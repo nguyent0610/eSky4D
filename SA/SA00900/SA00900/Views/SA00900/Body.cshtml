@@ -1,0 +1,94 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA00900;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print",true,""))
+    .Layout(LayoutType.Fit)
+    .Items(
+    ////Thiet ke giao dien o day
+    
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdLanguage")
+        .Store(
+            X.Store()
+            .ID("stoLanguage")    
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(SYS_Language), "mdlSYS_Language", "Code"))                                                                                                                                    
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetLanguage")))
+        )
+        .Listeners(p=>p.AfterRender.Handler="App.stoLanguage.reload();")
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40), 
+            X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(20).EnforceMaxLength(true)), 
+            X.Column().Text(Util.GetLang("Lang00")).DataIndex("Lang00").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)), 
+            X.Column().Text(Util.GetLang("Lang01")).DataIndex("Lang01").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)), 
+            X.Column().Text(Util.GetLang("Lang02")).DataIndex("Lang02").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)), 
+            X.Column().Text(Util.GetLang("Lang03")).DataIndex("Lang03").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)), 
+            X.Column().Text(Util.GetLang("Lang04")).DataIndex("Lang04").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)), 
+            X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l =>  l.Command.Handler = "grdLanguage_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmLanguage").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )                          
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>{
+                ls.BeforeEdit.Fn = "grdLanguage_BeforeEdit";
+                ls.Edit.Fn = "grdLanguage_Edit";
+                ls.ValidateEdit.Fn = "grdLanguage_ValidateEdit";
+            })        
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("Code"),
+                    X.StringFilter().DataIndex("Lang00"),
+                    X.StringFilter().DataIndex("Lang01"),
+                    X.StringFilter().DataIndex("Lang02"),
+                    X.StringFilter().DataIndex("Lang03"),
+                    X.StringFilter().DataIndex("Lang04")
+                )
+        )
+    )
+))
