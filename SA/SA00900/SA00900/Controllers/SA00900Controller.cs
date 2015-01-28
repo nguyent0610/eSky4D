@@ -126,25 +126,31 @@ namespace SA00900.Controllers
                 StringBuilder sb = new StringBuilder();
                 var lst = _db.SA00900GetLangJs(LangID).ToList();
                 sb.Append("var HQLang = {");
-          
-                for (int i = 0; i < lst.Count()-1; i++)
+
+                for (int i = 0; i < lst.Count() - 1; i++)
                 {
-                   
-                        sb.Append(lst[i].Code + ":\"" + lst[i].Lang + "\",");
-                       
+
+                    sb.Append(lst[i].Code + ":\"" + lst[i].Lang + "\",");
+
                 }
                 sb.Append(lst[lst.Count() - 1].Code + ":\"" + lst[lst.Count() - 1].Lang + "\"};");
-                //hasWE = false;
+
                 writeFile.Write(sb.ToString());
-                //writeFile.Flush();
+
                 writeFile.Close();
                 writeFile = null;
 
             }
             catch (Exception ex)
             {
+                writeFile.Close();
+                writeFile = null;
 
-
+            }
+            finally
+            {
+                writeFile.Close();
+                writeFile = null;
             }
 
 
