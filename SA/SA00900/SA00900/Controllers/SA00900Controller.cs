@@ -24,6 +24,7 @@ namespace SA00900.Controllers
 
         public ActionResult Index()
         {
+            
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -137,8 +138,8 @@ namespace SA00900.Controllers
 
                 writeFile.Write(sb.ToString());
 
-                writeFile.Close();
-                writeFile = null;
+                //writeFile.Close();
+                //writeFile = null;
 
             }
             catch (Exception ex)
