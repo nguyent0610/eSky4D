@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="PO_Setup" EntityType="eBiz4DWebAppModel.Store.PO_Setup" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="PO_Setup">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SetupID" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="SetupID" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="AutoRef" Type="smallint" Nullable="false" />
+          <Property Name="AutoReleaseAP" Type="smallint" Nullable="false" />
+          <Property Name="BillAddr1" Type="nvarchar" MaxLength="30" />
+          <Property Name="BillAddr2" Type="nvarchar" MaxLength="30" />
+          <Property Name="BillAttn" Type="nvarchar" MaxLength="200" />
+          <Property Name="BillCity" Type="varchar" MaxLength="10" />
+          <Property Name="BillCountry" Type="varchar" MaxLength="3" />
+          <Property Name="BillEmail" Type="varchar" MaxLength="40" />
+          <Property Name="BillFax" Type="varchar" MaxLength="30" />
+          <Property Name="BillName" Type="nvarchar" MaxLength="30" />
+          <Property Name="BillPhone" Type="varchar" MaxLength="30" />
+          <Property Name="BillState" Type="varchar" MaxLength="10" />
+          <Property Name="BillZip" Type="varchar" MaxLength="10" />
+          <Property Name="DfltLstUnitCost" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="DfltRcptFrom" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="DfltRcptUnitFromIN" Type="smallint" />
+          <Property Name="LastBatNbr" Type="varchar" MaxLength="10" />
+          <Property Name="LastPONbr" Type="varchar" MaxLength="100" />
+          <Property Name="LastRcptNbr" Type="varchar" MaxLength="10" />
+          <Property Name="PreFixBat" Type="varchar" MaxLength="2" />
+          <Property Name="ShipAddr1" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShipAddr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShipAttn" Type="nvarchar" MaxLength="200" />
+          <Property Name="ShipCity" Type="varchar" MaxLength="10" />
+          <Property Name="ShipCountry" Type="varchar" MaxLength="3" />
+          <Property Name="ShipEmail" Type="varchar" MaxLength="40" />
+          <Property Name="ShipFax" Type="varchar" MaxLength="30" />
+          <Property Name="ShipName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShipPhone" Type="varchar" MaxLength="30" />
+          <Property Name="ShipState" Type="varchar" MaxLength="10" />
+          <Property Name="ShipZip" Type="varchar" MaxLength="10" />
+          <Property Name="UseBarCode" Type="smallint" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="EditablePOPrice" Type="bit" Nullable="false" />
+          <Property Name="UseIN" Type="bit" Nullable="false" />
+          <Property Name="UseAP" Type="bit" Nullable="false" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PO00000Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PO00000Entities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="PO_Setup" EntityType="PO00000Model.PO_Setup" />
+        </EntityContainer>
+        <EntityType Name="PO_Setup">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SetupID" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SetupID" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="AutoRef" Nullable="false" />
+          <Property Type="Int16" Name="AutoReleaseAP" Nullable="false" />
+          <Property Type="String" Name="BillAddr1" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAddr2" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAttn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillCity" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillCountry" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillEmail" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillFax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillName" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillPhone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillState" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillZip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltLstUnitCost" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltRcptFrom" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DfltRcptUnitFromIN" />
+          <Property Type="String" Name="LastBatNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastPONbr" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastRcptNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PreFixBat" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipAddr1" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipAddr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipAttn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipCity" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipCountry" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipEmail" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipFax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipPhone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipState" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipZip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="UseBarCode" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="Boolean" Name="EditablePOPrice" Nullable="false" />
+          <Property Type="Boolean" Name="UseIN" Nullable="false" />
+          <Property Type="Boolean" Name="UseAP" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="PO00000Entities">
+          <EntitySetMapping Name="PO_Setup">
+            <EntityTypeMapping TypeName="PO00000Model.PO_Setup">
+              <MappingFragment StoreEntitySet="PO_Setup">
+                <ScalarProperty Name="UseAP" ColumnName="UseAP" />
+                <ScalarProperty Name="UseIN" ColumnName="UseIN" />
+                <ScalarProperty Name="EditablePOPrice" ColumnName="EditablePOPrice" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="UseBarCode" ColumnName="UseBarCode" />
+                <ScalarProperty Name="ShipZip" ColumnName="ShipZip" />
+                <ScalarProperty Name="ShipState" ColumnName="ShipState" />
+                <ScalarProperty Name="ShipPhone" ColumnName="ShipPhone" />
+                <ScalarProperty Name="ShipName" ColumnName="ShipName" />
+                <ScalarProperty Name="ShipFax" ColumnName="ShipFax" />
+                <ScalarProperty Name="ShipEmail" ColumnName="ShipEmail" />
+                <ScalarProperty Name="ShipCountry" ColumnName="ShipCountry" />
+                <ScalarProperty Name="ShipCity" ColumnName="ShipCity" />
+                <ScalarProperty Name="ShipAttn" ColumnName="ShipAttn" />
+                <ScalarProperty Name="ShipAddr2" ColumnName="ShipAddr2" />
+                <ScalarProperty Name="ShipAddr1" ColumnName="ShipAddr1" />
+                <ScalarProperty Name="PreFixBat" ColumnName="PreFixBat" />
+                <ScalarProperty Name="LastRcptNbr" ColumnName="LastRcptNbr" />
+                <ScalarProperty Name="LastPONbr" ColumnName="LastPONbr" />
+                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
+                <ScalarProperty Name="DfltRcptUnitFromIN" ColumnName="DfltRcptUnitFromIN" />
+                <ScalarProperty Name="DfltRcptFrom" ColumnName="DfltRcptFrom" />
+                <ScalarProperty Name="DfltLstUnitCost" ColumnName="DfltLstUnitCost" />
+                <ScalarProperty Name="BillZip" ColumnName="BillZip" />
+                <ScalarProperty Name="BillState" ColumnName="BillState" />
+                <ScalarProperty Name="BillPhone" ColumnName="BillPhone" />
+                <ScalarProperty Name="BillName" ColumnName="BillName" />
+                <ScalarProperty Name="BillFax" ColumnName="BillFax" />
+                <ScalarProperty Name="BillEmail" ColumnName="BillEmail" />
+                <ScalarProperty Name="BillCountry" ColumnName="BillCountry" />
+                <ScalarProperty Name="BillCity" ColumnName="BillCity" />
+                <ScalarProperty Name="BillAttn" ColumnName="BillAttn" />
+                <ScalarProperty Name="BillAddr2" ColumnName="BillAddr2" />
+                <ScalarProperty Name="BillAddr1" ColumnName="BillAddr1" />
+                <ScalarProperty Name="AutoReleaseAP" ColumnName="AutoReleaseAP" />
+                <ScalarProperty Name="AutoRef" ColumnName="AutoRef" />
+                <ScalarProperty Name="SetupID" ColumnName="SetupID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="60">
+        <EntityTypeShape EntityType="PO00000Model.PO_Setup" Width="1.5" PointX="2.8117889365236222" PointY="23.198995571210514" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

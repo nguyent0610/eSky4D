@@ -1,0 +1,144 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using PO10100;
+
+@model System.Collections.IEnumerable
+
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    var acc = Session["PO10100"] as AccessRight;
+    
+}
+
+<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+<script src='@Url.Content("Scripts/common.js")' type="text/javascript"></script>
+@*Save xoa sua*@
+<script >
+    
+  
+    var waitMsg = '@Util.GetLang("ProcessingData")';
+    var delMsg = '@Util.GetLang("DeletingData")';
+    var isUpdate = strToBool('@acc.Update.ToString()');
+    var isInsert = strToBool('@acc.Insert.ToString()');
+    var isDelete = strToBool('@acc.Delete.ToString()');
+    var bussinessDate = new Date();
+    var strCpnyID = '@Current.CpnyID';
+    var strUserName = '@Current.UserName';
+    var strLangID = '@Current.LangID.ToString()';
+   
+ </script>
+<script src='@Url.Content("Scripts/Screen/PO10100.js")' type="text/javascript"></script>   
+@Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme))
+
+
+@(Html.X().Store().ID("storePO_Header").AutoLoad(false)   
+    .Model(Util.GenerateModel(typeof(PO_Header), "PO_HeaderModel", "BranchID,PONbr"))          
+    .Proxy(
+            X.AjaxProxy()                
+            .Url(Url.Action("GetPO_Header", "PO10100"))                
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        ) 
+    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("pONbr", "App.cboPONbr.getValue()", ParameterMode.Raw));
+                    })  
+    .Listeners(p=>p.Load.Handler="loadDataHeader()" )            
+)
+@(Html.X().Store().ID("storeTax").AutoLoad(true)   
+    .Model(Util.GenerateModel(typeof(AP_VendorTaxes_Result), "AP_VendorTaxes_ResultModel", "taxid"))          
+    .Proxy(
+            X.AjaxProxy()                
+            .Url(Url.Action("GetAP_VendorTax", "PO10100"))                
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        ) 
+    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("vendID", "App.cboVendID.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("ordFromId", "", ParameterMode.Value));
+                    })          
+)
+
+@HQ.Store().ID("storePO10100OM_UserDefault").HQProcedure("PO10100OM_UserDefault").HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                    new StoreParameter() { Name = "@UserID", Value = "strUserName", Mode = ParameterMode.Raw}
+                                                                ,new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
+						                    }).LoadData().Listeners(lst => { lst.DataChanged.Handler = "loadPO10100OM_UserDefault()"; })
+
+@HQ.Store().ID("storePO10100PO_Setup").HQProcedure("PO10100PO_Setup").HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                    new StoreParameter() { Name = "@UserID", Value ="strUserName", Mode = ParameterMode.Raw}
+                                                                ,new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
+						                    }).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10100PO_Setup()"; })
+
+@HQ.Store().ID("storePO10100SI_Tax").HQProcedure("PO10100SI_Tax").HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                    new StoreParameter() { Name = "@UserID", Value ="strUserName", Mode = ParameterMode.Raw}
+                                                                
+						                    }).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10100SI_Tax()"; }).AutoLoad(true)
+
+@HQ.Store().ID("storePO10100IN_Inventory").HQProcedure("PO10100IN_Inventory").HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                    new StoreParameter() { Name = "@UserID", Value ="strUserName", Mode = ParameterMode.Raw}
+                                                                
+						                    }).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10100IN_Inventory()"; }).AutoLoad(true)
+
+
+@*@(Html.X().Store()
+    .ID("storePO10100_LoadTaxTrans")
+    .Model(Util.GenerateModel(typeof(PO10100_LoadTaxTrans_Result),"ModelPO10100_LoadTaxTrans_Result",""))
+    .DataSource(ViewBag.ListPO10100_LoadTaxTrans))*@
+
+@(Html.X().Store()
+    .ID("StoreUnit")
+    .Model(Util.GenerateModel(typeof(IN_UnitConversion),"ModelUnitConversion",""))
+    .DataSource(ViewBag.ListUnitConversion))
+
+@(Html.X().Store().ID("storePO_DetailLoad")   
+    .Model(Util.GenerateModel(typeof(PO_DetailLoad_Result), "PO_DetailLoadModel", "BranchID,InvtID")) 
+    .Listeners(p => p.Load.Handler = "loadDataDetail();")       
+    .Proxy(
+            X.AjaxProxy()                
+            .Url(Url.Action("GetPO_DetailLoad", "PO10100"))                
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        ) 
+    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("pONbr", "App.cboPONbr.getValue()", ParameterMode.Raw));
+                    })      
+)
+
+@(Html.X().Store().ID("storePO10100_LoadTaxTrans")   
+                            .Model(Util.GenerateModel(typeof(PO10100_LoadTaxTrans_Result), "ModelPO10100_LoadTaxTrans_Result", ""))                                 
+                            .Proxy(
+                                    X.AjaxProxy()                
+                                    .Url(Url.Action("GetPO10100_LoadTaxTrans", "PO10100"))                
+                                    .ActionMethods(action =>
+                                    {
+                                        action.Read = HttpMethod.POST;
+                                    })
+                                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                                ) 
+                            .Parameters(ps =>
+                                            {
+                                                ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                                                ps.Add(new StoreParameter("pONbr", "App.cboPONbr.getValue()", ParameterMode.Raw));
+                                            })
+                        .Listeners(p => p.Load.Handler = "loadstorePO10100_LoadTaxTrans();")       
+   
+                    )
+ 
+ @{ Html.RenderAction("Body"); }

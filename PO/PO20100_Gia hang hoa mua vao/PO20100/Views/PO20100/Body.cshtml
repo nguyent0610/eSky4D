@@ -1,0 +1,179 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using PO20100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Anchor)
+        .ID("dataForm")
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(10)
+        .TopBar(Util.SetupToolbar("PO20100"))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .Listeners(itm=>itm.AfterRender.Fn="frmloadAfterRender")
+        .Items(
+        // CAC PHAN TREN GIU NGUYEN, GIAO DIEN THIET KE O DAY 
+            X.Panel().ID("Header").Layout(LayoutType.Anchor)
+            .Items(
+                        X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Items(
+                                HQ.Combo().ID("cboPriceID").Name("cboPriceID").HQLangCode("PriceID").HQProcedure("ppv_PriceID").HQColumnShow("PriceID,Descr").DisplayField("PriceID").ValueField("PriceID").Width(300).HQHeightWidth(400, 300)
+                                        .HQParam(new StoreParameterCollection() { 
+                                                                                    new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                                                                                    , new StoreParameter() { Name = "@ScreenNbr", Value = "PO20100", Mode = ParameterMode.Value }
+                                                                                    , new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }                                                                                    
+                                                                                }).LoadData()
+                                        .Listeners(lst =>
+                                                {
+                                                    lst.Focus.Handler = "focus='POPriceHeader'";
+                                                    lst.Change.Fn = "cboPriceID_Change";
+                                                }
+                                        )
+                                
+                                , HQ.TextBox().ID("Descr").Name("Descr").HQLangCode("Descr").Width(300).AllowBlank(false).MarginSpec("0 0 0 20").HQControlFocus("LastPONbr").HideLabel(true).Listeners(lst => { lst.Focus.Handler = "focus='POPriceHeader'"; })
+                                , HQ.Checkbox().ID("Status").Name("Status").HQLangCode("ACTIVE").MarginSpec("0 0 0 5").Listeners(lst => { lst.Focus.Handler = "focus='POPriceHeader'"; })
+                        ),
+                        X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Items(
+                                X.NumberField().ID("txtFill").Name("txtFill").FieldLabel(Util.GetLang("Fill")).MaskRe(@"/[\d].[\d]{2}/").Width(210).MaxLength(3).Listeners(lst => { lst.Focus.Handler = "focus='POPriceHeader'"; })
+                                , HQ.Button().ID("btnFill").HQLangCode("Fill").Width(80).MarginSpec("0 0 0 10").Listeners(lst => { lst.Focus.Handler = "focus='POPriceHeader'"; lst.Click.Handler = "btnFill_Click()"; })
+                                , HQ.DateField().ID("EffDate").Name("EffDate").HQLangCode("EffDate").Width(320).AllowBlank(false).LabelWidth(120).Value("2014-03-19").Listeners(lst => { lst.Focus.Handler = "focus='POPriceHeader'"; })
+                                , HQ.Checkbox().ID("Public").Name("Public").HQLangCode("Public").MarginSpec("0 0 0 5").HQControlFocus("DfltRcptUnitFromIN")
+                                                                        .Listeners(lst => { lst.Focus.Handler = "focus='POPriceHeader'"; lst.Change.Fn = "chkPublic_Change"; })
+                        )
+
+                )
+            ,
+            X.TabPanel()
+            .Layout(LayoutType.Anchor)
+            .ID("tabPO20100")
+            .Listeners(p => p.AfterRender.Fn = "tabPO_Setup_AfterRender")
+            .Items(
+                    X.Panel()
+                    .ID("tabDetail")
+                    .Layout(LayoutType.Anchor)
+                    .AnchorVertical("100%")
+                    .Title(Util.GetLang("POPrice"))
+                    .Padding(5)
+                    .Items(
+                            Html.X().GridPanel()
+                                    .Frame(true)
+                                    .AnchorHorizontal("100%")
+                                    .AnchorVertical("100%")
+                                    .RenderTo("contentCenter")
+                                    .Scroll(ScrollMode.Both)
+                                    .ID("grdPOPrice")
+                                    .StoreID("storePOPrice")
+                                    .ColumnModel(
+                                        Html.X().RowNumbererColumn(),
+                                                                Html.X().Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(120)
+                                                                        .Editor(
+                                                                                HQ.Combo().ID("InvtID").Name("InvtID").HideLabel(true).HQProcedure("ppv_InventoryActive").HQColumnShow("InvtID,Descr").DisplayField("InvtID").ValueField("InvtID")
+                                                                                .HQHeightWidth(400, 300).LabelWidth(0).LoadData()
+                                                                                .Listeners(lst =>
+                                                                                            {
+                                                                                                lst.Change.Fn = "cboInvtID_Change";
+                                                                                            })
+                                                                                )
+                                                                , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(Html.X().TextField().MaxLength(100))
+                                                                
+                                                                , Html.X().Column().Text(Util.GetLang("UOM")).DataIndex("UOM").Width(150)
+                                                                        .Editor(
+                                                                                HQ.Combo().ID("UOM").Name("UOM").HideLabel(true).HQProcedure("ppv_PO20100INUnit_Invt_Class_From_To").HQColumnShow("FromUnit").DisplayField("FromUnit").ValueField("FromUnit").HQHeightWidth(400, 300).LabelWidth(0)
+                                                                                        .HQParam(new StoreParameterCollection() { 
+                                                                                                                            new StoreParameter() { Name = "@InvtID", Value = "paramInvtID", Mode = ParameterMode.Raw }                                                                                                                                    
+                                                                                        }).LoadData()
+
+                                                                                )
+                                                                , Html.X().NumberColumn().Text(Util.GetLang("QtyBreak")).DataIndex("QtyBreak").Width(150).Format("0,000,000").Editor(Html.X().NumberField().MaskRe(@"/[\d]/"))
+                                                                , Html.X().NumberColumn().Text(Util.GetLang("Price")).DataIndex("Price").Width(150).Format("0,000,000").Editor(Html.X().NumberField().MaskRe(@"/[\d]/"))
+                                                                , Html.X().NumberColumn().Text(Util.GetLang("Disc")).DataIndex("Disc").Width(150).Format("00.00").Editor(Html.X().NumberField().MaskRe(@"/[\d].[\d]{2}/"))
+                                                                , Html.X().CommandColumn()
+                                                                                        .Width(70)
+                                                                                        .Commands(
+                                                                                            Html.X().GridCommand()
+                                                                                                .Text(Util.GetLang("Reject"))
+                                                                                                .ToolTip(t =>
+                                                                                                {
+                                                                                                    t.Text = Util.GetLang("Rejectrowchanges");
+                                                                                                })
+                                                                                                .CommandName("reject")
+                                                                                                .Icon(Icon.ArrowUndo)
+                                                                                        )
+                                                                                        .PrepareToolbar(t =>
+                                                                                        {
+                                                                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                                                                        })
+                                                                                        .Listeners(l =>
+                                                                                        {
+                                                                                            l.Command.Handler = "record.reject();";
+                                                                                        })
+                                    )
+                                    .Listeners(lst =>
+                                    {
+                                        lst.Select.Handler = "focus='POPrice'";
+                                        lst.Edit.Fn = "grdPOPrice_Edit";
+                                        lst.BeforeEdit.Fn = "grdPOPrice_BeforeEdit";
+                                        lst.ValidateEdit.Fn = "grdPOPrice_ValidateEdit";
+                                    })
+                                    .SelectionModel(Html.X().RowSelectionModel().ID("SelectModelPOPrice").Mode(SelectionMode.Multi))
+                                    .Plugins(Html.X().CellEditing().ClicksToEdit(1))//Cho phep edit )                                                                       
+                    ),
+
+                    X.Panel()
+                    .ID("tabCompany")
+                    .Layout(LayoutType.Anchor)
+                    .AnchorVertical("100%")
+                    .Padding(5)
+                    .Title(Util.GetLang("APPCOMP"))
+                    .CloseAction(CloseAction.Hide)    
+                    .Items(
+                           Html.X().GridPanel()
+                                .ID("grdPOPriceCpny")
+                                .AnchorHorizontal("100%")
+                                .AnchorVertical("100%")
+                                .StoreID("storePOPriceCpny")
+                                .ColumnModel(
+                                        Html.X().RowNumbererColumn(),
+                                        Html.X().Column().DataIndex("CpnyID").Width(150).Text(Util.GetLang("CpnyID"))
+                                        .Editor(
+                                                HQ.Combo().ID("CpnyID").Name("CpnyID").HideLabel(true).HQProcedure("ppv_BranchAllByUser").HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
+                                                        .HQHeightWidth(400, 300).LabelWidth(0)
+                                                        .HQParam(new StoreParameterCollection() { 
+                                                                                        new StoreParameter() { Name = "@UserID", Value = Current.UserName, Mode = ParameterMode.Value }                                                                                                                                    
+                                                                                        }).LoadData()
+                                                        .Listeners(lst =>
+                                                                    {
+                                                                        lst.Change.Fn = "cboCpnyID_Change";
+                                                                    })
+                                            ),
+
+                                        Html.X().Column()
+                                        .DataIndex("CpnyName")
+                                        .Flex(1)
+                                        .Text(Util.GetLang("CpnyName"))                                       
+                                )
+                                .Listeners(lst =>
+                                {
+                                    lst.Select.Handler = "focus='POPriceCpny'";                                   
+                                    lst.Edit.Fn = "grdPOPriceCpny_Edit";
+                                    lst.ValidateEdit.Fn = "grdPOPriceCpny_ValidateEdit";
+                                    lst.BeforeEdit.Fn = "grdPOPriceCpny_BeforeEdit";
+                                })
+                                .SelectionModel(Html.X().RowSelectionModel().ID("SelectModelPOPriceCpny").Mode(SelectionMode.Multi))
+                                .View(X.GridView().TrackOver(false))
+                                .Plugins(Html.X().CellEditing().ClicksToEdit(1))
+                                )
+                        )
+                )
+        )
+
+)
+

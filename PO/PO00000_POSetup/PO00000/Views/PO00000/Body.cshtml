@@ -1,0 +1,169 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using PO00000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Anchor)
+        .ID("dataForm")
+        .Listeners(p=>p.AfterRender.Fn="frmloadAfterRender")
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(10)
+        .TopBar(Util.SetupToolbar("PO00000"))
+        .KeyMap(Util.SetupKeyMap())
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
+        .Items(
+        // CAC PHAN TREN GIU NGUYEN, GIAO DIEN THIET KE O DAY  
+            X.TabPanel()
+            .Layout(LayoutType.Anchor)
+            .ID("tabPOSETUP")
+            .Items(
+                    
+            X.Panel()
+                    .ID("tabOption")
+                    .Layout(LayoutType.Anchor)
+                    .AnchorVertical("100%")
+                    .Title(Util.GetLang("Option"))
+                    .Padding(5)
+                    .Items(
+                            X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Items(
+                                HQ.TextBox().ID("PreFixBat").Name("PreFixBat").HQLangCode("Prefix").Width(400).AllowBlank(true).MaxLength(10)
+                                            .HQControlFocus("LastBatNbr"),
+                                HQ.Checkbox().ID("AutoReleaseAP").Name("AutoReleaseAP").HQLangCode("AutoReleaseAP").MarginSpec("0 0 0 5")
+                                             .HQControlFocus("AutoRef")
+                            ),
+                            X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Items(
+                                HQ.TextBox().ID("LastBatNbr").Name("LastBatNbr").HQLangCode("LastBatNbr").Width(400).AllowBlank(true).MaxLength(10)
+                                            .HQControlFocus("LastPONbr"),
+                                HQ.Checkbox().ID("AutoRef").Name("AutoRef").HQLangCode("AutoNbr").MarginSpec("0 0 0 5")
+                                            .HQControlFocus("DfltRcptUnitFromIN")
+                            ),
+                            X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Items(
+                                HQ.TextBox().ID("LastPONbr").Name("LastPONbr").HQLangCode("LastPO").Width(400).AllowBlank(true).MaxLength(10)
+                                            .HQControlFocus("LastRcptNbr"),
+                                HQ.Checkbox().ID("DfltRcptUnitFromIN").Name("DfltRcptUnitFromIN").HQLangCode("UnitFromIN").MarginSpec("0 0 0 5")
+                                            .HQControlFocus("EditablePOPrice")
+
+                            ),
+                            X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Items(
+                                HQ.TextBox().ID("LastRcptNbr").Name("LastRcptNbr").HQLangCode("LastRec").Width(400).AllowBlank(true).MaxLength(10)
+                                            .HQControlFocus("DfltLstUnitCost"),
+                                HQ.Checkbox().ID("EditablePOPrice").Name("EditablePOPrice").HQLangCode("EditablePOPrice").MarginSpec("0 0 0 5")
+                                            .HQControlFocus("UseBarCode")
+                            ),
+                            X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Items(
+                                HQ.Combo().ID("DfltLstUnitCost").Name("DfltLstUnitCost").HQLangCode("DefCost").HQProcedure("ppv_PO00000UnitCost").HQColumnShow("").DisplayField("Descr").ValueField("Code").Width(400).HQHeightWidth(400, 300)
+                                    .HQControlFocus("DfltRcptFrom")
+                                    .HQParam(new StoreParameterCollection() { new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value } }).LoadData(),
+                                HQ.Checkbox().ID("UseBarCode").Name("UseBarCode").HQLangCode("UseBarCode").MarginSpec("0 0 0 5")
+                                            .HQControlFocus("UseIN")
+                            ),
+                            X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Items(
+                                HQ.Combo().ID("DfltRcptFrom").Name("DfltRcptFrom").HQLangCode("DfltRcptFrom").HQProcedure("ppv_PO00000RcptFrom").HQColumnShow("").DisplayField("Descr").ValueField("Code").Width(400).HQHeightWidth(400, 300)
+                                        .HQControlFocus("AutoReleaseAP")
+                                        .HQParam(new StoreParameterCollection() { new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value } }).LoadData(),
+
+                                HQ.Checkbox().ID("UseIN").Name("UseIN").HQLangCode("UseIN").MarginSpec("0 0 0 5")
+                                        .HQControlFocus("UseAP")
+                            ),
+                                HQ.Checkbox().ID("UseAP").Name("UseAP").HQLangCode("UseAP").MarginSpec("0 0 0 405")
+
+                    ),
+                    X.Panel()
+                    .ID("tabAddress")
+                    .Layout(LayoutType.Anchor)
+                    .AnchorVertical("100%")
+                    .Padding(5)
+                    .Title(Util.GetLang("Address"))
+                    .Items(
+                            X.Container()
+                                .Layout(LayoutType.HBox)
+                                .MarginSpec("0 0 10")
+                                .Items(
+                                    X.FieldSet()
+                                        .Flex(1)
+                                        .Title(Util.GetLang("MainAddress"))
+                                        .Layout(LayoutType.Anchor)
+                                        .DefaultAnchor("100%")
+                                        .Width(300)
+                                        .FieldDefaults(fd => { fd.LabelWidth = 120; fd.LabelAlign = LabelAlign.Right; })
+                                        .Items(
+                                                HQ.TextBox().HQLangCode("Name").ID("ShipName"),
+                                                HQ.TextBox().HQLangCode("Attn").ID("ShipAttn"),
+                                                HQ.TextBox().HQLangCode("Addr1").ID("ShipAddr1"),
+                                                HQ.TextBox().HQLangCode("Addr2").ID("ShipAddr2"),
+                                                HQ.Combo().ID("ShipCountry").Name("ShipCountry").HQLangCode("Country").HQProcedure("ppv_CountryID")
+                                                        .HQColumnShow("").DisplayField("Descr").ValueField("CountryID").HQHeightWidth(400, 300)
+                                                        .Listeners(p => { p.Change.Handler = "App.ShipState.getStore().reload();"; })
+                                                        .LoadData(),
+                                                        
+                                                    HQ.Combo().ID("ShipState").Name("ShipState").HQLangCode("State").HQProcedure("ppv_StateByCountry")
+                                                            .HQColumnShow("").DisplayField("Descr").ValueField("State").HQHeightWidth(400, 300)
+                                                            .HQParam(new StoreParameterCollection() { new StoreParameter() { Name = "@Country", Value = "App.ShipCountry.getValue()", Mode = ParameterMode.Raw } })
+                                                            .HQValue("App.storePO_Setup.getAt(0).data.ShipState")
+                                                            .Listeners(p => {  p.Change.Handler = "App.ShipCity.getStore().reload();"; })
+                                                            .LoadData(),
+                                                           
+                                                    HQ.Combo().ID("ShipCity").Name("ShipCity").HQLangCode("City").HQProcedure("ppv_CityByCountryState")
+                                                            .HQColumnShow("").DisplayField("Name").ValueField("City").HQHeightWidth(400, 300)
+                                                            .HQParam(new StoreParameterCollection() { new StoreParameter() { Name = "@Country", Value = "App.ShipCountry.getValue()", Mode = ParameterMode.Raw }, new StoreParameter() { Name = "@State", Value = "App.ShipState.getValue()", Mode = ParameterMode.Raw } })
+                                                            .HQValue("App.storePO_Setup.getAt(0).data.ShipCity")
+                                                            .LoadData()         ,
+                                                HQ.TextBox().HQLangCode("Zip").ID("ShipZip"),
+                                                HQ.TextBox().HQLangCode("Phone").ID("ShipPhone"),
+                                                HQ.TextBox().HQLangCode("Fax").ID("ShipFax"),
+                                                HQ.TextBox().HQLangCode("EmailAddr").ID("ShipEmail")
+                                        ),
+
+                                    X.Component().Width(10),
+                                    X.FieldSet()
+                                        .Flex(1)
+                                        .Width(250)
+                                        .Title(Util.GetLang("AddrBill"))
+                                        .Layout(LayoutType.Anchor)
+                                        .DefaultAnchor("100%")
+                                        .FieldDefaults(fd => { fd.LabelWidth = 0; })
+                                        .Defaults(X.Parameter().Name("HideEmptyLabel").Value("false").Mode(ParameterMode.Raw))
+                                        .Items(
+                                                HQ.TextBox().HQLangCode("").ID("BillName"),
+                                                HQ.TextBox().HQLangCode("").ID("BillAttn"),
+                                                HQ.TextBox().HQLangCode("").ID("BillAddr1"),
+                                                HQ.TextBox().HQLangCode("").ID("BillAddr2"),
+                                                    HQ.Combo().ID("BillCountry").Name("BillCountry").HQLangCode("").HQProcedure("ppv_CountryID")
+                                                        .HQColumnShow("").DisplayField("Descr").ValueField("CountryID").HQHeightWidth(400, 300)
+                                                        .HQValue("App.storePO_Setup.getAt(0).data.BillCountry")
+                                                        .Listeners(p => { p.Change.Handler = "App.BillState.getStore().reload();"; })
+                                                        .LoadData(),
+                                                    HQ.Combo().ID("BillState").Name("BillState").HQLangCode("").HQProcedure("ppv_StateByCountry")
+                                                        .HQColumnShow("").DisplayField("Descr").ValueField("State").HQHeightWidth(400, 300)
+                                                        .HQValue("App.storePO_Setup.getAt(0).data.BillState")
+                                                        .HQParam(new StoreParameterCollection() { new StoreParameter() { Name = "@Country", Value = "App.BillCountry.getValue()", Mode = ParameterMode.Raw } })
+                                                        .Listeners(p => { p.Change.Handler = "App.BillCity.getStore().reload();"; })
+                                                        .LoadData(),
+                                                    HQ.Combo().ID("BillCity").Name("BillCity").HQLangCode("").HQProcedure("ppv_CityByCountryState")
+                                                        .HQColumnShow("").DisplayField("Name").ValueField("City").HQHeightWidth(400, 300)
+                                                        .HQValue("App.storePO_Setup.getAt(0).data.BillCity")
+                                                        .HQParam(new StoreParameterCollection() { new StoreParameter() { Name = "@Country", Value = "App.BillCountry.getValue()", Mode = ParameterMode.Raw }, new StoreParameter() { Name = "@State", Value = "App.BillState.getValue()", Mode = ParameterMode.Raw } })
+                                                        .LoadData(),
+                                                HQ.TextBox().HQLangCode("").ID("BillZip"),
+                                                HQ.TextBox().HQLangCode("").ID("BillPhone"),
+                                                HQ.TextBox().HQLangCode("").ID("BillFax"),
+                                                HQ.TextBox().HQLangCode("").ID("BillEmail")
+                                        ),
+                                    X.Component().Width(200)
+                                )
+                            )
+                            
+                    )
+            )
+    )
+)
