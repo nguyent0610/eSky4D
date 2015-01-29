@@ -1,0 +1,746 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="AR_RedInvoiceDoc" EntityType="eBiz4DWebSysModel.Store.AR_RedInvoiceDoc" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="AR_RedInvoiceTrans" EntityType="eBiz4DWebSysModel.Store.AR_RedInvoiceTrans" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="AR_Setup" EntityType="eBiz4DWebSysModel.Store.AR_Setup" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="AR_Trans" EntityType="eBiz4DWebSysModel.Store.AR_Trans" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="AR_RedInvoiceDoc">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="InvcNbr" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="InvcNbr" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="InvcNote" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="CustID" Type="varchar" MaxLength="50" />
+          <Property Name="CuryTaxAmt" Type="float" Nullable="false" />
+          <Property Name="CuryTxblAmt" Type="float" Nullable="false" />
+          <Property Name="DocDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="DocDesc" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="PerPost" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="TaxID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="SlsPerID" Type="varchar" MaxLength="10" />
+          <Property Name="DiscAmt" Type="float" Nullable="false" />
+          <Property Name="SOFee" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AR_RedInvoiceTrans">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="InvcNbr" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="RefNbr" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="InvcNbr" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="RefNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="TranDesc" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="Qty" Type="float" Nullable="false" />
+          <Property Name="UnitDesc" Type="nvarchar" Nullable="false" MaxLength="12" />
+          <Property Name="DocDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="DocDesc" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="CuryTxblAmt" Type="float" Nullable="false" />
+          <Property Name="CuryTaxAmt" Type="float" Nullable="false" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="AR_Setup">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SetupId" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="SetupId" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="DfltBankAcct" Type="varchar" MaxLength="10" />
+          <Property Name="DfltShipViaID" Type="varchar" MaxLength="10" />
+          <Property Name="LastBatNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LastRefNbr" Type="varchar" MaxLength="10" />
+          <Property Name="LastReceiptNbr" Type="varchar" MaxLength="10" />
+          <Property Name="PrefixBat" Type="varchar" MaxLength="2" />
+          <Property Name="TranDescDflt" Type="char" MaxLength="1" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="AutoCustID" Type="bit" Nullable="false" />
+          <Property Name="LastCustID" Type="varchar" MaxLength="50" />
+          <Property Name="AddressLevel" Type="varchar" MaxLength="1" />
+          <Property Name="AutoSlsperID" Type="bit" />
+          <Property Name="HiddenHierarchy" Type="bit" />
+        </EntityType>
+        <EntityType Name="AR_Trans">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="RefNbr" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="BatNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="RefNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="InvcNbr" Type="varchar" MaxLength="10" />
+          <Property Name="InvcNote" Type="varchar" MaxLength="10" />
+          <Property Name="InvtId" Type="varchar" MaxLength="30" />
+          <Property Name="JrnlType" Type="varchar" MaxLength="3" />
+          <Property Name="LineType" Type="varchar" MaxLength="1" />
+          <Property Name="Qty" Type="float" Nullable="false" />
+          <Property Name="TaxAmt00" Type="float" Nullable="false" />
+          <Property Name="TaxAmt01" Type="float" Nullable="false" />
+          <Property Name="TaxAmt02" Type="float" Nullable="false" />
+          <Property Name="TaxAmt03" Type="float" Nullable="false" />
+          <Property Name="TaxCat" Type="varchar" MaxLength="10" />
+          <Property Name="TaxId00" Type="varchar" MaxLength="10" />
+          <Property Name="TaxId01" Type="varchar" MaxLength="10" />
+          <Property Name="TaxId02" Type="varchar" MaxLength="10" />
+          <Property Name="TaxId03" Type="varchar" MaxLength="10" />
+          <Property Name="TranAmt" Type="float" Nullable="false" />
+          <Property Name="TranClass" Type="varchar" MaxLength="1" />
+          <Property Name="TranDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="TranDesc" Type="nvarchar" MaxLength="100" />
+          <Property Name="TranType" Type="varchar" MaxLength="2" />
+          <Property Name="TxblAmt00" Type="float" Nullable="false" />
+          <Property Name="TxblAmt01" Type="float" Nullable="false" />
+          <Property Name="TxblAmt02" Type="float" Nullable="false" />
+          <Property Name="TxblAmt03" Type="float" Nullable="false" />
+          <Property Name="UnitPrice" Type="float" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="APNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="GetType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR_GetDocForRedInvoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="TaxID" Type="varchar" Mode="In" />
+          <Parameter Name="InvcNbr" Type="varchar" Mode="In" />
+          <Parameter Name="InvcNote" Type="varchar" Mode="In" />
+          <Parameter Name="StartDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="EndDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
+          <Parameter Name="DeliveryID" Type="varchar" Mode="In" />
+          <Parameter Name="IncludeFee" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="AR_TransLoadRedInvoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="InvcNbr" Type="varchar" Mode="In" />
+          <Parameter Name="InvcNote" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="ARNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="GetType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="ppv_CustomerActive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="ppv_DeliveryPerson" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="ppv_RedInvoiceNbr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ppv_RedInvoiceTax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ppv_SalesPerson" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="Username" Type="varchar" Mode="In" />
+          <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AR10800Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="AR10800Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="ppv_AR10800_getCompany" ReturnType="Collection(AR10800Model.ppv_AR10800_getCompany_Result)">
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="APNumbering" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="GetType" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="AR_Trans" EntityType="AR10800Model.AR_Trans" />
+          <FunctionImport Name="ARNumbering" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="GetType" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="AR_RedInvoiceDoc" EntityType="AR10800Model.AR_RedInvoiceDoc" />
+          <EntitySet Name="AR_RedInvoiceTrans" EntityType="AR10800Model.AR_RedInvoiceTrans" />
+          <EntitySet Name="AR_Setup" EntityType="AR10800Model.AR_Setup" />
+          <FunctionImport Name="AR_GetDocForRedInvoice" ReturnType="Collection(AR10800Model.AR_GetDocForRedInvoice_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="TaxID" Mode="In" Type="String" />
+            <Parameter Name="InvcNbr" Mode="In" Type="String" />
+            <Parameter Name="InvcNote" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="DeliveryID" Mode="In" Type="String" />
+            <Parameter Name="IncludeFee" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR_TransLoadRedInvoice" ReturnType="Collection(AR10800Model.AR_TransLoadRedInvoice_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="InvcNbr" Mode="In" Type="String" />
+            <Parameter Name="InvcNote" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_CustomerActive" ReturnType="Collection(AR10800Model.ppv_CustomerActive_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="ScreenNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_DeliveryPerson" ReturnType="Collection(AR10800Model.ppv_DeliveryPerson_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="ScreenNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_RedInvoiceNbr" ReturnType="Collection(AR10800Model.ppv_RedInvoiceNbr_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_RedInvoiceTax" ReturnType="Collection(AR10800Model.ppv_RedInvoiceTax_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_SalesPerson" ReturnType="Collection(AR10800Model.ppv_SalesPerson_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="Username" Mode="In" Type="String" />
+            <Parameter Name="ScreenNbr" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="ppv_AR10800_getCompany_Result">
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <EntityType Name="AR_Trans">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="RefNbr" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvcNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvcNote" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvtId" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="JrnlType" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LineType" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="Double" Name="TaxAmt00" Nullable="false" />
+          <Property Type="Double" Name="TaxAmt01" Nullable="false" />
+          <Property Type="Double" Name="TaxAmt02" Nullable="false" />
+          <Property Type="Double" Name="TaxAmt03" Nullable="false" />
+          <Property Type="String" Name="TaxCat" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId00" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId01" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId02" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId03" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="TranAmt" Nullable="false" />
+          <Property Type="String" Name="TranClass" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="TranDate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="TranDesc" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="TranType" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="TxblAmt00" Nullable="false" />
+          <Property Type="Double" Name="TxblAmt01" Nullable="false" />
+          <Property Type="Double" Name="TxblAmt02" Nullable="false" />
+          <Property Type="Double" Name="TxblAmt03" Nullable="false" />
+          <Property Type="Double" Name="UnitPrice" Nullable="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="AR_RedInvoiceDoc">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="InvcNbr" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="InvcNbr" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvcNote" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="CuryTaxAmt" Nullable="false" />
+          <Property Type="Double" Name="CuryTxblAmt" Nullable="false" />
+          <Property Type="DateTime" Name="DocDate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="DocDesc" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PerPost" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="SlsPerID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="DiscAmt" Nullable="false" />
+          <Property Type="Double" Name="SOFee" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AR_RedInvoiceTrans">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="InvcNbr" />
+            <PropertyRef Name="BatNbr" />
+            <PropertyRef Name="RefNbr" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="InvcNbr" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TranDesc" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="String" Name="UnitDesc" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DocDate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="DocDesc" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="CuryTxblAmt" Nullable="false" />
+          <Property Type="Double" Name="CuryTaxAmt" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="AR_Setup">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SetupId" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SetupId" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltBankAcct" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltShipViaID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastBatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastRefNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastReceiptNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PrefixBat" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TranDescDflt" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="Boolean" Name="AutoCustID" Nullable="false" />
+          <Property Type="String" Name="LastCustID" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AddressLevel" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="AutoSlsperID" />
+          <Property Type="Boolean" Name="HiddenHierarchy" />
+        </EntityType>
+        <ComplexType Name="AR_GetDocForRedInvoice_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="InvtId" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TranDesc" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
+          <Property Type="DateTime" Name="DocDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="DocDesc" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="TxblAmt" Nullable="true" />
+          <Property Type="Double" Name="TaxAmt" Nullable="true" />
+          <Property Type="Double" Name="DiscAmt" Nullable="false" />
+          <Property Type="Double" Name="SOFee" Nullable="true" />
+          <Property Type="Double" Name="TxblAmtSel" Nullable="true" />
+          <Property Type="Double" Name="TaxAmtSel" Nullable="true" />
+          <Property Type="Double" Name="DiscAmtSel" Nullable="false" />
+          <Property Type="Double" Name="SOFeeSel" Nullable="true" />
+          <Property Type="String" Name="IsChanged" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="CustId" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DeliveryID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="AR_TransLoadRedInvoice_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="RefNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="InvtId" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TranDesc" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
+          <Property Type="DateTime" Name="DocDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="DocDesc" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="TxblAmt" Nullable="true" />
+          <Property Type="Double" Name="TaxAmt" Nullable="true" />
+          <Property Type="Double" Name="DiscAmt" Nullable="false" />
+          <Property Type="Double" Name="SOFee" Nullable="true" />
+          <Property Type="Double" Name="TxblAmtSel" Nullable="true" />
+          <Property Type="Double" Name="TaxAmtSel" Nullable="true" />
+          <Property Type="Double" Name="DiscAmtSel" Nullable="false" />
+          <Property Type="Double" Name="SOFeeSel" Nullable="true" />
+          <Property Type="String" Name="IsChanged" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="CustId" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DeliveryID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ppv_CustomerActive_Result">
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Terms" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="ppv_DeliveryPerson_Result">
+          <Property Type="String" Name="Slsperid" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="ppv_RedInvoiceNbr_Result">
+          <Property Type="Double" Name="CuryTaxAmt" Nullable="false" />
+          <Property Type="Double" Name="CuryTxblAmt" Nullable="false" />
+          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="DiscAmt" Nullable="false" />
+          <Property Type="DateTime" Name="DocDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="DocDesc" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="InvcNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="InvcNote" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="PerPost" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="SlsPerID" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="SOFee" Nullable="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="TaxID" Nullable="false" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="ppv_RedInvoiceTax_Result">
+          <Property Type="String" Name="TaxID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
+          <Property Type="Double" Name="TaxRate" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="ppv_SalesPerson_Result">
+          <Property Type="String" Name="Slsperid" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="AR10800Entities" >
+          <FunctionImportMapping FunctionImportName="APNumbering" FunctionName="eBiz4DWebSysModel.Store.APNumbering" />
+          <EntitySetMapping Name="AR_Trans">
+            <EntityTypeMapping TypeName="AR10800Model.AR_Trans">
+              <MappingFragment StoreEntitySet="AR_Trans">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="TxblAmt03" ColumnName="TxblAmt03" />
+                <ScalarProperty Name="TxblAmt02" ColumnName="TxblAmt02" />
+                <ScalarProperty Name="TxblAmt01" ColumnName="TxblAmt01" />
+                <ScalarProperty Name="TxblAmt00" ColumnName="TxblAmt00" />
+                <ScalarProperty Name="TranType" ColumnName="TranType" />
+                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
+                <ScalarProperty Name="TranDate" ColumnName="TranDate" />
+                <ScalarProperty Name="TranClass" ColumnName="TranClass" />
+                <ScalarProperty Name="TranAmt" ColumnName="TranAmt" />
+                <ScalarProperty Name="TaxId03" ColumnName="TaxId03" />
+                <ScalarProperty Name="TaxId02" ColumnName="TaxId02" />
+                <ScalarProperty Name="TaxId01" ColumnName="TaxId01" />
+                <ScalarProperty Name="TaxId00" ColumnName="TaxId00" />
+                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
+                <ScalarProperty Name="TaxAmt03" ColumnName="TaxAmt03" />
+                <ScalarProperty Name="TaxAmt02" ColumnName="TaxAmt02" />
+                <ScalarProperty Name="TaxAmt01" ColumnName="TaxAmt01" />
+                <ScalarProperty Name="TaxAmt00" ColumnName="TaxAmt00" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="LineType" ColumnName="LineType" />
+                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
+                <ScalarProperty Name="InvtId" ColumnName="InvtId" />
+                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
+                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ARNumbering" FunctionName="eBiz4DWebSysModel.Store.ARNumbering" />
+          <EntitySetMapping Name="AR_RedInvoiceDoc">
+            <EntityTypeMapping TypeName="AR10800Model.AR_RedInvoiceDoc">
+              <MappingFragment StoreEntitySet="AR_RedInvoiceDoc">
+                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
+                <ScalarProperty Name="DiscAmt" ColumnName="DiscAmt" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PerPost" ColumnName="PerPost" />
+                <ScalarProperty Name="DocDesc" ColumnName="DocDesc" />
+                <ScalarProperty Name="DocDate" ColumnName="DocDate" />
+                <ScalarProperty Name="CuryTxblAmt" ColumnName="CuryTxblAmt" />
+                <ScalarProperty Name="CuryTaxAmt" ColumnName="CuryTaxAmt" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
+                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AR_RedInvoiceTrans">
+            <EntityTypeMapping TypeName="AR10800Model.AR_RedInvoiceTrans">
+              <MappingFragment StoreEntitySet="AR_RedInvoiceTrans">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="CuryTaxAmt" ColumnName="CuryTaxAmt" />
+                <ScalarProperty Name="CuryTxblAmt" ColumnName="CuryTxblAmt" />
+                <ScalarProperty Name="DocDesc" ColumnName="DocDesc" />
+                <ScalarProperty Name="DocDate" ColumnName="DocDate" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AR_Setup">
+            <EntityTypeMapping TypeName="AR10800Model.AR_Setup">
+              <MappingFragment StoreEntitySet="AR_Setup">
+                <ScalarProperty Name="HiddenHierarchy" ColumnName="HiddenHierarchy" />
+                <ScalarProperty Name="AutoSlsperID" ColumnName="AutoSlsperID" />
+                <ScalarProperty Name="AddressLevel" ColumnName="AddressLevel" />
+                <ScalarProperty Name="LastCustID" ColumnName="LastCustID" />
+                <ScalarProperty Name="AutoCustID" ColumnName="AutoCustID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="TranDescDflt" ColumnName="TranDescDflt" />
+                <ScalarProperty Name="PrefixBat" ColumnName="PrefixBat" />
+                <ScalarProperty Name="LastReceiptNbr" ColumnName="LastReceiptNbr" />
+                <ScalarProperty Name="LastRefNbr" ColumnName="LastRefNbr" />
+                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
+                <ScalarProperty Name="DfltShipViaID" ColumnName="DfltShipViaID" />
+                <ScalarProperty Name="DfltBankAcct" ColumnName="DfltBankAcct" />
+                <ScalarProperty Name="SetupId" ColumnName="SetupId" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR_GetDocForRedInvoice" FunctionName="eBiz4DWebSysModel.Store.AR_GetDocForRedInvoice">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10800Model.AR_GetDocForRedInvoice_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="InvtId" ColumnName="InvtId" />
+                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="DocDate" ColumnName="DocDate" />
+                <ScalarProperty Name="DocDesc" ColumnName="DocDesc" />
+                <ScalarProperty Name="TxblAmt" ColumnName="TxblAmt" />
+                <ScalarProperty Name="TaxAmt" ColumnName="TaxAmt" />
+                <ScalarProperty Name="DiscAmt" ColumnName="DiscAmt" />
+                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
+                <ScalarProperty Name="TxblAmtSel" ColumnName="TxblAmtSel" />
+                <ScalarProperty Name="TaxAmtSel" ColumnName="TaxAmtSel" />
+                <ScalarProperty Name="DiscAmtSel" ColumnName="DiscAmtSel" />
+                <ScalarProperty Name="SOFeeSel" ColumnName="SOFeeSel" />
+                <ScalarProperty Name="IsChanged" ColumnName="IsChanged" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR_TransLoadRedInvoice" FunctionName="eBiz4DWebSysModel.Store.AR_TransLoadRedInvoice">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10800Model.AR_TransLoadRedInvoice_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="RefNbr" ColumnName="RefNbr" />
+                <ScalarProperty Name="InvtId" ColumnName="InvtId" />
+                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="DocDate" ColumnName="DocDate" />
+                <ScalarProperty Name="DocDesc" ColumnName="DocDesc" />
+                <ScalarProperty Name="TxblAmt" ColumnName="TxblAmt" />
+                <ScalarProperty Name="TaxAmt" ColumnName="TaxAmt" />
+                <ScalarProperty Name="DiscAmt" ColumnName="DiscAmt" />
+                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
+                <ScalarProperty Name="TxblAmtSel" ColumnName="TxblAmtSel" />
+                <ScalarProperty Name="TaxAmtSel" ColumnName="TaxAmtSel" />
+                <ScalarProperty Name="DiscAmtSel" ColumnName="DiscAmtSel" />
+                <ScalarProperty Name="SOFeeSel" ColumnName="SOFeeSel" />
+                <ScalarProperty Name="IsChanged" ColumnName="IsChanged" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_CustomerActive" FunctionName="eBiz4DWebSysModel.Store.ppv_CustomerActive">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10800Model.ppv_CustomerActive_Result">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_DeliveryPerson" FunctionName="eBiz4DWebSysModel.Store.ppv_DeliveryPerson">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10800Model.ppv_DeliveryPerson_Result">
+                <ScalarProperty Name="Slsperid" ColumnName="Slsperid" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_RedInvoiceNbr" FunctionName="eBiz4DWebSysModel.Store.ppv_RedInvoiceNbr">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10800Model.ppv_RedInvoiceNbr_Result">
+                <ScalarProperty Name="CuryTaxAmt" ColumnName="CuryTaxAmt" />
+                <ScalarProperty Name="CuryTxblAmt" ColumnName="CuryTxblAmt" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="DiscAmt" ColumnName="DiscAmt" />
+                <ScalarProperty Name="DocDate" ColumnName="DocDate" />
+                <ScalarProperty Name="DocDesc" ColumnName="DocDesc" />
+                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
+                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
+                <ScalarProperty Name="PerPost" ColumnName="PerPost" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_RedInvoiceTax" FunctionName="eBiz4DWebSysModel.Store.ppv_RedInvoiceTax">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10800Model.ppv_RedInvoiceTax_Result">
+                <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_SalesPerson" FunctionName="eBiz4DWebSysModel.Store.ppv_SalesPerson">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10800Model.ppv_SalesPerson_Result">
+                <ScalarProperty Name="Slsperid" ColumnName="Slsperid" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="83" >
+        <EntityTypeShape EntityType="AR10800Model.AR_Trans" Width="1.5" PointX="4.375" PointY="0.5" />
+        <EntityTypeShape EntityType="AR10800Model.AR_RedInvoiceDoc" Width="1.75" PointX="0.5" PointY="0.5" />
+        <EntityTypeShape EntityType="AR10800Model.AR_RedInvoiceTrans" Width="1.75" PointX="2.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AR10800Model.AR_Setup" Width="1.5" PointX="6.125" PointY="0.5" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

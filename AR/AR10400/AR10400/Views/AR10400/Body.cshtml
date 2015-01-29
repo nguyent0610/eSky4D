@@ -1,0 +1,519 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using AR10400;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "AR10400";
+   
+}
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+.Items(
+        X.FormPanel()
+        .Layout(LayoutType.Anchor)
+        .ID("dataForm")
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(10)
+        //.AutoScroll(true)
+        .TopBar(Util.SetupToolbar("Print",true))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        //.Listeners(itm => itm.AfterRender.Fn = "frmloadAfterRender")
+        .Items(
+            X.Panel().ID("Header").Layout(LayoutType.Anchor).AnchorHorizontal("100%").AnchorVertical("33%")
+            .Items(
+            
+                X.FormPanel()
+                .ID("dataFormTop")
+                .Layout(LayoutType.Anchor)
+                .AnchorVertical("50%")
+                .AnchorHorizontal("100%")
+                //.Title(Util.GetLang("DOC"))
+                .Padding(2)
+                .Items(
+                        
+                 
+                X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                .Items(
+                   //Bat.No
+                    HQ.Combo().ID("cboBatNbr").Name("cboBatNbr").HQLangCode("BATNBR").HQProcedure("ppv_AR10100Batch")
+                    .HQColumnShow("BatNbr,TotAmt,Descr,Status").DisplayField("BatNbr").ValueField("BatNbr").Editable(false)
+                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.ForceSelection(true)
+                    .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
+                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
+                        new StoreParameter() { Name = "@ScreenNbr", Value = ViewBag.Title, Mode = ParameterMode.Value }
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "cboBatNbr_Change";
+
+                        })
+
+                    //BrandID    
+                    ,HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BRANCHID")
+                    .Width(300).MarginSpec("5 0 5 0").MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
+                    .Value(Current.CpnyID.ToString()).ReadOnly(true)
+                    .Listeners(lst =>
+                    {
+                        //lst.Change.Fn = "txtDescr_Change";
+                    })
+                    //Status
+                    ,HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("STATUS").HQProcedure("ppv_AP10300Status")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Status")
+                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.Disabled(true)
+                    .HQDBSys(false).HQValue("H",false).ReadOnly(true)
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "cboStatus_Change";
+                        })   
+                        
+                         
+                    //ngoac ket thuc dan hang ngang 3 combo  dau form         
+                    )
+
+
+                          , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
+                        .Items(
+                        
+
+                        //Xu ly (Handle)   
+                         HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("HANDLE").HQProcedure("ppv_AP10100Handle")
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                        .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 300").ForceSelection(true).AllowBlank(false)
+                        .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@Status", Value = "App.cboStatus.value", Mode = ParameterMode.Raw },
+                        //@Role nay sua sau
+                        
+                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                    })
+                        .LoadData()
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+
+                            })
+
+                        , HQ.NumberField().ID("txtCuryCrTot").Name("txtCuryCrTot").HQLangCode("TOTAMT").DataIndex("TotAmt")
+                        .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)
+                        .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "txtCuryCrTot_Change";
+                            })
+
+                    //ngoac ket thuc dan hang ngang 3 combo  sau form
+                    )
+                    
+                    ,HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("DESCR").DataIndex("Descr")
+                    .Width(600).MarginSpec("5 0 5 0").MaxLength(100).EnforceMaxLength(true).AllowBlank(false)
+                    .Listeners(lst =>
+                    {
+
+                        //lst.Change.Fn = "txtDescr_Change";
+                                    
+                    })
+
+                //ngoac dong dataFormTop
+                )
+
+                           , X.FormPanel()
+                            .ID("dataFormBot")
+                            .Layout(LayoutType.Anchor)
+                            .AnchorVertical("48%")
+                            .AnchorHorizontal("100%")
+                            .Padding(2)
+                            .Items(
+                             X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                             .Items(
+                                
+
+                                //CustID (customer ID)
+                             HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").HQProcedure("ppv_Customer")
+                            .HQColumnShow("CustId,CustName,Addr1,Addr2").DisplayField("CustId").ValueField("CustId").DataIndex("CustID")
+                            .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
+                            .HQDBSys(false)
+                            .HQParam(new StoreParameterCollection()
+                             {
+                                new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
+                             })
+                            .LoadData()
+                            .Listeners(lst =>
+                                {
+                                    lst.Change.Fn = "cboCustId_Change";
+                                })   
+
+
+                                //Doctype     
+                                ,HQ.Combo().ID("cboDocType").Name("cboDocType").HQLangCode("DOCTYPE").HQProcedure("ppv_AR10300DocType")
+                                .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("AdjgDocType").AllowBlank(false)
+                                .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
+                                .HQDBSys(false).HQValue("PP",false)
+                                //.MaxLength(30).EnforceMaxLength(true)
+                                //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .HQParam(new StoreParameterCollection()
+                                {
+                                    new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                    {
+                                        //lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Change.Fn = "cboDocType_Change";
+                                        //lst.Focus.Fn = "Focus1_Change";
+                                    })
+
+                                    //Original DocAmount ( Vendor Balance )
+                             , HQ.NumberField().ID("txtOrigDocAmt").Name("txtOrigDocAmt").HQLangCode("CUSTBAL")//.DataIndex("OrigDocAmt")
+                             .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)
+
+                            //ngoac ket thuc dan hang ngang hang 1 tab 1
+                            )
+
+                             , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
+                            .Items(
+                                //Apply Amount
+                                HQ.NumberField().ID("txtPayment").Name("txtPayment").HQLangCode("APPLYAMT").DataIndex("")
+                               .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)
+                               .Listeners(lst =>
+                                {
+                                    lst.Change.Fn = "txtPayment_Change";
+                                })
+                                 //DocDate
+                                ,HQ.DateField().ID("txtDocDate").Name("txtDocDate").HQLangCode("DOCDATE").DataIndex("AdjgDocDate")
+                                .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now).AllowBlank(false)
+                                .Listeners(lst =>
+                                 {
+                                    //lst.Change.Fn = "txtDocDate_Change";
+                                 })
+                                //Application Total
+                              ,HQ.NumberField().ID("txtPaid").Name("txtPaid").HQLangCode("TOTAPPLY").DataIndex("")
+                               .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)
+                               .Listeners(lst =>
+                                {
+                                    lst.Change.Fn = "txtPaid_Change";
+                                })
+
+                            //ngoac ket thuc dan hang ngang hang 2 tab 1
+                            )
+
+                             , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
+                            .Items(
+
+                                //Balance
+                                HQ.NumberField().ID("txtOdd").Name("txtOdd").HQLangCode("BALANCE").DataIndex("")
+                               .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)
+                               .Listeners(p =>
+                                 {
+                                     p.Change.Fn = "txtOdd_Change";
+                                 })
+
+                               , HQ.Button().ID("btnAutoAssign").MarginSpec("5 0 0 155").Width(145)
+                                 .HQLangCode("AUTOAPPL").Listeners(p =>
+                                 {
+                                     p.Click.Fn = "AutoAssign_Click";
+                                 })
+
+                                 //UnApply Total
+                                 ,HQ.NumberField().ID("txtUnTotPayment").Name("txtUnTotPayment").HQLangCode("UNTOTAPPLY").DataIndex("")
+                               .Width(300).MarginSpec("5 0 5 0").ReadOnly(true)
+
+
+                            //ngoac ket thuc dan hang ngang hang 3 tab 1
+                            )
+
+                      //ngoac ket thuc dataFormBot       
+                     )
+
+
+                  //ngoac ngoai Header Panel bao gom panel tren va tab o duoi
+                    )
+                    ,X.Panel().ID("TabGrid").Layout(LayoutType.Anchor).AnchorHorizontal("100%").AnchorVertical("67%")
+                    .Items(
+                          X.TabPanel()
+                    .Layout(LayoutType.Anchor)
+                    .ID("tabAtAP10100")
+                    .AnchorHorizontal("100%")
+                    .AnchorVertical("100%")
+                    .Listeners(p =>
+                    {
+                        //p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 100)";
+                        //p.TabChange.Fn = "Focus1_Change";
+                    })
+                    .Items(
+                                    Html.X().GridPanel()
+                                     .Layout(LayoutType.Fit)
+                                    .Frame(true)
+                                    .AnchorHorizontal("100%")
+                                    .AnchorVertical("100%")
+                                    //.Height(320)
+                                    //.Width(1400)
+                                    //.Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
+                                    .Title(Util.GetLang("ASSIGNINGDOC"))
+                                    .RenderTo("contentCenter")
+                                    .AutoScroll(true)
+                                    .View(X.GridView().TrackOver(false))
+                                    .ID("grdAdjusting").SetAutoScroll(true)
+                                    .StoreID("storeGrid1")
+                                    //.Hidden(true)
+                                    .SortableColumns(false)
+                                    .Listeners(l =>
+                                            {
+                                                l.ContainerMouseUp.Fn = "Focus1_Change";
+                                                l.Select.Fn = "Focus1_Change";
+                                                l.BeforeEdit.Fn = "Focus1_Change";
+                                                l.CellClick.Fn = "Focus1_Change";
+                                            })
+                                    //.Features(
+                                    //               Html.X().GridFilters()//Filter
+                                    //                   .Local(true)
+                                    //                       .Filters(
+                                    //                            Html.X().StringFilter().DataIndex("CpnyID"),
+                                    //                            Html.X().StringFilter().DataIndex("CpnyName")
+
+                                                                                             //                       )
+
+                                                                                             //           )       
+                                    .ColumnModel(
+                                        Html.X().RowNumbererColumn().ID("RowNumber1")
+
+
+                                             , Html.X().CheckColumn().ID("chkSelectAdjusting").DataIndex("Selected").Width(30).Editable(true).HideTitleEl(true)
+                                              .HeaderItems(
+                                                HQ.Checkbox().ID("AdjustingCheckAll").MarginSpec("0 0 0 8")
+                                                .Listeners(l => l.Change.Fn = "AdjustingCheckAll_Change")//bat thay doi khi check vao o tren header
+                                                )
+                                                .Listeners(l => l.CheckChange.Fn = "AdjustingCheckEveryRow_Change") // bat thay doi khi check vao tung o ben duoi
+                                                
+                                                
+                                                , Html.X().DateColumn().Text(Util.GetLang("DocDate")).DataIndex("DocDate").Width(100).Format("dd-MM-yyyy")
+                                                .Editor(Html.X().DateField().ID("txtDocDateGrid1").Format("dd-MM-yyyy").Editable(false)
+                                                .Listeners(lst =>
+                                                {
+
+                                                    //lst.Change.Fn = "ExpiryDate_Change";
+
+                                                }))
+                                             //Description
+                                              , Html.X().Column().ID("txtInvcNbrGrid1").Text(Util.GetLang("RcptNo")).DataIndex("InvcNbr").Width(150)
+                                              .Editor(Html.X().TextField())
+
+                                              , Html.X().Column().ID("txtBatNbrGrid1").Text(Util.GetLang("BatNbr")).DataIndex("BatNbr").Width(150)
+                                              .Editor(Html.X().TextField())
+                                              
+                                              , Html.X().Column().ID("txtRefNbrGrid1").Text(Util.GetLang("RefNbr")).DataIndex("RefNbr").Width(150)
+                                              .Editor(Html.X().TextField())
+                                              
+                                              , Html.X().NumberColumn().Format("0,000").ID("txtPaymentGrid1").Text(Util.GetLang("Payment")).DataIndex("Payment").Width(150)
+                                            .Editor(Html.X().TextField()
+                                            .Listeners(lst =>
+                                                {
+                                                    lst.Change.Fn = "txtPaymentGrid1_change";
+                                                })
+                                            )
+                                            
+                                            
+                                              , Html.X().NumberColumn().Format("0,000").ID("txtDocBalGrid1").Text(Util.GetLang("DocBal")).DataIndex("DocBal").Width(150)
+                                            .Editor(Html.X().TextField())
+                                            
+                                            , Html.X().Column().ID("txtCustIDGrid1").Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150)
+                                              .Editor(Html.X().TextField())
+                                              
+                                              , Html.X().Column().ID("txtDescrGrid1").Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
+                                              .Editor(Html.X().TextField())
+                                              
+                           
+
+                                  , Html.X().CommandColumn().Width(150)
+                                        .Commands(
+                                            Html.X().GridCommand()
+                                                .Text(Util.GetLang("Reject"))
+                                                .ToolTip(t =>
+                                                {
+                                                    t.Text = Util.GetLang("Rejectrowchanges");
+                                                })
+                                                .CommandName("reject")
+                                                .Icon(Icon.ArrowUndo)
+                                        )
+
+
+                                    .PrepareToolbar(t =>
+                                    {
+                                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                    })
+                                    .Listeners(l =>
+                                    {
+                                        l.Command.Handler = "grd_Reject(record);";
+                                    })
+                                //ngoac ket thuc ColumnModel
+                                 )
+                                 .SelectionModel(Html.X().RowSelectionModel().ID("SelectionRowOnGrid1").Mode(SelectionMode.Multi))
+                                  .Plugins(
+                                    Html.X()//Cho phep edit )
+                                        .CellEditing()
+                                        .ClicksToEdit(1)
+                                        .Listeners(ls =>
+                                        {
+                                            ls.BeforeEdit.Fn = "grd_BeforeEdit";
+                                            ls.Edit.Fn = "grd_Edit";
+                                            ls.ValidateEdit.Fn = "grd_ValidateEdit";
+                                            ls.CancelEdit.Fn = "grd_CancelEdit";
+
+                                        })
+                                //ngoac ket thuc Plugin        
+                                )
+
+                                , Html.X().GridPanel()
+                                     .Layout(LayoutType.Fit)
+                                    .Frame(true)
+                                     .AnchorHorizontal("100%")
+                                    .AnchorVertical("100%")
+                                    //.Height(320)
+                                    //.Width(1400)
+                                    //.Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
+                                    .Title(Util.GetLang("ASSIGNEDDOC"))
+                                    .RenderTo("contentCenter")
+                                    .AutoScroll(true)
+                                    .View(X.GridView().TrackOver(false))
+                                    .ID("grdAdjusted").SetAutoScroll(true)
+                                    .StoreID("storeGrid2")
+                                    //.Hidden(true)
+                                    .SortableColumns(false)
+                                    .Listeners(l =>
+                                            {
+                                                l.ContainerMouseUp.Fn = "Focus2_Change";
+                                                l.Select.Fn = "Focus2_Change";
+                                                l.BeforeEdit.Fn = "Focus2_Change";
+                                                l.CellClick.Fn = "Focus2_Change";
+                                            })
+                                    //.Features(
+                                    //               Html.X().GridFilters()//Filter
+                                    //                   .Local(true)
+                                    //                       .Filters(
+                                    //                            Html.X().StringFilter().DataIndex("CpnyID"),
+                                    //                            Html.X().StringFilter().DataIndex("CpnyName")
+
+                                                                                             //                       )
+
+                                                                                             //           )       
+                                        .ColumnModel(
+                                        Html.X().RowNumbererColumn().ID("RowNumber2")
+
+
+                                             , Html.X().CheckColumn().ID("chkSelectAdjusted").DataIndex("Selected").Width(30).Editable(true).HideTitleEl(true)
+                                              .HeaderItems(
+                                                HQ.Checkbox().ID("AdjustedCheckAll").MarginSpec("0 0 0 8")
+                                                .Listeners(l => l.Change.Fn = "AdjustedCheckAll_Change")  //bat thay doi khi check vao o tren header
+                                                )
+                                                .Listeners(l => l.CheckChange.Fn = "AdjustedCheckEveryRow_Change") // bat thay doi khi check vao tung o ben duoi
+                                                
+                                                , Html.X().DateColumn().Text(Util.GetLang("DocDate")).DataIndex("DocDate").Width(100).Format("dd-MM-yyyy")
+                                                .Editor(Html.X().DateField().ID("txtDocDateGrid2").Format("dd-MM-yyyy").Editable(false)
+                                                .Listeners(lst =>
+                                                {
+
+                                                    //lst.Change.Fn = "ExpiryDate_Change";
+
+                                                }))
+                                             //Description
+                                              , Html.X().Column().ID("txtInvcNbrGrid2").Text(Util.GetLang("InvcNbr")).DataIndex("InvcNbr").Width(150)
+                                              .Editor(Html.X().TextField())
+
+                                              , Html.X().Column().ID("txtBatNbrGrid2").Text(Util.GetLang("BatNbr")).DataIndex("BatNbr").Width(150)
+                                              .Editor(Html.X().TextField())
+                                              
+                                              , Html.X().Column().ID("txtRefNbrGrid2").Text(Util.GetLang("RefNbr")).DataIndex("RefNbr").Width(150)
+                                              .Editor(Html.X().TextField())
+                                              
+                                              , Html.X().NumberColumn().Format("0,000").ID("txtPaymentGrid2").Text(Util.GetLang("Payment")).DataIndex("Payment").Width(150)
+                                            .Editor(Html.X().TextField()
+                                            .Listeners(lst =>
+                                                {
+                                                    lst.Change.Fn = "txtPaymentGrid2_change";
+                                                })
+                                            )
+                                              , Html.X().NumberColumn().Format("0,000").ID("txtDocBalGrid12").Text(Util.GetLang("DocBal")).DataIndex("DocBal").Width(150)
+                                            .Editor(Html.X().TextField())
+                                            
+                                            , Html.X().Column().ID("txtCustIDGrid2").Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150)
+                                              .Editor(Html.X().TextField())
+                                              
+                                              , Html.X().Column().ID("txtDescrGrid2").Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
+                                              .Editor(Html.X().TextField())
+
+
+
+                                  , Html.X().CommandColumn().Width(150)
+                                        .Commands(
+                                            Html.X().GridCommand()
+                                                .Text(Util.GetLang("Reject"))
+                                                .ToolTip(t =>
+                                                {
+                                                    t.Text = Util.GetLang("Rejectrowchanges");
+                                                })
+                                                .CommandName("reject")
+                                                .Icon(Icon.ArrowUndo)
+                                        )
+
+
+                                    .PrepareToolbar(t =>
+                                    {
+                                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                    })
+                                    .Listeners(l =>
+                                    {
+                                        l.Command.Handler = "grd_Reject(record);";
+                                    })
+                                //ngoac ket thuc ColumnModel
+                                 )
+                                 .SelectionModel(Html.X().RowSelectionModel().ID("SelectionRowOnGrid2").Mode(SelectionMode.Multi))
+                                  .Plugins(
+                                    Html.X()//Cho phep edit )
+                                        .CellEditing()
+                                        .ClicksToEdit(1)
+                                        .Listeners(ls =>
+                                        {
+                                            ls.BeforeEdit.Fn = "grd_BeforeEdit";
+                                            ls.Edit.Fn = "grd_Edit";
+                                            ls.ValidateEdit.Fn = "grd_ValidateEdit";
+                                            ls.CancelEdit.Fn = "grd_CancelEdit";
+
+                                        })
+                        //ngoac ket thuc Plugin        
+                                )
+                                
+                                
+                                
+                                
+                                
+                            //ngoac ket thuc tat ca tab
+                            )
+         
+                            //ngoac ngoai TabGrid bao gom Grid cua ca 2 tab
+                            )
+     
+                    
+                )
+
+                )
+
+
+
+
+
+    )
+ 

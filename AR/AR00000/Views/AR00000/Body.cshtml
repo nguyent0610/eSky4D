@@ -1,0 +1,108 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using AR00000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+@(Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Anchor)
+        .ID("dataForm")
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(10)
+        .TopBar(Util.SetupToolbar("PO20100", false))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .Items(
+            X.Panel().ID("Header").Layout(LayoutType.HBox).Width(735)
+            .Items(
+            
+                // First Column
+                X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0").Width(735)
+                .Items(
+                
+                    X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Width(735)
+                   .Items(
+                   
+                           HQ.TextBox().ID("txtLastBatNbr").Name("txtLastBatNbr").HQLangCode("LASTBATNBR").DataIndex("LastBatNbr")
+                           .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                    
+                           , HQ.Checkbox().ID("chkAutoCustID").Name("chkAutoCustID").HQLangCode("AUTOCUSTID")
+                           .MarginSpec("0 0 0 5").DataIndex("AutoCustID").MarginSpec("10 10 15 20") 
+                        
+                    )  
+                    
+                   , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Width(735)
+                   .Items(
+                   
+                     HQ.TextBox().ID("txtLastRefNbr ").Name("txtLastRefNbr ").HQLangCode("LASTREFNBR").DataIndex("LastRefNbr")
+                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                    
+                    , HQ.Checkbox().ID("chkSlsPerID").Name("chkSlsPerID").HQLangCode("autoslsperid")
+                        .MarginSpec("0 0 0 5").DataIndex("AutoSlsperID").MarginSpec("5 10 15 20") 
+                        
+                    )
+                    
+                    , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0").Width(735)
+                   .Items(
+                   
+                     HQ.TextBox().ID("lblLastReceiptNbr").Name("lblLastReceiptNbr").HQLangCode("LASTRECEIPTNBR").DataIndex("LastReceiptNbr")
+                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                    
+                    , HQ.Checkbox().ID("chkHiddenTree").Name("chkHiddenTree").HQLangCode("hiddentree")
+                        .MarginSpec("0 0 0 5").DataIndex("HiddenHierarchy").MarginSpec("5 10 15 20")
+                        
+                     )
+                     
+                    , HQ.TextBox().ID("txtLastCustID").Name("txtLastCustID").HQLangCode("LASTCUSTID").DataIndex("LastCustID")
+                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(50).EnforceMaxLength(true)
+
+                    , HQ.Combo().ID("cboDfltShipViaID").Name("cboDfltShipViaID").HQLangCode("SHIPVIAID").HQProcedure("ppv_ShipViaID")
+                    .HQColumnShow("ShipViaID,Descr").DisplayField("ShipViaID").ValueField("ShipViaID").DataIndex("DfltShipViaID")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false)
+                    .LoadData()
+
+                     , HQ.TextBox().ID("txtPreFixBat").Name("txtPreFixBat").HQLangCode("Prefix").DataIndex("PrefixBat")
+                    .Width(400).MarginSpec("5 0 0 0").MaxLength(2).EnforceMaxLength(true)
+                    
+                    , HQ.Combo().ID("cboTranDescDflt").Name("cboTranDescDflt").HQLangCode("TranDescDflt").HQProcedure("ppv_AR00000_TranDescDflt")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("TranDescDflt")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false)
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                           // new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                           // new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
+                        })
+                    .LoadData()
+
+                    , HQ.Combo().ID("cboAddressLevel").Name("cboAddressLevel").HQLangCode("ADDRLEVEL").HQProcedure("ppv_AR00000_AddrLevel")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("AddressLevel")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false)
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                           // new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                           // new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
+                        })
+                    .LoadData()
+                    
+                    , HQ.Combo().ID("cboBankAcct").Name("cboBankAcct").HQLangCode("BankAcct").HQProcedure("ppv_BankAcctCA")
+                    .HQColumnShow("BankAcct,CashAcctName,AcctNbr").DisplayField("BankAcct").ValueField("BankAcct").DataIndex("DfltBankAcct")
+                    .Width(400).HQHeightWidth(400, 600).MarginSpec("5 0 0 0").Editable(false)
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString() , Mode = ParameterMode.Value },
+                           // new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
+                        })
+                    .LoadData()
+                    
+                
+                )
+            )
+        )))

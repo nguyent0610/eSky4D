@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="AR_Setup" EntityType="eBiz4DWebAppModel.Store.AR_Setup" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="AR_Setup">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SetupId" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="SetupId" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="DfltBankAcct" Type="varchar" MaxLength="10" />
+          <Property Name="DfltShipViaID" Type="varchar" MaxLength="10" />
+          <Property Name="LastBatNbr" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LastRefNbr" Type="varchar" MaxLength="10" />
+          <Property Name="LastReceiptNbr" Type="varchar" MaxLength="10" />
+          <Property Name="PrefixBat" Type="varchar" MaxLength="2" />
+          <Property Name="TranDescDflt" Type="char" MaxLength="1" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="AutoCustID" Type="bit" Nullable="false" />
+          <Property Name="LastCustID" Type="varchar" MaxLength="50" />
+          <Property Name="AddressLevel" Type="varchar" MaxLength="1" />
+          <Property Name="AutoSlsperID" Type="bit" />
+          <Property Name="HiddenHierarchy" Type="bit" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AR00000Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="AR00000Entities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="AR_Setup" EntityType="AR00000Model.AR_Setup" />
+        </EntityContainer>
+        <EntityType Name="AR_Setup">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SetupId" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SetupId" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltBankAcct" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltShipViaID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastBatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastRefNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastReceiptNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PrefixBat" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TranDescDflt" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="Boolean" Name="AutoCustID" Nullable="false" />
+          <Property Type="String" Name="LastCustID" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AddressLevel" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="AutoSlsperID" />
+          <Property Type="Boolean" Name="HiddenHierarchy" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="AR00000Entities">
+          <EntitySetMapping Name="AR_Setup">
+            <EntityTypeMapping TypeName="AR00000Model.AR_Setup">
+              <MappingFragment StoreEntitySet="AR_Setup">
+                <ScalarProperty Name="HiddenHierarchy" ColumnName="HiddenHierarchy" />
+                <ScalarProperty Name="AutoSlsperID" ColumnName="AutoSlsperID" />
+                <ScalarProperty Name="AddressLevel" ColumnName="AddressLevel" />
+                <ScalarProperty Name="LastCustID" ColumnName="LastCustID" />
+                <ScalarProperty Name="AutoCustID" ColumnName="AutoCustID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="TranDescDflt" ColumnName="TranDescDflt" />
+                <ScalarProperty Name="PrefixBat" ColumnName="PrefixBat" />
+                <ScalarProperty Name="LastReceiptNbr" ColumnName="LastReceiptNbr" />
+                <ScalarProperty Name="LastRefNbr" ColumnName="LastRefNbr" />
+                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
+                <ScalarProperty Name="DfltShipViaID" ColumnName="DfltShipViaID" />
+                <ScalarProperty Name="DfltBankAcct" ColumnName="DfltBankAcct" />
+                <ScalarProperty Name="SetupId" ColumnName="SetupId" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="83">
+        <EntityTypeShape EntityType="AR00000Model.AR_Setup" Width="1.5" PointX="2" PointY="0.625" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

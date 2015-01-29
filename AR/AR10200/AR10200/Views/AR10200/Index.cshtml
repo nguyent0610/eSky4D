@@ -1,0 +1,90 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using AR10200;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "AR10200";
+    var acc = Session["AR10200"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+<script src='@Url.Content("Scripts/common.js")' type="text/javascript"></script>
+<script src='@Url.Content("Scripts/Screen/AR10200.js")' type="text/javascript"></script>
+
+<script type="text/javascript">
+    var isUpdate = strToBool('@acc.Update.ToString()');
+    var isInsert = strToBool('@acc.Insert.ToString()');
+    var isDelete = strToBool('@acc.Delete.ToString()');
+</script>
+  <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
+
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("storeGridAR_Adjust")
+            .RemotePaging(true).PageSize(50).AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR10200_BindingGrid_Result), "AR10200_BindingGrid_ResultModel", ""))
+            .ServerProxy(Html.X().AjaxProxy().Url(Url.Action("GetListAdjust")))
+            .Parameters(ps => {
+                ps.Add(new StoreParameter("branchId", Current.CpnyID, ParameterMode.Value));
+                ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custId", "App.cboCustID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperId", "App.cboSlsperID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("deliveryId", "App.cboDeliveryID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("refNbr", "App.cboRefNbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("fromDate", "App.cboFromDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("toDate", "App.cboToDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("dateType", "App.cboDateType.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("isGridF3", "0", ParameterMode.Value));
+            })
+            .Listeners(l => {
+                l.Load.Fn = "storeGridAR_Adjust_load";
+                l.DataChanged.Fn = "storeGridAR_Adjust_dataChanged";
+                l.Update.Fn = "storeGridAR_Adjust_dataChanged";
+            })
+        )
+
+        @(
+            X.Store().ID("storeCboInvcNbr").AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR10200_BindingGrid_Result), "AR10200_BindingGrid_ResultModel1", ""))
+            //.Model(
+            //    X.Model().ID("AR10200_BindingGrid_ResultModel1")//InvcNbr,DocBal,CustId,SlsperID,DocDate
+            //    .Fields(
+            //        X.ModelField().Name("InvcNbr").Type(ModelFieldType.String)
+            //        ,X.ModelField().Name("DocBal").Type(ModelFieldType.Float)
+            //        ,X.ModelField().Name("CustId").Type(ModelFieldType.String)
+            //        ,X.ModelField().Name("SlsperID").Type(ModelFieldType.String)
+            //        ,X.ModelField().Name("DocDate").Type(ModelFieldType.Date)
+            //    )
+            //)
+            .ServerProxy(Html.X().AjaxProxy().Url(Url.Action("GetListAdjust")))
+            .Parameters(ps => {
+                ps.Add(new StoreParameter("branchId", Current.CpnyID, ParameterMode.Value));
+                ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custId", "App.cboCustID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperId", "App.cboSlsperID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("deliveryId", "App.cboDeliveryID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("refNbr", "App.cboRefNbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("fromDate", "App.cboFromDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("toDate", "App.cboToDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("dateType", "App.cboDateType.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("isGridF3", "1", ParameterMode.Value));
+            })
+        )
+
+        @{ Html.RenderAction("Body"); }
+    </body>
+</html>

@@ -1,0 +1,56 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using AR20200;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "AR20200";
+    var acc = Session["AR20200"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+<script src='@Url.Content("Scripts/common.js")' type="text/javascript"></script>
+<script src='@Url.Content("Scripts/Screen/AR20200.js")' type="text/javascript"></script>
+
+<script type="text/javascript">
+    var isUpdate = strToBool('@acc.Update.ToString()');
+    var isInsert = strToBool('@acc.Insert.ToString()');
+    var isDelete = strToBool('@acc.Delete.ToString()');
+</script>
+  <title>@ViewBag.Title</title>
+    </head>
+    <body>
+@Html.X().ResourceManager().Theme(Theme.Gray)
+
+@*Make the store - the binding data of the form*@
+@(Html.X().Store().ID("storeARSalesPersonHeader")   
+        .Model(Util.GenerateModel(typeof(AR_Salesperson), "AR_SalespersonModel", "SlsperId"))       
+        .Proxy(
+            X.AjaxProxy()                
+            .Url(Url.Action("GetARSalesPersonHeader", "AR20200"))                
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        ) 
+        .Parameters(ps =>
+                        {
+                            ps.Add(new StoreParameter("BranchID", "App.cboBranchID.value", ParameterMode.Raw));
+                        })      
+        .Listeners(p=>p.Load.Handler="loadDataHeader()" )
+  )
+
+     @{ Html.RenderAction("Body"); }
+    </body>
+</html>

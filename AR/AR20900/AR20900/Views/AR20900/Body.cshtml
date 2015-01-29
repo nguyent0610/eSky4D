@@ -1,0 +1,122 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using AR20900;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+ @(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+        .Items(
+           Html.X().Window()
+          .ID("frmMain")
+          .Layout(LayoutType.Fit)
+          .Maximized(true)
+          .Closable(false)
+          .TitleCollapse(true)
+          .Header(false)
+          .KeyMap(Util.SetupKeyMap())
+          .TopBar(Util.SetupToolbar("AR20900"))
+          .Items(
+                X.FormPanel()
+                .ID("pnlScreen")
+                .DefaultAnchor("100%")
+                .BodyPadding(0)
+                .Layout(LayoutType.Fit)
+                .Height(480)
+                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
+                .Items(
+                            Html.X().GridPanel()
+                                    .Frame(true)
+                                    .AnchorHorizontal("100%")
+                                    .AnchorVertical("100%")
+                                    .RenderTo("contentCenter")
+                                    .Scroll(ScrollMode.Both)
+                                    .View(X.GridView().TrackOver(false))
+                                    .ID("grd")
+                                    .Store(Html.X().Store().ID("Store1")    
+                                            .RemotePaging(true)
+                                            .DataSource(Model)
+                                            .PageSize(50)
+                                            .Model(Util.GenerateModel(typeof(AR_Territory), "AR_TerritoryModel", "Territory"))                                                                                                                                  
+                                            .ServerProxy(
+                                                Html.X().AjaxProxy()
+                                                    .Url(Url.Action("GetData"))
+                                            )                                            
+                                        )
+                                    .SortableColumns(false)
+                                    .ColumnModel(
+                                                 Html.X().RowNumbererColumn()
+                                                , Html.X().Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(150).Editor(Html.X().TextField().MaxLength(20100))
+                                                , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(300).Editor(Html.X().TextField().MaxLength(100100))
+                                                , Html.X().CommandColumn().Width(150)
+                                                                        .Commands(
+                                                                            Html.X().GridCommand()
+                                                                                .Text(Util.GetLang("Reject"))
+                                                                                .ToolTip(t =>
+                                                                                {
+                                                                                    t.Text = Util.GetLang("Rejectrowchanges");
+                                                                                })
+                                                                                .CommandName("reject")
+                                                                                .Icon(Icon.ArrowUndo)
+                                                                        )
+                                                                        .PrepareToolbar(t =>
+                                                                        {
+                                                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                                                        })
+                                                                        .Listeners(l =>
+                                                                        {
+                                                                            l.Command.Handler = "grd_Reject(record);";
+                                                                        })
+                                    )
+                                    .SelectionModel(Html.X().RowSelectionModel().ID("SelectionModelAR_Territory").Mode(SelectionMode.Multi))
+                                    .BottomBar(//Phan trang       
+                                        Html.X().PagingToolbar().ID("PagingToolbar")
+                                            .Items(
+                                                Html.X().Label("Page size:"),
+                                                Html.X().ToolbarSpacer(10),
+                                                Html.X().ComboBox()
+                                                    .Width(80)
+                                                    .Items("1", "2", "10", "20", "30", "50")
+                                                    .SelectedItems("50")
+                                                    .Listeners(l =>
+                                                    {
+                                                        l.Select.Fn = "onComboBoxSelect";
+                                                    })
+                                            )
+                                            .Plugins(Html.X().ProgressBarPager())
+
+                                        )
+                                    
+                                    .Plugins(
+                                        Html.X()//Cho phep edit )
+                                            .CellEditing()
+                                            .ClicksToEdit(1)
+                                            .Listeners(ls =>
+                                            {
+                                                ls.BeforeEdit.Fn = "grd_BeforeEdit";
+                                                ls.Edit.Fn = "grd_Edit";
+                                                ls.ValidateEdit.Fn = "grd_ValidateEdit";
+                                                ls.CancelEdit.Fn = "grd_CancelEdit";
+
+
+                                            })        
+                                    )
+                                    .Features(
+                                            Html.X().GridFilters()//Filter
+                                                .Local(true)
+                                                      .Filters(
+                                                          Html.X().StringFilter().DataIndex("Territory"),
+                                                          Html.X().StringFilter().DataIndex("Descr")                                                        
+                                                      )
+                                              
+                                        )
+       
+
+                    )
+                )
+           )
+ )

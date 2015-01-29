@@ -1,0 +1,774 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="AR_Customer" EntityType="eBiz4DWebSysModel.Store.AR_Customer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="AR_Salesperson" EntityType="eBiz4DWebSysModel.Store.AR_Salesperson" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="AR_Customer">
+          <Key>
+            <PropertyRef Name="CustId" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="CustId" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CustName" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="Addr1" Type="nvarchar" MaxLength="200" />
+          <Property Name="Addr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Attn" Type="nvarchar" MaxLength="200" />
+          <Property Name="BillAddr1" Type="nvarchar" MaxLength="200" />
+          <Property Name="BillAddr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="BillAttn" Type="nvarchar" MaxLength="200" />
+          <Property Name="BillCity" Type="varchar" MaxLength="10" />
+          <Property Name="BillCountry" Type="varchar" MaxLength="3" />
+          <Property Name="BillFax" Type="varchar" MaxLength="30" />
+          <Property Name="BillName" Type="nvarchar" MaxLength="200" />
+          <Property Name="BillPhone" Type="varchar" MaxLength="30" />
+          <Property Name="BillSalut" Type="nvarchar" MaxLength="50" />
+          <Property Name="BillState" Type="varchar" MaxLength="10" />
+          <Property Name="BillZip" Type="varchar" MaxLength="10" />
+          <Property Name="Channel" Type="varchar" MaxLength="10" />
+          <Property Name="City" Type="varchar" MaxLength="10" />
+          <Property Name="ClassId" Type="varchar" MaxLength="6" />
+          <Property Name="Country" Type="varchar" MaxLength="3" />
+          <Property Name="CrLmt" Type="float" Nullable="false" />
+          <Property Name="CrRule" Type="varchar" MaxLength="1" />
+          <Property Name="CustFillPriority" Type="smallint" Nullable="false" />
+          <Property Name="CustType" Type="varchar" MaxLength="1" />
+          <Property Name="DeliveryID" Type="varchar" MaxLength="10" />
+          <Property Name="DflSaleRouteID" Type="varchar" MaxLength="10" />
+          <Property Name="DfltShipToId" Type="varchar" MaxLength="10" />
+          <Property Name="District" Type="nvarchar" MaxLength="30" />
+          <Property Name="EMailAddr" Type="varchar" MaxLength="30" />
+          <Property Name="EmpNum" Type="int" Nullable="false" />
+          <Property Name="ExpiryDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="Exported" Type="smallint" Nullable="false" />
+          <Property Name="Fax" Type="varchar" MaxLength="30" />
+          <Property Name="GracePer" Type="smallint" Nullable="false" />
+          <Property Name="LTTContractNbr" Type="varchar" MaxLength="30" />
+          <Property Name="NodeID" Type="varchar" MaxLength="10" />
+          <Property Name="NodeLevel" Type="smallint" Nullable="false" />
+          <Property Name="ParentRecordID" Type="int" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="30" />
+          <Property Name="PriceClassID" Type="varchar" MaxLength="10" />
+          <Property Name="Salut" Type="nvarchar" MaxLength="30" />
+          <Property Name="ShopType" Type="varchar" MaxLength="10" />
+          <Property Name="SiteId" Type="varchar" MaxLength="10" />
+          <Property Name="SlsperId" Type="varchar" MaxLength="10" />
+          <Property Name="State" Type="varchar" MaxLength="10" />
+          <Property Name="Status" Type="varchar" MaxLength="1" />
+          <Property Name="SupID" Type="varchar" MaxLength="10" />
+          <Property Name="TaxDflt" Type="varchar" MaxLength="1" />
+          <Property Name="TaxID00" Type="varchar" MaxLength="10" />
+          <Property Name="TaxID01" Type="varchar" MaxLength="10" />
+          <Property Name="TaxID02" Type="varchar" MaxLength="10" />
+          <Property Name="TaxID03" Type="varchar" MaxLength="10" />
+          <Property Name="TaxLocId" Type="varchar" MaxLength="15" />
+          <Property Name="TaxRegNbr" Type="varchar" MaxLength="15" />
+          <Property Name="Terms" Type="varchar" MaxLength="10" />
+          <Property Name="Territory" Type="varchar" MaxLength="10" />
+          <Property Name="TradeDisc" Type="float" Nullable="false" />
+          <Property Name="Zip" Type="varchar" MaxLength="10" />
+          <Property Name="Location" Type="varchar" MaxLength="10" />
+          <Property Name="Area" Type="varchar" MaxLength="10" />
+          <Property Name="GiftExchange" Type="bit" Nullable="false" />
+          <Property Name="HasPG" Type="bit" Nullable="false" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="EstablishDate" Type="date" />
+          <Property Name="Birthdate" Type="date" />
+        </EntityType>
+        <EntityType Name="AR_Salesperson">
+          <Key>
+            <PropertyRef Name="SlsperId" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Addr1" Type="nvarchar" MaxLength="50" />
+          <Property Name="Addr2" Type="nvarchar" MaxLength="50" />
+          <Property Name="CmmnPct" Type="float" />
+          <Property Name="Country" Type="varchar" MaxLength="3" />
+          <Property Name="EMailAddr" Type="varchar" MaxLength="30" />
+          <Property Name="Fax" Type="varchar" MaxLength="30" />
+          <Property Name="Name" Type="nvarchar" MaxLength="30" />
+          <Property Name="Phone" Type="varchar" MaxLength="30" />
+          <Property Name="ProductGroup" Type="varchar" MaxLength="20" />
+          <Property Name="State" Type="varchar" MaxLength="10" />
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="DeliveryMan" Type="varchar" MaxLength="10" />
+          <Property Name="Position" Type="varchar" MaxLength="2" />
+          <Property Name="LUpd_DateTime" Type="datetime" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="District" Type="nvarchar" MaxLength="30" />
+          <Property Name="SupID" Type="varchar" MaxLength="10" />
+          <Property Name="CrLmt" Type="float" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="PPCPassword" Type="varchar" MaxLength="100" />
+          <Property Name="PPCStorePicReq" Type="bit" />
+          <Property Name="VendID" Type="varchar" MaxLength="15" />
+          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="PPCAdmin" Type="bit" Nullable="false" />
+          <Property Name="Images" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <Function Name="AR21600_CustomerList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR21600_ListChooseDescr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Object" Type="varchar" Mode="In" />
+          <Parameter Name="Task" Type="varchar" Mode="In" />
+          <Parameter Name="FromBranch" Type="varchar" Mode="In" />
+          <Parameter Name="ToBranch" Type="varchar" Mode="In" />
+          <Parameter Name="FromStatus" Type="varchar" Mode="In" />
+          <Parameter Name="ToStatus" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="AR21600_ListChooseDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Object" Type="varchar" Mode="In" />
+          <Parameter Name="Task" Type="varchar" Mode="In" />
+          <Parameter Name="FromBranch" Type="varchar" Mode="In" />
+          <Parameter Name="ToBranch" Type="varchar" Mode="In" />
+          <Parameter Name="FromStatus" Type="varchar" Mode="In" />
+          <Parameter Name="ToStatus" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="AR21600_ListChooseDetailFromCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Object" Type="varchar" Mode="In" />
+          <Parameter Name="Task" Type="varchar" Mode="In" />
+          <Parameter Name="FromBranch" Type="varchar" Mode="In" />
+          <Parameter Name="ToBranch" Type="varchar" Mode="In" />
+          <Parameter Name="FromStatus" Type="varchar" Mode="In" />
+          <Parameter Name="ToStatus" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="AR21600_ListChooseDetailFromSls" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Object" Type="varchar" Mode="In" />
+          <Parameter Name="Task" Type="varchar" Mode="In" />
+          <Parameter Name="FromBranch" Type="varchar" Mode="In" />
+          <Parameter Name="ToBranch" Type="varchar" Mode="In" />
+          <Parameter Name="FromStatus" Type="varchar" Mode="In" />
+          <Parameter Name="ToStatus" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="AR21600_ListChooseDetailToCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Object" Type="varchar" Mode="In" />
+          <Parameter Name="Task" Type="varchar" Mode="In" />
+          <Parameter Name="FromBranch" Type="varchar" Mode="In" />
+          <Parameter Name="ToBranch" Type="varchar" Mode="In" />
+          <Parameter Name="FromStatus" Type="varchar" Mode="In" />
+          <Parameter Name="ToStatus" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="AR21600_ListChooseDetailToSls" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Object" Type="varchar" Mode="In" />
+          <Parameter Name="Task" Type="varchar" Mode="In" />
+          <Parameter Name="FromBranch" Type="varchar" Mode="In" />
+          <Parameter Name="ToBranch" Type="varchar" Mode="In" />
+          <Parameter Name="FromStatus" Type="varchar" Mode="In" />
+          <Parameter Name="ToStatus" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="AR21600_Process" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Prog" Type="varchar" Mode="In" />
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="Object" Type="varchar" Mode="In" />
+          <Parameter Name="Task" Type="varchar" Mode="In" />
+          <Parameter Name="FromBranch" Type="varchar" Mode="In" />
+          <Parameter Name="ToBranch" Type="varchar" Mode="In" />
+          <Parameter Name="FromStatus" Type="varchar" Mode="In" />
+          <Parameter Name="ToStatus" Type="varchar" Mode="In" />
+          <Parameter Name="Reason" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="List" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="ppv_AR21600_FromStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="ScreenNumber" Type="varchar" Mode="In" />
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="ppv_AR21600_Object" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="ppv_AR21600_Task" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="ppv_AR21600_ToStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="ScreenNumber" Type="varchar" Mode="In" />
+          <Parameter Name="User" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="ppv_BranchAllByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AR21600Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="AR21600Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="AR21600_CustomerList" ReturnType="Collection(AR21600Model.AR21600_CustomerList_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR21600_ListChooseDescr" ReturnType="Collection(AR21600Model.AR21600_ListChooseDescr_Result)">
+            <Parameter Name="Object" Mode="In" Type="String" />
+            <Parameter Name="Task" Mode="In" Type="String" />
+            <Parameter Name="FromBranch" Mode="In" Type="String" />
+            <Parameter Name="ToBranch" Mode="In" Type="String" />
+            <Parameter Name="FromStatus" Mode="In" Type="String" />
+            <Parameter Name="ToStatus" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR21600_ListChooseDetail" ReturnType="Collection(AR21600Model.AR21600_ListChooseDetail_Result)">
+            <Parameter Name="Object" Mode="In" Type="String" />
+            <Parameter Name="Task" Mode="In" Type="String" />
+            <Parameter Name="FromBranch" Mode="In" Type="String" />
+            <Parameter Name="ToBranch" Mode="In" Type="String" />
+            <Parameter Name="FromStatus" Mode="In" Type="String" />
+            <Parameter Name="ToStatus" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR21600_Process" ReturnType="Collection(String)">
+            <Parameter Name="Prog" Mode="In" Type="String" />
+            <Parameter Name="User" Mode="In" Type="String" />
+            <Parameter Name="Object" Mode="In" Type="String" />
+            <Parameter Name="Task" Mode="In" Type="String" />
+            <Parameter Name="FromBranch" Mode="In" Type="String" />
+            <Parameter Name="ToBranch" Mode="In" Type="String" />
+            <Parameter Name="FromStatus" Mode="In" Type="String" />
+            <Parameter Name="ToStatus" Mode="In" Type="String" />
+            <Parameter Name="Reason" Mode="In" Type="String" />
+            <Parameter Name="List" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_AR21600_FromStatus" ReturnType="Collection(AR21600Model.ppv_AR21600_FromStatus_Result)">
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="ScreenNumber" Mode="In" Type="String" />
+            <Parameter Name="User" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_AR21600_Object" ReturnType="Collection(AR21600Model.ppv_AR21600_Object_Result)">
+          <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_AR21600_Task" ReturnType="Collection(AR21600Model.ppv_AR21600_Task_Result)">
+          <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_AR21600_ToStatus" ReturnType="Collection(AR21600Model.ppv_AR21600_ToStatus_Result)">
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="ScreenNumber" Mode="In" Type="String" />
+            <Parameter Name="User" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_BranchAllByUser" ReturnType="Collection(AR21600Model.ppv_BranchAllByUser_Result)">
+          <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR21600_ListChooseDetailToCust" ReturnType="Collection(AR21600Model.AR21600_ListChooseDetailToCust_Result)">
+            <Parameter Name="Object" Mode="In" Type="String" />
+            <Parameter Name="Task" Mode="In" Type="String" />
+            <Parameter Name="FromBranch" Mode="In" Type="String" />
+            <Parameter Name="ToBranch" Mode="In" Type="String" />
+            <Parameter Name="FromStatus" Mode="In" Type="String" />
+            <Parameter Name="ToStatus" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR21600_ListChooseDetailToSls" ReturnType="Collection(AR21600Model.AR21600_ListChooseDetailToSls_Result)">
+            <Parameter Name="Object" Mode="In" Type="String" />
+            <Parameter Name="Task" Mode="In" Type="String" />
+            <Parameter Name="FromBranch" Mode="In" Type="String" />
+            <Parameter Name="ToBranch" Mode="In" Type="String" />
+            <Parameter Name="FromStatus" Mode="In" Type="String" />
+            <Parameter Name="ToStatus" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR21600_ListChooseDetailFromCust" ReturnType="Collection(AR21600Model.AR21600_ListChooseDetailFromCust_Result)">
+            <Parameter Name="Object" Mode="In" Type="String" />
+            <Parameter Name="Task" Mode="In" Type="String" />
+            <Parameter Name="FromBranch" Mode="In" Type="String" />
+            <Parameter Name="ToBranch" Mode="In" Type="String" />
+            <Parameter Name="FromStatus" Mode="In" Type="String" />
+            <Parameter Name="ToStatus" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR21600_ListChooseDetailFromSls" ReturnType="Collection(AR21600Model.AR21600_ListChooseDetailFromSls_Result)">
+            <Parameter Name="Object" Mode="In" Type="String" />
+            <Parameter Name="Task" Mode="In" Type="String" />
+            <Parameter Name="FromBranch" Mode="In" Type="String" />
+            <Parameter Name="ToBranch" Mode="In" Type="String" />
+            <Parameter Name="FromStatus" Mode="In" Type="String" />
+            <Parameter Name="ToStatus" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <EntitySet Name="AR_Customer" EntityType="AR21600Model.AR_Customer" />
+          <EntitySet Name="AR_Salesperson" EntityType="AR21600Model.AR_Salesperson" />
+        </EntityContainer>
+        <ComplexType Name="AR21600_CustomerList_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="District" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Area" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Attn" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="AR21600_ListChooseDescr_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="Width" Nullable="true" />
+          <Property Type="Int32" Name="Stt" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="AR21600_ListChooseDetail_Result">
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="ppv_AR21600_FromStatus_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ppv_AR21600_Object_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="7" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ppv_AR21600_Task_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ppv_AR21600_ToStatus_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ppv_BranchAllByUser_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Addr" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="AR21600_ListChooseDetailToCust_Result">
+          <Property Type="String" Name="ToCustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ToCustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="ToCustAddress" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="ToCustStatus" Nullable="true" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="AR21600_ListChooseDetailToSls_Result">
+          <Property Type="String" Name="ToSlsId" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ToSlsName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ToSlsAddress" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ToSlsStatus" Nullable="false" MaxLength="2" />
+        </ComplexType>
+        <ComplexType Name="AR21600_ListChooseDetailFromCust_Result">
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="AR21600_ListChooseDetailFromSls_Result">
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="2" />
+        </ComplexType>
+        <EntityType Name="AR_Customer">
+          <Key>
+            <PropertyRef Name="CustId" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr1" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Attn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAddr1" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAddr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAttn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillCity" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillCountry" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillFax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillPhone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillSalut" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillState" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillZip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Channel" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="City" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClassId" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="CrLmt" Nullable="false" />
+          <Property Type="String" Name="CrRule" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="CustFillPriority" Nullable="false" />
+          <Property Type="String" Name="CustType" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DeliveryID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DflSaleRouteID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltShipToId" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="District" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EMailAddr" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="EmpNum" Nullable="false" />
+          <Property Type="DateTime" Name="ExpiryDate" Nullable="false" Precision="0" />
+          <Property Type="Int16" Name="Exported" Nullable="false" />
+          <Property Type="String" Name="Fax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GracePer" Nullable="false" />
+          <Property Type="String" Name="LTTContractNbr" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="NodeID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
+          <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
+          <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PriceClassID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Salut" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShopType" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SiteId" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperId" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Status" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SupID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxDflt" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxID00" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxID01" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxID02" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxID03" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxLocId" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxRegNbr" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Terms" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Territory" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="TradeDisc" Nullable="false" />
+          <Property Type="String" Name="Zip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Location" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Area" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="GiftExchange" Nullable="false" />
+          <Property Type="Boolean" Name="HasPG" Nullable="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="EstablishDate" Precision="0" />
+          <Property Type="DateTime" Name="Birthdate" Precision="0" />
+        </EntityType>
+        <EntityType Name="AR_Salesperson">
+          <Key>
+            <PropertyRef Name="SlsperId" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Addr1" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="CmmnPct" />
+          <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="EMailAddr" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Fax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Name" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ProductGroup" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DeliveryMan" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Position" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="District" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SupID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="CrLmt" />
+          <Property Type="Boolean" Name="Active" />
+          <Property Type="String" Name="PPCPassword" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="PPCStorePicReq" />
+          <Property Type="String" Name="VendID" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="PPCAdmin" Nullable="false" />
+          <Property Type="String" Name="Images" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="AR21600Entities" >
+          <FunctionImportMapping FunctionImportName="AR21600_CustomerList" FunctionName="eBiz4DWebSysModel.Store.AR21600_CustomerList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.AR21600_CustomerList_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Attn" ColumnName="Attn" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR21600_ListChooseDescr" FunctionName="eBiz4DWebSysModel.Store.AR21600_ListChooseDescr">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.AR21600_ListChooseDescr_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Stt" ColumnName="Stt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR21600_ListChooseDetail" FunctionName="eBiz4DWebSysModel.Store.AR21600_ListChooseDetail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.AR21600_ListChooseDetail_Result">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR21600_Process" FunctionName="eBiz4DWebSysModel.Store.AR21600_Process" />
+          <FunctionImportMapping FunctionImportName="ppv_AR21600_FromStatus" FunctionName="eBiz4DWebSysModel.Store.ppv_AR21600_FromStatus">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.ppv_AR21600_FromStatus_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_AR21600_Object" FunctionName="eBiz4DWebSysModel.Store.ppv_AR21600_Object">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.ppv_AR21600_Object_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_AR21600_Task" FunctionName="eBiz4DWebSysModel.Store.ppv_AR21600_Task">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.ppv_AR21600_Task_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_AR21600_ToStatus" FunctionName="eBiz4DWebSysModel.Store.ppv_AR21600_ToStatus">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.ppv_AR21600_ToStatus_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_BranchAllByUser" FunctionName="eBiz4DWebSysModel.Store.ppv_BranchAllByUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.ppv_BranchAllByUser_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR21600_ListChooseDetailToCust" FunctionName="eBiz4DWebSysModel.Store.AR21600_ListChooseDetailToCust">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.AR21600_ListChooseDetailToCust_Result">
+                <ScalarProperty Name="ToCustId" ColumnName="ToCustId" />
+                <ScalarProperty Name="ToCustName" ColumnName="ToCustName" />
+                <ScalarProperty Name="ToCustAddress" ColumnName="ToCustAddress" />
+                <ScalarProperty Name="ToCustStatus" ColumnName="ToCustStatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR21600_ListChooseDetailToSls" FunctionName="eBiz4DWebSysModel.Store.AR21600_ListChooseDetailToSls">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.AR21600_ListChooseDetailToSls_Result">
+                <ScalarProperty Name="ToSlsId" ColumnName="ToSlsId" />
+                <ScalarProperty Name="ToSlsName" ColumnName="ToSlsName" />
+                <ScalarProperty Name="ToSlsAddress" ColumnName="ToSlsAddress" />
+                <ScalarProperty Name="ToSlsStatus" ColumnName="ToSlsStatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR21600_ListChooseDetailFromCust" FunctionName="eBiz4DWebSysModel.Store.AR21600_ListChooseDetailFromCust">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.AR21600_ListChooseDetailFromCust_Result">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR21600_ListChooseDetailFromSls" FunctionName="eBiz4DWebSysModel.Store.AR21600_ListChooseDetailFromSls">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21600Model.AR21600_ListChooseDetailFromSls_Result">
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="AR_Customer">
+            <EntityTypeMapping TypeName="AR21600Model.AR_Customer">
+              <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
+                <ScalarProperty Name="EstablishDate" ColumnName="EstablishDate" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="HasPG" ColumnName="HasPG" />
+                <ScalarProperty Name="GiftExchange" ColumnName="GiftExchange" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="TradeDisc" ColumnName="TradeDisc" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="TaxLocId" ColumnName="TaxLocId" />
+                <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
+                <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
+                <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />
+                <ScalarProperty Name="TaxID00" ColumnName="TaxID00" />
+                <ScalarProperty Name="TaxDflt" ColumnName="TaxDflt" />
+                <ScalarProperty Name="SupID" ColumnName="SupID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="ShopType" ColumnName="ShopType" />
+                <ScalarProperty Name="Salut" ColumnName="Salut" />
+                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
+                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
+                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
+                <ScalarProperty Name="LTTContractNbr" ColumnName="LTTContractNbr" />
+                <ScalarProperty Name="GracePer" ColumnName="GracePer" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Exported" ColumnName="Exported" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="EmpNum" ColumnName="EmpNum" />
+                <ScalarProperty Name="EMailAddr" ColumnName="EMailAddr" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="DfltShipToId" ColumnName="DfltShipToId" />
+                <ScalarProperty Name="DflSaleRouteID" ColumnName="DflSaleRouteID" />
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+                <ScalarProperty Name="CustType" ColumnName="CustType" />
+                <ScalarProperty Name="CustFillPriority" ColumnName="CustFillPriority" />
+                <ScalarProperty Name="CrRule" ColumnName="CrRule" />
+                <ScalarProperty Name="CrLmt" ColumnName="CrLmt" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="BillZip" ColumnName="BillZip" />
+                <ScalarProperty Name="BillState" ColumnName="BillState" />
+                <ScalarProperty Name="BillSalut" ColumnName="BillSalut" />
+                <ScalarProperty Name="BillPhone" ColumnName="BillPhone" />
+                <ScalarProperty Name="BillName" ColumnName="BillName" />
+                <ScalarProperty Name="BillFax" ColumnName="BillFax" />
+                <ScalarProperty Name="BillCountry" ColumnName="BillCountry" />
+                <ScalarProperty Name="BillCity" ColumnName="BillCity" />
+                <ScalarProperty Name="BillAttn" ColumnName="BillAttn" />
+                <ScalarProperty Name="BillAddr2" ColumnName="BillAddr2" />
+                <ScalarProperty Name="BillAddr1" ColumnName="BillAddr1" />
+                <ScalarProperty Name="Attn" ColumnName="Attn" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AR_Salesperson">
+            <EntityTypeMapping TypeName="AR21600Model.AR_Salesperson">
+              <MappingFragment StoreEntitySet="AR_Salesperson">
+                <ScalarProperty Name="Images" ColumnName="Images" />
+                <ScalarProperty Name="PPCAdmin" ColumnName="PPCAdmin" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+                <ScalarProperty Name="PPCStorePicReq" ColumnName="PPCStorePicReq" />
+                <ScalarProperty Name="PPCPassword" ColumnName="PPCPassword" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CrLmt" ColumnName="CrLmt" />
+                <ScalarProperty Name="SupID" ColumnName="SupID" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="DeliveryMan" ColumnName="DeliveryMan" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="ProductGroup" ColumnName="ProductGroup" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="EMailAddr" ColumnName="EMailAddr" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="CmmnPct" ColumnName="CmmnPct" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" >
+        <EntityTypeShape EntityType="AR21600Model.AR_Customer" Width="1.5" PointX="0.443857563866236" PointY="8.4201394507755243" />
+        <EntityTypeShape EntityType="AR21600Model.AR_Salesperson" Width="1.5" PointX="2.25" PointY="0.5" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

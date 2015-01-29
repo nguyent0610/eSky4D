@@ -1,0 +1,431 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using AR21600;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+ @(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+        .Items(
+          X.FormPanel()
+        .Layout(LayoutType.Border)
+        .ID("dataForm")
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(10)
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar("Print",true))
+        
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 110; })
+        .Listeners(lst =>
+                        {
+                          
+                            lst.AfterRender.Fn = "LoadDefaulValue";
+                          
+                            //lst.Focus.Fn = "Focus1_Change";
+                  })
+        .Items(
+                Html.X().Panel()
+                    .Region(Region.North)
+                    //.Layout(LayoutType.Border)
+                    
+                    .Layout(LayoutType.VBox)
+                    .Items(
+            
+                 X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                .Items(
+                    
+                    
+                        
+                        
+                    HQ.Combo().ID("cboObject").Name("cboObject").HQLangCode("OBJECT").HQProcedure("ppv_AR21600_Object")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQValue("AR20400",false)
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 5 5")
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value },
+                        
+                        
+                        
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboObject_Change";
+                          
+                            //lst.Focus.Fn = "Focus1_Change";
+                        })
+                        
+                    ,HQ.Combo().ID("cboTask").Name("cboTask").HQLangCode("Task").HQProcedure("ppv_AR21600_Task")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQValue("CB",false)
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 5 5")
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value },
+                        
+                        
+                        
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboTask_Change";
+                          
+                            //lst.Focus.Fn = "Focus1_Change";
+                        })    
+
+                
+
+                       
+               //ngoac ket thuc Hbox 1 header
+                )
+                
+                ,X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                .Items(
+            
+                
+                    HQ.Combo().ID("cboFromBranch").Name("cboFromBranch").HQLangCode("FROMBRANCH").HQProcedure("ppv_BranchAllByUser")
+                    .HQColumnShow("BranchID,BranchName,Addr").DisplayField("BranchID").ValueField("BranchID").HQValue("LCUS-HCM-0004",false)
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 5 5")
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value },
+                        
+                        
+                        
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboFromBranch_Change";
+                          
+                            //lst.Focus.Fn = "Focus1_Change";
+                        })
+                        
+                    ,HQ.Combo().ID("cboToBranch").Name("cboToBranch").HQLangCode("TOBRANCH").HQProcedure("ppv_BranchAllByUser")
+                    .HQColumnShow("BranchID,BranchName,Addr").DisplayField("BranchID").ValueField("BranchID")
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 5 5")
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value },
+                        
+                        
+                        
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboToBranch_Change";
+                          
+                            //lst.Focus.Fn = "Focus1_Change";
+                        })
+                    
+            
+                    
+            //ngoac ket thuc Hbox 2 header
+            )
+              ,X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                .Items(
+                
+                
+                    HQ.Combo().ID("cboFromStatus").Name("cboFromStatus").HQLangCode("FromStatus").HQProcedure("ppv_AR21600_FromStatus")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 5 5")
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value },
+                        new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
+                        new StoreParameter() { Name = "@ScreenNumber", Value = "App.cboObject.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@User", Value = Current.UserName.ToString(), Mode = ParameterMode.Value },
+                        new StoreParameter() { Name = "@Status", Value = "%", Mode = ParameterMode.Value },
+                        
+                        
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboFromStatus_Change";
+                          
+                            //lst.Focus.Fn = "Focus1_Change";
+                        })
+                        
+       
+                     ,HQ.Combo().ID("cboToStatus").Name("cboToStatus").HQLangCode("ToStatus").HQProcedure("ppv_AR21600_ToStatus")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                    .Width(350).HQHeightWidth(400, 300).MarginSpec("5 0 5 5")
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value },
+                        new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
+                        new StoreParameter() { Name = "@ScreenNumber", Value = "App.cboObject.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@User", Value = Current.UserName.ToString(), Mode = ParameterMode.Value },
+                        new StoreParameter() { Name = "@Status", Value = "%", Mode = ParameterMode.Value },
+                        
+                        
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboToStatus_Change";
+                          
+                            //lst.Focus.Fn = "Focus1_Change";
+                        })   
+                 
+                    
+           
+                //ngoac ket thuc Hbox 3 header
+                )
+                
+                ,HQ.TextBox().ID("txtReason").HQLangCode("Reason").Width(705).DataIndex("").LabelWidth(110).MarginSpec("5 0 5 5")
+                
+                //ngoac ket thuc pabel Header
+                )
+                
+                ,Html.X().Panel()
+                    .Region(Region.Center)
+                    .Layout(LayoutType.Border)
+                    //.Title("Main")
+                    //.Layout(LayoutType.Column)
+                    .Items(
+                            
+                    
+                           
+                                Html.X().Panel()
+                                .Region(Region.West)
+                                //.ColumnWidth(0.5)
+                                //.AnchorHorizontal("50%")
+                                .Title("West")
+                                .Layout(LayoutType.Fit)
+                                .Split(true)
+                                .Items(
+                                        Html.X().GridPanel()
+                                        .Frame(true)
+                                        .Width(550)
+                                        .Height(350)
+                                        //.Layout(LayoutType.Fit)
+                                        //.AnchorHorizontal("100%")
+                                        //.Anchor("100% -100")
+                                        //.RenderTo("contentCenter")
+                                        //.AutoScroll(true)
+                                        .View(X.GridView().TrackOver(false))
+                                        .ID("grdFromCust")
+                                        .StoreID("storeGridDetailFromCust")
+                                        .SortableColumns(false)
+                                      
+                                        .ColumnModel(
+                                                    Html.X().Column().Text(Util.GetLang("CustId")).Width(150).ID("txtFromCustID").DataIndex("CustId")
+
+                                                    , Html.X().Column().Text(Util.GetLang("CustName")).Width(150).ID("txtFromCustName").DataIndex("CustName")
+
+                                                    , Html.X().Column().Text(Util.GetLang("Address")).Width(150).ID("txtFromCustAddress").DataIndex("Address")
+
+                                                    , Html.X().Column().Text(Util.GetLang("Status")).Width(120).ID("txtFromCustStatus").DataIndex("Status")
+
+
+
+                                    )
+                                        .SelectionModel(Html.X().RowSelectionModel().ID("SelectionModelDetailFromCust").Mode(SelectionMode.Multi))
+                                        .Features(
+                                                Html.X().GridFilters()//Filter
+                                                    .Local(true)
+                                                    .Filters(
+                                                                //Html.X().StringFilter().DataIndex("AreaCode"),
+                                                                //Html.X().StringFilter().DataIndex("AreaName")                                                        
+                                                            )
+
+                                            )
+                                            
+                                   
+                                        ,Html.X().GridPanel()
+                                        .Frame(true)
+                                        .Width(550)
+                                        .Height(350)
+                                        //.Layout(LayoutType.Fit)
+                                        //.AnchorHorizontal("100%")
+                                        //.Anchor("100% -100")
+                                        //.RenderTo("contentCenter")
+                                        //.AutoScroll(true)
+                                        .Hidden(true)
+                                        .View(X.GridView().TrackOver(false))
+                                        .ID("grdFromSls")
+                                        .StoreID("storeGridDetailFromSls")
+                                        .SortableColumns(false)
+                                      
+                                        .ColumnModel(
+                                                    Html.X().Column().Text(Util.GetLang("SlsperId")).Width(150).ID("txtFromSlsID").DataIndex("SlsperId")
+
+                                                    , Html.X().Column().Text(Util.GetLang("Name")).Width(150).ID("txtFromSlsName").DataIndex("Name")
+
+                                                    , Html.X().Column().Text(Util.GetLang("Address")).Width(150).ID("txtFromSlsAddress").DataIndex("Address")
+
+                                                    , Html.X().Column().Text(Util.GetLang("Status")).Width(120).ID("txtFromSlsStatus").DataIndex("Status")
+
+
+
+                                    )
+                                        .SelectionModel(Html.X().RowSelectionModel().ID("SelectionModelDetailFromSls").Mode(SelectionMode.Multi))
+                                        .Features(
+                                                Html.X().GridFilters()//Filter
+                                                    .Local(true)
+                                                    .Filters(
+                                                                //Html.X().StringFilter().DataIndex("AreaCode"),
+                                                                //Html.X().StringFilter().DataIndex("AreaName")                                                        
+                                                            )
+
+                                            )         
+                                            
+                                //ngoac ket thuc panel ben trai bao grid trai
+                                )
+                                
+                                ,Html.X().Panel()
+                                .Region(Region.Center)
+                                .Title("East")
+                                .Layout(LayoutType.Fit)
+                                .Items(
+                                    X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                                    .Items(
+                                    
+                                             X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0").ColumnWidth(0.05)
+                                            .Items(
+                                                 HQ.Button().ID("btnAllLeftToRight").HQLangCode(">>").Width(30).MarginSpec("150 5 0 5")
+                                                 .Listeners(p => p.Click.Fn = "btnAllLeftToRight") 
+                                                 
+                                                 ,HQ.Button().ID("btnLeftToRight").HQLangCode(">").Width(30).MarginSpec("10 5 0 5")
+                                                 .Listeners(p => p.Click.Fn = "btnLeftToRight") 
+                                                 
+                                                 ,HQ.Button().ID("btnRightToLeft").HQLangCode("<").Width(30).MarginSpec("10 5 0 5")
+                                                 .Listeners(p => p.Click.Fn = "btnRightToLeft") 
+                                                 
+                                                 ,HQ.Button().ID("btnAllRightToLeft").HQLangCode("<<").Width(30).MarginSpec("10 5 0 5")
+                                                 .Listeners(p => p.Click.Fn = "btnAllRightToLeft") 
+                                                 
+                                             //ngoac ket thuc container chua 4 button 0.15
+                                             )
+                                             
+                                             ,X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0").ColumnWidth(0.95)
+                                            .Items(
+                                                 
+                                                  Html.X().Panel()  
+                                                    .Layout(LayoutType.Fit)
+                                                    .AutoScroll(true)
+                                                    .Items(
+                                                         
+                                                    
+                                                        Html.X().GridPanel()
+                                                        .Frame(true)
+                                                        .Width(700)
+                                                        .Height(430)
+                                                        //.Layout(LayoutType.Fit)
+                                                        .AutoScroll(true)
+                                                        //.Hidden(true)
+                                                        .View(X.GridView().TrackOver(false))
+                                                        .ID("grdToCust")
+                                                        .MarginSpec("0 0 0 0")
+                                                        //    .Store(Html.X().Store()
+                                                        //    //.Model(Html.X().Model()
+                                                        //    //    .Fields(
+                                                        //    //        new ModelField("ToCustId",ModelFieldType.String),
+                                                        //    //        new ModelField("ToCustName", ModelFieldType.String),
+                                                        //    //        new ModelField("ToCustAddress", ModelFieldType.String),
+                                                        //    //        new ModelField("ToCustStatus", ModelFieldType.String)
+                                                           
+                                                        //    //    )
+                                                        //    //    .ID("ObjectModelToCust")// ID của model
+                                                        //    //)
+                                                        //    .Model(Util.GenerateModel(typeof(AR21600_ListChooseDetailToCust_Result), "ObjectModelToCust", ""))
+                                                        //    .ID("storeGridDetailToCust")// ID của store
+                                                            
+                                                   
+                                                        //)
+                                                        .StoreID("storeGridDetailToCust")
+                                                        .ColumnModel(
+                                                             Html.X().Column().Text(Util.GetLang("CustId")).Width(150).ID("txtToCustID").DataIndex("ToCustId")
+
+                                                            , Html.X().Column().Text(Util.GetLang("CustName")).Width(150).ID("txtToCustName").DataIndex("ToCustName")
+
+                                                            , Html.X().Column().Text(Util.GetLang("Address")).Width(150).ID("txtToCustAddress").DataIndex("ToCustAddress")
+
+                                                            , Html.X().Column().Text(Util.GetLang("Status")).Width(120).ID("txtToCustStatus").DataIndex("ToCustStatus")
+                                                        )
+                                                        .SelectionModel(Html.X().RowSelectionModel().ID("SelectionModelDetailToCust").Mode(SelectionMode.Multi))
+                                                        
+                                                         ,Html.X().GridPanel()
+                                                        .Frame(true)
+                                                        .Width(700)
+                                                        .Height(430)
+                                                        //.Layout(LayoutType.Fit)
+                                                        .AutoScroll(true)
+                                                        .Hidden(true)
+                                                        .View(X.GridView().TrackOver(false))
+                                                        .ID("grdToSls")
+                                                        .MarginSpec("0 0 0 0")
+                                                        //    .Store(Html.X().Store()
+                                                        //    //.Model(Html.X().Model()
+                                                        //    //    .Fields(
+                                                        //    //        new ModelField("ToSlsId",ModelFieldType.String),
+                                                        //    //        new ModelField("ToSlsName", ModelFieldType.String),
+                                                        //    //        new ModelField("ToSlsAddress", ModelFieldType.String),
+                                                        //    //        new ModelField("ToSlsStatus", ModelFieldType.String)
+                                                           
+                                                        //    //    )
+                                                        //    //    .ID("ObjectModelToSls") // ID của Model
+                                                        //    //)
+                                                        //    .Model(Util.GenerateModel(typeof(AR21600_ListChooseDetailToSls_Result), "ObjectModelToSls", ""))
+                                                        //    .ID("storeGridDetailToSls") // ID của store
+                                                        //    
+                                                        //)
+                                                        .StoreID("storeGridDetailToSls")
+                                                        .ColumnModel(
+                                                             Html.X().Column().Text(Util.GetLang("SlsperId")).Width(150).ID("txtToSlsID").DataIndex("ToSlsId")
+
+                                                            , Html.X().Column().Text(Util.GetLang("Name")).Width(150).ID("txtToSlsName").DataIndex("ToSlsName")
+
+                                                            , Html.X().Column().Text(Util.GetLang("Address")).Width(150).ID("txtToSlsAddress").DataIndex("ToSlsAddress")
+
+                                                            , Html.X().Column().Text(Util.GetLang("Status")).Width(120).ID("txtToSlsStatus").DataIndex("ToSlsStatus")
+                                                        )
+                                                        .SelectionModel(Html.X().RowSelectionModel().ID("SelectionModelDetailToSls").Mode(SelectionMode.Multi))
+                                                
+                                                //ngoac ket thuc Panel chua Grid 2 To
+                                                )
+                                             //ngoac ket thuc container chua 0.85
+                                             )
+                                                 
+                                        //ngoac ket thuc container phan ra column     
+                                         )
+                                         
+                                                 
+                                         //ngoac ket thuc panel ben phai bao grid phai    
+                                         )
+                               //Ngoac ket thuc Panel tong 2 cai Grid              
+                               )
+                               
+                           
+                    )
+                
+           )
+ )
+
+  
