@@ -30,7 +30,7 @@
             .ID("stoLanguage")
             .PageSize(50)
             .Model(Util.GenerateModel(typeof(SYS_Language), "mdlSYS_Language", "Code"))
-                                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetLanguage"))).Listeners(l => { l.BeforeLoad.Handler = "busy=true;waitMsg=HQ.common.getLang(\"loadingdata\"); HQ.common.showBusy(App.frmMain);"; l.Load.Handler = "busy=false;HQ.common.showBusy(App.frmMain);"; })
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetLanguage"))).Listeners(l => { l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; l.Load.Handler = "HQ.common.showBusy(false);"; })
         )
         .Listeners(p => p.AfterRender.Handler = "App.stoLanguage.reload();")
         .SortableColumns(false)
