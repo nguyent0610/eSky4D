@@ -1,0 +1,187 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using SI21300;
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+ @(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+        .Items(
+           Html.X().Window()
+          .ID("frmMain")
+          .Layout(LayoutType.Fit)
+          .Maximized(true)
+          .Closable(false)
+          .TitleCollapse(true)
+          .Header(false)
+          .KeyMap(Util.SetupKeyMap())
+          .TopBar(Util.SetupToolbar("Print",true))
+          .Items(
+                X.FormPanel()
+                .ID("pnlScreen")
+                .DefaultAnchor("100%")
+                .BodyPadding(0)
+                .Layout(LayoutType.Fit)
+                .Height(480)
+                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; }).Listeners(lst => lst.BoxReady.Handler = "menuClick('refresh')")
+                .Items(
+
+                //giao dien thiet ke tu day
+                            Html.X().GridPanel()
+                                    .Frame(true)
+                                    .AnchorHorizontal("100%")
+                                    .AnchorVertical("100%")
+                                    .RenderTo("contentCenter")
+                                    .Scroll(ScrollMode.Both)
+                                    .View(X.GridView().TrackOver(false))
+                                    .ID("grd")
+                                    .Store(Html.X().Store().ID("Store1")
+                                            .RemotePaging(true)
+                                            .DataSource(Model)
+                                            .PageSize(50).AutoLoad(false)
+                                            .Model(Util.GenerateModel(typeof(SI_Carrier), "SI_CarrierModel", "CarrierID"))
+                                            .ServerProxy(
+                                                Html.X().AjaxProxy()
+                                                    .Url(Url.Action("GetData"))
+                                            )
+                                            .Listeners(p=>p.Load.Handler="loadDefault()")
+                                        )
+                                    .SortableColumns(false)
+                                    .ColumnModel(
+                                                 Html.X().RowNumbererColumn()
+                                                
+                                                , Html.X().Column().Text(Util.GetLang("CarrierID")).DataIndex("CarrierID").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))
+                                                , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250).Editor(Html.X().TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true))
+
+                                                , Html.X().Column().Text(Util.GetLang("CarrierType")).Width(150).DataIndex("CarrierType").Editor(
+                                                    HQ.Combo().ID("cboCarrierType").Name("cboCarrierType").HQProcedure("ppv_CarrierType")
+                                                    .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                                                    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                                                    .HQParam(new StoreParameterCollection() { 
+                                                        //new StoreParameter("@UserID", Current.UserName, ParameterMode.Value),
+                                                        //new StoreParameter("@CpnyID", Current.CpnyID, ParameterMode.Value),
+                                                        //new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value)
+                                                    }).HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                                                    .LoadData()
+                                                )     
+                                                
+                                                , Html.X().Column().Text(Util.GetLang("TerritoryID")).Width(150).DataIndex("TerritoryID").Editor(
+                                                    HQ.Combo().ID("cboTerritoryID").Name("cboTerritoryID").HQProcedure("ppv_Territory")
+                                                    .HQColumnShow("Territory,Descr").DisplayField("Territory").ValueField("Territory")
+                                                    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                                                    .HQParam(new StoreParameterCollection() { 
+                                                        //new StoreParameter("@UserID", Current.UserName, ParameterMode.Value),
+                                                        //new StoreParameter("@CpnyID", Current.CpnyID, ParameterMode.Value),
+                                                        //new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value)
+                                                    }).HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                                                    .LoadData()
+                                                )     
+                                                
+                                                , Html.X().CheckColumn().Text(Util.GetLang("CheckZones")).DataIndex("CheckZones").Width(150).Editable(true)
+                                                
+                                                 , Html.X().Column().Text(Util.GetLang("ShipAccount")).Width(150).DataIndex("ShipAccount").Editor(
+                                                    HQ.Combo().ID("cboShipAccount").Name("cboShipAccount").HQProcedure("ppv_Acct_Active")
+                                                    .HQColumnShow("BankAcct,AcctName,AddrID").DisplayField("BankAcct").ValueField("BankAcct")
+                                                    .Width(300).HQHeightWidth(500, 600).MarginSpec("5 0 0 0")
+                                                    .HQParam(new StoreParameterCollection() { 
+                                                        //new StoreParameter("@UserID", Current.UserName, ParameterMode.Value),
+                                                        //new StoreParameter("@CpnyID", Current.CpnyID, ParameterMode.Value),
+                                                        //new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value)
+                                                    }).HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                                                    .LoadData()
+                                                )   
+                                                
+                                                , Html.X().Column().Text(Util.GetLang("UOM")).Width(150).DataIndex("UOM").Editor(
+                                                    HQ.Combo().ID("cboUOM").Name("cboUOM").HQProcedure("ppv_inunit_all")
+                                                    .HQColumnShow("FromUnit").DisplayField("FromUnit").ValueField("FromUnit")
+                                                    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                                                    .HQParam(new StoreParameterCollection() { 
+                                                        //new StoreParameter("@UserID", Current.UserName, ParameterMode.Value),
+                                                        //new StoreParameter("@CpnyID", Current.CpnyID, ParameterMode.Value),
+                                                        //new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value)
+                                                    }).HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                                                    .LoadData()
+                                                )   
+                                                
+                                                
+                                                , Html.X().CommandColumn().Width(150)
+                                                                        .Commands(
+                                                                            Html.X().GridCommand()
+                                                                                .Text(Util.GetLang("Reject"))
+                                                                                .ToolTip(t =>
+                                                                                {
+                                                                                    t.Text = Util.GetLang("Rejectrowchanges");
+                                                                                })
+                                                                                .CommandName("reject")
+                                                                                .Icon(Icon.ArrowUndo)
+                                                                        )
+                                                                        .PrepareToolbar(t =>
+                                                                        {
+                                                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                                                        })
+                                                                        .Listeners(l =>
+                                                                        {
+                                                                            l.Command.Handler = "grd_Reject(record);";
+                                                                        })
+                                    )
+                                    .SelectionModel(Html.X().RowSelectionModel().ID("SelectionModelSYS_ScreenCat").Mode(SelectionMode.Multi))
+                                    .BottomBar(//Phan trang       
+                                        Html.X().PagingToolbar().ID("PagingToolbar")
+                                            .Items(
+                                                Html.X().Label("Page size:"),
+                                                Html.X().ToolbarSpacer(10),
+                                                Html.X().ComboBox()
+                                                    .Width(80)
+                                                    .Items("1", "2", "10", "20", "30", "50")
+                                                    .SelectedItems("50")
+                                                    .Listeners(l =>
+                                                    {
+                                                        l.Select.Fn = "onComboBoxSelect";
+                                                    })
+                                            )
+                                            .Plugins(Html.X().ProgressBarPager())
+
+                                        )
+
+                                    .Plugins(
+                                        Html.X()//Cho phep edit )
+                                            .CellEditing()
+                                            .ClicksToEdit(1)
+                                            .Listeners(ls =>
+                                            {
+                                                ls.BeforeEdit.Fn = "grd_BeforeEdit";
+                                                ls.Edit.Fn = "grd_Edit";
+                                                ls.ValidateEdit.Fn = "grd_ValidateEdit";
+                                                ls.CancelEdit.Fn = "grd_CancelEdit";
+
+
+                                            })
+                                    )
+                                    .Features(
+                                            Html.X().GridFilters()//Filter
+                                                .Local(true)
+                                                      .Filters(
+                                                        Html.X().StringFilter().DataIndex("CarrierID"),
+                                                        Html.X().StringFilter().DataIndex("Descr"),
+                                                        Html.X().StringFilter().DataIndex("CarrierType"),
+                                                        Html.X().StringFilter().DataIndex("TerritoryID"),
+                                                        Html.X().StringFilter().DataIndex("CheckZones"),
+                                                        Html.X().StringFilter().DataIndex("ShipAccount"),
+                                                        Html.X().StringFilter().DataIndex("UOM")
+
+
+                                                      )
+
+                                        )
+
+
+                    )
+                )
+           )
+ )

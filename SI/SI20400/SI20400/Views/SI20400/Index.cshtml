@@ -1,0 +1,80 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using SI20400;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "SI20400";
+    var acc = Session["SI20400"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+<script src="~/Scripts/common.js"></script>
+<script src='@Url.Content("Scripts/Screen/SI20400.js")' type="text/javascript"></script>
+<style> @*Thuoc tinh hover tren grid *@
+    .x-grid-row-over .x-grid-cell-inner {
+        font-weight : bold;
+    }
+  
+  
+</style>
+<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+<script>
+    var isUpdate = strToBool('@acc.Update.ToString().ToLower()');
+    var isInsert = strToBool('@acc.Insert.ToString().ToLower()');
+    var isDelete = strToBool('@acc.Delete.ToString().ToLower()');
+</script>
+<script>
+    //check value
+    var isAllValid = function (items) {
+        if (items != undefined) {
+            for (var i = 0; i < items.length; i++) {
+
+                
+                if (items[i]["MaterialType"] == undefined) continue;
+            
+                if (items[i]["MaterialType"].trim() == "") {
+                callMessage(15, '@Util.GetLang("MaterialType")', null);
+                    return false;
+
+
+                }
+                if (items[i]["Descr"].trim() == "") {
+                    callMessage(15, '@Util.GetLang("Descr")', null);
+                    return false;
+                }
+                if (items[i]["Buyer"].trim() == "") {
+                    callMessage(15, '@Util.GetLang("Buyer")', null);
+                    return false;
+                }
+
+           
+            
+
+
+
+        }
+        return true;
+    } else {
+        return true;
+    }
+    };
+
+</script>
+  <title>@ViewBag.Title</title>
+    </head>
+    <body>
+
+
+@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+     @{ Html.RenderAction("Body"); }
+    </body>
+</html>

@@ -1,0 +1,67 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using SI20100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "SI20100";
+    var acc = Session["SI20100"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+<script src="~/Scripts/common.js"></script>
+<script src='@Url.Content("Scripts/Screen/SI20100.js")' type="text/javascript"></script>
+<style> @*Thuoc tinh hover tren grid *@
+    .x-grid-row-over .x-grid-cell-inner {
+        font-weight : bold;
+    }
+  
+  
+</style>
+
+<script>
+    var isUpdate = strToBool('@acc.Update.ToString().ToLower()');
+    var isInsert = strToBool('@acc.Insert.ToString().ToLower()');
+    var isDelete = strToBool('@acc.Delete.ToString().ToLower()');
+</script>
+<script>
+    //check value
+    var isAllValid = function (items) {
+        if (items != undefined) {
+            for (var i = 0; i < items.length; i++) {
+                if (items[i]["Buyer"] == undefined) continue;
+            
+                if (items[i]["Buyer"].trim() == "") {
+                callMessage(15, '@Util.GetLang("Buyer")', null);
+                    return false;
+                }
+                if (items[i]["BuyerName"].trim() == "") {
+                    callMessage(15, '@Util.GetLang("BuyerName")', null);
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return true;
+        }
+    };
+
+</script>
+@*Script chung*@    
+  <title>@ViewBag.Title</title>
+    </head>
+    <body>
+
+@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+     @{ Html.RenderAction("Body"); }
+    </body>
+</html>
+ 
