@@ -1,0 +1,510 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using AP10400;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "AP10400";
+   
+}
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+.Items(
+        X.FormPanel()
+        .Layout(LayoutType.Anchor)
+        .ID("dataForm")
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(10)
+        //.AutoScroll(true)
+        .TopBar(Util.SetupToolbar("Print",true))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        //.Listeners(itm => itm.AfterRender.Fn = "frmloadAfterRender")
+        .Items(
+            X.Panel().ID("Header").Layout(LayoutType.Anchor).AnchorVertical("46%").AnchorHorizontal("100%")
+            .Items(
+            
+                X.FormPanel()
+                .ID("dataFormTop")
+                .Layout(LayoutType.Anchor)
+                .AnchorVertical("28%")
+                .AnchorHorizontal("100%")
+                //.Title(Util.GetLang("DOC"))
+                .Padding(5)
+                .Items(
+                        
+                 
+                X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                .Items(
+                   //Bat.No
+                    HQ.Combo().ID("cboBatNbr").Name("cboBatNbr").HQLangCode("BATNBR").HQProcedure("ppv_AP10400Batch")
+                    .HQColumnShow("BatNbr,Descr,Status,TotAmt").DisplayField("BatNbr").ValueField("BatNbr").Editable(false)
+                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.ForceSelection(true)
+                    .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
+                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
+                        new StoreParameter() { Name = "@ScreenNbr", Value = ViewBag.Title, Mode = ParameterMode.Value }
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            //lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboBatNbr_Change";
+                            lst.Focus.Fn = "Focus3_Change";
+                            //lst.IconClick.Fn = "Focus3_Change";
+                        })
+
+                    //BranchID    
+                    ,HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BRANCHID")
+                    .Width(300).MarginSpec("5 0 5 0").MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
+                    .Value(Current.CpnyID.ToString()).ReadOnly(true)
+                    .Listeners(lst =>
+                    {
+
+                        //lst.Change.Fn = "txtDescr_Change";
+                                    
+                    })
+                    //Status
+                    ,HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("STATUS").HQProcedure("ppv_AP10300Status")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Status")
+                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.Disabled(true)
+                    .HQDBSys(false).HQValue("H",false).ReadOnly(true)
+                    //.MaxLength(30).EnforceMaxLength(true)
+                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            //lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboStatus_Change";
+                            //lst.Focus.Fn = "Focus1_Change";
+                        })   
+                        
+                         
+                    //ngoac ket thuc dan hang ngang 3 combo  dau form         
+                    )
+
+
+                          , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
+                        .Items(
+
+
+                        //Xu ly (Handle)   
+                         HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("HANDLE").HQProcedure("ppv_AP10400Handle")
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                        .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 300").ForceSelection(true).AllowBlank(false)
+                        .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@Status", Value = "App.cboStatus.value", Mode = ParameterMode.Raw },
+                        //@Role nay sua sau
+                        
+                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                    })
+                        .LoadData()
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                //lst.Change.Fn = "cboCustId_Change";
+                                //lst.Focus.Fn = "Focus1_Change";
+                            })
+                        //Total Amount
+                        , HQ.NumberField().ID("txtCuryCrTot").Name("txtCuryCrTot").HQLangCode("TOTAMT").DataIndex("TotAmt")
+                        .Width(300).MarginSpec("5 0 5 0").ReadOnly(true)
+
+
+                    //ngoac ket thuc dan hang ngang 3 combo  sau form
+                    )
+
+                //ngoac dong dataFormTop
+                )
+                   ,X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0").AnchorHorizontal("100%").AnchorVertical("72%")
+                   .Items(
+                        
+                            X.FormPanel()
+                            .ID("dataFormBotLeft")
+                            .Layout(LayoutType.Anchor)
+                            .Title(Util.GetLang("LocRa"))
+                            .AnchorVertical("30%")
+                            //.AnchorHorizontal("30%")
+                            .ColumnWidth(0.24)
+                            .Padding(5)
+                            .Items(
+                                 //Vendor
+                                HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("VENDID").HQProcedure("ppv_vendor")
+                                .HQColumnShow("VendID,name,Address").DisplayField("VendID").ValueField("VendID").DataIndex("")//.AllowBlank(false)
+                                .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.Disabled(true)//.LabelWidth(90)//.Disabled(true)
+                                .HQDBSys(false).ForceSelection(true)
+                                .HQParam(new StoreParameterCollection()
+                                {
+
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                    {
+                          
+                                        lst.Change.Fn = "cboVendID_Change";
+                                        //lst.Focus.Fn = "Focus1_Change";
+                                    })
+                            
+                                //From Date
+                                ,HQ.DateField().ID("txtFromDate").Name("txtFromDate").HQLangCode("FROMDATE").DataIndex("")
+                                .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now)//.Format("yyyy-MM-dd")
+                                .Listeners(lst =>
+                                 {
+                                     lst.Change.Fn = "txtFromDate_Change";
+                                 })
+                                
+                                //To Date
+                                ,HQ.DateField().ID("txtToDate").Name("txtToDate").HQLangCode("TODATE").DataIndex("")
+                                .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now)//.Format("yyyy-MM-dd")
+                                .Listeners(lst =>
+                                 {
+                                     lst.Change.Fn = "txtToDate_Change";
+                                 })
+                                 //cboDateType
+                                 ,HQ.Combo().ID("cboDateType").Name("cboDateType").HQLangCode("DATE").HQProcedure("ppv_AP10400DateType")
+                                .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Code")
+                                .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.Disabled(true)//.LabelWidth(90)//.Disabled(true)
+                                .HQDBSys(false).ForceSelection(true)//.HQValue("0",false)
+                                .HQParam(new StoreParameterCollection()
+                                {
+                                    new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                    {
+                          
+                                        //lst.Change.Fn = "cboVendID_Change";
+                                        //lst.Focus.Fn = "Focus1_Change";
+                                    })
+                                 //nut Load data
+                                 , HQ.Button().ID("btnSearch").MarginSpec("5 0 32 155").Width(145)
+                                 .HQLangCode("LOADDATA").Listeners(p =>
+                                 {
+                                     p.Click.Fn = "btnSearch_Click";
+                                 })
+                              //ngoac ket thuc dataFormBotLeft       
+                             )
+                     
+                     
+                             ,X.FormPanel()
+                            .ID("dataFormBotRight")
+                            .Layout(LayoutType.Anchor)
+                            .Title(Util.GetLang("Document"))
+                            .AnchorVertical("30%")
+                            //.AnchorHorizontal("100%")
+                            .ColumnWidth(0.76)
+                            .Padding(5)
+                            .Items(
+
+                            X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                            .Items(
+                                //RefNbr
+                                HQ.Combo().ID("cboRefNbr").Name("cboRefNbr").HQLangCode("REFNBR").HQProcedure("ppv_AP10100RefNbr")
+                                .HQColumnShow("RefNbr,DocDesc,DocType,OrigDocAmt").DisplayField("RefNbr").ValueField("RefNbr").Editable(false)
+                                .Width(280).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
+                                .HQDBSys(false).LabelWidth(130)
+                                //.MaxLength(30).EnforceMaxLength(true)
+                                //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .HQParam(new StoreParameterCollection()
+                                {
+                                   // new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
+                                   new StoreParameter() { Name = "@BatNbr", Value = "App.cboBatNbr.value", Mode = ParameterMode.Raw },
+                                    new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
+                                    
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                    {
+                                        //lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.Change.Fn = "cboRefNbr_Change";
+                                        //lst.Focus.Fn = "Focus1_Change";
+                                    })
+                            
+                             //Original DocAmount ( Vendor Balance )
+                             , HQ.NumberField().ID("txtOrigDocAmt").Name("txtOrigDocAmt").HQLangCode("VENDBAL")//.DataIndex("OrigDocAmt")
+                             .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)
+                        
+                            )
+                            
+                            ,X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                            .Items(
+                            
+                              //InvcNbr (Payment Number)
+                               HQ.TextBox().ID("txtInvcNbr").Name("txtInvcNbr").HQLangCode("PAYMENTNO").DataIndex("InvcNbr")
+                              .Width(280).MarginSpec("5 0 0 0").MaxLength(15).EnforceMaxLength(true).LabelWidth(130)
+                        
+                              //Paid Amount
+                              ,HQ.NumberField().ID("txtPaid").Name("txtPaid").HQLangCode("PAIDAMT").DataIndex("")
+                               .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)
+                               .Listeners(lst =>
+                                {
+                                    //lst.Change.Fn = "txtPaid_Change";
+                                })
+                            )
+                            
+                            ,X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                            .Items(
+                                //DocDate
+                                HQ.DateField().ID("txtDocDate").Name("txtDocDate").HQLangCode("DOCDATE").DataIndex("DocDate")
+                                .Width(280).MarginSpec("5 0 0 0").Value(DateTime.Now).AllowBlank(false).LabelWidth(130)
+                                .Listeners(lst =>
+                                 {
+                                    //lst.Change.Fn = "txtDocDate_Change";
+                                 })
+                        
+                                 //UnApply Total
+                                 ,HQ.NumberField().ID("txtUnTotPayment").Name("txtUnTotPayment").HQLangCode("UNTOTAPPLY").DataIndex("")
+                               .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)
+                            )
+                            
+                            
+                            //Description
+                            ,HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("DESCR").DataIndex("DocDesc")
+                            .Width(580).MarginSpec("5 0 0 0").MaxLength(100).EnforceMaxLength(true).AllowBlank(false).LabelWidth(130)
+                            .Listeners(lst =>
+                            {
+
+                                //lst.Change.Fn = "txtDescr_Change";
+                                    
+                            })
+                            
+                            
+                        
+                        
+                            ,X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                            .Items(
+                            
+                                //Apply Amount (Auto Apply)
+                                HQ.NumberField().ID("txtPayment").Name("txtPayment").HQLangCode("AUTOAPPL").DataIndex("")
+                               .Width(280).MarginSpec("5 0 0 0").LabelWidth(130)
+                               .Listeners(lst =>
+                                {
+                                    //lst.Change.Fn = "txtPayment_Change";
+                                })
+                        
+                               //BankAcct
+                              , HQ.Combo().ID("cboBankAcct").Name("cboBankAcct").HQLangCode("BANKACCT").HQProcedure("ppv_BankAcctCA").DataIndex("ReasonCD")
+                                .HQColumnShow("BankAcct,CashAcctName,AcctNbr").DisplayField("BankAcct").ValueField("BankAcct").AllowBlank(false)
+                                .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
+                                .HQDBSys(false).ForceSelection(true)
+                                //.MaxLength(30).EnforceMaxLength(true)
+                                //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .HQParam(new StoreParameterCollection()
+                                {
+                                   // new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
+                                   new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
+                                    //new StoreParameter() { Name = "@BatNbr", Value = "App.cboBatNbr.value", Mode = ParameterMode.Raw }
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                 {
+                                     //lst.Change.Fn = "cboBankAcct_Change";
+                                 })
+                            )
+                            
+                            ,X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                            .Items(
+                            
+                                //Balance
+                                HQ.NumberField().ID("txtOdd").Name("txtOdd").HQLangCode("BALANCE").DataIndex("")
+                               .Width(280).MarginSpec("5 0 0 0").ReadOnly(true).LabelWidth(130)
+                               .Listeners(p =>
+                                 {
+                                     p.Change.Fn = "txtOdd_Change";
+                                 })
+                        
+                                  //nut Auto Apply
+                                 , HQ.Button().ID("btnAutoAssign").MarginSpec("5 0 5 155").Width(145)
+                                 .HQLangCode("AUTOAPPL").Listeners(p =>
+                                 {
+                                     p.Click.Fn = "AutoAssign_Click";
+                                 })
+                            )
+                                
+                                
+                            
+                               
+
+                                
+                            
+
+                              //ngoac ket thuc dataFormBot       
+                             )
+                                
+                    //ngoac dong container chia layout column         
+                    )
+                    
+                     //ngoac ngoai Header bao gom panel tren va tab o duoi
+                    )
+                    ,X.Panel().ID("Grid").Layout(LayoutType.Anchor).AnchorVertical("54%").AnchorHorizontal("100%")
+                    .Items(         
+                     Html.X().GridPanel()
+                                .Layout(LayoutType.Fit)
+                                .Frame(true)
+                                .AnchorHorizontal("100%")
+                                .AnchorVertical("100%")
+                                //.Height(320)
+                                //.Width(1400)
+                                //.Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
+                                .RenderTo("contentCenter")
+                                .AutoScroll(true)
+                                .View(X.GridView().TrackOver(false))
+                                .ID("grd").SetAutoScroll(true)
+                                .StoreID("storeGrid")
+                                //.Hidden(true)
+                                .SortableColumns(false)
+                                .Listeners(l =>
+                                        {
+                                            l.ContainerMouseUp.Fn = "Focus2_Change";
+                                            l.Select.Fn = "Focus2_Change";
+                                            l.BeforeEdit.Fn = "Focus2_Change";
+                                            l.CellClick.Fn = "Focus2_Change";
+                                        })
+                                //.Features(
+                                //               Html.X().GridFilters()//Filter
+                                //                   .Local(true)
+                                //                       .Filters(
+                                //                            Html.X().StringFilter().DataIndex("CpnyID"),
+                                //                            Html.X().StringFilter().DataIndex("CpnyName")
+
+                                                             //                       )
+
+                                                             //           )       
+                                .ColumnModel(
+                                    Html.X().RowNumbererColumn().ID("RowNumber")
+
+
+                                         , Html.X().CheckColumn().ID("chkSelectAdjusted").DataIndex("Selected").Width(30).Editable(true).HideTitleEl(true)
+                                              .HeaderItems(
+                                                HQ.Checkbox().ID("AdjustedCheckAll").MarginSpec("0 0 0 8")
+                                                .Listeners(l => l.Change.Fn = "AdjustedCheckAll_Change")//bat thay doi khi check vao o tren header
+                                                )
+                                                .Listeners(l => l.CheckChange.Fn = "AdjustedCheckEveryRow_Change") // bat thay doi khi check vao tung o ben duoi
+                                                
+                                                
+                                                , Html.X().DateColumn().Text(Util.GetLang("DocDate")).DataIndex("DocDate").Width(100).Format("dd-MM-yyyy")
+                                                .Editor(Html.X().DateField().ID("txtDocDateGrid1").Format("dd-MM-yyyy").Editable(false)
+                                                .Listeners(lst =>
+                                                {
+
+                                                    //lst.Change.Fn = "ExpiryDate_Change";
+
+                                                }))
+                                             , Html.X().Column().Text(Util.GetLang("InvcNbr")).Width(150).DataIndex("InvcNbr")
+                                                .Editor(
+                                                    HQ.Combo().ID("cboInvcNbr").Name("cboInvcNbr").HQProcedure("AP10400_BindingGrid")
+                                                .HQColumnShow("InvcNbr,DocBal,VendID,Descr,DocDate").DisplayField("InvcNbr").ValueField("InvcNbr")
+                                                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                                                .HQDBSys(false).AllowBlank(true)
+                                                .HQParam(new StoreParameterCollection() { 
+                                                        new StoreParameter("@BatNbr", "App.cboBatNbr.value", ParameterMode.Raw),
+                                                        new StoreParameter("@BranchID", "App.txtBranchID.value", ParameterMode.Raw),
+                                                        new StoreParameter("@VendID", "App.cboVendID.value", ParameterMode.Raw),
+                                                        new StoreParameter("@RefNbr", "App.cboRefNbr.value", ParameterMode.Raw),
+                                                        new StoreParameter("@FromDate", "App.txtFromDate.getValue()", ParameterMode.Raw),
+                                                        new StoreParameter("@ToDate", "App.txtToDate.getValue()", ParameterMode.Raw),
+                                                        new StoreParameter("@DateType", "App.cboDateType.value", ParameterMode.Raw),
+                                                        new StoreParameter("@IsGridF3", "1", ParameterMode.Value),
+                                                    })
+                                                .Triggers(new FieldTrigger() {Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                     .Listeners(lst =>
+                                                     {
+                                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                              
+                                                     })    
+                                                .LoadData()
+                                                .Listeners(lst =>
+                                                {
+                                                    lst.Change.Fn = "cboInvcNbr_change";
+                                                })
+                                                )
+
+                                           
+                                              
+                                              , Html.X().NumberColumn().Format("0,000").ID("txtPaymentGrid").Text(Util.GetLang("Payment")).DataIndex("Payment").Width(150)
+                                            .Editor(Html.X().TextField()
+                                            .Listeners(lst =>
+                                                {
+                                                    lst.Change.Fn = "txtPaymentGrid_change";
+                                                })
+                                            )
+                                            
+                                            
+                                              , Html.X().NumberColumn().Format("0,000").ID("txtDocBalGrid").Text(Util.GetLang("DocBal")).DataIndex("DocBal").Width(150)
+                                            .Editor(Html.X().TextField())
+                                            
+                                            , Html.X().Column().ID("txtVendIDGrid1").Text(Util.GetLang("VENDID")).DataIndex("VendID").Width(150)
+                                              .Editor(Html.X().TextField())
+                                              
+                                              , Html.X().Column().ID("txtDescrGrid1").Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
+                                              .Editor(Html.X().TextField())
+
+
+
+                              , Html.X().CommandColumn().Width(150)
+                                    .Commands(
+                                        Html.X().GridCommand()
+                                            .Text(Util.GetLang("Reject"))
+                                            .ToolTip(t =>
+                                            {
+                                                t.Text = Util.GetLang("Rejectrowchanges");
+                                            })
+                                            .CommandName("reject")
+                                            .Icon(Icon.ArrowUndo)
+                                    )
+
+
+                                .PrepareToolbar(t =>
+                                {
+                                    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                })
+                                .Listeners(l =>
+                                {
+                                    l.Command.Handler = "grd_Reject(record);";
+                                })
+                             //ngoac ket thuc ColumnModel
+                             )
+                             .SelectionModel(Html.X().RowSelectionModel().ID("SelectionRowOnGrid").Mode(SelectionMode.Multi))
+                              .Plugins(
+                                Html.X()//Cho phep edit )
+                                    .CellEditing()
+                                    .ClicksToEdit(1)
+                                    .Listeners(ls =>
+                                    {
+                                        ls.BeforeEdit.Fn = "grd_BeforeEdit";
+                                        ls.Edit.Fn = "grd_Edit";
+                                        ls.ValidateEdit.Fn = "grd_ValidateEdit";
+                                        ls.CancelEdit.Fn = "grd_CancelEdit";
+
+                                    })
+                            //ngoac ket thuc Plugin        
+                            )
+
+                // ngoac dong ket thuc Panel bao Grid
+                  )
+         
+                        
+                 
+     
+                    
+                )
+
+                )
+
+
+
+
+
+    )
+ 

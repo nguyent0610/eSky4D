@@ -1,0 +1,76 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using AP00000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+@(Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Anchor)
+        .ID("dataForm")
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(10)
+        .TopBar(Util.SetupToolbar("PO20100", false))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .Items(
+            X.Panel().ID("Header").Layout(LayoutType.HBox)
+            .Items(
+            
+                // First Column
+                X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
+                .Items(
+                    HQ.TextBox().ID("txtLastRefNbr").Name("txtLastRefNbr").HQLangCode("LastRefNbr")
+                    .DataIndex("LastRefNbr").Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                    
+                    , HQ.TextBox().ID("txtLastBatNbr").Name("txtLastBatNbr").HQLangCode("LastBatNbr").DataIndex("LastBatNbr")
+                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+
+                    , HQ.TextBox().ID("txtLastPaymentNbr").Name("txtLastPaymentNbr").HQLangCode("LastPaymentNbr").DataIndex("LastPaymentNbr")
+                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+
+                    , HQ.TextBox().ID("txtPreFixBat").Name("txtPreFixBat").HQLangCode("Prefix").DataIndex("PreFixBat")
+                    .Width(400).MarginSpec("5 0 0 0").MaxLength(2).EnforceMaxLength(true)
+
+                    , HQ.Combo().ID("cboClassID").Name("cboClassID").HQLangCode("ClassID").HQProcedure("ppv_ClassID")
+                    .HQColumnShow("ClassID,Descr").DisplayField("ClassID").ValueField("ClassID").DataIndex("ClassID")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false)
+                   
+                    .LoadData()
+
+                    , HQ.Combo().ID("cboTermsID").Name("cboTermsID").HQLangCode("TermsID").HQProcedure("ppv_terms")
+                    .HQColumnShow("TermsID,Descr").DisplayField("TermsID").ValueField("TermsID").DataIndex("terms")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false)
+                    
+                    .LoadData()
+
+                    , HQ.Combo().ID("cboTranDescDef").Name("cboTranDescDef").HQLangCode("TranDescDef").HQProcedure("ppv_AP00000TranDescDflt")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("TranDescDflt")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false)
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                           // new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                           // new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
+                        })
+                    .LoadData()
+                    
+                    , HQ.Combo().ID("cboBankAcct").Name("cboBankAcct").HQLangCode("BankAcct").HQProcedure("ppv_BankAcctCA")
+                    .HQColumnShow("BankAcct,CashAcctName").DisplayField("BankAcct").ValueField("BankAcct").DataIndex("DfltBankAcct")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false)
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString() , Mode = ParameterMode.Value },
+                           // new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
+                        })
+                    .LoadData()
+                    
+                
+                )
+            )
+        )))
