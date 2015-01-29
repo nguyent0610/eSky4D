@@ -1,0 +1,193 @@
+
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using eBiz4DWebFrame;
+@using eBiz4DWebFrame.HQControl;
+@using IN20500;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "IN20500";
+    var acc = Session["IN20500"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+<script src="~/Scripts/common.js"></script>
+<script src='@Url.Content("Scripts/Screen/IN20500.js")' type="text/javascript"></script>
+@*<script src='@Url.Content("Scripts/Screen/uxflash.js")' type="text/javascript"></script>
+<script src='@Url.Content("Scripts/Screen/uxflex.js")' type="text/javascript"></script>
+<script src='@Url.Content("Scripts/Screen/uxmedia-ie.js")' type="text/javascript"></script>
+<script src='@Url.Content("Scripts/Screen/uxmedia.js")' type="text/javascript"></script>
+<script src='@Url.Content("Scripts/Screen/uxvismode.js")' type="text/javascript"></script>*@
+<style type="text/css"> @*Thuoc tinh hover tren grid *@
+    .x-grid-row-over .x-grid-cell-inner {
+        font-weight : bold;
+    }
+</style>
+
+
+
+@*<script type="text/javascript">
+    jwplayer("myElement").setup({
+        file: "https://www.youtube.com/watch?v=IvohXgIKTgU",
+        image: "http://example.com/uploads/myPoster.jpg",
+        width: 640,
+        height: 360
+    });
+</script>*@
+<script>
+    var isAllValid = function (items) {
+        if (items != undefined) {
+            for (var i = 0; i < items.length; i++) {
+                if (items[i]["CpnyID"] == undefined)
+                    continue;
+                if (items[i]["CpnyID"] == "")
+                    continue;
+
+                if (items[i]["CpnyID"].trim() == "") {
+                    callMessage(15, '@Util.GetLang("CpnyID")', null);
+                return false;
+            }
+
+
+        }
+        return true;
+    }
+    else {
+        return true;
+    }
+    };
+
+
+
+
+
+
+
+</script>
+<script>
+    var isUpdate = strToBool('@acc.Update.ToString().ToLower()');
+    var isInsert = strToBool('@acc.Insert.ToString().ToLower()');
+    var isDelete = strToBool('@acc.Delete.ToString().ToLower()');
+</script>
+<title>@ViewBag.Title</title>
+</head>
+    <body>
+@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
+
+
+@(Html.X().Store().ID("storeFormBig").AutoLoad(false)
+        .Model(Util.GenerateModel(typeof(IN_Inventory), "IN_InventoryModel", "InvtID",false,"StkItem"))
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetInventoryClass", "IN20500"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        )
+        .Parameters(ps =>
+        {
+            ps.Add(new StoreParameter("InvtID", "App.cboInvtID.value", ParameterMode.Raw));
+        })
+        .Listeners(p => p.Load.Handler = "loadDataAutoHeaderBig()")
+  )
+
+
+
+
+@(Html.X().Store().ID("storeFormSmall").AutoLoad(false)
+        //.Model(Util.GenerateModel(typeof(IN_ProductClass), "IN_ProductClassModel", "ClassID",false,"DfltStkItem"))
+        .Model(
+            X.Model()
+            .Name("IN_ProductClassModel")
+            .IDProperty("ClassID")
+            .Fields(
+                X.ModelField().Name("ClassID").Type(ModelFieldType.String)
+                ,X.ModelField().Name("Public").Type(ModelFieldType.Boolean)
+                ,X.ModelField().Name("StkItem").Type(ModelFieldType.Boolean)
+                ,X.ModelField().Name("InvtType").Type(ModelFieldType.String)
+                ,X.ModelField().Name("Source").Type(ModelFieldType.String)
+                ,X.ModelField().Name("ValMthd").Type(ModelFieldType.String)
+                ,X.ModelField().Name("LotSerTrack").Type(ModelFieldType.String)
+                ,X.ModelField().Name("Buyer").Type(ModelFieldType.String)
+                ,X.ModelField().Name("StkUnit").Type(ModelFieldType.String)
+                ,X.ModelField().Name("DfltPOUnit").Type(ModelFieldType.String)
+                ,X.ModelField().Name("DfltSOUnit").Type(ModelFieldType.String)
+                ,X.ModelField().Name("MaterialType").Type(ModelFieldType.String)
+                ,X.ModelField().Name("TaxCat").Type(ModelFieldType.String)
+                ,X.ModelField().Name("SerAssign").Type(ModelFieldType.String)
+                ,X.ModelField().Name("LotSerIssMthd").Type(ModelFieldType.String)
+                ,X.ModelField().Name("ShelfLife").Type(ModelFieldType.Int)
+                ,X.ModelField().Name("WarrantyDays").Type(ModelFieldType.Int)
+                ,X.ModelField().Name("LotSerFxdTyp").Type(ModelFieldType.String)
+                ,X.ModelField().Name("LotSerFxdLen").Type(ModelFieldType.Int)
+                ,X.ModelField().Name("LotSerFxdVal").Type(ModelFieldType.String)
+                ,X.ModelField().Name("LotSerNumLen").Type(ModelFieldType.Int)
+                ,X.ModelField().Name("LotSerNumVal").Type(ModelFieldType.String)
+         
+                
+            )
+        )
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetProductClass", "IN20500"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        )
+        .Parameters(ps =>
+        {
+            ps.Add(new StoreParameter("ClassID", "App.cboClassID.value", ParameterMode.Raw));
+        })
+        .Listeners(p => p.Load.Handler = "loadDataAutoHeaderSmall()")
+  )
+
+
+@(Html.X().Store().ID("storeGrid").AutoLoad(false)
+        //.Model(Util.GenerateModel(typeof(ppv_IN20500_getCompany_Result), "ppv_IN20500_getCompany_ResultModel", "CpnyID"))
+        .Model(
+            X.Model()
+            .Name("GetCompany_ResultModel")
+            .IDProperty("CpnyID")
+            .Fields(
+                X.ModelField().Name("ClassID").Type(ModelFieldType.String)
+                ,X.ModelField().Name("CpnyID").Type(ModelFieldType.String)
+                ,X.ModelField().Name("CpnyName").Type(ModelFieldType.String)
+                
+                
+            )
+        )
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetCompanyClass", "IN20500"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        )
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("ClassID", "App.cboClassID.value", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("InvtID", "App.cboInvtID.value", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("chooseGrid", "App.chooseGrid.value",ParameterMode.Raw));
+                            })
+       // .Listeners(p=>p.Load.Handler="loadGrid()" )
+  )
+
+
+@(Html.HQ().Store().ID("ApproveStatusAll").HQProcedure("ppv_IN20500ApproveStatus").HQDBSys(false).LoadData())
+
+     @{ Html.RenderAction("Body"); }
+    </body>
+</html>
