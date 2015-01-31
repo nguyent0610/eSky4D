@@ -1,7 +1,7 @@
 ﻿@using Ext.Net;
 @using Ext.Net.MVC;
-@using eBiz4DWebFrame;
-@using eBiz4DWebFrame.HQControl;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
 @using AR20200;
 
 @model System.Collections.IEnumerable
@@ -9,7 +9,6 @@
 @{
     Layout = null;
     var X = Html.X();
-    var HQ = Html.HQ();
     ViewBag.Title = "AR20200";
     var acc = Session["AR20200"] as AccessRight;
     
@@ -18,39 +17,52 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width" />
-<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
-<script src='@Url.Content("Scripts/common.js")' type="text/javascript"></script>
-<script src='@Url.Content("Scripts/Screen/AR20200.js")' type="text/javascript"></script>
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/AR20200.js")' type="text/javascript"></script>
 
-<script type="text/javascript">
-    var isUpdate = strToBool('@acc.Update.ToString()');
-    var isInsert = strToBool('@acc.Insert.ToString()');
-    var isDelete = strToBool('@acc.Delete.ToString()');
-</script>
-  <title>@ViewBag.Title</title>
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        </script>
+
+        <title>@ViewBag.Title</title>
     </head>
     <body>
-@Html.X().ResourceManager().Theme(Theme.Gray)
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
 
-@*Make the store - the binding data of the form*@
-@(Html.X().Store().ID("storeARSalesPersonHeader")   
-        .Model(Util.GenerateModel(typeof(AR_Salesperson), "AR_SalespersonModel", "SlsperId"))       
-        .Proxy(
-            X.AjaxProxy()                
-            .Url(Url.Action("GetARSalesPersonHeader", "AR20200"))                
-            .ActionMethods(action =>
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("stoSalesPerson")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR_Salesperson), "mdlAR_Salesperson", "SlsperId"))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetARSalesPersonHeader", "AR20200"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
             {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        ) 
-        .Parameters(ps =>
-                        {
-                            ps.Add(new StoreParameter("BranchID", "App.cboBranchID.value", ParameterMode.Raw));
-                        })      
-        .Listeners(p=>p.Load.Handler="loadDataHeader()" )
-  )
+                ps.Add(new StoreParameter("branchId", "App.cboBranchID.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperid", "App.cboSlsperid.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Handler="stoSalesPerson_load()" )
+            // Store: stoSalesPerson
+        )
 
-     @{ Html.RenderAction("Body"); }
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong AR20200Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body"); }
     </body>
 </html>

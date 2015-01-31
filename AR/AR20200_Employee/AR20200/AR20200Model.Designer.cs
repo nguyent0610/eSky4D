@@ -585,15 +585,15 @@ namespace AR20200
         /// </summary>
         /// <param name="slsperId">Initial value of the SlsperId property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
-        /// <param name="pPCAdmin">Initial value of the PPCAdmin property.</param>
         /// <param name="status">Initial value of the Status property.</param>
-        public static AR_Salesperson CreateAR_Salesperson(global::System.String slsperId, global::System.String branchID, global::System.Boolean pPCAdmin, global::System.String status)
+        /// <param name="pPCAdmin">Initial value of the PPCAdmin property.</param>
+        public static AR_Salesperson CreateAR_Salesperson(global::System.String slsperId, global::System.String branchID, global::System.String status, global::System.Boolean pPCAdmin)
         {
             AR_Salesperson aR_Salesperson = new AR_Salesperson();
             aR_Salesperson.SlsperId = slsperId;
             aR_Salesperson.BranchID = branchID;
-            aR_Salesperson.PPCAdmin = pPCAdmin;
             aR_Salesperson.Status = status;
+            aR_Salesperson.PPCAdmin = pPCAdmin;
             return aR_Salesperson;
         }
 
@@ -1284,30 +1284,6 @@ namespace AR20200
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean PPCAdmin
-        {
-            get
-            {
-                return _PPCAdmin;
-            }
-            set
-            {
-                OnPPCAdminChanging(value);
-                ReportPropertyChanging("PPCAdmin");
-                _PPCAdmin = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("PPCAdmin");
-                OnPPCAdminChanged();
-            }
-        }
-        private global::System.Boolean _PPCAdmin;
-        partial void OnPPCAdminChanging(global::System.Boolean value);
-        partial void OnPPCAdminChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.String Status
         {
             get
@@ -1326,6 +1302,30 @@ namespace AR20200
         private global::System.String _Status;
         partial void OnStatusChanging(global::System.String value);
         partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean PPCAdmin
+        {
+            get
+            {
+                return _PPCAdmin;
+            }
+            set
+            {
+                OnPPCAdminChanging(value);
+                ReportPropertyChanging("PPCAdmin");
+                _PPCAdmin = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PPCAdmin");
+                OnPPCAdminChanged();
+            }
+        }
+        private global::System.Boolean _PPCAdmin;
+        partial void OnPPCAdminChanging(global::System.Boolean value);
+        partial void OnPPCAdminChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

@@ -1,8 +1,8 @@
 ﻿using System.Web.Mvc;
 using Ext.Net;
 using Ext.Net.MVC;
-using eBiz4DWebFrame;
-using eBiz4DWebSys;
+using HQ.eSkyFramework;
+using HQ.eSkySys;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +11,17 @@ using System;
 using System.Data.Metadata.Edm;
 using System.Security.Cryptography;
 using System.Text;
-using HQSendMailApprove;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 namespace AR20200.Controllers
 {
     [DirectController]
     public class AR20200Controller : Controller
     {
-        private string _screenName = "AR20200";
+        private string _screenNbr = "AR20200";
         private string _beginStatus = "H";
         private string _noneStatus = "N";
         AR20200Entities _db = Util.CreateObjectContext<AR20200Entities>(false);
-        eBiz4DWebSysEntities _sys = Util.CreateObjectContext<eBiz4DWebSysEntities>(true);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
 
         private string _pathImage;
         internal string PathImage
@@ -56,17 +55,21 @@ namespace AR20200.Controllers
         // GET: /AR20200/
         public ActionResult Index()
         {
+            Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
         public PartialViewResult Body()
         {
             return PartialView();
         }
+
         // Get collection of Sales Person in a branch for binding data (Ajax)
-        public ActionResult GetARSalesPersonHeader(string branchId)
+        public ActionResult GetARSalesPersonHeader(string branchId, string slsperid)
         {
-            return this.Store(_db.AR_Salesperson.Where(p => p.BranchID == branchId));
+            var slsper = _db.AR_Salesperson.FirstOrDefault(p => p.BranchID == branchId && p.SlsperId == slsperid);
+            return this.Store(slsper);
         }
 
         [HttpPost]
@@ -99,7 +102,7 @@ namespace AR20200.Controllers
                     objHeader.Images = images;
 
                     objHeader.Crtd_DateTime = DateTime.Now;
-                    objHeader.Crtd_Prog = _screenName;
+                    objHeader.Crtd_Prog = _screenNbr;
                     objHeader.Crtd_User = Current.UserName;
                     UpdatingHeader(updatedSlsperson, ref objHeader);
 
@@ -121,10 +124,10 @@ namespace AR20200.Controllers
                 // add a new pending task with an approved handle.
                 if (!keepStatus)
                 {
-                    var task = _db.HO_PendingTasks.FirstOrDefault(p => p.ObjectID == slsperId && p.EditScreenNbr == _screenName && p.BranchID == branchId);
+                    var task = _db.HO_PendingTasks.FirstOrDefault(p => p.ObjectID == slsperId && p.EditScreenNbr == _screenNbr && p.BranchID == branchId);
 
                     var approveHandle = _db.SI_ApprovalFlowHandle
-                        .FirstOrDefault(p => p.AppFolID == _screenName
+                        .FirstOrDefault(p => p.AppFolID == _screenNbr
                                             && p.Status == objHeader.Status 
                                             && p.Handle == handle);
                     if (task == null && approveHandle != null)
@@ -134,10 +137,10 @@ namespace AR20200.Controllers
                             HO_PendingTasks newTask = new HO_PendingTasks();
                             newTask.BranchID = branchId;
                             newTask.ObjectID = slsperId;
-                            newTask.EditScreenNbr = _screenName;
+                            newTask.EditScreenNbr = _screenNbr;
                             newTask.Content = string.Format(approveHandle.ContentApprove, objHeader.SlsperId, objHeader.Name, branchId);
                             newTask.Crtd_Datetime = newTask.LUpd_Datetime = DateTime.Now;
-                            newTask.Crtd_Prog = newTask.LUpd_Prog = _screenName;
+                            newTask.Crtd_Prog = newTask.LUpd_Prog = _screenNbr;
                             newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
                             newTask.Status = approveHandle.ToStatus;
                             newTask.tstamp = new byte[1];
@@ -218,7 +221,7 @@ namespace AR20200.Controllers
             d.PPCAdmin = s.PPCAdmin;
 
             d.LUpd_DateTime = DateTime.Now;
-            d.LUpd_Prog = _screenName;
+            d.LUpd_Prog = _screenNbr;
             d.LUpd_User = Current.UserName;
         }
 
@@ -237,11 +240,11 @@ namespace AR20200.Controllers
             objSalesHist.Seq = strSeq;
             objSalesHist.BranchID = obj.BranchID;
             objSalesHist.Crtd_DateTime = now;
-            objSalesHist.Crtd_Prog = _screenName;
+            objSalesHist.Crtd_Prog = _screenNbr;
             objSalesHist.Crtd_User = Current.UserName;
             objSalesHist.SlsPerID = obj.SlsperId;
             objSalesHist.LUpd_DateTime = now;
-            objSalesHist.LUpd_Prog = _screenName;
+            objSalesHist.LUpd_Prog = _screenNbr;
             objSalesHist.LUpd_User = Current.UserName;
             objSalesHist.tstamp = new byte[0];
             objSalesHist.Note = "Tạo mới Nhân viên";

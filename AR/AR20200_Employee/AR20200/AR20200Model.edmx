@@ -26,10 +26,10 @@
           <Property Name="Note" Type="nvarchar(max)" />
           <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="smalldatetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="AR_Salesperson">
@@ -37,7 +37,7 @@
             <PropertyRef Name="SlsperId" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Addr1" Type="nvarchar" MaxLength="50" />
           <Property Name="Addr2" Type="nvarchar" MaxLength="50" />
           <Property Name="CmmnPct" Type="float" />
@@ -53,13 +53,13 @@
           <Property Name="Position" Type="varchar" MaxLength="2" />
           <Property Name="LUpd_DateTime" Type="datetime" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
           <Property Name="District" Type="nvarchar" MaxLength="30" />
-          <Property Name="SupID" Type="varchar" MaxLength="10" />
+          <Property Name="SupID" Type="varchar" MaxLength="30" />
           <Property Name="CrLmt" Type="float" />
           <Property Name="Active" Type="bit" />
           <Property Name="PPCPassword" Type="varchar" MaxLength="100" />
@@ -82,10 +82,10 @@
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="TaskID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Parm00" Type="nvarchar(max)" />
           <Property Name="Parm02" Type="nvarchar(max)" />
@@ -117,10 +117,10 @@
           <Property Name="Param05" Type="nvarchar" MaxLength="500" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="MailApprove" Type="varchar" MaxLength="100" />
           <Property Name="ProcContent" Type="varchar" MaxLength="100" />
@@ -138,10 +138,10 @@
           <Property Name="LangStatus" Type="varchar" MaxLength="50" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
       </Schema></edmx:StorageModels>
@@ -169,10 +169,10 @@
           <Property Type="String" Name="Note" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="0" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="0" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="AR_Salesperson">
@@ -180,7 +180,7 @@
             <PropertyRef Name="SlsperId" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Addr1" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Double" Name="CmmnPct" />
@@ -196,20 +196,20 @@
           <Property Type="String" Name="Position" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="District" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="SupID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SupID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="CrLmt" />
           <Property Type="Boolean" Name="Active" />
           <Property Type="String" Name="PPCPassword" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="PPCStorePicReq" />
           <Property Type="String" Name="VendID" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="PPCAdmin" Nullable="false" />
-          <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Type="String" Name="Images" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="HO_PendingTasks">
@@ -225,10 +225,10 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="TaskID" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Parm00" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Parm02" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -260,10 +260,10 @@
           <Property Type="String" Name="Param05" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="MailApprove" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProcContent" MaxLength="100" FixedLength="false" Unicode="false" />
@@ -281,13 +281,13 @@
           <Property Type="String" Name="LangStatus" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -316,8 +316,8 @@
             <EntityTypeMapping TypeName="AR20200Model.AR_Salesperson">
               <MappingFragment StoreEntitySet="AR_Salesperson">
                 <ScalarProperty Name="Images" ColumnName="Images" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="PPCAdmin" ColumnName="PPCAdmin" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="VendID" ColumnName="VendID" />
                 <ScalarProperty Name="PPCStorePicReq" ColumnName="PPCStorePicReq" />
                 <ScalarProperty Name="PPCPassword" ColumnName="PPCPassword" />
@@ -444,11 +444,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
-        <EntityTypeShape EntityType="AR20200Model.AR_SalesPerHist" Width="1.5" PointX="0.5" PointY="0.5" />
-        <EntityTypeShape EntityType="AR20200Model.AR_Salesperson" Width="1.5" PointX="2.625" PointY="0.5" />
-        <EntityTypeShape EntityType="AR20200Model.HO_PendingTasks" Width="1.5" PointX="4.625" PointY="0.5" />
-        <EntityTypeShape EntityType="AR20200Model.SI_ApprovalFlowHandle" Width="1.5" PointX="6.625" PointY="0.5" />
-        <EntityTypeShape EntityType="AR20200Model.SI_ApprovalFlowStatus" Width="1.5" PointX="8.375" PointY="0.5" />
+        <EntityTypeShape EntityType="AR20200Model.AR_SalesPerHist" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AR20200Model.AR_Salesperson" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AR20200Model.HO_PendingTasks" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AR20200Model.SI_ApprovalFlowHandle" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AR20200Model.SI_ApprovalFlowStatus" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </Diagrams>
   </Designer>
