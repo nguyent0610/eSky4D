@@ -16,12 +16,18 @@ function Save() {
                 params: {
                     lstARSalesPersonHeader: Ext.encode(App.stoSalesPerson.getChangedData({ skipIdForPhantomRecords: false }))
                 },
-                success: function (data) {
+                success: function (action, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode, '', '');
+                    }
                     App.cboSlsperid.getStore().reload();
                     menuClick('refresh');
                 },
 
-                failure: function () {
+                failure: function (action, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                    }
                 }
             });
         }
@@ -100,10 +106,7 @@ var stoSalesPerson_load = function () {
 // Event when cboBranchID is changed or selected item
 var cboBranchID_Change = function (sender, e) {
     App.cboDeliveryMan.getStore().reload();
-
-    setTimeout(function () {
-        App.cboSlsperid.getStore().reload();
-    }, 500);
+    App.cboSlsperid.getStore().load();
 };
 
 // Event when cboSlsperid is changed or selected item

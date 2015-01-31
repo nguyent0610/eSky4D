@@ -33,7 +33,7 @@
                 .Items(
                     HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQLangCode("BranchID").HQProcedure("AR20200_pcBranchAllByUser")
                     .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
-                    .HQValue("HQ.cpnyID", true).AllowBlank(false).ForceSelection(true)
+                    .AllowBlank(false)//.ForceSelection(true).HQValue("HQ.cpnyID", true)
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false).Editable(false)
                     .HQParam(new StoreParameterCollection() 
                         { 
@@ -52,6 +52,7 @@
                         HQ.Combo().ID("cboSlsperid").Name("cboSlsperid").HQLangCode("Slsperid").HQProcedure("AR20200_pcSalesPersonMaster")
                         .HQColumnShow("SlsperId,Name").DisplayField("SlsperId").ValueField("SlsperId")//.DataIndex("SlsperId")
                         .Width(300).HQHeightWidth(400, 300).AllowBlank(false)//.ForceSelection(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection() 
                             { 
                                 new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
@@ -59,6 +60,7 @@
                         .LoadData()
                         .Listeners(lst =>
                             {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 lst.Change.Fn = "cboSlsperid_Change";
                             })
 

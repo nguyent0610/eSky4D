@@ -59,7 +59,7 @@ namespace AR20200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
+        [OutputCache(Duration = 1000000, VaryByParam = "none")]
         public PartialViewResult Body()
         {
             return PartialView();
@@ -73,110 +73,133 @@ namespace AR20200.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Save(FormCollection data)
         {
-            // Get params from data that's sent from client (Ajax)
-            string slsperId = data["cboSlsperId"];
-            string branchId = data["cboBranchID"];
-            string handle = data["cboHandle"];
-
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstARSalesPersonHeader"]);
-            bool keepStatus = (string.IsNullOrWhiteSpace(handle) || handle == _noneStatus) ? true : false;
-
-            ChangeRecords<AR_Salesperson> lstARSalesPersonHeader = dataHandler.BatchObjectData<AR_Salesperson>();
-
-            foreach (AR_Salesperson updatedSlsperson in lstARSalesPersonHeader.Updated)
+            try
             {
-                // Get the image path
-                string images = getPathThenUploadImage(updatedSlsperson, branchId, slsperId);
+                // Get params from data that's sent from client (Ajax)
+                string slsperId = data["cboSlsperId"];
+                string branchId = data["cboBranchID"];
+                string handle = data["cboHandle"];
 
-                var objHeader = _db.AR_Salesperson.FirstOrDefault(p => p.SlsperId == slsperId && p.BranchID == branchId);
-                
-                if (objHeader == null)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstARSalesPersonHeader"]);
+                bool keepStatus = (string.IsNullOrWhiteSpace(handle) || handle == _noneStatus) ? true : false;
+
+                ChangeRecords<AR_Salesperson> lstARSalesPersonHeader = dataHandler.BatchObjectData<AR_Salesperson>();
+
+                foreach (AR_Salesperson createdSlsperson in lstARSalesPersonHeader.Created)
                 {
-                    // Create new a sales person
-                    objHeader = new AR_Salesperson();
-                    objHeader.BranchID = branchId;
-                    objHeader.SlsperId = slsperId;
-                    objHeader.Status = _beginStatus; // ???
-                    objHeader.Images = images;
+                    // Get the image path
+                    string images = getPathThenUploadImage(createdSlsperson, branchId, slsperId);
 
-                    objHeader.Crtd_DateTime = DateTime.Now;
-                    objHeader.Crtd_Prog = _screenNbr;
-                    objHeader.Crtd_User = Current.UserName;
-                    UpdatingHeader(updatedSlsperson, ref objHeader);
+                    var objHeader = _db.AR_Salesperson.FirstOrDefault(p => p.SlsperId == slsperId);
 
-                    // Add data to Sales person
-                    _db.AR_Salesperson.AddObject(objHeader);
-
-                    // Add data to Sales Per Hist
-                    AddSalesPerHist(objHeader);
-                }
-                else
-                {
-                    // Update an existing sales person
-                    objHeader.Status = keepStatus ? objHeader.Status : handle; // ???
-                    objHeader.Images = images;
-                    UpdatingHeader(updatedSlsperson, ref objHeader);
-                }
-
-                // If there is a change in handling status (keepStatus is False),
-                // add a new pending task with an approved handle.
-                if (!keepStatus)
-                {
-                    var task = _db.HO_PendingTasks.FirstOrDefault(p => p.ObjectID == slsperId && p.EditScreenNbr == _screenNbr && p.BranchID == branchId);
-
-                    var approveHandle = _db.SI_ApprovalFlowHandle
-                        .FirstOrDefault(p => p.AppFolID == _screenNbr
-                                            && p.Status == objHeader.Status 
-                                            && p.Handle == handle);
-                    if (task == null && approveHandle != null)
+                    if (objHeader == null)
                     {
-                        if (!approveHandle.Param00.PassNull().Split(',').Any(p => p.ToLower() == "notapprove"))
+                        // Create new a sales person
+                        objHeader = new AR_Salesperson();
+                        objHeader.BranchID = branchId;
+                        objHeader.SlsperId = slsperId;
+                        objHeader.Status = _beginStatus; // ???
+                        objHeader.Images = images;
+
+                        objHeader.Crtd_DateTime = DateTime.Now;
+                        objHeader.Crtd_Prog = _screenNbr;
+                        objHeader.Crtd_User = Current.UserName;
+                        UpdatingHeader(createdSlsperson, ref objHeader);
+
+                        // Add data to Sales person
+                        _db.AR_Salesperson.AddObject(objHeader);
+
+                        // Add data to Sales Per Hist
+                        AddSalesPerHist(objHeader);
+
+                        _db.SaveChanges();
+
+                        return Json(new { success = true, msgCode = 201405071 });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, msgCode = 20402, msgParam = slsperId });
+                    }
+                }
+
+                foreach (AR_Salesperson updatedSlsperson in lstARSalesPersonHeader.Updated)
+                {
+                    // Get the image path
+                    string images = getPathThenUploadImage(updatedSlsperson, branchId, slsperId);
+
+                    var objHeader = _db.AR_Salesperson.FirstOrDefault(p => p.SlsperId == slsperId);
+
+                    if (objHeader != null)
+                    {
+                        // Update an existing sales person
+                        objHeader.Status = keepStatus ? objHeader.Status : handle; // ???
+                        objHeader.Images = images;
+                        UpdatingHeader(updatedSlsperson, ref objHeader);
+                    }
+
+                    // If there is a change in handling status (keepStatus is False),
+                    // add a new pending task with an approved handle.
+                    if (!keepStatus)
+                    {
+                        var task = _db.HO_PendingTasks.FirstOrDefault(p => p.ObjectID == slsperId && p.EditScreenNbr == _screenNbr && p.BranchID == branchId);
+
+                        var approveHandle = _db.SI_ApprovalFlowHandle
+                            .FirstOrDefault(p => p.AppFolID == _screenNbr
+                                                && p.Status == objHeader.Status
+                                                && p.Handle == handle);
+                        if (task == null && approveHandle != null)
                         {
-                            HO_PendingTasks newTask = new HO_PendingTasks();
-                            newTask.BranchID = branchId;
-                            newTask.ObjectID = slsperId;
-                            newTask.EditScreenNbr = _screenNbr;
-                            newTask.Content = string.Format(approveHandle.ContentApprove, objHeader.SlsperId, objHeader.Name, branchId);
-                            newTask.Crtd_Datetime = newTask.LUpd_Datetime = DateTime.Now;
-                            newTask.Crtd_Prog = newTask.LUpd_Prog = _screenNbr;
-                            newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
-                            newTask.Status = approveHandle.ToStatus;
-                            newTask.tstamp = new byte[1];
-                            newTask.Parm00 = string.Empty;
-                            newTask.Parm01 = string.Empty;
-                            newTask.Parm02 = string.Empty;
-                            _db.HO_PendingTasks.AddObject(newTask);
+                            if (!approveHandle.Param00.PassNull().Split(',').Any(p => p.ToLower() == "notapprove"))
+                            {
+                                HO_PendingTasks newTask = new HO_PendingTasks();
+                                newTask.BranchID = branchId;
+                                newTask.ObjectID = slsperId;
+                                newTask.EditScreenNbr = _screenNbr;
+                                newTask.Content = string.Format(approveHandle.ContentApprove, objHeader.SlsperId, objHeader.Name, branchId);
+                                newTask.Crtd_Datetime = newTask.LUpd_Datetime = DateTime.Now;
+                                newTask.Crtd_Prog = newTask.LUpd_Prog = _screenNbr;
+                                newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
+                                newTask.Status = approveHandle.ToStatus;
+                                newTask.tstamp = new byte[1];
+                                newTask.Parm00 = string.Empty;
+                                newTask.Parm01 = string.Empty;
+                                newTask.Parm02 = string.Empty;
+                                _db.HO_PendingTasks.AddObject(newTask);
+                            }
+                            objHeader.Status = approveHandle.ToStatus; // ???
                         }
-                        objHeader.Status = approveHandle.ToStatus; // ???
+                        _db.SaveChanges();
+                        if (approveHandle != null)
+                        {
+                            X.Msg.Show(new MessageBoxConfig()
+                            {
+                                Message = "Email sent!"
+                            });
+                            //Approve.Mail_Approve(_screenName, objHeader.SlsperId,
+                            //    approveHandle.RoleID, approveHandle.Status, approveHandle.Handle,
+                            //    Current.LangID.ToString(), Current.UserName, branchId, Current.CpnyID,
+                            //    string.Empty, string.Empty, string.Empty);
+                        }
+
                     }
-                    _db.SaveChanges();
-                    if (approveHandle != null)
+                    else
                     {
-                        X.Msg.Show(new MessageBoxConfig() { 
-                            Message="Email sent!"
-                        });
-                        //Approve.Mail_Approve(_screenName, objHeader.SlsperId,
-                        //    approveHandle.RoleID, approveHandle.Status, approveHandle.Handle,
-                        //    Current.LangID.ToString(), Current.UserName, branchId, Current.CpnyID,
-                        //    string.Empty, string.Empty, string.Empty);
+                        _db.SaveChanges();
                     }
+                    // ===============================================================
 
+                    // Get out of the loop (only update the first data)
+                    return Json(new { success = true, msgCode = 201405071 });
                 }
-                else
-                {
-                    _db.SaveChanges();
-                }
-                // ===============================================================
-
-                // Get out of the loop (only update the first data)
-                break;
+                return Json(new { success = true });
             }
-
-            //_db.SaveChanges();
-            return Json(new { success = true });
-
+            catch (Exception ex)
+            {
+                return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+            }
         }
 
         // Delete a Sales Person and his picture file
