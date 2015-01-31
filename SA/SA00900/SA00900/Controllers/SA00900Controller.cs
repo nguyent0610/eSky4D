@@ -29,7 +29,7 @@ namespace SA00900.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
         public PartialViewResult Body()
         {
             return PartialView();
@@ -125,16 +125,16 @@ namespace SA00900.Controllers
             {
 
                 StringBuilder sb = new StringBuilder();
-                var lst = _db.SA00900GetLangJs(LangID).ToList();
+                var lst = _db.SA00900_GetLangJs(LangID).ToList();
                 sb.Append("var HQLang = {");
 
                 for (int i = 0; i < lst.Count() - 1; i++)
                 {
 
-                    sb.Append(lst[i].Code + ":\"" + lst[i].Lang + "\",");
+                    sb.Append("\""+lst[i].Code + "\":\"" + lst[i].Lang + "\",");
 
                 }
-                sb.Append(lst[lst.Count() - 1].Code + ":\"" + lst[lst.Count() - 1].Lang + "\"};");
+                sb.Append("\"" + lst[lst.Count() - 1].Code + "\":\"" + lst[lst.Count() - 1].Lang + "\"};");
 
                 writeFile.Write(sb.ToString());
 

@@ -195,13 +195,13 @@ var HQ = {
         findInStore: function (store, fields, values) {
             var data;
             store.data.each(function (item) {
-                var int = 0;
+                var intT = 0;
                 for (var i = 0; i < fields.length; i++) {
                     if (item.get(fields[i]) == values[i]) {
-                        int++;
+                        intT++;
                     }
                 }
-                if (int == fields.length) {
+                if (intT == fields.length) {
                     data = item.data;
                     return false;
                 }
@@ -248,6 +248,30 @@ var HQ = {
             store.reload();
         },
         checkDuplicate: function (grd, row, keys) {
+            var found = false;
+            var store = grd.getStore();
+            if (keys == undefined) keys = row.record.idProperty.split(',');
+            for (var i = 0; i < store.data.items.length; i++) {
+                var record = store.data.items[i];
+                var data = '';
+                var rowdata = '';
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (record.data[keys[jkey]] != undefined) {
+                        data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        if (row.field == keys[jkey])
+                            rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                        else
+                            rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                    }
+                }
+                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                    break;
+                };
+            }
+            return found;
+        },
+        //TrungHT dùng cho phân trang
+        checkDuplicateAll: function (grd, row, keys) {
             var found = false;
             var store = grd.getStore();
             if (keys == undefined) keys = row.record.idProperty.split(',');
@@ -397,8 +421,84 @@ var HQ = {
                 g: parseInt(result[2], 16),
                 b: parseInt(result[3], 16)
             } : null;
+        },
+        passNull: function (str) {
+            if (str == null) {
+                return "";
+            } else return str;
+        }
+    },
+   
+    tooltip: {
+        // TinhHV: show the tootip in grid
+        showOnGrid: function (toolTip, grid, isHtmlEncode) {
+            var view = grid.getView(),
+            store = grid.getStore(),
+            record = view.getRecord(view.findItemByChild(toolTip.triggerElement)),
+            column = view.getHeaderByCell(toolTip.triggerElement),
+            data = record.get(column.dataIndex);
+
+            if (data) {
+                if (isHtmlEncode) {
+                    toolTip.update(Ext.util.Format.htmlEncode(data));
+                }
+                else {
+                    toolTip.update(data);
+                }
+            }
+            else {
+                toolTip.hide();
+            }
         }
     }
-   
 };
+
 HQ.waitMsg = HQ.common.getLang('waitMsg');
+var FilterCombo = function (control, stkeyFilter) {
+    if (control) {
+        var store = control.getStore();
+        var value = HQ.util.passNull(control.getValue()).toString();
+        if (store) {
+            store.clearFilter();
+            if (control.valueModels == null || control.valueModels.length == 0) {
+                store.filterBy(function (record) {
+                    if (record) {
+                        var isMap = false;
+                        stkeyFilter.split(',').forEach(function (key) {
+                            if (key) {
+                                if ((typeof HQ.util.passNull(value)) == "string") {
+                                    if (record.data[key]) {
+                                        var fieldData = record.data[key].toString().toLowerCase().indexOf(HQ.util.passNull(value).toLowerCase());
+                                        if (fieldData > -1) {
+                                            isMap = true;
+                                            return record;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        if (isMap == true) return record
+                    }
+                });
+            }
+        }
+    }
+};
+//window.onresize = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+         
+//    }
+//};
+//window.onload = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};

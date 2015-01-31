@@ -101,7 +101,7 @@ namespace SA00900
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<SA00900GetLangJs_Result> SA00900GetLangJs(Nullable<global::System.Int16> langID)
+        public ObjectResult<SA00900_GetLangJs_Result> SA00900_GetLangJs(Nullable<global::System.Int16> langID)
         {
             ObjectParameter langIDParameter;
             if (langID.HasValue)
@@ -113,7 +113,7 @@ namespace SA00900
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<SA00900GetLangJs_Result>("SA00900GetLangJs", langIDParameter);
+            return base.ExecuteFunction<SA00900_GetLangJs_Result>("SA00900_GetLangJs", langIDParameter);
         }
 
         #endregion
@@ -494,22 +494,22 @@ namespace SA00900
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="SA00900Model", Name="SA00900GetLangJs_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="SA00900Model", Name="SA00900_GetLangJs_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class SA00900GetLangJs_Result : ComplexObject
+    public partial class SA00900_GetLangJs_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new SA00900GetLangJs_Result object.
+        /// Create a new SA00900_GetLangJs_Result object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
-        public static SA00900GetLangJs_Result CreateSA00900GetLangJs_Result(global::System.String code)
+        public static SA00900_GetLangJs_Result CreateSA00900_GetLangJs_Result(global::System.String code)
         {
-            SA00900GetLangJs_Result sA00900GetLangJs_Result = new SA00900GetLangJs_Result();
-            sA00900GetLangJs_Result.Code = code;
-            return sA00900GetLangJs_Result;
+            SA00900_GetLangJs_Result SA00900_GetLangJs_Result = new SA00900_GetLangJs_Result();
+            SA00900_GetLangJs_Result.Code = code;
+            return SA00900_GetLangJs_Result;
         }
 
         #endregion

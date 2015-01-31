@@ -26,7 +26,7 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="SA00900GetLangJs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="SA00900_GetLangJs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
@@ -35,7 +35,7 @@
       <Schema Namespace="SA00900Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SA00900Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SYS_Language" EntityType="SA00900Model.SYS_Language" />
-          <FunctionImport Name="SA00900GetLangJs" ReturnType="Collection(SA00900Model.SA00900GetLangJs_Result)">
+          <FunctionImport Name="SA00900_GetLangJs" ReturnType="Collection(SA00900Model.SA00900_GetLangJs_Result)">
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
@@ -57,7 +57,7 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="SA00900GetLangJs_Result">
+        <ComplexType Name="SA00900_GetLangJs_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="20" />
           <Property Type="String" Name="Lang" Nullable="true" MaxLength="100" />
         </ComplexType>
@@ -86,9 +86,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA00900GetLangJs" FunctionName="eBiz4DWebSysModel.Store.SA00900GetLangJs">
+          <FunctionImportMapping FunctionImportName="SA00900_GetLangJs" FunctionName="eBiz4DWebSysModel.Store.SA00900_GetLangJs">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="SA00900Model.SA00900GetLangJs_Result">
+              <ComplexTypeMapping TypeName="SA00900Model.SA00900_GetLangJs_Result">
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Lang" ColumnName="Lang" />
               </ComplexTypeMapping>
