@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
-          <EntitySet Name="AP_Setup" EntityType="eBiz4DWebAppModel.Store.AP_Setup" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <Schema Namespace="AP00000Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="AP00000ModelStoreContainer">
+          <EntitySet Name="AP_Setup" EntityType="AP00000Model.Store.AP_Setup" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="AP_Setup">
           <Key>
@@ -32,67 +32,133 @@
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="ReqPPPONbr" Type="bit" Nullable="false" />
         </EntityType>
+        <Function Name="ppv_AP00000TranDescDflt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="ppv_BankAcctCA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ppv_ClassID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ppv_terms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="AP00000Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
-        <EntityContainer Name="AP00000Entities" p1:LazyLoadingEnabled="true">
+      <Schema Namespace="AP00000Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="AP00000Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AP_Setup" EntityType="AP00000Model.AP_Setup" />
+          <FunctionImport Name="ppv_AP00000TranDescDflt" ReturnType="Collection(AP00000Model.ppv_AP00000TranDescDflt_Result)">
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_BankAcctCA" ReturnType="Collection(AP00000Model.ppv_BankAcctCA_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_ClassID" ReturnType="Collection(AP00000Model.ppv_ClassID_Result)" />
+          <FunctionImport Name="ppv_terms" ReturnType="Collection(AP00000Model.ppv_terms_Result)" />
         </EntityContainer>
         <EntityType Name="AP_Setup">
           <Key>
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="SetupID" />
           </Key>
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SetupID" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltBankAcct" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ClassID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastBatNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastRefNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastPaymentNbr" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="PreFixBat" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TranDescDflt" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="terms" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Type="Boolean" Name="ReqPPPONbr" Nullable="false" />
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="SetupID" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="false" />
+          <Property Name="DfltBankAcct" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="ClassID" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="LastBatNbr" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="LastRefNbr" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="LastPaymentNbr" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="PreFixBat" Type="String" MaxLength="2" Unicode="false" FixedLength="false" />
+          <Property Name="TranDescDflt" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="terms" Type="String" MaxLength="2" Unicode="false" FixedLength="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" Unicode="false" FixedLength="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" Unicode="false" FixedLength="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ReqPPPONbr" Type="Boolean" Nullable="false" />
         </EntityType>
+        <ComplexType Name="ppv_AP00000TranDescDflt_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ppv_BankAcctCA_Result">
+          <Property Type="String" Name="BankAcct" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="CashAcctName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="AcctNbr" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="ppv_ClassID_Result">
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="ppv_terms_Result">
+          <Property Type="String" Name="TermsID" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="AP00000Entities">
+        <EntityContainerMapping StorageEntityContainer="AP00000ModelStoreContainer" CdmEntityContainer="AP00000Entities">
           <EntitySetMapping Name="AP_Setup">
             <EntityTypeMapping TypeName="AP00000Model.AP_Setup">
               <MappingFragment StoreEntitySet="AP_Setup">
-                <ScalarProperty Name="ReqPPPONbr" ColumnName="ReqPPPONbr" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="terms" ColumnName="terms" />
-                <ScalarProperty Name="TranDescDflt" ColumnName="TranDescDflt" />
-                <ScalarProperty Name="PreFixBat" ColumnName="PreFixBat" />
-                <ScalarProperty Name="LastPaymentNbr" ColumnName="LastPaymentNbr" />
-                <ScalarProperty Name="LastRefNbr" ColumnName="LastRefNbr" />
-                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
-                <ScalarProperty Name="DfltBankAcct" ColumnName="DfltBankAcct" />
-                <ScalarProperty Name="SetupID" ColumnName="SetupID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="SetupID" ColumnName="SetupID" />
+                <ScalarProperty Name="DfltBankAcct" ColumnName="DfltBankAcct" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
+                <ScalarProperty Name="LastRefNbr" ColumnName="LastRefNbr" />
+                <ScalarProperty Name="LastPaymentNbr" ColumnName="LastPaymentNbr" />
+                <ScalarProperty Name="PreFixBat" ColumnName="PreFixBat" />
+                <ScalarProperty Name="TranDescDflt" ColumnName="TranDescDflt" />
+                <ScalarProperty Name="terms" ColumnName="terms" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="ReqPPPONbr" ColumnName="ReqPPPONbr" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ppv_AP00000TranDescDflt" FunctionName="AP00000Model.Store.ppv_AP00000TranDescDflt">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AP00000Model.ppv_AP00000TranDescDflt_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_BankAcctCA" FunctionName="AP00000Model.Store.ppv_BankAcctCA">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AP00000Model.ppv_BankAcctCA_Result">
+                <ScalarProperty Name="BankAcct" ColumnName="BankAcct" />
+                <ScalarProperty Name="CashAcctName" ColumnName="CashAcctName" />
+                <ScalarProperty Name="AcctNbr" ColumnName="AcctNbr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_ClassID" FunctionName="AP00000Model.Store.ppv_ClassID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AP00000Model.ppv_ClassID_Result">
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_terms" FunctionName="AP00000Model.Store.ppv_terms">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AP00000Model.ppv_terms_Result">
+                <ScalarProperty Name="TermsID" ColumnName="TermsID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -114,8 +180,8 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
-        <EntityTypeShape EntityType="AP00000Model.AP_Setup" Width="1.875" PointX="4" PointY="0.5" />
+      <Diagram DiagramId="524c08638f4b4aba82525e08c6d0c477" Name="Diagram1">
+        <EntityTypeShape EntityType="AP00000Model.AP_Setup" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </Diagrams>
   </Designer>

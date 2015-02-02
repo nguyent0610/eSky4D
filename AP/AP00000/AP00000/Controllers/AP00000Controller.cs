@@ -1,36 +1,31 @@
-using System.Web.Mvc;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
-using eBiz4DWebFrame;
-using eBiz4DWebSys;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System;
-using System.Data.Metadata.Edm;
-using System.Security.Cryptography;
-using System.Text;
-using HQSendMailApprove;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
 namespace AP00000.Controllers
 {
     [DirectController]
+    [CustomAuthorize]
+    [CheckSessionOut]
     public class AP00000Controller : Controller
     {
-        private string _screenName = "AP00000";
-        
+        private string _screenNbr = "AP00000";
+        private string _userName = Current.UserName;
+
         AP00000Entities _db = Util.CreateObjectContext<AP00000Entities>(false);
-        eBiz4DWebSysEntities _sys = Util.CreateObjectContext<eBiz4DWebSysEntities>(true);
 
-        string test = Current.CpnyID;
-
-        
-
-        //
-        // GET: /AP00000/
         public ActionResult Index()
         {
+            
+            Util.InitRight(_screenNbr);
             return View();
         }
 
@@ -40,7 +35,10 @@ namespace AP00000.Controllers
             return PartialView();
         }
 
-        // Get collection of Sales Person in a branch for binding data (Ajax)
+        //public ActionResult GetLanguage()
+        //{
+        //    return this.Store(_db.SYS_Language.ToList());
+        //}
         public ActionResult GetAP00000Header(string branchId, string setupID)
         {
             var setupData = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == setupID);
@@ -50,8 +48,6 @@ namespace AP00000.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-            // Get params from data that's sent from client (Ajax)
-            
             string branchId = Current.CpnyID;
             string dfltBankAcct = data["cboBankAcct"];
             string classID = data["cboClassID"];
@@ -61,120 +57,95 @@ namespace AP00000.Controllers
             string preFixBat = data["txtPreFixBat"];
             string tranDescDef = data["cboTranDescDef"];
             string terms = data["cboTermsID"];
-            
 
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstAP00000Header"]);
-            
 
-            ChangeRecords<AP_Setup> lstAP00000Header = dataHandler.BatchObjectData<AP_Setup>();
-
-            foreach (AP_Setup updatedSlsperson in lstAP00000Header.Updated)
+            try
             {
-                // Get the image path
-               
 
-                var objHeader = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == "AP");
-                if (objHeader != null)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstAP00000Header"]);
+                ChangeRecords<AP_Setup> lstSetup = dataHandler.BatchObjectData<AP_Setup>();
+                
+
+                lstSetup.Created.AddRange(lstSetup.Updated);
+
+                foreach (AP_Setup curSetup in lstSetup.Created)
                 {
-                    //updating
-                    
-                    if(objHeader.tstamp.ToHex() != updatedSlsperson.tstamp.ToHex())
+                    if (curSetup.BranchID.PassNull() == "") continue;
+
+                    var Setup = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == "AP");
+
+                    if (Setup != null)
                     {
-                        return Json(new { success = false, code = "19" }, JsonRequestBehavior.AllowGet);
-                    }else
+                        if (Setup.tstamp.ToHex() == curSetup.tstamp.ToHex())
+                        {
+                            Update_Setup(Setup, curSetup, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
                     {
-                        UpdatingHeader(updatedSlsperson, ref objHeader);
+                        Setup = new AP_Setup();
+                        Setup.DfltBankAcct = dfltBankAcct; // ???
+                        Setup.ClassID = classID;
+                        Setup.LastBatNbr = lastBatNbr;
+                        Setup.LastRefNbr = lastRefNbr;
+                        Setup.LastPaymentNbr = lastPaymentNbr;
+                        Setup.PreFixBat = preFixBat;
+                        Setup.TranDescDflt = tranDescDef;
+                        Setup.terms = terms;
+
+                        Update_Setup(Setup, curSetup, true);
+                        _db.AP_Setup.AddObject(Setup);
                     }
                 }
-                
-                
-                    
-                    
-                
 
-                // If there is a change in handling status (keepStatus is False),
-                // add a new pending task with an approved handle.
-                
-                    _db.SaveChanges();
-                
-                // ===============================================================
-
-                // Get out of the loop (only update the first data)
-                break;
+                _db.SaveChanges();
+                return Json(new { success = true });
             }
-            foreach (AP_Setup updatedSlsperson in lstAP00000Header.Created)
+            catch (Exception ex)
             {
-                var objHeader = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == "AP");
-                if (objHeader == null)
-                {
-                    objHeader = new AP_Setup();
-                    
-                    objHeader.BranchID = branchId;
-                    objHeader.SetupID = "AP";
-                    objHeader.DfltBankAcct = dfltBankAcct; // ???
-                    objHeader.ClassID = classID;
-                    objHeader.LastBatNbr = lastBatNbr;
-                    objHeader.LastRefNbr = lastRefNbr;
-                    objHeader.LastPaymentNbr = lastPaymentNbr;
-                    objHeader.PreFixBat = preFixBat;
-                    objHeader.TranDescDflt = tranDescDef;
-                    objHeader.terms = terms;
-
-
-                    objHeader.Crtd_DateTime = DateTime.Now;
-                    objHeader.Crtd_Prog = _screenName;
-                    objHeader.Crtd_User = Current.UserName;
-                    objHeader.tstamp = new byte[0];
-                    UpdatingHeader(updatedSlsperson, ref objHeader);
-                    _db.AP_Setup.AddObject(objHeader);
-                    _db.SaveChanges();
-                    
-                }
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
-            //_db.SaveChanges();
-
-            return Json(new { success = true });
         }
-
-        // Delete a Sales Person and his picture file
         [DirectMethod]
         public ActionResult Delete(string branchId)
         {
             branchId = Current.CpnyID;
             var cpny = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId);
-            if (cpny != null )
+            if (cpny != null)
             {
                 _db.AP_Setup.DeleteObject(cpny);
-               
-            }
 
+            }   
             _db.SaveChanges();
             return this.Direct();
         }
-
-        private void UpdatingHeader(AP_Setup s, ref AP_Setup d)
+        private void Update_Setup(AP_Setup s, AP_Setup d, bool isNew)
         {
-            
-            d.DfltBankAcct = s.DfltBankAcct;
-            d.ClassID = s.ClassID;
-            d.LastBatNbr = s.LastBatNbr;
-            d.LastRefNbr = s.LastRefNbr;
-            d.LastPaymentNbr = s.LastPaymentNbr;
-            d.PreFixBat = s.PreFixBat;
-            d.TranDescDflt = s.TranDescDflt;
-            d.terms = s.terms;
-                 
-
-            d.LUpd_DateTime = DateTime.Now;
-            d.LUpd_Prog = _screenName;
-            d.LUpd_User = Current.UserName;
+            if (isNew)
+            {
+                s.BranchID = d.BranchID;
+                s.SetupID = "AP";
+                s.Crtd_DateTime = DateTime.Now;
+                s.Crtd_Prog = _screenNbr;
+                s.Crtd_User = _userName;
+            }
+            s.ClassID = d.ClassID;
+            s.DfltBankAcct = d.DfltBankAcct;
+            s.LastBatNbr = d.LastBatNbr;
+            s.LastRefNbr = d.LastRefNbr;
+            s.LastPaymentNbr = d.LastPaymentNbr;
+            s.PreFixBat = d.PreFixBat;
+            s.TranDescDflt = d.TranDescDflt;
+            s.terms = d.terms;
+            s.LUpd_DateTime = DateTime.Now;
+            s.LUpd_Prog = _screenNbr;
+            s.LUpd_User = _userName;
         }
-
         
-
-        // Upload and preview the image.
-       
-
-       
     }
 }
