@@ -32,28 +32,12 @@
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="ReqPPPONbr" Type="bit" Nullable="false" />
         </EntityType>
-        <Function Name="ppv_AP00000TranDescDflt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="LangID" Type="smallint" Mode="In" />
-        </Function>
-        <Function Name="ppv_BankAcctCA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="ppv_ClassID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="ppv_terms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AP00000Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="AP00000Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AP_Setup" EntityType="AP00000Model.AP_Setup" />
-          <FunctionImport Name="ppv_AP00000TranDescDflt" ReturnType="Collection(AP00000Model.ppv_AP00000TranDescDflt_Result)">
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
-          </FunctionImport>
-          <FunctionImport Name="ppv_BankAcctCA" ReturnType="Collection(AP00000Model.ppv_BankAcctCA_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="ppv_ClassID" ReturnType="Collection(AP00000Model.ppv_ClassID_Result)" />
-          <FunctionImport Name="ppv_terms" ReturnType="Collection(AP00000Model.ppv_terms_Result)" />
         </EntityContainer>
         <EntityType Name="AP_Setup">
           <Key>
@@ -79,23 +63,6 @@
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="ReqPPPONbr" Type="Boolean" Nullable="false" />
         </EntityType>
-        <ComplexType Name="ppv_AP00000TranDescDflt_Result">
-          <Property Type="String" Name="Code" Nullable="true" MaxLength="1" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
-        </ComplexType>
-        <ComplexType Name="ppv_BankAcctCA_Result">
-          <Property Type="String" Name="BankAcct" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="CashAcctName" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="AcctNbr" Nullable="false" MaxLength="30" />
-        </ComplexType>
-        <ComplexType Name="ppv_ClassID_Result">
-          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
-        </ComplexType>
-        <ComplexType Name="ppv_terms_Result">
-          <Property Type="String" Name="TermsID" Nullable="false" MaxLength="2" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -126,39 +93,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="ppv_AP00000TranDescDflt" FunctionName="AP00000Model.Store.ppv_AP00000TranDescDflt">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AP00000Model.ppv_AP00000TranDescDflt_Result">
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ppv_BankAcctCA" FunctionName="AP00000Model.Store.ppv_BankAcctCA">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AP00000Model.ppv_BankAcctCA_Result">
-                <ScalarProperty Name="BankAcct" ColumnName="BankAcct" />
-                <ScalarProperty Name="CashAcctName" ColumnName="CashAcctName" />
-                <ScalarProperty Name="AcctNbr" ColumnName="AcctNbr" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ppv_ClassID" FunctionName="AP00000Model.Store.ppv_ClassID">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AP00000Model.ppv_ClassID_Result">
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ppv_terms" FunctionName="AP00000Model.Store.ppv_terms">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AP00000Model.ppv_terms_Result">
-                <ScalarProperty Name="TermsID" ColumnName="TermsID" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -180,7 +114,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="524c08638f4b4aba82525e08c6d0c477" Name="Diagram1">
+      <Diagram DiagramId="524c08638f4b4aba82525e08c6d0c477" Name="Diagram1" ZoomLevel="96">
         <EntityTypeShape EntityType="AP00000Model.AP_Setup" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </Diagrams>

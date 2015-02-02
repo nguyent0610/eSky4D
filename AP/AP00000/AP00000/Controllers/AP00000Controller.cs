@@ -29,7 +29,7 @@ namespace AP00000.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
+  //      [OutputCache(Duration = 1000000, VaryByParam = "none")]
         public PartialViewResult Body()
         {
             return PartialView();
