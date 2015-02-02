@@ -32,7 +32,7 @@
             .Model(Util.GenerateModel(typeof(SYS_Language), "mdlSYS_Language", "Code"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetLanguage"))).Listeners(l => { l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; l.Load.Handler = "HQ.common.showBusy(false);"; })
         )
-        .Listeners(p => p.AfterRender.Handler = "App.stoLanguage.reload();")
+        .Listeners(p => p.BoxReady.Handler = "App.stoLanguage.reload();")
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),

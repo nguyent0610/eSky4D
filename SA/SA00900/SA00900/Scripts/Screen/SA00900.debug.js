@@ -111,7 +111,7 @@ var grdLanguage_Reject = function (record) {
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
-            waitMsg: HQ.common.getLang("WaitMsg"),
+            waitMsg: HQ.common.getLang("SavingData"),
             url: 'SA00900/Save',
             params: {
                 lstLanguage: HQ.store.getData(App.stoLanguage)
