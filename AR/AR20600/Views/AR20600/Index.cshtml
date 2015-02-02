@@ -47,8 +47,7 @@
     </head>
     <body>
 @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
-
-
+          
 @(X.Store().ID("storeForm").AutoLoad(false)
         .Model(Util.GenerateModel(typeof(AR20600_ppAR_SOAddress_Result), "mdlAR20600_ppAR_SOAddress", "BranchID,CustId,ShipToId"))
         .Proxy(
