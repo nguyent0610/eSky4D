@@ -1,0 +1,150 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using AP10100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    //var HQ = Html.HQ();
+    ViewBag.Title = "AP10100";
+    var acc = Session["AP10100"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+
+
+   <script src='@Url.Content("Scripts/hq.language"+ Current.LangID+ ".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.debug.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/AP10100.debug.js")' type="text/javascript"></script>
+<style type="text/css"> @*Thuoc tinh hover tren grid *@
+    .x-grid-row-over .x-grid-cell-inner {
+        font-weight : bold;
+    }
+</style>
+<script>
+
+
+</script>
+<script>
+    HQ.cpnyID = '@Current.CpnyID';
+    HQ.langID = '@Current.LangID';
+    HQ.userName = '@Current.UserName';
+    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+</script>
+  <title>@ViewBag.Title</title>
+    </head>
+
+    <body>
+@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
+
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+
+
+@(Html.X().Store().ID("storeFormTop").AutoLoad(false)
+        .Model(Util.GenerateModel(typeof(Batch), "mdlBatch", "BranchID,Module,BatNbr"))
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetDataFormTop", "AP10100"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        )
+        .Parameters(ps =>
+        {
+            ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
+            ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
+            
+        })
+        .Listeners(p => p.Load.Handler = "loadDataAutoHeaderTop()")
+  )
+
+
+@(Html.X().Store().ID("storeFormBot").AutoLoad(false)
+        .Model(Util.GenerateModel(typeof(AP_Doc), "mdlAP_Doc", "BranchID,BatNbr,RefNbr"))
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetDataFormBot", "AP10100"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        )
+        .Parameters(ps =>
+        {
+            ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
+            ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
+            ps.Add(new StoreParameter("RefNbr", "App.cboRefNbr.value", ParameterMode.Raw));
+        })
+        .Listeners(p => p.Load.Handler = "loadDataAutoHeaderBot()")
+  )
+@(Html.X().Store().ID("storeGrid").AutoLoad(false)
+        .Model(Util.GenerateModel(typeof(AP_Trans), "mdlAP_Trans", "InvtID"))
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetDataGrid", "AP10100"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        )
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("RefNbr", "App.cboRefNbr.value", ParameterMode.Raw));
+                            })
+        //.Listeners(p=>p.Load.Handler="loadDataHeaderDetail()" )
+  )
+
+@(Html.X().Store().ID("storeGridTopTab2").AutoLoad(false)
+        .Model(
+            X.Model()
+            .ID("GetGrid1Tab2ResultModel")
+            //.IDProperty("Grid1Tab2")
+            .Fields(
+            
+                X.ModelField().Name("LineRef").Type(ModelFieldType.String)
+                ,X.ModelField().Name("TaxID").Type(ModelFieldType.String)
+                ,X.ModelField().Name("TaxRate").Type(ModelFieldType.String)
+                ,X.ModelField().Name("TaxAmt").Type(ModelFieldType.String)
+                ,X.ModelField().Name("TxblAmt").Type(ModelFieldType.String)
+                ,X.ModelField().Name("Level").Type(ModelFieldType.String)
+                
+                
+            )
+        )    
+
+  )
+
+@(Html.X().Store().ID("storeGridBotTab2").AutoLoad(false)
+        .Model(
+            X.Model()
+            .ID("GetGrid2Tab2ResultModel")
+            //.IDProperty("Grid1Tab2")
+            .Fields(
+                X.ModelField().Name("TaxRate2").Type(ModelFieldType.String)
+                ,X.ModelField().Name("TaxID2").Type(ModelFieldType.String)
+                ,X.ModelField().Name("TaxAmt2").Type(ModelFieldType.String)
+                ,X.ModelField().Name("TxblAmt2").Type(ModelFieldType.String)
+            )
+        )    
+   
+  )
+     @{ Html.RenderAction("Body"); }
+    </body>
+</html>
+
+
