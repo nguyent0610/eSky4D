@@ -130,14 +130,14 @@ var menuClick = function (command) {
         case "new":
             if (HQ.isInsert) {
                 App.cboBatNbr.setValue('');
-                App.dataForm.getForm().reset(true);
+                App.frm.getForm().reset(true);
 
                 setTimeout(function () { waitcboBatNbrForInsert(); }, 1000);
 
             }
             break;
         case "delete":
-            var curRecord = App.dataForm.getRecord();
+            var curRecord = App.frm.getRecord();
             if (HQ.isDelete) {
                 if (App.cboBatNbr.value != "") {
                      HQ.message.show(11, '', 'deleteRecordFormTopBatch');
@@ -173,7 +173,7 @@ var waitcboBatNbrForInsert = function () {
 
         });
         App.storeFormTop.insert(0, record);
-        App.dataFormTop.getForm().loadRecord(App.storeFormTop.getAt(0));
+        App.frmTop.getForm().loadRecord(App.storeFormTop.getAt(0));
     }
     App.cboDocType.setValue("PP");
     App.txtDocDate.setValue(time);
@@ -194,10 +194,10 @@ var setStatusValueH = function () {
 
 function Save() {
 
-    App.dataFormTop.getForm().updateRecord();
+    App.frmTop.getForm().updateRecord();
 
-    if (App.dataForm.isValid()) {
-        App.dataForm.submit({
+    if (App.frm.isValid()) {
+        App.frm.submit({
             waitMsg: HQ.common.getLang("WaitMsg"),
             url: 'AP10300/Save',
             params: {
@@ -242,7 +242,7 @@ function Save() {
             }
         });
     } else {
-        var fields = App.dataForm.getForm().getFields().each(
+        var fields = App.frm.getForm().getFields().each(
                 function (item) {
                     if (!item.isValid()) {
                         alert(item);
@@ -259,12 +259,12 @@ var AfterSaveWaitBatNbrStoreReload = function (data) {
 
 // Xem lai
 function Close() {
-    if (App.dataFormTop.getRecord() != undefined) App.dataFormTop.updateRecord();
+    if (App.frmTop.getRecord() != undefined) App.frmTop.updateRecord();
     if (App.storeGrid1.getChangedData().Updated == undefined &&
         App.storeGrid1.getChangedData().Deleted == undefined &&
         App.storeGrid2.getChangedData().Updated == undefined &&
         App.storeGrid2.getChangedData().Deleted == undefined &&
-        App.dataFormTop.getRecord() == undefined)
+        App.frmTop.getRecord() == undefined)
         parent.App.tabAP10300.close();
     else if (App.storeGrid1.getChangedData().Updated != undefined ||
         App.storeGrid1.getChangedData().Created != undefined ||
@@ -310,7 +310,7 @@ var deleteRecordFormTopBatch = function (item) {
 
                     App.cboBatNbr.setValue('');
                     App.cboBatNbr.getStore().reload();
-                    App.dataForm.getForm().reset(true);
+                    App.frm.getForm().reset(true);
 
 
                     App.cboStatus.setValue("H");
@@ -444,7 +444,7 @@ var loadDataAutoHeaderTop = function () {
 
     var record = App.storeFormTop.getAt(0);
     if (record != undefined) {
-        App.dataFormTop.getForm().loadRecord(record);
+        App.frmTop.getForm().loadRecord(record);
         waitcboStatusReLoad(); // chay lai gia tri cai Handle
 
         //App.cboRefNbr.getStore().reload();
@@ -488,7 +488,7 @@ var loadDataAutoHeaderBot = function () {
     //}
     var record = App.storeFormBot.getAt(0);
     if (record) {
-        App.dataFormBot.getForm().loadRecord(record);
+        App.frmBot.getForm().loadRecord(record);
         App.storeGrid1.reload();
         App.storeGrid2.reload();
         App.cboHandle.getStore().reload();
