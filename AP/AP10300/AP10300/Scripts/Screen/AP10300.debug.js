@@ -47,7 +47,7 @@ var tmpApplicationTotal = 0;
 var tmplUnApplyTotal = 0;
 //var autoApplyOnActive = 0;
 var tmpAutoApplyForTotalAmountAndPayment = 0;
-
+var keys = ['InvcNbr,BatNbr,RefNbr,DocBal,VendID,Descr'];
 
 var menuClick = function (command) {
     switch (command) {
@@ -345,8 +345,8 @@ var deleteRecordFormTopBatch = function (item) {
 var isAllValidKey = function (items) {
     if (items != undefined) {
         for (var i = 0; i < items.length; i++) {
-            for (var j = 0; j < strKeyGrid.length; j++) {
-                if (items[i][strKeyGrid[j]] == '' || items[i][strKeyGrid[j]] == undefined)
+            for (var j = 0; j < keys.length; j++) {
+                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
                     return false;
             }
         }
@@ -368,8 +368,8 @@ function selectRecord(grid, record) {
 var grd_BeforeEdit = function (editor, e) {
     if (!HQ.isUpdate)
         return false;
-    strKeyGrid = e.record.idProperty.split(',');
-    if (strKeyGrid.indexOf(e.field) != -1) {
+    //keys = e.record.idProperty.split(',');
+    if (keys.indexOf(e.field) != -1) {
         //if (e.record.data.TranAmt != "") {
         //    return false;
         //}
@@ -380,7 +380,7 @@ var grd_BeforeEdit = function (editor, e) {
 
 var grd_Edit = function (item, e) {
 
-    if (strKeyGrid.indexOf(e.field) != -1) {
+    if (keys.indexOf(e.field) != -1) {
         if (e.value != '' && isAllValidKey(App.storeGrid.getChangedData().Created) && isAllValidKey(App.storeGrid.getChangedData().Updated)) {
             //App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());//Ext.data.Record() 
             //App.SelectionRowOnGrid.selected.items[0].set('TranDesc', vendIDAndDescr);
@@ -399,7 +399,7 @@ var grd_Edit = function (item, e) {
 
 var grd_ValidateEdit = function (item, e) {
 
-    if (strKeyGrid.indexOf(e.field) != -1) {
+    if (keys.indexOf(e.field) != -1) {
         //if (duplicated(App.storeGrid, e))
         //{
         //     HQ.message.show(1112, e.value, '');
