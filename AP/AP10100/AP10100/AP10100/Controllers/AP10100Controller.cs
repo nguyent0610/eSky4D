@@ -49,8 +49,8 @@ namespace AP10100.Controllers
 
         public ActionResult GetDataGrid(String branchID, String batNbr, String refNbr)
         {
-            var lst = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
-            
+            //var lst = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
+            var lst = _db.AP10100_pgLoadGridTrans(branchID ,batNbr , refNbr).ToList();
             return this.Store(lst);
         }
 
@@ -63,7 +63,7 @@ namespace AP10100.Controllers
             StoreDataHandler dataHandlerBot = new StoreDataHandler(data["lstheaderBot"]);
             ChangeRecords<AP_Doc> lstheaderBot = dataHandlerBot.BatchObjectData<AP_Doc>();
             StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AP_Trans> lstgrd = dataHandlerGrid.BatchObjectData<AP_Trans>();
+            ChangeRecords<AP10100_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AP10100_pgLoadGridTrans_Result>();
 
 
 
@@ -254,7 +254,7 @@ namespace AP10100.Controllers
 
 
 
-            foreach (AP_Trans created in lstgrd.Created)
+            foreach (AP10100_pgLoadGridTrans_Result created in lstgrd.Created)
             {
                 tmpGridChangeOrNot = 1;
                 var record = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -328,7 +328,7 @@ namespace AP10100.Controllers
 
 
 
-            foreach (AP_Trans updated in lstgrd.Updated)
+            foreach (AP10100_pgLoadGridTrans_Result updated in lstgrd.Updated)
             {
                 tmpGridChangeOrNot = 1;
                 var record = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -425,7 +425,7 @@ namespace AP10100.Controllers
             }
 
 
-            foreach (AP_Trans deleted in lstgrd.Deleted)
+            foreach (AP10100_pgLoadGridTrans_Result deleted in lstgrd.Deleted)
             {
 
                 var del = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -497,9 +497,9 @@ namespace AP10100.Controllers
             return this.Direct();
         }
 
-    
 
-        private void UpdatingGridAP_Trans(AP_Trans s, ref AP_Trans d)
+
+        private void UpdatingGridAP_Trans(AP10100_pgLoadGridTrans_Result s, ref AP_Trans d)
         {
             d.LineRef = s.LineRef;
             d.InvtID = s.InvtID;

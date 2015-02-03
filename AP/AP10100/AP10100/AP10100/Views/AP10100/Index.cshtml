@@ -90,7 +90,7 @@
         .Listeners(p => p.Load.Handler = "loadDataAutoHeaderBot()")
   )
 @(Html.X().Store().ID("storeGrid").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AP_Trans), "mdlAP_Trans", "InvtID"))
+        .Model(Util.GenerateModel(typeof(AP10100_pgLoadGridTrans_Result), "mdlAP_Trans", "InvtID"))
         .Proxy(
             X.AjaxProxy()
             .Url(Url.Action("GetDataGrid", "AP10100"))
