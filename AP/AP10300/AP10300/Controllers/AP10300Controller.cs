@@ -1,4 +1,4 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 
@@ -44,14 +44,14 @@ namespace AP10300.Controllers
 
         public ActionResult GetDataGrid1(String batNbr,String branchID, String vendID,String docType)
         {
-            var lst = _db.AP10300_LoadGridAdjg(batNbr, branchID, vendID, docType);
+            var lst = _db.AP10300_pgLoadGridAdjg(batNbr, branchID, vendID, docType);
 
             return this.Store(lst);
         }
 
         public ActionResult GetDataGrid2(String batNbr, String branchID, String vendID)
         {
-            var lst = _db.AP10300_LoadGridAdjd(batNbr, branchID, vendID);
+            var lst = _db.AP10300_pgLoadGridAdjd(batNbr, branchID, vendID);
 
             return this.Store(lst);
         }
@@ -64,9 +64,9 @@ namespace AP10300.Controllers
             ChangeRecords<Batch> lstheaderTop = dataHandlerTop.BatchObjectData<Batch>();
 
             StoreDataHandler dataHandlerGrid1 = new StoreDataHandler(data["lstgrd1"]);
-            ChangeRecords<AP10300_LoadGridAdjg_Result> lstgrd1 = dataHandlerGrid1.BatchObjectData<AP10300_LoadGridAdjg_Result>();
+            ChangeRecords<AP10300_pgLoadGridAdjg_Result> lstgrd1 = dataHandlerGrid1.BatchObjectData<AP10300_pgLoadGridAdjg_Result>();
             StoreDataHandler dataHandlerGrid2 = new StoreDataHandler(data["lstgrd2"]);
-            ChangeRecords<AP10300_LoadGridAdjd_Result> lstgrd2 = dataHandlerGrid2.BatchObjectData<AP10300_LoadGridAdjd_Result>();
+            ChangeRecords<AP10300_pgLoadGridAdjd_Result> lstgrd2 = dataHandlerGrid2.BatchObjectData<AP10300_pgLoadGridAdjd_Result>();
 
 
             var docDate = data["txtDocDate"];
@@ -161,12 +161,12 @@ namespace AP10300.Controllers
 
 
 
-            foreach (AP10300_LoadGridAdjg_Result updatedGrid1 in lstgrd1.Updated)
+            foreach (AP10300_pgLoadGridAdjg_Result updatedGrid1 in lstgrd1.Updated)
             {
                 //if (branchID != "")
                 //{
                     tmpAdjAmt = Convert.ToDouble(updatedGrid1.Payment);
-                    foreach (AP10300_LoadGridAdjd_Result updatedGrid2 in lstgrd2.Updated)
+                    foreach (AP10300_pgLoadGridAdjd_Result updatedGrid2 in lstgrd2.Updated)
                     {
 
                         if (tmpAdjAmt > 0)
