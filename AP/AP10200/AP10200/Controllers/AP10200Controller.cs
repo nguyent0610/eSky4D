@@ -1,4 +1,4 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 
@@ -44,7 +44,7 @@ namespace AP10200.Controllers
 
         public ActionResult GetDataGrid(String branchID, String batNbr, String refNbr)
         {
-            var lst = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
+            var lst = _db.AP10200_pgLoadGridTrans(branchID , batNbr ,refNbr).ToList();
 
             return this.Store(lst);
         }
@@ -58,11 +58,11 @@ namespace AP10200.Controllers
             StoreDataHandler dataHandlerBot = new StoreDataHandler(data["lstheaderBot"]);
             ChangeRecords<AP_Doc> lstheaderBot = dataHandlerBot.BatchObjectData<AP_Doc>();
             StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AP_Trans> lstgrd = dataHandlerGrid.BatchObjectData<AP_Trans>();
+            ChangeRecords<AP10200_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AP10200_pgLoadGridTrans_Result>();
 
-            var docDate = data["txtDocDate"];
+            var docDate = data["dteDocDate"];
            
-            var toAmt = data["txtCuryCrTot"];
+            var toAmt = data["dteCuryCrTot"];
             var tmpGridChangeOrNot = 0;
             //var invcDate = data["txtInvcDate"];
 
@@ -232,7 +232,7 @@ namespace AP10200.Controllers
 
 
 
-            foreach (AP_Trans created in lstgrd.Created)
+            foreach (AP10200_pgLoadGridTrans_Result created in lstgrd.Created)
             {
                 tmpGridChangeOrNot = 1;
                 var record = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -308,7 +308,7 @@ namespace AP10200.Controllers
 
 
 
-            foreach (AP_Trans updated in lstgrd.Updated)
+            foreach (AP10200_pgLoadGridTrans_Result updated in lstgrd.Updated)
             {
                 tmpGridChangeOrNot = 1;
                 var record = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -401,7 +401,7 @@ namespace AP10200.Controllers
             }
 
 
-            foreach (AP_Trans deleted in lstgrd.Deleted)
+            foreach (AP10200_pgLoadGridTrans_Result deleted in lstgrd.Deleted)
             {
 
                 var del = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -481,12 +481,12 @@ namespace AP10200.Controllers
         //    if (recordBotAP_Doc != null)
         //    {
         //        _db.AP_Doc.DeleteObject(recordBotAP_Doc);
-        //        var recordGridTrans = _db.AP_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
+        //        var recordGridTrans = _db.AP10200_pgLoadGridTrans_Result.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
         //        if (recordGridTrans != null)
         //        {
         //            for (int i = 0; i < recordGridTrans.Count; i++)
         //            {
-        //                _db.AP_Trans.DeleteObject(recordGridTrans[i]);
+        //                _db.AP10200_pgLoadGridTrans_Result.DeleteObject(recordGridTrans[i]);
         //            }
         //        }
         //    }
@@ -496,7 +496,7 @@ namespace AP10200.Controllers
 
 
 
-        private void UpdatingGridAP_Trans(AP_Trans s, ref AP_Trans d)
+        private void UpdatingGridAP_Trans(AP10200_pgLoadGridTrans_Result s, ref AP_Trans d)
         {
             d.LineRef = s.LineRef;
             d.TranAmt = s.TranAmt;
@@ -541,13 +541,13 @@ namespace AP10200.Controllers
 
         private string functionBatNbrIfNull(string branchID)
         {
-            var recordLastBatNbr = _db.APNumbering(branchID, "BatNbr").FirstOrDefault();
+            var recordLastBatNbr = _db.AP10200_ppAPNumbering(branchID, "BatNbr").FirstOrDefault();
             return recordLastBatNbr;
         }
 
         private string functionRefNbrIfNull(string branchID)
         {
-            var recordLastBatNbr = _db.APNumbering(branchID, "RefNbr").FirstOrDefault();
+            var recordLastBatNbr = _db.AP10200_ppAPNumbering(branchID, "RefNbr").FirstOrDefault();
             return recordLastBatNbr;
         }
        

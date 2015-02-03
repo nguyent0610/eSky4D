@@ -37,7 +37,7 @@ var tmpChangeForm1OrForm2 = "0";
 //AP10200 bien tam
 
 var tmpTranAmt = 0;
-
+var keys = [''];
 
 var menuClick = function (command) {
     switch (command) {
@@ -51,7 +51,7 @@ var menuClick = function (command) {
                 App.cboBatNbr.setValue(combobox.store.getAt(0).data.BatNbr);
 
             } else if (_focusrecord == 2) {
-                App.slmGrid.select(0);
+                HQ.grid.first(App.grd);
             }
             
             break;
@@ -65,7 +65,7 @@ var menuClick = function (command) {
                 App.cboBatNbr.setValue(combobox.store.getAt(index - 1).data.BatNbr);
 
             } else if (_focusrecord == 2) {
-                App.slmGrid.selectPrevious();
+                HQ.grid.prev(App.grd);
             }
             
             break;
@@ -79,7 +79,7 @@ var menuClick = function (command) {
                 App.cboBatNbr.setValue(combobox.store.getAt(index + 1).data.BatNbr);
                
             } else if (_focusrecord == 2) {
-                App.slmGrid.selectNext();
+                HQ.grid.next(App.grd);
             }
             break;
         case "last":
@@ -92,7 +92,7 @@ var menuClick = function (command) {
                 App.cboBatNbr.setValue(App.cboBatNbr.store.getAt(App.cboBatNbr.store.getTotalCount() - 1).data.BatNbr);
 
             } else if (_focusrecord == 2) {
-                App.slmGrid.select(App.storeGrid.getCount() - 1);
+                HQ.grid.last(App.grd);
             }
             
 
@@ -197,20 +197,25 @@ var waitcboRefNbrForInsert = function () {
     App.cboDocType.enable(true);
     App.grd.enable(true);
     var time = new Date();
-    var record = Ext.create("App.AP_DocClassModel", {
-        //CustId: "",
-        DocType: App.cboDocType.store.data.items[0].data.Code,
-        DocDate: time,
+    App.txtBranchID.setValue(HQ.cpnyID);
+    App.cboBankAcct.getStore().reload();
+    App.cboPONbr.getStore().reload();
+    if (App.storeFormBot.data.items.length == 0) {
+        var record = Ext.create("App.AP_DocClassModel", {
+            //CustId: "",
+            DocType: App.cboDocType.store.data.items[0].data.Code,
+            DocDate: time,
 
-        OrigDocAmt: 0,
-        DocBalL: 0,
-        BatNbr: App.cboBatNbr.getValue(),
-        BranchID: App.txtBranchID.getValue(),
+            OrigDocAmt: 0,
+            DocBalL: 0,
+            BatNbr: App.cboBatNbr.getValue(),
+            BranchID: App.txtBranchID.getValue(),
 
 
-    });
-    App.storeFormBot.insert(0, record);
-    App.frmBot.getForm().loadRecord(App.storeFormBot.getAt(0));
+        });
+        App.storeFormBot.insert(0, record);
+        App.frmBot.getForm().loadRecord(App.storeFormBot.getAt(0));
+    }
     App.cboBankAcct.setValue(App.cboBankAcct.store.data.items[0].data.BankAcct);
     App.txtOrigRefNbr.setValue("");
     App.txtVendName.setValue("");
@@ -248,12 +253,12 @@ function Save() {
     
     if (App.frm.isValid()) {
         App.frm.submit({
-            waitMsg: 'Submiting...',
+            waitMsg: HQ.common.getLang("WaitMsg"),
             url: 'AP10200/Save',
             params: {
-                lstheaderTop: Ext.encode(App.storeFormTop.getChangedData({ skipIdForPhantomRecords: false })),//,
-                lstheaderBot: Ext.encode(App.storeFormBot.getChangedData({ skipIdForPhantomRecords: false })),
-                lstgrd: Ext.encode(App.storeGrid.getChangedData({ skipIdForPhantomRecords: false })),
+                lstheaderTop: HQ.store.getData(App.storeFormTop),
+                lstheaderBot: HQ.store.getData(App.storeFormBot),
+                lstgrd: HQ.store.getData(App.storeGrid),
                 BranchID: App.txtBranchID.getValue(),
                 Handle: App.cboHandle.getValue(),
                 BatNbr: App.cboBatNbr.getValue(),
@@ -476,7 +481,7 @@ function selectRecord (grid, record) {
 var grd_BeforeEdit = function (editor, e) {
     if (!HQ.isUpdate)
         return false;
-    keys = e.record.idProperty.split(',');
+    //keys = e.record.idProperty.split(',');
     if (keys.indexOf(e.field) != -1) {
         //if (e.record.data.TranAmt != "") {
         //    return false;
@@ -583,6 +588,9 @@ var cboStatus_Change = function () {
 //}
 var cboBatNbr_Change = function () {
     App.cboHandle.setValue(App.cboHandle.store.data.items[0].data.Code);
+    App.txtBranchID.setValue(HQ.cpnyID);
+    App.cboBankAcct.getStore().reload();
+    App.cboPONbr.getStore().reload();
     App.cboVendID.enable(true);
     App.cboDocType.enable(true);
     App.storeFormTop.reload();
@@ -741,6 +749,27 @@ var waitSelectRowInGrid = function (index) {
 };
 
 
+var checkRequire = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            if (items[i]["TranAmt"] == undefined)
+                continue;
+            if (items[i]["TranAmt"] == "")
+                continue;
+
+            if (items[i]["TranAmt"] == 0) {
+                 HQ.message.show(15, '@Util.GetLang("TranAmt")', null);
+                return false;
+            }
+
+
+        }
+        return true;
+    }
+    else {
+        return true;
+    }
+};
 
 
 
