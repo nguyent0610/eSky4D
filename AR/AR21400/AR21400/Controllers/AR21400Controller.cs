@@ -1,4 +1,4 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
 
 namespace AR21400.Controllers
 {
@@ -20,12 +21,19 @@ namespace AR21400.Controllers
 
         public ActionResult Index()
         {
-            return View(_db.AR_SellingProducts);//.OrderBy(x => x.tstamp)
+
+            Util.InitRight(screenNbr);
+            return View();
         }
 
+        [OutputCache(Duration = 1000000, VaryByParam = "none")]
+        public PartialViewResult Body()
+        {
+            return PartialView();
+        }
         public ActionResult GetData()
         {
-            return this.Store(_db.AR_SellingProducts);
+            return this.Store(_db.AR21400_pgLoadSellingProducts().ToList());
         }
         [DirectMethod]
         [HttpPost]      

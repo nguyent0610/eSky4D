@@ -43,29 +43,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="eBiz4DWeb">
-      <HintPath>..\..\EbizWebMvc\AR21400_Language\AR21400\bin\eBiz4DWeb.dll</HintPath>
-    </Reference>
-    <Reference Include="eBiz4DWebFrame, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\eBiz4DWebFrame\bin\eBiz4DWebFrame.dll</HintPath>
-    </Reference>
-    <Reference Include="eBiz4DWebSys">
-      <HintPath>..\..\EbizWebMvc\AR21400_Language\AR21400\bin\eBiz4DWebSys.dll</HintPath>
-    </Reference>
-    <Reference Include="Encryption">
-      <HintPath>..\..\..\eBiz4DWebFrame\bin\Encryption.dll</HintPath>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\..\Master\DLL\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net">
-      <HintPath>..\..\EbizWebMvc\AR21400_Language\AR21400\bin\Ext.Net.dll</HintPath>
+      <HintPath>..\..\Master\DLL\Ext.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net.Utilities">
-      <HintPath>..\..\EbizWebMvc\AR21400_Language\AR21400\bin\Ext.Net.Utilities.dll</HintPath>
+      <HintPath>..\..\Master\DLL\Ext.Net.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="HQWebCommon">
-      <HintPath>..\..\EbizWebMvc\SI20500_City\SI20500\bin\HQWebCommon.dll</HintPath>
+    <Reference Include="HQ.eSkyFramework">
+      <HintPath>..\..\Master\DLL\HQ.eSkyFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="HQ.eSkySys">
+      <HintPath>..\..\Master\DLL\HQ.eSkySys.dll</HintPath>
+    </Reference>
+    <Reference Include="HQSendMailApprove">
+      <HintPath>..\..\Master\DLL\HQSendMailApprove.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\Master\DLL\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -78,6 +77,16 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Master\DLL\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\..\Master\DLL\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Providers">
+      <HintPath>..\..\Master\DLL\System.Web.Providers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -87,15 +96,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
       <Private>True</Private>
@@ -114,16 +117,6 @@
     <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Optimization">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Providers">
-      <HintPath>..\packages\Microsoft.AspNet.Providers.Core.1.1\lib\net40\System.Web.Providers.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
@@ -140,13 +133,11 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="WebGrease">
-      <Private>True</Private>
-      <HintPath>..\packages\WebGrease.1.1.0\lib\WebGrease.dll</HintPath>
+    <Reference Include="Transformer.NET">
+      <HintPath>..\..\Master\DLL\Transformer.NET.dll</HintPath>
     </Reference>
-    <Reference Include="Antlr3.Runtime">
-      <Private>True</Private>
-      <HintPath>..\packages\WebGrease.1.1.0\lib\Antlr3.Runtime.dll</HintPath>
+    <Reference Include="WebGrease">
+      <HintPath>..\..\Master\DLL\WebGrease.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +219,12 @@
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\hq.common.debug.js" />
+    <Content Include="Scripts\hq.common.js" />
+    <Content Include="Scripts\hq.language0.js" />
+    <Content Include="Scripts\hq.language1.js" />
+    <Content Include="Scripts\hq.language2.js" />
+    <Content Include="Scripts\hq.language3.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -242,6 +239,8 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\Screen\AR21400.debug.js" />
+    <Content Include="Scripts\Screen\AR21400.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -256,6 +255,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\AR21400\Body.cshtml" />
     <Content Include="Views\AR21400\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -294,6 +294,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
