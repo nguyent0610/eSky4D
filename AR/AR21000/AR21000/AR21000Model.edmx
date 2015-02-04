@@ -22,12 +22,14 @@
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="AR21000_pgLoadShopType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AR21000Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="AR21000Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="AR_ShopType" EntityType="AR21000Model.AR_ShopType" />
+          <FunctionImport Name="AR21000_pgLoadShopType" ReturnType="Collection(AR21000Model.AR21000_pgLoadShopType_Result)" />
         </EntityContainer>
         <EntityType Name="AR_ShopType">
           <Key>
@@ -43,13 +45,18 @@
           <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="AR21000_pgLoadShopType_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="AR21000Entities" >
-          <EntitySetMapping Name="AR_ShopType">
+        <EntitySetMapping Name="AR_ShopType">
             <EntityTypeMapping TypeName="AR21000Model.AR_ShopType">
               <MappingFragment StoreEntitySet="AR_ShopType">
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -64,6 +71,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR21000_pgLoadShopType" FunctionName="eBiz4DWebSysModel.Store.AR21000_pgLoadShopType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21000Model.AR21000_pgLoadShopType_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -85,7 +101,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="AR21000Model.AR_ShopType" Width="1.5" PointX="1.0360933714714335" PointY="24.117476712967026" />
+        <EntityTypeShape EntityType="AR21000Model.AR_ShopType" Width="1.5" PointX="4.0707097947926769" PointY="10.079571266695657" />
       </Diagram>
     </Diagrams>
   </Designer>

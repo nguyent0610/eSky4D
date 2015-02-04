@@ -1,4 +1,4 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -7,7 +7,9 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
 namespace AR21000.Controllers
 {
     [DirectController]
@@ -15,112 +17,99 @@ namespace AR21000.Controllers
     [CheckSessionOut]
     public class AR21000Controller : Controller
     {
-        string screenNbr = "AR21000";
+        private string _screenNbr = "AR21000";
+        private string _userName = Current.UserName;
+
         AR21000Entities _db = Util.CreateObjectContext<AR21000Entities>(false);
 
         public ActionResult Index()
         {
-            return View( _db.AR_ShopType);//.OrderBy(x => x.tstamp)
+
+            Util.InitRight(_screenNbr);
+            return View();
         }
 
-        public ActionResult GetData()
+       [OutputCache(Duration = 1000000, VaryByParam = "none")]
+        public PartialViewResult Body()
         {
-            return this.Store(_db.AR_ShopType);
+            return PartialView();
         }
-        [DirectMethod]
-        [HttpPost]      
+
+        public ActionResult GetShopType()
+        {
+            return this.Store(_db.AR21000_pgLoadShopType().ToList());
+        }
+
+        [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AR_ShopType> lstMsg = dataHandler.BatchObjectData<AR_ShopType>();
-            foreach (AR_ShopType deleted in lstMsg.Deleted)
-            {
-                var del = _db.AR_ShopType.Where(p => p.Code == deleted.Code).FirstOrDefault();
-                if (del != null)
-                {
-                    _db.AR_ShopType.DeleteObject(del);
-                }
-              
-            }
-            foreach (AR_ShopType created in lstMsg.Created)
-            {
-                if (created.Code == "") continue;
-                var record = _db.AR_ShopType.Where(p => p.Code == created.Code).FirstOrDefault();
 
-                if (created.tstamp.ToHex() == "")
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstShopType"]);
+                ChangeRecords<AR_ShopType> lstShopType = dataHandler.BatchObjectData<AR_ShopType>();
+                foreach (AR_ShopType deleted in lstShopType.Deleted)
                 {
-                    if (record == null)
+                    var del = _db.AR_ShopType.Where(p => p.Code == deleted.Code).FirstOrDefault();
+                    if (del != null)
                     {
-                        record = new AR_ShopType();
-                        record.Code = created.Code;
-                        record.Crtd_Datetime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingAR_ShopType(created, ref record);
-                        _db.AR_ShopType.AddObject(record);
+                        _db.AR_ShopType.DeleteObject(del);
+                    }
+                }
+
+                lstShopType.Created.AddRange(lstShopType.Updated);
+
+                foreach (AR_ShopType curShopType in lstShopType.Created)
+                {
+                    if (curShopType.Code.PassNull() == "") continue;
+
+                    var ShopType = _db.AR_ShopType.Where(p => p.Code.ToLower() == curShopType.Code.ToLower()).FirstOrDefault();
+
+                    if (ShopType != null)
+                    {
+                        if (ShopType.tstamp.ToHex() == curShopType.tstamp.ToHex())
+                        {
+                            Update_AR_ShopType(ShopType, curShopType, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
                     }
                     else
                     {
-                        Message.Show(2000, new string[] { Util.GetLang("Code"), record.Code.ToString() }, null);
-                        return this.Direct();
-                        //tra ve loi da ton tai ma ngon ngu nay ko the them
+                        ShopType = new AR_ShopType();
+                        Update_AR_ShopType(ShopType, curShopType, true);
+                        _db.AR_ShopType.AddObject(ShopType);
                     }
                 }
-                else
-                {
-                    Message.Show(2000, new string[] { Util.GetLang("Code"), record.Code.ToString() }, null);
-                    return this.Direct();
-                    //tra ve loi da ton tai ma ngon ngu nay ko the them
-                }
 
+                _db.SaveChanges();
 
-            }
-
-            
-
-            foreach (AR_ShopType updated in lstMsg.Updated)
-            {
-                var record = _db.AR_ShopType.Where(p => p.Code == updated.Code).FirstOrDefault();
-                                
-                if (record != null)
-                {
-                    UpdatingAR_ShopType(updated, ref record);
-                }
-                else
-                {
-                    record = new AR_ShopType();
-                    record.Code = updated.Code;
-                    record.Crtd_Datetime = DateTime.Now;
-                    record.Crtd_Prog = screenNbr;
-                    record.Crtd_User = Current.UserName;                
-                    UpdatingAR_ShopType(updated, ref record);
-                    _db.AR_ShopType.AddObject(record);
-                }
-                
-
-            }
-            _db.SaveChanges();
-
-            return Json(new { success = true });
-              
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-
-                return Json(new { success = false, errorMsg = ex.ToString()});
-                
-              
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
 
-        private void UpdatingAR_ShopType(AR_ShopType s, ref AR_ShopType d)
+        private void Update_AR_ShopType(AR_ShopType t, AR_ShopType s, bool isNew)
         {
-            d.Descr = s.Descr;                   
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
+            if (isNew)
+            {
+                t.Code = s.Code;
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.Descr = s.Descr;
+
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
         }
+
     }
 }

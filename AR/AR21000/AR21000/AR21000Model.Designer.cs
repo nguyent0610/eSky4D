@@ -95,6 +95,18 @@ namespace AR21000
 
         #endregion
 
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<AR21000_pgLoadShopType_Result> AR21000_pgLoadShopType()
+        {
+            return base.ExecuteFunction<AR21000_pgLoadShopType_Result>("AR21000_pgLoadShopType");
+        }
+
+        #endregion
+
     }
 
     #endregion
@@ -140,7 +152,7 @@ namespace AR21000
 
         #endregion
 
-        #region Simple Properties
+        #region Primitive Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -159,7 +171,7 @@ namespace AR21000
                 {
                     OnCodeChanging(value);
                     ReportPropertyChanging("Code");
-                    _Code = StructuralObject.SetValidValue(value, false, "Code");
+                    _Code = StructuralObject.SetValidValue(value, false);
                     ReportPropertyChanged("Code");
                     OnCodeChanged();
                 }
@@ -184,7 +196,7 @@ namespace AR21000
             {
                 OnDescrChanging(value);
                 ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, false, "Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Descr");
                 OnDescrChanged();
             }
@@ -208,7 +220,7 @@ namespace AR21000
             {
                 OnLUpd_DatetimeChanging(value);
                 ReportPropertyChanging("LUpd_Datetime");
-                _LUpd_Datetime = StructuralObject.SetValidValue(value, "LUpd_Datetime");
+                _LUpd_Datetime = StructuralObject.SetValidValue(value);
                 ReportPropertyChanged("LUpd_Datetime");
                 OnLUpd_DatetimeChanged();
             }
@@ -232,7 +244,7 @@ namespace AR21000
             {
                 OnLUpd_ProgChanging(value);
                 ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false, "LUpd_Prog");
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("LUpd_Prog");
                 OnLUpd_ProgChanged();
             }
@@ -256,7 +268,7 @@ namespace AR21000
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false, "LUpd_User");
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -280,7 +292,7 @@ namespace AR21000
             {
                 OnCrtd_DatetimeChanging(value);
                 ReportPropertyChanging("Crtd_Datetime");
-                _Crtd_Datetime = StructuralObject.SetValidValue(value, "Crtd_Datetime");
+                _Crtd_Datetime = StructuralObject.SetValidValue(value);
                 ReportPropertyChanged("Crtd_Datetime");
                 OnCrtd_DatetimeChanged();
             }
@@ -304,7 +316,7 @@ namespace AR21000
             {
                 OnCrtd_ProgChanging(value);
                 ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false, "Crtd_Prog");
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Crtd_Prog");
                 OnCrtd_ProgChanged();
             }
@@ -328,7 +340,7 @@ namespace AR21000
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false, "Crtd_User");
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -352,7 +364,117 @@ namespace AR21000
             {
                 OntstampChanging(value);
                 ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, true, "tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    
+    }
+
+    #endregion
+
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR21000Model", Name="AR21000_pgLoadShopType_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR21000_pgLoadShopType_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR21000_pgLoadShopType_Result object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static AR21000_pgLoadShopType_Result CreateAR21000_pgLoadShopType_Result(global::System.String code, global::System.String descr, global::System.Byte[] tstamp)
+        {
+            AR21000_pgLoadShopType_Result aR21000_pgLoadShopType_Result = new AR21000_pgLoadShopType_Result();
+            aR21000_pgLoadShopType_Result.Code = code;
+            aR21000_pgLoadShopType_Result.Descr = descr;
+            aR21000_pgLoadShopType_Result.tstamp = tstamp;
+            return aR21000_pgLoadShopType_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("tstamp");
                 OntstampChanged();
             }
@@ -367,4 +489,5 @@ namespace AR21000
 
     #endregion
 
+    
 }

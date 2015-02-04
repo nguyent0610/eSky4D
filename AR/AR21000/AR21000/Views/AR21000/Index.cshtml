@@ -1,142 +1,49 @@
 @using Ext.Net;
 @using Ext.Net.MVC;
-@using eBiz4DWebFrame;
-@using eBiz4DWebFrame.HQControl;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
 @using AR21000;
 
 @model System.Collections.IEnumerable
 @{
     Layout = null;
     var X = Html.X();
-    var HQ = Html.HQ();
+    ViewBag.Title = "AR21000";
     var acc = Session["AR21000"] as AccessRight;
 }
-
-<script src="~/Scripts/common.js"></script>
-<script src="~/Scripts/Screen/AR21000.js"></script>
-<style> @*Thuoc tinh hover tren grid *@
-    .x-grid-row-over .x-grid-cell-inner {
-        font-weight : bold;
-    }
-  
-  
-</style>
-<script type="text/javascript">
-    var isUpdate = @acc.Update.ToString().ToLower() ;
-    var isInsert = @acc.Insert.ToString().ToLower() ;
-    var isDelete = @acc.Delete.ToString().ToLower() ;
-    var strKeyGridGrid='';
-</script>
-@Html.X().ResourceManager()
-  @(
- Html.X().Viewport().Layout(LayoutType.Fit)
-        .Items(
-           Html.X().Window()
-          .ID("frmMain")
-          .Layout(LayoutType.Fit)
-          .Maximized(true)
-          .Closable(false)
-          .TitleCollapse(true)
-          .Header(false)
-          .KeyMap(Util.SetupKeyMap())
-          .TopBar(Util.SetupToolbar("AR21000"))
-          .Items(
-                X.FormPanel()
-                .ID("pnlScreen")
-                .DefaultAnchor("100%")
-                .BodyPadding(0)
-                .Layout(LayoutType.Fit)
-                .Height(480)
-                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
-                .Items(
-                            Html.X().GridPanel()
-                                    .Frame(true)
-                                    .AnchorHorizontal("100%")
-                                    .AnchorVertical("100%")
-                                    .RenderTo("contentCenter")
-                                    .Scroll(ScrollMode.Both)
-                                    .View(X.GridView().TrackOver(false))
-                                    .ID("grd")
-                                    .Store(Html.X().Store().ID("Store1")    
-                                            .RemotePaging(true)
-                                            .DataSource(Model)
-                                            .PageSize(50)
-                                            .Model(Util.GenerateModel(typeof(AR_ShopType), "AR_ShopTypeModel", "Code"))                                                                                                                                  
-                                            .ServerProxy(
-                                                Html.X().AjaxProxy()
-                                                    .Url(Url.Action("GetData"))
-                                            )                                            
-                                        )
-                                    .SortableColumns(false)
-                                    .ColumnModel(
-                                                 Html.X().RowNumbererColumn()
-                                                , Html.X().Column().Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(Html.X().TextField().MaxLength(10))
-                                                , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(Html.X().TextField().MaxLength(200))
-                                                , Html.X().CommandColumn().Width(150)
-                                                                        .Commands(
-                                                                            Html.X().GridCommand()
-                                                                                .Text(Util.GetLang("Reject"))
-                                                                                .ToolTip(t =>
-                                                                                {
-                                                                                    t.Text = Util.GetLang("Rejectrowchanges");
-                                                                                })
-                                                                                .CommandName("reject")
-                                                                                .Icon(Icon.ArrowUndo)
-                                                                        )
-                                                                        .PrepareToolbar(t =>
-                                                                        {
-                                                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                                                                        })
-                                                                        .Listeners(l =>
-                                                                        {
-                                                                            l.Command.Handler = "grd_Reject(record);";
-                                                                        })
-                                    )
-                                    .SelectionModel(Html.X().RowSelectionModel().ID("SelectionModelAR_ShopType").Mode(SelectionMode.Multi))
-                                    .BottomBar(//Phan trang       
-                                        Html.X().PagingToolbar().ID("PagingToolbar")
-                                            .Items(
-                                                Html.X().Label("Page size:"),
-                                                Html.X().ToolbarSpacer(10),
-                                                Html.X().ComboBox()
-                                                    .Width(80)
-                                                    .Items("1", "2", "10", "20", "30", "50")
-                                                    .SelectedItems("50")
-                                                    .Listeners(l =>
-                                                    {
-                                                        l.Select.Fn = "onComboBoxSelect";
-                                                    })
-                                            )
-                                            .Plugins(Html.X().ProgressBarPager())
-
-                                        )
-                                    
-                                    .Plugins(
-                                        Html.X()//Cho phep edit )
-                                            .CellEditing()
-                                            .ClicksToEdit(1)
-                                            .Listeners(ls =>
-                                            {
-                                                ls.BeforeEdit.Fn = "grd_BeforeEdit";
-                                                ls.Edit.Fn = "grd_Edit";
-                                                ls.ValidateEdit.Fn = "grd_ValidateEdit";
-                                                ls.CancelEdit.Fn = "grd_CancelEdit";
-
-
-                                            })        
-                                    )
-                                    .Features(
-                                            Html.X().GridFilters()//Filter
-                                                .Local(true)
-                                                      .Filters(
-                                                          Html.X().StringFilter().DataIndex("Code"),
-                                                          Html.X().StringFilter().DataIndex("Descr")                                                        
-                                                      )
-                                              
-                                        )
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình AR21000.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/AR21000.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
        
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
 
-                    )
-                )
-           )
- )
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+    
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        <!-- Gọi hàm Body trong AR21000Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
+        @{Html.RenderAction("Body");}   
+    
+</body>
+</html>
+ 
