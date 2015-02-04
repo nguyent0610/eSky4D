@@ -1,4 +1,36 @@
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (elt /*, from*/) {
+        var len = this.length >>> 0;
 
+        var from = Number(arguments[1]) || 0;
+        from = (from < 0)
+             ? Math.ceil(from)
+             : Math.floor(from);
+        if (from < 0)
+            from += len;
+
+        for (; from < len; from++) {
+            if (from in this &&
+                this[from] === elt)
+                return from;
+        }
+        return -1;
+    };
+}
+
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
+}
+
+if (!('forEach' in Array.prototype)) {
+    Array.prototype.forEach = function (action, that /*opt*/) {
+        for (var i = 0, n = this.length; i < n; i++)
+            if (i in this)
+                action.call(that, this[i], i, this);
+    };
+}
 var HQ = {
 
     control: {
@@ -394,7 +426,12 @@ var HQ = {
                 ctr.items.each(function (itm) {
                     if (itm.getXType() == "grid") {
                         for (var i = 0; i < itm.columns.length; i++) {
-                            itm.columns[i].setText(HQ.common.getLang(itm.columns[i].text));
+                            if (itm.columns[i].getXType() == "commandcolumn") {
+                                itm.columns[i].commands[0].text=HQ.common.getLang(itm.columns[i].commands[0].text);
+                            } else                                
+                            {
+                                itm.columns[i].setText(HQ.common.getLang(itm.columns[i].text));
+                            }
                         }
                     }
                     else if (itm.getXType() == "combobox") {
@@ -406,7 +443,7 @@ var HQ = {
                     else if (itm.getXType() == "checkbox") {
                         itm.setBoxLabel(HQ.common.getLang(itm.boxLabel));
                     }
-                    else{
+                    else if (itm.getXType() == "numberfield") {
                         itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
                     }
                     HQ.common.setLang(itm);
