@@ -1,356 +1,49 @@
 @using Ext.Net;
 @using Ext.Net.MVC;
-@using eBiz4DWebFrame;
-@using eBiz4DWebFrame.HQControl;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
 @using AR21200;
 
 @model System.Collections.IEnumerable
 @{
     Layout = null;
     var X = Html.X();
-    var HQ = Html.HQ();
+    ViewBag.Title = "AR21200";
     var acc = Session["AR21200"] as AccessRight;
 }
-
-<script src="~/Scripts/common.js"></script>
-<style> @*Thuoc tinh hover tren grid *@
-    .x-grid-row-over .x-grid-cell-inner {
-        font-weight : bold;
-    }
-  
-  
-</style>
-@*Script chung*@    
-<script>    
-    var isUpdate = @acc.Update.ToString().ToLower() ;
-    var isInsert = @acc.Insert.ToString().ToLower() ;
-    var isDelete = @acc.Delete.ToString().ToLower() ;
-    var strKeyGridGrid='';
-   
-    var menuClick = function (command) {
-        switch (command) {
-            case "first":       
-                App.SelectionModelAR_Location.select(0);
-                break;
-            case "prev":
-                App.SelectionModelAR_Location.selectPrevious();
-                break;
-            case "next":
-                App.SelectionModelAR_Location.selectNext();
-                break;
-            case "last":
-                App.SelectionModelAR_Location.select(App.Store1.getCount() - 1);
-                break;
-            case "refresh":
-                App.grd.getStore().reload();
-                App.SelectionModelAR_Location.select(0);
-                break;
-            case "new":
-                if(isInsert){
-                    var createdItems=App.Store1.getChangedData().Created;
-                    if(createdItems!=undefined){
-                        App.Store1.loadPage(Math.ceil(App.Store1.totalCount/App.Store1.pageSize), {
-                            callback : function () {
-                                App.SelectionModelAR_Location.select(App.Store1.getCount()-1);                   
-                                App.grd.editingPlugin.startEditByPosition({row: App.Store1.getCount()-1, column: 1});                  
-                               
-                            }
-                        });   
-                        return;
-                    }
-                    App.Store1.loadPage(Math.ceil(App.Store1.totalCount/App.Store1.pageSize), {
-                        callback : function () {
-                            App.Store1.insert(App.Store1.getCount(), Ext.data.Record());//Ext.data.Record()
-                            App.SelectionModelAR_Location.select(App.Store1.getCount()-1);                   
-                            App.grd.editingPlugin.startEditByPosition({row: App.Store1.getCount()-1, column: 1});
-                        }
-                    });      
-                    
-                    
-                  
-                }
-                break;
-            case "delete":
-
-                if(isDelete){
-                    callMessage(11, '', 'deleteRecord');
-                }
-                break;
-            case "save":
-                if(isUpdate||isInsert||isDelete){
-                    if(isAllValid(App.Store1.getChangedData().Created)
-                        && isAllValid(App.Store1.getChangedData().Updated)){
-                        Save();
-                    }
-                  
-                }
-                break;
-            case "print":
-                alert(command);
-                break;
-            case "close":
-                Close();
-                break;
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình AR21200.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/AR21200.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
         }
+    </style>
+    <script>
        
-    }; 
-    function Save() {
-        if (App.pnlScreen.isValid()) {
-            App.pnlScreen.submit({
-                waitMsg: 'Submiting...',
-                url: 'AR21200/Save',
-                params: {
-                    lstgrd: Ext.encode(App.Store1.getChangedData({ skipIdForPhantomRecords: false }))
-                },
-                success: function (f, result) {
-                    menuClick("refresh");
-                    callMessage(201405071,'',null);                    
-                   
-                }
-                ,failure: function (f, errorMsg) {
-                    callMessage(201405072,errorMsg.result.errorMsg,null);
-                }
-            });
-        }
-    }
-    // Xem lai
-    function Close() {
-        if (App.Store1.getChangedData().Updated == undefined  && App.Store1.getChangedData().Deleted == undefined )
-            parent.App.tabAR21200.close();
-        else if (App.Store1.getChangedData().Updated != undefined || App.Store1.getChangedData().Created != undefined || App.Store1.getChangedData().Deleted != undefined)
-        {
-            App.direct.AskClose({ success: function (result) {
-                    
-            }
-            });
-        }
-    }
-    // Xem lai
-    var askClose = function (item) {
-        if (item == "yes") {
-            Save();
-        }
-        else {
-            if (parent.App.tabAR21200 != null)
-                parent.App.tabAR21200.close();
-        }
-    };
-    // Xac nhan xoa record tren grid
-    var deleteRecord = function (item){
-        if(item == "yes"){
-            App.grd.deleteSelected();
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
 
-        }
-    };
-    //check value
-    var isAllValid=function(items){
-        if(items!=undefined){
-            for(var i=0; i<items.length; i++){
-                if(items[i]["Location"]==undefined) continue;
-                if(items[i]["Location"].trim()=="")
-                {
-                    callMessage(15,'@Util.GetLang("Location")',null);
-                    return false;
-                }
-                if(items[i]["Descr"].trim()=="")
-                {
-                    callMessage(15,'@Util.GetLang("Descr")',null);
-                    return false;
-                }               
-                
-            }
-            return true;
-        }else{
-            return true;
-        }
-    };
-    //check value
-    var isAllValidKey=function(items){      
-        if(items!=undefined){
-            for(var i=0; i<items.length; i++){
-                for(var j=0;j<strKeyGrid.length;j++)
-                {
-                    if(items[i][strKeyGrid[j]]==''||items[i][strKeyGrid[j]]==undefined)
-                        return false;  
-                }
-            }
-            return true;
-        }else{
-            return true;
-        }
-    }; 
-</script>
-
-@*Script danh cho Grid*@
-<script>  
-    function selectRecord (grid, record) {
-        var record = grid.store.getById(id);            
-        grid.store.loadPage(grid.store.findPage(record), {
-            callback : function () {
-                grid.getSelectionModel().select(record);
-            }
-        });            
-    };
-    var grd_BeforeEdit = function (editor, e) {
-        if(!isUpdate) return false;
-        strKeyGrid = e.record.idProperty.split(',');
-        if (strKeyGrid.indexOf(e.field) != -1) {
-            if (e.record.data.tstamp!="")
-                return false;
-        }
-       
-    };
-    var grd_Edit = function (item, e) {
-        
-        if (strKeyGrid.indexOf(e.field) != -1) {
-            if(e.value!='' &&  isAllValidKey(App.Store1.getChangedData().Created)&&  isAllValidKey(App.Store1.getChangedData().Updated))           
-            App.Store1.insert(App.Store1.getCount(), Ext.data.Record());//Ext.data.Record() 
-        }       
-    };
-    var grd_ValidateEdit = function (item, e) {
-       
-        if (strKeyGrid.indexOf(e.field) != -1)
-        {
-            if(duplicated(App.Store1,e))
-            {
-                callMessage(1112, e.value, '');
-                return false;
-            }   
-        }
-    };
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
     
-    var grd_CancelEdit = function (editor, e){
-        if(e.record.phantom){
-            e.store.remove(e.record);
-        }
-    };
-    var grd_Reject= function (record){
-        if(record.data.tstamp=='')
-       {         
-            App.Store1.remove(record);
-            App.grd.getView().focusRow(App.Store1.getCount()-1);
-            App.grd.getSelectionModel().select(App.Store1.getCount()-1);
-        } else record.reject();
-    };
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        <!-- Gọi hàm Body trong AR21200Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
+        @{Html.RenderAction("Body");}   
     
-    //Phan trang tren grid
-    var onComboBoxSelect = function (combo) {
-        var store = combo.up("gridpanel").getStore();
-        store.pageSize = parseInt(combo.getValue(), 10);
-        store.reload();
-    };
-   
-</script>
-@Html.X().ResourceManager()
-  @(
- Html.X().Viewport().Layout(LayoutType.Fit)
-        .Items(
-           Html.X().Window()
-          .ID("frmMain")
-          .Layout(LayoutType.Fit)
-          .Maximized(true)
-          .Closable(false)
-          .TitleCollapse(true)
-          .Header(false)
-          .KeyMap(Util.SetupKeyMap())
-          .TopBar(Util.SetupToolbar("AR21200"))
-          .Items(
-                X.FormPanel()
-                .ID("pnlScreen")
-                .DefaultAnchor("100%")
-                .BodyPadding(0)
-                .Layout(LayoutType.Fit)
-                .Height(480)
-                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
-                .Items(
-                            Html.X().GridPanel()
-                                    .Frame(true)
-                                    .AnchorHorizontal("100%")
-                                    .AnchorVertical("100%")
-                                    .RenderTo("contentCenter")
-                                    .Scroll(ScrollMode.Both)
-                                    .View(X.GridView().TrackOver(false))
-                                    .ID("grd")
-                                    .Store(Html.X().Store().ID("Store1")    
-                                            .RemotePaging(true)
-                                            .DataSource(Model)
-                                            .PageSize(50)
-                                            .Model(Util.GenerateModel(typeof(AR_Location), "AR_LocationModel", "Location"))                                                                                                                                  
-                                            .ServerProxy(
-                                                Html.X().AjaxProxy()
-                                                    .Url(Url.Action("GetData"))
-                                            )                                            
-                                        )
-                                    .SortableColumns(false)
-                                    .ColumnModel(
-                                                 Html.X().RowNumbererColumn()
-                                                , Html.X().Column().Text(Util.GetLang("Location")).DataIndex("Location").Width(150).Editor(Html.X().TextField().MaxLength(10))
-                                                , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(Html.X().TextField().MaxLength(200))
-                                                , Html.X().CommandColumn().Width(150)
-                                                                        .Commands(
-                                                                            Html.X().GridCommand()
-                                                                                .Text(Util.GetLang("Reject"))
-                                                                                .ToolTip(t =>
-                                                                                {
-                                                                                    t.Text = Util.GetLang("Rejectrowchanges");
-                                                                                })
-                                                                                .CommandName("reject")
-                                                                                .Icon(Icon.ArrowUndo)
-                                                                        )
-                                                                        .PrepareToolbar(t =>
-                                                                        {
-                                                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                                                                        })
-                                                                        .Listeners(l =>
-                                                                        {
-                                                                            l.Command.Handler = "grd_Reject(record);";
-                                                                        })
-                                    )
-                                    .SelectionModel(Html.X().RowSelectionModel().ID("SelectionModelAR_Location").Mode(SelectionMode.Multi))
-                                    .BottomBar(//Phan trang       
-                                        Html.X().PagingToolbar().ID("PagingToolbar")
-                                            .Items(
-                                                Html.X().Label("Page size:"),
-                                                Html.X().ToolbarSpacer(10),
-                                                Html.X().ComboBox()
-                                                    .Width(80)
-                                                    .Items("1", "2", "10", "20", "30", "50")
-                                                    .SelectedItems("50")
-                                                    .Listeners(l =>
-                                                    {
-                                                        l.Select.Fn = "onComboBoxSelect";
-                                                    })
-                                            )
-                                            .Plugins(Html.X().ProgressBarPager())
-
-                                        )
-                                    
-                                    .Plugins(
-                                        Html.X()//Cho phep edit )
-                                            .CellEditing()
-                                            .ClicksToEdit(1)
-                                            .Listeners(ls =>
-                                            {
-                                                ls.BeforeEdit.Fn = "grd_BeforeEdit";
-                                                ls.Edit.Fn = "grd_Edit";
-                                                ls.ValidateEdit.Fn = "grd_ValidateEdit";
-                                                ls.CancelEdit.Fn = "grd_CancelEdit";
-
-
-                                            })        
-                                    )
-                                    .Features(
-                                            Html.X().GridFilters()//Filter
-                                                .Local(true)
-                                                      .Filters(
-                                                          Html.X().StringFilter().DataIndex("Location"),
-                                                          Html.X().StringFilter().DataIndex("Descr")                                                        
-                                                      )
-                                              
-                                        )
-       
-
-                    )
-                )
-           )
- )
+</body>
+</html>
+ 

@@ -1,4 +1,4 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -7,7 +7,9 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
 namespace AR21200.Controllers
 {
     [DirectController]
@@ -15,112 +17,99 @@ namespace AR21200.Controllers
     [CheckSessionOut]
     public class AR21200Controller : Controller
     {
-        string screenNbr = "AR21200";
+        private string _screenNbr = "AR21200";
+        private string _userName = Current.UserName;
+
         AR21200Entities _db = Util.CreateObjectContext<AR21200Entities>(false);
 
         public ActionResult Index()
         {
-            return View(_db.AR_Location);//.OrderBy(x => x.tstamp)
+
+            Util.InitRight(_screenNbr);
+            return View();
         }
 
-        public ActionResult GetData()
+       [OutputCache(Duration = 1000000, VaryByParam = "none")]
+        public PartialViewResult Body()
         {
-            return this.Store(_db.AR_Location);
+            return PartialView();
         }
-        [DirectMethod]
-        [HttpPost]      
+
+        public ActionResult GetLocation()
+        {
+            return this.Store(_db.AR21200_pgLoadLocation().ToList());
+        }
+
+        [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AR_Location> lstMsg = dataHandler.BatchObjectData<AR_Location>();
-            foreach (AR_Location deleted in lstMsg.Deleted)
-            {
-                var del = _db.AR_Location.Where(p => p.Location == deleted.Location).FirstOrDefault();
-                if (del != null)
-                {
-                    _db.AR_Location.DeleteObject(del);
-                }
-              
-            }
-            foreach (AR_Location created in lstMsg.Created)
-            {
-                if (created.Location == "") continue;
-                var record = _db.AR_Location.Where(p => p.Location == created.Location).FirstOrDefault();
 
-                if (created.tstamp.ToHex() == "")
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstLocation"]);
+                ChangeRecords<AR_Location> lstLocation = dataHandler.BatchObjectData<AR_Location>();
+                foreach (AR_Location deleted in lstLocation.Deleted)
                 {
-                    if (record == null)
+                    var del = _db.AR_Location.Where(p => p.Location == deleted.Location).FirstOrDefault();
+                    if (del != null)
                     {
-                        record = new AR_Location();
-                        record.Location = created.Location;
-                        record.Crtd_Datetime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingAR_Location(created, ref record);
-                        _db.AR_Location.AddObject(record);
+                        _db.AR_Location.DeleteObject(del);
+                    }
+                }
+
+                lstLocation.Created.AddRange(lstLocation.Updated);
+
+                foreach (AR_Location curLocation in lstLocation.Created)
+                {
+                    if (curLocation.Location.PassNull() == "") continue;
+
+                    var Location = _db.AR_Location.Where(p => p.Location.ToLower() == curLocation.Location.ToLower()).FirstOrDefault();
+
+                    if (Location != null)
+                    {
+                        if (Location.tstamp.ToHex() == curLocation.tstamp.ToHex())
+                        {
+                            Update_AR_Location(Location, curLocation, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
                     }
                     else
                     {
-                        Message.Show(2000, new string[] { Util.GetLang("Location"), record.Location.ToString() }, null);
-                        return this.Direct();
-                        //tra ve loi da ton tai ma ngon ngu nay ko the them
+                        Location = new AR_Location();
+                        Update_AR_Location(Location, curLocation, true);
+                        _db.AR_Location.AddObject(Location);
                     }
                 }
-                else
-                {
-                    Message.Show(2000, new string[] { Util.GetLang("Location"), record.Location.ToString() }, null);
-                    return this.Direct();
-                    //tra ve loi da ton tai ma ngon ngu nay ko the them
-                }
 
+                _db.SaveChanges();
 
-            }
-
-            
-
-            foreach (AR_Location updated in lstMsg.Updated)
-            {
-                var record = _db.AR_Location.Where(p => p.Location == updated.Location).FirstOrDefault();
-                                
-                if (record != null)
-                {
-                    UpdatingAR_Location(updated, ref record);
-                }
-                else
-                {
-                    record = new AR_Location();
-                    record.Location = updated.Location;
-                    record.Crtd_Datetime = DateTime.Now;
-                    record.Crtd_Prog = screenNbr;
-                    record.Crtd_User = Current.UserName;                
-                    UpdatingAR_Location(updated, ref record);
-                    _db.AR_Location.AddObject(record);
-                }
-                
-
-            }
-            _db.SaveChanges();
-
-            return Json(new { success = true });
-              
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-
-                return Json(new { success = false, errorMsg = ex.ToString()});
-                
-              
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
 
-        private void UpdatingAR_Location(AR_Location s, ref AR_Location d)
+        private void Update_AR_Location(AR_Location t, AR_Location s, bool isNew)
         {
-            d.Descr = s.Descr;                   
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
+            if (isNew)
+            {
+                t.Location = s.Location;
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.Descr = s.Descr;
+
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
         }
+
     }
 }
