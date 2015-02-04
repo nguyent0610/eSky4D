@@ -546,10 +546,11 @@ var isAllValidKey = function (items) {
 var checkRequire = function (items) {
     if (items != undefined) {
         for (var i = 0; i < items.length; i++) {
-            if (items[i]["LineType"] == undefined)
-                continue;
-            if (items[i]["LineType"] == "")
-                continue;
+            //if (items[i]["LineType"] == undefined)
+            //    continue;
+            //if (items[i]["LineType"] == "")
+            //    continue;
+            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
 
             if (items[i]["LineType"].trim() == "") {
                 HQ.message.show(15, HQ.common.getLang("LineType"));
