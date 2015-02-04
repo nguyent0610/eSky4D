@@ -106,29 +106,29 @@ var menuClick = function (command) {
 
                 if (_focusrecord == 2) {
                     if (App.frmDocument.getForm().getRecord() != null) {
-                        App.slmRowOnGridTab1.select(App.storeGrid.getCount() - 1);
+                        App.slmGridTab1.select(App.storeGrid.getCount() - 1);
 
                         if (App.storeGrid.getCount() == 0) {
 
                             App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());
-                            App.slmRowOnGridTab1.select(App.storeGrid.getCount() - 1);
+                            App.slmGridTab1.select(App.storeGrid.getCount() - 1);
                             for (var i = 0; i < App.cboVendID.getStore().data.length; i++) {
                                 if (App.cboVendID.getStore().data.items[i].data.VendID == App.cboVendID.value) {
                                     vendIDAndDescr = App.cboVendID.getStore().data.items[i].data.VendID + " - " + App.cboVendID.getStore().data.items[i].data.name;
                                 }
                             }
-                            App.slmRowOnGridTab1.selected.items[0].set('TranDesc', vendIDAndDescr)
+                            App.slmGridTab1.selected.items[0].set('TranDesc', vendIDAndDescr)
                             App.grd.editingPlugin.startEditByPosition({ row: App.storeGrid.getCount() - 1, column: 1 });
 
-                        } else if (App.slmRowOnGridTab1.selected.items[0].data.LineType != "") {
+                        } else if (App.slmGridTab1.selected.items[0].data.LineType != "") {
                             App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());
-                            App.slmRowOnGridTab1.select(App.storeGrid.getCount() - 1);
+                            App.slmGridTab1.select(App.storeGrid.getCount() - 1);
                             for (var i = 0; i < App.cboVendID.getStore().data.length; i++) {
                                 if (App.cboVendID.getStore().data.items[i].data.VendID == App.cboVendID.value) {
                                     vendIDAndDescr = App.cboVendID.getStore().data.items[i].data.VendID + " - " + App.cboVendID.getStore().data.items[i].data.name;
                                 }
                             }
-                            App.slmRowOnGridTab1.selected.items[0].set('TranDesc', vendIDAndDescr)
+                            App.slmGridTab1.selected.items[0].set('TranDesc', vendIDAndDescr)
                             App.grd.editingPlugin.startEditByPosition({ row: App.storeGrid.getCount() - 1, column: 1 });
                         }
                         //HQ.grid.insert(App.grd);
@@ -267,7 +267,7 @@ function Save() {
 
     //duyet vong for de lay cac gia tri con thieu cho Grid
     for (var i = 0; i <= App.storeGrid.getCount() - 1; i++) {
-        App.slmRowOnGridTab1.select(i);
+        App.slmGridTab1.select(i);
         //lay gia tri lineRef
         var lineRef = "";
         if (i < 10) {
@@ -287,27 +287,27 @@ function Save() {
         }
         //duyet grid top tab 2 de lay ra cac gia tri co cung LineRef de lay TaxAmt va txblAmt  
         for (var k = 0; k <= App.storeGridTopTab2.getCount() - 1; k++) {
-            App.slmOnGridTopTab2.select(k);
-            if (App.slmOnGridTopTab2.selected.items[0].data.LineRef == App.storeGrid.data.items[i].data.LineRef) {
+            App.slmGridTopTab2.select(k);
+            if (App.slmGridTopTab2.selected.items[0].data.LineRef == App.storeGrid.data.items[i].data.LineRef) {
                 //bien count de dem xem co bao nhieu cai cung LineRef de save vao cac bien TaxAmt 0 > 3 va bien txblAmt 0 > 3 cho dung 
                 countTaxAmt++;
                 if (countTaxAmt == 1) {
-                    //taxAmt[0] = parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TaxAmt);
-                    //txblAmt = parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TxblAmt);
-                    App.storeGrid.data.items[i].set('TaxAmt00', parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TaxAmt));
+                    //taxAmt[0] = parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt);
+                    //txblAmt = parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt);
+                    App.storeGrid.data.items[i].set('TaxAmt00', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
                     App.storeGrid.data.items[i].set('TaxAmt01', 0);
                     App.storeGrid.data.items[i].set('TaxAmt02', 0);
                     App.storeGrid.data.items[i].set('TaxAmt03', 0);
-                    App.storeGrid.data.items[i].set('TxblAmt00', parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TxblAmt));
+                    App.storeGrid.data.items[i].set('TxblAmt00', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
                 } else if (countTaxAmt == 2) {
-                    App.storeGrid.data.items[i].set('TaxAmt01', parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TaxAmt));
-                    App.storeGrid.data.items[i].set('TxblAmt01', parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TxblAmt));
+                    App.storeGrid.data.items[i].set('TaxAmt01', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
+                    App.storeGrid.data.items[i].set('TxblAmt01', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
                 } else if (countTaxAmt == 3) {
-                    App.storeGrid.data.items[i].set('TaxAmt02', parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TaxAmt));
-                    App.storeGrid.data.items[i].set('TxblAmt02', parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TxblAmt));
+                    App.storeGrid.data.items[i].set('TaxAmt02', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
+                    App.storeGrid.data.items[i].set('TxblAmt02', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
                 } else if (countTaxAmt == 4) {
-                    App.storeGrid.data.items[i].set('TaxAmt03', parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TaxAmt));
-                    App.storeGrid.data.items[i].set('TxblAmt03', parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TxblAmt));
+                    App.storeGrid.data.items[i].set('TaxAmt03', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
+                    App.storeGrid.data.items[i].set('TxblAmt03', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
                 }
             }
 
@@ -603,11 +603,11 @@ var grd_Edit = function (item, e) {
     if (keys.indexOf(e.field) != -1) {
         if (e.value != '' && isAllValidKey(App.storeGrid.getChangedData().Created) && isAllValidKey(App.storeGrid.getChangedData().Updated))
             //App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());//Ext.data.Record() 
-            //App.slmRowOnGridTab1.selected.items[0].set('TranDesc', vendIDAndDescr);
+            //App.slmGridTab1.selected.items[0].set('TranDesc', vendIDAndDescr);
 
             var record = Ext.create("App.mdlAP_Trans", {
                 //CustId: "",
-                TranDesc: App.slmRowOnGridTab1.selected.items[0].data.TranDesc
+                TranDesc: App.slmGridTab1.selected.items[0].data.TranDesc
 
 
 
@@ -622,7 +622,7 @@ var grd_ValidateEdit = function (item, e) {
     if (keys.indexOf(e.field) != -1) {
         if (HQ.grid.checkDuplicate(App.grd, e, keys)) {
             HQ.message.show(1112, e.value, '');
-            App.slmRowOnGridTab1.selected.items[0].set('InvtID', '');
+            App.slmGridTab1.selected.items[0].set('InvtID', '');
             return false;
         }
         //do grid nay ID chon tu comboBox nen ko can regex
@@ -846,9 +846,9 @@ var waitStoreGridTab1ReLoad = function () {
     reloadDataGrid1AndGrid2Tab2(0);
 
 
-    //App.slmOnGridTopTab2.select(0);
+    //App.slmGridTopTab2.select(0);
     App.tabAtAP10100.setActiveTab(App.frmDocument); // set tab dang su dung sang tab 1
-    //App.slmRowOnGridTab1.select(0);//chon dong 1 cua grid 1 tab 1
+    //App.slmGridTab1.select(0);//chon dong 1 cua grid 1 tab 1
     setTimeout(function () { waitGridLoadAndFocusIntoBatNbr(); }, 1000);
 
 }
@@ -901,12 +901,12 @@ var renderLineType = function (value) {
 //};
 //khi cboTaxCat thay doi thi
 var cboTaxCat_Change = function (item) {
-    App.slmRowOnGridTab1.selected.items[0].set('TaxCat', item.value);
-    var index = App.slmRowOnGridTab1.selected.items[0].index;
+    App.slmGridTab1.selected.items[0].set('TaxCat', item.value);
+    var index = App.slmGridTab1.selected.items[0].index;
     //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
-    if (index == undefined && App.slmRowOnGridTab1.selected.items[0].data.InvtID != "") {
+    if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
         for (var i = 0; i < App.storeGrid.data.length; i++) {
-            if (App.storeGrid.data.items[i].data.InvtID == App.slmRowOnGridTab1.selected.items[0].data.InvtID) {
+            if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
                 index = i;
             }
         }
@@ -925,26 +925,26 @@ var cboTaxCat_Change = function (item) {
 //khi cboTaxID thay doi thi
 var cboTaxID_Change = function (item) {//obj = App.cboTaxID
     //obj.value
-    App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "");
-    App.slmRowOnGridTab1.selected.items[0].set('TaxId02', "");
-    App.slmRowOnGridTab1.selected.items[0].set('TaxId03', "");
+    App.slmGridTab1.selected.items[0].set('TaxId01', "");
+    App.slmGridTab1.selected.items[0].set('TaxId02', "");
+    App.slmGridTab1.selected.items[0].set('TaxId03', "");
     for (var i = 0; i < item.value.length; i++) {
 
         if (i == 0) {
-            App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+            App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
         } else if (i == 1) {
-            App.slmRowOnGridTab1.selected.items[0].set('TaxId01', item.value[1]);
+            App.slmGridTab1.selected.items[0].set('TaxId01', item.value[1]);
         } else if (i == 2) {
-            App.slmRowOnGridTab1.selected.items[0].set('TaxId02', item.value[2]);
+            App.slmGridTab1.selected.items[0].set('TaxId02', item.value[2]);
         } else if (i == 3) {
-            App.slmRowOnGridTab1.selected.items[0].set('TaxId03', item.value[3]);
+            App.slmGridTab1.selected.items[0].set('TaxId03', item.value[3]);
         }
     }
-    var index = App.slmRowOnGridTab1.selected.items[0].index;
+    var index = App.slmGridTab1.selected.items[0].index;
     //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
-    if (index == undefined && App.slmRowOnGridTab1.selected.items[0].data.InvtID != "") {
+    if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
         for (var i = 0; i < App.storeGrid.data.length; i++) {
-            if (App.storeGrid.data.items[i].data.InvtID == App.slmRowOnGridTab1.selected.items[0].data.InvtID) {
+            if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
                 index = i;
             }
         }
@@ -961,19 +961,19 @@ var cboTaxID_Change = function (item) {//obj = App.cboTaxID
 var txtQty_Change = function (item) {
     //bat cac gia tri de chuan bi tinh toan lai
     var quantity = item.value;
-    var unitprice = App.slmRowOnGridTab1.selected.items[0].data.UnitPrice;
-    var index = App.slmRowOnGridTab1.selected.items[0].index;
+    var unitprice = App.slmGridTab1.selected.items[0].data.UnitPrice;
+    var index = App.slmGridTab1.selected.items[0].index;
     //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
-    if (index == undefined && App.slmRowOnGridTab1.selected.items[0].data.InvtID != "") {
+    if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
         for (var i = 0; i < App.storeGrid.data.length; i++) {
-            if (App.storeGrid.data.items[i].data.InvtID == App.slmRowOnGridTab1.selected.items[0].data.InvtID) {
+            if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
                 index = i;
             }
         }
-    } else if (index == undefined && App.slmRowOnGridTab1.selected.items[0].data.InvtID == "") {
+    } else if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID == "") {
         index = 0;
     }
-    App.slmRowOnGridTab1.selected.items[0].set('TranAmt', quantity * unitprice);
+    App.slmGridTab1.selected.items[0].set('TranAmt', quantity * unitprice);
     //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
     reloadDataGrid1AndGrid2Tab2(index);
     //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
@@ -985,21 +985,21 @@ var txtQty_Change = function (item) {
 //thay doi gia cho 1 dv san pham
 var txtUnitPrice_Change = function (item) {
     //bat cac gia tri de chuan bi tinh toan lai
-    var quantity = App.slmRowOnGridTab1.selected.items[0].data.Qty;
+    var quantity = App.slmGridTab1.selected.items[0].data.Qty;
     var unitprice = item.value;
-    var index = App.slmRowOnGridTab1.selected.items[0].index;
+    var index = App.slmGridTab1.selected.items[0].index;
     //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
-    if (index == undefined && App.slmRowOnGridTab1.selected.items[0].data.InvtID != "") {
+    if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
         for (var i = 0; i < App.storeGrid.data.length; i++) {
-            if (App.storeGrid.data.items[i].data.InvtID == App.slmRowOnGridTab1.selected.items[0].data.InvtID) {
+            if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
                 index = i;
             }
         }
 
-    } else if (index == undefined && App.slmRowOnGridTab1.selected.items[0].data.InvtID == "") {
+    } else if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID == "") {
         index = 0;
     }
-    App.slmRowOnGridTab1.selected.items[0].set('TranAmt', quantity * unitprice);
+    App.slmGridTab1.selected.items[0].set('TranAmt', quantity * unitprice);
     //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
     reloadDataGrid1AndGrid2Tab2(index);
     //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
@@ -1011,19 +1011,19 @@ var txtUnitPrice_Change = function (item) {
 var txtTranAmt_Change = function (item) {
     //bat cac gia tri de chuan bi tinh toan lai
     var tranAmt = item.value;
-    var quantity = App.slmRowOnGridTab1.selected.items[0].data.Qty;
-    var index = App.slmRowOnGridTab1.selected.items[0].index;
+    var quantity = App.slmGridTab1.selected.items[0].data.Qty;
+    var index = App.slmGridTab1.selected.items[0].index;
     //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
-    if (index == undefined && App.slmRowOnGridTab1.selected.items[0].data.InvtID != "") {
+    if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
         for (var i = 0; i < App.storeGrid.data.length; i++) {
-            if (App.storeGrid.data.items[i].data.InvtID == App.slmRowOnGridTab1.selected.items[0].data.InvtID) {
+            if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
                 index = i;
             }
         }
-    } else if (index == undefined && App.slmRowOnGridTab1.selected.items[0].data.InvtID == "") {
+    } else if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID == "") {
         index = 0;
     }
-    App.slmRowOnGridTab1.selected.items[0].set('UnitPrice', tranAmt / quantity);
+    App.slmGridTab1.selected.items[0].set('UnitPrice', tranAmt / quantity);
     //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
     reloadDataGrid1AndGrid2Tab2(index);
     //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
@@ -1045,7 +1045,7 @@ var reloadDataGrid1AndGrid2Tab2 = function (index) {
     //duyet grid 1 tab 2 de lay gia tri bo qua grid 2 tab 2 
     fillDataIntoGrid2Tab2();
     App.tabAtAP10100.setActiveTab(App.frmDocument); // set tab dang su dung sang tab 1
-    App.slmRowOnGridTab1.select(index);
+    App.slmGridTab1.select(index);
 }
 //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
 var reloadAmountMustPayTotal = function (index) {
@@ -1058,14 +1058,14 @@ var reloadAmountMustPayTotal = function (index) {
     }
     //duyet grid 1 de lay so tien goc cua minh
     for (var k = 0; k <= App.storeGrid.getCount() - 1; k++) {
-        App.slmRowOnGridTab1.select(k);
-        totalAmountMustPay = totalAmountMustPay + App.slmRowOnGridTab1.selected.items[0].data.TranAmt;
+        App.slmGridTab1.select(k);
+        totalAmountMustPay = totalAmountMustPay + App.slmGridTab1.selected.items[0].data.TranAmt;
     }
     //set lai gia tri cua 3 o kia
     App.txtCuryCrTot.setValue(totalTaxMustPay + totalAmountMustPay);
     App.txtCuryOrigDocAmt.setValue(totalTaxMustPay + totalAmountMustPay);
     App.txtCuryDocBal.setValue(totalTaxMustPay + totalAmountMustPay);
-    App.slmRowOnGridTab1.select(index);
+    App.slmGridTab1.select(index);
 }
 //khi VendID thay doi
 var cboVendID_Change = function () {
@@ -1174,7 +1174,7 @@ var removeReadOnly = function () {
 var fillDataIntoGrid1Tab2 = function () {
 
     for (var i = 0; i <= App.storeGrid.getCount() - 1; i++) {
-        App.slmRowOnGridTab1.select(i);
+        App.slmGridTab1.select(i);
         //lay gia tri lineRef
         var lineRef = "";
         if (i < 10) {
@@ -1189,26 +1189,26 @@ var fillDataIntoGrid1Tab2 = function () {
             lineRef = (i + 1).toString();
         }
         //lay cac gia tri can thiet khac
-        var tranAmt = App.slmRowOnGridTab1.selected.items[0].data.TranAmt;
-        var taxCat = App.slmRowOnGridTab1.selected.items[0].data.TaxCat;
-        var taxID0 = App.slmRowOnGridTab1.selected.items[0].data.TaxId00;
-        var taxID1 = App.slmRowOnGridTab1.selected.items[0].data.TaxId01;
-        var taxID2 = App.slmRowOnGridTab1.selected.items[0].data.TaxId02;
-        var taxID3 = App.slmRowOnGridTab1.selected.items[0].data.TaxId03;
+        var tranAmt = App.slmGridTab1.selected.items[0].data.TranAmt;
+        var taxCat = App.slmGridTab1.selected.items[0].data.TaxCat;
+        var taxID0 = App.slmGridTab1.selected.items[0].data.TaxId00;
+        var taxID1 = App.slmGridTab1.selected.items[0].data.TaxId01;
+        var taxID2 = App.slmGridTab1.selected.items[0].data.TaxId02;
+        var taxID3 = App.slmGridTab1.selected.items[0].data.TaxId03;
         //ham xoa cac dong co taxId01 , 02 va gop vao chung voi taxId00
-        //App.slmRowOnGridTab1.select(i);
-        //if (App.slmRowOnGridTab1.selected.items[0].data.TaxId01 != "" && App.slmRowOnGridTab1.selected.items[0].data.TaxId01 == "") {
-        //    App.slmRowOnGridTab1.selected.items[0].set('TaxId00', (taxID0 + "," + taxID1).toString());
-        //    App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "");
-        //} else if (App.slmRowOnGridTab1.selected.items[0].data.TaxId01 != "" && App.slmRowOnGridTab1.selected.items[0].data.TaxId01 != "") {
-        //    App.slmRowOnGridTab1.selected.items[0].set('TaxId00', (taxID0 + "," + taxID1 + "," + taxID2).toString());
-        //    App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "");
-        //    App.slmRowOnGridTab1.selected.items[0].set('TaxId02', "");
+        //App.slmGridTab1.select(i);
+        //if (App.slmGridTab1.selected.items[0].data.TaxId01 != "" && App.slmGridTab1.selected.items[0].data.TaxId01 == "") {
+        //    App.slmGridTab1.selected.items[0].set('TaxId00', (taxID0 + "," + taxID1).toString());
+        //    App.slmGridTab1.selected.items[0].set('TaxId01', "");
+        //} else if (App.slmGridTab1.selected.items[0].data.TaxId01 != "" && App.slmGridTab1.selected.items[0].data.TaxId01 != "") {
+        //    App.slmGridTab1.selected.items[0].set('TaxId00', (taxID0 + "," + taxID1 + "," + taxID2).toString());
+        //    App.slmGridTab1.selected.items[0].set('TaxId01', "");
+        //    App.slmGridTab1.selected.items[0].set('TaxId02', "");
         //}
         //sau khi bat xong chuyen sang tab 2
         //App.tabAtAP10100.setActiveTab(App.frmDocument);
-        //App.slmRowOnGridTab1.select();
-        //App.slmRowOnGridTab1.selected.items[0].data.TaxId00;
+        //App.slmGridTab1.select();
+        //App.slmGridTab1.selected.items[0].data.TaxId00;
         App.tabAtAP10100.setActiveTab(App.tabTax);
 
         var taxAmtVAT05 = tranAmt * 5 / 100;
@@ -1989,30 +1989,30 @@ var fillDataIntoGrid2Tab2 = function () {
     oVat10 = "0";
     vat10 = "0";
     for (var i = 0; i <= App.storeGridTopTab2.getCount() - 1; i++) {
-        App.slmOnGridTopTab2.select(i);
+        App.slmGridTopTab2.select(i);
         //cac bien tam phai khai bao de truyen gia tri vao
         // taxAmtTotalIVAT05        taxAmtTotalIVAT10          iVat05             iVat10             noneVat
         // tranAmtTotalIVAT05      tranAmtTotalIVAT10        tranAmtTotalNoneVat
 
-        if (App.slmOnGridTopTab2.selected.items[0].data.TaxID == "IVAT05") {
+        if (App.slmGridTopTab2.selected.items[0].data.TaxID == "IVAT05") {
             iVat05 = "1";
-            taxAmtTotalIVAT05 = taxAmtTotalIVAT05 + parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TaxAmt)
-            tranAmtTotalIVAT05 = tranAmtTotalIVAT05 + parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TxblAmt)
-        } else if (App.slmOnGridTopTab2.selected.items[0].data.TaxID == "IVAT10") {
+            taxAmtTotalIVAT05 = taxAmtTotalIVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+            tranAmtTotalIVAT05 = tranAmtTotalIVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+        } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "IVAT10") {
             iVat10 = "1";
-            taxAmtTotalIVAT10 = taxAmtTotalIVAT10 + parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TaxAmt)
-            tranAmtTotalIVAT10 = tranAmtTotalIVAT10 + parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TxblAmt)
-        } else if (App.slmOnGridTopTab2.selected.items[0].data.TaxID == "NONEVAT") {
+            taxAmtTotalIVAT10 = taxAmtTotalIVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+            tranAmtTotalIVAT10 = tranAmtTotalIVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+        } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "NONEVAT") {
             noneVat = "1";
-            tranAmtTotalNoneVat = tranAmtTotalNoneVat + parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TxblAmt)
-        } else if (App.slmOnGridTopTab2.selected.items[0].data.TaxID == "OVAT10-00") {
+            tranAmtTotalNoneVat = tranAmtTotalNoneVat + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+        } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "OVAT10-00") {
             oVat10 = "1";
-            taxAmtTotalOVAT10 = taxAmtTotalOVAT10 + parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TaxAmt)
-            tranAmtTotalOVAT10 = tranAmtTotalOVAT10 + parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TxblAmt)
-        } else if (App.slmOnGridTopTab2.selected.items[0].data.TaxID == "VAT10") {
+            taxAmtTotalOVAT10 = taxAmtTotalOVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+            tranAmtTotalOVAT10 = tranAmtTotalOVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+        } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "VAT10") {
             vat10 = "1";
-            taxAmtTotalVAT10 = taxAmtTotalVAT10 + parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TaxAmt)
-            tranAmtTotalVAT10 = tranAmtTotalVAT10 + parseFloat(App.slmOnGridTopTab2.selected.items[0].data.TxblAmt)
+            taxAmtTotalVAT10 = taxAmtTotalVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+            tranAmtTotalVAT10 = tranAmtTotalVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
         }
     }
     //khai bao cac record cho tung truong hop
@@ -2115,51 +2115,51 @@ var fillDataIntoGrid2Tab2 = function () {
 
 //var cboTaxID_Change = function (item) {
 //    //xoa value 2 cai taxid01 voi taxid02 truoc
-//    App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "");
-//    App.slmRowOnGridTab1.selected.items[0].set('TaxId02', "");
+//    App.slmGridTab1.selected.items[0].set('TaxId01', "");
+//    App.slmGridTab1.selected.items[0].set('TaxId02', "");
 //    //xet dieu kien de them vao lai taxid01 voi taxid02
 //    if (item.rawValue.search(", IVAT05, IVAT10") != -1) {
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "IVAT05");
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId02', "IVAT10");
+//        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+//        App.slmGridTab1.selected.items[0].set('TaxId01', "IVAT05");
+//        App.slmGridTab1.selected.items[0].set('TaxId02', "IVAT10");
 //    } else if (item.rawValue.search(", IVAT05, NONEVAT") != -1) {
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "IVAT05");
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId02', "NONEVAT");
+//        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+//        App.slmGridTab1.selected.items[0].set('TaxId01', "IVAT05");
+//        App.slmGridTab1.selected.items[0].set('TaxId02', "NONEVAT");
 //    } else if (item.rawValue.search(", IVAT10, IVAT05") != -1) {
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "IVAT10");
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId02', "IVAT05");
+//        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+//        App.slmGridTab1.selected.items[0].set('TaxId01', "IVAT10");
+//        App.slmGridTab1.selected.items[0].set('TaxId02', "IVAT05");
 //    } else if (item.rawValue.search(", IVAT10, NONEVAT") != -1) {
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "IVAT10");
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId02', "NONEVAT");
+//        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+//        App.slmGridTab1.selected.items[0].set('TaxId01', "IVAT10");
+//        App.slmGridTab1.selected.items[0].set('TaxId02', "NONEVAT");
 //    } else if (item.rawValue.search(", NONEVAT, IVAT05") != -1) {
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "NONEVAT");
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId02', "IVAT05");
+//        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+//        App.slmGridTab1.selected.items[0].set('TaxId01', "NONEVAT");
+//        App.slmGridTab1.selected.items[0].set('TaxId02', "IVAT05");
 //    } else if (item.rawValue.search(", NONEVAT, IVAT10") != -1) {
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "NONEVAT");
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId02', "IVAT10");
+//        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+//        App.slmGridTab1.selected.items[0].set('TaxId01', "NONEVAT");
+//        App.slmGridTab1.selected.items[0].set('TaxId02', "IVAT10");
 //    } else if (item.rawValue.search(", IVAT05") != -1) {
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "IVAT05");
+//        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+//        App.slmGridTab1.selected.items[0].set('TaxId01', "IVAT05");
 //    } else if (item.rawValue.search(", IVAT10") != -1) {
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "IVAT10");
+//        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+//        App.slmGridTab1.selected.items[0].set('TaxId01', "IVAT10");
 //    } else if (item.rawValue.search(", NONEVAT") != -1) {
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId01', "NONEVAT");
+//        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+//        App.slmGridTab1.selected.items[0].set('TaxId01', "NONEVAT");
 //    } else if (item.rawValue == "IVAT05" || item.rawValue == "IVAT10" || item.rawValue == "NONEVAT") {
-//        App.slmRowOnGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+//        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
 //    }
-//    var index = App.slmRowOnGridTab1.selected.items[0].index;
+//    var index = App.slmGridTab1.selected.items[0].index;
 //    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
 //    reloadDataGrid1AndGrid2Tab2(index);
 //    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
 //    reloadAmountMustPayTotal(index);
-//    var taxid00 = App.slmRowOnGridTab1.selected.items[0].data.TaxId00;
+//    var taxid00 = App.slmGridTab1.selected.items[0].data.TaxId00;
 //    //if(taxid00.search(","){
 //    //    var taxid00change = taxid00.substring(0, r.data.TaxId00.search(","));
 //    //    r.set('TaxId00', taxid00change);
