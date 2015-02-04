@@ -427,7 +427,7 @@ var HQ = {
                     if (itm.getXType() == "grid") {
                         for (var i = 0; i < itm.columns.length; i++) {
                             if (itm.columns[i].getXType() == "commandcolumn") {
-                                itm.columns[i].commands[0].text(HQ.common.getLang(itm.columns[i].commands[0].text));
+                                itm.columns[i].commands[0].text = HQ.common.getLang(itm.columns[i].commands[0].text);
                             } else {
                                 itm.columns[i].setText(HQ.common.getLang(itm.columns[i].text));
                             }
@@ -442,7 +442,7 @@ var HQ = {
                     else if (itm.getXType() == "checkbox") {
                         itm.setBoxLabel(HQ.common.getLang(itm.boxLabel));
                     }
-                    else {
+                    else if (itm.getXType() == "numberfield") {
                         itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
                     }
                     HQ.common.setLang(itm);

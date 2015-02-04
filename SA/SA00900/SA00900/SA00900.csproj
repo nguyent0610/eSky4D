@@ -216,7 +216,6 @@
       <LastGenOutput>SA00900Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
-    <Content Include="Scripts\hq.common.debug.js" />
     <Content Include="Scripts\hq.common.js" />
     <Content Include="Scripts\hq.language1.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
