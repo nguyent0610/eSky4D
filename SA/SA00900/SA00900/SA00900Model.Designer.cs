@@ -115,6 +115,14 @@ namespace SA00900
     
             return base.ExecuteFunction<SA00900_GetLangJs_Result>("SA00900_GetLangJs", langIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SA00900_pgLoadLanguage_Result> SA00900_pgLoadLanguage()
+        {
+            return base.ExecuteFunction<SA00900_pgLoadLanguage_Result>("SA00900_pgLoadLanguage");
+        }
 
         #endregion
 
@@ -507,9 +515,9 @@ namespace SA00900
         /// <param name="code">Initial value of the Code property.</param>
         public static SA00900_GetLangJs_Result CreateSA00900_GetLangJs_Result(global::System.String code)
         {
-            SA00900_GetLangJs_Result SA00900_GetLangJs_Result = new SA00900_GetLangJs_Result();
-            SA00900_GetLangJs_Result.Code = code;
-            return SA00900_GetLangJs_Result;
+            SA00900_GetLangJs_Result sA00900_GetLangJs_Result = new SA00900_GetLangJs_Result();
+            sA00900_GetLangJs_Result.Code = code;
+            return sA00900_GetLangJs_Result;
         }
 
         #endregion
@@ -563,6 +571,209 @@ namespace SA00900
         private global::System.String _Lang;
         partial void OnLangChanging(global::System.String value);
         partial void OnLangChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA00900Model", Name="SA00900_pgLoadLanguage_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA00900_pgLoadLanguage_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA00900_pgLoadLanguage_Result object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        /// <param name="lang00">Initial value of the Lang00 property.</param>
+        /// <param name="lang01">Initial value of the Lang01 property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SA00900_pgLoadLanguage_Result CreateSA00900_pgLoadLanguage_Result(global::System.String code, global::System.String lang00, global::System.String lang01, global::System.Byte[] tstamp)
+        {
+            SA00900_pgLoadLanguage_Result sA00900_pgLoadLanguage_Result = new SA00900_pgLoadLanguage_Result();
+            sA00900_pgLoadLanguage_Result.Code = code;
+            sA00900_pgLoadLanguage_Result.Lang00 = lang00;
+            sA00900_pgLoadLanguage_Result.Lang01 = lang01;
+            sA00900_pgLoadLanguage_Result.tstamp = tstamp;
+            return sA00900_pgLoadLanguage_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Lang00
+        {
+            get
+            {
+                return _Lang00;
+            }
+            set
+            {
+                OnLang00Changing(value);
+                ReportPropertyChanging("Lang00");
+                _Lang00 = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Lang00");
+                OnLang00Changed();
+            }
+        }
+        private global::System.String _Lang00;
+        partial void OnLang00Changing(global::System.String value);
+        partial void OnLang00Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Lang01
+        {
+            get
+            {
+                return _Lang01;
+            }
+            set
+            {
+                OnLang01Changing(value);
+                ReportPropertyChanging("Lang01");
+                _Lang01 = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Lang01");
+                OnLang01Changed();
+            }
+        }
+        private global::System.String _Lang01;
+        partial void OnLang01Changing(global::System.String value);
+        partial void OnLang01Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Lang02
+        {
+            get
+            {
+                return _Lang02;
+            }
+            set
+            {
+                OnLang02Changing(value);
+                ReportPropertyChanging("Lang02");
+                _Lang02 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Lang02");
+                OnLang02Changed();
+            }
+        }
+        private global::System.String _Lang02;
+        partial void OnLang02Changing(global::System.String value);
+        partial void OnLang02Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Lang03
+        {
+            get
+            {
+                return _Lang03;
+            }
+            set
+            {
+                OnLang03Changing(value);
+                ReportPropertyChanging("Lang03");
+                _Lang03 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Lang03");
+                OnLang03Changed();
+            }
+        }
+        private global::System.String _Lang03;
+        partial void OnLang03Changing(global::System.String value);
+        partial void OnLang03Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Lang04
+        {
+            get
+            {
+                return _Lang04;
+            }
+            set
+            {
+                OnLang04Changing(value);
+                ReportPropertyChanging("Lang04");
+                _Lang04 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Lang04");
+                OnLang04Changed();
+            }
+        }
+        private global::System.String _Lang04;
+        partial void OnLang04Changing(global::System.String value);
+        partial void OnLang04Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
 
         #endregion
 

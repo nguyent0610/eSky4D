@@ -293,6 +293,32 @@ var HQ = {
                 };
             }
             return found;
+        },
+        //Dùng trong ham before edit cua grid
+        //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
+        //Cot nao la key thi khoa lai khi da co du lieu
+        checkInput: function (row, keys) {
+            if (keys.indexOf(row.field) == -1) {
+
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") {
+                        return false;
+                    }
+                }
+            }
+            if (keys.indexOf(row.field) != -1) {
+                if (row.record.data[row.field] != "") return false;
+            }
+            return true;
+        },
+        //Kiem tra khi check require bo qua cac dong la new 
+        checkRequirePass: function (item, keys) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (item[keys[jkey]]) {
+                    return false;
+                }
+            }
+            return true;
         }
     },
     message: {
@@ -362,6 +388,27 @@ var HQ = {
             } else {
                 return key;
             }
+        },
+        setLang: function (ctr) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (itm.getXType() == "grid") {
+                        for (var i = 0; i < itm.columns.length; i++) {
+                            itm.columns[i].setText(HQ.common.getLang(itm.columns[i].text));
+                        }
+                    }
+                    else if (itm.getXType() == "textFile") {
+                    }
+                    else if (itm.getXType() == "grid") {
+                    }
+                    else if (itm.getXType() == "grid") {
+                    }
+                    else if (itm.getXType() == "grid") {
+                    }
+                    HQ.common.setLang(itm);
+                });
+            }
+          
         },
         lockItem: function (ctr, lock) {
             if (typeof (ctr.items) != "undefined") {

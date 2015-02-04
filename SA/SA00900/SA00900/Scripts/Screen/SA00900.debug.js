@@ -2,12 +2,8 @@
 
 var keys = ['Code'];
 ///////////////////////////////////////////////////////////////////////
-
 //// Store /////////////////////////////////////////////////////////////
-
 ////////////////////////////////////////////////////////////////////////
-
-
 //// Event /////////////////////////////////////////////////////////////
 
 var menuClick = function (command) {
@@ -61,35 +57,34 @@ var menuClick = function (command) {
 };
 var grdLanguage_BeforeEdit = function (editor, e) {
     if (!HQ.isUpdate) return false;
-    //keys = e.record.idProperty.split(',');
-
+      
     if (keys.indexOf(e.field) != -1) {
         if (e.record.data.tstamp != "")
             return false;
     }
-
+    return HQ.grid.checkInput(e,keys)
 };
 var grdLanguage_Edit = function (item, e) {
-
     if (keys.indexOf(e.field) != -1) {
         if (e.value != '' && isAllValidKey(App.stoLanguage.getChangedData().Created) && isAllValidKey(App.stoLanguage.getChangedData().Updated))
             HQ.store.insertBlank(App.stoLanguage);
     }
+ 
+    
 };
 var grdLanguage_ValidateEdit = function (item, e) {
     if (keys.indexOf(e.field) != -1) {
-        if (HQ.grid.checkDuplicate(App.grdLanguage, e, keys)) {
-            HQ.message.show(1112, e.value);
-            return false;
-        }
         var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-        if (e.value.match(regex)) {
-            return true;
-
-        } else {
+        if (!e.value.match(regex)) 
+        {
             HQ.message.show(20140811, e.column.text);
             return false;
         }
+        if (HQ.grid.checkDuplicateAll(App.grdLanguage, e, keys)) {
+            HQ.message.show(1112, e.value);
+            return false;
+        }
+       
     }
 };
 var grdLanguage_Reject = function (record) {
@@ -101,13 +96,8 @@ var grdLanguage_Reject = function (record) {
         record.reject();
     }
 };
-
 /////////////////////////////////////////////////////////////////////////
-
-
-
 //// Process Data ///////////////////////////////////////////////////////
-
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
@@ -150,7 +140,7 @@ var isAllValidKey = function (items) {
 var checkRequire = function (items) {
     if (items != undefined) {
         for (var i = 0; i < items.length; i++) {
-            if (items[i]["Code"] == undefined) continue;
+            if (HQ.grid.checkRequirePass(items[i],keys)) continue;
             if (items[i]["Code"].trim() == "") {
                 HQ.message.show(15, HQ.common.getLang("Code"));
                 return false;
@@ -170,17 +160,12 @@ var checkRequire = function (items) {
     }
 };
 /////////////////////////////////////////////////////////////////////////
-
-
-
 //// Other Functions ////////////////////////////////////////////////////
-
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
         HQ.common.close(this);
     }
 };
-
 /////////////////////////////////////////////////////////////////////////
 
 

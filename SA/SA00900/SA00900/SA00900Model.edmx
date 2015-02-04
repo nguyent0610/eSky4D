@@ -29,6 +29,7 @@
         <Function Name="SA00900_GetLangJs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LangID" Type="smallint" Mode="In" />
         </Function>
+        <Function Name="SA00900_pgLoadLanguage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -36,8 +37,9 @@
         <EntityContainer Name="SA00900Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SYS_Language" EntityType="SA00900Model.SYS_Language" />
           <FunctionImport Name="SA00900_GetLangJs" ReturnType="Collection(SA00900Model.SA00900_GetLangJs_Result)">
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <FunctionImport Name="SA00900_pgLoadLanguage" ReturnType="Collection(SA00900Model.SA00900_pgLoadLanguage_Result)" />
         </EntityContainer>
         <EntityType Name="SYS_Language">
           <Key>
@@ -60,6 +62,15 @@
         <ComplexType Name="SA00900_GetLangJs_Result">
           <Property Type="String" Name="Code" Nullable="false" MaxLength="20" />
           <Property Type="String" Name="Lang" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SA00900_pgLoadLanguage_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Lang00" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Lang01" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Lang02" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Lang03" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Lang04" Nullable="true" MaxLength="100" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -91,6 +102,19 @@
               <ComplexTypeMapping TypeName="SA00900Model.SA00900_GetLangJs_Result">
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Lang" ColumnName="Lang" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA00900_pgLoadLanguage" FunctionName="eBiz4DWebSysModel.Store.SA00900_pgLoadLanguage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00900Model.SA00900_pgLoadLanguage_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Lang00" ColumnName="Lang00" />
+                <ScalarProperty Name="Lang01" ColumnName="Lang01" />
+                <ScalarProperty Name="Lang02" ColumnName="Lang02" />
+                <ScalarProperty Name="Lang03" ColumnName="Lang03" />
+                <ScalarProperty Name="Lang04" ColumnName="Lang04" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -29,7 +29,7 @@ namespace SA00900.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
+        [OutputCache(Duration = 1000000, VaryByParam = "none")]
         public PartialViewResult Body()
         {
             return PartialView();
@@ -37,7 +37,7 @@ namespace SA00900.Controllers
 
         public ActionResult GetLanguage()
         {
-            return this.Store(_db.SYS_Language.ToList());
+            return this.Store(_db.SA00900_pgLoadLanguage().ToList());
         }
 
         [HttpPost]
@@ -47,8 +47,8 @@ namespace SA00900.Controllers
             {
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstLanguage"]);
-                ChangeRecords<SYS_Language> lstLang = dataHandler.BatchObjectData<SYS_Language>();
-                foreach (SYS_Language deleted in lstLang.Deleted)
+                ChangeRecords<SA00900_pgLoadLanguage_Result> lstLang = dataHandler.BatchObjectData<SA00900_pgLoadLanguage_Result>();
+                foreach (SA00900_pgLoadLanguage_Result deleted in lstLang.Deleted)
                 {
                     var del = _db.SYS_Language.Where(p => p.Code == deleted.Code).FirstOrDefault();
                     if (del != null)
@@ -59,7 +59,7 @@ namespace SA00900.Controllers
 
                 lstLang.Created.AddRange(lstLang.Updated);
 
-                foreach (SYS_Language curLang in lstLang.Created)
+                foreach (SA00900_pgLoadLanguage_Result curLang in lstLang.Created)
                 {
                     if (curLang.Code.PassNull() == "") continue;
 
@@ -99,7 +99,7 @@ namespace SA00900.Controllers
             }
         }
 
-        private void Update_Language(SYS_Language t, SYS_Language s, bool isNew)
+        private void Update_Language(SYS_Language t, SA00900_pgLoadLanguage_Result s, bool isNew)
         {
             if (isNew)
             {
