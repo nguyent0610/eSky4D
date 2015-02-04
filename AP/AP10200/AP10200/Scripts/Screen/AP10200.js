@@ -37,7 +37,7 @@ var tmpChangeForm1OrForm2 = "0";
 //AP10200 bien tam
 
 var tmpTranAmt = 0;
-
+var keys = [''];
 
 var menuClick = function (command) {
     switch (command) {
@@ -51,9 +51,9 @@ var menuClick = function (command) {
                 App.cboBatNbr.setValue(combobox.store.getAt(0).data.BatNbr);
 
             } else if (_focusrecord == 2) {
-                App.slmGrid.select(0);
+                HQ.grid.first(App.grd);
             }
-            
+
             break;
         case "prev":
             if (_focusrecord == 3) {
@@ -65,21 +65,21 @@ var menuClick = function (command) {
                 App.cboBatNbr.setValue(combobox.store.getAt(index - 1).data.BatNbr);
 
             } else if (_focusrecord == 2) {
-                App.slmGrid.selectPrevious();
+                HQ.grid.prev(App.grd);
             }
-            
+
             break;
         case "next":
             if (_focusrecord == 3) {
-                            
+
                 var combobox = App.cboBatNbr;
                 var v = combobox.getValue();
                 var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
                 var index = combobox.store.indexOf(record);
                 App.cboBatNbr.setValue(combobox.store.getAt(index + 1).data.BatNbr);
-               
+
             } else if (_focusrecord == 2) {
-                App.slmGrid.selectNext();
+                HQ.grid.next(App.grd);
             }
             break;
         case "last":
@@ -92,28 +92,27 @@ var menuClick = function (command) {
                 App.cboBatNbr.setValue(App.cboBatNbr.store.getAt(App.cboBatNbr.store.getTotalCount() - 1).data.BatNbr);
 
             } else if (_focusrecord == 2) {
-                App.slmGrid.select(App.storeGrid.getCount() - 1);
+                HQ.grid.last(App.grd);
             }
-            
 
-            
+
+
             break;
         case "refresh":
             App.storeFormTop.reload();
             App.storeFormBot.reload();
             App.storeGrid.reload();
-       
+
             break;
         case "new":
             if (HQ.isInsert) {
-              
-                if (_focusrecord == 2 )
-                {
+
+                if (_focusrecord == 2) {
                     if (App.frmBot.getForm().getRecord() != null) {
                         App.slmGrid.select(App.storeGrid.getCount() - 1);
 
-                    
-                        if(App.storeGrid.getCount() == 0) {
+
+                        if (App.storeGrid.getCount() == 0) {
                             App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());
                             App.slmGrid.select(App.storeGrid.getCount() - 1);
                             for (var i = 0; i < App.cboVendID.getStore().data.length; i++) {
@@ -123,7 +122,7 @@ var menuClick = function (command) {
                             }
                             App.slmGrid.selected.items[0].set('TranDesc', vendIDAndDescr)
                             App.grd.editingPlugin.startEditByPosition({ row: App.storeGrid.getCount() - 1, column: 1 });
-                        }else if(App.slmGrid.selected.items[0].data.TranAmt != ""){
+                        } else if (App.slmGrid.selected.items[0].data.TranAmt != "") {
                             App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());
                             App.slmGrid.select(App.storeGrid.getCount() - 1);
                             for (var i = 0; i < App.cboVendID.getStore().data.length; i++) {
@@ -135,26 +134,26 @@ var menuClick = function (command) {
                             App.grd.editingPlugin.startEditByPosition({ row: App.storeGrid.getCount() - 1, column: 1 });
                         }
                     }
-   
-               
+
+
 
                 } else if (_focusrecord == 3) {
-                 
-             
+
+
                     App.cboBatNbr.setValue('');
-                    
+
                     App.frmTop.getForm().reset(true);
-                    
+
                     App.cboRefNbr.getStore().reload();
                     App.cboRefNbr.setValue('');
-                    
+
                     setTimeout(function () { waitcboRefNbrForInsert(); }, 1500);
                     setTimeout(function () { setStatusValueH(); }, 1500);
                     setTimeout(function () { waitcboStatusReLoad(); }, 1700);
 
- 
+
                 }
-                  
+
             }
             break;
         case "delete":
@@ -163,23 +162,23 @@ var menuClick = function (command) {
                 if (App.cboBatNbr.value != "") {
 
                     if (_focusrecord == 3) {
-                         HQ.message.show(11, '', 'deleteRecordFormTopBatch');
+                        HQ.message.show(11, '', 'deleteRecordFormTopBatch');
                     } else if (_focusrecord == 2) {
-                         HQ.message.show(11, '', 'deleteRecordGrid')
-                    } 
+                        HQ.message.show(11, '', 'deleteRecordGrid')
+                    }
                 }
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-              
-                    if (checkRequire(App.storeGrid.getChangedData().Created)
-                        && checkRequire(App.storeGrid.getChangedData().Updated)) {
-                      
-                        Save();
-                    }
-           
-                  
+
+                if (checkRequire(App.storeGrid.getChangedData().Created)
+                    && checkRequire(App.storeGrid.getChangedData().Updated)) {
+
+                    Save();
+                }
+
+
             }
             break;
         case "print":
@@ -189,7 +188,7 @@ var menuClick = function (command) {
             Close();
             break;
     }
-       
+
 };
 
 var waitcboRefNbrForInsert = function () {
@@ -197,20 +196,25 @@ var waitcboRefNbrForInsert = function () {
     App.cboDocType.enable(true);
     App.grd.enable(true);
     var time = new Date();
-    var record = Ext.create("App.AP_DocClassModel", {
-        //CustId: "",
-        DocType: App.cboDocType.store.data.items[0].data.Code,
-        DocDate: time,
+    App.txtBranchID.setValue(HQ.cpnyID);
+    App.cboBankAcct.getStore().reload();
+    App.cboPONbr.getStore().reload();
+    if (App.storeFormBot.data.items.length == 0) {
+        var record = Ext.create("App.AP_DocClassModel", {
+            //CustId: "",
+            DocType: App.cboDocType.store.data.items[0].data.Code,
+            DocDate: time,
 
-        OrigDocAmt: 0,
-        DocBalL: 0,
-        BatNbr: App.cboBatNbr.getValue(),
-        BranchID: App.txtBranchID.getValue(),
+            OrigDocAmt: 0,
+            DocBalL: 0,
+            BatNbr: App.cboBatNbr.getValue(),
+            BranchID: App.txtBranchID.getValue(),
 
 
-    });
-    App.storeFormBot.insert(0, record);
-    App.frmBot.getForm().loadRecord(App.storeFormBot.getAt(0));
+        });
+        App.storeFormBot.insert(0, record);
+        App.frmBot.getForm().loadRecord(App.storeFormBot.getAt(0));
+    }
     App.cboBankAcct.setValue(App.cboBankAcct.store.data.items[0].data.BankAcct);
     App.txtOrigRefNbr.setValue("");
     App.txtVendName.setValue("");
@@ -245,15 +249,15 @@ function Save() {
         }
     }
     App.frmBot.getForm().updateRecord();
-    
+
     if (App.frm.isValid()) {
         App.frm.submit({
-            waitMsg: 'Submiting...',
+            waitMsg: HQ.common.getLang("WaitMsg"),
             url: 'AP10200/Save',
             params: {
-                lstheaderTop: Ext.encode(App.storeFormTop.getChangedData({ skipIdForPhantomRecords: false })),//,
-                lstheaderBot: Ext.encode(App.storeFormBot.getChangedData({ skipIdForPhantomRecords: false })),
-                lstgrd: Ext.encode(App.storeGrid.getChangedData({ skipIdForPhantomRecords: false })),
+                lstheaderTop: HQ.store.getData(App.storeFormTop),
+                lstheaderBot: HQ.store.getData(App.storeFormBot),
+                lstgrd: HQ.store.getData(App.storeGrid),
                 BranchID: App.txtBranchID.getValue(),
                 Handle: App.cboHandle.getValue(),
                 BatNbr: App.cboBatNbr.getValue(),
@@ -264,7 +268,7 @@ function Save() {
                 ReasonCD: App.cboBankAcct.getValue(),
             },
             success: function (result, data) {
-                 HQ.message.show(201405071, '', null);
+                HQ.message.show(201405071, '', null);
                 if (data.result.value == 0) {
                     //if (data.result.value1.toString() != "") {
                     //    App.cboRefNbr.getStore().reload();
@@ -294,7 +298,7 @@ function Save() {
                     //App.cboBatNbr.setValue(dt.value);
                     //App.cboTaxID.getStore().reload();
 
-                    
+
                 } else {
                     if (data.result.value2.toString() != "" && data.result.value1.toString() != "") {
                         App.cboBatNbr.getStore().reload();
@@ -316,9 +320,9 @@ function Save() {
                 //menuClick("refresh");
             }
             , failure: function (errorMsg, data) {
-              
+
                 var dt = Ext.decode(data.response.responseText);
-                 HQ.message.show(dt.code, dt.colName + ',' + dt.value, null);
+                HQ.message.show(dt.code, dt.colName + ',' + dt.value, null);
             }
         });
     } else {
@@ -351,7 +355,7 @@ function Close() {
         App.storeGrid.getChangedData().Created != undefined ||
         App.storeGrid.getChangedData().Deleted != undefined ||
         storeIsChange(App.storeForm, false)) {
-         HQ.message.show(5, '', 'closeScreen');
+        HQ.message.show(5, '', 'closeScreen');
     } else {
         parent.App.tabAP10200.close();
     }
@@ -379,16 +383,16 @@ var closeScreen = function (item) {
 };
 // Xac nhan xoa record cua form bot AP_Doc
 var deleteRecordFormTopBatch = function (item) {
-    if(item == "yes"){
-        
+    if (item == "yes") {
+
         try {
             App.direct.DeleteFormTopBatch(App.cboBatNbr.getValue(), App.txtBranchID.getValue(), {
                 success: function (data) {
                     //menuClick('refresh');
-                    
+
                     App.cboBatNbr.setValue('');
                     App.cboBatNbr.getStore().reload();
-                    
+
                     App.frmTop.getForm().reset(true);
                     App.cboRefNbr.getStore().reload();
                     App.cboRefNbr.setValue('');
@@ -400,7 +404,7 @@ var deleteRecordFormTopBatch = function (item) {
                     setTimeout(function () { waitcboStatusReLoad(); }, 700);
                     App.cboRefNbr.setValue('');
                     setReadOnly();
-                    
+
                     //window.location.reload();
                 },
                 failure: function () {
@@ -424,7 +428,7 @@ var deleteRecordFormTopBatch = function (item) {
 //                    //menuClick('refresh');
 //                    App.cboRefNbr.getStore().reload();
 //                    App.cboRefNbr.setValue('');
-                    
+
 
 //                    setTimeout(function () { waitStoreRefNbrReLoad(); }, 1000);
 
@@ -449,34 +453,33 @@ var deleteRecordGrid = function (item) {
 //check value
 
 //check value
-var isAllValidKey=function(items){      
-    if(items!=undefined){
-        for(var i=0; i<items.length; i++){
-            for(var j=0;j<keys.length;j++)
-            {
+var isAllValidKey = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            for (var j = 0; j < keys.length; j++) {
                 if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
-                    return false;  
+                    return false;
             }
         }
         return true;
-    }else{
+    } else {
         return true;
     }
 };
 
-function selectRecord (grid, record) {
-    var record = grid.store.getById(id);            
+function selectRecord(grid, record) {
+    var record = grid.store.getById(id);
     grid.store.loadPage(grid.store.findPage(record), {
-        callback : function () {
+        callback: function () {
             grid.getSelectionModel().select(record);
         }
-    });            
+    });
 }
 
 var grd_BeforeEdit = function (editor, e) {
     if (!HQ.isUpdate)
         return false;
-    keys = e.record.idProperty.split(',');
+    //keys = e.record.idProperty.split(',');
     if (keys.indexOf(e.field) != -1) {
         //if (e.record.data.TranAmt != "") {
         //    return false;
@@ -486,7 +489,7 @@ var grd_BeforeEdit = function (editor, e) {
 };
 
 var grd_Edit = function (item, e) {
-        
+
     if (keys.indexOf(e.field) != -1) {
         if (e.value != '' && isAllValidKey(App.storeGrid.getChangedData().Created) && isAllValidKey(App.storeGrid.getChangedData().Updated)) {
             //App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());//Ext.data.Record() 
@@ -505,9 +508,8 @@ var grd_Edit = function (item, e) {
 };
 
 var grd_ValidateEdit = function (item, e) {
-       
-    if (keys.indexOf(e.field) != -1)
-    {
+
+    if (keys.indexOf(e.field) != -1) {
         //if (duplicated(App.storeGrid, e))
         //{
         //     HQ.message.show(1112, e.value, '');
@@ -517,24 +519,22 @@ var grd_ValidateEdit = function (item, e) {
     }
     return true;
 };
-    
+
 var grd_CancelEdit = function (editor, e) {
     if (e.record.phantom) {
-        if (App.txtTranAmt.getValue == "")
-        {
+        if (App.txtTranAmt.getValue == "") {
             e.store.remove(e.record);
         }
     }
 };
-var grd_Reject= function (record){
-    if(record.data.tstamp=='')
-    {         
+var grd_Reject = function (record) {
+    if (record.data.tstamp == '') {
         App.storeGrid.remove(record);
         App.grd.getView().focusRow(App.storeGrid.getCount() - 1);
         App.grd.getSelectionModel().select(App.storeGrid.getCount() - 1);
     } else record.reject();
 };
-    
+
 //Phan trang tren grid
 var onComboBoxSelect = function (combo) {
     var store = combo.up("gridpanel").getStore();
@@ -583,6 +583,9 @@ var cboStatus_Change = function () {
 //}
 var cboBatNbr_Change = function () {
     App.cboHandle.setValue(App.cboHandle.store.data.items[0].data.Code);
+    App.txtBranchID.setValue(HQ.cpnyID);
+    App.cboBankAcct.getStore().reload();
+    App.cboPONbr.getStore().reload();
     App.cboVendID.enable(true);
     App.cboDocType.enable(true);
     App.storeFormTop.reload();
@@ -651,7 +654,7 @@ var waitStoreFormBotReLoad = function () {
 var cboVendID_Change = function () {
     App.cboPONbr.getStore().reload();
     //do trong store cua vendID va bat gia tri ten va dia chi bo vao 2 cai txtVendName va txtAddress
-    for(var i=0;i<App.cboVendID.store.data.length;i++){
+    for (var i = 0; i < App.cboVendID.store.data.length; i++) {
         if (App.cboVendID.value == App.cboVendID.store.data.items[i].data.VendID) {
             App.txtVendName.setValue(App.cboVendID.store.data.items[i].data.name);
             App.txtAddr.setValue(App.cboVendID.store.data.items[i].data.Address);
@@ -676,11 +679,11 @@ var setReadOnly = function () {
 
         App.txtOrigRefNbr.setReadOnly(true);
         App.dteDocDate.setReadOnly(true);
-       
+
         App.txtInvcNbr.setReadOnly(true);
-       
+
         App.cboBankAcct.setReadOnly(true);
-      
+
         App.cboPONbr.setReadOnly(true);
 
         App.grd.disable(true);
@@ -730,8 +733,8 @@ var txtTranAmt_Change = function (item) {
     App.txtCuryOrigDocAmt.setValue(TotalTranAmt);
     App.txtCuryDocBal.setValue(TotalTranAmt);
 
-        App.slmGrid.select(index);
-        App.grd.editingPlugin.startEditByPosition({ row: index, column: 1 });
+    App.slmGrid.select(index);
+    App.grd.editingPlugin.startEditByPosition({ row: index, column: 1 });
 
 
 
@@ -741,6 +744,27 @@ var waitSelectRowInGrid = function (index) {
 };
 
 
+var checkRequire = function (items) {
+    if (items != undefined) {
+        for (var i = 0; i < items.length; i++) {
+            if (items[i]["TranAmt"] == undefined)
+                continue;
+            if (items[i]["TranAmt"] == "")
+                continue;
+
+            if (items[i]["TranAmt"] == 0) {
+                HQ.message.show(15, '@Util.GetLang("TranAmt")', null);
+                return false;
+            }
+
+
+        }
+        return true;
+    }
+    else {
+        return true;
+    }
+};
 
 
 
