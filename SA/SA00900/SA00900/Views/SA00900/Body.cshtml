@@ -18,7 +18,7 @@
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Fit)
-        .Listeners(l => l.BoxReady.Handler = "HQ.common.setLang(App.frmMain);")
+    .Listeners(l => l.BoxReady.Handler = "HQ.common.setLang(App.frmMain);")
     .Items(
         ////Thiet ke giao dien o day
 
@@ -52,7 +52,7 @@
             .Commands(
                 X.GridCommand()
                 .Text("Reject")
-                .ToolTip(t => t.Text = Util.GetLang(""))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
                 .CommandName("reject")
                 .Icon(Icon.ArrowUndo)
             )

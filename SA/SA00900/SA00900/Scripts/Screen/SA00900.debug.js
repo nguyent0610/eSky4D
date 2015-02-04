@@ -62,7 +62,7 @@ var grdLanguage_BeforeEdit = function (editor, e) {
         if (e.record.data.tstamp != "")
             return false;
     }
-    return HQ.grid.checkInput(e,keys)
+    return HQ.grid.checkInput(e, keys);
 };
 var grdLanguage_Edit = function (item, e) {
     if (keys.indexOf(e.field) != -1) {

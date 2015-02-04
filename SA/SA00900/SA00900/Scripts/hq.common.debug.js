@@ -397,13 +397,17 @@ var HQ = {
                             itm.columns[i].setText(HQ.common.getLang(itm.columns[i].text));
                         }
                     }
-                    else if (itm.getXType() == "textFile") {
+                    else if (itm.getXType() == "combobox") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
                     }
-                    else if (itm.getXType() == "grid") {
+                    else if (itm.getXType() == "textfield") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
                     }
-                    else if (itm.getXType() == "grid") {
+                    else if (itm.getXType() == "checkbox") {
+                        itm.setBoxLabel(HQ.common.getLang(itm.boxLabel));
                     }
-                    else if (itm.getXType() == "grid") {
+                    else{
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
                     }
                     HQ.common.setLang(itm);
                 });
