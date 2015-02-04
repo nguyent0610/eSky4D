@@ -1,4 +1,4 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -7,6 +7,9 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
 
 namespace AR21300.Controllers
 {
@@ -17,15 +20,18 @@ namespace AR21300.Controllers
     {
         string screenNbr = "AR21300";
         AR21300Entities _db = Util.CreateObjectContext<AR21300Entities>(false);
-
         public ActionResult Index()
         {
-            return View(_db.AR_Area);//.OrderBy(x => x.tstamp)
+            Util.InitRight(screenNbr);
+            return View();
         }
-
+        public PartialViewResult Body()
+        {
+            return PartialView(_db.AR21300_pgLoadArea().ToList());
+        }
         public ActionResult GetData()
         {
-            return this.Store(_db.AR_Area);
+            return this.Store(_db.AR21300_pgLoadArea().ToList());
         }
         [DirectMethod]
         [HttpPost]      
@@ -121,6 +127,17 @@ namespace AR21300.Controllers
             d.LUpd_Datetime = DateTime.Now;
             d.LUpd_Prog = screenNbr;
             d.LUpd_User = Current.UserName;
+        }
+
+        [DirectMethod]
+        public ActionResult GetDataGrid()
+        {
+            var lst = _db.AR21300_pgLoadArea().ToList();
+
+            this.GetCmp<TextField>("stoArea").Data = lst;
+              
+
+            return this.Direct(lst);
         }
     }
 }

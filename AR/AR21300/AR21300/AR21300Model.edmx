@@ -22,12 +22,14 @@
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="AR21300_pgLoadArea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AR21300Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="AR21300Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="AR_Area" EntityType="AR21300Model.AR_Area" />
+          <FunctionImport Name="AR21300_pgLoadArea" ReturnType="Collection(AR21300Model.AR21300_pgLoadArea_Result)" />
         </EntityContainer>
         <EntityType Name="AR_Area">
           <Key>
@@ -43,6 +45,11 @@
           <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="AR21300_pgLoadArea_Result">
+          <Property Type="String" Name="Area" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -64,6 +71,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR21300_pgLoadArea" FunctionName="eBiz4DWebSysModel.Store.AR21300_pgLoadArea">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR21300Model.AR21300_pgLoadArea_Result">
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -85,7 +101,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="AR21300Model.AR_Area" Width="1.5" PointX="0.77339717781795048" PointY="16.865534969077228" />
+        <EntityTypeShape EntityType="AR21300Model.AR_Area" Width="1.5" PointX="2.875" PointY="16.75" />
       </Diagram>
     </Diagrams>
   </Designer>

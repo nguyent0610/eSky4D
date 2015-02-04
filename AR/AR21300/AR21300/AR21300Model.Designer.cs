@@ -95,6 +95,18 @@ namespace AR21300
 
         #endregion
 
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<AR21300_pgLoadArea_Result> AR21300_pgLoadArea()
+        {
+            return base.ExecuteFunction<AR21300_pgLoadArea_Result>("AR21300_pgLoadArea");
+        }
+
+        #endregion
+
     }
 
     #endregion
@@ -364,6 +376,115 @@ namespace AR21300
         #endregion
 
     
+    }
+
+    #endregion
+
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR21300Model", Name="AR21300_pgLoadArea_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR21300_pgLoadArea_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR21300_pgLoadArea_Result object.
+        /// </summary>
+        /// <param name="area">Initial value of the Area property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static AR21300_pgLoadArea_Result CreateAR21300_pgLoadArea_Result(global::System.String area, global::System.String descr, global::System.Byte[] tstamp)
+        {
+            AR21300_pgLoadArea_Result aR21300_pgLoadArea_Result = new AR21300_pgLoadArea_Result();
+            aR21300_pgLoadArea_Result.Area = area;
+            aR21300_pgLoadArea_Result.Descr = descr;
+            aR21300_pgLoadArea_Result.tstamp = tstamp;
+            return aR21300_pgLoadArea_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Area
+        {
+            get
+            {
+                return _Area;
+            }
+            set
+            {
+                OnAreaChanging(value);
+                ReportPropertyChanging("Area");
+                _Area = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Area");
+                OnAreaChanged();
+            }
+        }
+        private global::System.String _Area;
+        partial void OnAreaChanging(global::System.String value);
+        partial void OnAreaChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
     }
 
     #endregion
