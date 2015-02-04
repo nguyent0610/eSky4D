@@ -1,153 +1,40 @@
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (elt /*, from*/) {
+        var len = this.length >>> 0;
+
+        var from = Number(arguments[1]) || 0;
+        from = (from < 0)
+             ? Math.ceil(from)
+             : Math.floor(from);
+        if (from < 0)
+            from += len;
+
+        for (; from < len; from++) {
+            if (from in this &&
+                this[from] === elt)
+                return from;
+        }
+        return -1;
+    };
+}
+
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
+}
+
+if (!('forEach' in Array.prototype)) {
+    Array.prototype.forEach = function (action, that /*opt*/) {
+        for (var i = 0, n = this.length; i < n; i++)
+            if (i in this)
+                action.call(that, this[i], i, this);
+    };
+}
 
 var HQ = {
 
-    control: {
-        useThousand: function () {
-            //TrungHT 
-            Ext.define("ThousandSeparatorNumberField", {
-                override: "Ext.form.field.Number",
-
-                /**
-                * @cfg {Boolean} useThousandSeparator
-                */
-                useThousandSeparator: true,
-                //decimalPrecision: 0,
-                style: 'text-align: right',
-                fieldStyle: "text-align:right;",
-                /**
-                 * @inheritdoc
-                 */
-                toRawNumber: function (value) {
-                    return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
-                },
-
-                /**
-                 * @inheritdoc
-                 */
-                getErrors: function (value) {
-                    if (!this.useThousandSeparator)
-                        return this.callParent(arguments);
-                    var me = this,
-                        errors = Ext.form.field.Text.prototype.getErrors.apply(me, arguments),
-                        format = Ext.String.format,
-                        num;
-
-                    value = Ext.isDefined(value) ? value : this.processRawValue(this.getRawValue());
-
-                    if (value.length < 1) { // if it's blank and textfield didn't flag it then it's valid
-                        return errors;
-                    }
-
-                    value = me.toRawNumber(value);
-
-                    if (isNaN(value.replace(Ext.util.Format.thousandSeparator, ''))) {
-                        errors.push(format(me.nanText, value));
-                    }
-
-                    num = me.parseValue(value);
-
-                    if (me.minValue === 0 && num < 0) {
-                        errors.push(this.negativeText);
-                    }
-                    else if (num < me.minValue) {
-                        errors.push(format(me.minText, me.minValue));
-                    }
-
-                    if (num > me.maxValue) {
-                        errors.push(format(me.maxText, me.maxValue));
-                    }
-
-                    return errors;
-                },
-
-                /**
-                 * @inheritdoc
-                 */
-                valueToRaw: function (value) {
-                    if (!this.useThousandSeparator)
-                        return this.callParent(arguments);
-                    var me = this;
-
-                    var format = "000,000";
-                    for (var i = 0; i < me.decimalPrecision; i++) {
-                        if (i == 0)
-                            format += ".";
-                        format += "0";
-                    }
-                    value = me.parseValue(Ext.util.Format.number(value, format));
-                    value = me.fixPrecision(value);
-                    value = Ext.isNumber(value) ? value : parseFloat(me.toRawNumber(value));
-                    value = isNaN(value) ? '' : String(Ext.util.Format.number(value, format)).replace('.', me.decimalSeparator);
-                    return value;
-                },
-
-                /**
-                 * @inheritdoc
-                 */
-                getSubmitValue: function () {
-                    if (!this.useThousandSeparator)
-                        return this.callParent(arguments);
-                    var me = this,
-                        value = me.callParent();
-
-                    if (!me.submitLocaleSeparator) {
-                        value = me.toRawNumber(value);
-                    }
-                    return value;
-                },
-
-                /**
-                 * @inheritdoc
-                 */
-                setMinValue: function (value) {
-                    if (!this.useThousandSeparator)
-                        return this.callParent(arguments);
-                    var me = this,
-                        allowed;
-
-                    me.minValue = Ext.Number.from(value, Number.NEGATIVE_INFINITY);
-                    me.toggleSpinners();
-
-                    // Build regexes for masking and stripping based on the configured options
-                    if (me.disableKeyFilter !== true) {
-                        allowed = me.baseChars + '';
-
-                        if (me.allowExponential) {
-                            allowed += me.decimalSeparator + 'e+-';
-                        }
-                        else {
-                            allowed += Ext.util.Format.thousandSeparator;
-                            if (me.allowDecimals) {
-                                allowed += me.decimalSeparator;
-                            }
-                            if (me.minValue < 0) {
-                                allowed += '-';
-                            }
-                        }
-
-                        allowed = Ext.String.escapeRegex(allowed);
-                        me.maskRe = new RegExp('[' + allowed + ']');
-                        if (me.autoStripChars) {
-                            me.stripCharsRe = new RegExp('[^' + allowed + ']', 'gi');
-                        }
-                    }
-                },
-
-                /**
-                 * @private
-                 */
-                parseValue: function (value) {
-                    if (!this.useThousandSeparator)
-                        return this.callParent(arguments);
-                    value = parseFloat(this.toRawNumber(value));
-                    return isNaN(value) ? null : value;
-                }
-            });
-
-
-
-        }
-    },
+  
     store: {
         isChange: function (store) {
             if ((store.getChangedData().Created != undefined && store.getChangedData().Created.length > 1)
@@ -293,6 +180,32 @@ var HQ = {
                 };
             }
             return found;
+        },        
+        //Dùng trong ham before edit cua grid
+        //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
+        //Cot nao la key thi khoa lai khi da co du lieu
+        checkInput: function (row, keys) {
+            if (keys.indexOf(row.field) == -1) {
+
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") {
+                        return false;
+                    }
+                }
+            }
+            if (keys.indexOf(row.field) != -1) {
+                if (row.record.data[row.field] != "") return false;
+            }
+            return true;
+        },
+        //Kiem tra khi check require bo qua cac dong la new 
+        checkRequirePass: function (item,keys) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (item[keys[jkey]]) {
+                    return false;
+                }
+            }
+            return true;
         }
     },
     message: {
@@ -357,6 +270,7 @@ var HQ = {
             }
         },
         getLang: function (key) {
+            if (typeof HQLang == 'undefined') return key;
             if (HQLang[key] != undefined) {
                 return HQLang[key];
             } else {
@@ -374,6 +288,7 @@ var HQ = {
                 });
             }
         },
+		
         showBusy: function (busy, waitMsg, form) {
             if (form == undefined) {
                 if (busy) {
@@ -428,7 +343,7 @@ var HQ = {
             } else return str;
         }
     },
-   
+
     tooltip: {
         // TinhHV: show the tootip in grid
         showOnGrid: function (toolTip, grid, isHtmlEncode) {
@@ -454,7 +369,6 @@ var HQ = {
 };
 
 HQ.waitMsg = HQ.common.getLang('waitMsg');
-
 var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
@@ -485,3 +399,160 @@ var FilterCombo = function (control, stkeyFilter) {
         }
     }
 };
+Ext.define("ThousandSeparatorNumberField", {
+    override: "Ext.form.field.Number",
+
+    /**
+    * @cfg {Boolean} useThousandSeparator
+    */
+    useThousandSeparator: true,
+    decimalPrecision: 0,
+    style: 'text-align: right',
+    fieldStyle: "text-align:right;",
+    /**
+     * @inheritdoc
+     */
+    toRawNumber: function (value) {
+        return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
+    },
+
+    /**
+     * @inheritdoc
+     */
+    getErrors: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            errors = Ext.form.field.Text.prototype.getErrors.apply(me, arguments),
+            format = Ext.String.format,
+            num;
+
+        value = Ext.isDefined(value) ? value : this.processRawValue(this.getRawValue());
+
+        if (value.length < 1) { // if it's blank and textfield didn't flag it then it's valid
+            return errors;
+        }
+
+        value = me.toRawNumber(value);
+
+        if (isNaN(value.replace(Ext.util.Format.thousandSeparator, ''))) {
+            errors.push(format(me.nanText, value));
+        }
+
+        num = me.parseValue(value);
+
+        if (me.minValue === 0 && num < 0) {
+            errors.push(this.negativeText);
+        }
+        else if (num < me.minValue) {
+            errors.push(format(me.minText, me.minValue));
+        }
+
+        if (num > me.maxValue) {
+            errors.push(format(me.maxText, me.maxValue));
+        }
+
+        return errors;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    valueToRaw: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this;
+
+        var format = "000,000";
+        for (var i = 0; i < me.decimalPrecision; i++) {
+            if (i == 0)
+                format += ".";
+            format += "0";
+        }
+        value = me.parseValue(Ext.util.Format.number(value, format));
+        value = me.fixPrecision(value);
+        value = Ext.isNumber(value) ? value : parseFloat(me.toRawNumber(value));
+        value = isNaN(value) ? '' : String(Ext.util.Format.number(value, format)).replace('.', me.decimalSeparator);
+        return value;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    getSubmitValue: function () {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            value = me.callParent();
+
+        if (!me.submitLocaleSeparator) {
+            value = me.toRawNumber(value);
+        }
+        return value;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    setMinValue: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            allowed;
+
+        me.minValue = Ext.Number.from(value, Number.NEGATIVE_INFINITY);
+        me.toggleSpinners();
+
+        // Build regexes for masking and stripping based on the configured options
+        if (me.disableKeyFilter !== true) {
+            allowed = me.baseChars + '';
+
+            if (me.allowExponential) {
+                allowed += me.decimalSeparator + 'e+-';
+            }
+            else {
+                allowed += Ext.util.Format.thousandSeparator;
+                if (me.allowDecimals) {
+                    allowed += me.decimalSeparator;
+                }
+                if (me.minValue < 0) {
+                    allowed += '-';
+                }
+            }
+
+            allowed = Ext.String.escapeRegex(allowed);
+            me.maskRe = new RegExp('[' + allowed + ']');
+            if (me.autoStripChars) {
+                me.stripCharsRe = new RegExp('[^' + allowed + ']', 'gi');
+            }
+        }
+    },
+
+    /**
+     * @private
+     */
+    parseValue: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        value = parseFloat(this.toRawNumber(value));
+        return isNaN(value) ? null : value;
+    }
+});
+//window.onresize = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};
+//window.onload = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};
