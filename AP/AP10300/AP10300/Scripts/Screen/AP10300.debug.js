@@ -536,10 +536,12 @@ var Focus3_Change = function (sender, e) {
 var checkRequire = function (items) {
     if (items != undefined) {
         for (var i = 0; i < items.length; i++) {
-            if (items[i]["TranAmt"] == undefined)
-                continue;
-            if (items[i]["TranAmt"] == "")
-                continue;
+            //if (items[i]["TranAmt"] == undefined)
+            //    continue;
+            //if (items[i]["TranAmt"] == "")
+            //    continue;
+            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
+
 
             if (items[i]["TranAmt"] == 0) {
                  HQ.message.show(15, '@Util.GetLang("TranAmt")', null);
