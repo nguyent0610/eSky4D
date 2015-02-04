@@ -220,36 +220,6 @@ namespace AP10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="getType">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> APNumbering(global::System.String branchID, global::System.String getType)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter getTypeParameter;
-            if (getType != null)
-            {
-                getTypeParameter = new ObjectParameter("GetType", getType);
-            }
-            else
-            {
-                getTypeParameter = new ObjectParameter("GetType", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("APNumbering", branchIDParameter, getTypeParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="batNbr">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="vendID">No Metadata Documentation available.</param>
@@ -258,7 +228,7 @@ namespace AP10400
         /// <param name="toDate">No Metadata Documentation available.</param>
         /// <param name="dateType">No Metadata Documentation available.</param>
         /// <param name="isGridF3">No Metadata Documentation available.</param>
-        public ObjectResult<AP10400_BindingGrid_Result> AP10400_BindingGrid(global::System.String batNbr, global::System.String branchID, global::System.String vendID, global::System.String refNbr, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate, global::System.String dateType, global::System.String isGridF3)
+        public ObjectResult<AP10400_pgBindingGrid_Result> AP10400_pgBindingGrid(global::System.String batNbr, global::System.String branchID, global::System.String vendID, global::System.String refNbr, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate, global::System.String dateType, global::System.String isGridF3)
         {
             ObjectParameter batNbrParameter;
             if (batNbr != null)
@@ -340,7 +310,37 @@ namespace AP10400
                 isGridF3Parameter = new ObjectParameter("IsGridF3", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AP10400_BindingGrid_Result>("AP10400_BindingGrid", batNbrParameter, branchIDParameter, vendIDParameter, refNbrParameter, fromDateParameter, toDateParameter, dateTypeParameter, isGridF3Parameter);
+            return base.ExecuteFunction<AP10400_pgBindingGrid_Result>("AP10400_pgBindingGrid", batNbrParameter, branchIDParameter, vendIDParameter, refNbrParameter, fromDateParameter, toDateParameter, dateTypeParameter, isGridF3Parameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="getType">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AP10400_ppAPNumbering(global::System.String branchID, global::System.String getType)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter getTypeParameter;
+            if (getType != null)
+            {
+                getTypeParameter = new ObjectParameter("GetType", getType);
+            }
+            else
+            {
+                getTypeParameter = new ObjectParameter("GetType", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AP10400_ppAPNumbering", branchIDParameter, getTypeParameter);
         }
 
         #endregion
@@ -3604,7 +3604,6 @@ namespace AP10400
         /// <param name="city">Initial value of the City property.</param>
         /// <param name="classID">Initial value of the ClassID property.</param>
         /// <param name="country">Initial value of the Country property.</param>
-        /// <param name="dfltOrdFromId">Initial value of the DfltOrdFromId property.</param>
         /// <param name="eMailAddr">Initial value of the EMailAddr property.</param>
         /// <param name="expAcct">Initial value of the ExpAcct property.</param>
         /// <param name="expSub">Initial value of the ExpSub property.</param>
@@ -3638,7 +3637,7 @@ namespace AP10400
         /// <param name="crLmt">Initial value of the CrLmt property.</param>
         /// <param name="mOQVal">Initial value of the MOQVal property.</param>
         /// <param name="mOQType">Initial value of the MOQType property.</param>
-        public static AP_Vendor CreateAP_Vendor(global::System.String vendID, global::System.String addr1, global::System.String addr2, global::System.String attn, global::System.String city, global::System.String classID, global::System.String country, global::System.String dfltOrdFromId, global::System.String eMailAddr, global::System.String expAcct, global::System.String expSub, global::System.String fax, global::System.String phone, global::System.String remitCity, global::System.String remitCountry, global::System.String remitFax, global::System.String remitPhone, global::System.String remitSalut, global::System.String remitZip, global::System.String salut, global::System.String state, global::System.String status, global::System.String taxDflt, global::System.String taxId00, global::System.String taxId01, global::System.String taxId02, global::System.String taxId03, global::System.String taxLocId, global::System.String taxRegNbr, global::System.String terms, global::System.String zip, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double crLmt, global::System.Double mOQVal, global::System.String mOQType)
+        public static AP_Vendor CreateAP_Vendor(global::System.String vendID, global::System.String addr1, global::System.String addr2, global::System.String attn, global::System.String city, global::System.String classID, global::System.String country, global::System.String eMailAddr, global::System.String expAcct, global::System.String expSub, global::System.String fax, global::System.String phone, global::System.String remitCity, global::System.String remitCountry, global::System.String remitFax, global::System.String remitPhone, global::System.String remitSalut, global::System.String remitZip, global::System.String salut, global::System.String state, global::System.String status, global::System.String taxDflt, global::System.String taxId00, global::System.String taxId01, global::System.String taxId02, global::System.String taxId03, global::System.String taxLocId, global::System.String taxRegNbr, global::System.String terms, global::System.String zip, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double crLmt, global::System.Double mOQVal, global::System.String mOQType)
         {
             AP_Vendor aP_Vendor = new AP_Vendor();
             aP_Vendor.VendID = vendID;
@@ -3648,7 +3647,6 @@ namespace AP10400
             aP_Vendor.City = city;
             aP_Vendor.ClassID = classID;
             aP_Vendor.Country = country;
-            aP_Vendor.DfltOrdFromId = dfltOrdFromId;
             aP_Vendor.EMailAddr = eMailAddr;
             aP_Vendor.ExpAcct = expAcct;
             aP_Vendor.ExpSub = expSub;
@@ -3863,7 +3861,7 @@ namespace AP10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String DfltOrdFromId
         {
@@ -3875,7 +3873,7 @@ namespace AP10400
             {
                 OnDfltOrdFromIdChanging(value);
                 ReportPropertyChanging("DfltOrdFromId");
-                _DfltOrdFromId = StructuralObject.SetValidValue(value, false);
+                _DfltOrdFromId = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("DfltOrdFromId");
                 OnDfltOrdFromIdChanged();
             }
@@ -5571,15 +5569,15 @@ namespace AP10400
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AP10400Model", Name="AP10400_BindingGrid_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="AP10400Model", Name="AP10400_pgBindingGrid_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class AP10400_BindingGrid_Result : ComplexObject
+    public partial class AP10400_pgBindingGrid_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new AP10400_BindingGrid_Result object.
+        /// Create a new AP10400_pgBindingGrid_Result object.
         /// </summary>
         /// <param name="invcNbr">Initial value of the InvcNbr property.</param>
         /// <param name="docBal">Initial value of the DocBal property.</param>
@@ -5592,21 +5590,21 @@ namespace AP10400
         /// <param name="refNbr">Initial value of the RefNbr property.</param>
         /// <param name="isChanged">Initial value of the IsChanged property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static AP10400_BindingGrid_Result CreateAP10400_BindingGrid_Result(global::System.String invcNbr, global::System.Double docBal, global::System.String vendID, global::System.DateTime docDate, global::System.String descr, global::System.String docType, global::System.String batNbr, global::System.String branchID, global::System.String refNbr, global::System.String isChanged, global::System.Byte[] tstamp)
+        public static AP10400_pgBindingGrid_Result CreateAP10400_pgBindingGrid_Result(global::System.String invcNbr, global::System.Double docBal, global::System.String vendID, global::System.DateTime docDate, global::System.String descr, global::System.String docType, global::System.String batNbr, global::System.String branchID, global::System.String refNbr, global::System.String isChanged, global::System.Byte[] tstamp)
         {
-            AP10400_BindingGrid_Result aP10400_BindingGrid_Result = new AP10400_BindingGrid_Result();
-            aP10400_BindingGrid_Result.InvcNbr = invcNbr;
-            aP10400_BindingGrid_Result.DocBal = docBal;
-            aP10400_BindingGrid_Result.VendID = vendID;
-            aP10400_BindingGrid_Result.DocDate = docDate;
-            aP10400_BindingGrid_Result.Descr = descr;
-            aP10400_BindingGrid_Result.DocType = docType;
-            aP10400_BindingGrid_Result.BatNbr = batNbr;
-            aP10400_BindingGrid_Result.BranchID = branchID;
-            aP10400_BindingGrid_Result.RefNbr = refNbr;
-            aP10400_BindingGrid_Result.IsChanged = isChanged;
-            aP10400_BindingGrid_Result.tstamp = tstamp;
-            return aP10400_BindingGrid_Result;
+            AP10400_pgBindingGrid_Result aP10400_pgBindingGrid_Result = new AP10400_pgBindingGrid_Result();
+            aP10400_pgBindingGrid_Result.InvcNbr = invcNbr;
+            aP10400_pgBindingGrid_Result.DocBal = docBal;
+            aP10400_pgBindingGrid_Result.VendID = vendID;
+            aP10400_pgBindingGrid_Result.DocDate = docDate;
+            aP10400_pgBindingGrid_Result.Descr = descr;
+            aP10400_pgBindingGrid_Result.DocType = docType;
+            aP10400_pgBindingGrid_Result.BatNbr = batNbr;
+            aP10400_pgBindingGrid_Result.BranchID = branchID;
+            aP10400_pgBindingGrid_Result.RefNbr = refNbr;
+            aP10400_pgBindingGrid_Result.IsChanged = isChanged;
+            aP10400_pgBindingGrid_Result.tstamp = tstamp;
+            return aP10400_pgBindingGrid_Result;
         }
 
         #endregion

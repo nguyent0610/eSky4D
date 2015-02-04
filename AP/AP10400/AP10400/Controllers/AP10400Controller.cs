@@ -1,4 +1,4 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 
@@ -44,7 +44,7 @@ namespace AP10400.Controllers
 
         public ActionResult GetDataGrid(String batNbr, String branchID, String vendID, String refNbr, DateTime fromDate, DateTime toDate, String dateType, String isGridF3)
         {
-            var lst = _db.AP10400_BindingGrid(batNbr, branchID, vendID, refNbr, fromDate, toDate, dateType, isGridF3);
+            var lst = _db.AP10400_pgBindingGrid(batNbr, branchID, vendID, refNbr, fromDate, toDate, dateType, isGridF3);
 
             return this.Store(lst);
         }
@@ -58,9 +58,9 @@ namespace AP10400.Controllers
             StoreDataHandler dataHandlerBot = new StoreDataHandler(data["lstheaderBotRight"]);
             ChangeRecords<AP_Doc> lstheaderBotRight = dataHandlerBot.BatchObjectData<AP_Doc>();
             StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AP10400_BindingGrid_Result> lstgrd = dataHandlerGrid.BatchObjectData<AP10400_BindingGrid_Result>();
+            ChangeRecords<AP10400_pgBindingGrid_Result> lstgrd = dataHandlerGrid.BatchObjectData<AP10400_pgBindingGrid_Result>();
 
-            var docDate = data["txtDocDate"];
+            var docDate = data["dteDocDate"];
            
             var toAmt = data["txtCuryCrTot"];
             var tmpGridChangeOrNot = 0;
@@ -220,7 +220,7 @@ namespace AP10400.Controllers
 
             }
 
-            foreach (AP10400_BindingGrid_Result created in lstgrd.Created)
+            foreach (AP10400_pgBindingGrid_Result created in lstgrd.Created)
             {
                 var record = _db.AP_Adjust.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.AdjdRefNbr == created.RefNbr && p.AdjgRefNbr == refNbr).FirstOrDefault();
                 if (record == null)
@@ -240,7 +240,7 @@ namespace AP10400.Controllers
                 }
             }
 
-            foreach (AP10400_BindingGrid_Result updated in lstgrd.Updated)
+            foreach (AP10400_pgBindingGrid_Result updated in lstgrd.Updated)
             {
                 var record = _db.AP_Adjust.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.AdjdRefNbr == updated.RefNbr && p.AdjgRefNbr == refNbr).FirstOrDefault();
                 if (record != null)
@@ -264,7 +264,7 @@ namespace AP10400.Controllers
                 }
             }
 
-            foreach (AP10400_BindingGrid_Result deleted in lstgrd.Deleted)
+            foreach (AP10400_pgBindingGrid_Result deleted in lstgrd.Deleted)
             {
                 var record = _db.AP_Adjust.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.AdjdRefNbr == deleted.RefNbr && p.AdjgRefNbr == refNbr).FirstOrDefault();
                 if (record != null)
@@ -385,7 +385,7 @@ namespace AP10400.Controllers
             d.LUpd_User = Current.UserName;
         }
 
-        private void UpdatingGridAd_Adjust(AP10400_BindingGrid_Result s, ref AP_Adjust d)
+        private void UpdatingGridAd_Adjust(AP10400_pgBindingGrid_Result s, ref AP_Adjust d)
         {
             d.AdjdBatNbr = s.BatNbr;
             d.AdjdRefNbr = s.RefNbr;
@@ -401,13 +401,13 @@ namespace AP10400.Controllers
 
         private string functionBatNbrIfNull(string branchID)
         {
-            var recordLastBatNbr = _db.APNumbering(branchID, "BatNbr").FirstOrDefault();
+            var recordLastBatNbr = _db.AP10400_ppAPNumbering(branchID, "BatNbr").FirstOrDefault();
             return recordLastBatNbr;
         }
 
         private string functionRefNbrIfNull(string branchID)
         {
-            var recordLastBatNbr = _db.APNumbering(branchID, "RefNbr").FirstOrDefault();
+            var recordLastBatNbr = _db.AP10400_ppAPNumbering(branchID, "RefNbr").FirstOrDefault();
             return recordLastBatNbr;
         }
        
