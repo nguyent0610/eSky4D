@@ -6,7 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using System.Configuration;
 
 namespace SI20600
@@ -38,7 +38,7 @@ namespace SI20600
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server = "PCHQ-PC";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "eBiz4DCloudSysMVC";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
@@ -47,9 +47,9 @@ namespace SI20600
             Session["SI20600"] = acc;
             Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppMVC";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "18510580";
-            Session["Language"] = Current.Language = "en";
-            Session["LangID"] = 0;
+            Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004";
+            Session["Language"] = Current.Language = "vi";
+            Session["LangID"] = 1;
         }
     }
 }

@@ -95,6 +95,18 @@ namespace SI20600
 
         #endregion
 
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SI20600_pgLoadGrid_Result> SI20600_pgLoadGrid()
+        {
+            return base.ExecuteFunction<SI20600_pgLoadGrid_Result>("SI20600_pgLoadGrid");
+        }
+
+        #endregion
+
     }
 
     #endregion
@@ -362,6 +374,113 @@ namespace SI20600
         #endregion
 
     
+    }
+
+    #endregion
+
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SI20600Model", Name="SI20600_pgLoadGrid_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SI20600_pgLoadGrid_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SI20600_pgLoadGrid_Result object.
+        /// </summary>
+        /// <param name="countryID">Initial value of the CountryID property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SI20600_pgLoadGrid_Result CreateSI20600_pgLoadGrid_Result(global::System.String countryID, global::System.Byte[] tstamp)
+        {
+            SI20600_pgLoadGrid_Result sI20600_pgLoadGrid_Result = new SI20600_pgLoadGrid_Result();
+            sI20600_pgLoadGrid_Result.CountryID = countryID;
+            sI20600_pgLoadGrid_Result.tstamp = tstamp;
+            return sI20600_pgLoadGrid_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CountryID
+        {
+            get
+            {
+                return _CountryID;
+            }
+            set
+            {
+                OnCountryIDChanging(value);
+                ReportPropertyChanging("CountryID");
+                _CountryID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CountryID");
+                OnCountryIDChanged();
+            }
+        }
+        private global::System.String _CountryID;
+        partial void OnCountryIDChanging(global::System.String value);
+        partial void OnCountryIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
     }
 
     #endregion
