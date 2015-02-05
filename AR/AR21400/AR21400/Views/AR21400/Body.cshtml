@@ -21,110 +21,100 @@
  @(X.Viewport()
   .Layout(LayoutType.Fit)
   .Items(
-        X.Window()
-         .Layout(LayoutType.Fit)
-         .Maximized(true)
-         .Closable(false)
-         .TitleCollapse(true)
-         .Header(false)
-         .KeyMap(Util.SetupKeyMap())
-         .TopBar(Util.SetupToolbar("AR21400"))
-         .Items(
-               X.FormPanel()
-                .ID("frmMain")
-                .DefaultAnchor("100%")
-                .BodyPadding(0)
-                .Layout(LayoutType.Fit)
-                .Height(480)
-                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
-                .Items(
-                      X.GridPanel()
-                       .Frame(true)
-                       .AnchorHorizontal("100%")
-                       .AnchorVertical("100%")
-                       .RenderTo("contentCenter")
-                       .Scroll(ScrollMode.Both)
-                       .View(X.GridView().TrackOver(false))
-                       .ID("grdSellingProducts")
-                       .Store(
-                             X.Store().ID("stoSellingProducts")    
-                              .RemotePaging(true)
-                              //.DataSource(Model)
-                              .PageSize(50)
-                              .Model(Util.GenerateModel(typeof(AR21400_pgLoadSellingProducts_Result), "AR_SellingProductsModel", "Code"))                                                                                                                                  
-                              .ServerProxy(
-                                          X.AjaxProxy()
-                                           .Url(Url.Action("GetData"))
-                                          )                                            
-                             )
-                       .SortableColumns(false)
-                       .Listeners(l =>
-                                    {
-                                        l.BoxReady.Fn = "AutoLoadGrid";
-                                    })
-                       .ColumnModel(
-                                   X.RowNumbererColumn(),
-                                   X.Column().Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().MaxLength(10)),
-                                   X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(200)),
-                                   X.CommandColumn().Width(150)
-                                                    .Commands(
-                                                             X.GridCommand()
-                                                              .Text(Util.GetLang("Reject"))
-                                                              .ToolTip(t =>
-                                                                        {
-                                                                            t.Text = Util.GetLang("Rejectrowchanges");
-                                                                        })
-                                                              .CommandName("reject")
-                                                              .Icon(Icon.ArrowUndo)
-                                                             )
-                                                    .PrepareToolbar(t =>
-                                                                    {
-                                                                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                                                                    })
-                                                    .Listeners(l =>
+        X.FormPanel()
+        .ID("frmMain")
+        .DefaultAnchor("100%")
+        .BodyPadding(0)
+        .Layout(LayoutType.Fit)
+        .Height(480)
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
+        .Items(
+                X.GridPanel()
+                .Frame(true)
+                .AnchorHorizontal("100%")
+                .AnchorVertical("100%")
+                .RenderTo("contentCenter")
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false))
+                .ID("grdSellingProducts")
+                .Store(
+                        X.Store().ID("stoSellingProducts")    
+                        .RemotePaging(true)
+                        //.DataSource(Model)
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(AR21400_pgLoadSellingProducts_Result), "AR_SellingProductsModel", "Code"))                                                                                                                                  
+                        .ServerProxy(
+                                    X.AjaxProxy()
+                                    .Url(Url.Action("GetData"))
+                                    )                                            
+                        )
+                .SortableColumns(false)
+                .Listeners(l =>
+                            {
+                                l.BoxReady.Fn = "AutoLoadGrid";
+                            })
+                .ColumnModel(
+                            X.RowNumbererColumn(),
+                            X.Column().Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().MaxLength(10)),
+                            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(200)),
+                            X.CommandColumn().Width(150)
+                                            .Commands(
+                                                        X.GridCommand()
+                                                        .Text(Util.GetLang("Reject"))
+                                                        .ToolTip(t =>
                                                                 {
-                                                                    l.Command.Handler = "grdSellingProducts_Reject(record);";
+                                                                    t.Text = Util.GetLang("Rejectrowchanges");
                                                                 })
-                                    )
-                       .SelectionModel(X.RowSelectionModel().ID("slmSellingProducts").Mode(SelectionMode.Multi))
-                       .BottomBar(//Phan trang       
-                                 X.PagingToolbar().ID("PagingToolbar")
-                                  .Items(
-                                        X.Label("Page size:"),
-                                        X.ToolbarSpacer(10),
-                                        X.ComboBox()
-                                         .Width(80)
-                                         .Items("1", "2", "10", "20", "30", "50")
-                                         .SelectedItems("50")
-                                         .Listeners(l =>
-                                                    {
-                                                        l.Select.Fn = "HQ.grid.onPageSelect";
-                                                    })
-                                         )
-                                   .Plugins(X.ProgressBarPager())
-                                 )
-                       .Plugins( //Cho phep edit
-                                X.CellEditing()
-                                .ClicksToEdit(1)
-                                .Listeners(ls =>
+                                                        .CommandName("reject")
+                                                        .Icon(Icon.ArrowUndo)
+                                                        )
+                                            .PrepareToolbar(t =>
+                                                            {
+                                                                t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                                            })
+                                            .Listeners(l =>
+                                                        {
+                                                            l.Command.Handler = "grdSellingProducts_Reject(record);";
+                                                        })
+                            )
+                .SelectionModel(X.RowSelectionModel().ID("slmSellingProducts").Mode(SelectionMode.Multi))
+                .BottomBar(//Phan trang       
+                            X.PagingToolbar().ID("PagingToolbar")
+                            .Items(
+                                X.Label("Page size:"),
+                                X.ToolbarSpacer(10),
+                                X.ComboBox()
+                                    .Width(80)
+                                    .Items("1", "2", "10", "20", "30", "50")
+                                    .SelectedItems("50")
+                                    .Listeners(l =>
                                             {
-                                                ls.BeforeEdit.Fn = "grdSellingProducts_BeforeEdit";
-                                                ls.Edit.Fn = "grdSellingProducts_Edit";
-                                                ls.ValidateEdit.Fn = "grdSellingProducts_ValidateEdit";
-                                                ls.CancelEdit.Fn = "grdSellingProducts_CancelEdit";
-                                            })        
-                               )
-                       .Features(
-                                X.GridFilters()//Filter
-                                 .Local(true)
-                                 .Filters(
-                                         X.StringFilter().DataIndex("Code"),
-                                         X.StringFilter().DataIndex("Descr")                                                        
-                                         )             
-                                )
+                                                l.Select.Fn = "HQ.grid.onPageSelect";
+                                            })
+                                    )
+                            .Plugins(X.ProgressBarPager())
+                            )
+                .Plugins( //Cho phep edit
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                                    {
+                                        ls.BeforeEdit.Fn = "grdSellingProducts_BeforeEdit";
+                                        ls.Edit.Fn = "grdSellingProducts_Edit";
+                                        ls.ValidateEdit.Fn = "grdSellingProducts_ValidateEdit";
+                                        ls.CancelEdit.Fn = "grdSellingProducts_CancelEdit";
+                                    })        
+                        )
+                .Features(
+                        X.GridFilters()//Filter
+                            .Local(true)
+                            .Filters(
+                                    X.StringFilter().DataIndex("Code"),
+                                    X.StringFilter().DataIndex("Descr")                                                        
+                                    )             
+                        )
        
 
-                    )
-                )
-           )
+            )
+        )         
 )

@@ -42,6 +42,6 @@
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         <!-- Gọi hàm Body trong AR21400Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
-        @{Html.RenderAction("Body");}
+        @{Html.RenderAction("Body",new {lang = @Current.LangID});}
 </body>
 </html>

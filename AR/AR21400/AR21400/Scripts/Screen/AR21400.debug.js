@@ -61,13 +61,12 @@ var menuClick = function (command) {
 };
 // Danh cho grid ///////////////////////////////////////////////////////
 var grdSellingProducts_BeforeEdit = function (editor, e) {
-    if (!HQ.isUpdate) return false;
-    //keys = e.record.idProperty.split(',');
+    if (!HQ.isUpdate) return false;  
     if (keys.indexOf(e.field) != -1) {
         if (e.record.data.tstamp != "")
             return false;
     }
-
+    return HQ.grid.checkInput(e, keys);
 };
 var grdSellingProducts_Edit = function (item, e) {
 
@@ -130,13 +129,13 @@ var deleteData = function (item) {
 var checkRequire = function (items) {
     if (items != undefined) {
         for (var i = 0; i < items.length; i++) {
-            if (items[i]["Code"] == undefined) continue;
+            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
             if (items[i]["Code"].trim() == "") {
-                callMessage(15, '@Util.GetLang("Code")', null);
+                callMessage(15, HQ.common.getLang("Code"));
                 return false;
             }
             if (items[i]["Descr"].trim() == "") {
-                callMessage(15, '@Util.GetLang("Descr")', null);
+                callMessage(15, HQ.common.getLang("Descr"));
                 return false;
             }
 
