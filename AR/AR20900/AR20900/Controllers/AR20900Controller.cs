@@ -1,4 +1,4 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -7,7 +7,9 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
 namespace AR20900.Controllers
 {
     [DirectController]
@@ -15,113 +17,99 @@ namespace AR20900.Controllers
     [CheckSessionOut]
     public class AR20900Controller : Controller
     {
-        string screenNbr = "AR20900";
+        private string _screenNbr = "AR20900";
+        private string _userName = Current.UserName;
+
         AR20900Entities _db = Util.CreateObjectContext<AR20900Entities>(false);
 
         public ActionResult Index()
         {
-            return View(_db.AR_Territory);
+
+            Util.InitRight(_screenNbr);
+            return View();
         }
 
-        public ActionResult GetData()
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
-            return this.Store(_db.AR_Territory);
+            return PartialView();
         }
-        [DirectMethod]
-        [HttpPost]      
+
+        public ActionResult GetTerritory()
+        {
+            return this.Store(_db.AR20900_pgLoadTerritory().ToList());
+        }
+
+        [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AR_Territory> lstMsg = dataHandler.BatchObjectData<AR_Territory>();
-            foreach (AR_Territory deleted in lstMsg.Deleted)
-            {
-                var del = _db.AR_Territory.Where(p => p.Territory == deleted.Territory).FirstOrDefault();
-                if (del != null)
-                {
-                    _db.AR_Territory.DeleteObject(del);
-                }
-              
-            }
-            foreach (AR_Territory created in lstMsg.Created)
-            {
-                if (created.Territory == "") continue;
-                var record = _db.AR_Territory.Where(p => p.Territory == created.Territory).FirstOrDefault();
 
-                if (created.tstamp.ToHex() == "")
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstTerritory"]);
+                ChangeRecords<AR_Territory> lstTerritory = dataHandler.BatchObjectData<AR_Territory>();
+                foreach (AR_Territory deleted in lstTerritory.Deleted)
                 {
-                    if (record == null)
+                    var del = _db.AR_Territory.Where(p => p.Territory == deleted.Territory).FirstOrDefault();
+                    if (del != null)
                     {
-                        record = new AR_Territory();
-                        record.Territory = created.Territory;
-                        record.Crtd_DateTime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingAR_Territory(created, ref record);
-                        _db.AR_Territory.AddObject(record);
+                        _db.AR_Territory.DeleteObject(del);
+                    }
+                }
+
+                lstTerritory.Created.AddRange(lstTerritory.Updated);
+
+                foreach (AR_Territory curTerritory in lstTerritory.Created)
+                {
+                    if (curTerritory.Territory.PassNull() == "") continue;
+
+                    var territory = _db.AR_Territory.Where(p => p.Territory.ToLower() == curTerritory.Territory.ToLower()).FirstOrDefault();
+
+                    if (territory != null)
+                    {
+                        if (territory.tstamp.ToHex() == curTerritory.tstamp.ToHex())
+                        {
+                            Update_AR_Territory(territory, curTerritory, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
                     }
                     else
                     {
-                        Message.Show(2000, new string[] { Util.GetLang("Territory"), record.Territory.ToString() }, null);
-                        return this.Direct();
-                        //tra ve loi da ton tai ma ngon ngu nay ko the them
+                        territory = new AR_Territory();
+                        Update_AR_Territory(territory, curTerritory, true);
+                        _db.AR_Territory.AddObject(territory);
                     }
                 }
-                else
-                {
-                    Message.Show(2000, new string[] { Util.GetLang("Territory"), record.Territory.ToString() }, null);
-                    return this.Direct();
-                    //tra ve loi da ton tai ma ngon ngu nay ko the them
-                }
 
+                _db.SaveChanges();
 
-            }
-
-            
-
-            foreach (AR_Territory updated in lstMsg.Updated)
-            {
-                var record = _db.AR_Territory.Where(p => p.Territory == updated.Territory).FirstOrDefault();
-                                
-                if (record != null)
-                {
-                    UpdatingAR_Territory(updated, ref record);
-                }
-                else
-                {
-                    record = new AR_Territory();
-                    record.Territory = updated.Territory;
-                    record.Crtd_DateTime = DateTime.Now;
-                    record.Crtd_Prog = screenNbr;
-                    record.Crtd_User = Current.UserName;                
-                    UpdatingAR_Territory(updated, ref record);
-                    _db.AR_Territory.AddObject(record);
-                }
-                
-
-            }
-            _db.SaveChanges();
-
-            return Json(new { success = true });
-              
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-
-                return Json(new { success = false, errorMsg = ex.ToString()});
-                
-              
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
 
-        private void UpdatingAR_Territory(AR_Territory s, ref AR_Territory d)
+        private void Update_AR_Territory(AR_Territory t, AR_Territory s, bool isNew)
         {
-            d.Descr = s.Descr;
-                   
-            d.LUpd_DateTime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
+            if (isNew)
+            {
+                t.Territory = s.Territory;
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.Descr = s.Descr;
+
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
         }
+
     }
 }

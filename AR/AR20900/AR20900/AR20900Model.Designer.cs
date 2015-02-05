@@ -95,6 +95,18 @@ namespace AR20900
 
         #endregion
 
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<AR20900_pgLoadTerritory_Result> AR20900_pgLoadTerritory()
+        {
+            return base.ExecuteFunction<AR20900_pgLoadTerritory_Result>("AR20900_pgLoadTerritory");
+        }
+
+        #endregion
+
     }
 
     #endregion
@@ -362,6 +374,113 @@ namespace AR20900
         #endregion
 
     
+    }
+
+    #endregion
+
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR20900Model", Name="AR20900_pgLoadTerritory_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR20900_pgLoadTerritory_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR20900_pgLoadTerritory_Result object.
+        /// </summary>
+        /// <param name="territory">Initial value of the Territory property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static AR20900_pgLoadTerritory_Result CreateAR20900_pgLoadTerritory_Result(global::System.String territory, global::System.Byte[] tstamp)
+        {
+            AR20900_pgLoadTerritory_Result aR20900_pgLoadTerritory_Result = new AR20900_pgLoadTerritory_Result();
+            aR20900_pgLoadTerritory_Result.Territory = territory;
+            aR20900_pgLoadTerritory_Result.tstamp = tstamp;
+            return aR20900_pgLoadTerritory_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
     }
 
     #endregion

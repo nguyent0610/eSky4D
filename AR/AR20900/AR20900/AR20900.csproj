@@ -43,27 +43,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="eBiz4DWeb">
-      <HintPath>..\..\EbizWebMvc\AR20900_Language\AR20900\bin\eBiz4DWeb.dll</HintPath>
-    </Reference>
-    <Reference Include="eBiz4DWebFrame, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\eBiz4DWebFrame\bin\eBiz4DWebFrame.dll</HintPath>
-    </Reference>
-    <Reference Include="eBiz4DWebSys">
-      <HintPath>..\..\EbizWebMvc\AR20900_Language\AR20900\bin\eBiz4DWebSys.dll</HintPath>
-    </Reference>
-    <Reference Include="Encryption">
-      <HintPath>..\..\..\eBiz4DWebFrame\bin\Encryption.dll</HintPath>
-    </Reference>
     <Reference Include="Ext.Net">
       <HintPath>..\..\EbizWebMvc\AR20900_Language\AR20900\bin\Ext.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net.Utilities">
       <HintPath>..\..\EbizWebMvc\AR20900_Language\AR20900\bin\Ext.Net.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="HQWebCommon">
-      <HintPath>..\..\EbizWebMvc\SI20500_City\SI20500\bin\HQWebCommon.dll</HintPath>
+    <Reference Include="HQ.eSkyFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\eBiz4DSky\Dll\HQ.eSkyFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="HQ.eSkySys, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\eBiz4DSky\Dll\HQ.eSkySys.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -87,9 +79,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -227,7 +216,9 @@
       <LastGenOutput>AR20900Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
-    <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\hq.common.debug.js" />
+    <Content Include="Scripts\hq.common.js" />
+    <Content Include="Scripts\hq.language1.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -242,6 +233,8 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\Screen\AR20900.debug.js" />
+    <Content Include="Scripts\Screen\AR20900.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -257,10 +250,12 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\AR20900\Index.cshtml" />
+    <Content Include="Views\AR20900\Body.cshtml" />
+    <Content Include="Views\Shared\_BaseLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Content\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -284,7 +279,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>5753</DevelopmentServerPort>
+          <DevelopmentServerPort>14806</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:2019/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
@@ -294,6 +289,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
