@@ -22,12 +22,14 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="SI20900_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SI20900Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SI20900Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SI_TaxCat" EntityType="SI20900Model.SI_TaxCat" />
+          <FunctionImport Name="SI20900_pgLoadGrid" ReturnType="Collection(SI20900Model.SI20900_pgLoadGrid_Result)" />
         </EntityContainer>
         <EntityType Name="SI_TaxCat">
           <Key>
@@ -43,6 +45,11 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="SI20900_pgLoadGrid_Result">
+          <Property Type="String" Name="CatID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -64,6 +71,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SI20900_pgLoadGrid" FunctionName="eBiz4DWebSysModel.Store.SI20900_pgLoadGrid">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI20900Model.SI20900_pgLoadGrid_Result">
+                <ScalarProperty Name="CatID" ColumnName="CatID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -85,7 +101,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="SI20900Model.SI_TaxCat" Width="1.5" PointX="4.625" PointY="0.5" />
+        <EntityTypeShape EntityType="SI20900Model.SI_TaxCat" Width="1.5" PointX="6.8820235779890906" PointY="28.803400604428443" />
       </Diagram>
     </Diagrams>
   </Designer>

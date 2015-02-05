@@ -95,6 +95,18 @@ namespace SI20900
 
         #endregion
 
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SI20900_pgLoadGrid_Result> SI20900_pgLoadGrid()
+        {
+            return base.ExecuteFunction<SI20900_pgLoadGrid_Result>("SI20900_pgLoadGrid");
+        }
+
+        #endregion
+
     }
 
     #endregion
@@ -364,6 +376,115 @@ namespace SI20900
         #endregion
 
     
+    }
+
+    #endregion
+
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SI20900Model", Name="SI20900_pgLoadGrid_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SI20900_pgLoadGrid_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SI20900_pgLoadGrid_Result object.
+        /// </summary>
+        /// <param name="catID">Initial value of the CatID property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SI20900_pgLoadGrid_Result CreateSI20900_pgLoadGrid_Result(global::System.String catID, global::System.String descr, global::System.Byte[] tstamp)
+        {
+            SI20900_pgLoadGrid_Result sI20900_pgLoadGrid_Result = new SI20900_pgLoadGrid_Result();
+            sI20900_pgLoadGrid_Result.CatID = catID;
+            sI20900_pgLoadGrid_Result.Descr = descr;
+            sI20900_pgLoadGrid_Result.tstamp = tstamp;
+            return sI20900_pgLoadGrid_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CatID
+        {
+            get
+            {
+                return _CatID;
+            }
+            set
+            {
+                OnCatIDChanging(value);
+                ReportPropertyChanging("CatID");
+                _CatID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CatID");
+                OnCatIDChanged();
+            }
+        }
+        private global::System.String _CatID;
+        partial void OnCatIDChanging(global::System.String value);
+        partial void OnCatIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
     }
 
     #endregion
