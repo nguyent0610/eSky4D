@@ -67,7 +67,8 @@ var grdCostType_BeforeEdit = function (editor, e) {
         if (e.record.data.tstamp != "")
             return false;
     }
-
+    
+    return HQ.grid.checkInput(e, keys);
 };
 var grdCostType_Edit = function (item, e) {
 
@@ -83,10 +84,7 @@ var grdCostType_ValidateEdit = function (item, e) {
             return false;
         }
         var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-        if (e.value.match(regex)) {
-            return true;
-
-        } else {
+        if (!e.value.match(regex)) {      
             HQ.message.show(20140811, e.column.text);
             return false;
         }
@@ -157,7 +155,7 @@ var isAllValidKey = function (items) {
 var checkRequire = function (items) {
     if (items != undefined) {
         for (var i = 0; i < items.length; i++) {
-            if (items[i]["TypeID"] == undefined) continue;
+            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
             if (items[i]["TypeID"].trim() == "") {
                 HQ.message.show(15, HQ.common.getLang("TypeID"));
                 return false;
