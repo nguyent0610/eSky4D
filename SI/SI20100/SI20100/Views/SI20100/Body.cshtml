@@ -42,16 +42,16 @@
         .ColumnModel(
         
          X.RowNumbererColumn()
-                    , X.Column().Text(("Buyer")).DataIndex("Buyer").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))
-                    , X.Column().Text(("BuyerName")).DataIndex("BuyerName").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true))
+                    , X.Column().Text(Util.GetLang("Buyer")).DataIndex("Buyer").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))
+                    , X.Column().Text(Util.GetLang("BuyerName")).DataIndex("BuyerName").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true))
                     
                     , X.CommandColumn().Width(150)
                     .Commands(
                             X.GridCommand()
-                            .Text(("Reject"))
+                            .Text(Util.GetLang("Reject"))
                             .ToolTip(t =>
                             {
-                                t.Text = ("Rejectrowchanges");
+                                t.Text = Util.GetLang("Rejectrowchanges");
                             })
                             .CommandName("reject")
                             .Icon(Icon.ArrowUndo)
