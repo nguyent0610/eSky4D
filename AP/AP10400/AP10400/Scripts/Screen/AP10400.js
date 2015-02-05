@@ -457,7 +457,7 @@ var grd_Edit = function (item, e) {
 var grd_ValidateEdit = function (item, e) {
 
     if (keys.indexOf(e.field) != -1) {
-        if (duplicated(App.storeGrid, e)) {
+        if (HQ.grid.checkDuplicate(App.grd, e,keys)) {
             HQ.message.show(1112, e.value, '');
             App.slmGrid.selected.items[0].set('InvcNbr', '');
             return false;
