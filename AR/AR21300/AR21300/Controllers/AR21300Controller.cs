@@ -18,14 +18,16 @@ namespace AR21300.Controllers
     [CheckSessionOut]
     public class AR21300Controller : Controller
     {
-        string screenNbr = "AR21300";
+        private string _screenNbr = "AR21300";
         AR21300Entities _db = Util.CreateObjectContext<AR21300Entities>(false);
         public ActionResult Index()
         {
-            Util.InitRight(screenNbr);
+            Util.InitRight(_screenNbr);
             return View();
         }
-        public PartialViewResult Body()
+
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             return PartialView(_db.AR21300_pgLoadArea().ToList());
         }
@@ -33,7 +35,7 @@ namespace AR21300.Controllers
         {
             return this.Store(_db.AR21300_pgLoadArea().ToList());
         }
-        [DirectMethod]
+      
         [HttpPost]      
         public ActionResult Save(FormCollection data)
         {
@@ -62,7 +64,7 @@ namespace AR21300.Controllers
                         record = new AR_Area();
                         record.Area = created.Area;
                         record.Crtd_Datetime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
+                        record.Crtd_Prog = _screenNbr;
                         record.Crtd_User = Current.UserName;
                         UpdatingAR_Area(created, ref record);
                         _db.AR_Area.AddObject(record);
@@ -99,7 +101,7 @@ namespace AR21300.Controllers
                     record = new AR_Area();
                     record.Area = updated.Area;
                     record.Crtd_Datetime = DateTime.Now;
-                    record.Crtd_Prog = screenNbr;
+                    record.Crtd_Prog = _screenNbr;
                     record.Crtd_User = Current.UserName;                
                     UpdatingAR_Area(updated, ref record);
                     _db.AR_Area.AddObject(record);
@@ -125,7 +127,7 @@ namespace AR21300.Controllers
         {
             d.Descr = s.Descr;                   
             d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
+            d.LUpd_Prog = _screenNbr;
             d.LUpd_User = Current.UserName;
         }
 

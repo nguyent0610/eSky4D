@@ -20,110 +20,102 @@
 
 @(X.Viewport()
           .Layout(LayoutType.Fit)
-          .Items(
-                X.Window()
-                 .Layout(LayoutType.Fit)
-                 .Maximized(true)
-                 .Closable(false)
-                 .TitleCollapse(true)
-                 .Header(false)
-                 .KeyMap(Util.SetupKeyMap())
-                 .TopBar(Util.SetupToolbar("Print", true, ""))
-                 .Items(
-                       X.FormPanel()
-                        .ID("frmMain")
-                        .DefaultAnchor("100%")
-                        .BodyPadding(0)
-                        .Layout(LayoutType.Fit)
-                        .Height(480)
-                        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
-                        .Items(
-                              X.GridPanel()
-                               .Frame(true)
-                               .AnchorHorizontal("100%")
-                               .AnchorVertical("100%")
-                               .RenderTo("contentCenter")
-                               .Scroll(ScrollMode.Both)
-                               .View(X.GridView().TrackOver(false))
-                               .ID("grdArea")
-                               .Store(
-                                     X.Store()
-                                      .ID("stoArea")    
-                                      .RemotePaging(true).AutoLoad(true)
-                                      //.DataSource(Model)
-                                      .PageSize(50)
-                                      .Model(Util.GenerateModel(typeof(AR21300_pgLoadArea_Result), "AR_AreaModel", "Area"))                                                                                                                                  
-                                      .ServerProxy(
-                                                  X.AjaxProxy()
-                                                   .Url(Url.Action("GetData"))
-                                                  )                                            
-                                     )
-                               .SortableColumns(false)
-                               .Listeners(l =>
-                                    {
-                                        l.AfterRender.Fn = "AutoLoadGrid";
-                                    })
-                               .ColumnModel(
-                                           X.RowNumbererColumn(),
-                                           X.Column().Text(Util.GetLang("Area")).DataIndex("Area").Width(150).Editor(X.TextField().MaxLength(10)),
-                                           X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(200)),
-                                           X.CommandColumn().Width(150)
-                                                            .Commands(
-                                                                     X.GridCommand()
-                                                                      .Text(Util.GetLang("Reject"))
-                                                                      .ToolTip(t =>
-                                                                             {
-                                                                                 t.Text = Util.GetLang("Rejectrowchanges");
-                                                                             })
-                                                                      .CommandName("reject")
-                                                                      .Icon(Icon.ArrowUndo)
-                                                                     )
-                                                            .PrepareToolbar(t =>
+          .Items(               
+                X.FormPanel()
+                .ID("frmMain")
+                .DefaultAnchor("100%")
+                .BodyPadding(0)
+                .KeyMap(Util.SetupKeyMap())
+                .TopBar(Util.SetupToolbar("Print", true, ""))
+                .Layout(LayoutType.Fit)
+                .Height(480)
+                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
+                .Items(
+                        X.GridPanel()
+                        .Frame(true)
+                        .AnchorHorizontal("100%")
+                        .AnchorVertical("100%")
+                        .RenderTo("contentCenter")
+                        .Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false))
+                        .ID("grdArea")
+                        .Store(
+                                X.Store()
+                                .ID("stoArea")    
+                                .RemotePaging(true).AutoLoad(true)
+                                //.DataSource(Model)
+                                .PageSize(50)
+                                .Model(Util.GenerateModel(typeof(AR21300_pgLoadArea_Result), "mdlAR_AreaModel", "Area"))                                                                                                                                  
+                                .ServerProxy(
+                                            X.AjaxProxy()
+                                            .Url(Url.Action("GetData"))
+                                            )                                            
+                                )
+                        .SortableColumns(false)
+                        .Listeners(l =>
+                            {
+                                l.AfterRender.Fn = "AutoLoadGrid";
+                            })
+                        .ColumnModel(
+                                    X.RowNumbererColumn(),
+                                    X.Column().Text(Util.GetLang("Area")).DataIndex("Area").Width(150).Editor(X.TextField().MaxLength(10)),
+                                    X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(200)),
+                                    X.CommandColumn().Width(150)
+                                                    .Commands(
+                                                                X.GridCommand()
+                                                                .Text(Util.GetLang("Reject"))
+                                                                .ToolTip(t =>
                                                                         {
-                                                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                                                            t.Text = Util.GetLang("Rejectrowchanges");
                                                                         })
-                                                            .Listeners(l =>
-                                                                        {
-                                                                            l.Command.Handler = "grdArea_Reject(record);";
-                                                                        })
-                                           )
-                               .SelectionModel(X.RowSelectionModel().ID("slmArea").Mode(SelectionMode.Multi))
-                               .BottomBar(//Phan trang       
-                                         X.PagingToolbar()
-                                          .ID("PagingToolbar")
-                                          .Items(
-                                                X.Label("Page size:"),
-                                                X.ToolbarSpacer(10),
-                                                X.ComboBox().Width(80)
-                                                            .Items("1", "2", "10", "20", "30", "50")
-                                                            .SelectedItems("50")
-                                                            .Listeners(l =>
-                                                                        {
-                                                                            l.Select.Fn = "HQ.grid.onPageSelect";
-                                                                        })
-                                                )
-                                          .Plugins(X.ProgressBarPager())
-                                         )
-                               .Plugins( //Cho phep edit
-                                       X.CellEditing()
-                                        .ClicksToEdit(1)
-                                        .Listeners(ls =>
-                                                    {
-                                                        ls.BeforeEdit.Fn = "grdArea_BeforeEdit";
-                                                        ls.Edit.Fn = "grdArea_Edit";
-                                                        ls.ValidateEdit.Fn = "grdArea_ValidateEdit";
-                                                        ls.CancelEdit.Fn = "grdArea_CancelEdit";
-                                                    })        
-                                       )
-                               .Features(
-                                        X.GridFilters()//Filter
-                                         .Local(true)
-                                         .Filters(
-                                                 X.StringFilter().DataIndex("Area"),
-                                                 X.StringFilter().DataIndex("Descr")                                                        
-                                                 )
+                                                                .CommandName("reject")
+                                                                .Icon(Icon.ArrowUndo)
+                                                                )
+                                                    .PrepareToolbar(t =>
+                                                                {
+                                                                    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                                                })
+                                                    .Listeners(l =>
+                                                                {
+                                                                    l.Command.Handler = "grdArea_Reject(record);";
+                                                                })
+                                    )
+                        .SelectionModel(X.RowSelectionModel().ID("slmArea").Mode(SelectionMode.Multi))
+                        .BottomBar(//Phan trang       
+                                    X.PagingToolbar()
+                                    .ID("PagingToolbar")
+                                    .Items(
+                                        X.Label("Page size:"),
+                                        X.ToolbarSpacer(10),
+                                        X.ComboBox().Width(80)
+                                                    .Items("1", "2", "10", "20", "30", "50")
+                                                    .SelectedItems("50")
+                                                    .Listeners(l =>
+                                                                {
+                                                                    l.Select.Fn = "HQ.grid.onPageSelect";
+                                                                })
                                         )
-                    )
-                )
-           )
+                                    .Plugins(X.ProgressBarPager())
+                                    )
+                        .Plugins( //Cho phep edit
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                            {
+                                                ls.BeforeEdit.Fn = "grdArea_BeforeEdit";
+                                                ls.Edit.Fn = "grdArea_Edit";
+                                                ls.ValidateEdit.Fn = "grdArea_ValidateEdit";
+                                                ls.CancelEdit.Fn = "grdArea_CancelEdit";
+                                            })        
+                                )
+                        .Features(
+                                X.GridFilters()//Filter
+                                    .Local(true)
+                                    .Filters(
+                                            X.StringFilter().DataIndex("Area"),
+                                            X.StringFilter().DataIndex("Descr")                                                        
+                                            )
+                                )
+            )
+        )          
 )
