@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="CA_Account" EntityType="eBiz4DWebSysModel.Store.CA_Account" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="CA_Account">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BankAcct" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BankAcct" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="AcctNbr" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="AddrID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="AcctName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="CA20200_pcLoadAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="CA20200_pcLoadBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="CA20200_pgLoadAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CA20200Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="CA20200Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="CA_Account" EntityType="CA20200Model.CA_Account" />
+          <FunctionImport Name="CA20200_pcLoadAddress" ReturnType="Collection(CA20200Model.CA20200_pcLoadAddress_Result)" />
+          <FunctionImport Name="CA20200_pcLoadBranch" ReturnType="Collection(CA20200Model.CA20200_pcLoadBranch_Result)" />
+          <FunctionImport Name="CA20200_pgLoadAccount" ReturnType="Collection(CA20200Model.CA20200_pgLoadAccount_Result)" />
+        </EntityContainer>
+        <EntityType Name="CA_Account">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="BankAcct" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BankAcct" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AcctNbr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Active" Nullable="false" />
+          <Property Type="String" Name="AddrID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AcctName" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="CA20200_pcLoadAddress_Result">
+          <Property Type="String" Name="AddrID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Attn" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="fax" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Zip" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="CA20200_pcLoadBranch_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="CA20200_pgLoadAccount_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BankAcct" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="AcctName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="AcctNbr" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="AddrID" Nullable="false" MaxLength="10" />
+          <Property Type="Boolean" Name="Active" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="CA20200Entities" >
+          <EntitySetMapping Name="CA_Account">
+            <EntityTypeMapping TypeName="CA20200Model.CA_Account">
+              <MappingFragment StoreEntitySet="CA_Account">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="AcctName" ColumnName="AcctName" />
+                <ScalarProperty Name="AddrID" ColumnName="AddrID" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="AcctNbr" ColumnName="AcctNbr" />
+                <ScalarProperty Name="BankAcct" ColumnName="BankAcct" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CA20200_pcLoadAddress" FunctionName="eBiz4DWebSysModel.Store.CA20200_pcLoadAddress">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CA20200Model.CA20200_pcLoadAddress_Result">
+                <ScalarProperty Name="AddrID" ColumnName="AddrID" />
+                <ScalarProperty Name="Attn" ColumnName="Attn" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CA20200_pcLoadBranch" FunctionName="eBiz4DWebSysModel.Store.CA20200_pcLoadBranch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CA20200Model.CA20200_pcLoadBranch_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CA20200_pgLoadAccount" FunctionName="eBiz4DWebSysModel.Store.CA20200_pgLoadAccount">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CA20200Model.CA20200_pgLoadAccount_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BankAcct" ColumnName="BankAcct" />
+                <ScalarProperty Name="AcctName" ColumnName="AcctName" />
+                <ScalarProperty Name="AcctNbr" ColumnName="AcctNbr" />
+                <ScalarProperty Name="AddrID" ColumnName="AddrID" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" >
+        <EntityTypeShape EntityType="CA20200Model.CA_Account" Width="1.5" PointX="3.1355770114509278" PointY="7.4192068313337893" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

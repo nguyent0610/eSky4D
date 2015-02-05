@@ -1,0 +1,128 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using CA20200;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+    .Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .ID("frmMain")
+        .BodyPadding(0)
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar("Print", true, ""))
+        .Layout(LayoutType.Fit)    
+        .Items(
+            ////Thiet ke giao dien o day
+
+            X.GridPanel()
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .ID("grdAccount")
+            .Store(
+                X.Store()
+                .ID("stoAccount")
+                .PageSize(50)
+                .Model(Util.GenerateModel(typeof(CA20200_pgLoadAccount_Result), "mdCA_Account", "BranchID,BankAcct"))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetAccount")))
+                .Listeners(l =>
+                {
+                    l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
+                    l.Load.Handler = "HQ.common.showBusy(false);"; 
+                })
+            )
+            .Listeners(p => p.BoxReady.Handler = "App.stoAccount.reload();")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40)
+                , X.Column().ID("BranchID").Text(Util.GetLang("BranchID")).DataIndex("BranchID").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQProcedure("CA20200_pcLoadBranch")                      
+                        .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                        .LoadData()
+                    )
+                , X.Column().ID("BankAcct").Text(Util.GetLang("BankAcct")).DataIndex("BankAcct").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true))
+                , X.Column().Text(Util.GetLang("AcctName")).DataIndex("AcctName").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(100).EnforceMaxLength(true))
+                , X.Column().Text(Util.GetLang("AcctNbr")).DataIndex("AcctNbr").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true))
+                , X.Column().Text(Util.GetLang("AddrID")).DataIndex("AddrID").Width(150)
+                     .Editor(
+                        HQ.Combo().ID("cboAddrID").Name("cboAddrID").HQProcedure("CA20200_pcLoadAddress")                      
+                        .HQColumnShow("AddrID,Name,Addr1,Addr2").DisplayField("AddrID").ValueField("AddrID")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                        .LoadData()
+                    )
+                 ,Html.X().CheckColumn().DataIndex("Active").Width(150).Editable(true).HideTitleEl(false)
+                     .HeaderItems(
+                        HQ.Label().HQLangCode("Active").ID("Activetext").MarginSpec("0 0 0 5")
+                        , HQ.Checkbox().ID("ActiveCheckAll").MarginSpec("10 0 0 24").Listeners(l => l.Change.Fn = "ActiveCheckAll_Change")
+                        )
+                        .ID("txtActive")
+                , X.CommandColumn().Width(150)
+                                        .Commands(
+                                            Html.X().GridCommand()
+                                                .Text(Util.GetLang("Reject"))
+                                                .ToolTip(t =>
+                                                {
+                                                    t.Text = Util.GetLang("Rejectrowchanges");
+                                                })
+                                                .CommandName("reject")
+                                                .Icon(Icon.ArrowUndo)
+                                        )
+                                        .PrepareToolbar(t =>
+                                        {
+                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                        })
+                                        .Listeners(l =>
+                                        {
+                                            l.Command.Handler = "grd_Reject(record);";
+                                        })
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmAccount").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdAccount_BeforeEdit";
+                    ls.Edit.Fn = "grdAccount_Edit";
+                    ls.ValidateEdit.Fn = "grdAccount_ValidateEdit";
+                    ls.CancelEdit.Fn = "grdAccount_CancelEdit";
+                })
+            )
+
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("BranchID"),
+                        X.StringFilter().DataIndex("Descr")
+                     )
+            )
+        )
+    )
+)
