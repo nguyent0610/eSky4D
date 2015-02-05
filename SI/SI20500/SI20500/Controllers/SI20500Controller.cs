@@ -1,7 +1,6 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +8,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
 namespace SI20500.Controllers
 {
     [DirectController]
@@ -16,161 +17,99 @@ namespace SI20500.Controllers
     [CheckSessionOut]
     public class SI20500Controller : Controller
     {
-        string screenNbr = "SI20500";
+        private string _screenNbr = "SI20500";
+        private string _userName = Current.UserName;
+
         SI20500Entities _db = Util.CreateObjectContext<SI20500Entities>(false);
 
         public ActionResult Index()
-        {
+        {  
+            Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
-            return PartialView(_db.SI_City);
+            return PartialView();
         }
 
         public ActionResult GetData()
         {
-            
-            return this.Store(_db.SI_City);
+            return this.Store(_db.SI20500_pgLoadGrid().ToList());
         }
-        [DirectMethod]
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<SI_City> lstMsg = dataHandler.BatchObjectData<SI_City>();
-            foreach (SI_City deleted in lstMsg.Deleted)
+            try
             {
-                var del = _db.SI_City.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.City == deleted.City).FirstOrDefault();
-                if (del != null)
-                {
-                    _db.SI_City.DeleteObject(del);
 
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
+                ChangeRecords<SI_City> lstLang = dataHandler.BatchObjectData<SI_City>();
+                foreach (SI_City deleted in lstLang.Deleted)
+                {
+                    var del = _db.SI_City.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.City == deleted.City).FirstOrDefault();
+                    if (del != null)
+                    {
+                        _db.SI_City.DeleteObject(del);
+                    }
                 }
 
-            }
-            foreach (SI_City created in lstMsg.Created)
-            {
-                if (created.Country == "") continue;
-                var record = _db.SI_City.Where(p => p.Country == created.Country && p.State == created.State && p.City == created.City).FirstOrDefault();
+                lstLang.Created.AddRange(lstLang.Updated);
 
-                if (created.tstamp.ToHex() == "")
+                foreach (SI_City curLang in lstLang.Created)
                 {
-                    if (record == null)
-                    {
-                        record = new SI_City();
-                        record.Country = created.Country;
-                        record.State = created.State;
-                        record.City = created.City;
-                        record.Name = created.Name;
-                        
-                        record.tstamp = new byte[0];
-                        
-                        record.Crtd_Datetime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingSYS_ModuleCat(created, ref record);
-                        _db.SI_City.AddObject(record);
+                    if (curLang.Country.PassNull() == "") continue;
 
+                    var lang = _db.SI_City.Where(p => p.Country.ToLower() == curLang.Country.ToLower() && p.State.ToLower() == curLang.State.ToLower() && p.City.ToLower() == curLang.City.ToLower()).FirstOrDefault();
+
+                    if (lang != null)
+                    {
+                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        {
+                            Update_Language(lang, curLang, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
                     }
                     else
                     {
-                        var record2 = new SI_City();
-                        record2.Country = created.Country;
-                        record2.State = created.State;
-                        record2.City = created.City;
-                        record2.Name = created.Name;
-
-                        record2.Crtd_Datetime = DateTime.Now;
-                        record2.Crtd_Prog = screenNbr;
-                        record2.Crtd_User = Current.UserName;
-                        UpdatingSYS_ModuleCat(created, ref record2);
-                        _db.SI_City.AddObject(record2);
-                        //Message.Show(2000, new string[] { Util.GetLang("Country"), record.Country.ToString() }, null);
-                        //return this.Direct();
-                        //tra ve loi da ton tai ma ngon ngu nay ko the them
+                        lang = new SI_City();
+                        Update_Language(lang, curLang, true);
+                        _db.SI_City.AddObject(lang);
                     }
                 }
-                else
-                {
-                    Message.Show(2000, new string[] { Util.GetLang("Country"), record.Country.ToString() }, null);
-                    return this.Direct();
-                    //tra ve loi da ton tai ma ngon ngu nay ko the them
-                }
 
-
+                _db.SaveChanges();
+                return Json(new { success = true });
             }
-
-
-
-            foreach (SI_City updated in lstMsg.Updated)
+            catch (Exception ex)
             {
-
-                var record = _db.SI_City.Where(p => p.Country == updated.Country && p.State == updated.State && p.City == updated.City).FirstOrDefault();
-
-
-                if (record != null)
-                {
-                    
-                    if (record.tstamp.ToHex() != updated.tstamp.ToHex())
-                    {
-                        return Json(new { success = false });
-                    }
-                    UpdatingSYS_ModuleCat(updated, ref record);
-                }
-                else
-                {
-                    if (updated.tstamp.ToHex() == "")
-                    {
-                        record = new SI_City();
-                        record.Country = updated.Country;
-                        record.State = updated.State;
-                        record.City = updated.City;
-                        record.Name = updated.Name;
-                       
-                    
-                        record.tstamp = new byte[0];
-
-                        record.Crtd_Datetime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingSYS_ModuleCat(updated, ref record);
-                        _db.SI_City.AddObject(record);
-                        
-                    }
-                    else
-                    {
-
-                        return Json(new { success = false });
-                    }
-                }
-
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
-
-
-
-
-            _db.SaveChanges();
-            return Json(new { success = true });
-
-
         }
 
-
-        private void UpdatingSYS_ModuleCat(SI_City s, ref SI_City d)
+        private void Update_Language(SI_City t, SI_City s, bool isNew)
         {
+            if (isNew)
+            {
+                t.Country = s.Country;
+                t.State = s.State;
+                t.City = s.City;
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
 
-            d.Name = s.Name;
-            
-            
-          
-           
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
+            t.Name = s.Name;
+
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
         }
     }
 }
