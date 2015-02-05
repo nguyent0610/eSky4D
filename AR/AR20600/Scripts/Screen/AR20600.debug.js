@@ -1,20 +1,4 @@
-﻿var selectedIndex = 0;
-var _hold = "H";
-var _curSlsperid = "";
-var _focusrecord = 0;
-var beforeedit = '';
-var prefixvalue = "";
-var lastfixvalue = "";
-var shownextlotserial = "";
-var chooseGrid = "";
-var click = 0;
-var tmpImageDelete = 0;
-var tmpMediaDelete = 0;
-var tmpSelectedNode = "";
-var tmpCopyForm = "0";
-var tmpCopyFormSave = "0";
-var tmpOldFileName = "";
-var tmpShipToIdloadStoreOrForm = "0";
+﻿var tmpShipToIdloadStoreOrForm = "0";
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -46,6 +30,7 @@ var menuClick = function (command) {
             App.cboCustId.setValue(App.cboCustId.store.getAt(App.cboCustId.store.getTotalCount() - 1).data.CustId);
             break;
         case "refresh":
+            tmpShipToIdloadStoreOrForm = "1";
             App.storeForm.reload();
             break;
         case "new":
@@ -59,7 +44,6 @@ var menuClick = function (command) {
             var curRecord = App.frmMain.getRecord();
             if (HQ.isDelete) {
                 if (App.cboShipToId.value != "") {                    
-                    //callMessage(11, '', 'deleteRecordForm');
                     HQ.message.show(11, '', 'deleteRecordForm');
                 }
             }
@@ -84,15 +68,14 @@ var refreshTree2 = function (dt) {
     var findNode = App.IDTree.items.items[0].store.data.items;
     for (var i = 0; i < findNode.length; i++) {
         if (findNode[i].data.id == node) {
-            //click = 1;
             App.Tree.select(i);
-            //setTimeout(function () { refreshTree(i); }, 7000);
             break;
         }
     }
 }
 
 var waitFormReload = function (sender, e) {
+    tmpShipToIdloadStoreOrForm = "1";
     App.cboShipToId.setValue(sender);
     App.storeForm.reload();
 }
@@ -123,15 +106,12 @@ function Save() {
                     //App.cboShipToId.setValue(data.result.ShipToId);
                     // App.storeForm.reload();
                 } else {
-
                 }
             }
             , failure: function (errorMsg, data) {
-
                 //var dt = Ext.decode(data.response.responseText);
                 //callMessage(dt.code, dt.colName + ',' + dt.value, null);
                 if (data.result.code) {
-                    //callMessage(data.result.code, '', '');
                     HQ.message.show(data.result.code, '', '');
                 }
                 else {
@@ -151,12 +131,10 @@ function Save() {
     }
 }
 
-
 // Xem lai
 function Close() {
     if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
     if (storeIsChange(App.storeForm, false)) {
-       // callMessage(5, '', 'closeScreen');
         HQ.message.show(5, '', 'closeScreen');
 
     } else {
@@ -201,7 +179,7 @@ var deleteRecordForm = function (item) {
                 failure: function () {
                     //
                 },
-                eventMask: { msg: '@Util.GetLang("DeletingData")', showMask: true }
+                eventMask: { msg: HQ.common.getLang("DeletingData"), showMask: true }
             });
         } catch (ex) {
             alert(ex.message);
@@ -232,7 +210,6 @@ var loadDataAutoHeader = function () {
     var record = App.storeForm.getAt(0);
     if (record) {
         App.frmMain.getForm().loadRecord(record);
-        //App.cboCustId.getStore().reload();
     }
 };
 
@@ -241,7 +218,6 @@ var waitCopyShipToIdLoad = function () {
     if (App.cboShipToId.getStore().data.items[0] == undefined) {
         App.cboShipToId.setValue("");
     } else {
-        //App.cboShipToId.setValue("");
         App.cboShipToId.setValue(App.cboShipToId.getStore().data.items[0].data.ShipToId);
     }
 }
@@ -250,7 +226,6 @@ var cboCustID_Change = function (sender, e) {
     App.cboShipToId.setValue("");
     App.cboShipToId.getStore().reload();
     setTimeout(function () { waitCopyShipToIdLoad(); }, 1500);
-    //App.storeForm.reload;
 }
 
 var cboShipToId_Change = function (sender, e) {
@@ -258,33 +233,66 @@ var cboShipToId_Change = function (sender, e) {
     App.storeForm.reload();
 }
 
-//var waitcboCountryLoad = function () {
-//    App.cboState.getStore().reload();
-
-//}
-
-//var waitcboStateLoad = function () {
-//    App.cboCity.getStore().reload();
-//    App.cboDistrict.getStore().reload();
-
-//}
 var cboCountry_Change = function (sender, newValue, oldValue) {
-    if (tmpShipToIdloadStoreOrForm == "1") {
-        App.cboState.getStore().reload();
-        App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
-    } else {
-        App.cboState.getStore().reload();
-    }
+    setTimeout(function () {
+        if (tmpShipToIdloadStoreOrForm == 1) {
+            App.cboState.getStore().load({
+                scope: this,
+                callback: function () {
+                    var record = App.frmMain.getRecord();
+                    App.cboState.setValue(record.data.State);
+                }
+            });
+        } else {
+            App.cboState.getStore().load();
+        }
+    }, 1500);
 }
 
 var cboState_Change = function (sender, newValue, oldValue) {
-    if (tmpShipToIdloadStoreOrForm == "1") {
-        App.cboCity.getStore().reload();
-        App.cboDistrict.getStore().reload();
-        App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
-        tmpShipToIdloadStoreOrForm = "0";
-    } else {
-        App.cboCity.getStore().reload();
-        App.cboDistrict.getStore().reload();
-    }
+    setTimeout(function () { waitCityDistrictLoad(); }, 1500);
 }
+
+var waitCityDistrictLoad = function () {
+    if (tmpShipToIdloadStoreOrForm == 1) {
+        var record = App.frmMain.getRecord();
+        App.cboCity.getStore().load({
+            scope: this,
+            callback: function () {
+                App.cboCity.setValue(record.data.City);
+            }
+        });
+
+        App.cboDistrict.getStore().load({
+            scope: this,
+            callback: function () {
+                App.cboDistrict.setValue(record.data.District);
+            }
+        });
+        //App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
+        tmpShipToIdloadStoreOrForm = 0;
+    } else {
+        App.cboCity.getStore().load();
+        App.cboDistrict.getStore().load();
+    }
+};
+//var cboCountry_Change = function (sender, newValue, oldValue) {
+//    if (tmpShipToIdloadStoreOrForm == "1") {
+//        App.cboState.getStore().reload();
+//        App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
+//    } else {
+//        App.cboState.getStore().reload();
+//    }
+//}
+
+//var cboState_Change = function (sender, newValue, oldValue) {
+//    if (tmpShipToIdloadStoreOrForm == "1") {
+//        App.cboCity.getStore().reload();
+//        App.cboDistrict.getStore().reload();
+//        App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
+//        tmpShipToIdloadStoreOrForm = "0";
+//    } else {
+//        App.cboCity.getStore().reload();
+//        App.cboDistrict.getStore().reload();
+//    }
+//}

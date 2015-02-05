@@ -27,9 +27,9 @@ namespace AR20600.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-
-        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+        
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
@@ -57,6 +57,11 @@ namespace AR20600.Controllers
                 var objHeader = _db.AR_SOAddress.Where(p => p.BranchID == _branchID && p.CustId == custId && p.ShipToId == updated.ShipToId).FirstOrDefault();
                 if (objHeader != null)
                 {
+                    if (updated.tstamp.ToHex() != objHeader.tstamp.ToHex())
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                        //return Json(new { success = false });
+                    }
                     UpdatingHeader(updated, ref objHeader);
                 }
                 else
@@ -106,7 +111,6 @@ namespace AR20600.Controllers
         [DirectMethod]
         public ActionResult AR20600Delete(string custId ,string shipToId)
         {
-            
             var soAddress = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == _branchID && p.CustId == custId && p.ShipToId == shipToId);
             _db.AR_SOAddress.DeleteObject(soAddress);
             _db.SaveChanges();

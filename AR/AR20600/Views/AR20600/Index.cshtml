@@ -70,7 +70,7 @@
 
 
 @*@(HQ.Store().ID("ApproveStatusAll").HQProcedure("ppv_AR20600ApproveStatus").HQDBSys(false).LoadData())*@
-     @{ Html.RenderAction("Body"); }
+     @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
     </body>
 </html>
 
