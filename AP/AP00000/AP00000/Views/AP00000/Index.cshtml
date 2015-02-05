@@ -42,7 +42,7 @@
 
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
-        <!-- Gọi hàm Body trong AP00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+      
         @(Html.X().Store().ID("stoAP00000Header")   
             .Model(Util.GenerateModel(typeof(AP_Setup), "AP00000Model", "BrandID"))       
             .Proxy(
@@ -60,8 +60,9 @@
                                 ps.Add(new StoreParameter("setupID", "AP", ParameterMode.Value));
                             })      
             .Listeners(p=>p.Load.Handler="loadDataHeader()" )
-      )            
-        @{Html.RenderAction("Body");}   
+      )  
+      <!-- Gọi hàm Body trong AP00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->          
+       @{Html.RenderAction("Body", new { lang=@Current.LangID});}   
     
 </body>
 </html>

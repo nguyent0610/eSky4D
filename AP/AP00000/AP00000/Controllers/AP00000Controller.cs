@@ -29,16 +29,13 @@ namespace AP00000.Controllers
             return View();
         }
 
-  //      [OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(int lang)
         {
             return PartialView();
         }
 
-        //public ActionResult GetLanguage()
-        //{
-        //    return this.Store(_db.SYS_Language.ToList());
-        //}
+        
         public ActionResult GetAP00000Header(string branchId, string setupID)
         {
             var setupData = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == setupID);
@@ -72,13 +69,13 @@ namespace AP00000.Controllers
                 {
                     if (curSetup.BranchID.PassNull() == "") continue;
 
-                    var Setup = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == "AP");
+                    var setup = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == "AP");
 
-                    if (Setup != null)
+                    if (setup != null)
                     {
-                        if (Setup.tstamp.ToHex() == curSetup.tstamp.ToHex())
+                        if (setup.tstamp.ToHex() == curSetup.tstamp.ToHex())
                         {
-                            Update_Setup(Setup, curSetup, false);
+                            Update_Setup(setup, curSetup, false);
                         }
                         else
                         {
@@ -87,18 +84,18 @@ namespace AP00000.Controllers
                     }
                     else
                     {
-                        Setup = new AP_Setup();
-                        Setup.DfltBankAcct = dfltBankAcct; // ???
-                        Setup.ClassID = classID;
-                        Setup.LastBatNbr = lastBatNbr;
-                        Setup.LastRefNbr = lastRefNbr;
-                        Setup.LastPaymentNbr = lastPaymentNbr;
-                        Setup.PreFixBat = preFixBat;
-                        Setup.TranDescDflt = tranDescDef;
-                        Setup.terms = terms;
+                        setup = new AP_Setup();
+                        setup.DfltBankAcct = dfltBankAcct; 
+                        setup.ClassID = classID;
+                        setup.LastBatNbr = lastBatNbr;
+                        setup.LastRefNbr = lastRefNbr;
+                        setup.LastPaymentNbr = lastPaymentNbr;
+                        setup.PreFixBat = preFixBat;
+                        setup.TranDescDflt = tranDescDef;
+                        setup.terms = terms;
 
-                        Update_Setup(Setup, curSetup, true);
-                        _db.AP_Setup.AddObject(Setup);
+                        Update_Setup(setup, curSetup, true);
+                        _db.AP_Setup.AddObject(setup);
                     }
                 }
 
