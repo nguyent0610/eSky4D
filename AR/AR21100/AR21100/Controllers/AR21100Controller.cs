@@ -1,4 +1,4 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -7,7 +7,9 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
 namespace AR21100.Controllers
 {
     [DirectController]
@@ -15,112 +17,99 @@ namespace AR21100.Controllers
     [CheckSessionOut]
     public class AR21100Controller : Controller
     {
-        string screenNbr = "AR21100";
+        private string _screenNbr = "AR21100";
+        private string _userName = Current.UserName;
+
         AR21100Entities _db = Util.CreateObjectContext<AR21100Entities>(false);
 
         public ActionResult Index()
         {
-            return View(_db.AR_Channel);//.OrderBy(x => x.tstamp)
+
+            Util.InitRight(_screenNbr);
+            return View();
         }
 
-        public ActionResult GetData()
+       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
-            return this.Store(_db.AR_Channel);
+            return PartialView();
         }
-        [DirectMethod]
-        [HttpPost]      
+
+        public ActionResult GetChannel()
+        {
+            return this.Store(_db.AR21100_pgLoadChannel().ToList());
+        }
+
+        [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AR_Channel> lstMsg = dataHandler.BatchObjectData<AR_Channel>();
-            foreach (AR_Channel deleted in lstMsg.Deleted)
-            {
-                var del = _db.AR_Channel.Where(p => p.Code == deleted.Code).FirstOrDefault();
-                if (del != null)
-                {
-                    _db.AR_Channel.DeleteObject(del);
-                }
-              
-            }
-            foreach (AR_Channel created in lstMsg.Created)
-            {
-                if (created.Code == "") continue;
-                var record = _db.AR_Channel.Where(p => p.Code == created.Code).FirstOrDefault();
 
-                if (created.tstamp.ToHex() == "")
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstChannel"]);
+                ChangeRecords<AR_Channel> lstChannel = dataHandler.BatchObjectData<AR_Channel>();
+                foreach (AR_Channel deleted in lstChannel.Deleted)
                 {
-                    if (record == null)
+                    var del = _db.AR_Channel.Where(p => p.Code == deleted.Code).FirstOrDefault();
+                    if (del != null)
                     {
-                        record = new AR_Channel();
-                        record.Code = created.Code;
-                        record.Crtd_Datetime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingAR_Channel(created, ref record);
-                        _db.AR_Channel.AddObject(record);
+                        _db.AR_Channel.DeleteObject(del);
+                    }
+                }
+
+                lstChannel.Created.AddRange(lstChannel.Updated);
+
+                foreach (AR_Channel curChannel in lstChannel.Created)
+                {
+                    if (curChannel.Code.PassNull() == "") continue;
+
+                    var Channel = _db.AR_Channel.Where(p => p.Code.ToLower() == curChannel.Code.ToLower()).FirstOrDefault();
+
+                    if (Channel != null)
+                    {
+                        if (Channel.tstamp.ToHex() == curChannel.tstamp.ToHex())
+                        {
+                            Update_AR_Channel(Channel, curChannel, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
                     }
                     else
                     {
-                        Message.Show(2000, new string[] { Util.GetLang("Code"), record.Code.ToString() }, null);
-                        return this.Direct();
-                        //tra ve loi da ton tai ma ngon ngu nay ko the them
+                        Channel = new AR_Channel();
+                        Update_AR_Channel(Channel, curChannel, true);
+                        _db.AR_Channel.AddObject(Channel);
                     }
                 }
-                else
-                {
-                    Message.Show(2000, new string[] { Util.GetLang("Code"), record.Code.ToString() }, null);
-                    return this.Direct();
-                    //tra ve loi da ton tai ma ngon ngu nay ko the them
-                }
 
+                _db.SaveChanges();
 
-            }
-
-            
-
-            foreach (AR_Channel updated in lstMsg.Updated)
-            {
-                var record = _db.AR_Channel.Where(p => p.Code == updated.Code).FirstOrDefault();
-                                
-                if (record != null)
-                {
-                    UpdatingAR_Channel(updated, ref record);
-                }
-                else
-                {
-                    record = new AR_Channel();
-                    record.Code = updated.Code;
-                    record.Crtd_Datetime = DateTime.Now;
-                    record.Crtd_Prog = screenNbr;
-                    record.Crtd_User = Current.UserName;                
-                    UpdatingAR_Channel(updated, ref record);
-                    _db.AR_Channel.AddObject(record);
-                }
-                
-
-            }
-            _db.SaveChanges();
-
-            return Json(new { success = true });
-              
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-
-                return Json(new { success = false, errorMsg = ex.ToString()});
-                
-              
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
 
-        private void UpdatingAR_Channel(AR_Channel s, ref AR_Channel d)
+        private void Update_AR_Channel(AR_Channel t, AR_Channel s, bool isNew)
         {
-            d.Descr = s.Descr;                   
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
+            if (isNew)
+            {
+                t.Code = s.Code;
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.Descr = s.Descr;
+
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
         }
+
     }
 }
