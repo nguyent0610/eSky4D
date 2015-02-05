@@ -68,6 +68,7 @@ var grdCostCode_BeforeEdit = function (editor, e) {
             return false;
     }
 
+    return HQ.grid.checkInput(e, keys);
 };
 var grdCostCode_Edit = function (item, e) {
 
@@ -83,13 +84,12 @@ var grdCostCode_ValidateEdit = function (item, e) {
             return false;
         }
         var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-        if (e.value.match(regex)) {
-            return true;
-
-        } else {
+        if (!e.value.match(regex)) {
             HQ.message.show(20140811, e.column.text);
             return false;
         }
+
+
     }
 };
 
@@ -157,7 +157,7 @@ var isAllValidKey = function (items) {
 var checkRequire = function (items) {
     if (items != undefined) {
         for (var i = 0; i < items.length; i++) {
-            if (items[i]["CostID"] == undefined) continue;
+            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
             if (items[i]["CostID"].trim() == "") {
                 HQ.message.show(15, HQ.common.getLang("CostID"));
                 return false;

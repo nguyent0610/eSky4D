@@ -1,4 +1,36 @@
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (elt /*, from*/) {
+        var len = this.length >>> 0;
 
+        var from = Number(arguments[1]) || 0;
+        from = (from < 0)
+             ? Math.ceil(from)
+             : Math.floor(from);
+        if (from < 0)
+            from += len;
+
+        for (; from < len; from++) {
+            if (from in this &&
+                this[from] === elt)
+                return from;
+        }
+        return -1;
+    };
+}
+
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
+}
+
+if (!('forEach' in Array.prototype)) {
+    Array.prototype.forEach = function (action, that /*opt*/) {
+        for (var i = 0, n = this.length; i < n; i++)
+            if (i in this)
+                action.call(that, this[i], i, this);
+    };
+}
 var HQ = {
 
     control: {
@@ -251,6 +283,30 @@ var HQ = {
             var found = false;
             var store = grd.getStore();
             if (keys == undefined) keys = row.record.idProperty.split(',');
+            for (var i = 0; i < store.data.items.length; i++) {
+                var record = store.data.items[i];
+                var data = '';
+                var rowdata = '';
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (record.data[keys[jkey]] != undefined) {
+                        data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        if (row.field == keys[jkey])
+                            rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                        else
+                            rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                    }
+                }
+                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                    break;
+                };
+            }
+            return found;
+        },
+        //TrungHT dùng cho phân trang
+        checkDuplicateAll: function (grd, row, keys) {
+            var found = false;
+            var store = grd.getStore();
+            if (keys == undefined) keys = row.record.idProperty.split(',');
             for (var i = 0; i < store.allData.items.length; i++) {
                 var record = store.allData.items[i];
                 var data = '';
@@ -269,6 +325,32 @@ var HQ = {
                 };
             }
             return found;
+        },
+        //Dùng trong ham before edit cua grid
+        //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
+        //Cot nao la key thi khoa lai khi da co du lieu
+        checkInput: function (row, keys) {
+            if (keys.indexOf(row.field) == -1) {
+
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") {
+                        return false;
+                    }
+                }
+            }
+            if (keys.indexOf(row.field) != -1) {
+                if (row.record.data[row.field] != "") return false;
+            }
+            return true;
+        },
+        //Kiem tra khi check require bo qua cac dong la new 
+        checkRequirePass: function (item, keys) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (item[keys[jkey]]) {
+                    return false;
+                }
+            }
+            return true;
         }
     },
     message: {
@@ -339,6 +421,35 @@ var HQ = {
                 return key;
             }
         },
+        setLang: function (ctr) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (itm.getXType() == "grid") {
+                        for (var i = 0; i < itm.columns.length; i++) {
+                            if (itm.columns[i].getXType() == "commandcolumn") {
+                                itm.columns[i].commands[0].text = HQ.common.getLang(itm.columns[i].commands[0].text);
+                            } else {
+                                itm.columns[i].setText(HQ.common.getLang(itm.columns[i].text));
+                            }
+                        }
+                    }
+                    else if (itm.getXType() == "combobox") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "textfield") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "checkbox") {
+                        itm.setBoxLabel(HQ.common.getLang(itm.boxLabel));
+                    }
+                    else if (itm.getXType() == "numberfield") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    HQ.common.setLang(itm);
+                });
+            }
+
+        },
         lockItem: function (ctr, lock) {
             if (typeof (ctr.items) != "undefined") {
                 ctr.items.each(function (itm) {
@@ -404,7 +515,7 @@ var HQ = {
             } else return str;
         }
     },
-   
+
     tooltip: {
         // TinhHV: show the tootip in grid
         showOnGrid: function (toolTip, grid, isHtmlEncode) {
@@ -430,7 +541,6 @@ var HQ = {
 };
 
 HQ.waitMsg = HQ.common.getLang('waitMsg');
-
 var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
@@ -461,3 +571,21 @@ var FilterCombo = function (control, stkeyFilter) {
         }
     }
 };
+//window.onresize = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};
+//window.onload = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};

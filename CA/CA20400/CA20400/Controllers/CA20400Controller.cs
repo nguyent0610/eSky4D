@@ -29,8 +29,8 @@ namespace CA20400.Controllers
             return View();
         }
 
-       [OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
