@@ -1,133 +1,104 @@
-﻿@using Ext.Net;
+@using Ext.Net;
 @using Ext.Net.MVC;
-@using eBiz4DWebFrame;
-@using eBiz4DWebFrame.HQControl;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
 @using SI20100;
-@model System.Collections.IEnumerable
 @{
     Layout = null;
     var X = Html.X();
     var HQ = Html.HQ();
 }
 
- @(
- Html.X().Viewport().Layout(LayoutType.Fit)
-        .Items(
-           Html.X().Window()
-          .ID("frmMain")
-          .Layout(LayoutType.Fit)
-          .Maximized(true)
-          .Closable(false)
-          .TitleCollapse(true)
-          .Header(false)
-          .KeyMap(Util.SetupKeyMap())
-          .TopBar(Util.SetupToolbar("Print",true))
-          .Items(
-                X.FormPanel()
-                .ID("pnlScreen")
-                .DefaultAnchor("100%")
-                .BodyPadding(0)
-                .Layout(LayoutType.Fit)
-                .Height(480)
-                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; }).Listeners(lst => lst.BoxReady.Handler = "menuClick('refresh')")
-                .Items(
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)
+    .Listeners(l => l.BoxReady.Handler = "HQ.common.setLang(App.frmMain);")
+    .Items(
+        ////Thiet ke giao dien o day
 
-                //giao dien thiet ke tu day
-                            Html.X().GridPanel()
-                                    .Frame(true)
-                                    .AnchorHorizontal("100%")
-                                    .AnchorVertical("100%")
-                                    .RenderTo("contentCenter")
-                                    .Scroll(ScrollMode.Both)
-                                    .View(X.GridView().TrackOver(false))
-                                    .ID("grd")
-                                    .Store(Html.X().Store().ID("Store1")
-                                            .RemotePaging(true)
-                                            .DataSource(Model)
-                                            .PageSize(50).AutoLoad(false)
-                                            .Model(Util.GenerateModel(typeof(SI_Buyer), "SI_BuyerModel", "Buyer"))
-                                            .ServerProxy(
-                                                Html.X().AjaxProxy()
-                                                    .Url(Url.Action("GetData"))
-                                            )
-                                            .Listeners(p=>p.Load.Handler="loadDefault()")
-                                        )
-                                    .SortableColumns(false)
-                                    .ColumnModel(
-                                                 Html.X().RowNumbererColumn()
-                                                
-                                                , Html.X().Column().Text(Util.GetLang("Buyer")).DataIndex("Buyer").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))
-                                                , Html.X().Column().Text(Util.GetLang("BuyerName")).DataIndex("BuyerName").Width(250).Editor(Html.X().TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true))
-
-                                                     
-                                                
-                                                , Html.X().CommandColumn().Width(150)
-                                                                        .Commands(
-                                                                            Html.X().GridCommand()
-                                                                                .Text(Util.GetLang("Reject"))
-                                                                                .ToolTip(t =>
-                                                                                {
-                                                                                    t.Text = Util.GetLang("Rejectrowchanges");
-                                                                                })
-                                                                                .CommandName("reject")
-                                                                                .Icon(Icon.ArrowUndo)
-                                                                        )
-                                                                        .PrepareToolbar(t =>
-                                                                        {
-                                                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                                                                        })
-                                                                        .Listeners(l =>
-                                                                        {
-                                                                            l.Command.Handler = "grd_Reject(record);";
-                                                                        })
-                                    )
-                                    .SelectionModel(Html.X().RowSelectionModel().ID("SelectionModelSYS_ScreenCat").Mode(SelectionMode.Multi))
-                                    .BottomBar(//Phan trang       
-                                        Html.X().PagingToolbar().ID("PagingToolbar")
-                                            .Items(
-                                                Html.X().Label("Page size:"),
-                                                Html.X().ToolbarSpacer(10),
-                                                Html.X().ComboBox()
-                                                    .Width(80)
-                                                    .Items("1", "2", "10", "20", "30", "50")
-                                                    .SelectedItems("50")
-                                                    .Listeners(l =>
-                                                    {
-                                                        l.Select.Fn = "onComboBoxSelect";
-                                                    })
-                                            )
-                                            .Plugins(Html.X().ProgressBarPager())
-
-                                        )
-
-                                    .Plugins(
-                                        Html.X()//Cho phep edit )
-                                            .CellEditing()
-                                            .ClicksToEdit(1)
-                                            .Listeners(ls =>
-                                            {
-                                                ls.BeforeEdit.Fn = "grd_BeforeEdit";
-                                                ls.Edit.Fn = "grd_Edit";
-                                                ls.ValidateEdit.Fn = "grd_ValidateEdit";
-                                                ls.CancelEdit.Fn = "grd_CancelEdit";
-
-
-                                            })
-                                    )
-                                    .Features(
-                                            Html.X().GridFilters()//Filter
-                                                .Local(true)
-                                                      .Filters(
-                                                        Html.X().StringFilter().DataIndex("Buyer"),
-                                                          Html.X().StringFilter().DataIndex("BuyerName")
-
-
-                                                      )
-
-                                        )
-
-
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdIN_Buyer")
+        .Store(
+             X.Store()
+            .ID("stoData")
+            .PageSize(50)//.AutoLoad(true)
+            .Model(Util.GenerateModel(typeof(SI20100_pgLoadGrid_Result), "mdlIN_Buyer", "Buyer"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData")))
+            .Listeners(l => { 
+                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; 
+                l.Load.Handler = "HQ.common.showBusy(false);"; 
+            })
+        )
+        .Listeners(p => p.BoxReady.Handler = "App.stoData.reload();")
+        .SortableColumns(false)
+        .ColumnModel(
+        
+         X.RowNumbererColumn()
+                    , X.Column().Text(("Buyer")).DataIndex("Buyer").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))
+                    , X.Column().Text(("BuyerName")).DataIndex("BuyerName").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true))
+                    
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                            X.GridCommand()
+                            .Text(("Reject"))
+                            .ToolTip(t =>
+                            {
+                                t.Text = ("Rejectrowchanges");
+                            })
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
                     )
+                    .PrepareToolbar(t =>
+                    {
+                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Command.Handler = "grdIN_Buyer_Reject(record);";
+                    })
+        
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdIN_Buyer_BeforeEdit";
+                ls.Edit.Fn = "grdIN_Buyer_Edit";
+                ls.ValidateEdit.Fn = "grdIN_Buyer_ValidateEdit";
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("Buyer"),
+                    X.StringFilter().DataIndex("BuyerName")
+      
                 )
-           )
- )
+        )
+    )
+))
