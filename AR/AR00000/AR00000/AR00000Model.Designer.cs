@@ -95,6 +95,75 @@ namespace AR00000
 
         #endregion
 
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<ppv_AR00000_AddrLevel_Result> ppv_AR00000_AddrLevel(Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<ppv_AR00000_AddrLevel_Result>("ppv_AR00000_AddrLevel", langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<ppv_AR00000_TranDescDflt_Result> ppv_AR00000_TranDescDflt(Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<ppv_AR00000_TranDescDflt_Result>("ppv_AR00000_TranDescDflt", langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<ppv_BankAcctCA_Result> ppv_BankAcctCA(global::System.String branchID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<ppv_BankAcctCA_Result>("ppv_BankAcctCA", branchIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<ppv_ShipViaID_Result> ppv_ShipViaID()
+        {
+            return base.ExecuteFunction<ppv_ShipViaID_Result>("ppv_ShipViaID");
+        }
+
+        #endregion
+
     }
 
     #endregion
@@ -659,6 +728,316 @@ namespace AR00000
         #endregion
 
     
+    }
+
+    #endregion
+
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR00000Model", Name="ppv_AR00000_AddrLevel_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class ppv_AR00000_AddrLevel_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR00000Model", Name="ppv_AR00000_TranDescDflt_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class ppv_AR00000_TranDescDflt_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR00000Model", Name="ppv_BankAcctCA_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class ppv_BankAcctCA_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new ppv_BankAcctCA_Result object.
+        /// </summary>
+        /// <param name="bankAcct">Initial value of the BankAcct property.</param>
+        /// <param name="cashAcctName">Initial value of the CashAcctName property.</param>
+        /// <param name="acctNbr">Initial value of the AcctNbr property.</param>
+        public static ppv_BankAcctCA_Result Createppv_BankAcctCA_Result(global::System.String bankAcct, global::System.String cashAcctName, global::System.String acctNbr)
+        {
+            ppv_BankAcctCA_Result ppv_BankAcctCA_Result = new ppv_BankAcctCA_Result();
+            ppv_BankAcctCA_Result.BankAcct = bankAcct;
+            ppv_BankAcctCA_Result.CashAcctName = cashAcctName;
+            ppv_BankAcctCA_Result.AcctNbr = acctNbr;
+            return ppv_BankAcctCA_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BankAcct
+        {
+            get
+            {
+                return _BankAcct;
+            }
+            set
+            {
+                OnBankAcctChanging(value);
+                ReportPropertyChanging("BankAcct");
+                _BankAcct = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BankAcct");
+                OnBankAcctChanged();
+            }
+        }
+        private global::System.String _BankAcct;
+        partial void OnBankAcctChanging(global::System.String value);
+        partial void OnBankAcctChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CashAcctName
+        {
+            get
+            {
+                return _CashAcctName;
+            }
+            set
+            {
+                OnCashAcctNameChanging(value);
+                ReportPropertyChanging("CashAcctName");
+                _CashAcctName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CashAcctName");
+                OnCashAcctNameChanged();
+            }
+        }
+        private global::System.String _CashAcctName;
+        partial void OnCashAcctNameChanging(global::System.String value);
+        partial void OnCashAcctNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String AcctNbr
+        {
+            get
+            {
+                return _AcctNbr;
+            }
+            set
+            {
+                OnAcctNbrChanging(value);
+                ReportPropertyChanging("AcctNbr");
+                _AcctNbr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("AcctNbr");
+                OnAcctNbrChanged();
+            }
+        }
+        private global::System.String _AcctNbr;
+        partial void OnAcctNbrChanging(global::System.String value);
+        partial void OnAcctNbrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR00000Model", Name="ppv_ShipViaID_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class ppv_ShipViaID_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new ppv_ShipViaID_Result object.
+        /// </summary>
+        /// <param name="shipViaID">Initial value of the ShipViaID property.</param>
+        public static ppv_ShipViaID_Result Createppv_ShipViaID_Result(global::System.String shipViaID)
+        {
+            ppv_ShipViaID_Result ppv_ShipViaID_Result = new ppv_ShipViaID_Result();
+            ppv_ShipViaID_Result.ShipViaID = shipViaID;
+            return ppv_ShipViaID_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ShipViaID
+        {
+            get
+            {
+                return _ShipViaID;
+            }
+            set
+            {
+                OnShipViaIDChanging(value);
+                ReportPropertyChanging("ShipViaID");
+                _ShipViaID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ShipViaID");
+                OnShipViaIDChanged();
+            }
+        }
+        private global::System.String _ShipViaID;
+        partial void OnShipViaIDChanging(global::System.String value);
+        partial void OnShipViaIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
     }
 
     #endregion

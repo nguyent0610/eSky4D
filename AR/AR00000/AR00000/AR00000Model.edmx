@@ -4,9 +4,9 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
-          <EntitySet Name="AR_Setup" EntityType="eBiz4DWebAppModel.Store.AR_Setup" store:Type="Tables" Schema="dbo" />
+    <Schema Namespace="AR00000Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="AR00000ModelStoreContainer">
+          <EntitySet Name="AR_Setup" EntityType="AR00000Model.Store.AR_Setup" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="AR_Setup">
           <Key>
@@ -35,12 +35,32 @@
           <Property Name="AutoSlsperID" Type="bit" />
           <Property Name="HiddenHierarchy" Type="bit" />
         </EntityType>
+        <Function Name="ppv_AR00000_AddrLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="ppv_AR00000_TranDescDflt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="ppv_BankAcctCA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ppv_ShipViaID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="AR00000Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
-        <EntityContainer Name="AR00000Entities" p1:LazyLoadingEnabled="true">
+      <Schema Namespace="AR00000Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="AR00000Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AR_Setup" EntityType="AR00000Model.AR_Setup" />
+          <FunctionImport Name="ppv_AR00000_AddrLevel" ReturnType="Collection(AR00000Model.ppv_AR00000_AddrLevel_Result)">
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_AR00000_TranDescDflt" ReturnType="Collection(AR00000Model.ppv_AR00000_TranDescDflt_Result)">
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_BankAcctCA" ReturnType="Collection(AR00000Model.ppv_BankAcctCA_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ppv_ShipViaID" ReturnType="Collection(AR00000Model.ppv_ShipViaID_Result)" />
         </EntityContainer>
         <EntityType Name="AR_Setup">
           <Key>
@@ -62,19 +82,36 @@
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Boolean" Name="AutoCustID" Nullable="false" />
           <Property Type="String" Name="LastCustID" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="AddressLevel" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="AutoSlsperID" />
           <Property Type="Boolean" Name="HiddenHierarchy" />
         </EntityType>
+        <ComplexType Name="ppv_AR00000_AddrLevel_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ppv_AR00000_TranDescDflt_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ppv_BankAcctCA_Result">
+          <Property Type="String" Name="BankAcct" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="CashAcctName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="AcctNbr" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="ppv_ShipViaID_Result">
+          <Property Type="String" Name="ShipViaID" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="AR00000Entities">
+        <EntityContainerMapping StorageEntityContainer="AR00000ModelStoreContainer" CdmEntityContainer="AR00000Entities">
           <EntitySetMapping Name="AR_Setup">
             <EntityTypeMapping TypeName="AR00000Model.AR_Setup">
               <MappingFragment StoreEntitySet="AR_Setup">
@@ -102,6 +139,39 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ppv_AR00000_AddrLevel" FunctionName="AR00000Model.Store.ppv_AR00000_AddrLevel">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR00000Model.ppv_AR00000_AddrLevel_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_AR00000_TranDescDflt" FunctionName="AR00000Model.Store.ppv_AR00000_TranDescDflt">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR00000Model.ppv_AR00000_TranDescDflt_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_BankAcctCA" FunctionName="AR00000Model.Store.ppv_BankAcctCA">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR00000Model.ppv_BankAcctCA_Result">
+                <ScalarProperty Name="BankAcct" ColumnName="BankAcct" />
+                <ScalarProperty Name="CashAcctName" ColumnName="CashAcctName" />
+                <ScalarProperty Name="AcctNbr" ColumnName="AcctNbr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ppv_ShipViaID" FunctionName="AR00000Model.Store.ppv_ShipViaID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR00000Model.ppv_ShipViaID_Result">
+                <ScalarProperty Name="ShipViaID" ColumnName="ShipViaID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -123,8 +193,8 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="83">
-        <EntityTypeShape EntityType="AR00000Model.AR_Setup" Width="1.5" PointX="2" PointY="0.625" />
+      <Diagram DiagramId="524c08638f4b4aba82525e08c6d0c477" Name="Diagram1" ZoomLevel="62">
+        <EntityTypeShape EntityType="AR00000Model.AR_Setup" Width="1.5" PointX="2.151391715813145" PointY="20.511006051912442" />
       </Diagram>
     </Diagrams>
   </Designer>
