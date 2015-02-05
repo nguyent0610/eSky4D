@@ -63,6 +63,6 @@
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 
         <!-- Gọi hàm Body trong AR20200Controller để dựng view Body.cshtml, mục đích tạo cache. -->
-        @{ Html.RenderAction("Body"); }
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
     </body>
 </html>

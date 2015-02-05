@@ -38,7 +38,7 @@ function Save() {
 function Delete(item) {
     if (item == 'yes') {
         try{
-            App.direct.Delete(App.cboSlsperid.getValue(), App.cboBranchID.getValue(), {
+            App.direct.AR20200Delete(App.cboSlsperid.getValue(), App.cboBranchID.getValue(), {
                 success: function (data) {
                     menuClick('refresh');
                     App.cboSlsperid.getStore().load();
@@ -77,7 +77,7 @@ var stoSalesPerson_load = function () {
         App.frmMain.getForm().loadRecord(record);
 
         if (record.data.Images) {
-            App.direct.GetImages(record.data.Images);
+            App.direct.AR20200GetImages(record.data.Images);
         } else {
             App.imgPPCStorePicReq.setImageUrl("");
         }

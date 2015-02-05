@@ -15,6 +15,8 @@ using PartialViewResult = System.Web.Mvc.PartialViewResult;
 namespace AR20200.Controllers
 {
     [DirectController]
+    [CustomAuthorize]
+    [CheckSessionOut]
     public class AR20200Controller : Controller
     {
         private string _screenNbr = "AR20200";
@@ -59,8 +61,8 @@ namespace AR20200.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
@@ -146,10 +148,13 @@ namespace AR20200.Controllers
                     {
                         var task = _db.HO_PendingTasks.FirstOrDefault(p => p.ObjectID == slsperId && p.EditScreenNbr == _screenNbr && p.BranchID == branchId);
 
+                        var roles = _sys.Users.FirstOrDefault(x => x.UserName == Current.UserName).UserTypes;
+
                         var approveHandle = _db.SI_ApprovalFlowHandle
                             .FirstOrDefault(p => p.AppFolID == _screenNbr
                                                 && p.Status == objHeader.Status
-                                                && p.Handle == handle);
+                                                && p.Handle == handle
+                                                && roles.Split(',').Contains(p.RoleID));
                         if (task == null && approveHandle != null)
                         {
                             if (!approveHandle.Param00.PassNull().Split(',').Any(p => p.ToLower() == "notapprove"))
@@ -204,7 +209,7 @@ namespace AR20200.Controllers
 
         // Delete a Sales Person and his picture file
         [DirectMethod]
-        public ActionResult Delete(string slsperId, string branchId)
+        public ActionResult AR20200Delete(string slsperId, string branchId)
         {
             var cpny = _db.AR_Salesperson.FirstOrDefault(p => p.SlsperId == slsperId && p.BranchID == branchId);
             if (cpny != null && cpny.Status==_beginStatus)
@@ -368,7 +373,7 @@ namespace AR20200.Controllers
         }
 
         [DirectMethod]
-        public ActionResult GetImages(string Name)
+        public ActionResult AR20200GetImages(string Name)
         {
             string typeFile = "";
             if (Name.EndsWith(".jpg"))
