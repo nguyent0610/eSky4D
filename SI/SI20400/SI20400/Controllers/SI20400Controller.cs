@@ -1,7 +1,6 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +8,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
 namespace SI20400.Controllers
 {
     [DirectController]
@@ -16,157 +17,99 @@ namespace SI20400.Controllers
     [CheckSessionOut]
     public class SI20400Controller : Controller
     {
-        string screenNbr = "SI20400";
+        private string _screenNbr = "SI20400";
+        private string _userName = Current.UserName;
+
         SI20400Entities _db = Util.CreateObjectContext<SI20400Entities>(false);
 
         public ActionResult Index()
-        {
+        {  
+            Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
-            return PartialView(_db.SI_MaterialType);
+            return PartialView();
         }
 
         public ActionResult GetData()
         {
-            
-            return this.Store(_db.SI_MaterialType);
+            return this.Store(_db.SI20400_pgLoadGrid().ToList());
         }
-        [DirectMethod]
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<SI_MaterialType> lstMsg = dataHandler.BatchObjectData<SI_MaterialType>();
-            foreach (SI_MaterialType deleted in lstMsg.Deleted)
+            try
             {
-                var del = _db.SI_MaterialType.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault();
-                if (del != null)
-                {
-                    _db.SI_MaterialType.DeleteObject(del);
 
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
+                ChangeRecords<SI_MaterialType> lstLang = dataHandler.BatchObjectData<SI_MaterialType>();
+                foreach (SI_MaterialType deleted in lstLang.Deleted)
+                {
+                    var del = _db.SI_MaterialType.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault();
+                    if (del != null)
+                    {
+                        _db.SI_MaterialType.DeleteObject(del);
+                    }
                 }
 
-            }
-            foreach (SI_MaterialType created in lstMsg.Created)
-            {
-                if (created.MaterialType == "") continue;
-                var record = _db.SI_MaterialType.Where(p => p.MaterialType == created.MaterialType).FirstOrDefault();
+                lstLang.Created.AddRange(lstLang.Updated);
 
-                if (created.tstamp.ToHex() == "")
+                foreach (SI_MaterialType curLang in lstLang.Created)
                 {
-                    if (record == null)
-                    {
-                        record = new SI_MaterialType();
-                        record.MaterialType = created.MaterialType;
-                        record.Descr = created.Descr;
-                        record.Buyer = created.Buyer;
-                        
-                        record.tstamp = new byte[0];
-                        
-                        record.Crtd_DateTime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingSYS_ModuleCat(created, ref record);
-                        _db.SI_MaterialType.AddObject(record);
+                    if (curLang.MaterialType.PassNull() == "") continue;
 
+                    var lang = _db.SI_MaterialType.Where(p => p.MaterialType.ToLower() == curLang.MaterialType.ToLower()).FirstOrDefault();
+
+                    if (lang != null)
+                    {
+                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        {
+                            Update_Language(lang, curLang, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
                     }
                     else
                     {
-                        //var record2 = new SI_MaterialType();
-                        //record2.Active = created.Active;
-                        //record2.ModuleCode = created.ModuleCode;
-                        //record2.ModuleID = created.ModuleID;
-                        //record2.CatID = created.CatID;
-                        //record2.ModuleName = created.ModuleName;
-
-                        //record2.Crtd_DateTime = DateTime.Now;
-                        //record2.Crtd_Prog = screenNbr;
-                        //record2.Crtd_User = Current.UserName;
-                        //UpdatingSYS_ModuleCat(created, ref record2);
-                        //_db.SI_MaterialType.AddObject(record2);
-                        Message.Show(2000, new string[] { Util.GetLang("MaterialType"), record.MaterialType.ToString() }, null);
-                        return this.Direct();
-                        //tra ve loi da ton tai ma ngon ngu nay ko the them
+                        lang = new SI_MaterialType();
+                        Update_Language(lang, curLang, true);
+                        _db.SI_MaterialType.AddObject(lang);
                     }
                 }
-                else
-                {
-                    Message.Show(2000, new string[] { Util.GetLang("MaterialType"), record.MaterialType.ToString() }, null);
-                    return this.Direct();
-                    //tra ve loi da ton tai ma ngon ngu nay ko the them
-                }
 
-
+                _db.SaveChanges();
+                return Json(new { success = true });
             }
-
-
-
-            foreach (SI_MaterialType updated in lstMsg.Updated)
+            catch (Exception ex)
             {
-
-                var record = _db.SI_MaterialType.Where(p => p.MaterialType == updated.MaterialType).FirstOrDefault();
-
-
-                if (record != null)
-                {
-                    
-                    if (record.tstamp.ToHex() != updated.tstamp.ToHex())
-                    {
-                        return Json(new { success = false });
-                    }
-                    UpdatingSYS_ModuleCat(updated, ref record);
-                }
-                else
-                {
-                    if (updated.tstamp.ToHex() == "")
-                    {
-                        record = new SI_MaterialType();
-                        record.MaterialType = updated.MaterialType;
-                        record.Descr = updated.Descr;
-                        record.Buyer = updated.Buyer;
-                    
-                        record.tstamp = new byte[0];
-
-                        record.Crtd_DateTime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingSYS_ModuleCat(updated, ref record);
-                        _db.SI_MaterialType.AddObject(record);
-                        
-                    }
-                    else
-                    {
-
-                        return Json(new { success = false });
-                    }
-                }
-
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
-
-
-
-
-            _db.SaveChanges();
-            return Json(new { success = true });
-
-
         }
 
-
-        private void UpdatingSYS_ModuleCat(SI_MaterialType s, ref SI_MaterialType d)
+        private void Update_Language(SI_MaterialType t, SI_MaterialType s, bool isNew)
         {
+            if (isNew)
+            {
+                t.MaterialType = s.MaterialType;
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
 
-            d.Descr = s.Descr;
-            d.Buyer = s.Buyer;
-           
-            d.LUpd_DateTime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
+            t.Descr = s.Descr;
+            t.Buyer = s.Buyer;
+
+
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
         }
     }
 }

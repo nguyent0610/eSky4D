@@ -23,12 +23,14 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="SI20400_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SI20400Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SI20400Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SI_MaterialType" EntityType="SI20400Model.SI_MaterialType" />
+          <FunctionImport Name="SI20400_pgLoadGrid" ReturnType="Collection(SI20400Model.SI20400_pgLoadGrid_Result)" />
         </EntityContainer>
         <EntityType Name="SI_MaterialType">
           <Key>
@@ -45,6 +47,12 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="SI20400_pgLoadGrid_Result">
+          <Property Type="String" Name="MaterialType" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Buyer" Nullable="false" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -67,6 +75,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SI20400_pgLoadGrid" FunctionName="eBiz4DWebSysModel.Store.SI20400_pgLoadGrid">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI20400Model.SI20400_pgLoadGrid_Result">
+                <ScalarProperty Name="MaterialType" ColumnName="MaterialType" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Buyer" ColumnName="Buyer" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -88,7 +106,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="SI20400Model.SI_MaterialType" Width="1.5" PointX="4.25" PointY="0.5" />
+        <EntityTypeShape EntityType="SI20400Model.SI_MaterialType" Width="1.5" PointX="0.089695293498083625" PointY="8.8769578975052372" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -95,6 +95,18 @@ namespace SI20400
 
         #endregion
 
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SI20400_pgLoadGrid_Result> SI20400_pgLoadGrid()
+        {
+            return base.ExecuteFunction<SI20400_pgLoadGrid_Result>("SI20400_pgLoadGrid");
+        }
+
+        #endregion
+
     }
 
     #endregion
@@ -390,6 +402,141 @@ namespace SI20400
         #endregion
 
     
+    }
+
+    #endregion
+
+    #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SI20400Model", Name="SI20400_pgLoadGrid_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SI20400_pgLoadGrid_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SI20400_pgLoadGrid_Result object.
+        /// </summary>
+        /// <param name="materialType">Initial value of the MaterialType property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        /// <param name="buyer">Initial value of the Buyer property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SI20400_pgLoadGrid_Result CreateSI20400_pgLoadGrid_Result(global::System.String materialType, global::System.String descr, global::System.String buyer, global::System.Byte[] tstamp)
+        {
+            SI20400_pgLoadGrid_Result sI20400_pgLoadGrid_Result = new SI20400_pgLoadGrid_Result();
+            sI20400_pgLoadGrid_Result.MaterialType = materialType;
+            sI20400_pgLoadGrid_Result.Descr = descr;
+            sI20400_pgLoadGrid_Result.Buyer = buyer;
+            sI20400_pgLoadGrid_Result.tstamp = tstamp;
+            return sI20400_pgLoadGrid_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String MaterialType
+        {
+            get
+            {
+                return _MaterialType;
+            }
+            set
+            {
+                OnMaterialTypeChanging(value);
+                ReportPropertyChanging("MaterialType");
+                _MaterialType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("MaterialType");
+                OnMaterialTypeChanged();
+            }
+        }
+        private global::System.String _MaterialType;
+        partial void OnMaterialTypeChanging(global::System.String value);
+        partial void OnMaterialTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Buyer
+        {
+            get
+            {
+                return _Buyer;
+            }
+            set
+            {
+                OnBuyerChanging(value);
+                ReportPropertyChanging("Buyer");
+                _Buyer = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Buyer");
+                OnBuyerChanged();
+            }
+        }
+        private global::System.String _Buyer;
+        partial void OnBuyerChanging(global::System.String value);
+        partial void OnBuyerChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
     }
 
     #endregion
