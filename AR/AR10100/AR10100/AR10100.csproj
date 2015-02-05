@@ -43,27 +43,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="eBiz4DWeb">
-      <HintPath>..\..\EbizWebMvc\AR10100_Language\AR10100\bin\eBiz4DWeb.dll</HintPath>
-    </Reference>
-    <Reference Include="eBiz4DWebFrame, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\eBiz4DWebFrame\bin\eBiz4DWebFrame.dll</HintPath>
-    </Reference>
-    <Reference Include="eBiz4DWebSys">
-      <HintPath>..\..\EbizWebMvc\AR10100_Language\AR10100\bin\eBiz4DWebSys.dll</HintPath>
-    </Reference>
     <Reference Include="Encryption">
       <HintPath>..\..\..\eBiz4DWebFrame\bin\Encryption.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>C:\Users\TramTB\Documents\Visual Studio 2012\Projects\ArrayGridUsingDB\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net">
       <HintPath>..\..\EbizWebMvc\AR10100_Language\AR10100\bin\Ext.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net.Utilities">
       <HintPath>..\..\EbizWebMvc\AR10100_Language\AR10100\bin\Ext.Net.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="HQ.eSkyFramework">
+      <HintPath>..\..\..\..\..\..\DLL MVC moi\HQ.eSkyFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="HQ.eSkySys">
+      <HintPath>..\..\..\..\..\..\DLL MVC moi\HQ.eSkySys.dll</HintPath>
     </Reference>
     <Reference Include="HQWebCommon">
       <HintPath>..\..\EbizWebMvc\SI20500_City\SI20500\bin\HQWebCommon.dll</HintPath>
@@ -228,7 +221,12 @@
       <LastGenOutput>AR10100Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
-    <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\hq.common.debug.js" />
+    <Content Include="Scripts\hq.common.js" />
+    <Content Include="Scripts\hq.language0.js" />
+    <Content Include="Scripts\hq.language1.js" />
+    <Content Include="Scripts\hq.language2.js" />
+    <Content Include="Scripts\hq.language3.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -243,6 +241,7 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\Screen\AR10100.debug.js" />
     <Content Include="Scripts\Screen\AR10100.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">

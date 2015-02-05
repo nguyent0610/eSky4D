@@ -1,4 +1,5 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
+
 using Ext.Net;
 using Ext.Net.MVC;
 
@@ -38,13 +39,13 @@ namespace AR10100.Controllers
         }
         public ActionResult GetDataFormBot(String branchID, String batNbr, String refNbr)
         {
-            var lst = _db.AR_Doc.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
+            var lst = _db.AR_Doc.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).FirstOrDefault();
             return this.Store(lst);
         }
 
         public ActionResult GetDataGrid(String branchID, String batNbr, String refNbr)
         {
-            var lst = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).ToList();
+            var lst = _db.AR10100_pgLoadGridTrans(branchID,batNbr,refNbr).ToList();
 
             return this.Store(lst);
         }
@@ -58,7 +59,7 @@ namespace AR10100.Controllers
             StoreDataHandler dataHandlerBot = new StoreDataHandler(data["lstheaderBot"]);
             ChangeRecords<AR_Doc> lstheaderBot = dataHandlerBot.BatchObjectData<AR_Doc>();
             StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AR_Trans> lstgrd = dataHandlerGrid.BatchObjectData<AR_Trans>();
+            ChangeRecords<AR10100_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AR10100_pgLoadGridTrans_Result>();
 
             var docDate = data["txtDocDate"];
             var invcDate = data["txtInvcDate"];
@@ -250,7 +251,7 @@ namespace AR10100.Controllers
 
 
 
-            foreach (AR_Trans created in lstgrd.Created)
+            foreach (AR10100_pgLoadGridTrans_Result created in lstgrd.Created)
             {
                 tmpGridChangeOrNot = 1;
                 var record = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -308,8 +309,10 @@ namespace AR10100.Controllers
                     record.Crtd_DateTime = DateTime.Now;
                     record.Crtd_Prog = screenNbr;
                     record.Crtd_User = Current.UserName;
-
-                    _db.AR_Trans.AddObject(record);
+                    if (record.BranchID != "" && record.BatNbr != "" && record.RefNbr != "" && record.InvtId != "")
+                    {
+                        _db.AR_Trans.AddObject(record);
+                    }
                     _db.SaveChanges();
 
                 }
@@ -329,7 +332,7 @@ namespace AR10100.Controllers
 
 
 
-            foreach (AR_Trans updated in lstgrd.Updated)
+            foreach (AR10100_pgLoadGridTrans_Result updated in lstgrd.Updated)
             {
                 tmpGridChangeOrNot = 1;
                 var record = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -408,8 +411,10 @@ namespace AR10100.Controllers
                             record.Crtd_DateTime = DateTime.Now;
                             record.Crtd_Prog = screenNbr;
                             record.Crtd_User = Current.UserName;
-
-                            _db.AR_Trans.AddObject(record);
+                            if (record.BranchID != "" && record.BatNbr != "" && record.RefNbr != "" && record.InvtId != "")
+                            {
+                                _db.AR_Trans.AddObject(record);
+                            }
                             //_db.SaveChanges();
 
                         }
@@ -424,7 +429,7 @@ namespace AR10100.Controllers
             }
 
 
-            foreach (AR_Trans deleted in lstgrd.Deleted)
+            foreach (AR10100_pgLoadGridTrans_Result deleted in lstgrd.Deleted)
             {
 
                 var del = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -502,12 +507,12 @@ namespace AR10100.Controllers
             return this.Direct();
         }
 
-    
 
-        private void UpdatingGridAP_Trans(AR_Trans s, ref AR_Trans d)
+
+        private void UpdatingGridAP_Trans(AR10100_pgLoadGridTrans_Result s, ref AR_Trans d)
         {
             d.LineRef = s.LineRef;
-            //d.InvtID = s.InvtID;
+            d.InvtId = s.InvtID;
             d.LineType = s.LineType;
 
 
@@ -568,13 +573,13 @@ namespace AR10100.Controllers
 
         private string functionBatNbrIfNull(string branchID)
         {
-            var recordLastBatNbr = _db.ARNumbering(branchID, "BatNbr").FirstOrDefault();
+            var recordLastBatNbr = _db.AR10100_ppARNumbering(branchID, "BatNbr").FirstOrDefault();
             return recordLastBatNbr;
         }
 
         private string functionRefNbrIfNull(string branchID)
         {
-            var recordLastBatNbr = _db.ARNumbering(branchID, "RefNbr").FirstOrDefault();
+            var recordLastBatNbr = _db.AR10100_ppARNumbering(branchID, "RefNbr").FirstOrDefault();
             return recordLastBatNbr;
         }
         //private string functionBatNbrIfNull(int batNbrIfNull)
