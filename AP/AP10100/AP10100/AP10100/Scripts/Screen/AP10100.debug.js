@@ -757,6 +757,11 @@ var Focus3_Change = function (sender, e) {
     _focusrecord = 3;
 }
 
+var setValueBranchID = function () {
+    App.txtBranchID.setValue(HQ.cpnyID);
+
+};
+
 var leapYear = function (year) {
     return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
 }

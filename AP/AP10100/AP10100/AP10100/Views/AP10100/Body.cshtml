@@ -32,6 +32,11 @@
                 .AnchorVertical("20%")
                 //.Title(Util.GetLang("DOC"))
                 .Padding(5)
+                .Listeners(lst =>
+                        {
+                            lst.BoxReady.Fn = "setValueBranchID";
+
+                        })
                 .Items(
                         
                  
