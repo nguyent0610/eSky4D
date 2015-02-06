@@ -102,7 +102,7 @@
   )
 
 
-     @{ Html.RenderAction("Body"); }
+       @{Html.RenderAction("Body", new { lang=@Current.LangID});}
     </body>
 </html>
 

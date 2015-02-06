@@ -457,7 +457,7 @@ var grd_Edit = function (item, e) {
 var grd_ValidateEdit = function (item, e) {
 
     if (keys.indexOf(e.field) != -1) {
-        if (HQ.grid.checkDuplicate(App.grd, e,keys)) {
+        if (HQ.grid.checkDuplicate(App.grd, e, keys)) {
             HQ.message.show(1112, e.value, '');
             App.slmGrid.selected.items[0].set('InvcNbr', '');
             return false;
@@ -573,6 +573,12 @@ var Focus3_Change = function (sender, e) {
 
     _focusrecord = 3;
 };
+
+var setValueBranchID = function () {
+    App.txtBranchID.setValue(HQ.cpnyID);
+
+};
+
 
 var checkRequire = function (items) {
     if (items != undefined) {
