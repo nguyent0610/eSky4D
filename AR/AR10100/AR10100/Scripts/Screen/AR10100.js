@@ -709,6 +709,12 @@ var Focus3_Change = function (sender, e) {
     _focusrecord = 3;
 }
 
+var setValueBranchID = function () {
+    App.txtBranchID.setValue(HQ.cpnyID);
+
+};
+
+
 var checkRequire = function (items) {
     if (items != undefined) {
         for (var i = 0; i < items.length; i++) {

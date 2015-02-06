@@ -173,7 +173,7 @@
         //.Listeners(p=>p.Load.Handler="loadDataHeaderDetail()" )
         
   )
-     @{ Html.RenderAction("Body"); }
+     @{Html.RenderAction("Body", new { lang=@Current.LangID});}
     </body>
 </html>
 
