@@ -124,7 +124,7 @@
                             })
         .Listeners(p => p.Load.Handler = "waitstoreGrid2Reload()")
   )
-     @{ Html.RenderAction("Body"); }
+     @{Html.RenderAction("Body", new { lang=@Current.LangID});}
     </body>
 </html>
 
