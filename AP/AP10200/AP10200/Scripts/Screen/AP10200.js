@@ -630,7 +630,10 @@ var Focus3_Change = function (sender, e) {
     _focusrecord = 3;
 };
 
+var setValueBranchID = function () {
+    App.txtBranchID.setValue(HQ.cpnyID);
 
+};
 
 
 var waitGridLoadAndFocusIntoBatNbr = function () {
