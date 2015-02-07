@@ -1,5 +1,6 @@
 ﻿using System;
 using HQ.eSkyFramework;
+using HQ.eSkySys;
 using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -282,7 +283,50 @@ namespace HQSendMailApprove
             }
 
         }
+
+        public static void SendMailApprove(string lstBranchID, string lstObj, string ScreenNbr, string CurrentBranch, string Status, string ToStatus, string User, short LangID)
+        {
+            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>();
+            eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
+            var objhandle = new SI_ApprovalFlowHandle();
+            var _roles = _sys.Users.Where(p => p.UserName.ToUpper() == User.ToUpper()).FirstOrDefault().UserTypes.PassNull().Split(',');
+            var lstobjhandle = app.SI_ApprovalFlowHandle.Where(p => p.AppFolID.ToUpper().Trim() == ScreenNbr.ToUpper().Trim() && p.Status.ToUpper().Trim() == Status.ToUpper().Trim() && p.ToStatus.ToUpper().Trim() == ToStatus.ToUpper().Trim()).ToList();
+
+            objhandle = lstobjhandle.Where(p => _roles.Any(d => d.ToUpper().Trim() == p.RoleID.ToUpper().ToUpper().Trim())).FirstOrDefault();
+            objhandle = objhandle == null ? new SI_ApprovalFlowHandle() : objhandle;
+            try
+            {
+
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                dic.Add("@CurrentBranchID", CurrentBranch);
+                dic.Add("@ScreenNbr", objhandle.AppFolID.PassNull());
+                dic.Add("@ObjID", lstObj);
+                dic.Add("@BranchID", lstBranchID);
+                dic.Add("@FromStatus", objhandle.Status.PassNull());
+                dic.Add("@ToStatus", objhandle.ToStatus.PassNull());
+                dic.Add("@Action", "2");
+                dic.Add("@Handle", objhandle.Handle.PassNull());
+                dic.Add("@RoleID", objhandle.RoleID.PassNull());
+                dic.Add("@LangID", LangID.ToString());
+                dic.Add("@User", User);
+
+                if (objhandle.Param00.PassNull().ToUpper().Split(',').Contains("PUSHTASK"))
+                    InsertHOPendingTask("InsertHOPendingTask", dic);
+                var lstMail = GetMail(objhandle.MailApprove.PassNull().Trim() == "" ? "MailSend" : objhandle.MailApprove, dic);
+                foreach (var item in lstMail)
+                {
+                    SendMail(item.To.PassNull(), item.CC.PassNull(), objhandle.MailSubject, item.Content);
+                }
+            }
+            catch
+            {
+                throw new Exception();
+
+            }
+
+        }
    
+
         public static void SendMailApproveAR21600(string ScreenNbr, string User, string ObjectValue, string Task, string FromBranch, string ToBranch, string FromStatus, string ToStatus, string lstObj, string Reason, string Handle, string[] _roles, short LangID)
         {
             try
