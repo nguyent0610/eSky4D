@@ -40,18 +40,18 @@
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
-            X.Column().ID("Code").Text("Code").DataIndex("Code").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(20).EnforceMaxLength(true)),
-            X.Column().Text("Lang00").DataIndex("Lang00").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
-            X.Column().Text("Lang01").DataIndex("Lang01").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
-            X.Column().Text("Lang02").DataIndex("Lang02").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
-            X.Column().Text("Lang03").DataIndex("Lang03").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
-            X.Column().Text("Lang04").DataIndex("Lang04").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
+            X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(20).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Lang00")).DataIndex("Lang00").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Lang01")).DataIndex("Lang01").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Lang02")).DataIndex("Lang02").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Lang03")).DataIndex("Lang03").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Lang04")).DataIndex("Lang04").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
             X.CommandColumn()
             .Width(150)
             .Commands(
                 X.GridCommand()
-                .Text("Reject")
-                .ToolTip(t => t.Text = "Rejectrowchanges")
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
                 .CommandName("reject")
                 .Icon(Icon.ArrowUndo)
             )
