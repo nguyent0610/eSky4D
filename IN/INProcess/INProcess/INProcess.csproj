@@ -8,8 +8,8 @@
     <ProjectGuid>{5076D947-B886-4BC1-8C36-ECAC983ACDEF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ServerApp_Process</RootNamespace>
-    <AssemblyName>ServerApp_Process</AssemblyName>
+    <RootNamespace>INProcess</RootNamespace>
+    <AssemblyName>INProcess</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
