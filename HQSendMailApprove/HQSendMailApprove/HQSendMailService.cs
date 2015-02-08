@@ -290,8 +290,7 @@ namespace HQSendMailApprove
             eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
             var objhandle = new SI_ApprovalFlowHandle();
             var _roles = _sys.Users.Where(p => p.UserName.ToUpper() == User.ToUpper()).FirstOrDefault().UserTypes.PassNull().Split(',');
-            var lstobjhandle = app.SI_ApprovalFlowHandle.Where(p => p.AppFolID.ToUpper().Trim() == ScreenNbr.ToUpper().Trim() && p.Status.ToUpper().Trim() == Status.ToUpper().Trim() && p.ToStatus.ToUpper().Trim() == ToStatus.ToUpper().Trim()).ToList();
-
+            var lstobjhandle = app.SI_ApprovalFlowHandle.Where(p => p.AppFolID.ToUpper().Trim() == ScreenNbr.ToUpper().Trim() && p.Status.ToUpper().Trim() == Status.ToUpper().Trim() && p.ToStatus.ToUpper().Trim() == ToStatus.ToUpper().Trim()).ToList();          
             objhandle = lstobjhandle.Where(p => _roles.Any(d => d.ToUpper().Trim() == p.RoleID.ToUpper().ToUpper().Trim())).FirstOrDefault();
             objhandle = objhandle == null ? new SI_ApprovalFlowHandle() : objhandle;
             try
@@ -318,9 +317,9 @@ namespace HQSendMailApprove
                     SendMail(item.To.PassNull(), item.CC.PassNull(), objhandle.MailSubject, item.Content);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception();
+                throw ex;
 
             }
 
