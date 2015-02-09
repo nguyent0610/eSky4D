@@ -1,6 +1,8 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 
 var keys = ['Code'];
+var fieldsCheckRequire = ["Code", "Lang00", "Lang01"];
+var fieldsLangCheckRequire = ["Code", "Lang00", "Lang01"];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -9,28 +11,28 @@ var keys = ['Code'];
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            HQ.grid.first(App.grdLanguage);
+            HQ.grid.first(App.grdSYS_Language);
             break;
         case "prev":
-            HQ.grid.prev(App.grdLanguage);
+            HQ.grid.prev(App.grdSYS_Language);
             break;
         case "next":
-            HQ.grid.next(App.grdLanguage);
+            HQ.grid.next(App.grdSYS_Language);
             break;
         case "last":
-            HQ.grid.last(App.grdLanguage);
+            HQ.grid.last(App.grdSYS_Language);
             break;
         case "refresh":
-            App.stoLanguage.reload();
-            HQ.grid.first(App.grdLanguage);
+            App.stoSYS_Language.reload();
+            HQ.grid.first(App.grdSYS_Language);
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdLanguage);
+                HQ.grid.insert(App.grdSYS_Language);
             }
             break;
         case "delete":
-            if (App.slmLanguage.selected.items[0] != undefined) {
+            if (App.slmSYS_Language.selected.items[0] != undefined) {
                 if (HQ.isDelete) {
                     HQ.message.show(11, '', 'deleteData');
                 }
@@ -38,7 +40,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (checkRequire(App.stoLanguage.getChangedData().Created) && checkRequire(App.stoLanguage.getChangedData().Updated)) {
+                if (HQ.store.checkRequirePass(App.stoSYS_Language, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -46,7 +48,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.store.isChange(App.stoLanguage)) {
+            if (HQ.store.isChange(App.stoSYS_Language)) {
                 HQ.message.show(5, '', 'askClose');
             } else {
                 HQ.common.close(this);
@@ -55,43 +57,31 @@ var menuClick = function (command) {
     }
 
 };
-var grdLanguage_BeforeEdit = function (editor, e) {
-    if (!HQ.isUpdate) return false;
-      
-    if (keys.indexOf(e.field) != -1) {
-        if (e.record.data.tstamp != "")
-            return false;
-    }
-    return HQ.grid.checkInput(e, keys);
+var grdSYS_Language_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
 };
-var grdLanguage_Edit = function (item, e) {
-    if (keys.indexOf(e.field) != -1) {
-        if (e.value != '' && isAllValidKey(App.stoLanguage.getChangedData().Created) && isAllValidKey(App.stoLanguage.getChangedData().Updated))
-            HQ.store.insertBlank(App.stoLanguage);
-    }
- 
-    
+var grdSYS_Language_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.stoSYS_Group, e, keys);
 };
-var grdLanguage_ValidateEdit = function (item, e) {
+var grdSYS_Language_ValidateEdit = function (item, e) {
     if (keys.indexOf(e.field) != -1) {
         var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-        if (!e.value.match(regex)) 
-        {
+        if (!e.value.match(regex)) {
             HQ.message.show(20140811, e.column.text);
             return false;
         }
-        if (HQ.grid.checkDuplicateAll(App.grdLanguage, e, keys)) {
+        if (HQ.grid.checkDuplicateAll(App.grdSYS_Language, e, keys)) {
             HQ.message.show(1112, e.value);
             return false;
         }
-       
+
     }
 };
-var grdLanguage_Reject = function (record) {
+var grdSYS_Language_Reject = function (record) {
     if (record.data.tstamp == '') {
-        App.stoLanguage.remove(record);
-        App.grdLanguage.getView().focusRow(App.stoLanguage.getCount() - 1);
-        App.grdLanguage.getSelectionModel().select(App.stoLanguage.getCount() - 1);
+        App.stoSYS_Language.remove(record);
+        App.grdSYS_Language.getView().focusRow(App.stoSYS_Language.getCount() - 1);
+        App.grdSYS_Language.getSelectionModel().select(App.stoSYS_Language.getCount() - 1);
     } else {
         record.reject();
     }
@@ -104,7 +94,7 @@ var save = function () {
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'SA00900/Save',
             params: {
-                lstLanguage: HQ.store.getData(App.stoLanguage)
+                lstSYS_Language: HQ.store.getData(App.stoSYS_Language)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
@@ -119,46 +109,11 @@ var save = function () {
 
 var deleteData = function (item) {
     if (item == "yes") {
-        App.grdLanguage.deleteSelected();
+        App.grdSYS_Language.deleteSelected();
     }
 };
-//kiem tra key da nhap du chua
-var isAllValidKey = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            for (var j = 0; j < keys.length; j++) {
-                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
-                    return false;
-            }
-        }
-        return true;
-    } else {
-        return true;
-    }
-};
-//kiem tra nhung field yeu cau bat buoc nhap
-var checkRequire = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            if (HQ.grid.checkRequirePass(items[i],keys)) continue;
-            if (items[i]["Code"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("Code"));
-                return false;
-            }
-            if (items[i]["Lang00"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("Lang00"));
-                return false;
-            }
-            if (items[i]["Lang01"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("Lang01"));
-                return false;
-            }
-        }
-        return true;
-    } else {
-        return true;
-    }
-};
+
+
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 var askClose = function (item) {

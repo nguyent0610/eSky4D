@@ -119,9 +119,9 @@ namespace SA00900
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SA00900_pgLoadLanguage_Result> SA00900_pgLoadLanguage()
+        public ObjectResult<SA00900_pgLoadSYS_Language_Result> SA00900_pgLoadSYS_Language()
         {
-            return base.ExecuteFunction<SA00900_pgLoadLanguage_Result>("SA00900_pgLoadLanguage");
+            return base.ExecuteFunction<SA00900_pgLoadSYS_Language_Result>("SA00900_pgLoadSYS_Language");
         }
 
         #endregion
@@ -579,28 +579,28 @@ namespace SA00900
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="SA00900Model", Name="SA00900_pgLoadLanguage_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="SA00900Model", Name="SA00900_pgLoadSYS_Language_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class SA00900_pgLoadLanguage_Result : ComplexObject
+    public partial class SA00900_pgLoadSYS_Language_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new SA00900_pgLoadLanguage_Result object.
+        /// Create a new SA00900_pgLoadSYS_Language_Result object.
         /// </summary>
         /// <param name="code">Initial value of the Code property.</param>
         /// <param name="lang00">Initial value of the Lang00 property.</param>
         /// <param name="lang01">Initial value of the Lang01 property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SA00900_pgLoadLanguage_Result CreateSA00900_pgLoadLanguage_Result(global::System.String code, global::System.String lang00, global::System.String lang01, global::System.Byte[] tstamp)
+        public static SA00900_pgLoadSYS_Language_Result CreateSA00900_pgLoadSYS_Language_Result(global::System.String code, global::System.String lang00, global::System.String lang01, global::System.Byte[] tstamp)
         {
-            SA00900_pgLoadLanguage_Result sA00900_pgLoadLanguage_Result = new SA00900_pgLoadLanguage_Result();
-            sA00900_pgLoadLanguage_Result.Code = code;
-            sA00900_pgLoadLanguage_Result.Lang00 = lang00;
-            sA00900_pgLoadLanguage_Result.Lang01 = lang01;
-            sA00900_pgLoadLanguage_Result.tstamp = tstamp;
-            return sA00900_pgLoadLanguage_Result;
+            SA00900_pgLoadSYS_Language_Result sA00900_pgLoadSYS_Language_Result = new SA00900_pgLoadSYS_Language_Result();
+            sA00900_pgLoadSYS_Language_Result.Code = code;
+            sA00900_pgLoadSYS_Language_Result.Lang00 = lang00;
+            sA00900_pgLoadSYS_Language_Result.Lang01 = lang01;
+            sA00900_pgLoadSYS_Language_Result.tstamp = tstamp;
+            return sA00900_pgLoadSYS_Language_Result;
         }
 
         #endregion

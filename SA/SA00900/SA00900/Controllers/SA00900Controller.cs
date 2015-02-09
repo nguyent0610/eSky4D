@@ -29,15 +29,15 @@ namespace SA00900.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetLanguage()
+        public ActionResult GetSYS_Language()
         {
-            return this.Store(_db.SA00900_pgLoadLanguage().ToList());
+            return this.Store(_db.SA00900_pgLoadSYS_Language().ToList());
         }
 
         [HttpPost]
@@ -46,9 +46,9 @@ namespace SA00900.Controllers
             try
             {
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstLanguage"]);
-                ChangeRecords<SA00900_pgLoadLanguage_Result> lstLang = dataHandler.BatchObjectData<SA00900_pgLoadLanguage_Result>();
-                foreach (SA00900_pgLoadLanguage_Result deleted in lstLang.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Language"]);
+                ChangeRecords<SA00900_pgLoadSYS_Language_Result> lstLang = dataHandler.BatchObjectData<SA00900_pgLoadSYS_Language_Result>();
+                foreach (SA00900_pgLoadSYS_Language_Result deleted in lstLang.Deleted)
                 {
                     var del = _db.SYS_Language.Where(p => p.Code == deleted.Code).FirstOrDefault();
                     if (del != null)
@@ -59,7 +59,7 @@ namespace SA00900.Controllers
 
                 lstLang.Created.AddRange(lstLang.Updated);
 
-                foreach (SA00900_pgLoadLanguage_Result curLang in lstLang.Created)
+                foreach (SA00900_pgLoadSYS_Language_Result curLang in lstLang.Created)
                 {
                     if (curLang.Code.PassNull() == "") continue;
 
@@ -99,7 +99,7 @@ namespace SA00900.Controllers
             }
         }
 
-        private void Update_Language(SYS_Language t, SA00900_pgLoadLanguage_Result s, bool isNew)
+        private void Update_Language(SYS_Language t, SA00900_pgLoadSYS_Language_Result s, bool isNew)
         {
             if (isNew)
             {

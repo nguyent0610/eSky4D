@@ -24,19 +24,19 @@
         X.GridPanel()
         .Scroll(ScrollMode.Both)
         .View(X.GridView().TrackOver(false))
-        .ID("grdLanguage")
+        .ID("grdSYS_Language")
         .Store(
             X.Store()
-            .ID("stoLanguage")
+            .ID("stoSYS_Language")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(SA00900_pgLoadLanguage_Result), "mdlSA00900_pgLoadLanguage", "Code"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetLanguage")))
+            .Model(Util.GenerateModel(typeof(SA00900_pgLoadSYS_Language_Result), "mdlSA00900_pgLoadSYS_Language", "Code"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Language")))
             .Listeners(l => { 
                 l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; 
                 l.Load.Handler = "HQ.common.showBusy(false);"; 
             })
         )
-        .Listeners(p => p.BoxReady.Handler = "App.stoLanguage.reload();")
+        .Listeners(p => p.BoxReady.Handler = "App.stoSYS_Language.reload();")
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
@@ -56,9 +56,9 @@
                 .Icon(Icon.ArrowUndo)
             )
             .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-            .Listeners(l => l.Command.Handler = "grdLanguage_Reject(record);")
+            .Listeners(l => l.Command.Handler = "grdSYS_Language_Reject(record);")
         )
-        .SelectionModel(X.RowSelectionModel().ID("slmLanguage").Mode(SelectionMode.Multi))
+        .SelectionModel(X.RowSelectionModel().ID("slmSYS_Language").Mode(SelectionMode.Multi))
         .BottomBar(
             X.PagingToolbar()
             .Items(
@@ -77,9 +77,9 @@
             .ClicksToEdit(1)
             .Listeners(ls =>
             {
-                ls.BeforeEdit.Fn = "grdLanguage_BeforeEdit";
-                ls.Edit.Fn = "grdLanguage_Edit";
-                ls.ValidateEdit.Fn = "grdLanguage_ValidateEdit";
+                ls.BeforeEdit.Fn = "grdSYS_Language_BeforeEdit";
+                ls.Edit.Fn = "grdSYS_Language_Edit";
+                ls.ValidateEdit.Fn = "grdSYS_Language_ValidateEdit";
             })
         )
 
