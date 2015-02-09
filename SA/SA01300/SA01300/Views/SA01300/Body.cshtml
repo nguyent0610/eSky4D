@@ -1,0 +1,118 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA01300;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)   
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdSYS_Configurations")
+        .Store(
+             X.Store()
+            .ID("stoData")
+            .PageSize(50)//.AutoLoad(true)
+            .Model(Util.GenerateModel(typeof(SA01300_pgLoadGrid_Result), "mdlgrdSYS_Configurations", "Code"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData")))
+            .Listeners(l => { 
+                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; 
+                l.Load.Handler = "HQ.common.showBusy(false);"; 
+            })
+        )
+        .Listeners(p => p.BoxReady.Handler = "App.stoData.reload();")
+        .SortableColumns(false)
+        .ColumnModel(
+         X.RowNumbererColumn()
+            
+            ,X.Column().Text(Util.GetLang("Code")).DataIndex("Code").Width(150)
+            .Editor(X.TextField().MaxLength(20).EnforceMaxLength(true)).ID("txtCode")
+                                                
+            , X.DateColumn().Text(Util.GetLang("DateVal")).DataIndex("DateVal").Width(100).Format("MM-dd-yyyy")
+            .Editor(X.DateField().ID("txtDateVal").Format("MM-dd-yyyy"))
+                                                
+            , X.NumberColumn().Text(Util.GetLang("FloatVal")).DataIndex("FloatVal").Width(150).Format("0,000")
+            .Editor(X.NumberField().DecimalPrecision(0)).ID("txtFloatVal")
+                                                
+            , X.NumberColumn().Text(Util.GetLang("IntVal")).DataIndex("IntVal").Format("0,000").Width(150)
+            .Editor(X.NumberField().DecimalPrecision(0)).ID("txtIntVal")
+                                       
+            ,X.Column().Text(Util.GetLang("TextVal")).DataIndex("TextVal").Width(150)
+            .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true)).ID("txtTextVal")
+                                      
+         
+            , X.CommandColumn().Width(150)
+            .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t =>
+                    {
+                        t.Text = Util.GetLang("Rejectrowchanges");
+                    })
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t =>
+            {
+                t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+            })
+            .Listeners(l =>
+            {
+                l.Command.Handler = "grdSYS_Configurations_Reject(record);";
+            })
+        
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdSYS_Configurations_BeforeEdit";
+                ls.Edit.Fn = "grdSYS_Configurations_Edit";
+                ls.ValidateEdit.Fn = "grdSYS_Configurations_ValidateEdit";
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("Code"),
+                    X.StringFilter().DataIndex("DateVal"),
+                    X.StringFilter().DataIndex("FloatVal"),
+                    X.StringFilter().DataIndex("IntVal"),
+                    X.StringFilter().DataIndex("TextVal")
+                )
+        )
+    )
+))
