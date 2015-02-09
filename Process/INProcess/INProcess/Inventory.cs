@@ -122,7 +122,7 @@ namespace INProcess
         {
             try
             {
-                if(Receipt_Cancel(branchID, batNbr, string.Empty, isTransfer,true) && isCopy)
+                if (Receipt_Cancel(branchID, batNbr, string.Empty, isTransfer, transferNbr, true) && isCopy)
                 {
                     clsBatch objBatch = new clsBatch(Dal);
                     if (objBatch.GetByKey(branchID,"IN",batNbr))
@@ -901,7 +901,7 @@ namespace INProcess
                 throw ex;
             }
         }
-        public bool Receipt_Cancel(string branchID, string batNbr, string rcptNbr, bool isTransfer, bool release)
+        public bool Receipt_Cancel(string branchID, string batNbr, string rcptNbr, bool isTransfer,string transferNbr, bool release)
         {
             try
             {
@@ -1001,7 +1001,7 @@ namespace INProcess
                 }
                 if (isTransfer)
                 {
-                    sql.IN10100_UpdateTransfer(branchID, batNbr, Prog, User, tranDate, refNbr, transferNbr,"I");
+                    objSql.IN10100_UpdateTransfer(branchID, batNbr, Prog, User, tranDate, "", transferNbr, "I");
                 }
                 if (release)
                     objSql.IN_CancelBatch(branchID, batNbr, Prog, User);
