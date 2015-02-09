@@ -1,7 +1,6 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +8,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
 namespace SI21700.Controllers
 {
     [DirectController]
@@ -16,155 +17,101 @@ namespace SI21700.Controllers
     [CheckSessionOut]
     public class SI21700Controller : Controller
     {
-        string screenNbr = "SI21700";
+        private string _screenNbr = "SI21700";
+        private string _userName = Current.UserName;
+
         SI21700Entities _db = Util.CreateObjectContext<SI21700Entities>(false);
 
         public ActionResult Index()
         {
+
+            Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
-            return PartialView(_db.SI_District);
+            return PartialView();
         }
 
-        public ActionResult GetData()
+        public ActionResult GetDistrict()
         {
-            
-            return this.Store(_db.SI_District);
+            var Districts = _db.SI21700_pgLoadDistrict().ToList();
+            return this.Store(Districts);
         }
-        [DirectMethod]
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<SI_District> lstMsg = dataHandler.BatchObjectData<SI_District>();
-            foreach (SI_District deleted in lstMsg.Deleted)
+            try
             {
-                var del = _db.SI_District.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.District == deleted.District).FirstOrDefault();
-                if (del != null)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstDistrict"]);
+                ChangeRecords<SI_District> lstDistrict = dataHandler.BatchObjectData<SI_District>();
+                foreach (SI_District deleted in lstDistrict.Deleted)
                 {
-                    _db.SI_District.DeleteObject(del);
-
+                    var del = _db.SI_District.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.District == deleted.District).FirstOrDefault();
+                    if (del != null)
+                    {
+                        _db.SI_District.DeleteObject(del);
+                    }
                 }
 
-            }
-            foreach (SI_District created in lstMsg.Created)
-            {
-                if (created.Country == "") continue;
-                var record = _db.SI_District.Where(p => p.Country == created.Country && p.State == created.State && p.District == created.District).FirstOrDefault();
+                lstDistrict.Created.AddRange(lstDistrict.Updated);
 
-                if (created.tstamp.ToHex() == "")
+                foreach (SI_District curDistrict in lstDistrict.Created)
                 {
-                    if (record == null)
-                    {
-                        record = new SI_District();
-                        record.Country = created.Country;
-                        record.State = created.State;
-                        record.District = created.District;
-                        record.Name = created.Name;
-                        record.tstamp = new byte[0];
-                        
-                        record.Crtd_Datetime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingSYS_ModuleCat(created, ref record);
-                        _db.SI_District.AddObject(record);
+                    if (curDistrict.Country.PassNull() == "" && curDistrict.State.PassNull() == "" && curDistrict.District.PassNull() == "") continue;
 
+                    var District = _db.SI_District.Where(p => p.Country.ToLower() == curDistrict.Country.ToLower() && p.State.ToLower() == curDistrict.State.ToLower() && p.District.ToLower() == curDistrict.District.ToLower()).FirstOrDefault();
+
+                    if (District != null)
+                    {
+                        if (District.tstamp.ToHex() == curDistrict.tstamp.ToHex())
+                        {
+                            Update_SI_District(District, curDistrict, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
                     }
                     else
                     {
-                        var record2 = new SI_District();
-                        
-                        record2.Country = created.Country;
-                        record2.State = created.State;
-                        record2.District = created.District;
-                        record2.Name = created.Name;
-
-                        record2.Crtd_Datetime = DateTime.Now;
-                        record2.Crtd_Prog = screenNbr;
-                        record2.Crtd_User = Current.UserName;
-                        UpdatingSYS_ModuleCat(created, ref record2);
-                        _db.SI_District.AddObject(record2);
-                        
-                        //tra ve loi da ton tai ma ngon ngu nay ko the them
+                        District = new SI_District();
+                        Update_SI_District(District, curDistrict, true);
+                        _db.SI_District.AddObject(District);
                     }
                 }
-                else
-                {
-                    Message.Show(2000, new string[] { Util.GetLang("Country"), record.Country.ToString() }, null);
-                    return this.Direct();
-                    //tra ve loi da ton tai ma ngon ngu nay ko the them
-                }
 
+                _db.SaveChanges();
 
+                return Json(new { success = true });
             }
-
-
-
-            foreach (SI_District updated in lstMsg.Updated)
+            catch (Exception ex)
             {
-
-                var record = _db.SI_District.Where(p => p.Country == updated.Country && p.State == updated.State && p.District == updated.District).FirstOrDefault();
-
-
-                if (record != null)
-                {
-                    
-                    if (record.tstamp.ToHex() != updated.tstamp.ToHex())
-                    {
-                        return Json(new { success = false });
-                    }
-                    UpdatingSYS_ModuleCat(updated, ref record);
-                }
-                else
-                {
-                    if (updated.tstamp.ToHex() == "")
-                    {
-                        record = new SI_District();
-                        record.Country = updated.Country;
-                        record.State = updated.State;
-                        record.District = updated.District;
-                        record.Name = updated.Name;
-                        record.tstamp = new byte[0];
-
-                        record.Crtd_Datetime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingSYS_ModuleCat(updated, ref record);
-                        _db.SI_District.AddObject(record);
-                        
-                    }
-                    else
-                    {
-
-                        return Json(new { success = false });
-                    }
-                }
-
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
-
-
-
-
-            _db.SaveChanges();
-            return Json(new { success = true });
-
-
         }
 
-
-        private void UpdatingSYS_ModuleCat(SI_District s, ref SI_District d)
+        private void Update_SI_District(SI_District t, SI_District s, bool isNew)
         {
+            if (isNew)
+            {
+                t.Country = s.Country;
+                t.State = s.State;
+                t.District = s.District;
 
-            d.Name = s.Name;
-           
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.Name = s.Name;
+         
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
         }
     }
 }
