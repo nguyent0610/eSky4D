@@ -18,13 +18,13 @@
         .ID("frm")
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
-        .BodyPadding(10)
+        .BodyPadding(5)
         //.AutoScroll(true)
         .TopBar(Util.SetupToolbar("Print",true))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         //.Listeners(itm => itm.AfterRender.Fn = "frmloadAfterRender")
         .Items(
-            X.Panel().ID("Header").Layout(LayoutType.Anchor).AnchorVertical("46%").AnchorHorizontal("100%")
+            X.Panel().ID("Header").Layout(LayoutType.Anchor).AnchorVertical("52%").AnchorHorizontal("100%")
             .Items(
             
                 X.FormPanel()
@@ -33,7 +33,7 @@
                 .AnchorVertical("28%")
                 .AnchorHorizontal("100%")
                 //.Title(Util.GetLang("DOC"))
-                .Padding(5)
+                .Padding(1)
                  .Listeners(lst =>
                         {
                             lst.BoxReady.Fn = "setValueBranchID";
@@ -142,10 +142,14 @@
                             .AnchorVertical("30%")
                             //.AnchorHorizontal("30%")
                             .ColumnWidth(0.24)
-                            .Padding(5)
+                            .Padding(1)
                             .Items(
                                  //Vendor
-                                HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("VENDID").HQProcedure("AP10400_pcGetVendor")
+                                 X.Container().Layout(LayoutType.Anchor).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
+                                 .Items(
+                                 
+                                 
+                                HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("VENDID").HQProcedure("AP10400_pcGetVendor").LabelWidth(80)
                                 .HQColumnShow("VendID,name,Address").DisplayField("VendID").ValueField("VendID").DataIndex("")//.AllowBlank(false)
                                 .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.Disabled(true)//.LabelWidth(90)//.Disabled(true)
                                 .HQDBSys(false).ForceSelection(true)
@@ -162,7 +166,7 @@
                                     })
                             
                                 //From Date
-                                ,HQ.DateField().ID("dteFromDate").Name("dteFromDate").HQLangCode("FROMDATE").DataIndex("")
+                                ,HQ.DateField().ID("dteFromDate").Name("dteFromDate").HQLangCode("FROMDATE").DataIndex("").LabelWidth(80)
                                 .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now)//.Format("yyyy-MM-dd")
                                 .Listeners(lst =>
                                  {
@@ -170,14 +174,14 @@
                                  })
                                 
                                 //To Date
-                                ,HQ.DateField().ID("dteToDate").Name("dteToDate").HQLangCode("TODATE").DataIndex("")
+                                ,HQ.DateField().ID("dteToDate").Name("dteToDate").HQLangCode("TODATE").DataIndex("").LabelWidth(80)
                                 .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now)//.Format("yyyy-MM-dd")
                                 .Listeners(lst =>
                                  {
                                      lst.Change.Fn = "txtToDate_Change";
                                  })
                                  //cboDateType
-                                 ,HQ.Combo().ID("cboDateType").Name("cboDateType").HQLangCode("DATE").HQProcedure("AP10400_pcDateType")
+                                 ,HQ.Combo().ID("cboDateType").Name("cboDateType").HQLangCode("DATE").HQProcedure("AP10400_pcDateType").LabelWidth(80)
                                 .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Code")
                                 .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.Disabled(true)//.LabelWidth(90)//.Disabled(true)
                                 .HQDBSys(false).ForceSelection(true)//.HQValue("0",false)
@@ -198,6 +202,9 @@
                                  {
                                      p.Click.Fn = "btnSearch_Click";
                                  })
+                                 
+                                 )
+                                 
                               //ngoac ket thuc frmBotLeft       
                              )
                      
@@ -209,7 +216,7 @@
                             .AnchorVertical("30%")
                             //.AnchorHorizontal("100%")
                             .ColumnWidth(0.76)
-                            .Padding(5)
+                            .Padding(1)
                             .Items(
 
                             X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
@@ -352,7 +359,7 @@
                     
                      //ngoac ngoai Header bao gom panel tren va tab o duoi
                     )
-                    ,X.Panel().ID("Grid").Layout(LayoutType.Anchor).AnchorVertical("54%").AnchorHorizontal("100%")
+                    ,X.Panel().ID("Grid").Layout(LayoutType.Anchor).AnchorVertical("48%").AnchorHorizontal("100%")
                     .Items(         
                      Html.X().GridPanel()
                                 .Layout(LayoutType.Fit)
@@ -450,6 +457,9 @@
                                             //.Editor(Html.X().TextField())
                                             
                                             , Html.X().Column().ID("txtVendIDGrid1").Text(Util.GetLang("VENDID")).DataIndex("VendID").Width(150)
+                                              .Editor(Html.X().TextField())
+                                              
+                                              , Html.X().Column().ID("txtVendName1").Text(Util.GetLang("VendName")).DataIndex("Name").Width(150)
                                               .Editor(Html.X().TextField())
                                               
                                               , Html.X().Column().ID("txtDescrGrid1").Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
