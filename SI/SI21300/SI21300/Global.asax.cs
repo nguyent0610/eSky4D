@@ -6,7 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using System.Configuration;
 
 namespace SI21300
@@ -38,7 +38,7 @@ namespace SI21300
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server = "VAIO";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "eBiz4DCloudSysMVC";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;

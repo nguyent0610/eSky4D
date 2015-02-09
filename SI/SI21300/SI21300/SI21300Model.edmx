@@ -27,12 +27,26 @@
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="TerritoryID" Type="varchar" MaxLength="10" />
         </EntityType>
+        <Function Name="SI21300_pcLoadAcct_Active" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SI21300_pcLoadCarrierType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SI21300_pcLoadInUnit_all" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SI21300_pcLoadTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SI21300_pgLoadCarrier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SI21300Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SI21300Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SI_Carrier" EntityType="SI21300Model.SI_Carrier" />
+          <FunctionImport Name="SI21300_pcLoadAcct_Active" ReturnType="Collection(SI21300Model.SI21300_pcLoadAcct_Active_Result)" />
+          <FunctionImport Name="SI21300_pcLoadCarrierType" ReturnType="Collection(SI21300Model.SI21300_pcLoadCarrierType_Result)" />
+          <FunctionImport Name="SI21300_pcLoadTerritory" ReturnType="Collection(SI21300Model.SI21300_pcLoadTerritory_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SI21300_pcLoadInUnit_all" ReturnType="Collection(SI21300Model.SI21300_pcLoadInUnit_all_Result)" />
+          <FunctionImport Name="SI21300_pgLoadCarrier" ReturnType="Collection(SI21300Model.SI21300_pgLoadCarrier_Result)" />
         </EntityContainer>
         <EntityType Name="SI_Carrier">
           <Key>
@@ -53,6 +67,32 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="TerritoryID" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="SI21300_pcLoadAcct_Active_Result">
+          <Property Type="String" Name="BankAcct" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="AcctName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="AddrID" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="SI21300_pcLoadCarrierType_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SI21300_pcLoadTerritory_Result">
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="SI21300_pcLoadInUnit_all_Result">
+          <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="SI21300_pgLoadCarrier_Result">
+          <Property Type="String" Name="CarrierID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CarrierType" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="TerritoryID" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="CheckZones" Nullable="false" />
+          <Property Type="String" Name="ShipAccount" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="UOM" Nullable="false" MaxLength="6" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -79,6 +119,52 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SI21300_pcLoadAcct_Active" FunctionName="eBiz4DWebSysModel.Store.SI21300_pcLoadAcct_Active">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI21300Model.SI21300_pcLoadAcct_Active_Result">
+                <ScalarProperty Name="BankAcct" ColumnName="BankAcct" />
+                <ScalarProperty Name="AcctName" ColumnName="AcctName" />
+                <ScalarProperty Name="AddrID" ColumnName="AddrID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI21300_pcLoadCarrierType" FunctionName="eBiz4DWebSysModel.Store.SI21300_pcLoadCarrierType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI21300Model.SI21300_pcLoadCarrierType_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI21300_pcLoadTerritory" FunctionName="eBiz4DWebSysModel.Store.SI21300_pcLoadTerritory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI21300Model.SI21300_pcLoadTerritory_Result">
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI21300_pcLoadInUnit_all" FunctionName="eBiz4DWebSysModel.Store.SI21300_pcLoadInUnit_all">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI21300Model.SI21300_pcLoadInUnit_all_Result">
+                <ScalarProperty Name="FromUnit" ColumnName="FromUnit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI21300_pgLoadCarrier" FunctionName="eBiz4DWebSysModel.Store.SI21300_pgLoadCarrier">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI21300Model.SI21300_pgLoadCarrier_Result">
+                <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="CarrierType" ColumnName="CarrierType" />
+                <ScalarProperty Name="TerritoryID" ColumnName="TerritoryID" />
+                <ScalarProperty Name="CheckZones" ColumnName="CheckZones" />
+                <ScalarProperty Name="ShipAccount" ColumnName="ShipAccount" />
+                <ScalarProperty Name="UOM" ColumnName="UOM" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -100,7 +186,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="SI21300Model.SI_Carrier" Width="1.5" PointX="4.375" PointY="0.5" />
+        <EntityTypeShape EntityType="SI21300Model.SI_Carrier" Width="1.5" PointX="1.341443069903852" PointY="21.210747445565996" />
       </Diagram>
     </Diagrams>
   </Designer>
