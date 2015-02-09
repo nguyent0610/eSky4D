@@ -1,0 +1,120 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA00200;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)   
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdSYS_Module")
+        .Store(
+             X.Store()
+            .ID("stoData")
+            .PageSize(50)//.AutoLoad(true)
+            .Model(Util.GenerateModel(typeof(SA00200_pgLoadGrid_Result), "mdlgrdSYS_Module", "ModuleCode,ModuleID"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData")))
+            .Listeners(l => { 
+                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; 
+                l.Load.Handler = "HQ.common.showBusy(false);"; 
+            })
+        )
+        .Listeners(p => p.BoxReady.Handler = "App.stoData.reload();")
+        .SortableColumns(false)
+        .ColumnModel(
+        
+         X.RowNumbererColumn()
+                    , X.CheckColumn().Text(Util.GetLang("Active")).DataIndex("Active").Width(150).Editable(true)
+                                                , X.Column().Text(Util.GetLang("ModuleCode")).DataIndex("ModuleCode").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(2).EnforceMaxLength(true))
+                                                , X.Column().Text(Util.GetLang("ModuleID")).DataIndex("ModuleID").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(2).EnforceMaxLength(true))
+                                                , X.Column().Text(Util.GetLang("CatID")).Width(150).DataIndex("CatID").Editor(
+                                                    HQ.Combo().ID("cboCatID").Name("cboCatID").HQProcedure("SA00200_pcGetAccessModuleCat")
+                                                    .HQColumnShow("catID,ModCatDescr").DisplayField("catID").ValueField("catID")
+                                                    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                                                    .HQParam(new StoreParameterCollection() { 
+                                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw),
+                                                        new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                                                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                                    }).HQDBSys(true).AllowBlank(true).ForceSelection(true)
+                                                    .LoadData()
+                                                )
+                                                , Html.X().Column().Text(Util.GetLang("ModuleName")).DataIndex("ModuleName").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(50).EnforceMaxLength(true))
+                                                
+         
+         
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                            X.GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t =>
+                            {
+                                t.Text = Util.GetLang("Rejectrowchanges");
+                            })
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t =>
+                    {
+                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Command.Handler = "grdSYS_Module_Reject(record);";
+                    })
+        
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdSYS_Module_BeforeEdit";
+                ls.Edit.Fn = "grdSYS_Module_Edit";
+                ls.ValidateEdit.Fn = "grdSYS_Module_ValidateEdit";
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("ModuleCode"),
+                    X.StringFilter().DataIndex("ModuleID"),
+                    X.StringFilter().DataIndex("Active"),
+                    X.StringFilter().DataIndex("CatID"),
+                    X.StringFilter().DataIndex("ModuleName")
+                )
+        )
+    )
+))
