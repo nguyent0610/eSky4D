@@ -136,7 +136,7 @@ var menuClick = function (command) {
             if (HQ.store.isChange(App.stoPO_Price) || HQ.store.isChange(App.stoPO_PriceCpny) || HQ.store.isChange(App.stoPOPriceHeader)) {
                 HQ.message.show(7, '', 'askClose');
             } else {
-                HQ.common.close(App);
+                HQ.common.close(this);
             }
             break;
     }
