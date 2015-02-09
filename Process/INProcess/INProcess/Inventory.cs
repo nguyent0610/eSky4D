@@ -112,7 +112,7 @@ namespace INProcess
             }
             if (isTransfer)
             {
-                sql.IN10100_UpdateTransfer(branchID,batNbr,Prog,User,tranDate,refNbr,transferNbr);
+                sql.IN10100_UpdateTransfer(branchID,batNbr,Prog,User,tranDate,refNbr,transferNbr,"R");
             }
             sql.IN_ReleaseBatch(branchID, batNbr, Prog, User);
             return true;
@@ -976,7 +976,7 @@ namespace INProcess
                         else
                             qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
 
-                        if (isTransfer && tran.String("TranType") == "TR") objSite.QtyInTransit -= qty;
+                        if (isTransfer && tran.String("TranType") == "TR") objSite.QtyInTransit += qty;
 
                         objSite.QtyOnHand = Math.Round(objSite.QtyOnHand + qty, 0);
                         objSite.QtyAvail = Math.Round(objSite.QtyAvail + qty, 0);
@@ -998,6 +998,10 @@ namespace INProcess
                     if (objInvt.StkItem == 1 && objInvt.LotSerTrack != "N"){}
 
                     objSql.DelCostByCostID(tran.String("InvtID"), tran.String("SiteID"), tran.String("CostID"));
+                }
+                if (isTransfer)
+                {
+                    sql.IN10100_UpdateTransfer(branchID, batNbr, Prog, User, tranDate, refNbr, transferNbr,"I");
                 }
                 if (release)
                     objSql.IN_CancelBatch(branchID, batNbr, Prog, User);

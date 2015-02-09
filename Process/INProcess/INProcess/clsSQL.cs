@@ -15,7 +15,7 @@ namespace INProcess
         {
             mDal = da;
         }
-        public void IN10100_UpdateTransfer(string branchID,string batNbr,string prog,string user,DateTime? tranDate,string refNbr,string transferNbr)
+        public void IN10100_UpdateTransfer(string branchID,string batNbr,string prog,string user,DateTime? tranDate,string refNbr,string transferNbr,string status)
         {
           
             try
@@ -28,6 +28,7 @@ namespace INProcess
                 pc.Add(new ParamStruct("@TranDate", DbType.DateTime, clsCommon.GetValueDBNull(tranDate), ParameterDirection.Input,30));
                 pc.Add(new ParamStruct("@RefNbr", DbType.String, clsCommon.GetValueDBNull(refNbr), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@TrnsfrDocNbr", DbType.String, clsCommon.GetValueDBNull(transferNbr), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@Status", DbType.String, clsCommon.GetValueDBNull(status), ParameterDirection.Input, 1);
                 mDal.ExecNonQuery("IN_UpdateTransfer", CommandType.StoredProcedure,ref pc);
             }
             catch (Exception ex)
