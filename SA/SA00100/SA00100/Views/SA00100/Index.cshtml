@@ -1,0 +1,51 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA00100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "SA00100";
+    var acc = Session["SA00100"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình SA00100.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/SA00100.debug.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+       
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+    
+    
+
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        <!-- Gọi hàm Body trong SA00900Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
+        @{Html.RenderAction("Body",new {lang=@Current.LangID});}   
+    
+</body>
+</html>
+ 

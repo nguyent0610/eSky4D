@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SYS_Screen" EntityType="eBiz4DWebSysModel.Store.SYS_Screen" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="SYS_Screen">
+          <Key>
+            <PropertyRef Name="ScreenNumber" />
+          </Key>
+          <Property Name="ScreenNumber" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="Descr" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="ModuleID" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="ScreenType" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="SortNbr" Type="int" Nullable="false" />
+          <Property Name="CatID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ExecPath" Type="char" MaxLength="50" />
+          <Property Name="Crtd_Datetime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_USer" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_Datetime" Type="datetime" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="SA00100_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SA00100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SA00100Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="SYS_Screen" EntityType="SA00100Model.SYS_Screen" />
+          <FunctionImport Name="SA00100_pgLoadGrid" ReturnType="Collection(SA00100Model.SA00100_pgLoadGrid_Result)" />
+        </EntityContainer>
+        <EntityType Name="SYS_Screen">
+          <Key>
+            <PropertyRef Name="ScreenNumber" />
+          </Key>
+          <Property Type="String" Name="ScreenNumber" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ModuleID" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ScreenType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="SortNbr" Nullable="false" />
+          <Property Type="String" Name="CatID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ExecPath" MaxLength="50" FixedLength="true" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_USer" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="SA00100_pgLoadGrid_Result">
+          <Property Type="String" Name="ScreenNumber" Nullable="false" MaxLength="7" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="ModuleID" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="ScreenType" Nullable="false" MaxLength="1" />
+          <Property Type="Int32" Name="SortNbr" Nullable="false" />
+          <Property Type="String" Name="CatID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ExecPath" Nullable="true" MaxLength="50" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SA00100Entities" >
+          <EntitySetMapping Name="SYS_Screen">
+            <EntityTypeMapping TypeName="SA00100Model.SYS_Screen">
+              <MappingFragment StoreEntitySet="SYS_Screen">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_USer" ColumnName="Crtd_USer" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="ExecPath" ColumnName="ExecPath" />
+                <ScalarProperty Name="CatID" ColumnName="CatID" />
+                <ScalarProperty Name="SortNbr" ColumnName="SortNbr" />
+                <ScalarProperty Name="ScreenType" ColumnName="ScreenType" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="ScreenNumber" ColumnName="ScreenNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SA00100_pgLoadGrid" FunctionName="eBiz4DWebSysModel.Store.SA00100_pgLoadGrid">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00100Model.SA00100_pgLoadGrid_Result">
+                <ScalarProperty Name="ScreenNumber" ColumnName="ScreenNumber" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+                <ScalarProperty Name="ScreenType" ColumnName="ScreenType" />
+                <ScalarProperty Name="SortNbr" ColumnName="SortNbr" />
+                <ScalarProperty Name="CatID" ColumnName="CatID" />
+                <ScalarProperty Name="ExecPath" ColumnName="ExecPath" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" >
+        <EntityTypeShape EntityType="SA00100Model.SYS_Screen" Width="1.5" PointX="7.7245165164230931" PointY="25.298204731800688" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
