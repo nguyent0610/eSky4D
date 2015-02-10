@@ -91,7 +91,7 @@ window.Modernizr = (function( window, document, undefined ) {
           // IE6 and 7 won't return offsetWidth or offsetHeight unless it's in the body element, so we fake it.
           fakeBody = body ? body : document.createElement('body');
 
-      if ( parseInt(nodes, 10) ) {
+      if ( parseFloat(nodes, 10) ) {
           // In order not to give false positives we create a node for each test
           // This also allows the method to scale for unspecified uses
           while ( nodes-- ) {

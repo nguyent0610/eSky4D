@@ -1175,7 +1175,7 @@ $.extend($.validator, {
 
 			for (var n = value.length - 1; n >= 0; n--) {
 				var cDigit = value.charAt(n);
-				var nDigit = parseInt(cDigit, 10);
+				var nDigit = parseFloat(cDigit, 10);
 				if (bEven) {
 					if ((nDigit *= 2) > 9)
 						nDigit -= 9;
