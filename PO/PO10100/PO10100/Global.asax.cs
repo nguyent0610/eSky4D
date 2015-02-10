@@ -29,18 +29,18 @@ namespace PO10100
         {
             Current.Authorize = false;
             Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eBiz4DCloudSysMVC";// "eBiz4DWebSys";// ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "eSky4DSys";// "eBiz4DWebSys";// ConfigurationManager.AppSettings["DBSys"].ToString();
             Current.Theme = "Default";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["PO10100"] = acc;
-            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppMVC";// "eBiz4DWebApp";
-            Session["UserName"] = Current.UserName = "HQHD3110";
+            Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
+            Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
-            Session["LangID"] = 1;
+            Session["LangID"] = 0;
            
         }
     }

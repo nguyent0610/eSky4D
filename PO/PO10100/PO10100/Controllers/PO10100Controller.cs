@@ -10,6 +10,9 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using Microsoft.Office.Interop.Excel;
+using System.Reflection;
+using System.Drawing;
 namespace PO10100.Controllers
 {
    
@@ -19,85 +22,115 @@ namespace PO10100.Controllers
     public class PO10100Controller : Controller
     {
       
-        PO10100Entities db = Util.CreateObjectContext<PO10100Entities>(false);
-        private string screenNbr="PO10100";
-        private FormCollection _form;
-        private JsonResult _logMessage;
-        private string _currentPO;
-        private List<PO_DetailLoad_Result> lstPODetailLoad;     
-        private PO_Setup objPO_Setup;
+        PO10100Entities _db = Util.CreateObjectContext<PO10100Entities>(false);
+        private const string ScreenNbr = "PO10100";
+        private FormCollection _form;   
+        private List<PO10100_pgDetail_Result> _lstPODetailLoad;     
+        private PO_Setup _objPO_Setup;
         private PO_Header _poHead;
-        bool bStatusClose = false;
-        string strponbr = "";
-        string strbranchID = "";      
-        HQ4DApp clsApp = new HQ4DApp();
-        List<OM_DiscAllByBranchPO_Result> lstOM_DiscAllByBranchPO_ResultALL;
-        List<IN_Inventory> lstIN_Inventory;
-        List<IN_UnitConversion> lstUnitConversion;
-        private List <PO_DetailLoad_Result> _lstTmpPO_DetailLoad;
+        bool _statusClose = false;
+        string _ponbr = "";
+        string _branchID = "";
+        string _toStatus = "";
+        string _status = ""; 
+         
+        List<PO10100_pdOM_DiscAllByBranchPO_Result> _lstPO10100_pdOM_DiscAllByBranchPO;      
+        List<PO10100_pdIN_UnitConversion_Result> _PO10100_pdIN_UnitConversion_Result;
+        private List <PO10100_pgDetail_Result> _lstTmpPO10100_pgDetail;
         private bool _freeLineRunning = false;
         private string _lineRef = string.Empty;
         private int _countAddItem = 0;
-        private OM_UserDefault objOM_UserDefault;
-
-        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
+        private OM_UserDefault objOM_UserDefault;      
         public ActionResult Index()
         {
-          
-            ViewBag.ListUnitConversion = db.IN_UnitConversion.ToList();
-            ViewBag.Title = DateTime.Now.ToLongTimeString();
+                
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             return PartialView();
-        }
-
-       
+        }       
         #region Get Data
         public ActionResult GetPO_Header(string pONbr, string branchID)
         {
-            var obj = db.PO_Header.Where(p => p.PONbr == pONbr && p.BranchID == branchID);
+            var obj = _db.PO_Header.Where(p => p.PONbr == pONbr && p.BranchID == branchID);
             return this.Store(obj);
 
         }
         public ActionResult GetAP_VendorTax(string vendID, string ordFromId)
         {
           
-            return this.Store(db.AP_VendorTaxes(vendID,ordFromId));
+            return this.Store(_db.PO10100_pdAP_VenDorTaxes(vendID,ordFromId));
 
         }    
-        public ActionResult GetPO_DetailLoad(string pONbr, string branchID)
+        public ActionResult GetPO10100_pgDetail(string pONbr, string branchID)
         {
-            lstPODetailLoad = db.PO_DetailLoad(pONbr, branchID, "%").ToList();
-            return this.Store(lstPODetailLoad);
+            _lstPODetailLoad = _db.PO10100_pgDetail(pONbr, branchID, "%").ToList();
+            return this.Store(_lstPODetailLoad);
 
         }
-        public ActionResult GetPO10100_LoadTaxTrans(string pONbr, string branchID)
+        public ActionResult GetPO10100_pgLoadTaxTrans(string pONbr, string branchID)
         {
-            return this.Store(db.PO10100_LoadTaxTrans(branchID, pONbr).ToList());
+            return this.Store(_db.PO10100_pgLoadTaxTrans(branchID, pONbr).ToList());
         }
-        //public ActionResult GetPO10100_LoadTaxTrans()
-        //{
-        //    return this.Store(new System.Data.Objects.ObjectResult<PO10100_LoadTaxTrans_Result>());
-        //}  
+
         #endregion
-        #region DataProcess    
-        [HttpPost]      
-        public ActionResult Save(FormCollection data)
+        #region DataProcess 
+        [HttpPost]
+        public ActionResult ExportPOSuggest(string type, string branchID, DateTime pODate, string vendID)
         {
             try
             {
-                _form = data;
-               
-                SaveData(data);
+                string filePath = GetExcelPOSuggest(type, branchID, pODate, vendID);
+                return Json(new { success = true, filePath });
+            }
+            catch (Exception ex)
+            {
+                return (ex as MessageException).ToMessage();
+            }
+        }
+        public ActionResult Download(string filePath)
+        {
+            var dlFileName = string.Format("{0}_{1}.xls", Util.GetLang("PO10100Sugguest"), DateTime.Now.ToString("ddMMyyHHmmss"));
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+            System.IO.File.Delete(filePath);
+            return File(fileBytes, "application/xls", dlFileName);
+        }
+        [HttpPost]
+        public ActionResult Report(FormCollection data)
+        {
+            try
+            {
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
+                string reportName = "";
+                var rpt = new RPTRunning();
+                rpt.ResetET();
 
-                if (_logMessage != null)
-                {
-                    return _logMessage;
-                }
-                return Json(new { success = true, PONbr =strponbr });
+                reportName = "PO_PurchaseOrder";
+                rpt.ReportNbr = "PO602";
+                rpt.MachineName = "Web";
+                rpt.ReportCap = "ReportName";
+                rpt.ReportName = reportName;
+                rpt.ReportDate = DateTime.Now;
+                rpt.DateParm00 = DateTime.Now;
+                rpt.DateParm01 = DateTime.Now;
+                rpt.DateParm02 = DateTime.Now;
+                rpt.DateParm03 = DateTime.Now;
+                rpt.StringParm00 = _branchID;
+                rpt.StringParm01 = _ponbr;
+                rpt.UserID = Current.UserName;
+                rpt.AppPath = "Reports\\";
+                rpt.ClientName = Current.UserName;
+                rpt.LoggedCpnyID = Current.CpnyID;
+                rpt.CpnyID = Current.CpnyID;
+                rpt.LangID = Current.LangID;
+                _db.RPTRunnings.AddObject(rpt);
+
+                _db.SaveChanges();
+
+                return Json(new { success = true, reportID = rpt.ReportID, reportName });
             }
             catch (Exception ex)
             {
@@ -108,74 +141,176 @@ namespace PO10100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        [DirectMethod]
-        public ActionResult PO10100Delete(string UserID)
+        [HttpPost]      
+        public ActionResult Save(FormCollection data)
         {
-            //var cpny = db.Users.FirstOrDefault(p => p.UserName == UserID);
-            //if (cpny != null)
-            //{
-            //    db.Users.DeleteObject(cpny);
-            //}
+            try
+            {               
+                _form = data;
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
+                _status = data["cboStatus"].PassNull();
+                _toStatus = data["cboHandle"].PassNull() == "" ? _status : data["cboHandle"].PassNull();
+                DateTime dpoDate = data["PODate"].ToDateShort();
 
-            //var lstAddr = db.SYS_UserGroup.Where(p => p.UserID == UserID).ToList();
-            //foreach (var item in lstAddr)
-            //{
-            //    db.SYS_UserGroup.DeleteObject(item);
-            //}
 
-            //var lstSub = db.SYS_UserCompany.Where(p => p.UserName == UserID).ToList();
-            //foreach (var item in lstSub)
-            //{
-            //    db.SYS_UserCompany.DeleteObject(item);
-            //}
+                var detHeader = new StoreDataHandler(data["lstHeader"]);
+                _poHead = detHeader.ObjectData<PO_Header>().FirstOrDefault();
 
-            //db.SaveChanges();
-            return this.Direct();
+
+                var detHandler = new StoreDataHandler(data["lstDet"]);
+                _lstPODetailLoad = detHandler.ObjectData<PO10100_pgDetail_Result>()
+                            .Where(p => Util.PassNull(p.LineRef) != string.Empty)
+                            .ToList();
+
+                Save_PO_Header();
+                return Json(new { success = true, PONbr =_ponbr });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
         }
-        //Lấy giá
-        [DirectMethod]
-        public ActionResult POPrice(string branchID="",string invtID="",string Unit="",DateTime? podate=null)
+        [HttpPost]
+        public ActionResult DeleteHeader(FormCollection data)
         {
-            var result=db.PO_GetPrice(branchID, invtID, Unit, podate).FirstOrDefault().Value;
+            try
+            {
+                _form = data;
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
+                var detHeader = new StoreDataHandler(data["lstHeader"]);
+                if (_poHead == null)
+                    _poHead = detHeader.ObjectData<PO_Header>().FirstOrDefault();
+                var objHeader = _db.PO_Header.Where(p => p.BranchID == _branchID && p.PONbr == _ponbr).FirstOrDefault();
+                if (objHeader == null)
+                {
+                }
+                else
+                {
+
+                    if (_poHead.tstamp.ToHex() != objHeader.tstamp.ToHex())
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
+                    
+                    _db.PO_Header.DeleteObject(objHeader);
+                    var lstdel=_db.PO_Detail.Where(p => p.PONbr == _ponbr && p.BranchID == _branchID).ToList();
+                    while (lstdel.FirstOrDefault() != null)
+                    {
+                        var objDetail = lstdel.FirstOrDefault();
+                        if (objDetail != null)
+                        {
+                            if (objDetail.PurchaseType == "GI" || objDetail.PurchaseType == "PR" || objDetail.PurchaseType == "GS")
+                            {
+                                double OldQty = Math.Round((objDetail.UnitMultDiv == "D" ? ((objDetail.QtyOrd - objDetail.QtyRcvd) / objDetail.CnvFact) : (objDetail.QtyOrd - objDetail.QtyRcvd) * objDetail.CnvFact));
+                                UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, 0, 2);
+                            }
+                        }
+                      
+                        _db.PO_Detail.DeleteObject(lstdel.FirstOrDefault());
+                        lstdel.Remove(lstdel.FirstOrDefault());
+                    }
+                }
+                _db.SaveChanges();
+                return Json(new { success = true, PONbr = "" });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+
+        }
+        [HttpPost]
+        public ActionResult DeleteGrd(FormCollection data)
+        {
+            try
+            {
+                _form = data;
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
+                _status = data["cboStatus"].PassNull();
+                _toStatus = data["cboHandle"].PassNull() == "" ? _status : data["cboHandle"].PassNull();
+                DateTime dpoDate = data["PODate"].ToDateShort();
+
+
+                var detHeader = new StoreDataHandler(data["lstHeader"]);
+                _poHead = detHeader.ObjectData<PO_Header>().FirstOrDefault();
+
+
+                var detHandler = new StoreDataHandler(data["lstDet"]);
+                _lstPODetailLoad = detHandler.ObjectData<PO10100_pgDetail_Result>()
+                            .Where(p => Util.PassNull(p.LineRef) != string.Empty)
+                            .ToList();
+
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstDel"]);
+                ChangeRecords<PO10100_pgDetail_Result> lst = dataHandler.BatchObjectData<PO10100_pgDetail_Result>();
+
+                if (_poHead == null)
+                {
+                    throw new MessageException(MessageType.Message, "19");
+                }
+                else
+                {
+                    foreach (PO10100_pgDetail_Result deleted in lst.Deleted)
+                    {
+                        var obj1 = _db.PO_Detail.Where(p => p.BranchID == deleted.BranchID && p.PONbr == deleted.PONbr && p.LineRef == deleted.LineRef).FirstOrDefault();
+                        if (obj1 != null)
+                        {
+                            if (deleted.PurchaseType == "GI" || deleted.PurchaseType == "PR" || deleted.PurchaseType == "GP" || deleted.PurchaseType == "GS")
+                            {
+                                double OldQty = Math.Round((obj1.UnitMultDiv == "D" ? ((obj1.QtyOrd - obj1.QtyRcvd) / obj1.CnvFact) : (obj1.QtyOrd - obj1.QtyRcvd) * obj1.CnvFact));
+                                UpdateOnPOQty(obj1.InvtID, obj1.SiteID, OldQty, 0, 2);
+                            }
+                            _db.PO_Detail.DeleteObject(obj1);
+                        }
+                    }
+                    Save_PO_Header(true);
+                }
+                return Json(new { success = true, PONbr = _ponbr });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+        //get price
+        [DirectMethod]
+        public ActionResult PO10100POPrice(string branchID="",string invtID="",string Unit="",DateTime? podate=null)
+        {
+            var result=_db.PO10100_ppGetPrice(branchID, invtID, Unit, podate).FirstOrDefault().Value;
             return this.Direct(result);
            
         }
         [DirectMethod]
-        public ActionResult ItemSitePrice(string branchID = "", string invtID = "", string siteID = "")
+        public ActionResult PO10100ItemSitePrice(string branchID = "", string invtID = "", string siteID = "")
         {
-            var objIN_ItemSite = db.IN_ItemSite.Where(p => p.InvtID == invtID && p.SiteID == siteID).FirstOrDefault();
+            var objIN_ItemSite = _db.IN_ItemSite.Where(p => p.InvtID == invtID && p.SiteID == siteID).FirstOrDefault();
 
             return this.Direct(objIN_ItemSite);
 
-        }
-        #region Save Data
-        private void SaveData(FormCollection data)
+        }       
+           
+        private void Save_PO_Header(bool isDeleteGrd=false)
         {
-            _form = data;
-            strponbr = data["cboPONbr"];
-            strbranchID = data["cboBranchID"];
-            DateTime dpoDate = data["PODate"].ToDateShort();
-
-            
-            var detHeader = new StoreDataHandler(data["lstHeader"]);
-            if (_poHead == null)
-                _poHead = detHeader.ObjectData<PO_Header>().FirstOrDefault();
-
-
-            var detHandler = new StoreDataHandler(data["lstDet"]);
-            lstPODetailLoad = detHandler.ObjectData<PO_DetailLoad_Result>()
-                        .Where(p => Util.PassNull(p.LineRef) != string.Empty)
-                        .ToList();
-
-            lstOM_DiscAllByBranchPO_ResultALL = db.OM_DiscAllByBranchPO(strbranchID).ToList();
-            lstIN_Inventory = db.IN_Inventory.ToList();
-            lstUnitConversion = db.IN_UnitConversion.ToList();
-            objOM_UserDefault = db.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID.Trim().ToUpper() == strbranchID.Trim().ToUpper() && p.UserID.Trim().ToUpper() == Current.UserName.Trim().ToUpper());
-            objPO_Setup = db.PO_Setup.FirstOrDefault(p => p.BranchID == strbranchID && p.SetupID == "PO");
-
-
-            var obj = db.PO_Header.FirstOrDefault(p => p.PONbr == strponbr && p.BranchID == strbranchID);
-            if (Data_Checking())
+            _lstPO10100_pdOM_DiscAllByBranchPO = _db.PO10100_pdOM_DiscAllByBranchPO(_branchID).ToList();
+            _PO10100_pdIN_UnitConversion_Result = _db.PO10100_pdIN_UnitConversion().ToList();
+            objOM_UserDefault = _db.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID.Trim().ToUpper() == _branchID.Trim().ToUpper() && p.UserID.Trim().ToUpper() == Current.UserName.Trim().ToUpper());
+            _objPO_Setup = _db.PO_Setup.FirstOrDefault(p => p.BranchID == _branchID && p.SetupID == "PO");
+            var obj = _db.PO_Header.FirstOrDefault(p => p.PONbr == _ponbr && p.BranchID == _branchID);
+            if (Data_Checking(isDeleteGrd))
             {
                 if (obj != null)
                 {
@@ -184,281 +319,53 @@ namespace PO10100.Controllers
                     {
                         throw new MessageException(MessageType.Message, "19");
                     }
-                    UpdatingPO_Header(ref obj, _poHead, lstPODetailLoad);
-                    Save_PO_Detail(obj, lstPODetailLoad);
+                    UpdatingPO_Header(ref obj, _poHead, _lstPODetailLoad);
+                    Save_PO_Detail(obj, _lstPODetailLoad);
                 }
                 else
                 {
-                    if (objPO_Setup.AutoRef == 1)
+                    if (_objPO_Setup.AutoRef == 1)
                     {
                         obj = new PO_Header();
-                        UpdatingPO_Header(ref obj, _poHead, lstPODetailLoad);
+                        UpdatingPO_Header(ref obj, _poHead, _lstPODetailLoad);
 
-                        var obj1 = db.PONumbering(strbranchID, "PONbr").FirstOrDefault();
-                        strbranchID = obj.BranchID = strbranchID;
-                        strponbr = obj.PONbr = obj1;
+                        var obj1 = _db.PONumbering(_branchID, "PONbr").FirstOrDefault();
+                        _branchID = obj.BranchID = _branchID;
+                        _ponbr = obj.PONbr = obj1;
                         obj.IsExport = false;
                         obj.ImpExp = "";
 
                         obj.Crtd_DateTime = DateTime.Now;
-                        obj.Crtd_Prog = screenNbr;
+                        obj.Crtd_Prog = ScreenNbr;
                         obj.Crtd_User = Current.UserName;
 
-                        db.PO_Header.AddObject(obj);
-                        Save_PO_Detail(obj, lstPODetailLoad);
+                        _db.PO_Header.AddObject(obj);
+                        Save_PO_Detail(obj, _lstPODetailLoad);
                     }
                 }
             }
-        }
-        //private bool DeleteData(object sender, HQSLFramework.Message.HQMessageBox.ExitCode e)
-        //{
-        //    try
-        //    {
-        //        _complete = true;
-        //        if (e == HQMessageBox.ExitCode.Yes)
-        //        {
-        //            busyIndicator.IsBusy = true;
-        //            //delete Header
-        //            var query = (from p in db.GetPO_Header where p.BranchID == data["cboBranchID"] && p.PONbr == data["cboPONbr"] select p);
-        //            db.Load(query, LoadBehavior.RefreshCurrent, true).Completed += (sender1, args) =>
-        //            {
-        //                var obj = (from p in db.PO_Headers select p).Where(p => p.PONbr == data["cboPONbr"] && p.BranchID == data["cboBranchID"]).FirstOrDefault();
-        //                if (obj != null)
-        //                {
-        //                    if (obj.tstamp.ToHex() != objPO_Header.tstamp.ToHex())
-        //                    {
-        //                        if (_complete)
-        //                            HQMessageBox.Show(19, hqSys.LangID, null, HQmesscomplete);
-        //                        _complete = false;
-
-        //                        db.RejectChanges();
-        //                        return;
-        //                    }
-        //                    db.PO_Headers.Remove(obj);
-        //                    //delete Detail
-        //                    var query1 = (from p in db.GetPO_Detail where p.BranchID == data["cboBranchID"] && p.PONbr == data["cboPONbr"] select p);
-        //                    var query2 = (from p in db.GetIN_ItemSite select p);
-        //                    // objItemSite = iN_ItemSiteDomainDataSource.Data.OfType<IN_ItemSite>().Where(p => p.InvtID == InvtID && p.SiteID == SiteID).FirstOrDefault();
-        //                    db.Load(query2, LoadBehavior.RefreshCurrent, true).Completed += (sender3, args3) =>
-        //                    {
-        //                        db.Load(query1, LoadBehavior.RefreshCurrent, true).Completed += (sender2, args2) =>
-        //                        {
-        //                            try
-        //                            {
-        //                                while (lstDetail.Count() > 0)
-        //                                {
-        //                                    if (lstDetail.FirstOrDefault() != null)
-        //                                    {
-        //                                        var r = lstDetail.FirstOrDefault().Data as PO_DetailLoad_Result;
-        //                                        var obj1 = db.PO_Detail.Where(p => p.BranchID == data["cboBranchID"] && p.PONbr == data["cboPONbr"] && p.LineRef == r.LineRef).FirstOrDefault();
-        //                                        if (obj1 != null)
-        //                                        {
-        //                                            if (obj1.PurchaseType == "GI" || obj1.PurchaseType == "PR" || obj1.PurchaseType == "GS")
-        //                                            {
-        //                                                double OldQty = Math.Round((obj1.UnitMultDiv == "D" ? ((obj1.QtyOrd - r.QtyRcvd) / obj1.CnvFact) : (obj1.QtyOrd - obj1.QtyRcvd) * obj1.CnvFact));
-        //                                                UpdateOnPOQty(obj1.InvtID, obj1.SiteID, OldQty, 0, 2);
-        //                                            }
-        //                                        }
-        //                                        if (obj1 != null) db.PO_Details.Remove(obj1);
-        //                                    }
-        //                                    lstDetail.Remove(lstDetail.FirstOrDefault());
-        //                                }
-        //                                try
-        //                                {
-        //                                    if (db.HasChanges)
-        //                                    {
-        //                                        this.db.SubmitChanges(OnSubmitCompleted1 =>
-        //                                        {
-        //                                            if (OnSubmitCompleted1.HasError)
-        //                                            {
-        //                                                string message = "";
-
-        //                                                if (OnSubmitCompleted1.EntitiesInError.Any())
-        //                                                {
-        //                                                    message = "";
-
-        //                                                    Entity entityInError = OnSubmitCompleted1.EntitiesInError.First();
-        //                                                    if (entityInError.ValidationErrors.Any())
-        //                                                    {
-        //                                                        message = entityInError.ValidationErrors.First().ErrorMessage;
-        //                                                    }
-        //                                                }
-        //                                                busyIndicator.IsBusy = false;
-
-        //                                                // ErrorWindow.CreateNew(OnSubmitCompleted1.Error, message);
-        //                                                OnSubmitCompleted1.MarkErrorAsHandled();
-        //                                                throw new Exception(message);
-        //                                                // OnSubmitCompleted1.MarkErrorAsHandled();
-        //                                            }
-        //                                            else
-        //                                            {
-        //                                                (this.Resources["ppv_PO10100PONbr_Branch_All_ResultDomainDataSource"] as DomainDataSource).Clear();
-        //                                                (this.Resources["ppv_PO10100PONbr_Branch_All_ResultDomainDataSource"] as DomainDataSource).Load();
-        //                                                this.pO_DetailLoadDomainDataSource.Clear();
-        //                                                this.pO_DetailLoadDomainDataSource.Load();
-        //                                                //data["cboPONbr"] = strPONbr;
-        //                                                busyIndicator.IsBusy = false;
-        //                                                Change(false);
-        //                                            }
-        //                                        }, null);
-        //                                    }
-        //                                    else
-        //                                    {
-        //                                        CalCTNPCS();
-        //                                        busyIndicator.IsBusy = false;
-        //                                    }
-        //                                }
-        //                                catch (Exception ex)
-        //                                {
-        //                                    busyIndicator.IsBusy = false;
-        //                                    throw ex;
-        //                                    //throw (ex);
-
-        //                                }
-        //                            }
-        //                            catch (Exception ex)
-        //                            {
-        //                                busyIndicator.IsBusy = false;
-        //                                throw (ex);
-        //                            }
-        //                        };
-        //                    };
-        //                }
-        //                //else HQMessageBox.Show()//Thong bao khong ton tai PONbr nay co le da xoa
-        //            };
-
-
-
-        //            return true;
-        //        }
-        //        return true;
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        busyIndicator.IsBusy = false;
-        //        throw (ex);
-        //        return false;
-        //    }
-        //}
-        
-        //private bool DeleteGrid(object sender, HQSLFramework.Message.HQMessageBox.ExitCode e)
-        //{
-
-        //    try
-        //    {
-        //        _complete = true;
-        //        if (e == HQMessageBox.ExitCode.Yes)
-        //        {
-        //            busyIndicator.IsBusy = true;
-        //            int i = lstDetail.Where(p => p.IsSelected == true && (p.Data as PO_DetailLoad_Result).DiscLineRef == (p.Data as PO_DetailLoad_Result).LineRef && (p.Data as PO_DetailLoad_Result).PurchaseType != "PR").Count();
-        //            var query = (from p in db.GetPO_Detail where p.BranchID == data["cboBranchID"] && p.PONbr == data["cboPONbr"] select p);
-        //            db.Load(query, LoadBehavior.RefreshCurrent, true).Completed += (sender1, args) =>
-        //            {
-        //                var query2 = (from p in db.GetIN_ItemSite select p);
-        //                db.Load(query2, LoadBehavior.RefreshCurrent, true).Completed += (sender3, args3) =>
-        //                {
-        //                    try
-        //                    {
-        //                        while (lstDetail.Where(p => p.IsSelected == true && (p.Data as PO_DetailLoad_Result).DiscLineRef == (p.Data as PO_DetailLoad_Result).LineRef && (p.Data as PO_DetailLoad_Result).PurchaseType != "PR").Count() > 0)
-        //                        {
-        //                            if (lstDetail.Where(p => p.IsSelected == true && (p.Data as PO_DetailLoad_Result).DiscLineRef == (p.Data as PO_DetailLoad_Result).LineRef && (p.Data as PO_DetailLoad_Result).PurchaseType != "PR").FirstOrDefault() != null)
-        //                            {
-
-        //                                var r = lstDetail.Where(p => p.IsSelected == true && (p.Data as PO_DetailLoad_Result).DiscLineRef == (p.Data as PO_DetailLoad_Result).LineRef && (p.Data as PO_DetailLoad_Result).PurchaseType != "PR").FirstOrDefault().Data as PO_DetailLoad_Result;
-        //                                while (lstDetail.Where(p => (p.Data as PO_DetailLoad_Result).DiscLineRef == r.LineRef).Count() > 0)
-        //                                {
-        //                                    var r1 = lstDetail.Where(p => (p.Data as PO_DetailLoad_Result).DiscLineRef == r.LineRef).FirstOrDefault().Data as PO_DetailLoad_Result;
-        //                                    var obj1 = db.PO_Detail.Where(p => p.BranchID == data["cboBranchID"] && p.PONbr == data["cboPONbr"] && p.LineRef == r1.LineRef).FirstOrDefault();
-        //                                    if (obj1 != null)
-        //                                    {
-        //                                        if (r.PurchaseType == "GI" || r.PurchaseType == "PR" || r.PurchaseType == "GP" || r.PurchaseType == "GS")
-        //                                        {
-        //                                            double OldQty = Math.Round((obj1.UnitMultDiv == "D" ? ((obj1.QtyOrd - obj1.QtyRcvd) / obj1.CnvFact) : (obj1.QtyOrd - obj1.QtyRcvd) * obj1.CnvFact));
-        //                                            UpdateOnPOQty(obj1.InvtID, obj1.SiteID, OldQty, 0, 2);
-        //                                        }
-
-        //                                    }
-        //                                    lstDetail.Remove(lstDetail.Where(p => (p.Data as PO_DetailLoad_Result).DiscLineRef == r.LineRef).FirstOrDefault());
-        //                                    if (obj1 != null) db.PO_Details.Remove(obj1);
-        //                                }
-
-        //                            }
-        //                        }
-        //                        listCalcElement.ItemsSource = GridPO_Detail.ItemsSource;
-        //                        if (cboPONbr.SelectedItem != null)
-        //                        {
-        //                            db.PO_Header, LoadBehavior.RefreshCurrent, true).Completed += (sender2, args2) =>
-        //                            {
-        //                                var obj = (from p in db.PO_Headers select p).Where(p => p.PONbr == data["cboPONbr"] && p.BranchID == data["cboBranchID"]).FirstOrDefault();
-        //                                if (obj != null)
-        //                                {
-        //                                    if (obj.tstamp.ToHex() != objPO_Header.tstamp.ToHex())
-        //                                    {
-        //                                        if (_complete)
-        //                                            HQMessageBox.Show(19, hqSys.LangID, null, HQmesscomplete);
-        //                                        _complete = false;
-
-        //                                        db.RejectChanges();
-        //                                        busyIndicator.IsBusy = false;
-        //                                        return;
-
-        //                                    }
-        //                                    UpdatingPO_Header(ref obj);
-        //                                    strPONbr = obj.PONbr;
-        //                                    objPO_Header = obj;
-        //                                    //Save_PO_Detail();
-        //                                    SubmitChange(false, null);
-        //                                }
-        //                                else busyIndicator.IsBusy = false;
-        //                            };
-        //                        }
-        //                        else busyIndicator.IsBusy = false;
-
-        //                    }
-        //                    catch (Exception ex)
-        //                    {
-        //                        busyIndicator.IsBusy = false;
-        //                        throw (ex);
-        //                    }
-        //                };
-        //            };
-        //            return true;
-
-        //        }
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        busyIndicator.IsBusy = false;
-        //        throw (ex);
-        //        return false;
-        //    }
-        //}
-       
-        private void Save_Task(PO_Header header)
-        {
-
-        }
-        private void Save_PO_Detail(PO_Header header, List<PO_DetailLoad_Result> lst)
+        }        
+        private void Save_PO_Detail(PO_Header header, List<PO10100_pgDetail_Result> lst)
         {
             int i = 0;
             try
             {
                 for (i = 0; i < lst.Count; i++)
                 {
-                    PO_DetailLoad_Result objDetail = lst[i];
-                    var objPO_Detail = db.PO_Detail.Where(p => p.BranchID == header.BranchID && p.PONbr == header.PONbr && p.LineRef == objDetail.LineRef).FirstOrDefault();
+                    PO10100_pgDetail_Result objDetail = lst[i];
+                    var objPO_Detail = _db.PO_Detail.Where(p => p.BranchID == header.BranchID && p.PONbr == header.PONbr && p.LineRef == objDetail.LineRef).FirstOrDefault();
                     if (objPO_Detail == null)
                     {
-                        objPO_Detail = clsApp.ResetPO_Detail();
+                        objPO_Detail = new PO_Detail();
+                        objPO_Detail.ResetET();
+
                         UpdatingPO_Detail(objDetail, ref objPO_Detail);
                         objPO_Detail.Crtd_DateTime = DateTime.Now;
-                        objPO_Detail.Crtd_Prog = screenNbr;
+                        objPO_Detail.Crtd_Prog = ScreenNbr;
                         objPO_Detail.Crtd_User = Current.UserName;
                         objPO_Detail.ReqdDate = objPO_Detail.ReqdDate.ToDateShort();
 
-                        db.PO_Detail.AddObject(objPO_Detail);
+                        _db.PO_Detail.AddObject(objPO_Detail);
                     }
                     else
                     {
@@ -469,39 +376,29 @@ namespace PO10100.Controllers
                         UpdatingPO_Detail(objDetail, ref objPO_Detail);
                     }
                 }
-                db.SaveChanges();
-                //if (cboHandle.HandleToValue().Trim() == "N" || cboHandle.HandleToValue().Trim() == "")
-                //    SubmitChange(false, null);
-                //else
-                //{
-                //    header.Status = (cboHandle.SelectedItem as ppv_PO10100Handle_Result).ToStatus;
-                //    SubmitChange(true, objPO_Header);
-                //}
-
+                _db.SaveChanges();
+                if (_toStatus != _status) SendMail(header);
+                
 
             }
             catch (Exception ex)
             {
                 throw (ex);              
             }
-        }
-        
-
-
-        private void UpdatingPO_Header(ref PO_Header objHeader, PO_Header _poHead, List<PO_DetailLoad_Result> lst)
+        }        
+        private void UpdatingPO_Header(ref PO_Header objHeader, PO_Header _poHead, List<PO10100_pgDetail_Result> lst)
         {
 
             try
             {
                 objHeader.VouchStage =_poHead.VouchStage.PassNull();
-                objHeader.POAmt = _poHead.POAmt.ToDouble();//.Value.ToDouble();//lstDetail.Sum(p => (p.Data as PO_DetailLoad_Result).POFee)+ lstDetail.Sum(p => (p.Data as PO_DetailLoad_Result).TaxAmt00) + lstDetail.Sum(p => (p.Data as PO_DetailLoad_Result).TaxAmt01) + lstDetail.Sum(p => (p.Data as PO_DetailLoad_Result).TaxAmt02) + lstDetail.Sum(p => (p.Data as PO_DetailLoad_Result).TaxAmt03) + lstDetail.Sum(p => (p.Data as PO_DetailLoad_Result).ExtCost);// Math.Round(double.Parse(this.txtPOAmt.Value == null ? "0" : this.txtPOAmt.Value.ToString()));
-                objHeader.POFeeTot = lst.Sum(p => p.POFee);// Math.Round(double.Parse(this.txtPOFeeTot.Value == null ? "0" : this.txtPOFeeTot.Value.ToString()));
-                //objHeader.FeeTransport = txtTotFeeTransport.Value.ToDouble();
-                //objHeader.Surcharge = txtTotSurcharge.Value.ToDouble();
+                objHeader.POAmt = _poHead.POAmt.ToDouble();
+                objHeader.POFeeTot = lst.Sum(p => p.POFee);
+
                 //tap main
                 objHeader.ReqNbr = _poHead.ReqNbr.PassNull();
                 objHeader.VendID = _poHead.VendID.PassNull();
-                objHeader.NoteID = 0;// this.HeaderNoteID;
+                objHeader.NoteID = 0;
                 objHeader.Status = _poHead.Status.PassNull();
                 objHeader.POType = _poHead.POType.PassNull();
                 objHeader.BlktPONbr = _poHead.BlktPONbr.PassNull();
@@ -545,14 +442,14 @@ namespace PO10100.Controllers
                 objHeader.RcptStage = _poHead.RcptStage.PassNull();
                 objHeader.Terms = _poHead.Terms.PassNull();
                 objHeader.Buyer = _poHead.Buyer.PassNull();
-
-                if (bStatusClose) objHeader.Status = "C";
+                objHeader.Status = _toStatus;
+                if (_statusClose) objHeader.Status = "C";
 
                 objHeader.LUpd_DateTime = DateTime.Now;
-                objHeader.LUpd_Prog = screenNbr;
+                objHeader.LUpd_Prog = ScreenNbr;
                 objHeader.LUpd_User = Current.UserName;
                 objHeader.tstamp = new byte[0];
-                bStatusClose = false;
+                _statusClose = false;
             }
             catch (Exception ex)
             {
@@ -560,28 +457,29 @@ namespace PO10100.Controllers
             }
 
         }
-        private void UpdatingPO_Detail(PO_DetailLoad_Result objDetail, ref PO_Detail objrPO_Detail)
+        private void UpdatingPO_Detail(PO10100_pgDetail_Result objDetail, ref PO_Detail objrPO_Detail)
         {
             double OldQty = 0;
             double NewQty = 0;
 
-            PO_DetailLoad_Result objDetailFirst = lstPODetailLoad.Where(p => p.BranchID == objDetail.BranchID && p.LineRef == objDetail.LineRef && p.PONbr == objDetail.PONbr).FirstOrDefault();
+            PO10100_pgDetail_Result objDetailFirst = _lstPODetailLoad.Where(p => p.BranchID == objDetail.BranchID && p.LineRef == objDetail.LineRef && p.PONbr == objDetail.PONbr).FirstOrDefault();
 
             IN_ItemSite objIN_ItemSite = new IN_ItemSite();
             try
             {
                 if (objDetail.PurchaseType == "GI" || objDetail.PurchaseType == "PR" || objDetail.PurchaseType == "GP" || objDetail.PurchaseType == "GS")
                 {
-                    var objIN_Inventory = db.IN_Inventory.FirstOrDefault(p => p.InvtID == objDetail.InvtID);
+                    var objIN_Inventory = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == objDetail.InvtID);
                     if (objIN_Inventory == null)
                     {
-                        objIN_Inventory = clsApp.ResetIN_Inventory();
+                        objIN_Inventory = new IN_Inventory();
+                        objIN_Inventory.ResetET();
                         objIN_Inventory.InvtID = objDetail.InvtID;
                     }
                  
                     try
                     {
-                        objIN_ItemSite = db.IN_ItemSite.FirstOrDefault(p => p.InvtID == objDetail.InvtID && p.SiteID == objDetail.SiteID);
+                        objIN_ItemSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == objDetail.InvtID && p.SiteID == objDetail.SiteID);
                         if (objIN_ItemSite == null)
                         {
                             objIN_ItemSite = new IN_ItemSite();
@@ -604,8 +502,8 @@ namespace PO10100.Controllers
                     UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, NewQty, 2);
                   
                 }
-                objrPO_Detail.BranchID = strbranchID;
-                objrPO_Detail.PONbr = strponbr;
+                objrPO_Detail.BranchID = _branchID;
+                objrPO_Detail.PONbr = _ponbr;
                 objrPO_Detail.LineRef = objDetail.LineRef;
 
                 objrPO_Detail.BlktLineID = objDetail.BlktLineID;
@@ -664,7 +562,7 @@ namespace PO10100.Controllers
                 objrPO_Detail.UnitVolume = objDetail.UnitVolume;
                 objrPO_Detail.VouchStage = objDetail.VouchStage;
                 objrPO_Detail.LUpd_DateTime = DateTime.Now;
-                objrPO_Detail.LUpd_Prog =screenNbr;
+                objrPO_Detail.LUpd_Prog =ScreenNbr;
                 objrPO_Detail.LUpd_User = Current.UserName;
               
             }
@@ -674,536 +572,212 @@ namespace PO10100.Controllers
                 throw (ex);
 
             }
-        }
-        //private void SubmitChange(bool isSendMail, PO_Header objHeader)
-        //{
-        //    try
-        //    {
-        //        if (_complete)
-        //        {
-        //            this.db.SubmitChanges(OnSubmitCompleted1 =>
-        //            {
-        //                if (OnSubmitCompleted1.HasError)
-        //                {
-        //                    string message = "";
-
-        //                    if (OnSubmitCompleted1.EntitiesInError.Any())
-        //                    {
-        //                        message = "";
-
-        //                        Entity entityInError = OnSubmitCompleted1.EntitiesInError.First();
-        //                        if (entityInError.ValidationErrors.Any())
-        //                        {
-        //                            message = entityInError.ValidationErrors.First().ErrorMessage;
-        //                        }
-        //                    }
-        //                    busyIndicator.IsBusy = false;
-                        
-
-        //                    OnSubmitCompleted1.MarkErrorAsHandled();
-        //                    throw new Exception(message);
-        //                }
-        //                else
-        //                {
-        //                    if (isSendMail) SendMail(objHeader);
-
-        //                    (this.Resources["ppv_PO10100PONbr_Branch_All_ResultDomainDataSource"] as DomainDataSource).Clear();
-        //                    (this.Resources["ppv_PO10100PONbr_Branch_All_ResultDomainDataSource"] as DomainDataSource).Load();
-        //                    this.pO_DetailLoadDomainDataSource.Clear();
-        //                    this.pO_DetailLoadDomainDataSource.Load();                         
-        //                    busyIndicator.IsBusy = false;
-        //                    Change(false);
-        //                }
-        //                CalCTNPCS();
-        //            }, null);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        busyIndicator.IsBusy = false;
-        //        throw ex;              
-        //    }
-        //}
-        //private bool Data_Checking()
-        //{
-        //    try
-        //    {
-        //        if (objPO_Setup == null)
-        //        {
-        //            if (_complete && cboBranchID.SelectedItem != null)
-        //                HQMessageBox.Show(20404, hqSys.LangID, new string[] { "PO_Setup" }, HQmesscomplete);
-        //            _complete = false;
-
-        //            return false;
-        //        }               
-        //        if (data["cboPONbr"] == "" && objPO_Setup.AutoRef == 0)
-        //        {
-        //            if (_complete)
-        //                HQMessageBox.Show(15, hqSys.LangID, new string[] { lblPONbr.Content.ToString() }, HQmesscomplete);
-        //            _complete = false;
-
-        //            cboPONbr.Focus();
-        //            return false;
-        //        }
-        //        if (cboVendID.SelectedItem == null)
-        //        {
-        //            if (_complete)
-        //                HQMessageBox.Show(15, hqSys.LangID, new string[] { lblVendID.Content.ToString() }, HQmesscomplete);
-        //            _complete = false;
-
-        //            cboVendID.Focus();
-        //            return false;
-        //        }
-        //        if (cboDistAddr.SelectedItem == null)
-        //        {
-        //            if (_complete)
-        //                HQMessageBox.Show(15, hqSys.LangID, new string[] { lblDistAddr.Content.ToString() }, HQmesscomplete);
-        //            _complete = false;
-
-        //            cboVendID.Focus();
-        //            return false;
-        //        }
-        //        //Invalid data
-        //        if (t["cboBranchID"].Length == 0 || this.cboVendID.SelectedItem == null || this.cboPOType.SelectedItem == null || this.cboStatus.SelectedItem == null)
-        //        {
-        //            if (_complete)
-        //                HQMessageBox.Show(744, hqSys.LangID, null, HQmesscomplete);
-        //            _complete = false;
-
-        //            return false;
-        //        }
-        //        //Check PO has no detail data
-        //        if (lstDetail.Count == 0)
-        //        {
-        //            if (_complete)
-        //                HQMessageBox.Show(704, hqSys.LangID, null, HQmesscomplete);
-        //            _complete = false;
-
-
-        //            return false;
-        //        }
-        //        if (lstDetail.Where(p => string.IsNullOrEmpty((p.Data as PO_DetailLoad_Result).PurchUnit.PassNull())).Count() > 0)
-        //        {
-        //            if (_complete)
-        //                HQMessageBox.Show(25, hqSys.LangID, null, HQmesscomplete);
-        //            _complete = false;
-
-
-        //            return false;
-        //        }
-
-
-        //        //Check MOQ
-        //        AP_Vendor objVendor = new AP_Vendor();
-        //        objVendor = aP_VendorDomainDataSource.Data.OfType<AP_Vendor>().Where(p => p.VendID == (cboVendID.SelectedItem as ppv_vendor_Result).VendID).FirstOrDefault();
-        //        if (objVendor.MOQVal > 0)
-        //        {
-        //            switch (objVendor.MOQType)
-        //            {
-        //                case "Q":
-        //                    if (double.Parse(this.txtQuantityTotal.Value == null ? "0" : this.txtQuantityTotal.Value.ToString()) < objVendor.MOQVal)
-        //                    {
-        //                        if (_complete)
-        //                            HQMessageBox.Show(747, hqSys.LangID, new string[] { _lang.Where(p => p.Code.ToUpper() == "Quantity".ToUpper()).FirstOrDefault().Descr, objVendor.MOQVal.ToString() }, HQmesscomplete);
-        //                        _complete = false;
-
-
-        //                    }
-        //                    break;
-        //                case "V":
-        //                    if (double.Parse(this.txtTotVol.Value == null ? "0" : this.txtTotVol.Value.ToString()) < objVendor.MOQVal)
-        //                    {
-        //                        if (_complete)
-        //                            HQMessageBox.Show(747, hqSys.LangID, new string[] { _lang.Where(p => p.Code.ToUpper() == "Quantity".ToUpper()).FirstOrDefault().Descr, objVendor.MOQVal + "L" }, HQmesscomplete);
-        //                        _complete = false;
-
-
-        //                    }
-        //                    break;
-        //                case "A":
-        //                    if (double.Parse(this.txtPOAmt.Value == null ? "0" : this.txtPOAmt.Value.ToString()) < objVendor.MOQVal)
-        //                    {
-        //                        if (_complete)
-        //                            HQMessageBox.Show(747, hqSys.LangID, new string[] { _lang.Where(p => p.Code.ToUpper() == "Quantity".ToUpper()).FirstOrDefault().Descr, objVendor.MOQVal + "" }, HQmesscomplete);
-        //                        _complete = false;
-
-
-        //                    }
-        //                    break;
-        //                case "W":
-        //                    if (double.Parse(this.txtTotWeight.Value == null ? "0" : this.txtTotWeight.Value.ToString()) < objVendor.MOQVal)
-        //                    {
-        //                        if (_complete)
-        //                            HQMessageBox.Show(747, hqSys.LangID, new string[] { _lang.Where(p => p.Code.ToUpper() == "Quantity".ToUpper()).FirstOrDefault().Descr, objVendor.MOQVal + "KG" }, HQmesscomplete);
-        //                        _complete = false;
-
-
-        //                    }
-        //                    break;
-        //            }
-        //        }
-        //         if (objSysConfig != null)
-        //        {
-        //            if (objSysConfig.WrkDateChk)
-        //            {
-        //                int iWrkUpperDays = objSysConfig.WrkUpperDays;
-        //                int iWrkLowerDays = objSysConfig.WrkLowerDays;
-        //                System.DateTime dWrkAdjDate = default(System.DateTime);
-
-        //                //Adjustment Date
-
-        //                dWrkAdjDate = objSysConfig.WrkAdjDate;
-
-        //                //Checking:
-        //                t["PODate"] = t["PODate"] == null ? hqSys.BusinessDate : t["PODate"];
-        //                if (!((((DateTime)t["PODate"].ToDateShort() >= objSysConfig.WrkOpenDate.Date.AddDays(-1 * iWrkLowerDays).ToDateShort() && (DateTime)t["PODate"].ToDateShort() <= objSysConfig.WrkOpenDate.ToDateShort()) || (((DateTime)t["PODate"].ToDateShort() <= objSysConfig.WrkOpenDate.Date.AddDays(iWrkUpperDays).ToDateShort()) && (DateTime)t["PODate"].ToDateShort() >= objSysConfig.WrkOpenDate.ToDateShort()) || (DateTime)t["PODate"].ToDateShort() == dWrkAdjDate.ToDateShort())))
-        //                {
-        //                    if (_complete)
-        //                        HQMessageBox.Show(301, hqSys.LangID, null, HQmesscomplete);
-        //                    _complete = false;
-
-        //                    this.cboPODate.Focus();
-        //                    return false;
-        //                }
-        //            }  
-        //        for (Int16 i = 0; i <= lstDetail.Count - 1; i++)
-        //        {
-        //            var objDetail = lstDetail[i];
-
-        //            if (objDetail.PurchaseType != "PR" && objDetail.ExtCost == 0)
-        //            {
-        //                if (_complete)
-        //                    HQMessageBox.Show(44, hqSys.LangID, null, HQmesscomplete);
-        //                _complete = false;
-
-        //                return false;
-        //            }
-        //            if (string.IsNullOrEmpty(objDetail.PurchUnit))
-        //            {
-        //                if (_complete)
-        //                    HQMessageBox.Show(15, hqSys.LangID, new string[] { GridPO_Detail.Columns["PurchUnit"].HeaderText.ToString() }, HQmesscomplete);
-        //                _complete = false;
-
-        //                return false;
-        //            }
-        //            if (string.IsNullOrEmpty(objDetail.SiteID))
-        //            {
-        //                if (_complete)
-        //                    HQMessageBox.Show(15, hqSys.LangID, new string[] { GridPO_Detail.Columns["SiteID"].HeaderText.ToString() }, HQmesscomplete);
-        //                _complete = false;
-
-        //                return false;
-        //            }
-        //            if (string.IsNullOrEmpty(objDetail.PurchaseType))
-        //            {
-        //                if (_complete)
-        //                    HQMessageBox.Show(15, hqSys.LangID, new string[] { GridPO_Detail.Columns["PurchaseType"].HeaderText.ToString() }, HQmesscomplete);
-        //                _complete = false;
-
-        //                return false;
-        //            }
-        //        }
-        //        var lstDetail = GridPO_Detail.ItemsSource.OfType<PO_DetailLoad_Result>().ToList();
-        //        string strInvt = "";
-        //        var query = (from f in lstDetail
-        //                     where f.PurchaseType != "PR"                            
-        //                     group f by f.InvtID into g
-        //                     let count = g.Count()
-        //                     where count > 1
-        //                     orderby count descending
-        //                     select new CountInvtID
-        //                     {
-        //                         invtID = g.First().InvtID,
-        //                         count = count
-        //                     }).ToList();
-        //        foreach (var obj in query)
-        //        {
-        //            strInvt += obj.invtID + ",";
-        //        }
-        //        if (strInvt != "")
-        //        {
-        //            if (_complete)
-        //                HQMessageBox.Show(20417, hqSys.LangID, new string[] { strInvt.Substring(0, strInvt.Length - 1) }, HQmesscomplete);
-        //            _complete = false;
-        //        }              
-        //        var lstremove = lstDetail.Where(p => (p.Data as PO_DetailLoad_Result).PurchaseType == "PR").ToList();
-        //        while (lstDetail.Where(p => (p.Data as PO_DetailLoad_Result).PurchaseType == "PR" && (!string.IsNullOrEmpty((p.Data as PO_DetailLoad_Result).DiscLineRef)) && ((p.Data as PO_DetailLoad_Result).DiscLineRef != (p.Data as PO_DetailLoad_Result).LineRef)).Count() > 0)
-        //        {
-        //            var obj1 = lstDetail.Where(p => (p.Data as PO_DetailLoad_Result).PurchaseType == "PR" && (!string.IsNullOrEmpty((p.Data as PO_DetailLoad_Result).DiscLineRef)) && ((p.Data as PO_DetailLoad_Result).DiscLineRef != (p.Data as PO_DetailLoad_Result).LineRef)).FirstOrDefault();
-        //            var obj = obj1.Data as PO_DetailLoad_Result;
-        //            var objD = db.PO_Details.Where(p => p.PONbr == obj.PONbr && p.LineRef == obj.LineRef && p.BranchID == obj.BranchID && p.PurchaseType == "PR" && p.DiscLineRef == obj.DiscLineRef).FirstOrDefault();
-        //            if (objD != null) db.PO_Details.Remove(objD);
-        //            lstDetail.Remove(obj1);
-
-        //        }
-        //        for (Int16 i = 0; i <= lstDetail.Count - 1; i++)
-        //        {
-        //            var objDetail = lstDetail[i];
-
-        //            if (objDetail.PurchaseType != "PR" && objDetail.ExtCost == 0)
-        //            {
-        //                if (_complete)
-        //                    HQMessageBox.Show(44, hqSys.LangID, null, HQmesscomplete);
-        //                _complete = false;
-
-        //                return false;
-        //            }
-        //            if (objDetail.PurchaseType != "PR" && objDetail.DiscAmt == 0)
-        //            {
-
-        //                _lineRef = LastLineRef();
-        //                double DiscAmt = 0;
-        //                double DiscPct = 0;
-        //                string discSeq = string.Empty;
-        //                string discID = string.Empty;
-        //                string budgetID = string.Empty;
-        //                string breaklineRef = string.Empty;
-        //                GetDiscLineSetup(objDetail, objDetail.QtyOrd, objDetail.ExtCost, ref DiscAmt, ref DiscPct, ref discSeq, ref discID, ref budgetID, ref breaklineRef);
-        //                objDetail.DiscAmt = DiscAmt;
-        //                objDetail.DiscPct = DiscPct;
-        //                objDetail.DiscSeq = discSeq;
-        //                objDetail.DiscID = discID;
-        //                objDetail.ExtCost = objDetail.QtyOrd * objDetail.UnitCost - objDetail.DiscAmt;               
-        //            }
-        //        }
-        //        FreeItemForLine(ref _lineRef, "");            
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw (ex);
-        //        return false;
-        //    }
-        //}
-        #endregion
-        #region Data Processing
-        //private void SendMail(PO_Header objHeader)
-        //{
-        //    _SendMail.SendMailApprove(cboBranchID.BranchIDToValue(), objHeader.PONbr, hqSys.ScreenNumber, hqSys.CpnyID, cboStatus.StatusToValue(), cboHandle.HandleToValue(), _roles, hqSys.UserName, hqSys.LangID).Completed += (sender6, arg6) =>
-        //    {
-        //        InvokeOperation approve = (sender6 as InvokeOperation);
-        //        if (approve.HasError)
-        //        {
-        //            approve.MarkErrorAsHandled();
-        //            //ErrorWindow.CreateNew(approve.Error);
-
-        //            busyIndicator.IsBusy = false;
-        //            throw new Exception(approve.Error.Message);
-        //        }
-        //    };
-        //}
-     
-        #endregion
-
-
-        private bool Data_Checking()
+        }                
+        private void SendMail(PO_Header objHeader)
         {
-            try
-            {
-              
-                if (objPO_Setup == null)
-                {
-                    throw new MessageException(MessageType.Message, "20404",
-                      parm: new[] { "PO_Setup" });
-
-                }
-
-                if (_poHead.PONbr.PassNull() == "" && objPO_Setup.AutoRef == 0)
-                {
-                    throw new MessageException(MessageType.Message, "15",
-                     parm: new[] { Util.GetLang("PONbr") });
-
-                }
-                if (_poHead.VendID.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15",
-                    parm: new[] { Util.GetLang("VendID") });
-
-                }
-                if (_poHead.ShipDistAddrID.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15",
-                  parm: new[] { Util.GetLang("DistAddr") });
-
-                }
-                //Invalid data
-                if (_poHead.POType.PassNull() == "" || _poHead.Status.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "744");
-
-                }
-                //Check PO has no detail data
-                if (lstPODetailLoad.Count == 0)
-                {
-                    throw new MessageException(MessageType.Message, "704");
-
-
-                }
-                if (lstPODetailLoad.Where(p => string.IsNullOrEmpty(p.PurchUnit.PassNull())).Count() > 0)
-                {
-
-                    throw new MessageException(MessageType.Message, "25");
-
-                }
-                if (db.checkPODate(strbranchID, _poHead.PODate.ToDateShort(), screenNbr,strponbr).FirstOrDefault() == "0")
-                    throw new MessageException(MessageType.Message, "201302041",
-                            parm: new[] { _poHead.PODate.ToShortDateString() });
-               
-                //Check MOQ
-                AP_Vendor objVendor = new AP_Vendor();
-                objVendor = db.AP_Vendor.ToList().FirstOrDefault(p => p.VendID == _poHead.VendID.PassNull());
-                if (objVendor.MOQVal > 0)
-                {
-                    switch (objVendor.MOQType)
-                    {
-                        case "Q":
-                            if (lstPODetailLoad.Sum(p=>p.QtyOrd*p.CnvFact)< objVendor.MOQVal)
-                            {
-                                throw new MessageException(MessageType.Message, "747",
-                                    parm: new[] { Util.GetLang("Quantity"), objVendor.MOQVal.ToString() });
-
-
-
-                            }
-                            break;
-                        case "V":
-                            if (lstPODetailLoad.Sum(p => p.ExtVolume) < objVendor.MOQVal)
-                            {
-                                throw new MessageException(MessageType.Message, "747",
-                                      parm: new[] { Util.GetLang("TotVol"), objVendor.MOQVal.ToString() + "L" });
-
-                            }
-                            break;
-                        case "A":
-                            if (_poHead.POAmt < objVendor.MOQVal)
-                            {
-                                throw new MessageException(MessageType.Message, "747",
-                                      parm: new[] { Util.GetLang("POAmt"), objVendor.MOQVal.ToString() });
-
-
-                            }
-                            break;
-                        case "W":
-                            if (lstPODetailLoad.Sum(p => p.ExtWeight) < objVendor.MOQVal)
-                            {
-                                throw new MessageException(MessageType.Message, "747",
-                                      parm: new[] { Util.GetLang("TotWeight"), objVendor.MOQVal.ToString() + "KG" });
-
-
-
-
-                            }
-                            break;
-                    }
-                }
-
-                if (db.checkCloseDate(strbranchID, _poHead.PODate.ToDateShort(), screenNbr).FirstOrDefault() == "0")
-                    throw new MessageException(MessageType.Message, "301");
-
-
-                for (Int16 i = 0; i <= lstPODetailLoad.Count - 1; i++)
-                {
-                    var objDetail = lstPODetailLoad[i];
-
-                    if (objDetail.PurchaseType != "PR" && objDetail.ExtCost == 0)
-                    {
-                        throw new MessageException(MessageType.Message, "44");
-                    }
-                    if (string.IsNullOrEmpty(objDetail.PurchUnit))
-                    {
-                        throw new MessageException(MessageType.Message, "15",
-                     parm: new[] { Util.GetLang("PurchUnit") });
-
-                    }
-                    if (string.IsNullOrEmpty(objDetail.SiteID))
-                    {
-                        throw new MessageException(MessageType.Message, "15",
-                        parm: new[] { Util.GetLang("SiteID") });
-                    }
-                    if (string.IsNullOrEmpty(objDetail.PurchaseType))
-                    {
-                        throw new MessageException(MessageType.Message, "15",
-                        parm: new[] { Util.GetLang("PurchaseType") });
-                    }
-                }
-                string strInvt = "";
-                var query = (from f in lstPODetailLoad
-                             where f.PurchaseType != "PR"
-                             //join l in lstPO_DetailLoad on f.InvtID equals l.InvtID
-                             group f by f.InvtID into g
-                             let count = g.Count()
-                             where count > 1
-                             orderby count descending
-                             select new CountInvtID
-                             {
-                                 invtID = g.First().InvtID,
-                                 count = count
-                             }).ToList();
-                foreach (var obj in query)
-                {
-                    strInvt += obj.invtID + ",";
-                }
-                if (strInvt != "")
-                {
-                    throw new MessageException(MessageType.Message, "20417",
-                        parm: new[] { strInvt.TrimEnd(',') });
-
-                }
-
-                var lstremove = lstPODetailLoad.Where(p => p.PurchaseType == "PR").ToList();
-                while (lstPODetailLoad.Where(p => p.PurchaseType == "PR" && (!string.IsNullOrEmpty(p.DiscLineRef)) && (p.DiscLineRef != p.LineRef)).Count() > 0)
-                {
-                    var obj1 = lstPODetailLoad.FirstOrDefault(p => p.PurchaseType == "PR" && (!string.IsNullOrEmpty(p.DiscLineRef)) && (p.DiscLineRef != p.LineRef));
-                    var obj = obj1;
-                    var objD = db.PO_Detail.FirstOrDefault(p => p.PONbr == obj.PONbr && p.LineRef == obj.LineRef && p.BranchID == obj.BranchID && p.PurchaseType == "PR" && p.DiscLineRef == obj.DiscLineRef);
-                    if (objD != null) db.PO_Detail.DeleteObject(objD);
-                    lstPODetailLoad.Remove(obj1);
-
-                }
-                for (Int16 i = 0; i <= lstPODetailLoad.Count - 1; i++)
-                {
-                    var objDetail = lstPODetailLoad[i];
-
-                    if (objDetail.PurchaseType != "PR" && objDetail.ExtCost == 0)
-                    {
-                        throw new MessageException(MessageType.Message, "44");
-                    }
-                    if (objDetail.PurchaseType != "PR" && objDetail.DiscAmt == 0)
-                    {
-
-                        _lineRef = LastLineRef(lstPODetailLoad);
-                        double DiscAmt = 0;
-                        double DiscPct = 0;
-                        string discSeq = string.Empty;
-                        string discID = string.Empty;
-                        string budgetID = string.Empty;
-                        string breaklineRef = string.Empty;
-                        GetDiscLineSetup(objDetail, objDetail.QtyOrd, objDetail.ExtCost, ref DiscAmt, ref DiscPct, ref discSeq, ref discID, ref budgetID, ref breaklineRef);
-                        objDetail.DiscAmt = DiscAmt;
-                        objDetail.DiscPct = DiscPct;
-                        objDetail.DiscSeq = discSeq;
-                        objDetail.DiscID = discID;
-                        objDetail.ExtCost = objDetail.QtyOrd * objDetail.UnitCost - objDetail.DiscAmt;
-
-                    }
-                }
-                FreeItemForLine(ref _lineRef, "");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
+            HQSendMailApprove.Approve.SendMailApprove(objHeader.BranchID, objHeader.PONbr, ScreenNbr, Current.CpnyID, _status, _toStatus, Current.UserName, Current.LangID);
         }
-       
+        private bool Data_Checking(bool isDeleteGrd=false)
+        {
+
+
+            if (_objPO_Setup == null)
+            {
+                throw new MessageException(MessageType.Message, "20404",
+                  parm: new[] { "PO_Setup" });
+
+            }
+
+            if (_poHead.PONbr.PassNull() == "" && _objPO_Setup.AutoRef == 0)
+            {
+                throw new MessageException(MessageType.Message, "15",
+                 parm: new[] { Util.GetLang("PONbr") });
+
+            }
+            if (_poHead.VendID.PassNull() == "")
+            {
+                throw new MessageException(MessageType.Message, "15",
+                parm: new[] { Util.GetLang("VendID") });
+
+            }
+            if (_poHead.ShipDistAddrID.PassNull() == "")
+            {
+                throw new MessageException(MessageType.Message, "15",
+              parm: new[] { Util.GetLang("DistAddr") });
+
+            }
+            //Invalid data
+            if (_poHead.POType.PassNull() == "" || _poHead.Status.PassNull() == "")
+            {
+                throw new MessageException(MessageType.Message, "744");
+
+            }
+            //Check PO has no detail data
+            if (_lstPODetailLoad.Count == 0)
+            {
+                throw new MessageException(MessageType.Message, "704");
+
+
+            }
+            if (_lstPODetailLoad.Where(p => string.IsNullOrEmpty(p.PurchUnit.PassNull())).Count() > 0)
+            {
+
+                throw new MessageException(MessageType.Message, "25");
+
+            }
+            if (_db.PO10100_ppCheckPODate(_branchID, _poHead.PODate.ToDateShort(), ScreenNbr, _ponbr).FirstOrDefault() == "0")
+                throw new MessageException(MessageType.Message, "201302041",
+                        parm: new[] { _poHead.PODate.ToShortDateString() });
+
+            //Check MOQ
+            AP_Vendor objVendor = new AP_Vendor();
+            objVendor = _db.AP_Vendor.ToList().FirstOrDefault(p => p.VendID == _poHead.VendID.PassNull());
+            if (objVendor.MOQVal > 0)
+            {
+                switch (objVendor.MOQType)
+                {
+                    case "Q":
+                        if (_lstPODetailLoad.Sum(p => p.QtyOrd * p.CnvFact) < objVendor.MOQVal)
+                        {
+                            throw new MessageException(MessageType.Message, "747",
+                                parm: new[] { Util.GetLang("Quantity"), objVendor.MOQVal.ToString() });
+
+
+
+                        }
+                        break;
+                    case "V":
+                        if (_lstPODetailLoad.Sum(p => p.ExtVolume) < objVendor.MOQVal)
+                        {
+                            throw new MessageException(MessageType.Message, "747",
+                                  parm: new[] { Util.GetLang("TotVol"), objVendor.MOQVal.ToString() + "L" });
+
+                        }
+                        break;
+                    case "A":
+                        if (_poHead.POAmt < objVendor.MOQVal)
+                        {
+                            throw new MessageException(MessageType.Message, "747",
+                                  parm: new[] { Util.GetLang("POAmt"), objVendor.MOQVal.ToString() });
+
+
+                        }
+                        break;
+                    case "W":
+                        if (_lstPODetailLoad.Sum(p => p.ExtWeight) < objVendor.MOQVal)
+                        {
+                            throw new MessageException(MessageType.Message, "747",
+                                  parm: new[] { Util.GetLang("TotWeight"), objVendor.MOQVal.ToString() + "KG" });
+
+
+
+
+                        }
+                        break;
+                }
+            }
+
+            if (_db.PO10100_ppCheckCloseDate(_branchID, _poHead.PODate.ToDateShort(), ScreenNbr).FirstOrDefault() == "0")
+                throw new MessageException(MessageType.Message, "301");
+
+
+            for (Int16 i = 0; i <= _lstPODetailLoad.Count - 1; i++)
+            {
+                var objDetail = _lstPODetailLoad[i];
+
+                if (objDetail.PurchaseType != "PR" && objDetail.ExtCost == 0)
+                {
+                    throw new MessageException(MessageType.Message, "44");
+                }
+                if (string.IsNullOrEmpty(objDetail.PurchUnit))
+                {
+                    throw new MessageException(MessageType.Message, "15",
+                 parm: new[] { Util.GetLang("PurchUnit") });
+
+                }
+                if (string.IsNullOrEmpty(objDetail.SiteID))
+                {
+                    throw new MessageException(MessageType.Message, "15",
+                    parm: new[] { Util.GetLang("SiteID") });
+                }
+                if (string.IsNullOrEmpty(objDetail.PurchaseType))
+                {
+                    throw new MessageException(MessageType.Message, "15",
+                    parm: new[] { Util.GetLang("PurchaseType") });
+                }
+            }
+            string strInvt = "";
+            var query = (from f in _lstPODetailLoad
+                         where f.PurchaseType != "PR"
+                         //join l in lstPO10100_pgDetail on f.InvtID equals l.InvtID
+                         group f by f.InvtID into g
+                         let count = g.Count()
+                         where count > 1
+                         orderby count descending
+                         select new CountInvtID
+                         {
+                             invtID = g.First().InvtID,
+                             count = count
+                         }).ToList();
+            foreach (var obj in query)
+            {
+                strInvt += obj.invtID + ",";
+            }
+            if (strInvt != "")
+            {
+                throw new MessageException(MessageType.Message, "20417",
+                    parm: new[] { strInvt.TrimEnd(',') });
+
+            }
+
+            var lstremove = _lstPODetailLoad.Where(p => p.PurchaseType == "PR").ToList();
+            while (_lstPODetailLoad.Where(p => p.PurchaseType == "PR" && (!string.IsNullOrEmpty(p.DiscLineRef)) && (p.DiscLineRef != p.LineRef)).Count() > 0)
+            {
+                var obj1 = _lstPODetailLoad.FirstOrDefault(p => p.PurchaseType == "PR" && (!string.IsNullOrEmpty(p.DiscLineRef)) && (p.DiscLineRef != p.LineRef));
+                var obj = obj1;
+                var objD = _db.PO_Detail.FirstOrDefault(p => p.PONbr == obj.PONbr && p.LineRef == obj.LineRef && p.BranchID == obj.BranchID && p.PurchaseType == "PR" && p.DiscLineRef == obj.DiscLineRef);
+                if (objD != null) _db.PO_Detail.DeleteObject(objD);
+                _lstPODetailLoad.Remove(obj1);
+
+            }
+            for (Int16 i = 0; i <= _lstPODetailLoad.Count - 1; i++)
+            {
+                var objDetail = _lstPODetailLoad[i];
+
+                if (objDetail.PurchaseType != "PR" && objDetail.ExtCost == 0)
+                {
+                    throw new MessageException(MessageType.Message, "44");
+                }
+                if (objDetail.PurchaseType != "PR" && objDetail.DiscAmt == 0)
+                {
+
+                    _lineRef = LastLineRef(_lstPODetailLoad);
+                    double DiscAmt = 0;
+                    double DiscPct = 0;
+                    string discSeq = string.Empty;
+                    string discID = string.Empty;
+                    string budgetID = string.Empty;
+                    string breaklineRef = string.Empty;
+                    GetDiscLineSetup(objDetail, objDetail.QtyOrd, objDetail.ExtCost, ref DiscAmt, ref DiscPct, ref discSeq, ref discID, ref budgetID, ref breaklineRef);
+                    objDetail.DiscAmt = DiscAmt;
+                    objDetail.DiscPct = DiscPct;
+                    objDetail.DiscSeq = discSeq;
+                    objDetail.DiscID = discID;
+                    objDetail.ExtCost = objDetail.QtyOrd * objDetail.UnitCost - objDetail.DiscAmt;
+
+                }
+            }
+            FreeItemForLine(ref _lineRef, "");
+            return true;
+        }                     
         #endregion
         #region Other
         public void Insert_IN_ItemSite(ref IN_ItemSite objIN_ItemSite, ref IN_Inventory objIN_Inventory, string SiteID)
         {
             try
             {
-                objIN_ItemSite = clsApp.ResetIN_ItemSite();
+                objIN_ItemSite=new IN_ItemSite();
+                objIN_ItemSite.ResetET();
                 objIN_ItemSite.InvtID = objIN_Inventory.InvtID;
                 objIN_ItemSite.SiteID = SiteID;
                 objIN_ItemSite.AvgCost = 0;
@@ -1222,13 +796,13 @@ namespace PO10100.Controllers
                 objIN_ItemSite.StkItem = objIN_Inventory.StkItem;
                 objIN_ItemSite.TotCost = 0;
                 objIN_ItemSite.Crtd_DateTime = DateTime.Now;
-                objIN_ItemSite.Crtd_Prog = screenNbr;
+                objIN_ItemSite.Crtd_Prog = ScreenNbr;
                 objIN_ItemSite.Crtd_User = Current.UserName;
                 objIN_ItemSite.LUpd_DateTime = DateTime.Now;
-                objIN_ItemSite.LUpd_Prog = screenNbr;
+                objIN_ItemSite.LUpd_Prog = ScreenNbr;
                 objIN_ItemSite.LUpd_User = Current.UserName;
                 objIN_ItemSite.tstamp = new byte[0];
-                db.IN_ItemSite.AddObject(objIN_ItemSite);
+                _db.IN_ItemSite.AddObject(objIN_ItemSite);
 
 
             }
@@ -1244,7 +818,7 @@ namespace PO10100.Controllers
             {             
                 try
                 {
-                    objItemSite = db.IN_ItemSite.FirstOrDefault(p => p.InvtID == InvtID && p.SiteID == SiteID);
+                    objItemSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == InvtID && p.SiteID == SiteID);
                     if (objItemSite != null)
                     {
                         objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + NewQty - OldQty, DecQty);
@@ -1260,7 +834,7 @@ namespace PO10100.Controllers
                 throw (ex);
             }
         }
-        private string LastLineRef(List<PO_DetailLoad_Result> lst)
+        private string LastLineRef(List<PO10100_pgDetail_Result> lst)
         {
             string strlineRef = "";
             int ilineRef = 0;
@@ -1270,34 +844,34 @@ namespace PO10100.Controllers
             strlineRef = strlineRef.Substring(strlineRef.Length - 5, 5);
             return strlineRef;
         }
-        private double GetDiscLineSetup(PO_DetailLoad_Result det, double qty, double amt, ref double discAmt, ref double discPct, ref string discSeq, ref string discID, ref string budgetID, ref string breaklineRef)
+        private double GetDiscLineSetup(PO10100_pgDetail_Result det, double qty, double amt, ref double discAmt, ref double discPct, ref string discSeq, ref string discID, ref string budgetID, ref string breaklineRef)
         {
             double discItemUnitQty = 0;
             
-            var lstsetup =db.OM_DiscAllByBranchPO(strbranchID).Where(p => p.DiscType == "L").ToList();
+            var lstsetup =_db.PO10100_pdOM_DiscAllByBranchPO(_branchID).Where(p => p.DiscType == "L").ToList();
             if (lstsetup.Count > 0)
             {
                 foreach (var setup in lstsetup)
                 {
                     var objDisc = setup;// (from p in _PO10100Context.OM_Discounts where p.DiscType == "L" && p.Status == "C" && p.POUse == true select p).FirstOrDefault();
-                    var objCpnyID = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.CpnyID == strbranchID && p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim()).FirstOrDefault();
+                    var objCpnyID = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.CpnyID == _branchID && p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim()).FirstOrDefault();
                     if (objCpnyID != null)
                     {
                         if (objDisc != null)
                         {
                             if (objDisc.DiscType == "L")
                             {
-                                var lstSeq = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.Status.ToUpper().Trim() == "C" && p.Active == 1 && p.POUse == true && ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0 && p.Promo == 0) || ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0) && (DateTime.Compare(_poHead.PODate.ToDateShort(), p.POEndDate) <= 0) && p.Promo == 1))).ToList();
+                                var lstSeq = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.Status.ToUpper().Trim() == "C" && p.Active == 1 && p.POUse == true && ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0 && p.Promo == 0) || ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0) && (DateTime.Compare(_poHead.PODate.ToDateShort(), p.POEndDate) <= 0) && p.Promo == 1))).ToList();
                                 if (lstSeq.Count > 0)
                                 {
                                     foreach (var seq in lstSeq)
                                     {
-                                        var objItem = lstOM_DiscAllByBranchPO_ResultALL.Where(p =>
+                                        var objItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p =>
                                                            p.DiscID == objDisc.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() &&
                                                            p.InvtID == det.InvtID
                                                            ).FirstOrDefault();
-                                        if (objItem == null) objItem = new OM_DiscAllByBranchPO_Result();
-                                        var objInvt = lstIN_Inventory.FirstOrDefault(p => p.InvtID == det.InvtID);
+                                        if (objItem == null) objItem = new PO10100_pdOM_DiscAllByBranchPO_Result();
+                                        var objInvt = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == det.InvtID);
                                         if (objInvt == null) objInvt = new IN_Inventory();
                                         double cnvFact = 0;
                                         string unitMultDiv = "";
@@ -1311,7 +885,7 @@ namespace PO10100.Controllers
 
                                         if (seq.Active != 0 && objDisc.DiscClass == "II")
                                         {
-                                            var objtmpItem = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.InvtID == det.InvtID).FirstOrDefault();
+                                            var objtmpItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.InvtID == det.InvtID).FirstOrDefault();
                                             if (objtmpItem != null)
                                             {
                                                 discID = objDisc.DiscID;
@@ -1341,8 +915,8 @@ namespace PO10100.Controllers
             else
                 qtyAmt = qty;
         begin:
-            var objSeq = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == discSeq.ToUpper().Trim()).FirstOrDefault();
-            if (objSeq == null) objSeq = new OM_DiscAllByBranchPO_Result();
+            var objSeq = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == discSeq.ToUpper().Trim()).FirstOrDefault();
+            if (objSeq == null) objSeq = new PO10100_pdOM_DiscAllByBranchPO_Result();
             if (objSeq.BudgetID.PassNull() != "")
             {
                 throw new MessageException(MessageType.Message, "403",
@@ -1378,11 +952,11 @@ namespace PO10100.Controllers
         {
             double result = 0;
             double qtyBreak = tmpqtyBreak;
-            OM_DiscAllByBranchPO_Result objBreak = new OM_DiscAllByBranchPO_Result();
+            PO10100_pdOM_DiscAllByBranchPO_Result objBreak = new PO10100_pdOM_DiscAllByBranchPO_Result();
             if (discBreak == "A")
-                objBreak = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == discSeq.ToUpper().Trim() && p.BreakAmt <= qtyAmt && p.BreakAmt > 0).OrderByDescending(p => p.BreakAmt).FirstOrDefault();
+                objBreak = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == discSeq.ToUpper().Trim() && p.BreakAmt <= qtyAmt && p.BreakAmt > 0).OrderByDescending(p => p.BreakAmt).FirstOrDefault();
             else
-                objBreak = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == discSeq.ToUpper().Trim() && p.BreakQty <= qtyAmt && p.BreakQty > 0).OrderByDescending(p => p.BreakQty).FirstOrDefault();
+                objBreak = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == discSeq.ToUpper().Trim() && p.BreakQty <= qtyAmt && p.BreakQty > 0).OrderByDescending(p => p.BreakQty).FirstOrDefault();
 
             if (objBreak != null)
             {
@@ -1399,35 +973,28 @@ namespace PO10100.Controllers
         private double OM_GetCnvFactFromUnit(string invtID, string unitDesc, ref double cnvFact, ref string unitMultDiv)
         {
             //double cnvFact = 1;
-            var objInvt = lstIN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+            var objInvt = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
             if (objInvt != null)
             {
-                var cnv = lstUnitConversion.Where(p => p.InvtID == invtID && p.FromUnit == unitDesc && p.ToUnit == objInvt.StkUnit).FirstOrDefault();
+                var cnv = _PO10100_pdIN_UnitConversion_Result.Where(p => p.InvtID == invtID && p.FromUnit == unitDesc && p.ToUnit == objInvt.StkUnit).FirstOrDefault();
                 if (cnv == null)
-                    cnv = lstUnitConversion.Where(p => p.InvtID == invtID && p.FromUnit == objInvt.StkUnit && p.ToUnit == unitDesc).FirstOrDefault();
+                    cnv = _PO10100_pdIN_UnitConversion_Result.Where(p => p.InvtID == invtID && p.FromUnit == objInvt.StkUnit && p.ToUnit == unitDesc).FirstOrDefault();
                 else if (cnv == null)
-                    cnv =// iN_UnitConversionDomainDataSource.Data.OfType<IN_UnitConversion>()
-                        lstUnitConversion.Where(p => p.UnitType == "3" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == invtID.PassNull().Trim().ToUpper() && p.FromUnit.PassNull().Trim().ToUpper() == unitDesc.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == objInvt.StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
+                    cnv = _PO10100_pdIN_UnitConversion_Result.Where(p => p.UnitType == "3" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == invtID.PassNull().Trim().ToUpper() && p.FromUnit.PassNull().Trim().ToUpper() == unitDesc.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == objInvt.StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
                 else if (cnv == null)
-                    cnv =// iN_UnitConversionDomainDataSource.Data.OfType<IN_UnitConversion>()
-                        lstUnitConversion.Where(p => p.UnitType == "2" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == invtID.PassNull().Trim().ToUpper() && p.FromUnit.PassNull().Trim().ToUpper() == unitDesc.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == objInvt.StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
+                    cnv = _PO10100_pdIN_UnitConversion_Result.Where(p => p.UnitType == "2" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == invtID.PassNull().Trim().ToUpper() && p.FromUnit.PassNull().Trim().ToUpper() == unitDesc.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == objInvt.StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
                 else if (cnv == null)
-                    cnv =// iN_UnitConversionDomainDataSource.Data.OfType<IN_UnitConversion>()
-                        lstUnitConversion.Where(p => p.UnitType == "1" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == "*" && p.FromUnit.PassNull().Trim().ToUpper() == unitDesc.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == objInvt.StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
+                    cnv = _PO10100_pdIN_UnitConversion_Result.Where(p => p.UnitType == "1" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == "*" && p.FromUnit.PassNull().Trim().ToUpper() == unitDesc.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == objInvt.StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
 
                 if (cnv != null)
                 {
-
                     if (cnv.MultDiv == "D")
                     {
                         cnvFact = 1 / cnv.CnvFact;
-
                     }
-
                     else
                     {
                         cnvFact = cnv.CnvFact;
-
                     }
                     unitMultDiv = cnv.MultDiv;
                 }
@@ -1444,10 +1011,10 @@ namespace PO10100.Controllers
             string discSeq = string.Empty;
             string discID = string.Empty;
             string boType = string.Empty;
-            _lstTmpPO_DetailLoad = lstPODetailLoad;
+            _lstTmpPO10100_pgDetail = _lstPODetailLoad;
             _countAddItem = 0;
             _freeLineRunning = true;
-            foreach (var det in _lstTmpPO_DetailLoad)
+            foreach (var det in _lstTmpPO10100_pgDetail)
             {
                 if (det.PurchaseType != "PR")
                 {
@@ -1477,14 +1044,14 @@ namespace PO10100.Controllers
             double qtyAmt = 0;
             bool calcDisc = false;
             double discItemUntiQty = 0;
-            List<OM_DiscAllByBranchPO_Result> lstDiscSeq;
-            List<OM_DiscAllByBranchPO_Result> lstDiscFreeItem1;
-            var lstSetup = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscType == "L").ToList();
+            List<PO10100_pdOM_DiscAllByBranchPO_Result> lstDiscSeq;
+            List<PO10100_pdOM_DiscAllByBranchPO_Result> lstDiscFreeItem1;
+            var lstSetup = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscType == "L").ToList();
             foreach (var setup in lstSetup)
             {
 
                 var objDisc = setup;// (from p in _PO10100Context.OM_Discounts where p.DiscType == "L" && p.Status == "C" && p.POUse == true select p).FirstOrDefault();
-                //var objCpnyID = lstOM_DiscAllByBranchPO_ResultALL.Where(p=>p.CpnyID == strbranchID && p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() select p).FirstOrDefault();
+                //var objCpnyID = lstPO10100_pdOM_DiscAllByBranchPO_ResultALL.Where(p=>p.CpnyID == strbranchID && p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() select p).FirstOrDefault();
                 //if (objCpnyID != null)
                 //{
                 if (objDisc != null)
@@ -1492,25 +1059,25 @@ namespace PO10100.Controllers
                     if (objDisc.DiscType == "L")
                     {
                         _poHead.PODate = _poHead.PODate == null ? DateTime.Now.ToDateShort() : _poHead.PODate;
-                        lstDiscSeq = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.Status == "C" && p.Active == 1 && p.POUse == true && ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0 && p.Promo == 0) || ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0) && (DateTime.Compare(_poHead.PODate.ToDateShort(), p.POEndDate) <= 0) && p.Promo == 1))).ToList();
+                        lstDiscSeq = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.Status == "C" && p.Active == 1 && p.POUse == true && ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0 && p.Promo == 0) || ((DateTime.Compare(_poHead.PODate.ToDateShort(), p.POStartDate) >= 0) && (DateTime.Compare(_poHead.PODate.ToDateShort(), p.POEndDate) <= 0) && p.Promo == 1))).ToList();
                         foreach (var seq in lstDiscSeq)
                         {
                             calcDisc = false;
-                            var objInvt = lstIN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-                            OM_DiscAllByBranchPO_Result objItem = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim()).FirstOrDefault();
+                            var objInvt = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                            PO10100_pdOM_DiscAllByBranchPO_Result objItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim()).FirstOrDefault();
 
-                            if (objItem == null) objItem = new OM_DiscAllByBranchPO_Result();
+                            if (objItem == null) objItem = new PO10100_pdOM_DiscAllByBranchPO_Result();
                             double cnvFact = 0;
                             string unitMultDiv = "";
                             discItemUntiQty = (qty * OM_GetCnvFactFromUnit(invtID, unit, ref cnvFact, ref unitMultDiv).ToInt());// objItem.UnitDesc)).ToInt();
 
-                            lstDiscFreeItem1 = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim()).ToList();
+                            lstDiscFreeItem1 = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == objDisc.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim()).ToList();
 
                             if (seq.BreakBy == "A")
                                 qtyAmt = amt;
                             else if (seq.BreakBy == "W")
                             {
-                                objInvt = lstIN_Inventory.Where(p => p.InvtID == invtID).FirstOrDefault();
+                                objInvt = _db.IN_Inventory.Where(p => p.InvtID == invtID).FirstOrDefault();
                                 qtyAmt = discItemUntiQty * objInvt.StkWt;
                             }
                             else
@@ -1523,7 +1090,7 @@ namespace PO10100.Controllers
 
                             if (lstDiscFreeItem1.Count > 0 && seq.Active != 0 && objDisc.DiscClass == "II")
                             {
-                                var objTmpItem = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.InvtID == invtID).FirstOrDefault();
+                                var objTmpItem = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.InvtID == invtID).FirstOrDefault();
                                 if (objTmpItem != null)
                                 {
                                     calcDisc = true;
@@ -1532,8 +1099,8 @@ namespace PO10100.Controllers
                             }
                             else if (lstDiscFreeItem1.Count > 0 && seq.Active != 0 && objDisc.DiscClass == "PP")
                             {
-                                objInvt = lstIN_Inventory.Where(p => p.InvtID == invtID).FirstOrDefault();
-                                var objDiscItemClass = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.ClassID.ToUpper().Trim() == objInvt.PriceClassID.ToUpper().Trim()).FirstOrDefault();
+                                objInvt = _db.IN_Inventory.Where(p => p.InvtID == invtID).FirstOrDefault();
+                                var objDiscItemClass = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.ClassID.ToUpper().Trim() == objInvt.PriceClassID.ToUpper().Trim()).FirstOrDefault();
                                 if (objDiscItemClass != null)
                                 {
                                     calcDisc = true;
@@ -1553,7 +1120,7 @@ namespace PO10100.Controllers
                                 GetDiscBreak(seq.DiscID, seq.DiscSeq, seq.BreakBy, qtyAmt, ref qtyBreak, ref breakLineRef1);
                                 discID = objDisc.DiscID;
                                 discSeq = seq.DiscSeq;
-                                var lstDiscFreeItem1tmp = lstOM_DiscAllByBranchPO_ResultALL.Where(p =>
+                                var lstDiscFreeItem1tmp = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p =>
                                                             p.DiscID.ToUpper().Trim() == seq.DiscID.ToUpper().Trim() && p.DiscSeq.ToUpper().Trim() == seq.DiscSeq.ToUpper().Trim() && p.LineRef == breakLineRef1)
                                                           .ToList();
 
@@ -1606,7 +1173,7 @@ namespace PO10100.Controllers
                                             freeItemID1 = free.FreeItemID;
                                             //double cnvFact = 0;
                                             //string unitMultDiv = string.Empty;
-                                            objInvt = lstIN_Inventory.Where(p => p.InvtID == freeItemID1).FirstOrDefault();
+                                            objInvt = _db.IN_Inventory.Where(p => p.InvtID == freeItemID1).FirstOrDefault();
                                             if (objInvt == null) objInvt = new IN_Inventory();
                                             uom1 = string.IsNullOrEmpty(uom1) ? (objInvt.StkUnit == null ? "" : objInvt.StkUnit) : uom1;
                                             if (SetUOM(ref cnvFact, ref unitMultDiv, freeItemID1, objInvt.ClassID, objInvt.StkUnit, uom1))
@@ -1654,7 +1221,7 @@ namespace PO10100.Controllers
         }
         private void AddFreeItem(string discID, string discSeq, string freeItemID, double qty, string siteID, string uom, string lineRef, string disclineref, string budgetID, string boType)
         {
-            var objDisc = lstOM_DiscAllByBranchPO_ResultALL.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim()).FirstOrDefault();
+            var objDisc = _lstPO10100_pdOM_DiscAllByBranchPO.Where(p => p.DiscID.ToUpper().Trim() == discID.ToUpper().Trim()).FirstOrDefault();
             if (objDisc.DiscType == "L")
                 _countAddItem++;
             double cnvFact = 0;
@@ -1665,7 +1232,7 @@ namespace PO10100.Controllers
             double stkQty = 0;
             if (freeItemID != string.Empty && qty > 0)
             {
-                var objInvt = lstIN_Inventory.FirstOrDefault(p => p.InvtID == freeItemID);
+                var objInvt = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == freeItemID);
                 if (objInvt == null) objInvt = new IN_Inventory();
 
                 uom = string.IsNullOrEmpty(uom) ? (objInvt.StkUnit == null ? "" : objInvt.StkUnit) : uom;
@@ -1684,11 +1251,12 @@ namespace PO10100.Controllers
                         stkQty = 0;
                 }
 
-                
-                
-                PO_DetailLoad_Result newdet = clsApp.ResetPO_DetailLoad_Result();
-                newdet.PONbr = strponbr;
-                newdet.BranchID = strbranchID;
+
+
+                PO10100_pgDetail_Result newdet = new PO10100_pgDetail_Result();
+                newdet.ResetET();//_clsApp.ResetPO10100_pgDetail_Result();
+                newdet.PONbr = _ponbr;
+                newdet.BranchID = _branchID;
                 newdet.LineRef = lineRef;
                 newdet.DiscID = discID;
                 newdet.SiteID = string.IsNullOrEmpty(siteID) ? (objOM_UserDefault.DiscSite == null ? "" : objOM_UserDefault.DiscSite) : siteID;
@@ -1706,25 +1274,22 @@ namespace PO10100.Controllers
                 newdet.UnitCost = 0;
                 newdet.UnitMultDiv = unitMultDiv;
                 newdet.CnvFact = cnvFact;
-                lstPODetailLoad.Add(newdet);
+                _lstPODetailLoad.Add(newdet);
             }
         }
         public bool SetUOM(ref double Cnvfact, ref string UnitMultDiv, string InvtID, string ClassID, string StkUnit, string FromUnit)
         {
             Cnvfact = 0;
-            IN_UnitConversion objIN_UnitConversion = new IN_UnitConversion();
+            PO10100_pdIN_UnitConversion_Result objIN_UnitConversion = new PO10100_pdIN_UnitConversion_Result();
             try
             {
                 if (!string.IsNullOrEmpty(FromUnit))
                 {
-                    objIN_UnitConversion =// iN_UnitConversionDomainDataSource.Data.OfType<IN_UnitConversion>()
-                        lstUnitConversion.Where(p => p.UnitType == "3" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == InvtID.PassNull().Trim().ToUpper() && p.FromUnit.PassNull().Trim().ToUpper() == FromUnit.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
+                    objIN_UnitConversion = _PO10100_pdIN_UnitConversion_Result.Where(p => p.UnitType == "3" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == InvtID.PassNull().Trim().ToUpper() && p.FromUnit.PassNull().Trim().ToUpper() == FromUnit.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
                     if (objIN_UnitConversion == null)
-                        objIN_UnitConversion = //iN_UnitConversionDomainDataSource.Data.OfType<IN_UnitConversion>()
-                            lstUnitConversion.Where(p => p.UnitType == "2" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == InvtID.PassNull().Trim().ToUpper() && p.FromUnit.PassNull().Trim().ToUpper() == FromUnit.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
+                        objIN_UnitConversion = _PO10100_pdIN_UnitConversion_Result.Where(p => p.UnitType == "2" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == InvtID.PassNull().Trim().ToUpper() && p.FromUnit.PassNull().Trim().ToUpper() == FromUnit.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
                     if (objIN_UnitConversion == null)
-                        objIN_UnitConversion = //iN_UnitConversionDomainDataSource.Data.OfType<IN_UnitConversion>()
-                            lstUnitConversion.Where(p => p.UnitType == "1" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == "*" && p.FromUnit.PassNull().Trim().ToUpper() == FromUnit.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
+                        objIN_UnitConversion = _PO10100_pdIN_UnitConversion_Result.Where(p => p.UnitType == "1" && p.ClassID == "*" && p.InvtID.PassNull().Trim().ToUpper() == "*" && p.FromUnit.PassNull().Trim().ToUpper() == FromUnit.PassNull().Trim().ToUpper() && p.ToUnit.PassNull().Trim().ToUpper() == StkUnit.PassNull().Trim().ToUpper()).FirstOrDefault();
                     if (objIN_UnitConversion == null)
                     {
                         throw new MessageException(MessageType.Message, "25",
@@ -1748,6 +1313,473 @@ namespace PO10100.Controllers
                 throw (ex);
                 return false;
             }
+        }
+        private string GetExcelPOSuggest(string strType, string strBranchID, DateTime strPODate, string strVendID)
+        {
+
+
+            string fileName = Directory.GetParent(Server.MapPath("")) + "\\" + Guid.NewGuid().ToString() + ".xls";
+            System.Data.DataTable dtData = new System.Data.DataTable();
+            System.Data.DataTable dtHeader = new System.Data.DataTable();
+            System.Data.DataTable dtInvtID = new System.Data.DataTable();
+
+            Application excelApplication = new Application();
+            Workbook excelWorkBook;
+            Worksheet SheetKPI;
+            //Worksheet SheetInventory;
+            //Worksheet SheetWeek;
+            object oMissing = Missing.Value;
+            excelWorkBook = excelApplication.Workbooks.Add();
+            excelWorkBook.Worksheets.Add();
+            string cellName;
+            int counter = 2;
+          
+            try
+            {
+              
+              
+              
+                Dictionary<string, string> para = new Dictionary<string, string>();
+                para.Add("@BranchID", strBranchID);
+                para.Add("@PODate", strPODate.ToString("yyyy-MM-dd"));
+                para.Add("@UserName", Current.UserName);
+                para.Add("@VendID", strVendID);
+                dtHeader = Util.getDataTableFromProc("PO10100_peHeader", para, false);
+
+                para = new Dictionary<string, string>();
+                para.Add("@BranchID", strBranchID);
+                para.Add("@PODate", strPODate.ToString("yyyy-MM-dd"));
+                para.Add("@User", Current.UserName);
+                para.Add("@VendID", strVendID);
+
+                dtData = Util.getDataTableFromProc("PO10100_peSuggest", para, false);
+
+                                            
+                para = new Dictionary<string, string>();
+                para.Add("@BranchID", strBranchID);
+                para.Add("@PODate", strPODate.ToString("yyyy-MM-dd"));
+                para.Add("@User", Current.UserName);
+                para.Add("@VendID", strVendID);
+                para.Add("@Type", strType);
+                dtInvtID = Util.getDataTableFromProc("PO10100_peInventory", para, false);
+                          
+                SheetKPI = excelWorkBook.Worksheets[1];
+                SheetKPI.Name = Util.GetLang("POSuggest");
+
+
+                #region sheet Inventory
+                Util.SetCellValueHeader(SheetKPI, "AA1", Util.GetLang("PO10100InvtID"));
+                Util.SetCellValueHeader(SheetKPI, "AB1", Util.GetLang("PO10100Descr"));
+                Util.SetCellValueHeader(SheetKPI, "AC1", Util.GetLang("PO10100Unit"));
+                Util.SetCellValueHeader(SheetKPI, "AD1", Util.GetLang("PO10100Price"));
+                Util.SetCellValueHeader(SheetKPI, "AE1", Util.GetLang("PO10100Type"));
+
+             
+
+
+                Util.SetCellValueHeader(SheetKPI, "AF1", Util.GetLang("PO10100InvtID"));
+                Util.SetCellValueHeader(SheetKPI, "AG1", Util.GetLang("PO10100Descr"));
+                Util.SetCellValueHeader(SheetKPI, "AH1", Util.GetLang("PO10100PurchUnit"));
+                Util.SetCellValueHeader(SheetKPI, "AI1", Util.GetLang("UnitPrice"));
+                Util.SetCellValueHeader(SheetKPI, "AJ1", Util.GetLang("TKchuan"));
+                Util.SetCellValueHeader(SheetKPI, "AK1", Util.GetLang("TKHientai"));
+                Util.SetCellValueHeader(SheetKPI, "AL1", Util.GetLang("TKCuoithang"));
+                Util.SetCellValueHeader(SheetKPI, "AM1", Util.GetLang("SLChitieu"));
+                Util.SetCellValueHeader(SheetKPI, "AN1", Util.GetLang("SLDenghi"));
+                Util.SetCellValueHeader(SheetKPI, "AO1", Util.GetLang("SLConlai"));
+                Util.SetCellValueHeader(SheetKPI, "AP1", Util.GetLang("SLDathang"));
+                ////now the list
+
+                object[,] array = new object[dtInvtID.Rows.Count, dtInvtID.Columns.Count];
+
+
+                for (int i = 0; i < dtInvtID.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dtInvtID.Columns.Count; j++)
+                    {
+                        array[i, j] = dtInvtID.Rows[i].ItemArray[j].ToString().Trim();
+                    }
+                }
+                if (dtInvtID.Rows.Count > 0)
+                {
+                    SheetKPI.get_Range("AA2", "AC" + (dtInvtID.Rows.Count + 1).ToString()).NumberFormat = "@";
+                    SheetKPI.get_Range("AE2", "AE" + (dtInvtID.Rows.Count + 1).ToString()).NumberFormat = "@";
+                    SheetKPI.get_Range("AA2", "AE" + (dtInvtID.Rows.Count + 1).ToString()).Value2 = array;
+                }
+         
+                #endregion
+
+
+                #region template
+                Util.SetCellValueHeader(SheetKPI, "B1", Util.GetLang("PO10100EHeader"));
+                SheetKPI.Range["B1:G1"].Merge();
+                SheetKPI.Range["B1:G1"].Font.Bold = true;
+                SheetKPI.Range["B1:G1"].Font.Size = 20;
+                SheetKPI.Range["B1:G1"].Font.Color = Color.Blue;
+
+                Util.SetCellValueHeader(SheetKPI, "B2", Util.GetLang("PO10100VendName"));
+                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
+                SheetKPI.Range["B2:B2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["B2:B2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "C2", dtHeader.Rows[0]["VendName"]);
+                SheetKPI.Range["C2:C2"].Font.Color = Color.Blue;
+                SheetKPI.Range["C2:D2"].Merge();
+                SheetKPI.Range["C2:C2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["C2:C2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignLeft;
+
+
+                Util.SetCellValueHeader(SheetKPI, "B3", Util.GetLang("PO10100BranchID"));
+                SheetKPI.Range["B3:B3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["B3:B3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "C3", dtHeader.Rows[0]["CpnyID"]);
+                SheetKPI.Range["C3:C3"].Font.Color = Color.Blue;
+                SheetKPI.Range["C3:D3"].Merge();
+                SheetKPI.Range["C3:C3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["C3:C3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignLeft;
+
+
+
+                Util.SetCellValueHeader(SheetKPI, "B4", Util.GetLang("PO10100BranchName"));
+                SheetKPI.Range["B4:B4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["B4:B4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "C4", dtHeader.Rows[0]["CpnyName"]);
+                SheetKPI.Range["C4:C4"].Font.Color = Color.Blue;
+                SheetKPI.Range["C4:D4"].Merge();
+                SheetKPI.Range["C4:C4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["C4:C4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignLeft;
+
+                Util.SetCellValueHeader(SheetKPI, "B5", Util.GetLang("PO10100SNDD"));
+                SheetKPI.Range["B5:B5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["B5:B5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "C5", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["SNDD"] : "0");
+                SheetKPI.Range["C5:C5"].Font.Color = Color.Blue;
+                SheetKPI.Range["C5:D5"].Merge();
+                SheetKPI.Range["C5:C5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["C5:C5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+
+
+                Util.SetCellValueHeader(SheetKPI, "E2", Util.GetLang("PO10100PODate"));
+                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
+                SheetKPI.Range["E2:E2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["E2:E2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+                SheetKPI.Range["F2:F2"].NumberFormat = "@";
+
+                Util.SetCellValueHeader(SheetKPI, "F2", strPODate.ToString("dd-MM-yyyy"));
+                SheetKPI.Range["F2:F2"].Font.Color = Color.Blue;
+                //SheetKPI.Range["F2:G2"].Merge();
+                SheetKPI.Range["F2:F2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["F2:F2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+                SheetKPI.Range["F2:F2"].NumberFormat = "@";
+
+                Util.SetCellValueHeader(SheetKPI, "E3", Util.GetLang("PO10100TotAmtExcel"));
+                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
+                SheetKPI.Range["E3:E3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["E3:E3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "E4", Util.GetLang("PO10100MinValue"));
+                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
+                SheetKPI.Range["E4:E4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["E4:E4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "F4", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["MinValue"] : "0");
+                SheetKPI.Range["F4:F4"].Font.Color = Color.Blue;
+                SheetKPI.Range["F4:F4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["F4:F4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "E5", Util.GetLang("PO10100NXK"));
+                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
+                SheetKPI.Range["E5:E5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["E5:E5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                SheetKPI.Range["F5:F5"].NumberFormat = "@";
+                Util.SetCellValueHeader(SheetKPI, "F5", dtHeader.Rows.Count > 0 ? Convert.ToDateTime(dtHeader.Rows[0]["NXK"]).ToString("dd-MM-yyyy") : strPODate.ToString("dd-MM-yyyy"));
+                SheetKPI.Range["F5:F5"].Font.Color = Color.Blue;
+                SheetKPI.Range["F5:F5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["F5:F5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;          
+
+                Util.SetCellValueHeader(SheetKPI, "G2", Util.GetLang("PO10100CreditLimit"));
+                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
+                SheetKPI.Range["G2:G2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["G2:G2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "H2", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["CreditLimit"] : "0");
+                SheetKPI.Range["H2:H2"].NumberFormat = "#,##0";
+                SheetKPI.Range["H2:H2"].Font.Color = Color.Blue;
+                SheetKPI.Range["H2:H2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["H2:H2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+                SheetKPI.Range["H2:H2"].NumberFormat = "#,##0";
+
+                Util.SetCellValueHeader(SheetKPI, "G3", Util.GetLang("PO10100Deposit"));
+                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
+                SheetKPI.Range["G3:G3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["G3:G3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "H3", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["Deposit"] : "0");
+                SheetKPI.Range["H3:H3"].NumberFormat = "#,##0";
+                SheetKPI.Range["H3:H3"].Font.Color = Color.Blue;
+                SheetKPI.Range["H3:H3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["H3:H3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+                SheetKPI.Range["H3:H3"].NumberFormat = "#,##0";
+
+                Util.SetCellValueHeader(SheetKPI, "G4", Util.GetLang("PO10100MaxValue"));
+                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
+                SheetKPI.Range["G4:G4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["G4:G4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "H4", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["MaxValue"] : "0");
+                SheetKPI.Range["H4:H4"].NumberFormat = "#,##0";
+                SheetKPI.Range["H4:H4"].Font.Color = Color.Blue;
+                SheetKPI.Range["H4:H4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["H4:H4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+                SheetKPI.Range["H4:H4"].NumberFormat = "#,##0";
+
+                Util.SetCellValueHeader(SheetKPI, "G5", Util.GetLang("PO10100CountShip"));
+                SheetKPI.Range["G5:G5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["G5:G5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                Util.SetCellValueHeader(SheetKPI, "H5", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["CountShipment"] : "0");
+                SheetKPI.Range["H5:H5"].NumberFormat = "#,##0";
+                SheetKPI.Range["H5:H5"].Font.Color = Color.Blue;
+                SheetKPI.Range["H5:H5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["H5:H5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+                SheetKPI.Range["H5:H5"].NumberFormat = "#,##0";
+
+                SheetKPI.Range["A6:N6"].Interior.Color = Color.Yellow;
+                Util.SetCellValueHeader(SheetKPI, "A6", Util.GetLang("PO10100ESTT"));
+                Util.SetCellValueHeader(SheetKPI, "B6", Util.GetLang("PO10100InvtID"));
+                Util.SetCellValueHeader(SheetKPI, "C6", Util.GetLang("PO10100Descr"));
+                Util.SetCellValueHeader(SheetKPI, "D6", Util.GetLang("PO10100PurchUnit"));
+                Util.SetCellValueHeader(SheetKPI, "E6", Util.GetLang("PO10100UnitPrice"));
+
+                Util.SetCellValueHeader(SheetKPI, "N6", Util.GetLang("SLConlai"));
+                Util.SetCellValueHeader(SheetKPI, "G6", Util.GetLang("SLDathang"));
+                Util.SetCellValueHeader(SheetKPI, "H6", Util.GetLang("ThanhTien"));
+
+                Util.SetCellValueHeader(SheetKPI, "I6", Util.GetLang("TKchuan"));
+                Util.SetCellValueHeader(SheetKPI, "J6", Util.GetLang("TKHientai"));
+                Util.SetCellValueHeader(SheetKPI, "K6", Util.GetLang("TKCuoithang"));
+
+                Util.SetCellValueHeader(SheetKPI, "L6", Util.GetLang("TBSellout"));
+                Util.SetCellValueHeader(SheetKPI, "M6", Util.GetLang("SLChitieu"));
+                Util.SetCellValueHeader(SheetKPI, "F6", Util.GetLang("SLDenghi"));
+
+              
+                String formulaCustomer = "=$AA$2:$AA$" + (dtInvtID.Rows.Count + 2);           
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.Add(XlDVType.xlValidateList, XlDVAlertStyle.xlValidAlertStop, XlFormatConditionOperator.xlBetween, formulaCustomer, oMissing);
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.IgnoreBlank = false;
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.InputTitle = "";
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.ErrorTitle = "";
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.InputMessage = "Chọn Mã Sản Phẩm";
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.ErrorMessage = "Mã Sản Phẩm này không tồn tại hoặc đã hết tồn kho";
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.ShowInput = true;
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.ShowError = true;
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).NumberFormat = "@";
+
+
+
+                String formulaDesctInvtID = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,2,0)),\"\",VLOOKUP(B7,$AA:$AD,2,0))");
+                SheetKPI.get_Range("C7", "C" + (dtInvtID.Rows.Count + 7)).Formula = formulaDesctInvtID;
+                String formulaUnit = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,3,0)),\"\",VLOOKUP(B7,$AA:$AD,3,0))");
+                SheetKPI.get_Range("D7", "D" + (dtInvtID.Rows.Count + 7)).Formula = formulaUnit;
+                String formulaPrice = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,4,0)),0,VLOOKUP(B7,$AA:$AD,4,0))");
+                SheetKPI.get_Range("E7", "E" + (dtInvtID.Rows.Count + 7)).Formula = formulaPrice;
+                String formulaTypeInvtID = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AE,5,0)),\"\",VLOOKUP(B7,$AA:$AE,5,0))");
+                SheetKPI.get_Range("O7", "O" + (dtInvtID.Rows.Count + 7)).Formula = formulaTypeInvtID;
+                String formulaZERO = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,5,0)),0,VLOOKUP(B7,$AA:$AD,5,0))");
+                SheetKPI.get_Range("G7", "G" + (dtInvtID.Rows.Count + 7)).Formula = formulaZERO;
+                String formulaSTT = "=IF(ISERROR(IF(C7<>\"\",A6+1 & \"\",\"\")),1,IF(C7<>\"\",A6+1 & \"\",\"\"))";
+                SheetKPI.get_Range("A7", "A" + (dtInvtID.Rows.Count + 7)).Formula = formulaSTT;
+                SheetKPI.get_Range("A7", "A" + (dtInvtID.Rows.Count + 7)).HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+
+                String formulachuan = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,5,0)),0,VLOOKUP(B7,$AF:$AQ,5,0))");
+                SheetKPI.get_Range("I7", "I" + (dtInvtID.Rows.Count + 7)).Formula = formulachuan;
+
+                String formulahientai = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,6,0)),0,VLOOKUP(B7,$AF:$AQ,6,0))");
+                SheetKPI.get_Range("J7", "J" + (dtInvtID.Rows.Count + 7)).Formula = formulahientai;
+
+                String formulacth = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,6,0)),0,VLOOKUP(B7,$AF:$AQ,6,0))");
+                SheetKPI.get_Range("K7", "K" + (dtInvtID.Rows.Count + 7)).Formula = formulacth;
+
+                String formulaSellout = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,7,0)),0,VLOOKUP(B7,$AF:$AQ,7,0))");
+                SheetKPI.get_Range("L7", "L" + (dtInvtID.Rows.Count + 7)).Formula = formulaSellout;
+
+                String formulact = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,8,0)),0,VLOOKUP(B7,$AF:$AQ,8,0))");
+                SheetKPI.get_Range("M7", "M" + (dtInvtID.Rows.Count + 7)).Formula = formulact;
+
+                String formuladn = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,9,0)),0,VLOOKUP(B7,$AF:$AQ,9,0))");
+                SheetKPI.get_Range("F7", "F" + (dtInvtID.Rows.Count + 7)).Formula = formuladn;
+
+                String formulacl = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,10,0)),0,VLOOKUP(B7,$AF:$AQ,10,0))");
+                SheetKPI.get_Range("N7", "N" + (dtInvtID.Rows.Count + 7)).Formula = formulacl;
+
+                #endregion
+                //#region Fomat kieu text
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).NumberFormat = "General";
+                SheetKPI.get_Range("C7", "C" + (dtInvtID.Rows.Count + 7)).NumberFormat = "@";
+                SheetKPI.get_Range("D7", "D" + (dtInvtID.Rows.Count + 7)).NumberFormat = "@";
+                SheetKPI.get_Range("E7", "E" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("F7", "F" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("G7", "G" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("H7", "H" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("I7", "I" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("J7", "J" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("K7", "K" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("L7", "L" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("M7", "M" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("N7", "N" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("O7", "O" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("P7", "P" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("Q7", "Q" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("R7", "R" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("S7", "S" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("T7", "T" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("U7", "U" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("V7", "V" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Locked = false;
+                SheetKPI.get_Range("G7", "G" + (dtInvtID.Rows.Count + 7)).Locked = false;
+
+                //#endregion
+
+                #region truyen du lieu
+             
+                counter = 7;
+                int countPO = 2;
+             
+                object[,] arr = new object[dtData.Rows.Count, 11];
+                for (int i = 0; i < dtData.Rows.Count; i++)
+                {
+                  
+
+                    cellName = "B" + counter.ToString();
+                    SheetKPI.get_Range(cellName, cellName).Value2 = dtData.Rows[i]["InvtID"].ToString();
+                    arr[i, 0] = dtData.Rows[i]["InvtID"].ToString();
+                    arr[i, 1] = dtData.Rows[i]["Descr"].ToString();
+                    arr[i, 2] = dtData.Rows[i]["PurchUnit"].ToString();
+                    arr[i, 3] = dtData.Rows[i]["UnitPrice"].ToString();
+                    arr[i, 4] = dtData.Rows[i]["TKchuan"].ToString();
+                    arr[i, 5] = dtData.Rows[i]["TKHientai"].ToString();
+                    arr[i, 6] = dtData.Rows[i]["TKCuoithang"].ToString();
+                    arr[i, 7] = dtData.Rows[i]["SLChitieu"].ToString();
+                    arr[i, 8] = dtData.Rows[i]["SLDenghi"].ToString();
+                    arr[i, 9] = dtData.Rows[i]["SLConlai"].ToString();
+                    arr[i, 10] = dtData.Rows[i]["SLDathang"].ToString();                   
+                    countPO++;
+                    counter++;
+                }
+                if (dtData.Rows.Count > 0)
+                {
+                    SheetKPI.get_Range("AF2", "AP" + (dtData.Rows.Count + 1).ToString()).Value2 = arr;
+                }
+             
+                #endregion
+                #region Fomular
+                String formulaTB = string.Format("=IF(OR({0}={1},{2}={3}),{4},ROUND({5}*{6},0))", "E7", "\"\"", "G7", "\"\"", "\"\"", "E7", "G7");
+                SheetKPI.get_Range("H7", "H" + (dtInvtID.Rows.Count + 7)).Formula = formulaTB;
+                SheetKPI.get_Range("H7", "H" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
+                String formulaTot = string.Format("=SUM({0}:{1})", "H7", "H" + (dtInvtID.Rows.Count + 7));               
+                SheetKPI.Range["F3:F3"].NumberFormat = "#,##0";
+                SheetKPI.Range["F3:F3"].Font.Color = Color.Blue;             
+                SheetKPI.Range["F3:F3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                SheetKPI.Range["F3:F3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
+                SheetKPI.Range["F3:F3"].Formula = formulaTot;
+                SheetKPI.Range["F3:F3"].NumberFormat = "#,##0";
+                #endregion               
+                SheetKPI.Columns.AutoFit();
+                SheetKPI.Columns.WrapText = false;
+                SheetKPI.Columns["C", Type.Missing].ColumnWidth = 35;
+                SheetKPI.Columns["B", Type.Missing].ColumnWidth = 15;
+                SheetKPI.Columns["D", Type.Missing].ColumnWidth = 15;
+                SheetKPI.Columns["E", Type.Missing].ColumnWidth = 20;
+                SheetKPI.Columns["F", Type.Missing].ColumnWidth = 15;
+                SheetKPI.Columns["G", Type.Missing].ColumnWidth = 15;
+                SheetKPI.Columns["H", Type.Missing].ColumnWidth = 20;
+                SheetKPI.Columns["I", Type.Missing].ColumnWidth = 20;
+                SheetKPI.Columns["J", Type.Missing].ColumnWidth = 25;
+                SheetKPI.Columns["K", Type.Missing].ColumnWidth = 35;
+                SheetKPI.Columns["O", Type.Missing].ColumnWidth = 0;
+                SheetKPI.Range["O1:O" + (dtInvtID.Rows.Count + 7)].Font.Color = Color.White;               
+                SheetKPI.Range["A1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Name = "Arial";
+                SheetKPI.Range["A1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Size = 10;
+                SheetKPI.Range["AA1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Color = Color.White;         
+                SheetKPI.Range["B7:G" + (dtInvtID.Rows.Count + 7)].Interior.Color = Color.Silver;
+
+                FormatConditions fcs = SheetKPI.Range["A7:N" + (dtInvtID.Rows.Count + 7)].FormatConditions;
+                FormatCondition fc = (FormatCondition)fcs.Add
+                    (XlFormatConditionType.xlExpression, Type.Missing, "=$O7=\"G\"");
+                fc.Font.Color = ColorTranslator.ToOle(Color.Green);
+
+
+                FormatCondition fc1 = (FormatCondition)fcs.Add
+                    (XlFormatConditionType.xlExpression, Type.Missing, "=$O7=\"R\"");
+                fc1.Font.Color = ColorTranslator.ToOle(Color.Red);
+              
+                Microsoft.Office.Interop.Excel.Range firstRow = (Microsoft.Office.Interop.Excel.Range)SheetKPI.Rows[7];
+                firstRow.Activate();
+                firstRow.Select();
+                //firstRow.AutoFilter(5, Type.Missing, XlAutoFilterOperator.xlFilterValues, Type.Missing, true);
+                firstRow.Application.ActiveWindow.FreezePanes = true;
+
+                //Filter excel
+
+                string lastrow = "N" + (dtInvtID.Rows.Count + 7).ToString();
+                var _rng = SheetKPI.get_Range("A6", lastrow);
+                _rng.AutoFilter(1, Type.Missing, Microsoft.Office.Interop.Excel.XlAutoFilterOperator.xlAnd, Type.Missing, true);
+                _rng.Borders.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
+
+
+
+
+                excelApplication.DisplayAlerts = false;
+                excelWorkBook.SaveAs(fileName, XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                excelWorkBook.Close(true, Type.Missing, Type.Missing);
+                excelApplication.Quit();
+                excelApplication = null;
+                byte[] buffer = new byte[1];
+                using (FileStream fs = new FileStream(fileName, FileMode.Open,
+                                   FileAccess.Read, FileShare.Read))
+                {
+                    buffer = new byte[fs.Length];
+                    fs.Read(buffer, 0, (int)fs.Length);
+
+                }
+
+                return fileName;
+            }
+            catch (Exception ex)
+            {
+                excelApplication.Quit();
+                excelApplication = null;
+                throw ex;
+            }
+
+
+            finally
+            {
+                
+                //if (System.IO.File.Exists(fileName))
+                //    System.IO.File.Delete(fileName);
+                SheetKPI = null;
+                if (excelWorkBook != null)
+                    excelWorkBook = null;
+                if (excelApplication != null)
+                {
+                    excelApplication.Quit();
+                    excelApplication = null;
+                }
+                //Garbage collection.
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                
+            }
+
+
         }
       
         #endregion
