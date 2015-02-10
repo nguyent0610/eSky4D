@@ -227,10 +227,24 @@ namespace AP10400.Controllers
                 {
                     record = new AP_Adjust();
                     record.BranchID = branchID;
-                    record.BatNbr = batNbr;
-
-                    record.AdjgBatNbr = batNbr;
-                    record.AdjgRefNbr = refNbr;
+                    if (batNbr == "")
+                    {
+                        record.AdjgBatNbr = tmpBatNbr;
+                        record.BatNbr = tmpBatNbr;
+                    }
+                    else
+                    {
+                        record.BatNbr = batNbr;
+                        record.AdjgBatNbr = batNbr;
+                    }
+                    if (refNbr == "")
+                    {
+                        record.AdjgRefNbr = tmpRefNbr;
+                    }
+                    else
+                    {
+                        record.AdjgRefNbr = refNbr;
+                    }
 
                     UpdatingGridAd_Adjust(created, ref record);
                     record.Crtd_DateTime = DateTime.Now;
@@ -245,16 +259,41 @@ namespace AP10400.Controllers
                 var record = _db.AP_Adjust.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.AdjdRefNbr == updated.RefNbr && p.AdjgRefNbr == refNbr).FirstOrDefault();
                 if (record != null)
                 {
+                    if (batNbr == "")
+                    {
+                        record.AdjgBatNbr = tmpBatNbr;
+                        record.BatNbr = tmpBatNbr;
+                    }
+      
+                    if (refNbr == "")
+                    {
+                        record.AdjgRefNbr = tmpRefNbr;
+                    }
+
                    UpdatingGridAd_Adjust(updated, ref record);
                 }
                 else
                 {
                     record = new AP_Adjust();
                     record.BranchID = branchID;
-                    record.BatNbr = batNbr;
-
-                    record.AdjgBatNbr = batNbr;
-                    record.AdjgRefNbr = refNbr;
+                    if (batNbr == "")
+                    {
+                        record.AdjgBatNbr = tmpBatNbr;
+                        record.BatNbr = tmpBatNbr;
+                    }
+                    else
+                    {
+                        record.BatNbr = batNbr;
+                        record.AdjgBatNbr = batNbr;
+                    }
+                    if (refNbr == "")
+                    {
+                        record.AdjgRefNbr = tmpRefNbr;
+                    }
+                    else
+                    {
+                        record.AdjgRefNbr = refNbr;
+                    }
 
                     UpdatingGridAd_Adjust(updated, ref record);
                     record.Crtd_DateTime = DateTime.Now;
