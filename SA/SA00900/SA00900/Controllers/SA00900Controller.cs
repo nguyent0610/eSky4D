@@ -19,27 +19,22 @@ namespace SA00900.Controllers
     {
         private string _screenNbr = "SA00900";
         private string _userName = Current.UserName;
-
         SA00900Entities _db = Util.CreateObjectContext<SA00900Entities>(true);
-
         public ActionResult Index()
         {
             
             Util.InitRight(_screenNbr);
             return View();
         }
-
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
         public ActionResult GetSYS_Language()
         {
             return this.Store(_db.SA00900_pgLoadSYS_Language().ToList());
         }
-
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
@@ -98,7 +93,6 @@ namespace SA00900.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-
         private void Update_Language(SYS_Language t, SA00900_pgLoadSYS_Language_Result s, bool isNew)
         {
             if (isNew)
