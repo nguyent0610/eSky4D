@@ -25,10 +25,10 @@
             X.GridPanel()
             .Scroll(ScrollMode.Both)
             .View(X.GridView().TrackOver(false))
-            .ID("grdDistrict")
+            .ID("grdSI_District")
             .Store(
                 X.Store()
-                .ID("stoDistrict")
+                .ID("stoSI_District")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(SI21700_pgLoadDistrict_Result), "mdSI_District", "Country,State,District"))
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDistrict")))
@@ -36,9 +36,9 @@
                 {
                     l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
                     l.Load.Handler = "HQ.common.showBusy(false);"; 
-                }) // stoDistrict
+                }) // stoSI_District
             )
-            .Listeners(p => p.BoxReady.Handler = "App.stoDistrict.reload();")
+            .Listeners(p => p.BoxReady.Handler = "App.stoSI_District.reload();")
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)
@@ -63,7 +63,7 @@
                         .ValueField("State").DisplayField("State")
                         .HQParam(new StoreParameterCollection() { 
                             //do cboState load dựa vào cboCountry nên ta sử dụng bắt giá trị Country của hàng đang click vào trên grid
-                            new StoreParameter("@Country","App.slmDistrict.selected.items[0]==undefined ? '':  App.slmDistrict.selected.items[0].data.Country",ParameterMode.Raw)
+                            new StoreParameter("@Country","App.slmSI_District.selected.items[0]==undefined ? '':  App.slmSI_District.selected.items[0].data.Country",ParameterMode.Raw)
                         })
                         .LoadData()
                 ) 
@@ -93,7 +93,7 @@
                     l.Command.Handler = "grd_Reject(record);";
                 })
             )
-            .SelectionModel(X.RowSelectionModel().ID("slmDistrict").Mode(SelectionMode.Multi))
+            .SelectionModel(X.RowSelectionModel().ID("slmSI_District").Mode(SelectionMode.Multi))
             .BottomBar(
                 X.PagingToolbar()
                 .Items(
@@ -112,10 +112,9 @@
                 .ClicksToEdit(1)
                 .Listeners(ls =>
                 {
-                    ls.BeforeEdit.Fn = "grdDistrict_BeforeEdit";
-                    ls.Edit.Fn = "grdDistrict_Edit";
-                    ls.ValidateEdit.Fn = "grdDistrict_ValidateEdit";
-                    ls.CancelEdit.Fn = "grdDistrict_CancelEdit";
+                    ls.BeforeEdit.Fn = "grdSI_District_BeforeEdit";
+                    ls.Edit.Fn = "grdSI_District_Edit";
+                    ls.ValidateEdit.Fn = "grdSI_District_ValidateEdit";                  
                 })
             )
             .Features(
@@ -127,7 +126,7 @@
                     X.StringFilter().DataIndex("District"),
                     X.StringFilter().DataIndex("Name")
                 )
-            ) // grdDistrict
+            ) // grdSI_District
         ) // frmMain
     ) // Viewport
 )

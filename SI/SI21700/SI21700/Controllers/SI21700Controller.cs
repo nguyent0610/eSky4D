@@ -21,34 +21,30 @@ namespace SI21700.Controllers
         private string _userName = Current.UserName;
 
         SI21700Entities _db = Util.CreateObjectContext<SI21700Entities>(false);
-
         public ActionResult Index()
         {
 
             Util.InitRight(_screenNbr);
             return View();
         }
-
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
         public ActionResult GetDistrict()
         {
             var Districts = _db.SI21700_pgLoadDistrict().ToList();
             return this.Store(Districts);
         }
-
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstDistrict"]);
-                ChangeRecords<SI_District> lstDistrict = dataHandler.BatchObjectData<SI_District>();
-                foreach (SI_District deleted in lstDistrict.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_District"]);
+                ChangeRecords<SI21700_pgLoadDistrict_Result> lstSI_District = dataHandler.BatchObjectData<SI21700_pgLoadDistrict_Result>();
+                foreach (SI21700_pgLoadDistrict_Result deleted in lstSI_District.Deleted)
                 {
                     var del = _db.SI_District.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.District == deleted.District).FirstOrDefault();
                     if (del != null)
@@ -57,9 +53,9 @@ namespace SI21700.Controllers
                     }
                 }
 
-                lstDistrict.Created.AddRange(lstDistrict.Updated);
+                lstSI_District.Created.AddRange(lstSI_District.Updated);
 
-                foreach (SI_District curDistrict in lstDistrict.Created)
+                foreach (SI21700_pgLoadDistrict_Result curDistrict in lstSI_District.Created)
                 {
                     if (curDistrict.Country.PassNull() == "" && curDistrict.State.PassNull() == "" && curDistrict.District.PassNull() == "") continue;
 
@@ -94,8 +90,7 @@ namespace SI21700.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-
-        private void Update_SI_District(SI_District t, SI_District s, bool isNew)
+        private void Update_SI_District(SI_District t, SI21700_pgLoadDistrict_Result s, bool isNew)
         {
             if (isNew)
             {
