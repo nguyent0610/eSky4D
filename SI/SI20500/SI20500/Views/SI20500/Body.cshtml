@@ -51,7 +51,7 @@
                         .LoadData()
                         .Listeners(
                             x => {
-                                x.Change.Handler = "App.slmSI_City.getSelection()[0].set('State','');";//set lai du lieu cho state ='' khi thay doi country
+                                x.Change.Fn = "cboCountry_Change";//set lai du lieu cho state ='' khi thay doi country
                             }
                         )
                     )
@@ -62,7 +62,7 @@
                         .HQColumnShow("State,Descr").HQHeightWidth(300, 400).ForceSelection(true)
                         .ValueField("State").DisplayField("State")                     
                         .HQParam(new StoreParameterCollection() { 
-                            new StoreParameter("@Country","App.cboCountryID.getValue()",ParameterMode.Raw)
+                            new StoreParameter("@Country","App.slmSI_City.selected.items[0]==undefined ? '':  App.slmSI_City.selected.items[0].data.Country",ParameterMode.Raw)
                         })
                         .LoadData()
                     )

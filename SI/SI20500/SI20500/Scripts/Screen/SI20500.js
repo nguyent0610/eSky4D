@@ -52,14 +52,14 @@ var menuClick = function (command) {
     }
 
 };
+var cboCountry_Change = function () {
+    App.slmSI_City.getSelection()[0].set('State', '');
+};
 var grdSI_City_BeforeEdit = function (editor, e) {
     //HQ.grid.checkBeforeEdit(e, keys) kiem tra cho phep nhap lieu hay ko xem them trong HQ.grid
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
-    if (e.field == 'State' ) {
-        App.cboCountryID.setValue(e.record.data.Country);//gan lai gia tri country tren dong chon de load lai tinh cho dung voi country tren dong dang chon
-        App.cboState.store.load(function () {           
-            App.cboState.setValue(e.record.data.State);
-        });// load lai cboState   
+    if (e.field == 'State' ) {     
+        App.cboState.store.load();
     }
 };
 var grdSI_City_Edit = function (item, e) {
