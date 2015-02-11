@@ -20,16 +20,15 @@
     .Layout(LayoutType.Fit)  
     .Items(
         ////Thiet ke giao dien o day
-
         X.GridPanel()
         .Scroll(ScrollMode.Both)
         .View(X.GridView().TrackOver(false))
         .ID("grdSI_City")
         .Store(
              X.Store()
-            .ID("stoData")
-            .PageSize(50)//.AutoLoad(true)
-            .Model(Util.GenerateModel(typeof(SI20500_pgLoadGrid_Result), "mdlIN_ReasonCode", "ReasonCD"))
+            .ID("stoSI_City")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(SI20500_pgLoadGrid_Result), "mdlSI_City", "City"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData")))
             .Listeners(l =>
             {
@@ -37,7 +36,7 @@
                 l.Load.Handler = "HQ.common.showBusy(false);";
             })
         )
-        .Listeners(p => p.BoxReady.Handler = "App.stoData.reload();")
+        .Listeners(p => p.BoxReady.Handler = "App.stoSI_City.reload();")
         .SortableColumns(false)
         .ColumnModel(
 
@@ -52,7 +51,7 @@
                         .LoadData()
                         .Listeners(
                             x => {
-                                x.Change.Handler = "App.cboState.store.reload()";
+                                x.Change.Handler = "App.slmSI_City.getSelection()[0].set('State','');";//set lai du lieu cho state ='' khi thay doi country
                             }
                         )
                     )
@@ -61,9 +60,9 @@
                     .Editor(                      
                         HQ.Combo().ID("cboState").HQProcedure("SI20500_pcStateAll")
                         .HQColumnShow("State,Descr").HQHeightWidth(300, 400).ForceSelection(true)
-                        .ValueField("State").DisplayField("State")                      
+                        .ValueField("State").DisplayField("State")                     
                         .HQParam(new StoreParameterCollection() { 
-                            new StoreParameter("@Country","",ParameterMode.Value)
+                            new StoreParameter("@Country","App.cboCountryID.getValue()",ParameterMode.Raw)
                         })
                         .LoadData()
                     )
@@ -90,7 +89,7 @@
                     })
 
         )
-        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+        .SelectionModel(X.RowSelectionModel().ID("slmSI_City").Mode(SelectionMode.Multi))
         .BottomBar(
             X.PagingToolbar()
             .Items(

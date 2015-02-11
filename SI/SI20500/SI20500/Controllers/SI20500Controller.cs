@@ -45,9 +45,9 @@ namespace SI20500.Controllers
             try
             {
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
-                ChangeRecords<SI_City> lstLang = dataHandler.BatchObjectData<SI_City>();
-                foreach (SI_City deleted in lstLang.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_City"]);
+                ChangeRecords<SI20500_pgLoadGrid_Result> lstSI_City = dataHandler.BatchObjectData<SI20500_pgLoadGrid_Result>();
+                foreach (SI20500_pgLoadGrid_Result deleted in lstSI_City.Deleted)
                 {
                     var del = _db.SI_City.Where(p => p.Country == deleted.Country && p.State == deleted.State && p.City == deleted.City).FirstOrDefault();
                     if (del != null)
@@ -56,9 +56,9 @@ namespace SI20500.Controllers
                     }
                 }
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                lstSI_City.Created.AddRange(lstSI_City.Updated);
 
-                foreach (SI_City curLang in lstLang.Created)
+                foreach (SI20500_pgLoadGrid_Result curLang in lstSI_City.Created)
                 {
                     if (curLang.Country.PassNull() == "") continue;
 
@@ -93,7 +93,7 @@ namespace SI20500.Controllers
             }
         }
 
-        private void Update_Language(SI_City t, SI_City s, bool isNew)
+        private void Update_Language(SI_City t, SI20500_pgLoadGrid_Result s, bool isNew)
         {
             if (isNew)
             {
