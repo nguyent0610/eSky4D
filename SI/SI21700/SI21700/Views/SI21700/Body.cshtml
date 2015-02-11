@@ -62,7 +62,7 @@
                         .HQColumnShow("State,Descr").HQHeightWidth(300, 400).ForceSelection(true)
                         .ValueField("State").DisplayField("State")
                         .HQParam(new StoreParameterCollection() { 
-                            new StoreParameter("@Country","App.slmDistrict.selected.items[0].data.Country",ParameterMode.Raw)
+                            new StoreParameter("@Country","App.slmDistrict.selected.items[0]==undefined ? '':  App.slmDistrict.selected.items[0].data.Country",ParameterMode.Raw)
                         })
                         .LoadData()
                 ) 

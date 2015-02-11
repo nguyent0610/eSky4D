@@ -79,6 +79,7 @@ var grdDistrict_BeforeEdit = function (editor, e) {
 
 var cboCountry_Change = function () {
     App.cboState.getStore().reload();
+    App.slmDistrict.selected.items[0].set('State', '');
 };
 
 
