@@ -1,4 +1,4 @@
-@using Ext.Net;
+﻿@using Ext.Net;
 @using Ext.Net.MVC;
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
@@ -62,6 +62,7 @@
                         .HQColumnShow("State,Descr").HQHeightWidth(300, 400).ForceSelection(true)
                         .ValueField("State").DisplayField("State")
                         .HQParam(new StoreParameterCollection() { 
+                            //do cboState load dựa vào cboCountry nên ta sử dụng bắt giá trị Country của hàng đang click vào trên grid
                             new StoreParameter("@Country","App.slmDistrict.selected.items[0]==undefined ? '':  App.slmDistrict.selected.items[0].data.Country",ParameterMode.Raw)
                         })
                         .LoadData()

@@ -1,6 +1,6 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 
-var keys = ['Country','State','District'];
+var keys = ['Country,State,District'];
 ///////////////////////////////////////////////////////////////////////
 
 //// Store /////////////////////////////////////////////////////////////
@@ -64,19 +64,21 @@ var grdDistrict_BeforeEdit = function (editor, e) {
     //keys = e.record.idProperty.split(',');
 
     if (keys.indexOf(e.field) != -1) {
-        //if (e.record.data.tstamp != "")
-        //    return false;
+        if (e.record.data.tstamp != "")
+            return false;
     }
-    //return HQ.grid.checkInput(e, keys);
-
+    //nếu cell đang click vào là State thì reload store của cboState
     if (e.field == "State") {
         App.cboState.getStore().reload();
     }
+    return HQ.grid.checkInput(e, keys);
+
+ 
 
 
 };
 
-
+//neu cboCountry thay đổi thì reload lại store của cboState và set giá trị rỗng cho cboState
 var cboCountry_Change = function () {
     App.cboState.getStore().reload();
     App.slmDistrict.selected.items[0].set('State', '');
