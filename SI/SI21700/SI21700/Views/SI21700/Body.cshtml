@@ -31,7 +31,7 @@
                 .ID("stoSI_District")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(SI21700_pgLoadDistrict_Result), "mdSI_District", "Country,State,District"))
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDistrict")))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_District")))
                 .Listeners(l =>
                 {
                     l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";

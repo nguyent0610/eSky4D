@@ -32,7 +32,7 @@ namespace SI21700.Controllers
         {
             return PartialView();
         }
-        public ActionResult GetDistrict()
+        public ActionResult GetSI_District()
         {
             var Districts = _db.SI21700_pgLoadDistrict().ToList();
             return this.Store(Districts);
