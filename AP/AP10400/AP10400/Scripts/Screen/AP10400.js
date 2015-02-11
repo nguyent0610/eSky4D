@@ -46,7 +46,7 @@ var tmplUnApplyTotal = 0;
 var tmpAutoApplyForTotalAmountAndPayment = 0;
 var tmpTranAmt = 0;
 
-var keys = ['InvcNbr,DocDate,DocBal,VendID,Descr'];
+var keys = ['InvcNbr', 'DocDate', 'DocBal', 'VendID', 'Descr'];
 
 
 var menuClick = function (command) {
