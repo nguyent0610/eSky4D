@@ -32,7 +32,7 @@
             .Model(Util.GenerateModel(typeof(SA00900_pgLoadSYS_Language_Result), "mdlSA00900_pgLoadSYS_Language", "Code"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Language")))
             .Listeners(l => { 
-                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; 
+                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
                 l.Load.Handler = "HQ.common.showBusy(false);"; 
             })
         )

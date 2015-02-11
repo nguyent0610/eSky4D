@@ -61,30 +61,13 @@ var grdSYS_Language_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdSYS_Language_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.stoSYS_Group, e, keys);
+    HQ.grid.checkInsertKey(App.grdSYS_Language, e, keys);
 };
 var grdSYS_Language_ValidateEdit = function (item, e) {
-    if (keys.indexOf(e.field) != -1) {
-        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-        if (!e.value.match(regex)) {
-            HQ.message.show(20140811, e.column.text);
-            return false;
-        }
-        if (HQ.grid.checkDuplicateAll(App.grdSYS_Language, e, keys)) {
-            HQ.message.show(1112, e.value);
-            return false;
-        }
-
-    }
+    return HQ.grid.checkValidateEdit(App.grdSYS_Language, e, keys);
 };
 var grdSYS_Language_Reject = function (record) {
-    if (record.data.tstamp == '') {
-        App.stoSYS_Language.remove(record);
-        App.grdSYS_Language.getView().focusRow(App.stoSYS_Language.getCount() - 1);
-        App.grdSYS_Language.getSelectionModel().select(App.stoSYS_Language.getCount() - 1);
-    } else {
-        record.reject();
-    }
+    HQ.grid.checkReject(record, App.grdSYS_Language);
 };
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////

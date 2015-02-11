@@ -217,7 +217,10 @@
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\hq.common.js" />
+    <Content Include="Scripts\hq.language0.js" />
     <Content Include="Scripts\hq.language1.js" />
+    <Content Include="Scripts\hq.language2.js" />
+    <Content Include="Scripts\hq.language3.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -232,7 +235,6 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Scripts\Screen\SA00900.debug.js" />
     <Content Include="Scripts\Screen\SA00900.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -278,7 +280,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>2260</DevelopmentServerPort>
+          <DevelopmentServerPort>10512</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:2019/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
