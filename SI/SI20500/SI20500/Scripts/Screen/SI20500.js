@@ -1,7 +1,8 @@
-﻿var keys = ['Country', 'State', 'City'];
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['Country', 'State', 'City'];
 var fieldsCheckRequire = ["Country", "State", "City", "Name"];
 var fieldsLangCheckRequire = ["Country", "State", "City", "Name"];
-
+//// Event //////////////////////////////////////////////////////////
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -51,7 +52,6 @@ var menuClick = function (command) {
     }
 
 };
-
 var grdSI_City_BeforeEdit = function (editor, e) {
     //HQ.grid.checkBeforeEdit(e, keys) kiem tra cho phep nhap lieu hay ko xem them trong HQ.grid
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
@@ -62,7 +62,6 @@ var grdSI_City_BeforeEdit = function (editor, e) {
         });// load lai cboState   
     }
 };
-
 var grdSI_City_Edit = function (item, e) {
     //Kiem tra cac key da duoc nhap se insert them dong moi
     HQ.grid.checkInsertKey(App.grdSI_City, e, keys);
@@ -76,7 +75,7 @@ var grdSI_City_Reject = function (record) {
     //reject dong thay doi du lieu ve ban dau
     HQ.grid.checkReject(record, App.grdSI_City);
 };
-
+//// Process Data ///////////////////////////////////////////////////////
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
@@ -95,15 +94,12 @@ var save = function () {
         });
     }
 };
-
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSI_City.deleteSelected();
     }
 };
-
 //// Other Functions ////////////////////////////////////////////////////
-
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
         HQ.common.close(this);
