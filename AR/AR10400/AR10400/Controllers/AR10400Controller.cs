@@ -1,4 +1,4 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 
@@ -25,8 +25,8 @@ namespace AR10400.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
@@ -44,14 +44,14 @@ namespace AR10400.Controllers
 
         public ActionResult GetDataGrid1(String batNbr,String branchID, String custID,String docType)
         {
-            var lst = _db.AR10400_LoadGridAdjg(batNbr, branchID, custID, docType);
+            var lst = _db.AR10400_pgLoadGridAdjg(batNbr, branchID, custID, docType);
 
             return this.Store(lst);
         }
 
         public ActionResult GetDataGrid2(String batNbr, String branchID, String custID)
         {
-            var lst = _db.AR10400_LoadGridAdjd(batNbr, branchID, custID);
+            var lst = _db.AR10400_pgLoadGridAdjd(batNbr, branchID, custID);
 
             return this.Store(lst);
         }
@@ -64,9 +64,9 @@ namespace AR10400.Controllers
             ChangeRecords<Batch> lstheaderTop = dataHandlerTop.BatchObjectData<Batch>();
 
             StoreDataHandler dataHandlerGrid1 = new StoreDataHandler(data["lstgrd1"]);
-            ChangeRecords<AR10400_LoadGridAdjg_Result> lstgrd1 = dataHandlerGrid1.BatchObjectData<AR10400_LoadGridAdjg_Result>();
+            ChangeRecords<AR10400_pgLoadGridAdjg_Result> lstgrd1 = dataHandlerGrid1.BatchObjectData<AR10400_pgLoadGridAdjg_Result>();
             StoreDataHandler dataHandlerGrid2 = new StoreDataHandler(data["lstgrd2"]);
-            ChangeRecords<AR10400_LoadGridAdjd_Result> lstgrd2 = dataHandlerGrid2.BatchObjectData<AR10400_LoadGridAdjd_Result>();
+            ChangeRecords<AR10400_pgLoadGridAdjd_Result> lstgrd2 = dataHandlerGrid2.BatchObjectData<AR10400_pgLoadGridAdjd_Result>();
 
 
             var docDate = data["txtDocDate"];
@@ -161,12 +161,12 @@ namespace AR10400.Controllers
 
 
 
-            foreach (AR10400_LoadGridAdjg_Result updatedGrid1 in lstgrd1.Updated)
+            foreach (AR10400_pgLoadGridAdjg_Result updatedGrid1 in lstgrd1.Updated)
             {
                 //if (branchID != "")
                 //{
                     tmpAdjAmt = Convert.ToDouble(updatedGrid1.Payment);
-                    foreach (AR10400_LoadGridAdjd_Result updatedGrid2 in lstgrd2.Updated)
+                    foreach (AR10400_pgLoadGridAdjd_Result updatedGrid2 in lstgrd2.Updated)
                     {
 
                         if (tmpAdjAmt > 0)
@@ -417,7 +417,7 @@ namespace AR10400.Controllers
 
         private string functionBatNbrIfNull(string branchID)
         {
-            var recordLastBatNbr = _db.ARNumbering(branchID, "BatNbr").FirstOrDefault();
+            var recordLastBatNbr = _db.AR10400_ppARNumbering(branchID, "BatNbr").FirstOrDefault();
             return recordLastBatNbr;
         }
 

@@ -124,36 +124,6 @@ namespace AR10400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="getType">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> ARNumbering(global::System.String branchID, global::System.String getType)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter getTypeParameter;
-            if (getType != null)
-            {
-                getTypeParameter = new ObjectParameter("GetType", getType);
-            }
-            else
-            {
-                getTypeParameter = new ObjectParameter("GetType", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("ARNumbering", branchIDParameter, getTypeParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="batNbr">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         public ObjectResult<AR10400_BindingGridCancel_Result> AR10400_BindingGridCancel(global::System.String batNbr, global::System.String branchID)
@@ -291,7 +261,7 @@ namespace AR10400
         /// <param name="batNbr">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="custID">No Metadata Documentation available.</param>
-        public ObjectResult<AR10400_LoadGridAdjd_Result> AR10400_LoadGridAdjd(global::System.String batNbr, global::System.String branchID, global::System.String custID)
+        public ObjectResult<AR10400_pgLoadGridAdjd_Result> AR10400_pgLoadGridAdjd(global::System.String batNbr, global::System.String branchID, global::System.String custID)
         {
             ObjectParameter batNbrParameter;
             if (batNbr != null)
@@ -323,7 +293,7 @@ namespace AR10400
                 custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR10400_LoadGridAdjd_Result>("AR10400_LoadGridAdjd", batNbrParameter, branchIDParameter, custIDParameter);
+            return base.ExecuteFunction<AR10400_pgLoadGridAdjd_Result>("AR10400_pgLoadGridAdjd", batNbrParameter, branchIDParameter, custIDParameter);
         }
     
         /// <summary>
@@ -333,7 +303,7 @@ namespace AR10400
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="custID">No Metadata Documentation available.</param>
         /// <param name="docType">No Metadata Documentation available.</param>
-        public ObjectResult<AR10400_LoadGridAdjg_Result> AR10400_LoadGridAdjg(global::System.String batNbr, global::System.String branchID, global::System.String custID, global::System.String docType)
+        public ObjectResult<AR10400_pgLoadGridAdjg_Result> AR10400_pgLoadGridAdjg(global::System.String batNbr, global::System.String branchID, global::System.String custID, global::System.String docType)
         {
             ObjectParameter batNbrParameter;
             if (batNbr != null)
@@ -375,7 +345,37 @@ namespace AR10400
                 docTypeParameter = new ObjectParameter("DocType", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR10400_LoadGridAdjg_Result>("AR10400_LoadGridAdjg", batNbrParameter, branchIDParameter, custIDParameter, docTypeParameter);
+            return base.ExecuteFunction<AR10400_pgLoadGridAdjg_Result>("AR10400_pgLoadGridAdjg", batNbrParameter, branchIDParameter, custIDParameter, docTypeParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="getType">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR10400_ppARNumbering(global::System.String branchID, global::System.String getType)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter getTypeParameter;
+            if (getType != null)
+            {
+                getTypeParameter = new ObjectParameter("GetType", getType);
+            }
+            else
+            {
+                getTypeParameter = new ObjectParameter("GetType", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR10400_ppARNumbering", branchIDParameter, getTypeParameter);
         }
 
         #endregion
@@ -1805,15 +1805,15 @@ namespace AR10400
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AR10400Model", Name="AR10400_LoadGridAdjd_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="AR10400Model", Name="AR10400_pgLoadGridAdjd_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class AR10400_LoadGridAdjd_Result : ComplexObject
+    public partial class AR10400_pgLoadGridAdjd_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new AR10400_LoadGridAdjd_Result object.
+        /// Create a new AR10400_pgLoadGridAdjd_Result object.
         /// </summary>
         /// <param name="batNbr">Initial value of the BatNbr property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
@@ -1822,17 +1822,17 @@ namespace AR10400
         /// <param name="docDate">Initial value of the DocDate property.</param>
         /// <param name="isChanged">Initial value of the IsChanged property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static AR10400_LoadGridAdjd_Result CreateAR10400_LoadGridAdjd_Result(global::System.String batNbr, global::System.String branchID, global::System.String refNbr, global::System.Double docBal, global::System.DateTime docDate, global::System.String isChanged, global::System.Byte[] tstamp)
+        public static AR10400_pgLoadGridAdjd_Result CreateAR10400_pgLoadGridAdjd_Result(global::System.String batNbr, global::System.String branchID, global::System.String refNbr, global::System.Double docBal, global::System.DateTime docDate, global::System.String isChanged, global::System.Byte[] tstamp)
         {
-            AR10400_LoadGridAdjd_Result aR10400_LoadGridAdjd_Result = new AR10400_LoadGridAdjd_Result();
-            aR10400_LoadGridAdjd_Result.BatNbr = batNbr;
-            aR10400_LoadGridAdjd_Result.BranchID = branchID;
-            aR10400_LoadGridAdjd_Result.RefNbr = refNbr;
-            aR10400_LoadGridAdjd_Result.DocBal = docBal;
-            aR10400_LoadGridAdjd_Result.DocDate = docDate;
-            aR10400_LoadGridAdjd_Result.IsChanged = isChanged;
-            aR10400_LoadGridAdjd_Result.tstamp = tstamp;
-            return aR10400_LoadGridAdjd_Result;
+            AR10400_pgLoadGridAdjd_Result aR10400_pgLoadGridAdjd_Result = new AR10400_pgLoadGridAdjd_Result();
+            aR10400_pgLoadGridAdjd_Result.BatNbr = batNbr;
+            aR10400_pgLoadGridAdjd_Result.BranchID = branchID;
+            aR10400_pgLoadGridAdjd_Result.RefNbr = refNbr;
+            aR10400_pgLoadGridAdjd_Result.DocBal = docBal;
+            aR10400_pgLoadGridAdjd_Result.DocDate = docDate;
+            aR10400_pgLoadGridAdjd_Result.IsChanged = isChanged;
+            aR10400_pgLoadGridAdjd_Result.tstamp = tstamp;
+            return aR10400_pgLoadGridAdjd_Result;
         }
 
         #endregion
@@ -2182,15 +2182,15 @@ namespace AR10400
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AR10400Model", Name="AR10400_LoadGridAdjg_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="AR10400Model", Name="AR10400_pgLoadGridAdjg_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class AR10400_LoadGridAdjg_Result : ComplexObject
+    public partial class AR10400_pgLoadGridAdjg_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new AR10400_LoadGridAdjg_Result object.
+        /// Create a new AR10400_pgLoadGridAdjg_Result object.
         /// </summary>
         /// <param name="batNbr">Initial value of the BatNbr property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
@@ -2199,17 +2199,17 @@ namespace AR10400
         /// <param name="docDate">Initial value of the DocDate property.</param>
         /// <param name="isChanged">Initial value of the IsChanged property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static AR10400_LoadGridAdjg_Result CreateAR10400_LoadGridAdjg_Result(global::System.String batNbr, global::System.String branchID, global::System.String refNbr, global::System.Double docBal, global::System.DateTime docDate, global::System.String isChanged, global::System.Byte[] tstamp)
+        public static AR10400_pgLoadGridAdjg_Result CreateAR10400_pgLoadGridAdjg_Result(global::System.String batNbr, global::System.String branchID, global::System.String refNbr, global::System.Double docBal, global::System.DateTime docDate, global::System.String isChanged, global::System.Byte[] tstamp)
         {
-            AR10400_LoadGridAdjg_Result aR10400_LoadGridAdjg_Result = new AR10400_LoadGridAdjg_Result();
-            aR10400_LoadGridAdjg_Result.BatNbr = batNbr;
-            aR10400_LoadGridAdjg_Result.BranchID = branchID;
-            aR10400_LoadGridAdjg_Result.RefNbr = refNbr;
-            aR10400_LoadGridAdjg_Result.DocBal = docBal;
-            aR10400_LoadGridAdjg_Result.DocDate = docDate;
-            aR10400_LoadGridAdjg_Result.IsChanged = isChanged;
-            aR10400_LoadGridAdjg_Result.tstamp = tstamp;
-            return aR10400_LoadGridAdjg_Result;
+            AR10400_pgLoadGridAdjg_Result aR10400_pgLoadGridAdjg_Result = new AR10400_pgLoadGridAdjg_Result();
+            aR10400_pgLoadGridAdjg_Result.BatNbr = batNbr;
+            aR10400_pgLoadGridAdjg_Result.BranchID = branchID;
+            aR10400_pgLoadGridAdjg_Result.RefNbr = refNbr;
+            aR10400_pgLoadGridAdjg_Result.DocBal = docBal;
+            aR10400_pgLoadGridAdjg_Result.DocDate = docDate;
+            aR10400_pgLoadGridAdjg_Result.IsChanged = isChanged;
+            aR10400_pgLoadGridAdjg_Result.tstamp = tstamp;
+            return aR10400_pgLoadGridAdjg_Result;
         }
 
         #endregion

@@ -66,36 +66,24 @@
           <Property Name="Status" Type="varchar" MaxLength="1" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="AR10400_IsExistAR_Adjustd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
-          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
-          <Parameter Name="RefNbr" Type="varchar" Mode="In" />
-          <Parameter Name="PayBatNbr" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="AR10400_IsExistAR_Adjustg" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
-          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
-          <Parameter Name="RefNbr" Type="varchar" Mode="In" />
-          <Parameter Name="PayBatNbr" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="AR10400_LoadGridAdjd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="AR10400_pgLoadGridAdjd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="CustID" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="AR10400_LoadGridAdjg" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="AR10400_pgLoadGridAdjg" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="CustID" Type="varchar" Mode="In" />
           <Parameter Name="DocType" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="ARNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="AR10400_ppARNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="GetType" Type="varchar" Mode="In" />
         </Function>
@@ -106,10 +94,6 @@
         <EntityContainer Name="AR10400Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="Batches" EntityType="AR10400Model.Batch" />
           <EntitySet Name="AR_Adjust" EntityType="AR10400Model.AR_Adjust" />
-          <FunctionImport Name="ARNumbering" ReturnType="Collection(String)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="GetType" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="AR10400_BindingGridCancel" ReturnType="Collection(AR10400Model.AR10400_BindingGridCancel_Result)">
             <Parameter Name="BatNbr" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -126,16 +110,20 @@
             <Parameter Name="RefNbr" Mode="In" Type="String" />
             <Parameter Name="PayBatNbr" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AR10400_LoadGridAdjd" ReturnType="Collection(AR10400Model.AR10400_LoadGridAdjd_Result)">
+          <FunctionImport Name="AR10400_pgLoadGridAdjd" ReturnType="Collection(AR10400Model.AR10400_pgLoadGridAdjd_Result)">
             <Parameter Name="BatNbr" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="CustID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AR10400_LoadGridAdjg" ReturnType="Collection(AR10400Model.AR10400_LoadGridAdjg_Result)">
+          <FunctionImport Name="AR10400_pgLoadGridAdjg" ReturnType="Collection(AR10400Model.AR10400_pgLoadGridAdjg_Result)">
             <Parameter Name="BatNbr" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="CustID" Mode="In" Type="String" />
             <Parameter Name="DocType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR10400_ppARNumbering" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Batch">
@@ -166,10 +154,10 @@
           <Property Type="String" Name="Status" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="AR_Adjust">
@@ -207,7 +195,7 @@
           <Property Type="String" Name="AdjdRefNbr" Nullable="false" MaxLength="10" />
           <Property Type="Double" Name="AdjAmt" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="AR10400_LoadGridAdjd_Result">
+        <ComplexType Name="AR10400_pgLoadGridAdjd_Result">
           <Property Type="Boolean" Name="Selected" Nullable="true" />
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -223,7 +211,7 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="DocType" Nullable="true" MaxLength="2" />
         </ComplexType>
-        <ComplexType Name="AR10400_LoadGridAdjg_Result">
+        <ComplexType Name="AR10400_pgLoadGridAdjg_Result">
           <Property Type="Boolean" Name="Selected" Nullable="true" />
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -304,12 +292,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="ARNumbering" FunctionName="eBiz4DWebSysModel.Store.ARNumbering" />
-          <FunctionImportMapping FunctionImportName="AR10400_IsExistAR_Adjustd" FunctionName="eBiz4DWebSysModel.Store.AR10400_IsExistAR_Adjustd" />
-          <FunctionImportMapping FunctionImportName="AR10400_IsExistAR_Adjustg" FunctionName="eBiz4DWebSysModel.Store.AR10400_IsExistAR_Adjustg" />
-          <FunctionImportMapping FunctionImportName="AR10400_LoadGridAdjd" FunctionName="eBiz4DWebSysModel.Store.AR10400_LoadGridAdjd">
+          <FunctionImportMapping FunctionImportName="AR10400_pgLoadGridAdjd" FunctionName="eBiz4DWebSysModel.Store.AR10400_pgLoadGridAdjd">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="AR10400Model.AR10400_LoadGridAdjd_Result">
+              <ComplexTypeMapping TypeName="AR10400Model.AR10400_pgLoadGridAdjd_Result">
                 <ScalarProperty Name="Selected" ColumnName="Selected" />
                 <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
@@ -327,9 +312,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="AR10400_LoadGridAdjg" FunctionName="eBiz4DWebSysModel.Store.AR10400_LoadGridAdjg">
+          <FunctionImportMapping FunctionImportName="AR10400_pgLoadGridAdjg" FunctionName="eBiz4DWebSysModel.Store.AR10400_pgLoadGridAdjg">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="AR10400Model.AR10400_LoadGridAdjg_Result">
+              <ComplexTypeMapping TypeName="AR10400Model.AR10400_pgLoadGridAdjg_Result">
                 <ScalarProperty Name="Selected" ColumnName="Selected" />
                 <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
@@ -346,7 +331,8 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-        </EntityContainerMapping>
+          <FunctionImportMapping FunctionImportName="AR10400_ppARNumbering" FunctionName="eBiz4DWebSysModel.Store.AR10400_ppARNumbering" />
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
@@ -366,7 +352,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="102" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="92" >
         <EntityTypeShape EntityType="AR10400Model.Batch" Width="1.5" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="AR10400Model.AR_Adjust" Width="1.5" PointX="2.125" PointY="0.5" />
       </Diagram>

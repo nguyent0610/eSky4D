@@ -1,4 +1,4 @@
-
+﻿
 var selectedIndex = 0;
 var _hold = "H";
 var _curSlsperid = "";
@@ -48,7 +48,7 @@ var tmplUnApplyTotal = 0;
 //var autoApplyOnActive = 0;
 var tmpAutoApplyForTotalAmountAndPayment = 0;
 
-var keys = ['InvcNbr', 'BatNbr', 'RefNbr', 'DocBal', 'CustID', 'Descr'];
+var keys = ['InvcNbr','BatNbr','RefNbr','DocBal','CustID','Descr'];
 
 var menuClick = function (command) {
     switch (command) {
