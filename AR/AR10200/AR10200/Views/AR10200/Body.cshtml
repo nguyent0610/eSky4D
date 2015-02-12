@@ -24,7 +24,7 @@
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         //.Listeners(itm => itm.AfterRender.Fn = "frmloadAfterRender")
         .Items(
-            X.Panel().ID("Header").Layout(LayoutType.Anchor).AnchorVertical("52%").AnchorHorizontal("100%")
+            X.Panel().ID("Header").Layout(LayoutType.Anchor)//.AnchorVertical("52%").AnchorHorizontal("100%")
             .Items(
             
                 X.FormPanel()
@@ -66,7 +66,7 @@
 
                     //BranchID    
                     ,HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BRANCHID")
-                    .Width(300).MarginSpec("5 0 5 0").MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
+                    .Width(300).MarginSpec("5 0 5 10").MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
                     .ReadOnly(true)//.Value("HQ.cpnyID")
                     .Listeners(lst =>
                     {
@@ -107,7 +107,7 @@
                          //Xu ly (Handle)   
                          ,HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("HANDLE").HQProcedure("AR10200_pcGetHandle")
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                        .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 67").ForceSelection(true).AllowBlank(false)
+                        .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 77").ForceSelection(true).AllowBlank(false)
                         .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection()
@@ -134,16 +134,16 @@
 
                 //ngoac dong frmTop
                 )
-                   ,X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0").AnchorHorizontal("100%").AnchorVertical("72%")
+                   ,X.Container().Layout(LayoutType.Column).MarginSpec("0 0 0 0")//.AnchorHorizontal("100%").AnchorVertical("72%")
                    .Items(
                         
                             X.FormPanel()
                             .ID("frmBotLeft")
-                            .Layout(LayoutType.Anchor)
+                            .Layout(LayoutType.Column)
                             .Title(Util.GetLang("LocRa"))
                             .AnchorVertical("30%")
                             //.AnchorHorizontal("30%")
-                            .ColumnWidth(0.24)
+                            .ColumnWidth(0.3)
                             .Padding(1)
                             .Items(
                                  //Vendor
@@ -152,7 +152,7 @@
                                  
                                  //CustID
                                 HQ.Combo().ID("cboCustID")
-                                .MarginSpec("0 5 5 0").ForceSelection(true).HQProcedure("AR10200_pcCustomer")
+                                .MarginSpec("5 5 5 0").ForceSelection(true).HQProcedure("AR10200_pcCustomer")
                                 .HQLangCode("CustID").HQHeightWidth(500, 300)
                                 .HQColumnShow("CustId,CustName,Addr1,Addr2").ValueField("CustId").DisplayField("CustId")
                                 .PageSize(5).QueryMode(DataLoadMode.Local).TypeAhead(true).LabelWidth(90).Width(300)
@@ -236,7 +236,7 @@
                                         //lst.Focus.Fn = "Focus1_Change";
                                     })
                                  //nut Load data
-                                 , HQ.Button().ID("btnSearch").MarginSpec("5 0 32 155").Width(145)
+                                 , HQ.Button().ID("btnSearch").MarginSpec("5 0 5 155").Width(145)
                                  .HQLangCode("LOADDATA").Listeners(p =>
                                  {
                                      p.Click.Fn = "btnSearch_Click";
@@ -250,11 +250,11 @@
                      
                              ,X.FormPanel()
                             .ID("frmBotRight")
-                            .Layout(LayoutType.Anchor)
+                            .Layout(LayoutType.Column)
                             .Title(Util.GetLang("Document"))
                             .AnchorVertical("30%")
                             //.AnchorHorizontal("100%")
-                            .ColumnWidth(0.76)
+                            .ColumnWidth(0.7)
                             .Padding(1)
                             .Items(
 
