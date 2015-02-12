@@ -196,20 +196,42 @@ namespace AR10300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="classID">No Metadata Documentation available.</param>
-        public ObjectResult<ppv_AR10300_getCompany_Result> ppv_AR10300_getCompany(global::System.String classID)
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="batNbr">No Metadata Documentation available.</param>
+        /// <param name="refNbr">No Metadata Documentation available.</param>
+        public ObjectResult<AR10300_pgLoadGridTrans_Result> AR10300_pgLoadGridTrans(global::System.String branchID, global::System.String batNbr, global::System.String refNbr)
         {
-            ObjectParameter classIDParameter;
-            if (classID != null)
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
             {
-                classIDParameter = new ObjectParameter("ClassID", classID);
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
             }
             else
             {
-                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<ppv_AR10300_getCompany_Result>("ppv_AR10300_getCompany", classIDParameter);
+            ObjectParameter batNbrParameter;
+            if (batNbr != null)
+            {
+                batNbrParameter = new ObjectParameter("BatNbr", batNbr);
+            }
+            else
+            {
+                batNbrParameter = new ObjectParameter("BatNbr", typeof(global::System.String));
+            }
+    
+            ObjectParameter refNbrParameter;
+            if (refNbr != null)
+            {
+                refNbrParameter = new ObjectParameter("RefNbr", refNbr);
+            }
+            else
+            {
+                refNbrParameter = new ObjectParameter("RefNbr", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<AR10300_pgLoadGridTrans_Result>("AR10300_pgLoadGridTrans", branchIDParameter, batNbrParameter, refNbrParameter);
         }
     
         /// <summary>
@@ -217,7 +239,7 @@ namespace AR10300
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="getType">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> APNumbering(global::System.String branchID, global::System.String getType)
+        public ObjectResult<global::System.String> AR10300_ppARNumbering(global::System.String branchID, global::System.String getType)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -239,37 +261,7 @@ namespace AR10300
                 getTypeParameter = new ObjectParameter("GetType", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("APNumbering", branchIDParameter, getTypeParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="getType">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> ARNumbering(global::System.String branchID, global::System.String getType)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter getTypeParameter;
-            if (getType != null)
-            {
-                getTypeParameter = new ObjectParameter("GetType", getType);
-            }
-            else
-            {
-                getTypeParameter = new ObjectParameter("GetType", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("ARNumbering", branchIDParameter, getTypeParameter);
+            return base.ExecuteFunction<global::System.String>("AR10300_ppARNumbering", branchIDParameter, getTypeParameter);
         }
 
         #endregion
@@ -300,7 +292,6 @@ namespace AR10300
         /// <param name="city">Initial value of the City property.</param>
         /// <param name="classID">Initial value of the ClassID property.</param>
         /// <param name="country">Initial value of the Country property.</param>
-        /// <param name="dfltOrdFromId">Initial value of the DfltOrdFromId property.</param>
         /// <param name="eMailAddr">Initial value of the EMailAddr property.</param>
         /// <param name="expAcct">Initial value of the ExpAcct property.</param>
         /// <param name="expSub">Initial value of the ExpSub property.</param>
@@ -334,7 +325,7 @@ namespace AR10300
         /// <param name="crLmt">Initial value of the CrLmt property.</param>
         /// <param name="mOQVal">Initial value of the MOQVal property.</param>
         /// <param name="mOQType">Initial value of the MOQType property.</param>
-        public static AP_Vendor CreateAP_Vendor(global::System.String vendID, global::System.String addr1, global::System.String addr2, global::System.String attn, global::System.String city, global::System.String classID, global::System.String country, global::System.String dfltOrdFromId, global::System.String eMailAddr, global::System.String expAcct, global::System.String expSub, global::System.String fax, global::System.String phone, global::System.String remitCity, global::System.String remitCountry, global::System.String remitFax, global::System.String remitPhone, global::System.String remitSalut, global::System.String remitZip, global::System.String salut, global::System.String state, global::System.String status, global::System.String taxDflt, global::System.String taxId00, global::System.String taxId01, global::System.String taxId02, global::System.String taxId03, global::System.String taxLocId, global::System.String taxRegNbr, global::System.String terms, global::System.String zip, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double crLmt, global::System.Double mOQVal, global::System.String mOQType)
+        public static AP_Vendor CreateAP_Vendor(global::System.String vendID, global::System.String addr1, global::System.String addr2, global::System.String attn, global::System.String city, global::System.String classID, global::System.String country, global::System.String eMailAddr, global::System.String expAcct, global::System.String expSub, global::System.String fax, global::System.String phone, global::System.String remitCity, global::System.String remitCountry, global::System.String remitFax, global::System.String remitPhone, global::System.String remitSalut, global::System.String remitZip, global::System.String salut, global::System.String state, global::System.String status, global::System.String taxDflt, global::System.String taxId00, global::System.String taxId01, global::System.String taxId02, global::System.String taxId03, global::System.String taxLocId, global::System.String taxRegNbr, global::System.String terms, global::System.String zip, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double crLmt, global::System.Double mOQVal, global::System.String mOQType)
         {
             AP_Vendor aP_Vendor = new AP_Vendor();
             aP_Vendor.VendID = vendID;
@@ -344,7 +335,6 @@ namespace AR10300
             aP_Vendor.City = city;
             aP_Vendor.ClassID = classID;
             aP_Vendor.Country = country;
-            aP_Vendor.DfltOrdFromId = dfltOrdFromId;
             aP_Vendor.EMailAddr = eMailAddr;
             aP_Vendor.ExpAcct = expAcct;
             aP_Vendor.ExpSub = expSub;
@@ -559,7 +549,7 @@ namespace AR10300
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String DfltOrdFromId
         {
@@ -571,7 +561,7 @@ namespace AR10300
             {
                 OnDfltOrdFromIdChanging(value);
                 ReportPropertyChanging("DfltOrdFromId");
-                _DfltOrdFromId = StructuralObject.SetValidValue(value, false);
+                _DfltOrdFromId = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("DfltOrdFromId");
                 OnDfltOrdFromIdChanged();
             }
@@ -4802,24 +4792,26 @@ namespace AR10300
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AR10300Model", Name="ppv_AR10300_getCompany_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="AR10300Model", Name="AR10300_pgLoadGridTrans_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class ppv_AR10300_getCompany_Result : ComplexObject
+    public partial class AR10300_pgLoadGridTrans_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new ppv_AR10300_getCompany_Result object.
+        /// Create a new AR10300_pgLoadGridTrans_Result object.
         /// </summary>
-        /// <param name="classID">Initial value of the ClassID property.</param>
-        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
-        public static ppv_AR10300_getCompany_Result Createppv_AR10300_getCompany_Result(global::System.String classID, global::System.String cpnyID)
+        /// <param name="tranAmt">Initial value of the TranAmt property.</param>
+        /// <param name="lineRef">Initial value of the LineRef property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static AR10300_pgLoadGridTrans_Result CreateAR10300_pgLoadGridTrans_Result(global::System.Double tranAmt, global::System.String lineRef, global::System.Byte[] tstamp)
         {
-            ppv_AR10300_getCompany_Result ppv_AR10300_getCompany_Result = new ppv_AR10300_getCompany_Result();
-            ppv_AR10300_getCompany_Result.ClassID = classID;
-            ppv_AR10300_getCompany_Result.CpnyID = cpnyID;
-            return ppv_AR10300_getCompany_Result;
+            AR10300_pgLoadGridTrans_Result aR10300_pgLoadGridTrans_Result = new AR10300_pgLoadGridTrans_Result();
+            aR10300_pgLoadGridTrans_Result.TranAmt = tranAmt;
+            aR10300_pgLoadGridTrans_Result.LineRef = lineRef;
+            aR10300_pgLoadGridTrans_Result.tstamp = tstamp;
+            return aR10300_pgLoadGridTrans_Result;
         }
 
         #endregion
@@ -4831,72 +4823,96 @@ namespace AR10300
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String ClassID
+        public global::System.Double TranAmt
         {
             get
             {
-                return _ClassID;
+                return _TranAmt;
             }
             set
             {
-                OnClassIDChanging(value);
-                ReportPropertyChanging("ClassID");
-                _ClassID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ClassID");
-                OnClassIDChanged();
+                OnTranAmtChanging(value);
+                ReportPropertyChanging("TranAmt");
+                _TranAmt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TranAmt");
+                OnTranAmtChanged();
             }
         }
-        private global::System.String _ClassID;
-        partial void OnClassIDChanging(global::System.String value);
-        partial void OnClassIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyID
-        {
-            get
-            {
-                return _CpnyID;
-            }
-            set
-            {
-                OnCpnyIDChanging(value);
-                ReportPropertyChanging("CpnyID");
-                _CpnyID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CpnyID");
-                OnCpnyIDChanged();
-            }
-        }
-        private global::System.String _CpnyID;
-        partial void OnCpnyIDChanging(global::System.String value);
-        partial void OnCpnyIDChanged();
+        private global::System.Double _TranAmt;
+        partial void OnTranAmtChanging(global::System.Double value);
+        partial void OnTranAmtChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String CpnyName
+        public global::System.String TranDesc
         {
             get
             {
-                return _CpnyName;
+                return _TranDesc;
             }
             set
             {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
+                OnTranDescChanging(value);
+                ReportPropertyChanging("TranDesc");
+                _TranDesc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TranDesc");
+                OnTranDescChanged();
             }
         }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
+        private global::System.String _TranDesc;
+        partial void OnTranDescChanging(global::System.String value);
+        partial void OnTranDescChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LineRef
+        {
+            get
+            {
+                return _LineRef;
+            }
+            set
+            {
+                OnLineRefChanging(value);
+                ReportPropertyChanging("LineRef");
+                _LineRef = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LineRef");
+                OnLineRefChanged();
+            }
+        }
+        private global::System.String _LineRef;
+        partial void OnLineRefChanging(global::System.String value);
+        partial void OnLineRefChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
 
         #endregion
 

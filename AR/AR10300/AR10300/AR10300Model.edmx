@@ -23,7 +23,7 @@
           <Property Name="City" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Country" Type="varchar" Nullable="false" MaxLength="3" />
-          <Property Name="DfltOrdFromId" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="DfltOrdFromId" Type="varchar" MaxLength="10" />
           <Property Name="EMailAddr" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="ExpAcct" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="ExpSub" Type="varchar" Nullable="false" MaxLength="24" />
@@ -55,10 +55,10 @@
           <Property Name="Zip" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="CrLmt" Type="float" Nullable="false" />
           <Property Name="PmtMethod" Type="nvarchar" MaxLength="200" />
@@ -176,10 +176,10 @@
           <Property Name="UnitPrice" Type="float" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="Batch">
@@ -210,17 +210,18 @@
           <Property Name="Status" Type="varchar" MaxLength="1" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="APNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="AR10300_pgLoadGridTrans" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
-          <Parameter Name="GetType" Type="varchar" Mode="In" />
+          <Parameter Name="BatNbr" Type="varchar" Mode="In" />
+          <Parameter Name="RefNbr" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="ARNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="AR10300_ppARNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="GetType" Type="varchar" Mode="In" />
         </Function>
@@ -229,28 +230,21 @@
     <edmx:ConceptualModels>
       <Schema Namespace="AR10300Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="AR10300Entities" annotation:LazyLoadingEnabled="true" >
-          <FunctionImport Name="ppv_AR10300_getCompany" ReturnType="Collection(AR10300Model.ppv_AR10300_getCompany_Result)">
-            <Parameter Name="ClassID" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="Batches" EntityType="AR10300Model.Batch" />
-          <FunctionImport Name="APNumbering" ReturnType="Collection(String)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="GetType" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="AP_Vendor" EntityType="AR10300Model.AP_Vendor" />
           <EntitySet Name="AR_Doc" EntityType="AR10300Model.AR_Doc" />
           <EntitySet Name="AR_Setup" EntityType="AR10300Model.AR_Setup" />
           <EntitySet Name="AR_Trans" EntityType="AR10300Model.AR_Trans" />
-          <FunctionImport Name="ARNumbering" ReturnType="Collection(String)">
+          <FunctionImport Name="AR10300_pgLoadGridTrans" ReturnType="Collection(AR10300Model.AR10300_pgLoadGridTrans_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="BatNbr" Mode="In" Type="String" />
+            <Parameter Name="RefNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR10300_ppARNumbering" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
-        <ComplexType Name="ppv_AR10300_getCompany_Result">
-          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
-        </ComplexType>
         <EntityType Name="Batch">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -279,10 +273,10 @@
           <Property Type="String" Name="Status" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="AP_Vendor">
@@ -296,7 +290,7 @@
           <Property Type="String" Name="City" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Country" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltOrdFromId" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltOrdFromId" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="EMailAddr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ExpAcct" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ExpSub" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
@@ -328,10 +322,10 @@
           <Property Type="String" Name="Zip" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Double" Name="CrLmt" Nullable="false" />
           <Property Type="String" Name="PmtMethod" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -449,12 +443,18 @@
           <Property Type="Double" Name="UnitPrice" Nullable="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="AR10300_pgLoadGridTrans_Result">
+          <Property Type="Double" Name="TranAmt" Nullable="false" />
+          <Property Type="String" Name="TranDesc" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -494,7 +494,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="APNumbering" FunctionName="eBiz4DWebSysModel.Store.APNumbering" />
           <EntitySetMapping Name="AP_Vendor">
             <EntityTypeMapping TypeName="AR10300Model.AP_Vendor">
               <MappingFragment StoreEntitySet="AP_Vendor">
@@ -663,7 +662,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="ARNumbering" FunctionName="eBiz4DWebSysModel.Store.ARNumbering" />
+          <FunctionImportMapping FunctionImportName="AR10300_pgLoadGridTrans" FunctionName="eBiz4DWebSysModel.Store.AR10300_pgLoadGridTrans">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10300Model.AR10300_pgLoadGridTrans_Result">
+                <ScalarProperty Name="TranAmt" ColumnName="TranAmt" />
+                <ScalarProperty Name="TranDesc" ColumnName="TranDesc" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR10300_ppARNumbering" FunctionName="eBiz4DWebSysModel.Store.AR10300_ppARNumbering" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -684,7 +693,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="106" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="82" >
         <EntityTypeShape EntityType="AR10300Model.Batch" Width="1.5" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="AR10300Model.AP_Vendor" Width="1.5" PointX="8.125" PointY="0.5" />
         <EntityTypeShape EntityType="AR10300Model.AR_Doc" Width="1.5" PointX="2.375" PointY="0.5" />

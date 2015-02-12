@@ -1,7 +1,7 @@
 @using Ext.Net;
 @using Ext.Net.MVC;
-@using eBiz4DWebFrame;
-@using eBiz4DWebFrame.HQControl;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
 @using AR10300;
 @{
     Layout = null;
@@ -15,38 +15,43 @@
 .Items(
         X.FormPanel()
         .Layout(LayoutType.Anchor)
-        .ID("dataForm")
+        .ID("frm")
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
-        .BodyPadding(10)
+        .BodyPadding(2)
         //.AutoScroll(true)
-        .TopBar(Util.SetupToolbar("Print",true))
+        .TopBar(Util.SetupToolbar("Print",true,""))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         //.Listeners(itm => itm.AfterRender.Fn = "frmloadAfterRender")
         .Items(
-            X.Panel().ID("Header").Layout(LayoutType.Anchor).AnchorVertical("34%").AnchorHorizontal("100%")
+            X.Panel().ID("Header").Layout(LayoutType.Anchor)//.AnchorVertical("34%").AnchorHorizontal("100%")
             .Items(
             
                 X.FormPanel()
-                .ID("dataFormTop")
+                .ID("frmTop")
                 .Layout(LayoutType.Anchor)
                 .AnchorVertical("20%")
                 //.Title(Util.GetLang("DOC"))
-                .Padding(5)
+                .Padding(2)
+                .Listeners(lst =>
+                        {
+                            lst.BoxReady.Fn = "setValueBranchID";
+
+                        })
                 .Items(
                         
                  
                 X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
                 .Items(
                    //Bat.No
-                    HQ.Combo().ID("cboBatNbr").Name("cboBatNbr").HQLangCode("BATNBR").HQProcedure("ppv_AR10100Batch")
+                    HQ.Combo().ID("cboBatNbr").Name("cboBatNbr").HQLangCode("BATNBR").HQProcedure("AR10300_pcBatch")
                     .HQColumnShow("BatNbr,TotAmt,Descr,Status").DisplayField("BatNbr").ValueField("BatNbr").Editable(false)
                     .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.ForceSelection(true)
                     .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
                     {
-                        new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@ScreenNbr", Value = ViewBag.Title, Mode = ParameterMode.Value }
                     })
                     .LoadData()
@@ -61,7 +66,7 @@
                     //BrandID    
                     ,HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BRANCHID")
                     .Width(300).MarginSpec("5 0 5 0").MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
-                    .Value(Current.CpnyID.ToString()).ReadOnly(true)
+                    .ReadOnly(true)//.Value(Current.CpnyID.ToString())
                     .Listeners(lst =>
                     {
 
@@ -69,7 +74,7 @@
                                     
                     })
                     //Status
-                    ,HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("STATUS").HQProcedure("ppv_AP10100Status")
+                    ,HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("STATUS").HQProcedure("AR10300_pcGetStatus")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Status")
                     .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.Disabled(true)
                     .HQDBSys(false).HQValue("H",false).ReadOnly(true)
@@ -77,7 +82,7 @@
                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
                     {
-                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                     })
                     .LoadData()
                     .Listeners(lst =>
@@ -106,7 +111,7 @@
                         })
 
                         //Xu ly (Handle)   
-                        , HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("HANDLE").HQProcedure("ppv_AP10100Handle")
+                        , HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("HANDLE").HQProcedure("AR10300_pcGetHandle")
                         .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                         .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").ForceSelection(true).AllowBlank(false)
                         .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
@@ -116,7 +121,7 @@
                         new StoreParameter() { Name = "@Status", Value = "App.cboStatus.value", Mode = ParameterMode.Raw },
                         //@Role nay sua sau
                         
-                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                     })
                         .LoadData()
                         .Listeners(lst =>
@@ -133,21 +138,21 @@
                     //ngoac ket thuc dan hang ngang 3 combo  sau form
                     )
 
-                //ngoac dong dataFormTop
+                //ngoac dong frmTop
                 )
 
                            , X.FormPanel()
-                            .ID("dataFormBot")
+                            .ID("frmBot")
                             .Layout(LayoutType.Anchor)
                             .AnchorVertical("30%")
                             
-                            .Padding(5)
+                            .Padding(2)
                             .Items(
 
                              X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
                             .Items(
                                  //Doctype     
-                                HQ.Combo().ID("cboDocType").Name("cboDocType").HQLangCode("DOCTYPE").HQProcedure("ppv_AR10100DocType")
+                                HQ.Combo().ID("cboDocType").Name("cboDocType").HQLangCode("DOCTYPE").HQProcedure("AR10300_pcDocType")
                                 .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("DocType").AllowBlank(false)
                                 .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
                                 .HQDBSys(false).HQValue("CC", false)
@@ -155,7 +160,7 @@
                                 //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection()
                             {
-                                new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                             })
                                 .LoadData()
                                 .Listeners(lst =>
@@ -164,7 +169,7 @@
                                     })
 
                                //RefNbr
-                                ,HQ.Combo().ID("cboRefNbr").Name("cboRefNbr").HQLangCode("REFNBR").HQProcedure("ppv_AR10100RefNbr")
+                                ,HQ.Combo().ID("cboRefNbr").Name("cboRefNbr").HQLangCode("REFNBR").HQProcedure("AR10300_pcRefNbr")
                                 .HQColumnShow("RefNbr,DocType,OrigDocAmt,DocDesc").DisplayField("RefNbr").ValueField("RefNbr").Editable(false)
                                 .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
                                 .HQDBSys(false)
@@ -172,8 +177,8 @@
                                 //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection()
                             {
-                               // new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
-                                new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
+                               // new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                                new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@BatNbr", Value = "App.cboBatNbr.value", Mode = ParameterMode.Raw }
                             })
                                 .LoadData()
@@ -221,7 +226,7 @@
                             .Items(
 
                                 //CustID (customer ID)
-                            HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").HQProcedure("ppv_CustomerActive")
+                            HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").HQProcedure("AR10300_pcCustomerActive")
                             .HQColumnShow("CustID,Name,Addr1,Addr2").DisplayField("CustID").ValueField("CustID").DataIndex("CustId")
                             .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
                             .HQDBSys(false)
@@ -229,8 +234,8 @@
                             //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection()
                             {
-                                new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
-                                new StoreParameter() { Name = "@Username", Value = Current.UserName.ToString(), Mode = ParameterMode.Value },
+                                new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@ScreenNbr", Value = ViewBag.Title, Mode = ParameterMode.Value },
                             })
                             .LoadData()
@@ -243,15 +248,15 @@
                                 
                                 
                             //DEBTCOLLECTOR
-                            ,HQ.Combo().ID("cboDebtCollector").Name("cboDebtCollector").HQLangCode("DEBTCOLLECTOR").HQProcedure("ppv_SalesPerson")
+                            ,HQ.Combo().ID("cboDebtCollector").Name("cboDebtCollector").HQLangCode("DEBTCOLLECTOR").HQProcedure("AR10300_pcSalesPerson")
                             .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid").DataIndex("SlsperId")
                             .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
                             .HQDBSys(false)
           
                             .HQParam(new StoreParameterCollection()
                             {
-                                new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
-                                new StoreParameter() { Name = "@Username", Value = Current.UserName.ToString(), Mode = ParameterMode.Value },
+                                new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@ScreenNbr", Value = "AR10300", Mode = ParameterMode.Value },
                             })
                             .LoadData()
@@ -261,15 +266,15 @@
                                 })
 
                             //BankAcct
-                            , HQ.Combo().ID("cboBankAcct").Name("cboBankAcct").HQLangCode("BANKACCT").HQProcedure("ppv_BankAcctCA").DataIndex("ReasonCD")
+                            , HQ.Combo().ID("cboBankAcct").Name("cboBankAcct").HQLangCode("BANKACCT").HQProcedure("AR10300_pcBankAcctCA").DataIndex("ReasonCD")
                             .HQColumnShow("BankAcct,CashAcctName,AcctNbr").DisplayField("BankAcct").ValueField("BankAcct").AllowBlank(false)
                             .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
                             .HQDBSys(false).ForceSelection(true)
        
                             .HQParam(new StoreParameterCollection()
                             {
-                                // new StoreParameter() { Name = "@UserID", Value = Current.UserName.ToString(), Mode = ParameterMode.Value }
-                                new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value },
+                                // new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                                new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                 //new StoreParameter() { Name = "@BatNbr", Value = "App.cboBatNbr.value", Mode = ParameterMode.Raw }
                             })
                             .LoadData()
@@ -301,7 +306,7 @@
 
                                 
 
-                      //ngoac ket thuc dataFormBot       
+                      //ngoac ket thuc frmBot       
                      )
                 
                                 

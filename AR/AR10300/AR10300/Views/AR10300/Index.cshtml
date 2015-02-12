@@ -1,14 +1,14 @@
 @using Ext.Net;
 @using Ext.Net.MVC;
-@using eBiz4DWebFrame;
-@using eBiz4DWebFrame.HQControl;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
 @using AR10300;
 
 @model System.Collections.IEnumerable
 @{
     Layout = null;
     var X = Html.X();
-    var HQ = Html.HQ();
+    //var HQ = Html.HQ();
     ViewBag.Title = "AR10300";
     var acc = Session["AR10300"] as AccessRight;
 }
@@ -17,47 +17,33 @@
     <head>
         <meta name="viewport" content="width=device-width" />
 <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
-<script src="~/Scripts/common.js"></script>
-<script src='@Url.Content("Scripts/Screen/AR10300.js")' type="text/javascript"></script>
+   <script src='@Url.Content("Scripts/hq.language"+ Current.LangID+ ".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.debug.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/AR10300.debug.js")' type="text/javascript"></script>
 <style type="text/css"> @*Thuoc tinh hover tren grid *@
     .x-grid-row-over .x-grid-cell-inner {
         font-weight : bold;
     }
 </style>
 <script>
-    var isAllValid = function (items) {
-        if (items != undefined) {
-            for (var i = 0; i < items.length; i++) {
-                if (items[i]["TranAmt"] == undefined)
-                    continue;
-                if (items[i]["TranAmt"] == "")
-                    continue;
 
-                if (items[i]["TranAmt"] == 0) {
-                    callMessage(15, '@Util.GetLang("TranAmt")', null);
-                return false;
-            }
-
-
-        }
-        return true;
-    }
-    else {
-        return true;
-    }
-    };
 
 </script>
 <script>
-    var isUpdate = strToBool('@acc.Update.ToString().ToLower()');
-    var isInsert = strToBool('@acc.Insert.ToString().ToLower()');
-    var isDelete = strToBool('@acc.Delete.ToString().ToLower()');
+    HQ.cpnyID = '@Current.CpnyID';
+    HQ.langID = '@Current.LangID';
+    HQ.userName = '@Current.UserName';
+    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
 </script>
   <title>@ViewBag.Title</title>
     </head>
     <body>
 @(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
 
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->  
 
 @(Html.X().Store().ID("storeFormTop").AutoLoad(false)
         .Model(Util.GenerateModel(typeof(Batch), "BatchClassModel", "BranchID,Module,BatNbr"))
@@ -100,7 +86,7 @@
         .Listeners(p => p.Load.Handler = "loadDataAutoHeaderBot()")
   )
 @(Html.X().Store().ID("storeGrid").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR_Trans), "AR_TransResultModel", ""))
+        .Model(Util.GenerateModel(typeof(AR10300_pgLoadGridTrans_Result), "AR_TransResultModel", ""))
         .Proxy(
             X.AjaxProxy()
             .Url(Url.Action("GetDataGrid", "AR10300"))
@@ -120,7 +106,7 @@
   )
 
 
-     @{ Html.RenderAction("Body"); }
+     @{Html.RenderAction("Body", new { lang=@Current.LangID});}
     </body>
 </html>
 
