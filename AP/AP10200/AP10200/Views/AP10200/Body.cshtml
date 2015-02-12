@@ -18,13 +18,13 @@
         .ID("frm")
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
-        .BodyPadding(10)
+        .BodyPadding(2)
         //.AutoScroll(true)
         .TopBar(Util.SetupToolbar("Print",true,""))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         //.Listeners(itm => itm.AfterRender.Fn = "frmloadAfterRender")
         .Items(
-            X.Panel().ID("Header").Layout(LayoutType.Anchor).AnchorVertical("38%").AnchorHorizontal("100%")
+            X.Panel().ID("Header").Layout(LayoutType.Anchor)//.AnchorVertical("38%").AnchorHorizontal("100%")
             .Items(
             
                 X.FormPanel()
@@ -32,7 +32,7 @@
                 .Layout(LayoutType.Anchor)
                 .AnchorVertical("20%")
                 //.Title(Util.GetLang("DOC"))
-                .Padding(5)
+                .Padding(2)
                 .Listeners(lst =>
                         {
                             lst.BoxReady.Fn = "setValueBranchID";
@@ -143,7 +143,7 @@
                             .ID("frmBot")
                             .Layout(LayoutType.Anchor)
                             .AnchorVertical("30%")
-                            .Padding(5)
+                            .Padding(2)
                             .Items(
 
                              X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").AnchorHorizontal("100%")
