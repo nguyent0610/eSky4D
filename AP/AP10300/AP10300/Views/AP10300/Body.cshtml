@@ -18,13 +18,13 @@
         .ID("frm")
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
-        .BodyPadding(10)
+        .BodyPadding(2)
         //.AutoScroll(true)
         .TopBar(Util.SetupToolbar("Print",true))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         //.Listeners(itm => itm.AfterRender.Fn = "frmloadAfterRender")
         .Items(
-            X.Panel().ID("Header").Layout(LayoutType.Anchor).AnchorHorizontal("100%").AnchorVertical("33%")
+            X.Panel().ID("Header").Layout(LayoutType.Anchor)//.AnchorHorizontal("100%").AnchorVertical("33%")
             .Items(
             
                 X.FormPanel()
