@@ -1,0 +1,167 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM30400;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM30400";
+    var acc = Session["OM30400"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/OM30400.js")' type="text/javascript"></script>
+
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyD1KCqJiFRTtXsU2UxG3Zf7D55Gjft7JJI&sensor=false"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        </script>
+
+        <style type="text/css">
+            html {
+                height: 100%;
+            }
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            #map_canvas {
+                height: 100%;
+            }
+            .x-grid3-hd-inner {
+                white-space: normal;
+            }
+            #content {
+                line-height: 1.35;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .ci-row .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+	            background-color: #CCFF33 !important;
+            }
+        
+            .co-row .x-grid-cell, .new-row .x-grid-rowwrap-div {
+	            background: #FF0000 !important;
+            } 
+        </style>
+
+
+    </head>
+    <body>
+        @(X.ResourceManager()
+        .Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
+
+        @(
+            X.Store().ID("stoVisitCustomerPlan")
+            //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM30400_pgVisitCustomerPlan_Result),"OM30400VisitCustomerPlan_ResultModel",""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadVisitCustomerPlan")))
+            .Parameters(ps=>{
+                ps.Add(new StoreParameter("channel", "", ParameterMode.Value));
+                ps.Add(new StoreParameter("territory", "App.cboAreaPlan.value.join()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("province", "App.cboProvincePlan.value.join()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("distributor", "App.cboDistributorPlan.value.join()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("shopType", "", ParameterMode.Value));
+                ps.Add(new StoreParameter("slsperId", "App.cboSalesManPlan.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("daysOfWeek", "App.cboDayOfWeek.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("weekOfVisit", "App.cboWeekOfVisit.value", ParameterMode.Raw));
+            })
+            .Listeners(l=>l.Load.Fn="Index.stoVisitCustomerPlan_load")
+        )
+
+         @(
+            X.Store().ID("stoMCL")
+            .RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM30400_pgLoadMCL_Result),"OM30400LoadMCL_ResultModel",""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadMCL")))
+            .Parameters(ps=>{
+                ps.Add(new StoreParameter("channel", "App.cboChannelMCL.value.join()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("territory", "App.cboAreaMCL.value.join()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("province", "App.cboProvinceMCL.value.join()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("distributor", "App.cboDistributorMCL.value.join()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("shopType", "App.cboShopTypeMCL.value.join()", ParameterMode.Raw));
+            })
+                .Listeners(l => { 
+                    l.BeforeLoad.Handler = "App.frmMain.getEl().mask('Loading Maps', 'x-mask-loading');";
+                    l.Load.Fn = "Index.stoMCL_load";
+                })
+        )
+
+        @(
+            X.Store().ID("stoVisitCustomerActual")
+            //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM30400_pgVisitCustomerActual_Result),"OM30400VisitCustomerActual_ResultModel",""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadVisitCustomerActual")))
+            .Parameters(ps=>{
+                ps.Add(new StoreParameter("distributor", "App.cboDistributorActual.value.join()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperId", "App.cboSalesManActual.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("visitDate", "App.dateVisit.value", ParameterMode.Raw));
+            })
+            .Listeners(l=>l.Load.Fn="Index.stoVisitCustomerActual_load")
+        )
+
+        @(
+            X.Store().ID("stoAllCurrentSalesman")
+            //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM30400_pgAllCurrentSalesman_Result),"OM30400AllCurrentSalesman_ResultModel",""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadAllCurrentSalesman")))
+            .Parameters(ps=>{
+                ps.Add(new StoreParameter("distributor", "App.cboDistributorActual.value.join()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("visitDate", "App.dateVisit.value", ParameterMode.Raw));
+            })
+            .Listeners(l=>l.Load.Fn="Index.stoAllCurrentSalesman_load")
+        )
+
+        @(
+            X.Store().ID("stoCustHistory")
+            //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM30400_pgHistory_Result),"OM30400History_ResultModel",""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadCustHistory")))
+            .Parameters(ps=>{
+                ps.Add(new StoreParameter("distributor", "App.cboDistributorHistory.value.join()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperId", "App.cboSalesManHistory.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("customer", "App.cboCustomerHistory.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("startDate", "App.dateFrom.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("endDate", "App.dateTo.value", ParameterMode.Raw));
+            })
+            .Listeners(l=>l.Load.Fn="Index.stoCustHistory_load")
+        )
+
+        @(
+            X.ToolTip()
+            .Target("={App.grdActualVisit.getView().el}")
+            .TrackMouse(true)
+            .Delegate(".x-grid-cell")
+            .Listeners(l=>l.Show.Handler="HQ.tooltip.showOnGrid(this, App.grdActualVisit, false);")
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        @{ Html.RenderAction("Body"); }
+    </body>
+</html>

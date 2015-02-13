@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer" />
+        <Function Name="OM30400_pgAllCurrentSalesman" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="Distributor" Type="varchar(max)" Mode="In" />
+          <Parameter Name="VisitDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="OM30400_pgHistory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="Distributor" Type="varchar(max)" Mode="In" />
+          <Parameter Name="SlsPerID" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="OM30400_pgLoadMCL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="Territory" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Province" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Distributor" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Channel" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ShopType" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="OM30400_pgVisitCustomerActual" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="Distributor" Type="varchar(max)" Mode="In" />
+          <Parameter Name="SlsperId" Type="varchar" Mode="In" />
+          <Parameter Name="VisitDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="OM30400_pgVisitCustomerPlan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="Channel" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Territory" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Province" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Distributor" Type="varchar(max)" Mode="In" />
+          <Parameter Name="ShopType" Type="varchar(max)" Mode="In" />
+          <Parameter Name="SlsperId" Type="varchar" Mode="In" />
+          <Parameter Name="DaysOfWeek" Type="varchar" Mode="In" />
+          <Parameter Name="WeekEO" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM30400Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="OM30400Entities" p1:LazyLoadingEnabled="true">
+          <FunctionImport Name="OM30400_pgAllCurrentSalesman" ReturnType="Collection(OM30400Model.OM30400_pgAllCurrentSalesman_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="Distributor" Mode="In" Type="String" />
+            <Parameter Name="VisitDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="OM30400_pgHistory" ReturnType="Collection(OM30400Model.OM30400_pgHistory_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="Distributor" Mode="In" Type="String" />
+            <Parameter Name="SlsPerID" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="OM30400_pgLoadMCL" ReturnType="Collection(OM30400Model.OM30400_pgLoadMCL_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="Territory" Mode="In" Type="String" />
+            <Parameter Name="Province" Mode="In" Type="String" />
+            <Parameter Name="Distributor" Mode="In" Type="String" />
+            <Parameter Name="Channel" Mode="In" Type="String" />
+            <Parameter Name="ShopType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM30400_pgVisitCustomerActual" ReturnType="Collection(OM30400Model.OM30400_pgVisitCustomerActual_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="Distributor" Mode="In" Type="String" />
+            <Parameter Name="SlsperId" Mode="In" Type="String" />
+            <Parameter Name="VisitDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="OM30400_pgVisitCustomerPlan" ReturnType="Collection(OM30400Model.OM30400_pgVisitCustomerPlan_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="Channel" Mode="In" Type="String" />
+            <Parameter Name="Territory" Mode="In" Type="String" />
+            <Parameter Name="Province" Mode="In" Type="String" />
+            <Parameter Name="Distributor" Mode="In" Type="String" />
+            <Parameter Name="ShopType" Mode="In" Type="String" />
+            <Parameter Name="SlsperId" Mode="In" Type="String" />
+            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
+            <Parameter Name="WeekEO" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="OM30400_pgAllCurrentSalesman_Result">
+          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Addr" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="VisitDate" Nullable="false" Precision="23" />
+          <Property Type="Double" Name="Lat" Nullable="false" />
+          <Property Type="Double" Name="Lng" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="OM30400_pgHistory_Result">
+          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Addr" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="VisitDate" Nullable="false" Precision="23" />
+          <Property Type="Double" Name="Lat" Nullable="false" />
+          <Property Type="Double" Name="Lng" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="OM30400_pgLoadMCL_Result">
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Distributor" Nullable="true" MaxLength="231" />
+          <Property Type="Double" Name="Lat" Nullable="false" />
+          <Property Type="Double" Name="Lng" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="OM30400_pgVisitCustomerActual_Result">
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Addr" Nullable="false" MaxLength="200" />
+          <Property Type="DateTime" Name="VisitDate" Nullable="false" Precision="23" />
+          <Property Type="Double" Name="Lat" Nullable="false" />
+          <Property Type="Double" Name="Lng" Nullable="false" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="2" />
+        </ComplexType>
+        <ComplexType Name="OM30400_pgVisitCustomerPlan_Result">
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Addr" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="10" />
+          <Property Type="Double" Name="Lat" Nullable="false" />
+          <Property Type="Double" Name="Lng" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="OM30400Entities">
+          <FunctionImportMapping FunctionImportName="OM30400_pgAllCurrentSalesman" FunctionName="eBiz4DWebAppModel.Store.OM30400_pgAllCurrentSalesman">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM30400Model.OM30400_pgAllCurrentSalesman_Result">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="VisitDate" ColumnName="VisitDate" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM30400_pgHistory" FunctionName="eBiz4DWebAppModel.Store.OM30400_pgHistory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM30400Model.OM30400_pgHistory_Result">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="VisitDate" ColumnName="VisitDate" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM30400_pgLoadMCL" FunctionName="eBiz4DWebAppModel.Store.OM30400_pgLoadMCL">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM30400Model.OM30400_pgLoadMCL_Result">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Distributor" ColumnName="Distributor" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM30400_pgVisitCustomerActual" FunctionName="eBiz4DWebAppModel.Store.OM30400_pgVisitCustomerActual">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM30400Model.OM30400_pgVisitCustomerActual_Result">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+                <ScalarProperty Name="VisitDate" ColumnName="VisitDate" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM30400_pgVisitCustomerPlan" FunctionName="eBiz4DWebAppModel.Store.OM30400_pgVisitCustomerPlan">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM30400Model.OM30400_pgVisitCustomerPlan_Result">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,629 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM30400;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport().Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .Layout("border")
+        //.Layout(LayoutType.Anchor)
+    .ID("frmMain")
+    .TrackResetOnLoad(true)
+    .DefaultAnchor("100%")
+    .BodyPadding(5)
+    .BodyBorder(0)
+        //.TopBar(Util.SetupToolbar("new,save,delete,print",true,"Index.menuClick"))
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Items(
+        X.Panel()
+        .ID("pnlInfo")
+        .Border(true).Split(true)
+        .Width(350).MinWidth(300).CollapseMode(CollapseMode.Default)
+        .Collapsible(true).Header(false)
+        .Region(Region.East).Layout(LayoutType.Border)
+        .TopBar(
+            X.Toolbar()
+            .StyleSpec("padding-bottom:0px;")
+            .Items(
+                X.Button().ToolTip(Util.GetLang("Refresh")).Icon(Icon.ArrowRefresh)
+                .Handler("Index.menuClick('refresh')")
+                
+                , X.ToolbarSeparator()
+                , X.ToolbarFill()
+                
+                ,X.TabStrip()
+                .Items(t =>
+                {
+                    t.Add(X.Tab().ActionItemID("pnlMCP").Text(Util.GetLang("MCP")));
+                    t.Add(X.Tab().ActionItemID("pnlMCL").Text(Util.GetLang("MCL")));
+                    t.Add(X.Tab().ActionItemID("pnlActualVisit").Text(Util.GetLang("ActualVisit")));
+                    t.Add(X.Tab().ActionItemID("pnlCustHistory").Text(Util.GetLang("History")));
+                })
+
+                //, X.Button().ToolTip(Util.GetLang("CloseScreen")).Icon(Icon.HouseGo)
+                //.Listeners(l => {
+                //    l.Click.Handler = "Index.menuClick('close')";
+                //})
+            )
+        )
+        .Items(
+            X.FormPanel()
+            .ID("pnlMCP")
+            .Border(false).Width(350)
+            .Region(Region.Center).Layout(LayoutType.Border)
+            .Items(
+                X.Container().Layout(LayoutType.VBox)
+                .Region(Region.North)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboAreaPlan").Name("cboAreaPlan").HQLangCode("Area").HQProcedure("OM30400_pcArea")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).MultiSelect(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            lst.Change.Fn = "Index.cboAreaPlan_change";
+                        })
+
+                    , HQ.Combo().ID("cboProvincePlan").Name("cboProvincePlan").HQLangCode("Province").HQProcedure("OM30400_pcProvince")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).MultiSelect(true)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaPlan.value.join()", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            //lst.Change.Fn = "Index.cboProvincePlan_change";
+                        })
+                        
+                    , HQ.Combo().ID("cboDistributorPlan").HQLangCode("Distributor").HQProcedure("OM30400_pcDistributor")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).MultiSelect(true)
+                     .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaPlan.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Channel", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvincePlan.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@SlsperId", Value = "App.cboSalesManPlan.value", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@ShopType", Value = "", Mode = ParameterMode.Value }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            lst.Change.Fn = "Index.cboDistributorPlan_change";
+                        })
+
+                     , HQ.Combo().ID("cboSalesManPlan").Name("cboSalesManPlan").HQLangCode("SalesMan").HQProcedure("OM30400_pcSalesMan")
+                    .HQColumnShow("SlsperId,Name").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Channel", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaPlan.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvincePlan.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorPlan.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@ShopType", Value = "", Mode = ParameterMode.Value }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                        })
+
+                    , HQ.Combo().ID("cboDayOfWeek").HQLangCode("DayOfWeek").HQProcedure("OM30400_pcDaysOfWeek")
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
+                    .EmptyText(Util.GetLang("Select")).MarginSpec("5 5 0 0")
+                    .ForceSelection(true).Flex(1).AllowBlank(false)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                    })
+                    
+                    , HQ.Combo().ID("cboWeekOfVisit").HQLangCode("WeekOfVisit").HQProcedure("OM30400_pcWeekOfVisit")
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
+                    .EmptyText(Util.GetLang("Select")).MarginSpec("5 5 0 0")
+                    .ForceSelection(true).Flex(1).AllowBlank(false)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                    })
+
+                    , HQ.Button().ID("btnLoadDataPlan").HQLangCode("LoadData")
+                    .Icon(Icon.MapStart).Flex(1).MarginSpec("5 5 0 105")
+                    .Listeners(l => l.Click.Fn = "Index.btnLoadDataPlan_click")
+                )
+                // Container
+                
+                , X.Container()
+                .Region(Region.Center)
+                .Layout(LayoutType.Fit)
+                .ID("pnlGridPlan")
+                .Items(
+                    X.GridPanel().ID("grdVisitCustomerPlan").MarginSpec("5 0 0 0")
+                    .Frame(false).Scroll(ScrollMode.Both)
+                    .View(
+                        X.GridView().TrackOver(false).EnableTextSelection(true)
+                    )
+                    .StoreID("stoVisitCustomerPlan")
+                    .SortableColumns(false)
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(30).Listeners(x=>x.AfterRender.Handler="this.resizable = true")
+                        , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustId")
+                        , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").MinWidth(100).Flex(1)
+                        , X.Column().Text(Util.GetLang("Lat")).DataIndex("Lat").Align(Alignment.Right).Width(80)
+                        , X.Column().Text(Util.GetLang("Lng")).DataIndex("Lng").Align(Alignment.Right).Width(80)
+                    )
+                    .SelectionModel(
+                        X.RowSelectionModel().ID("SelectionModelVisitCustomerPlan").Mode(SelectionMode.Single)
+                        .Listeners(l => l.Select.Fn = "Index.selectionModelVisitCustomerPlan_Select")
+                    )
+
+                    //.Listeners(l => l.CellClick.Fn = "Index.grdVisitCustomerPlan_cellClick")
+        // GridPanel: grdVisitCustomerPlan
+                )
+        // Container: pnlGridPlan
+            )
+        // FormPanel: pnlMCP
+        
+            , X.FormPanel()
+            .ID("pnlMCL")
+            .Border(false).Width(350)
+            .Region(Region.Center).Layout(LayoutType.Border)
+            .Items(
+                X.Container().Layout(LayoutType.VBox)
+                .Region(Region.North)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboAreaMCL").Name("cboAreaMCL").HQLangCode("Area").HQProcedure("OM30400_pcArea")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).MultiSelect(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            lst.Change.Fn = "Index.cboAreaMCL_change";
+                        })
+
+                    , HQ.Combo().ID("cboProvinceMCL").Name("cboProvinceMCL").HQLangCode("Province").HQProcedure("OM30400_pcProvince")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).MultiSelect(true)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaMCL.value.join()", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            //lst.Change.Fn = "Index.cboProvincePlan_change";
+                        })
+                        
+                    , HQ.Combo().ID("cboDistributorMCL").HQLangCode("Distributor").HQProcedure("OM30400_pcDistributor")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).MultiSelect(true)
+                     .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Channel", Value = "App.cboChannelMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvinceMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@SlsperId", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@ShopType", Value = "App.cboShopTypeMCL.value.join()", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            lst.Change.Fn = "Index.cboDistributorMCL_change";
+                        })
+
+                    , HQ.Combo().ID("cboChannelMCL").HQLangCode("Channel").HQProcedure("OM30400_pcChannel")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).MultiSelect(true)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvinceMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@SlsperId", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@ShopType", Value = "App.cboShopTypeMCL.value.join()", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            lst.Change.Fn = "Index.cboChannelMCL_change";
+                        })
+
+                    , HQ.Combo().ID("cboShopTypeMCL").HQLangCode("ShopType").HQProcedure("OM30400_pcShopType")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).MultiSelect(true)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Channel", Value = "App.cboChannelMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvinceMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@SlsperId", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorMCL.value.join()", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            //lst.Change.Fn = "Index.cboProvince_change";
+                        })
+
+                    , HQ.Button().ID("btnLoadDataMCL").HQLangCode("LoadData")
+                    .Icon(Icon.MapStart).Flex(1).MarginSpec("5 5 0 105")
+                    .Listeners(l => l.Click.Fn = "Index.btnLoadDataMCL_click")
+                )
+                // Container
+                
+                , X.Container()
+                .Region(Region.Center)
+                .Layout(LayoutType.Fit)
+                .ID("pnlGridMCL")
+                .Items(
+                    X.GridPanel().ID("grdMCL").MarginSpec("5 0 0 0")
+                    .Frame(false).Scroll(ScrollMode.Both)
+                    .View(
+                        X.GridView().TrackOver(false).EnableTextSelection(true)
+                    )
+                    .StoreID("stoMCL")
+                    .SortableColumns(false)
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(30).Listeners(x=>x.AfterRender.Handler="this.resizable = true")
+                        , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustId")
+                        , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").MinWidth(100).Flex(1)
+                        , X.Column().Text(Util.GetLang("Distributor")).DataIndex("Distributor")
+                        , X.Column().Text(Util.GetLang("Salesman")).DataIndex("Name")
+                        , X.Column().Text(Util.GetLang("Lat")).DataIndex("Lat").Align(Alignment.Right).Width(80)
+                        , X.Column().Text(Util.GetLang("Lng")).DataIndex("Lng").Align(Alignment.Right).Width(80)
+                    )
+                    .SelectionModel(
+                        X.RowSelectionModel().ID("SelectionModelMCL").Mode(SelectionMode.Single)
+                        .Listeners(l => l.Select.Fn = "Index.selectionModelMCL_Select")
+                    )
+                    //.Listeners(l => l.CellClick.Fn = "Index.grdVisitCustomerPlan_cellClick")
+        // GridPanel: grdMCL
+                )
+        // Container: pnlGridMCL
+            )
+        // FormPanel: pnlMCL
+
+            , X.FormPanel()
+            .ID("pnlActualVisit")
+            .Border(false).Width(350)
+            .Region(Region.Center).Layout(LayoutType.Border)
+            .Items(
+                X.Container().Layout(LayoutType.VBox)
+                .Region(Region.North)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                
+                    HQ.Combo().ID("cboDistributorActual").HQLangCode("Distributor").HQProcedure("OM30400_pcDistributor")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).MultiSelect(true)
+                     .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Channel", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Province", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@SlsperId", Value = "App.cboSalesManActual.value", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@ShopType", Value = "", Mode = ParameterMode.Value }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            lst.Change.Fn = "Index.cboDistributorActual_change";
+                        })
+                        
+                    , X.Container().Layout(LayoutType.HBox).Flex(1)
+                    .Items(
+                        X.Radio().ID("radSalesmanAll")
+                        .BoxLabel(Util.GetLang("All")).Name("Salesman")
+                        .FieldLabel(Util.GetLang("Type")).Checked(true).Flex(1)
+                        .Listeners(x=>x.Change.Fn="Index.radSalesmanAll_change")
+                        
+                        ,X.Radio().ID("radSalesmanOne")
+                        .BoxLabel(Util.GetLang("One")).Name("Salesman").Flex(1)
+                    )
+
+                    , HQ.Combo().ID("cboSalesManActual").Name("cboSalesManActual").HQLangCode("SalesMan").HQProcedure("OM30400_pcSalesMan")
+                    .HQColumnShow("SlsperId,Name").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false).Disabled(true)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Channel", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Territory", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Province", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorActual.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@ShopType", Value = "", Mode = ParameterMode.Value }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                        })
+
+                    , HQ.DateField().ID("dateVisit").Name("dateVisit").HQLangCode("VisitDate").Value(DateTime.Now)
+                    .MarginSpec("5 5 0 0").AllowBlank(false).Flex(1).EmptyText(Util.GetLang("Select")).Flex(1)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "this.clear();";
+                        })
+
+                    , X.Container().Layout(LayoutType.HBox).Flex(1)
+                    .Items(
+                        X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
+                        .StyleSpec("background-color:#CCFF33;")
+                        , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("CheckIn")).Width(60)
+                        
+                        , HQ.Button().ID("btnLoadDataActual").HQLangCode("LoadData")
+                        .Icon(Icon.MapStart).Flex(1).MarginSpec("5 5 0 5")
+                        .Listeners(l => l.Click.Fn = "Index.btnLoadDataActual_click")
+                    )
+                    
+                    , X.Container().Layout(LayoutType.HBox).Flex(1)
+                    .Items(
+                        X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
+                        .StyleSpec("background-color:#FF0000;")
+                        , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("CheckOut")).Width(60)
+                        
+                        , HQ.Button().ID("btnGetCurrentLocation").HQLangCode("CurrentLocation")
+                        .Icon(Icon.ArrowBranch).Flex(1).MarginSpec("5 5 0 5").Disabled(true)
+                        .Listeners(l => l.Click.Fn = "Index.btnGetCurrentLocation_click")
+                    )
+                )
+        // Container
+
+                , X.Container()
+                .Region(Region.Center)
+                .Layout(LayoutType.Fit)
+                .ID("pnlGridActual")
+                .Items(
+                    X.GridPanel().ID("grdVisitCustomerActual").MarginSpec("5 0 0 0")
+                    .Frame(false).Scroll(ScrollMode.Both).Hidden(true)
+                    .View(
+                        X.GridView().TrackOver(false).EnableTextSelection(true)
+                        .GetRowClass(grc => grc.Fn = "Index.grdVisitCustomerActual_viewGetRowClass")
+                    )
+                    .StoreID("stoVisitCustomerActual")
+                    .SortableColumns(false)
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(30).Listeners(x=>x.AfterRender.Handler="this.resizable = true")
+                        , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustId")
+                        , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").MinWidth(100).Flex(1)
+                        , X.DateColumn().Text(Util.GetLang("Time")).DataIndex("VisitDate").Format("HH:mm").Width(50)
+                        , X.Column().Text(Util.GetLang("Lat")).DataIndex("Lat").Align(Alignment.Right).Width(80)
+                        , X.Column().Text(Util.GetLang("Lng")).DataIndex("Lng").Align(Alignment.Right).Width(80)
+                    )
+                    .SelectionModel(
+                        X.RowSelectionModel().ID("SelectionModelVisitCustomerActual").Mode(SelectionMode.Single)
+                        .Listeners(l => l.Select.Fn = "Index.selectionModelVisitCustomerPlan_Select")
+                    )
+                    // GridPanel: grdVisitCustomerActual
+        
+                    , X.GridPanel().ID("grdAllCurrentSalesman").MarginSpec("5 0 0 0")
+                    .Frame(false).Scroll(ScrollMode.Both)
+                    .View(
+                        X.GridView().TrackOver(false).EnableTextSelection(true)
+                    )
+                    .StoreID("stoAllCurrentSalesman")
+                    .SortableColumns(false)
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(30).Listeners(x=>x.AfterRender.Handler="this.resizable = true")
+                        , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID")
+                        , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").MinWidth(100).Flex(1)
+                        , X.Column().Text(Util.GetLang("Lat")).DataIndex("Lat").Align(Alignment.Right).Width(80)
+                        , X.Column().Text(Util.GetLang("Lng")).DataIndex("Lng").Align(Alignment.Right).Width(80)
+                    )
+                    .SelectionModel(
+                        X.RowSelectionModel().ID("SelectionModelAllCurrentSalesman").Mode(SelectionMode.Single)
+                        .Listeners(l => l.Select.Fn = "Index.selectionModelVisitCustomerPlan_Select")
+                    )
+                    // GridPanel: grdVisitCustomerActual
+                )
+        // Container: pnlGridActual
+            )
+        // FormPanel: pnlActualVisit
+        
+            , X.FormPanel()
+            .ID("pnlCustHistory")
+            .Border(false).Width(350)
+            .Region(Region.Center).Layout(LayoutType.Border)
+            .Items(
+                X.Container().Layout(LayoutType.VBox)
+                .Region(Region.North)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                
+                    HQ.Combo().ID("cboDistributorHistory").HQLangCode("Distributor").HQProcedure("OM30400_pcDistributor")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).MultiSelect(true)
+                     .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Channel", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Province", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@SlsperId", Value = "App.cboSalesManHistory.value", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@ShopType", Value = "", Mode = ParameterMode.Value }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            lst.Change.Fn = "Index.cboDistributorHistory_change";
+                        })
+
+                    , HQ.Combo().ID("cboSalesManHistory").Name("cboSalesManHistory").HQLangCode("SalesMan").HQProcedure("OM30400_pcSalesMan")
+                    .HQColumnShow("SlsperId,Name").DisplayField("SlsperId").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Channel", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Territory", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Province", Value = "", Mode = ParameterMode.Value }
+                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorHistory.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@ShopType", Value = "", Mode = ParameterMode.Value }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                            lst.Change.Fn = "Index.cboSalesManHistory_change";
+                        })
+                        
+                    , HQ.Combo().ID("cboCustomerHistory").Name("cboCustomerHistory").HQLangCode("Customer").HQProcedure("OM30400_pcCustomer")
+                    .HQColumnShow("CustID,CustName").DisplayField("CustName").ValueField("CustID").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                        , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorHistory.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@SlsperId", Value = "App.cboSalesManHistory.value", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Index.btnHideTrigger_click";
+                        })
+
+                    , HQ.DateField().ID("dateFrom").Name("dateFrom").HQLangCode("From").Value(DateTime.Now)
+                    .MarginSpec("5 5 0 0").AllowBlank(false).Flex(1).EmptyText(Util.GetLang("Select")).Flex(1)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "this.clear();";
+                        })
+                        
+                    , HQ.DateField().ID("dateTo").Name("dateTo").HQLangCode("To").Value(DateTime.Now)
+                    .MarginSpec("5 5 0 0").AllowBlank(false).Flex(1).EmptyText(Util.GetLang("Select")).Flex(1)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "this.clear();";
+                        })
+
+                    , HQ.Button().ID("btnLoadDataHistory").HQLangCode("LoadData")
+                    .Icon(Icon.MapStart).Flex(1).MarginSpec("5 5 0 105")
+                    .Listeners(l => l.Click.Fn = "Index.btnLoadDataHistory_click")
+                )
+        // Container
+
+                , X.Container()
+                .Region(Region.Center)
+                .Layout(LayoutType.Fit)
+                .ID("pnlGridCustHistory")
+                .Items(
+                    X.GridPanel().ID("grdCustHistory").MarginSpec("5 0 0 0")
+                    .Frame(false).Scroll(ScrollMode.Both)
+                    .View(
+                        X.GridView().TrackOver(false).EnableTextSelection(true)
+                    )
+                    .StoreID("stoCustHistory")
+                    .SortableColumns(false)
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(30).Listeners(x=>x.AfterRender.Handler="this.resizable = true")
+                        , X.DateColumn().Text(Util.GetLang("VisitDate")).DataIndex("VisitDate").Format("dd/MM/yyyy HH:mm").Flex(1)
+                        //, X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").MinWidth(100).Flex(1)
+                        , X.Column().Text(Util.GetLang("Lat")).DataIndex("Lat").Align(Alignment.Right)//.Width(80)
+                        , X.Column().Text(Util.GetLang("Lng")).DataIndex("Lng").Align(Alignment.Right)//.Width(80)
+                    )
+                    .SelectionModel(
+                        X.RowSelectionModel().ID("SelectionModelCustHistory").Mode(SelectionMode.Single)
+                        .Listeners(l => l.Select.Fn = "Index.selectionModelVisitCustomerPlan_Select")
+                    )
+                    // GridPanel: grdCustHistory
+                )
+        // Container: pnlCustHistory
+            )
+        // FormPanel: pnlCustHistory
+        
+        )
+        // Panel: pnlInfo
+
+        , X.Panel().ID("map_canvas").Region(Region.Center)//.Layout(LayoutType.Fit)
+            .Listeners(x => { 
+                x.AfterRender.Handler = "PosGmap.initialize()";
+                x.Resize.Handler = "google.maps.event.trigger(map, 'resize');";
+            })
+        // Panel: map_canvas
+    )
+        // FormPanel: frmMain
+)
+        // Viewport
+)
