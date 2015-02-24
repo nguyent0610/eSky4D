@@ -976,7 +976,7 @@ namespace INProcess
                         else
                             qty = -1 * tran.Double("Qty") * tran.Short("InvtMult") / tran.Double("CnvFact");
 
-                        if (isTransfer && tran.String("TranType") == "TR") objSite.QtyInTransit += qty;
+                        if (isTransfer && tran.String("TranType") == "TR") objSite.QtyInTransit -= qty;
 
                         objSite.QtyOnHand = Math.Round(objSite.QtyOnHand + qty, 0);
                         objSite.QtyAvail = Math.Round(objSite.QtyAvail + qty, 0);
