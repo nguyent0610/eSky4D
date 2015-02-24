@@ -1,7 +1,7 @@
 @using Ext.Net;
 @using Ext.Net.MVC;
-@using eBiz4DWebFrame;
-@using eBiz4DWebFrame.HQControl;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
 @using IN10100;
 
 @model System.Collections.IEnumerable
@@ -14,103 +14,142 @@
 }
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width" />
-<script src='@Url.Content("Scripts/common.js")' type="text/javascript"></script>
-<script src='@Url.Content("Scripts/Screen/IN10100.js")' type="text/javascript"></script>
-<style> @*Thuoc tinh hover tren grid *@
-    .x-grid-row-over .x-grid-cell-inner {
-        font-weight : bold;
-    }
-  
-  
-</style>
-@*Script chung*@    
-<script>
-    var isUpdate = strToBool('@acc.Update.ToString().ToLower()');
-    var isInsert = strToBool('@acc.Insert.ToString().ToLower()');
-    var isDelete = strToBool('@acc.Delete.ToString().ToLower()');
-    var strKeyGridGrid = '';
-    var dSMAll = '';
-    var areaAll = '';
-    var stateAll = '';
-    //check value
-    var isAllValid = function (items) {
-        if (items != undefined) {
-            for (var i = 0; i < items.length; i++) {
-                if (items[i]["InvtID"] == undefined) continue;
-                if (items[i]["InvtID"].trim() == "") {
-                    callMessage(15, '@Util.GetLang("InvtID")', null);
-                    return false;
-                }
-       
-
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.debug.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/IN10100.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
         }
-        return true;
-    } else {
-        return true;
-    }
-    };
-</script>   
+    </style>
+    <script>
 
-  <title>@ViewBag.Title</title>
-    </head>
-    <body>   
-@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.businessDate = new Date();
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
 
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+@(
+    X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull()))
+)
 
-@(Html.X().Store().ID("storeForm").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(ppv_INReceiptBatch_Result), "ppv_INReceiptBatch_ResultModel", ""))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataForm", "IN10100"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-        .Parameters(ps =>
-        {
-            ps.Add(new StoreParameter("BranchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
-            ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
-            
+@(
+    X.Store().ID("stoBatch")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN10100_pcBatch_Result), "mdlBatch","BatNbr"))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetBatch", "IN10100"))
+        .ActionMethods(action =>{
+            action.Read = HttpMethod.POST;
         })
-        .Listeners(p => p.Load.Handler = "loadDataAutoHeader()")
-  )
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Parameters(ps =>{
+        ps.Add(new StoreParameter("branchID", "App.BranchID.getValue()", ParameterMode.Raw));
+    })
+        .Listeners(p => { 
+            p.Load.Fn = "stoBatch_Load";
+            p.BeforeLoad.Fn = "stoBatch_BeforeLoad"; 
+        })
+)
 
-
-        @(Html.X().Store().ID("storeGrid").AutoLoad(false)  
-        .Model(Util.GenerateModel(typeof(ppv_IN10100_ReceiptLoad_Result), "ppv_IN10100_ReceiptLoad_ResultModel", "InvtID"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataGrid", "IN10100"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-        .Parameters(ps =>
+@(
+    X.Store().ID("stoTrans")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN10100_pgReceiptLoad_Result), "mdlTrans", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetTrans", "IN10100"))
+        .ActionMethods(action =>
         {
-            ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
-            ps.Add(new StoreParameter("BranchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
-            
+            action.Read = HttpMethod.POST;
+        })
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Parameters(ps =>
+    {
+        ps.Add(new StoreParameter("BatNbr", "App.BatNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("BranchID", "App.BranchID.getValue()", ParameterMode.Raw));
+    })
+    .Listeners(p => {
+        p.Load.Fn = "stoTrans_Load";
+        p.BeforeLoad.Fn= "stoTrans_BeforeLoad";
+    })
+)
 
-            //ps.Add(new StoreParameter("DSM", "(App.cboDSM.getValue()==null||App.cboDSM.getValue()=='')?dSMAll:App.cboDSM.getValue()", ParameterMode.Raw));
-            //ps.Add(new StoreParameter("FromDate", "App.txtFromDate.getValue()", ParameterMode.Raw));
-            //ps.Add(new StoreParameter("ToDate", "App.txtToDate.getValue()", ParameterMode.Raw));
-            //ps.Add(new StoreParameter("QuestionType", "App.cboReportType.getValue()", ParameterMode.Raw));
-            //ps.Add(new StoreParameter("QuestionCode", "App.cboReportDetail.getValue()", ParameterMode.Raw));
+@(
+    X.Store()
+    .ID("stoUnit")
+    .Model(Util.GenerateModel(typeof (IN10100_pcUnit_Result),"mdlUnit", "FromUnit"))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetUnit", "IN10100"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data"))
+    )
     
-        })      
-        //.Listeners(p=>p.Load.Fn="checkPT" )
-  )
+)
 
 
+@(
+    X.Store()
+    .ID("stoUnitConversion")
+    .AutoLoad(true)
+    .Model(Util.GenerateModel(typeof (IN10100_pcUnitConversion_Result),"mdlUnitConversion", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetUnitConversion", "IN10100"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
 
+@(
+    X.Store()
+    .ID("stoItemSite")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_ItemSite),"mdlItemSite",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemSite", "IN10100"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
 
-     @{ Html.RenderAction("Body"); }
-    </body>
+@(
+    X.Store()
+    .ID("stoPrice")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN10100_pdPrice_Result),"mdlPrice",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetPrice", "IN10100"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
+
+@(
+    X.Store()
+    .ID("stoTransfer")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN10100_pdTrnsfer_Result),"mdlTransfer",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetTransfer", "IN10100"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
+
+@{ Html.RenderAction("Body", new { lang = Current.LangID.ToString() }); }
+</body>
 </html>
  
