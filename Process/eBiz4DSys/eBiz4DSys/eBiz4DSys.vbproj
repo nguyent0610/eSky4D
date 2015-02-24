@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>
+    </SchemaVersion>
+    <ProjectGuid>{743A7C9C-75F7-4D75-887E-56A49CEB6439}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>eBiz4DSys</RootNamespace>
+    <AssemblyName>eBiz4DSys</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Windows</MyType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>eBiz4DSys.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>eBiz4DSys.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HQFramework.Common">
+      <HintPath>..\..\eBiz4DServer\eBiz4DServer\bin\Debug\HQFramework.Common.DLL</HintPath>
+    </Reference>
+    <Reference Include="HQFramework.DAL">
+      <HintPath>..\..\eBiz4DServer\eBiz4DServer\bin\Debug\HQFramework.DAL.DLL</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="clsServerApplication.vb" />
+    <Compile Include="clsServerApplication_Assembly.vb" />
+    <Compile Include="clsServerApplication_Database.vb" />
+    <Compile Include="clsServerApplication_DynamicDLFile.vb" />
+    <Compile Include="clsServerApplication_Export.vb" />
+    <Compile Include="clsServerApplication_ExportBranch.vb" />
+    <Compile Include="clsServerApplication_ExportExclude.vb" />
+    <Compile Include="clsServerApplication_ExportScript.vb" />
+    <Compile Include="clsServerApplication_ExportTable.vb" />
+    <Compile Include="clsServerApplication_Group.vb" />
+    <Compile Include="clsServerApplication_Import.vb" />
+    <Compile Include="clsServerApplication_ImportCheck.vb" />
+    <Compile Include="clsServerApplication_ImportDefault.vb" />
+    <Compile Include="clsServerApplication_ImportExcel.vb" />
+    <Compile Include="clsServerApplication_ImportMap.vb" />
+    <Compile Include="clsServerApplication_ImportTable.vb" />
+    <Compile Include="clsServerApplication_Param.vb" />
+    <Compile Include="clsServerApplication_Schedule.vb" />
+    <Compile Include="clsServerApplication_Setup.vb" />
+    <Compile Include="clsServerApplication_StaticDLFileList.vb" />
+    <Compile Include="clsServerApplication_Upload.vb" />
+    <Compile Include="clsServerApplication_User.vb" />
+    <Compile Include="clsServerApp_IEMaster.vb" />
+    <Compile Include="clsServerApp_Process.vb" />
+    <Compile Include="clsServerApp_Sync.vb" />
+    <Compile Include="clsServerApp_Update.vb" />
+    <Compile Include="clsServerApp_UploadFile.vb" />
+    <Compile Include="clsServer_MailAutoDetail.vb" />
+    <Compile Include="clsServer_MailAutoHeader.vb" />
+    <Compile Include="clssysdiagrams.vb" />
+    <Compile Include="clsSYS_AccessDetRights.vb" />
+    <Compile Include="clsSYS_BuildLog.vb" />
+    <Compile Include="clsSYS_CloseDateAuto.vb" />
+    <Compile Include="clsSYS_CloseDateBranchAuto.vb" />
+    <Compile Include="clsSYS_CloseDateHistDetail.vb" />
+    <Compile Include="clsSYS_CloseDateHistHeader.vb" />
+    <Compile Include="clsSYS_CloseDateLogAuto.vb" />
+    <Compile Include="clsSYS_CloseDateSetUp.vb" />
+    <Compile Include="clsSYS_Company.vb" />
+    <Compile Include="clsSys_CompanyAddr.vb" />
+    <Compile Include="clsSYS_Configurations.vb" />
+    <Compile Include="clsSYS_Favourite.vb" />
+    <Compile Include="clsSYS_Group.vb" />
+    <Compile Include="clsSYS_Language.vb" />
+    <Compile Include="clsSYS_MailAutoLog.vb" />
+    <Compile Include="clsSYS_Message.vb" />
+    <Compile Include="clsSYS_Module.vb" />
+    <Compile Include="clsSYS_ModuleCat.vb" />
+    <Compile Include="clsSYS_OLapTemplate.vb" />
+    <Compile Include="clsSYS_PrintControl.vb" />
+    <Compile Include="clsSYS_Reg.vb" />
+    <Compile Include="clsSYS_ReportControl.vb" />
+    <Compile Include="clsSYS_ReportParm.vb" />
+    <Compile Include="clsSYS_ReportViewer.vb" />
+    <Compile Include="clsSYS_RibbonGroup.vb" />
+    <Compile Include="clsSYS_RibbonScreen.vb" />
+    <Compile Include="clsSYS_RibbonTab.vb" />
+    <Compile Include="clsSYS_Role.vb" />
+    <Compile Include="clsSYS_RPTTemplate.vb" />
+    <Compile Include="clsSYS_Screen.vb" />
+    <Compile Include="clsSYS_ScreenCat.vb" />
+    <Compile Include="clsSYS_SubCompany.vb" />
+    <Compile Include="clsSYS_UserGroup.vb" />
+    <Compile Include="clsUsers.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
