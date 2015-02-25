@@ -463,10 +463,10 @@ var HQ = {
             }
         },
         changeData: function (isChange, screenNbr) {
-            if (parent.App[screenNbr] != undefined)
+            if (parent.App['tab'+screenNbr] != undefined)
                 if (isChange)
-                    parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
-                else parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
+                    parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
+                else parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
         },
         showBusy: function (busy, waitMsg, form) {
             if (form == undefined) {
