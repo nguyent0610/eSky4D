@@ -124,7 +124,9 @@ var stoLoad = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'SA00900');
     if (HQ.isFirstLoad) {
-        menuClick('new');
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
         HQ.isFirstLoad = false;
     }
 };
