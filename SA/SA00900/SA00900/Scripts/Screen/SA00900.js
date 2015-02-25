@@ -24,9 +24,8 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_Language);
             break;
         case "refresh":
-            App.stoSYS_Language.reload();
             HQ.isFirstLoad = true;
-            HQ.grid.first(App.grdSYS_Language);
+            App.stoSYS_Language.reload();
             break;
         case "new":
             if (HQ.isInsert) {
@@ -105,6 +104,7 @@ var deleteData = function (item) {
 //// Other Functions ////////////////////////////////////////////////////
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
+        HQ.common.changeData(false, 'SA00900');//khi dong roi gan lai cho change la false
         HQ.common.close(this);
     }
 };
@@ -116,19 +116,13 @@ var firstLoad = function () {
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
-    if (parent.App["tabSA00900"] != undefined)
-        if (HQ.isChange)
-            parent.App["tabSA00900"].setTitle(HQ.common.getLang('SA00900') + '(SA00900)*');
-        else parent.App["tabSA00900"].setTitle(HQ.common.getLang('SA00900') + '(SA00900)');
+    HQ.common.changeData(HQ.isChange, 'SA00900');
 };
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
-    if (parent.App["tabSA00900"] != undefined)
-        if (HQ.isChange)
-            parent.App["tabSA00900"].setTitle(HQ.common.getLang('SA00900') + '(SA00900)*');
-        else parent.App["tabSA00900"].setTitle(HQ.common.getLang('SA00900') + '(SA00900)');
+    HQ.common.changeData(HQ.isChange, 'SA00900');
     if (HQ.isFirstLoad) {
         menuClick('new');
         HQ.isFirstLoad = false;
