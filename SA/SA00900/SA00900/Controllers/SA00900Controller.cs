@@ -32,7 +32,7 @@ namespace SA00900.Controllers
             return PartialView();
         }
         public ActionResult GetSYS_Language()
-        {
+        {           
             return this.Store(_db.SA00900_pgLoadSYS_Language().ToList());
         }
         [HttpPost]

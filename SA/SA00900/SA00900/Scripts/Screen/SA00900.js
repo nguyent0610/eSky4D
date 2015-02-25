@@ -11,6 +11,7 @@ var fieldsLangCheckRequire = ["Code", "Lang00", "Lang01"];
 var menuClick = function (command) {
     switch (command) {
         case "first":
+
             HQ.grid.first(App.grdSYS_Language);
             break;
         case "prev":
@@ -24,11 +25,12 @@ var menuClick = function (command) {
             break;
         case "refresh":
             App.stoSYS_Language.reload();
+            HQ.isFirstLoad = true;
             HQ.grid.first(App.grdSYS_Language);
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdSYS_Language);
+                HQ.grid.insert(App.grdSYS_Language, keys);
             }
             break;
         case "delete":
@@ -48,7 +50,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.store.isChange(App.stoSYS_Language)) {
+            if (HQ.isChange) {
                 HQ.message.show(5, '', 'askClose');
             } else {
                 HQ.common.close(this);
@@ -68,6 +70,7 @@ var grdSYS_Language_ValidateEdit = function (item, e) {
 };
 var grdSYS_Language_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSYS_Language);
+    stoChanged(App.stoSYS_Language);
 };
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
@@ -93,6 +96,7 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSYS_Language.deleteSelected();
+        stoChanged(App.stoSYS_Language);
     }
 };
 
@@ -104,6 +108,37 @@ var askClose = function (item) {
         HQ.common.close(this);
     }
 };
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSYS_Language.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    if (parent.App["tabSA00900"] != undefined)
+        if (HQ.isChange)
+            parent.App["tabSA00900"].setTitle(HQ.common.getLang('SA00900') + '(SA00900)*');
+        else parent.App["tabSA00900"].setTitle(HQ.common.getLang('SA00900') + '(SA00900)');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    if (parent.App["tabSA00900"] != undefined)
+        if (HQ.isChange)
+            parent.App["tabSA00900"].setTitle(HQ.common.getLang('SA00900') + '(SA00900)*');
+        else parent.App["tabSA00900"].setTitle(HQ.common.getLang('SA00900') + '(SA00900)');
+    if (HQ.isFirstLoad) {
+        menuClick('new');
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
 /////////////////////////////////////////////////////////////////////////
 
 
