@@ -21,11 +21,11 @@ var menuClick = function (command) {
         case "refresh":
             HQ.isFirstLoad = true;
             App.stoSI_City.reload();
-         
+
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdSI_City,keys);
+                HQ.grid.insert(App.grdSI_City, keys);
             }
             break;
         case "delete":
@@ -39,7 +39,7 @@ var menuClick = function (command) {
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.store.checkRequirePass(App.stoSI_City, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
-                }                    
+                }
             }
             break;
         case "print":
@@ -60,18 +60,18 @@ var cboCountry_Change = function () {
 var grdSI_City_BeforeEdit = function (editor, e) {
     //HQ.grid.checkBeforeEdit(e, keys) kiem tra cho phep nhap lieu hay ko xem them trong HQ.grid
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
-    if (e.field == 'State' ) {     
+    if (e.field == 'State') {
         App.cboState.store.load();
     }
 };
 var grdSI_City_Edit = function (item, e) {
     //Kiem tra cac key da duoc nhap se insert them dong moi
     HQ.grid.checkInsertKey(App.grdSI_City, e, keys);
-  
+
 };
 var grdSI_City_ValidateEdit = function (item, e) {
     //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
-    return HQ.grid.checkValidateEdit(App.grdSI_City, e, keys);    
+    return HQ.grid.checkValidateEdit(App.grdSI_City, e, keys);
 };
 var grdSI_City_Reject = function (record) {
     //reject dong thay doi du lieu ve ban dau
@@ -99,6 +99,7 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSI_City.deleteSelected();
+        stoChanged(App.stoSI_City);
     }
 };
 //// Other Functions ////////////////////////////////////////////////////
