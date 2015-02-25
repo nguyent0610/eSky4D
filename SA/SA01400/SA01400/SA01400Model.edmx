@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SYS_BuildLog" EntityType="eBiz4DWebSysModel.Store.SYS_BuildLog" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="SYS_BuildLog">
+          <Key>
+            <PropertyRef Name="Version" />
+          </Key>
+          <Property Name="Version" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="BuildID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Descr" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AppliedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Function Name="SA01400_pgSYS_BuildLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SA01400Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SA01400Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="SYS_BuildLog" EntityType="SA01400Model.SYS_BuildLog" />
+          <FunctionImport Name="SA01400_pgSYS_BuildLog" ReturnType="Collection(SA01400Model.SA01400_pgSYS_BuildLog_Result)" />
+        </EntityContainer>
+        <EntityType Name="SYS_BuildLog">
+          <Key>
+            <PropertyRef Name="Version" />
+          </Key>
+          <Property Type="String" Name="Version" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="BuildID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="AppliedDate" Nullable="false" Precision="3" />
+        </EntityType>
+        <ComplexType Name="SA01400_pgSYS_BuildLog_Result">
+          <Property Type="String" Name="Version" Nullable="false" MaxLength="20" />
+          <Property Type="Int32" Name="BuildID" Nullable="false" />
+          <Property Type="String" Name="Descr" Nullable="false" />
+          <Property Type="DateTime" Name="AppliedDate" Nullable="false" Precision="23" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SA01400Entities" >
+          <EntitySetMapping Name="SYS_BuildLog">
+            <EntityTypeMapping TypeName="SA01400Model.SYS_BuildLog">
+              <MappingFragment StoreEntitySet="SYS_BuildLog">
+                <ScalarProperty Name="AppliedDate" ColumnName="AppliedDate" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="BuildID" ColumnName="BuildID" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SA01400_pgSYS_BuildLog" FunctionName="eBiz4DWebSysModel.Store.SA01400_pgSYS_BuildLog">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA01400Model.SA01400_pgSYS_BuildLog_Result">
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="BuildID" ColumnName="BuildID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="AppliedDate" ColumnName="AppliedDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="84" >
+        <EntityTypeShape EntityType="SA01400Model.SYS_BuildLog" Width="1.5" PointX="1.3465122828942315" PointY="1.8632520445917045" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
