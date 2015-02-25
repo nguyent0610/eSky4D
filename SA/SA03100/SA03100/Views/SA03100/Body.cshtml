@@ -1,0 +1,106 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA03100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit) 
+    .Items(
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdSYS_CompanyGroup")
+        .Store(
+            X.Store()
+            .ID("stoSYS_CompanyGroup")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(SA03100_pgSYS_CompanyGroup_Result), "mdlSA03100_pgSYS_CompanyGroup", "GroupID"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_CompanyGroup")))
+            .Listeners(l => { 
+                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
+                l.Load.Handler = "HQ.common.showBusy(false);"; 
+            })
+        )
+        .Listeners(p => p.BoxReady.Handler = "App.stoSYS_CompanyGroup.reload();")
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40),
+            X.Column().ID("txtGroupID").Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(250).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("ListCpny")).Width(600).DataIndex("ListCpny")
+                .Editor(
+                    HQ.Combo().ID("CpnyID").Name("CpnyID").MarginSpec("3 0 0 0").AllowBlank(false)
+                    .HQDBSys(true).HQProcedure("SA03100_pcSYS_Company")
+                    .HQColumnShow("CpnyID,CpnyName")
+                    .DisplayField("CpnyID")
+                    .ValueField("CpnyID")
+                    .MultiSelect(true)
+                    .HQHeightWidth(400, 300)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
+                    .LoadData().Width(600)
+                ),
+            
+    
+                                             
+            X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdSYS_CompanyGroup_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmSYS_CompanyGroup").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdSYS_CompanyGroup_BeforeEdit";
+                ls.Edit.Fn = "grdSYS_CompanyGroup_Edit";
+                ls.ValidateEdit.Fn = "grdSYS_CompanyGroup_ValidateEdit";
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("GroupID"),
+                    X.StringFilter().DataIndex("Descr"),
+                    X.StringFilter().DataIndex("ListCpny")
+                )
+        )
+    )
+))
