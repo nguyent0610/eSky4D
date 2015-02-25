@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SYS_Message" EntityType="eBiz4DWebSysModel.Store.SYS_Message" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="SYS_Message">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Type" Type="smallint" />
+          <Property Name="Title00" Type="nvarchar" MaxLength="300" />
+          <Property Name="Title01" Type="nvarchar" MaxLength="300" />
+          <Property Name="Title02" Type="nvarchar" MaxLength="300" />
+          <Property Name="Title03" Type="nvarchar" MaxLength="300" />
+          <Property Name="Title04" Type="nvarchar" MaxLength="300" />
+          <Property Name="Msg00" Type="nvarchar" Nullable="false" MaxLength="300" />
+          <Property Name="Msg01" Type="nvarchar" Nullable="false" MaxLength="300" />
+          <Property Name="Msg02" Type="nvarchar" MaxLength="300" />
+          <Property Name="Msg03" Type="nvarchar" MaxLength="300" />
+          <Property Name="Msg04" Type="nvarchar" MaxLength="300" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="SA01100_pgSYS_Message" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SA01100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SA01100Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="SYS_Message" EntityType="SA01100Model.SYS_Message" />
+          <FunctionImport Name="SA01100_pgSYS_Message" ReturnType="Collection(SA01100Model.SA01100_pgSYS_Message_Result)" />
+        </EntityContainer>
+        <EntityType Name="SYS_Message">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Type="Int32" Name="Code" Nullable="false" />
+          <Property Type="Int16" Name="Type" />
+          <Property Type="String" Name="Title00" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Title01" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Title02" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Title03" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Title04" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Msg00" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Msg01" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Msg02" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Msg03" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Msg04" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="SA01100_pgSYS_Message_Result">
+          <Property Type="Int32" Name="Code" Nullable="false" />
+          <Property Type="Int16" Name="Type" Nullable="true" />
+          <Property Type="String" Name="Title00" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Title01" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Title02" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Title03" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Title04" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Msg00" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Msg01" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Msg02" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Msg03" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="Msg04" Nullable="true" MaxLength="300" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SA01100Entities" >
+          <EntitySetMapping Name="SYS_Message">
+            <EntityTypeMapping TypeName="SA01100Model.SYS_Message">
+              <MappingFragment StoreEntitySet="SYS_Message">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="Msg04" ColumnName="Msg04" />
+                <ScalarProperty Name="Msg03" ColumnName="Msg03" />
+                <ScalarProperty Name="Msg02" ColumnName="Msg02" />
+                <ScalarProperty Name="Msg01" ColumnName="Msg01" />
+                <ScalarProperty Name="Msg00" ColumnName="Msg00" />
+                <ScalarProperty Name="Title04" ColumnName="Title04" />
+                <ScalarProperty Name="Title03" ColumnName="Title03" />
+                <ScalarProperty Name="Title02" ColumnName="Title02" />
+                <ScalarProperty Name="Title01" ColumnName="Title01" />
+                <ScalarProperty Name="Title00" ColumnName="Title00" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SA01100_pgSYS_Message" FunctionName="eBiz4DWebSysModel.Store.SA01100_pgSYS_Message">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA01100Model.SA01100_pgSYS_Message_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Title00" ColumnName="Title00" />
+                <ScalarProperty Name="Title01" ColumnName="Title01" />
+                <ScalarProperty Name="Title02" ColumnName="Title02" />
+                <ScalarProperty Name="Title03" ColumnName="Title03" />
+                <ScalarProperty Name="Title04" ColumnName="Title04" />
+                <ScalarProperty Name="Msg00" ColumnName="Msg00" />
+                <ScalarProperty Name="Msg01" ColumnName="Msg01" />
+                <ScalarProperty Name="Msg02" ColumnName="Msg02" />
+                <ScalarProperty Name="Msg03" ColumnName="Msg03" />
+                <ScalarProperty Name="Msg04" ColumnName="Msg04" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="84" >
+        <EntityTypeShape EntityType="SA01100Model.SYS_Message" Width="1.5" PointX="0.75" PointY="0.75" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

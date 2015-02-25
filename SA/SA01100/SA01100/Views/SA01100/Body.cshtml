@@ -1,0 +1,111 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA01100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit) 
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdSYS_Message")
+        .Store(
+            X.Store()
+            .ID("stoSYS_Message")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(SA01100_pgSYS_Message_Result), "mdlSA01100_pgSYSMessage_Language", "Code"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Message")))
+            .Listeners(l => { 
+                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
+                l.Load.Handler = "HQ.common.showBusy(false);"; 
+            })
+        )
+        .Listeners(p => p.BoxReady.Handler = "App.stoSYS_Message.reload();")
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40),
+            X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().MaxLength(10).AllowBlank(true).EnforceMaxLength(true)),
+            X.Column().ID("Type").Text(Util.GetLang("Type")).DataIndex("Type").Width(150).Editor(X.TextField().MaxLength(5).AllowBlank(true).EnforceMaxLength(true)),
+            X.Column().Text("Title 00").DataIndex("Title00").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text("Message 00").DataIndex("Msg00").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text("Title 01").DataIndex("Title01").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text("Message 01").DataIndex("Msg01").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text("Title 02").DataIndex("Title02").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text("Message 02").DataIndex("Msg02").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text("Title 03").DataIndex("Title03").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text("Message 03").DataIndex("Msg03").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text("Title 04").DataIndex("Title04").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+            X.Column().Text("Message 04").DataIndex("Msg04").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
+           X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdSYS_Language_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmSYS_Message").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdSYS_Message_BeforeEdit";
+                ls.Edit.Fn = "grdSYS_Message_Edit";
+                ls.ValidateEdit.Fn = "grdSYS_Message_ValidateEdit";
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("Code"),
+                    X.StringFilter().DataIndex("Type"),
+                    X.StringFilter().DataIndex("Title00"),
+                    X.StringFilter().DataIndex("Title01"),
+                    X.StringFilter().DataIndex("Title02"),
+                    X.StringFilter().DataIndex("Title03"),
+                    X.StringFilter().DataIndex("Title04"),
+                    X.StringFilter().DataIndex("Msg00"),
+                    X.StringFilter().DataIndex("Msg01"),
+                    X.StringFilter().DataIndex("Msg02"),
+                    X.StringFilter().DataIndex("Msg03"),
+                    X.StringFilter().DataIndex("Msg04")
+                )
+        )
+    )
+))
