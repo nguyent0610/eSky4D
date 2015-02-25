@@ -1,0 +1,148 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA02100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdSYS_RibbonScreen")
+        .Store(
+            X.Store()
+            .ID("stoSYS_RibbonScreen")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(SA02100_pgSYS_RibbonScreen_Result), "mdlSA02100_pgSYS_RibbonScreen", "TabID,GroupID,ScreenNumber"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_RibbonScreen")))
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
+                l.Load.Handler = "HQ.common.showBusy(false);";
+            })
+        )
+        .Listeners(p => p.BoxReady.Handler = "App.stoSYS_RibbonScreen.reload();")
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40),
+
+            X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(120)
+                .Editor(
+                    HQ.Combo().ID("cboScreenNumber").Name("cboScreenNumber")
+                    .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
+                    .HQLangCode("ScreenNumber").HQDBSys(true).HQProcedure("SA02100_pcSYS_Screen")
+                    .HQColumnShow("ScreenNumber,Descr")
+                    .DisplayField("ScreenNumber")
+                    .ValueField("ScreenNumber")
+                    .HQHeightWidth(400, 300)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    .LoadData()
+                )
+
+            ,X.Column().Text(Util.GetLang("TabID")).DataIndex("TabID").Width(120)
+                .Editor(
+                    HQ.Combo().ID("cboTabID").Name("cboTabID")
+                    .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
+                    .HQLangCode("TabID").HQDBSys(true).HQProcedure("SA02100_pcSYS_RibbonTab")
+                    .HQColumnShow("TabID,Descr")
+                    .DisplayField("TabID")
+                    .ValueField("TabID")
+                    .HQHeightWidth(400, 300)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.Change.Fn = "cboTabID_Change";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    .LoadData()
+                )
+
+            ,X.Column().Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(120)
+                .Editor(
+                    HQ.Combo().ID("cboGroupID").Name("cboGroupID")
+                    .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
+                    .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA02100_pcSYS_RibbonGroup")
+                    .HQColumnShow("GroupID,Descr")
+                    .DisplayField("GroupID")
+                    .ValueField("GroupID")
+                    .HQParam(new StoreParameterCollection() { 
+                            //new StoreParameter("@TabID","App.slmSYS_RibbonScreen.selected.items[0].data.TabID",ParameterMode.Value)
+                        new StoreParameter("@TabID","App.slmSYS_RibbonScreen.selected.items[0] == undefined ? '':  App.slmSYS_RibbonScreen.selected.items[0].data.TabID",ParameterMode.Raw)
+                    })
+                    .HQHeightWidth(400, 300)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    .LoadData()
+                )
+
+            ,X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdSYS_RibbonScreen_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmSYS_RibbonScreen").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdSYS_RibbonScreen_BeforeEdit";
+                ls.Edit.Fn = "grdSYS_RibbonScreen_Edit";
+                ls.ValidateEdit.Fn = "grdSYS_RibbonScreen_ValidateEdit";
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("TabID"),
+                    X.StringFilter().DataIndex("GroupID"),
+                    X.StringFilter().DataIndex("ScreenNumber")
+                )
+        )
+    )
+))
