@@ -57,6 +57,10 @@ var menuClick = function (command) {
     }
 
 };
+var cboCpnyID_Change = function (item) {
+    
+};
+
 var grdSYS_CompanyGroup_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };

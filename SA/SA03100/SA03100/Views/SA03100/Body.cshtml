@@ -42,7 +42,7 @@
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(250).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("ListCpny")).Width(600).DataIndex("ListCpny")
                 .Editor(
-                    HQ.Combo().ID("CpnyID").Name("CpnyID").MarginSpec("3 0 0 0").AllowBlank(false)
+                    HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").MarginSpec("3 0 0 0").AllowBlank(false)
                     .HQDBSys(true).HQProcedure("SA03100_pcSYS_Company")
                     .HQColumnShow("CpnyID,CpnyName")
                     .DisplayField("CpnyID")
@@ -50,7 +50,10 @@
                     .MultiSelect(true)
                     .HQHeightWidth(400, 300)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
+                    .Listeners(lst => { 
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn="cboCpnyID_Change";
+                    })
                     .LoadData().Width(600)
                 ),
             

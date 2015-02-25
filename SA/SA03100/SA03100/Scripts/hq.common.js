@@ -552,7 +552,7 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 2) value = '';
+        //if (value.split(',').length > 2) value = '';
         if (store) {
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {
