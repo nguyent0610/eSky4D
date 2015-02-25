@@ -31,14 +31,15 @@
                 .ID("stoSI_District")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(SI21700_pgLoadDistrict_Result), "mdSI_District", "Country,State,District"))
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_District")))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_District"))).AutoLoad(false)
                 .Listeners(l =>
                 {
-                    l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                    l.Load.Handler = "HQ.common.showBusy(false);"; 
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";
+                    l.Update.Fn = "stoChanged"; 
                 }) // stoSI_District
             )
-            .Listeners(p => p.BoxReady.Handler = "App.stoSI_District.reload();")
+            .Listeners(p => p.BoxReady.Handler = "firstLoad();")
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)

@@ -1,5 +1,5 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
-
+var screenNbr = 'SI21700';
 var keys = ['Country', 'State', 'District'];
 var fieldsCheckRequire = ["Country", "State", "District", "Name"];
 var fieldsLangCheckRequire = ["Country", "State", "District", "Name"];
@@ -27,8 +27,8 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSI_District);
             break;
         case "refresh":
-            App.stoSI_District.reload();
-            HQ.grid.first(App.grdSI_District);
+            HQ.isFirstLoad = true;
+            App.stoSI_District.reload();         
             break;
         case "new":
             if (HQ.isInsert) {
@@ -111,6 +111,7 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSI_District.deleteSelected();
+        stoChanged(App.stoSI_District);
     }
 };
 
@@ -119,10 +120,34 @@ var deleteData = function (item) {
 
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
+        HQ.common.changeData(false, screenNbr);
         HQ.common.close(this);
     }
 };
-
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSI_District.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, screenNbr);
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, screenNbr);
+    if (HQ.isFirstLoad) {
+        menuClick('new');
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
 /////////////////////////////////////////////////////////////////////////
 
 
