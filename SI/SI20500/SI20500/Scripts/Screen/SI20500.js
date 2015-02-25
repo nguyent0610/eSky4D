@@ -1,4 +1,5 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
+var screenNbr = 'SI20500';
 var keys = ['Country', 'State', 'City'];
 var fieldsCheckRequire = ["Country", "State", "City", "Name"];
 var fieldsLangCheckRequire = ["Country", "State", "City", "Name"];
@@ -18,8 +19,9 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSI_City);
             break;
         case "refresh":
+            HQ.isFirstLoad = true;
             App.stoSI_City.reload();
-            HQ.grid.first(App.grdSI_City);
+         
             break;
         case "new":
             if (HQ.isInsert) {
@@ -102,6 +104,34 @@ var deleteData = function (item) {
 //// Other Functions ////////////////////////////////////////////////////
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
+        HQ.common.changeData(false, screenNbr);
         HQ.common.close(this);
     }
 };
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSI_City.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, screenNbr);
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, screenNbr);
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+/////////////////////////////////////////////////////////////////////////
