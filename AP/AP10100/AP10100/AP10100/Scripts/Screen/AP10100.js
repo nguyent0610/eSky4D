@@ -462,13 +462,13 @@ var deleteRecordFormTopBatch = function (item) {
             App.direct.DeleteFormTopBatch(App.cboBatNbr.getValue(), App.txtBranchID.getValue(), {
                 success: function (data) {
                     //menuClick('refresh');
-
                     App.cboBatNbr.setValue('');
+                    App.cboRefNbr.setValue('');
+                    App.cboRefNbr.getStore().reload();
                     App.cboBatNbr.getStore().reload();
 
                     App.frmTop.getForm().reset(true);
-                    App.cboRefNbr.getStore().reload();
-                    App.cboRefNbr.setValue('');
+
                     App.frmDocument.getForm().reset(true);
                     setTimeout(function () { waitStoreRefNbrReLoad(); }, 1000);
                     App.cboStatus.setValue("H");
@@ -661,6 +661,7 @@ var onComboBoxSelect = function (combo) {
 var waitStoreRefNbrReLoad = function () {
     if (App.cboRefNbr.getStore().data.items[0] == undefined) {
         App.cboRefNbr.setValue("");
+        App.storeFormBot.reload();
     } else {
         App.cboRefNbr.setValue(App.cboRefNbr.getStore().data.items[0].data.RefNbr);
     }
@@ -1065,9 +1066,10 @@ var reloadAmountMustPayTotal = function (index) {
         totalAmountMustPay = totalAmountMustPay + App.slmGridTab1.selected.items[0].data.TranAmt;
     }
     //set lai gia tri cua 3 o kia
-    App.txtCuryCrTot.setValue(totalTaxMustPay + totalAmountMustPay);
+    
     App.txtCuryOrigDocAmt.setValue(totalTaxMustPay + totalAmountMustPay);
     App.txtCuryDocBal.setValue(totalTaxMustPay + totalAmountMustPay);
+    App.txtCuryCrTot.setValue(App.txtCuryCrTot.getValue() + totalTaxMustPay + totalAmountMustPay);
     App.slmGridTab1.select(index);
 }
 //khi VendID thay doi

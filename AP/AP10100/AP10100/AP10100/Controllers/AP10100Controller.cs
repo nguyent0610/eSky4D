@@ -30,7 +30,7 @@ namespace AP10100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -305,7 +305,7 @@ namespace AP10100.Controllers
                         record.Crtd_DateTime = DateTime.Now;
                         record.Crtd_Prog = screenNbr;
                         record.Crtd_User = Current.UserName;
-                        if (record.InvtID != "")
+                        if (record.InvtID != "" && record.BatNbr != "" && record.RefNbr != "")
                         {
                             _db.AP_Trans.AddObject(record);
                         }
@@ -407,7 +407,7 @@ namespace AP10100.Controllers
                             record.Crtd_DateTime = DateTime.Now;
                             record.Crtd_Prog = screenNbr;
                             record.Crtd_User = Current.UserName;
-                            if (record.InvtID != "")
+                            if (record.InvtID != "" && record.BatNbr != "" && record.RefNbr != "")
                             {
                                 _db.AP_Trans.AddObject(record);
                             }

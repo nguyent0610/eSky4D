@@ -59,6 +59,8 @@
                             //lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             lst.Change.Fn = "cboBatNbr_Change";
                             lst.Focus.Fn = "Focus3_Change";
+                            lst.BeforeSelect.Fn = "Focus3_Change";
+                            lst.KeyDown.Fn = "Focus3_Change";
                             //lst.IconClick.Fn = "Focus3_Change";
                         })
 
@@ -227,6 +229,8 @@
                                     //lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Change.Fn = "cboRefNbr_Change";
                                     lst.Focus.Fn = "Focus1_Change";
+                                    lst.BeforeSelect.Fn = "Focus1_Change";
+                                    lst.KeyDown.Fn = "Focus1_Change";
                                 })
                                 
                             //InvcNbr
@@ -335,6 +339,7 @@
                                         l.Select.Fn = "Focus2_Change";
                                         l.BeforeEdit.Fn = "Focus2_Change";
                                         l.CellClick.Fn = "Focus2_Change";
+                                        
                                     })
                              //.Features(
                              //               Html.X().GridFilters()//Filter

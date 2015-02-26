@@ -33,7 +33,7 @@ var taxAmt = [taxAmt00, taxAmt01, taxAmt02, taxAmt03];
 var txblAmt = 0;
 var countTaxAmt = 0;
 var tmpChangeForm1OrForm2 = "0";
-
+var tmpForeverStatictxtCuryCrTot = 0;
 var keys = ['InvtID'];
 
 var menuClick = function (command) {
@@ -390,6 +390,7 @@ function Save() {
                 if (data.result.value3 != "") {
                     App.storeFormTop.reload();
                 }
+                
                 //menuClick("refresh");
             }
             , failure: function (errorMsg, data) {
@@ -466,11 +467,12 @@ var deleteRecordFormTopBatch = function (item) {
                     //menuClick('refresh');
 
                     App.cboBatNbr.setValue('');
+                    App.cboRefNbr.setValue('');
+                    App.cboRefNbr.getStore().reload();
                     App.cboBatNbr.getStore().reload();
 
                     App.frmTop.getForm().reset(true);
-                    App.cboRefNbr.getStore().reload();
-                    App.cboRefNbr.setValue('');
+                           
                     App.frmDocument.getForm().reset(true);
                     setTimeout(function () { waitStoreRefNbrReLoad(); }, 1000);
                     App.cboStatus.setValue("H");
@@ -503,7 +505,7 @@ var deleteRecordFormBotAP_Doc = function (item) {
                     //menuClick('refresh');
                     App.cboRefNbr.getStore().reload();
                     App.cboRefNbr.setValue('');
-
+                    App.frmDocument.getForm().reset(true);
 
                     setTimeout(function () { waitStoreRefNbrReLoad(); }, 1000);
 
@@ -663,6 +665,7 @@ var onComboBoxSelect = function (combo) {
 var waitStoreRefNbrReLoad = function () {
     if (App.cboRefNbr.getStore().data.items[0] == undefined) {
         App.cboRefNbr.setValue("");
+        App.frmDocument.getForm().reset(true);
     } else {
         App.cboRefNbr.setValue(App.cboRefNbr.getStore().data.items[0].data.RefNbr);
     }
@@ -721,11 +724,14 @@ var cboBatNbr_Change = function () {
     //setTimeout(function () { waitcboRefNbrReLoad(); }, 1200);
     App.cboVendID.disable(true);
     App.cboDocType.disable(true);
+    
 }
 
 var cboRefNbr_Change = function () {
 
     App.storeFormBot.reload();
+    //bien ao de lay gia tri mac dinh ban dau cua txtCurryCrTot cho du chuyen sang RefNbr khac cung cong them duoc
+    tmpForeverStatictxtCuryCrTot = App.txtCuryCrTot.getValue();
     setTimeout(function () { waitStoreFormBotReLoad(); }, 1000);
 
 }
@@ -1067,9 +1073,10 @@ var reloadAmountMustPayTotal = function (index) {
         totalAmountMustPay = totalAmountMustPay + App.slmGridTab1.selected.items[0].data.TranAmt;
     }
     //set lai gia tri cua 3 o kia
-    App.txtCuryCrTot.setValue(totalTaxMustPay + totalAmountMustPay);
+    
     App.txtCuryOrigDocAmt.setValue(totalTaxMustPay + totalAmountMustPay);
     App.txtCuryDocBal.setValue(totalTaxMustPay + totalAmountMustPay);
+    App.txtCuryCrTot.setValue(tmpForeverStatictxtCuryCrTot + totalTaxMustPay + totalAmountMustPay);
     App.slmGridTab1.select(index);
 }
 //khi VendID thay doi
