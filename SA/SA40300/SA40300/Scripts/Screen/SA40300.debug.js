@@ -17,7 +17,18 @@ var menuClick = function (command) {
                 var v = combobox.getValue();
                 var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
                 var index = combobox.store.indexOf(record);
-                App.cboMailID.setValue(combobox.store.getAt(0).data.MailID);
+                //dòng này để bắt các thay đổi của form 
+                App.frm.getForm().updateRecord();
+                //neu ko co thay doi trong form hoac Grid
+                if (App.storeMailDetail.getChangedData().Updated == undefined && App.storeMailDetail.getChangedData().Deleted == undefined && App.storeMailHeader.getChangedData().Updated == undefined && App.storeMailHeader.getChangedData().Deleted == undefined)
+                    App.cboMailID.setValue(combobox.store.getAt(0).data.MailID);
+                //neu co thay doi trong form hoac Grid
+                else if (App.storeMailDetail.getChangedData().Updated != undefined || App.storeMailDetail.getChangedData().Created != undefined || App.storeMailDetail.getChangedData().Deleted != undefined || App.storeMailHeader.getChangedData().Updated != undefined || App.storeMailHeader.getChangedData().Created != undefined || App.storeMailHeader.getChangedData().Deleted != undefined) {
+                    //hien thong bao du lieu da thay doi
+                    HQ.message.show(150, '', '');
+
+                }
+             
 
             } else if (_focusrecord == 2) {
                 HQ.grid.first(App.grd);
@@ -30,7 +41,18 @@ var menuClick = function (command) {
                 var v = combobox.getValue();
                 var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
                 var index = combobox.store.indexOf(record);
-                App.cboMailID.setValue(combobox.store.getAt(index - 1).data.MailID);
+                
+                //dòng này để bắt các thay đổi của form 
+                App.frm.getForm().updateRecord();
+                //neu ko co thay doi trong form hoac Grid
+                if (App.storeMailDetail.getChangedData().Updated == undefined && App.storeMailDetail.getChangedData().Deleted == undefined && App.storeMailHeader.getChangedData().Updated == undefined && App.storeMailHeader.getChangedData().Deleted == undefined)
+                    App.cboMailID.setValue(combobox.store.getAt(index - 1).data.MailID);
+                    //neu co thay doi trong form hoac Grid
+                else if (App.storeMailDetail.getChangedData().Updated != undefined || App.storeMailDetail.getChangedData().Created != undefined || App.storeMailDetail.getChangedData().Deleted != undefined || App.storeMailHeader.getChangedData().Updated != undefined || App.storeMailHeader.getChangedData().Created != undefined || App.storeMailHeader.getChangedData().Deleted != undefined) {
+                    //hien thong bao du lieu da thay doi
+                    HQ.message.show(150, '', '');
+
+                }
 
             } else if (_focusrecord == 2) {
                 HQ.grid.prev(App.grd);
@@ -43,7 +65,18 @@ var menuClick = function (command) {
                 var v = combobox.getValue();
                 var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
                 var index = combobox.store.indexOf(record);
-                App.cboMailID.setValue(combobox.store.getAt(index + 1).data.MailID);
+                
+                //dòng này để bắt các thay đổi của form 
+                App.frm.getForm().updateRecord();
+                //neu ko co thay doi trong form hoac Grid
+                if (App.storeMailDetail.getChangedData().Updated == undefined && App.storeMailDetail.getChangedData().Deleted == undefined && App.storeMailHeader.getChangedData().Updated == undefined && App.storeMailHeader.getChangedData().Deleted == undefined)
+                    App.cboMailID.setValue(combobox.store.getAt(index + 1).data.MailID);
+                    //neu co thay doi trong form hoac Grid
+                else if (App.storeMailDetail.getChangedData().Updated != undefined || App.storeMailDetail.getChangedData().Created != undefined || App.storeMailDetail.getChangedData().Deleted != undefined || App.storeMailHeader.getChangedData().Updated != undefined || App.storeMailHeader.getChangedData().Created != undefined || App.storeMailHeader.getChangedData().Deleted != undefined) {
+                    //hien thong bao du lieu da thay doi
+                    HQ.message.show(150, '', '');
+
+                }
 
             } else if (_focusrecord == 2) {
                 HQ.grid.next(App.grd);
@@ -56,14 +89,26 @@ var menuClick = function (command) {
                 var v = combobox.getValue();
                 var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
                 var index = combobox.store.indexOf(record);
-                App.cboMailID.setValue(App.cboMailID.store.getAt(App.cboMailID.store.getTotalCount() - 1).data.MailID);
+                
+                //dòng này để bắt các thay đổi của form 
+                App.frm.getForm().updateRecord();
+                //neu ko co thay doi trong form hoac Grid
+                if (App.storeMailDetail.getChangedData().Updated == undefined && App.storeMailDetail.getChangedData().Deleted == undefined && App.storeMailHeader.getChangedData().Updated == undefined && App.storeMailHeader.getChangedData().Deleted == undefined)
+                    App.cboMailID.setValue(App.cboMailID.store.getAt(App.cboMailID.store.getTotalCount() - 1).data.MailID);
+                    //neu co thay doi trong form hoac Grid
+                else if (App.storeMailDetail.getChangedData().Updated != undefined || App.storeMailDetail.getChangedData().Created != undefined || App.storeMailDetail.getChangedData().Deleted != undefined || App.storeMailHeader.getChangedData().Updated != undefined || App.storeMailHeader.getChangedData().Created != undefined || App.storeMailHeader.getChangedData().Deleted != undefined) {
+                    //hien thong bao du lieu da thay doi
+                    HQ.message.show(150, '', '');
+
+                }
 
             } else if (_focusrecord == 2) {
                 HQ.grid.last(App.grd);
             }
             break;
         case "refresh":
-            loadDataAutoHeader();
+            App.storeMailHeader.reload();
+            App.storeMailDetail.reload();
 
             break;
         case "new":
@@ -165,6 +210,7 @@ function Close() {
         });
     }
 }
+
 // Xem lai
 var askClose = function (item) {
     if (item == "yes") {
@@ -176,6 +222,8 @@ var askClose = function (item) {
             parent.App.tabSA40300.close();
     }
 };
+//
+
 // Xac nhan xoa record tren grid
 var deleteRecordForm = function (item) {
     if (item == "yes") {
