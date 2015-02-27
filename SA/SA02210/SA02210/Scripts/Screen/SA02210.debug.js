@@ -1,4 +1,4 @@
-
+﻿
 var keys = ['ScreenNumber'];
 var fieldsCheckRequire = ["ScreenNumber"];
 var fieldsLangCheckRequire = ["ScreenNumber"];
@@ -18,8 +18,8 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_FavouriteGroupUser);
             break;
         case "refresh":
+            HQ.isFirstLoad = true;
             App.stoSYS_FavouriteGroupUser.reload();
-            HQ.grid.first(App.grdSYS_FavouriteGroupUser);
             break;
         case "new":
             if (HQ.isInsert) {
@@ -62,6 +62,7 @@ var tabSA02210_AfterRender = function (obj) {
 };
 
 var cboUserGroupID_Change = function (item, newValue, oldValue) {
+    HQ.isFirstLoad = true;
     App.grdSYS_FavouriteGroupUser.store.reload();
 };
 
@@ -70,15 +71,12 @@ var cboScreenNumber_Change = function (value) {
     App.slmSYS_FavouriteGroupUser.selected.items[0].set('Descr', k);
 };
 var grdSYS_FavouriteGroupUser_BeforeEdit = function (editor, e) {
-     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;  
+    if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
 };
 
 var grdSYS_FavouriteGroupUser_Edit = function (item, e) {
     //Kiem tra cac key da duoc nhap se insert them dong moi
     HQ.grid.checkInsertKey(App.grdSYS_FavouriteGroupUser, e, keys);
-
-
-
 };
 
 var grdSYS_FavouriteGroupUser_ValidateEdit = function (item, e) {
@@ -89,6 +87,7 @@ var grdSYS_FavouriteGroupUser_ValidateEdit = function (item, e) {
 var grdSYS_FavouriteGroupUser_Reject = function (record) {
     //reject dong thay doi du lieu ve ban dau
     HQ.grid.checkReject(record, App.grdSYS_FavouriteGroupUser);
+    stoChanged(App.stoSYS_FavouriteGroupUser);
 };
 
 var save = function () {
@@ -114,6 +113,7 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSYS_FavouriteGroupUser.deleteSelected();
+        stoChanged(App.stoSYS_FavouriteGroupUser);
     }
 };
 //// Other Functions ////////////////////////////////////////////////////
@@ -121,4 +121,31 @@ var askClose = function (item) {
     if (item == "no" || item == "ok") {
         HQ.common.close(this);
     }
+};
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSYS_FavouriteGroupUser.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA02210');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA02210');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };

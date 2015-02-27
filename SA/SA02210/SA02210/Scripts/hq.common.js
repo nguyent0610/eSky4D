@@ -42,8 +42,8 @@ var HQ = {
                 return false;
             }
         },
-        insertBlank: function (store, key) {
-            if (key == undefined) {
+        insertBlank: function (store, keys) {
+            if (keys == undefined) {
                 store.insert(store.getCount(), Ext.data.Record());
             } else {
                 var flat = store.findBy(function (record, id) {
@@ -184,14 +184,21 @@ var HQ = {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
+                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
                         HQ.grid.last(grd);
                         grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
                     }
                 });
+                //}
+                //else {
+                //    HQ.grid.last(grd);
+                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                //}
                 return;
             }
+            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
             store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                 callback: function () {
                     if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
@@ -201,6 +208,14 @@ var HQ = {
                     grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
                 }
             });
+            //}
+            //else {
+            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+            //        HQ.store.insertBlank(store, keys);
+            //    }
+            //    HQ.grid.last(grd);
+            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+            //}
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
@@ -263,11 +278,11 @@ var HQ = {
             }
             return found;
         },
-        //TrungHT dùng cho phân trang
+        //TrungHT d�ng cho ph�n trang
         checkDuplicateAll: function (grd, row, keys) {
             return HQ.grid.checkDuplicate(grd, row, keys);
         },
-        //Dùng trong ham before edit cua grid
+        //D�ng trong ham before edit cua grid
         //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
         //Cot nao la key thi khoa lai khi da co du lieu
         checkInput: function (row, keys) {
@@ -447,6 +462,12 @@ var HQ = {
                 });
             }
         },
+        changeData: function (isChange, screenNbr) {
+            if (parent.App[screenNbr] != undefined)
+                if (isChange)
+                    parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
+                else parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
+        },
         showBusy: function (busy, waitMsg, form) {
             if (form == undefined) {
                 if (busy) {
@@ -499,39 +520,9 @@ var HQ = {
             if (str == null) {
                 return "";
             } else return str;
-        },
-        checkEmail: function (value) {
-            var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-            if ((HQ.util.passNull(value)).match(regex)) {
-                return true;
-            } else {
-                HQ.message.show(09112014, '', null);
-                return false;
-            }
-        },
-        focusControl : function (item) {
-            if (App[invalidField]) {
-                App[invalidField].focus();
-            }
         }
     },
-    form: {
-        checkRequirePass: function (frm) {
-            frm.updateRecord();
-            var isValid = true;
-            frm.getForm().getFields().each(
-                            function (item)
-                            {
-                                if (!item.isValid()) {
-                                    invalidField = item.id;
-                                    HQ.message.show(1000, item.fieldLabel, 'HQ.util.focusControl');
-                                    isValid = false;
-                                    return false;
-                                }
-                            })
-            return isValid;
-        }
-    },
+
     tooltip: {
         // TinhHV: show the tootip in grid
         showOnGrid: function (toolTip, grid, isHtmlEncode) {
