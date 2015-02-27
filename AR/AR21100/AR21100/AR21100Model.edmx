@@ -28,6 +28,10 @@
     <edmx:ConceptualModels>
       <Schema Namespace="AR21100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="AR21100Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="AR21100_GetLangJs">
+          <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="AR21100_pgLoadSYS_Language" />
           <EntitySet Name="AR_Channel" EntityType="AR21100Model.AR_Channel" />
           <FunctionImport Name="AR21100_pgLoadChannel" ReturnType="Collection(AR21100Model.AR21100_pgLoadChannel_Result)" />
         </EntityContainer>
@@ -101,7 +105,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="AR21100Model.AR_Channel" Width="1.5" PointX="8.16997925945091" PointY="31.200878247246557" />
+        <EntityTypeShape EntityType="AR21100Model.AR_Channel" Width="1.5" PointX="11.748833734425173" PointY="17.926179909112946" />
       </Diagram>
     </Diagrams>
   </Designer>

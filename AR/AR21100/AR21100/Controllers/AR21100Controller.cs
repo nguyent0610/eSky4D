@@ -19,27 +19,22 @@ namespace AR21100.Controllers
     {
         private string _screenNbr = "AR21100";
         private string _userName = Current.UserName;
-
         AR21100Entities _db = Util.CreateObjectContext<AR21100Entities>(false);
-
         public ActionResult Index()
         {
 
             Util.InitRight(_screenNbr);
             return View();
         }
-
-       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
         public ActionResult GetChannel()
         {
             return this.Store(_db.AR21100_pgLoadChannel().ToList());
         }
-
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
@@ -110,6 +105,5 @@ namespace AR21100.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
-
     }
 }

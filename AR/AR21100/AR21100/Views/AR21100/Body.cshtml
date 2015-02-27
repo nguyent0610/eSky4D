@@ -10,95 +10,93 @@
 }
 
 @(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Fit)
     .Items(
-        X.FormPanel()
-        .ID("frmMain")
-        .BodyPadding(0)
-        .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar("Print", true, ""))
-        .Layout(LayoutType.Fit)
-        .Items(
-            ////Thiet ke giao dien o day
+        ////Thiet ke giao dien o day
 
-            X.GridPanel()
-            .Scroll(ScrollMode.Both)
-            .View(X.GridView().TrackOver(false))
-            .ID("grdChannel")
-            .Store(
-                X.Store()
-                .ID("stoChannel")
-                .PageSize(50)
-                .Model(Util.GenerateModel(typeof(AR21100_pgLoadChannel_Result), "mdAR_Channel", "Code"))
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetChannel")))
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdChannel")
+        .Store(
+            X.Store()
+            .ID("stoChannel")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(AR21100_pgLoadChannel_Result), "mdlAR21100_pgLoadChannel", "Code"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetChannel"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";                 
+            })
+        )
+        .Listeners(p =>
+                 {
+                     p.BoxReady.Handler = "firstLoad();";
+                 })
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40),
+            X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),
+            X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdChannel_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmChannel").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
                 .Listeners(l =>
-                {
-                    l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                    l.Load.Handler = "HQ.common.showBusy(false);"; 
-                })
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
             )
-            .Listeners(p => p.BoxReady.Handler = "App.stoChannel.reload();")
-            .SortableColumns(false)
-            .ColumnModel(
-                X.RowNumbererColumn().Width(40)
-                , Html.X().Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(20100))
-                , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
-                    .Editor(Html.X().TextField().MaxLength(100100))
-                , Html.X().CommandColumn().Width(150)
-                                        .Commands(
-                                            Html.X().GridCommand()
-                                                .Text(Util.GetLang("Reject"))
-                                                .ToolTip(t =>
-                                                {
-                                                    t.Text = Util.GetLang("Rejectrowchanges");
-                                                })
-                                                .CommandName("reject")
-                                                .Icon(Icon.ArrowUndo)
-                                        )
-                                        .PrepareToolbar(t =>
-                                        {
-                                            t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                                        })
-                                        .Listeners(l =>
-                                        {
-                                            l.Command.Handler = "grd_Reject(record);";
-                                        })
-            )
-            .SelectionModel(X.RowSelectionModel().ID("slmChannel").Mode(SelectionMode.Multi))
-            .BottomBar(
-                X.PagingToolbar()
-                .Items(
-                    X.Label("Page size:"),
-                    X.ToolbarSpacer(10),
-                    X.ComboBox()
-                    .Width(80)
-                    .Items("1", "2", "10", "20", "30", "50")
-                    .SelectedItems("50")
-                    .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
-                )
-                .Plugins(X.ProgressBarPager())
-            )
-            .Plugins(
-                X.CellEditing()
-                .ClicksToEdit(1)
-                .Listeners(ls =>
-                {
-                    ls.BeforeEdit.Fn = "grdChannel_BeforeEdit";
-                    ls.Edit.Fn = "grdChannel_Edit";
-                    ls.ValidateEdit.Fn = "grdChannel_ValidateEdit";
-                    ls.CancelEdit.Fn = "grdChannel_CancelEdit";
-                })
-            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdChannel_BeforeEdit";
+                ls.Edit.Fn = "grdChannel_Edit";
+                ls.ValidateEdit.Fn = "grdChannel_ValidateEdit";
 
-            .Features(
-                X.GridFilters()
-                    .Local(true)
-                    .Filters(
-                        X.StringFilter().DataIndex("Code"),
-                        X.StringFilter().DataIndex("Descr")
-                     )
-            )
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                   X.StringFilter().DataIndex("Code"),
+                   X.StringFilter().DataIndex("Descr")
+                )
         )
     )
-)
+))

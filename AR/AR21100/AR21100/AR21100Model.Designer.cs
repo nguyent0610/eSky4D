@@ -100,6 +100,33 @@ namespace AR21100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public int AR21100_GetLangJs(Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction("AR21100_GetLangJs", langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public int AR21100_pgLoadSYS_Language()
+        {
+            return base.ExecuteFunction("AR21100_pgLoadSYS_Language");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectResult<AR21100_pgLoadChannel_Result> AR21100_pgLoadChannel()
         {
             return base.ExecuteFunction<AR21100_pgLoadChannel_Result>("AR21100_pgLoadChannel");
