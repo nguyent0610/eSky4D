@@ -40,6 +40,7 @@ Html.X().Viewport().Layout(LayoutType.Fit)
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             lst.Change.Fn = "cboMailID_Change";
+                            
                             lst.Focus.Fn = "Focus1_Change";
                            
                         })
@@ -47,9 +48,17 @@ Html.X().Viewport().Layout(LayoutType.Fit)
                     
                     , HQ.Checkbox().ID("chkActive").Name("chkActive").HQLangCode("ACTIVE")
                     .MarginSpec("0 0 0 5").DataIndex("Active").MarginSpec("5 10 0 110").Width(130) 
+                    .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "_recycleMailID_Change";
+                        })
                            
                     ,HQ.TextBox().ID("txtHeader").Name("txtHeader").HQLangCode("HEADERMAIL").DataIndex("Header")
                     .Width(400).MarginSpec("5 0 0 0")
+                    .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "_recycleMailID_Change";
+                        })
                 )  
                     
                 , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
@@ -59,6 +68,10 @@ Html.X().Viewport().Layout(LayoutType.Fit)
                             .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").MultiSelect(true).Delimiter(";")
                             //lưu ý nếu đang làm database Sys thì phải có .HQDBSys(true) và còn 1 cái nữa trong Controller                             
                             .HQDBSys(true).AllowBlank(true).Editable(false).LoadData()
+                            .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "_recycleMailID_Change";
+                            })
                      
                     
                       ,HQ.Combo().ID("cboType").Name("cboType").HQLangCode("SA40300TYPE").HQProcedure("SA40300_pcType")
@@ -71,9 +84,17 @@ Html.X().Viewport().Layout(LayoutType.Fit)
                                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                 })
                             .LoadData()
+                            .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "_recycleMailID_Change";
+                            })
                             
                             ,HQ.TextBox().ID("txtBody").Name("txtBody").HQLangCode("BODYMAIL").DataIndex("Body")
                            .Width(400).MarginSpec("5 0 0 0")
+                           .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "_recycleMailID_Change";
+                            })
                 )
                     
                 , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
@@ -83,22 +104,42 @@ Html.X().Viewport().Layout(LayoutType.Fit)
                             .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").MultiSelect(true).Delimiter(";")
                             //lưu ý nếu đang làm database Sys thì phải có .HQDBSys(true) và còn 1 cái nữa trong Controller 
                             .HQDBSys(true).Editable(false).LoadData()
+                            .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "_recycleMailID_Change";
+                            })
                     
                             ,HQ.DateField().ID("dtmDateTime").Name("dtmDateTime").HQLangCode("DATE").DataIndex("DateTime")
                            .Width(250).MarginSpec("5 0 0 0").Value(DateTime.Now.ToString()).AllowBlank(true).Editable(false)
+                           .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "_recycleMailID_Change";
+                            })
                         
                             ,HQ.TextBox().ID("txtPass").Name("txtPass").HQLangCode("PassUnZip").DataIndex("PassUnZip")
                            .Width(400).MarginSpec("5 0 0 0").InputType(Ext.Net.InputType.Password)
                            .MaxLength(100).EnforceMaxLength(true)
+                           .Listeners(lst =>
+                            {
+                                lst.Change.Fn = "_recycleMailID_Change";
+                            })
                         
                 )
                 ,X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
                 .Items(
                      HQ.TextBox().ID("txtMailSubject").Name("txtMailSubject").HQLangCode("MAILSUBJECT").DataIndex("Subject")
                     .Width(650).MarginSpec("5 0 0 0").AllowBlank(true)
+                    .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "_recycleMailID_Change";
+                        })
                            
                     ,HQ.TextBox().ID("txtNameFile").Name("txtNameFile").HQLangCode("NameFile").DataIndex("FileName")
                     .Width(400).MarginSpec("5 0 0 0").AllowBlank(true)
+                    .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "_recycleMailID_Change";
+                        })
                 ) 
                              
                 
@@ -106,6 +147,10 @@ Html.X().Viewport().Layout(LayoutType.Fit)
                 .Items(
                      HQ.TextBox().ID("txtTemplateFile").Name("txtTemplateFile").HQLangCode("TEMPLATEFILE").DataIndex("TemplateFile")
                     .Width(650).MarginSpec("5 0 0 0").AllowBlank(true).MaxLength(250).EnforceMaxLength(true)
+                    .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "_recycleMailID_Change";
+                        })
 
                         , HQ.Checkbox().ID("chkIsAttachFile").Name("chkIsAttachFile").HQLangCode("NotAttachFile")
                         .MarginSpec("0 0 0 5").DataIndex("IsNotAttachFile").MarginSpec("5 10 0 110")
@@ -121,9 +166,17 @@ Html.X().Viewport().Layout(LayoutType.Fit)
                 .Items(
                      HQ.TextBox().ID("txtExportFolder").Name("txtExportFolder").HQLangCode("EXPORTFOLDER").DataIndex("ExportFolder")
                     .Width(650).MarginSpec("5 0 0 0").AllowBlank(true).MaxLength(250).EnforceMaxLength(true)
+                    .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "_recycleMailID_Change";
+                        })
                            
                     , HQ.Checkbox().ID("chkIsDeleteFile").Name("chkIsDeleteFile").HQLangCode("NotDeleteFile")
                     .MarginSpec("0 0 0 5").DataIndex("IsNotDeleteFile").MarginSpec("5 10 0 110") 
+                    .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "_recycleMailID_Change";
+                        })
                 ) 
                
                 
