@@ -1,13 +1,12 @@
-//// Declare //////////////////////////////////////////////////////////
+﻿//// Declare //////////////////////////////////////////////////////////
 
 var keys = ['Code'];
-var fieldsCheckRequire = ["Title00", "Title01","Msg00", "Msg01"];
-var fieldsLangCheckRequire = ["Title00", "Title01","Msg00", "Msg01"];
+var fieldsCheckRequire = ["Title00", "Title01", "Msg00", "Msg01"];
+var fieldsLangCheckRequire = ["Title00", "Title01", "Msg00", "Msg01"];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
-
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -23,12 +22,12 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_Message);
             break;
         case "refresh":
+            HQ.isFirstLoad = true;
             App.stoSYS_Message.reload();
-            HQ.grid.first(App.grdSYS_Message);
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdSYS_Message);
+                HQ.grid.insert(App.grdSYS_Message, keys);
             }
             break;
         case "delete":
@@ -48,7 +47,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.store.isChange(App.stoSYS_Message)) {
+            if (HQ.isChange) {
                 HQ.message.show(5, '', 'askClose');
             } else {
                 HQ.common.close(this);
@@ -68,6 +67,7 @@ var grdSYS_Message_ValidateEdit = function (item, e) {
 };
 var grdSYS_Message_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSYS_Message);
+    stoChanged(App.stoSYS_Message);
 };
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
@@ -93,14 +93,41 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSYS_Message.deleteSelected();
+        stoChanged(App.stoSYS_Message);
     }
 };
 
-
-/////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
+        HQ.common.changeData(false, 'SA01100');//khi dong roi gan lai cho change la false
         HQ.common.close(this);
     }
 };
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSYS_Message.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA01100');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA01100');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+

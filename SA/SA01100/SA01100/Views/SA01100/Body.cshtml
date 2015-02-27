@@ -30,13 +30,18 @@
             .ID("stoSYS_Message")
             .PageSize(50)
             .Model(Util.GenerateModel(typeof(SA01100_pgSYS_Message_Result), "mdlSA01100_pgSYSMessage_Language", "Code"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Message")))
-            .Listeners(l => { 
-                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                l.Load.Handler = "HQ.common.showBusy(false);"; 
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Message"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";                 
             })
         )
-        .Listeners(p => p.BoxReady.Handler = "App.stoSYS_Message.reload();")
+        .Listeners(p =>
+                 {
+                     p.BoxReady.Handler = "firstLoad();";
+                 })
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
@@ -62,7 +67,7 @@
                 .Icon(Icon.ArrowUndo)
             )
             .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-            .Listeners(l => l.Command.Handler = "grdSYS_Language_Reject(record);")
+            .Listeners(l => l.Command.Handler = "grdSYS_Message_Reject(record);")
         )
         .SelectionModel(X.RowSelectionModel().ID("slmSYS_Message").Mode(SelectionMode.Multi))
         .BottomBar(
@@ -74,7 +79,10 @@
                 .Width(80)
                 .Items("1", "2", "10", "20", "30", "50")
                 .SelectedItems("50")
-                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
             )
             .Plugins(X.ProgressBarPager())
         )
