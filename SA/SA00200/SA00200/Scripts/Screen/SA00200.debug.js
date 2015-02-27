@@ -72,7 +72,7 @@ var save = function () {
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'SA00200/Save',
             params: {
-                lstSYS_Language: HQ.store.getData(App.stoSYS_Module)
+                lstData: HQ.store.getData(App.stoSYS_Module)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
