@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="OM_SalesRoute" EntityType="eBiz4DWebSysModel.Store.OM_SalesRoute" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="OM_SalesRoute">
+          <Key>
+            <PropertyRef Name="SalesRouteID" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="SalesRouteID" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="Descr" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+        </EntityType>
+        <Function Name="OM21600_pcLoadBranchAllByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM21600_pgLoadSalesRoute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM21600Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="OM21600Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="OM_SalesRoute" EntityType="OM21600Model.OM_SalesRoute" />
+          <FunctionImport Name="OM21600_pcLoadBranchAllByUser" ReturnType="Collection(OM21600Model.OM21600_pcLoadBranchAllByUser_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM21600_pgLoadSalesRoute" ReturnType="Collection(OM21600Model.OM21600_pgLoadSalesRoute_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="OM_SalesRoute">
+          <Key>
+            <PropertyRef Name="SalesRouteID" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Type="String" Name="SalesRouteID" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="OM21600_pcLoadBranchAllByUser_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Addr" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="OM21600_pgLoadSalesRoute_Result">
+          <Property Type="String" Name="SalesRouteID" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="OM21600Entities" >
+          <EntitySetMapping Name="OM_SalesRoute">
+            <EntityTypeMapping TypeName="OM21600Model.OM_SalesRoute">
+              <MappingFragment StoreEntitySet="OM_SalesRoute">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="SalesRouteID" ColumnName="SalesRouteID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM21600_pcLoadBranchAllByUser" FunctionName="eBiz4DWebSysModel.Store.OM21600_pcLoadBranchAllByUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21600Model.OM21600_pcLoadBranchAllByUser_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM21600_pgLoadSalesRoute" FunctionName="eBiz4DWebSysModel.Store.OM21600_pgLoadSalesRoute">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM21600Model.OM21600_pgLoadSalesRoute_Result">
+                <ScalarProperty Name="SalesRouteID" ColumnName="SalesRouteID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" >
+        <EntityTypeShape EntityType="OM21600Model.OM_SalesRoute" Width="1.5" PointX="2.0063714357122646" PointY="28.889953537327216" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
