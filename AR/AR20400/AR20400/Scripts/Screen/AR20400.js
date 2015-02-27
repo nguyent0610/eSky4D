@@ -427,33 +427,34 @@ var chooseNodeFromTree = function () {
     var custIDcustName = App.cboCustId.value + "-" + App.txtCustName.value;
     
     var record = App.IDTree.getStore().getNodeById(custIDcustName);
-    var depth = App.IDTree.getStore().getNodeById(custIDcustName).data.depth;
-    if (depth == 3) {
-        //setTimeout(function () { waitCollacpse(); }, 1500);
-        //App.IDTree.store.tree.root.collapse();
-        App.IDTree.getStore().getNodeById(custIDcustName).parentNode.parentNode.parentNode.expand();
-        App.IDTree.getStore().getNodeById(custIDcustName).parentNode.parentNode.expand();
-        App.IDTree.getStore().getNodeById(custIDcustName).parentNode.expand();
-    } else if (depth == 2) {
-        //setTimeout(function () { waitCollacpse(); }, 1500);
-        //App.IDTree.store.tree.root.collapse();
-        App.IDTree.getStore().getNodeById(custIDcustName).parentNode.parentNode.expand();
-        App.IDTree.getStore().getNodeById(custIDcustName).parentNode.expand();
-    } else if (depth == 1) {
-        //setTimeout(function () { waitCollacpse(); }, 1500);
-        //App.IDTree.store.tree.root.collapse();
-        App.IDTree.getStore().getNodeById(custIDcustName).parentNode.expand();
-    }
-    var findNode = App.IDTree.items.items[0].store.data.items;
-    for (var i = 0; i < findNode.length; i++) {
-        if (findNode[i].data.id == custIDcustName) {
-            App.Tree.select(i);
-            tmpSelectedNode = App.Tree.selected.items[0].data.id;
-            break;
+    if (App.IDTree.getStore().getNodeById(invtIDDescr)) {
+        var depth = App.IDTree.getStore().getNodeById(custIDcustName).data.depth;
+        if (depth == 3) {
+            //setTimeout(function () { waitCollacpse(); }, 1500);
+            //App.IDTree.store.tree.root.collapse();
+            App.IDTree.getStore().getNodeById(custIDcustName).parentNode.parentNode.parentNode.expand();
+            App.IDTree.getStore().getNodeById(custIDcustName).parentNode.parentNode.expand();
+            App.IDTree.getStore().getNodeById(custIDcustName).parentNode.expand();
+        } else if (depth == 2) {
+            //setTimeout(function () { waitCollacpse(); }, 1500);
+            //App.IDTree.store.tree.root.collapse();
+            App.IDTree.getStore().getNodeById(custIDcustName).parentNode.parentNode.expand();
+            App.IDTree.getStore().getNodeById(custIDcustName).parentNode.expand();
+        } else if (depth == 1) {
+            //setTimeout(function () { waitCollacpse(); }, 1500);
+            //App.IDTree.store.tree.root.collapse();
+            App.IDTree.getStore().getNodeById(custIDcustName).parentNode.expand();
         }
+        var findNode = App.IDTree.items.items[0].store.data.items;
+        for (var i = 0; i < findNode.length; i++) {
+            if (findNode[i].data.id == custIDcustName) {
+                App.Tree.select(i);
+                tmpSelectedNode = App.Tree.selected.items[0].data.id;
+                break;
+            }
 
+        }
     }
-   
     //App.IDTree.getStore().getNodeById(custIDcustName).select();
 }
 var waitapproveStatus = function () {
