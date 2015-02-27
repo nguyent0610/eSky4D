@@ -1,5 +1,6 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
 
+
 var keys = ['Code'];
 var fieldsCheckRequire = ["Title00", "Title01", "Msg00", "Msg01"];
 var fieldsLangCheckRequire = ["Title00", "Title01", "Msg00", "Msg01"];
@@ -97,6 +98,8 @@ var deleteData = function (item) {
     }
 };
 
+
+/////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
@@ -130,4 +133,3 @@ var stoLoad = function (sto) {
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
-
