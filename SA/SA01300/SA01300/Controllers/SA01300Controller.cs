@@ -28,7 +28,7 @@ namespace SA01300.Controllers
             return View();
         }
 
-       //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -45,9 +45,9 @@ namespace SA01300.Controllers
             try
             {
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
-                ChangeRecords<SYS_Configurations> lstLang = dataHandler.BatchObjectData<SYS_Configurations>();
-                foreach (SYS_Configurations deleted in lstLang.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Configurations"]);
+                ChangeRecords<SYS_Configurations> lstSYS_Configurations = dataHandler.BatchObjectData<SYS_Configurations>();
+                foreach (SYS_Configurations deleted in lstSYS_Configurations.Deleted)
                 {
                     var del = _db.SYS_Configurations.Where(p => p.Code == deleted.Code).FirstOrDefault();
                     if (del != null)
@@ -56,9 +56,9 @@ namespace SA01300.Controllers
                     }
                 }
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                lstSYS_Configurations.Created.AddRange(lstSYS_Configurations.Updated);
 
-                foreach (SYS_Configurations curLang in lstLang.Created)
+                foreach (SYS_Configurations curLang in lstSYS_Configurations.Created)
                 {
                     if (curLang.Code.PassNull() == "") continue;
 
@@ -103,10 +103,10 @@ namespace SA01300.Controllers
                 t.Crtd_User = _userName;
             }
 
-            t.DateVal = s.DateVal;
+            t.DateVal = s.DateVal == null ? DateTime.Now : (s.DateVal.Year == 1 ? DateTime.Now : s.DateVal);
             t.FloatVal = s.FloatVal;
             t.IntVal = s.IntVal;
-            t.TextVal = s.TextVal;
+            t.TextVal = s.TextVal == "" ? "none" : s.TextVal;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

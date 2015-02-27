@@ -48,8 +48,8 @@ namespace SA01300
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004";
-            Session["Language"] = Current.Language = "en";
-            Session["LangID"] = 0;
+            Session["Language"] = Current.Language = "vn";
+            Session["LangID"] =1;
         }
     }
 }
