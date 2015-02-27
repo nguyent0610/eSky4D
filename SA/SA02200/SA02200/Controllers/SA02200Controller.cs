@@ -40,7 +40,6 @@ namespace SA02200.Controllers
         {
             try
             {
-
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Favourite"]);
                 ChangeRecords<SA02200_pgSYS_Favourite_Result> lstSYS_Favourite = dataHandler.BatchObjectData<SA02200_pgSYS_Favourite_Result>();
                 foreach (SA02200_pgSYS_Favourite_Result deleted in lstSYS_Favourite.Deleted)

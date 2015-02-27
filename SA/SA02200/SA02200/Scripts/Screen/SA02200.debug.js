@@ -1,4 +1,4 @@
-//// Declare //////////////////////////////////////////////////////////
+﻿//// Declare //////////////////////////////////////////////////////////
 
 var keys = ['ScreenNumber'];
 var fieldsCheckRequire = ["ScreenNumber"];
@@ -23,8 +23,8 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_Favourite);
             break;
         case "refresh":
+            HQ.isFirstLoad = true;
             App.stoSYS_Favourite.reload();
-            HQ.grid.first(App.grdSYS_Favourite);
             break;
         case "new":
             if (HQ.isInsert) {
@@ -60,7 +60,7 @@ var menuClick = function (command) {
 
 var cboScreenNumber_Change = function (value) {
     var k = value.displayTplData[0].Descr;
-    App.slmSYS_Favourite.selected.items[0].set('Descr',k);
+    App.slmSYS_Favourite.selected.items[0].set('Descr', k);
 };
 
 var grdSYS_Favourite_BeforeEdit = function (editor, e) {
@@ -74,6 +74,7 @@ var grdSYS_Favourite_ValidateEdit = function (item, e) {
 };
 var grdSYS_Favourite_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSYS_Favourite);
+    stoChanged(App.stoSYS_Favourite);
 };
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
@@ -99,6 +100,7 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSYS_Favourite.deleteSelected();
+        stoChanged(App.stoSYS_Favourite);
     }
 };
 
@@ -113,6 +115,31 @@ var askClose = function (item) {
 /////////////////////////////////////////////////////////////////////////
 
 
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSYS_Favourite.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA02200');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA02200');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
 
 
 
