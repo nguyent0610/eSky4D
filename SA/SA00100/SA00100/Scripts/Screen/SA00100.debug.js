@@ -1,4 +1,4 @@
-var keys = ['ScreenNumber'];
+﻿var keys = ['ScreenNumber'];
 
 var menuClick = function (command) {
     switch (command) {
@@ -15,8 +15,8 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_Screen);
             break;
         case "refresh":
+            HQ.isFirstLoad = true;
             App.stoData.reload();
-            HQ.grid.first(App.grdSYS_Screen);
             break;
         case "new":
             if (HQ.isInsert) {
@@ -50,43 +50,17 @@ var menuClick = function (command) {
 
 };
 var grdSYS_Screen_BeforeEdit = function (editor, e) {
-    if (!HQ.isUpdate) return false;
-    //keys = e.record.idProperty.split(',');
-
-    if (keys.indexOf(e.field) != -1) {
-        if (e.record.data.tstamp != "")
-            return false;
-    }
-    return HQ.grid.checkInput(e, keys);
+    return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdSYS_Screen_Edit = function (item, e) {
-
-    if (keys.indexOf(e.field) != -1) {
-        if (e.value != '' && isAllValidKey(App.stoData.getChangedData().Created) && isAllValidKey(App.stoData.getChangedData().Updated))
-            HQ.store.insertBlank(App.stoData);
-    }
+    HQ.grid.checkInsertKey(App.grdSYS_Screen, e, keys);
 };
 var grdSYS_Screen_ValidateEdit = function (item, e) {
-    if (keys.indexOf(e.field) != -1) {
-        if (HQ.grid.checkDuplicate(App.grdSYS_Screen, e, keys)) {
-            HQ.message.show(1112, e.value);
-            return false;
-        }
-        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-        if (!e.value.match(regex)) {
-            HQ.message.show(20140811, e.column.text);
-            return false;
-        }
-    }
+    return HQ.grid.checkValidateEdit(App.grdSYS_Screen, e, keys);
 };
 var grdSYS_Screen_Reject = function (record) {
-    if (record.data.tstamp == '') {
-        App.stoData.remove(record);
-        App.grdSYS_Screen.getView().focusRow(App.stoData.getCount() - 1);
-        App.grdSYS_Screen.getSelectionModel().select(App.stoData.getCount() - 1);
-    } else {
-        record.reject();
-    }
+    HQ.grid.checkReject(record, App.grdSYS_Screen);
+    stoChanged(App.stoData);
 };
 
 var save = function () {
@@ -111,59 +85,39 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSYS_Screen.deleteSelected();
+        stoChanged(App.stoData);
     }
 };
-//kiem tra key da nhap du chua
-var isAllValidKey = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            for (var j = 0; j < keys.length; j++) {
-                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
-                    return false;
-            }
-        }
-        return true;
-    } else {
-        return true;
-    }
-};
-//kiem tra nhung field yeu cau bat buoc nhap
-var checkRequire = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
-            if (items[i]["ScreenNumber"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("ScreenNumber"));
-                return false;
-            }
-            if (items[i]["Descr"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("Descr"));
-                return false;
-            }
-            if (items[i]["ModuleID"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("ModuleID"));
-                return false;
-            }
-            if (items[i]["ScreenType"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("ScreenType"));
-                return false;
-            }
-
-            if (items[i]["CatID"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("CatID"));
-                return false;
-            }
-        }
-        return true;
-    } else {
-        return true;
-    }
-};
-
 //// Other Functions ////////////////////////////////////////////////////
 
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
         HQ.common.close(this);
     }
+};
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoData.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA00100');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA00100');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
