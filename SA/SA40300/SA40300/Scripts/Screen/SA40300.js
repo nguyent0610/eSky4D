@@ -431,16 +431,10 @@ var chkIsAttachFile_Change = function (sender, e) {
 }
 //2 hàm focus nhằm bắt xem mình đang click vào form hay grid
 var Focus2_Change = function (sender, e) {
-
-
     _focusrecord = 2;
-
 }
 
 var Focus1_Change = function (sender, e) {
-
-
-
     _focusrecord = 1;
 }
 
