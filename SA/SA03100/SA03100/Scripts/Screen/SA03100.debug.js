@@ -1,4 +1,4 @@
-//// Declare //////////////////////////////////////////////////////////
+﻿//// Declare //////////////////////////////////////////////////////////
 
 var keys = ['GroupID'];
 var fieldsCheckRequire = ["GroupID", "Descr", "ListCpny"];
@@ -23,8 +23,8 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_CompanyGroup);
             break;
         case "refresh":
+            HQ.isFirstLoad = true;
             App.stoSYS_CompanyGroup.reload();
-            HQ.grid.first(App.grdSYS_CompanyGroup);
             break;
         case "new":
             if (HQ.isInsert) {
@@ -68,6 +68,7 @@ var grdSYS_CompanyGroup_ValidateEdit = function (item, e) {
 };
 var grdSYS_CompanyGroup_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSYS_CompanyGroup);
+    stoChanged(App.stoSYS_CompanyGroup);
 };
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
@@ -93,6 +94,7 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSYS_CompanyGroup.deleteSelected();
+        stoChanged(App.stoSYS_CompanyGroup);
     }
 };
 
@@ -105,3 +107,29 @@ var askClose = function (item) {
     }
 };
 /////////////////////////////////////////////////////////////////////////
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSYS_CompanyGroup.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA03100');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA03100');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};

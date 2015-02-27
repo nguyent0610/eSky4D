@@ -463,10 +463,10 @@ var HQ = {
             }
         },
         changeData: function (isChange, screenNbr) {
-            if (parent.App['tab' + screenNbr] != undefined)
+            if (parent.App[screenNbr] != undefined)
                 if (isChange)
-                    parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
-                else parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
+                    parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
+                else parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
         },
         showBusy: function (busy, waitMsg, form) {
             if (form == undefined) {
@@ -552,7 +552,6 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
-        //if (value.split(',').length > 2) value = '';
         if (store) {
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {

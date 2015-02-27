@@ -28,13 +28,18 @@
             .ID("stoSYS_CompanyGroup")
             .PageSize(50)
             .Model(Util.GenerateModel(typeof(SA03100_pgSYS_CompanyGroup_Result), "mdlSA03100_pgSYS_CompanyGroup", "GroupID"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_CompanyGroup")))
-            .Listeners(l => { 
-                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                l.Load.Handler = "HQ.common.showBusy(false);"; 
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_CompanyGroup"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";
             })
         )
-        .Listeners(p => p.BoxReady.Handler = "App.stoSYS_CompanyGroup.reload();")
+        .Listeners(p =>
+                 {
+                     p.BoxReady.Handler = "firstLoad();";
+                 })
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
@@ -52,7 +57,7 @@
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst => { 
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        lst.Change.Fn="cboCpnyID_Change";
+                        //lst.Change.Fn="cboCpnyID_Change";
                     })
                     .LoadData().Width(600)
                 ),
