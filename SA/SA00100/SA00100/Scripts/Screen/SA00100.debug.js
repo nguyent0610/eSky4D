@@ -1,5 +1,7 @@
-﻿var keys = ['ScreenNumber'];
-
+﻿
+var keys = ['ScreenNumber'];
+var fieldsCheckRequire = ["ScreenNumber", "Descr", "ModuleID", "ScreenType", "CatID"];
+var fieldsLangCheckRequire = ["ScreenNumber", "Descr", "ModuleID", "ScreenType", "CatID"];
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -32,7 +34,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (checkRequire(App.stoData.getChangedData().Created) && checkRequire(App.stoData.getChangedData().Updated)) {
+                if (HQ.store.checkRequirePass(App.stoData, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
