@@ -30,13 +30,18 @@
             .ID("stoSYS_FavouriteGroup")
             .PageSize(50)
             .Model(Util.GenerateModel(typeof(SA03000_pgSYS_FavouriteGroup_Result), "mdlSA03000_pgSYS_FavouriteGroup", "Code"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_FavouriteGroup")))
-            .Listeners(l => { 
-                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                l.Load.Handler = "HQ.common.showBusy(false);"; 
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_FavouriteGroup"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";
             })
         )
-        .Listeners(p => p.BoxReady.Handler = "App.stoSYS_FavouriteGroup.reload();")
+        .Listeners(p =>
+                 {
+                     p.BoxReady.Handler = "firstLoad();";
+                 })
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
