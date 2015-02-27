@@ -2,8 +2,12 @@
 var selectedIndex = 0;
 var _hold = "H";
 var _curSlsperid = "";
+//biến tạm focusrecord để biết đang focus vào form hay Grid để xác định các xử lý các nút phía trên
 var _focusrecord = 0;
 var beforeedit = '';
+//lưu ý cái biến tạm _recycleMailID dùng để tránh vòng lặp đệ quy khi ta set lại giá trị 
+//cho cboMailID trong function cboMailID_Change vì nó sẽ lại chạy function cboMailID_Change
+var _recycleMailID = 0;
 
 var keys = ['ReportID', 'ReportViewID'];
 
@@ -17,7 +21,18 @@ var menuClick = function (command) {
                 var v = combobox.getValue();
                 var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
                 var index = combobox.store.indexOf(record);
-                App.cboMailID.setValue(combobox.store.getAt(0).data.MailID);
+                //dòng này để bắt các thay đổi của form 
+                App.frm.getForm().updateRecord();
+                //neu ko co thay doi trong form hoac Grid
+                if (App.storeMailDetail.getChangedData().Updated == undefined && App.storeMailDetail.getChangedData().Deleted == undefined && App.storeMailHeader.getChangedData().Updated == undefined && App.storeMailHeader.getChangedData().Deleted == undefined)
+                    App.cboMailID.setValue(combobox.store.getAt(0).data.MailID);
+                    //neu co thay doi trong form hoac Grid
+                else if (App.storeMailDetail.getChangedData().Updated != undefined || App.storeMailDetail.getChangedData().Created != undefined || App.storeMailDetail.getChangedData().Deleted != undefined || App.storeMailHeader.getChangedData().Updated != undefined || App.storeMailHeader.getChangedData().Created != undefined || App.storeMailHeader.getChangedData().Deleted != undefined) {
+                    //hien thong bao du lieu da thay doi
+                    HQ.message.show(150, '', '');
+
+                }
+
 
             } else if (_focusrecord == 2) {
                 HQ.grid.first(App.grd);
@@ -30,7 +45,18 @@ var menuClick = function (command) {
                 var v = combobox.getValue();
                 var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
                 var index = combobox.store.indexOf(record);
-                App.cboMailID.setValue(combobox.store.getAt(index - 1).data.MailID);
+
+                //dòng này để bắt các thay đổi của form 
+                App.frm.getForm().updateRecord();
+                //neu ko co thay doi trong form hoac Grid
+                if (App.storeMailDetail.getChangedData().Updated == undefined && App.storeMailDetail.getChangedData().Deleted == undefined && App.storeMailHeader.getChangedData().Updated == undefined && App.storeMailHeader.getChangedData().Deleted == undefined)
+                    App.cboMailID.setValue(combobox.store.getAt(index - 1).data.MailID);
+                    //neu co thay doi trong form hoac Grid
+                else if (App.storeMailDetail.getChangedData().Updated != undefined || App.storeMailDetail.getChangedData().Created != undefined || App.storeMailDetail.getChangedData().Deleted != undefined || App.storeMailHeader.getChangedData().Updated != undefined || App.storeMailHeader.getChangedData().Created != undefined || App.storeMailHeader.getChangedData().Deleted != undefined) {
+                    //hien thong bao du lieu da thay doi
+                    HQ.message.show(150, '', '');
+
+                }
 
             } else if (_focusrecord == 2) {
                 HQ.grid.prev(App.grd);
@@ -43,7 +69,18 @@ var menuClick = function (command) {
                 var v = combobox.getValue();
                 var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
                 var index = combobox.store.indexOf(record);
-                App.cboMailID.setValue(combobox.store.getAt(index + 1).data.MailID);
+
+                //dòng này để bắt các thay đổi của form 
+                App.frm.getForm().updateRecord();
+                //neu ko co thay doi trong form hoac Grid
+                if (App.storeMailDetail.getChangedData().Updated == undefined && App.storeMailDetail.getChangedData().Deleted == undefined && App.storeMailHeader.getChangedData().Updated == undefined && App.storeMailHeader.getChangedData().Deleted == undefined)
+                    App.cboMailID.setValue(combobox.store.getAt(index + 1).data.MailID);
+                    //neu co thay doi trong form hoac Grid
+                else if (App.storeMailDetail.getChangedData().Updated != undefined || App.storeMailDetail.getChangedData().Created != undefined || App.storeMailDetail.getChangedData().Deleted != undefined || App.storeMailHeader.getChangedData().Updated != undefined || App.storeMailHeader.getChangedData().Created != undefined || App.storeMailHeader.getChangedData().Deleted != undefined) {
+                    //hien thong bao du lieu da thay doi
+                    HQ.message.show(150, '', '');
+
+                }
 
             } else if (_focusrecord == 2) {
                 HQ.grid.next(App.grd);
@@ -56,14 +93,26 @@ var menuClick = function (command) {
                 var v = combobox.getValue();
                 var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
                 var index = combobox.store.indexOf(record);
-                App.cboMailID.setValue(App.cboMailID.store.getAt(App.cboMailID.store.getTotalCount() - 1).data.MailID);
+
+                //dòng này để bắt các thay đổi của form 
+                App.frm.getForm().updateRecord();
+                //neu ko co thay doi trong form hoac Grid
+                if (App.storeMailDetail.getChangedData().Updated == undefined && App.storeMailDetail.getChangedData().Deleted == undefined && App.storeMailHeader.getChangedData().Updated == undefined && App.storeMailHeader.getChangedData().Deleted == undefined)
+                    App.cboMailID.setValue(App.cboMailID.store.getAt(App.cboMailID.store.getTotalCount() - 1).data.MailID);
+                    //neu co thay doi trong form hoac Grid
+                else if (App.storeMailDetail.getChangedData().Updated != undefined || App.storeMailDetail.getChangedData().Created != undefined || App.storeMailDetail.getChangedData().Deleted != undefined || App.storeMailHeader.getChangedData().Updated != undefined || App.storeMailHeader.getChangedData().Created != undefined || App.storeMailHeader.getChangedData().Deleted != undefined) {
+                    //hien thong bao du lieu da thay doi
+                    HQ.message.show(150, '', '');
+
+                }
 
             } else if (_focusrecord == 2) {
                 HQ.grid.last(App.grd);
             }
             break;
         case "refresh":
-            loadDataAutoHeader();
+            App.storeMailHeader.reload();
+            App.storeMailDetail.reload();
 
             break;
         case "new":
@@ -165,6 +214,7 @@ function Close() {
         });
     }
 }
+
 // Xem lai
 var askClose = function (item) {
     if (item == "yes") {
@@ -176,6 +226,8 @@ var askClose = function (item) {
             parent.App.tabSA40300.close();
     }
 };
+//
+
 // Xac nhan xoa record tren grid
 var deleteRecordForm = function (item) {
     if (item == "yes") {
@@ -263,18 +315,18 @@ var grd_Edit = function (item, e) {
 var grd_ValidateEdit = function (item, e) {
 
     if (keys.indexOf(e.field) != -1) {
-        if (HQ.grid.checkDuplicate(App.storeMailDetail, e)) {
+        if (HQ.grid.checkDuplicate(App.grd, e, keys)) {
             HQ.message.show(1112, e.value, '');
             return false;
         }
     }
-    //Regex quy định ID chỉ gồm các ký tự chữ và số và _ ko bao gồm các ký tự khác
-    var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+    ////Regex quy định ID chỉ gồm các ký tự chữ và số và _ ko bao gồm các ký tự khác
+    //var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
 
-    if (!e.value.match(regex)) {
-        HQ.message.show(20140811, e.column.text);
-        return false;
-    }
+    //if (!e.value.match(regex)) {
+    //    HQ.message.show(20140811, e.column.text);
+    //    return false;
+    //}
     return true;
 };
 
@@ -326,15 +378,47 @@ var loadDataAutoHeader = function () {
 
 
 
-var cboMailID_Change = function (sender, e) {
+var cboMailID_Change = function (sender, newValue, oldValue) {
 
+    if (App.frm.getForm()._record) {
+        //dòng này để bắt các thay đổi của form 
+        App.frm.getForm().updateRecord();
+        //neu ko co thay doi trong form hoac Grid
+        if (App.storeMailDetail.getChangedData().Updated == undefined &&
+            App.storeMailDetail.getChangedData().Deleted == undefined &&
+            App.storeMailHeader.getChangedData().Updated == undefined &&
+            App.storeMailHeader.getChangedData().Deleted == undefined) {
+            _recycleMailID = 0;
+            App.storeMailHeader.reload();
+            App.storeMailDetail.reload();
 
-    App.storeMailHeader.reload();
-    App.storeMailDetail.reload();
+        } //neu co thay doi trong form hoac Grid
+        else if ((App.storeMailDetail.getChangedData().Updated != undefined ||
+            App.storeMailDetail.getChangedData().Created != undefined ||
+            App.storeMailDetail.getChangedData().Deleted != undefined ||
+            App.storeMailHeader.getChangedData().Updated != undefined ||
+            App.storeMailHeader.getChangedData().Created != undefined ||
+            App.storeMailHeader.getChangedData().Deleted != undefined) && _recycleMailID == 0) {
+            //hien thong bao du lieu da thay doi
+            //lưu ý cái biến tạm _recycleMailID dùng để tránh vòng lặp đệ quy khi ta set lại giá trị 
+            //cho cboMailID vì nó sẽ lại chạy function cboMailID_Change
+            _recycleMailID = 1;
+            HQ.message.show(150, '', '');
+            App.cboMailID.setValue(oldValue);
+
+        } else {
+            return false;
+        }
+    } else {
+        _recycleMailID = 0;
+        App.storeMailHeader.reload();
+        App.storeMailDetail.reload();
+    }
 
 };
 
 var chkIsAttachFile_Change = function (sender, e) {
+    _recycleMailID = 0;
     if (e) {
         App.chkIsDeleteFile.setValue(true);
         App.chkIsDeleteFile.disable();
@@ -412,6 +496,15 @@ var cboReportID_Change = function (sender, e) {
 
 }
 
-
+var _recycleMailID_Change = function () {
+    _recycleMailID = 0;
+    if (App.frm.getForm()._record) {
+        //dòng này để bắt các thay đổi của form 
+        App.frm.getForm().updateRecord();
+        //neu ko co thay doi trong form hoac Grid
+        HQ.isChange = HQ.store.isChange(App.storeMailHeader);
+        HQ.common.changeData(HQ.isChange, 'SA40300');
+    }
+}
 
 

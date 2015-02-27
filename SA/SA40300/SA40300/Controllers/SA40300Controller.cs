@@ -37,7 +37,7 @@ namespace SA40300.Controllers
         {
             var obj=_db.Server_MailAutoHeader.FirstOrDefault(p => p.MailID == mailID);
             if(obj!=null)
-            obj.PassUnZip=obj.PassUnZip.ToString().PassNull()==""?"":Encryption.Encryption.Decrypt(obj.PassUnZip.ToString(), "1210Hq10s081f359t");
+            obj.PassUnZip=obj.PassUnZip.ToString().PassNull()==""?"":Encryption.Decrypt(obj.PassUnZip.ToString(), "1210Hq10s081f359t");
             return this.Store(obj);
         }
         public ActionResult GetMailDetail(String mailID)
@@ -280,7 +280,7 @@ namespace SA40300.Controllers
             d.DateTime = s.DateTime;
             d.Header = s.Header;
             d.Body = s.Body;
-            d.PassUnZip = s.PassUnZip.PassNull().Trim()==string.Empty?"": Encryption.Encryption.Encrypt(s.PassUnZip, "1210Hq10s081f359t"); ;
+            d.PassUnZip = s.PassUnZip.PassNull().Trim()==string.Empty?"": Encryption.Encrypt(s.PassUnZip, "1210Hq10s081f359t"); ;
             d.FileName = s.FileName;
                  
             d.LUpd_Datetime = DateTime.Now;

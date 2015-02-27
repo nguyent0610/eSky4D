@@ -43,9 +43,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Encryption">
-      <HintPath>..\..\..\eBiz4DWebFrame\bin\Encryption.dll</HintPath>
-    </Reference>
     <Reference Include="Ext.Net">
       <HintPath>..\..\EbizWebMvc\SA40300_Language\SA40300\bin\Ext.Net.dll</HintPath>
     </Reference>

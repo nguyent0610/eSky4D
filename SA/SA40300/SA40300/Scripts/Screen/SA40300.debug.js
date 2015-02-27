@@ -498,8 +498,13 @@ var cboReportID_Change = function (sender, e) {
 
 var _recycleMailID_Change = function () {
     _recycleMailID = 0;
-    HQ.isChange = HQ.store.isChange(App.storeMailHeader);
-    HQ.common.changeData(HQ.isChange, 'SA40300');
+    if (App.frm.getForm()._record) {
+        //dòng này để bắt các thay đổi của form 
+        App.frm.getForm().updateRecord();
+        //neu ko co thay doi trong form hoac Grid
+        HQ.isChange = HQ.store.isChange(App.storeMailHeader);
+        HQ.common.changeData(HQ.isChange, 'SA40300');
+    }
 }
 
 
