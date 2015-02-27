@@ -1,4 +1,4 @@
-if (!Array.prototype.indexOf) {
+﻿if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
 
@@ -42,12 +42,19 @@ var HQ = {
                 return false;
             }
         },
-        insertBlank: function (store, key) {
-            if (key == undefined) {
+        insertBlank: function (store, keys) {
+            if (keys == undefined) {
                 store.insert(store.getCount(), Ext.data.Record());
             } else {
                 var flat = store.findBy(function (record, id) {
-                    if (!record.get(key)) {
+                    if (keys.constructor === Array) {
+                        for (var i = 0; i < keys.length; i++) {
+                            if (!record.get(keys[i])) {
+                                return true;
+                            }
+                        }
+                    }
+                    else if (!record.get(keys)) {
                         return true;
                     }
                     return false;
@@ -173,25 +180,42 @@ var HQ = {
                 grd.view.loadMask.show();
             else grd.view.loadMask.hide();
         },
-        insert: function (grd) {
+        insert: function (grd, keys) {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
+                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+                    store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                        callback: function () {
+                            HQ.grid.last(grd);
+                            grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                        }
+                    });
+                //}
+                //else {
+                //    HQ.grid.last(grd);
+                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                //}
+                return;
+            }
+            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
+                        if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                            HQ.store.insertBlank(store, keys);
+                        }
                         HQ.grid.last(grd);
                         grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
                     }
                 });
-                return;
-            }
-            store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                callback: function () {
-                    HQ.store.insertBlank(store);
-                    HQ.grid.last(grd);
-                    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-                }
-            });
+            //}
+            //else {
+            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+            //        HQ.store.insertBlank(store, keys);
+            //    }
+            //    HQ.grid.last(grd);
+            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+            //}
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
@@ -254,11 +278,11 @@ var HQ = {
             }
             return found;
         },
-        //TrungHT dùng cho phân trang
+        //TrungHT d�ng cho ph�n trang
         checkDuplicateAll: function (grd, row, keys) {
             return HQ.grid.checkDuplicate(grd, row, keys);
         },
-        //Dùng trong ham before edit cua grid
+        //D�ng trong ham before edit cua grid
         //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
         //Cot nao la key thi khoa lai khi da co du lieu
         checkInput: function (row, keys) {
@@ -271,17 +295,21 @@ var HQ = {
                 }
             }
             if (keys.indexOf(row.field) != -1) {
-                if (row.record.data[row.field] != "") return false;
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") return true;
+                }
+                return false;
             }
             return true;
         },
         //Kiem tra khi check require bo qua cac dong la new 
         checkRequirePass: function (items, keys) {
-            for (var jkey = 0; jkey < keys.length; jkey++) {
-                if (items[keys[jkey]]) {
-                    return false;
+            if (items != undefined && keys != undefined)
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (items[keys[jkey]]) {
+                        return false;
+                    }
                 }
-            }
             return true;
         },
         checkBeforeEdit: function (e, keys) {
@@ -292,10 +320,33 @@ var HQ = {
             }
             return HQ.grid.checkInput(e, keys);
         },
-        checkInsertKey: function (store, e, keys) {
+        checkReject: function (record, grd) {
+            if (record.data.tstamp == '') {
+                grd.getStore().remove(record, grd);
+                grd.getView().focusRow(grd.getStore().getCount() - 1);
+                grd.getSelectionModel().select(grd.getStore().getCount() - 1);
+            } else {
+                record.reject();
+            }
+        },
+        checkValidateEdit: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value).match(regex)) {
+                    HQ.message.show(20140811, e.column.text);
+                    return false;
+                }
+                if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                    HQ.message.show(1112, e.value);
+                    return false;
+                }
+
+            }
+        },
+        checkInsertKey: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 if (e.value != '')
-                    HQ.store.insertBlank(store, keys);
+                    HQ.store.insertBlank(grd.getStore(), keys);
             }
         }
     },
@@ -410,6 +461,12 @@ var HQ = {
                     HQ.common.lockItem(itm, lock);
                 });
             }
+        },
+        changeData: function (isChange, screenNbr) {
+            if (parent.App[screenNbr] != undefined)
+                if (isChange)
+                    parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '('+screenNbr+')*');
+                else parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '('+screenNbr+')');
         },
         showBusy: function (busy, waitMsg, form) {
             if (form == undefined) {

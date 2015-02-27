@@ -1,6 +1,7 @@
-var keys = ['GroupID'];
+﻿var keys = ['GroupID'];
 var fieldsCheckRequire = ["GroupID", "Descr"];
 var fieldsLangCheckRequire = ["GroupID", "Descr"];
+
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -16,16 +17,16 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_Group);
             break;
         case "refresh":
+            HQ.isFirstLoad = true;
             App.stoSYS_Group.reload();
-            HQ.grid.first(App.grdSYS_Group);
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdSYS_Group);
+                HQ.grid.insert(App.grdSYS_Group, keys);
             }
             break;
         case "delete":
-            if (App.slmData.selected.items[0] != undefined) {
+            if (App.slmSYS_Group.selected.items[0] != undefined) {
                 if (HQ.isDelete) {
                     HQ.message.show(11, '', 'deleteData');
                 }
@@ -41,8 +42,8 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.store.isChange(App.stoSYS_Group)) {
-                HQ.message.show(7, '', 'askClose');
+            if (HQ.isChange) {
+                HQ.message.show(5, '', 'askClose');
             } else {
                 HQ.common.close(this);
             }
@@ -54,36 +55,21 @@ var grdSYS_Group_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdSYS_Group_Edit = function (item, e) {
-
-    HQ.grid.checkInsertKey(App.stoSYS_Group, e, keys);
+    HQ.grid.checkInsertKey(App.grdSYS_Group, e, keys);
 };
 var grdSYS_Group_ValidateEdit = function (item, e) {
-    if (keys.indexOf(e.field) != -1) {
-        if (HQ.grid.checkDuplicate(App.grdSYS_Group, e, keys)) {
-            HQ.message.show(1112, e.value);
-            return false;
-        }
-        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-        if (!e.value.match(regex)) {
-            HQ.message.show(20140811, e.column.text);
-            return false;
-        }
-    }
+    return HQ.grid.checkValidateEdit(App.grdSYS_Group, e, keys);
 };
 var grdSYS_Group_Reject = function (record) {
-    if (record.data.tstamp == '') {
-        App.stoSYS_Group.remove(record);
-        App.grdSYS_Group.getView().focusRow(App.stoSYS_Group.getCount() - 1);
-        App.grdSYS_Group.getSelectionModel().select(App.stoSYS_Group.getCount() - 1);
-    } else {
-        record.reject();
-    }
+    HQ.grid.checkReject(record, App.grdSYS_Group);
+    stoChanged(App.stoSYS_Group);
 };
-
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
-            waitMsg: HQ.common.getLang("WaitMsg"),
+            waitMsg: HQ.common.getLang("SavingData"),
             url: 'SA00500/Save',
             params: {
                 lstData: HQ.store.getData(App.stoSYS_Group)
@@ -102,13 +88,42 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSYS_Group.deleteSelected();
+        stoChanged(App.stoSYS_Group);
     }
 };
 
-//// Other Functions ////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
+        HQ.common.changeData(false, 'SA00500');//khi dong roi gan lai cho change la false
         HQ.common.close(this);
     }
+};
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSYS_Group.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA00500');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA00500');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
