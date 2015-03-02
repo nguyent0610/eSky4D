@@ -458,7 +458,7 @@ var grdTrans_BeforeEdit = function (item, e) {
     }
 
     if (key == 'UnitPrice') {
-        var invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
+        var invt = e.row.invt; //HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
         if (!Ext.isEmpty(invt) && invt.ValMthd == 'T') {
             return false;
         }
@@ -486,7 +486,10 @@ var grdTrans_Edit = function (item, e) {
     var key = e.field;
     if (Object.keys(e.record.modified).length > 0) {
         grdTrans.isChange = true;
-        var invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
+        if (e.record.invt == undefined) {
+            e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
+        }
+        var invt = e.record.invt;
         if (!Ext.isEmpty(invt)) {
             if (invt.ValMthd == 'A' || invt.ValMthd == 'E') {
                 if (key == 'InvtID' && Ext.isEmpty(e.record.data.UnitDesc)) {
@@ -842,7 +845,8 @@ var checkExitEdit = function (row) {
         trans.ReasonCD = App.ReasonCD.getValue();
         trans.SiteID = App.SiteID.getValue();
 
-        var invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [trans.InvtID]);
+        //var invt =HQ.store.findInStore(App.stoInvt, ['InvtID'], [trans.InvtID]);
+        var invt = row.record.invt;
         var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
         if (Ext.isEmpty(cnv)){
             trans.UnitMultDiv = '';
@@ -862,7 +866,7 @@ var checkExitEdit = function (row) {
 
     } else if (key == 'UnitDesc') {
 
-        var invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [trans.InvtID]);
+        var invt = row.record.invt;
 
         var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
 
