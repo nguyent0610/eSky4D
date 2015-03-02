@@ -46,21 +46,22 @@
         .ColumnModel(
         
          X.RowNumbererColumn()
+                    
+                    , X.Column().Text(Util.GetLang("ModuleCode")).DataIndex("ModuleCode").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(2).EnforceMaxLength(true))
+                    , X.Column().Text(Util.GetLang("ModuleID")).DataIndex("ModuleID").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(2).EnforceMaxLength(true))
                     , X.CheckColumn().Text(Util.GetLang("Active")).DataIndex("Active").Width(150).Editable(true)
-                                                , X.Column().Text(Util.GetLang("ModuleCode")).DataIndex("ModuleCode").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(2).EnforceMaxLength(true))
-                                                , X.Column().Text(Util.GetLang("ModuleID")).DataIndex("ModuleID").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(2).EnforceMaxLength(true))
-                                                , X.Column().Text(Util.GetLang("CatID")).Width(150).DataIndex("CatID").Editor(
-                                                    HQ.Combo().ID("cboCatID").Name("cboCatID").HQProcedure("SA00200_pcGetAccessModuleCat")
-                                                    .HQColumnShow("catID,ModCatDescr").DisplayField("catID").ValueField("catID")
-                                                    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                                                    .HQParam(new StoreParameterCollection() { 
-                                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw),
-                                                        new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
-                                                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
-                                                    }).HQDBSys(true).AllowBlank(true).ForceSelection(true)
-                                                    .LoadData()
-                                                )
-                                                , Html.X().Column().Text(Util.GetLang("ModuleName")).DataIndex("ModuleName").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(50).EnforceMaxLength(true))
+                    , X.Column().Text(Util.GetLang("CatID")).Width(150).DataIndex("CatID").Editor(
+                        HQ.Combo().ID("cboCatID").Name("cboCatID").HQProcedure("SA00200_pcGetAccessModuleCat")
+                        .HQColumnShow("catID,ModCatDescr").DisplayField("catID").ValueField("catID")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .HQParam(new StoreParameterCollection() { 
+                            new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw),
+                            new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw),
+                            new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        }).HQDBSys(true).AllowBlank(true).ForceSelection(true)
+                        .LoadData()
+                    )
+                    , Html.X().Column().Text(Util.GetLang("ModuleName")).DataIndex("ModuleName").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(50).EnforceMaxLength(true))
                                                 
          
          
