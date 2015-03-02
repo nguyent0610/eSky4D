@@ -43,7 +43,7 @@ namespace IN10100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -288,9 +288,9 @@ namespace IN10100.Controllers
                             dal.CommitTrans();
                         }
 
-                        Util.AppendLog(ref _logMessage, "9999", "", data:new {success=true, batNbr = _objBatch.BatNbr});
+                        Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
                     }
-                    else if (_handle == "C" || _handle=="V")
+                    else if (_handle == "C" || _handle == "V")
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
                         if (!inventory.IN10100_Cancel(_objBatch.BranchID, _objBatch.BatNbr, data["isTransfer"].ToBool(), data["isTransfer"].ToBool() ? _lstTrans[0].RefNbr : "", _handle == "C"))
@@ -505,15 +505,15 @@ namespace IN10100.Controllers
                 Workbook workbook = new Workbook();
                 Worksheet sheetTrans = workbook.Worksheets[0];
 
-                sheetTrans.Name="Details";
+                sheetTrans.Name = "Details";
 
                 DataAccess dal = Util.Dal();
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@EffDate", DbType.DateTime, clsCommon.GetValueDBNull(data["DateEnd"].ToDateShort()), ParameterDirection.Input, 30));
-                DataTable  dt = dal.ExecDataTable("IN10100_pdImportInventory", CommandType.StoredProcedure,ref pc);
+                DataTable dt = dal.ExecDataTable("IN10100_pdImportInventory", CommandType.StoredProcedure, ref pc);
 
-                sheetTrans.Cells.ImportDataTable(dt,false,"AA2");
+                sheetTrans.Cells.ImportDataTable(dt, false, "AA2");
 
                 Style style = workbook.GetStyleInPool(0);
                 style.Font.Color = Color.Transparent;
@@ -528,7 +528,7 @@ namespace IN10100.Controllers
                 sheetTrans.Cells.Columns[28].ApplyStyle(style, flag);
                 sheetTrans.Cells.Columns[29].ApplyStyle(style, flag);
 
-                
+
                 var cell = sheetTrans.Cells["B1"];
                 cell.PutValue("CHI TIẾT NHẬP KHO");
                 style = cell.GetStyle();
@@ -549,10 +549,10 @@ namespace IN10100.Controllers
                 cell.SetStyle(style);
 
                 cell = sheetTrans.Cells["C2"];
-                cell.Formula =  "=SUM(F5:F" + (dt.Rows.Count + 5).ToString() + ")";
+                cell.Formula = "=SUM(F5:F" + (dt.Rows.Count + 5).ToString() + ")";
                 style = cell.GetStyle();
-                style.IsLocked=true;
-                style.Custom =  "#,##0";
+                style.IsLocked = true;
+                style.Custom = "#,##0";
                 cell.SetStyle(style);
 
                 style = sheetTrans.Cells["A4"].GetStyle();
@@ -585,7 +585,7 @@ namespace IN10100.Controllers
                 validation.ShowError = true;
                 validation.AlertStyle = ValidationAlertType.Stop;
                 validation.ErrorTitle = "Error";
-                validation.InputMessage="Chọn mã mặt hàng";
+                validation.InputMessage = "Chọn mã mặt hàng";
                 validation.ErrorMessage = "Mã mặt hàng này không tồn tại";
 
                 CellArea area;
@@ -593,11 +593,11 @@ namespace IN10100.Controllers
                 area.EndRow = dt.Rows.Count + 4;
                 area.StartColumn = 0;
                 area.EndColumn = 0;
-                
+
                 validation.AddArea(area);
-               
+
                 string formulaInventory = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AD,2,0)),\"\",VLOOKUP({0},AA:AD,2,0))", "A5");
-                sheetTrans.Cells["B5"].SetSharedFormula(formulaInventory,dt.Rows.Count,1);
+                sheetTrans.Cells["B5"].SetSharedFormula(formulaInventory, dt.Rows.Count, 1);
 
                 string formulaUnitInventory = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AD,3,0)),\"\",VLOOKUP({0},AA:AD,3,0))", "A5");
                 sheetTrans.Cells["C5"].SetSharedFormula(formulaUnitInventory, dt.Rows.Count, 1);
@@ -611,7 +611,7 @@ namespace IN10100.Controllers
                 style = sheetTrans.Cells["F5"].GetStyle();
                 style.Custom = "#,##0";
                 Range range = sheetTrans.Cells.CreateRange("F5", "F" + (dt.Rows.Count + 5));
-                range.ApplyStyle(style,flag);
+                range.ApplyStyle(style, flag);
                 range = sheetTrans.Cells.CreateRange("E5", "E" + (dt.Rows.Count + 5));
                 range.ApplyStyle(style, flag);
 
@@ -619,7 +619,7 @@ namespace IN10100.Controllers
                 style.IsLocked = false;
 
                 range = sheetTrans.Cells.CreateRange("A5", "A" + (dt.Rows.Count + 5));
-                range.ApplyStyle(style,flag);
+                range.ApplyStyle(style, flag);
 
                 style = sheetTrans.Cells["D5"].GetStyle();
                 style.Custom = "#,##0";
@@ -639,7 +639,7 @@ namespace IN10100.Controllers
                 sheetTrans.Protect(ProtectionType.All);
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Position = 0;
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName=data["BatNbr"].PassNull()+".xlsx"};
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = data["BatNbr"].PassNull() + ".xlsx" };
             }
             catch (Exception ex)
             {
@@ -653,7 +653,7 @@ namespace IN10100.Controllers
                 }
             }
         }
-        
+
         public ActionResult Import(FormCollection data)
         {
             try
