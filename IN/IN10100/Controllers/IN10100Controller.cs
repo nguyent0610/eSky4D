@@ -226,7 +226,7 @@ namespace IN10100.Controllers
 
             _objBatch = data.ConvertToObject<IN10100_pcBatch_Result>();
 
-            string _handle = data["Handle"].PassNull();
+            _handle = data["Handle"].PassNull();
             _objBatch.Status = _objBatch.Status.PassNull() == string.Empty ? "H" : _objBatch.Status;
 
             var cfgWrkDateChk = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
