@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IN10100")]
+[assembly: AssemblyTitle("Receipt")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("IN10100")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany("Han Quang Software Solution")]
+[assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]
+[assembly: AssemblyCopyright("Copy right 2006-2015 Han Quang Software Solution. All rights Reserved")]
+[assembly: AssemblyTrademark("IN10100")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
