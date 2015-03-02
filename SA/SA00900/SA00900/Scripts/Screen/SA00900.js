@@ -58,6 +58,32 @@ var menuClick = function (command) {
     }
 
 };
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSYS_Language.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA00900');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA00900');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
 var grdSYS_Language_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
@@ -108,32 +134,7 @@ var askClose = function (item) {
         HQ.common.close(this);
     }
 };
-//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
-var firstLoad = function () {
-    HQ.isFirstLoad = true;
-    App.stoSYS_Language.reload();
-}
-//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
-var stoChanged = function (sto) {
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SA00900');
-};
-//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
-var stoLoad = function (sto) {
-    HQ.common.showBusy(false);
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SA00900');
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
-        }
-        HQ.isFirstLoad = false;
-    }
-};
-//trước khi load trang busy la dang load data
-var stoBeforeLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
-};
+
 
 /////////////////////////////////////////////////////////////////////////
 

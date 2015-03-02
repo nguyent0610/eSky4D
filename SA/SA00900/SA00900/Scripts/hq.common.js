@@ -183,39 +183,43 @@ var HQ = {
         insert: function (grd, keys) {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
+            //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
             if (createdItems != undefined) {
-                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+                if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
                     store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                         callback: function () {
                             HQ.grid.last(grd);
-                            grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                            setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 500);
+
                         }
                     });
-                //}
-                //else {
-                //    HQ.grid.last(grd);
-                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-                //}
+                }
+                else {
+                    HQ.grid.last(grd);
+                    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                }
                 return;
             }
-            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+            if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
                         if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
                             HQ.store.insertBlank(store, keys);
                         }
                         HQ.grid.last(grd);
-                        grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 3000);
+
                     }
                 });
-            //}
-            //else {
-            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-            //        HQ.store.insertBlank(store, keys);
-            //    }
-            //    HQ.grid.last(grd);
-            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-            //}
+            }
+            else {
+                if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                    HQ.store.insertBlank(store, keys);
+                }
+                HQ.grid.last(grd);
+                grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+            }
+           
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
