@@ -39,8 +39,8 @@ namespace AP20200
             Session["DBApp"] = Current.DBApp = "eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004";
-            Session["Language"] = Current.Language = "en";
-            Session["LangID"] = 0;
+            Session["Language"] = Current.Language = "vi";
+            Session["LangID"] = 1;
 
         }
     }

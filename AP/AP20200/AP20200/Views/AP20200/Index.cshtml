@@ -38,31 +38,31 @@
 
         @*Make the store - the binding data of the form*@
         @(
-            X.Store().ID("stoVendor")
+ X.Store().ID("stoVendor")
             .AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(AP_Vendor), "mdlAP_Vendor", "VendID"))       
+            .Model(Util.GenerateModel(typeof(AP_Vendor), "mdlAP_Vendor", "VendID"))
             .Proxy(
-                X.AjaxProxy()                
-                .Url(Url.Action("GetAPVendorHeader", "AP20200"))                
+                X.AjaxProxy()
+                .Url(Url.Action("GetAPVendorHeader", "AP20200"))
                 .ActionMethods(action =>
                 {
                     action.Read = HttpMethod.POST;
                 })
                 .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-            ) 
+            )
             .Parameters(ps =>
             {
-                //ps.Add(new StoreParameter("branchId", "App.cboBranchID.value", ParameterMode.Raw));
                 ps.Add(new StoreParameter("vendID", "App.cboVendID.getValue()", ParameterMode.Raw));
-            })      
-            .Listeners(p=>p.Load.Handler="stoVendor_load()" )
-            // Store: stoVendor
+            })
+            .Listeners(l =>
+                    {
+                        l.BeforeLoad.Fn = "stoBeforeLoad";
+                        l.Load.Fn = "stoLoad";                   
+                    }
+                )
+                // Store: stoVendor
         )
-
-        @X.GridFilters() <!--Khi cache cho grid-->
-        @X.ProgressBarPager() <!--Khi cache cho grid -->
-
         <!-- Gọi hàm Body trong AP20200Controller để dựng view Body.cshtml, mục đích tạo cache. -->
-        @{ Html.RenderAction("Body"); }
+        @{ Html.RenderAction("Body", new { lang = @Current.LangID });}   
     </body>
 </html>

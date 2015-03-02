@@ -28,8 +28,8 @@ namespace AP20200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
@@ -43,7 +43,7 @@ namespace AP20200.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Save(FormCollection data)
+        public ActionResult Save(FormCollection data, bool isNew)
         {
             try
             {
@@ -51,55 +51,50 @@ namespace AP20200.Controllers
                 string vendID = data["cboVendID"];
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstAPVendorHeader"]);
                 ChangeRecords<AP_Vendor> lstAPVendorHeader = dataHandler.BatchObjectData<AP_Vendor>();
-                foreach (AP_Vendor createdVendor in lstAPVendorHeader.Created)
+                foreach (AP_Vendor createdVendor in lstAPVendorHeader.Updated)
                 {
                     var objHeader = _db.AP_Vendor.FirstOrDefault(p => p.VendID == vendID);
-
-                    if (objHeader == null)
+                    if (isNew)//new record
                     {
-                        // Create new a Vendor
-                        objHeader = new AP_Vendor();
-                        objHeader.VendID = vendID;
-
-                        objHeader.Crtd_DateTime = DateTime.Now;
-                        objHeader.Crtd_Prog = _screenNbr;
-                        objHeader.Crtd_User = Current.UserName;
-                        UpdatingHeader(createdVendor, ref objHeader);
-
-                        // Add data to AP_Vendor
-                        _db.AP_Vendor.AddObject(objHeader);
-
+                        if (objHeader != null)
+                            return Json(new { success = false, msgCode = 2000, msgParam = vendID });//quang message ma nha cung cap da ton tai ko the them
+                        else
+                        {
+                            objHeader = new AP_Vendor();
+                            objHeader.VendID = vendID;
+                            objHeader.Crtd_DateTime = DateTime.Now;
+                            objHeader.Crtd_Prog = _screenNbr;
+                            objHeader.Crtd_User = Current.UserName;
+                            UpdatingHeader(createdVendor, ref objHeader);
+                            // Add data to AP_Vendor
+                            _db.AP_Vendor.AddObject(objHeader);
+                            _db.SaveChanges();                        
+                        }
+                    }
+                    else if (objHeader != null)//update record
+                    {
+                        if (objHeader.tstamp.ToHex() == createdVendor.tstamp.ToHex())
+                        {
+                            UpdatingHeader(createdVendor, ref objHeader);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }               
                         _db.SaveChanges();
-
-                        return Json(new { success = true });
+                       
                     }
                     else
                     {
-                        return Json(new { success = false, msgCode = 20402, msgParam = vendID });
+                        throw new MessageException(MessageType.Message, "19");
                     }
-                }
-
-                foreach (AP_Vendor updatedSlsperson in lstAPVendorHeader.Updated)
-                {
-                    var objHeader = _db.AP_Vendor.FirstOrDefault(p => p.VendID == vendID);
-
-                    if (objHeader != null)
-                    {
-                        // Update an existing vendor
-                        UpdatingHeader(updatedSlsperson, ref objHeader);
-                    }
-                    _db.SaveChanges();
-                    
-                    // ===============================================================
-
-                    // Get out of the loop (only update the first data)
-                    return Json(new { success = true, msgCode = 201405071 });
                 }
                 return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
 
@@ -172,12 +167,6 @@ namespace AP20200.Controllers
             d.LUpd_DateTime = DateTime.Now;
             d.LUpd_Prog = _screenNbr;
             d.LUpd_User = Current.UserName;
-        }
-
-     
-       
-       
-
-       
+        }   
     }
 }
