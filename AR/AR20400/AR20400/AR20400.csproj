@@ -43,27 +43,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="eBiz4DWeb">
-      <HintPath>..\..\EbizWebMvc\AR20400_Language\AR20400\bin\eBiz4DWeb.dll</HintPath>
-    </Reference>
-    <Reference Include="eBiz4DWebFrame, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\eBiz4DWebFrame\bin\eBiz4DWebFrame.dll</HintPath>
-    </Reference>
-    <Reference Include="eBiz4DWebSys">
-      <HintPath>..\..\EbizWebMvc\AR20400_Language\AR20400\bin\eBiz4DWebSys.dll</HintPath>
-    </Reference>
-    <Reference Include="Encryption">
-      <HintPath>..\..\..\eBiz4DWebFrame\bin\Encryption.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>C:\Users\TramTB\Documents\Visual Studio 2012\Projects\ArrayGridUsingDB\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Ext.Net">
       <HintPath>..\..\EbizWebMvc\AR20400_Language\AR20400\bin\Ext.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net.Utilities">
       <HintPath>..\..\EbizWebMvc\AR20400_Language\AR20400\bin\Ext.Net.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="HQ.eSkyFramework">
+      <HintPath>..\..\..\..\..\..\DLL MVC moi\HQ.eSkyFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="HQ.eSkySys">
+      <HintPath>..\..\..\..\..\..\DLL MVC moi\HQ.eSkySys.dll</HintPath>
     </Reference>
     <Reference Include="HQSendMailApprove, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,24 +67,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Dll\Dll\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SendMailService.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\EXT\Dll\sendmail\SendMailService.Web.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
-    <Reference Include="System.ServiceModel.DomainServices.Client, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\EXT\Dll\sendmail\System.ServiceModel.DomainServices.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ServiceModel.DomainServices.Client.Web, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\EXT\Dll\sendmail\System.ServiceModel.DomainServices.Client.Web.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -245,7 +223,12 @@
       <LastGenOutput>AR20400Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
-    <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\hq.common.debug.js" />
+    <Content Include="Scripts\hq.common.js" />
+    <Content Include="Scripts\hq.language0.js" />
+    <Content Include="Scripts\hq.language1.js" />
+    <Content Include="Scripts\hq.language2.js" />
+    <Content Include="Scripts\hq.language3.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

@@ -469,25 +469,6 @@ namespace AR20400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        public ObjectResult<ppv_Customer_Result> ppv_Customer(global::System.String branchID)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<ppv_Customer_Result>("ppv_Customer", branchIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="status">No Metadata Documentation available.</param>
         /// <param name="roles">No Metadata Documentation available.</param>
@@ -524,6 +505,25 @@ namespace AR20400
             }
     
             return base.ExecuteFunction<PPV_AR20400Handle_Result>("PPV_AR20400Handle", langIDParameter, statusParameter, rolesParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<AR20400_pcCustomer_Result> AR20400_pcCustomer(global::System.String branchID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<AR20400_pcCustomer_Result>("AR20400_pcCustomer", branchIDParameter);
         }
 
         #endregion
@@ -8391,6 +8391,209 @@ namespace AR20400
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="AR20400_pcCustomer_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR20400_pcCustomer_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR20400_pcCustomer_Result object.
+        /// </summary>
+        /// <param name="custId">Initial value of the CustId property.</param>
+        /// <param name="custName">Initial value of the CustName property.</param>
+        /// <param name="nodeLevel">Initial value of the NodeLevel property.</param>
+        /// <param name="parentRecordID">Initial value of the ParentRecordID property.</param>
+        public static AR20400_pcCustomer_Result CreateAR20400_pcCustomer_Result(global::System.String custId, global::System.String custName, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID)
+        {
+            AR20400_pcCustomer_Result aR20400_pcCustomer_Result = new AR20400_pcCustomer_Result();
+            aR20400_pcCustomer_Result.CustId = custId;
+            aR20400_pcCustomer_Result.CustName = custName;
+            aR20400_pcCustomer_Result.NodeLevel = nodeLevel;
+            aR20400_pcCustomer_Result.ParentRecordID = parentRecordID;
+            return aR20400_pcCustomer_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CustId
+        {
+            get
+            {
+                return _CustId;
+            }
+            set
+            {
+                OnCustIdChanging(value);
+                ReportPropertyChanging("CustId");
+                _CustId = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CustId");
+                OnCustIdChanged();
+            }
+        }
+        private global::System.String _CustId;
+        partial void OnCustIdChanging(global::System.String value);
+        partial void OnCustIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CustName
+        {
+            get
+            {
+                return _CustName;
+            }
+            set
+            {
+                OnCustNameChanging(value);
+                ReportPropertyChanging("CustName");
+                _CustName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CustName");
+                OnCustNameChanged();
+            }
+        }
+        private global::System.String _CustName;
+        partial void OnCustNameChanging(global::System.String value);
+        partial void OnCustNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Addr1
+        {
+            get
+            {
+                return _Addr1;
+            }
+            set
+            {
+                OnAddr1Changing(value);
+                ReportPropertyChanging("Addr1");
+                _Addr1 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Addr1");
+                OnAddr1Changed();
+            }
+        }
+        private global::System.String _Addr1;
+        partial void OnAddr1Changing(global::System.String value);
+        partial void OnAddr1Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Addr2
+        {
+            get
+            {
+                return _Addr2;
+            }
+            set
+            {
+                OnAddr2Changing(value);
+                ReportPropertyChanging("Addr2");
+                _Addr2 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Addr2");
+                OnAddr2Changed();
+            }
+        }
+        private global::System.String _Addr2;
+        partial void OnAddr2Changing(global::System.String value);
+        partial void OnAddr2Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String NodeID
+        {
+            get
+            {
+                return _NodeID;
+            }
+            set
+            {
+                OnNodeIDChanging(value);
+                ReportPropertyChanging("NodeID");
+                _NodeID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("NodeID");
+                OnNodeIDChanged();
+            }
+        }
+        private global::System.String _NodeID;
+        partial void OnNodeIDChanging(global::System.String value);
+        partial void OnNodeIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 NodeLevel
+        {
+            get
+            {
+                return _NodeLevel;
+            }
+            set
+            {
+                OnNodeLevelChanging(value);
+                ReportPropertyChanging("NodeLevel");
+                _NodeLevel = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("NodeLevel");
+                OnNodeLevelChanged();
+            }
+        }
+        private global::System.Int16 _NodeLevel;
+        partial void OnNodeLevelChanging(global::System.Int16 value);
+        partial void OnNodeLevelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ParentRecordID
+        {
+            get
+            {
+                return _ParentRecordID;
+            }
+            set
+            {
+                OnParentRecordIDChanging(value);
+                ReportPropertyChanging("ParentRecordID");
+                _ParentRecordID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ParentRecordID");
+                OnParentRecordIDChanged();
+            }
+        }
+        private global::System.Int32 _ParentRecordID;
+        partial void OnParentRecordIDChanging(global::System.Int32 value);
+        partial void OnParentRecordIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="ppv_AR20400_getCompany_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -8690,209 +8893,6 @@ namespace AR20400
         private global::System.String _Descr;
         partial void OnDescrChanging(global::System.String value);
         partial void OnDescrChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="ppv_Customer_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class ppv_Customer_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new ppv_Customer_Result object.
-        /// </summary>
-        /// <param name="custId">Initial value of the CustId property.</param>
-        /// <param name="custName">Initial value of the CustName property.</param>
-        /// <param name="nodeLevel">Initial value of the NodeLevel property.</param>
-        /// <param name="parentRecordID">Initial value of the ParentRecordID property.</param>
-        public static ppv_Customer_Result Createppv_Customer_Result(global::System.String custId, global::System.String custName, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID)
-        {
-            ppv_Customer_Result ppv_Customer_Result = new ppv_Customer_Result();
-            ppv_Customer_Result.CustId = custId;
-            ppv_Customer_Result.CustName = custName;
-            ppv_Customer_Result.NodeLevel = nodeLevel;
-            ppv_Customer_Result.ParentRecordID = parentRecordID;
-            return ppv_Customer_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String CustId
-        {
-            get
-            {
-                return _CustId;
-            }
-            set
-            {
-                OnCustIdChanging(value);
-                ReportPropertyChanging("CustId");
-                _CustId = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CustId");
-                OnCustIdChanged();
-            }
-        }
-        private global::System.String _CustId;
-        partial void OnCustIdChanging(global::System.String value);
-        partial void OnCustIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String CustName
-        {
-            get
-            {
-                return _CustName;
-            }
-            set
-            {
-                OnCustNameChanging(value);
-                ReportPropertyChanging("CustName");
-                _CustName = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CustName");
-                OnCustNameChanged();
-            }
-        }
-        private global::System.String _CustName;
-        partial void OnCustNameChanging(global::System.String value);
-        partial void OnCustNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Addr1
-        {
-            get
-            {
-                return _Addr1;
-            }
-            set
-            {
-                OnAddr1Changing(value);
-                ReportPropertyChanging("Addr1");
-                _Addr1 = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Addr1");
-                OnAddr1Changed();
-            }
-        }
-        private global::System.String _Addr1;
-        partial void OnAddr1Changing(global::System.String value);
-        partial void OnAddr1Changed();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Addr2
-        {
-            get
-            {
-                return _Addr2;
-            }
-            set
-            {
-                OnAddr2Changing(value);
-                ReportPropertyChanging("Addr2");
-                _Addr2 = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Addr2");
-                OnAddr2Changed();
-            }
-        }
-        private global::System.String _Addr2;
-        partial void OnAddr2Changing(global::System.String value);
-        partial void OnAddr2Changed();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String NodeID
-        {
-            get
-            {
-                return _NodeID;
-            }
-            set
-            {
-                OnNodeIDChanging(value);
-                ReportPropertyChanging("NodeID");
-                _NodeID = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("NodeID");
-                OnNodeIDChanged();
-            }
-        }
-        private global::System.String _NodeID;
-        partial void OnNodeIDChanging(global::System.String value);
-        partial void OnNodeIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int16 NodeLevel
-        {
-            get
-            {
-                return _NodeLevel;
-            }
-            set
-            {
-                OnNodeLevelChanging(value);
-                ReportPropertyChanging("NodeLevel");
-                _NodeLevel = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("NodeLevel");
-                OnNodeLevelChanged();
-            }
-        }
-        private global::System.Int16 _NodeLevel;
-        partial void OnNodeLevelChanging(global::System.Int16 value);
-        partial void OnNodeLevelChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 ParentRecordID
-        {
-            get
-            {
-                return _ParentRecordID;
-            }
-            set
-            {
-                OnParentRecordIDChanging(value);
-                ReportPropertyChanging("ParentRecordID");
-                _ParentRecordID = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ParentRecordID");
-                OnParentRecordIDChanged();
-            }
-        }
-        private global::System.Int32 _ParentRecordID;
-        partial void OnParentRecordIDChanging(global::System.Int32 value);
-        partial void OnParentRecordIDChanged();
 
         #endregion
 

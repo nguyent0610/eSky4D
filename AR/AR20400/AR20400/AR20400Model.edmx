@@ -338,10 +338,10 @@
           <Property Name="ShipViaID" Type="varchar" MaxLength="15" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="District" Type="varchar" MaxLength="10" />
         </EntityType>
@@ -371,10 +371,10 @@
           <Property Name="Param05" Type="nvarchar" MaxLength="500" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="MailApprove" Type="varchar" MaxLength="100" />
           <Property Name="ProcContent" Type="varchar" MaxLength="100" />
@@ -400,16 +400,8 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="PPV_AR20400Handle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="LangID" Type="smallint" Mode="In" />
-          <Parameter Name="Status" Type="varchar" Mode="In" />
-          <Parameter Name="Roles" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="ppv_Customer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="AR20400_pcCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="SI_GetMaxHierarchyLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Type" Type="varchar" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -437,15 +429,15 @@
           <EntitySet Name="AR_SellingProducts" EntityType="AR20400Model.AR_SellingProducts" />
           <EntitySet Name="AR_Setup" EntityType="AR20400Model.AR_Setup" />
           <EntitySet Name="AR_SOAddress" EntityType="AR20400Model.AR_SOAddress" />
-          <FunctionImport Name="ppv_Customer" ReturnType="Collection(AR20400Model.ppv_Customer_Result)">
-          <Parameter Name="BranchID" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="AR20400Model.SI_ApprovalFlowHandle" />
           <FunctionImport Name="PPV_AR20400Handle" ReturnType="Collection(AR20400Model.PPV_AR20400Handle_Result)">
             <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="Status" Mode="In" Type="String" />
             <Parameter Name="Roles" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_pcCustomer" ReturnType="Collection(AR20400Model.AR20400_pcCustomer_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="ppv_AR20400_getCompany_Result">
@@ -718,22 +710,13 @@
           <Property Type="String" Name="ShipViaID" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="District" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="ppv_Customer_Result">
-          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
-          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="NodeID" Nullable="true" MaxLength="10" />
-          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
-          <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
-        </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
             <PropertyRef Name="CustId" />
@@ -838,10 +821,10 @@
           <Property Type="String" Name="Param05" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="MailApprove" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProcContent" MaxLength="100" FixedLength="false" Unicode="false" />
@@ -850,6 +833,15 @@
           <Property Type="String" Name="ToStatus" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="Code" Nullable="false" MaxLength="5" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="AR20400_pcCustomer_Result">
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Addr2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="NodeID" Nullable="true" MaxLength="10" />
+          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
+          <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -876,7 +868,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SI_GetMaxHierarchyLevel" FunctionName="eBiz4DWebSysModel.Store.SI_GetMaxHierarchyLevel" />
           <EntitySetMapping Name="AR_CustAdvTool">
             <EntityTypeMapping TypeName="AR20400Model.AR_CustAdvTool">
               <MappingFragment StoreEntitySet="AR_CustAdvTool">
@@ -1125,19 +1116,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="ppv_Customer" FunctionName="eBiz4DWebSysModel.Store.ppv_Customer">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="AR20400Model.ppv_Customer_Result">
-                <ScalarProperty Name="CustId" ColumnName="CustId" />
-                <ScalarProperty Name="CustName" ColumnName="CustName" />
-                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
-                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
-                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
-                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
-                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
@@ -1248,12 +1226,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="PPV_AR20400Handle" FunctionName="eBiz4DWebSysModel.Store.PPV_AR20400Handle">
+          <FunctionImportMapping FunctionImportName="AR20400_pcCustomer" FunctionName="eBiz4DWebSysModel.Store.AR20400_pcCustomer">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="AR20400Model.PPV_AR20400Handle_Result">
-                <ScalarProperty Name="ToStatus" ColumnName="ToStatus" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pcCustomer_Result">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
+                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
+                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1291,7 +1273,7 @@
         <EntityTypeShape EntityType="AR20400Model.AR_Setup" Width="1.5" PointX="7.375" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="AR20400Model.AR_SOAddress" Width="1.5" PointX="3.25" PointY="3.5" />
         <EntityTypeShape EntityType="AR20400Model.AR_Customer" Width="1.5" PointX="5.625" PointY="0.5" />
-        <EntityTypeShape EntityType="AR20400Model.SI_ApprovalFlowHandle" Width="1.5" PointX="10.563478884549568" PointY="1.1222060029963992" />
+        <EntityTypeShape EntityType="AR20400Model.SI_ApprovalFlowHandle" Width="2.125" PointX="16.625" PointY="0.5" />
       </Diagram>
     </Diagrams>
   </Designer>

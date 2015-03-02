@@ -1,7 +1,7 @@
-using eBiz4DWebFrame;
 using Ext.Net;
 using Ext.Net.MVC;
-using eBiz4DWebSys;
+using HQ.eSkyFramework;
+using HQ.eSkySys;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,7 +21,7 @@ namespace AR20400.Controllers
     {
         string screenNbr = "AR20400";
         AR20400Entities _db = Util.CreateObjectContext<AR20400Entities>(false);
-        eBiz4DWebSysEntities _sys = Util.CreateObjectContext<eBiz4DWebSysEntities>(true);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         string b = "";
         string tmpChangeTreeDic = "0";
         string brandID = Current.CpnyID;
@@ -33,8 +33,8 @@ namespace AR20400.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
             ViewBag.Roles = user.UserTypes;
@@ -72,7 +72,7 @@ namespace AR20400.Controllers
                 node.NodeID = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
             }
 
-            var tmps = _db.ppv_Customer(brandID)
+            var tmps = _db.AR20400_pcCustomer(brandID)
                 .Where(p => p.NodeID == inactiveHierachy.NodeID
                     && p.ParentRecordID == inactiveHierachy.ParentRecordID
                     && p.NodeLevel == level - 1).ToList();
@@ -83,7 +83,7 @@ namespace AR20400.Controllers
 
             if (tmps != null && tmps.Count > 0)
             {
-                foreach (ppv_Customer_Result tmp in tmps)
+                foreach (AR20400_pcCustomer_Result tmp in tmps)
                 {
                     
                     k++;
@@ -504,7 +504,7 @@ namespace AR20400.Controllers
                     }
                     else
                     {
-                        return Json(new { success = false, code = "8001" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { success = false, code = "213" }, JsonRequestBehavior.AllowGet);
                     }
 
                 }
