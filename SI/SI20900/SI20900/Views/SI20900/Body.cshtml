@@ -17,56 +17,51 @@
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
-    .Layout(LayoutType.Fit) 
+    .Layout(LayoutType.Fit)
     .Items(
         ////Thiet ke giao dien o day
 
         X.GridPanel()
         .Scroll(ScrollMode.Both)
         .View(X.GridView().TrackOver(false))
-        .ID("grdSI_TaxCat")
+        .ID("grdTaxCat")
         .Store(
-             X.Store()
-            .ID("stoData")
-            .PageSize(50)//.AutoLoad(true)
-            .Model(Util.GenerateModel(typeof(SI20900_pgLoadGrid_Result), "mdlSI_TaxCat", "CatID"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData")))
-            .Listeners(l => { 
-                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; 
-                l.Load.Handler = "HQ.common.showBusy(false);"; 
+            X.Store()
+            .ID("stoTaxCat")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(SI20900_pgLoadTaxCat_Result), "mdlSI20900_pgLoadTaxCat", "CatID"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetTaxCat"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";                 
             })
         )
-        .Listeners(p => p.BoxReady.Handler = "App.stoData.reload();")
+        .Listeners(p =>
+                 {
+                     p.BoxReady.Handler = "firstLoad();";
+                 })
         .SortableColumns(false)
         .ColumnModel(
-        
-         X.RowNumbererColumn()
-                    , X.Column().Text(Util.GetLang("CatID")).DataIndex("CatID").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))
-                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(Html.X().TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true))
-                    
-
-                    , X.CommandColumn().Width(150)
-                    .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t =>
-                            {
-                                t.Text = Util.GetLang("Rejectrowchanges");
-                            })
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
-                    )
-                    .PrepareToolbar(t =>
-                    {
-                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                    })
-                    .Listeners(l =>
-                    {
-                        l.Command.Handler = "grdSI_TaxCat_Reject(record);";
-                    })
-        
+            X.RowNumbererColumn().Width(40),
+            X.Column().ID("CatID").Text(Util.GetLang("CatID")).DataIndex("CatID").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true)),
+            X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdTaxCat_Reject(record);")
         )
-        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+        .SelectionModel(X.RowSelectionModel().ID("slmTaxCat").Mode(SelectionMode.Multi))
         .BottomBar(
             X.PagingToolbar()
             .Items(
@@ -76,7 +71,10 @@
                 .Width(80)
                 .Items("1", "2", "10", "20", "30", "50")
                 .SelectedItems("50")
-                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
             )
             .Plugins(X.ProgressBarPager())
         )
@@ -85,9 +83,10 @@
             .ClicksToEdit(1)
             .Listeners(ls =>
             {
-                ls.BeforeEdit.Fn = "grdSI_TaxCat_BeforeEdit";
-                ls.Edit.Fn = "grdSI_TaxCat_Edit";
-                ls.ValidateEdit.Fn = "grdSI_TaxCat_ValidateEdit";
+                ls.BeforeEdit.Fn = "grdTaxCat_BeforeEdit";
+                ls.Edit.Fn = "grdTaxCat_Edit";
+                ls.ValidateEdit.Fn = "grdTaxCat_ValidateEdit";
+
             })
         )
 
@@ -95,9 +94,8 @@
             X.GridFilters()
                 .Local(true)
                 .Filters(
-                    X.StringFilter().DataIndex("CatID"),
-                    X.StringFilter().DataIndex("Descr")
-      
+                   X.StringFilter().DataIndex("CatID"),
+                   X.StringFilter().DataIndex("Descr")
                 )
         )
     )

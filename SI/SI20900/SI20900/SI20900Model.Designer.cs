@@ -100,9 +100,9 @@ namespace SI20900
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SI20900_pgLoadGrid_Result> SI20900_pgLoadGrid()
+        public ObjectResult<SI20900_pgLoadTaxCat_Result> SI20900_pgLoadTaxCat()
         {
-            return base.ExecuteFunction<SI20900_pgLoadGrid_Result>("SI20900_pgLoadGrid");
+            return base.ExecuteFunction<SI20900_pgLoadTaxCat_Result>("SI20900_pgLoadTaxCat");
         }
 
         #endregion
@@ -385,26 +385,26 @@ namespace SI20900
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="SI20900Model", Name="SI20900_pgLoadGrid_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="SI20900Model", Name="SI20900_pgLoadTaxCat_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class SI20900_pgLoadGrid_Result : ComplexObject
+    public partial class SI20900_pgLoadTaxCat_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new SI20900_pgLoadGrid_Result object.
+        /// Create a new SI20900_pgLoadTaxCat_Result object.
         /// </summary>
         /// <param name="catID">Initial value of the CatID property.</param>
         /// <param name="descr">Initial value of the Descr property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI20900_pgLoadGrid_Result CreateSI20900_pgLoadGrid_Result(global::System.String catID, global::System.String descr, global::System.Byte[] tstamp)
+        public static SI20900_pgLoadTaxCat_Result CreateSI20900_pgLoadTaxCat_Result(global::System.String catID, global::System.String descr, global::System.Byte[] tstamp)
         {
-            SI20900_pgLoadGrid_Result sI20900_pgLoadGrid_Result = new SI20900_pgLoadGrid_Result();
-            sI20900_pgLoadGrid_Result.CatID = catID;
-            sI20900_pgLoadGrid_Result.Descr = descr;
-            sI20900_pgLoadGrid_Result.tstamp = tstamp;
-            return sI20900_pgLoadGrid_Result;
+            SI20900_pgLoadTaxCat_Result sI20900_pgLoadTaxCat_Result = new SI20900_pgLoadTaxCat_Result();
+            sI20900_pgLoadTaxCat_Result.CatID = catID;
+            sI20900_pgLoadTaxCat_Result.Descr = descr;
+            sI20900_pgLoadTaxCat_Result.tstamp = tstamp;
+            return sI20900_pgLoadTaxCat_Result;
         }
 
         #endregion

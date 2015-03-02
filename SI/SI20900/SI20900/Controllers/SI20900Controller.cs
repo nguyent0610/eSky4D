@@ -19,35 +19,31 @@ namespace SI20900.Controllers
     {
         private string _screenNbr = "SI20900";
         private string _userName = Current.UserName;
-
         SI20900Entities _db = Util.CreateObjectContext<SI20900Entities>(false);
-
         public ActionResult Index()
-        {  
+        {
+
             Util.InitRight(_screenNbr);
             return View();
         }
-
-       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
-        public ActionResult GetData()
+        public ActionResult GetTaxCat()
         {
-            return this.Store(_db.SI20900_pgLoadGrid().ToList());
+            return this.Store(_db.SI20900_pgLoadTaxCat().ToList());
         }
-
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
-                ChangeRecords<SI_TaxCat> lstLang = dataHandler.BatchObjectData<SI_TaxCat>();
-                foreach (SI_TaxCat deleted in lstLang.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstTaxCat"]);
+                ChangeRecords<SI_TaxCat> lstTaxCat = dataHandler.BatchObjectData<SI_TaxCat>();
+                foreach (SI_TaxCat deleted in lstTaxCat.Deleted)
                 {
                     var del = _db.SI_TaxCat.Where(p => p.CatID == deleted.CatID).FirstOrDefault();
                     if (del != null)
@@ -56,19 +52,19 @@ namespace SI20900.Controllers
                     }
                 }
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                lstTaxCat.Created.AddRange(lstTaxCat.Updated);
 
-                foreach (SI_TaxCat curLang in lstLang.Created)
+                foreach (SI_TaxCat curTaxCat in lstTaxCat.Created)
                 {
-                    if (curLang.CatID.PassNull() == "") continue;
+                    if (curTaxCat.CatID.PassNull() == "") continue;
 
-                    var lang = _db.SI_TaxCat.Where(p => p.CatID.ToLower() == curLang.CatID.ToLower()).FirstOrDefault();
+                    var TaxCat = _db.SI_TaxCat.Where(p => p.CatID.ToLower() == curTaxCat.CatID.ToLower()).FirstOrDefault();
 
-                    if (lang != null)
+                    if (TaxCat != null)
                     {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        if (TaxCat.tstamp.ToHex() == curTaxCat.tstamp.ToHex())
                         {
-                            Update_Language(lang, curLang, false);
+                            Update_SI_TaxCat(TaxCat, curTaxCat, false);
                         }
                         else
                         {
@@ -77,13 +73,14 @@ namespace SI20900.Controllers
                     }
                     else
                     {
-                        lang = new SI_TaxCat();
-                        Update_Language(lang, curLang, true);
-                        _db.SI_TaxCat.AddObject(lang);
+                        TaxCat = new SI_TaxCat();
+                        Update_SI_TaxCat(TaxCat, curTaxCat, true);
+                        _db.SI_TaxCat.AddObject(TaxCat);
                     }
                 }
 
                 _db.SaveChanges();
+
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -93,7 +90,7 @@ namespace SI20900.Controllers
             }
         }
 
-        private void Update_Language(SI_TaxCat t, SI_TaxCat s, bool isNew)
+        private void Update_SI_TaxCat(SI_TaxCat t, SI_TaxCat s, bool isNew)
         {
             if (isNew)
             {
@@ -102,7 +99,6 @@ namespace SI20900.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
-
             t.Descr = s.Descr;
 
             t.LUpd_DateTime = DateTime.Now;

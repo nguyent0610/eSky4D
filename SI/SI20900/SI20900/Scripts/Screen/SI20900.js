@@ -1,1 +1,146 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('q b=["\\K\\g\\e\\P\\E","\\s\\m\\r\\Q\\P\\1F\\1D\\g\\W\\K\\g\\e","\\J\\k\\m\\f\\e","\\s\\m\\k\\r","\\H\\m\\c\\N","\\p\\c\\W\\e","\\l\\g\\f\\e","\\m\\c\\l\\o\\g\\r","\\f\\e\\o\\E\\g\\e\\g","\\m\\c\\J\\m\\c\\f\\D","\\k\\f\\P\\p\\f\\c\\m\\e","\\k\\p\\f\\c\\m\\e","\\p\\c\\T","\\k\\e\\c\\x\\f","\\f\\c\\l\\c\\n\\e\\c\\r","\\f\\l\\x\\E\\g\\e\\g","\\k\\f\\E\\c\\l\\c\\e\\c","","\\r\\c\\l\\c\\e\\c\\E\\g\\e\\g","\\f\\D\\o\\T","\\x\\c\\f\\f\\g\\s\\c","\\r\\c\\l\\c\\e\\c","\\k\\f\\1B\\H\\r\\g\\e\\c","\\s\\c\\e\\K\\D\\g\\p\\s\\c\\r\\E\\g\\e\\g","\\f\\g\\N\\c","\\H\\m\\k\\p\\e","\\k\\f\\K\\D\\g\\p\\s\\c","\\f\\e\\o\\m\\c","\\g\\f\\L\\K\\l\\o\\f\\c","\\n\\l\\o\\f\\c","\\n\\o\\x\\x\\o\\p","\\J\\k\\c\\l\\r","\\k\\p\\r\\c\\W\\1A\\J","\\e\\f\\e\\g\\x\\H","\\r\\g\\e\\g","\\m\\c\\n\\o\\m\\r","\\n\\D\\c\\n\\L\\P\\p\\H\\F\\e","\\N\\g\\l\\F\\c","\\k\\p\\f\\c\\m\\e\\1I\\l\\g\\p\\L","\\n\\D\\c\\n\\L\\E\\F\\H\\l\\k\\n\\g\\e\\c","\\x\\g\\e\\n\\D","\\e\\c\\W\\e","\\n\\o\\l\\F\\x\\p","\\m\\c\\x\\o\\N\\c","\\s\\c\\e\\K\\o\\F\\p\\e","\\J\\o\\n\\F\\f\\1v\\o\\T","\\s\\c\\e\\1w\\k\\c\\T","\\f\\c\\l\\c\\n\\e","\\s\\c\\e\\Q\\c\\l\\c\\n\\e\\k\\o\\p\\1i\\o\\r\\c\\l","\\m\\c\\1R\\c\\n\\e","\\k\\f\\1w\\g\\l\\k\\r","\\J\\m\\x\\1i\\g\\k\\p","\\1S\\g\\k\\e\\1i\\f\\s","\\s\\c\\e\\1P\\g\\p\\s","\\Q\\P\\1O\\1a\\1K\\1a\\1a\\1L\\Q\\g\\N\\c","\\s\\c\\e\\E\\g\\e\\g","\\H\\m\\o\\n\\c\\f\\f","\\f\\F\\1N\\x\\k\\e","\\1T\\c\\f","\\r\\c\\l\\c\\e\\c\\Q\\c\\l\\c\\n\\e\\c\\r","\\l\\c\\p\\s\\e\\D","\\n\\D\\c\\n\\L\\1v\\c\\1M\\F\\k\\m\\c\\1J\\g\\f\\f","\\e\\m\\k\\x","\\E\\c\\f\\n\\m","\\p\\o","\\o\\L"];q A=[b[0]];q 1q=v(1p){1Q(1p){C b[2]:h[b[3]][b[2]](i[b[1]]);B;C b[4]:h[b[3]][b[4]](i[b[1]]);B;C b[5]:h[b[3]][b[5]](i[b[1]]);B;C b[6]:h[b[3]][b[6]](i[b[1]]);B;C b[9]:i[b[8]][b[7]]();h[b[3]][b[2]](i[b[1]]);B;C b[12]:j(h[b[10]]){h[b[3]][b[11]](i[b[1]])};B;C b[21]:j(i[b[15]][b[14]][b[13]][0]!=U){j(h[b[16]]){h[b[20]][b[19]](11,b[17],b[18])}};B;C b[24]:j(h[b[22]]||h[b[10]]||h[b[16]]){j(1e(i[b[8]][b[23]]().1r)&&1e(i[b[8]][b[23]]().1k)){1y()}};B;C b[25]:B;C b[29]:j(h[b[27]][b[26]](i[b[8]])){h[b[20]][b[19]](7,b[17],b[28])}V{h[b[O]][b[29]](1m)};B}};q 1C=v(1z,t){j(!h[b[22]]){u G};j(A[b[1d]](t[b[1c]])!=-1){j(t[b[1H]][b[1l]][b[1n]]!=b[17]){u G}};u h[b[3]][b[1G]](t,A)};q 1E=v(I,t){j(A[b[1d]](t[b[1c]])!=-1){j(t[b[Y]]!=b[17]&&1j(i[b[8]][b[23]]().1r)&&1j(i[b[8]][b[23]]().1k)){h[b[27]][b[2C]](i[b[8]])}}};q 2z=v(I,t){j(A[b[1d]](t[b[1c]])!=-1){j(h[b[3]][b[2A]](i[b[1]],t,A)){h[b[20]][b[19]](2B,t[b[Y]]);u G};q 1o=/^(\\w*(\\d|[a-1U-Z]))[\\2E]*$/;j(!t[b[Y]][b[2F]](1o)){h[b[20]][b[19]](2D,t[b[2x]][b[2e]]);u G}}};q 2d=v(S){j(S[b[1l]][b[1n]]==b[17]){i[b[8]][b[2f]](S);i[b[1]][b[2g]]()[b[2y]](i[b[8]][b[1s]]()-1);i[b[1]][b[2h]]()[b[2c]](i[b[8]][b[1s]]()-1)}V{S[b[2b]]()}};q 1y=v(){j(i[b[1x]][b[1W]]()){i[b[1x]][b[1V]]({1X:h[b[O]][b[1b]](b[1Y]),2a:b[1Z],2i:{2j:h[b[27]][b[2t]](i[b[8]])},2s:v(1g,1h){h[b[20]][b[19]](2u);1q(b[9])},2v:v(1g,1h){h[b[20]][b[2w]](1g,1h,M)}})}};q 2r=v(I){j(I==b[2q]){i[b[1]][b[2l]]()}};q 1j=v(y){j(y!=U){X(q z=0;z<y[b[1f]];z++){X(q R=0;R<A[b[1f]];R++){j(y[z][A[R]]==b[17]||y[z][A[R]]==U){u G}}};u M}V{u M}};q 1e=v(y){j(y!=U){X(q z=0;z<y[b[1f]];z++){j(h[b[3]][b[2k]](y[z],A)){2m};j(y[z][b[0]][b[1t]]()==b[17]){h[b[20]][b[19]](15,h[b[O]][b[1b]](b[0]));u G};j(y[z][b[1u]][b[1t]]()==b[17]){h[b[20]][b[19]](15,h[b[O]][b[1b]](b[1u]));u G}};u M}V{u M}};q 2n=v(I){j(I==b[2p]||I==b[2o]){h[b[O]][b[29]](1m)}};', 62, 166, '|||||||||||_0x9cf9|x65||x74|x73|x61|HQ|App|if|x69|x6C|x72|x63|x6F|x6E|var|x64|x67|_0x3fcax6|return|function||x6D|_0x3fcax12|_0x3fcax13|keys|break|case|x68|x44|x75|false|x70|_0x3fcax8|x66|x43|x6B|true|x76|30|x49|x53|_0x3fcax14|_0x3fcaxc|x77|undefined|else|x78|for|37||||||||||||x30|53|31|32|checkRequire|60|_0x3fcaxe|_0x3fcaxf|x4D|isAllValidKey|Updated|34|this|33|_0x3fcaxa|_0x3fcax3|menuClick|Created|44|62|63|x52|x56|51|save|_0x3fcax5|x4F|x55|grdSI_TaxCat_BeforeEdit|x54|grdSI_TaxCat_Edit|x5F|36|35|x42|x50|x39|x2F|x71|x62|x32|x4C|switch|x6A|x57|x79|zA|57|50|waitMsg|52|54|||||||||||url|49|47|grdSI_TaxCat_Reject|41|43|46|48|params|lstData|61|59|continue|askClose|65|64|58|deleteData|success|55|201405071|failure|56|42|45|grdSI_TaxCat_ValidateEdit|39|1112|38|20140811|_|40'.split('|'), 0, {}))
+//// Declare //////////////////////////////////////////////////////////
+
+var keys = ['CatID'];
+var fieldsCheckRequire = ["CatID", "Descr"];
+var fieldsLangCheckRequire = ["CatID", "Descr"];
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+
+            HQ.grid.first(App.grdTaxCat);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdTaxCat);
+            break;
+        case "next":
+            HQ.grid.next(App.grdTaxCat);
+            break;
+        case "last":
+            HQ.grid.last(App.grdTaxCat);
+            break;
+        case "refresh":
+            HQ.isFirstLoad = true;
+            App.stoTaxCat.reload();
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdTaxCat, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmTaxCat.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoTaxCat, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            if (HQ.isChange) {
+                HQ.message.show(5, '', 'askClose');
+            } else {
+                HQ.common.close(this);
+            }
+            break;
+    }
+
+};
+var grdTaxCat_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdTaxCat_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdTaxCat, e, keys);
+};
+var grdTaxCat_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdTaxCat, e, keys);
+};
+var grdTaxCat_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdTaxCat);
+    stoChanged(App.stoTaxCat);
+};
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SI20900/Save',
+            params: {
+                lstTaxCat: HQ.store.getData(App.stoTaxCat)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdTaxCat.deleteSelected();
+        stoChanged(App.stoTaxCat);
+    }
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+var askClose = function (item) {
+    if (item == "no" || item == "ok") {
+        HQ.common.changeData(false, 'SI20900');//khi dong roi gan lai cho change la false
+        HQ.common.close(this);
+    }
+};
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoTaxCat.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SI20900');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SI20900');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
