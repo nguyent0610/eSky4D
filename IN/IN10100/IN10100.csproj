@@ -265,6 +265,7 @@
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\hq.common.debug.js" />
     <Content Include="Scripts\hq.common.js" />
+    <Content Include="Scripts\Screen\IN10100.debug.js" />
     <Content Include="Scripts\Screen\IN10100.js" />
     <Content Include="Scripts\main.debug.js" />
     <Content Include="Scripts\main.js" />

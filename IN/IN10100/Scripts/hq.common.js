@@ -1,1 +1,788 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('x c=["\\o\\t\\u\\h\\O\\3x\\L","\\E\\l\\p\\j\\p\\j\\S\\E\\h","\\n\\h\\t\\y\\j\\P","\\F\\h\\o\\n","\\L\\n\\p\\p\\l","\\j\\l\\o\\D","\\L\\B\\t\\F\\j\\o\\p\\t","","\\l\\h\\E\\n\\k\\F\\h","\\L\\p\\l\\1h\\k\\F\\P","\\F\\k\\n\\n","\\Z\\l\\h\\k\\j\\h\\u","\\y\\h\\j\\Z\\P\\k\\t\\y\\h\\u\\1G\\k\\j\\k","\\4I\\E\\u\\k\\j\\h\\u","\\1G\\h\\n\\h\\j\\h\\u","\\y\\h\\j\\Z\\p\\B\\t\\j","\\u\\k\\j\\k","\\o\\t\\q\\h\\l\\j","\\y\\h\\j","\\L\\o\\t\\u\\1y\\S","\\o\\q\\1h\\D\\E\\j\\S","\\h\\t\\F\\p\\u\\h","\\h\\k\\F\\P","\\y\\h\\j\\Y\\j\\p\\l\\h","\\j\\p\\j\\k\\n\\Z\\p\\B\\t\\j","\\E\\k\\y\\h\\Y\\o\\4K\\h","\\n\\k\\q\\j","\\y\\l\\o\\u","\\q\\j\\k\\l\\j\\1h\\u\\o\\j\\1y\\S\\1m\\p\\q\\o\\j\\o\\p\\t","\\h\\u\\o\\j\\o\\t\\y\\1m\\n\\B\\y\\o\\t","\\n\\p\\k\\u\\1m\\k\\y\\h","\\o\\t\\q\\h\\l\\j\\1y\\n\\k\\t\\1Z","\\q\\j\\p\\l\\h","\\q\\h\\n\\h\\F\\j","\\y\\h\\j\\Y\\h\\n\\h\\F\\j\\o\\p\\t\\1x\\p\\u\\h\\n","\\q\\h\\n\\h\\F\\j\\1m\\l\\h\\1L\\o\\p\\B\\q","\\q\\h\\n\\h\\F\\j\\1s\\h\\O\\j","\\y\\l\\o\\u\\E\\k\\t\\h\\n","\\B\\E","\\y\\h\\j\\1w\\k\\n\\B\\h","\\l\\h\\n\\p\\k\\u","\\3H","\\q\\E\\n\\o\\j","\\o\\u\\1m\\l\\p\\E\\h\\l\\j\\S","\\l\\h\\F\\p\\l\\u","\\o\\j\\h\\D\\q","\\j\\p\\2g\\p\\1j\\h\\l\\Z\\k\\q\\h","\\L\\o\\h\\n\\u","\\1L\\k\\n\\B\\h","\\o\\u","\\k\\n\\n\\1G\\k\\j\\k","\\u\\o\\l\\h\\F\\j","\\l\\h\\q\\B\\n\\j","\\j\\S\\E\\h","\\D\\h\\q\\q\\k\\y\\h","\\F\\p\\u\\h","\\E\\k\\l\\D","\\L\\t","\\q\\P\\p\\1j","\\h\\l\\l\\p\\l","\\1h\\l\\l\\p\\l","\\h\\l\\l\\p\\l\\1x\\q\\y","\\k\\n\\h\\l\\j","\\1x\\q\\y","\\l\\h\\q\\E\\p\\t\\q\\h\\1i\\h\\O\\j","\\u\\h\\F\\p\\u\\h","\\l\\h\\q\\E\\p\\t\\q\\h","\\L\\k\\o\\n\\B\\l\\h\\1i\\S\\E\\h","\\1z\\k\\o\\n\\h\\u\\Z\\p\\t\\t\\h\\F\\j\\Y\\h\\l\\1L\\h\\l","\\y\\h\\j\\2g\\k\\t\\y","\\F\\p\\D\\D\\p\\t","\\E\\k\\l\\h\\t\\j\\4C\\B\\j\\p\\2g\\p\\k\\u\\Z\\p\\t\\j\\l\\p\\n","\\F\\n\\p\\q\\h","\\B\\t\\u\\h\\L\\o\\t\\h\\u","\\q\\h\\j\\1n\\h\\k\\u\\3x\\t\\n\\S","\\D\\k\\q\\1Z","\\1g\\p\\u\\S","\\L\\l\\D\\1x\\k\\o\\t","\\B\\t\\D\\k\\q\\1Z","\\L\\k\\n\\q\\h","\\j\\l\\B\\h","\\D\\2w\\u\\2w\\S","\\y\\h\\j\\1x\\p\\t\\j\\P","\\2w","\\y\\h\\j\\1G\\k\\j\\h","\\y\\h\\j\\1z\\B\\n\\n\\4j\\h\\k\\l","\\h\\O\\h\\F","\\y\\h\\j\\1w\\o\\h\\1j","\\j\\l\\o\\y\\y\\h\\l\\1h\\n\\h\\D\\h\\t\\j","\\L\\o\\t\\u\\3B\\j\\h\\D\\1y\\S\\Z\\P\\o\\n\\u","\\y\\h\\j\\1n\\h\\F\\p\\l\\u","\\y\\h\\j\\4f\\h\\k\\u\\h\\l\\1y\\S\\Z\\h\\n\\n","\\u\\k\\j\\k\\3B\\t\\u\\h\\O","\\P\\j\\D\\n\\1h\\t\\F\\p\\u\\h","\\1z\\p\\l\\D\\k\\j","\\B\\j\\o\\n","\\B\\E\\u\\k\\j\\h","\\P\\o\\u\\h","\\1j\\k\\o\\j\\1x\\q\\y","\\E\\k\\q\\q\\1s\\B\\n\\n","\\F\\n\\h\\k\\l\\1z\\o\\n\\j\\h\\l","\\1L\\k\\n\\B\\h\\1x\\p\\u\\h\\n\\q","\\q\\j\\l\\o\\t\\y","\\L\\o\\n\\j\\h\\l\\1y\\S","\\1i\\P\\p\\B\\q\\k\\t\\u\\Y\\h\\E\\k\\l\\k\\j\\p\\l\\1s\\B\\D\\1g\\h\\l\\1z\\o\\h\\n\\u","\\1h\\O\\j\\1X\\L\\p\\l\\D\\1X\\L\\o\\h\\n\\u\\1X\\1s\\B\\D\\1g\\h\\l","\\j\\h\\O\\j\\2a\\k\\n\\o\\y\\t\\3F\\3S\\l\\o\\y\\P\\j","\\j\\h\\O\\j\\2a\\k\\n\\o\\y\\t\\3F\\l\\o\\y\\P\\j\\3O","\\j\\P\\p\\B\\q\\k\\t\\u\\Y\\h\\E\\k\\l\\k\\j\\p\\l","\\y","\\u\\h\\F\\o\\D\\k\\n\\Y\\h\\E\\k\\l\\k\\j\\p\\l","\\1X","\\B\\q\\h\\1i\\P\\p\\B\\q\\k\\t\\u\\Y\\h\\E\\k\\l\\k\\j\\p\\l","\\F\\k\\n\\n\\1m\\k\\l\\h\\t\\j","\\k\\E\\E\\n\\S","\\y\\h\\j\\1h\\l\\l\\p\\l\\q","\\1i\\h\\O\\j","\\L\\p\\l\\D","\\L\\p\\l\\D\\k\\j","\\Y\\j\\l\\o\\t\\y","\\o\\q\\1G\\h\\L\\o\\t\\h\\u","\\y\\h\\j\\1n\\k\\1j\\1w\\k\\n\\B\\h","\\E\\l\\p\\F\\h\\q\\q\\1n\\k\\1j\\1w\\k\\n\\B\\h","\\j\\p\\1n\\k\\1j\\1s\\B\\D\\1g\\h\\l","\\t\\k\\t\\1i\\h\\O\\j","\\E\\B\\q\\P","\\E\\k\\l\\q\\h\\1w\\k\\n\\B\\h","\\D\\o\\t\\1w\\k\\n\\B\\h","\\t\\h\\y\\k\\j\\o\\1L\\h\\1i\\h\\O\\j","\\D\\o\\t\\1i\\h\\O\\j","\\D\\k\\O\\1w\\k\\n\\B\\h","\\D\\k\\O\\1i\\h\\O\\j","\\1u\\1u\\1u\\3H\\1u\\1u\\1u","\\u\\h\\F\\o\\D\\k\\n\\1m\\l\\h\\F\\o\\q\\o\\p\\t","\\1u","\\t\\B\\D\\1g\\h\\l","\\L\\o\\O\\1m\\l\\h\\F\\o\\q\\o\\p\\t","\\o\\q\\1s\\B\\D\\1g\\h\\l","\\q\\B\\1g\\D\\o\\j\\2g\\p\\F\\k\\n\\h\\Y\\h\\E\\k\\l\\k\\j\\p\\l","\\L\\l\\p\\D","\\1s\\B\\D\\1g\\h\\l","\\j\\p\\y\\y\\n\\h\\Y\\E\\o\\t\\t\\h\\l\\q","\\u\\o\\q\\k\\1g\\n\\h\\4N\\h\\S\\1z\\o\\n\\j\\h\\l","\\1g\\k\\q\\h\\Z\\P\\k\\l\\q","\\k\\n\\n\\p\\1j\\1h\\O\\E\\p\\t\\h\\t\\j\\o\\k\\n","\\h\\4t\\2a","\\k\\n\\n\\p\\1j\\1G\\h\\F\\o\\D\\k\\n\\q","\\2a","\\h\\q\\F\\k\\E\\h\\1n\\h\\y\\h\\O","\\D\\k\\q\\1Z\\1n\\h","\\2N","\\4B","\\k\\B\\j\\p\\Y\\j\\l\\o\\E\\Z\\P\\k\\l\\q","\\q\\j\\l\\o\\E\\Z\\P\\k\\l\\q\\1n\\h","\\2N\\4P","\\y\\o","\\u\\h\\L\\o\\t\\h"];m(!2j[c[1]][c[0]]){2j[c[1]][c[0]]=v(2S){x 2n=G[c[2]]>>>0;x 1b=2V(1q[1])||0;1b=(1b<0)?2e[c[3]](1b):2e[c[4]](1b);m(1b<0){1b+=2n};1o(;1b<2n;1b++){m(1b 2D G&&G[1b]===2S){z 1b}};z-1}};m(1N 2f[c[1]][c[5]]!==c[6]){2f[c[1]][c[5]]=v(){z G[c[8]](/^\\s+|\\s+$/g,c[7])}};m(!(c[9]2D 2j[c[1]])){2j[c[1]][c[9]]=v(3c,3n){1o(x I=0,3b=G[c[2]];I<3b;I++){m(I 2D G){3c[c[10]](3n,G[I],I,G)}}}};x 1a={3M:{3K:v(w){m((w[c[12]]()[c[11]]!=R&&w[c[12]]()[c[11]][c[2]]>1)||w[c[12]]()[c[13]]!=R||w[c[12]]()[c[14]]!=R){z 1e}J{z X}},3U:v(w,V){m(V==R){w[c[17]](w[c[15]](),H[c[16]].3p())}J{x 1V=w[c[19]](v(M,3r){m(!M[c[18]](V)){z 1e};z X});m(1V==-1){w[c[17]](w[c[15]](),H[c[16]].3p())}}},3R:v(w,V,3q){x 1V=w[c[19]](v(M,3r){m(!M[c[18]](V)){z 1e};z X});m(1V==-1){w[c[17]](w[c[15]](),3q)}},3N:v(w,1S){m(H[c[20]](1S)){1S=X};z H[c[21]](w[c[12]]({3L:1S}))},4k:v(w,2h,3e){x K;w[c[16]][c[22]](v(2o){x 2z=0;1o(x I=0;I<2h[c[2]];I++){m(2o[c[18]](2h[I])==3e[I]){2z++}};m(2z==2h[c[2]]){K=2o[c[16]];z X}});z K}},4g:{4h:v(N){x w=N[c[23]]();x 3d=w[c[12]]()[c[11]];m(3d!=R){w[c[30]](2e[c[3]](w[c[24]]/w[c[25]]),{3g:v (){1a[c[27]][c[26]](N);N[c[29]][c[28]]({3h:w[c[15]]()-1,3j:1});} });z ;} ;w[c[30]](2e[c[3]](w[c[24]]/w[c[25]]),{3g:v(){1a[c[32]][c[31]](w);1a[c[27]][c[26]](N);N[c[29]][c[28]]({3h:w[c[15]]()-1,3j:1})}})},4d:v(N){N[c[34]]()[c[33]](0)},4c:v(N){N[c[34]]()[c[35]]()},3X:v(N){N[c[34]]()[c[36]]()},3W:v(N){N[c[34]]()[c[33]](N[c[23]]()[c[15]]()-1)},3Y:v(2A){x w=2A[c[38]](c[37])[c[23]]();w[c[25]]=2b(2A[c[39]](),10);w[c[40]]()},4U:v(N,T,Q){x 1F=X;x w=N[c[23]]();m(Q==R){Q=T[c[44]][c[43]][c[42]](c[41])};1o(x I=0;I<w[c[16]][c[45]][c[2]];I++){x M=w[c[16]][c[45]][I];x K=c[7];x 1p=c[7];1o(x U=0;U<Q[c[2]];U++){m(M[c[16]][Q[U]]!=R){K+=M[c[16]][Q[U]].1d()[c[46]]()+c[41];m(T[c[47]]==Q[U]){1p+=(T[c[48]]==1l?c[7]:T[c[48]].1d()[c[46]]())+c[41]}J{1p+=T[c[44]][c[16]][Q[U]].1d()[c[46]]()+c[41]}}};m(1F=(K==1p&&M[c[49]]!=T[c[44]][c[49]])?1e:X){3i}};z 1F},4a:v(N,T,Q){x 1F=X;x w=N[c[23]]();m(Q==R){Q=T[c[44]][c[43]][c[42]](c[41])};1o(x I=0;I<w[c[50]][c[45]][c[2]];I++){x M=w[c[50]][c[45]][I];x K=c[7];x 1p=c[7];1o(x U=0;U<Q[c[2]];U++){m(M[c[16]][Q[U]]!=R){K+=M[c[16]][Q[U]].1d()[c[46]]()+c[41];m(T[c[47]]==Q[U]){1p+=(T[c[48]]==1l?c[7]:T[c[48]].1d()[c[46]]())+c[41]}J{1p+=T[c[44]][c[16]][Q[U]].1d()[c[46]]()+c[41]}}};m(1F=(K==1p&&M[c[49]]!=T[c[44]][c[49]])?1e:X){3i}};z 1F}},5T:{5Y:v(2m,1A,2p,1r){m(1r==1e){1U[c[51]].5w(2m,H[c[21]](1A),2p,{3f:v(1v){},3k:v(3l,K){}})}J{1U[c[51]].5h(2m,H[c[21]](1A),2p,{3f:v(1v){},3k:v(3l,K){}})}},4X:v(2Q,W,1r){4Y{m(1r==1l){1r=X};m(W[c[52]]!=R){m(W[c[52]][c[53]]==c[54]){1a[c[54]][c[58]](W[c[52]][c[55]],W[c[52]][c[56]],W[c[52]][c[57]],1r)}J{m(W[c[52]][c[53]]==c[59]){H[c[1C]][c[1B]](c[1D],W[c[52]][c[3o]])}}}J{m(W[c[2i]]!=R){x K=H[c[5i]](W[c[2i]]);m(K[c[53]]==c[54]){1a[c[54]][c[58]](K[c[55]],K[c[56]],K[c[57]],1r)}J{m(K[c[53]]==c[59]){H[c[1C]][c[1B]](c[1D],W[c[3o]])}J{H[c[1C]][c[1B]](c[1D],K)}}}J{m(W[c[3m]][c[2i]]!=R){H[c[1C]][c[1B]](c[1D],W[c[3m]][c[2i]])}J{m(W[c[5n]]!=R){H[c[1C]][c[1B]](c[1D],1a[c[2T]][c[3w]](c[5m]))}}}}}5l(e){H[c[1C]][c[1B]](c[1D],2Q)}}},5N:{5O:v(2B){m(2B[c[2M]]!=R){2B[c[2M]][c[5V]]()}},5U:v(V){m(1N 2C==c[2v]){z V};m(2C[V]!=R){z 2C[V]}J{z V}},2U:v(2y,2E){m(1N(2y[c[45]])!=c[2v]){2y[c[45]][c[22]](v(2k){m(1N(2k[c[3t]])!=c[2v]){2k[c[3t]](2E)};2U(2k,2E)})}},5t:v(2x,2u,1Q){m(1Q==R){m(2x){1U[c[3a]][c[1R]][c[2X]](2u)}J{1U[c[3a]][c[1R]][c[2W]]()}}J{m(2x){1Q[c[1R]][c[2X]](2u)}J{1Q[c[1R]][c[2W]]()}}}},5q:{5v:v(1A){m(1A[c[46]]()==c[5u]){z X}J{m(1A[c[46]]()==c[5s]){z 1e}J{z X}}},3s:v 3s(1K,1c){m(1K==1l){z c[7]};m(1c==c[5j]){z(1K[c[4Z]]()+1).1d()+c[3I]+1K[c[5a]]().1d()+c[3I]+1K[c[5b]]().1d()};z c[7]},5g:v(2d){x 3v=/^#?([a-f\\d])([a-f\\d])([a-f\\d])$/i;2d=2d[c[8]](3v,v(5f,2t,2r,2l){z 2t+2t+2r+2r+2l+2l});x 1v=/^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i[c[5Q]](2d);z 1v?{r:2b(1v[1],16),g:2b(1v[2],16),b:2b(1v[3],16)}:1l},5L:v(2q){m(2q==1l){z c[7]}J{z 2q}}},5B:{5A:v(1H,2s,3G){x 1Y=2s[c[5z]](),w=2s[c[23]](),M=1Y[c[5E]](1Y[c[5F]](1H[c[3D]])),3u=1Y[c[5J]](1H[c[3D]]),K=M[c[18]](3u[c[5G]]);m(K){m(3G){1H[c[2Y]](H[c[1k]][c[1I]][c[5H]](K))}J{1H[c[2Y]](K)}}J{1H[c[4b]]()}}}};1a[c[3z]]=1a[c[2T]][c[3w]](c[3z]);x 5D=v(1E,3y){m(1E){x w=1E[c[23]]();x A=1a[c[1k]][c[2I]](1E[c[39]]()).1d();m(w){w[c[5P]]();m(1E[c[3C]]==1l||1E[c[3C]][c[2]]==0){w[c[5d]](v(M){m(M){x 2L=X;3y[c[42]](c[41])[c[9]](v(V){m(V){m((1N 1a[c[1k]][c[2I]](A))==c[5k]){m(M[c[16]][V]){x 2Z=M[c[16]][V].1d()[c[46]]()[c[0]](1a[c[1k]][c[2I]](A)[c[46]]());m(2Z>-1){2L=1e;z M}}}}});m(2L==1e){z M}}})}}}};H[c[5r]](c[4W],{5I:c[5M],5W:1e,5R:0,5x:c[5e],5S:c[5o],5p:v(A){z 2f(A)[c[8]](G[c[2c]],c[2J])[c[8]](2F 2G(H[c[1k]][c[1I]][c[2H]],c[4V]),c[7])},5c:v(A){m(!G[c[1M]]){z G[c[1J]](1q)};x C=G,1t=H[c[5X]][c[47]][c[5C]][c[1]][c[5y]][c[5K]](C,1q),1c=H[c[3E]][c[4s]],1P;A=H[c[3Z]](A)?A:G[c[4i]](G[c[3V]]());m(A[c[2]]<1){z 1t};A=C[c[1W]](A);m(2K(A[c[8]](H[c[1k]][c[1I]][c[2H]],c[7]))){1t[c[1T]](1c(C[c[3Q]],A))};1P=C[c[2P]](A);m(C[c[1O]]===0&&1P<0){1t[c[1T]](G[c[3P]])}J{m(1P<C[c[1O]]){1t[c[1T]](1c(C[c[4J]],C[c[1O]]))}};m(1P>C[c[2R]]){1t[c[1T]](1c(C[c[4l]],C[c[2R]]))};z 1t},4H:v(A){m(!G[c[1M]]){z G[c[1J]](1q)};x C=G;x 1c=c[4E];1o(x I=0;I<C[c[4G]];I++){m(I==0){1c+=c[2J]};1c+=c[4L]};A=C[c[2P]](H[c[1k]][c[1I]][c[2O]](A,1c));A=C[c[4S]](A);A=H[c[4Q]](A)?A:3A(C[c[1W]](A));A=2K(A)?c[7]:2f(H[c[1k]][c[1I]][c[2O]](A,1c))[c[8]](c[2J],C[c[2c]]);z A},4D:v(){m(!G[c[1M]]){z G[c[1J]](1q)};x C=G,A=C[c[1J]]();m(!C[c[4r]]){A=C[c[1W]](A)};z A},4q:v(A){m(!G[c[1M]]){z G[c[1J]](1q)};x C=G,1f;C[c[1O]]=H[c[4m]][c[4o]](A,2V.4u);C[c[4A]]();m(C[c[4z]]!==1e){1f=C[c[4y]]+c[7];m(C[c[4v]]){1f+=C[c[2c]]+c[4x]}J{1f+=H[c[1k]][c[1I]][c[2H]];m(C[c[4w]]){1f+=C[c[2c]]};m(C[c[1O]]<0){1f+=c[4n]}};1f=H[c[3E]][c[4p]](1f);C[c[4O]]=2F 2G(c[4R]+1f+c[3J]);m(C[c[4M]]){C[c[4F]]=2F 2G(c[4T]+1f+c[3J],c[4e])}}},3T:v(A){m(!G[c[1M]]){z G[c[1J]](1q)};A=3A(G[c[1W]](A));z 2K(A)?1l:A}});', 62, 371, '||||||||||||_0xcf4c|||||x65||x74|x61|x72|if|x6C|x69|x6F|x73|||x6E|x64|function|_0xa2aax9|var|x67|return|_0xa2aax3e|x75|_0xa2aax41|x6D|x70|x63|this|Ext|_0xa2aax6|else|_0xa2aax12|x66|_0xa2aaxc|_0xa2aax15|x78|x68|_0xa2aax19|undefined|x79|_0xa2aax18|_0xa2aax1c|_0xa2aaxa|_0xa2aax24|false|x53|x43|||||||||||HQ|_0xa2aax3|_0xa2aax2e|toString|true|_0xa2aax44|x62|x45|x54|x77|95|null|x50|x52|for|_0xa2aax1b|arguments|_0xa2aax20|x4E|_0xa2aax42|x30|_0xa2aax21|x56|x4D|x42|x46|_0xa2aax1e|62|63|60|_0xa2aax3c|_0xa2aax1a|x44|_0xa2aax36|94|113|_0xa2aax2d|x76|112|typeof|127|_0xa2aax43|_0xa2aax2b|76|_0xa2aaxf|125|App|_0xa2aaxb|123|x2E|_0xa2aax39|x6B|||||||||||x2D|parseInt|110|_0xa2aax2f|Math|String|x4C|_0xa2aax10|64|Array|_0xa2aax28|_0xa2aax34|_0xa2aax1d|_0xa2aax2|_0xa2aax13|_0xa2aax1f|_0xa2aax35|_0xa2aax33|_0xa2aax37|_0xa2aax32|_0xa2aax2a|73|x2F|_0xa2aax29|_0xa2aax26|_0xa2aax14|_0xa2aax17|_0xa2aax25|HQLang|in|_0xa2aax27|new|RegExp|108|99|111|isNaN|_0xa2aax3f|71|x5B|135|126|_0xa2aax23|130|_0xa2aax1|70|lockItem|Number|78|75|96|_0xa2aax40|||||||||||77|_0xa2aax7|_0xa2aax4|_0xa2aax16|_0xa2aax11|success|callback|row|break|column|failure|_0xa2aax22|66|_0xa2aax5|61|Record|_0xa2aaxe|_0xa2aaxd|dateToString|74|_0xa2aax3a|_0xa2aax30|69|x4F|_0xa2aax3d|98|parseFloat|x49|101|88|119|x3A|_0xa2aax38|x2C|83|151|isChange|skipIdForPhantomRecords|store|getData|x3B|128|124|insertRecord|x20|parseValue|insertBlank|121|last|next|onPageSelect|120|||||||||||checkDuplicateAll|97|prev|first|155|x48|grid|insert|122|x59|findInStore|131|140|147|139|148|setMinValue|138|118|x2B|NEGATIVE_INFINITY|144|146|145|143|142|141|x5D|x41|getSubmitValue|132|153|133|valueToRaw|x55|129|x7A|134|152|x4B|149|x5E|137|150|136|154|checkDuplicate|109|104|process|try|82|||||||||||84|85|getErrors|103|106|_0xa2aax31|hexToRGB|CallMessage|65|81|102|catch|68|67|107|toRawNumber|util|156|80|showBusy|79|toBool|CallMessageArray|style|115|87|showOnGrid|tooltip|116|FilterCombo|90|89|92|93|override|91|114|passNull|105|common|close|100|86|decimalPrecision|fieldStyle|message|getLang|72|useThousandSeparator|117|show'.split('|'), 0, {}))
+﻿if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (elt /*, from*/) {
+        var len = this.length >>> 0;
+
+        var from = Number(arguments[1]) || 0;
+        from = (from < 0)
+             ? Math.ceil(from)
+             : Math.floor(from);
+        if (from < 0)
+            from += len;
+
+        for (; from < len; from++) {
+            if (from in this &&
+                this[from] === elt)
+                return from;
+        }
+        return -1;
+    };
+}
+
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
+}
+
+if (!('forEach' in Array.prototype)) {
+    Array.prototype.forEach = function (action, that /*opt*/) {
+        for (var i = 0, n = this.length; i < n; i++)
+            if (i in this)
+                action.call(that, this[i], i, this);
+    };
+}
+var HQ = {
+    store: {
+        isChange: function (store) {
+            if ((store.getChangedData().Created != undefined && store.getChangedData().Created.length > 1)
+                || store.getChangedData().Updated != undefined
+                || store.getChangedData().Deleted != undefined) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        insertBlank: function (store, keys) {
+            if (keys == undefined) {
+                store.insert(store.getCount(), Ext.data.Record());
+            } else {
+                var flat = store.findBy(function (record, id) {
+                    if (keys.constructor === Array) {
+                        for (var i = 0; i < keys.length; i++) {
+                            if (!record.get(keys[i])) {
+                                return true;
+                            }
+                        }
+                    }
+                    else if (!record.get(keys)) {
+                        return true;
+                    }
+                    return false;
+                });
+
+                if (flat == -1) {
+                    store.insert(store.getCount(), Ext.data.Record());
+                }
+            }
+        },
+        insertRecord: function (store, keys, newRecord, commit) {
+            var flat = store.findBy(function (record, id) {
+                if (keys.constructor === Array) {
+                    for (var i = 0; i < keys.length; i++) {
+                        if (!record.get(keys[i])) {
+                            return true;
+                        }
+                    }
+                }
+                else if (!record.get(keys)) {
+                    return true;
+                }
+                return false;
+            });
+
+            if (flat == -1) {
+                store.insert(store.getCount(), newRecord);
+            }
+            if (commit != undefined && commit == true) {
+                store.commitChanges();
+            }
+        },
+        getData: function (store, skip) {
+            if (Ext.isEmpty(skip)) {
+                skip = false;
+            }
+            return Ext.encode(store.getChangedData({ skipIdForPhantomRecords: skip }));
+        },
+        findInStore: function (store, fields, values) {
+            var data;
+            store.data.each(function (item) {
+                var intT = 0;
+                for (var i = 0; i < fields.length; i++) {
+                    if (item.get(fields[i]) == values[i]) {
+                        intT++;
+                    }
+                }
+                if (intT == fields.length) {
+                    data = item.data;
+                    return false;
+                }
+            });
+            return data;
+        },
+        findRecord: function (store, fields, values) {
+            var data;
+            store.data.each(function (item) {
+                var intT = 0;
+                for (var i = 0; i < fields.length; i++) {
+                    if (item.get(fields[i]) == values[i]) {
+                        intT++;
+                    }
+                }
+                if (intT == fields.length) {
+                    data = item;
+                    return false;
+                }
+            });
+            return data;
+        },
+        //kiem tra key da nhap du chua
+        isAllValidKey: function (items, keys) {
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var j = 0; j < keys.length; j++) {
+                        if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
+                            return false;
+                    }
+                }
+                return true;
+            } else {
+                return true;
+            }
+        },
+        checkRequirePass: function (store, keys, fieldsCheck, fieldsLang) {
+            items = store.getChangedData().Created;
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (items[i][keys[jkey]]) {
+                            for (var k = 0; k < fieldsCheck.length; k++) {
+                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                    HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            items = store.getChangedData().Updated;
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (items[i][keys[jkey]]) {
+                            for (var k = 0; k < fieldsCheck.length; k++) {
+                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                    HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    },
+    grid: {
+        showBusy: function (grd, isBusy) {
+            if (isBusy)
+                grd.view.loadMask.show();
+            else grd.view.loadMask.hide();
+        },
+        insert: function (grd, keys) {
+            var store = grd.getStore();
+            var createdItems = store.getChangedData().Created;
+            if (createdItems != undefined) {
+                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                    callback: function () {
+                        HQ.grid.last(grd);
+                        grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                    }
+                });
+                //}
+                //else {
+                //    HQ.grid.last(grd);
+                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                //}
+                return;
+            }
+            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+            store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                callback: function () {
+                    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                        HQ.store.insertBlank(store, keys);
+                    }
+                    HQ.grid.last(grd);
+                    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                }
+            });
+            //}
+            //else {
+            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+            //        HQ.store.insertBlank(store, keys);
+            //    }
+            //    HQ.grid.last(grd);
+            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+            //}
+        },
+        first: function (grd) {
+            grd.getSelectionModel().select(0);
+        },
+        prev: function (grd) {
+            grd.getSelectionModel().selectPrevious();
+        },
+        next: function (grd) {
+            grd.getSelectionModel().selectNext();
+        },
+        last: function (grd) {
+            grd.getSelectionModel().select(grd.getStore().getCount() - 1);
+        },
+        onPageSelect: function (combo) {
+            var store = combo.up("gridpanel").getStore();
+            store.pageSize = parseInt(combo.getValue(), 10);
+            store.reload();
+        },
+        checkDuplicate: function (grd, row, keys) {
+            var found = false;
+            var store = grd.getStore();
+            if (keys == undefined) keys = row.record.idProperty.split(',');
+            if (store.data) {
+                for (var i = 0; i < store.data.items.length; i++) {
+                    var record = store.data.items[i];
+                    var data = '';
+                    var rowdata = '';
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (record.data[keys[jkey]] != undefined) {
+                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                            if (row.field == keys[jkey])
+                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                            else
+                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        }
+                    }
+                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                        break;
+                    };
+                }
+            }
+            else {
+                for (var i = 0; i < store.allData.items.length; i++) {
+                    var record = store.allData.items[i];
+                    var data = '';
+                    var rowdata = '';
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (record.data[keys[jkey]] != undefined) {
+                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                            if (row.field == keys[jkey])
+                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                            else
+                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        }
+                    }
+                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                        break;
+                    };
+                }
+            }
+            return found;
+        },
+        //TrungHT d�ng cho ph�n trang
+        checkDuplicateAll: function (grd, row, keys) {
+            return HQ.grid.checkDuplicate(grd, row, keys);
+        },
+        //D�ng trong ham before edit cua grid
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
+        //Cot nao la key thi khoa lai khi da co du lieu
+        checkInput: function (row, keys) {
+            if (keys.indexOf(row.field) == -1) {
+
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") {
+                        return false;
+                    }
+                }
+            }
+            if (keys.indexOf(row.field) != -1) {
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") return true;
+                }
+                return false;
+            }
+            return true;
+        },
+        //Kiem tra khi check require bo qua cac dong la new 
+        checkRequirePass: function (items, keys) {
+            if (items != undefined && keys != undefined)
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (items[keys[jkey]]) {
+                        return false;
+                    }
+                }
+            return true;
+        },
+        checkBeforeEdit: function (e, keys) {
+            if (!HQ.isUpdate) return false;
+            if (keys.indexOf(e.field) != -1) {
+                if (e.record.data.tstamp != "")
+                    return false;
+            }
+            return HQ.grid.checkInput(e, keys);
+        },
+        checkReject: function (record, grd) {
+            if (record.data.tstamp == '') {
+                grd.getStore().remove(record, grd);
+                grd.getView().focusRow(grd.getStore().getCount() - 1);
+                grd.getSelectionModel().select(grd.getStore().getCount() - 1);
+            } else {
+                record.reject();
+            }
+        },
+        checkValidateEdit: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value).match(regex)) {
+                    HQ.message.show(20140811, e.column.text);
+                    return false;
+                }
+                if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                    HQ.message.show(1112, e.value);
+                    return false;
+                }
+
+            }
+        },
+        checkInsertKey: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                if (e.value != '')
+                    HQ.store.insertBlank(grd.getStore(), keys);
+            }
+        }
+    },
+    message: {
+        show: function (code, parm, fn, array) {
+            parm = parm != null ? parm : '';
+            if (array == true) {
+                App.direct.CallMessageArray(code, parm, fn, {
+                    success: function (result) {
+                    },
+                    failure: function (msg, data) {
+                    }
+                });
+            } else {
+                App.direct.CallMessage(code, parm, fn, {
+                    success: function (result) {
+                    },
+                    failure: function (msg, data) {
+                    }
+                });
+            }
+        },
+        process: function (errorMsg, obj, array) {
+            try {
+                if (array == null) array = false;
+                if (obj.result != undefined) {
+
+                    if (obj.result.type == 'message') {
+                        HQ.message.show(obj.result.code, obj.result.parm, obj.result.fn, array);
+                    }
+                    else if (obj.result.type == "error") {
+                        Ext.Msg.alert('Error', obj.result.errorMsg);
+                    }
+                } else if (obj.responseText != undefined) {
+                    var data = Ext.decode(obj.responseText);
+                    if (data.type == 'message') {
+                        HQ.message.show(data.code, data.parm, data.fn, array);
+                    }
+                    else if (data.type == "error") {
+                        Ext.Msg.alert('Error', obj.errorMsg);
+                    }
+                    else {
+                        Ext.Msg.alert('Error', data);
+                    }
+
+                } else if (obj.response.responseText != undefined) {
+                    Ext.Msg.alert('Error', obj.response.responseText);
+                } else {
+                    if (obj.failureType != undefined) {
+                        Ext.Msg.alert('Error', HQ.common.getLang("FailedConnectServer"));
+                    }
+                }
+            }
+            catch (e) {
+                Ext.Msg.alert('Error', errorMsg);
+            }
+
+        }
+    },
+    common: {
+
+
+
+
+
+
+
+
+        close: function (app) {
+            if (app["parentAutoLoadControl"] != undefined) {
+                app["parentAutoLoadControl"].close();
+            }
+        },
+        getLang: function (key) {
+            if (HQLang[key.toUpperCase()]) {
+                return HQLang[key.toUpperCase()];
+            } else {
+                return key;
+            }
+        },
+        setLang: function (ctr) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (itm.getXType() == "grid") {
+                        for (var i = 0; i < itm.columns.length; i++) {
+                            if (itm.columns[i].getXType() == "commandcolumn") {
+                                itm.columns[i].commands[0].text = HQ.common.getLang(itm.columns[i].commands[0].text);
+                            } else {
+                                itm.columns[i].setText(HQ.common.getLang(itm.columns[i].text));
+                            }
+                        }
+                    }
+                    else if (itm.getXType() == "combobox") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "textfield") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "checkbox") {
+                        itm.setBoxLabel(HQ.common.getLang(itm.boxLabel));
+                    }
+                    else if (itm.getXType() == "numberfield") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "panel") {
+                        itm.setTitle(HQ.common.getLang(itm.title));
+                    }
+                    HQ.common.setLang(itm);
+                });
+            }
+
+        },
+        lockItem: function (ctr, lock) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.setReadOnly) != "undefined") {
+                        itm.setReadOnly(lock)
+
+                    }
+                    HQ.common.lockItem(itm, lock);
+                });
+            }
+        },
+        changeData: function (isChange, screenNbr) {
+            if (parent.App['tab' + screenNbr] != undefined)
+                if (isChange)
+                    parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
+                else parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
+        },
+        showBusy: function (busy, waitMsg, form) {
+            if (form == undefined) {
+                if (busy) {
+                    App.frmMain.body.mask(waitMsg);
+                } else {
+                    App.frmMain.body.unmask();
+                }
+            } else {
+                if (busy) {
+                    form.body.mask(waitMsg);
+                } else {
+                    form.body.unmask();
+                }
+            }
+
+        }
+    },
+    util: {
+        toBool: function (parm) {
+            if (parm.toLowerCase() == 'false') {
+                return false;
+            } else if (parm.toLowerCase() == 'true') {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        dateToString: function dateToString(date, format) {
+            if (date == null) return '';
+            if (format == 'm/d/y') {
+                return (date.getMonth() + 1).toString() + '/' + date.getDate().toString() + '/' + date.getFullYear().toString();
+            }
+            return ''
+
+        },
+        hexToRGB: function (hex) {
+            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        },
+        passNull: function (str) {
+            if (str == null) {
+                return "";
+            } else return str;
+        }
+    },
+    form: {
+        checkRequirePass: function (frm) {
+            frm.updateRecord();
+            var isValid = true;
+            frm.getForm().getFields().each(
+                            function (item) {
+                                if (!item.isValid()) {
+                                    invalidField = item.id;
+                                    HQ.message.show(1000, item.fieldLabel, 'HQ.util.focusControl');
+                                    isValid = false;
+                                    return false;
+                                }
+                            })
+            return isValid;
+        }
+    },
+    tooltip: {
+        // TinhHV: show the tootip in grid
+        showOnGrid: function (toolTip, grid, isHtmlEncode) {
+            var view = grid.getView(),
+            store = grid.getStore(),
+            record = view.getRecord(view.findItemByChild(toolTip.triggerElement)),
+            column = view.getHeaderByCell(toolTip.triggerElement),
+            data = record.get(column.dataIndex);
+
+            if (data) {
+                if (isHtmlEncode) {
+                    toolTip.update(Ext.util.Format.htmlEncode(data));
+                }
+                else {
+                    toolTip.update(data);
+                }
+            }
+            else {
+                toolTip.hide();
+            }
+        }
+    }
+};
+
+HQ.waitMsg = HQ.common.getLang('waitMsg');
+var FilterCombo = function (control, stkeyFilter) {
+    if (control) {
+        var store = control.getStore();
+        var value = HQ.util.passNull(control.getValue()).toString();
+        if (value.split(',').length > 2) value = '';
+        if (store) {
+            store.clearFilter();
+            if (control.valueModels == null || control.valueModels.length == 0) {
+                store.filterBy(function (record) {
+                    if (record) {
+                        var isMap = false;
+                        stkeyFilter.split(',').forEach(function (key) {
+                            if (key) {
+                                if ((typeof HQ.util.passNull(value)) == "string") {
+                                    if (record.data[key]) {
+                                        var fieldData = record.data[key].toString().toLowerCase().indexOf(HQ.util.passNull(value).toLowerCase());
+                                        if (fieldData > -1) {
+                                            isMap = true;
+                                            return record;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        if (isMap == true) return record
+                    }
+                });
+            }
+        }
+    }
+};
+var loadDefault = function (fileNameStore, cbo) {
+    if (fileNameStore.data.items.length > 0) {
+        cbo.setValue(fileNameStore.getAt(0).get(cbo.valueField));
+
+    }
+};
+//TrungHT
+Ext.define("ThousandSeparatorNumberField", {
+    override: "Ext.form.field.Number",
+
+    /**
+    * @cfg {Boolean} useThousandSeparator
+    */
+    useThousandSeparator: true,
+    decimalPrecision: 0,
+    style: 'text-align: right',
+    fieldStyle: "text-align:right;",
+    /**
+     * @inheritdoc
+     */
+    toRawNumber: function (value) {
+        return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
+    },
+
+    /**
+     * @inheritdoc
+     */
+    getErrors: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            errors = Ext.form.field.Text.prototype.getErrors.apply(me, arguments),
+            format = Ext.String.format,
+            num;
+
+        value = Ext.isDefined(value) ? value : this.processRawValue(this.getRawValue());
+
+        if (value.length < 1) { // if it's blank and textfield didn't flag it then it's valid
+            return errors;
+        }
+
+        value = me.toRawNumber(value);
+
+        if (isNaN(value.replace(Ext.util.Format.thousandSeparator, ''))) {
+            errors.push(format(me.nanText, value));
+        }
+
+        num = me.parseValue(value);
+
+        if (me.minValue === 0 && num < 0) {
+            errors.push(this.negativeText);
+        }
+        else if (num < me.minValue) {
+            errors.push(format(me.minText, me.minValue));
+        }
+
+        if (num > me.maxValue) {
+            errors.push(format(me.maxText, me.maxValue));
+        }
+
+        return errors;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    valueToRaw: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this;
+
+        var format = "000,000";
+        for (var i = 0; i < me.decimalPrecision; i++) {
+            if (i == 0)
+                format += ".";
+            format += "0";
+        }
+        value = me.parseValue(Ext.util.Format.number(value, format));
+        value = me.fixPrecision(value);
+        value = Ext.isNumber(value) ? value : parseFloat(me.toRawNumber(value));
+        value = isNaN(value) ? '' : String(Ext.util.Format.number(value, format)).replace('.', me.decimalSeparator);
+        return value;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    getSubmitValue: function () {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            value = me.callParent();
+
+        if (!me.submitLocaleSeparator) {
+            value = me.toRawNumber(value);
+        }
+        return value;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    setMinValue: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            allowed;
+
+        me.minValue = Ext.Number.from(value, Number.NEGATIVE_INFINITY);
+        me.toggleSpinners();
+
+        // Build regexes for masking and stripping based on the configured options
+        if (me.disableKeyFilter !== true) {
+            allowed = me.baseChars + '';
+
+            if (me.allowExponential) {
+                allowed += me.decimalSeparator + 'e+-';
+            }
+            else {
+                allowed += Ext.util.Format.thousandSeparator;
+                if (me.allowDecimals) {
+                    allowed += me.decimalSeparator;
+                }
+                if (me.minValue < 0) {
+                    allowed += '-';
+                }
+            }
+
+            allowed = Ext.String.escapeRegex(allowed);
+            me.maskRe = new RegExp('[' + allowed + ']');
+            if (me.autoStripChars) {
+                me.stripCharsRe = new RegExp('[^' + allowed + ']', 'gi');
+            }
+        }
+    },
+
+    /**
+     * @private
+     */
+    parseValue: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        value = parseFloat(this.toRawNumber(value));
+        return isNaN(value) ? null : value;
+    }
+});
+//window.onresize = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};
+//window.onload = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};
