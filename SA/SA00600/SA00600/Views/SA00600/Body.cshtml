@@ -1,0 +1,116 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA00600;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .Layout(LayoutType.Anchor)
+    .TrackResetOnLoad(true)
+    .DefaultAnchor("100%")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print,New,Delete,Save", true, ""))
+     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Listeners(lst =>{
+        lst.AfterRender.Fn = "renderFromcbodateTogrid";
+    })
+    .Items(
+    
+        X.Panel().ID("Header").Layout(LayoutType.VBox).Border(false)
+        .Items(
+                HQ.DateField().ID("cboACCESSDATE").Name("cboACCESSDATE").HQLangCode("ACCESSDATE")
+                .Width(400).MarginSpec("5 0 5 10").Value(DateTime.Now)
+                .MaxLength(30).EnforceMaxLength(true)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboACCESSDATE_Change";
+            
+                })        
+        ),
+        
+      
+        X.GridPanel()
+        .Frame(true)
+        .AnchorHorizontal("100%")
+        .AnchorVertical("95%")
+        .RenderTo("contentCenter")
+        .AutoScroll(true)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdSYS_Access").SetAutoScroll(true)
+        .StoreID("stoMailHeader")
+        .Listeners(p => p.BoxReady.Handler = "App.stoMailHeader.reload();")
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40)
+            , X.Column().Text(Util.GetLang("AccessDate")).DataIndex("AccessDate").Width(195)      
+            , X.Column().Text(Util.GetLang("CompanyID")).DataIndex("CompanyID").Width(110)   
+            , X.Column().Text(Util.GetLang("DatabaseName")).DataIndex("DatabaseName").Width(150)        
+            , X.Column().Text(Util.GetLang("InternetAddress")).DataIndex("InternetAddress").Width(110)     
+            , X.Column().Text(Util.GetLang("ComputerName")).DataIndex("ComputerName").Width(150)         
+            , X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(100)        
+            , X.Column().Text(Util.GetLang("ScreenCaption")).DataIndex("ScreenCaption").Width(100)   
+            , X.Column().Text(Util.GetLang("UserId")).DataIndex("UserId").Width(85)
+            , X.Column().Text(Util.GetLang("Type")).DataIndex("Type").Width(90),
+           X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmSYS_BuildLog").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("AccessDate"),
+                    X.StringFilter().DataIndex("CompanyID"),
+                    X.StringFilter().DataIndex("DatabaseName"),
+                    X.StringFilter().DataIndex("InternetAddress"),
+                    X.StringFilter().DataIndex("ComputerName"),
+                    X.StringFilter().DataIndex("ScreenNumber"),
+                    X.StringFilter().DataIndex("ScreenCaption"),
+                    X.StringFilter().DataIndex("UserId"),
+                    X.StringFilter().DataIndex("Type")
+                )
+        )
+        
+    )
+))
