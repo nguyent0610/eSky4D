@@ -652,7 +652,6 @@ namespace IN10100.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
-            return null;
         }
         
         public ActionResult Import(FormCollection data)
@@ -733,6 +732,54 @@ namespace IN10100.Controllers
                 {
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Report(FormCollection data)
+        {
+            try
+            {
+                _form = data;
+                _objBatch = data.ConvertToObject<IN10100_pcBatch_Result>();
+                User user = _sys.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
+                var rpt = new RPTRunning();
+                rpt.ResetET();
+
+                rpt.ReportNbr = "IN602";
+                rpt.MachineName = "Web";
+                rpt.ReportCap = "IN_Receipt";
+                rpt.ReportName = "IN_Receipt";
+                rpt.ReportDate = DateTime.Now;
+                rpt.DateParm00 = DateTime.Now;
+                rpt.DateParm01 = DateTime.Now;
+                rpt.DateParm02 = DateTime.Now;
+                rpt.DateParm03 = DateTime.Now;
+                rpt.StringParm00 = _objBatch.BranchID;
+                rpt.StringParm01 = _objBatch.BatNbr;
+                rpt.UserID = Current.UserName;
+                rpt.AppPath = "Reports\\";
+                rpt.ClientName = Current.UserName;
+                rpt.LoggedCpnyID = Current.CpnyID;
+                rpt.CpnyID = user.CpnyID;
+                rpt.LangID = Current.LangID;
+
+                _app.RPTRunnings.AddObject(rpt);
+                _app.SaveChanges();
+
+                if (_logMessage != null)
+                {
+                    return _logMessage;
+                }
+                return Json(new { success = true, reportID = rpt.ReportID, reportName = rpt.ReportName });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
     }

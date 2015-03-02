@@ -1,4 +1,4 @@
-if (!Array.prototype.indexOf) {
+ï»¿if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
 
@@ -42,12 +42,19 @@ var HQ = {
                 return false;
             }
         },
-        insertBlank: function (store, key) {
-            if (key == undefined) {
+        insertBlank: function (store, keys) {
+            if (keys == undefined) {
                 store.insert(store.getCount(), Ext.data.Record());
             } else {
                 var flat = store.findBy(function (record, id) {
-                    if (!record.get(key)) {
+                    if (keys.constructor === Array) {
+                        for (var i = 0; i < keys.length; i++) {
+                            if (!record.get(keys[i])) {
+                                return true;
+                            }
+                        }
+                    }
+                    else if (!record.get(keys)) {
                         return true;
                     }
                     return false;
@@ -58,9 +65,16 @@ var HQ = {
                 }
             }
         },
-        insertRecord: function (store, key, newRecord, commit) {
+        insertRecord: function (store, keys, newRecord, commit) {
             var flat = store.findBy(function (record, id) {
-                if (!record.get(key)) {
+                if (keys.constructor === Array) {
+                    for (var i = 0; i < keys.length; i++) {
+                        if (!record.get(keys[i])) {
+                            return true;
+                        }
+                    }
+                }
+                else if (!record.get(keys)) {
                     return true;
                 }
                 return false;
@@ -110,28 +124,98 @@ var HQ = {
                 }
             });
             return data;
+        },
+        //kiem tra key da nhap du chua
+        isAllValidKey: function (items, keys) {
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var j = 0; j < keys.length; j++) {
+                        if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
+                            return false;
+                    }
+                }
+                return true;
+            } else {
+                return true;
+            }
+        },
+        checkRequirePass: function (store, keys, fieldsCheck, fieldsLang) {
+            items = store.getChangedData().Created;
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (items[i][keys[jkey]]) {
+                            for (var k = 0; k < fieldsCheck.length; k++) {
+                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                    HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            items = store.getChangedData().Updated;
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (items[i][keys[jkey]]) {
+                            for (var k = 0; k < fieldsCheck.length; k++) {
+                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                    HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
         }
     },
     grid: {
-        insert: function (grd) {
+        showBusy: function (grd, isBusy) {
+            if (isBusy)
+                grd.view.loadMask.show();
+            else grd.view.loadMask.hide();
+        },
+        insert: function (grd, keys) {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
+                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
                         HQ.grid.last(grd);
                         grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
                     }
                 });
+                //}
+                //else {
+                //    HQ.grid.last(grd);
+                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                //}
                 return;
             }
+            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
             store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                 callback: function () {
-                    HQ.store.insertBlank(store);
+                    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                        HQ.store.insertBlank(store, keys);
+                    }
                     HQ.grid.last(grd);
                     grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
                 }
             });
+            //}
+            //else {
+            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+            //        HQ.store.insertBlank(store, keys);
+            //    }
+            //    HQ.grid.last(grd);
+            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+            //}
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
@@ -154,50 +238,71 @@ var HQ = {
             var found = false;
             var store = grd.getStore();
             if (keys == undefined) keys = row.record.idProperty.split(',');
-            for (var i = 0; i < store.data.items.length; i++) {
-                var record = store.data.items[i];
-                var data = '';
-                var rowdata = '';
-                for (var jkey = 0; jkey < keys.length; jkey++) {
-                    if (record.data[keys[jkey]] != undefined) {
-                        data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-                        if (row.field == keys[jkey])
-                            rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-                        else
-                            rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+            if (store.data) {
+                for (var i = 0; i < store.data.items.length; i++) {
+                    var record = store.data.items[i];
+                    var data = '';
+                    var rowdata = '';
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (record.data[keys[jkey]] != undefined) {
+                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                            if (row.field == keys[jkey])
+                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                            else
+                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        }
                     }
+                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                        break;
+                    };
                 }
-                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-                    break;
-                };
+            }
+            else {
+                for (var i = 0; i < store.allData.items.length; i++) {
+                    var record = store.allData.items[i];
+                    var data = '';
+                    var rowdata = '';
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (record.data[keys[jkey]] != undefined) {
+                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                            if (row.field == keys[jkey])
+                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                            else
+                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        }
+                    }
+                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                        break;
+                    };
+                }
             }
             return found;
         },
-        //TrungHT dùng cho phân trang
+        //TrungHT dï¿½ng cho phï¿½n trang
         checkDuplicateAll: function (grd, row, keys) {
-            var found = false;
-            var store = grd.getStore();
-            if (keys == undefined) keys = row.record.idProperty.split(',');
-            for (var i = 0; i < store.allData.items.length; i++) {
-                var record = store.allData.items[i];
-                var data = '';
-                var rowdata = '';
-                for (var jkey = 0; jkey < keys.length; jkey++) {
-                    if (record.data[keys[jkey]] != undefined) {
-                        data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-                        if (row.field == keys[jkey])
-                            rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-                        else
-                            rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
-                    }
-                }
-                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-                    break;
-                };
-            }
-            return found;
+            return HQ.grid.checkDuplicate(grd, row, keys);
         },
-        //Dùng trong ham before edit cua grid
+        //Dï¿½ng trong ham before edit cua grid
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
         //Cot nao la key thi khoa lai khi da co du lieu
         checkInput: function (row, keys) {
@@ -210,18 +315,59 @@ var HQ = {
                 }
             }
             if (keys.indexOf(row.field) != -1) {
-                if (row.record.data[row.field] != "") return false;
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") return true;
+                }
+                return false;
             }
             return true;
         },
         //Kiem tra khi check require bo qua cac dong la new 
-        checkRequirePass: function (item, keys) {
-            for (var jkey = 0; jkey < keys.length; jkey++) {
-                if (item[keys[jkey]]) {
+        checkRequirePass: function (items, keys) {
+            if (items != undefined && keys != undefined)
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (items[keys[jkey]]) {
+                        return false;
+                    }
+                }
+            return true;
+        },
+        checkBeforeEdit: function (e, keys) {
+            if (!HQ.isUpdate) return false;
+            if (keys.indexOf(e.field) != -1) {
+                if (e.record.data.tstamp != "")
+                    return false;
+            }
+            return HQ.grid.checkInput(e, keys);
+        },
+        checkReject: function (record, grd) {
+            if (record.data.tstamp == '') {
+                grd.getStore().remove(record, grd);
+                grd.getView().focusRow(grd.getStore().getCount() - 1);
+                grd.getSelectionModel().select(grd.getStore().getCount() - 1);
+            } else {
+                record.reject();
+            }
+        },
+        checkValidateEdit: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value).match(regex)) {
+                    HQ.message.show(20140811, e.column.text);
                     return false;
                 }
+                if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                    HQ.message.show(1112, e.value);
+                    return false;
+                }
+
             }
-            return true;
+        },
+        checkInsertKey: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                if (e.value != '')
+                    HQ.store.insertBlank(grd.getStore(), keys);
+            }
         }
     },
     message: {
@@ -281,6 +427,14 @@ var HQ = {
         }
     },
     common: {
+
+
+
+
+
+
+
+
         close: function (app) {
             if (app["parentAutoLoadControl"] != undefined) {
                 app["parentAutoLoadControl"].close();
@@ -336,6 +490,12 @@ var HQ = {
                 });
             }
         },
+        changeData: function (isChange, screenNbr) {
+            if (parent.App['tab' + screenNbr] != undefined)
+                if (isChange)
+                    parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
+                else parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
+        },
         showBusy: function (busy, waitMsg, form) {
             if (form == undefined) {
                 if (busy) {
@@ -390,7 +550,22 @@ var HQ = {
             } else return str;
         }
     },
-
+    form: {
+        checkRequirePass: function (frm) {
+            frm.updateRecord();
+            var isValid = true;
+            frm.getForm().getFields().each(
+                            function (item) {
+                                if (!item.isValid()) {
+                                    invalidField = item.id;
+                                    HQ.message.show(1000, item.fieldLabel, 'HQ.util.focusControl');
+                                    isValid = false;
+                                    return false;
+                                }
+                            })
+            return isValid;
+        }
+    },
     tooltip: {
         // TinhHV: show the tootip in grid
         showOnGrid: function (toolTip, grid, isHtmlEncode) {
@@ -420,6 +595,7 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
+        if (value.split(',').length > 2) value = '';
         if (store) {
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {

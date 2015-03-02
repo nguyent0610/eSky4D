@@ -19,6 +19,7 @@
         .Layout(LayoutType.Border)
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
+        .Listeners(p=>p.FieldChange.Fn="frmMain_FieldChange")
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{
             
@@ -416,8 +417,13 @@
                 .Width(100)
                 .Editor(HQ.NumberField().MaxValue(1000).MinValue(1).SpinUpEnabled(true))
                 .Renderer("rdrTrans_QtyAmt"),
-
-                 X.Column()
+                
+                X.ComponentColumn()
+                .Text("")
+                .Width(20)
+                .Component(X.Button().Height(18).Text("").Listeners(p=>p.Click.Fn="btnLot_Click")),
+                
+                X.Column()
                 .DataIndex("UnitPrice")
                 .Text(Util.GetLang("UnitPrice"))
                 .Align(Alignment.Right)
@@ -443,6 +449,17 @@
             .View(X.GridView().TrackOver(false))
             .Plugins(
                 X.CellEditing().ClicksToEdit(1)
+            )
+        ),
+        
+        X.Window()
+        .ID("winLot")
+        .Hidden(true)
+        .Modal(true)
+        .Title(Util.GetLang("Lot"))
+        .Items(
+            X.GridPanel()
+            .Items(
             )
         )
     )

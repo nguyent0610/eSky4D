@@ -16,6 +16,7 @@
           <EntitySet Name="IN_Transfer" EntityType="eBiz4DWebSysModel.Store.IN_Transfer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="IN_UnitConversion" EntityType="eBiz4DWebSysModel.Store.IN_UnitConversion" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_UserDefault" EntityType="eBiz4DWebSysModel.Store.OM_UserDefault" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="RPTRunning" EntityType="eBiz4DWebSysModel.Store.RPTRunning" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="Batch">
           <Key>
@@ -372,6 +373,42 @@
           <Property Name="WorkingDate" Type="smalldatetime" />
           <Property Name="DiscSite" Type="varchar" MaxLength="10" />
         </EntityType>
+        <EntityType Name="RPTRunning">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="ReportID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="MachineName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="ReportName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ReportCap" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ReportDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="StringParm00" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StringParm01" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StringParm02" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StringParm03" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="DateParm00" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateParm01" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateParm02" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateParm03" Type="smalldatetime" Nullable="false" />
+          <Property Name="BooleanParm00" Type="smallint" Nullable="false" />
+          <Property Name="BooleanParm01" Type="smallint" Nullable="false" />
+          <Property Name="BooleanParm02" Type="smallint" Nullable="false" />
+          <Property Name="BooleanParm03" Type="smallint" Nullable="false" />
+          <Property Name="SelectionFormular" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="AppPath" Type="varchar" Nullable="false" MaxLength="400" />
+          <Property Name="ClientName" Type="varchar" Nullable="false" MaxLength="40" />
+          <Property Name="LoggedCpnyID" Type="varchar" MaxLength="30" />
+          <Property Name="CpnyID" Type="varchar" MaxLength="400" />
+          <Property Name="LangID" Type="smallint" />
+          <Property Name="ListParm00" Type="nvarchar(max)" />
+          <Property Name="ListParm01" Type="nvarchar(max)" />
+          <Property Name="ListParm02" Type="nvarchar(max)" />
+          <Property Name="ListParm03" Type="nvarchar(max)" />
+        </EntityType>
         <Function Name="IN10100_pcBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="Query" Type="nvarchar" Mode="In" />
@@ -469,6 +506,7 @@
             <Parameter Name="TranDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <EntitySet Name="IN_Transfer" EntityType="IN10100Model.IN_Transfer" />
+          <EntitySet Name="RPTRunnings" EntityType="IN10100Model.RPTRunning" />
         </EntityContainer>
         <EntityType Name="Batch">
           <Key>
@@ -942,6 +980,42 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" ConcurrencyMode="Fixed" />
           <Property Type="String" Name="ToCpnyID" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="RPTRunning">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportID" />
+            <PropertyRef Name="MachineName" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ReportID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="MachineName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="ReportDate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="StringParm00" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringParm01" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringParm02" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringParm03" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DateParm00" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="DateParm01" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="DateParm02" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="DateParm03" Nullable="false" Precision="0" />
+          <Property Type="Int16" Name="BooleanParm00" Nullable="false" />
+          <Property Type="Int16" Name="BooleanParm01" Nullable="false" />
+          <Property Type="Int16" Name="BooleanParm02" Nullable="false" />
+          <Property Type="Int16" Name="BooleanParm03" Nullable="false" />
+          <Property Type="String" Name="SelectionFormular" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UserID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AppPath" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClientName" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LoggedCpnyID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CpnyID" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="LangID" />
+          <Property Type="String" Name="ListParm00" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListParm01" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListParm02" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListParm03" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1445,6 +1519,41 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RPTRunnings">
+            <EntityTypeMapping TypeName="IN10100Model.RPTRunning">
+              <MappingFragment StoreEntitySet="RPTRunning">
+                <ScalarProperty Name="ListParm03" ColumnName="ListParm03" />
+                <ScalarProperty Name="ListParm02" ColumnName="ListParm02" />
+                <ScalarProperty Name="ListParm01" ColumnName="ListParm01" />
+                <ScalarProperty Name="ListParm00" ColumnName="ListParm00" />
+                <ScalarProperty Name="LangID" ColumnName="LangID" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="LoggedCpnyID" ColumnName="LoggedCpnyID" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="AppPath" ColumnName="AppPath" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="SelectionFormular" ColumnName="SelectionFormular" />
+                <ScalarProperty Name="BooleanParm03" ColumnName="BooleanParm03" />
+                <ScalarProperty Name="BooleanParm02" ColumnName="BooleanParm02" />
+                <ScalarProperty Name="BooleanParm01" ColumnName="BooleanParm01" />
+                <ScalarProperty Name="BooleanParm00" ColumnName="BooleanParm00" />
+                <ScalarProperty Name="DateParm03" ColumnName="DateParm03" />
+                <ScalarProperty Name="DateParm02" ColumnName="DateParm02" />
+                <ScalarProperty Name="DateParm01" ColumnName="DateParm01" />
+                <ScalarProperty Name="DateParm00" ColumnName="DateParm00" />
+                <ScalarProperty Name="StringParm03" ColumnName="StringParm03" />
+                <ScalarProperty Name="StringParm02" ColumnName="StringParm02" />
+                <ScalarProperty Name="StringParm01" ColumnName="StringParm01" />
+                <ScalarProperty Name="StringParm00" ColumnName="StringParm00" />
+                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
+                <ScalarProperty Name="ReportCap" ColumnName="ReportCap" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1476,6 +1585,7 @@
         <EntityTypeShape EntityType="IN10100Model.IN_UnitConversion" Width="1.5" PointX="2.125" PointY="8.75" />
         <EntityTypeShape EntityType="IN10100Model.OM_UserDefault" Width="1.5" PointX="3.75" PointY="7.25" />
         <EntityTypeShape EntityType="IN10100Model.IN_Transfer" Width="1.5" PointX="2.3698065161564417" PointY="30.2927671960987" />
+        <EntityTypeShape EntityType="IN10100Model.RPTRunning" Width="1.5" PointX="1.0111313653230347" PointY="21.278797338380851" />
       </Diagram>
     </Diagrams>
   </Designer>
