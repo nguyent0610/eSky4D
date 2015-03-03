@@ -544,7 +544,7 @@ var HQ = {
             if (typeof (ctr.items) != "undefined") {
                 ctr.items.each(function (itm) {
                     if (typeof (itm.allowBlank) != "undefined") {
-                        itm.focus(!itm.allowBlank);
+                        itm.validate();
                     }
                     HQ.common.setRequire(itm);
                 });

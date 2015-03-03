@@ -76,10 +76,9 @@ var stoLoad = function (sto) {
         //record.data.setValue('', '');//gan du lieu mac dinh ban dau
         sto.commitChanges();//commit dung de chut nua set su kien changedata cua store cho no la record updated
         HQ.isNew = true;
-        App.cboVendID.forceSelection = false;
-        HQ.common.setRequire(App.frmMain);       
-        App.cboVendID.focus(true);//focus vao mã
-        
+        App.cboVendID.forceSelection = false;       
+        HQ.common.setRequire(App.frmMain);              
+        App.cboVendID.focus(true);
       
     }
     var record = sto.getAt(0);     

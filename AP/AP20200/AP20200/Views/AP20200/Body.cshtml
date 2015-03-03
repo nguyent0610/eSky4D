@@ -36,7 +36,7 @@
                     HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("VendID").HQProcedure("AP20200_pcGetVendor").MaxLength(15).EnforceMaxLength(true)
                     .HQColumnShow("VendID,Name,Address").DisplayField("VendID").ValueField("VendID")
                     .AllowBlank(false)
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false).Editable(true)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
