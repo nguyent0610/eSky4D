@@ -49,10 +49,10 @@ var menuClick = function (command) {
             }           
             break;
         case "refresh":
-            HQ.isChange = false;
-            if (App.cboVendID.valueModels == null) App.cboVendID.setValue('');
-            App.cboVendID.getStore().reload();
-            App.stoVendor.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+           
             break;
         default:
     }
@@ -69,9 +69,18 @@ var stoLoad = function (sto) {
     App.cboVendID.forceSelection = true;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "VendID");
+        record = sto.getAt(0);
+        record.data.Status = 'A';
+        record.data.TaxDflt = 'A';
+        record.data.MOQType = 'Q';
+        //record.data.setValue('', '');//gan du lieu mac dinh ban dau
         sto.commitChanges();//commit dung de chut nua set su kien changedata cua store cho no la record updated
         HQ.isNew = true;
         App.cboVendID.forceSelection = false;
+        HQ.common.setRequire(App.frmMain);       
+        App.cboVendID.focus(true);//focus vao mã
+        
+      
     }
     var record = sto.getAt(0);     
     App.frmMain.getForm().loadRecord(record);
@@ -291,5 +300,12 @@ function deleteData(item) {
 };
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
-
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        if (App.cboVendID.valueModels == null) App.cboVendID.setValue('');
+        App.cboVendID.getStore().reload();
+        App.stoVendor.reload();
+    }
+};
 ///////////////////////////////////

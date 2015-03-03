@@ -539,7 +539,17 @@ var HQ = {
                 }
             }
 
-        }
+        },
+        setRequire: function (ctr) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.allowBlank) != "undefined") {
+                        itm.focus(!itm.allowBlank);
+                    }
+                    HQ.common.setRequire(itm);
+                });
+            }
+        },
     },
     util: {
         toBool: function (parm) {
@@ -626,6 +636,7 @@ var HQ = {
             frmMain.menuClickbtnNew.setDisabled(isChange);
             frmMain.menuClickbtnDelete.setDisabled(isChange);
         }
+
     },
     tooltip: {
         // TinhHV: show the tootip in grid
