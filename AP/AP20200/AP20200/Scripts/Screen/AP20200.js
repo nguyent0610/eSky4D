@@ -141,7 +141,6 @@ var cboVendID_Expand = function (sender, value) {
     if (HQ.isChange) {
         App.cboVendID.collapse();
     }
-
 };
 //khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
 var cboVendID_TriggerClick = function (sender, value) {
@@ -153,7 +152,7 @@ var cboVendID_TriggerClick = function (sender, value) {
     }
 
 };
-
+////////////////////////////////////////
 var txtName_Change = function (sender, e) {
     App.txtShipName.setValue(App.txtName.getValue());
 
