@@ -34,12 +34,8 @@ var menuClick = function (command) {
                 }
             }
             break;
-        case "close":            
-            //if (HQ.isChange) {
-            //    HQ.message.show(5, '', 'askClose');
-            //} else {
-                HQ.common.close(this);
-            //}
+        case "close":                       
+            HQ.common.close(this);            
             break;
         case "new":
             if (HQ.isInsert) {
@@ -298,21 +294,5 @@ function deleteData(item) {
 };
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
-// When anwser the confirmed closing
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.close(this);
-    }
-};
-// Check the store of data is change or not
-function storeIsChange(store, isCreate) {
-    if (isCreate == undefined) isCreate = true;
-    if ((isCreate == true ? store.getChangedData().Created.length > 1 : false)
-        || store.getChangedData().Updated != undefined
-        || store.getChangedData().Deleted != undefined) {
-        return true;
-    }
-    return false;
-};
 
 ///////////////////////////////////
