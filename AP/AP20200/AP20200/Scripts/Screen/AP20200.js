@@ -22,7 +22,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if(HQ.form.checkRequirePass(App.frmMain))
+                if(HQ.form.checkRequirePass(App.frmMain))//check require truoc khi save
                     save();
             }
             break;
