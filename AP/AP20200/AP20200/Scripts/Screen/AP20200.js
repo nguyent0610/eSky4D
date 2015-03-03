@@ -35,11 +35,11 @@ var menuClick = function (command) {
             }
             break;
         case "close":            
-            if (HQ.isChange) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
+            //if (HQ.isChange) {
+            //    HQ.message.show(5, '', 'askClose');
+            //} else {
                 HQ.common.close(this);
-            }
+            //}
             break;
         case "new":
             if (HQ.isInsert) {
