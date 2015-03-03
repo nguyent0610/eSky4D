@@ -576,6 +576,31 @@ var HQ = {
             if (str == null) {
                 return "";
             } else return str;
+        },
+        focusControl: function () {
+            if (App[invalidField] && !App[invalidField].hasFocus) {
+                var tab = App[invalidField].findParentByType('tabpanel');
+                if (tab == undefined) {
+                    App[invalidField].focus();
+                }
+                else {
+                    HQ.util.focusControlInTab(tab, invalidField);
+                }
+            }
+        },
+        focusControlInTab: function (ctr, field) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (ctr.setActiveTab) != "undefined" && !App[field].hasFocus) {
+                        ctr.setActiveTab(App[itm.id]);
+                        }
+                    if (itm.id == field) {
+                        App[field].focus();
+                        return true;
+                    }
+                    HQ.util.focusControlInTab(itm, field);
+                });
+            }            
         }
     },
     form: {

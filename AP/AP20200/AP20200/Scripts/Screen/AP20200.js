@@ -1,5 +1,5 @@
 ﻿////Declare//////////////////////////////////////////////////////////
-var keys = ['VendID'];
+
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -42,9 +42,14 @@ var menuClick = function (command) {
             }
             break;
         case "new":
-            if (HQ.isInsert) {                            
-                App.cboVendID.setValue('');                              
-                cboVendID_Change(App.cboVendID);
+            if (HQ.isInsert) {
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', '');
+                }
+                else {
+                    App.cboVendID.setValue('');
+                    cboVendID_Change(App.cboVendID);
+                }
             }
             else {
                 HQ.message.show(4, '', '');
@@ -59,22 +64,11 @@ var menuClick = function (command) {
         default:
     }
 };
-//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+//load khi giao dien da load xong
 var firstLoad = function () {    
-    loadSourceCombo();
-    HQ.isChange = false;
+    loadSourceCombo();  
 };
-//khi co su thay doi du lieu cua cac conttol tren form
-var frmChange = function () {
-    App.frmMain.getForm().updateRecord(); 
-    HQ.isChange = HQ.store.isChange(App.stoVendor);
-    HQ.common.changeData(HQ.isChange, 'AP20200');   
-    HQ.form.lockButtonChange(HQ.isChange, App);
-    if (App.cboVendID.valueModels==null|| HQ.isNew == true)
-        App.cboVendID.setReadOnly(false);
-    else App.cboVendID.setReadOnly(HQ.isChange);
-  
-}; 
+
 //load store khi co su thay doi vendid
 var stoLoad = function (sto) {
     HQ.common.showBusy(false);
@@ -94,6 +88,7 @@ var stoLoad = function (sto) {
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
+//load source cho cac combo ban dau
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboVendID.getStore().load(function () {
@@ -119,6 +114,19 @@ var loadSourceCombo = function () {
             })
         })
     });
+};
+
+////////////Kiem tra combo chinh VendID
+//khi co su thay doi du lieu cua cac conttol tren form
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = HQ.store.isChange(App.stoVendor);
+    HQ.common.changeData(HQ.isChange, 'AP20200');
+    HQ.form.lockButtonChange(HQ.isChange, App);
+    if (App.cboVendID.valueModels == null || HQ.isNew == true)
+        App.cboVendID.setReadOnly(false);
+    else App.cboVendID.setReadOnly(HQ.isChange);
+
 };
 // Event when cboVendID is changed or selected item 
 var cboVendID_Change = function (sender, value) {    

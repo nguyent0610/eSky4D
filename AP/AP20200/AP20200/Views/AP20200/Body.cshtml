@@ -57,16 +57,16 @@
                                     })
                     )//header
 
-                , X.TabPanel().Layout(LayoutType.Fit)
+                , X.TabPanel().Layout(LayoutType.Fit).ID("tabDetail")
                 .Anchor("100% -35")
                 .Items
                 (
-                    X.Panel().Title(Util.GetLang("VendInfo")).Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
+                    X.Panel().ID("pnlVendInfo").Title(Util.GetLang("VendInfo")).Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
                     .Flex(1).MinWidth(200).AutoScroll(true)
                     .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Left }).Border(true)
                     .Items
                     (
-                        HQ.Combo().ID("cboClassID").Name("cboClassID").HQLangCode("ClassID").HQProcedure("AP20200_pcClassID")
+                        HQ.Combo().ID("cboClassID").Name("cboClassID").HQLangCode("ClassID").HQProcedure("AP20200_pcClassID").AllowBlank(false)
                         .HQColumnShow("ClassID,Descr").DisplayField("Descr").ValueField("ClassID").Width(300).DataIndex("ClassID")
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .LoadData()
@@ -188,7 +188,7 @@
                                         })
                     )
 
-                    , X.Panel().Title(Util.GetLang("Address"))
+                    , X.Panel().ID("pnlAddress").Title(Util.GetLang("Address"))
                     .Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
                     .MinWidth(200).AutoScroll(true)
                     .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
