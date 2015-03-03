@@ -46,10 +46,7 @@ var menuClick = function (command) {
                     App.cboVendID.setValue('');
                     cboVendID_Change(App.cboVendID);
                 }
-            }
-            else {
-                HQ.message.show(4, '', '');
-            }
+            }           
             break;
         case "refresh":
             HQ.isChange = false;

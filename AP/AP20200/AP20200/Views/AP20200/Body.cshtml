@@ -13,12 +13,7 @@
  Html.X().Viewport().Layout(LayoutType.Fit)
     .Items(
         X.FormPanel()
-        .Layout(LayoutType.Anchor)
-            .Listeners(l =>
-                    {
-                        l.BoxReady.Handler = "firstLoad();";
-                        l.FieldChange.Fn = "frmChange";
-                    })
+        .Layout(LayoutType.Anchor)            
         .ID("frmMain")
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
@@ -28,6 +23,11 @@
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar("PO20100"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .Listeners(l =>
+                    {
+                        l.BoxReady.Handler = "firstLoad();";
+                        l.FieldChange.Fn = "frmChange";
+                    })
         .Items(
                 X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
                 .Flex(1).MinWidth(200)
