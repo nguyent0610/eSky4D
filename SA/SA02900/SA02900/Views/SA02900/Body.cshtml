@@ -9,100 +9,397 @@
     var HQ = Html.HQ();
 }
 
-@(X.Viewport()
+@(
+
+X.Viewport()
 .Layout(LayoutType.Fit)
 .Items(
     X.FormPanel()
     .ID("frmMain")
     .BodyPadding(0)
+    .TrackResetOnLoad(true)
+    .DefaultAnchor("100%")
     .KeyMap(Util.SetupKeyMap())
-    .TopBar(Util.SetupToolbar("Print", true, ""))
-    .Layout(LayoutType.Fit)
+    .TopBar(Util.SetupToolbar("print", true, ""))
+    .Layout(LayoutType.Border)
     .Items(
-        ////Thiet ke giao dien o day
-
-        X.GridPanel()
-        .Scroll(ScrollMode.Both)
-        .View(X.GridView().TrackOver(false))
-        .ID("grdSYS_Language")
-        .Store(
-            X.Store()
-            .ID("stoSYS_Language")
-            .PageSize(50)
-            .Model(Util.GenerateModel(typeof(SA02900_pgLoadSYS_Language_Result), "mdlSA02900_pgLoadSYS_Language", "Code"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Language"))).AutoLoad(false)
-            .Listeners(l =>
-            {
-                l.BeforeLoad.Fn = "stoBeforeLoad";
-                l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";
-            })
-        )
-        .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
-        .SortableColumns(false)
-        .ColumnModel(
-            X.RowNumbererColumn().Width(40),
-            X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(20).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Lang00")).DataIndex("Lang00").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Lang01")).DataIndex("Lang01").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Lang02")).DataIndex("Lang02").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Lang03")).DataIndex("Lang03").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
-            X.Column().Text(Util.GetLang("Lang04")).DataIndex("Lang04").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
-            X.CommandColumn()
-            .Width(150)
-            .Commands(
-                X.GridCommand()
-                .Text(Util.GetLang("Reject"))
-                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                .CommandName("reject")
-                .Icon(Icon.ArrowUndo)
-            )
-            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-            .Listeners(l => l.Command.Handler = "grdSYS_Language_Reject(record);")
-        )
-        .SelectionModel(X.RowSelectionModel().ID("slmSYS_Language").Mode(SelectionMode.Multi))
-        .BottomBar(
-            X.PagingToolbar()
-            .Items(
-                X.Label("Page size:"),
-                X.ToolbarSpacer(10),
-                X.ComboBox()
-                .Width(80)
-                .Items("1", "2", "10", "20", "30", "50")
-                .SelectedItems("50")
+        X.Panel().ID("pnlTop")
+        .Region(Region.North).Flex(1)
+        .Layout(LayoutType.Border)
+        .Split(true)
+        .Items(
+            X.GridPanel()
+            .Region(Region.Center)
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .ID("grdTop")
+            .Store(
+                X.Store()
+                .ID("stoTop")
+                .PageSize(50)
+                .Model(Util.GenerateModel(typeof(SA02900_pgSI_ApprovalFlowStatus_Result), "mdlSA02900_pgSI_ApprovalFlowStatus", "AppFolID,RoleID,Status"))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetTopGrid"))).AutoLoad(false)
                 .Listeners(l =>
-                    {
-                        l.Select.Fn = "HQ.grid.onPageSelect";                   
-                    })
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoadTop";
+                    l.Load.Fn = "stoLoadTop";
+                    l.Update.Fn = "stoChangedTop";
+                })
             )
-            .Plugins(X.ProgressBarPager())
-        )
-        .Plugins(
-            X.CellEditing()
-            .ClicksToEdit(1)
-            .Listeners(ls =>
+            .Listeners(p =>
             {
-                ls.BeforeEdit.Fn = "grdSYS_Language_BeforeEdit";
-                ls.Edit.Fn = "grdSYS_Language_Edit";
-                ls.ValidateEdit.Fn = "grdSYS_Language_ValidateEdit";
-
+                p.BoxReady.Handler = "firstLoadTop();";
             })
-        )
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40),
 
-        .Features(
-            X.GridFilters()
+                X.Column().Text(Util.GetLang("AppFolID")).DataIndex("AppFolID").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboAppFolID")
+                        .Name("cboAppFolID").HQProcedure("SA02900_pcScreen")
+                        .HQColumnShow("ScreenNumber,DescrScreen").DisplayField("ScreenNumber").ValueField("ScreenNumber")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(true)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                             new StoreParameter() { Name = "@ScreenNbr", Value = "SA02900" , Mode = ParameterMode.Value },
+                             new StoreParameter() { Name = "@User", Value = "HQ.userName" , Mode = ParameterMode.Raw },
+                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID" , Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboAppFolID_Change";
+                        })
+                    ),
+
+                X.Column().Text(Util.GetLang("DescrScreen")).DataIndex("DescrScreen").Width(200),
+
+                X.Column().Text(Util.GetLang("RoleID")).DataIndex("RoleID").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboRoleID")
+                        .Name("cboAppFolID").HQProcedure("SA02900_pcGetRoleID")
+                        .HQColumnShow("RoleID,Desc").DisplayField("RoleID").ValueField("RoleID")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    ),
+
+                X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(70).Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
+                X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(400).EnforceMaxLength(true)),
+                X.Column().Text(Util.GetLang("LangStatus")).DataIndex("LangStatus").Width(150).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true)),
+
+                X.CommandColumn()
+                .Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdTop_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmTopGrid").Mode(SelectionMode.Multi))
+            .Listeners(lst => {
+                lst.Select.Fn = "GridTop_Change";
+            })
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdTop_BeforeEdit";
+                    ls.Edit.Fn = "grdTop_Edit";
+                    ls.ValidateEdit.Fn = "grdTop_ValidateEdit";
+
+                })
+            )
+            .Features(
+                X.GridFilters()
                 .Local(true)
                 .Filters(
-                    X.StringFilter().DataIndex("Code"),
-                    X.StringFilter().DataIndex("Lang00"),
-                    X.StringFilter().DataIndex("Lang01"),
-                    X.StringFilter().DataIndex("Lang02"),
-                    X.StringFilter().DataIndex("Lang03"),
-                    X.StringFilter().DataIndex("Lang04")
+                    X.StringFilter().DataIndex("AppFolID"),
+                    X.StringFilter().DataIndex("DescrScreen"),
+                    X.StringFilter().DataIndex("RoleID"),
+                    X.StringFilter().DataIndex("Status"),
+                    X.StringFilter().DataIndex("Descr"),
+                    X.StringFilter().DataIndex("LangStatus")
                 )
-        )
-    )
-))
+           ) // grdTop
+        ).Listeners(lss =>
+        {
+            lss.Render.Fn = "pnl_render";
+        }) // pnlTop
+        
+        , X.Panel().ID("pnlBot")
+        .Region(Region.Center).Flex(1)
+        .Layout(LayoutType.Border)
+        .Items(
+            X.GridPanel()
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .Region(Region.Center)
+            .ID("grdBot")
+            .Store(
+                X.Store()
+                .ID("stoBot")
+                .PageSize(50)
+                .Model(Util.GenerateModel(typeof(SA02900_pgSI_ApprovalFlowHandle_Result), "mdlSA02900_pgSI_ApprovalFlowHandle", "Handle"))
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("AppFolID", "App.slmTopGrid.selected.items[0].data.AppFolID", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("RoleID", "App.slmTopGrid.selected.items[0].data.RoleID", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("Status", "App.slmTopGrid.selected.items[0].data.Status", ParameterMode.Raw));
+                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetBotGrid"))).AutoLoad(false)
+                .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoadBot";
+                    l.Load.Fn = "stoLoadBot";
+                    l.Update.Fn = "stoChangedBot";
+                })
+            )
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40),
+                    X.Column().Text(Util.GetLang("Handle")).DataIndex("Handle").Width(70)
+                    .Editor(X.TextField().MaxLength(5).EnforceMaxLength(true)).ID("txtHandle"),
+
+                    X.Column().Text(Util.GetLang("LangHandle")).DataIndex("LangHandle").Width(150)
+                    .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true)),
+
+                    X.Column().Text(Util.GetLang("ToStatus")).DataIndex("ToStatus").Width(100)
+                    .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
+
+                    X.Column().Text(Util.GetLang("ContentApprove")).DataIndex("ContentApprove").Width(220)
+                    .Editor(X.TextField().MaxLength(500).EnforceMaxLength(true)),
+
+                    X.Column().Text(Util.GetLang("MailSubject")).DataIndex("MailSubject").Width(170)
+                    .Editor(X.TextField().MaxLength(250).EnforceMaxLength(true)),
+
+                    X.Column().Text(Util.GetLang("MailApprove")).DataIndex("MailApprove").Width(80)
+                    .Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
+
+                    X.Column().Text(Util.GetLang("ProcContent")).DataIndex("ProcContent").Width(80)
+                    .Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
+
+                    X.Column().Text(Util.GetLang("ToMail")).DataIndex("MailTo").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboMailTo")
+                        .Name("cboMailTo").HQProcedure("SA02900_pcGetRoleID")
+                        .HQColumnShow("RoleID,Desc").DisplayField("RoleID").ValueField("RoleID")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    ),
+
+                    X.Column().Text(Util.GetLang("CCMail")).DataIndex("MailCC").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboMailCC")
+                        .Name("cboMailCC").HQProcedure("SA02900_pcGetRoleID")
+                        .HQColumnShow("RoleID,Desc").DisplayField("RoleID").ValueField("RoleID")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).MultiSelect(true)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    ),
+
+                    X.Column().Text(Util.GetLang("ProcName")).DataIndex("ProcName").Width(150)
+                    .Editor(X.TextField().MaxLength(250).EnforceMaxLength(true)),
+
+                    X.Column().Text(Util.GetLang("Param00")).DataIndex("Param00").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboParam00")
+                        .Name("cboParam00").HQProcedure("SA02900_pcParam00")
+                        .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).MultiSelect(true)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    ),
+
+                    X.Column().Text(Util.GetLang("Param01")).DataIndex("Param01").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboParam01")
+                        .Name("cboParam01").HQProcedure("SA02900_pcParam01")
+                        .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).MultiSelect(true)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    ),
+
+                    X.Column().Text(Util.GetLang("Param02")).DataIndex("Param02").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboParam02")
+                        .Name("cboParam02").HQProcedure("SA02900_pcParam02")
+                        .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).MultiSelect(true)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    ),
+
+                    X.Column().Text(Util.GetLang("Param03")).DataIndex("Param03").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboParam03")
+                        .Name("cboParam03").HQProcedure("SA02900_pcParam03")
+                        .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).MultiSelect(true)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    ),
+
+                    X.Column().Text(Util.GetLang("Param04")).DataIndex("Param04").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboParam04")
+                        .Name("cboParam04").HQProcedure("SA02900_pcParam04")
+                        .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).MultiSelect(true)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    ),
+
+                    X.Column().Text(Util.GetLang("Param05")).DataIndex("Param05").Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboParam05")
+                        .Name("cboParam05").HQProcedure("SA02900_pcParam05")
+                        .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).MultiSelect(true)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    ),
+
+                X.CommandColumn()
+                .Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdBot_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmBotGrid").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdBot_BeforeEdit";
+                    ls.Edit.Fn = "grdBot_Edit";
+                    ls.ValidateEdit.Fn = "grdBot_ValidateEdit";
+
+                })
+            )
+
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("Handle"),
+                        X.StringFilter().DataIndex("LangHandle"),
+                        X.StringFilter().DataIndex("ToStatus"),
+                        X.StringFilter().DataIndex("ContentApprove"),
+                        X.StringFilter().DataIndex("MailSubject"),
+                        X.StringFilter().DataIndex("MailApprove"),
+                        X.StringFilter().DataIndex("ProcContent"),
+                        X.StringFilter().DataIndex("MailTo"),
+                        X.NumericFilter().DataIndex("MailCC"),
+                        X.NumericFilter().DataIndex("ProcName"),
+                        X.NumericFilter().DataIndex("Param00"),
+                        X.NumericFilter().DataIndex("Param01"),
+                        X.BooleanFilter().DataIndex("Param02"),
+                        X.BooleanFilter().DataIndex("Param03"),
+                        X.BooleanFilter().DataIndex("Param04"),
+                        X.BooleanFilter().DataIndex("Param05")
+                    )
+            ) // grdBot
+        ).Listeners(lss =>
+        {
+            lss.Render.Fn = "pnl_render";
+        }) // pnlBot
+    )// frmMain
+) // viewport
+
+)

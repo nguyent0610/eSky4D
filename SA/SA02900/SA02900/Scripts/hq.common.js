@@ -185,12 +185,12 @@ var HQ = {
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
                 //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-                    store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                        callback: function () {
-                            HQ.grid.last(grd);
-                            grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-                        }
-                    });
+                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                    callback: function () {
+                        HQ.grid.last(grd);
+                        grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                    }
+                });
                 //}
                 //else {
                 //    HQ.grid.last(grd);
@@ -199,15 +199,15 @@ var HQ = {
                 return;
             }
             //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                    callback: function () {
-                        if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-                            HQ.store.insertBlank(store, keys);
-                        }
-                        HQ.grid.last(grd);
-                        grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+            store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                callback: function () {
+                    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                        HQ.store.insertBlank(store, keys);
                     }
-                });
+                    HQ.grid.last(grd);
+                    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                }
+            });
             //}
             //else {
             //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
@@ -465,8 +465,8 @@ var HQ = {
         changeData: function (isChange, screenNbr) {
             if (parent.App[screenNbr] != undefined)
                 if (isChange)
-                    parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '('+screenNbr+')*');
-                else parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '('+screenNbr+')');
+                    parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
+                else parent.App[screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
         },
         showBusy: function (busy, waitMsg, form) {
             if (form == undefined) {

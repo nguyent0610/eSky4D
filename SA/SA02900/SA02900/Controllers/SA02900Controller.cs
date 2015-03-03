@@ -27,7 +27,7 @@ namespace SA02900.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -104,17 +104,17 @@ namespace SA02900.Controllers
 
                 lstBotGrid.Created.AddRange(lstBotGrid.Updated);
 
-                foreach (SA02900_pgSI_ApprovalFlowHandle_Result curLang in lstBotGrid.Created)
+                foreach (SA02900_pgSI_ApprovalFlowHandle_Result curLang1 in lstBotGrid.Created)
                 {
-                    if (curLang.Handle.PassNull() == "" ) continue;
+                    if (curLang1.Handle.PassNull() == "") continue;
 
-                    var lang = _db.SI_ApprovalFlowHandle.Where(p => p.Handle == curLang.Handle).FirstOrDefault();
+                    var lang1 = _db.SI_ApprovalFlowHandle.Where(p => p.Handle == curLang1.Handle).FirstOrDefault();
 
-                    if (lang != null)
+                    if (lang1 != null)
                     {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        if (lang1.tstamp.ToHex() == curLang1.tstamp.ToHex())
                         {
-                            Update_BotGrid(lang, curLang, false);
+                            Update_BotGrid(lang1, curLang1, false);
                         }
                         else
                         {
@@ -123,12 +123,12 @@ namespace SA02900.Controllers
                     }
                     else
                     {
-                        lang = new SI_ApprovalFlowHandle();
-                        lang.AppFolID = AppFolID;
-                        lang.RoleID = RoleID;
-                        lang.Status = Status;
-                        Update_BotGrid(lang, curLang, true);
-                        _db.SI_ApprovalFlowHandle.AddObject(lang);
+                        lang1 = new SI_ApprovalFlowHandle();
+                        lang1.AppFolID = AppFolID;
+                        lang1.RoleID = RoleID;
+                        lang1.Status = Status;
+                        Update_BotGrid(lang1, curLang1, true);
+                        _db.SI_ApprovalFlowHandle.AddObject(lang1);
                     }
                 }
                 #endregion
