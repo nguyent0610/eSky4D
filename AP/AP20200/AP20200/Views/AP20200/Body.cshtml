@@ -66,7 +66,7 @@
                     .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Left }).Border(true)
                     .Items
                     (
-                        HQ.Combo().ID("cboClassID").Name("cboClassID").HQLangCode("ClassID").HQProcedure("AP20200_pcClassID").AllowBlank(false)
+                        HQ.Combo().ID("cboClassID").Name("cboClassID").HQLangCode("ClassID").HQProcedure("AP20200_pcClassID")
                         .HQColumnShow("ClassID,Descr").DisplayField("Descr").ValueField("ClassID").Width(300).DataIndex("ClassID")
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .LoadData()
