@@ -76,7 +76,7 @@ var stoLoad = function (sto) {
     App.cboVendID.forceSelection = true;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "VendID");
-        sto.commitChanges();//commit dung de chut nua set su kien changedata cua store
+        sto.commitChanges();//commit dung de chut nua set su kien changedata cua store cho no la record updated
         HQ.isNew = true;
         App.cboVendID.forceSelection = false;
     }
