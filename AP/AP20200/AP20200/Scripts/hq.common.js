@@ -146,7 +146,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -162,7 +162,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -174,62 +174,61 @@ var HQ = {
             return true;
         }
     },
-    combo:
-        {
-            first: function (cbo, isChange) {
-                if (isChange) {
-                    HQ.message.show(150,'','');
+    combo: {
+        first: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var value = cbo.store.getAt(0);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
                 }
-                else {
-                    var value = cbo.store.getAt(0);
-                    if (value) {
-                        cbo.setValue(value.data[cbo.valueField]);
-                    }
-                }
-            },
-            prev: function (cbo, isChange) {
-                if (isChange) {
-                    HQ.message.show(150, '', '');
-                }
-                else {
-                    var v = cbo.getValue();
-                    var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
-                    var index = cbo.store.indexOf(record);
-                    var value = cbo.store.getAt(index - 1);
-                    if (value) {
-                        cbo.setValue(value.data[cbo.valueField]);
-                    }
-                    else HQ.combo.first(cbo);
-                }
-            },
-            next: function (cbo, isChange) {
-                if (isChange) {
-                    HQ.message.show(150, '', '');
-                }
-                else {
-                    var v = cbo.getValue();
-                    var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
-                    var index = cbo.store.indexOf(record);
-                    var value = cbo.store.getAt(index + 1);
-                    if (value) {
-                        cbo.setValue(value.data[cbo.valueField]);
-                    }
-                    else HQ.combo.last(cbo);
-                }
-            },
-            last: function (cbo, isChange) {
-                if (isChange) {
-                    HQ.message.show(150, '', '');
-                }
-                else {
-                    var value = cbo.store.getAt(cbo.store.getCount() - 1);
-                    if (value) {
-                        cbo.setValue(value.data[cbo.valueField]);
-                    }
-                }
-               
-            },
+            }
         },
+        prev: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var v = cbo.getValue();
+                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
+                var index = cbo.store.indexOf(record);
+                var value = cbo.store.getAt(index - 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+                else HQ.combo.first(cbo);
+            }
+        },
+        next: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var v = cbo.getValue();
+                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
+                var index = cbo.store.indexOf(record);
+                var value = cbo.store.getAt(index + 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+                else HQ.combo.last(cbo);
+            }
+        },
+        last: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var value = cbo.store.getAt(cbo.store.getCount() - 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+            }
+
+        },
+    },
     grid: {
         showBusy: function (grd, isBusy) {
             if (isBusy)
@@ -243,8 +242,8 @@ var HQ = {
                 //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
-                        HQ.grid.last(grd);
-                        grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                        //HQ.grid.last(grd);
+                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
                     }
                 });
                 //}
@@ -260,8 +259,8 @@ var HQ = {
                     if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
                         HQ.store.insertBlank(store, keys);
                     }
-                    HQ.grid.last(grd);
-                    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                    //HQ.grid.last(grd);
+                    setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
                 }
             });
             //}
@@ -399,7 +398,7 @@ var HQ = {
 
             }
         },
-        checkInsertKey: function (grd, e, keys) {           
+        checkInsertKey: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 if (e.value != '')
                     HQ.store.insertBlank(grd.getStore(), keys);
@@ -603,14 +602,14 @@ var HQ = {
                 ctr.items.each(function (itm) {
                     if (typeof (ctr.setActiveTab) != "undefined" && !App[field].hasFocus) {
                         ctr.setActiveTab(App[itm.id]);
-                        }
+                    }
                     if (itm.id == field) {
                         App[field].focus();
                         return true;
                     }
                     HQ.util.focusControlInTab(itm, field);
                 });
-            }            
+            }
         }
     },
     form: {
@@ -628,7 +627,7 @@ var HQ = {
                             })
             return isValid;
         },
-        lockButtonChange: function (isChange, frmMain) {     
+        lockButtonChange: function (isChange, frmMain) {
             frmMain.menuClickbtnFirst.setDisabled(isChange);
             frmMain.menuClickbtnNext.setDisabled(isChange);
             frmMain.menuClickbtnLast.setDisabled(isChange);
@@ -636,7 +635,6 @@ var HQ = {
             frmMain.menuClickbtnNew.setDisabled(isChange);
             frmMain.menuClickbtnDelete.setDisabled(isChange);
         }
-
     },
     tooltip: {
         // TinhHV: show the tootip in grid
@@ -667,6 +665,7 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
+        if (value.split(',').length > 2) value = '';
         if (store) {
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {

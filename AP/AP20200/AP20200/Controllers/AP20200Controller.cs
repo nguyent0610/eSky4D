@@ -20,7 +20,7 @@ namespace AP20200.Controllers
         private string _screenNbr = "AP20200";
         AP20200Entities _db = Util.CreateObjectContext<AP20200Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-        //
+      
         // GET: /AP20200/
         public ActionResult Index()
         {
@@ -28,7 +28,7 @@ namespace AP20200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

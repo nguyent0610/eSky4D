@@ -2,6 +2,33 @@
 
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
+//load source cho cac combo ban dau
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboVendID.getStore().load(function () {
+        App.cboCountry.getStore().load(function () {
+            App.cboBillCountry.getStore().load(function () {
+                App.cboClassID.getStore().load(function () {
+                    App.cboStatus.getStore().load(function () {
+                        App.cboTermsID.getStore().load(function () {
+                            App.cboTaxDflt.getStore().load(function () {
+                                App.cboTaxId00.getStore().load(function () {
+                                    App.cboTaxId01.getStore().load(function () {
+                                        App.cboTaxId02.getStore().load(function () {
+                                            App.cboTaxId03.getStore().load(function () {
+                                                App.stoVendor.reload();
+                                            })
+                                        })
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        })
+    });
+};
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
 // Load and show binding data to the form
@@ -57,11 +84,10 @@ var menuClick = function (command) {
         default:
     }
 };
-//load khi giao dien da load xong
+//load lần đầu khi mở
 var firstLoad = function () {    
     loadSourceCombo();  
 };
-
 //load store khi co su thay doi vendid
 var stoLoad = function (sto) {
     HQ.common.showBusy(false);
@@ -70,15 +96,16 @@ var stoLoad = function (sto) {
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "VendID");
         record = sto.getAt(0);
+        //gan du lieu mac dinh ban dau
         record.data.Status = 'A';
         record.data.TaxDflt = 'A';
         record.data.MOQType = 'Q';
-        //record.data.setValue('', '');//gan du lieu mac dinh ban dau
-        sto.commitChanges();//commit dung de chut nua set su kien changedata cua store cho no la record updated
-        HQ.isNew = true;
+
+        sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
+        HQ.isNew = true;//record la new
         App.cboVendID.forceSelection = false;       
-        HQ.common.setRequire(App.frmMain);              
-        App.cboVendID.focus(true);
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboVendID.focus(true);//focus ma khi tao moi
       
     }
     var record = sto.getAt(0);     
@@ -89,42 +116,15 @@ var stoLoad = function (sto) {
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
-//load source cho cac combo ban dau
-var loadSourceCombo = function () {
-    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.cboVendID.getStore().load(function () {
-        App.cboCountry.getStore().load(function () {
-            App.cboBillCountry.getStore().load(function () {
-                App.cboClassID.getStore().load(function () {
-                    App.cboStatus.getStore().load(function () {
-                        App.cboTermsID.getStore().load(function () {
-                            App.cboTaxDflt.getStore().load(function () {
-                                App.cboTaxId00.getStore().load(function () {
-                                    App.cboTaxId01.getStore().load(function () {
-                                        App.cboTaxId02.getStore().load(function () {
-                                            App.cboTaxId03.getStore().load(function () {                                               
-                                                App.stoVendor.reload();
-                                            })
-                                        })
-                                    })
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        })
-    });
-};
 
 ////////////Kiem tra combo chinh VendID
 //khi co su thay doi du lieu cua cac conttol tren form
 var frmChange = function () {
     App.frmMain.getForm().updateRecord();
     HQ.isChange = HQ.store.isChange(App.stoVendor);
-    HQ.common.changeData(HQ.isChange, 'AP20200');
-    HQ.form.lockButtonChange(HQ.isChange, App);
-    if (App.cboVendID.valueModels == null || HQ.isNew == true)
+    HQ.common.changeData(HQ.isChange, 'AP20200');//co thay doi du lieu gan * tren tab title header
+    HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+    if (App.cboVendID.valueModels == null || HQ.isNew == true)//App.cboVendID.valueModels == null khi ko co select item nao
         App.cboVendID.setReadOnly(false);
     else App.cboVendID.setReadOnly(HQ.isChange);
 
