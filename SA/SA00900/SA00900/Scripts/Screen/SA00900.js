@@ -11,7 +11,6 @@ var fieldsLangCheckRequire = ["Code", "Lang00", "Lang01"];
 var menuClick = function (command) {
     switch (command) {
         case "first":
-
             HQ.grid.first(App.grdSYS_Language);
             break;
         case "prev":
@@ -49,11 +48,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.isChange) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);            
             break;
     }
 
@@ -128,14 +123,6 @@ var deleteData = function (item) {
 
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.changeData(false, 'SA00900');//khi dong roi gan lai cho change la false
-        HQ.common.close(this);
-    }
-};
-
-
 /////////////////////////////////////////////////////////////////////////
 
 
