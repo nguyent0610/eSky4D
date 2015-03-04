@@ -95,7 +95,7 @@ namespace SA02900.Controllers
                 #region Save Bot Grid SI_ApprovalFlowHandle
                 foreach (SA02900_pgSI_ApprovalFlowHandle_Result deleted in lstBotGrid.Deleted)
                 {
-                    var del = _db.SI_ApprovalFlowHandle.Where(p => p.Handle == deleted.Handle).FirstOrDefault();
+                    var del = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle == deleted.Handle && p.AppFolID == AppFolID && p.RoleID == RoleID && p.Status ==Status);
                     if (del != null)
                     {
                         _db.SI_ApprovalFlowHandle.DeleteObject(del);
@@ -108,7 +108,7 @@ namespace SA02900.Controllers
                 {
                     if (curLang1.Handle.PassNull() == "") continue;
 
-                    var lang1 = _db.SI_ApprovalFlowHandle.Where(p => p.Handle == curLang1.Handle).FirstOrDefault();
+                    var lang1 = _db.SI_ApprovalFlowHandle.FirstOrDefault(p => p.Handle == curLang1.Handle&&p.AppFolID == AppFolID && p.RoleID == RoleID && p.Status == Status);
 
                     if (lang1 != null)
                     {

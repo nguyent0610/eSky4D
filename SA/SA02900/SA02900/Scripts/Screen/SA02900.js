@@ -62,7 +62,6 @@ var menuClick = function (command) {
         case "refresh":
             HQ.isFirstLoad = true;
             App.stoTop.reload();
-            App.grdBot.store.reload();
             break;
         case "new":
             if (HQ.isInsert) {
@@ -114,8 +113,8 @@ var menuClick = function (command) {
 
 var GridTop_Change = function (sender, e) {
     HQ.isFirstLoad = true;
-    App.grdBot.store.reload();
-    //_index = App.slmTopGrid.selected.items[0].index;
+    App.stoBot.reload();
+    _index = App.slmTopGrid.selected.items[0].index;
 };
 
 var cboAppFolID_Change = function (value) {
@@ -135,7 +134,7 @@ var grdTop_ValidateEdit = function (item, e) {
 };
 var grdTop_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdTop);
-    stoChanged(App.stoTop);
+    stoChangedTop(App.stoTop);
 };
 
 //Bot Grid
@@ -150,7 +149,7 @@ var grdBot_ValidateEdit = function (item, e) {
 };
 var grdBot_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdBot);
-    stoChanged(App.stoBot);
+    stoChangedBot(App.stoBot);
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -223,7 +222,7 @@ var stoLoadTop = function (sto) {
         }
         HQ.isFirstLoad = false;
     }
-    //App.slmTopGrid.select(_index);
+   App.slmTopGrid.select(_index);
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoadTop = function (sto) {
@@ -234,7 +233,7 @@ var stoBeforeLoadTop = function (sto) {
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoadBot = function () {
     HQ.isFirstLoad = true;
-    App.stoBot.reload();
+    //App.stoBot.reload();
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChangedBot = function (sto) {
