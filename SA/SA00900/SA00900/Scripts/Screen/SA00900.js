@@ -23,8 +23,14 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_Language);
             break;
         case "refresh":
-            HQ.isFirstLoad = true;
-            App.stoSYS_Language.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSYS_Language.reload();
+            }          
             break;
         case "new":
             if (HQ.isInsert) {
@@ -123,7 +129,14 @@ var deleteData = function (item) {
 
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_Language.reload();
+    }
+};
+///////////////////////////////////
 
 
 
