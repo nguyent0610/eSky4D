@@ -39,7 +39,7 @@
                 .Height(550)
                 //.Width(250)
                 .Border(false)
-                .SelectionModel(Html.X().TreeSelectionModel().ID("Tree").Mode(SelectionMode.Multi))
+                .SelectionModel(Html.X().TreeSelectionModel().ID("slmTree").Mode(SelectionMode.Multi))
                     //.Root(
                     //    (Node)ViewData["resultRoot"]
                         
@@ -634,18 +634,7 @@
                                                          //Ngay Sinh Nhat
                                                          ,HQ.DateField().ID("cboBirthday").Name("cboBirthday").HQLangCode("BIRTHDAY").DataIndex("Birthdate")
                                                         .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now) 
-                                                        
-                                                        //,HQ.DateField().ID("cboBirthday2").Name("cboBirthday").HQLangCode("BIRTHDAY").DataIndex("Birthdate")
-                                                        //.Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now)
-                                                        
-                                                        //,HQ.DateField().ID("cboBirthday3").Name("cboBirthday").HQLangCode("BIRTHDAY").DataIndex("Birthdate")
-                                                        //.Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now)
-                                                        
-                                                        //,HQ.DateField().ID("cboBirthday4").Name("cboBirthday").HQLangCode("BIRTHDAY").DataIndex("Birthdate")
-                                                        //.Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now)
-                                                        
-                                                        //,HQ.DateField().ID("cboBirthday5").Name("cboBirthday").HQLangCode("BIRTHDAY").DataIndex("Birthdate")
-                                                        //.Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now)
+                            
                                                            
                                                     //ngoac ket thuc panel botright
                                                     )

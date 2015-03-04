@@ -57,7 +57,7 @@ namespace AR20400.Controllers
 
 
 
-        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level , int z)
+        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z)
         {
             var node = new Node();
             var k = -1;
@@ -85,17 +85,17 @@ namespace AR20400.Controllers
             {
                 foreach (AR20400_pcCustomer_Result tmp in tmps)
                 {
-                    
+
                     k++;
-                    
+
                     Node nodetmp = new Node();
                     nodetmp.Text = tmp.CustId + "-" + tmp.CustName;
                     nodetmp.NodeID = tmp.CustId + "-" + tmp.CustName;
                     nodetmp.Leaf = true;
 
                     node.Children.Add(nodetmp);
-                        //System.Diagnostics.Debug.WriteLine(nodetmp.Text);
-                    
+                    //System.Diagnostics.Debug.WriteLine(nodetmp.Text);
+
                 }
             }
 
@@ -104,7 +104,7 @@ namespace AR20400.Controllers
                 foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
                 {
 
-                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1 , z++));
+                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, z++));
 
                 }
             }
@@ -127,7 +127,7 @@ namespace AR20400.Controllers
             return node;
         }
 
-        //    dang submit ko load duoc lai cai not Root Tree
+        //    dang submit ko load duoc lai cai not Root slmTree
         //[DirectMethod]
         //public ActionResult ReloadTree(string cpnyID)
         //{
@@ -156,10 +156,10 @@ namespace AR20400.Controllers
         //    //return PartialView();
         //    //this.GetCmp<TreePanel>("IDTree").SetRootNode(node);
         //    return Json(new { success = true});
-     
+
         //}
 
-        //dang method co the load duoc node root Tree
+        //dang method co the load duoc node root slmTree
         [DirectMethod]
         public ActionResult ReloadTree(string cpnyID)
         {
@@ -184,7 +184,7 @@ namespace AR20400.Controllers
             //var m = ViewData["resultRoot2"];
 
 
-            //quan trong dung de refresh Tree
+            //quan trong dung de refresh slmTree
             this.GetCmp<TreePanel>("IDTree").SetRootNode(node);
 
             return this.Direct();
@@ -235,77 +235,115 @@ namespace AR20400.Controllers
         [ValidateInput(false)]
         public ActionResult Save(FormCollection data, string custID, string handle, string nodeID, int nodeLevel, string parentRecordID, int hadChild, string status, string tmpSelectedNode, string branchID, string custName)
         {
-            StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstheader"]);
-            ChangeRecords<AR_Customer> lstheader = dataHandler2.BatchObjectData<AR_Customer>();
-            var approveHandle = _db.SI_ApprovalFlowHandle
-                       .FirstOrDefault(p => p.AppFolID == screenNbr
-                                           && p.Status == status
-                                           && p.Handle == handle);
-            var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
-            var Role = user.UserTypes;
-            //var custName = data["txtCustName"];
-
-            //var statusAfterAll = "";
-            foreach (AR_Customer updated in lstheader.Updated)
+            try
             {
-                // Get the image path
+                StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstheader"]);
+                ChangeRecords<AR_Customer> lstheader = dataHandler2.BatchObjectData<AR_Customer>();
+                var approveHandle = _db.SI_ApprovalFlowHandle
+                           .FirstOrDefault(p => p.AppFolID == screenNbr
+                                               && p.Status == status
+                                               && p.Handle == handle);
+                var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
+                var Role = user.UserTypes;
+                //var custName = data["txtCustName"];
 
-
-                var objHeader = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
-                if (objHeader != null)
+                //var statusAfterAll = "";
+                foreach (AR_Customer updated in lstheader.Updated)
                 {
-                    //updating
-                    if (hadChild == 0)
-                    {
+                    // Get the image path
 
-                       
-                        if (handle == "N" || handle == "")
+
+                    var objHeader = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
+                    if (objHeader != null)
+                    {
+                        //updating
+                        if (hadChild == 0)
                         {
-                            objHeader.Status = status;
+
+
+                            if (handle == "N" || handle == "")
+                            {
+                                objHeader.Status = status;
+                            }
+                            else
+                            {
+                                objHeader.Status = approveHandle.ToStatus;
+
+                            }
+                            if (objHeader.Status == "O")
+                            {
+                                X.Msg.Show(new MessageBoxConfig()
+                                {
+                                    Message = "Email sent!"
+                                });
+                                Approve.Mail_Approve(screenNbr, custID, Role, objHeader.Status, handle,
+                                             lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
+                            }
+                            //Node
+
+
+                            //String[] nodeid = nodeID.Split('-');
+                            //objHeader.NodeID = nodeid[0];
+                            //objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
+
+                            UpdatingHeader(updated, ref objHeader);
+
+                            _db.SaveChanges();
                         }
                         else
                         {
-                            objHeader.Status = approveHandle.ToStatus;
-                            
-                        }
-                        if(objHeader.Status == "O"){
-                            X.Msg.Show(new MessageBoxConfig()
+                            if (handle == "N" || handle == "")
                             {
-                                Message = "Email sent!"
-                            });
-                            Approve.Mail_Approve(screenNbr, custID, Role,objHeader.Status,handle,
-                                         lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
+                                objHeader.Status = status;
+                            }
+                            else
+                            {
+                                objHeader.Status = approveHandle.ToStatus;
+
+                            }
+                            if (objHeader.Status == "O")
+                            {
+                                X.Msg.Show(new MessageBoxConfig()
+                                {
+                                    Message = "Email sent!"
+                                });
+                                Approve.Mail_Approve(screenNbr, custID, Role, objHeader.Status, handle,
+                                             lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
+                            }
+
+                            String[] nodeid = nodeID.Split('-');
+                            if (objHeader.NodeID != nodeid[0])
+                            {
+                                tmpChangeTreeDic = "1";
+                            }
+                            else
+                            {
+                                tmpChangeTreeDic = "0";
+                            }
+                            objHeader.NodeID = nodeid[0];
+                            objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
+                            var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
+                            objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
+
+                            //Image and Media
+
+                            //String[] nodeid = nodeID.Split('-');
+                            //objHeader.NodeID = nodeid[0];
+                            //objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
+
+                            UpdatingHeader(updated, ref objHeader);
+
+                            _db.SaveChanges();
                         }
-                        //statusAfterAll = objHeader.Status;
-                      
-                        //Node
 
-
-                        //String[] nodeid = nodeID.Split('-');
-                        //objHeader.NodeID = nodeid[0];
-                        //objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
-  
-                        UpdatingHeader(updated, ref objHeader);
-
-                        _db.SaveChanges();
                     }
                     else
                     {
+                        //bo sung code add new copyForm neu update
+                        objHeader = new AR_Customer();
+                        objHeader.CustId = custID;
+                        objHeader.BranchID = branchID;
 
-                        //if (handle == "N" || handle == "")
-                        //{
-                        //    objHeader.Status = status;
-                        //}
-                        //else if (handle == "C")
-                        //{
-                        //    objHeader.Status = "A";
-
-                        //}
-                        //else if (handle == "O")
-                        //{
-                        //    objHeader.Status = "O";
-                        //    //gui mail 
-                        //}
                         if (handle == "N" || handle == "")
                         {
                             objHeader.Status = status;
@@ -325,274 +363,166 @@ namespace AR20400.Controllers
                                          lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
                         }
                         //statusAfterAll = objHeader.Status;
-                       
 
                         String[] nodeid = nodeID.Split('-');
-                        if (objHeader.NodeID != nodeid[0])
+                        objHeader.NodeID = nodeid[0];
+                        objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
+                        var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
+                        objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
+
+                        objHeader.Crtd_Datetime = DateTime.Now;
+                        objHeader.Crtd_Prog = screenNbr;
+                        objHeader.Crtd_User = Current.UserName;
+                        objHeader.tstamp = new byte[0];
+
+                        UpdatingHeader(updated, ref objHeader);
+                        _db.AR_Customer.AddObject(objHeader);
+                        _db.SaveChanges();
+
+
+
+
+                    }
+
+
+                    // If there is a change in handling status (keepStatus is False),
+                    // add a new pending task with an approved handle.
+
+
+
+                    // ===============================================================
+
+                    // Get out of the loop (only update the first data)
+
+                }
+                foreach (AR_Customer created in lstheader.Created)
+                {
+
+                    var objHeader = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
+                    if (objHeader == null)
+                    {
+                        if (hadChild != 0)
                         {
+
+                            objHeader = new AR_Customer();
+                            objHeader.CustId = custID;
+                            objHeader.BranchID = branchID;
+
+                            if (handle == "N" || handle == "")
+                            {
+                                objHeader.Status = status;
+                            }
+                            else
+                            {
+                                objHeader.Status = approveHandle.ToStatus;
+
+                            }
+                            if (objHeader.Status == "O")
+                            {
+                                X.Msg.Show(new MessageBoxConfig()
+                                {
+                                    Message = "Email sent!"
+                                });
+                                Approve.Mail_Approve(screenNbr, custID, Role, objHeader.Status, handle,
+                                             lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
+                            }
+
+                            String[] nodeid = nodeID.Split('-');
+                            objHeader.NodeID = nodeid[0];
+                            objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
+                            var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
+                            objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
+
+                            objHeader.Crtd_Datetime = DateTime.Now;
+                            objHeader.Crtd_Prog = screenNbr;
+                            objHeader.Crtd_User = Current.UserName;
+                            objHeader.tstamp = new byte[0];
+
+                            UpdatingHeader(created, ref objHeader);
+                            _db.AR_Customer.AddObject(objHeader);
+                            _db.SaveChanges();
+
+                        }
+                        else
+                        {
+                            return Json(new { success = false, code = "213" }, JsonRequestBehavior.AllowGet);
+                        }
+
+                    }
+                }
+
+                var objtmp = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
+                if (objtmp != null)
+                {
+
+                    if (handle == "N" || handle == "")
+                    {
+                        objtmp.Status = status;
+                    }
+                    else
+                    {
+                        objtmp.Status = approveHandle.ToStatus;
+
+                    }
+                    if (objtmp.Status == "O" && lstheader.Updated.Count == 0 && lstheader.Created.Count == 0)
+                    {
+                        X.Msg.Show(new MessageBoxConfig()
+                        {
+                            Message = "Email sent!"
+                        });
+                        Approve.Mail_Approve(screenNbr, custID, Role, objtmp.Status, handle,
+                                     lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
+                    }
+
+                    //statusAfterAll = objtmp.Status;
+                    //loc ra la insert du lieu moi hay chuyen cay cho du lieu
+                    if (lstheader.Updated.Count == 0 && hadChild != 0)
+                    {
+                        String[] nodeid = nodeID.Split('-');
+                        if (objtmp.NodeID != nodeid[0])
+                        {
+                            //chuyen cay du lieu
                             tmpChangeTreeDic = "1";
                         }
                         else
                         {
                             tmpChangeTreeDic = "0";
                         }
-                        objHeader.NodeID = nodeid[0];
-                        objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
+                        objtmp.NodeID = nodeid[0];
+
+                        objtmp.NodeLevel = Convert.ToInt16(nodeLevel);
                         var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-                        objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
-
-                        //Image and Media
-
-                        //String[] nodeid = nodeID.Split('-');
-                        //objHeader.NodeID = nodeid[0];
-                        //objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
-
-                        UpdatingHeader(updated, ref objHeader);
-
-                        _db.SaveChanges();
+                        objtmp.ParentRecordID = searchparentRecordID.ParentRecordID;
+                        //tmpChangeTreeDic = "1";
                     }
 
+
+                }
+
+
+                _db.SaveChanges();
+                //this.Direct();
+
+
+                if (hadChild != 0)
+                {
+                    return Json(new { success = true, value = custID, value2 = custName, value3 = "addNew", value4 = tmpChangeTreeDic, value5 = tmpSelectedNode }, JsonRequestBehavior.AllowGet);
+                    //return Json(new { success = true });
                 }
                 else
                 {
-                    //bo sung code add new copyForm neu update
-                    objHeader = new AR_Customer();
-                    objHeader.CustId = custID;
-                    objHeader.BranchID = branchID;
-                    //if (handle == "N" || handle == "")
-                    //{
-                    //    objHeader.Status = status;
-                    //}
-                    //else if (handle == "C")
-                    //{
-                    //    objHeader.Status = "A";
-
-                    //}
-                    //else if (handle == "O")
-                    //{
-                    //    objHeader.Status = "O";
-                    //    //gui mail 
-                    //}
-                    if (handle == "N" || handle == "")
-                    {
-                        objHeader.Status = status;
-                    }
-                    else
-                    {
-                        objHeader.Status = approveHandle.ToStatus;
-
-                    }
-                    if (objHeader.Status == "O")
-                    {
-                        X.Msg.Show(new MessageBoxConfig()
-                        {
-                            Message = "Email sent!"
-                        });
-                        Approve.Mail_Approve(screenNbr, custID, Role, objHeader.Status, handle,
-                                     lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                    }
-                    //statusAfterAll = objHeader.Status;
-               
-                    String[] nodeid = nodeID.Split('-');
-                    objHeader.NodeID = nodeid[0];
-                    objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
-                    var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-                    objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
-
-                    //Image and Media
-
-         
-
-                    //
-                    objHeader.Crtd_Datetime = DateTime.Now;
-                    objHeader.Crtd_Prog = screenNbr;
-                    objHeader.Crtd_User = Current.UserName;
-                    objHeader.tstamp = new byte[0];
-
-
-
-
-                    UpdatingHeader(updated, ref objHeader);
-                    _db.AR_Customer.AddObject(objHeader);
-                    _db.SaveChanges();
-
-
-
-
+                    //return Json(new { success = true });
+                    return Json(new { success = true, value = custID, value2 = custName, value3 = "update" }, JsonRequestBehavior.AllowGet);
                 }
-
-
-                // If there is a change in handling status (keepStatus is False),
-                // add a new pending task with an approved handle.
-
-
-
-                // ===============================================================
-
-                // Get out of the loop (only update the first data)
-
             }
-            foreach (AR_Customer created in lstheader.Created)
+            catch (Exception ex)
             {
-
-                var objHeader = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
-                if (objHeader == null)
-                {
-                    if (hadChild != 0)
-                    {
-                        
-                        objHeader = new AR_Customer();
-                        objHeader.CustId = custID;
-                        objHeader.BranchID = branchID;
-                        //if (handle == "N" || handle == "")
-                        //{
-                        //    objHeader.Status = status;
-                        //}
-                        //else if (handle == "C")
-                        //{
-                        //    objHeader.Status = "A";
-
-                        //}
-                        //else if (handle == "O")
-                        //{
-                        //    objHeader.Status = "O";
-                        //    //gui mail 
-                        //}
-                        if (handle == "N" || handle == "")
-                        {
-                            objHeader.Status = status;
-                        }
-                        else
-                        {
-                            objHeader.Status = approveHandle.ToStatus;
-
-                        }
-                        if (objHeader.Status == "O")
-                        {
-                            X.Msg.Show(new MessageBoxConfig()
-                            {
-                                Message = "Email sent!"
-                            });
-                            Approve.Mail_Approve(screenNbr, custID, Role, objHeader.Status, handle,
-                                         lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                        }
-                        //statusAfterAll = objHeader.Status;
-
-                        String[] nodeid = nodeID.Split('-');
-                        objHeader.NodeID = nodeid[0];
-                        objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
-                        var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-                        objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
-
-                        //Image and Media
-
-
-
-                        //
-                        objHeader.Crtd_Datetime = DateTime.Now;
-                        objHeader.Crtd_Prog = screenNbr;
-                        objHeader.Crtd_User = Current.UserName;
-                        objHeader.tstamp = new byte[0];
-
-
-
-
-                        UpdatingHeader(created, ref objHeader);
-                        _db.AR_Customer.AddObject(objHeader);
-                        _db.SaveChanges();
-                        
-                    }
-                    else
-                    {
-                        return Json(new { success = false, code = "213" }, JsonRequestBehavior.AllowGet);
-                    }
-
-                }
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
-
-            var objtmp = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
-            if (objtmp != null)
-            {
-                //if (handle == "N" || handle == "")
-                //{
-                //    objtmp.Status = status;
-                //}
-                //else if (handle == "C")
-                //{
-                //    objtmp.Status = "A";
-
-                //}
-                //else if (handle == "O")
-                //{
-                //    objtmp.Status = "O";
-                    
-                //    if (lstheader.Updated.Count == 0 && lstheader.Created.Count == 0)
-                //    {
-                //        //gui mail 
-
-                //    }
-                //}
-                if (handle == "N" || handle == "")
-                {
-                    objtmp.Status = status;
-                }
-                else
-                {
-                    objtmp.Status = approveHandle.ToStatus;
-
-                }
-                if (objtmp.Status == "O" && lstheader.Updated.Count == 0 && lstheader.Created.Count == 0)
-                {
-                    X.Msg.Show(new MessageBoxConfig()
-                    {
-                        Message = "Email sent!"
-                    });
-                    Approve.Mail_Approve(screenNbr, custID, Role, objtmp.Status, handle,
-                                 lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                }
-
-                //statusAfterAll = objtmp.Status;
-                //loc ra la insert du lieu moi hay chuyen cay cho du lieu
-                if (lstheader.Updated.Count == 0 && hadChild != 0)
-                {
-                    String[] nodeid = nodeID.Split('-');
-                    if (objtmp.NodeID != nodeid[0])
-                    {
-                        //chuyen cay du lieu
-                        tmpChangeTreeDic = "1";
-                    }
-                    else
-                    {
-                        tmpChangeTreeDic = "0";
-                    }
-                    objtmp.NodeID = nodeid[0];
-
-                    objtmp.NodeLevel = Convert.ToInt16(nodeLevel);
-                    var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-                    objtmp.ParentRecordID = searchparentRecordID.ParentRecordID;
-                    //tmpChangeTreeDic = "1";
-                }
-
-
-            }
-
-
-            _db.SaveChanges();
-            //this.Direct();
-
-
-            if (hadChild != 0)
-            {
-                return Json(new { success = true, value = custID, value2 = custName, value3 = "addNew", value4 = tmpChangeTreeDic, value5 = tmpSelectedNode }, JsonRequestBehavior.AllowGet);
-                //return Json(new { success = true });
-            }
-            else
-            {
-                //return Json(new { success = true });
-                return Json(new { success = true, value = custID, value2 = custName, value3 = "update"}, JsonRequestBehavior.AllowGet);
-            }
-
         }
+
+
 
 
 
@@ -602,16 +532,16 @@ namespace AR20400.Controllers
         [DirectMethod]
         public ActionResult AR20400Delete(string custID, string branchID, string status)
         {
-          
-                var inv = _db.AR_Customer.FirstOrDefault(p => p.CustId == custID && p.BranchID == branchID);
-                _db.AR_Customer.DeleteObject(inv);
-                _db.SaveChanges();
-                return this.Direct();
-          
-                //Ext.Net.ResourceManager.AjaxSuccess = false;
-                return this.Direct(false);
-           
-            
+
+            var inv = _db.AR_Customer.FirstOrDefault(p => p.CustId == custID && p.BranchID == branchID);
+            _db.AR_Customer.DeleteObject(inv);
+            _db.SaveChanges();
+            return this.Direct();
+
+            //Ext.Net.ResourceManager.AjaxSuccess = false;
+            return this.Direct(false);
+
+
         }
 
 
@@ -684,7 +614,7 @@ namespace AR20400.Controllers
         }
 
 
-        
+
 
     }
 }
