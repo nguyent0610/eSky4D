@@ -65,7 +65,7 @@
                 l.Load.Fn = "stoLoad";                   
             })
       )            
-        @{Html.RenderAction("Body");}   
+        @{Html.RenderAction("Body", new { lang=@Current.LangID});}  
     
 </body>
 </html>

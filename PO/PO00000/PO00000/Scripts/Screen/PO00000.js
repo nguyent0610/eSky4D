@@ -29,27 +29,47 @@ var cboShipCountry_Change = function (sender, e) {
    
 };
 var cboShipState_Change = function (sender, e) {
-    App.cboShipCity.setValue("");
-    App.cboShipCity.store.reload();
+    App.cboShipCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.ShipCity) {
+                App.cboShipCity.setValue(curRecord.data.ShipCity);
+            }
+        var dt = HQ.store.findInStore(App.cboShipCity.getStore(), ["City"], [App.cboShipCity.getValue()]);
+        if (!dt) {
+            curRecord.data.ShipCity = '';
+            App.cboShipCity.setValue("");
+        }
+    });   
 };
 var cboBillCountry_Change = function (sender, e) {
-    //App.cboBillState.getStore().load(function () {
-    //    var curRecord = App.frmMain.getRecord();
-    //    if (curRecord != undefined)
-    //        if (curRecord.data.BillSate) {
-    //            App.cboBillState.setValue(curRecord.data.BillSate);
-    //        }
-    //    var dt = HQ.store.findInStore(App.cboBillState.getStore(), ["State"], [App.cboBillState.getValue()]);
-    //    if (!dt) {
-    //        curRecord.data.ShipState = '';
-    //        App.cboBillState.setValue("");
-    //    }
-    //});
+    App.cboBillState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.BillState) {
+                App.cboBillState.setValue(curRecord.data.BillState);
+            }
+        var dt = HQ.store.findInStore(App.cboBillState.getStore(), ["State"], [App.cboBillState.getValue()]);
+        if (!dt) {
+            curRecord.data.BillState = '';
+            App.cboBillState.setValue("");
+        }
+    });
    
 };
 var cboBillState_Change = function (sender, e) {
-    App.cboBillCity.setValue("");
-    App.cboBillCity.store.reload();
+    App.cboBillCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.BillCity) {
+                App.cboBillCity.setValue(curRecord.data.BillCity);
+            }
+        var dt = HQ.store.findInStore(App.cboBillCity.getStore(), ["City"], [App.cboBillCity.getValue()]);
+        if (!dt) {
+            curRecord.data.BillCity = '';
+            App.cboBillCity.setValue("");
+        }
+    });
 };
 
 function save() {
@@ -131,6 +151,8 @@ var stoLoad = function (sto) {
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "BranchID");
         record = sto.getAt(0);
+        record.data.BranchID = HQ.cpnyID;
+        record.data.SetupID = 'PO';
         sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
                   
