@@ -135,7 +135,7 @@ var loadDataAutoHeader = function (sto) {
         HQ.store.insertBlank(sto, "MailID");
         record = sto.getAt(0);
         //gan du lieu mac dinh ban dau
-        record.data.DateTime ="@ViewBag.BussinessDate";
+        record.data.DateTime = HQ.bussinessDate;;
         record.data.Time = HQ.bussinessTime;
         
         record.data.TypeAuto = 'M';
