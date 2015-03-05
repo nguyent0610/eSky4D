@@ -34,28 +34,28 @@
         .Items(
             X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
             .Items(
-                HQ.Checkbox().ID("NegQty").Name("NegQty").HQLangCode("NegQty").MarginSpec("0 0 0 5")
-                , HQ.Checkbox().ID("AutoRefNbr").Name("AutoRefNbr").HQLangCode("AutoRefNbr").MarginSpec("0 0 0 5")
-                , HQ.Checkbox().ID("UseBarCode").Name("UseBarCode").HQLangCode("UseBarCode").MarginSpec("0 0 0 5")
-                , HQ.Checkbox().ID("CnvFactEditable").Name("CnvFactEditable").HQLangCode("CnvFactEditable").MarginSpec("0 0 0 5")
-                , HQ.Checkbox().ID("CheckINVal").Name("CheckINVal").HQLangCode("CheckINVal").MarginSpec("0 0 0 5")
+                HQ.Checkbox().ID("NegQty").Name("NegQty").HQLangCode("NegQty").MarginSpec("10 0 0 10")
+                , HQ.Checkbox().ID("AutoRefNbr").Name("AutoRefNbr").HQLangCode("AutoRefNbr").MarginSpec("0 0 0 10")
+                , HQ.Checkbox().ID("UseBarCode").Name("UseBarCode").HQLangCode("UseBarCode").MarginSpec("0 0 0 10")
+                , HQ.Checkbox().ID("CnvFactEditable").Name("CnvFactEditable").HQLangCode("CnvFactEditable").MarginSpec("0 0 0 10")
+                , HQ.Checkbox().ID("CheckINVal").Name("CheckINVal").HQLangCode("CheckINVal").MarginSpec("0 0 0 10")
                 
                 , HQ.TextBox().ID("txtPreFixBat").Name("txtPreFixBat").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
-                    .DataIndex("PreFixBat").HQLangCode("Prefix").Width(400).MarginSpec("5 0 0 0")
+                    .DataIndex("PreFixBat").HQLangCode("Prefix").Width(400).MarginSpec("10 0 0 10")
                 , HQ.TextBox().ID("txtLastBatNbr").Name("txtLastBatNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
-                    .DataIndex("LastBatNbr").HQLangCode("LastBatNbr").Width(400).MarginSpec("5 0 0 0")
+                    .DataIndex("LastBatNbr").HQLangCode("LastBatNbr").Width(400).MarginSpec("5 0 0 10")
                 , HQ.TextBox().ID("txtLastTransferNbr").Name("txtLastTransferNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
-                    .DataIndex("LastTransferNbr").HQLangCode("LastTransferNbr").Width(400).MarginSpec("5 0 0 0")
+                    .DataIndex("LastTransferNbr").HQLangCode("LastTransferNbr").Width(400).MarginSpec("5 0 0 10")
                 , HQ.TextBox().ID("txtLastRefNbr").Name("txtLastRefNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
-                    .DataIndex("LastRefNbr").HQLangCode("LastRefNbr").Width(400).MarginSpec("5 0 0 0")
+                    .DataIndex("LastRefNbr").HQLangCode("LastRefNbr").Width(400).MarginSpec("5 0 0 10")
                 , HQ.TextBox().ID("txtLastIssueNbr").Name("txtLastIssueNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
-                    .DataIndex("LastIssueNbr").HQLangCode("LastIssueNbr").Width(400).MarginSpec("5 0 0 0")
+                    .DataIndex("LastIssueNbr").HQLangCode("LastIssueNbr").Width(400).MarginSpec("5 0 0 10")
                 , HQ.TextBox().ID("txtLastRcptNbr").Name("txtLastRcptNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
-                    .DataIndex("LastRcptNbr").HQLangCode("LastRcptNbr").Width(400).MarginSpec("5 0 0 0")
+                    .DataIndex("LastRcptNbr").HQLangCode("LastRcptNbr").Width(400).MarginSpec("5 0 0 10")
        
                 , HQ.Combo().ID("cboDfltSite").Name("cboDfltSite").HQLangCode("DfltSite").HQProcedure("IN00000_pcSiteAll").AllowBlank(false)
                     .HQColumnShow("SiteID,Name").DisplayField("Name").ValueField("SiteID").Width(400).DataIndex("DfltSite")
-                    .HQHeightWidth(400, 400).MarginSpec("5 0 0 0").LabelAlign(LabelAlign.Left)
+                    .HQHeightWidth(400, 400).MarginSpec("5 0 0 10").LabelAlign(LabelAlign.Left)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
@@ -69,7 +69,7 @@
             
                 , HQ.Combo().ID("cboDfltValMthd").Name("cboDfltValMthd").HQLangCode("ValMthd").HQProcedure("IN00000_pcValuation").AllowBlank(false)
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Width(400).DataIndex("DfltValMthd").HQDBSys(true)
-                    .HQHeightWidth(400, 400).MarginSpec("5 0 0 0").LabelAlign(LabelAlign.Left)
+                    .HQHeightWidth(400, 400).MarginSpec("5 0 0 10").LabelAlign(LabelAlign.Left)
                     .LoadData()
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
