@@ -1,0 +1,62 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SI21100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "SI21100";
+    var acc = Session["SI21100"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình SI21100.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/SI21100.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        @(Html.X().Store().ID("stoSI_Terms")
+            .Model(Util.GenerateModel(typeof(SI_Terms), "mdlSI_Terms", "TermsID"))       
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetSI_Terms", "SI21100"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("TermsID", "App.cboTermsID.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Handler="loadData()" )
+        )
+        <!-- Gọi hàm Body trong SI21100Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
+        @{Html.RenderAction("Body", new {lang=@Current.LangID});}
+</body>
+</html>
+ 
