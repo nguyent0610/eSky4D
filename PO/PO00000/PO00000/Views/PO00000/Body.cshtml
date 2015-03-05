@@ -1,0 +1,244 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using PO00000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .DefaultAnchor("100%")
+    .Config("trackResetOnLoad", "true")
+    .BodyPadding(10)
+    .BodyBorder(0)
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", false, ""))
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        l.FieldChange.Fn = "frmChange";
+    })
+    .Layout(LayoutType.Fit)
+    .Items(
+        X.TabPanel()
+        .Layout(LayoutType.Fit)
+        .ID("tabPO_Setup")
+        .Items(
+            X.Panel()
+            .ID("tabOption")
+            .Region(Region.Center)
+            .Title(Util.GetLang("Option"))
+            .Layout(LayoutType.HBox)
+            .Items(
+                X.Container().Layout(LayoutType.VBox).MarginSpec("10 0 0 10")
+                .Items(
+                    HQ.TextBox().ID("PreFixBat").Name("PreFixBat").HQLangCode("Prefix").Width(300).AllowBlank(true).MaxLength(2)
+                    .DataIndex("PreFixBat").EnforceMaxLength(true),
+                    HQ.TextBox().ID("LastBatNbr").Name("LastBatNbr").HQLangCode("LastBatNbr").Width(300).AllowBlank(true).MaxLength(10)
+                    .DataIndex("LastBatNbr").EnforceMaxLength(true),
+                    HQ.TextBox().ID("LastPONbr").Name("LastPONbr").HQLangCode("LastPO").Width(300).AllowBlank(true).MaxLength(100)
+                    .DataIndex("LastPONbr").EnforceMaxLength(true),
+                    HQ.TextBox().ID("LastRcptNbr").Name("LastRcptNbr").HQLangCode("LastRec").Width(300).AllowBlank(true).MaxLength(10)
+                    .DataIndex("LastRcptNbr").EnforceMaxLength(true)
+
+                    , HQ.Combo().ID("cboDfltLstUnitCost").Name("cboDfltLstUnitCost").HQLangCode("DefCost").HQProcedure("PO00000_pcUnitCost").AllowBlank(false)
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Width(300).DataIndex("DfltLstUnitCost")
+                    .HQHeightWidth(400, 400).LabelAlign(LabelAlign.Left).HQDBSys(true)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+
+                    , HQ.Combo().ID("cboDfltRcptFrom").Name("cboDfltRcptFrom").HQLangCode("DfltRcptFrom").HQProcedure("PO00000_pcRcptFrom").AllowBlank(false)
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Width(300).DataIndex("DfltRcptFrom")
+                    .HQHeightWidth(400, 400).LabelAlign(LabelAlign.Left).HQDBSys(true)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+
+                )//Column 1
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("10 0 0 10")
+                .Items(
+                    HQ.Checkbox().ID("AutoReleaseAP").Name("AutoReleaseAP").HQLangCode("AutoReleaseAP"),
+                    HQ.Checkbox().ID("AutoRef").Name("AutoRef").HQLangCode("AutoNbr"),
+                    HQ.Checkbox().ID("DfltRcptUnitFromIN").Name("DfltRcptUnitFromIN").HQLangCode("UnitFromIN"),
+                    HQ.Checkbox().ID("EditablePOPrice").Name("EditablePOPrice").HQLangCode("EditablePOPrice"),
+                    HQ.Checkbox().ID("UseBarCode").Name("UseBarCode").HQLangCode("UseBarCode"),
+                    HQ.Checkbox().ID("UseIN").Name("UseIN").HQLangCode("UseIN"),
+                    HQ.Checkbox().ID("UseAP").Name("UseAP").HQLangCode("UseAP")
+                    )//Column 2
+            )// tab Options
+
+            , X.Panel()
+            .ID("tabAddress")
+            .Region(Region.Center)
+            .Title(Util.GetLang("Address"))
+            .Layout(LayoutType.HBox)
+            .Items(
+                X.Container().Layout(LayoutType.VBox).MarginSpec("10 0 0 10")
+                .LayoutConfig(new VBoxLayoutConfig() { Align=VBoxAlign.Right })
+                .Items(
+                    HQ.Label().HQLangCode("Name").MarginSpec("20 0 10 0"),
+                    HQ.Label().HQLangCode("Attn").MarginSpec("0 0 10 0"),
+                    HQ.Label().HQLangCode("Addr1").MarginSpec("0 0 10 0"),
+                    HQ.Label().HQLangCode("Addr2").MarginSpec("0 0 12 0"),
+                    HQ.Label().HQLangCode("Country").MarginSpec("0 0 12 0"),
+                    HQ.Label().HQLangCode("State").MarginSpec("0 0 12 0"),
+                    HQ.Label().HQLangCode("City").MarginSpec("0 0 10 0"),
+                    HQ.Label().HQLangCode("Zip").MarginSpec("0 0 10 0"),
+                    HQ.Label().HQLangCode("Phone").MarginSpec("0 0 10 0"),
+                    HQ.Label().HQLangCode("Fax").MarginSpec("0 0 10 0"),
+                    HQ.Label().HQLangCode("EmailAddr").MarginSpec("0 0 10 0")
+                )//Column 1
+
+                , X.FieldSet().Layout(LayoutType.VBox).MarginSpec("10 0 0 10")
+                    .Title(Util.GetLang("MainAddress"))
+                    .Items(
+                        HQ.TextBox().ID("ShipName").Name("ShipName").Width(300).MaxLength(50)
+                        .DataIndex("ShipName").EnforceMaxLength(true),
+                        HQ.TextBox().ID("ShipAttn").Name("ShipAttn").Width(300).MaxLength(200)
+                        .DataIndex("ShipAttn").EnforceMaxLength(true),
+                        HQ.TextBox().ID("ShipAddr1").Name("ShipAddr1").Width(300).MaxLength(50)
+                        .DataIndex("ShipAddr1").EnforceMaxLength(true),
+                        HQ.TextBox().ID("ShipAddr2").Name("ShipAddr2").Width(300).MaxLength(50)
+                        .DataIndex("ShipAddr2").EnforceMaxLength(true),
+
+                        HQ.Combo().ID("cboShipCountry").Name("cboShipCountry").HQProcedure("PO00000_pcCountryID").HQAutoLoad(false)
+                        .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").Width(300).DataIndex("ShipCountry")
+                        .HQHeightWidth(300, 300)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboShipCountry_Change";
+                        }),
+
+                        HQ.Combo().ID("cboShipState").Name("cboShipState").HQProcedure("PO00000_pcStateByCountry").HQAutoLoad(false)
+                        .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").Width(300).DataIndex("ShipState")
+                        .HQHeightWidth(300, 300)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@Country", Value = "App.cboShipCountry.getValue()", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboShipState_Change";
+                        }),
+                        
+                        HQ.Combo().ID("cboShipCity").Name("cboShipCity").HQProcedure("PO00000_pcCityByCountryState").HQAutoLoad(false)
+                        .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").Width(300).DataIndex("ShipCity")
+                        .HQHeightWidth(300, 300)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@Country", Value = "App.cboShipCountry.getValue()", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@State", Value = "App.cboShipState.getValue()", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        }),
+
+                        HQ.TextBox().ID("ShipZip").Name("ShipZip").Width(300).AllowBlank(true).MaxLength(10)
+                        .DataIndex("ShipZip").EnforceMaxLength(true),
+                        HQ.TextBox().ID("ShipPhone").Name("ShipPhone").Width(300).AllowBlank(true).MaxLength(30)
+                        .DataIndex("ShipPhone").EnforceMaxLength(true),
+                        HQ.TextBox().ID("ShipFax").Name("ShipFax").Width(300).AllowBlank(true).MaxLength(30)
+                        .DataIndex("ShipFax").EnforceMaxLength(true),
+                        HQ.TextBox().ID("ShipEmail").Name("ShipEmail").Width(300).AllowBlank(true).MaxLength(40)
+                        .DataIndex("ShipEmail").EnforceMaxLength(true)
+                    )//Column 2
+                    
+                    , X.FieldSet().Layout(LayoutType.VBox).MarginSpec("10 0 0 10")
+                    .Title(Util.GetLang("MainAddress"))
+                    .Items(
+                        HQ.TextBox().ID("BillName").Name("BillName").Width(300).MaxLength(30)
+                        .DataIndex("BillName").EnforceMaxLength(true),
+                        HQ.TextBox().ID("BillAttn").Name("BillAttn").Width(300).MaxLength(200)
+                        .DataIndex("BillAttn").EnforceMaxLength(true),
+                        HQ.TextBox().ID("BillAddr1").Name("BillAddr1").Width(300).MaxLength(30)
+                        .DataIndex("BillAddr1").EnforceMaxLength(true),
+                        HQ.TextBox().ID("BillAddr2").Name("BillAddr2").Width(300).MaxLength(30)
+                        .DataIndex("BillAddr2").EnforceMaxLength(true),
+
+                        HQ.Combo().ID("cboBillCountry").Name("cboBillCountry").HQProcedure("PO00000_pcCountryID").HQAutoLoad(false)
+                        .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").Width(300).DataIndex("BillCountry")
+                        .HQHeightWidth(300, 300)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboBillCountry_Change";
+                        }),
+
+                        HQ.Combo().ID("cboBillState").Name("cboBillState").HQProcedure("PO00000_pcStateByCountry").HQAutoLoad(false)
+                        .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").Width(300).DataIndex("BillState")
+                        .HQHeightWidth(300, 300)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@Country", Value = "App.cboBillCountry.getValue()", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "cboBillState_Change";
+                        }),
+                        
+                        HQ.Combo().ID("cboBillCity").Name("cboBillCity").HQProcedure("PO00000_pcCityByCountryState").HQAutoLoad(false)
+                        .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").Width(300).DataIndex("BillCity")
+                        .HQHeightWidth(300, 300)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@Country", Value = "App.cboBillCountry.getValue()", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@State", Value = "App.cboBillState.getValue()", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        }),
+
+                        HQ.TextBox().ID("BillZip").Name("BillZip").Width(300).AllowBlank(true).MaxLength(10)
+                        .DataIndex("BillZip").EnforceMaxLength(true),
+                        HQ.TextBox().ID("BillPhone").Name("BillPhone").Width(300).AllowBlank(true).MaxLength(30)
+                        .DataIndex("BillPhone").EnforceMaxLength(true),
+                        HQ.TextBox().ID("BillFax").Name("BillFax").Width(300).AllowBlank(true).MaxLength(30)
+                        .DataIndex("BillFax").EnforceMaxLength(true),
+                        HQ.TextBox().ID("BillEmail").Name("BillEmail").Width(300).AllowBlank(true).MaxLength(40)
+                        .DataIndex("BillEmail").EnforceMaxLength(true)
+                    )//Column 3
+            )//tab Address
+        )// main tab PO_setup
+    )//giao dien
+))
