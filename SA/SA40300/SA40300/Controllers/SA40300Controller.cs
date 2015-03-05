@@ -23,220 +23,163 @@ namespace SA40300.Controllers
 
         public ActionResult Index()
         {
-            
+            ViewBag.BussinessDate = DateTime.Now.ToDateShort();
+            ViewBag.BussinessTime = DateTime.Now;
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
+          
             return PartialView();
         }
 
-        public ActionResult GetMailHeader(String mailID)
+        public ActionResult GetMailHeader(string mailID)
         {
+            ViewBag.BussinessDate = DateTime.Now.ToDateShort();
+            ViewBag.BussinessTime = DateTime.Now;
             var obj=_db.Server_MailAutoHeader.FirstOrDefault(p => p.MailID == mailID);
             if(obj!=null)
             obj.PassUnZip=obj.PassUnZip.ToString().PassNull()==""?"":Encryption.Decrypt(obj.PassUnZip.ToString(), "1210Hq10s081f359t");
             return this.Store(obj);
         }
-        public ActionResult GetMailDetail(String mailID)
+        public ActionResult GetMailDetail(string mailID)
         {
-           // var lst = .ToList();
             return this.Store(_db.Server_MailAutoDetail.Where(p => p.MailID == mailID));
         }
        
-        [DirectMethod]
         [HttpPost]
-        public ActionResult Save(FormCollection data, string mailId)
+        public ActionResult Save(FormCollection data, bool isNew)
         {
-            string mailidNew = DateTime.Now.ToString("yyyyMMddhhmmssff");
-            StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<Server_MailAutoDetail> lstgrd = dataHandler1.BatchObjectData<Server_MailAutoDetail>();
-            StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstheader"]);
-            ChangeRecords<Server_MailAutoHeader> lstheader = dataHandler2.BatchObjectData<Server_MailAutoHeader>();
-            foreach (Server_MailAutoDetail deleted in lstgrd.Deleted)
+            try
             {
-                var del = _db.Server_MailAutoDetail.Where(p => p.MailID == mailId && p.ReportID == deleted.ReportID && p.ReportViewID == deleted.ReportViewID).FirstOrDefault();
-                if (del != null)
+                string mailId = isNew ? DateTime.Now.ToString("yyyyMMddhhmmssff") : data["cboMailID"];
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstgrd"]);
+                ChangeRecords<Server_MailAutoDetail> lstgrd = dataHandler1.BatchObjectData<Server_MailAutoDetail>();
+                StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstheader"]);
+                ChangeRecords<Server_MailAutoHeader> lstheader = dataHandler2.BatchObjectData<Server_MailAutoHeader>();
+                //xoa cac record tren luoi
+                foreach (Server_MailAutoDetail deleted in lstgrd.Deleted)
                 {
-                    _db.Server_MailAutoDetail.DeleteObject(del);
-
-                }
-
-            }
-            foreach (Server_MailAutoDetail created in lstgrd.Created)
-            {
-                
-                var record = _db.Server_MailAutoDetail.Where(p => p.MailID == mailId && p.ReportID == created.ReportID && p.ReportViewID == created.ReportViewID).FirstOrDefault();
-
-                if (created.tstamp.ToHex() == "")
-                {
-                    if (record == null)
+                    var del = _db.Server_MailAutoDetail.Where(p => p.MailID == mailId && p.ReportID == deleted.ReportID && p.ReportViewID == deleted.ReportViewID).FirstOrDefault();
+                    if (del != null)
                     {
-                        record = new Server_MailAutoDetail();
-                        if (mailId == "")
+                        _db.Server_MailAutoDetail.DeleteObject(del);
+                    }
+                }
+                //them hoac update cac record tren luoi
+                lstgrd.Created.AddRange(lstgrd.Updated);
+                foreach (Server_MailAutoDetail created in lstgrd.Created)
+                {
+                    if (created.ReportID.PassNull() == "") continue;
+                    var record = _db.Server_MailAutoDetail.Where(p => p.MailID == mailId && p.ReportID == created.ReportID && p.ReportViewID == created.ReportViewID).FirstOrDefault();
+                    if (created.tstamp.ToHex() == "")//dong nay la dong them moi
+                    {
+                        if (record == null)
                         {
-                            mailId = mailidNew;
-                        }
-                        
-                        record.MailID = mailId;
-                        record.ReportID = created.ReportID;
-                        record.ReportViewID = created.ReportViewID;
-                        record.LoggedCpnyID = created.LoggedCpnyID;
-                        record.CpnyID = created.CpnyID;
-                        record.LangID = created.LangID;
-                        record.StringParm00 = created.StringParm00;
-                        record.StringParm01 = created.StringParm01;
-                        record.StringParm02 = created.StringParm02;
-                        record.StringParm03 = created.StringParm03;
-                        record.BeforeDateParm00 = created.BeforeDateParm00;
-                        record.BeforeDateParm01 = created.BeforeDateParm01;
-                        record.BeforeDateParm02 = created.BeforeDateParm02;
-                        record.BeforeDateParm03 = created.BeforeDateParm03;
-                        record.BooleanParm00 = created.BooleanParm00;
-                        record.BooleanParm01 = created.BooleanParm01;
-                        record.BooleanParm02 = created.BooleanParm02;
-                        record.BooleanParm03 = created.BooleanParm03;
-                        record.ListParm00 = created.ListParm00;
-                        record.ListParm01 = created.ListParm01;
-                        record.ListParm02 = created.ListParm02;
-                        record.ListParm03 = created.ListParm03;
-                        record.Crtd_Datetime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        if (record.ReportID != "" && record.ReportViewID != "")
-                        {
+                            record = new Server_MailAutoDetail();
+                            record.MailID = mailId;
+                            record.ReportID = created.ReportID;
+                            record.ReportViewID = created.ReportViewID;
+                            record.Crtd_Datetime = DateTime.Now;
+                            record.Crtd_Prog = screenNbr;
+                            record.Crtd_User = Current.UserName;
+                            record.tstamp = new byte[0];
                             UpdatingServer_MailAutoDetail(created, ref record);
                             _db.Server_MailAutoDetail.AddObject(record);
+
+
                         }
-
-                    }
-                    else
-                    {
-                        return Json(new
+                        else
                         {
-                            success = false,
-                            code = "151",
-                            colName = Util.GetLang("ReportViewID"),
-                            value = created.ReportViewID
-                        }, JsonRequestBehavior.AllowGet);
-                        //tra ve loi da ton tai ma ngon ngu nay ko the them
-                    }
-                }
-            }
-
-
-
-            foreach (Server_MailAutoDetail updated in lstgrd.Updated)
-            {
-
-                var record = _db.Server_MailAutoDetail.Where(p => p.MailID == mailId && p.ReportID == updated.ReportID && p.ReportViewID == updated.ReportViewID).FirstOrDefault();
-
-
-                if (record != null)
-                {
-
-                    if (record.tstamp.ToHex() != updated.tstamp.ToHex())
-                    {
-                        return Json(new { success = false, code = "19" }, JsonRequestBehavior.AllowGet);
-                    }
-                    UpdatingServer_MailAutoDetail(updated, ref record);
-                }
-                else
-                {
-                    if (updated.tstamp.ToHex() == "")
-                    {
-                        record = new Server_MailAutoDetail();
-                        record.MailID = mailId;
-                        record.ReportID = updated.ReportID;
-                        record.ReportViewID = updated.ReportViewID;
-                        record.LoggedCpnyID = updated.LoggedCpnyID;
-                        record.CpnyID = updated.CpnyID;
-                        record.LangID = updated.LangID;
-                        record.StringParm00 = updated.StringParm00;
-                        record.StringParm01 = updated.StringParm01;
-                        record.StringParm02 = updated.StringParm02;
-                        record.StringParm03 = updated.StringParm03;
-                        record.BeforeDateParm00 = updated.BeforeDateParm00;
-                        record.BeforeDateParm01 = updated.BeforeDateParm01;
-                        record.BeforeDateParm02 = updated.BeforeDateParm02;
-                        record.BeforeDateParm03 = updated.BeforeDateParm03;
-                        record.BooleanParm00 = updated.BooleanParm00;
-                        record.BooleanParm01 = updated.BooleanParm01;
-                        record.BooleanParm02 = updated.BooleanParm02;
-                        record.BooleanParm03 = updated.BooleanParm03;
-                        record.ListParm00 = updated.ListParm00;
-                        record.ListParm01 = updated.ListParm01;
-                        record.ListParm02 = updated.ListParm02;
-                        record.ListParm03 = updated.ListParm03;
-                        record.Crtd_Datetime = DateTime.Now;
-                        record.Crtd_Prog = screenNbr;
-                        record.Crtd_User = Current.UserName;
-                        UpdatingServer_MailAutoDetail(updated, ref record);
-                        _db.Server_MailAutoDetail.AddObject(record);
-
+                            throw new MessageException(MessageType.Message, "19");//da co ung dung them record nay
+                        }
                     }
                     else
                     {
-
-                        return Json(new { success = false, code = "19" }, JsonRequestBehavior.AllowGet);
+                        if (created.tstamp.ToHex() == record.tstamp.ToHex())
+                        {
+                            UpdatingServer_MailAutoDetail(created, ref record);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
                     }
                 }
-
-            }
-
-            foreach (Server_MailAutoHeader updated in lstheader.Updated)
-            {
-                // Get the image path
-
-
-                var objHeader = _db.Server_MailAutoHeader.Where(p => p.MailID == updated.MailID).FirstOrDefault();
-                if (objHeader != null)
-                {                                     
-                        UpdatingHeader(updated, ref objHeader);                    
-                }
-            }
-            foreach (Server_MailAutoHeader created in lstheader.Created)
-            {
-                var objHeader = _db.Server_MailAutoHeader.Where(p => p.MailID == mailidNew).FirstOrDefault();
-                if (objHeader == null)
+                //xu li header
+                foreach (Server_MailAutoHeader created in lstheader.Updated)
                 {
-                    objHeader = new Server_MailAutoHeader();
-                    objHeader.MailID = mailidNew;
-                    objHeader.Crtd_Datetime = DateTime.Now;
-                    objHeader.Crtd_Prog = screenNbr;
-                    objHeader.Crtd_User = Current.UserName;
-                    objHeader.tstamp = new byte[0];
-                    UpdatingHeader(created, ref objHeader);
-                    _db.Server_MailAutoHeader.AddObject(objHeader);
-                    _db.SaveChanges();
+                    var objHeader = _db.Server_MailAutoHeader.Where(p => p.MailID == created.MailID).FirstOrDefault();
+                    if (isNew)//new record
+                    {
+                        if (objHeader != null)
+                            return Json(new { success = false, msgCode = 2000, msgParam = mailId });//quang message ma nha cung cap da ton tai ko the them
+                        else
+                        {
+                            objHeader = new Server_MailAutoHeader();
+                            objHeader.MailID = mailId;
+                            objHeader.Crtd_Datetime = DateTime.Now;
+                            objHeader.Crtd_Prog = screenNbr;
+                            objHeader.Crtd_User = Current.UserName;
+                            objHeader.tstamp = new byte[0];
+                            UpdatingHeader(created, ref objHeader);
+                            _db.Server_MailAutoHeader.AddObject(objHeader);
+                          
+                        }
+                    }
+                    else if (objHeader != null)//update record
+                    {
+                        if (objHeader.tstamp.ToHex() == created.tstamp.ToHex())
+                        {
+                            UpdatingHeader(created, ref objHeader);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }                  
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
 
                 }
+                _db.SaveChanges();
+                return Json(new { success = true, mailId = mailId });
             }
-
-
-            _db.SaveChanges();
-            //this.Direct();
-
-            if (mailId == "")
+            catch (Exception ex)
             {
-                mailId = mailidNew;
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
-            return Json(new { success = true, value = mailId }, JsonRequestBehavior.AllowGet);
-        }
-        [DirectMethod]
-        public ActionResult SA40300Delete(string mailid)
-        {
-            var cpny = _db.Server_MailAutoHeader.FirstOrDefault(p => p.MailID == mailid);
-            
-            
-                _db.Server_MailAutoHeader.DeleteObject(cpny);
-               
-            
 
-            _db.SaveChanges();
-            return this.Direct();
+        }
+        [HttpPost]
+        public ActionResult Delete(string mailId)
+        {
+            try
+            {
+                //xoa grid
+                var lstDetail = _db.Server_MailAutoDetail.Where(p => p.MailID == mailId).ToList();
+                for (int i = 0; i < lstDetail.Count(); i++)
+                {
+                    _db.Server_MailAutoDetail.DeleteObject(lstDetail[0]);                    
+                }
+                //xoa header
+                var cpny = _db.Server_MailAutoHeader.FirstOrDefault(p => p.MailID == mailId);
+                if (cpny != null)
+                {
+                    _db.Server_MailAutoHeader.DeleteObject(cpny);
+                }
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+            }
         }
 
         private void UpdatingServer_MailAutoDetail(Server_MailAutoDetail s, ref Server_MailAutoDetail d)
@@ -261,7 +204,6 @@ namespace SA40300.Controllers
             d.ListParm02 = s.ListParm02;
             d.ListParm03 = s.ListParm03;
 
-
             d.LUpd_Datetime = DateTime.Now;
             d.LUpd_Prog = screenNbr;
             d.LUpd_User = Current.UserName;
@@ -269,8 +211,7 @@ namespace SA40300.Controllers
 
         private void UpdatingHeader(Server_MailAutoHeader s, ref Server_MailAutoHeader d)
         {
-
-            d.MailTo = s.MailTo.Replace(",",";");  // ???
+            d.MailTo = s.MailTo.Replace(",",";");  
             d.MailCC = s.MailCC.Replace(",", ";");
             d.Subject = s.Subject;
             d.TemplateFile = s.TemplateFile;
@@ -278,6 +219,12 @@ namespace SA40300.Controllers
             d.Active = s.Active;
             d.TypeAuto = s.TypeAuto;
             d.DateTime = s.DateTime;
+            d.Time =new DateTime(s.DateTime.Year,s.DateTime.Month,s.DateTime.Day,s.Time.Value.Hour,s.Time.Value.Minute,0);
+
+
+            d.IsNotDeleteFile = s.IsNotDeleteFile;
+            d.IsNotAttachFile = s.IsNotAttachFile;
+
             d.Header = s.Header;
             d.Body = s.Body;
             d.PassUnZip = s.PassUnZip.PassNull().Trim()==string.Empty?"": Encryption.Encrypt(s.PassUnZip, "1210Hq10s081f359t"); ;

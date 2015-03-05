@@ -10,14 +10,15 @@
     var X = Html.X();
     var HQ = Html.HQ();
     ViewBag.Title = "SA40300";
+    
     var acc = Session["SA40300"] as AccessRight;
 }
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width" />
-<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
-   <script src='@Url.Content("Scripts/hq.language"+ Current.LangID + ".js")' type="text/javascript"></script>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+    <script src='@Url.Content("Scripts/hq.language"+ Current.LangID + ".js")' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/Screen/SA40300.js")' type="text/javascript"></script>
 <style type="text/css"> @*Thuoc tinh hover tren grid *@
@@ -36,55 +37,38 @@
     HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
     HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
     HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+    HQ.bussinessDate = new Date('@ViewBag.BussinessDate');//lay ngay server trong controller
+    HQ.bussinessTime = new Date('@ViewBag.BussinessTime');//lay ngay co gio cua server trong controller
 </script>
   <title>@ViewBag.Title</title>
     </head>
     <body>
-@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
+        @(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
 
 
-         @X.GridFilters()<!--Khi cache cho grid-->
+        @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
 
 
-@(Html.X().Store().ID("storeMailHeader").AutoLoad(false)  
-        .Model(Util.GenerateModel(typeof(Server_MailAutoHeader), "Server_MailAutoHeaderModel", "MailID"))       
-        .Proxy(
-            X.AjaxProxy()                
-            .Url(Url.Action("GetMailHeader", "SA40300"))                
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-        .Parameters(ps =>
-        {
-            ps.Add(new StoreParameter("MailID", "App.cboMailID.value", ParameterMode.Raw));
-        })      
-        .Listeners(p=>p.Load.Handler="loadDataAutoHeader()" )
-  )
+        @(Html.X().Store().ID("stoMailHeader").AutoLoad(false)  
+                .Model(Util.GenerateModel(typeof(Server_MailAutoHeader), "Server_MailAutoHeaderModel", "MailID"))       
+                .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetMailHeader", "SA40300"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("MailID", "App.cboMailID.value", ParameterMode.Raw));
+                })      
+                .Listeners(p=>p.Load.Fn="loadDataAutoHeader" )
+          )
 
-@(Html.X().Store().ID("storeMailDetail").AutoLoad(false)  
-        .Model(Util.GenerateModel(typeof(Server_MailAutoDetail), "Server_MailAutoDetailModel", "ReportID,ReportViewID",true,"BooleanParm00,BooleanParm01,BooleanParm02,BooleanParm03"))       
-        .RemotePaging(true)                                                                                        
-        .PageSize(50)                                             
-        .Proxy(
-            X.AjaxProxy()                
-            .Url(Url.Action("GetMailDetail", "SA40300"))                
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-            .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("MailID", "App.cboMailID.value", ParameterMode.Raw));
-                            })      
-   
-  )
-
+     
 
 
        @{Html.RenderAction("Body", new { lang=@Current.LangID});}
