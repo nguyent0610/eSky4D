@@ -103,6 +103,7 @@ var grdSYS_Language_Reject = function (record) {
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
+            timeout: 1800000,
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'SA00900/Save',
             params: {
