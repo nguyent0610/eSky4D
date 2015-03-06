@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="IN_UnitConversion" EntityType="eBiz4DWebSysModel.Store.IN_UnitConversion" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="IN_UnitConversion">
+          <Key>
+            <PropertyRef Name="UnitType" />
+            <PropertyRef Name="ClassID" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="FromUnit" />
+            <PropertyRef Name="ToUnit" />
+          </Key>
+          <Property Name="UnitType" Type="char" Nullable="false" MaxLength="1" />
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="FromUnit" Type="nvarchar" Nullable="false" MaxLength="15" />
+          <Property Name="ToUnit" Type="nvarchar" Nullable="false" MaxLength="15" />
+          <Property Name="MultDiv" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="CnvFact" Type="float" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="IN20100_pcLoadClasID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="IN20100_pcLoadInventory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="IN20100_pcLoadMultDiv" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="IN20100_pcLoadUnitType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="IN20100_pgLoadUnitConversion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IN20100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="IN20100Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="IN_UnitConversion" EntityType="IN20100Model.IN_UnitConversion" />
+          <FunctionImport Name="IN20100_pcLoadClasID" ReturnType="Collection(IN20100Model.IN20100_pcLoadClasID_Result)" />
+          <FunctionImport Name="IN20100_pcLoadInventory" ReturnType="Collection(IN20100Model.IN20100_pcLoadInventory_Result)" />
+          <FunctionImport Name="IN20100_pcLoadMultDiv" ReturnType="Collection(IN20100Model.IN20100_pcLoadMultDiv_Result)">
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="IN20100_pcLoadUnitType" ReturnType="Collection(IN20100Model.IN20100_pcLoadUnitType_Result)">
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="IN20100_pgLoadUnitConversion" ReturnType="Collection(IN20100Model.IN20100_pgLoadUnitConversion_Result)" />
+        </EntityContainer>
+        <EntityType Name="IN_UnitConversion">
+          <Key>
+            <PropertyRef Name="UnitType" />
+            <PropertyRef Name="ClassID" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="FromUnit" />
+            <PropertyRef Name="ToUnit" />
+          </Key>
+          <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ToUnit" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="MultDiv" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="CnvFact" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="IN20100_pcLoadClasID_Result">
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="IN20100_pcLoadInventory_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Descr1" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="BarCode" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Color" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="DfltSOUnit" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="IN20100_pcLoadMultDiv_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="MultDiv" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="IN20100_pcLoadUnitType_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="13" />
+          <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="IN20100_pgLoadUnitConversion_Result">
+          <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="ToUnit" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="MultDiv" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="CnvFact" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="IN20100Entities" >
+          <EntitySetMapping Name="IN_UnitConversion">
+            <EntityTypeMapping TypeName="IN20100Model.IN_UnitConversion">
+              <MappingFragment StoreEntitySet="IN_UnitConversion">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+                <ScalarProperty Name="MultDiv" ColumnName="MultDiv" />
+                <ScalarProperty Name="ToUnit" ColumnName="ToUnit" />
+                <ScalarProperty Name="FromUnit" ColumnName="FromUnit" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="UnitType" ColumnName="UnitType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN20100_pcLoadClasID" FunctionName="eBiz4DWebSysModel.Store.IN20100_pcLoadClasID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20100Model.IN20100_pcLoadClasID_Result">
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="UnitType" ColumnName="UnitType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN20100_pcLoadInventory" FunctionName="eBiz4DWebSysModel.Store.IN20100_pcLoadInventory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20100Model.IN20100_pcLoadInventory_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
+                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="DfltSOUnit" ColumnName="DfltSOUnit" />
+                <ScalarProperty Name="UnitType" ColumnName="UnitType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN20100_pcLoadMultDiv" FunctionName="eBiz4DWebSysModel.Store.IN20100_pcLoadMultDiv">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20100Model.IN20100_pcLoadMultDiv_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="MultDiv" ColumnName="MultDiv" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN20100_pcLoadUnitType" FunctionName="eBiz4DWebSysModel.Store.IN20100_pcLoadUnitType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20100Model.IN20100_pcLoadUnitType_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="UnitType" ColumnName="UnitType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN20100_pgLoadUnitConversion" FunctionName="eBiz4DWebSysModel.Store.IN20100_pgLoadUnitConversion">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN20100Model.IN20100_pgLoadUnitConversion_Result">
+                <ScalarProperty Name="UnitType" ColumnName="UnitType" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="FromUnit" ColumnName="FromUnit" />
+                <ScalarProperty Name="ToUnit" ColumnName="ToUnit" />
+                <ScalarProperty Name="MultDiv" ColumnName="MultDiv" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="97" >
+        <EntityTypeShape EntityType="IN20100Model.IN_UnitConversion" Width="1.5" PointX="10.586436604422721" PointY="29.283558829353918" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

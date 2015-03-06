@@ -1,0 +1,151 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN20100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdUnitConversion")
+        .Store(
+            X.Store()
+            .ID("stoUnitConversion")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(IN20100_pgLoadUnitConversion_Result), "mdlIN20100_pgLoadUnitConversion", "UnitType, ClassID, InvtID, FromUnit, ToUnit"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetUnitConversion"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";                 
+            })
+        )
+        .Listeners(p =>
+                 {
+                     p.BoxReady.Handler = "firstLoad();";
+                 })
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40),
+            
+            X.Column().Text(Util.GetLang("UnitType")).DataIndex("UnitType").Width(150).Renderer("UnitTypechange")
+            .Editor(
+                HQ.Combo().ID("cboUnitType").Name("cboUnitType").HQProcedure("IN20100_pcLoadUnitType")
+                .HQColumnShow("UnitType,Code").DisplayField("Code").ValueField("UnitType")
+                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                .HQParam(new StoreParameterCollection() { 
+                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID" , Mode = ParameterMode.Raw }
+                  })
+                .LoadData()
+            ),
+            
+            X.Column().Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(150)
+            .Editor(
+                HQ.Combo().ID("cboClassID").Name("cboClassID").HQProcedure("IN20100_pcLoadClasID")
+                .HQColumnShow("ClassID,Descr").DisplayField("ClassID").ValueField("ClassID")
+                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                .LoadData()
+            ),
+            
+            X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(150)
+            .Editor(
+                HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQProcedure("IN20100_pcLoadInventory")
+                .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
+                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                .LoadData()
+             ),
+            
+            X.Column().ID("txtDescr").Text(Util.GetLang("Descr")).DataIndex("InvtID").Width(150).Renderer("getDescr"),
+                   
+            X.Column().Text(Util.GetLang("FromUnit")).DataIndex("FromUnit").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(15).EnforceMaxLength(true)),
+            
+            X.Column().Text(Util.GetLang("ToUnit")).DataIndex("ToUnit").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(15).EnforceMaxLength(true)),
+            
+            X.Column().Text(Util.GetLang("MultDiv")).DataIndex("MultDiv").Width(150).Renderer("MultDivchange")
+            .Editor(
+                HQ.Combo().ID("cboMultDiv").Name("cboMultDiv").HQProcedure("IN20100_pcLoadMultDiv")
+                .HQColumnShow("MultDiv,Code").DisplayField("Code").ValueField("MultDiv")
+                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                .HQParam(new StoreParameterCollection() { 
+                new StoreParameter() { Name = "@LangID", Value = "HQ.langID" , Mode = ParameterMode.Raw }
+                })
+                .LoadData()
+            ),
+            
+            X.NumberColumn().Text(Util.GetLang("CnvFact")).DataIndex("CnvFact").Width(150).Format("00")
+                    .Editor(X.TextField().EnforceMaxLength(true)),        
+            X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdUnitConversion_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmUnitConversion").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdUnitConversion_BeforeEdit";
+                ls.Edit.Fn = "grdUnitConversion_Edit";
+                ls.ValidateEdit.Fn = "grdUnitConversion_ValidateEdit";
+
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("UnitType")
+                  //  X.StringFilter().DataIndex("Descr")
+                )
+        )
+    )
+))
