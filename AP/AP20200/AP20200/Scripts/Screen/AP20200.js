@@ -286,6 +286,7 @@ function save() {
 function deleteData(item) {
     if (item == 'yes') {
         App.frmMain.submit({
+            clientValidation: false,
             waitMsg: HQ.common.getLang('DeletingData'),
             url: 'AP20200/Delete',
             params: {
