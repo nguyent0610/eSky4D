@@ -190,6 +190,7 @@ function save() {
     App.frmMain.getForm().updateRecord();
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
+            timeout: 1800000,
             waitMsg: 'Submiting...',
             url: 'SA40300/Save',
             params: {
@@ -223,6 +224,8 @@ function save() {
 var deleteRecordForm = function (item) {
     if (item == 'yes') {
         App.frmMain.submit({
+            clientValidation: false,
+            timeout: 1800000,
             waitMsg: HQ.common.getLang('DeletingData'),
             url: 'SA040300/Delete',
             params: {
