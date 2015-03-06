@@ -53,6 +53,7 @@
     HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
     HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
     HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+    HQ.businessDate='@ViewBag.BusinessDate';
 </script>
 <title>@ViewBag.Title</title>
 </head>
@@ -78,7 +79,13 @@
             ps.Add(new StoreParameter("CustId", "App.cboCustId.value", ParameterMode.Raw));
             ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.value", ParameterMode.Raw));
         })
-        .Listeners(p => p.Load.Handler = "loadDataAutoHeaderBig()")
+        .Listeners(p => 
+            {
+                p.BeforeLoad.Fn = "storeBeforeLoad";    
+                p.Load.Fn = "storeLoad";
+                
+                
+            })
   )
 
 

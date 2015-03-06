@@ -49,7 +49,8 @@
     <Reference Include="Ext.Net.Utilities">
       <HintPath>..\..\EbizWebMvc\AR20400_Language\AR20400\bin\Ext.Net.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="HQ.eSkyFramework">
+    <Reference Include="HQ.eSkyFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\DLL MVC moi\HQ.eSkyFramework.dll</HintPath>
     </Reference>
     <Reference Include="HQ.eSkySys">

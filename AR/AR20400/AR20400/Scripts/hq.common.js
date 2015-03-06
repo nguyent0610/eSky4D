@@ -1,4 +1,4 @@
-if (!Array.prototype.indexOf) {
+ï»¿if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
 
@@ -42,8 +42,8 @@ var HQ = {
                 return false;
             }
         },
-        insertBlank: function (store, key) {
-            if (key == undefined) {
+        insertBlank: function (store, keys) {
+            if (keys == undefined) {
                 store.insert(store.getCount(), Ext.data.Record());
             } else {
                 var flat = store.findBy(function (record, id) {
@@ -146,7 +146,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -162,7 +162,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -174,6 +174,61 @@ var HQ = {
             return true;
         }
     },
+    combo: {
+        first: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var value = cbo.store.getAt(0);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+            }
+        },
+        prev: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var v = cbo.getValue();
+                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
+                var index = cbo.store.indexOf(record);
+                var value = cbo.store.getAt(index - 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+                else HQ.combo.first(cbo);
+            }
+        },
+        next: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var v = cbo.getValue();
+                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
+                var index = cbo.store.indexOf(record);
+                var value = cbo.store.getAt(index + 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+                else HQ.combo.last(cbo);
+            }
+        },
+        last: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var value = cbo.store.getAt(cbo.store.getCount() - 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+            }
+
+        },
+    },
     grid: {
         showBusy: function (grd, isBusy) {
             if (isBusy)
@@ -184,23 +239,38 @@ var HQ = {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
+                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
-                        HQ.grid.last(grd);
-                        grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                        //HQ.grid.last(grd);
+                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
                     }
                 });
+                //}
+                //else {
+                //    HQ.grid.last(grd);
+                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                //}
                 return;
             }
+            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
             store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                 callback: function () {
                     if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
                         HQ.store.insertBlank(store, keys);
                     }
-                    HQ.grid.last(grd);
-                    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                    //HQ.grid.last(grd);
+                    setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
                 }
             });
+            //}
+            //else {
+            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+            //        HQ.store.insertBlank(store, keys);
+            //    }
+            //    HQ.grid.last(grd);
+            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+            //}
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
@@ -263,11 +333,11 @@ var HQ = {
             }
             return found;
         },
-        //TrungHT dùng cho phân trang
+        //TrungHT dï¿½ng cho phï¿½n trang
         checkDuplicateAll: function (grd, row, keys) {
             return HQ.grid.checkDuplicate(grd, row, keys);
         },
-        //Dùng trong ham before edit cua grid
+        //Dï¿½ng trong ham before edit cua grid
         //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
         //Cot nao la key thi khoa lai khi da co du lieu
         checkInput: function (row, keys) {
@@ -447,6 +517,12 @@ var HQ = {
                 });
             }
         },
+        changeData: function (isChange, screenNbr) {
+            if (parent.App['tab' + screenNbr] != undefined)
+                if (isChange)
+                    parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
+                else parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
+        },
         showBusy: function (busy, waitMsg, form) {
             if (form == undefined) {
                 if (busy) {
@@ -462,6 +538,21 @@ var HQ = {
                 }
             }
 
+        },
+        setRequire: function (ctr) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.allowBlank) != "undefined") {
+                        itm.validate();
+                    }
+                    HQ.common.setRequire(itm);
+                });
+            }
+        },
+        control_render: function (control, itemfocus) {
+            control.getEl().on("click", function () {
+                HQ.focus = itemfocus;
+            });
         }
     },
     util: {
@@ -500,16 +591,56 @@ var HQ = {
                 return "";
             } else return str;
         },
-        checkEmail: function (value) {
-            var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-            if ((HQ.uti.passNull(value)).match(regex)) {
-                return true;
-            } else {
-                HQ.message.show(09112014, '', null);        
-                return false;
+        focusControl: function () {
+            if (App[invalidField] && !App[invalidField].hasFocus) {
+                var tab = App[invalidField].findParentByType('tabpanel');
+                if (tab == undefined) {
+                    App[invalidField].focus();
+                }
+                else {
+                    HQ.util.focusControlInTab(tab, invalidField);
+                }
+            }
+        },
+        focusControlInTab: function (ctr, field) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (ctr.setActiveTab) != "undefined" && !App[field].hasFocus) {
+                        ctr.setActiveTab(App[itm.id]);
+                    }
+                    if (itm.id == field) {
+                        App[field].focus();
+                        return true;
+                    }
+                    HQ.util.focusControlInTab(itm, field);
+                });
             }
         }
-    },   
+    },
+    form: {
+        checkRequirePass: function (frmMain) {
+            frmMain.updateRecord();
+            var isValid = true;
+            frmMain.getForm().getFields().each(
+                            function (item) {
+                                if (!item.isValid()) {
+                                    invalidField = item.id;
+                                    HQ.message.show(1000, item.fieldLabel, 'HQ.util.focusControl');
+                                    isValid = false;
+                                    return false;
+                                }
+                            })
+            return isValid;
+        },
+        lockButtonChange: function (isChange, frmMain) {
+            frmMain.menuClickbtnFirst.setDisabled(isChange);
+            frmMain.menuClickbtnNext.setDisabled(isChange);
+            frmMain.menuClickbtnLast.setDisabled(isChange);
+            frmMain.menuClickbtnPrev.setDisabled(isChange);
+            frmMain.menuClickbtnNew.setDisabled(isChange);
+            frmMain.menuClickbtnDelete.setDisabled(isChange);
+        }
+    },
     tooltip: {
         // TinhHV: show the tootip in grid
         showOnGrid: function (toolTip, grid, isHtmlEncode) {
@@ -539,6 +670,7 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
+        if (value.split(',').length > 2) value = '';
         if (store) {
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {

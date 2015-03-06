@@ -53,7 +53,7 @@
                 .AutoScroll(true)
                 .Layout(LayoutType.Fit)
                 .ColumnWidth(0.80)
-                .ID("frm")
+                .ID("frmMain")
                 
                 .TrackResetOnLoad(true)
                 //.DefaultAnchor("100%")
@@ -62,6 +62,11 @@
                 //.MarginSpec("0 50 0 50")
                 .BodyPadding(0)
                 //.TopBar(Util.SetupToolbar("Print",true))
+                 .Listeners(l =>
+                    {
+                        l.BoxReady.Handler = "firstLoad();";
+                        l.FieldChange.Fn = "frmChange";
+                    })
                 .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
                 .Items(
                     X.Panel().ID("Header").Layout(LayoutType.Fit)//.AutoScroll(true)
@@ -83,6 +88,7 @@
                                     {
                                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                         lst.Change.Fn = "cboCustId_Change";
+                                        lst.Expand.Fn = "cboCustId_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko? 
                                         //lst.Focus.Fn = "Focus1_Change";
                                     })
                                     
@@ -625,7 +631,7 @@
                                                          
                                                          //Ngay Ngung GD
                                                          ,HQ.DateField().ID("calExpiryDate").Name("calExpiryDate").HQLangCode("CUSTEXPD").DataIndex("ExpiryDate")
-                                                        .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now)
+                                                        .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now).AllowBlank(false)
                                                          
                                                          //Ngay Thanh Lap
                                                          ,HQ.DateField().ID("cboEstablishDate").Name("cboEstablishDate").HQLangCode("ESTABLISHDATE").DataIndex("EstablishDate")
@@ -1081,7 +1087,7 @@
 
 
                 
-                  //ngoac ket thuc Panel frm
+                  //ngoac ket thuc Panel frmMain
                     )
         
         

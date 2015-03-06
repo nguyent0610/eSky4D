@@ -1,4 +1,4 @@
-
+﻿
 var selectedIndex = 0;
 var _hold = "H";
 var _curSlsperid = "";
@@ -25,7 +25,8 @@ var parentRecordID = ""
 var selectNodeAfterInsert = "0";
 var tmpCountryloadStoreOrForm = "0";
 
-
+var tmpCity = "";
+var tmpDistrict = "";
 
 var menuClick = function (command) {
     switch (command) {
@@ -54,7 +55,7 @@ var menuClick = function (command) {
 
             break;
         case "next":
-            HQ.combo.prev(App.cboVendID, HQ.isChange);
+            HQ.combo.prev(App.cboCustId, HQ.isChange);
 
             //var combobox = App.cboCustId;
             //    var v = combobox.getValue();
@@ -65,7 +66,7 @@ var menuClick = function (command) {
 
             break;
         case "last":
-            HQ.combo.last(App.cboVendID, HQ.isChange);
+            HQ.combo.last(App.cboCustId, HQ.isChange);
             //var combobox = App.cboCustId;
             //    var v = combobox.getValue();
             //    var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
@@ -77,8 +78,10 @@ var menuClick = function (command) {
 
             break;
         case "refresh":
-            App.storeFormBig.reload();
-
+            //App.storeFormBig.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
 
             break;
         case "new":
@@ -99,9 +102,9 @@ var menuClick = function (command) {
                     State: "0043",
                     City: "HCM",
                     District: "0043001",
-                    ExpiryDate: time,
-                    EstablishDate: time,
-                    Birthdate: time,
+                    ExpiryDate: HQ.businessDate,
+                    EstablishDate: HQ.businessDate,
+                    Birthdate: HQ.businessDate,
                     TaxDflt: "C",
                     TaxID00: "VAT10",
                     TaxID01: "VAT10",
@@ -112,7 +115,7 @@ var menuClick = function (command) {
 
                 });
                 App.storeFormBig.insert(0, record);
-                App.frm.getForm().loadRecord(App.storeFormBig.getAt(0));
+                App.frmMain.getForm().loadRecord(App.storeFormBig.getAt(0));
                 //tmpAddNew = "1";
                 //App.cboCustId.setValue('');
                 //App.storeFormBig.reload();
@@ -122,7 +125,7 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
-            var curRecord = App.frm.getRecord();
+            var curRecord = App.frmMain.getRecord();
             if (HQ.isDelete) {
                 if (App.cboCustId.value != "" && App.cboStatus.value != "A" && App.cboStatus.value != "O") {
 
@@ -135,14 +138,15 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
 
-
-                // if (App.slmTree.selected.items[0].childNodes.length != 0) {
-                Save();
+                if (HQ.form.checkRequirePass(App.frmMain))
+                {
+                    // if (App.slmTree.selected.items[0].childNodes.length != 0) {
+                    Save();
                 // } else {
                 //    HQ.message.show(8081, '', null);
                 //}
 
-
+                }
 
             }
             break;
@@ -155,6 +159,37 @@ var menuClick = function (command) {
     }
 
 };
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        if (App.cboCustId.valueModels == null) App.cboCustId.setValue('');
+        App.cboCustId.getStore().reload();
+        App.storeFormBig.reload();
+    }
+};
+
+////////////Kiem tra combo chinh CustID
+//khi co su thay doi du lieu cua cac conttol tren form
+//load lần đầu khi mở
+var firstLoad = function () {
+    App.cboCustId.getStore().reload();
+    App.storeFormBig.reload();
+};
+var frmChange = function () {
+    //đề phòng trường hợp nếu store chưa có gì cả giao diện chưa load xong mà App.frmMain.getForm().updateRecord(); được gọi sẽ gây lỗi
+    if (App.storeFormBig.data.length > 0) {
+        App.frmMain.getForm().updateRecord();
+
+        HQ.isChange = HQ.store.isChange(App.storeFormBig);
+        HQ.common.changeData(HQ.isChange, 'IN20500');//co thay doi du lieu gan * tren tab title header
+        HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+        if (App.cboCustId.valueModels == null || HQ.isNew == true)//App.cboCustId.valueModels == null khi ko co select item nao
+            App.cboCustId.setReadOnly(false);
+        else App.cboCustId.setReadOnly(HQ.isChange);
+    }
+
+};
+
 var refreshTree = function (i) {
     App.slmTree.select(i);
 }
@@ -175,20 +210,20 @@ var refreshTree2 = function (dt) {
 function Save() {
 
 
-    var curRecord = App.frm.getRecord();
+    var curRecord = App.frmMain.getRecord();
 
 
-    //var tmpforChangeFucn = App.frm.getRecord().data.LossRate00;
-    //App.frm.getRecord().data.LossRate00 = 0;
-    //App.frm.getRecord().data.LossRate00 = tmpforChangeFucn;
+    //var tmpforChangeFucn = App.frmMain.getRecord().data.LossRate00;
+    //App.frmMain.getRecord().data.LossRate00 = 0;
+    //App.frmMain.getRecord().data.LossRate00 = tmpforChangeFucn;
     //App.chooseGrid.setValue("2")
     //setValueToGrid();
     //App.chooseGrid.setValue("1")
 
-    App.frm.getForm().updateRecord();
-    //App.frm.updateRecord(curRecord);
-    if (App.frm.isValid()) {
-        App.frm.submit({
+    App.frmMain.getForm().updateRecord();
+    //App.frmMain.updateRecord(curRecord);
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
             waitMsg: HQ.common.getLang('Submiting...'),
             url: 'AR20400/Save',
             params: {
@@ -203,6 +238,7 @@ function Save() {
                 tmpSelectedNode: tmpSelectedNode,
                 branchID: App.cboCpnyID.value,
                 custName: App.txtCustName.value,
+                isNew: HQ.isNew,
             },
             success: function (result, data) {
                 //if (data.result.statusAfterAll == "H") {
@@ -214,16 +250,16 @@ function Save() {
                 //App.cboHandle.setValue("");
                 HQ.message.show(201405071, '', null);
                 //App.cboInvtID.setValue('');
-                menuClick("refresh");
+                App.storeFormBig.reload();
                 //tampSaveButton = "1";
-                if (data.result.value3 == "addNew") {
-                    if (data.result.value4 == "0") {
+                if (data.result.addNewOrUpdate == "addNew") {
+                    if (data.result.changeTreeBranch == "0") {//nếu ko chuyển nhánh khác cho node
                         //ReloadTree();
-                        //setTimeout(function () { waitReloadTreeDone(data.result.value); }, 4000);
-                        //App.cboCustId.setValue(data.result.value);
+                        //setTimeout(function () { waitReloadTreeDone(data.result.custID); }, 4000);
+                        //App.cboCustId.setValue(data.result.custID);
                         var newNode = App.slmTree.selected.items[0].data.id;
                         var record = App.IDTree.getStore().getNodeById(newNode);
-                        var node = data.result.value + "-" + data.result.value2;
+                        var node = data.result.custID + "-" + data.result.custName;
                         record.appendChild({ text: node, leaf: true, id: node });
 
                         //cach lam tim node tren cay de select vao`
@@ -241,11 +277,11 @@ function Save() {
 
                         //cach lam set value lai cho ID
                         App.cboCustId.setValue("");
-                        setTimeout(function () { waitReloadTreeDone(data.result.value); }, 3000);
-                        //App.cboCustId.setValue(data.result.value);
-                    } else if (data.result.value4 == "1") {
+                        setTimeout(function () { waitReloadTreeDone(data.result.custID); }, 3000);
+                        //App.cboCustId.setValue(data.result.custID);
+                    } else if (data.result.changeTreeBranch == "1") {//nếu chuyển nhánh khác cho node
                         //ReloadTree();
-                        //setTimeout(function () { waitReloadTreeDone(data.result.value); }, 4000);
+                        //setTimeout(function () { waitReloadTreeDone(data.result.custID); }, 4000);
                         var tmpSelectedNode = data.result.value5;
                         var recordtmpSelectedNode = App.IDTree.getStore().getNodeById(tmpSelectedNode);
                         recordtmpSelectedNode.remove(true);
@@ -253,24 +289,24 @@ function Save() {
                         var newNode = App.slmTree.selected.items[0].data.id;
                         var record = App.IDTree.getStore().getNodeById(newNode);
 
-                        var node = data.result.value + "-" + data.result.value2;
+                        var node = data.result.custID + "-" + data.result.custName;
 
                         record.appendChild({ text: node, leaf: true, id: node });
 
                         App.cboCustId.setValue("");
-                        setTimeout(function () { waitReloadTreeDone(data.result.value); }, 3000);
-                        //App.cboCustId.setValue(data.result.value);
+                        setTimeout(function () { waitReloadTreeDone(data.result.custID); }, 3000);
+                        //App.cboCustId.setValue(data.result.custID);
 
 
 
                     }
                 }
-                if (data.result.value3 == "update") {
+                if (data.result.addNewOrUpdate == "update") {
                     //ReloadTree();
-                    //setTimeout(function () { waitReloadTreeDone(data.result.value); }, 4000);
+                    //setTimeout(function () { waitReloadTreeDone(data.result.custID); }, 4000);
                     var newNode = App.slmTree.selected.items[0].data.id;
                     var record = App.IDTree.getStore().getNodeById(newNode);
-                    var node = data.result.value + "-" + data.result.value2;
+                    var node = data.result.custID + "-" + data.result.custName;
                     if (newNode != node) {
                         record.parentNode.appendChild({ text: node, leaf: true, id: node });
                         var findNode = App.IDTree.items.items[0].store.data.items;
@@ -298,30 +334,31 @@ function Save() {
                         }
                     }
 
-                    //App.cboCustId.setValue(data.result.value);
+                    //App.cboCustId.setValue(data.result.custID);
 
 
                 }
+                App.storeFormBig.reload();
 
 
 
 
             }
-            , failure: function (errorMsg, data) {
+            , failure: function (msg, data) {
 
-                //var dt = Ext.decode(data.response.responseText);
-                //HQ.message.show(dt.code, dt.colName + ',' + dt.value, null);
-                if (data.result.code) {
-                    HQ.message.show(data.result.code, '', '');
+                if (data.result.msgCode) {
+                    if (data.result.msgCode == 2000)//loi trung key ko the add
+                        HQ.message.show(data.result.msgCode, [App.cboCustId.fieldLabel, App.cboCustId.getValue()], '', true);
+                    else HQ.message.show(data.result.msgCode, data.result.msgParam, '');
                 }
                 else {
-                    processMessage(errorMsg, data);
+                    HQ.message.process(msg, data, true);
                 }
             }
         });
     }
     else {
-        var fields = App.frm.getForm().getFields().each(
+        var fields = App.frmMain.getForm().getFields().each(
                 function (item) {
                     if (!item.isValid()) {
                         alert(item);
@@ -332,7 +369,7 @@ function Save() {
 }
 
 var waitReloadTreeDone = function (value) {
-    //App.cboCustId.setValue(data.result.value);
+    //App.cboCustId.setValue(data.result.custID);
     App.cboCustId.setValue(value);
 }
 
@@ -340,7 +377,7 @@ var waitReloadTreeDone = function (value) {
 
 // Xem lai
 function Close() {
-    if (App.frm.getRecord() != undefined) App.frm.updateRecord();
+    if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
     if (storeIsChange(App.storeFormBig, false)) {
         HQ.message.show(5, '', 'closeScreen');
 
@@ -406,22 +443,22 @@ var deleteRecordForm = function (item) {
 
 
 
-var loadDataAutoHeaderSmall = function () {
+//var loadDataAutoHeaderSmall = function () {
 
-    if (App.storeFormSmall.getCount() == 0) {
-        App.storeFormSmall.insert(0, Ext.data.Record());
-    }
-    var record = App.storeFormSmall.getAt(0);
-    if (record) {
-        App.frm.getForm().loadRecord(record);
-        App.cboCpnyID.getStore().reload();
-    }
-};
+//    if (App.storeFormSmall.getCount() == 0) {
+//        App.storeFormSmall.insert(0, Ext.data.Record());
+//    }
+//    var record = App.storeFormSmall.getAt(0);
+//    if (record) {
+//        App.frmMain.getForm().loadRecord(record);
+//        App.cboCpnyID.getStore().reload();
+//    }
+//};
 
-var loadGrid = function () {
+//var loadGrid = function () {
 
 
-}
+//}
 var setValueApproveStatus = function () {
     App.IDTree.store.tree.root.collapse();
 }
@@ -472,7 +509,7 @@ var waitapproveStatus = function () {
         setTimeout(function () { waitToLoadHandle(); }, 1000);
     }
     //load hinh len khi chon invtID
-    var curRecord = App.frm.getRecord();
+    var curRecord = App.frmMain.getRecord();
     if (curRecord) {
         if (curRecord.data.Picture) {
             App.direct.GetImages(curRecord.data.Picture);
@@ -582,15 +619,15 @@ var cboCpnyID_Change = function (sender, newValue, oldValue) {
 
 }
 
-var waitCityAndDistrictLoad = function () {
-    App.cboCity.setValue("HCM");
-    App.cboDistrict.setValue("0043001");
+//var waitCityAndDistrictLoad = function () {
+//    App.cboCity.setValue("HCM");
+//    App.cboDistrict.setValue("0043001");
 
-}
-var waitStateLoad = function () {
-    App.cboState.setValue("0043");
-    setTimeout(function () { waitCityAndDistrictLoad(); }, 1500);
-}
+//}
+//var waitStateLoad = function () {
+//    App.cboState.setValue("0043");
+//    setTimeout(function () { waitCityAndDistrictLoad(); }, 1500);
+//}
 //dang DirectMethod co the load duoc node root slmTree
 function ReloadTree() {
     try {
@@ -600,16 +637,17 @@ function ReloadTree() {
                 //    tampSaveButton = "0";
                 //} else {
                 //App.cboCustId.getStore().reload();
+                //App.cboCountry.setValue("VN");
+                //setTimeout(function () { waitStateLoad(); }, 1500);
                 App.cboHandle.getStore().reload();
-                App.cboCountry.setValue("VN");
-                setTimeout(function () { waitStateLoad(); }, 1500);
+                
                 // }
             },
             failure: function () {
                 //
                 alert("fail");
             },
-            eventMask: { msg: 'Loading slmTree', showMask: true }
+            eventMask: { msg: 'Loading Tree', showMask: true }
         });
     } catch (ex) {
         alert(ex.message);
@@ -628,27 +666,15 @@ var cboStatus_Change = function (sender, newValue, oldValue) {
 }
 
 
-
-var loadDataAutoHeaderBig = function () {
-    //if (tmpAddNew == "1") {
-
-
-    //    tmpAddNew = "0";
-
-    //} else
-    //{
-    //if(App.storeFormBig.getCount() == 0) {
-    //    App.storeFormBig.insert(0, Ext.data.Record());
-    //}
-    //var record = App.storeFormBig.getAt(0);
-    //if (record) {
-    //    App.frm.getForm().loadRecord(record);
-    //}
-    //}
-    var record = App.storeFormBig.getAt(0);
-    if (record) {
-        App.frm.getForm().loadRecord(record);
-    } else {
+//trước khi load trang busy la dang load data
+var storeBeforeLoad = function (store) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'),App.frmMain);
+};
+var storeLoad = function (store) {
+    HQ.common.showBusy(false);
+    HQ.isNew = false;
+    App.cboCustId.forceSelection = true;
+    if (store.data.length == 0) {
         var time = new Date();
         var record = Ext.create("App.AR_CustomerModel", {
             //CustId: "",
@@ -662,9 +688,9 @@ var loadDataAutoHeaderBig = function () {
             State: "0043",
             City: "HCM",
             District: "0043001",
-            ExpiryDate: time,
-            EstablishDate: time,
-            Birthdate: time,
+            ExpiryDate: HQ.businessDate,
+            EstablishDate: HQ.businessDate,
+            Birthdate: HQ.businessDate,
             TaxDflt: "C",
             TaxID00: "VAT10",
             TaxID01: "VAT10",
@@ -675,33 +701,73 @@ var loadDataAutoHeaderBig = function () {
 
         });
         App.storeFormBig.insert(0, record);
-        App.frm.getForm().loadRecord(App.storeFormBig.getAt(0));
+        //App.cboCountry.setValue("VN");
+        //setTimeout(function () { waitStateLoad(); }, 1500);
+        App.frmMain.getForm().loadRecord(App.storeFormBig.getAt(0));
+        //HQ.store.insertBlank(store, "CustId");
+        //record = store.getAt(0);
+        store.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
+        HQ.isNew = true;//record la new
+        App.cboCustId.forceSelection = false;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboCustId.focus(true);//focus ma khi tao moi
     }
-
+    var record = store.getAt(0);
+    tmpCity = store.getAt(0).data.City;
+    tmpDistrict = store.getAt(0).data.District;
+    App.frmMain.getForm().loadRecord(record);
+    
+    frmChange();
 };
 
 var cboCustId_Change = function (sender, newValue, oldValue) {
-    tmpCountryloadStoreOrForm = "1";
-    App.storeFormBig.reload();
-    setTimeout(function () { chooseNodeFromTree(); }, 1000);
-    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
-        disableForm();
-    } else if (App.cboStatus.value == "H") {
-        enableForm();
+    if (sender.valueModels != null) {
+        tmpCountryloadStoreOrForm = "1";
+        App.storeFormBig.reload();
+        App.cboDfltShipToId.getStore().reload();
+        App.cboLTTContract.getStore().reload();
+        setTimeout(function () { chooseNodeFromTree(); }, 1000);
+        if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
+            disableForm();
+        } else if (App.cboStatus.value == "H") {
+            enableForm();
+        }
     }
 
 }
+
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboCustId_Expand = function (sender, value) {
+    if (App.cboCustId.getStore().data.length == 0) {
+        App.cboCustId.getStore().reload();
+    }
+    if (HQ.isChange && App.cboCustId.getValue()) {
+        App.cboCustId.collapse();
+    }
+};
 
 var cboCountry_Change = function (sender, newValue, oldValue) {
     //bien tam tmpCountryloadStoreOrForm de bat neu chon CustID thi load form len du sau do set ve trang thai cu
     if (tmpCountryloadStoreOrForm == "1") {
         App.cboState.getStore().reload();
-        App.frm.getForm().loadRecord(App.frm.getRecord());
+        App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
 
     } else {
         App.cboState.getStore().reload();
     }
+    //App.cboState.getStore().load(function () {
+    //    var curRecord = App.frmMain.getRecord();
+    //    if (curRecord != undefined)
+    //        if (curRecord.data.State) {
+    //            App.cboState.setValue(curRecord.data.State);
+    //        }
+    //    var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+    //    if (!dt) {
+    //        curRecord.data.State = '';
+    //        App.cboState.setValue("");
+    //    }
 
+    //});
 }
 
 
@@ -709,18 +775,47 @@ var cboState_Change = function (sender, newValue, oldValue) {
     if (tmpCountryloadStoreOrForm == "1") {
         App.cboCity.getStore().reload();
         App.cboDistrict.getStore().reload();
-        App.frm.getForm().loadRecord(App.frm.getRecord());
+        App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
+        App.cboCity.setValue(tmpCity);
+        App.cboDistrict.setValue(tmpDistrict);
         tmpCountryloadStoreOrForm = "0";
     } else {
         App.cboCity.getStore().reload();
         App.cboDistrict.getStore().reload();
     }
+    //App.cboCity.getStore().load(function () {
+    //    var curRecord = App.frmMain.getRecord();
+    //    if (curRecord != undefined)
+    //        if (curRecord.data.City) {
+    //            App.cboCity.setValue(curRecord.data.City);
+    //        }
+    //    var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+    //    if (!dt) {
+    //        curRecord.data.City = '';
+    //        App.cboCity.setValue("");
+    //    }
+
+    //});
+
+    //App.cboDistrict.getStore().load(function () {
+    //    var curRecord = App.frmMain.getRecord();
+    //    if (curRecord != undefined)
+    //        if (curRecord.data.District) {
+    //            App.cboDistrict.setValue(curRecord.data.District);
+    //        }
+    //    var dt = HQ.store.findInStore(App.cboCity.getStore(), ["District"], [App.cboDistrict.getValue()]);
+    //    if (!dt) {
+    //        curRecord.data.City = '';
+    //        App.cboDistrict.setValue("");
+    //    }
+
+    //});
 }
 
 var cboBillCountry_Change = function (sender, newValue, oldValue) {
     if (tmpCountryloadStoreOrForm == "1") {
         App.cboBillState.getStore().reload();
-        App.frm.getForm().loadRecord(App.frm.getRecord());
+        App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
     } else {
         App.cboBillState.getStore().reload();
     }
@@ -731,7 +826,7 @@ var cboBillCountry_Change = function (sender, newValue, oldValue) {
 var cboBillState_Change = function (sender, newValue, oldValue) {
     if (tmpCountryloadStoreOrForm == "1") {
         App.cboBillCity.getStore().reload();
-        App.frm.getForm().loadRecord(App.frm.getRecord());
+        App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
         tmpCountryloadStoreOrForm = "0";
     } else {
         App.cboBillCity.getStore().reload();
