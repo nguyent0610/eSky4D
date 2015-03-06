@@ -82,10 +82,8 @@ var menuClick = function (command) {
             else {
                 HQ.isChange = false;
                 var vendID = '';
-                if (App.cboVendID.valueModels == null) vendID = '';
-                else vendID = App.cboVendID.getValue();
-                App.cboVendID.getStore().load(function () { App.cboVendID.setValue(vendID); App.stoVendor.reload(); });
-                
+                if (App.cboVendID.valueModels != null) vendID = App.cboVendID.getValue();
+                App.cboVendID.getStore().load(function () { App.cboVendID.setValue(vendID); App.stoVendor.reload(); });                
             }
            
             break;
@@ -311,8 +309,7 @@ function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         var vendID = '';
-        if (App.cboVendID.valueModels == null) vendID = '';
-        else vendID = App.cboVendID.getValue();
+        if (App.cboVendID.valueModels != null)  vendID = App.cboVendID.getValue();
         App.cboVendID.getStore().load(function () { App.cboVendID.setValue(vendID); App.stoVendor.reload(); });
     }
 };
