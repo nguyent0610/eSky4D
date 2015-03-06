@@ -111,6 +111,7 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                HQ.isChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
