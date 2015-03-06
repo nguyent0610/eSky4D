@@ -252,6 +252,7 @@ function save() {
         App.frmMain.getForm().updateRecord();
         if (App.frmMain.isValid()) {
             App.frmMain.submit({
+                timeout: 1800000,
                 waitMsg: HQ.common.getLang('Submiting...'),
                 url: 'AP20200/Save',
                 params: {
