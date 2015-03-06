@@ -6,27 +6,27 @@
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboVendID.getStore().load(function () {
-        App.cboCountry.getStore().load(function () {
-            App.cboBillCountry.getStore().load(function () {
-                App.cboClassID.getStore().load(function () {
-                    App.cboStatus.getStore().load(function () {
-                        App.cboTermsID.getStore().load(function () {
-                            App.cboTaxDflt.getStore().load(function () {
-                                App.cboTaxId00.getStore().load(function () {
-                                    App.cboTaxId01.getStore().load(function () {
-                                        App.cboTaxId02.getStore().load(function () {
-                                            App.cboTaxId03.getStore().load(function () {
+        //App.cboCountry.getStore().load(function () {
+        //    App.cboBillCountry.getStore().load(function () {
+        //        App.cboClassID.getStore().load(function () {
+        //            App.cboStatus.getStore().load(function () {
+        //                App.cboTermsID.getStore().load(function () {
+        //                    App.cboTaxDflt.getStore().load(function () {
+        //                        App.cboTaxId00.getStore().load(function () {
+        //                            App.cboTaxId01.getStore().load(function () {
+        //                                App.cboTaxId02.getStore().load(function () {
+        //                                    App.cboTaxId03.getStore().load(function () {
                                                 App.stoVendor.reload();
-                                            })
-                                        })
-                                    })
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        })
+    //                                        })
+    //                                    })
+    //                                })
+    //                            })
+    //                        })
+    //                    })
+    //                })
+    //            })
+    //        })
+    //    })
     });
 };
 ////////////////////////////////////////////////////////////////////////
@@ -81,9 +81,11 @@ var menuClick = function (command) {
             }
             else {
                 HQ.isChange = false;
-                if (App.cboVendID.valueModels == null) App.cboVendID.setValue('');
-                App.cboVendID.getStore().reload();
-                App.stoVendor.reload();
+                var vendID = '';
+                if (App.cboVendID.valueModels == null) vendID = '';
+                else vendID = App.cboVendID.getValue();
+                App.cboVendID.getStore().load(function () { App.cboVendID.setValue(vendID); App.stoVendor.reload(); });
+                
             }
            
             break;
@@ -264,9 +266,7 @@ function save() {
                     App.cboVendID.getStore().load(function () {
                         App.cboVendID.setValue(vendID);
                         App.stoVendor.reload();
-                    });
-                               
-                  
+                    });                                                 
                 },
                 failure: function (msg, data) {
                     if (data.result.msgCode) {
@@ -310,9 +310,10 @@ function deleteData(item) {
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
-        if (App.cboVendID.valueModels == null) App.cboVendID.setValue('');
-        App.cboVendID.getStore().reload();
-        App.stoVendor.reload();
+        var vendID = '';
+        if (App.cboVendID.valueModels == null) vendID = '';
+        else vendID = App.cboVendID.getValue();
+        App.cboVendID.getStore().load(function () { App.cboVendID.setValue(vendID); App.stoVendor.reload(); });
     }
 };
 ///////////////////////////////////

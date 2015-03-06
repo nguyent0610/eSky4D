@@ -33,7 +33,7 @@
                 .Flex(1).MinWidth(200)
                 .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
                 .Items(
-                    HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("VendID").HQProcedure("AP20200_pcGetVendor").MaxLength(15).EnforceMaxLength(true)
+                    HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("VendID").HQProcedure("AP20200_pcGetVendor").HQAutoLoad(false).MaxLength(15).EnforceMaxLength(true)
                     .HQColumnShow("VendID,Name,Address").DisplayField("VendID").ValueField("VendID")
                     .AllowBlank(false)
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(true)
@@ -176,7 +176,7 @@
                         .Width(300).MarginSpec("5 0 0 0").MaxLength(15).EnforceMaxLength(true)
                         
                          , HQ.TextBox().ID("txtPmtMethod").Name("txtPmtMethod").HQLangCode("PmtMethod").DataIndex("PmtMethod")
-                        .Width(300).MarginSpec("5 0 0 0")
+                        .Width(300).MarginSpec("5 0 0 0").MaxLength(200).EnforceMaxLength(true)
 
                          , HQ.NumberField().ID("txtCrlmt").Name("txtCrlmt").HQLangCode("CrLmt").DataIndex("CrLmt")
                         .Width(300).MarginSpec("5 0 0 0")
@@ -238,7 +238,7 @@
                                             lst.Change.Fn = "cboCountry_Change";
                                         })
 
-                                        , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("State").HQProcedure("AP20200_pcStateByCountry")
+                                        , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("State").HQProcedure("AP20200_pcStateByCountry").HQAutoLoad(false)
                                         .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").DataIndex("State")
                                         .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
                                         .HQParam(new StoreParameterCollection() 
@@ -252,7 +252,7 @@
                                             lst.Change.Fn = "cboState_Change";
                                         })
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                        , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("City").HQProcedure("AP20200_pcCityByCountryState")
+                                        , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("City").HQProcedure("AP20200_pcCityByCountryState").HQAutoLoad(false)
                                         .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").DataIndex("City")
                                         .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                         .HQParam(new StoreParameterCollection() 
@@ -315,7 +315,7 @@
                                             lst.Change.Fn = "cboBillCountry_Change";
                                         })
 
-                                        , HQ.Combo().ID("cboBillState").Name("cboBillState").HQProcedure("AP20200_pcStateByCountry").HQLangCode("State").HideLabel(true)
+                                        , HQ.Combo().ID("cboBillState").Name("cboBillState").HQProcedure("AP20200_pcStateByCountry").HQLangCode("State").HQAutoLoad(false).HideLabel(true)
                                         .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").DataIndex("RemitState")
                                         .Width(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
                                         .HQParam(new StoreParameterCollection() 
@@ -330,7 +330,7 @@
                                                 lst.Change.Fn = "cboBillState_Change";
                                             })
 
-                                        , HQ.Combo().ID("cboBillCity").Name("cboBillCity").HQProcedure("AP20200_pcCityByCountryState").HQLangCode("City").HideLabel(true)
+                                        , HQ.Combo().ID("cboBillCity").Name("cboBillCity").HQProcedure("AP20200_pcCityByCountryState").HQLangCode("City").HQAutoLoad(false).HideLabel(true)
                                         .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").DataIndex("RemitCity")
                                         .Width(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                         .HQParam(new StoreParameterCollection() 
