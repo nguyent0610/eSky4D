@@ -1,0 +1,64 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA02400;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .DefaultAnchor("100%")
+    .Config("trackResetOnLoad","true")
+    .BodyPadding(10)
+    .BodyBorder(0)
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print,Delete,New", false, ""))
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        l.FieldChange.Fn = "frmChange";
+    })
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("Header").Layout(LayoutType.HBox)
+        .Items(
+            X.Container().Layout(LayoutType.VBox).MarginSpec("10 0 0 10")
+            .Items(
+                HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("DisplayName").DataIndex("Name")
+                .Width(400).MaxLength(100).EnforceMaxLength(true)
+                                 
+                ,HQ.TextBox().ID("txtSMTPServer").Name("txtSMTPServer").HQLangCode("SMTPServer").DataIndex("SMTPServer")
+                .Width(400).MaxLength(100).EnforceMaxLength(true)
+                           
+                ,HQ.NumberField().ID("txtPort").Name("txtPort").HQLangCode("Port").DataIndex("Port")
+                .Width(200).MinValue(0)
+                        
+                , HQ.Checkbox().ID("chkSSL").Name("chkSSL").HQLangCode("SSL")
+               .DataIndex("SSL").MarginSpec("0 0 6 105")
+                            
+                            
+                ,HQ.TextBox().ID("txtEmail").Name("txtEmail").HQLangCode("Email").DataIndex("MailBox")
+                .Width(400).MaxLength(200).EnforceMaxLength(true)
+            
+                            
+                ,HQ.TextBox().ID("txtUserNameE").Name("txtUserNameE").HQLangCode("UserNameE").DataIndex("UserName")
+                .Width(400).MaxLength(100).EnforceMaxLength(true)
+                        
+                ,HQ.TextBox().ID("txtPass").Name("txtPass").HQLangCode("Pass").DataIndex("Pass")
+                .Width(400).InputType(Ext.Net.InputType.Password)
+                .MaxLength(100).EnforceMaxLength(true)
+               
+            )
+        )
+    )//giao dien
+))
