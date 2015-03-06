@@ -1,0 +1,124 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN20700;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdReasonCode")
+        .Store(
+            X.Store()
+            .ID("stoReasonCode")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(IN20700_pgLoadReasonCode_Result), "mdlIN20700_pgLoadReasonCode", "ReasonCD"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetReasonCode"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";                 
+            })
+        )
+        .Listeners(p =>
+                 {
+                     p.BoxReady.Handler = "firstLoad();";
+                 })
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40),
+            X.Column().ID("ReasonCD").Text(Util.GetLang("ReasonCD")).DataIndex("ReasonCD").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(6).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
+                    .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("SiteID")).DataIndex("SiteID").Width(150)
+            .Editor(
+                HQ.Combo().ID("cboSiteID").Name("cboSiteID").HQProcedure("IN20700_pcLoadSiteAll")
+                .HQColumnShow("SiteID,Name").DisplayField("SiteID").ValueField("SiteID")
+                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                .HQParam(new StoreParameterCollection() { 
+                    new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID" , Mode = ParameterMode.Raw }
+                })
+                .LoadData()
+            ),
+            X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(150)
+            .Editor(
+                HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").HQProcedure("IN20700_pcLoadSalesPerson")
+                .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid")
+                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                .HQParam(new StoreParameterCollection() { 
+                    new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                })
+                .LoadData()
+            ),
+            X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdReasonCode_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmReasonCode").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdReasonCode_BeforeEdit";
+                ls.Edit.Fn = "grdReasonCode_Edit";
+                ls.ValidateEdit.Fn = "grdReasonCode_ValidateEdit";
+
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("ReasonCD"),
+                    X.StringFilter().DataIndex("Descr")
+                )
+        )
+    )
+))
