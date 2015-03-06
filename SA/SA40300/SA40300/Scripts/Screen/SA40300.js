@@ -48,8 +48,8 @@ var menuClick = function (command) {
             }
             else {
                 HQ.isChange = false;
-                App.cboMailID.getStore().reload();
-                App.stoMailHeader.reload();
+                App.cboMailID.getStore().load(function () { App.stoMailHeader.reload(); });
+                
             }
             break;
         case "new":
@@ -252,8 +252,8 @@ var deleteRecordGrid = function (item) {
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
-        App.cboMailID.getStore().reload();
-        App.stoMailHeader.reload();
+        App.cboMailID.getStore().load(function () { App.stoMailHeader.reload(); });
+        
     }
 };
 ///////////////////////////////////
