@@ -110,7 +110,7 @@
                     .Width(580).MarginSpec("5 0 0 0").AllowBlank(false)                    
                     
                     , HQ.TextBox().ID("txtNameFile").Name("txtNameFile").HQLangCode("NameFile").DataIndex("FileName")
-                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
 
                 )
 
