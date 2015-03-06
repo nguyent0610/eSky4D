@@ -1,0 +1,255 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA00700;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(lst =>
+    {
+        lst.BoxReady.Fn = "beforeSelectcombo";
+    })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+            .Region(Region.North)
+            .Items(
+
+                HQ.Combo().ID("cboRecType")
+                    .Name("cboRecType").HQLangCode("RecType").HQProcedure("SA00700_pcLoadComboTypeMVC")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("G")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }    
+                        })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboRecType_Change";
+                    })
+
+                , HQ.Combo().ID("cboUsr_GrByType")
+                    .Name("cboUsr_GrByType").HQLangCode("USERID").HQProcedure("SA00700_pcUserOrGroupByTypeMVC")
+                    .HQColumnShow("ID,Descr").DisplayField("ID").ValueField("ID").HQAutoLoad(false)
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@RecType", Value = "App.cboRecType.getValue()", Mode = ParameterMode.Raw }     
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+
+                , HQ.Combo().ID("cboCpny").Name("cboCpny").HQLangCode("CPNYID").HQProcedure("SA00700_pcSYS_Company")
+                    .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("ALL")
+                    .LoadData()
+
+                , HQ.Combo().ID("cboModule").Name("cboModule").HQLangCode("Module").HQProcedure("SA00700_pcSYS_Module")
+                    .HQColumnShow("ModuleID,ModuleName").DisplayField("ModuleID").ValueField("ModuleID")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("ALL")
+                    .LoadData()
+
+                , X.Button().MarginSpec("5 0 5 160").Width(150)
+                 .Text("Load Data").Listeners(p =>
+                     {
+                         p.Click.Fn = "LoadGrid";
+                     })
+            )//pnl Header
+
+            ,
+            X.Panel().ID("pnlgrd")
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .Items(
+                X.GridPanel().ID("grdSYS_AccessDetRights")
+                .Hidden(true)
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false).LoadMask(true))
+                .Region(Region.Center).Flex(1)
+                .SelectionMemory(false)
+                .Store(
+                    X.Store()
+                    .ID("stoSYS_AccessDetRights")
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(SA00700_pgAccessRightsScreen_Result), "mdlSA00700_pgAccessRightsScreen", "ScreenNumber"))
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_AccessDetRights"))).AutoLoad(false)
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("type", "App.cboRecType.value", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("userID", "App.cboUsr_GrByType.value", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("cpnyID", "App.cboCpny.value", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("module", "App.cboModule.value", ParameterMode.Raw));
+                    })
+                    .Listeners(l =>
+                    {
+                        l.BeforeLoad.Fn = "stoBeforeLoad";
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "stoChanged";
+                    })
+                )
+                .Listeners(p =>
+                {
+                    p.BoxReady.Handler = "firstLoad();";
+                })
+                .SortableColumns(false)
+                .ColumnModel(
+                    X.RowNumbererColumn().Width(40)
+
+                    , X.Column().DataIndex("ScreenNumber").Text(Util.GetLang("ScreenNumber")).Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboScreenNumber")
+                        .Name("cboScreenNumber").HQProcedure("SA00700_pcGetScreenDesrMVC")
+                        .HQColumnShow("ScreenNumber,Descr").DisplayField("ScreenNumber").ValueField("ScreenNumber")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                        .HQDBSys(true).AllowBlank(false).Listeners(lst =>
+                        {
+                            lst.Change.Fn = "cboScreenNumber_Change";
+                        })
+                        .LoadData()
+                    )
+                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
+
+                    //Colum Init
+                    , X.CheckColumn().ID("txtInitRights")
+                    .DataIndex("InitRights").Editable(true).HideTitleEl(true)
+                    .HeaderItems(
+                        HQ.Checkbox().ID("InitRightsCheckAll").BoxLabel("InitRights")//.HQLangCode("InitRights")//.MarginSpec("0 0 0 50")
+                            .Listeners(l =>
+                            {
+                                l.Change.Fn = "InitRightsCheckAll_Change";
+                            })
+                    )
+
+                    //Colum Insert
+                    , X.CheckColumn().ID("txtInsertRights")
+                    .DataIndex("InsertRights").Width(150).Editable(true).HideTitleEl(true)
+                    .HeaderItems(
+                        HQ.Checkbox().ID("InsertRightsCheckAll").HQLangCode("InsertRights").MarginSpec("0 0 0 50")
+                            .Listeners(l =>
+                            {
+                                l.Change.Fn = "InsertRightsCheckAll_Change";
+                            })
+                    )
+
+                    //Colum Update
+                    , X.CheckColumn().ID("txtUpdateRights")
+                    .DataIndex("UpdateRights").Width(150).Editable(true).HideTitleEl(true)
+                    .HeaderItems(
+                        HQ.Checkbox().ID("UpdateRightsCheckAll").HQLangCode("UpdateRights").MarginSpec("0 0 0 50")
+                            .Listeners(l =>
+                            {
+                                l.Change.Fn = "UpdateRightsCheckAll_Change";
+                            })
+                    )
+
+                    //Colum Delete
+                    , X.CheckColumn().ID("txtDeleteRights")
+                    .DataIndex("DeleteRights").Width(150).Editable(true).HideTitleEl(true)
+                    .HeaderItems(
+                        HQ.Checkbox().ID("DeleteRightsCheckAll").HQLangCode("DeleteRights").MarginSpec("0 0 0 50")
+                            .Listeners(l =>
+                            {
+                                l.Change.Fn = "DeleteRightsCheckAll_Change";
+                            })
+                    )
+
+                    //Colum View
+                    , X.CheckColumn().ID("txtViewRights")
+                    .DataIndex("ViewRights").Width(150).Editable(true).HideTitleEl(true)
+                    .HeaderItems(
+                        HQ.Checkbox().ID("ViewRightsCheckAll").HQLangCode("ViewRights").MarginSpec("0 0 0 50")
+                            .Listeners(l =>
+                            {
+                                l.Change.Fn = "ViewRightsCheckAll_Change";
+                            })
+                    )
+
+                    //Colum Release
+                    , X.CheckColumn().ID("txtReleaseRights")
+                    .DataIndex("ReleaseRights").Width(150).Editable(true).HideTitleEl(true)
+                    .HeaderItems(
+                        HQ.Checkbox().ID("ReleaseRightsCheckAll").HQLangCode("ReleaseRights").MarginSpec("0 0 0 50")
+                            .Listeners(l =>
+                            {
+                                l.Change.Fn = "ReleaseRightsCheckAll_Change";
+                            })
+                    )
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "grdSYS_AccessDetRights_Reject(record);")
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmSYS_AccessDetRights").Mode(SelectionMode.Multi))
+        //.BottomBar(
+        //    X.PagingToolbar()
+        //    .Items(
+        //        X.Label("Page size:"),
+        //        X.ToolbarSpacer(10),
+        //        X.ComboBox()
+        //        .Width(80)
+        //        .Items("1", "2", "10", "20", "30", "50")
+        //        .SelectedItems("50")
+        //        .Listeners(l =>
+        //            {
+        //                l.Select.Fn = "HQ.grid.onPageSelect";
+        //            })
+        //    )
+        //    .Plugins(X.ProgressBarPager())
+        //)
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdSYS_AccessDetRights_BeforeEdit";
+                        ls.Edit.Fn = "grdSYS_AccessDetRights_Edit";
+                        ls.ValidateEdit.Fn = "grdSYS_AccessDetRights_ValidateEdit";
+
+                    })
+                )
+
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("ScreenNumber"),
+                            X.StringFilter().DataIndex("Descr")
+                        )
+                )
+
+            )// pnl Grid
+
+    )//frm Main
+)//View port
+)
