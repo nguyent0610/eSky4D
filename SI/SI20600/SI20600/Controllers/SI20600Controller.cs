@@ -19,35 +19,30 @@ namespace SI20600.Controllers
     {
         private string _screenNbr = "SI20600";
         private string _userName = Current.UserName;
-
         SI20600Entities _db = Util.CreateObjectContext<SI20600Entities>(false);
-
         public ActionResult Index()
-        {  
+        {
+            
             Util.InitRight(_screenNbr);
             return View();
         }
-
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
-        public ActionResult GetData()
-        {
-            return this.Store(_db.SI20600_pgLoadGrid().ToList());
+        public ActionResult GetCountry()
+        {           
+            return this.Store(_db.SI20600_pgLoadCountry().ToList());
         }
-
-        [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
-                ChangeRecords<SI_Country> lstLang = dataHandler.BatchObjectData<SI_Country>();
-                foreach (SI_Country deleted in lstLang.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstCountry"]);
+                ChangeRecords<SI_Country> lstCountry = dataHandler.BatchObjectData<SI_Country>();
+                foreach (SI_Country deleted in lstCountry.Deleted)
                 {
                     var del = _db.SI_Country.Where(p => p.CountryID == deleted.CountryID).FirstOrDefault();
                     if (del != null)
@@ -56,19 +51,19 @@ namespace SI20600.Controllers
                     }
                 }
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                lstCountry.Created.AddRange(lstCountry.Updated);
 
-                foreach (SI_Country curLang in lstLang.Created)
+                foreach (SI_Country curCountry in lstCountry.Created)
                 {
-                    if (curLang.CountryID.PassNull() == "") continue;
+                    if (curCountry.CountryID.PassNull() == "") continue;
 
-                    var lang = _db.SI_Country.Where(p => p.CountryID.ToLower() == curLang.CountryID.ToLower()).FirstOrDefault();
+                    var Country = _db.SI_Country.Where(p => p.CountryID.ToLower() == curCountry.CountryID.ToLower()).FirstOrDefault();
 
-                    if (lang != null)
+                    if (Country != null)
                     {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        if (Country.tstamp.ToHex() == curCountry.tstamp.ToHex())
                         {
-                            Update_Language(lang, curLang, false);
+                            Update_SI_Country(Country, curCountry, false);
                         }
                         else
                         {
@@ -77,13 +72,14 @@ namespace SI20600.Controllers
                     }
                     else
                     {
-                        lang = new SI_Country();
-                        Update_Language(lang, curLang, true);
-                        _db.SI_Country.AddObject(lang);
+                        Country = new SI_Country();
+                        Update_SI_Country(Country, curCountry, true);
+                        _db.SI_Country.AddObject(Country);
                     }
                 }
 
                 _db.SaveChanges();
+
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -93,7 +89,7 @@ namespace SI20600.Controllers
             }
         }
 
-        private void Update_Language(SI_Country t, SI_Country s, bool isNew)
+        private void Update_SI_Country(SI_Country t, SI_Country s, bool isNew)
         {
             if (isNew)
             {
@@ -102,7 +98,6 @@ namespace SI20600.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
-
             t.Descr = s.Descr;
 
             t.LUpd_DateTime = DateTime.Now;

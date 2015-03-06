@@ -100,9 +100,9 @@ namespace SI20600
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SI20600_pgLoadGrid_Result> SI20600_pgLoadGrid()
+        public ObjectResult<SI20600_pgLoadCountry_Result> SI20600_pgLoadCountry()
         {
-            return base.ExecuteFunction<SI20600_pgLoadGrid_Result>("SI20600_pgLoadGrid");
+            return base.ExecuteFunction<SI20600_pgLoadCountry_Result>("SI20600_pgLoadCountry");
         }
 
         #endregion
@@ -383,24 +383,24 @@ namespace SI20600
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="SI20600Model", Name="SI20600_pgLoadGrid_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="SI20600Model", Name="SI20600_pgLoadCountry_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class SI20600_pgLoadGrid_Result : ComplexObject
+    public partial class SI20600_pgLoadCountry_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new SI20600_pgLoadGrid_Result object.
+        /// Create a new SI20600_pgLoadCountry_Result object.
         /// </summary>
         /// <param name="countryID">Initial value of the CountryID property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI20600_pgLoadGrid_Result CreateSI20600_pgLoadGrid_Result(global::System.String countryID, global::System.Byte[] tstamp)
+        public static SI20600_pgLoadCountry_Result CreateSI20600_pgLoadCountry_Result(global::System.String countryID, global::System.Byte[] tstamp)
         {
-            SI20600_pgLoadGrid_Result sI20600_pgLoadGrid_Result = new SI20600_pgLoadGrid_Result();
-            sI20600_pgLoadGrid_Result.CountryID = countryID;
-            sI20600_pgLoadGrid_Result.tstamp = tstamp;
-            return sI20600_pgLoadGrid_Result;
+            SI20600_pgLoadCountry_Result sI20600_pgLoadCountry_Result = new SI20600_pgLoadCountry_Result();
+            sI20600_pgLoadCountry_Result.CountryID = countryID;
+            sI20600_pgLoadCountry_Result.tstamp = tstamp;
+            return sI20600_pgLoadCountry_Result;
         }
 
         #endregion
