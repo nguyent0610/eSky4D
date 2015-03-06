@@ -79,6 +79,12 @@ var menuClick = function (command) {
             if (HQ.isChange) {
                 HQ.message.show(20150303, '', 'refresh');
             }
+            else {
+                HQ.isChange = false;
+                if (App.cboVendID.valueModels == null) App.cboVendID.setValue('');
+                App.cboVendID.getStore().reload();
+                App.stoVendor.reload();
+            }
            
             break;
         default:
@@ -120,13 +126,15 @@ var stoBeforeLoad = function (sto) {
 ////////////Kiem tra combo chinh VendID
 //khi co su thay doi du lieu cua cac conttol tren form
 var frmChange = function () {
-    App.frmMain.getForm().updateRecord();
-    HQ.isChange = HQ.store.isChange(App.stoVendor);
-    HQ.common.changeData(HQ.isChange, 'AP20200');//co thay doi du lieu gan * tren tab title header
-    HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
-    if (App.cboVendID.valueModels == null || HQ.isNew == true)//App.cboVendID.valueModels == null khi ko co select item nao
-        App.cboVendID.setReadOnly(false);
-    else App.cboVendID.setReadOnly(HQ.isChange);
+    if (App.stoVendor.data.length > 0) {
+        App.frmMain.getForm().updateRecord();
+        HQ.isChange = HQ.store.isChange(App.stoVendor);
+        HQ.common.changeData(HQ.isChange, 'AP20200');//co thay doi du lieu gan * tren tab title header
+        HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+        if (App.cboVendID.valueModels == null || HQ.isNew == true)//App.cboVendID.valueModels == null khi ko co select item nao
+            App.cboVendID.setReadOnly(false);
+        else App.cboVendID.setReadOnly(HQ.isChange);
+    }
 
 };
 // Event when cboVendID is changed or selected item 
