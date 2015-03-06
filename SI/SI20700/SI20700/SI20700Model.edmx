@@ -25,14 +25,18 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="SI20700_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SI20700_pcLoadCountryAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SI20700_pcLoadTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SI20700_pgLoadState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SI20700Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SI20700Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SI_State" EntityType="SI20700Model.SI_State" />
-          <FunctionImport Name="SI20700_pgLoadGrid" ReturnType="Collection(SI20700Model.SI20700_pgLoadGrid_Result)" />
+          <FunctionImport Name="SI20700_pcLoadCountryAll" ReturnType="Collection(SI20700Model.SI20700_pcLoadCountryAll_Result)" />
+          <FunctionImport Name="SI20700_pcLoadTerritory" ReturnType="Collection(SI20700Model.SI20700_pcLoadTerritory_Result)" />
+          <FunctionImport Name="SI20700_pgLoadState" ReturnType="Collection(SI20700Model.SI20700_pgLoadState_Result)" />
         </EntityContainer>
         <EntityType Name="SI_State">
           <Key>
@@ -51,7 +55,16 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="SI20700_pgLoadGrid_Result">
+        <ComplexType Name="SI20700_pcLoadCountryAll_Result">
+          <Property Type="String" Name="CountryID" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="SI20700_pcLoadTerritory_Result">
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="SI20700_pgLoadState_Result">
           <Property Type="String" Name="Country" Nullable="false" MaxLength="3" />
           <Property Type="String" Name="State" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="false" MaxLength="30" />
@@ -81,9 +94,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SI20700_pgLoadGrid" FunctionName="eBiz4DWebSysModel.Store.SI20700_pgLoadGrid">
+          <FunctionImportMapping FunctionImportName="SI20700_pcLoadCountryAll" FunctionName="eBiz4DWebSysModel.Store.SI20700_pcLoadCountryAll">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="SI20700Model.SI20700_pgLoadGrid_Result">
+              <ComplexTypeMapping TypeName="SI20700Model.SI20700_pcLoadCountryAll_Result">
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI20700_pcLoadTerritory" FunctionName="eBiz4DWebSysModel.Store.SI20700_pcLoadTerritory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI20700Model.SI20700_pcLoadTerritory_Result">
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SI20700_pgLoadState" FunctionName="eBiz4DWebSysModel.Store.SI20700_pgLoadState">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI20700Model.SI20700_pgLoadState_Result">
                 <ScalarProperty Name="Country" ColumnName="Country" />
                 <ScalarProperty Name="State" ColumnName="State" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
@@ -113,7 +143,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="SI20700Model.SI_State" Width="1.5" PointX="11.317789060677303" PointY="21.816016848113396" />
+        <EntityTypeShape EntityType="SI20700Model.SI_State" Width="1.5" PointX="7.60692058299059" PointY="14.266624010292173" />
       </Diagram>
     </Diagrams>
   </Designer>

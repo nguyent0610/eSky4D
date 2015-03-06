@@ -1,1 +1,146 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('r b=["\\N\\n\\F\\p\\e\\j\\Y","\\K\\e\\h\\e\\c","\\t\\j\\q\\K\\T\\1P\\K\\e\\h\\e\\c","\\L\\l\\j\\g\\e","\\t\\j\\l\\q","\\H\\j\\c\\R","\\p\\c\\1f\\e","\\m\\h\\g\\e","\\j\\c\\m\\n\\h\\q","\\g\\e\\n\\G\\h\\e\\h","\\j\\c\\L\\j\\c\\g\\D","\\l\\g\\T\\p\\g\\c\\j\\e","\\l\\p\\g\\c\\j\\e","\\p\\c\\W","\\l\\e\\c\\z\\g","\\g\\c\\m\\c\\o\\e\\c\\q","\\g\\m\\z\\G\\h\\e\\h","\\l\\g\\G\\c\\m\\c\\e\\c","","\\q\\c\\m\\c\\e\\c\\G\\h\\e\\h","\\g\\D\\n\\W","\\z\\c\\g\\g\\h\\t\\c","\\q\\c\\m\\c\\e\\c","\\l\\g\\1Q\\H\\q\\h\\e\\c","\\t\\c\\e\\N\\D\\h\\p\\t\\c\\q\\G\\h\\e\\h","\\g\\h\\R\\c","\\H\\j\\l\\p\\e","\\l\\g\\N\\D\\h\\p\\t\\c","\\g\\e\\n\\j\\c","\\h\\g\\M\\N\\m\\n\\g\\c","\\o\\m\\n\\g\\c","\\o\\n\\z\\z\\n\\p","\\L\\l\\c\\m\\q","\\l\\p\\q\\c\\1f\\1V\\L","\\e\\g\\e\\h\\z\\H","\\q\\h\\e\\h","\\j\\c\\o\\n\\j\\q","\\o\\D\\c\\o\\M\\T\\p\\H\\F\\e","\\R\\h\\m\\F\\c","\\l\\p\\g\\c\\j\\e\\1W\\m\\h\\p\\M","\\o\\D\\c\\o\\M\\G\\F\\H\\m\\l\\o\\h\\e\\c","\\z\\h\\e\\o\\D","\\e\\c\\1f\\e","\\o\\n\\m\\F\\z\\p","\\j\\c\\z\\n\\R\\c","\\t\\c\\e\\N\\n\\F\\p\\e","\\L\\n\\o\\F\\g\\1q\\n\\W","\\t\\c\\e\\1B\\l\\c\\W","\\g\\c\\m\\c\\o\\e","\\t\\c\\e\\K\\c\\m\\c\\o\\e\\l\\n\\p\\1d\\n\\q\\c\\m","\\j\\c\\1Y\\c\\o\\e","\\l\\g\\1B\\h\\m\\l\\q","\\L\\j\\z\\1d\\h\\l\\p","\\1J\\h\\l\\e\\1d\\g\\t","\\t\\c\\e\\2i\\h\\p\\t","\\K\\T\\2A\\1g\\2z\\1g\\1g\\1H\\K\\h\\R\\c","\\t\\c\\e\\G\\h\\e\\h","\\H\\j\\n\\o\\c\\g\\g","\\g\\F\\1L\\z\\l\\e","\\Y\\c\\g","\\q\\c\\m\\c\\e\\c\\K\\c\\m\\c\\o\\e\\c\\q","\\m\\c\\p\\t\\e\\D","\\o\\D\\c\\o\\M\\1q\\c\\1D\\F\\l\\j\\c\\2c\\h\\g\\g","\\e\\j\\l\\z","\\G\\c\\g\\o\\j","\\1U\\c\\j\\j\\l\\e\\n\\j\\Y","\\p\\n","\\n\\M"];r C=[b[0],b[1]];r 1A=y(1s){2b(1s){A b[3]:f[b[4]][b[3]](k[b[2]]);B;A b[5]:f[b[4]][b[5]](k[b[2]]);B;A b[6]:f[b[4]][b[6]](k[b[2]]);B;A b[7]:f[b[4]][b[7]](k[b[2]]);B;A b[10]:k[b[9]][b[8]]();f[b[4]][b[3]](k[b[2]]);B;A b[13]:i(f[b[11]]){f[b[4]][b[12]](k[b[2]])};B;A b[22]:i(k[b[16]][b[15]][b[14]][0]!=U){i(f[b[17]]){f[b[21]][b[20]](11,b[18],b[19])}};B;A b[25]:i(f[b[23]]||f[b[11]]||f[b[17]]){i(1i(k[b[9]][b[24]]().1p)&&1i(k[b[9]][b[24]]().1t)){1z()}};B;A b[26]:B;A b[1h]:i(f[b[28]][b[27]](k[b[9]])){f[b[21]][b[20]](7,b[18],b[29])}X{f[b[I]][b[1h]](1u)};B}};r 2H=y(2d,u){i(!f[b[23]]){s E};i(C[b[1b]](u[b[1c]])!=-1){i(u[b[2x]][b[1o]][b[1r]]!=b[18]){s E}};s f[b[4]][b[2w]](u,C)};r 2u=y(J,u){i(C[b[1b]](u[b[1c]])!=-1){i(u[b[1l]]!=b[18]&&1m(k[b[9]][b[24]]().1p)&&1m(k[b[9]][b[24]]().1t)){f[b[28]][b[2G]](k[b[9]])}}};r 2F=y(J,u){i(C[b[1b]](u[b[1c]])!=-1){i(f[b[4]][b[2D]](k[b[2]],u,C)){f[b[21]][b[20]](2t,u[b[1l]]);s E};r 1n=/^(\\w*(\\d|[a-2j-Z]))[\\2g]*$/;i(!u[b[1l]][b[2e]](1n)){f[b[21]][b[20]](2k,u[b[2q]][b[2r]]);s E}}};r 2p=y(S){i(S[b[1o]][b[1r]]==b[18]){k[b[9]][b[2n]](S);k[b[2]][b[2y]]()[b[2m]](k[b[9]][b[1v]]()-1);k[b[2]][b[2o]]()[b[2l]](k[b[9]][b[1v]]()-1)}X{S[b[2f]]()}};r 1z=y(){i(k[b[1y]][b[2h]]()){k[b[1y]][b[2s]]({2C:f[b[I]][b[O]](b[2E]),2B:b[2v],1X:{1I:f[b[28]][b[1K]](k[b[9]])},1M:y(1a,1e){f[b[21]][b[20]](1G);1A(b[10])},1F:y(1a,1e){f[b[21]][b[1C]](1a,1e,Q)}})}};r 1E=y(J){i(J==b[1N]){k[b[2]][b[1O]]()}};r 1m=y(v){i(v!=U){1j(r x=0;x<v[b[1k]];x++){1j(r P=0;P<C[b[1k]];P++){i(v[x][C[P]]==b[18]||v[x][C[P]]==U){s E}}};s Q}X{s Q}};r 1i=y(v){i(v!=U){1j(r x=0;x<v[b[1k]];x++){i(f[b[4]][b[1Z]](v[x],C)){2a};i(v[x][b[0]][b[V]]()==b[18]){f[b[21]][b[20]](15,f[b[I]][b[O]](b[0]));s E};i(v[x][b[1]][b[V]]()==b[18]){f[b[21]][b[20]](15,f[b[I]][b[O]](b[1]));s E};i(v[x][b[1w]][b[V]]()==b[18]){f[b[21]][b[20]](15,f[b[I]][b[O]](b[1w]));s E};i(v[x][b[1x]][b[V]]()==b[18]){f[b[21]][b[20]](15,f[b[I]][b[O]](b[1x]));s E}};s Q}X{s Q}};r 1R=y(J){i(J==b[1S]||J==b[1T]){f[b[I]][b[1h]](1u)}};', 62, 168, '|||||||||||_0x424c|x65||x74|HQ|x73|x61|if|x72|App|x69|x6C|x6F|x63|x6E|x64|var|return|x67|_0x468fx6|_0x468fx12||_0x468fx13|function|x6D|case|break|keys|x68|false|x75|x44|x70|31|_0x468fx8|x53|x66|x6B|x43|54|_0x468fx14|true|x76|_0x468fxc|x49|undefined|63|x77|else|x79||||||||||||_0x468fxe|33|32|x4D|_0x468fxf|x78|x30|30|checkRequire|for|61|38|isAllValidKey|_0x468fxa|35|Created|x52|34|_0x468fx3|Updated|this|45|64|65|52|save|menuClick|x56|57|x71|deleteData|failure|201405071|x2F|lstData|x57|56|x62|success|59|60|x5F|x55|askClose|66|67|x54|x4F|x42|params|x6A|62|||||||||||continue|switch|x50|_0x468fx5|41|50|_|51|x4C|zA|20140811|48|46|44|49|grdSI_State_Reject|43|42|58|1112|grdSI_State_Edit|55|37|36|47|x37|x32|url|waitMsg|40|53|grdSI_State_ValidateEdit|39|grdSI_State_BeforeEdit'.split('|'), 0, {}))
+//// Declare //////////////////////////////////////////////////////////
+
+var keys = ['Country','State'];
+var fieldsCheckRequire = ["Country", "State"];
+var fieldsLangCheckRequire = ["Country","State"];
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+
+            HQ.grid.first(App.grdState);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdState);
+            break;
+        case "next":
+            HQ.grid.next(App.grdState);
+            break;
+        case "last":
+            HQ.grid.last(App.grdState);
+            break;
+        case "refresh":
+            HQ.isFirstLoad = true;
+            App.stoState.reload();
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdState, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmState.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoState, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            if (HQ.isChange) {
+                HQ.message.show(5, '', 'askClose');
+            } else {
+                HQ.common.close(this);
+            }
+            break;
+    }
+
+};
+var grdState_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdState_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdState, e, keys);
+};
+var grdState_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdState, e, keys);
+};
+var grdState_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdState);
+    stoChanged(App.stoState);
+};
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SI20700/Save',
+            params: {
+                lstState: HQ.store.getData(App.stoState)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdState.deleteSelected();
+        stoChanged(App.stoState);
+    }
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+var askClose = function (item) {
+    if (item == "no" || item == "ok") {
+        HQ.common.changeData(false, 'SI20700');//khi dong roi gan lai cho change la false
+        HQ.common.close(this);
+    }
+};
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoState.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SI20700');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SI20700');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+

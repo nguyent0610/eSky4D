@@ -100,9 +100,25 @@ namespace SI20700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SI20700_pgLoadGrid_Result> SI20700_pgLoadGrid()
+        public ObjectResult<SI20700_pcLoadCountryAll_Result> SI20700_pcLoadCountryAll()
         {
-            return base.ExecuteFunction<SI20700_pgLoadGrid_Result>("SI20700_pgLoadGrid");
+            return base.ExecuteFunction<SI20700_pcLoadCountryAll_Result>("SI20700_pcLoadCountryAll");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SI20700_pcLoadTerritory_Result> SI20700_pcLoadTerritory()
+        {
+            return base.ExecuteFunction<SI20700_pcLoadTerritory_Result>("SI20700_pcLoadTerritory");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SI20700_pgLoadState_Result> SI20700_pgLoadState()
+        {
+            return base.ExecuteFunction<SI20700_pgLoadState_Result>("SI20700_pgLoadState");
         }
 
         #endregion
@@ -440,30 +456,210 @@ namespace SI20700
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="SI20700Model", Name="SI20700_pgLoadGrid_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="SI20700Model", Name="SI20700_pcLoadCountryAll_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class SI20700_pgLoadGrid_Result : ComplexObject
+    public partial class SI20700_pcLoadCountryAll_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new SI20700_pgLoadGrid_Result object.
+        /// Create a new SI20700_pcLoadCountryAll_Result object.
+        /// </summary>
+        /// <param name="countryID">Initial value of the CountryID property.</param>
+        public static SI20700_pcLoadCountryAll_Result CreateSI20700_pcLoadCountryAll_Result(global::System.String countryID)
+        {
+            SI20700_pcLoadCountryAll_Result sI20700_pcLoadCountryAll_Result = new SI20700_pcLoadCountryAll_Result();
+            sI20700_pcLoadCountryAll_Result.CountryID = countryID;
+            return sI20700_pcLoadCountryAll_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CountryID
+        {
+            get
+            {
+                return _CountryID;
+            }
+            set
+            {
+                OnCountryIDChanging(value);
+                ReportPropertyChanging("CountryID");
+                _CountryID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CountryID");
+                OnCountryIDChanged();
+            }
+        }
+        private global::System.String _CountryID;
+        partial void OnCountryIDChanging(global::System.String value);
+        partial void OnCountryIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SI20700Model", Name="SI20700_pcLoadTerritory_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SI20700_pcLoadTerritory_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SI20700_pcLoadTerritory_Result object.
+        /// </summary>
+        /// <param name="territory">Initial value of the Territory property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SI20700_pcLoadTerritory_Result CreateSI20700_pcLoadTerritory_Result(global::System.String territory, global::System.Byte[] tstamp)
+        {
+            SI20700_pcLoadTerritory_Result sI20700_pcLoadTerritory_Result = new SI20700_pcLoadTerritory_Result();
+            sI20700_pcLoadTerritory_Result.Territory = territory;
+            sI20700_pcLoadTerritory_Result.tstamp = tstamp;
+            return sI20700_pcLoadTerritory_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SI20700Model", Name="SI20700_pgLoadState_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SI20700_pgLoadState_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SI20700_pgLoadState_Result object.
         /// </summary>
         /// <param name="country">Initial value of the Country property.</param>
         /// <param name="state">Initial value of the State property.</param>
         /// <param name="descr">Initial value of the Descr property.</param>
         /// <param name="territory">Initial value of the Territory property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SI20700_pgLoadGrid_Result CreateSI20700_pgLoadGrid_Result(global::System.String country, global::System.String state, global::System.String descr, global::System.String territory, global::System.Byte[] tstamp)
+        public static SI20700_pgLoadState_Result CreateSI20700_pgLoadState_Result(global::System.String country, global::System.String state, global::System.String descr, global::System.String territory, global::System.Byte[] tstamp)
         {
-            SI20700_pgLoadGrid_Result sI20700_pgLoadGrid_Result = new SI20700_pgLoadGrid_Result();
-            sI20700_pgLoadGrid_Result.Country = country;
-            sI20700_pgLoadGrid_Result.State = state;
-            sI20700_pgLoadGrid_Result.Descr = descr;
-            sI20700_pgLoadGrid_Result.Territory = territory;
-            sI20700_pgLoadGrid_Result.tstamp = tstamp;
-            return sI20700_pgLoadGrid_Result;
+            SI20700_pgLoadState_Result sI20700_pgLoadState_Result = new SI20700_pgLoadState_Result();
+            sI20700_pgLoadState_Result.Country = country;
+            sI20700_pgLoadState_Result.State = state;
+            sI20700_pgLoadState_Result.Descr = descr;
+            sI20700_pgLoadState_Result.Territory = territory;
+            sI20700_pgLoadState_Result.tstamp = tstamp;
+            return sI20700_pgLoadState_Result;
         }
 
         #endregion

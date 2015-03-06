@@ -38,7 +38,7 @@ namespace SI20700
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "PCHQ-PC";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server = "VAIO";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "eBiz4DCloudSysMVC";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
@@ -47,7 +47,7 @@ namespace SI20700
             Session["SI20700"] = acc;
             Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppMVC";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004";
+            Session["CpnyID"] = Current.CpnyID = "18510580";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }

@@ -19,56 +19,51 @@ namespace SI20700.Controllers
     {
         private string _screenNbr = "SI20700";
         private string _userName = Current.UserName;
-
         SI20700Entities _db = Util.CreateObjectContext<SI20700Entities>(false);
-
         public ActionResult Index()
-        {  
+        {
+            
             Util.InitRight(_screenNbr);
             return View();
         }
-
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
-        public ActionResult GetData()
-        {
-            return this.Store(_db.SI20700_pgLoadGrid().ToList());
+        public ActionResult GetState()
+        {           
+            return this.Store(_db.SI20700_pgLoadState().ToList());
         }
-
-        [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
-                ChangeRecords<SI_State> lstLang = dataHandler.BatchObjectData<SI_State>();
-                foreach (SI_State deleted in lstLang.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstState"]);
+                ChangeRecords<SI_State> lstState = dataHandler.BatchObjectData<SI_State>();
+                foreach (SI_State deleted in lstState.Deleted)
                 {
-                    var del = _db.SI_State.Where(p => p.Country == deleted.Country&&p.State==deleted.State).FirstOrDefault();
+                    var del = _db.SI_State.Where(p => p.Country == deleted.Country && p.State == deleted.State).FirstOrDefault();
                     if (del != null)
                     {
                         _db.SI_State.DeleteObject(del);
                     }
                 }
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                lstState.Created.AddRange(lstState.Updated);
 
-                foreach (SI_State curLang in lstLang.Created)
+                foreach (SI_State curState in lstState.Created)
                 {
-                    if (curLang.Country.PassNull() == "") continue;
+                    if (curState.Country.PassNull() == "" && curState.State.PassNull() == "") continue;
 
-                    var lang = _db.SI_State.Where(p => p.Country.ToLower() == curLang.Country.ToLower() && p.State.ToLower() == curLang.State.ToLower()).FirstOrDefault();
+                    var State = _db.SI_State.Where(p => p.Country.ToLower() == curState.Country.ToLower() && p.State.ToLower() == curState.State.ToLower()).FirstOrDefault();
 
-                    if (lang != null)
+                    if (State != null)
                     {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        if (State.tstamp.ToHex() == curState.tstamp.ToHex())
                         {
-                            Update_Language(lang, curLang, false);
+                            Update_SI_State(State, curState, false);
                         }
                         else
                         {
@@ -77,13 +72,14 @@ namespace SI20700.Controllers
                     }
                     else
                     {
-                        lang = new SI_State();
-                        Update_Language(lang, curLang, true);
-                        _db.SI_State.AddObject(lang);
+                        State = new SI_State();
+                        Update_SI_State(State, curState, true);
+                        _db.SI_State.AddObject(State);
                     }
                 }
 
                 _db.SaveChanges();
+
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -93,7 +89,7 @@ namespace SI20700.Controllers
             }
         }
 
-        private void Update_Language(SI_State t, SI_State s, bool isNew)
+        private void Update_SI_State(SI_State t, SI_State s, bool isNew)
         {
             if (isNew)
             {
@@ -103,7 +99,6 @@ namespace SI20700.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
-
             t.Descr = s.Descr;
             t.Territory = s.Territory;
 
