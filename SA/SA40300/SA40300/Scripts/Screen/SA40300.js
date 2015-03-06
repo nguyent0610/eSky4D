@@ -227,7 +227,7 @@ var deleteRecordForm = function (item) {
             clientValidation: false,
             timeout: 1800000,
             waitMsg: HQ.common.getLang('DeletingData'),
-            url: 'SA040300/Delete',
+            url: 'SA40300/Delete',
             params: {
                 mailId: App.cboMailID.getValue()
             },
