@@ -287,6 +287,7 @@ function deleteData(item) {
     if (item == 'yes') {
         App.frmMain.submit({
             clientValidation: false,
+            timeout:1800000,
             waitMsg: HQ.common.getLang('DeletingData'),
             url: 'AP20200/Delete',
             params: {
@@ -295,9 +296,7 @@ function deleteData(item) {
             success: function (action, data) {               
                 App.cboVendID.setValue("");
                 App.cboVendID.getStore().load(function () { cboVendID_Change(App.cboVendID); });
-
             },
-
             failure: function (action, data) {
                 if (data.result.msgCode) {
                     HQ.message.show(data.result.msgCode, data.result.msgParam, '');
