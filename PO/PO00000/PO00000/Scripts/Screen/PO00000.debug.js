@@ -1,13 +1,76 @@
-//var loadSourceCombo = function () {
-//    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-//    App.cboDfltSite.getStore().load(function () {
-//        App.cboDfltValMthd.getStore().load(function () {
-
-//        })
-//    });
-//};
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboShipCountry.getStore().load(function () {
+        App.cboBillCountry.getStore().load(function () {
+            App.cboDfltLstUnitCost.getStore().load(function () {
+                App.cboDfltRcptFrom.getStore().load(function () {
+                    App.stoPO00000.reload();
+                })
+            })
+        })
+    });
+};
 
 // Submit the changed data (created, updated) into server side
+var cboShipCountry_Change = function (sender, e) {
+    App.cboShipState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.ShipState) {
+                App.cboShipState.setValue(curRecord.data.ShipState);
+            }
+        var dt = HQ.store.findInStore(App.cboShipState.getStore(), ["State"], [App.cboShipState.getValue()]);
+        if (!dt) {
+            curRecord.data.ShipState = '';
+            App.cboShipState.setValue("");
+        }
+    });
+
+};
+var cboShipState_Change = function (sender, e) {
+    App.cboShipCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.ShipCity) {
+                App.cboShipCity.setValue(curRecord.data.ShipCity);
+            }
+        var dt = HQ.store.findInStore(App.cboShipCity.getStore(), ["City"], [App.cboShipCity.getValue()]);
+        if (!dt) {
+            curRecord.data.ShipCity = '';
+            App.cboShipCity.setValue("");
+        }
+    });
+};
+var cboBillCountry_Change = function (sender, e) {
+    App.cboBillState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.BillState) {
+                App.cboBillState.setValue(curRecord.data.BillState);
+            }
+        var dt = HQ.store.findInStore(App.cboBillState.getStore(), ["State"], [App.cboBillState.getValue()]);
+        if (!dt) {
+            curRecord.data.BillState = '';
+            App.cboBillState.setValue("");
+        }
+    });
+
+};
+var cboBillState_Change = function (sender, e) {
+    App.cboBillCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.BillCity) {
+                App.cboBillCity.setValue(curRecord.data.BillCity);
+            }
+        var dt = HQ.store.findInStore(App.cboBillCity.getStore(), ["City"], [App.cboBillCity.getValue()]);
+        if (!dt) {
+            curRecord.data.BillCity = '';
+            App.cboBillCity.setValue("");
+        }
+    });
+};
+
 function save() {
 
     if (HQ.isInsert || HQ.isUpdate) {
@@ -77,7 +140,7 @@ var menuClick = function (command) {
 
 
 var firstLoad = function () {
-    //loadSourceCombo();
+    loadSourceCombo();
 };
 
 //load store khi co su thay doi
@@ -87,11 +150,14 @@ var stoLoad = function (sto) {
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "BranchID");
         record = sto.getAt(0);
+        record.data.BranchID = HQ.cpnyID;
+        record.data.SetupID = 'PO';
         sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
-        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+
     }
     App.frmMain.getForm().loadRecord(App.stoPO00000.getAt(0));
+    HQ.common.setRequire(App.frmMain);  //to do cac o la require  
     frmChange();
 };
 
