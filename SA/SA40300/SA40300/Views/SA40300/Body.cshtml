@@ -27,7 +27,7 @@
         .Listeners(l =>
                     {
                         l.BoxReady.Handler = "firstLoad();";
-                        l.FieldChange.Fn = "frmChange";
+                        l.FieldChange.Fn = "frmChange";                        
                     })
         .Items(
             X.Panel().ID("pnlHeader").Layout(LayoutType.VBox).Border(false).AutoScroll(true)
@@ -147,6 +147,10 @@
             )//end header
 
             , Html.X().GridPanel()
+            .Listeners(lst =>
+                {
+                    lst.Render.Handler = "HQ.common.control_render(this,'grdMailDetail');";                     
+                })//focus grid 
             .Layout(LayoutType.Fit)
             .MarginSpec("5 0 0 0")
             .Anchor("100% -170")// WIDTH HEIGHT                 
@@ -165,7 +169,7 @@
                                 })
                 .Listeners(p => p.Load.Fn = "loadDataAutoDetail"))
             .SortableColumns(false)
-            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdMailDetail');")//focus grid          
+                     
             .ColumnModel(
                 Html.X().RowNumbererColumn()
                , Html.X().Column().Text(Util.GetLang("ReportID")).Width(150).DataIndex("ReportID")
@@ -211,8 +215,8 @@
                 , Html.X().Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(150)
                     .Editor(Html.X().TextField())
 
-                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("LangID")).DataIndex("LangID").Width(150)
-                    .Editor(Html.X().TextField())
+                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("LangID")).DataIndex("LangID").Width(150).Align(Alignment.Right)
+                    .Editor(Html.X().NumberField().DecimalPrecision(0))
 
                 , Html.X().Column().Text(Util.GetLang("StringParm00")).DataIndex("StringParm00").Width(150)
                     .Editor(Html.X().TextField().MaxLength(1000).EnforceMaxLength(true))

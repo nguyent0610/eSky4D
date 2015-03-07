@@ -104,7 +104,7 @@ var frmChange = function () {
     App.frmMain.getForm().updateRecord();
     HQ.isChange = HQ.store.isChange(App.stoMailHeader) == false ? HQ.store.isChange(App.stoMailDetail) : true;
     HQ.common.changeData(HQ.isChange, 'SA40300');//co thay doi du lieu gan * tren tab title header
-    HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
     App.cboMailID.setReadOnly(HQ.isChange);
 };
 
@@ -122,9 +122,6 @@ var grdMailDetail_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdMailDetail);
     frmChange();
 };
-
-
-
 
 //hàm này chạy sau khi store của form trong Controller vừa chạy xong đã load dữ liệu vào store của form
 var loadDataAutoHeader = function (sto) {
