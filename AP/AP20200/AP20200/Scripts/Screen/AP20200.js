@@ -130,7 +130,7 @@ var frmChange = function () {
         App.frmMain.getForm().updateRecord();
         HQ.isChange = HQ.store.isChange(App.stoVendor);
         HQ.common.changeData(HQ.isChange, 'AP20200');//co thay doi du lieu gan * tren tab title header
-        HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+        //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
         if (App.cboVendID.valueModels == null || HQ.isNew == true)//App.cboVendID.valueModels == null khi ko co select item nao
             App.cboVendID.setReadOnly(false);
         else App.cboVendID.setReadOnly(HQ.isChange);
