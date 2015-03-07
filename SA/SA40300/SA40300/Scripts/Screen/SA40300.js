@@ -245,7 +245,7 @@ var deleteRecordForm = function (item) {
 var deleteRecordGrid = function (item) {
     if (item == "yes") {
         App.grdMailDetail.deleteSelected();
-
+        frmChange();
     }
 };
 //// Other Functions ////////////////////////////////////////////////////
