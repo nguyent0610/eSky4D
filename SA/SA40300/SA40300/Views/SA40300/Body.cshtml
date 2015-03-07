@@ -22,6 +22,7 @@
         .DefaultAnchor("100%")
         .BodyPadding(2)
         .TopBar(Util.SetupToolbar("Print", true))
+        .KeyMap(Util.SetupKeyMap())
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
         .Listeners(l =>
                     {
@@ -152,6 +153,7 @@
             .RenderTo("contentCenter")
             .View(X.GridView().TrackOver(false))
             .ID("grdMailDetail").SetAutoScroll(true)
+            .SelectionMemory(false)
             .Store(
                 X.Store().ID("stoMailDetail")
                 .Model(Util.GenerateModel(typeof(Server_MailAutoDetail), "Server_MailAutoDetailModel", "ReportID,ReportViewID", true, "BooleanParm00,BooleanParm01,BooleanParm02,BooleanParm03"))
@@ -224,17 +226,17 @@
                 , Html.X().Column().Text(Util.GetLang("StringParm03")).DataIndex("StringParm03").Width(150)
                     .Editor(Html.X().TextField().MaxLength(1000).EnforceMaxLength(true))
 
-                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("BeforeDateParm00")).DataIndex("BeforeDateParm00").Width(150)
-                    .Editor(Html.X().NumberField())
+                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("BeforeDateParm00")).DataIndex("BeforeDateParm00").Width(150).Align(Alignment.Right)
+                    .Editor(Html.X().NumberField().DecimalPrecision(0))
 
-                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("BeforeDateParm01")).DataIndex("BeforeDateParm01").Width(150)
-                    .Editor(Html.X().NumberField().AllowBlank(true))
+                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("BeforeDateParm01")).DataIndex("BeforeDateParm01").Width(150).Align(Alignment.Right)
+                    .Editor(Html.X().NumberField().DecimalPrecision(0))
 
-                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("BeforeDateParm02")).DataIndex("BeforeDateParm02").Width(150)
-                    .Editor(Html.X().NumberField())
+                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("BeforeDateParm02")).DataIndex("BeforeDateParm02").Width(150).Align(Alignment.Right)
+                    .Editor(Html.X().NumberField().DecimalPrecision(0))
 
-                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("BeforeDateParm03")).DataIndex("BeforeDateParm03").Width(150)
-                    .Editor(Html.X().NumberField())
+                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("BeforeDateParm03")).DataIndex("BeforeDateParm03").Width(150).Align(Alignment.Right)
+                    .Editor(Html.X().NumberField().DecimalPrecision(0))
 
                 , Html.X().CheckColumn().Text(Util.GetLang("BooleanParm00")).DataIndex("BooleanParm00").Width(150).Editable(true)//.Listeners(p=>p.CheckChange.Fn="onCheckChange")                       
                 , Html.X().CheckColumn().Text(Util.GetLang("BooleanParm01")).DataIndex("BooleanParm01").Width(150).Editable(true)//.Listeners(p=>p.CheckChange.Fn="onCheckChange")                       
@@ -289,7 +291,7 @@
                             l.Select.Fn = "HQ.grid.onPageSelect";
                         })
                 )
-                .Plugins(X.ProgressBarPager())
+                .Plugins(X.ProgressBarPager().ID("pagDetail"))
             )
             .Plugins(
                 X.CellEditing()
