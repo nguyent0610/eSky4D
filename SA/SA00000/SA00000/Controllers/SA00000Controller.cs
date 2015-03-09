@@ -1,0 +1,294 @@
+using HQ.eSkyFramework;
+using Ext.Net;
+using Ext.Net.MVC;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
+
+namespace SA00000.Controllers
+{
+    [DirectController]
+    [CustomAuthorize]
+    [CheckSessionOut]
+    public class SA00000Controller : Controller
+    {
+        private string _screenNbr = "SA00000";
+        private string _userName = Current.UserName;
+        SA00000Entities _db = Util.CreateObjectContext<SA00000Entities>(true);
+
+        public ActionResult Index()
+        {  
+            Util.InitRight(_screenNbr);
+            return View();
+        }
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
+        {
+            return PartialView();
+        }
+
+        #region Get information Company
+        public ActionResult GetSYS_Company(string CpnyID)
+        {
+            return this.Store(_db.SYS_Company.FirstOrDefault(p => p.CpnyID == CpnyID));
+        }
+
+        public ActionResult GetSYS_UserCompany(string CpnyID)
+        {
+            return this.Store(_db.SA00000_pgCompanyAddr(CpnyID).ToList());
+        }
+
+        public ActionResult GetSYS_UserGroup(string CpnyID)
+        {
+            return this.Store(_db.SA00000_pgSubCompany(CpnyID).ToList());
+        }
+        #endregion
+
+        #region Save & Update information Company
+        //Save information Company
+        [HttpPost]
+        public ActionResult Save(FormCollection data)
+        {
+            try
+            {
+                string CpnyID = data["cboCpnyID"];
+
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Company"]);
+                ChangeRecords<SYS_Company> lstSYS_Company = dataHandler.BatchObjectData<SYS_Company>();
+
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSys_CompanyAddr"]);
+                ChangeRecords<SA00000_pgCompanyAddr_Result> lstSys_CompanyAddr = dataHandler1.BatchObjectData<SA00000_pgCompanyAddr_Result>();
+
+                StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstSYS_SubCompany"]);
+                ChangeRecords<SA00000_pgSubCompany_Result> lstSYS_SubCompany = dataHandler2.BatchObjectData<SA00000_pgSubCompany_Result>();
+               
+                #region Save Header Company
+                lstSYS_Company.Created.AddRange(lstSYS_Company.Updated);
+                foreach (SYS_Company curHeader in lstSYS_Company.Created)
+                {
+                    if (CpnyID.PassNull() == "") continue;
+
+                    var header = _db.SYS_Company.FirstOrDefault(p => p.CpnyID == CpnyID);
+                    if (header != null)
+                    {
+                        if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
+                        {
+                            UpdatingHeader(header, curHeader, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        //string images = getPathThenUploadImage(curHeader, UserID);
+                        header = new SYS_Company();
+                        header.CpnyID = CpnyID;
+                        UpdatingHeader(header, curHeader, true);
+                        _db.SYS_Company.AddObject(header);
+                    }
+                }
+                #endregion
+
+                #region Save Sys_CompanyAddr
+                foreach (SA00000_pgCompanyAddr_Result deleted in lstSys_CompanyAddr.Deleted)
+                {
+                    var objDelete = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID == CpnyID && p.AddrID == deleted.AddrID);
+                    if (objDelete != null)
+                    {
+                        _db.Sys_CompanyAddr.DeleteObject(objDelete);
+                    }
+                }
+
+                lstSys_CompanyAddr.Created.AddRange(lstSys_CompanyAddr.Updated);
+
+                foreach (SA00000_pgCompanyAddr_Result curLang in lstSys_CompanyAddr.Created)
+                {
+                    if (curLang.AddrID.PassNull() == "" && CpnyID.PassNull() == "") continue;
+
+                    var lang = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.AddrID.ToLower() == curLang.AddrID.ToLower());
+
+                    if (lang != null)
+                    {
+                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        {
+                            UpdatingSys_CompanyAddr(lang, curLang, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        lang = new Sys_CompanyAddr();
+                        lang.CpnyID = CpnyID;
+                        UpdatingSys_CompanyAddr(lang, curLang, true);
+                        _db.Sys_CompanyAddr.AddObject(lang);
+                    }
+                }
+                #endregion
+
+                #region Save SYS_UserGroup
+                foreach (SA00000_pgSubCompany_Result deleted in lstSYS_SubCompany.Deleted)
+                {
+                    var del = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID == CpnyID && p.SubCpnyID == deleted.SubCpnyID);
+                    if (del != null)
+                    {
+                        _db.SYS_SubCompany.DeleteObject(del);
+                    }
+                }
+
+                lstSYS_SubCompany.Created.AddRange(lstSYS_SubCompany.Updated);
+
+                foreach (SA00000_pgSubCompany_Result curLang in lstSYS_SubCompany.Created)
+                {
+                    if (curLang.SubCpnyID.PassNull() == "" && CpnyID.PassNull()=="") continue;
+
+                    var lang = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.SubCpnyID.ToLower() == curLang.SubCpnyID.ToLower());
+
+                    if (lang != null)
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
+                    else
+                    {
+                        lang = new SYS_SubCompany();
+                        lang.CpnyID = CpnyID;
+                        lang.SubCpnyID = curLang.SubCpnyID;
+                        _db.SYS_SubCompany.AddObject(lang);
+                    }
+                }
+                #endregion
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+
+        //Update Header Company
+        private void UpdatingHeader(SYS_Company t,SYS_Company s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+
+            t.CpnyName = s.CpnyName;
+            t.Address = s.Address;
+            t.Address1 = s.Address1;
+            t.Address2 = s.Address2;
+            t.Tel = s.Tel;
+            t.Fax = s.Fax;
+            t.TaxRegNbr = s.TaxRegNbr;
+            t.Channel = s.Channel;
+            t.Territory = s.Territory;
+            t.Country = s.Country;
+            t.City = s.City;
+            t.District = s.District;
+            t.CpnyType = s.CpnyType;
+            t.Email = s.Email;
+            t.Owner = s.Owner;
+            t.Plant = s.Plant;
+            t.DatabaseName = s.DatabaseName;
+            t.Deposit = s.Deposit;
+            t.CreditLimit = s.CreditLimit;
+            t.MaxValue = s.MaxValue;
+            t.Type = s.Type;
+            t.State = s.State;
+
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
+
+        //Update Sys_CompanyAddr
+        private void UpdatingSys_CompanyAddr(Sys_CompanyAddr t, SA00000_pgCompanyAddr_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.AddrID = s.AddrID;
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+
+            t.Addr1 = s.Addr1;
+            t.Addr2 = s.Addr2;
+            t.Attn = s.Attn;
+            t.City = s.City;
+            t.Country = s.Country;
+            t.Fax = s.Fax;
+            t.Name = s.TaxRegNbr;
+            t.Phone = s.Phone;
+            t.Salut = s.Salut;
+            t.State = s.Country;
+            t.TaxId00 = s.TaxId00;
+            t.TaxId01 = s.TaxId01;
+            t.TaxId02 = s.TaxId02;
+            t.TaxId03 = s.TaxId03;
+            t.TaxLocId = s.TaxLocId;
+            t.TaxRegNbr = s.TaxRegNbr;
+            t.Zip = s.Zip;
+          
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+
+        }
+        #endregion
+
+        #region Delete information Company
+        //Delete information Company
+        [HttpPost]
+        public ActionResult DeleteAll(FormCollection data)
+        {
+            try
+            {
+                string CpnyID = data["cboCpnyID"];
+                var cpny = _db.SYS_Company.FirstOrDefault(p => p.CpnyID == CpnyID);
+                if (cpny != null)
+                {
+                    _db.SYS_Company.DeleteObject(cpny);
+  
+                }
+
+                var lstAddr = _db.Sys_CompanyAddr.Where(p => p.CpnyID == CpnyID).ToList();
+                foreach (var item in lstAddr)
+                {
+                    _db.Sys_CompanyAddr.DeleteObject(item);
+                }
+
+                var lstSub = _db.SYS_SubCompany.Where(p => p.CpnyID == CpnyID).ToList();
+                foreach (var item in lstSub)
+                {
+                    _db.SYS_SubCompany.DeleteObject(item);
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+        #endregion
+    }
+}
