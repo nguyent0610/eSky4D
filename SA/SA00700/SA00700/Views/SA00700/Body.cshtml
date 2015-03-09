@@ -136,9 +136,9 @@
 
                     //Colum Init
                     , X.CheckColumn().ID("txtInitRights")
-                    .DataIndex("InitRights").Editable(true).HideTitleEl(true)
+                    .DataIndex("InitRights").Width(150).Editable(true).HideTitleEl(true)
                     .HeaderItems(
-                        HQ.Checkbox().ID("InitRightsCheckAll").BoxLabel("InitRights")//.HQLangCode("InitRights")//.MarginSpec("0 0 0 50")
+                        HQ.Checkbox().ID("InitRightsCheckAll").HQLangCode("InitRights").MarginSpec("0 0 0 50")
                             .Listeners(l =>
                             {
                                 l.Change.Fn = "InitRightsCheckAll_Change";
