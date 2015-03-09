@@ -44,6 +44,7 @@
                             .HQLangCode("DiscID").HQProcedure("OM21100_pcDiscountAll").HQColumnShow("DiscID,Descr")
                             .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
                             .AllowBlank(false).AllowOnlyWhitespace(false).MaxLength(10).EnforceMaxLength(true)
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
                                 , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
@@ -51,6 +52,7 @@
                             .LoadData()
                             .Listeners(l =>
                             {
+                                l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                 l.Change.Fn = "DiscDefintion.Event.cboDiscID_change";
                             })
 
@@ -116,6 +118,7 @@
                                     .HQHeightWidth(400, 300).ValueField("DiscSeq").DisplayField("DiscSeq")
                                     .HQFirstDefault(true).MaxLength(10).EnforceMaxLength(true)
                                     .AllowBlank(false).AllowOnlyWhitespace(false)
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection() { 
                                         new StoreParameter("@DiscID", "App.cboDiscID.getValue()", ParameterMode.Raw)
                                         , new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
@@ -124,6 +127,7 @@
                                     .LoadData()
                                     .Listeners(l =>
                                     {
+                                        l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                         l.Change.Fn = "DiscDefintion.Event.cboDiscSeq_change";
                                     })
 
@@ -267,22 +271,22 @@
                                     X.RowNumbererColumn().Width(40)
                                     , X.Column().Text(Util.GetLang("BreakQty")).DataIndex("BreakQty")
                                     .Editor(
-                                        X.NumberField()
+                                        X.NumberField().SelectOnFocus(true)
                                     )
 
                                     , X.Column().Text(Util.GetLang("BreakAmt")).DataIndex("BreakAmt")
                                     .Editor(
-                                        X.NumberField()
+                                        X.NumberField().SelectOnFocus(true)
                                     )
 
                                     , X.Column().Text(Util.GetLang("Discount")).DataIndex("DiscAmt")
                                     .Editor(
-                                        X.NumberField()
+                                        X.NumberField().SelectOnFocus(true)
                                     )
 
                                     , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
                                     .Editor(
-                                        HQ.TextBox()
+                                        HQ.TextBox().SelectOnFocus(true)
                                     )
 
                                     , X.CommandColumn()
@@ -327,7 +331,7 @@
                                         .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color")
                                         .HQHeightWidth(400, 300)
                                         .ValueField("InvtID").DisplayField("InvtID")
-                                        .ForceSelection(true)
+                                        .ForceSelection(true).SelectOnFocus(true)
                                         .HQParam(new StoreParameterCollection() { 
                                             new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                                         })
@@ -344,7 +348,7 @@
                                         .HQColumnShow("FromUnit,ClassID")
                                         .HQHeightWidth(400, 300)
                                         .ValueField("FromUnit").DisplayField("FromUnit")
-                                        .ForceSelection(true)
+                                        .ForceSelection(true).SelectOnFocus(true)
                                         .HQParam(new StoreParameterCollection() { 
                                             new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdFreeItem,'FreeItemID')",ParameterMode.Raw)//se fix lai
                                         })
@@ -358,7 +362,7 @@
                                         .HQProcedure("OM21100_pcSite").HQColumnShow("SiteID,Name")
                                         .HQHeightWidth(400, 300)
                                         .ValueField("SiteID").DisplayField("SiteID")
-                                        .ForceSelection(true)
+                                        .ForceSelection(true).SelectOnFocus(true)
                                         .HQParam(new StoreParameterCollection() { 
                                             new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                                             ,new StoreParameter("@UserID","HQ.userName",ParameterMode.Raw)
@@ -368,7 +372,7 @@
 
                                     , X.Column().Text(Util.GetLang("Qty")).DataIndex("FreeItemQty")
                                     .Editor(
-                                        HQ.NumberField()
+                                        HQ.NumberField().SelectOnFocus(true)
                                     )
 
                                     , X.Column().Text(Util.GetLang("BudgetID")).DataIndex("FreeItemBudgetID")
@@ -377,7 +381,7 @@
                                         .HQProcedure("OM21100_pcBudgetFreeItem").HQColumnShow("BudgetID,Descr")
                                         .HQHeightWidth(400, 300)
                                         .ValueField("BudgetID").DisplayField("BudgetID")
-                                        .ForceSelection(true)
+                                        .ForceSelection(true).SelectOnFocus(true)
                                         .HQParam(new StoreParameterCollection() { 
                                             new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                                         })
@@ -516,7 +520,7 @@
                                     .HQProcedure("OM21100_pcCompany").HQColumnShow("CpnyID,CpnyName")
                                     .HQHeightWidth(400, 300)
                                     .ValueField("CpnyID").DisplayField("CpnyID")
-                                    .ForceSelection(true)
+                                    .ForceSelection(true).SelectOnFocus(true)
                                     .HQParam(new StoreParameterCollection() { 
                                         new StoreParameter("@UserID","HQ.userName",ParameterMode.Raw)
                                     })
@@ -575,7 +579,7 @@
                             .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color")
                             .HQHeightWidth(400, 300)
                             .ValueField("InvtID").DisplayField("InvtID")
-                            .ForceSelection(true)
+                            .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                             })
@@ -591,7 +595,7 @@
                             .HQProcedure("OM21100_pcClassUnitDescrByInvtID").HQColumnShow("FromUnit,ClassID")//ok
                             .HQHeightWidth(400, 300)
                             .ValueField("FromUnit").DisplayField("FromUnit")
-                            .ForceSelection(true)
+                            .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdDiscItem,'InvtID')",ParameterMode.Raw)//se fix lai
                             })
@@ -649,7 +653,7 @@
                             .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color")
                             .HQHeightWidth(400, 300)
                             .ValueField("InvtID").DisplayField("InvtID")
-                            .ForceSelection(true)
+                            .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                             })
@@ -661,12 +665,12 @@
 
                         , X.Column().Text(Util.GetLang("BreakQty")).DataIndex("BundleQty")
                         .Editor(
-                            X.NumberField()
+                            X.NumberField().SelectOnFocus(true)
                         )
 
                          , X.Column().Text(Util.GetLang("BreakAmt")).DataIndex("BundleAmt")
                         .Editor(
-                            X.NumberField()
+                            X.NumberField().SelectOnFocus(true)
                         )
 
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
@@ -718,7 +722,7 @@
                             .HQProcedure("OM21100_pcCustomerPriceClass")
                             .HQColumnShow("PriceClassID,Descr")
                             .HQHeightWidth(400, 300)
-                            .ForceSelection(true)
+                            .ForceSelection(true).SelectOnFocus(true)
                             .ValueField("PriceClassID").DisplayField("PriceClassID")
                             .LoadData()
                         )
@@ -772,7 +776,7 @@
                             .HQProcedure("OM21100_pcCustomerActive").HQColumnShow("CustID,Name")
                             .HQHeightWidth(400, 300)
                             .ValueField("CustID").DisplayField("CustID")
-                            .ForceSelection(true)
+                            .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@BranchID","HQ.cpnyID",ParameterMode.Raw)
                             })
@@ -828,7 +832,7 @@
                             .HQProcedure("OM21100_pcItemPriceClass").HQColumnShow("PriceClassID,Descr")
                             .HQHeightWidth(400, 300)
                             .ValueField("PriceClassID").DisplayField("PriceClassID")
-                            .ForceSelection(true)
+                            .ForceSelection(true).SelectOnFocus(true)
                             .LoadData()
                         )
 
@@ -838,7 +842,7 @@
                             .HQProcedure("OM21100_pcClassUnitDescr").HQColumnShow("FromUnit,ClassID")//ok
                             .HQHeightWidth(400, 300)
                             .ValueField("FromUnit").DisplayField("FromUnit")
-                            .ForceSelection(true)
+                            .ForceSelection(true).SelectOnFocus(true)
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@ClassID","Main.Process.getParamForGridCombo(App.grdDiscItemClass,'ClassID')",ParameterMode.Raw)//se fix lai
                             })
