@@ -91,7 +91,7 @@
 
                     , HQ.Combo().ID("cboDeliveryMan").Name("cboDeliveryMan").HQLangCode("DeliveryMan").HQProcedure("AR20200_pcDeliveryPerson")
                     .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid").DataIndex("DeliveryMan")
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
@@ -100,7 +100,7 @@
 
                     , HQ.Combo().ID("cboSupID").Name("cboSupID").HQLangCode("SALESSUP").HQProcedure("AR20200_pcUser")
                     .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid").DataIndex("SupID")
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
@@ -110,6 +110,16 @@
 
                     , HQ.NumberField().ID("txtCrLmt").Name("txtCrLmt").HQLangCode("CrLmt").DataIndex("CrLmt")
                     .Width(300).MarginSpec("5 0 0 0")
+                    
+                    , HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("AR20200vendID").HQProcedure("AR20200_pcVend")
+                    .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code").DataIndex("VendID")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        })
+                    .LoadData()
                 )
 
                 // Second Column

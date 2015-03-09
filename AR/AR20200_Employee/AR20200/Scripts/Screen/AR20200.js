@@ -1,1 +1,276 @@
-﻿var _0x8eed = ["\x48", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x67\x65\x74\x52\x65\x63\x6F\x72\x64", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x49\x6D\x61\x67\x65\x73", "\x64\x61\x74\x61", "\x69\x6D\x61\x67\x65\x55\x72\x6C", "\x69\x6D\x67\x50\x50\x43\x53\x74\x6F\x72\x65\x50\x69\x63\x52\x65\x71", "\x75\x70\x64\x61\x74\x65\x52\x65\x63\x6F\x72\x64", "\x67\x65\x74\x46\x6F\x72\x6D", "\x69\x73\x56\x61\x6C\x69\x64", "\x53\x75\x62\x6D\x69\x74\x69\x6E\x67\x2E\x2E\x2E", "\x67\x65\x74\x4C\x61\x6E\x67", "\x63\x6F\x6D\x6D\x6F\x6E", "\x41\x52\x32\x30\x32\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x43\x68\x61\x6E\x67\x65\x64\x44\x61\x74\x61", "\x73\x74\x6F\x53\x61\x6C\x65\x73\x50\x65\x72\x73\x6F\x6E", "\x65\x6E\x63\x6F\x64\x65", "\x6D\x73\x67\x43\x6F\x64\x65", "\x72\x65\x73\x75\x6C\x74", "", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x72\x65\x6C\x6F\x61\x64", "\x67\x65\x74\x53\x74\x6F\x72\x65", "\x63\x62\x6F\x53\x6C\x73\x70\x65\x72\x69\x64", "\x72\x65\x66\x72\x65\x73\x68", "\x6D\x73\x67\x50\x61\x72\x61\x6D", "\x73\x75\x62\x6D\x69\x74", "\x79\x65\x73", "\x67\x65\x74\x56\x61\x6C\x75\x65", "\x63\x62\x6F\x42\x72\x61\x6E\x63\x68\x49\x44", "\x6C\x6F\x61\x64", "\x44\x65\x6C\x65\x74\x69\x6E\x67\x44\x61\x74\x61", "\x64\x69\x72\x65\x63\x74", "\x55\x70\x6C\x6F\x61\x64\x69\x6E\x67\x20\x79\x6F\x75\x72\x20\x66\x69\x6C\x65\x2E\x2E\x2E", "\x41\x52\x32\x30\x32\x30\x30\x2F\x55\x70\x6C\x6F\x61\x64", "\x67\x65\x74\x41\x74", "\x6C\x6F\x61\x64\x52\x65\x63\x6F\x72\x64", "\x73\x65\x74\x49\x6D\x61\x67\x65\x55\x72\x6C", "\x53\x74\x61\x74\x75\x73", "\x41\x70\x70\x2E\x6D\x64\x6C\x41\x52\x5F\x53\x61\x6C\x65\x73\x70\x65\x72\x73\x6F\x6E", "\x76\x61\x6C\x75\x65", "\x63\x72\x65\x61\x74\x65", "\x69\x6E\x73\x65\x72\x74", "\x63\x62\x6F\x44\x65\x6C\x69\x76\x65\x72\x79\x4D\x61\x6E", "\x63\x62\x6F\x53\x74\x61\x74\x65", "\x63\x62\x6F\x44\x69\x73\x74\x72\x69\x63\x74", "\x63\x62\x6F\x48\x61\x6E\x64\x6C\x65", "\x73\x65\x74\x44\x69\x72\x74\x79", "\x74\x6F\x4C\x6F\x77\x65\x72\x43\x61\x73\x65", "\x70\x6F\x70", "\x2E", "\x73\x70\x6C\x69\x74", "\x6A\x70\x67", "\x70\x6E\x67", "\x67\x69\x66", "\x50\x6C\x65\x61\x73\x65\x20\x63\x68\x6F\x6F\x73\x65\x20\x61\x20\x70\x69\x63\x74\x75\x72\x65\x21\x20\x28\x2E\x6A\x70\x67\x2C\x20\x2E\x70\x6E\x67\x2C\x20\x2E\x67\x69\x66\x29", "\x72\x65\x73\x65\x74", "\x73\x74\x6F\x72\x65", "\x73\x65\x74\x56\x61\x6C\x75\x65", "\x66\x69\x72\x73\x74", "\x67\x65\x74\x43\x6F\x75\x6E\x74", "\x6E\x65\x78\x74", "\x70\x72\x65\x76", "\x6C\x61\x73\x74", "\x73\x61\x76\x65", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x44\x65\x6C\x65\x74\x65", "\x64\x65\x6C\x65\x74\x65", "\x63\x6C\x6F\x73\x65\x53\x63\x72\x65\x65\x6E", "\x63\x6C\x6F\x73\x65", "\x70\x61\x72\x65\x6E\x74\x41\x75\x74\x6F\x4C\x6F\x61\x64\x43\x6F\x6E\x74\x72\x6F\x6C", "\x6E\x65\x77", "\x6E\x6F", "\x6C\x65\x6E\x67\x74\x68", "\x43\x72\x65\x61\x74\x65\x64", "\x55\x70\x64\x61\x74\x65\x64", "\x44\x65\x6C\x65\x74\x65\x64", "\x73\x65\x74\x52\x65\x61\x64\x4F\x6E\x6C\x79", "\x63\x68\x6B\x41\x63\x74\x69\x76\x65", "\x74\x78\x74\x4E\x61\x6D\x65", "\x63\x62\x6F\x50\x6F\x73\x69\x74\x69\x6F\x6E", "\x74\x78\x74\x41\x64\x64\x72\x31", "\x74\x78\x74\x41\x64\x64\x72\x32", "\x74\x78\x74\x45\x4D\x61\x69\x6C\x41\x64\x64\x72", "\x63\x62\x6F\x53\x75\x70\x49\x44", "\x74\x78\x74\x43\x72\x4C\x6D\x74", "\x63\x62\x6F\x43\x6F\x75\x6E\x74\x72\x79\x49\x64", "\x74\x78\x74\x50\x68\x6F\x6E\x65", "\x74\x78\x74\x46\x61\x78", "\x74\x78\x74\x43\x6D\x6D\x6E\x50\x63\x74", "\x63\x68\x6B\x50\x50\x43\x53\x74\x6F\x72\x65\x50\x69\x63\x52\x65\x71", "\x63\x68\x6B\x50\x50\x43\x41\x64\x6D\x69\x6E"]; var selectedIndex = 0; var _hold = _0x8eed[0]; function Save() { if (HQ[_0x8eed[1]] || HQ[_0x8eed[2]]) { var _0x6cc4x4 = App[_0x8eed[4]][_0x8eed[3]](); _0x6cc4x4[_0x8eed[6]][_0x8eed[5]] = App[_0x8eed[8]][_0x8eed[7]]; App[_0x8eed[4]][_0x8eed[10]]()[_0x8eed[9]](); if (App[_0x8eed[4]][_0x8eed[11]]()) { App[_0x8eed[4]][_0x8eed[29]]({ waitMsg: HQ[_0x8eed[14]][_0x8eed[13]](_0x8eed[12]), url: _0x8eed[15], params: { lstARSalesPersonHeader: Ext[_0x8eed[18]](App[_0x8eed[17]][_0x8eed[16]]({ skipIdForPhantomRecords: false })) }, success: function (_0x6cc4x5, _0x6cc4x6) { if (_0x6cc4x6[_0x8eed[20]][_0x8eed[19]]) { HQ[_0x8eed[23]][_0x8eed[22]](_0x6cc4x6[_0x8eed[20]][_0x8eed[19]], _0x8eed[21], _0x8eed[21]); }; App[_0x8eed[26]][_0x8eed[25]]()[_0x8eed[24]](); menuClick(_0x8eed[27]); }, failure: function (_0x6cc4x5, _0x6cc4x6) { if (_0x6cc4x6[_0x8eed[20]][_0x8eed[19]]) { HQ[_0x8eed[23]][_0x8eed[22]](_0x6cc4x6[_0x8eed[20]][_0x8eed[19]], _0x6cc4x6[_0x8eed[20]][_0x8eed[28]], _0x8eed[21]); }; } }); }; }; }; function Delete(_0x6cc4x8) { if (_0x6cc4x8 == _0x8eed[30]) { try { App[_0x8eed[35]].AR20200Delete(App[_0x8eed[26]][_0x8eed[31]](), App[_0x8eed[32]][_0x8eed[31]](), { success: function (_0x6cc4x6) { menuClick(_0x8eed[27]); App[_0x8eed[26]][_0x8eed[25]]()[_0x8eed[33]](); }, failure: function () { }, eventMask: { msg: HQ[_0x8eed[14]][_0x8eed[13]](_0x8eed[34]), showMask: true } }); } catch (ex) { alert(ex[_0x8eed[23]]); }; }; }; function UploadImage() { App[_0x8eed[4]][_0x8eed[29]]({ waitMsg: _0x8eed[36], url: _0x8eed[37], success: function (_0x6cc4xa) { }, failure: function (_0x6cc4xb) { } }); }; var stoSalesPerson_load = function () { var _0x6cc4xd = App[_0x8eed[17]][_0x8eed[38]](0); if (_0x6cc4xd) { App[_0x8eed[4]][_0x8eed[10]]()[_0x8eed[39]](_0x6cc4xd); if (_0x6cc4xd[_0x8eed[6]][_0x8eed[5]]) { App[_0x8eed[35]].AR20200GetImages(_0x6cc4xd[_0x8eed[6]].Images); } else { App[_0x8eed[8]][_0x8eed[40]](_0x8eed[21]); }; if (_0x6cc4xd[_0x8eed[6]][_0x8eed[41]] == _hold) { enableControls(true); } else { enableControls(false); }; } else { var _0x6cc4xe = Ext[_0x8eed[44]](_0x8eed[42], { BranchID: App[_0x8eed[32]][_0x8eed[43]], SlsperId: _0x8eed[21], Status: _hold }); App[_0x8eed[17]][_0x8eed[45]](0, _0x6cc4xe); App[_0x8eed[4]][_0x8eed[10]]()[_0x8eed[39]](_0x6cc4xe); App[_0x8eed[8]][_0x8eed[40]](_0x8eed[21]); enableControls(true); }; }; var cboBranchID_Change = function (_0x6cc4x10, _0x6cc4x11) { App[_0x8eed[46]][_0x8eed[25]]()[_0x8eed[24]](); App[_0x8eed[26]][_0x8eed[25]]()[_0x8eed[33]](); }; var cboSlsperid_Change = function (_0x6cc4x10, _0x6cc4x11) { App[_0x8eed[17]][_0x8eed[24]](); }; var cboCountryId_Change = function (_0x6cc4x10, _0x6cc4x11) { App[_0x8eed[47]][_0x8eed[25]]()[_0x8eed[33]](); }; var cboState_Change = function (_0x6cc4x10, _0x6cc4x11) { App[_0x8eed[48]][_0x8eed[25]]()[_0x8eed[33]](); }; var cboStatus_Change = function (_0x6cc4x10, _0x6cc4x11) { App[_0x8eed[49]][_0x8eed[25]]()[_0x8eed[24]](); }; var cboHandle_Change = function (_0x6cc4x10, _0x6cc4x11) { var _0x6cc4x4 = App[_0x8eed[4]][_0x8eed[3]](); _0x6cc4x4[_0x8eed[50]](); }; var NamePPCStorePicReq_Change = function (_0x6cc4x10, _0x6cc4x11) { var _0x6cc4x18 = _0x6cc4x10[_0x8eed[31]](); var _0x6cc4x19 = _0x6cc4x18[_0x8eed[54]](_0x8eed[53])[_0x8eed[52]]()[_0x8eed[51]](); if (_0x6cc4x19 == _0x8eed[55] || _0x6cc4x19 == _0x8eed[56] || _0x6cc4x19 == _0x8eed[57]) { UploadImage(); var _0x6cc4x4 = App[_0x8eed[4]][_0x8eed[3]](); _0x6cc4x4[_0x8eed[6]][_0x8eed[5]] = App[_0x8eed[8]][_0x8eed[7]]; _0x6cc4x4[_0x8eed[50]](); } else { alert(_0x8eed[58]); _0x6cc4x10[_0x8eed[59]](); }; }; var btnClearImage_Click = function (_0x6cc4x10, _0x6cc4x11) { App[_0x8eed[8]][_0x8eed[40]](_0x8eed[21]); var _0x6cc4x4 = App[_0x8eed[4]][_0x8eed[3]](); _0x6cc4x4[_0x8eed[6]][_0x8eed[5]] = _0x8eed[21]; _0x6cc4x4[_0x8eed[50]](); }; var menuClick = function (_0x6cc4x1c) { switch (_0x6cc4x1c) { case _0x8eed[62]: selectedIndex = 0; var _0x6cc4x1d = App[_0x8eed[26]][_0x8eed[60]][_0x8eed[38]](selectedIndex); if (_0x6cc4x1d) { App[_0x8eed[26]][_0x8eed[61]](_0x6cc4x1d[_0x8eed[6]].SlsperId); }; break;; case _0x8eed[64]: if (selectedIndex < (App[_0x8eed[26]][_0x8eed[60]][_0x8eed[63]]() - 1)) { selectedIndex += 1; }; var _0x6cc4x1d = App[_0x8eed[26]][_0x8eed[60]][_0x8eed[38]](selectedIndex); if (_0x6cc4x1d) { App[_0x8eed[26]][_0x8eed[61]](_0x6cc4x1d[_0x8eed[6]].SlsperId); }; break;; case _0x8eed[65]: if (selectedIndex > 0) { selectedIndex -= 1; }; var _0x6cc4x1d = App[_0x8eed[26]][_0x8eed[60]][_0x8eed[38]](selectedIndex); if (_0x6cc4x1d) { App[_0x8eed[26]][_0x8eed[61]](_0x6cc4x1d[_0x8eed[6]].SlsperId); }; break;; case _0x8eed[66]: selectedIndex = App[_0x8eed[26]][_0x8eed[60]][_0x8eed[63]]() - 1; var _0x6cc4x1d = App[_0x8eed[26]][_0x8eed[60]][_0x8eed[38]](selectedIndex); if (_0x6cc4x1d) { App[_0x8eed[26]][_0x8eed[61]](_0x6cc4x1d[_0x8eed[6]].SlsperId); }; break;; case _0x8eed[67]: Save(); break;; case _0x8eed[70]: var _0x6cc4x4 = App[_0x8eed[4]][_0x8eed[3]](); if (_0x6cc4x4 && _0x6cc4x4[_0x8eed[6]][_0x8eed[41]] == _hold) { if (HQ[_0x8eed[68]]) { HQ[_0x8eed[23]][_0x8eed[22]](11, _0x8eed[21], _0x8eed[69]); }; }; break;; case _0x8eed[72]: if (App[_0x8eed[4]][_0x8eed[3]]() != undefined) { App[_0x8eed[4]][_0x8eed[9]](); }; if (storeIsChange(App[_0x8eed[17]], false)) { HQ[_0x8eed[23]][_0x8eed[22]](5, _0x8eed[21], _0x8eed[71]); } else { this[_0x8eed[73]][_0x8eed[72]](); }; break;; case _0x8eed[74]: if (HQ[_0x8eed[1]]) { selectedIndex = 0; App[_0x8eed[26]][_0x8eed[61]](_0x8eed[21]); cboSlsperid_Change(App[_0x8eed[26]]); } else { HQ[_0x8eed[23]][_0x8eed[22]](4, _0x8eed[21], _0x8eed[21]); }; break;; case _0x8eed[27]: if (App[_0x8eed[4]][_0x8eed[11]]()) { App[_0x8eed[17]][_0x8eed[24]](); App[_0x8eed[49]][_0x8eed[61]](_0x8eed[21]); }; break;; default:; }; }; var closeScreen = function (_0x6cc4x8) { if (_0x6cc4x8 == _0x8eed[75]) { this[_0x8eed[73]][_0x8eed[72]](); } else { if (_0x6cc4x8 == _0x8eed[30]) { Save(); }; }; }; function storeIsChange(_0x6cc4x20, _0x6cc4x21) { if (_0x6cc4x21 == undefined) { _0x6cc4x21 = true; }; if ((_0x6cc4x21 == true ? _0x6cc4x20[_0x8eed[16]]()[_0x8eed[77]][_0x8eed[76]] > 1 : false) || _0x6cc4x20[_0x8eed[16]]()[_0x8eed[78]] != undefined || _0x6cc4x20[_0x8eed[16]]()[_0x8eed[79]] != undefined) { return true; }; return false; }; function enableControls(_0x6cc4x23) { App[_0x8eed[81]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[82]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[83]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[84]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[85]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[86]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[46]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[87]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[88]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[89]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[47]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[48]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[90]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[91]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[92]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[93]][_0x8eed[80]](!_0x6cc4x23); App[_0x8eed[94]][_0x8eed[80]](!_0x6cc4x23); };
+﻿var selectedIndex = 0;
+var _hold = "H";
+//ATTENTION: isUpdate, isInsert, isDelete  -- from index.cshtml
+
+// Submit the changed data (created, updated) into server side
+function Save() {
+    if (HQ.isInsert || HQ.isUpdate) {
+        var curRecord = App.frmMain.getRecord();
+        curRecord.data.Images = App.imgPPCStorePicReq.imageUrl;
+
+        App.frmMain.getForm().updateRecord();
+        if (App.frmMain.isValid()) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang('Submiting...'),
+                url: 'AR20200/Save',
+                params: {
+                    lstARSalesPersonHeader: Ext.encode(App.stoSalesPerson.getChangedData({ skipIdForPhantomRecords: false }))
+                },
+                success: function (action, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode, '', '');
+                    }
+                    App.cboSlsperid.getStore().reload();
+                    menuClick('refresh');
+                },
+
+                failure: function (action, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                    }
+                }
+            });
+        }
+    }
+};
+
+// Submit the deleted data into server side
+function Delete(item) {
+    if (item == 'yes') {
+        try {
+            App.direct.AR20200Delete(App.cboSlsperid.getValue(), App.cboBranchID.getValue(), {
+                success: function (data) {
+                    menuClick('refresh');
+                    App.cboSlsperid.getStore().load();
+                },
+                failure: function () {
+                    //
+                },
+                eventMask: { msg: HQ.common.getLang('DeletingData'), showMask: true }
+            });
+        } catch (ex) {
+            alert(ex.message);
+        }
+    }
+};
+
+// Upload the picture file to server
+function UploadImage() {
+    App.frmMain.submit({
+        waitMsg: 'Uploading your file...',
+        url: 'AR20200/Upload',
+
+        success: function (result) {
+            //
+        },
+        failure: function (error) {
+            //
+        }
+    });
+};
+
+// Load and show binding data to the form
+var stoSalesPerson_load = function () {
+    var record = App.stoSalesPerson.getAt(0);
+    if (record) {
+        // Edit record
+        App.frmMain.getForm().loadRecord(record);
+
+        if (record.data.Images) {
+            App.direct.AR20200GetImages(record.data.Images);
+        } else {
+            App.imgPPCStorePicReq.setImageUrl("");
+        }
+
+        if (record.data.Status == _hold) {
+            enableControls(true);
+        }
+        else {
+            enableControls(false);
+        }
+    } else {
+        // If has no record then create a new
+        var insertedRecord = Ext.create("App.mdlAR_Salesperson", {
+            BranchID: App.cboBranchID.value,
+            SlsperId: "",
+            Status: _hold
+        })
+        App.stoSalesPerson.insert(0, insertedRecord);
+        App.frmMain.getForm().loadRecord(insertedRecord);
+        App.imgPPCStorePicReq.setImageUrl("");
+
+        enableControls(true);
+    }
+};
+
+// Event when cboBranchID is changed or selected item
+var cboBranchID_Change = function (sender, e) {
+    App.cboDeliveryMan.getStore().reload();
+    App.cboSlsperid.getStore().load();
+    App.cboVendID.getStore().reload();
+};
+
+// Event when cboSlsperid is changed or selected item
+var cboSlsperid_Change = function (sender, e) {
+    App.stoSalesPerson.reload();
+};
+
+// Event when cboCountryId is changed or selected item
+var cboCountryId_Change = function (sender, e) {
+    App.cboState.getStore().load();
+};
+
+// Event when cboState is changed or selected item
+var cboState_Change = function (sender, e) {
+    App.cboDistrict.getStore().load();
+};
+
+// Event when cboStatus is changed or selected item
+var cboStatus_Change = function (sender, e) {
+    App.cboHandle.getStore().reload();
+};
+
+// Event when cboHandle is changed or selected item
+var cboHandle_Change = function (sender, e) {
+    var curRecord = App.frmMain.getRecord();
+    curRecord.setDirty();
+};
+
+// Event when uplPPCStorePicReq is change a file
+var NamePPCStorePicReq_Change = function (sender, e) {
+    var fileName = sender.getValue();
+    var ext = fileName.split(".").pop().toLowerCase();
+    if (ext == "jpg" || ext == "png" || ext == "gif") {
+        UploadImage();
+        var curRecord = App.frmMain.getRecord();
+        curRecord.data.Images = App.imgPPCStorePicReq.imageUrl;
+        curRecord.setDirty();
+    } else {
+        alert("Please choose a picture! (.jpg, .png, .gif)");
+        sender.reset();
+    }
+};
+
+// Click to clear image of sales person
+var btnClearImage_Click = function (sender, e) {
+    App.imgPPCStorePicReq.setImageUrl("");
+    var curRecord = App.frmMain.getRecord();
+    curRecord.data.Images = "";
+    curRecord.setDirty();
+};
+
+// Command of the topbar on screen
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            selectedIndex = 0;
+            var slsper = App.cboSlsperid.store.getAt(selectedIndex);
+            if (slsper) {
+                App.cboSlsperid.setValue(slsper.data.SlsperId);
+            }
+            break;
+        case "next":
+            if (selectedIndex < (App.cboSlsperid.store.getCount() - 1))
+                selectedIndex += 1;
+            var slsper = App.cboSlsperid.store.getAt(selectedIndex);
+            if (slsper) {
+                App.cboSlsperid.setValue(slsper.data.SlsperId);
+            }
+            break;
+        case "prev":
+            if (selectedIndex > 0)
+                selectedIndex -= 1;
+            var slsper = App.cboSlsperid.store.getAt(selectedIndex);
+            if (slsper) {
+                App.cboSlsperid.setValue(slsper.data.SlsperId);
+            }
+            break;
+        case "last":
+            selectedIndex = App.cboSlsperid.store.getCount() - 1;
+            var slsper = App.cboSlsperid.store.getAt(selectedIndex);
+            if (slsper) {
+                App.cboSlsperid.setValue(slsper.data.SlsperId);
+            }
+            break;
+        case "save":
+            Save();
+            break;
+        case "delete":
+            var curRecord = App.frmMain.getRecord();
+            if (curRecord && curRecord.data.Status == _hold) {
+                if (HQ.isDelete) {
+                    HQ.message.show(11, '', 'Delete');
+                }
+            }
+            break;
+        case "close":
+            if (App.frmMain.getRecord() != undefined) {
+                App.frmMain.updateRecord()
+            };
+            if (storeIsChange(App.stoSalesPerson, false)) {
+                HQ.message.show(5, '', 'closeScreen');
+            } else {
+                this.parentAutoLoadControl.close()
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                selectedIndex = 0;
+                App.cboSlsperid.setValue("");
+                cboSlsperid_Change(App.cboSlsperid);
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+            break;
+        case "refresh":
+            if (App.frmMain.isValid()) {
+                App.stoSalesPerson.reload();
+                App.cboHandle.setValue("");
+            }
+            break;
+        default:
+    }
+};
+
+// When anwser the confirmed closing
+var closeScreen = function (item) {
+    if (item == "no") {
+        this.parentAutoLoadControl.close()
+    }
+    else if (item == "yes") {
+        Save();
+    }
+};
+
+// Check the store of data is change or not
+function storeIsChange(store, isCreate) {
+    if (isCreate == undefined) isCreate = true;
+    if ((isCreate == true ? store.getChangedData().Created.length > 1 : false)
+        || store.getChangedData().Updated != undefined
+        || store.getChangedData().Deleted != undefined) {
+        return true;
+    }
+    return false;
+};
+
+function enableControls(enable) {
+    //App.cboBranchID.setReadOnly(enable);
+    App.chkActive.setReadOnly(!enable);
+    App.txtName.setReadOnly(!enable);
+    App.cboPosition.setReadOnly(!enable);
+    App.txtAddr1.setReadOnly(!enable);
+    App.txtAddr2.setReadOnly(!enable);
+    App.txtEMailAddr.setReadOnly(!enable);
+    App.cboDeliveryMan.setReadOnly(!enable);
+    App.cboSupID.setReadOnly(!enable);
+    App.txtCrLmt.setReadOnly(!enable);
+    App.cboCountryId.setReadOnly(!enable);
+    App.cboState.setReadOnly(!enable);
+    App.cboDistrict.setReadOnly(!enable);
+    App.txtPhone.setReadOnly(!enable);
+    App.txtFax.setReadOnly(!enable);
+    App.txtCmmnPct.setReadOnly(!enable);
+    App.chkPPCStorePicReq.setReadOnly(!enable);
+    App.chkPPCAdmin.setReadOnly(!enable);
+};

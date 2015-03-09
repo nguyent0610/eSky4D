@@ -107,6 +107,7 @@ var stoSalesPerson_load = function () {
 var cboBranchID_Change = function (sender, e) {
     App.cboDeliveryMan.getStore().reload();
     App.cboSlsperid.getStore().load();
+    App.cboVendID.getStore().reload();
 };
 
 // Event when cboSlsperid is changed or selected item
