@@ -56,13 +56,13 @@
             })      
             .Listeners(l =>
                 {
-                    //l.BeforeLoad.Fn = "stoBeforeLoad";
-                    //l.Load.Fn = "stoLoad";                   
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";                   
                 }
             )
         )
         <!-- Gọi hàm Body trong SA00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
-        @{Html.RenderAction("Body", new {lang=@Current.LangID});}
+        @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>
 </html>
  

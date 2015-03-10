@@ -10,7 +10,6 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
-
 namespace SA00000.Controllers
 {
     [DirectController]
@@ -63,11 +62,11 @@ namespace SA00000.Controllers
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Company"]);
                 ChangeRecords<SYS_Company> lstSYS_Company = dataHandler.BatchObjectData<SYS_Company>();
 
-                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSys_CompanyAddr"]);
-                ChangeRecords<SA00000_pgCompanyAddr_Result> lstSys_CompanyAddr = dataHandler1.BatchObjectData<SA00000_pgCompanyAddr_Result>();
+                //StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSys_CompanyAddr"]);
+                //ChangeRecords<SA00000_pgCompanyAddr_Result> lstSys_CompanyAddr = dataHandler1.BatchObjectData<SA00000_pgCompanyAddr_Result>();
 
-                StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstSYS_SubCompany"]);
-                ChangeRecords<SA00000_pgSubCompany_Result> lstSYS_SubCompany = dataHandler2.BatchObjectData<SA00000_pgSubCompany_Result>();
+                //StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstSYS_SubCompany"]);
+                //ChangeRecords<SA00000_pgSubCompany_Result> lstSYS_SubCompany = dataHandler2.BatchObjectData<SA00000_pgSubCompany_Result>();
                
                 #region Save Header Company
                 lstSYS_Company.Created.AddRange(lstSYS_Company.Updated);
@@ -80,7 +79,7 @@ namespace SA00000.Controllers
                     {
                         if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                         {
-                            UpdatingHeader(header, curHeader, false);
+                            UpdatingHeader(ref header, curHeader);
                         }
                         else
                         {
@@ -92,85 +91,89 @@ namespace SA00000.Controllers
                         //string images = getPathThenUploadImage(curHeader, UserID);
                         header = new SYS_Company();
                         header.CpnyID = CpnyID;
-                        UpdatingHeader(header, curHeader, true);
+                        header.Crtd_DateTime = DateTime.Now;
+                        header.Crtd_Prog = _screenNbr;
+                        header.Crtd_User = Current.UserName;
+                        header.tstamp = new byte[0];
+                        UpdatingHeader(ref header, curHeader);
                         _db.SYS_Company.AddObject(header);
                     }
                 }
                 #endregion
 
-                #region Save Sys_CompanyAddr
-                foreach (SA00000_pgCompanyAddr_Result deleted in lstSys_CompanyAddr.Deleted)
-                {
-                    var objDelete = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID == CpnyID && p.AddrID == deleted.AddrID);
-                    if (objDelete != null)
-                    {
-                        _db.Sys_CompanyAddr.DeleteObject(objDelete);
-                    }
-                }
+                //#region Save Sys_CompanyAddr
+                //foreach (SA00000_pgCompanyAddr_Result deleted in lstSys_CompanyAddr.Deleted)
+                //{
+                //    var objDelete = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID == CpnyID && p.AddrID == deleted.AddrID);
+                //    if (objDelete != null)
+                //    {
+                //        _db.Sys_CompanyAddr.DeleteObject(objDelete);
+                //    }
+                //}
 
-                lstSys_CompanyAddr.Created.AddRange(lstSys_CompanyAddr.Updated);
+                //lstSys_CompanyAddr.Created.AddRange(lstSys_CompanyAddr.Updated);
 
-                foreach (SA00000_pgCompanyAddr_Result curLang in lstSys_CompanyAddr.Created)
-                {
-                    if (curLang.AddrID.PassNull() == "" && CpnyID.PassNull() == "") continue;
+                //foreach (SA00000_pgCompanyAddr_Result curLang in lstSys_CompanyAddr.Created)
+                //{
+                //    if (curLang.AddrID.PassNull() == "" && CpnyID.PassNull() == "") continue;
 
-                    var lang = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.AddrID.ToLower() == curLang.AddrID.ToLower());
+                //    var lang = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.AddrID.ToLower() == curLang.AddrID.ToLower());
 
-                    if (lang != null)
-                    {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
-                        {
-                            UpdatingSys_CompanyAddr(lang, curLang, false);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
-                    }
-                    else
-                    {
-                        lang = new Sys_CompanyAddr();
-                        lang.CpnyID = CpnyID;
-                        UpdatingSys_CompanyAddr(lang, curLang, true);
-                        _db.Sys_CompanyAddr.AddObject(lang);
-                    }
-                }
-                #endregion
+                //    if (lang != null)
+                //    {
+                //        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                //        {
+                //            UpdatingSys_CompanyAddr(lang, curLang, false);
+                //        }
+                //        else
+                //        {
+                //            throw new MessageException(MessageType.Message, "19");
+                //        }
+                //    }
+                //    else
+                //    {
+                //        lang = new Sys_CompanyAddr();
+                //        lang.CpnyID = CpnyID;
+                //        UpdatingSys_CompanyAddr(lang, curLang, true);
+                //        _db.Sys_CompanyAddr.AddObject(lang);
+                //    }
+                //}
+                //#endregion
 
-                #region Save SYS_UserGroup
-                foreach (SA00000_pgSubCompany_Result deleted in lstSYS_SubCompany.Deleted)
-                {
-                    var del = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID == CpnyID && p.SubCpnyID == deleted.SubCpnyID);
-                    if (del != null)
-                    {
-                        _db.SYS_SubCompany.DeleteObject(del);
-                    }
-                }
+                //#region Save SYS_UserGroup
+                //foreach (SA00000_pgSubCompany_Result deleted in lstSYS_SubCompany.Deleted)
+                //{
+                //    var del = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID == CpnyID && p.SubCpnyID == deleted.SubCpnyID);
+                //    if (del != null)
+                //    {
+                //        _db.SYS_SubCompany.DeleteObject(del);
+                //    }
+                //}
 
-                lstSYS_SubCompany.Created.AddRange(lstSYS_SubCompany.Updated);
+                //lstSYS_SubCompany.Created.AddRange(lstSYS_SubCompany.Updated);
 
-                foreach (SA00000_pgSubCompany_Result curLang in lstSYS_SubCompany.Created)
-                {
-                    if (curLang.SubCpnyID.PassNull() == "" && CpnyID.PassNull()=="") continue;
+                //foreach (SA00000_pgSubCompany_Result curLang in lstSYS_SubCompany.Created)
+                //{
+                //    if (curLang.SubCpnyID.PassNull() == "" && CpnyID.PassNull()=="") continue;
 
-                    var lang = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.SubCpnyID.ToLower() == curLang.SubCpnyID.ToLower());
+                //    var lang = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.SubCpnyID.ToLower() == curLang.SubCpnyID.ToLower());
 
-                    if (lang != null)
-                    {
-                        throw new MessageException(MessageType.Message, "19");
-                    }
-                    else
-                    {
-                        lang = new SYS_SubCompany();
-                        lang.CpnyID = CpnyID;
-                        lang.SubCpnyID = curLang.SubCpnyID;
-                        _db.SYS_SubCompany.AddObject(lang);
-                    }
-                }
-                #endregion
+                //    if (lang != null)
+                //    {
+                //        throw new MessageException(MessageType.Message, "19");
+                //    }
+                //    else
+                //    {
+                //        lang = new SYS_SubCompany();
+                //        lang.CpnyID = CpnyID;
+                //        lang.SubCpnyID = curLang.SubCpnyID;
+                //        _db.SYS_SubCompany.AddObject(lang);
+                //    }
+                //}
+                //#endregion
 
                 _db.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true, CpnyID = CpnyID });
             }
             catch (Exception ex)
             {
@@ -180,15 +183,8 @@ namespace SA00000.Controllers
         }
 
         //Update Header Company
-        private void UpdatingHeader(SYS_Company t,SYS_Company s, bool isNew)
+        private void UpdatingHeader(ref SYS_Company t,SYS_Company s)
         {
-            if (isNew)
-            {
-                t.Crtd_DateTime = DateTime.Now;
-                t.Crtd_Prog = _screenNbr;
-                t.Crtd_User = _userName;
-            }
-
             t.CpnyName = s.CpnyName;
             t.Address = s.Address;
             t.Address1 = s.Address1;
