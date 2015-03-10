@@ -125,6 +125,24 @@ var HQ = {
             });
             return data;
         },
+        // TinhHV using for auto gen the LineRef
+        lastLineRef: function (store) {
+            var num = 0;
+            for (var j = 0; j < store.data.length; j++) {
+                var item = store.data.items[j];
+
+                if (!Ext.isEmpty(item.data.LineRef) && parseInt(item.data.LineRef) > num) {
+                    num = parseInt(item.data.LineRef);
+                }
+            };
+            num++;
+            var lineRef = num.toString();
+            var len = lineRef.length;
+            for (var i = 0; i < 5 - len; i++) {
+                lineRef = "0" + lineRef;
+            }
+            return lineRef;
+        },
         //kiem tra key da nhap du chua
         isAllValidKey: function (items, keys) {
             if (items != undefined) {
@@ -228,6 +246,10 @@ var HQ = {
             }
 
         },
+        expand: function (cbo, delimiter) {
+            if (cbo.getValue())
+                cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
+        },
     },
     grid: {
         showBusy: function (grd, isBusy) {
@@ -288,6 +310,15 @@ var HQ = {
             var store = combo.up("gridpanel").getStore();
             store.pageSize = parseInt(combo.getValue(), 10);
             store.reload();
+        },
+        indexSelect: function (grd) {
+            var index = '';
+            var arr = grd.getSelectionModel().getSelection();
+            arr.forEach(function (itm) {
+                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+            });
+
+            return index.substring(0, index.length - 1);
         },
         checkDuplicate: function (grd, row, keys) {
             var found = false;
@@ -549,6 +580,11 @@ var HQ = {
                 });
             }
         },
+        control_render: function (control, itemfocus) {
+            control.getEl().on("click", function () {
+                HQ.focus = itemfocus;
+            });
+        }
     },
     util: {
         toBool: function (parm) {
@@ -610,6 +646,15 @@ var HQ = {
                     HQ.util.focusControlInTab(itm, field);
                 });
             }
+        },
+        checkEmail: function (value) {
+            var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            if ((HQ.util.passNull(value)).match(regex)) {
+                return true;
+            } else {
+                HQ.message.show(09112014, '', null);
+                return false;
+            }
         }
     },
     form: {
@@ -665,7 +710,8 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 2) value = '';
+        if (value.split(',').length > 2) value = '';//value.split(',')[value.split(',').length-1];
+        if (value.split(';').length > 2) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {
@@ -706,7 +752,7 @@ Ext.define("ThousandSeparatorNumberField", {
     * @cfg {Boolean} useThousandSeparator
     */
     useThousandSeparator: true,
-    decimalPrecision: 0,
+    //decimalPrecision: 0,
     style: 'text-align: right',
     fieldStyle: "text-align:right;",
     /**

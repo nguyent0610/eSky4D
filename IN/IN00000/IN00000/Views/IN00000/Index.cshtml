@@ -25,7 +25,6 @@
         }
     </style>
     <script>
-
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
@@ -38,11 +37,8 @@
 </head>
 <body>   
     @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
-    
-
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
-        <!-- Gọi hàm Body trong IN00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->
         @(X.Store().ID("stoIN00000")  
             .Model(Util.GenerateModel(typeof(IN_Setup), "IN00000Model", "BrandID"))       
             .Proxy(
@@ -65,7 +61,8 @@
                 l.Load.Fn = "stoLoad";                   
             })
       )            
-        @{Html.RenderAction("Body");}   
+      <!-- Gọi hàm Body trong IN00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
+        @{Html.RenderAction("Body", new {lang=Current.LangID});}
     
 </body>
 </html>

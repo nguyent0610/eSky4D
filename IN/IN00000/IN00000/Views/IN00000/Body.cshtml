@@ -21,7 +21,7 @@
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", false, ""))
-    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Left; act.LabelWidth = 200; })
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
     .Listeners(l =>
     {
         l.BoxReady.Handler = "firstLoad();";
@@ -40,7 +40,7 @@
                 , HQ.Checkbox().ID("CnvFactEditable").Name("CnvFactEditable").HQLangCode("CnvFactEditable").MarginSpec("0 0 0 10")
                 , HQ.Checkbox().ID("CheckINVal").Name("CheckINVal").HQLangCode("CheckINVal").MarginSpec("0 0 0 10")
                 
-                , HQ.TextBox().ID("txtPreFixBat").Name("txtPreFixBat").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                , HQ.TextBox().ID("txtPreFixBat").Name("txtPreFixBat").MaxLength(10).EnforceMaxLength(true)
                     .DataIndex("PreFixBat").HQLangCode("Prefix").Width(400).MarginSpec("10 0 0 10")
                 , HQ.TextBox().ID("txtLastBatNbr").Name("txtLastBatNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
                     .DataIndex("LastBatNbr").HQLangCode("LastBatNbr").Width(400).MarginSpec("5 0 0 10")
@@ -70,6 +70,10 @@
                 , HQ.Combo().ID("cboDfltValMthd").Name("cboDfltValMthd").HQLangCode("ValMthd").HQProcedure("IN00000_pcValuation").AllowBlank(false)
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Width(400).DataIndex("DfltValMthd").HQDBSys(true)
                     .HQHeightWidth(400, 400).MarginSpec("5 0 0 10").LabelAlign(LabelAlign.Left)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
                     .LoadData()
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>

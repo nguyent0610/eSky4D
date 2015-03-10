@@ -19,7 +19,6 @@ namespace IN00000.Controllers
     {
         private string _screenNbr = "IN00000";
         private string _userName = Current.UserName;
-
         IN00000Entities _db = Util.CreateObjectContext<IN00000Entities>(false);
 
         public ActionResult Index()
@@ -28,7 +27,7 @@ namespace IN00000.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

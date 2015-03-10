@@ -44,12 +44,12 @@ namespace IN00000
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
-            Session["SA00900"] = acc;
+            Session["IN00000"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "18510580";
-            Session["Language"] = Current.Language = "en";
-            Session["LangID"] = 0;
+            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
+            Session["Language"] = Current.Language = "vi";
+            Session["LangID"] = 1;
         }
     }
 }
