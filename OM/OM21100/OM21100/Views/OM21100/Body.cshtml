@@ -19,7 +19,7 @@
         //.DefaultAnchor("100%")
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
-        .TopBar(Util.SetupToolbar("PO20100","Main.Event.menuClick"))
+        .TopBar(Util.SetupToolbar("PO20100", "Main.Event.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Items(
             X.TabPanel().ID("tabMain")
@@ -88,8 +88,8 @@
                                 new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                             })
                             .LoadData()
-                            .Listeners(l=>l.Change.Fn="DiscDefintion.Event.cboDiscClass_change")
-                            
+                            .Listeners(l => l.Change.Fn = "DiscDefintion.Event.cboDiscClass_change")
+
                             , X.Hidden().ID("tstamp").DataIndex("tstamp")
                         ) // Container
                     ) // frmDiscDefintionTop
@@ -300,21 +300,27 @@
                                     .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
                                     .Listeners(l => l.Command.Handler = "Main.Event.grd_reject(this, record);")
                                 )
-                                .SelectionModel(X.RowSelectionModel().ID("slmDiscBreak").Mode(SelectionMode.Multi))
+                                .SelectionModel(
+                                    X.RowSelectionModel().ID("slmDiscBreak").Mode(SelectionMode.Single)
+                                    .Listeners(x => {
+                                        x.SelectionChange.Fn = "DiscDefintion.Event.slmDiscBreak_selectChange"; 
+                                    })
+                                )
                                 .Plugins(
                                     X.CellEditing()
                                     .ClicksToEdit(1)
                                     .Listeners(ls =>
                                     {
                                         ls.BeforeEdit.Fn = "Main.Event.grd_beforeEdit";
-                                        ls.Edit.Fn = "Main.Event.grd_edit";
+                                        ls.Edit.Fn = "DiscDefintion.Event.grdDiscBreak_edit";
                                         ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                                     })
                                 )
-                                .Listeners(ls => {
-                                    ls.Render.Fn = "Main.Event.control_render"; 
+                                .Listeners(ls =>
+                                {
+                                    ls.Render.Fn = "Main.Event.control_render";
                                 }) // grdDiscBreak
-                                
+
                                 , X.GridPanel().ID("grdFreeItem")
                                 .Title(Util.GetLang("FreeItemList")).TitleAlign(TitleAlign.Center)
                                 .Scroll(ScrollMode.Both).Flex(4)
@@ -353,7 +359,7 @@
                                             new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdFreeItem,'FreeItemID')",ParameterMode.Raw)//se fix lai
                                         })
                                         .LoadData()
-                                        .Listeners(x=>x.Expand.Handler="this.store.reload()")
+                                        .Listeners(x => x.Expand.Handler = "this.store.reload()")
                                     )
 
                                     , X.Column().Text(Util.GetLang("SiteID")).DataIndex("FreeITemSiteID")
@@ -388,7 +394,7 @@
                                         .LoadData()
                                     )
 
-                                    , X.CommandColumn() 
+                                    , X.CommandColumn()
                                     .Commands(
                                         X.GridCommand()
                                         .Text(Util.GetLang("Reject"))
@@ -406,16 +412,18 @@
                                     .Listeners(ls =>
                                     {
                                         ls.BeforeEdit.Fn = "Main.Event.grd_beforeEdit";
-                                        ls.Edit.Fn = "Main.Event.grd_edit";
+                                        ls.Edit.Fn = "DiscDefintion.Event.grdFreeItem_edit";
                                         ls.ValidateEdit.Fn = "Main.Event.grd_validateEdit";
                                     })
                                 )
-                                .Listeners(ls => {
-                                    ls.Render.Fn = "Main.Event.control_render"; 
+                                .Listeners(ls =>
+                                {
+                                    ls.Render.Fn = "Main.Event.control_render";
                                 }) // grdFreeItem
                             ) // Panel
                         )
-                        .Listeners(ls => {
+                        .Listeners(ls =>
+                        {
                             //ls.Render.Fn = "Main.Event.control_render"; 
                         })// pnlDiscSeq
 
@@ -451,7 +459,7 @@
                                 de.Expand.Timeout = 60000;
                                 de.Expand.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
                                 de.Expand.EventMask.ShowMask = true;
-                                de.Expand.EventMask.Msg =Util.GetLang("LoadingData");
+                                de.Expand.EventMask.Msg = Util.GetLang("LoadingData");
                                 de.Expand.EventMask.MinDelay = 500;
                             })
                             .BottomBar(
@@ -493,7 +501,7 @@
                                 .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
                                 .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
                                 .Handler("DiscDefintion.Event.btnAdd_click")
-                                
+
                                 , HQ.Button().ID("btnDel")
                                 .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
                                 .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
@@ -554,8 +562,9 @@
                                 })
                             ) // grdCompany
                         )
-                        .Listeners(ls => {
-                            ls.Render.Fn = "Main.Event.control_render"; 
+                        .Listeners(ls =>
+                        {
+                            ls.Render.Fn = "Main.Event.control_render";
                         })// pnlAppComp
                     ) // tabDiscDefintionCenter
                 ) // pnlDiscDefintion
@@ -600,7 +609,7 @@
                                 new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdDiscItem,'InvtID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
-                            .Listeners(x=>x.Expand.Handler="this.store.reload();")
+                            .Listeners(x => x.Expand.Handler = "this.store.reload();")
                         )
 
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
@@ -630,8 +639,9 @@
                         })
                     ) // grdDiscItem
                 )
-                .Listeners(ls => {
-                    ls.Render.Fn = "Main.Event.control_render"; 
+                .Listeners(ls =>
+                {
+                    ls.Render.Fn = "Main.Event.control_render";
                 })// pnlDPII
 
                 , X.Panel().ID("pnlDPBB")
@@ -700,8 +710,9 @@
                         })
                     ) // grdBundle
                 )
-                .Listeners(ls => {
-                    ls.Render.Fn = "Main.Event.control_render"; 
+                .Listeners(ls =>
+                {
+                    ls.Render.Fn = "Main.Event.control_render";
                 })// pnlDPBB
 
                 , X.Panel().ID("pnlDPTT")
@@ -754,8 +765,9 @@
                         })
                     ) // grdDiscCustClass
                 )
-                .Listeners(ls => {
-                    ls.Render.Fn = "Main.Event.control_render"; 
+                .Listeners(ls =>
+                {
+                    ls.Render.Fn = "Main.Event.control_render";
                 }) // pnlDPTT
 
                 , X.Panel().ID("pnlDPCC")
@@ -810,8 +822,9 @@
                         })
                     ) // grdDiscCustClass
                 )
-                .Listeners(ls => {
-                    ls.Render.Fn = "Main.Event.control_render"; 
+                .Listeners(ls =>
+                {
+                    ls.Render.Fn = "Main.Event.control_render";
                 }) // pnlDPCC
 
                 , X.Panel().ID("pnlDPPP")
@@ -847,7 +860,7 @@
                                 new StoreParameter("@ClassID","Main.Process.getParamForGridCombo(App.grdDiscItemClass,'ClassID')",ParameterMode.Raw)//se fix lai
                             })
                             .LoadData()
-                            .Listeners(x=>x.Expand.Handler="this.store.reload()")
+                            .Listeners(x => x.Expand.Handler = "this.store.reload()")
                         )
 
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
@@ -877,13 +890,15 @@
                         })
                     ) // grdDiscItemClass
                 )
-                .Listeners(ls => {
-                    ls.Render.Fn = "Main.Event.control_render"; 
+                .Listeners(ls =>
+                {
+                    ls.Render.Fn = "Main.Event.control_render";
                 }) // pnlDPPP
 
             ) // tabMain
         )
-        .Listeners(l => {
+        .Listeners(l =>
+        {
             l.BoxReady.Fn = "Main.Event.frmMain_boxReady";
         })// frmMain
     ) // Viewport

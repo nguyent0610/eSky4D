@@ -28,7 +28,7 @@ var Main = {
                 for (var i = 0; i < items.length; i++) {
                     for (var j = 0; j < keys.length; j++) {
                         if (items[i][keys[j]])
-                             flag = i;
+                            flag = i;
                     }
                 }
                 if (flag == items.length - 1) {
@@ -107,7 +107,7 @@ var Main = {
 
         saveData: function () {
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if(App.frmMain.isValid()){ //if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                if (App.frmMain.isValid()) { //if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
                     //var discId = App.cboDiscID.getValue();
                     //var discSeq = App.cboDiscSeq.getValue();
                     var status = App.cboStatus.value;
@@ -142,7 +142,7 @@ var Main = {
                             App.frmMain.submit({
                                 waitMsg: HQ.common.getLang("SavingData"),
                                 url: 'OM21100/SaveData',
-                                timeout:10000000,
+                                timeout: 10000000,
                                 params: {
                                     isNewDiscID: _isNewDisc,
                                     isNewDiscSeq: _isNewSeq,
@@ -157,7 +157,7 @@ var Main = {
                                     //lstDiscCustChange: HQ.store.getData(App.grdDiscCust.store),
                                     //lstDiscItemClassChange: HQ.store.getData(App.grdDiscItemClass.store),
 
-                                    lstDiscSeqInfo: (function(){
+                                    lstDiscSeqInfo: (function () {
                                         App.stoDiscSeqInfo.each(function (item) {
                                             item.data.Active = App.chkActive.value ? 1 : 0;
                                             item.data.Promo = App.chkDiscTerm.value ? 1 : 0;
@@ -244,7 +244,7 @@ var Main = {
         },
 
         grd_beforeEdit: function (editor, e) {
-            
+
             if (HQ.isUpdate) {
                 if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
                     var status = App.cboStatus.value;
@@ -436,11 +436,12 @@ var Main = {
                 case "print":
                     break;
                 case "close":
-                    //if (HQ.store.isChange(App.stoLanguage)) {
-                    //    HQ.message.show(5, '', 'askClose');
-                    //} else {
-                    //    HQ.common.close(this);
-                    //}
+                    if (App["parentAutoLoadControl"] != undefined) {
+                        App["parentAutoLoadControl"].close();
+                    }
+                    else {
+                        parentAutoLoadControl.close();
+                    }
                     break;
             }
         }
@@ -783,5 +784,3 @@ var DiscDefintion = {
         }
     }
 };
-
-
