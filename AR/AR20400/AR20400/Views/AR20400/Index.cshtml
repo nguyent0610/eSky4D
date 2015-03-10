@@ -88,6 +88,55 @@
             })
   )
 
+@(Html.X().Store().ID("storeGridLTTTop").AutoLoad(false)
+        .Model(Util.GenerateModel(typeof(AR_LTTContract), "AR_LTTContract_ResultModel", "LTTContractNbr"))
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetDataGridLTTContract", "AR20400"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        )
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("CustID", "App.cboCustId.getValue()", ParameterMode.Raw));
+                            })
+        .Listeners(l =>
+        {
+            //l.BeforeLoad.Fn = "stoBeforeLoadTop";
+            //l.Load.Fn = "stoLoadTop";
+            //l.Update.Fn = "stoChangedTop";
+        })
+        .Listeners(p=>p.Load.Fn="loadDataGridLTTContract" )
+  )
+
+@(Html.X().Store().ID("storeGridLTTBot").AutoLoad(false)
+        .Model(Util.GenerateModel(typeof(AR_LTTContractDetail), "AR_LTTContractDetail_ResultModel", ""))
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetDataGridLTTContractDetail", "AR20400"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("LTTContractNbr", "App.slmTopGrid.selected.items[0].data.LTTContractNbr", ParameterMode.Raw));
+            })
+        .Listeners(l =>
+        {
+            //l.BeforeLoad.Fn = "stoBeforeLoadTop";
+            //l.Load.Fn = "stoLoadTop";
+            //l.Update.Fn = "stoChangedTop";
+        })
+       .Listeners(p=>p.Load.Fn="loadDataGridLTTContractDetail" )
+  )
+
+
 
 
 

@@ -31,24 +31,39 @@
         //.Listeners(itm => itm.AfterRender.Fn = "frmloadAfterRender")
         //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
         .Items(
-                Html.X().TreePanel().ID("IDTree")
-                .Title("Tree")
-                .Layout(LayoutType.Fit)
+                X.FormPanel()
                 .AutoScroll(true)
+                .Layout(LayoutType.Fit)
                 .ColumnWidth(0.20)
-                .Height(550)
-                //.Width(250)
-                .Border(false)
-                .SelectionModel(Html.X().TreeSelectionModel().ID("slmTree").Mode(SelectionMode.Multi))
-                    //.Root(
-                    //    (Node)ViewData["resultRoot"]
-                        
-                    //)
-                .Listeners(lst =>
-                {
-                    lst.ItemClick.Fn = "NodeSelected_Change";
-                })
+                .ID("frmTree")
                 
+                .TrackResetOnLoad(true)
+          
+                .BodyPadding(0)
+                //.TopBar(Util.SetupToolbar("Print",true))
+             
+                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+                .Items(
+                
+                
+                    Html.X().TreePanel().ID("IDTree")
+                    .Title("Tree")
+                    .Layout(LayoutType.Fit)
+                    //.AutoScroll(true)
+                    //.ColumnWidth(0.20)
+                    .Height(550)
+                    //.Width(250)
+                    .Border(false)
+                    .SelectionModel(Html.X().TreeSelectionModel().ID("slmTree").Mode(SelectionMode.Multi))
+                        //.Root(
+                        //    (Node)ViewData["resultRoot"]
+                        
+                        //)
+                    .Listeners(lst =>
+                    {
+                        lst.ItemClick.Fn = "NodeSelected_Change";
+                    })
+                )
                 ,X.FormPanel()
                 .AutoScroll(true)
                 .Layout(LayoutType.Fit)
@@ -64,6 +79,7 @@
                 //.TopBar(Util.SetupToolbar("Print",true))
                  .Listeners(l =>
                     {
+                        //l.Render.Handler = "HQ.common.control_render(this,'header')";
                         l.BoxReady.Handler = "firstLoad();";
                         l.FieldChange.Fn = "frmChange";
                     })
@@ -72,6 +88,11 @@
                     X.Panel().ID("Header").Layout(LayoutType.Fit)//.AutoScroll(true)
                     .Items(
                         X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
+                        .Listeners(l =>
+                        {
+                            l.Render.Handler = "HQ.common.control_render(this,'header')";
+                   
+                        })
                         .Items(
                                 //ma khach hang
                                 HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").HQProcedure("AR20400_pcCustomer")
@@ -205,31 +226,16 @@
                                             X.Panel()
                                             .ID("tabCustInfo")
                                             .Layout(LayoutType.Column)
-                                            
-                                            //.AutoScroll(true)
-                                            //.AnchorVertical("100%")
-                                            //.AnchorHorizontal("100%")
-                                            
-                                                
+                  
                                             .Title(Util.GetLang("CustInfo"))
                                             .Padding(5)
+                                            .Listeners(l =>
+                                            {
+                                                l.Render.Handler = "HQ.common.control_render(this,'header')";
+                   
+                                            })
                                             .Items(
-                                            
-                                            //X.FormPanel()
-                                            //        .Layout(LayoutType.Fit)
-                                            //        .ID("dataFormBotLeftTab1All")
-                                                    
-                                            //        //.AutoScroll(true)
-                                            //        //.TrackResetOnLoad(true)
-                                            //        //.DefaultAnchor("100%")
-                                            //        //.AnchorVertical("100%")
-                                            //        //.AnchorHorizontal("100%")
-                                            //        .BodyPadding(0)
-                                            //        //.TopBar(Util.SetupToolbar("Print",true))
-                                            //        //.FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
-                                            //        .MarginSpec("0 5 0 0")
-                                            //        //.MarginSpec("0 0 0 20")
-                                            //        .Items( 
+                         
                                                 //ten khach hang
                                                 HQ.TextBox().ID("txtCustName").Name("txtCustName").HQLangCode("CUSTNAME").DataIndex("CustName")
                                                 .Width(610).MarginSpec("5 0 5 0").MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
@@ -666,7 +672,11 @@
                                             .AnchorVertical("100%")
                                             .Title(Util.GetLang("Address"))
                                             .Padding(5)
-                                            
+                                            .Listeners(l =>
+                                            {
+                                                l.Render.Handler = "HQ.common.control_render(this,'header')";
+                   
+                                            })
                                             .Items(
                                                 X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
                                                 .Items(
@@ -928,7 +938,11 @@
                                                 .Padding(5)
                                                 .Title(Util.GetLang("Tax"))
                                                 .CloseAction(CloseAction.Hide)
-                                                //.Disabled(true)
+                                                .Listeners(l =>
+                                                {
+                                                    l.Render.Handler = "HQ.common.control_render(this,'header')";
+                   
+                                                })
                                                 .Items(
                                                     
                                                     X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0").Width(550)
@@ -1056,51 +1070,258 @@
                         
                                                 // ngoac ket thuc tab 3             
                                                 )
+                                                
+                                                
+                                                , X.Panel()
+                                                .ID("tabLTT")
+                                                .Layout(LayoutType.Border)
+                                                .AnchorHorizontal("100%")
+                                                .AnchorVertical("100%")
+                                                .Padding(0)
+                                                .Title(Util.GetLang("LTTCONT"))
+                                                .CloseAction(CloseAction.Hide)
+                                                .AutoScroll(true)
+                                                //.Collapsed(true)
+                                                //.Disabled(true)
+                                                .Items(
+                                                    X.Panel().ID("pnlTop")
+                                                    .Region(Region.North).Flex(1)
+                                                    .Layout(LayoutType.Border)
+                                                    .AnchorVertical("50%")
+                                                    .Split(true)
+                                                    .Items(
+                                                        X.GridPanel()
+                                                        .Region(Region.Center)
+                                                        .Scroll(ScrollMode.Both)
+                                                        .View(X.GridView().TrackOver(false))
+                                                        .ID("grdTop")
+                                                        .StoreID("storeGridLTTTop")
+                                                                
+                                                        .Listeners(p =>
+                                                        {
+                                                            // p.BoxReady.Handler = "firstLoadTop();";
+                                                            p.Render.Handler = "HQ.common.control_render(this,'grdLTTContract');";    
+                                                            p.Select.Fn = "GridTop_Change";
+                                                        })
+                                                        .SortableColumns(false)
+                                                        .ColumnModel(
+                                                            X.RowNumbererColumn().Width(40),
 
+
+                                                                X.Column().Text(Util.GetLang("LTTConNbr")).ID("txtLTTContractNbr")
+                                                                .DataIndex("LTTContractNbr").Width(100).Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
+
+                                                                ,Html.X().CheckColumn().Text(Util.GetLang("Active")).DataIndex("Active")
+                                                                .Width(80).Editable(true)
+                                                                //.Listeners(p=>p.CheckChange.Fn="onCheckChange")   
+                                                                            
+                                                                //FromDate
+                                                                , Html.X().DateColumn().Text(Util.GetLang("FromDate")).DataIndex("FromDate").Width(100).ID("txtFromDate")
+                                                                .Editor(Html.X().DateField().Format("dd-MM-yyyy")).Format("dd-MM-yyyy")
+                                                                     
+                                                                //ToDate             
+                                                                , Html.X().DateColumn().Text(Util.GetLang("ToDate")).DataIndex("ToDate").Width(100).ID("txtToDate")
+                                                                .Editor(Html.X().DateField().Format("dd-MM-yyyy")).Format("dd-MM-yyyy")
+                                                                     
+                                                                //ExtDateDate
+                                                                , Html.X().DateColumn().Text(Util.GetLang("ExtDate")).DataIndex("ExtDate").Width(100).ID("txtExtDate")
+                                                                .Editor(Html.X().DateField().Format("dd-MM-yyyy")).Format("dd-MM-yyyy")
+                                                                     
+                                                                //MonthNum
+                                                                , Html.X().NumberColumn().Text(Util.GetLang("MonthNum")).DataIndex("MonthNum").Format("0").Width(80)
+                                                                .Editor(Html.X().NumberField()).ID("txtMonthNum")
+                                                                     
+                                                                //QtyCommit
+                                                                , Html.X().NumberColumn().Text(Util.GetLang("QtyCommit")).DataIndex("QtyCommit").Format("0").Width(80)
+                                                                .Editor(Html.X().NumberField()).ID("txtQtyCommit")
+                                                                     
+                                                                //AmtCommit
+                                                                , Html.X().NumberColumn().Text(Util.GetLang("AmtCommit")).DataIndex("AmtCommit").Format("0").Width(150)
+                                                                .Editor(Html.X().NumberField()).ID("txtAmtCommit")
+                                                                     
+                                                                //TotQtyCommit
+                                                                , Html.X().NumberColumn().Text(Util.GetLang("TotQtyCommit")).DataIndex("TotQty").Format("0").Width(100)
+                                                                .Editor(Html.X().NumberField()).ID("txtTotQty")
+                                                                     
+                                                                //TotAmtCommit
+                                                                , Html.X().NumberColumn().Text(Util.GetLang("TotAmtCommit")).DataIndex("TotAmt").Format("0").Width(150)
+                                                                .Editor(Html.X().NumberField()).ID("txtTotAmt")
+                                                                     
+                                                                //Status
+                                                                ,X.Column().Text(Util.GetLang("Status")).ID("txtLTTContractStatus")
+                                                                .DataIndex("Status").Width(100).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
+                                                                    
+                                                                //UnitCommit
+                                                                ,X.Column().Text(Util.GetLang("UnitDesc")).ID("txtUnitCommit")
+                                                                .DataIndex("UnitCommit").Width(50).Editor(X.TextField().MaxLength(10).EnforceMaxLength(true))
+                                                                     
+                                                                //ActualQty
+                                                                ,Html.X().NumberColumn().Text(Util.GetLang("ActualQty")).DataIndex("ActualQty").Format("0").Width(150)
+                                                                .Editor(Html.X().NumberField()).ID("txtActualQty")
+                                                                    
+                                                                //ActlAmt
+                                                                ,Html.X().NumberColumn().Text(Util.GetLang("ActlAmt")).DataIndex("ActualAmt").Format("0").Width(150)
+                                                                .Editor(Html.X().NumberField()).ID("txtActualAmt")
+                                                                    
+
+                                                            ,X.CommandColumn()
+                                                            .Width(150)
+                                                            .Commands(
+                                                                X.GridCommand()
+                                                                .Text(Util.GetLang("Reject"))
+                                                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                                                .CommandName("reject")
+                                                                .Icon(Icon.ArrowUndo)
+                                                            )
+                                                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                                            .Listeners(l => l.Command.Handler = "grdTop_Reject(record);")
+                                                        ) // ngoac ket thuc column grid top
+                                                        .SelectionModel(X.RowSelectionModel().ID("slmTopGrid").Mode(SelectionMode.Multi))
+                                                        //.Listeners(lst => {
+                                                        //    lst.Select.Fn = "GridTop_Change";
+                                                        //})
+                                                           
+                                                        .Plugins(
+                                                            X.CellEditing()
+                                                            .ClicksToEdit(1)
+                                                            .Listeners(ls =>
+                                                            {
+                                                                ls.BeforeEdit.Fn = "grdTop_BeforeEdit";
+                                                                ls.Edit.Fn = "grdTop_Edit";
+                                                                ls.ValidateEdit.Fn = "grdTop_ValidateEdit";
+
+                                                            })
+                                                        )
+                                                        .Features(
+                                                            X.GridFilters()
+                                                            .Local(true)
+                                                            .Filters(
+                                                                //X.StringFilter().DataIndex("AppFolID"),
+                                                                //X.StringFilter().DataIndex("DescrScreen"),
+                                                                //X.StringFilter().DataIndex("RoleID"),
+                                                                //X.StringFilter().DataIndex("Status"),
+                                                                //X.StringFilter().DataIndex("Descr"),
+                                                                //X.StringFilter().DataIndex("LangStatus")
+                                                            )
+                                                        ) // ngoac feature Grid top
+                                                    ) // pnlTop
+                                                    
+                                                    , X.Panel().ID("pnlBot")
+                                                    .Region(Region.Center).Flex(1)
+                                                    .Layout(LayoutType.Border)
+                                                    .Items(
+                                                        X.GridPanel()
+                                                        .Scroll(ScrollMode.Both)
+                                                        .View(X.GridView().TrackOver(false))
+                                                        .Region(Region.Center)
+                                                        .ID("grdBot")
+                                                        .StoreID("storeGridLTTBot")
+                                                        .SortableColumns(false)
+                                                        .Listeners(p =>
+                                                        {
+                                                            p.Render.Handler = "HQ.common.control_render(this,'grdLTTContractDetail');";    
+                                                        })
+                                                        .ColumnModel(
+                                                            X.RowNumbererColumn().Width(40)
+                                                            
+                                                            //cboType
+                                                             ,X.Column().Text(Util.GetLang("Type")).DataIndex("Type").Width(150)
+                                                             .Editor(
+                                                                HQ.Combo().ID("cboType")
+                                                                .Name("cboType").HQProcedure("AR20400_pcLTTContractDetailType")
+                                                                .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                                                                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                                                .HQParam(new StoreParameterCollection()
+                                                                {
+                                                                   new StoreParameter() { Name = "@Langid", Value = "HQ.langID" , Mode = ParameterMode.Raw }
+                                                                })
+                                                                .LoadData()
+                                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                                .Listeners(lst =>
+                                                                {
+                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                    //lst.Change.Fn = "cboAppFolID_Change";
+                                                                })
+                                                             )
+                                                             
+                                                             //txtLTTContractDetailDescr
+                                                             ,X.Column().Text(Util.GetLang("Descr")).ID("txtLTTContractDetailDescr")
+                                                             .DataIndex("Descr").Width(100).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
+                                                                                                                          
+                                                             //txtAmt
+                                                             ,Html.X().NumberColumn().Text(Util.GetLang("Amt")).DataIndex("Amt").Format("0").Width(150)
+                                                             .Editor(Html.X().NumberField()).ID("txtAmt")
+                                                             
+                                                             //txtLTTContractDetailStatus
+                                                             ,X.Column().Text(Util.GetLang("Status")).ID("txtLTTContractDetailStatus")
+                                                             .DataIndex("Status").Width(100).Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
+                                                            
+                                                            
+                                                            , Html.X().Column().ID("txtLineRef").Text(Util.GetLang("LineRef")).Width(100)
+                                                            .DataIndex("LineRef").Hidden(true)
+                                                            
+                                                            ,X.CommandColumn()
+                                                            .Width(150)
+                                                            .Commands(
+                                                                X.GridCommand()
+                                                                .Text(Util.GetLang("Reject"))
+                                                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                                                .CommandName("reject")
+                                                                .Icon(Icon.ArrowUndo)
+                                                            )
+                                                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                                            .Listeners(l => l.Command.Handler = "grdBot_Reject(record);")
+                                                        //ngoac ket thuc cac column
+                                                        )
+                                                        .SelectionModel(X.RowSelectionModel().ID("slmBotGrid").Mode(SelectionMode.Multi))
+                                                                   
+                                                        .Plugins(
+                                                            X.CellEditing()
+                                                            .ClicksToEdit(1)
+                                                            .Listeners(ls =>
+                                                            {
+                                                                ls.BeforeEdit.Fn = "grdBot_BeforeEdit";
+                                                                ls.Edit.Fn = "grdBot_Edit";
+                                                                ls.ValidateEdit.Fn = "grdBot_ValidateEdit";
+
+                                                            })
+                                                        )
+
+                                                        .Features(
+                                                            X.GridFilters()
+                                                                .Local(true)
+                                                                .Filters(
+                                                                    //X.StringFilter().DataIndex("Handle"),
+                                                                    //X.StringFilter().DataIndex("LangHandle"),
+                                                                    //X.StringFilter().DataIndex("ToStatus"),
+                                                                    //X.StringFilter().DataIndex("ContentApprove"),
+                                                                    //X.StringFilter().DataIndex("MailSubject"),
+                                                                    //X.StringFilter().DataIndex("MailApprove"),
+                                                                    //X.StringFilter().DataIndex("ProcContent"),
+                                                                    //X.StringFilter().DataIndex("MailTo"),
+                                                                    //X.NumericFilter().DataIndex("MailCC"),
+                                                                    //X.NumericFilter().DataIndex("ProcName"),
+                                                                    //X.NumericFilter().DataIndex("Param00"),
+                                                                    //X.NumericFilter().DataIndex("Param01"),
+                                                                    //X.BooleanFilter().DataIndex("Param02"),
+                                                                    //X.BooleanFilter().DataIndex("Param03"),
+                                                                    //X.BooleanFilter().DataIndex("Param04"),
+                                                                    //X.BooleanFilter().DataIndex("Param05")
+                                                                )
+                                                        ) // ngoac ket thuc feature Filter
+                                                    ) // pnlBot
+                                                )// ngoac ket thuc tab  LTT
+                                                
+                                                )
                                         //ngoac panel chinh cua tat ca tab   
-                                         )
-                        
-                            
-                                     
-                                    
-                                
-                                
-                                
-                                
-                                   
-                                    
-
-                                     
-                                //    )
-                                    
-                                    
-                                    
-                         
-                     
-                                        
+                                        // )
+                                //    )                     
               //ngoac ket thuc panel ben phai           
                   )
-                                
-                                
-                                
-                                
-
-
-                
                   //ngoac ket thuc Panel frmMain
                     )
-        
-        
-        
-            
-
-
                )
-
       )
-
-
-
-
 
  )
