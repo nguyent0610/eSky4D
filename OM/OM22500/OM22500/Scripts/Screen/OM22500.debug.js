@@ -23,8 +23,14 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdOM_ReasonCode);
             break;
         case "refresh":
-            HQ.isFirstLoad = true;
-            App.stoOM_ReasonCode.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoOM_ReasonCode.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
@@ -48,65 +54,14 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.isChange) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
 
 };
-var grdOM_ReasonCode_BeforeEdit = function (editor, e) {
-    return HQ.grid.checkBeforeEdit(e, keys);
-};
-var grdOM_ReasonCode_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdOM_ReasonCode, e, keys);
-};
-var grdOM_ReasonCode_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdOM_ReasonCode, e, keys);
-};
-var grdOM_ReasonCode_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdOM_ReasonCode);
-    stoChanged(App.stoOM_ReasonCode);
-};
-/////////////////////////////////////////////////////////////////////////
-//// Process Data ///////////////////////////////////////////////////////
-var save = function () {
-    if (App.frmMain.isValid()) {
-        App.frmMain.submit({
-            waitMsg: HQ.common.getLang("SavingData"),
-            url: 'OM22500/Save',
-            params: {
-                lstOM_ReasonCode: HQ.store.getData(App.stoOM_ReasonCode)
-            },
-            success: function (msg, data) {
-                HQ.message.show(201405071);
-                menuClick("refresh");
-            },
-            failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
-            }
-        });
-    }
-};
-
-var deleteData = function (item) {
-    if (item == "yes") {
-        App.grdOM_ReasonCode.deleteSelected();
-        stoChanged(App.stoOM_ReasonCode);
-    }
-};
 
 
-/////////////////////////////////////////////////////////////////////////
-//// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.changeData(false, 'OM22500');//khi dong roi gan lai cho change la false
-        HQ.common.close(this);
-    }
-};
+
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
@@ -133,3 +88,62 @@ var stoLoad = function (sto) {
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
+
+var grdOM_ReasonCode_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdOM_ReasonCode_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdOM_ReasonCode, e, keys);
+};
+var grdOM_ReasonCode_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdOM_ReasonCode, e, keys);
+};
+var grdOM_ReasonCode_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_ReasonCode);
+    stoChanged(App.stoOM_ReasonCode);
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+
+
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'OM22500/Save',
+            params: {
+                lstOM_ReasonCode: HQ.store.getData(App.stoOM_ReasonCode)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdOM_ReasonCode.deleteSelected();
+        stoChanged(App.stoOM_ReasonCode);
+    }
+};
+
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoOM_ReasonCode.reload();
+    }
+};
+///////////////////////////////////

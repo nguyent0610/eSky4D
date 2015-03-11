@@ -48,8 +48,8 @@ namespace OM22500
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "18510580";
-            Session["Language"] = Current.Language = "vi";
-            Session["LangID"] = 1;
+            Session["Language"] = Current.Language = "en";
+            Session["LangID"] = 0;
         }
     }
 }
