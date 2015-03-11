@@ -18,12 +18,18 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_FavouriteGroupUser);
             break;
         case "refresh":
-            HQ.isFirstLoad = true;
-            App.stoSYS_FavouriteGroupUser.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSYS_FavouriteGroupUser.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdSYS_FavouriteGroupUser);
+                HQ.grid.insert(App.grdSYS_FavouriteGroupUser, keys);
             }
             break;
         case "delete":
@@ -43,11 +49,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.store.isChange(App.stoSYS_FavouriteGroupUser)) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
 
@@ -67,8 +69,6 @@ var cboUserGroupID_Change = function (item, newValue, oldValue) {
 };
 
 var cboScreenNumber_Change = function (value) {
-    var k = value.displayTplData[0].Descr;
-    App.slmSYS_FavouriteGroupUser.selected.items[0].set('Descr', k);
 };
 var grdSYS_FavouriteGroupUser_BeforeEdit = function (editor, e) {
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
@@ -77,6 +77,15 @@ var grdSYS_FavouriteGroupUser_BeforeEdit = function (editor, e) {
 var grdSYS_FavouriteGroupUser_Edit = function (item, e) {
     //Kiem tra cac key da duoc nhap se insert them dong moi
     HQ.grid.checkInsertKey(App.grdSYS_FavouriteGroupUser, e, keys);
+    if (e.field == "ScreenNumber") {
+        var selectedRecord = App.cboScreenNumber.store.findRecord(e.field, e.value);
+        if (selectedRecord) {
+            e.record.set("Descr", selectedRecord.data.Descr);
+        }
+        else {
+            e.record.set("Descr", "");
+        }
+    }
 };
 
 var grdSYS_FavouriteGroupUser_ValidateEdit = function (item, e) {
@@ -100,6 +109,7 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                HQ.isChange = false;
                 App.cboUserGroupID.getStore().reload();
                 menuClick("refresh");
             },
@@ -116,12 +126,7 @@ var deleteData = function (item) {
         stoChanged(App.stoSYS_FavouriteGroupUser);
     }
 };
-//// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.close(this);
-    }
-};
+
 
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
@@ -149,3 +154,16 @@ var stoLoad = function (sto) {
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
+
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_FavouriteGroupUser.reload();
+    }
+};
+///////////////////////////////////
