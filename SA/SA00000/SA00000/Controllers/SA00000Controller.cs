@@ -39,12 +39,12 @@ namespace SA00000.Controllers
             return this.Store(_db.SYS_Company.FirstOrDefault(p => p.CpnyID == CpnyID));
         }
 
-        public ActionResult GetSYS_UserCompany(string CpnyID)
+        public ActionResult GetSys_CompanyAddr(string CpnyID)
         {
             return this.Store(_db.SA00000_pgCompanyAddr(CpnyID).ToList());
         }
 
-        public ActionResult GetSYS_UserGroup(string CpnyID)
+        public ActionResult GetSYS_SubCompany(string CpnyID)
         {
             return this.Store(_db.SA00000_pgSubCompany(CpnyID).ToList());
         }
@@ -62,12 +62,12 @@ namespace SA00000.Controllers
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Company"]);
                 ChangeRecords<SYS_Company> lstSYS_Company = dataHandler.BatchObjectData<SYS_Company>();
 
-                //StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSys_CompanyAddr"]);
-                //ChangeRecords<SA00000_pgCompanyAddr_Result> lstSys_CompanyAddr = dataHandler1.BatchObjectData<SA00000_pgCompanyAddr_Result>();
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSys_CompanyAddr"]);
+                ChangeRecords<SA00000_pgCompanyAddr_Result> lstSys_CompanyAddr = dataHandler1.BatchObjectData<SA00000_pgCompanyAddr_Result>();
 
-                //StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstSYS_SubCompany"]);
-                //ChangeRecords<SA00000_pgSubCompany_Result> lstSYS_SubCompany = dataHandler2.BatchObjectData<SA00000_pgSubCompany_Result>();
-               
+                StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstSYS_SubCompany"]);
+                ChangeRecords<SA00000_pgSubCompany_Result> lstSYS_SubCompany = dataHandler2.BatchObjectData<SA00000_pgSubCompany_Result>();
+
                 #region Save Header Company
                 lstSYS_Company.Created.AddRange(lstSYS_Company.Updated);
                 foreach (SYS_Company curHeader in lstSYS_Company.Created)
@@ -101,76 +101,76 @@ namespace SA00000.Controllers
                 }
                 #endregion
 
-                //#region Save Sys_CompanyAddr
-                //foreach (SA00000_pgCompanyAddr_Result deleted in lstSys_CompanyAddr.Deleted)
-                //{
-                //    var objDelete = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID == CpnyID && p.AddrID == deleted.AddrID);
-                //    if (objDelete != null)
-                //    {
-                //        _db.Sys_CompanyAddr.DeleteObject(objDelete);
-                //    }
-                //}
+                #region Save Sys_CompanyAddr
+                foreach (SA00000_pgCompanyAddr_Result deleted in lstSys_CompanyAddr.Deleted)
+                {
+                    var objDelete = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID == CpnyID && p.AddrID == deleted.AddrID);
+                    if (objDelete != null)
+                    {
+                        _db.Sys_CompanyAddr.DeleteObject(objDelete);
+                    }
+                }
 
-                //lstSys_CompanyAddr.Created.AddRange(lstSys_CompanyAddr.Updated);
+                lstSys_CompanyAddr.Created.AddRange(lstSys_CompanyAddr.Updated);
 
-                //foreach (SA00000_pgCompanyAddr_Result curLang in lstSys_CompanyAddr.Created)
-                //{
-                //    if (curLang.AddrID.PassNull() == "" && CpnyID.PassNull() == "") continue;
+                foreach (SA00000_pgCompanyAddr_Result curLang in lstSys_CompanyAddr.Created)
+                {
+                    if (curLang.AddrID.PassNull() == "") continue;
 
-                //    var lang = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.AddrID.ToLower() == curLang.AddrID.ToLower());
+                    var lang = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.AddrID.ToLower() == curLang.AddrID.ToLower());
 
-                //    if (lang != null)
-                //    {
-                //        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
-                //        {
-                //            UpdatingSys_CompanyAddr(lang, curLang, false);
-                //        }
-                //        else
-                //        {
-                //            throw new MessageException(MessageType.Message, "19");
-                //        }
-                //    }
-                //    else
-                //    {
-                //        lang = new Sys_CompanyAddr();
-                //        lang.CpnyID = CpnyID;
-                //        UpdatingSys_CompanyAddr(lang, curLang, true);
-                //        _db.Sys_CompanyAddr.AddObject(lang);
-                //    }
-                //}
-                //#endregion
+                    if (lang != null)
+                    {
+                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        {
+                            UpdatingSys_CompanyAddr(lang, curLang, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        lang = new Sys_CompanyAddr();
+                        lang.CpnyID = CpnyID;
+                        UpdatingSys_CompanyAddr(lang, curLang, true);
+                        _db.Sys_CompanyAddr.AddObject(lang);
+                    }
+                }
+                #endregion
 
-                //#region Save SYS_UserGroup
-                //foreach (SA00000_pgSubCompany_Result deleted in lstSYS_SubCompany.Deleted)
-                //{
-                //    var del = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID == CpnyID && p.SubCpnyID == deleted.SubCpnyID);
-                //    if (del != null)
-                //    {
-                //        _db.SYS_SubCompany.DeleteObject(del);
-                //    }
-                //}
+                #region Save SYS_SubCompany
+                foreach (SA00000_pgSubCompany_Result deleted in lstSYS_SubCompany.Deleted)
+                {
+                    var del = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID == CpnyID && p.SubCpnyID == deleted.SubCpnyID);
+                    if (del != null)
+                    {
+                        _db.SYS_SubCompany.DeleteObject(del);
+                    }
+                }
 
-                //lstSYS_SubCompany.Created.AddRange(lstSYS_SubCompany.Updated);
+                lstSYS_SubCompany.Created.AddRange(lstSYS_SubCompany.Updated);
 
-                //foreach (SA00000_pgSubCompany_Result curLang in lstSYS_SubCompany.Created)
-                //{
-                //    if (curLang.SubCpnyID.PassNull() == "" && CpnyID.PassNull()=="") continue;
+                foreach (SA00000_pgSubCompany_Result curLang in lstSYS_SubCompany.Created)
+                {
+                    if (curLang.SubCpnyID.PassNull() == "") continue;
 
-                //    var lang = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.SubCpnyID.ToLower() == curLang.SubCpnyID.ToLower());
+                    var lang = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.SubCpnyID.ToLower() == curLang.SubCpnyID.ToLower());
 
-                //    if (lang != null)
-                //    {
-                //        throw new MessageException(MessageType.Message, "19");
-                //    }
-                //    else
-                //    {
-                //        lang = new SYS_SubCompany();
-                //        lang.CpnyID = CpnyID;
-                //        lang.SubCpnyID = curLang.SubCpnyID;
-                //        _db.SYS_SubCompany.AddObject(lang);
-                //    }
-                //}
-                //#endregion
+                    if (lang != null)
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
+                    else
+                    {
+                        lang = new SYS_SubCompany();
+                        lang.CpnyID = CpnyID;
+                        lang.SubCpnyID = curLang.SubCpnyID;
+                        _db.SYS_SubCompany.AddObject(lang);
+                    }
+                }
+                #endregion
 
                 _db.SaveChanges();
                 return Json(new { success = true, CpnyID = CpnyID });
@@ -230,10 +230,10 @@ namespace SA00000.Controllers
             t.City = s.City;
             t.Country = s.Country;
             t.Fax = s.Fax;
-            t.Name = s.TaxRegNbr;
+            t.Name = s.Name;
             t.Phone = s.Phone;
             t.Salut = s.Salut;
-            t.State = s.Country;
+            t.State = s.State;
             t.TaxId00 = s.TaxId00;
             t.TaxId01 = s.TaxId01;
             t.TaxId02 = s.TaxId02;
@@ -261,7 +261,6 @@ namespace SA00000.Controllers
                 if (cpny != null)
                 {
                     _db.SYS_Company.DeleteObject(cpny);
-  
                 }
 
                 var lstAddr = _db.Sys_CompanyAddr.Where(p => p.CpnyID == CpnyID).ToList();
