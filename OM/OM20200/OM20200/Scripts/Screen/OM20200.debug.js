@@ -23,8 +23,14 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdOM_PriceClass);
             break;
         case "refresh":
-            HQ.isFirstLoad = true;
-            App.stoOM_PriceClass.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoOM_PriceClass.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
@@ -48,65 +54,12 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.isChange) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
 
 };
-var grdOM_PriceClass_BeforeEdit = function (editor, e) {
-    return HQ.grid.checkBeforeEdit(e, keys);
-};
-var grdOM_PriceClass_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdOM_PriceClass, e, keys);
-};
-var grdOM_PriceClass_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdOM_PriceClass, e, keys);
-};
-var grdOM_PriceClass_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdOM_PriceClass);
-    stoChanged(App.stoOM_PriceClass);
-};
-/////////////////////////////////////////////////////////////////////////
-//// Process Data ///////////////////////////////////////////////////////
-var save = function () {
-    if (App.frmMain.isValid()) {
-        App.frmMain.submit({
-            waitMsg: HQ.common.getLang("SavingData"),
-            url: 'OM20200/Save',
-            params: {
-                lstOM_PriceClass: HQ.store.getData(App.stoOM_PriceClass)
-            },
-            success: function (msg, data) {
-                HQ.message.show(201405071);
-                menuClick("refresh");
-            },
-            failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
-            }
-        });
-    }
-};
 
-var deleteData = function (item) {
-    if (item == "yes") {
-        App.grdOM_PriceClass.deleteSelected();
-        stoChanged(App.stoOM_PriceClass);
-    }
-};
-
-
-/////////////////////////////////////////////////////////////////////////
-//// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.changeData(false, 'OM20200');//khi dong roi gan lai cho change la false
-        HQ.common.close(this);
-    }
-};
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
@@ -133,3 +86,57 @@ var stoLoad = function (sto) {
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
+
+var grdOM_PriceClass_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdOM_PriceClass_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdOM_PriceClass, e, keys);
+};
+var grdOM_PriceClass_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdOM_PriceClass, e, keys);
+};
+var grdOM_PriceClass_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_PriceClass);
+    stoChanged(App.stoOM_PriceClass);
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'OM20200/Save',
+            params: {
+                lstOM_PriceClass: HQ.store.getData(App.stoOM_PriceClass)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdOM_PriceClass.deleteSelected();
+        stoChanged(App.stoOM_PriceClass);
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoOM_PriceClass.reload();
+    }
+};
+///////////////////////////////////
