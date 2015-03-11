@@ -24,14 +24,18 @@
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="CodeGroup" Type="varchar" MaxLength="30" />
         </EntityType>
-        <Function Name="SA02200_pgSYS_Favourite" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SA02200_pgSYS_Favourite" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SA02200Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="SA02200Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SYS_Favourite" EntityType="SA02200Model.SYS_Favourite" />
-          <FunctionImport Name="SA02200_pgSYS_Favourite" ReturnType="Collection(SA02200Model.SA02200_pgSYS_Favourite_Result)" />
+          <FunctionImport Name="SA02200_pgSYS_Favourite" ReturnType="Collection(SA02200Model.SA02200_pgSYS_Favourite_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="SYS_Favourite">
           <Key>

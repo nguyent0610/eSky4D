@@ -31,9 +31,9 @@ namespace SA02200.Controllers
         {
             return PartialView();
         }
-        public ActionResult GetSYS_Favourite()
+        public ActionResult GetSYS_Favourite(string UserName)
         {
-            return this.Store(_db.SA02200_pgSYS_Favourite().ToList());
+            return this.Store(_db.SA02200_pgSYS_Favourite(UserName).ToList());
         }
         [HttpPost]
         public ActionResult Save(FormCollection data)

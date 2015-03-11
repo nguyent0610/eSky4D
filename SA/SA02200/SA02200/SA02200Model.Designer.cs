@@ -100,9 +100,20 @@ namespace SA02200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SA02200_pgSYS_Favourite_Result> SA02200_pgSYS_Favourite()
+        /// <param name="userName">No Metadata Documentation available.</param>
+        public ObjectResult<SA02200_pgSYS_Favourite_Result> SA02200_pgSYS_Favourite(global::System.String userName)
         {
-            return base.ExecuteFunction<SA02200_pgSYS_Favourite_Result>("SA02200_pgSYS_Favourite");
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<SA02200_pgSYS_Favourite_Result>("SA02200_pgSYS_Favourite", userNameParameter);
         }
 
         #endregion

@@ -17,7 +17,7 @@
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
-    .Layout(LayoutType.Fit) 
+    .Layout(LayoutType.Fit)
     .Items(
         ////Thiet ke giao dien o day
 
@@ -31,11 +31,15 @@
             .PageSize(50)
             .Model(Util.GenerateModel(typeof(SA02200_pgSYS_Favourite_Result), "mdlSA02200_pgSYS_Favourite", "ScreenNumber"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Favourite"))).AutoLoad(false)
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("UserName", "HQ.userName", ParameterMode.Raw));
+            })  
             .Listeners(l =>
             {
                 l.BeforeLoad.Fn = "stoBeforeLoad";
                 l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
+                l.Update.Fn = "stoChanged";
             })
         )
         .Listeners(p =>
@@ -53,6 +57,7 @@
                     .HQColumnShow("ScreenNumber,Descr")
                     .DisplayField("ScreenNumber")
                     .ValueField("ScreenNumber")
+                    .ForceSelection(true)
                     .HQHeightWidth(400, 300)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
@@ -62,7 +67,7 @@
                     })
                     .LoadData()
                 ),
-            
+
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150),
             X.CommandColumn()
             .Width(150)
