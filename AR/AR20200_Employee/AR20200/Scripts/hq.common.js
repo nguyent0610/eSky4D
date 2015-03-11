@@ -1,1 +1,904 @@
-var _0x2b59 = ["\x63\x20\x76\x3D\x7B\x4C\x3A\x7B\x32\x58\x3A\x35\x28\x29\x7B\x6A\x2E\x32\x57\x28\x22\x32\x56\x22\x2C\x7B\x32\x59\x3A\x22\x6A\x2E\x52\x2E\x31\x43\x2E\x31\x51\x22\x2C\x4F\x3A\x78\x2C\x32\x5A\x3A\x27\x32\x6C\x2D\x32\x65\x3A\x20\x32\x38\x27\x2C\x33\x31\x3A\x22\x32\x6C\x2D\x32\x65\x3A\x32\x38\x3B\x22\x2C\x5A\x3A\x35\x28\x37\x29\x7B\x38\x20\x31\x77\x28\x37\x29\x2E\x31\x32\x28\x6E\x2E\x31\x6C\x2C\x27\x2E\x27\x29\x2E\x31\x32\x28\x31\x44\x20\x31\x50\x28\x6A\x2E\x41\x2E\x50\x2E\x31\x48\x2C\x22\x67\x22\x29\x2C\x27\x27\x29\x7D\x2C\x32\x39\x3A\x35\x28\x37\x29\x7B\x34\x28\x21\x6E\x2E\x4F\x29\x38\x20\x6E\x2E\x53\x28\x56\x29\x3B\x63\x20\x39\x3D\x6E\x2C\x47\x3D\x6A\x2E\x52\x2E\x31\x43\x2E\x33\x30\x2E\x32\x55\x2E\x32\x39\x2E\x32\x54\x28\x39\x2C\x56\x29\x2C\x75\x3D\x6A\x2E\x31\x77\x2E\x75\x2C\x31\x33\x3B\x37\x3D\x6A\x2E\x32\x4F\x28\x37\x29\x3F\x37\x3A\x6E\x2E\x32\x4E\x28\x6E\x2E\x32\x4D\x28\x29\x29\x3B\x34\x28\x37\x2E\x48\x3C\x31\x29\x7B\x38\x20\x47\x7D\x37\x3D\x39\x2E\x5A\x28\x37\x29\x3B\x34\x28\x31\x42\x28\x37\x2E\x31\x32\x28\x6A\x2E\x41\x2E\x50\x2E\x31\x48\x2C\x27\x27\x29\x29\x29\x7B\x47\x2E\x31\x78\x28\x75\x28\x39\x2E\x32\x50\x2C\x37\x29\x29\x7D\x31\x33\x3D\x39\x2E\x31\x54\x28\x37\x29\x3B\x34\x28\x39\x2E\x31\x34\x3D\x3D\x3D\x30\x26\x26\x31\x33\x3C\x30\x29\x7B\x47\x2E\x31\x78\x28\x6E\x2E\x32\x51\x29\x7D\x6B\x20\x34\x28\x31\x33\x3C\x39\x2E\x31\x34\x29\x7B\x47\x2E\x31\x78\x28\x75\x28\x39\x2E\x32\x53\x2C\x39\x2E\x31\x34\x29\x29\x7D\x34\x28\x31\x33\x3E\x39\x2E\x32\x63\x29\x7B\x47\x2E\x31\x78\x28\x75\x28\x39\x2E\x32\x52\x2C\x39\x2E\x32\x63\x29\x29\x7D\x38\x20\x47\x7D\x2C\x33\x32\x3A\x35\x28\x37\x29\x7B\x34\x28\x21\x6E\x2E\x4F\x29\x38\x20\x6E\x2E\x53\x28\x56\x29\x3B\x63\x20\x39\x3D\x6E\x3B\x63\x20\x75\x3D\x22\x32\x62\x2C\x32\x62\x22\x3B\x31\x6E\x28\x63\x20\x69\x3D\x30\x3B\x69\x3C\x39\x2E\x33\x33\x3B\x69\x2B\x2B\x29\x7B\x34\x28\x69\x3D\x3D\x30\x29\x75\x2B\x3D\x22\x2E\x22\x3B\x75\x2B\x3D\x22\x30\x22\x7D\x37\x3D\x39\x2E\x31\x54\x28\x6A\x2E\x41\x2E\x50\x2E\x32\x43\x28\x37\x2C\x75\x29\x29\x3B\x37\x3D\x39\x2E\x33\x65\x28\x37\x29\x3B\x37\x3D\x6A\x2E\x33\x64\x28\x37\x29\x3F\x37\x3A\x32\x61\x28\x39\x2E\x5A\x28\x37\x29\x29\x3B\x37\x3D\x31\x42\x28\x37\x29\x3F\x27\x27\x3A\x31\x77\x28\x6A\x2E\x41\x2E\x50\x2E\x32\x43\x28\x37\x2C\x75\x29\x29\x2E\x31\x32\x28\x27\x2E\x27\x2C\x39\x2E\x31\x6C\x29\x3B\x38\x20\x37\x7D\x2C\x33\x66\x3A\x35\x28\x29\x7B\x34\x28\x21\x6E\x2E\x4F\x29\x38\x20\x6E\x2E\x53\x28\x56\x29\x3B\x63\x20\x39\x3D\x6E\x2C\x37\x3D\x39\x2E\x53\x28\x29\x3B\x34\x28\x21\x39\x2E\x33\x67\x29\x7B\x37\x3D\x39\x2E\x5A\x28\x37\x29\x7D\x38\x20\x37\x7D\x2C\x33\x69\x3A\x35\x28\x37\x29\x7B\x34\x28\x21\x6E\x2E\x4F\x29\x38\x20\x6E\x2E\x53\x28\x56\x29\x3B\x63\x20\x39\x3D\x6E\x2C\x7A\x3B\x39\x2E\x31\x34\x3D\x6A\x2E\x31\x51\x2E\x33\x68\x28\x37\x2C\x31\x51\x2E\x32\x4C\x29\x3B\x39\x2E\x33\x62\x28\x29\x3B\x34\x28\x39\x2E\x33\x36\x21\x3D\x3D\x78\x29\x7B\x7A\x3D\x39\x2E\x33\x35\x2B\x27\x27\x3B\x34\x28\x39\x2E\x33\x34\x29\x7B\x7A\x2B\x3D\x39\x2E\x31\x6C\x2B\x27\x65\x2B\x2D\x27\x7D\x6B\x7B\x7A\x2B\x3D\x6A\x2E\x41\x2E\x50\x2E\x31\x48\x3B\x34\x28\x39\x2E\x33\x37\x29\x7B\x7A\x2B\x3D\x39\x2E\x31\x6C\x7D\x34\x28\x39\x2E\x31\x34\x3C\x30\x29\x7B\x7A\x2B\x3D\x27\x2D\x27\x7D\x7D\x7A\x3D\x6A\x2E\x31\x77\x2E\x33\x38\x28\x7A\x29\x3B\x39\x2E\x33\x61\x3D\x31\x44\x20\x31\x50\x28\x27\x5B\x27\x2B\x7A\x2B\x27\x5D\x27\x29\x3B\x34\x28\x39\x2E\x33\x39\x29\x7B\x39\x2E\x33\x6A\x3D\x31\x44\x20\x31\x50\x28\x27\x5B\x5E\x27\x2B\x7A\x2B\x27\x5D\x27\x2C\x27\x32\x4B\x27\x29\x7D\x7D\x7D\x2C\x31\x54\x3A\x35\x28\x37\x29\x7B\x34\x28\x21\x6E\x2E\x4F\x29\x38\x20\x6E\x2E\x53\x28\x56\x29\x3B\x37\x3D\x32\x61\x28\x6E\x2E\x5A\x28\x37\x29\x29\x3B\x38\x20\x31\x42\x28\x37\x29\x3F\x4A\x3A\x37\x7D\x7D\x29\x7D\x7D\x2C\x36\x3A\x7B\x32\x4A\x3A\x35\x28\x36\x29\x7B\x34\x28\x28\x36\x2E\x51\x28\x29\x2E\x31\x4C\x21\x3D\x70\x26\x26\x36\x2E\x51\x28\x29\x2E\x31\x4C\x2E\x48\x3E\x31\x29\x7C\x7C\x36\x2E\x51\x28\x29\x2E\x33\x63\x21\x3D\x70\x7C\x7C\x36\x2E\x51\x28\x29\x2E\x33\x72\x21\x3D\x70\x29\x7B\x38\x20\x78\x7D\x6B\x7B\x38\x20\x77\x7D\x7D\x2C\x32\x73\x3A\x35\x28\x36\x2C\x74\x29\x7B\x34\x28\x74\x3D\x3D\x70\x29\x7B\x36\x2E\x31\x76\x28\x36\x2E\x58\x28\x29\x2C\x6A\x2E\x68\x2E\x32\x68\x28\x29\x29\x7D\x6B\x7B\x63\x20\x31\x68\x3D\x36\x2E\x32\x67\x28\x35\x28\x6C\x2C\x31\x74\x29\x7B\x34\x28\x21\x6C\x2E\x31\x72\x28\x74\x29\x29\x7B\x38\x20\x78\x7D\x38\x20\x77\x7D\x29\x3B\x34\x28\x31\x68\x3D\x3D\x2D\x31\x29\x7B\x36\x2E\x31\x76\x28\x36\x2E\x58\x28\x29\x2C\x6A\x2E\x68\x2E\x32\x68\x28\x29\x29\x7D\x7D\x7D\x2C\x33\x58\x3A\x35\x28\x36\x2C\x74\x2C\x32\x6E\x29\x7B\x63\x20\x31\x68\x3D\x36\x2E\x32\x67\x28\x35\x28\x6C\x2C\x31\x74\x29\x7B\x34\x28\x21\x6C\x2E\x31\x72\x28\x74\x29\x29\x7B\x38\x20\x78\x7D\x38\x20\x77\x7D\x29\x3B\x34\x28\x31\x68\x3D\x3D\x2D\x31\x29\x7B\x36\x2E\x31\x76\x28\x36\x2E\x58\x28\x29\x2C\x32\x6E\x29\x7D\x7D\x2C\x34\x34\x3A\x35\x28\x36\x2C\x31\x6D\x29\x7B\x34\x28\x6A\x2E\x34\x33\x28\x31\x6D\x29\x29\x7B\x31\x6D\x3D\x77\x7D\x38\x20\x6A\x2E\x31\x49\x28\x36\x2E\x51\x28\x7B\x33\x56\x3A\x31\x6D\x7D\x29\x29\x7D\x2C\x33\x55\x3A\x35\x28\x36\x2C\x31\x70\x2C\x32\x64\x29\x7B\x63\x20\x68\x3B\x36\x2E\x68\x2E\x32\x75\x28\x35\x28\x31\x4F\x29\x7B\x63\x20\x31\x52\x3D\x30\x3B\x31\x6E\x28\x63\x20\x69\x3D\x30\x3B\x69\x3C\x31\x70\x2E\x48\x3B\x69\x2B\x2B\x29\x7B\x34\x28\x31\x4F\x2E\x31\x72\x28\x31\x70\x5B\x69\x5D\x29\x3D\x3D\x32\x64\x5B\x69\x5D\x29\x7B\x31\x52\x2B\x2B\x7D\x7D\x34\x28\x31\x52\x3D\x3D\x31\x70\x2E\x48\x29\x7B\x68\x3D\x31\x4F\x2E\x68\x3B\x38\x20\x77\x7D\x7D\x29\x3B\x38\x20\x68\x7D\x7D\x2C\x54\x3A\x7B\x31\x76\x3A\x35\x28\x6F\x29\x7B\x63\x20\x36\x3D\x6F\x2E\x59\x28\x29\x3B\x63\x20\x32\x70\x3D\x36\x2E\x51\x28\x29\x2E\x31\x4C\x3B\x34\x28\x32\x70\x21\x3D\x70\x29\x7B\x36\x2E\x32\x7A\x28\x32\x34\x2E\x32\x45\x28\x36\x2E\x32\x46\x2F\x36\x2E\x31\x53\x29\x2C\x7B\x32\x49\x3A\x35\x28\x29\x7B\x76\x2E\x54\x2E\x31\x4D\x28\x6F\x29\x3B\x6F\x2E\x32\x77\x2E\x32\x6F\x28\x7B\x42\x3A\x36\x2E\x58\x28\x29\x2D\x31\x2C\x31\x75\x3A\x31\x7D\x29\x7D\x7D\x29\x3B\x38\x7D\x36\x2E\x32\x7A\x28\x32\x34\x2E\x32\x45\x28\x36\x2E\x32\x46\x2F\x36\x2E\x31\x53\x29\x2C\x7B\x32\x49\x3A\x35\x28\x29\x7B\x76\x2E\x36\x2E\x32\x73\x28\x36\x29\x3B\x76\x2E\x54\x2E\x31\x4D\x28\x6F\x29\x3B\x6F\x2E\x32\x77\x2E\x32\x6F\x28\x7B\x42\x3A\x36\x2E\x58\x28\x29\x2D\x31\x2C\x31\x75\x3A\x31\x7D\x29\x7D\x7D\x29\x7D\x2C\x33\x4D\x3A\x35\x28\x6F\x29\x7B\x6F\x2E\x31\x6B\x28\x29\x2E\x32\x42\x28\x30\x29\x7D\x2C\x33\x4C\x3A\x35\x28\x6F\x29\x7B\x6F\x2E\x31\x6B\x28\x29\x2E\x33\x4B\x28\x29\x7D\x2C\x33\x50\x3A\x35\x28\x6F\x29\x7B\x6F\x2E\x31\x6B\x28\x29\x2E\x33\x54\x28\x29\x7D\x2C\x31\x4D\x3A\x35\x28\x6F\x29\x7B\x6F\x2E\x31\x6B\x28\x29\x2E\x32\x42\x28\x6F\x2E\x59\x28\x29\x2E\x58\x28\x29\x2D\x31\x29\x7D\x2C\x33\x52\x3A\x35\x28\x31\x56\x29\x7B\x63\x20\x36\x3D\x31\x56\x2E\x34\x32\x28\x22\x33\x51\x22\x29\x2E\x59\x28\x29\x3B\x36\x2E\x31\x53\x3D\x31\x73\x28\x31\x56\x2E\x32\x66\x28\x29\x2C\x31\x30\x29\x3B\x36\x2E\x33\x53\x28\x29\x7D\x2C\x33\x4E\x3A\x35\x28\x6F\x2C\x42\x2C\x43\x29\x7B\x63\x20\x31\x4E\x3D\x77\x3B\x63\x20\x36\x3D\x6F\x2E\x59\x28\x29\x3B\x34\x28\x43\x3D\x3D\x70\x29\x43\x3D\x42\x2E\x6C\x2E\x34\x35\x2E\x32\x6A\x28\x27\x2C\x27\x29\x3B\x31\x6E\x28\x63\x20\x69\x3D\x30\x3B\x69\x3C\x36\x2E\x31\x5A\x2E\x31\x62\x2E\x48\x3B\x69\x2B\x2B\x29\x7B\x63\x20\x6C\x3D\x36\x2E\x31\x5A\x2E\x31\x62\x5B\x69\x5D\x3B\x63\x20\x68\x3D\x27\x27\x3B\x63\x20\x31\x6F\x3D\x27\x27\x3B\x31\x6E\x28\x63\x20\x49\x3D\x30\x3B\x49\x3C\x43\x2E\x48\x3B\x49\x2B\x2B\x29\x7B\x34\x28\x6C\x2E\x68\x5B\x43\x5B\x49\x5D\x5D\x21\x3D\x70\x29\x7B\x68\x2B\x3D\x6C\x2E\x68\x5B\x43\x5B\x49\x5D\x5D\x2E\x45\x28\x29\x2E\x4B\x28\x29\x2B\x27\x2C\x27\x3B\x34\x28\x42\x2E\x31\x43\x3D\x3D\x43\x5B\x49\x5D\x29\x31\x6F\x2B\x3D\x28\x42\x2E\x37\x3D\x3D\x4A\x3F\x22\x22\x3A\x42\x2E\x37\x2E\x45\x28\x29\x2E\x4B\x28\x29\x29\x2B\x27\x2C\x27\x3B\x6B\x20\x31\x6F\x2B\x3D\x42\x2E\x6C\x2E\x68\x5B\x43\x5B\x49\x5D\x5D\x2E\x45\x28\x29\x2E\x4B\x28\x29\x2B\x27\x2C\x27\x7D\x7D\x34\x28\x31\x4E\x3D\x28\x68\x3D\x3D\x31\x6F\x26\x26\x6C\x2E\x31\x74\x21\x3D\x42\x2E\x6C\x2E\x31\x74\x29\x3F\x78\x3A\x77\x29\x7B\x34\x31\x7D\x7D\x38\x20\x31\x4E\x7D\x7D\x2C\x31\x35\x3A\x7B\x31\x7A\x3A\x35\x28\x31\x39\x2C\x44\x2C\x31\x38\x2C\x46\x29\x7B\x34\x28\x46\x3D\x3D\x78\x29\x7B\x31\x6A\x2E\x31\x59\x2E\x34\x30\x28\x31\x39\x2C\x6A\x2E\x31\x49\x28\x44\x29\x2C\x31\x38\x2C\x7B\x31\x58\x3A\x35\x28\x71\x29\x7B\x7D\x2C\x32\x30\x3A\x35\x28\x32\x31\x2C\x68\x29\x7B\x7D\x7D\x29\x7D\x6B\x7B\x31\x6A\x2E\x31\x59\x2E\x33\x57\x28\x31\x39\x2C\x6A\x2E\x31\x49\x28\x44\x29\x2C\x31\x38\x2C\x7B\x31\x58\x3A\x35\x28\x71\x29\x7B\x7D\x2C\x32\x30\x3A\x35\x28\x32\x31\x2C\x68\x29\x7B\x7D\x7D\x29\x7D\x7D\x2C\x33\x6B\x3A\x35\x28\x31\x63\x2C\x73\x2C\x46\x29\x7B\x33\x59\x7B\x34\x28\x46\x3D\x3D\x4A\x29\x46\x3D\x77\x3B\x34\x28\x73\x2E\x71\x21\x3D\x70\x29\x7B\x34\x28\x73\x2E\x71\x2E\x31\x61\x3D\x3D\x27\x31\x35\x27\x29\x7B\x76\x2E\x31\x35\x2E\x31\x7A\x28\x73\x2E\x71\x2E\x31\x39\x2C\x73\x2E\x71\x2E\x44\x2C\x73\x2E\x71\x2E\x31\x38\x2C\x46\x29\x7D\x6B\x20\x34\x28\x73\x2E\x71\x2E\x31\x61\x3D\x3D\x22\x32\x32\x22\x29\x7B\x6A\x2E\x4E\x2E\x4D\x28\x27\x55\x27\x2C\x73\x2E\x71\x2E\x31\x63\x29\x7D\x7D\x6B\x20\x34\x28\x73\x2E\x31\x64\x21\x3D\x70\x29\x7B\x63\x20\x68\x3D\x6A\x2E\x33\x5A\x28\x73\x2E\x31\x64\x29\x3B\x34\x28\x68\x2E\x31\x61\x3D\x3D\x27\x31\x35\x27\x29\x7B\x76\x2E\x31\x35\x2E\x31\x7A\x28\x68\x2E\x31\x39\x2C\x68\x2E\x44\x2C\x68\x2E\x31\x38\x2C\x46\x29\x7D\x6B\x20\x34\x28\x68\x2E\x31\x61\x3D\x3D\x22\x32\x32\x22\x29\x7B\x6A\x2E\x4E\x2E\x4D\x28\x27\x55\x27\x2C\x73\x2E\x31\x63\x29\x7D\x6B\x7B\x6A\x2E\x4E\x2E\x4D\x28\x27\x55\x27\x2C\x68\x29\x7D\x7D\x6B\x20\x34\x28\x73\x2E\x32\x33\x2E\x31\x64\x21\x3D\x70\x29\x7B\x6A\x2E\x4E\x2E\x4D\x28\x27\x55\x27\x2C\x73\x2E\x32\x33\x2E\x31\x64\x29\x7D\x6B\x7B\x34\x28\x73\x2E\x33\x4F\x21\x3D\x70\x29\x7B\x6A\x2E\x4E\x2E\x4D\x28\x27\x55\x27\x2C\x76\x2E\x31\x41\x2E\x31\x57\x28\x22\x33\x49\x22\x29\x29\x7D\x7D\x7D\x33\x73\x28\x65\x29\x7B\x6A\x2E\x4E\x2E\x4D\x28\x27\x55\x27\x2C\x31\x63\x29\x7D\x7D\x7D\x2C\x31\x41\x3A\x7B\x32\x79\x3A\x35\x28\x31\x4B\x29\x7B\x34\x28\x31\x4B\x5B\x22\x32\x78\x22\x5D\x21\x3D\x70\x29\x7B\x31\x4B\x5B\x22\x32\x78\x22\x5D\x2E\x32\x79\x28\x29\x7D\x7D\x2C\x31\x57\x3A\x35\x28\x74\x29\x7B\x34\x28\x32\x76\x5B\x74\x5D\x21\x3D\x70\x29\x7B\x38\x20\x32\x76\x5B\x74\x5D\x7D\x6B\x7B\x38\x20\x74\x7D\x7D\x2C\x32\x72\x3A\x35\x28\x31\x45\x2C\x31\x47\x29\x7B\x34\x28\x31\x79\x28\x31\x45\x2E\x31\x62\x29\x21\x3D\x22\x70\x22\x29\x7B\x31\x45\x2E\x31\x62\x2E\x32\x75\x28\x35\x28\x31\x66\x29\x7B\x34\x28\x31\x79\x28\x31\x66\x2E\x32\x71\x29\x21\x3D\x22\x70\x22\x29\x7B\x31\x66\x2E\x32\x71\x28\x31\x47\x29\x7D\x32\x72\x28\x31\x66\x2C\x31\x47\x29\x7D\x29\x7D\x7D\x2C\x33\x74\x3A\x35\x28\x31\x46\x2C\x31\x37\x2C\x52\x29\x7B\x34\x28\x52\x3D\x3D\x70\x29\x7B\x34\x28\x31\x46\x29\x7B\x31\x6A\x2E\x32\x74\x2E\x31\x67\x2E\x32\x41\x28\x31\x37\x29\x7D\x6B\x7B\x31\x6A\x2E\x32\x74\x2E\x31\x67\x2E\x32\x47\x28\x29\x7D\x7D\x6B\x7B\x34\x28\x31\x46\x29\x7B\x52\x2E\x31\x67\x2E\x32\x41\x28\x31\x37\x29\x7D\x6B\x7B\x52\x2E\x31\x67\x2E\x32\x47\x28\x29\x7D\x7D\x7D\x7D\x2C\x41\x3A\x7B\x33\x75\x3A\x35\x28\x44\x29\x7B\x34\x28\x44\x2E\x4B\x28\x29\x3D\x3D\x27\x77\x27\x29\x7B\x38\x20\x77\x7D\x6B\x20\x34\x28\x44\x2E\x4B\x28\x29\x3D\x3D\x27\x78\x27\x29\x7B\x38\x20\x78\x7D\x6B\x7B\x38\x20\x77\x7D\x7D\x2C\x32\x48\x3A\x35\x20\x32\x48\x28\x31\x31\x2C\x75\x29\x7B\x34\x28\x31\x31\x3D\x3D\x4A\x29\x38\x27\x27\x3B\x34\x28\x75\x3D\x3D\x27\x6D\x2F\x64\x2F\x79\x27\x29\x7B\x38\x28\x31\x31\x2E\x33\x76\x28\x29\x2B\x31\x29\x2E\x45\x28\x29\x2B\x27\x2F\x27\x2B\x31\x31\x2E\x33\x4A\x28\x29\x2E\x45\x28\x29\x2B\x27\x2F\x27\x2B\x31\x31\x2E\x33\x71\x28\x29\x2E\x45\x28\x29\x7D\x38\x27\x27\x7D\x2C\x33\x6D\x3A\x35\x28\x31\x65\x29\x7B\x63\x20\x32\x44\x3D\x2F\x5E\x23\x3F\x28\x5B\x61\x2D\x66\x5C\x64\x5D\x29\x28\x5B\x61\x2D\x66\x5C\x64\x5D\x29\x28\x5B\x61\x2D\x66\x5C\x64\x5D\x29\x24\x2F\x69\x3B\x31\x65\x3D\x31\x65\x2E\x31\x32\x28\x32\x44\x2C\x35\x28\x6D\x2C\x72\x2C\x67\x2C\x62\x29\x7B\x38\x20\x72\x2B\x72\x2B\x67\x2B\x67\x2B\x62\x2B\x62\x7D\x29\x3B\x63\x20\x71\x3D\x2F\x5E\x23\x3F\x28\x5B\x61\x2D\x66\x5C\x64\x5D\x7B\x32\x7D\x29\x28\x5B\x61\x2D\x66\x5C\x64\x5D\x7B\x32\x7D\x29\x28\x5B\x61\x2D\x66\x5C\x64\x5D\x7B\x32\x7D\x29\x24\x2F\x69\x2E\x33\x6C\x28\x31\x65\x29\x3B\x38\x20\x71\x3F\x7B\x72\x3A\x31\x73\x28\x71\x5B\x31\x5D\x2C\x31\x36\x29\x2C\x67\x3A\x31\x73\x28\x71\x5B\x32\x5D\x2C\x31\x36\x29\x2C\x62\x3A\x31\x73\x28\x71\x5B\x33\x5D\x2C\x31\x36\x29\x7D\x3A\x4A\x7D\x2C\x31\x69\x3A\x35\x28\x31\x55\x29\x7B\x34\x28\x31\x55\x3D\x3D\x4A\x29\x7B\x38\x22\x22\x7D\x6B\x20\x38\x20\x31\x55\x7D\x7D\x2C\x33\x6E\x3A\x7B\x33\x6F\x3A\x35\x28\x57\x2C\x54\x2C\x32\x36\x29\x7B\x63\x20\x31\x71\x3D\x54\x2E\x33\x70\x28\x29\x2C\x36\x3D\x54\x2E\x59\x28\x29\x2C\x6C\x3D\x31\x71\x2E\x33\x77\x28\x31\x71\x2E\x33\x78\x28\x57\x2E\x32\x35\x29\x29\x2C\x31\x75\x3D\x31\x71\x2E\x33\x45\x28\x57\x2E\x32\x35\x29\x2C\x68\x3D\x6C\x2E\x31\x72\x28\x31\x75\x2E\x33\x46\x29\x3B\x34\x28\x68\x29\x7B\x34\x28\x32\x36\x29\x7B\x57\x2E\x32\x37\x28\x6A\x2E\x41\x2E\x50\x2E\x33\x47\x28\x68\x29\x29\x7D\x6B\x7B\x57\x2E\x32\x37\x28\x68\x29\x7D\x7D\x6B\x7B\x57\x2E\x33\x48\x28\x29\x7D\x7D\x7D\x7D\x3B\x76\x2E\x31\x37\x3D\x76\x2E\x31\x41\x2E\x31\x57\x28\x27\x31\x37\x27\x29\x3B\x63\x20\x33\x44\x3D\x35\x28\x4C\x2C\x32\x6B\x29\x7B\x34\x28\x4C\x29\x7B\x63\x20\x36\x3D\x4C\x2E\x59\x28\x29\x3B\x63\x20\x37\x3D\x76\x2E\x41\x2E\x31\x69\x28\x4C\x2E\x32\x66\x28\x29\x29\x2E\x45\x28\x29\x3B\x34\x28\x36\x29\x7B\x36\x2E\x33\x43\x28\x29\x3B\x34\x28\x4C\x2E\x32\x6D\x3D\x3D\x4A\x7C\x7C\x4C\x2E\x32\x6D\x2E\x48\x3D\x3D\x30\x29\x7B\x36\x2E\x33\x79\x28\x35\x28\x6C\x29\x7B\x34\x28\x6C\x29\x7B\x63\x20\x31\x4A\x3D\x77\x3B\x32\x6B\x2E\x32\x6A\x28\x27\x2C\x27\x29\x2E\x33\x7A\x28\x35\x28\x74\x29\x7B\x34\x28\x74\x29\x7B\x34\x28\x28\x31\x79\x20\x76\x2E\x41\x2E\x31\x69\x28\x37\x29\x29\x3D\x3D\x22\x33\x41\x22\x29\x7B\x34\x28\x6C\x2E\x68\x5B\x74\x5D\x29\x7B\x63\x20\x32\x69\x3D\x6C\x2E\x68\x5B\x74\x5D\x2E\x45\x28\x29\x2E\x4B\x28\x29\x2E\x33\x42\x28\x76\x2E\x41\x2E\x31\x69\x28\x37\x29\x2E\x4B\x28\x29\x29\x3B\x34\x28\x32\x69\x3E\x2D\x31\x29\x7B\x31\x4A\x3D\x78\x3B\x38\x20\x6C\x7D\x7D\x7D\x7D\x7D\x29\x3B\x34\x28\x31\x4A\x3D\x3D\x78\x29\x38\x20\x6C\x7D\x7D\x29\x7D\x7D\x7D\x7D\x3B", "\x7C", "\x73\x70\x6C\x69\x74", "\x7C\x7C\x7C\x7C\x69\x66\x7C\x66\x75\x6E\x63\x74\x69\x6F\x6E\x7C\x73\x74\x6F\x72\x65\x7C\x76\x61\x6C\x75\x65\x7C\x72\x65\x74\x75\x72\x6E\x7C\x6D\x65\x7C\x7C\x7C\x76\x61\x72\x7C\x7C\x7C\x7C\x7C\x64\x61\x74\x61\x7C\x7C\x45\x78\x74\x7C\x65\x6C\x73\x65\x7C\x72\x65\x63\x6F\x72\x64\x7C\x7C\x74\x68\x69\x73\x7C\x67\x72\x64\x7C\x75\x6E\x64\x65\x66\x69\x6E\x65\x64\x7C\x72\x65\x73\x75\x6C\x74\x7C\x7C\x6F\x62\x6A\x7C\x6B\x65\x79\x7C\x66\x6F\x72\x6D\x61\x74\x7C\x48\x51\x7C\x66\x61\x6C\x73\x65\x7C\x74\x72\x75\x65\x7C\x7C\x61\x6C\x6C\x6F\x77\x65\x64\x7C\x75\x74\x69\x6C\x7C\x72\x6F\x77\x7C\x6B\x65\x79\x73\x7C\x70\x61\x72\x6D\x7C\x74\x6F\x53\x74\x72\x69\x6E\x67\x7C\x61\x72\x72\x61\x79\x7C\x65\x72\x72\x6F\x72\x73\x7C\x6C\x65\x6E\x67\x74\x68\x7C\x6A\x6B\x65\x79\x7C\x6E\x75\x6C\x6C\x7C\x74\x6F\x4C\x6F\x77\x65\x72\x43\x61\x73\x65\x7C\x63\x6F\x6E\x74\x72\x6F\x6C\x7C\x61\x6C\x65\x72\x74\x7C\x4D\x73\x67\x7C\x75\x73\x65\x54\x68\x6F\x75\x73\x61\x6E\x64\x53\x65\x70\x61\x72\x61\x74\x6F\x72\x7C\x46\x6F\x72\x6D\x61\x74\x7C\x67\x65\x74\x43\x68\x61\x6E\x67\x65\x64\x44\x61\x74\x61\x7C\x66\x6F\x72\x6D\x7C\x63\x61\x6C\x6C\x50\x61\x72\x65\x6E\x74\x7C\x67\x72\x69\x64\x7C\x45\x72\x72\x6F\x72\x7C\x61\x72\x67\x75\x6D\x65\x6E\x74\x73\x7C\x74\x6F\x6F\x6C\x54\x69\x70\x7C\x67\x65\x74\x43\x6F\x75\x6E\x74\x7C\x67\x65\x74\x53\x74\x6F\x72\x65\x7C\x74\x6F\x52\x61\x77\x4E\x75\x6D\x62\x65\x72\x7C\x7C\x64\x61\x74\x65\x7C\x72\x65\x70\x6C\x61\x63\x65\x7C\x6E\x75\x6D\x7C\x6D\x69\x6E\x56\x61\x6C\x75\x65\x7C\x6D\x65\x73\x73\x61\x67\x65\x7C\x7C\x77\x61\x69\x74\x4D\x73\x67\x7C\x66\x6E\x7C\x63\x6F\x64\x65\x7C\x74\x79\x70\x65\x7C\x69\x74\x65\x6D\x73\x7C\x65\x72\x72\x6F\x72\x4D\x73\x67\x7C\x72\x65\x73\x70\x6F\x6E\x73\x65\x54\x65\x78\x74\x7C\x68\x65\x78\x7C\x69\x74\x6D\x7C\x62\x6F\x64\x79\x7C\x66\x6C\x61\x74\x7C\x70\x61\x73\x73\x4E\x75\x6C\x6C\x7C\x41\x70\x70\x7C\x67\x65\x74\x53\x65\x6C\x65\x63\x74\x69\x6F\x6E\x4D\x6F\x64\x65\x6C\x7C\x64\x65\x63\x69\x6D\x61\x6C\x53\x65\x70\x61\x72\x61\x74\x6F\x72\x7C\x73\x6B\x69\x70\x7C\x66\x6F\x72\x7C\x72\x6F\x77\x64\x61\x74\x61\x7C\x66\x69\x65\x6C\x64\x73\x7C\x76\x69\x65\x77\x7C\x67\x65\x74\x7C\x70\x61\x72\x73\x65\x49\x6E\x74\x7C\x69\x64\x7C\x63\x6F\x6C\x75\x6D\x6E\x7C\x69\x6E\x73\x65\x72\x74\x7C\x53\x74\x72\x69\x6E\x67\x7C\x70\x75\x73\x68\x7C\x74\x79\x70\x65\x6F\x66\x7C\x73\x68\x6F\x77\x7C\x63\x6F\x6D\x6D\x6F\x6E\x7C\x69\x73\x4E\x61\x4E\x7C\x66\x69\x65\x6C\x64\x7C\x6E\x65\x77\x7C\x63\x74\x72\x7C\x62\x75\x73\x79\x7C\x6C\x6F\x63\x6B\x7C\x74\x68\x6F\x75\x73\x61\x6E\x64\x53\x65\x70\x61\x72\x61\x74\x6F\x72\x7C\x65\x6E\x63\x6F\x64\x65\x7C\x69\x73\x4D\x61\x70\x7C\x61\x70\x70\x7C\x43\x72\x65\x61\x74\x65\x64\x7C\x6C\x61\x73\x74\x7C\x66\x6F\x75\x6E\x64\x7C\x69\x74\x65\x6D\x7C\x52\x65\x67\x45\x78\x70\x7C\x4E\x75\x6D\x62\x65\x72\x7C\x69\x6E\x74\x54\x7C\x70\x61\x67\x65\x53\x69\x7A\x65\x7C\x70\x61\x72\x73\x65\x56\x61\x6C\x75\x65\x7C\x73\x74\x72\x7C\x63\x6F\x6D\x62\x6F\x7C\x67\x65\x74\x4C\x61\x6E\x67\x7C\x73\x75\x63\x63\x65\x73\x73\x7C\x64\x69\x72\x65\x63\x74\x7C\x61\x6C\x6C\x44\x61\x74\x61\x7C\x66\x61\x69\x6C\x75\x72\x65\x7C\x6D\x73\x67\x7C\x65\x72\x72\x6F\x72\x7C\x72\x65\x73\x70\x6F\x6E\x73\x65\x7C\x4D\x61\x74\x68\x7C\x74\x72\x69\x67\x67\x65\x72\x45\x6C\x65\x6D\x65\x6E\x74\x7C\x69\x73\x48\x74\x6D\x6C\x45\x6E\x63\x6F\x64\x65\x7C\x75\x70\x64\x61\x74\x65\x7C\x72\x69\x67\x68\x74\x7C\x67\x65\x74\x45\x72\x72\x6F\x72\x73\x7C\x70\x61\x72\x73\x65\x46\x6C\x6F\x61\x74\x7C\x30\x30\x30\x7C\x6D\x61\x78\x56\x61\x6C\x75\x65\x7C\x76\x61\x6C\x75\x65\x73\x7C\x61\x6C\x69\x67\x6E\x7C\x67\x65\x74\x56\x61\x6C\x75\x65\x7C\x66\x69\x6E\x64\x42\x79\x7C\x52\x65\x63\x6F\x72\x64\x7C\x66\x69\x65\x6C\x64\x44\x61\x74\x61\x7C\x73\x70\x6C\x69\x74\x7C\x73\x74\x6B\x65\x79\x46\x69\x6C\x74\x65\x72\x7C\x74\x65\x78\x74\x7C\x76\x61\x6C\x75\x65\x4D\x6F\x64\x65\x6C\x73\x7C\x6E\x65\x77\x52\x65\x63\x6F\x72\x64\x7C\x73\x74\x61\x72\x74\x45\x64\x69\x74\x42\x79\x50\x6F\x73\x69\x74\x69\x6F\x6E\x7C\x63\x72\x65\x61\x74\x65\x64\x49\x74\x65\x6D\x73\x7C\x73\x65\x74\x52\x65\x61\x64\x4F\x6E\x6C\x79\x7C\x6C\x6F\x63\x6B\x49\x74\x65\x6D\x7C\x69\x6E\x73\x65\x72\x74\x42\x6C\x61\x6E\x6B\x7C\x66\x72\x6D\x4D\x61\x69\x6E\x7C\x65\x61\x63\x68\x7C\x48\x51\x4C\x61\x6E\x67\x7C\x65\x64\x69\x74\x69\x6E\x67\x50\x6C\x75\x67\x69\x6E\x7C\x70\x61\x72\x65\x6E\x74\x41\x75\x74\x6F\x4C\x6F\x61\x64\x43\x6F\x6E\x74\x72\x6F\x6C\x7C\x63\x6C\x6F\x73\x65\x7C\x6C\x6F\x61\x64\x50\x61\x67\x65\x7C\x6D\x61\x73\x6B\x7C\x73\x65\x6C\x65\x63\x74\x7C\x6E\x75\x6D\x62\x65\x72\x7C\x73\x68\x6F\x72\x74\x68\x61\x6E\x64\x52\x65\x67\x65\x78\x7C\x63\x65\x69\x6C\x7C\x74\x6F\x74\x61\x6C\x43\x6F\x75\x6E\x74\x7C\x75\x6E\x6D\x61\x73\x6B\x7C\x64\x61\x74\x65\x54\x6F\x53\x74\x72\x69\x6E\x67\x7C\x63\x61\x6C\x6C\x62\x61\x63\x6B\x7C\x69\x73\x43\x68\x61\x6E\x67\x65\x7C\x67\x69\x7C\x4E\x45\x47\x41\x54\x49\x56\x45\x5F\x49\x4E\x46\x49\x4E\x49\x54\x59\x7C\x67\x65\x74\x52\x61\x77\x56\x61\x6C\x75\x65\x7C\x70\x72\x6F\x63\x65\x73\x73\x52\x61\x77\x56\x61\x6C\x75\x65\x7C\x69\x73\x44\x65\x66\x69\x6E\x65\x64\x7C\x6E\x61\x6E\x54\x65\x78\x74\x7C\x6E\x65\x67\x61\x74\x69\x76\x65\x54\x65\x78\x74\x7C\x6D\x61\x78\x54\x65\x78\x74\x7C\x6D\x69\x6E\x54\x65\x78\x74\x7C\x61\x70\x70\x6C\x79\x7C\x70\x72\x6F\x74\x6F\x74\x79\x70\x65\x7C\x54\x68\x6F\x75\x73\x61\x6E\x64\x53\x65\x70\x61\x72\x61\x74\x6F\x72\x4E\x75\x6D\x62\x65\x72\x46\x69\x65\x6C\x64\x7C\x64\x65\x66\x69\x6E\x65\x7C\x75\x73\x65\x54\x68\x6F\x75\x73\x61\x6E\x64\x7C\x6F\x76\x65\x72\x72\x69\x64\x65\x7C\x73\x74\x79\x6C\x65\x7C\x54\x65\x78\x74\x7C\x66\x69\x65\x6C\x64\x53\x74\x79\x6C\x65\x7C\x76\x61\x6C\x75\x65\x54\x6F\x52\x61\x77\x7C\x64\x65\x63\x69\x6D\x61\x6C\x50\x72\x65\x63\x69\x73\x69\x6F\x6E\x7C\x61\x6C\x6C\x6F\x77\x45\x78\x70\x6F\x6E\x65\x6E\x74\x69\x61\x6C\x7C\x62\x61\x73\x65\x43\x68\x61\x72\x73\x7C\x64\x69\x73\x61\x62\x6C\x65\x4B\x65\x79\x46\x69\x6C\x74\x65\x72\x7C\x61\x6C\x6C\x6F\x77\x44\x65\x63\x69\x6D\x61\x6C\x73\x7C\x65\x73\x63\x61\x70\x65\x52\x65\x67\x65\x78\x7C\x61\x75\x74\x6F\x53\x74\x72\x69\x70\x43\x68\x61\x72\x73\x7C\x6D\x61\x73\x6B\x52\x65\x7C\x74\x6F\x67\x67\x6C\x65\x53\x70\x69\x6E\x6E\x65\x72\x73\x7C\x55\x70\x64\x61\x74\x65\x64\x7C\x69\x73\x4E\x75\x6D\x62\x65\x72\x7C\x66\x69\x78\x50\x72\x65\x63\x69\x73\x69\x6F\x6E\x7C\x67\x65\x74\x53\x75\x62\x6D\x69\x74\x56\x61\x6C\x75\x65\x7C\x73\x75\x62\x6D\x69\x74\x4C\x6F\x63\x61\x6C\x65\x53\x65\x70\x61\x72\x61\x74\x6F\x72\x7C\x66\x72\x6F\x6D\x7C\x73\x65\x74\x4D\x69\x6E\x56\x61\x6C\x75\x65\x7C\x73\x74\x72\x69\x70\x43\x68\x61\x72\x73\x52\x65\x7C\x70\x72\x6F\x63\x65\x73\x73\x7C\x65\x78\x65\x63\x7C\x68\x65\x78\x54\x6F\x52\x47\x42\x7C\x74\x6F\x6F\x6C\x74\x69\x70\x7C\x73\x68\x6F\x77\x4F\x6E\x47\x72\x69\x64\x7C\x67\x65\x74\x56\x69\x65\x77\x7C\x67\x65\x74\x46\x75\x6C\x6C\x59\x65\x61\x72\x7C\x44\x65\x6C\x65\x74\x65\x64\x7C\x63\x61\x74\x63\x68\x7C\x73\x68\x6F\x77\x42\x75\x73\x79\x7C\x74\x6F\x42\x6F\x6F\x6C\x7C\x67\x65\x74\x4D\x6F\x6E\x74\x68\x7C\x67\x65\x74\x52\x65\x63\x6F\x72\x64\x7C\x66\x69\x6E\x64\x49\x74\x65\x6D\x42\x79\x43\x68\x69\x6C\x64\x7C\x66\x69\x6C\x74\x65\x72\x42\x79\x7C\x66\x6F\x72\x45\x61\x63\x68\x7C\x73\x74\x72\x69\x6E\x67\x7C\x69\x6E\x64\x65\x78\x4F\x66\x7C\x63\x6C\x65\x61\x72\x46\x69\x6C\x74\x65\x72\x7C\x46\x69\x6C\x74\x65\x72\x43\x6F\x6D\x62\x6F\x7C\x67\x65\x74\x48\x65\x61\x64\x65\x72\x42\x79\x43\x65\x6C\x6C\x7C\x64\x61\x74\x61\x49\x6E\x64\x65\x78\x7C\x68\x74\x6D\x6C\x45\x6E\x63\x6F\x64\x65\x7C\x68\x69\x64\x65\x7C\x46\x61\x69\x6C\x65\x64\x43\x6F\x6E\x6E\x65\x63\x74\x53\x65\x72\x76\x65\x72\x7C\x67\x65\x74\x44\x61\x74\x65\x7C\x73\x65\x6C\x65\x63\x74\x50\x72\x65\x76\x69\x6F\x75\x73\x7C\x70\x72\x65\x76\x7C\x66\x69\x72\x73\x74\x7C\x63\x68\x65\x63\x6B\x44\x75\x70\x6C\x69\x63\x61\x74\x65\x7C\x66\x61\x69\x6C\x75\x72\x65\x54\x79\x70\x65\x7C\x6E\x65\x78\x74\x7C\x67\x72\x69\x64\x70\x61\x6E\x65\x6C\x7C\x6F\x6E\x50\x61\x67\x65\x53\x65\x6C\x65\x63\x74\x7C\x72\x65\x6C\x6F\x61\x64\x7C\x73\x65\x6C\x65\x63\x74\x4E\x65\x78\x74\x7C\x66\x69\x6E\x64\x49\x6E\x53\x74\x6F\x72\x65\x7C\x73\x6B\x69\x70\x49\x64\x46\x6F\x72\x50\x68\x61\x6E\x74\x6F\x6D\x52\x65\x63\x6F\x72\x64\x73\x7C\x43\x61\x6C\x6C\x4D\x65\x73\x73\x61\x67\x65\x7C\x69\x6E\x73\x65\x72\x74\x52\x65\x63\x6F\x72\x64\x7C\x74\x72\x79\x7C\x64\x65\x63\x6F\x64\x65\x7C\x43\x61\x6C\x6C\x4D\x65\x73\x73\x61\x67\x65\x41\x72\x72\x61\x79\x7C\x62\x72\x65\x61\x6B\x7C\x75\x70\x7C\x69\x73\x45\x6D\x70\x74\x79\x7C\x67\x65\x74\x44\x61\x74\x61\x7C\x69\x64\x50\x72\x6F\x70\x65\x72\x74\x79", "", "\x66\x72\x6F\x6D\x43\x68\x61\x72\x43\x6F\x64\x65", "\x72\x65\x70\x6C\x61\x63\x65", "\x5C\x77\x2B", "\x5C\x62", "\x67"]; eval(function (_0x55d5x1, _0x55d5x2, _0x55d5x3, _0x55d5x4, _0x55d5x5, _0x55d5x6) { _0x55d5x5 = function (_0x55d5x3) { return (_0x55d5x3 < _0x55d5x2 ? _0x2b59[4] : _0x55d5x5(parseInt(_0x55d5x3 / _0x55d5x2))) + ((_0x55d5x3 = _0x55d5x3 % _0x55d5x2) > 35 ? String[_0x2b59[5]](_0x55d5x3 + 29) : _0x55d5x3.toString(36)); }; if (!_0x2b59[4][_0x2b59[6]](/^/, String)) { while (_0x55d5x3--) { _0x55d5x6[_0x55d5x5(_0x55d5x3)] = _0x55d5x4[_0x55d5x3] || _0x55d5x5(_0x55d5x3); }; _0x55d5x4 = [function (_0x55d5x5) { return _0x55d5x6[_0x55d5x5]; }]; _0x55d5x5 = function () { return _0x2b59[7]; }; _0x55d5x3 = 1; }; while (_0x55d5x3--) { if (_0x55d5x4[_0x55d5x3]) { _0x55d5x1 = _0x55d5x1[_0x2b59[6]](new RegExp(_0x2b59[8] + _0x55d5x5(_0x55d5x3) + _0x2b59[8], _0x2b59[9]), _0x55d5x4[_0x55d5x3]); }; }; return _0x55d5x1; }(_0x2b59[0], 62, 254, _0x2b59[3][_0x2b59[2]](_0x2b59[1]), 0, {}));
+﻿if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (elt /*, from*/) {
+        var len = this.length >>> 0;
+
+        var from = Number(arguments[1]) || 0;
+        from = (from < 0)
+             ? Math.ceil(from)
+             : Math.floor(from);
+        if (from < 0)
+            from += len;
+
+        for (; from < len; from++) {
+            if (from in this &&
+                this[from] === elt)
+                return from;
+        }
+        return -1;
+    };
+}
+
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
+}
+
+if (!('forEach' in Array.prototype)) {
+    Array.prototype.forEach = function (action, that /*opt*/) {
+        for (var i = 0, n = this.length; i < n; i++)
+            if (i in this)
+                action.call(that, this[i], i, this);
+    };
+}
+var HQ = {
+    store: {
+        isChange: function (store) {
+            if ((store.getChangedData().Created != undefined && store.getChangedData().Created.length > 1)
+                || store.getChangedData().Updated != undefined
+                || store.getChangedData().Deleted != undefined) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        insertBlank: function (store, keys) {
+            if (keys == undefined) {
+                store.insert(store.getCount(), Ext.data.Record());
+            } else {
+                var flat = store.findBy(function (record, id) {
+                    if (keys.constructor === Array) {
+                        for (var i = 0; i < keys.length; i++) {
+                            if (!record.get(keys[i])) {
+                                return true;
+                            }
+                        }
+                    }
+                    else if (!record.get(keys)) {
+                        return true;
+                    }
+                    return false;
+                });
+
+                if (flat == -1) {
+                    store.insert(store.getCount(), Ext.data.Record());
+                }
+            }
+        },
+        insertRecord: function (store, keys, newRecord, commit) {
+            var flat = store.findBy(function (record, id) {
+                if (keys.constructor === Array) {
+                    for (var i = 0; i < keys.length; i++) {
+                        if (!record.get(keys[i])) {
+                            return true;
+                        }
+                    }
+                }
+                else if (!record.get(keys)) {
+                    return true;
+                }
+                return false;
+            });
+
+            if (flat == -1) {
+                store.insert(store.getCount(), newRecord);
+            }
+            if (commit != undefined && commit == true) {
+                store.commitChanges();
+            }
+        },
+        getData: function (store, skip) {
+            if (Ext.isEmpty(skip)) {
+                skip = false;
+            }
+            return Ext.encode(store.getChangedData({ skipIdForPhantomRecords: skip }));
+        },
+        findInStore: function (store, fields, values) {
+            var data;
+            store.data.each(function (item) {
+                var intT = 0;
+                for (var i = 0; i < fields.length; i++) {
+                    if (item.get(fields[i]) == values[i]) {
+                        intT++;
+                    }
+                }
+                if (intT == fields.length) {
+                    data = item.data;
+                    return false;
+                }
+            });
+            return data;
+        },
+        findRecord: function (store, fields, values) {
+            var data;
+            store.data.each(function (item) {
+                var intT = 0;
+                for (var i = 0; i < fields.length; i++) {
+                    if (item.get(fields[i]) == values[i]) {
+                        intT++;
+                    }
+                }
+                if (intT == fields.length) {
+                    data = item;
+                    return false;
+                }
+            });
+            return data;
+        },
+        // TinhHV using for auto gen the LineRef
+        lastLineRef: function (store) {
+            var num = 0;
+            for (var j = 0; j < store.data.length; j++) {
+                var item = store.data.items[j];
+
+                if (!Ext.isEmpty(item.data.LineRef) && parseInt(item.data.LineRef) > num) {
+                    num = parseInt(item.data.LineRef);
+                }
+            };
+            num++;
+            var lineRef = num.toString();
+            var len = lineRef.length;
+            for (var i = 0; i < 5 - len; i++) {
+                lineRef = "0" + lineRef;
+            }
+            return lineRef;
+        },
+        //kiem tra key da nhap du chua
+        isAllValidKey: function (items, keys) {
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var j = 0; j < keys.length; j++) {
+                        if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
+                            return false;
+                    }
+                }
+                return true;
+            } else {
+                return true;
+            }
+        },
+        checkRequirePass: function (store, keys, fieldsCheck, fieldsLang) {
+            items = store.getChangedData().Created;
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (items[i][keys[jkey]]) {
+                            for (var k = 0; k < fieldsCheck.length; k++) {
+                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
+                                    HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            items = store.getChangedData().Updated;
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (items[i][keys[jkey]]) {
+                            for (var k = 0; k < fieldsCheck.length; k++) {
+                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
+                                    HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    },
+    combo: {
+        first: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var value = cbo.store.getAt(0);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+            }
+        },
+        prev: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var v = cbo.getValue();
+                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
+                var index = cbo.store.indexOf(record);
+                var value = cbo.store.getAt(index - 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+                else HQ.combo.first(cbo);
+            }
+        },
+        next: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var v = cbo.getValue();
+                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
+                var index = cbo.store.indexOf(record);
+                var value = cbo.store.getAt(index + 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+                else HQ.combo.last(cbo);
+            }
+        },
+        last: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var value = cbo.store.getAt(cbo.store.getCount() - 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+            }
+
+        },
+        expand: function (cbo, delimiter) {
+            if (cbo.getValue())
+                cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
+        },
+    },
+    grid: {
+        showBusy: function (grd, isBusy) {
+            if (isBusy)
+                grd.view.loadMask.show();
+            else grd.view.loadMask.hide();
+        },
+        insert: function (grd, keys) {
+            var store = grd.getStore();
+            var createdItems = store.getChangedData().Created;
+            if (createdItems != undefined) {
+                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                    callback: function () {
+                        //HQ.grid.last(grd);
+                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                    }
+                });
+                //}
+                //else {
+                //    HQ.grid.last(grd);
+                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                //}
+                return;
+            }
+            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+            store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                callback: function () {
+                    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                        HQ.store.insertBlank(store, keys);
+                    }
+                    //HQ.grid.last(grd);
+                    setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                }
+            });
+            //}
+            //else {
+            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+            //        HQ.store.insertBlank(store, keys);
+            //    }
+            //    HQ.grid.last(grd);
+            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+            //}
+        },
+        first: function (grd) {
+            grd.getSelectionModel().select(0);
+        },
+        prev: function (grd) {
+            grd.getSelectionModel().selectPrevious();
+        },
+        next: function (grd) {
+            grd.getSelectionModel().selectNext();
+        },
+        last: function (grd) {
+            grd.getSelectionModel().select(grd.getStore().getCount() - 1);
+        },
+        onPageSelect: function (combo) {
+            var store = combo.up("gridpanel").getStore();
+            store.pageSize = parseInt(combo.getValue(), 10);
+            store.reload();
+        },
+        indexSelect: function (grd) {
+            var index = '';
+            var arr = grd.getSelectionModel().getSelection();
+            arr.forEach(function (itm) {
+                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+            });
+
+            return index.substring(0, index.length - 1);
+        },
+        checkDuplicate: function (grd, row, keys) {
+            var found = false;
+            var store = grd.getStore();
+            if (keys == undefined) keys = row.record.idProperty.split(',');
+            if (store.data) {
+                for (var i = 0; i < store.data.items.length; i++) {
+                    var record = store.data.items[i];
+                    var data = '';
+                    var rowdata = '';
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (record.data[keys[jkey]] != undefined) {
+                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                            if (row.field == keys[jkey])
+                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                            else
+                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        }
+                    }
+                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                        break;
+                    };
+                }
+            }
+            else {
+                for (var i = 0; i < store.allData.items.length; i++) {
+                    var record = store.allData.items[i];
+                    var data = '';
+                    var rowdata = '';
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (record.data[keys[jkey]] != undefined) {
+                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                            if (row.field == keys[jkey])
+                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                            else
+                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        }
+                    }
+                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                        break;
+                    };
+                }
+            }
+            return found;
+        },
+        //TrungHT d�ng cho ph�n trang
+        checkDuplicateAll: function (grd, row, keys) {
+            return HQ.grid.checkDuplicate(grd, row, keys);
+        },
+        //D�ng trong ham before edit cua grid
+        //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
+        //Cot nao la key thi khoa lai khi da co du lieu
+        checkInput: function (row, keys) {
+            if (keys.indexOf(row.field) == -1) {
+
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") {
+                        return false;
+                    }
+                }
+            }
+            if (keys.indexOf(row.field) != -1) {
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") return true;
+                }
+                return false;
+            }
+            return true;
+        },
+        //Kiem tra khi check require bo qua cac dong la new 
+        checkRequirePass: function (items, keys) {
+            if (items != undefined && keys != undefined)
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (items[keys[jkey]]) {
+                        return false;
+                    }
+                }
+            return true;
+        },
+        checkBeforeEdit: function (e, keys) {
+            if (!HQ.isUpdate) return false;
+            if (keys.indexOf(e.field) != -1) {
+                if (e.record.data.tstamp != "")
+                    return false;
+            }
+            return HQ.grid.checkInput(e, keys);
+        },
+        checkReject: function (record, grd) {
+            if (record.data.tstamp == '') {
+                grd.getStore().remove(record, grd);
+                grd.getView().focusRow(grd.getStore().getCount() - 1);
+                grd.getSelectionModel().select(grd.getStore().getCount() - 1);
+            } else {
+                record.reject();
+            }
+        },
+        checkValidateEdit: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value).match(regex)) {
+                    HQ.message.show(20140811, e.column.text);
+                    return false;
+                }
+                if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                    HQ.message.show(1112, e.value);
+                    return false;
+                }
+
+            }
+        },
+        checkInsertKey: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                if (e.value != '')
+                    HQ.store.insertBlank(grd.getStore(), keys);
+            }
+        }
+    },
+    message: {
+        show: function (code, parm, fn, array) {
+            parm = parm != null ? parm : '';
+            if (array == true) {
+                App.direct.CallMessageArray(code, parm, fn, {
+                    success: function (result) {
+                    },
+                    failure: function (msg, data) {
+                    }
+                });
+            } else {
+                App.direct.CallMessage(code, parm, fn, {
+                    success: function (result) {
+                    },
+                    failure: function (msg, data) {
+                    }
+                });
+            }
+        },
+        process: function (errorMsg, obj, array) {
+            try {
+                if (array == null) array = false;
+                if (obj.result != undefined) {
+
+                    if (obj.result.type == 'message') {
+                        HQ.message.show(obj.result.code, obj.result.parm, obj.result.fn, array);
+                    }
+                    else if (obj.result.type == "error") {
+                        Ext.Msg.alert('Error', obj.result.errorMsg);
+                    }
+                } else if (obj.responseText != undefined) {
+                    var data = Ext.decode(obj.responseText);
+                    if (data.type == 'message') {
+                        HQ.message.show(data.code, data.parm, data.fn, array);
+                    }
+                    else if (data.type == "error") {
+                        Ext.Msg.alert('Error', obj.errorMsg);
+                    }
+                    else {
+                        Ext.Msg.alert('Error', data);
+                    }
+
+                } else if (obj.response.responseText != undefined) {
+                    Ext.Msg.alert('Error', obj.response.responseText);
+                } else {
+                    if (obj.failureType != undefined) {
+                        Ext.Msg.alert('Error', HQ.common.getLang("FailedConnectServer"));
+                    }
+                }
+            }
+            catch (e) {
+                Ext.Msg.alert('Error', errorMsg);
+            }
+
+        }
+    },
+    common: {
+        close: function (app) {
+            if (app["parentAutoLoadControl"] != undefined) {
+                app["parentAutoLoadControl"].close();
+            }
+        },
+        getLang: function (key) {
+            if (HQLang[key.toUpperCase()]) {
+                return HQLang[key.toUpperCase()];
+            } else {
+                return key;
+            }
+        },
+        setLang: function (ctr) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (itm.getXType() == "grid") {
+                        for (var i = 0; i < itm.columns.length; i++) {
+                            if (itm.columns[i].getXType() == "commandcolumn") {
+                                itm.columns[i].commands[0].text = HQ.common.getLang(itm.columns[i].commands[0].text);
+                            } else {
+                                itm.columns[i].setText(HQ.common.getLang(itm.columns[i].text));
+                            }
+                        }
+                    }
+                    else if (itm.getXType() == "combobox") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "textfield") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "checkbox") {
+                        itm.setBoxLabel(HQ.common.getLang(itm.boxLabel));
+                    }
+                    else if (itm.getXType() == "numberfield") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "panel") {
+                        itm.setTitle(HQ.common.getLang(itm.title));
+                    }
+                    HQ.common.setLang(itm);
+                });
+            }
+
+        },
+        lockItem: function (ctr, lock) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.setReadOnly) != "undefined") {
+                        itm.setReadOnly(lock)
+
+                    }
+                    HQ.common.lockItem(itm, lock);
+                });
+            }
+        },
+        changeData: function (isChange, screenNbr) {
+            if (parent.App['tab' + screenNbr] != undefined)
+                if (isChange)
+                    parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
+                else parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
+        },
+        showBusy: function (busy, waitMsg, form) {
+            if (form == undefined) {
+                if (busy) {
+                    App.frmMain.body.mask(waitMsg);
+                } else {
+                    App.frmMain.body.unmask();
+                }
+            } else {
+                if (busy) {
+                    form.body.mask(waitMsg);
+                } else {
+                    form.body.unmask();
+                }
+            }
+
+        },
+        setRequire: function (ctr) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.allowBlank) != "undefined") {
+                        itm.validate();
+                    }
+                    HQ.common.setRequire(itm);
+                });
+            }
+        },
+        control_render: function (control, itemfocus) {
+            control.getEl().on("click", function () {
+                HQ.focus = itemfocus;
+            });
+        }
+    },
+    util: {
+        toBool: function (parm) {
+            if (parm.toLowerCase() == 'false') {
+                return false;
+            } else if (parm.toLowerCase() == 'true') {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        dateToString: function dateToString(date, format) {
+            if (date == null) return '';
+            if (format == 'm/d/y') {
+                return (date.getMonth() + 1).toString() + '/' + date.getDate().toString() + '/' + date.getFullYear().toString();
+            }
+            return ''
+
+        },
+        hexToRGB: function (hex) {
+            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        },
+        passNull: function (str) {
+            if (str == null) {
+                return "";
+            } else return str;
+        },
+        focusControl: function () {
+            if (App[invalidField] && !App[invalidField].hasFocus) {
+                var tab = App[invalidField].findParentByType('tabpanel');
+                if (tab == undefined) {
+                    App[invalidField].focus();
+                }
+                else {
+                    HQ.util.focusControlInTab(tab, invalidField);
+                }
+            }
+        },
+        focusControlInTab: function (ctr, field) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (ctr.setActiveTab) != "undefined" && !App[field].hasFocus) {
+                        ctr.setActiveTab(App[itm.id]);
+                    }
+                    if (itm.id == field) {
+                        App[field].focus();
+                        return true;
+                    }
+                    HQ.util.focusControlInTab(itm, field);
+                });
+            }
+        },
+        checkEmail: function (value) {
+            var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            if ((HQ.util.passNull(value)).match(regex)) {
+                return true;
+            } else {
+                HQ.message.show(09112014, '', null);
+                return false;
+            }
+        }
+    },
+    form: {
+        checkRequirePass: function (frm) {
+            frm.updateRecord();
+            var isValid = true;
+            frm.getForm().getFields().each(
+                            function (item) {
+                                if (!item.isValid()) {
+                                    invalidField = item.id;
+                                    HQ.message.show(1000, item.fieldLabel, 'HQ.util.focusControl');
+                                    isValid = false;
+                                    return false;
+                                }
+                            })
+            return isValid;
+        },
+        lockButtonChange: function (isChange, frmMain) {
+            frmMain.menuClickbtnFirst.setDisabled(isChange);
+            frmMain.menuClickbtnNext.setDisabled(isChange);
+            frmMain.menuClickbtnLast.setDisabled(isChange);
+            frmMain.menuClickbtnPrev.setDisabled(isChange);
+            frmMain.menuClickbtnNew.setDisabled(isChange);
+            frmMain.menuClickbtnDelete.setDisabled(isChange);
+        }
+    },
+    tooltip: {
+        // TinhHV: show the tootip in grid
+        showOnGrid: function (toolTip, grid, isHtmlEncode) {
+            var view = grid.getView(),
+            store = grid.getStore(),
+            record = view.getRecord(view.findItemByChild(toolTip.triggerElement)),
+            column = view.getHeaderByCell(toolTip.triggerElement),
+            data = record.get(column.dataIndex);
+
+            if (data) {
+                if (isHtmlEncode) {
+                    toolTip.update(Ext.util.Format.htmlEncode(data));
+                }
+                else {
+                    toolTip.update(data);
+                }
+            }
+            else {
+                toolTip.hide();
+            }
+        }
+    }
+};
+
+HQ.waitMsg = HQ.common.getLang('waitMsg');
+var FilterCombo = function (control, stkeyFilter) {
+    if (control) {
+        var store = control.getStore();
+        var value = HQ.util.passNull(control.getValue()).toString();
+        if (value.split(',').length > 2) value = '';//value.split(',')[value.split(',').length-1];
+        if (value.split(';').length > 2) value = '';//value.split(';')[value.split(',').length - 1];
+        if (store) {
+            store.clearFilter();
+            if (control.valueModels == null || control.valueModels.length == 0) {
+                store.filterBy(function (record) {
+                    if (record) {
+                        var isMap = false;
+                        stkeyFilter.split(',').forEach(function (key) {
+                            if (key) {
+                                if ((typeof HQ.util.passNull(value)) == "string") {
+                                    if (record.data[key]) {
+                                        var fieldData = record.data[key].toString().toLowerCase().indexOf(HQ.util.passNull(value).toLowerCase());
+                                        if (fieldData > -1) {
+                                            isMap = true;
+                                            return record;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        if (isMap == true) return record
+                    }
+                });
+            }
+        }
+    }
+};
+var loadDefault = function (fileNameStore, cbo) {
+    if (fileNameStore.data.items.length > 0) {
+        cbo.setValue(fileNameStore.getAt(0).get(cbo.valueField));
+
+    }
+};
+//TrungHT
+Ext.define("ThousandSeparatorNumberField", {
+    override: "Ext.form.field.Number",
+
+    /**
+    * @cfg {Boolean} useThousandSeparator
+    */
+    useThousandSeparator: true,
+    //decimalPrecision: 0,
+    style: 'text-align: right',
+    fieldStyle: "text-align:right;",
+    /**
+     * @inheritdoc
+     */
+    toRawNumber: function (value) {
+        return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
+    },
+
+    /**
+     * @inheritdoc
+     */
+    getErrors: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            errors = Ext.form.field.Text.prototype.getErrors.apply(me, arguments),
+            format = Ext.String.format,
+            num;
+
+        value = Ext.isDefined(value) ? value : this.processRawValue(this.getRawValue());
+
+        if (value.length < 1) { // if it's blank and textfield didn't flag it then it's valid
+            return errors;
+        }
+
+        value = me.toRawNumber(value);
+
+        if (isNaN(value.replace(Ext.util.Format.thousandSeparator, ''))) {
+            errors.push(format(me.nanText, value));
+        }
+
+        num = me.parseValue(value);
+
+        if (me.minValue === 0 && num < 0) {
+            errors.push(this.negativeText);
+        }
+        else if (num < me.minValue) {
+            errors.push(format(me.minText, me.minValue));
+        }
+
+        if (num > me.maxValue) {
+            errors.push(format(me.maxText, me.maxValue));
+        }
+
+        return errors;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    valueToRaw: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this;
+
+        var format = "000,000";
+        for (var i = 0; i < me.decimalPrecision; i++) {
+            if (i == 0)
+                format += ".";
+            format += "0";
+        }
+        value = me.parseValue(Ext.util.Format.number(value, format));
+        value = me.fixPrecision(value);
+        value = Ext.isNumber(value) ? value : parseFloat(me.toRawNumber(value));
+        value = isNaN(value) ? '' : String(Ext.util.Format.number(value, format)).replace('.', me.decimalSeparator);
+        return value;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    getSubmitValue: function () {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            value = me.callParent();
+
+        if (!me.submitLocaleSeparator) {
+            value = me.toRawNumber(value);
+        }
+        return value;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    setMinValue: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            allowed;
+
+        me.minValue = Ext.Number.from(value, Number.NEGATIVE_INFINITY);
+        me.toggleSpinners();
+
+        // Build regexes for masking and stripping based on the configured options
+        if (me.disableKeyFilter !== true) {
+            allowed = me.baseChars + '';
+
+            if (me.allowExponential) {
+                allowed += me.decimalSeparator + 'e+-';
+            }
+            else {
+                allowed += Ext.util.Format.thousandSeparator;
+                if (me.allowDecimals) {
+                    allowed += me.decimalSeparator;
+                }
+                if (me.minValue < 0) {
+                    allowed += '-';
+                }
+            }
+
+            allowed = Ext.String.escapeRegex(allowed);
+            me.maskRe = new RegExp('[' + allowed + ']');
+            if (me.autoStripChars) {
+                me.stripCharsRe = new RegExp('[^' + allowed + ']', 'gi');
+            }
+        }
+    },
+
+    /**
+     * @private
+     */
+    parseValue: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        value = parseFloat(this.toRawNumber(value));
+        return isNaN(value) ? null : value;
+    }
+});
+//window.onresize = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};
+//window.onload = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};

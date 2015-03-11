@@ -43,7 +43,7 @@
             .Model(Util.GenerateModel(typeof(AR_Salesperson), "mdlAR_Salesperson", "SlsperId"))       
             .Proxy(
                 X.AjaxProxy()                
-                .Url(Url.Action("GetARSalesPersonHeader", "AR20200"))                
+                .Url(Url.Action("GetSalesPersonById", "AR20200"))                
                 .ActionMethods(action =>
                 {
                     action.Read = HttpMethod.POST;
@@ -52,10 +52,10 @@
             ) 
             .Parameters(ps =>
             {
-                ps.Add(new StoreParameter("branchId", "App.cboBranchID.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("slsperid", "App.cboSlsperid.getValue()", ParameterMode.Raw));
             })      
-            .Listeners(p=>p.Load.Handler="stoSalesPerson_load()" )
+            .Listeners(p=>p.Load.Fn="Store.stoSalesPerson_load" )
             // Store: stoSalesPerson
         )
 
