@@ -31,14 +31,17 @@
             X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
             .Items(
                 HQ.Combo().ID("cboCpnyID")
-                .Name("cboCpnyID").HQLangCode("CPNYID").HQDBSys(true).AllowBlank(false).MarginSpec("5 0 0 0")
+                .Name("cboCpnyID").HQLangCode("CPNYID").HQDBSys(true).AllowBlank(false).MarginSpec("5 0 0 0").ForceSelection(true)
                 .HQProcedure("SA00000_pcCompanyAll").HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
                 .HQHeightWidth(400, 400).Width(600)
                 .LoadData()
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst => {
-                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                    lst.Change.Fn = "cboCpnyID_Change";// khi thay doi cbo
+                    //lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    //lst.Change.Fn = "cboCpnyID_Change";// khi thay doi cbo
+                    lst.TriggerClick.Fn = "cboCpnyID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
+                    lst.Change.Fn = "cboCpnyID_Change";//khi thay doi du lieu
+                    lst.Expand.Fn = "cboCpnyID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
                 })
                 , HQ.TextBox().ID("CpnyName").Name("CpnyName").HQLangCode("CPNYNAME").MarginSpec("5 0 0 0").Width(600).AllowBlank(false)         
             )
@@ -206,7 +209,7 @@
                                     ps.Add(new StoreParameter("CpnyID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
                                 })
                                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSys_CompanyAddr")))
-                                .Listeners(p => p.Load.Fn = "stoLoadGrid")
+                                .Listeners(p => p.Load.Fn = "stoLoadSys_CompanyAddr")
                             )
                             .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSys_CompanyAddr');")
                             .SortableColumns(false)
@@ -354,7 +357,7 @@
                                     l.Command.Handler = "grdSys_CompanyAddr_Reject(record);";
                                 })
                         )
-                        .SelectionModel(X.RowSelectionModel().ID("slmSYS_UserGroupSys_CompanyAddr")
+                        .SelectionModel(X.RowSelectionModel().ID("slmSys_CompanyAddr")
                         .Mode(SelectionMode.Multi))
                         .BottomBar(
                             X.PagingToolbar()
@@ -422,17 +425,17 @@
                             ps.Add(new StoreParameter("CpnyID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
                         })
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_SubCompany")))
-                        .Listeners(p => p.Load.Fn = "stoLoadGrid")
+                        .Listeners(p => p.Load.Fn = "stoLoadSYS_SubCompany")
                             )
                             .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_SubCompany');")
                             .SortableColumns(false)
                             .ColumnModel(
                                 X.RowNumbererColumn()
                         
-                                , X.Column().Text(Util.GetLang("SubCpnyID")).Width(100).DataIndex("SubCpnyID")
+                                , X.Column().Text(Util.GetLang("SubCpnyID")).Width(300).DataIndex("SubCpnyID")
                                     .Editor(
                                         HQ.Combo().ID("cboSubCpnyID").Name("cboSubCpnyID").HQProcedure("SA00000_pcCompanyAll")
-                                        .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyName").ValueField("CpnyID").HQAutoLoad(true)
+                                        .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyName").ValueField("CpnyID")
                                         .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true).HQDBSys(true)
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                         .Listeners(lst => { 
@@ -481,9 +484,9 @@
                                     .ClicksToEdit(1)
                                     .Listeners(ls =>
                                     {
-                                        //ls.BeforeEdit.Fn = "grdSYS_SubCompany_BeforeEdit";
-                                        //ls.Edit.Fn = "grdSYS_SubCompany_Edit";
-                                        //ls.ValidateEdit.Fn = "grdSYS_SubCompany_ValidateEdit";
+                                        ls.BeforeEdit.Fn = "grdSYS_SubCompany_BeforeEdit";
+                                        ls.Edit.Fn = "grdSYS_SubCompany_Edit";
+                                        ls.ValidateEdit.Fn = "grdSYS_SubCompany_ValidateEdit";
                                     })
                                 )
                                 .Features(

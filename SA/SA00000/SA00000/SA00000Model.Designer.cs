@@ -84,22 +84,6 @@ namespace SA00000
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<SYS_SubCompany> SYS_SubCompany
-        {
-            get
-            {
-                if ((_SYS_SubCompany == null))
-                {
-                    _SYS_SubCompany = base.CreateObjectSet<SYS_SubCompany>("SYS_SubCompany");
-                }
-                return _SYS_SubCompany;
-            }
-        }
-        private ObjectSet<SYS_SubCompany> _SYS_SubCompany;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SYS_Company> SYS_Company
         {
             get
@@ -112,6 +96,22 @@ namespace SA00000
             }
         }
         private ObjectSet<SYS_Company> _SYS_Company;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SYS_SubCompany> SYS_SubCompany
+        {
+            get
+            {
+                if ((_SYS_SubCompany == null))
+                {
+                    _SYS_SubCompany = base.CreateObjectSet<SYS_SubCompany>("SYS_SubCompany");
+                }
+                return _SYS_SubCompany;
+            }
+        }
+        private ObjectSet<SYS_SubCompany> _SYS_SubCompany;
 
         #endregion
 
@@ -126,19 +126,19 @@ namespace SA00000
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the SYS_SubCompany EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSYS_SubCompany(SYS_SubCompany sYS_SubCompany)
-        {
-            base.AddObject("SYS_SubCompany", sYS_SubCompany);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the SYS_Company EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToSYS_Company(SYS_Company sYS_Company)
         {
             base.AddObject("SYS_Company", sYS_Company);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SYS_SubCompany EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSYS_SubCompany(SYS_SubCompany sYS_SubCompany)
+        {
+            base.AddObject("SYS_SubCompany", sYS_SubCompany);
         }
 
         #endregion
@@ -1661,11 +1661,13 @@ namespace SA00000
         /// </summary>
         /// <param name="cpnyID">Initial value of the CpnyID property.</param>
         /// <param name="subCpnyID">Initial value of the SubCpnyID property.</param>
-        public static SYS_SubCompany CreateSYS_SubCompany(global::System.String cpnyID, global::System.String subCpnyID)
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SYS_SubCompany CreateSYS_SubCompany(global::System.String cpnyID, global::System.String subCpnyID, global::System.Byte[] tstamp)
         {
             SYS_SubCompany sYS_SubCompany = new SYS_SubCompany();
             sYS_SubCompany.CpnyID = cpnyID;
             sYS_SubCompany.SubCpnyID = subCpnyID;
+            sYS_SubCompany.tstamp = tstamp;
             return sYS_SubCompany;
         }
 
@@ -1726,6 +1728,174 @@ namespace SA00000
         private global::System.String _SubCpnyID;
         partial void OnSubCpnyIDChanging(global::System.String value);
         partial void OnSubCpnyIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Crtd_Datetime
+        {
+            get
+            {
+                return _Crtd_Datetime;
+            }
+            set
+            {
+                OnCrtd_DatetimeChanging(value);
+                ReportPropertyChanging("Crtd_Datetime");
+                _Crtd_Datetime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Crtd_Datetime");
+                OnCrtd_DatetimeChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Crtd_Datetime;
+        partial void OnCrtd_DatetimeChanging(Nullable<global::System.DateTime> value);
+        partial void OnCrtd_DatetimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_Prog
+        {
+            get
+            {
+                return _Crtd_Prog;
+            }
+            set
+            {
+                OnCrtd_ProgChanging(value);
+                ReportPropertyChanging("Crtd_Prog");
+                _Crtd_Prog = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Crtd_Prog");
+                OnCrtd_ProgChanged();
+            }
+        }
+        private global::System.String _Crtd_Prog;
+        partial void OnCrtd_ProgChanging(global::System.String value);
+        partial void OnCrtd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_User
+        {
+            get
+            {
+                return _Crtd_User;
+            }
+            set
+            {
+                OnCrtd_UserChanging(value);
+                ReportPropertyChanging("Crtd_User");
+                _Crtd_User = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Crtd_User");
+                OnCrtd_UserChanged();
+            }
+        }
+        private global::System.String _Crtd_User;
+        partial void OnCrtd_UserChanging(global::System.String value);
+        partial void OnCrtd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> LUpd_Datetime
+        {
+            get
+            {
+                return _LUpd_Datetime;
+            }
+            set
+            {
+                OnLUpd_DatetimeChanging(value);
+                ReportPropertyChanging("LUpd_Datetime");
+                _LUpd_Datetime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LUpd_Datetime");
+                OnLUpd_DatetimeChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _LUpd_Datetime;
+        partial void OnLUpd_DatetimeChanging(Nullable<global::System.DateTime> value);
+        partial void OnLUpd_DatetimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_Prog
+        {
+            get
+            {
+                return _LUpd_Prog;
+            }
+            set
+            {
+                OnLUpd_ProgChanging(value);
+                ReportPropertyChanging("LUpd_Prog");
+                _LUpd_Prog = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LUpd_Prog");
+                OnLUpd_ProgChanged();
+            }
+        }
+        private global::System.String _LUpd_Prog;
+        partial void OnLUpd_ProgChanging(global::System.String value);
+        partial void OnLUpd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_User
+        {
+            get
+            {
+                return _LUpd_User;
+            }
+            set
+            {
+                OnLUpd_UserChanging(value);
+                ReportPropertyChanging("LUpd_User");
+                _LUpd_User = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LUpd_User");
+                OnLUpd_UserChanged();
+            }
+        }
+        private global::System.String _LUpd_User;
+        partial void OnLUpd_UserChanging(global::System.String value);
+        partial void OnLUpd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
 
         #endregion
 
@@ -2264,11 +2434,13 @@ namespace SA00000
         /// </summary>
         /// <param name="cpnyID">Initial value of the CpnyID property.</param>
         /// <param name="subCpnyID">Initial value of the SubCpnyID property.</param>
-        public static SA00000_pgSubCompany_Result CreateSA00000_pgSubCompany_Result(global::System.String cpnyID, global::System.String subCpnyID)
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SA00000_pgSubCompany_Result CreateSA00000_pgSubCompany_Result(global::System.String cpnyID, global::System.String subCpnyID, global::System.Byte[] tstamp)
         {
             SA00000_pgSubCompany_Result sA00000_pgSubCompany_Result = new SA00000_pgSubCompany_Result();
             sA00000_pgSubCompany_Result.CpnyID = cpnyID;
             sA00000_pgSubCompany_Result.SubCpnyID = subCpnyID;
+            sA00000_pgSubCompany_Result.tstamp = tstamp;
             return sA00000_pgSubCompany_Result;
         }
 
@@ -2323,6 +2495,30 @@ namespace SA00000
         private global::System.String _SubCpnyID;
         partial void OnSubCpnyIDChanging(global::System.String value);
         partial void OnSubCpnyIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
 
         #endregion
 

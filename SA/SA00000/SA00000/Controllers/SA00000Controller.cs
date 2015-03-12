@@ -160,13 +160,21 @@ namespace SA00000.Controllers
 
                     if (lang != null)
                     {
-                        throw new MessageException(MessageType.Message, "19");
+                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        {
+                            UpdatingSYS_SubCompany(lang, curLang, false);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
                     }
                     else
                     {
                         lang = new SYS_SubCompany();
                         lang.CpnyID = CpnyID;
                         lang.SubCpnyID = curLang.SubCpnyID;
+                        UpdatingSYS_SubCompany(lang, curLang, true);
                         _db.SYS_SubCompany.AddObject(lang);
                     }
                 }
@@ -181,6 +189,7 @@ namespace SA00000.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
+        #endregion
 
         //Update Header Company
         private void UpdatingHeader(ref SYS_Company t,SYS_Company s)
@@ -213,7 +222,26 @@ namespace SA00000.Controllers
             t.LUpd_User = _userName;
         }
 
+        //Update SYS_SubCompany
+        #region Update SYS_SubCompany
+        private void UpdatingSYS_SubCompany(SYS_SubCompany t, SA00000_pgSubCompany_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+          
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+
+        }
+        #endregion
+
         //Update Sys_CompanyAddr
+        #region Update SYS_CompanyAddr
         private void UpdatingSys_CompanyAddr(Sys_CompanyAddr t, SA00000_pgCompanyAddr_Result s, bool isNew)
         {
             if (isNew)
