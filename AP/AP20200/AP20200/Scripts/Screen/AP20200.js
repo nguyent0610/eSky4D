@@ -6,27 +6,29 @@
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboVendID.getStore().load(function () {
-        //App.cboCountry.getStore().load(function () {
-        //    App.cboBillCountry.getStore().load(function () {
-        //        App.cboClassID.getStore().load(function () {
-        //            App.cboStatus.getStore().load(function () {
-        //                App.cboTermsID.getStore().load(function () {
-        //                    App.cboTaxDflt.getStore().load(function () {
-        //                        App.cboTaxId00.getStore().load(function () {
-        //                            App.cboTaxId01.getStore().load(function () {
-        //                                App.cboTaxId02.getStore().load(function () {
-        //                                    App.cboTaxId03.getStore().load(function () {
-                                                App.stoVendor.reload();
-    //                                        })
-    //                                    })
-    //                                })
-    //                            })
-    //                        })
-    //                    })
-    //                })
-    //            })
-    //        })
-    //    })
+        App.cboCountry.getStore().load(function () {
+            App.cboBillCountry.getStore().load(function () {
+                App.cboClassID.getStore().load(function () {
+                    App.cboStatus.getStore().load(function () {
+                        App.cboTermsID.getStore().load(function () {
+                            App.cboTaxDflt.getStore().load(function () {
+                                App.cboTaxId00.getStore().load(function () {
+                                    App.cboTaxId01.getStore().load(function () {
+                                        App.cboTaxId02.getStore().load(function () {
+                                            App.cboTaxId03.getStore().load(function () {
+                                                App.cboMOQType.getStore().load(function () {                                                   
+                                                    App.stoVendor.reload();
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
     });
 };
 ////////////////////////////////////////////////////////////////////////
@@ -96,6 +98,8 @@ var firstLoad = function () {
 };
 //load store khi co su thay doi vendid
 var stoLoad = function (sto) {
+    
+
     HQ.common.showBusy(false);
     HQ.isNew = false;
     App.cboVendID.forceSelection = true;
@@ -117,6 +121,13 @@ var stoLoad = function (sto) {
     var record = sto.getAt(0);     
     App.frmMain.getForm().loadRecord(record);
     frmChange();
+    HQ.common.showBusy(false);
+
+    App.cboBillCity.forceSelection=false;
+    App.cboBillState.forceSelection=false;
+    App.cboCity.forceSelection=false;
+    App.cboState.forceSelection=false;
+  
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
@@ -199,6 +210,7 @@ var cboBillCountry_Change = function (sender, e) {
 };
 // Event when cboState is changed or selected item
 var cboState_Change = function (sender, e) {
+
     App.cboCity.getStore().load(function () {
         var curRecord = App.frmMain.getRecord();
         if (curRecord != undefined)

@@ -68,17 +68,17 @@
                     .Items
                     (
                         HQ.Combo().ID("cboClassID").Name("cboClassID").HQLangCode("ClassID").HQProcedure("AP20200_pcClassID").AllowBlank(false)
-                        .HQColumnShow("ClassID,Descr").DisplayField("Descr").ValueField("ClassID").Width(300).DataIndex("ClassID")
+                        .HQColumnShow("ClassID,Descr").DisplayField("Descr").ValueField("ClassID").Width(300).DataIndex("ClassID").ForceSelection(true)
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .LoadData()
                          .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                          .Listeners(lst =>
                                         {
-                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            lst.TriggerClick.Handler = "if (index == 0) {this.focus(true); this.clearValue();}";
                                            
                                         })
                         , HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("Status").HQProcedure("AP20200_pcStatus").AllowBlank(false)
-                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").Width(300).DataIndex("Status")
+                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").Width(300).DataIndex("Status").ForceSelection(true)
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .HQParam(new StoreParameterCollection() 
                         { 
@@ -91,7 +91,7 @@
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                            
                                         })
-                        , HQ.Combo().ID("cboTermsID").Name("cboTermsID").HQLangCode("TermsID").HQProcedure("AP20200_pcTerms_Vend").AllowBlank(false)
+                        , HQ.Combo().ID("cboTermsID").Name("cboTermsID").HQLangCode("TermsID").HQProcedure("AP20200_pcTerms_Vend").AllowBlank(false).ForceSelection(true).HQAutoLoad(false)
                         .HQColumnShow("TermsID,Descr").DisplayField("Descr").ValueField("TermsID").Width(300).DataIndex("Terms")
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .LoadData()
@@ -101,7 +101,7 @@
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                            
                                         })
-                        , HQ.Combo().ID("cboDfltOrdFromId").Name("cboDfltOrdFromId").HQLangCode("DefaultID").HQProcedure("AP20200_pcDefID")
+                        , HQ.Combo().ID("cboDfltOrdFromId").Name("cboDfltOrdFromId").HQLangCode("DefaultID").HQProcedure("AP20200_pcDefID").HQAutoLoad(false)
                         .HQColumnShow("OrdFromId,VendID").DisplayField("OrdFromId").ValueField("OrdFromId").Width(300).DataIndex("DfltOrdFromId")
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .HQParam(new StoreParameterCollection() 
@@ -115,7 +115,7 @@
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                            
                                         })
-                         , HQ.Combo().ID("cboTaxDflt").Name("cboTaxDflt").HQLangCode("TaxDflt").HQProcedure("AP20200_pcTaxDflt").AllowBlank(false)
+                         , HQ.Combo().ID("cboTaxDflt").Name("cboTaxDflt").HQLangCode("TaxDflt").HQProcedure("AP20200_pcTaxDflt").AllowBlank(false).ForceSelection(true).HQAutoLoad(false)
                         .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").Width(300).DataIndex("TaxDflt")
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .HQParam(new StoreParameterCollection() 
@@ -129,7 +129,7 @@
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                            
                                         })
-                          , HQ.Combo().ID("cboTaxId00").Name("cboTaxId00").HQLangCode("TaxId00").HQProcedure("AP20200_pcTaxAll")
+                          , HQ.Combo().ID("cboTaxId00").Name("cboTaxId00").HQLangCode("TaxId00").HQProcedure("AP20200_pcTaxAll").ForceSelection(true).HQAutoLoad(false)
                         .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("Descr").ValueField("TaxID").Width(300).DataIndex("TaxId00")
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .LoadData()
@@ -139,7 +139,7 @@
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                            
                                         })
-                         , HQ.Combo().ID("cboTaxId01").Name("cboTaxId01").HQLangCode("TaxId01").HQProcedure("AP20200_pcTaxAll")
+                         , HQ.Combo().ID("cboTaxId01").Name("cboTaxId01").HQLangCode("TaxId01").HQProcedure("AP20200_pcTaxAll").ForceSelection(true).HQAutoLoad(false)
                         .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("Descr").ValueField("TaxID").Width(300).DataIndex("TaxId01")
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .LoadData()
@@ -149,7 +149,7 @@
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                            
                                         })
-                         , HQ.Combo().ID("cboTaxId02").Name("cboTaxId02").HQLangCode("TaxId02").HQProcedure("AP20200_pcTaxAll")
+                         , HQ.Combo().ID("cboTaxId02").Name("cboTaxId02").HQLangCode("TaxId02").HQProcedure("AP20200_pcTaxAll").ForceSelection(true).HQAutoLoad(false)
                         .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("Descr").ValueField("TaxID").Width(300).DataIndex("TaxId02")
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .LoadData()
@@ -159,7 +159,7 @@
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                            
                                         })
-                         , HQ.Combo().ID("cboTaxId03").Name("cboTaxId03").HQLangCode("TaxId03").HQProcedure("AP20200_pcTaxAll")
+                         , HQ.Combo().ID("cboTaxId03").Name("cboTaxId03").HQLangCode("TaxId03").HQProcedure("AP20200_pcTaxAll").ForceSelection(true).HQAutoLoad(false)
                         .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("Descr").ValueField("TaxID").Width(300).DataIndex("TaxId03")
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                         .LoadData()
@@ -184,7 +184,7 @@
                          , HQ.NumberField().ID("txtMOQVal").Name("txtMOQVal").HQLangCode("MOQVal").DataIndex("MOQVal")
                         .Width(300).MarginSpec("5 0 0 0")
 
-                        , HQ.Combo().ID("cboMOQType").Name("cboMOQType").HQLangCode("MOQType").HQProcedure("AP20200_pcMOQType").AllowBlank(false)
+                        , HQ.Combo().ID("cboMOQType").Name("cboMOQType").HQLangCode("MOQType").HQProcedure("AP20200_pcMOQType").AllowBlank(false).HQAutoLoad(false).ForceSelection(true)
                         .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").Width(300).DataIndex("MOQType")
                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                          .HQParam(new StoreParameterCollection() 
@@ -227,7 +227,7 @@
                                         , HQ.TextBox().ID("txtAddr2").Name("txtAddr2").HQLangCode("Addr2").DataIndex("Addr2")
                                         .Width(300).MarginSpec("5 0 0 0")
 
-                                        , HQ.Combo().ID("cboCountry").Name("cboCountry").HQLangCode("Country").HQProcedure("AP20200_pcCountryID").AllowBlank(false)
+                                        , HQ.Combo().ID("cboCountry").Name("cboCountry").HQLangCode("Country").HQProcedure("AP20200_pcCountryID").HQAutoLoad(false).AllowBlank(false).ForceSelection(true)
                                         .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").Width(300).DataIndex("Country")
                                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                         .LoadData()
@@ -238,7 +238,7 @@
                                             lst.Change.Fn = "cboCountry_Change";
                                         })
 
-                                        , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("State").HQProcedure("AP20200_pcStateByCountry").HQAutoLoad(false)
+                                        , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("State").HQProcedure("AP20200_pcStateByCountry").HQAutoLoad(false).ForceSelection(false)
                                         .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").DataIndex("State")
                                         .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
                                         .HQParam(new StoreParameterCollection() 
@@ -250,9 +250,10 @@
                                         {
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                             lst.Change.Fn = "cboState_Change";
+                                            lst.Focus.Handler = "this.forceSelection = true;";
                                         })
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                        , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("City").HQProcedure("AP20200_pcCityByCountryState").HQAutoLoad(false)
+                                        , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("City").HQProcedure("AP20200_pcCityByCountryState").HQAutoLoad(false).ForceSelection(false)
                                         .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").DataIndex("City")
                                         .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                         .HQParam(new StoreParameterCollection() 
@@ -265,6 +266,7 @@
                                          .Listeners(lst =>
                                         {
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            lst.Focus.Handler = "this.forceSelection = true;";
                                            
                                         })
                                         , HQ.TextBox().ID("txtShipZip").Name("txtShipZip").HQLangCode("Zip").DataIndex("Zip")
@@ -304,7 +306,7 @@
                                         , HQ.TextBox().ID("txtBillAddr2").Name("txtBillAddr2").DataIndex("RemitAddr2").HQLangCode("Addr2").HideLabel(true)
                                         .Width(150).MarginSpec("5 0 0 0")
 
-                                        , HQ.Combo().ID("cboBillCountry").Name("cboBillCountry").HQProcedure("AP20200_pcCountryID").HQLangCode("Country").HideLabel(true).AllowBlank(false)
+                                        , HQ.Combo().ID("cboBillCountry").Name("cboBillCountry").HQProcedure("AP20200_pcCountryID").HQLangCode("Country").HideLabel(true).HQAutoLoad(false).AllowBlank(false).ForceSelection(true)
                                         .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").Width(150).DataIndex("RemitCountry")
                                         .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                         .LoadData()
@@ -315,7 +317,7 @@
                                             lst.Change.Fn = "cboBillCountry_Change";
                                         })
 
-                                        , HQ.Combo().ID("cboBillState").Name("cboBillState").HQProcedure("AP20200_pcStateByCountry").HQLangCode("State").HQAutoLoad(false).HideLabel(true)
+                                        , HQ.Combo().ID("cboBillState").Name("cboBillState").HQProcedure("AP20200_pcStateByCountry").HQLangCode("State").HQAutoLoad(false).HideLabel(true).ForceSelection(false)
                                         .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").DataIndex("RemitState")
                                         .Width(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
                                         .HQParam(new StoreParameterCollection() 
@@ -328,9 +330,10 @@
                                         {
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                                 lst.Change.Fn = "cboBillState_Change";
+                                                lst.Focus.Handler = "this.forceSelection = true;";
                                             })
 
-                                        , HQ.Combo().ID("cboBillCity").Name("cboBillCity").HQProcedure("AP20200_pcCityByCountryState").HQLangCode("City").HQAutoLoad(false).HideLabel(true)
+                                        , HQ.Combo().ID("cboBillCity").Name("cboBillCity").HQProcedure("AP20200_pcCityByCountryState").HQLangCode("City").HQAutoLoad(false).HideLabel(true).ForceSelection(false)
                                         .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").DataIndex("RemitCity")
                                         .Width(150).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                         .HQParam(new StoreParameterCollection() 
@@ -343,6 +346,7 @@
                                          .Listeners(lst =>
                                         {
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                            lst.Focus.Handler = "this.forceSelection = true;";
                                            
                                         })
                                         , HQ.TextBox().ID("txtBillZip").Name("txtBillZip").DataIndex("RemitZip").HQLangCode("Zip").HideLabel(true)
