@@ -221,6 +221,19 @@ function refresh(item) {
         if (App.cboCustId.valueModels == null) App.cboCustId.setValue('');
         App.cboCustId.getStore().reload();
         App.storeFormBig.reload();
+        if (tmpHiddenTabLTT == false) {
+            App.storeGridLTTTop.reload();
+            App.storeGridLTTBot.reload();
+        }
+        if (tmpHiddenTabAdv == false) {
+            App.storeGridAdv.reload();
+        }
+        if (tmpHiddenTabSellingProd == false) {
+            App.storeGridSellingProd.reload();
+        }
+        if (tmpHiddenTabDispMethod == false) {
+            App.storeGridDispMethod.reload();
+        }
     }
 };
 
