@@ -17,12 +17,18 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_Screen);
             break;
         case "refresh":
-            HQ.isFirstLoad = true;
-            App.stoData.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSYS_Screen.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdSYS_Screen);
+                HQ.grid.insert(App.grdSYS_Screen, keys);
             }
             break;
         case "delete":
@@ -34,7 +40,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoData, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.store.checkRequirePass(App.stoSYS_Screen, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -42,11 +48,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.store.isChange(App.stoData)) {
-                HQ.message.show(7, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
 
@@ -62,7 +64,7 @@ var grdSYS_Screen_ValidateEdit = function (item, e) {
 };
 var grdSYS_Screen_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSYS_Screen);
-    stoChanged(App.stoData);
+    stoChanged(App.stoSYS_Screen);
 };
 
 var save = function () {
@@ -71,10 +73,11 @@ var save = function () {
             waitMsg: HQ.common.getLang("WaitMsg"),
             url: 'SA00100/Save',
             params: {
-                lstData: HQ.store.getData(App.stoData)
+                lstData: HQ.store.getData(App.stoSYS_Screen)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                HQ.isChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
@@ -87,20 +90,14 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSYS_Screen.deleteSelected();
-        stoChanged(App.stoData);
+        stoChanged(App.stoSYS_Screen);
     }
 };
-//// Other Functions ////////////////////////////////////////////////////
 
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.close(this);
-    }
-};
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
-    App.stoData.reload();
+    App.stoSYS_Screen.reload();
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
@@ -123,3 +120,15 @@ var stoLoad = function (sto) {
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_Screen.reload();
+    }
+};
+///////////////////////////////////

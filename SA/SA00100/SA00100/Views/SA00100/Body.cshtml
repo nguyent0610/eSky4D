@@ -27,9 +27,9 @@
         .ID("grdSYS_Screen")
         .Store(
              X.Store()
-            .ID("stoData")
+            .ID("stoSYS_Screen")
             .PageSize(50)//.AutoLoad(true)
-            .Model(Util.GenerateModel(typeof(SA00100_pgLoadGrid_Result), "mdlgrdSYS_Screen", "ScreenNumber"))
+            .Model(Util.GenerateModel(typeof(SA00100_pgLoadGrid_Result), "mdlSYS_Screen", "ScreenNumber"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
             .Listeners(l =>
             {
