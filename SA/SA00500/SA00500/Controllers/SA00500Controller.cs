@@ -44,7 +44,6 @@ namespace SA00500.Controllers
         {
             try
             {
-
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
                 ChangeRecords<SYS_Group> lstLang = dataHandler.BatchObjectData<SYS_Group>();
                 foreach (SYS_Group deleted in lstLang.Deleted)
