@@ -114,6 +114,7 @@ var grdMailDetail_BeforeEdit = function (editor, e) {
 };
 var grdMailDetail_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdMailDetail, e, keys);
+    frmChange();
 };
 var grdMailDetail_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdMailDetail, e, keys);

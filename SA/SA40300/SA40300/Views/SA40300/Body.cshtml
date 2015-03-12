@@ -167,9 +167,11 @@
                                 {
                                     ps.Add(new StoreParameter("MailID", "App.cboMailID.value", ParameterMode.Raw));
                                 })
-                .Listeners(p => p.Load.Fn = "loadDataAutoDetail"))
-            .SortableColumns(false)
-                     
+                    .Listeners(l => { l.Load.Fn = "loadDataAutoDetail";
+                                      l.Update.Fn = "stoChanged";  
+                                })
+                )
+            .SortableColumns(false)                     
             .ColumnModel(
                 Html.X().RowNumbererColumn()
                , Html.X().Column().Text(Util.GetLang("ReportID")).Width(150).DataIndex("ReportID")
