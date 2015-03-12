@@ -67,30 +67,62 @@ var menuClick = function (command) {
         case "first":
             if (HQ.focus == 'header') {
                 HQ.combo.first(App.cboCustId, HQ.isChange);
-            } else if (HQ.focus == '') {
-               // HQ.grid.first(App.grdMailDetail);
+            } else if (HQ.focus == 'grdLTTContract') {
+                HQ.grid.first(App.grdTop);
+            } else if (HQ.focus == 'grdLTTContractDetail') {
+                HQ.grid.first(App.grdBot);
+            } else if (HQ.focus == 'grdAdv') {
+                HQ.grid.first(App.grdAdv);
+            } else if (HQ.focus == 'grdSellingProd') {
+                HQ.grid.first(App.grdSellingProd);
+            } else if (HQ.focus == 'grdDispMethod') {
+                HQ.grid.first(App.grdDispMethod);
             }
             break;
         case "prev":
             if (HQ.focus == 'header') {
                 HQ.combo.next(App.cboCustId, HQ.isChange);
-            } else if (HQ.focus == '') {
-                //HQ.grid.next(App.grdMailDetail);
+            } else if (HQ.focus == 'grdLTTContract') {
+                HQ.grid.prev(App.grdTop);
+            } else if (HQ.focus == 'grdLTTContractDetail') {
+                HQ.grid.prev(App.grdBot);
+            } else if (HQ.focus == 'grdAdv') {
+                HQ.grid.prev(App.grdAdv);
+            } else if (HQ.focus == 'grdSellingProd') {
+                HQ.grid.prev(App.grdSellingProd);
+            } else if (HQ.focus == 'grdDispMethod') {
+                HQ.grid.prev(App.grdDispMethod);
             }
             break;
         case "next":
             if (HQ.focus == 'header') {
                 HQ.combo.prev(App.cboCustId, HQ.isChange);
-            } else if (HQ.focus == '') {
-                //HQ.grid.prev(App.grdMailDetail);
+            } else if (HQ.focus == 'grdLTTContract') {
+                HQ.grid.next(App.grdTop);
+            } else if (HQ.focus == 'grdLTTContractDetail') {
+                HQ.grid.next(App.grdBot);
+            } else if (HQ.focus == 'grdAdv') {
+                HQ.grid.next(App.grdAdv);
+            } else if (HQ.focus == 'grdSellingProd') {
+                HQ.grid.next(App.grdSellingProd);
+            } else if (HQ.focus == 'grdDispMethod') {
+                HQ.grid.next(App.grdDispMethod);
             }
 
             break;
         case "last":
             if (HQ.focus == 'header') {
                 HQ.combo.last(App.cboCustId, HQ.isChange);
-            } else if (HQ.focus == '') {
-                //HQ.grid.last(App.grdMailDetail);
+            } else if (HQ.focus == 'grdLTTContract') {
+                HQ.grid.last(App.grdTop);
+            } else if (HQ.focus == 'grdLTTContractDetail') {
+                HQ.grid.last(App.grdBot);
+            } else if (HQ.focus == 'grdAdv') {
+                HQ.grid.last(App.grdAdv);
+            } else if (HQ.focus == 'grdSellingProd') {
+                HQ.grid.last(App.grdSellingProd);
+            } else if (HQ.focus == 'grdDispMethod') {
+                HQ.grid.last(App.grdDispMethod);
             }
             break;
         case "refresh":
