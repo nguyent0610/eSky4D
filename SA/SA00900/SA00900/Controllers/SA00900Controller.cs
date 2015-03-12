@@ -22,7 +22,6 @@ namespace SA00900.Controllers
         SA00900Entities _db = Util.CreateObjectContext<SA00900Entities>(true);
         public ActionResult Index()
         {
-            
             Util.InitRight(_screenNbr);
             return View();
         }

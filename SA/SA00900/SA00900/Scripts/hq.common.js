@@ -719,7 +719,7 @@ Ext.define("ThousandSeparatorNumberField", {
     },
 
     /**
-     * @private
+     * @private`
      */
     parseValue: function (value) {
         if (!this.useThousandSeparator)
