@@ -244,11 +244,32 @@ namespace AR20400.Controllers
             return this.Store(lstLTTContractDetail);
         }
 
+        public ActionResult GetDataGridAdv(String custId)
+        {
+
+            var lstAR_CustAdvTool = _db.AR_CustAdvTool.Where(p => p.CustID == custId).ToList();
+            return this.Store(lstAR_CustAdvTool);
+        }
+
+        public ActionResult GetDataGridSellingProd(String custId)
+        {
+
+            var lstAR_CustSellingProducts = _db.AR_CustSellingProducts.Where(p => p.CustID == custId).ToList();
+            return this.Store(lstAR_CustSellingProducts);
+        }
+
+        public ActionResult GetDataGridDispMethod(String custId)
+        {
+
+            var lstAR_CustDisplayMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == custId).ToList();
+            return this.Store(lstAR_CustDisplayMethod);
+        }
 
         [DirectMethod]
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult SaveTree(FormCollection data, string custID, string handle, string nodeID, int nodeLevel, string parentRecordID, int hadChild, string status, string tmpSelectedNode, string branchID, string custName, bool isNew,bool tmpHiddenTree)
+        public ActionResult SaveTree(FormCollection data, string custID, string handle, string nodeID, int nodeLevel, string parentRecordID,
+            int hadChild, string status, string tmpSelectedNode, string branchID, string custName, bool isNew, bool tmpHiddenTree, string lTTContractNbr)
         {
             try
             {
@@ -318,8 +339,68 @@ namespace AR20400.Controllers
                                     objAR_Customer.tstamp = new byte[0];
 
                                     UpdatingHeader(updated, ref objAR_Customer);
+                                    if (data["cboEstablishDate"] == "")
+                                    {
+                                        objAR_Customer.EstablishDate = null;
+                                    }
                                     _db.AR_Customer.AddObject(objAR_Customer);
                                     _db.SaveChanges();
+
+
+                                    //save may bang khac
+                                    var objAR_Setup = _db.AR_Setup.Where(p => p.BranchID == brandID && p.SetupId == "AR").FirstOrDefault();
+                                    if (objAR_Setup.AutoCustID)
+                                    {
+                                        var objCustHist = new AR_CustHist();
+                                        var objCustHist1 = _db.AR_CustHist.Where(p => p.BranchID == objAR_Customer.BranchID &&
+                                             p.CustID == objAR_Customer.CustId).OrderByDescending(p => p.Seq).FirstOrDefault();
+                                        string strSeq = objCustHist1 == null ? "0000000001" : ("0000000000" + (double.Parse(objCustHist1.Seq) + 1));
+                                        strSeq = strSeq.Substring(strSeq.Length - 10, 10);
+                                        objCustHist.Seq = strSeq;
+                                        objCustHist.BranchID = objAR_Customer.BranchID;
+                                        objCustHist.Crtd_DateTime = DateTime.Now;
+                                        objCustHist.Crtd_Prog = screenNbr;
+                                        objCustHist.Crtd_User = Current.UserName;
+                                        objCustHist.CustID = objAR_Customer.CustId;
+                                        objCustHist.LUpd_DateTime = DateTime.Now;
+                                        objCustHist.LUpd_Prog = screenNbr;
+                                        objCustHist.LUpd_User = Current.UserName;
+                                        objCustHist.tstamp = new byte[0];
+                                        objCustHist.Note = "Tạo mới khách hàng";
+                                        objCustHist.FromDate = DateTime.Now.ToDateShort();
+                                        objCustHist.ToDate = DateTime.Now.ToDateShort().AddYears(100);
+                                        _db.AR_CustHist.AddObject(objCustHist);
+                                        // SubmitchangeAR_Customer();
+                                        _db.SaveChanges();
+                                        SaveAR_SOAddress(data, isNew);
+                                        _db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        var objCustHist = new AR_CustHist();
+                                        var objCustHist1 = _db.AR_CustHist.Where(p => p.BranchID == objAR_Customer.BranchID &&
+                                             p.CustID == objAR_Customer.CustId).OrderByDescending(p => p.Seq).FirstOrDefault();
+                                        string strSeq = objCustHist1 == null ? "0000000001" : ("0000000000" + (double.Parse(objCustHist1.Seq) + 1));
+                                        strSeq = strSeq.Substring(strSeq.Length - 10, 10);
+                                        objCustHist.Seq = strSeq;
+                                        objCustHist.BranchID = objAR_Customer.BranchID;
+                                        objCustHist.Crtd_DateTime = DateTime.Now;
+                                        objCustHist.Crtd_Prog = screenNbr;
+                                        objCustHist.Crtd_User = Current.UserName;
+                                        objCustHist.CustID = objAR_Customer.CustId;
+                                        objCustHist.LUpd_DateTime = DateTime.Now;
+                                        objCustHist.LUpd_Prog = screenNbr;
+                                        objCustHist.LUpd_User = Current.UserName;
+                                        objCustHist.tstamp = new byte[0];
+                                        objCustHist.Note = "Tạo mới khách hàng";
+                                        objCustHist.FromDate = DateTime.Now.ToDateShort();
+                                        objCustHist.ToDate = DateTime.Now.ToDateShort().AddYears(100);
+                                        _db.AR_CustHist.AddObject(objCustHist);
+                                        // SubmitchangeAR_Customer();
+                                        _db.SaveChanges();
+                                        SaveAR_SOAddress(data, isNew);
+                                        _db.SaveChanges();
+                                    }
                                 }
                             }
                         }
@@ -587,6 +668,38 @@ namespace AR20400.Controllers
 
                 //dong ngoac foreach Customer        
                 }
+
+                //xet cac tab co the an xem co thay doi gi ko
+                var TabContract = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabContract");
+                if (TabContract.IntVal == 1)
+                {
+                    SaveAR_LTTContract(data, custID);
+                    SaveAR_LTTContractDetail(data, lTTContractNbr);
+                }
+
+                var TabAdvTool = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabAdvTool");
+
+                if (TabAdvTool.IntVal == 1)
+                {
+                    SaveAR_CustAdvTool(data, custID);
+
+                }
+
+                var TabSellingProduct = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabSellingProduct");
+                if (TabSellingProduct.IntVal == 1)
+                {
+                    SaveAR_CustSellingProducts(data, custID);
+
+                }
+
+
+                var TabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
+                if (TabDisplayMethod.IntVal == 1)
+                {
+                    SaveAR_CustDisplayMethod(data, custID);
+
+                }
+
                 return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             //dong ngoac try
             }
@@ -602,7 +715,7 @@ namespace AR20400.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult SaveNoTree(FormCollection data, string custID, string handle, string status, string tmpSelectedNode,
-            string branchID, string custName, bool isNew, string lineRef, string lTTContractNbr)
+            string branchID, string custName, bool isNew, string lTTContractNbr)
         {
             try
             {
@@ -789,14 +902,36 @@ namespace AR20400.Controllers
                 } //dong ngoac foreach Customer  
 
 
-                //xet cai tab co the an xem co thay doi gi ko
+                //xet cac tab co the an xem co thay doi gi ko
                 var TabContract = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabContract");
                 if (TabContract.IntVal == 1)
                 {
                     SaveAR_LTTContract(data,custID);
-                    SaveAR_LTTContractDetail(data, lineRef, lTTContractNbr);
+                    SaveAR_LTTContractDetail(data, lTTContractNbr);
                 }
 
+                var TabAdvTool = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabAdvTool");
+
+                if (TabAdvTool.IntVal == 1)
+                {
+                    SaveAR_CustAdvTool(data, custID);
+                   
+                }
+
+                var TabSellingProduct = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabSellingProduct");
+                if (TabSellingProduct.IntVal == 1)
+                {
+                    SaveAR_CustSellingProducts(data, custID);
+
+                }
+
+                
+                var TabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
+                if (TabDisplayMethod.IntVal == 1)
+                {
+                    SaveAR_CustDisplayMethod(data, custID);
+
+                }
 
 
                 return Json(new { success = true }, JsonRequestBehavior.AllowGet);
@@ -816,18 +951,91 @@ namespace AR20400.Controllers
 
 
 
-        [DirectMethod]
-        public ActionResult AR20400Delete(string custID, string branchID, string status)
+        [HttpPost]
+        public ActionResult AR20400DeleteHeader(string custID, string branchID, string status)
         {
 
-            var inv = _db.AR_Customer.FirstOrDefault(p => p.CustId == custID && p.BranchID == branchID);
-            _db.AR_Customer.DeleteObject(inv);
-            _db.SaveChanges();
-            return this.Direct();
+            
+            try
+            {
+                var delHeaderAR_Customer = _db.AR_Customer.FirstOrDefault(p => p.CustId == custID && p.BranchID == branchID);
+                if (delHeaderAR_Customer != null)
+                {
+                    //delete SOAddress
+                    var delAR_SOAddress = _db.AR_SOAddress.Where(p => p.CustId == custID && p.BranchID == branchID).ToList();
+                    if(delAR_SOAddress != null){
+                        foreach (var del in delAR_SOAddress)
+                        {
+                            _db.AR_SOAddress.DeleteObject(del);
+                            _db.SaveChanges();
+                        }
 
-            //Ext.Net.ResourceManager.AjaxSuccess = false;
-            return this.Direct(false);
+                    }
 
+                    var delLTTContract = _db.AR_LTTContract.Where(p => p.LTTContractNbr == delHeaderAR_Customer.LTTContractNbr).ToList();
+                    if (delLTTContract != null)
+                    {
+                        foreach (var delContract in delLTTContract)
+                        {
+                            var delLTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == delContract.LTTContractNbr).ToList();
+                            if (delLTTContractDetail != null)
+                            {
+                                foreach (var delDetail in delLTTContractDetail)
+                                {
+                                    _db.AR_LTTContractDetail.DeleteObject(delDetail);
+                                    _db.SaveChanges();
+                                }
+                            }
+
+                            _db.AR_LTTContract.DeleteObject(delContract);
+                            _db.SaveChanges();
+                        }
+                      
+                    }
+
+                    var delAR_CustAdvTool = _db.AR_CustAdvTool.Where(p => p.CustID == custID).ToList();
+                    if (delAR_CustAdvTool != null)
+                    {
+                        foreach (var delAdv in delAR_CustAdvTool)
+                        {
+                            _db.AR_CustAdvTool.DeleteObject(delAdv);
+                            _db.SaveChanges();
+                        }
+                    }
+
+                    var delCustSellingProducts = _db.AR_CustSellingProducts.Where(p => p.CustID == custID).ToList();
+                    if (delCustSellingProducts != null)
+                    {
+                        foreach (var delSellingProd in delCustSellingProducts)
+                        {
+                            _db.AR_CustSellingProducts.DeleteObject(delSellingProd);
+                            _db.SaveChanges();
+                        }
+                    }
+
+                    var delCustDisplayMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == custID).ToList();
+                    if (delCustDisplayMethod != null)
+                    {
+                        foreach (var delDispMethod in delCustDisplayMethod)
+                        {
+                            _db.AR_CustDisplayMethod.DeleteObject(delDispMethod);
+                            _db.SaveChanges();
+                        }
+                    }
+
+
+
+
+                    _db.AR_Customer.DeleteObject(delHeaderAR_Customer);
+                    _db.SaveChanges();
+                }
+               
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+            }
 
         }
 
@@ -1059,6 +1267,26 @@ namespace AR20400.Controllers
             StoreDataHandler dataLTTContract = new StoreDataHandler(data["lstGridLTTContract"]);
             ChangeRecords<AR_LTTContract> lstGridLTTContract = dataLTTContract.BatchObjectData<AR_LTTContract>();
 
+            foreach (AR_LTTContract deleted in lstGridLTTContract.Deleted)
+            {
+                var delLTTContract = _db.AR_LTTContract.Where(p => p.LTTContractNbr == deleted.LTTContractNbr).FirstOrDefault();
+                if (delLTTContract != null)
+                {
+                    var delLTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == delLTTContract.LTTContractNbr).ToList();
+                    if (delLTTContractDetail != null)
+                    {
+                        foreach (var del in delLTTContractDetail)
+                        {
+                            _db.AR_LTTContractDetail.DeleteObject(del);
+                            _db.SaveChanges();
+                        }
+                    }
+
+                    _db.AR_LTTContract.DeleteObject(delLTTContract);
+                    _db.SaveChanges();
+                }
+            }
+
             lstGridLTTContract.Created.AddRange(lstGridLTTContract.Updated);// bo cai Update vao Created luon cho gon
             foreach (AR_LTTContract created in lstGridLTTContract.Created)
             {
@@ -1130,30 +1358,72 @@ namespace AR20400.Controllers
             d.LUpd_User = Current.UserName;
         }
 
-        private bool SaveAR_LTTContractDetail(FormCollection data, string lineRef, string lTTContractNbr)
+        private bool SaveAR_LTTContractDetail(FormCollection data, string lTTContractNbr)
         {
             StoreDataHandler dataLTTContractDetail = new StoreDataHandler(data["lstGridLTTContractDetail"]);
             ChangeRecords<AR_LTTContractDetail> lstGridLTTContractDetail = dataLTTContractDetail.BatchObjectData<AR_LTTContractDetail>();
+
+            foreach (AR_LTTContractDetail deleted in lstGridLTTContractDetail.Deleted)
+            {
+                var del = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == deleted.LTTContractNbr && p.LineRef == deleted.LineRef && p.Type == deleted.Type).FirstOrDefault();
+                if (del != null)
+                {
+                    _db.AR_LTTContractDetail.DeleteObject(del);
+                    _db.SaveChanges();
+                }
+            }
+
 
             lstGridLTTContractDetail.Created.AddRange(lstGridLTTContractDetail.Updated);// bo cai Update vao Created luon cho gon
             foreach (AR_LTTContractDetail created in lstGridLTTContractDetail.Created)
             {
 
-                var recordLTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == created.LTTContractNbr).FirstOrDefault();
+                var recordLTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == created.LTTContractNbr && p.LineRef == created.LineRef && p.Type == created.Type).FirstOrDefault();
                 if (created.tstamp.ToHex() == "")//dong nay la dong them moi
                 {
                     if (recordLTTContractDetail == null)
                     {
                         recordLTTContractDetail = new AR_LTTContractDetail();
                         recordLTTContractDetail.LTTContractNbr = lTTContractNbr;
-                        recordLTTContractDetail.LineRef = lineRef;
+                        //lấy LineRef tu dong
+                        var lastRecordLTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == created.LTTContractNbr).LastOrDefault();
+                        if (lastRecordLTTContractDetail != null)
+                        {
+                            var numberLineRefLTTBot = Convert.ToInt16(lastRecordLTTContractDetail.LineRef) + 1;
+                            if (numberLineRefLTTBot < 10)
+                            {
+                                recordLTTContractDetail.LineRef = "0000" + Convert.ToString(numberLineRefLTTBot);
+                            }
+                            else if (numberLineRefLTTBot >= 10 && (numberLineRefLTTBot) < 100)
+                            {
+                                recordLTTContractDetail.LineRef = "000" + Convert.ToString(numberLineRefLTTBot);
+                            }
+                            else if (numberLineRefLTTBot >= 100 && (numberLineRefLTTBot) < 1000)
+                            {
+                                recordLTTContractDetail.LineRef = "00" + Convert.ToString(numberLineRefLTTBot);
+                            }
+                            else if (numberLineRefLTTBot >= 1000 && (numberLineRefLTTBot) < 10000)
+                            {
+                                recordLTTContractDetail.LineRef = "0" + Convert.ToString(numberLineRefLTTBot);
+                            }
+                            else if (numberLineRefLTTBot >= 10000 && (numberLineRefLTTBot) < 100000)
+                            {
+                                recordLTTContractDetail.LineRef = Convert.ToString(numberLineRefLTTBot);
+                            }
+                              
+                        }
+                        else
+                        {
+                            recordLTTContractDetail.LineRef = "00001";
+                        }
+
                         recordLTTContractDetail.Crtd_Datetime = DateTime.Now;
                         recordLTTContractDetail.Crtd_Prog = screenNbr;
                         recordLTTContractDetail.Crtd_User = Current.UserName;
                         recordLTTContractDetail.tstamp = new byte[0];
 
                         UpdatingAR_LTTContractDetail(created, ref recordLTTContractDetail);
-                        if (recordLTTContractDetail.LTTContractNbr != "" && recordLTTContractDetail.LineRef != "")
+                        if (recordLTTContractDetail.LTTContractNbr != "" && recordLTTContractDetail.LineRef != "" && recordLTTContractDetail.Type != "")
                         {
                             _db.AR_LTTContractDetail.AddObject(recordLTTContractDetail);
                         }
@@ -1178,6 +1448,11 @@ namespace AR20400.Controllers
                 }
             }
 
+
+
+
+
+
             //
             _db.SaveChanges();
             return true;
@@ -1189,22 +1464,274 @@ namespace AR20400.Controllers
             d.Descr = s.Descr;
             d.Status = s.Status;
             d.Type = s.Type;
+            //d.LineRef = s.LineRef;
 
             d.LUpd_Datetime = DateTime.Now;
             d.LUpd_Prog = screenNbr;
             d.LUpd_User = Current.UserName;
         }
 
+        private bool SaveAR_CustAdvTool(FormCollection data,string custID)
+        {
+            StoreDataHandler dataCustAdvTool = new StoreDataHandler(data["lstGridAdv"]);
+            ChangeRecords<AR_CustAdvTool> lstGridAdv = dataCustAdvTool.BatchObjectData<AR_CustAdvTool>();
+
+            foreach (AR_CustAdvTool deleted in lstGridAdv.Deleted)
+            {
+                var delAR_CustAdvTool = _db.AR_CustAdvTool.Where(p => p.CustID == custID && p.LineRef == deleted.LineRef && p.Type == deleted.Type).FirstOrDefault();
+                if (delAR_CustAdvTool != null)
+                {
+                    _db.AR_CustAdvTool.DeleteObject(delAR_CustAdvTool);
+                    _db.SaveChanges();
+                }
+            }
+
+            lstGridAdv.Created.AddRange(lstGridAdv.Updated);// bo cai Update vao Created luon cho gon
+            foreach (AR_CustAdvTool created in lstGridAdv.Created)
+            {
+
+                var recordAdv = _db.AR_CustAdvTool.Where(p => p.CustID == custID && p.LineRef == created.LineRef && p.Type == created.Type).FirstOrDefault();
+                if (created.tstamp.ToHex() == "")//dong nay la dong them moi
+                {
+                    if (recordAdv == null)
+                    {
+                        recordAdv = new AR_CustAdvTool();
+                        recordAdv.CustID = custID;
+
+                        //lấy LineRef tu dong
+                        var lastRecordAdv = _db.AR_CustAdvTool.Where(p => p.CustID == custID).LastOrDefault();
+                        if (lastRecordAdv != null)
+                        {
+                            var numberLineRefAdv = Convert.ToInt16(lastRecordAdv.LineRef) + 1;
+                            if (numberLineRefAdv < 10)
+                            {
+                                recordAdv.LineRef = "0000" + Convert.ToString(numberLineRefAdv);
+                            }
+                            else if (numberLineRefAdv >= 10 && (numberLineRefAdv) < 100)
+                            {
+                                recordAdv.LineRef = "000" + Convert.ToString(numberLineRefAdv);
+                            }
+                            else if (numberLineRefAdv >= 100 && (numberLineRefAdv) < 1000)
+                            {
+                                recordAdv.LineRef = "00" + Convert.ToString(numberLineRefAdv);
+                            }
+                            else if (numberLineRefAdv >= 1000 && (numberLineRefAdv) < 10000)
+                            {
+                                recordAdv.LineRef = "0" + Convert.ToString(numberLineRefAdv);
+                            }
+                            else if (numberLineRefAdv >= 10000 && (numberLineRefAdv) < 100000)
+                            {
+                                recordAdv.LineRef = Convert.ToString(numberLineRefAdv);
+                            }
+
+                        }
+                        else
+                        {
+                            recordAdv.LineRef = "00001";
+                        }
 
 
 
+                        recordAdv.Crtd_Datetime = DateTime.Now;
+                        recordAdv.Crtd_Prog = screenNbr;
+                        recordAdv.Crtd_User = Current.UserName;
+                        recordAdv.tstamp = new byte[0];
+
+                        UpdatingAR_CustAdvTool(created, ref recordAdv);
+                        if (recordAdv.CustID != "" && recordAdv.LineRef != "" && recordAdv.Type != "")
+                        {
+                            _db.AR_CustAdvTool.AddObject(recordAdv);
+                        }
+                        _db.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");//da co ung dung them record nay
+                    }
+                }
+                else //update
+                {
+                    if (created.tstamp.ToHex() == recordAdv.tstamp.ToHex())
+                    {
+                        UpdatingAR_CustAdvTool(created, ref recordAdv);
+                        _db.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
+                }
+            }
+
+            //
+            _db.SaveChanges();
+            return true;
+        }
+
+        private void UpdatingAR_CustAdvTool(AR_CustAdvTool s, ref AR_CustAdvTool d)
+        {
+            d.Active = s.Active;
+            d.Type = s.Type;
+            d.Descr = s.Descr;
+            d.Qty = s.Qty;
+            d.Amt = s.Amt;
+            d.FitupDate = s.FitupDate;
+            
+            d.Status = s.Status;
+            //d.LineRef = s.LineRef;
+            
+            d.LUpd_Datetime = DateTime.Now;
+            d.LUpd_Prog = screenNbr;
+            d.LUpd_User = Current.UserName;
+        }
 
 
+        private bool SaveAR_CustSellingProducts(FormCollection data, string custID)
+        {
+            StoreDataHandler dataSellingProd = new StoreDataHandler(data["lstGridSellingProd"]);
+            ChangeRecords<AR_CustSellingProducts> lstGridSellingProd = dataSellingProd.BatchObjectData<AR_CustSellingProducts>();
+
+            foreach (AR_CustSellingProducts deleted in lstGridSellingProd.Deleted)
+            {
+                var delCustSellingProducts = _db.AR_CustSellingProducts.Where(p => p.CustID == custID && p.Code == deleted.Code).FirstOrDefault();
+                if (delCustSellingProducts != null)
+                {
+                    _db.AR_CustSellingProducts.DeleteObject(delCustSellingProducts);
+                    _db.SaveChanges();
+                }
+            }
+
+            lstGridSellingProd.Created.AddRange(lstGridSellingProd.Updated);// bo cai Update vao Created luon cho gon
+            foreach (AR_CustSellingProducts created in lstGridSellingProd.Created)
+            {
+
+                var recordSellingProd = _db.AR_CustSellingProducts.Where(p => p.CustID == custID && p.Code == created.Code).FirstOrDefault();
+                if (created.tstamp.ToHex() == "")//dong nay la dong them moi
+                {
+                    if (recordSellingProd == null)
+                    {
+                        recordSellingProd = new AR_CustSellingProducts();
+                        recordSellingProd.CustID = custID;
+                        recordSellingProd.Code = created.Code;
+                        recordSellingProd.Crtd_Datetime = DateTime.Now;
+                        recordSellingProd.Crtd_Prog = screenNbr;
+                        recordSellingProd.Crtd_User = Current.UserName;
+                        recordSellingProd.tstamp = new byte[0];
+
+                        UpdatingAR_CustSellingProducts(created, ref recordSellingProd);
+                        if (recordSellingProd.CustID != "" && recordSellingProd.Code != "" )
+                        {
+                            _db.AR_CustSellingProducts.AddObject(recordSellingProd);
+                        }
+                        _db.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");//da co ung dung them record nay
+                    }
+                }
+                else //update
+                {
+                    if (created.tstamp.ToHex() == recordSellingProd.tstamp.ToHex())
+                    {
+                        UpdatingAR_CustSellingProducts(created, ref recordSellingProd);
+                        _db.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
+                }
+            }
+
+            //
+            _db.SaveChanges();
+            return true;
+        }
+
+        private void UpdatingAR_CustSellingProducts(AR_CustSellingProducts s, ref AR_CustSellingProducts d)
+        {
+           
+            d.Descr = s.Descr;
+
+            d.LUpd_Datetime = DateTime.Now;
+            d.LUpd_Prog = screenNbr;
+            d.LUpd_User = Current.UserName;
+        }
+
+        private bool SaveAR_CustDisplayMethod(FormCollection data, string custID)
+        {
+            StoreDataHandler dataDispMethod = new StoreDataHandler(data["lstGridDispMethod"]);
+            ChangeRecords<AR_CustDisplayMethod> lstGridDispMethod = dataDispMethod.BatchObjectData<AR_CustDisplayMethod>();
+
+            foreach (AR_CustDisplayMethod deleted in lstGridDispMethod.Deleted)
+            {
+                var delCustDisplayMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == custID && p.DispMethod == deleted.DispMethod).FirstOrDefault();
+                if (delCustDisplayMethod != null)
+                {
+                    _db.AR_CustDisplayMethod.DeleteObject(delCustDisplayMethod);
+                    _db.SaveChanges();
+                }
+            }
 
 
+            lstGridDispMethod.Created.AddRange(lstGridDispMethod.Updated);// bo cai Update vao Created luon cho gon
+            foreach (AR_CustDisplayMethod created in lstGridDispMethod.Created)
+            {
 
+                var recordDispMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == custID && p.DispMethod == created.DispMethod).FirstOrDefault();
+                if (created.tstamp.ToHex() == "")//dong nay la dong them moi
+                {
+                    if (recordDispMethod == null)
+                    {
+                        recordDispMethod = new AR_CustDisplayMethod();
+                        recordDispMethod.CustID = custID;
+                        recordDispMethod.DispMethod = created.DispMethod;
+                        recordDispMethod.Crtd_Datetime = DateTime.Now;
+                        recordDispMethod.Crtd_Prog = screenNbr;
+                        recordDispMethod.Crtd_User = Current.UserName;
+                        recordDispMethod.tstamp = new byte[0];
 
+                        UpdatingAR_CustDisplayMethod(created, ref recordDispMethod);
+                        if (recordDispMethod.CustID != "" && recordDispMethod.DispMethod != "")
+                        {
+                            _db.AR_CustDisplayMethod.AddObject(recordDispMethod);
+                        }
+                        _db.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");//da co ung dung them record nay
+                    }
+                }
+                else //update
+                {
+                    if (created.tstamp.ToHex() == recordDispMethod.tstamp.ToHex())
+                    {
+                        UpdatingAR_CustDisplayMethod(created, ref recordDispMethod);
+                        _db.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
+                }
+            }
 
+            //
+            _db.SaveChanges();
+            return true;
+        }
+
+        private void UpdatingAR_CustDisplayMethod(AR_CustDisplayMethod s, ref AR_CustDisplayMethod d)
+        {
+
+            d.Descr = s.Descr;
+
+            d.LUpd_Datetime = DateTime.Now;
+            d.LUpd_Prog = screenNbr;
+            d.LUpd_User = Current.UserName;
+        }
 
 
 

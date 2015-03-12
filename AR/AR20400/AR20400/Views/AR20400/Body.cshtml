@@ -1224,10 +1224,10 @@
                                                         .ColumnModel(
                                                             X.RowNumbererColumn().Width(40)
                                                             
-                                                            //cboType
+                                                            //cboTypeLTT
                                                              ,X.Column().Text(Util.GetLang("Type")).DataIndex("Type").Width(150)
                                                              .Editor(
-                                                                HQ.Combo().ID("cboType")
+                                                                HQ.Combo().ID("cboTypeLTT")
                                                                 .Name("cboType").HQProcedure("AR20400_pcLTTContractDetailType")
                                                                 .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
                                                                 .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
@@ -1258,7 +1258,7 @@
                                                              .DataIndex("Status").Width(100).Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
                                                             
                                                             
-                                                            , Html.X().Column().ID("txtLineRef").Text(Util.GetLang("LineRef")).Width(100)
+                                                            , Html.X().Column().ID("txtLineRefLTTBot").Text(Util.GetLang("LineRef")).Width(100)
                                                             .DataIndex("LineRef").Hidden(true)
                                                             
                                                             ,X.CommandColumn()
@@ -1292,31 +1292,384 @@
                                                             X.GridFilters()
                                                                 .Local(true)
                                                                 .Filters(
-                                                                    //X.StringFilter().DataIndex("Handle"),
-                                                                    //X.StringFilter().DataIndex("LangHandle"),
-                                                                    //X.StringFilter().DataIndex("ToStatus"),
-                                                                    //X.StringFilter().DataIndex("ContentApprove"),
-                                                                    //X.StringFilter().DataIndex("MailSubject"),
-                                                                    //X.StringFilter().DataIndex("MailApprove"),
-                                                                    //X.StringFilter().DataIndex("ProcContent"),
-                                                                    //X.StringFilter().DataIndex("MailTo"),
-                                                                    //X.NumericFilter().DataIndex("MailCC"),
-                                                                    //X.NumericFilter().DataIndex("ProcName"),
-                                                                    //X.NumericFilter().DataIndex("Param00"),
-                                                                    //X.NumericFilter().DataIndex("Param01"),
-                                                                    //X.BooleanFilter().DataIndex("Param02"),
-                                                                    //X.BooleanFilter().DataIndex("Param03"),
-                                                                    //X.BooleanFilter().DataIndex("Param04"),
-                                                                    //X.BooleanFilter().DataIndex("Param05")
+                                                                    X.StringFilter().DataIndex("Type"),
+                                                                    X.StringFilter().DataIndex("Descr"),
+                                                                    X.NumericFilter().DataIndex("Amt"),
+                                                                    X.StringFilter().DataIndex("Status")
+                                                                  
+                                                                    
+                                                               
                                                                 )
                                                         ) // ngoac ket thuc feature Filter
                                                     ) // pnlBot
                                                 )// ngoac ket thuc tab  LTT
                                                 
-                                                )
-                                        //ngoac panel chinh cua tat ca tab   
-                                        // )
-                                //    )                     
+                                                
+                                                
+                                                
+                                                , X.Panel()
+                                                .ID("tabADV")
+                                                .Layout(LayoutType.Anchor)
+                                                //.AnchorHorizontal("100%")
+                                                //.AnchorVertical("100%")
+                                                .Padding(0)
+                                                .Title(Util.GetLang("BRDADVTOOL"))
+                                                .CloseAction(CloseAction.Hide)
+                                                .DefaultAnchor("100%")
+                                                //.Disabled(true)
+                                                .Listeners(p =>
+                                                        {
+                                                            p.Render.Handler = "HQ.common.control_render(this,'grdAdv');";    
+                                                        })
+                                                .Items(
+                                                        X.GridPanel()
+                                                        .Scroll(ScrollMode.Both)
+                                                        .View(X.GridView().TrackOver(false))
+                                                        .Layout(LayoutType.Fit)
+                                                        .ID("grdAdv")
+                                                        .StoreID("storeGridAdv")
+                                                        .SortableColumns(false)
+                                                        //.Listeners(p =>
+                                                        //{
+                                                        //    p.Render.Handler = "HQ.common.control_render(this,'grdAdv');";    
+                                                        //})
+                                                        .ColumnModel(
+                                                            X.RowNumbererColumn().Width(40)
+                                                            
+                                                            
+                                                            //Active
+                                                            ,Html.X().CheckColumn().Text(Util.GetLang("Active")).DataIndex("Active")
+                                                            .Width(80).Editable(true)
+
+
+
+                                                            //cboTypeAdv
+                                                            , X.Column().Text(Util.GetLang("Type")).DataIndex("Type").Width(150)
+                                                            .Editor(
+                                                                HQ.Combo().ID("cboTypeAdv")
+                                                                .Name("cboType").HQProcedure("AR20400_pcCustAdvToolType")
+                                                                .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                                                                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                                                .HQParam(new StoreParameterCollection()
+                                                                {
+                                                                    new StoreParameter() { Name = "@Langid", Value = "HQ.langID" , Mode = ParameterMode.Raw }
+                                                                })
+                                                                .LoadData()
+                                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                                .Listeners(lst =>
+                                                                {
+                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                    //lst.Change.Fn = "cboAppFolID_Change";
+                                                                })
+                                                            )
+
+                                                            //txtAdvDescr
+                                                            , X.Column().Text(Util.GetLang("Descr")).ID("txtDescrAdv")
+                                                            .DataIndex("Descr").Width(100).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+
+                                                            //txtQtyAdv
+                                                            , Html.X().NumberColumn().Text(Util.GetLang("Qty")).DataIndex("Qty").Format("0").Width(150)
+                                                            .Editor(Html.X().NumberField()).ID("txtQtyAdv")
+                                           
+                                                            //txtAmtAdv
+                                                            , Html.X().NumberColumn().Text(Util.GetLang("Amt")).DataIndex("Amt").Format("0").Width(150)
+                                                            .Editor(Html.X().NumberField()).ID("txtAmtAdv")
+                                                             
+                                                            
+                                                            //FitupDate
+                                                            , Html.X().DateColumn().Text(Util.GetLang("FitupDate")).DataIndex("FitupDate").Width(100)
+                                                            .ID("txtFitupDate").Editor(Html.X().DateField().Format("dd-MM-yyyy")).Format("dd-MM-yyyy")
+
+
+                                                            //txtLTTContractDetailStatus
+                                                            , X.Column().Text(Util.GetLang("Status")).ID("txtStatusAdv")
+                                                            .DataIndex("Status").Width(100).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+                                                            
+                                                            
+                                                            //LineRef an
+                                                            , Html.X().Column().ID("txtLineRefAdv").Text(Util.GetLang("LineRef")).Width(100)
+                                                            .DataIndex("LineRef").Hidden(true)
+                                                            
+                                                            
+                                                            
+                                                            ,X.CommandColumn()
+                                                            .Width(150)
+                                                            .Commands(
+                                                                X.GridCommand()
+                                                                .Text(Util.GetLang("Reject"))
+                                                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                                                .CommandName("reject")
+                                                                .Icon(Icon.ArrowUndo)
+                                                            )
+                                                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                                            .Listeners(l => l.Command.Handler = "grdAdv_Reject(record);")
+                                                        //ngoac ket thuc cac column
+                                                        )
+                                                        .SelectionModel(X.RowSelectionModel().ID("slmGridAdv").Mode(SelectionMode.Multi))
+                                                                   
+                                                        .Plugins(
+                                                            X.CellEditing()
+                                                            .ClicksToEdit(1)
+                                                            .Listeners(ls =>
+                                                            {
+                                                                ls.BeforeEdit.Fn = "grdAdv_BeforeEdit";
+                                                                ls.Edit.Fn = "grdAdv_Edit";
+                                                                ls.ValidateEdit.Fn = "grdAdv_ValidateEdit";
+
+                                                            })
+                                                        )
+
+                                                        .Features(
+                                                            X.GridFilters()
+                                                                .Local(true)
+                                                                .Filters(
+                                                                    //X.StringFilter().DataIndex("Type"),
+                                                                    //X.StringFilter().DataIndex("Descr"),
+                                                                    //X.NumericFilter().DataIndex("Amt"),
+                                                                    //X.StringFilter().DataIndex("Status")
+                                                                  
+                                                                    
+                                                               
+                                                                )
+                                                        ) // ngoac ket thuc feature Filter
+                                                
+                                                
+                                                
+                                                
+                                                )//ngoac dong tab CustAdvTool
+                                                
+                                                
+                                                , X.Panel()
+                                                .ID("tabSellingProd")
+                                                .Layout(LayoutType.Anchor)
+                                                //.AnchorHorizontal("100%")
+                                                //.AnchorVertical("100%")
+                                                .Padding(0)
+                                                .Title(Util.GetLang("SellingProd"))
+                                                .CloseAction(CloseAction.Hide)
+                                                .DefaultAnchor("100%")
+                                                //.Disabled(true)
+                                                .Listeners(p =>
+                                                        {
+                                                            p.Render.Handler = "HQ.common.control_render(this,'grdSellingProd');";    
+                                                        })
+                                                .Items(
+                                                        X.GridPanel()
+                                                        .Scroll(ScrollMode.Both)
+                                                        .View(X.GridView().TrackOver(false))
+                                                        .Layout(LayoutType.Fit)
+                                                        .ID("grdSellingProd")
+                                                        .StoreID("storeGridSellingProd")
+                                                        .SortableColumns(false)
+                                                        //.Listeners(p =>
+                                                        //{
+                                                        //    p.Render.Handler = "HQ.common.control_render(this,'grdAdv');";    
+                                                        //})
+                                                        .ColumnModel(
+                                                            X.RowNumbererColumn().Width(40)
+                                                            
+                                                            
+                                                            //cboSellingProd
+                                                            , X.Column().Text(Util.GetLang("SellingProd")).DataIndex("Code").Width(150)
+                                                            .Editor(
+                                                                HQ.Combo().ID("cboSellingProd")
+                                                                .Name("cboSellingProd").HQProcedure("AR20400_pcSellingProducts")
+                                                                .HQColumnShow("SellingProd,Descr").DisplayField("SellingProd").ValueField("SellingProd")
+                                                                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                                                .HQParam(new StoreParameterCollection()
+                                                                {
+                                                                    //new StoreParameter() { Name = "@Langid", Value = "HQ.langID" , Mode = ParameterMode.Raw }
+                                                                })
+                                                                .LoadData()
+                                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                                .Listeners(lst =>
+                                                                {
+                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                    //lst.Change.Fn = "cboAppFolID_Change";
+                                                                })
+                                                            )
+
+                                                            //txtDescrSellingProd
+                                                            , X.Column().Text(Util.GetLang("Descr")).ID("txtDescrSellingProd")
+                                                            .DataIndex("Descr").Width(300).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
+
+                                                            
+                                                            
+                                                            
+                                                            ,X.CommandColumn()
+                                                            .Width(150)
+                                                            .Commands(
+                                                                X.GridCommand()
+                                                                .Text(Util.GetLang("Reject"))
+                                                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                                                .CommandName("reject")
+                                                                .Icon(Icon.ArrowUndo)
+                                                            )
+                                                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                                            .Listeners(l => l.Command.Handler = "grdSellingProd_Reject(record);")
+                                                        //ngoac ket thuc cac column
+                                                        )
+                                                        .SelectionModel(X.RowSelectionModel().ID("slmGridSellingProd").Mode(SelectionMode.Multi))
+                                                                   
+                                                        .Plugins(
+                                                            X.CellEditing()
+                                                            .ClicksToEdit(1)
+                                                            .Listeners(ls =>
+                                                            {
+                                                                ls.BeforeEdit.Fn = "grdSellingProd_BeforeEdit";
+                                                                ls.Edit.Fn = "grdSellingProd_Edit";
+                                                                ls.ValidateEdit.Fn = "grdSellingProd_ValidateEdit";
+
+                                                            })
+                                                        )
+
+                                                        .Features(
+                                                            X.GridFilters()
+                                                                .Local(true)
+                                                                .Filters(
+                                                                    //X.StringFilter().DataIndex("Type"),
+                                                                    //X.StringFilter().DataIndex("Descr"),
+                                                                    //X.NumericFilter().DataIndex("Amt"),
+                                                                    //X.StringFilter().DataIndex("Status")
+                                                                  
+                                                                    
+                                                               
+                                                                )
+                                                        ) // ngoac ket thuc feature Filter
+                                                
+                                                
+                                                
+                                                
+                                                )//ngoac dong tab SellingProd
+                                                
+                                                
+                                                , X.Panel()
+                                                .ID("tabDispMethod")
+                                                .Layout(LayoutType.Anchor)
+                                                //.AnchorHorizontal("100%")
+                                                //.AnchorVertical("100%")
+                                                .Padding(0)
+                                                .Title(Util.GetLang("DISPMETHOD"))
+                                                .CloseAction(CloseAction.Hide)
+                                                .DefaultAnchor("100%")
+                                                //.Disabled(true)
+                                                .Listeners(p =>
+                                                        {
+                                                            p.Render.Handler = "HQ.common.control_render(this,'grdDispMethod');";    
+                                                        })
+                                                .Items(
+                                                        X.GridPanel()
+                                                        .Scroll(ScrollMode.Both)
+                                                        .View(X.GridView().TrackOver(false))
+                                                        .Layout(LayoutType.Fit)
+                                                        .ID("grdDispMethod")
+                                                        .StoreID("storeGridDispMethod")
+                                                        .SortableColumns(false)
+                                                        //.Listeners(p =>
+                                                        //{
+                                                        //    p.Render.Handler = "HQ.common.control_render(this,'grdAdv');";    
+                                                        //})
+                                                        .ColumnModel(
+                                                            X.RowNumbererColumn().Width(40)
+
+
+                                                            //cboDispMethod
+                                                            , X.Column().Text(Util.GetLang("DispMethod")).DataIndex("DispMethod").Width(150)
+                                                            .Editor(
+                                                                HQ.Combo().ID("cboDispMethod")
+                                                                .Name("cboDispMethod").HQProcedure("AR20400_pcDisplayMethod")
+                                                                .HQColumnShow("DispMethod,Descr").DisplayField("DispMethod").ValueField("DispMethod")
+                                                                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                                                                .HQParam(new StoreParameterCollection()
+                                                                {
+                                                                    //new StoreParameter() { Name = "@Langid", Value = "HQ.langID" , Mode = ParameterMode.Raw }
+                                                                })
+                                                                .LoadData()
+                                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                                .Listeners(lst =>
+                                                                {
+                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                    //lst.Change.Fn = "cboAppFolID_Change";
+                                                                })
+                                                            )
+
+                                                            //txtDescrDispMethod
+                                                            , X.Column().Text(Util.GetLang("Descr")).ID("txtDescrDispMethod")
+                                                            .DataIndex("Descr").Width(300).Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
+
+                                                            
+                                                            
+                                                            
+                                                            ,X.CommandColumn()
+                                                            .Width(150)
+                                                            .Commands(
+                                                                X.GridCommand()
+                                                                .Text(Util.GetLang("Reject"))
+                                                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                                                .CommandName("reject")
+                                                                .Icon(Icon.ArrowUndo)
+                                                            )
+                                                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                                            .Listeners(l => l.Command.Handler = "grdDispMethod_Reject(record);")
+                                                        //ngoac ket thuc cac column
+                                                        )
+                                                        .SelectionModel(X.RowSelectionModel().ID("slmGridDispMethod").Mode(SelectionMode.Multi))
+                                                                   
+                                                        .Plugins(
+                                                            X.CellEditing()
+                                                            .ClicksToEdit(1)
+                                                            .Listeners(ls =>
+                                                            {
+                                                                ls.BeforeEdit.Fn = "grdDispMethod_BeforeEdit";
+                                                                ls.Edit.Fn = "grdDispMethod_Edit";
+                                                                ls.ValidateEdit.Fn = "grdDispMethod_ValidateEdit";
+
+                                                            })
+                                                        )
+
+                                                        .Features(
+                                                            X.GridFilters()
+                                                                .Local(true)
+                                                                .Filters(
+                                                                    //X.StringFilter().DataIndex("Type"),
+                                                                    //X.StringFilter().DataIndex("Descr"),
+                                                                    //X.NumericFilter().DataIndex("Amt"),
+                                                                    //X.StringFilter().DataIndex("Status")
+                                                                  
+                                                                    
+                                                               
+                                                                )
+                                                        ) // ngoac ket thuc feature Filter
+                                                
+                                                
+                                                
+                                                
+                                                )//ngoac dong tab DispMethod
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                            //ngoac panel chinh cua tat ca tab   
+                                            )
+                                
               //ngoac ket thuc panel ben phai           
                   )
                   //ngoac ket thuc Panel frmMain
