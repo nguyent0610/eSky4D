@@ -39,9 +39,9 @@
             })
         )
         .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
         .SortableColumns(false)
         .ColumnModel(
          X.RowNumbererColumn()
@@ -51,12 +51,12 @@
                                                 
             , X.DateColumn().Text(Util.GetLang("DateVal")).DataIndex("DateVal").Width(100).Format("MM-dd-yyyy")
             .Editor(X.DateField().ID("txtDateVal").Format("MM-dd-yyyy"))
-                                                
-            , X.NumberColumn().Text(Util.GetLang("FloatVal")).DataIndex("FloatVal").Width(150).Format("0,000")
-            .Editor(X.NumberField().DecimalPrecision(0)).ID("txtFloatVal")
-                                                
-            , X.NumberColumn().Text(Util.GetLang("IntVal")).DataIndex("IntVal").Format("0,000").Width(150)
-            .Editor(X.NumberField().DecimalPrecision(0)).ID("txtIntVal")
+                                  
+            ,X.NumberColumn().Text(Util.GetLang("FloatVal")).DataIndex("FloatVal").Width(150).Format("0,000").Align(Alignment.Right)
+            .Editor(X.NumberField().DecimalPrecision(0))
+                          
+            ,X.NumberColumn().Text(Util.GetLang("IntVal")).DataIndex("IntVal").Width(150).Format("0,000").Align(Alignment.Right)
+            .Editor(X.NumberField().DecimalPrecision(0))
                                        
             ,X.Column().Text(Util.GetLang("TextVal")).DataIndex("TextVal").Width(150)
             .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true)).ID("txtTextVal")
@@ -113,9 +113,9 @@
                 .Local(true)
                 .Filters(
                     X.StringFilter().DataIndex("Code"),
-                    X.StringFilter().DataIndex("DateVal"),
-                    X.StringFilter().DataIndex("FloatVal"),
-                    X.StringFilter().DataIndex("IntVal"),
+                    X.DateFilter().DataIndex("DateVal"),
+                    X.NumericFilter().DataIndex("FloatVal"),
+                    X.NumericFilter().DataIndex("IntVal"),
                     X.StringFilter().DataIndex("TextVal")
                 )
         )
