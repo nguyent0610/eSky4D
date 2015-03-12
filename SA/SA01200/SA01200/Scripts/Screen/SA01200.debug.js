@@ -22,8 +22,14 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_ModuleCat);
             break;
         case "refresh":
-            HQ.isFirstLoad = true;
-            App.stoSYS_ModuleCat.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSYS_ModuleCat.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
@@ -47,11 +53,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.isChange) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
 
@@ -81,6 +83,7 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                HQ.isChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
@@ -97,15 +100,6 @@ var deleteData = function (item) {
     }
 };
 
-
-/////////////////////////////////////////////////////////////////////////
-//// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.changeData(false, 'SA01200');//khi dong roi gan lai cho change la false
-        HQ.common.close(this);
-    }
-};
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
@@ -132,3 +126,14 @@ var stoLoad = function (sto) {
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSYS_ModuleCat.reload();
+    }
+};
+///////////////////////////////////
