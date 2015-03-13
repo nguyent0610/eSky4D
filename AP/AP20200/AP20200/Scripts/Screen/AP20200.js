@@ -149,10 +149,17 @@ var frmChange = function () {
 
 };
 // Event when cboVendID is changed or selected item 
-var cboVendID_Change = function (sender, value) {    
-    if (sender.valueModels != null || !HQ.isNew) {
-            App.cboDfltOrdFromId.getStore().reload();
-            App.stoVendor.reload();
+var cboVendID_Change = function (sender, value) {
+    if ((!HQ.isNew || sender.valueModels != null) && !App.stoVendor.loading) {
+        App.cboDfltOrdFromId.getStore().reload();
+        App.stoVendor.reload();
+    }
+   
+};
+var cboVendID_Select = function (sender, value) {
+    if (sender.valueModels != null && !App.stoVendor.loading) {
+        App.cboDfltOrdFromId.getStore().reload();
+        App.stoVendor.reload();
     }
 
 };
