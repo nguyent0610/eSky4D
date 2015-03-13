@@ -127,7 +127,7 @@ var grdMailDetail_Reject = function (record) {
 //hàm này chạy sau khi store của form trong Controller vừa chạy xong đã load dữ liệu vào store của form
 var loadDataAutoHeader = function (sto) {
     HQ.isFirstLoad = true;
-    HQ.common.showBusy(false);
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
     HQ.isNew = false;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "MailID");
@@ -139,7 +139,8 @@ var loadDataAutoHeader = function (sto) {
         record.data.TypeAuto = 'M';
         HQ.isNew = true;//record la new    
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
-        App.cboMailID.focus(true);//focus ma khi tao moi
+      
+
         sto.commitChanges();
     }
     var record = sto.getAt(0);
@@ -149,7 +150,8 @@ var loadDataAutoHeader = function (sto) {
     //record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
     App.stoMailDetail.reload();
-
+    if (Ext.isEmpty(App.cboMailID.getValue()))
+        App.cboMailID.focus(true);//focus ma khi tao moi
 };
 var loadDataAutoDetail = function (sto) {
     if (HQ.isFirstLoad) {
@@ -159,11 +161,17 @@ var loadDataAutoDetail = function (sto) {
         HQ.isFirstLoad = false;
     }
     frmChange();
+    HQ.common.showBusy(false);
 };
-var cboMailID_Change = function (sender, newValue, oldValue) {
-    if (sender.valueModels != null) {
+var cboMailID_BeforeDeselect = function (sender, newValue, oldValue) {
+    if (!HQ.isNew && sender.value == null) {
         App.stoMailHeader.reload();
     }   
+};
+var cboMailID_Select = function (sender) {
+    if (sender.valueModels != null) {
+        App.stoMailHeader.reload();
+    }
 };
 var chkIsAttachFile_Change = function (sender, e) { 
     if (e) {

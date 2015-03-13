@@ -48,7 +48,8 @@
                     .Listeners(lst =>
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                            lst.Change.Fn = "cboMailID_Change";
+                            lst.BeforeDeselect.Fn = "cboMailID_BeforeDeselect";
+                            lst.Select.Fn = "cboMailID_Select";
                         })
 
                     , HQ.Checkbox().ID("chkActive").Name("chkActive").HQLangCode("ACTIVE")
@@ -168,7 +169,7 @@
                                     ps.Add(new StoreParameter("MailID", "App.cboMailID.value", ParameterMode.Raw));
                                 })
                     .Listeners(l => { l.Load.Fn = "loadDataAutoDetail";
-                                      l.Update.Fn = "stoChanged";  
+                                   
                                 })
                 )
             .SortableColumns(false)                     
