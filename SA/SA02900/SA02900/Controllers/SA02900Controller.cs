@@ -57,10 +57,16 @@ namespace SA02900.Controllers
                 #region Save Top Grid SI_ApprovalFlowStatus
                 foreach (SA02900_pgSI_ApprovalFlowStatus_Result deleted in lstTopGrid.Deleted)
                 {
-                    var del = _db.SI_ApprovalFlowStatus.Where(p => p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status).FirstOrDefault();
-                    if (del != null)
+                    var deltop = _db.SI_ApprovalFlowStatus.FirstOrDefault(p => p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status);
+                    if (deltop != null)
                     {
-                        _db.SI_ApprovalFlowStatus.DeleteObject(del);
+                        _db.SI_ApprovalFlowStatus.DeleteObject(deltop);
+                    }
+                    //
+                    var delbot = _db.SI_ApprovalFlowHandle.Where(p => p.AppFolID == deleted.AppFolID && p.RoleID == deleted.RoleID && p.Status == deleted.Status).ToList();
+                    foreach (var item in delbot)
+                    {
+                        _db.SI_ApprovalFlowHandle.DeleteObject(item);
                     }
                 }
 
@@ -192,5 +198,33 @@ namespace SA02900.Controllers
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
+
+        ////[HttpPost]
+        ////public ActionResult DeleteAll(FormCollection data, string AppFolID, string RoleID, string Status)
+        ////{
+        ////    try
+        ////    {
+               
+        ////        var lstTop = _db.SI_ApprovalFlowStatus.Where(p => p.AppFolID == AppFolID && p.RoleID == RoleID && p.Status == Status).ToList();
+        ////        foreach (var item in lstTop)
+        ////        {
+        ////            _db.SI_ApprovalFlowStatus.DeleteObject(item);
+        ////        }
+
+        ////        var lstBot = _db.SI_ApprovalFlowHandle.Where(p => p.AppFolID == AppFolID && p.RoleID == RoleID && p.Status == Status).ToList();
+        ////        foreach (var item in lstBot)
+        ////        {
+        ////            _db.SI_ApprovalFlowHandle.DeleteObject(item);
+        ////        }
+
+        ////        _db.SaveChanges();
+        ////        return Json(new { success = true });
+        ////    }
+        ////    catch (Exception ex)
+        ////    {
+        ////        if (ex is MessageException) return (ex as MessageException).ToMessage();
+        ////        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+        ////    }
+        ////}
     }
 }
