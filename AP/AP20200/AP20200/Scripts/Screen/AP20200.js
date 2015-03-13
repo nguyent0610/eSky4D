@@ -115,7 +115,7 @@ var stoLoad = function (sto) {
         HQ.isNew = true;//record la new
         App.cboVendID.forceSelection = false;       
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
-        App.cboVendID.focus(true);//focus ma khi tao moi
+        //App.cboVendID.focus(true);//focus ma khi tao moi
       
     }
     var record = sto.getAt(0);     
@@ -127,7 +127,8 @@ var stoLoad = function (sto) {
     App.cboBillState.forceSelection=false;
     App.cboCity.forceSelection=false;
     App.cboState.forceSelection=false;
-  
+    if (Ext.isEmpty(App.cboVendID.getValue()))
+        App.cboVendID.focus(true);//focus ma khi tao moi
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
