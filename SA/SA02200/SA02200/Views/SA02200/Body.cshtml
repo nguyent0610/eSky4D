@@ -60,16 +60,32 @@
                     .ForceSelection(true)
                     .HQHeightWidth(400, 300)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst =>
-                    {
+                    .Listeners(lst => { 
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         lst.Change.Fn = "cboScreenNumber_Change";
                     })
                     .LoadData()
-                ),
+                )
 
-            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150),
-            X.CommandColumn()
+            ,X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
+            
+            ,X.Column().Text(Util.GetLang("CodeGroup")).DataIndex("CodeGroup").Width(120)
+                    .Editor(
+                        HQ.Combo().ID("cboCodeGroup").Name("cboCodeGroup")
+                        .MarginSpec("5 0 0 0").HideLabel(true).LabelWidth(0)
+                        .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA02200_pcSYS_FavouriteGroup")
+                        .HQColumnShow("Code,Descr")
+                        .DisplayField("Code")
+                        .ValueField("Code")
+                        .ForceSelection(true)
+                        .HQHeightWidth(400, 300)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst => { 
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .LoadData()            
+                    ) 
+            ,X.CommandColumn()
             .Width(150)
             .Commands(
                 X.GridCommand()
@@ -111,7 +127,8 @@
                 .Local(true)
                 .Filters(
                     X.StringFilter().DataIndex("ScreenNumber"),
-                    X.StringFilter().DataIndex("Descr")
+                    X.StringFilter().DataIndex("Descr"),
+                    X.StringFilter().DataIndex("CodeGroup")
                 )
         )
     )

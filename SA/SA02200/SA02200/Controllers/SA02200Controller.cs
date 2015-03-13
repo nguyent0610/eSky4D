@@ -96,6 +96,8 @@ namespace SA02200.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
+
+            t.CodeGroup = s.CodeGroup;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
