@@ -150,7 +150,7 @@ var frmChange = function () {
 };
 // Event when cboVendID is changed or selected item 
 var cboVendID_Change = function (sender, value) {    
-    if(sender.valueModels != null) {
+    if (sender.valueModels != null || !HQ.isNew) {
             App.cboDfltOrdFromId.getStore().reload();
             App.stoVendor.reload();
     }
