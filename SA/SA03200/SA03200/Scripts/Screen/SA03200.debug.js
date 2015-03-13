@@ -34,6 +34,9 @@ var menuClick = function (command) {
         case "new":
             if (HQ.isInsert) {
                 HQ.grid.insert(App.grdPPC_License, keys);
+                //App.txtLastSyncDate.value(_dateServer);
+                //App.txtLastSyncDate.set('LastSyncDate', _dateServer);
+                //item.set("LastSyncDate", new Date(_dateServer));
             }
             break;
         case "delete":
@@ -65,7 +68,9 @@ var StatusCheckAll_Change = function (value) {
         });
     }
 }
-
+var cboBranchID_Change = function (sender, e) {
+    App.cboSlsperId.getStore().reload();
+};
 var grdPPC_License_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
@@ -125,7 +130,8 @@ var stoLoad = function (sto) {
     HQ.common.changeData(HQ.isChange, 'SA03200');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
+            //HQ.store.insertBlank(sto, keys);
+            HQ.store.insertRecord(sto, keys, { LastSyncDate: new Date(_dateServer) });
         }
         HQ.isFirstLoad = false;
     }
