@@ -48,7 +48,7 @@
                     .Listeners(lst =>
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                            lst.BeforeDeselect.Fn = "cboMailID_BeforeDeselect";
+                            lst.Change.Fn = "cboMailID_Change";
                             lst.Select.Fn = "cboMailID_Select";
                         })
 
@@ -317,7 +317,7 @@
                         Html.X().StringFilter().DataIndex("ReportViewID"),
                         Html.X().StringFilter().DataIndex("LoggedCpnyID"),
                         Html.X().StringFilter().DataIndex("CpnyID"),
-                        Html.X().StringFilter().DataIndex("LangID"),
+                        Html.X().NumericFilter().DataIndex("LangID"),
                         Html.X().StringFilter().DataIndex("StringParm00"),
                         Html.X().StringFilter().DataIndex("StringParm01"),
                         Html.X().StringFilter().DataIndex("StringParm02"),

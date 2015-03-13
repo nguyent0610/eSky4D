@@ -138,9 +138,7 @@ var loadDataAutoHeader = function (sto) {
         
         record.data.TypeAuto = 'M';
         HQ.isNew = true;//record la new    
-        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
-      
-
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require                       
         sto.commitChanges();
     }
     var record = sto.getAt(0);
@@ -163,13 +161,14 @@ var loadDataAutoDetail = function (sto) {
     frmChange();
     HQ.common.showBusy(false);
 };
-var cboMailID_BeforeDeselect = function (sender, newValue, oldValue) {
-    if (!HQ.isNew && sender.value == null) {
+var cboMailID_Change = function (sender, newValue, oldValue) {
+    if ((!HQ.isNew || sender.valueModels != null) && !App.stoMailHeader.loading ) {
         App.stoMailHeader.reload();
-    }   
+    }
+   
 };
-var cboMailID_Select = function (sender) {
-    if (sender.valueModels != null) {
+var cboMailID_Select = function (sender) {  
+    if (sender.valueModels != null && !App.stoMailHeader.loading) {
         App.stoMailHeader.reload();
     }
 };
