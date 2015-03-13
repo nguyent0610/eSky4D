@@ -1,21 +1,53 @@
 ﻿
 var keys = ['ScreenNumber'];
-var fieldsCheckRequire = ["ScreenNumber"];
-var fieldsLangCheckRequire = ["ScreenNumber"];
+var fieldsCheckRequire = ["ScreenNumber", "CodeGroup"];
+var fieldsLangCheckRequire = ["ScreenNumber", "CodeGroup"];
+//var _focusNo = 0;
+//var pnl_render = function (cmd) {
+//    cmd.getEl().on('mousedown', function () {
+//        if (cmd.id == 'Header') {
+//            _focusNo = 0;
+//        }
+//        else {//pnlHeader
+//            _focusNo = 1;
+//        }
+//    });
+//};
+
 
 var menuClick = function (command) {
     switch (command) {
         case "first":
+            //if (_focusNo == 1) {
             HQ.grid.first(App.grdSYS_FavouriteGroupUser);
+            //}
+            //else {
+            //    HQ.combo.first(App.cboUserGroupID, HQ.isChange);
+            //}
             break;
         case "prev":
+            //if (_focusNo == 1) {
             HQ.grid.prev(App.grdSYS_FavouriteGroupUser);
+            //}
+            //else {
+            //    HQ.combo.prev(App.cboUserGroupID, HQ.isChange);
+            //}
             break;
         case "next":
+            //if (_focusNo == 1) {
             HQ.grid.next(App.grdSYS_FavouriteGroupUser);
+            //}
+            //else {
+            //    HQ.combo.next(App.cboUserGroupID, HQ.isChange);
+            //}
             break;
         case "last":
+            //if (_focusNo == 1) {
             HQ.grid.last(App.grdSYS_FavouriteGroupUser);
+            //}
+            //else {
+            //    HQ.combo.last(App.cboUserGroupID, HQ.isChange);
+            //}
             break;
         case "refresh":
             if (HQ.isChange) {

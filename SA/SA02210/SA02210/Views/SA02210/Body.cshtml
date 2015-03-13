@@ -20,125 +20,145 @@
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
     .Items(
         ////Thiet ke giao dien o day
-        X.Panel().ID("pnlHeader")
-        .Region(Region.North)
-        .Items(
-            X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
+            X.Panel()
+            .Region(Region.North)
+            .Items(
+                X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 5 0")
                 .Items(
                     HQ.Combo().ID("cboUserGroupID")
                     .Name("cboUserGroupID").HQLangCode("UserGroupID").HQDBSys(true).AllowBlank(false).ForceSelection(true)
-                    .HQProcedure("SA02210_pcSYS_FavouriteGroup").HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                    .HQProcedure("SA02210_pcSYS_Group").HQColumnShow("GroupID,Descr").DisplayField("GroupID").ValueField("GroupID")
                     .HQHeightWidth(400, 300)
                     .LoadData()
-                    .Listeners(lst =>
-                    {
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => { 
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         lst.Change.Fn = "cboUserGroupID_Change";
                     })
                 )
-        ),
-
-            X.GridPanel().ID("grdSYS_FavouriteGroupUser")
-            .Scroll(ScrollMode.Both)
-            .View(X.GridView().TrackOver(false))
-            .Region(Region.Center).Flex(1)
-            .Store(
+            )
+            ,
+            
+                X.GridPanel().ID("grdSYS_FavouriteGroupUser")
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false))
+                .Region(Region.Center).Flex(1)
+                .Store(
                     X.Store()
-                .ID("stoSYS_FavouriteGroupUser")
-                .PageSize(50)//.AutoLoad(true)
-                .Model(Util.GenerateModel(typeof(SA02210_pgSYS_FavouriteGroupUser_Result), "mdlSYS_FavouriteGroupUser", "ScreenNumber"))
-                .Parameters(ps =>
+                    .ID("stoSYS_FavouriteGroupUser")
+                    .PageSize(50)//.AutoLoad(true)
+                    .Model(Util.GenerateModel(typeof(SA02210_pgSYS_FavouriteGroupUser_Result), "mdlSYS_FavouriteGroupUser", "ScreenNumber"))
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("UserGroupID", "App.cboUserGroupID.getValue()", ParameterMode.Raw));
+                    })
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_FavouriteGroupUser"))).AutoLoad(false)
+                    .Listeners(l =>
+                    {
+                        l.BeforeLoad.Fn = "stoBeforeLoad";
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "stoChanged";                 
+                    })
+                )
+                .Listeners(p =>
                 {
-                    ps.Add(new StoreParameter("UserGroupID", "App.cboUserGroupID.getValue()", ParameterMode.Raw));
+                    p.BoxReady.Handler = "firstLoad();";
                 })
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_FavouriteGroupUser"))).AutoLoad(false)
-            .Listeners(l =>
-            {
-                l.BeforeLoad.Fn = "stoBeforeLoad";
-                l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
-            })
-        )
-        .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
-            .SortableColumns(false)
-            .ColumnModel(
-                X.RowNumbererColumn()
+                .SortableColumns(false)
+                .ColumnModel(
+                    X.RowNumbererColumn()
                         
-                ,Html.X().Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(120)
-                .Editor(
-                    HQ.Combo().ID("cboScreenNumber").Name("cboScreenNumber")
-                    .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
-                    .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA02210_pcSYS_Screen")
-                    .HQColumnShow("ScreenNumber,Descr")
-                    .DisplayField("ScreenNumber")
-                    .ValueField("ScreenNumber")
-                    .ForceSelection(true)
-                    .HQHeightWidth(400, 300)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst => 
-                    {
-                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue }";
-                        lst.Change.Fn="cboScreenNumber_Change"; 
-                    })
-                    .LoadData()            
-                )
-                ,Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(120) 
-
-                , X.CommandColumn().Width(150)
-                .Commands(
-                    X.GridCommand()
-                    .Text(("Reject"))
-                    .ToolTip(t =>
-                    {
-                        t.Text = ("Rejectrowchanges");
-                    })
-                    .CommandName("reject")
-                    .Icon(Icon.ArrowUndo)
-                )
-                .PrepareToolbar(t =>
-                {
-                    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                })
-                .Listeners(l =>
-                {
-                    l.Command.Handler = "grdSYS_FavouriteGroupUser_Reject(record);";
-                })
-            )
-            .SelectionModel(X.RowSelectionModel().ID("slmSYS_FavouriteGroupUser")
-            .Mode(SelectionMode.Multi))
-            .BottomBar(
-                X.PagingToolbar()
-                .Items(
-                    X.Label("Page size:"),
-                    X.ToolbarSpacer(10),
-                    X.ComboBox()
-                    .Width(80)
-                    .Items("1", "2", "10", "20", "30", "50")
-                    .SelectedItems("50")
-                    .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
-                )
-                .Plugins(X.ProgressBarPager())
-            )
-            .Plugins(
-                X.CellEditing()
-                .ClicksToEdit(1)
-                .Listeners(ls =>
-                {
-                    ls.BeforeEdit.Fn = "grdSYS_FavouriteGroupUser_BeforeEdit";
-                    ls.Edit.Fn = "grdSYS_FavouriteGroupUser_Edit";
-                    ls.ValidateEdit.Fn = "grdSYS_FavouriteGroupUser_ValidateEdit";
-                })
-            )
-            .Features(
-                X.GridFilters()
-                    .Local(true)
-                    .Filters(
-                        X.StringFilter().DataIndex("ScreenNumber"),
-                        X.StringFilter().DataIndex("Descr")
+                    ,X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(120)
+                    .Editor(
+                        HQ.Combo().ID("cboScreenNumber").Name("cboScreenNumber")
+                        .MarginSpec("5 0 0 0").HideLabel(true).LabelWidth(0)
+                        .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA02210_pcSYS_Screen")
+                        .HQColumnShow("ScreenNumber,Descr")
+                        .DisplayField("ScreenNumber")
+                        .ValueField("ScreenNumber")
+                        .ForceSelection(true)
+                        .HQHeightWidth(400, 300)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst => { 
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn="cboScreenNumber_Change"; 
+                        })
+                        .LoadData()            
                     )
-            )
+                    ,X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200) 
+                
+                    
+                    ,X.Column().Text(Util.GetLang("CodeGroup")).DataIndex("CodeGroup").Width(120)
+                    .Editor(
+                        HQ.Combo().ID("cboCodeGroup").Name("cboCodeGroup")
+                        .MarginSpec("5 0 0 0").HideLabel(true).LabelWidth(0)
+                        .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA02210_pcSYS_FavouriteGroup")
+                        .HQColumnShow("Code,Descr")
+                        .DisplayField("Code")
+                        .ValueField("Code")
+                        .ForceSelection(true)
+                        .HQHeightWidth(400, 300)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst => { 
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .LoadData()            
+                    )    
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(("Reject"))
+                        .ToolTip(t =>
+                        {
+                            t.Text = ("Rejectrowchanges");
+                        })
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t =>
+                    {
+                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Command.Handler = "grdSYS_FavouriteGroupUser_Reject(record);";
+                    })
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmSYS_FavouriteGroupUser")
+                .Mode(SelectionMode.Multi))
+                .BottomBar(
+                    X.PagingToolbar()
+                    .Items(
+                        X.Label("Page size:"),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("50")
+                        .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                    )
+                    .Plugins(X.ProgressBarPager())
+                )
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdSYS_FavouriteGroupUser_BeforeEdit";
+                        ls.Edit.Fn = "grdSYS_FavouriteGroupUser_Edit";
+                        ls.ValidateEdit.Fn = "grdSYS_FavouriteGroupUser_ValidateEdit";
+                    })
+                )
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("ScreenNumber"),
+                            X.StringFilter().DataIndex("Descr"),
+                            X.StringFilter().DataIndex("CodeGroup")
+                        )
+                )
+            
         )
     )// frmMain
 )

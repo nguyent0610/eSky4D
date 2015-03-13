@@ -58,6 +58,7 @@
           <Property Type="String" Name="ScreenNumber" Nullable="false" MaxLength="7" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="Descr" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="CodeGroup" Nullable="true" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -88,6 +89,7 @@
                 <ScalarProperty Name="ScreenNumber" ColumnName="ScreenNumber" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="CodeGroup" ColumnName="CodeGroup" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

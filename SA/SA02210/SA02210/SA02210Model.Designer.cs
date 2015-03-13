@@ -534,6 +534,30 @@ namespace SA02210
         private global::System.String _Descr;
         partial void OnDescrChanging(global::System.String value);
         partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CodeGroup
+        {
+            get
+            {
+                return _CodeGroup;
+            }
+            set
+            {
+                OnCodeGroupChanging(value);
+                ReportPropertyChanging("CodeGroup");
+                _CodeGroup = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CodeGroup");
+                OnCodeGroupChanged();
+            }
+        }
+        private global::System.String _CodeGroup;
+        partial void OnCodeGroupChanging(global::System.String value);
+        partial void OnCodeGroupChanged();
 
         #endregion
 
