@@ -47,7 +47,7 @@ namespace SA03200
             Session["SA03200"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "18510580";
+            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "en";
             Session["LangID"] = 0;
         }

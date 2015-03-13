@@ -60,36 +60,41 @@
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                 .Listeners(lst => { 
                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    lst.Change.Fn = "cboBranchID_Change";
                 })
                 .LoadData()
             ),
-            
+                  
             X.Column().Text(Util.GetLang("SlsperId")).Width(100).DataIndex("SlsperId")
-            .Editor(
-                HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQDBSys(true).HQProcedure("SA03200_pcSalesperson")
-                .HQColumnShow("UserName").DisplayField("UserName").ValueField("UserName")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
-                .HQParam(new StoreParameterCollection() {})
-                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                .Listeners(lst => { 
-                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                })
-                .LoadData()
-            ),
+                .Editor(
+                    HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQProcedure("SA03200_pcSalesperson").HQDBSys(true)
+                    .HQColumnShow("UserName,CpnyID,FirstName").DisplayField("UserName").ValueField("UserName").HQAutoLoad(false)
+                    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() {                                
+                     new StoreParameter() { Name = "@CpnyID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => { 
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        
+                                        
+                    })
+                    .LoadData()
+                ),
             
             X.Column().Text(Util.GetLang("LicenseKey")).DataIndex("LicenseKey").Width(150)
             .Editor(X.TextField().AllowBlank(false).MaxLength(250).EnforceMaxLength(true)),
             
-            X.NumberColumn().Text(Util.GetLang("ActivitionDay")).DataIndex("ActivitionDay").Format("0,000").Width(150)
-            .Editor(Html.X().NumberField().DecimalPrecision(0)).ID("txtActivitionDay"),
+            X.NumberColumn().Text(Util.GetLang("ActivitionDay")).DataIndex("ActivitionDay").Format("0,000").Width(150).Align(Alignment.Right)
+            .Editor(X.NumberField().DecimalPrecision(0)).ID("txtActivitionDay"),
                                                 
-            X.DateColumn().Text(Util.GetLang("LastSyncDate")).DataIndex("LastSyncDate").Width(100)
-            .Editor(Html.X().DateField().ID("txtLastSyncDate")),
+            X.DateColumn().Text(Util.GetLang("LastSyncDate")).DataIndex("LastSyncDate").Width(150).ID("txtLastSyncDate")
+            .Editor(X.DateField().Format("MM/dd/yyyy")),
             
-            X.CheckColumn().DataIndex("Status").Width(85).Editable(true).HideTitleEl(true)
+            X.CheckColumn().DataIndex("Status").Width(85).Editable(true).HideTitleEl(true).Align(Alignment.Center)
             .HeaderItems(
-                HQ.Label().HQLangCode("Active").ID("Statustext").MarginSpec("0 0 0 5")
-                ,HQ.Checkbox().ID("StatusCheckAll").MarginSpec("10 0 0 24").Listeners(l => l.Change.Fn = "StatusCheckAll_Change")   
+                HQ.Label().HQLangCode("Active").ID("Statustext")
+                ,HQ.Checkbox().ID("StatusCheckAll").Listeners(l => l.Change.Fn = "StatusCheckAll_Change")   
             ).ID("txtStatus"),
             
             X.CommandColumn()
@@ -143,7 +148,7 @@
                     X.DateFilter().DataIndex("LastSyncDate"),
                     X.StringFilter().DataIndex("WorkingDate"),
                     X.StringFilter().DataIndex("SIMID"),
-                    X.StringFilter().DataIndex("Status")
+                    X.BooleanFilter().DataIndex("Status")
                     
                 )
         )
