@@ -27,7 +27,8 @@
         .Listeners(l =>
                     {
                         l.BoxReady.Handler = "firstLoad();";
-                        l.FieldChange.Fn = "frmChange";                        
+                        l.FieldChange.Fn = "frmChange"; 
+                                                
                     })
         .Items(
             X.Panel().ID("pnlHeader").Layout(LayoutType.VBox).Border(false).AutoScroll(true)
@@ -219,7 +220,7 @@
                     .Editor(Html.X().TextField())
 
                 , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("LangID")).DataIndex("LangID").Width(150).Align(Alignment.Right)
-                    .Editor(Html.X().NumberField().DecimalPrecision(0))
+                    .Editor(Html.X().NumberField().ID("nblang").DecimalPrecision(2))
 
                 , Html.X().Column().Text(Util.GetLang("StringParm00")).DataIndex("StringParm00").Width(150)
                     .Editor(Html.X().TextField().MaxLength(1000).EnforceMaxLength(true))
@@ -285,9 +286,9 @@
             )
             .SelectionModel(X.RowSelectionModel().ID("slmMailDetail").Mode(SelectionMode.Multi))
             .BottomBar(
-                X.PagingToolbar()
+                X.PagingToolbar().ID("pag")
                 .Items(
-                    X.Label("Page size:"),
+                    X.Label(Util.GetLang("PageSize")),
                     X.ToolbarSpacer(10),
                     X.ComboBox()
                     .Width(80)

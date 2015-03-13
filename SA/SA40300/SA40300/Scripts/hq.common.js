@@ -719,23 +719,30 @@ var loadDefault = function (fileNameStore, cbo) {
     }
 };
 //TrungHT
+Ext.define("NumbercurrencyPrecision", {
+    override: "Ext.util.Format.Number",
+    currencyPrecision: 0
+});
 Ext.define("ThousandSeparatorNumberField", {
     override: "Ext.form.field.Number",
 
     /**
     * @cfg {Boolean} useThousandSeparator
     */
-    useThousandSeparator: true,
-    //decimalPrecision: 0,
+    useThousandSeparator: true,  
+    
     style: 'text-align: right',
-    fieldStyle: "text-align:right;",
+    fieldStyle: "text-align:right;",    
     /**
      * @inheritdoc
      */
+    //dung cho page
+   
     toRawNumber: function (value) {
+        this.decimalPrecision= this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
         return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
     },
-
+   
     /**
      * @inheritdoc
      */
@@ -858,6 +865,21 @@ Ext.define("ThousandSeparatorNumberField", {
         return isNaN(value) ? null : value;
     }
 });
+
+Ext.define("Ext.locale.vn.toolbar.Paging", {
+    override: "Ext.PagingToolbar",
+    lable: HQ.common.getLang("PageSize"),
+    beforePageText:  HQ.common.getLang("Page"),
+    afterPageText: HQ.common.getLang("of")+" {0}",
+    firstText: HQ.common.getLang("PageFirst"),
+    prevText: HQ.common.getLang("PagePrev"),
+    nextText: HQ.common.getLang("PageNext"),
+    lastText: HQ.common.getLang("PageLast"),
+    refreshText: HQ.common.getLang("PageRefresh"),
+    displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
+    emptyMsg: HQ.common.getLang("DataEmty")
+});
+
 //window.onresize = function () {
 //    if ((window.outerHeight - window.innerHeight) > 100) {
 //        alert('Docked inspector was opened');
