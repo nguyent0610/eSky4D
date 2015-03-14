@@ -10,9 +10,12 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
-using Microsoft.Office.Interop.Excel;
 using System.Reflection;
 using System.Drawing;
+using Aspose.Cells;
+using HQFramework.DAL;
+using HQFramework.Common;
+using System.Data;
 namespace PO10100.Controllers
 {
    
@@ -43,10 +46,11 @@ namespace PO10100.Controllers
         private OM_UserDefault objOM_UserDefault;      
         public ActionResult Index()
         {
-                
+            ViewBag.BussinessDate = DateTime.Now.ToDateShort();
+            ViewBag.BussinessTime = DateTime.Now;
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -77,19 +81,19 @@ namespace PO10100.Controllers
 
         #endregion
         #region DataProcess 
-        [HttpPost]
-        public ActionResult ExportPOSuggest(string type, string branchID, DateTime pODate, string vendID)
-        {
-            try
-            {
-                string filePath = GetExcelPOSuggest(type, branchID, pODate, vendID);
-                return Json(new { success = true, filePath });
-            }
-            catch (Exception ex)
-            {
-                return (ex as MessageException).ToMessage();
-            }
-        }
+        //[HttpPost]
+        //public ActionResult ExportPOSuggest(string type, string branchID, DateTime pODate, string vendID)
+        //{
+        //    try
+        //    {
+        //        string filePath = GetExcelPOSuggest(type, branchID, pODate, vendID);
+        //        return Json(new { success = true, filePath });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return (ex as MessageException).ToMessage();
+        //    }
+        //}
         public ActionResult Download(string filePath)
         {
             var dlFileName = string.Format("{0}_{1}.xls", Util.GetLang("PO10100Sugguest"), DateTime.Now.ToString("ddMMyyHHmmss"));
@@ -102,8 +106,8 @@ namespace PO10100.Controllers
         {
             try
             {
-                _ponbr = data["cboPONbr"];
-                _branchID = data["cboBranchID"];
+                _ponbr = data["PONbr"];
+                _branchID = data["BranchID"];
                 string reportName = "";
                 var rpt = new RPTRunning();
                 rpt.ResetET();
@@ -147,10 +151,10 @@ namespace PO10100.Controllers
             try
             {               
                 _form = data;
-                _ponbr = data["cboPONbr"];
-                _branchID = data["cboBranchID"];
-                _status = data["cboStatus"].PassNull();
-                _toStatus = data["cboHandle"].PassNull() == "" ? _status : data["cboHandle"].PassNull();
+                _ponbr = data["PONbr"];
+                _branchID = data["BranchID"];
+                _status = data["Status"].PassNull();
+                _toStatus = data["Handle"].PassNull() == "" ? _status : data["Handle"].PassNull();
                 DateTime dpoDate = data["PODate"].ToDateShort();
 
 
@@ -181,8 +185,8 @@ namespace PO10100.Controllers
             try
             {
                 _form = data;
-                _ponbr = data["cboPONbr"];
-                _branchID = data["cboBranchID"];
+                _ponbr = data["PONbr"];
+                _branchID = data["BranchID"];
                 var detHeader = new StoreDataHandler(data["lstHeader"]);
                 if (_poHead == null)
                     _poHead = detHeader.ObjectData<PO_Header>().FirstOrDefault();
@@ -235,10 +239,10 @@ namespace PO10100.Controllers
             try
             {
                 _form = data;
-                _ponbr = data["cboPONbr"];
-                _branchID = data["cboBranchID"];
-                _status = data["cboStatus"].PassNull();
-                _toStatus = data["cboHandle"].PassNull() == "" ? _status : data["cboHandle"].PassNull();
+                _ponbr = data["PONbr"];
+                _branchID = data["BranchID"];
+                _status = data["Status"].PassNull();
+                _toStatus = data["Handle"].PassNull() == "" ? _status : data["Handle"].PassNull();
                 DateTime dpoDate = data["PODate"].ToDateShort();
 
 
@@ -393,6 +397,7 @@ namespace PO10100.Controllers
             {
                 objHeader.VouchStage =_poHead.VouchStage.PassNull();
                 objHeader.POAmt = _poHead.POAmt.ToDouble();
+                objHeader.RcptTotAmt = _poHead.RcptTotAmt.ToDouble();
                 objHeader.POFeeTot = lst.Sum(p => p.POFee);
 
                 //tap main
@@ -462,8 +467,6 @@ namespace PO10100.Controllers
             double OldQty = 0;
             double NewQty = 0;
 
-            PO10100_pgDetail_Result objDetailFirst = _lstPODetailLoad.Where(p => p.BranchID == objDetail.BranchID && p.LineRef == objDetail.LineRef && p.PONbr == objDetail.PONbr).FirstOrDefault();
-
             IN_ItemSite objIN_ItemSite = new IN_ItemSite();
             try
             {
@@ -496,9 +499,9 @@ namespace PO10100.Controllers
                 if (objDetail.PurchaseType == "GI" || objDetail.PurchaseType == "PR" || objDetail.PurchaseType == "GP" || objDetail.PurchaseType == "GS")
                 {
                     NewQty = Math.Round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
-                    if (objDetailFirst == null) OldQty = 0;
+                    if (objrPO_Detail == null) OldQty = 0;
                     else
-                        OldQty = Math.Round((objDetailFirst.UnitMultDiv == "D" ? (objDetailFirst.QtyOrd / objDetailFirst.CnvFact) : objDetailFirst.QtyOrd * objDetailFirst.CnvFact));
+                        OldQty = Math.Round((objrPO_Detail.UnitMultDiv == "D" ? (objrPO_Detail.QtyOrd / objrPO_Detail.CnvFact) : objrPO_Detail.QtyOrd * objrPO_Detail.CnvFact));
                     UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, NewQty, 2);
                   
                 }
@@ -575,7 +578,13 @@ namespace PO10100.Controllers
         }                
         private void SendMail(PO_Header objHeader)
         {
-            HQSendMailApprove.Approve.SendMailApprove(objHeader.BranchID, objHeader.PONbr, ScreenNbr, Current.CpnyID, _status, _toStatus, Current.UserName, Current.LangID);
+            try
+            {
+                HQSendMailApprove.Approve.SendMailApprove(objHeader.BranchID, objHeader.PONbr, ScreenNbr, Current.CpnyID, _status, _toStatus, Current.UserName, Current.LangID);
+            }
+            catch
+            {
+            }
         }
         private bool Data_Checking(bool isDeleteGrd=false)
         {
@@ -770,6 +779,453 @@ namespace PO10100.Controllers
             FreeItemForLine(ref _lineRef, "");
             return true;
         }                     
+        #endregion
+        #region import,export, report     
+        [HttpPost]
+        public ActionResult Export(FormCollection data, string type)
+        {
+            try
+            {
+                Stream stream = new MemoryStream();
+                Workbook workbook = new Workbook();
+                Worksheet SheetPOSuggest = workbook.Worksheets[0];
+                SheetPOSuggest.Name = Util.GetLang("POSuggest");
+
+
+                DataAccess dal = Util.Dal();
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@PODate", DbType.DateTime, clsCommon.GetValueDBNull(data["PODate"].ToDateShort()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@User", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@VendID", DbType.String, clsCommon.GetValueDBNull(data["VendID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@Type", DbType.String, clsCommon.GetValueDBNull(type), ParameterDirection.Input, 30));
+                DataTable dtInvtID = dal.ExecDataTable("PO10100_peInventory", CommandType.StoredProcedure, ref pc);
+                SheetPOSuggest.Cells.ImportDataTable(dtInvtID, true, "AA1");// du lieu Inventory
+
+                pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@PODate", DbType.DateTime, clsCommon.GetValueDBNull(data["PODate"].ToDateShort()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@VendID", DbType.String, clsCommon.GetValueDBNull(data["VendID"].PassNull()), ParameterDirection.Input, 30));
+                DataTable dtHeader = dal.ExecDataTable("PO10100_peHeader", CommandType.StoredProcedure, ref pc);
+
+                pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@PODate", DbType.DateTime, clsCommon.GetValueDBNull(data["PODate"].ToDateShort()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@User", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@VendID", DbType.String, clsCommon.GetValueDBNull(data["VendID"].PassNull()), ParameterDirection.Input, 30));
+                DataTable dtData = dal.ExecDataTable("PO10100_peSuggest", CommandType.StoredProcedure, ref pc);
+
+
+                #region Fomat cell
+
+                
+
+                Style style = workbook.GetStyleInPool(0);                        
+                StyleFlag flag = new StyleFlag();
+                Range range;
+                Cell cell;
+
+                //LOCK TRUE
+
+                style = workbook.GetStyleInPool(0);
+                style.IsLocked = true;
+                range = SheetPOSuggest.Cells.CreateRange("A1", "ZZ" + dtInvtID.Rows.Count + 7);
+                range.SetStyle(style);
+
+                
+
+                #endregion
+               
+                #region template
+            
+                SetCellValueHeader(SheetPOSuggest.Cells["B1"], Util.GetLang("PO10100EHeader"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SheetPOSuggest.Cells.Merge(0, 1, 1, 6);
+
+                SetCellValueHeader(SheetPOSuggest.Cells["B2"],  Util.GetLang("PO10100VendName"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["B3"],  Util.GetLang("PO10100BranchID"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["B4"],  Util.GetLang("PO10100BranchName"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["B5"],  Util.GetLang("PO10100SNDD"), TextAlignmentType.Center, TextAlignmentType.Right);
+
+                SetCellValueHeader(SheetPOSuggest.Cells["C2"], dtHeader.Rows[0]["VendName"].ToString(), TextAlignmentType.Center, TextAlignmentType.Left);
+                SheetPOSuggest.Cells.Merge(1, 2, 1, 2);
+
+                SetCellValueHeader(SheetPOSuggest.Cells["C3"], dtHeader.Rows[0]["CpnyID"].ToString(), TextAlignmentType.Center, TextAlignmentType.Left);
+                SheetPOSuggest.Cells.Merge(2, 2, 1, 2);
+
+                SetCellValueHeader(SheetPOSuggest.Cells["C4"], dtHeader.Rows[0]["CpnyName"].ToString(), TextAlignmentType.Center, TextAlignmentType.Left);
+                SheetPOSuggest.Cells.Merge(3, 2, 1, 2);
+
+                SetCellValueHeader(SheetPOSuggest.Cells["C5"], dtHeader.Rows[0]["SNDD"].ToString(), TextAlignmentType.Center, TextAlignmentType.Right);
+               
+
+
+                SetCellValueHeader(SheetPOSuggest.Cells["E2"], Util.GetLang("PO10100PODate"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["E3"], Util.GetLang("PO10100TotAmtExcel"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["E4"], Util.GetLang("PO10100MinValue"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["E5"], Util.GetLang("PO10100NXK"), TextAlignmentType.Center, TextAlignmentType.Right);
+
+                SetCellValueHeader(SheetPOSuggest.Cells["F2"], data["PODate"].ToDateShort().ToString("dd-MM-yyyy"), TextAlignmentType.Center, TextAlignmentType.Right);
+
+                SetCellValueHeader(SheetPOSuggest.Cells["F3"], "0", TextAlignmentType.Center, TextAlignmentType.Right);
+              
+                SetCellValueHeader(SheetPOSuggest.Cells["F4"], dtHeader.Rows[0]["MinValue"].ToString(), TextAlignmentType.Center, TextAlignmentType.Right);
+              
+                SetCellValueHeader(SheetPOSuggest.Cells["F5"], Convert.ToDateTime(dtHeader.Rows[0]["NXK"]).ToString("dd-MM-yyyy"), TextAlignmentType.Center, TextAlignmentType.Right);
+               
+
+                SetCellValueHeader(SheetPOSuggest.Cells["G2"], Util.GetLang("PO10100CreditLimit"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["G3"], Util.GetLang("PO10100Deposit"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["G4"], Util.GetLang("PO10100MaxValue"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["G5"], Util.GetLang("PO10100CountShip"), TextAlignmentType.Center, TextAlignmentType.Right);
+
+                SetCellValueHeader(SheetPOSuggest.Cells["H2"], dtHeader.Rows[0]["CreditLimit"].ToString(), TextAlignmentType.Center, TextAlignmentType.Right);
+              
+                SetCellValueHeader(SheetPOSuggest.Cells["H3"], dtHeader.Rows[0]["Deposit"].ToString(), TextAlignmentType.Center, TextAlignmentType.Right);
+              
+                SetCellValueHeader(SheetPOSuggest.Cells["H4"], dtHeader.Rows[0]["MaxValue"].ToString(), TextAlignmentType.Center, TextAlignmentType.Right);
+               
+                SetCellValueHeader(SheetPOSuggest.Cells["H5"], dtHeader.Rows[0]["CountShipment"].ToString(), TextAlignmentType.Center, TextAlignmentType.Right);
+              
+
+
+                
+                //SheetPOSuggest.Range["A6:N6"].Interior.Color = Color.Yellow;
+
+                SetCellValueHeader(SheetPOSuggest.Cells["A6"], Util.GetLang("PO10100ESTT"), TextAlignmentType.Center, TextAlignmentType.Center);                
+                SetCellValueHeader(SheetPOSuggest.Cells["B6"], Util.GetLang("PO10100InvtID"), TextAlignmentType.Center, TextAlignmentType.Center);             
+                SetCellValueHeader(SheetPOSuggest.Cells["C6"], Util.GetLang("PO10100Descr"), TextAlignmentType.Center, TextAlignmentType.Center);               
+                SetCellValueHeader(SheetPOSuggest.Cells["D6"], Util.GetLang("PO10100PurchUnit"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetPOSuggest.Cells["E6"], Util.GetLang("PO10100UnitPrice"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetPOSuggest.Cells["N6"], Util.GetLang("SLConlai"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetPOSuggest.Cells["G6"], Util.GetLang("SLDathang"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetPOSuggest.Cells["H6"], Util.GetLang("ThanhTien"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetPOSuggest.Cells["I6"], Util.GetLang("TKchuan"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetPOSuggest.Cells["J6"], Util.GetLang("TKHientai"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetPOSuggest.Cells["K6"], Util.GetLang("TKCuoithang"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetPOSuggest.Cells["L6"], Util.GetLang("TBSellout"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetPOSuggest.Cells["M6"], Util.GetLang("SLChitieu"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetPOSuggest.Cells["F6"], Util.GetLang("SLDenghi"), TextAlignmentType.Center, TextAlignmentType.Center);
+
+               
+
+            #endregion
+               
+                #region formular
+               
+    
+
+                Validation validation = SheetPOSuggest.Validations[SheetPOSuggest.Validations.Add()];
+                validation.Type = Aspose.Cells.ValidationType.List;
+                validation.Operator = OperatorType.Between;
+                validation.InCellDropDown = true;
+                validation.Formula1 = "=$AA$2:$AA$" + (dtInvtID.Rows.Count + 2);
+                validation.ShowError = true;
+                validation.AlertStyle = ValidationAlertType.Stop;
+                validation.ErrorTitle = "Error";
+                validation.InputMessage = "Chọn mã mặt hàng";
+                validation.ErrorMessage = "Mã mặt hàng này không tồn tại";
+
+                CellArea area;
+                area.StartRow = 6;
+                area.EndRow = dtInvtID.Rows.Count + 7;
+                area.StartColumn = 1;
+                area.EndColumn = 1;
+
+                validation.AddArea(area);
+
+
+
+                String formulaSTT = "=IF(ISERROR(IF(C7<>\"\",A6+1 & \"\",\"\")),1,IF(C7<>\"\",A6+1 & \"\",\"\"))";
+                SheetPOSuggest.Cells["A7"].SetSharedFormula(formulaSTT, (dtInvtID.Rows.Count + 7), 1);
+               
+
+                String formulaDesctInvtID = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,2,0)),\"\",VLOOKUP(B7,$AA:$AD,2,0))");
+                SheetPOSuggest.Cells["C7"].SetSharedFormula(formulaDesctInvtID, (dtInvtID.Rows.Count + 7), 1);
+
+                String formulaUnit = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,3,0)),\"\",VLOOKUP(B7,$AA:$AD,3,0))");
+                SheetPOSuggest.Cells["D7"].SetSharedFormula(formulaUnit, (dtInvtID.Rows.Count + 7), 1);
+
+              
+                String formulaPrice = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,4,0)),0,VLOOKUP(B7,$AA:$AD,4,0))");
+                SheetPOSuggest.Cells["E7"].SetSharedFormula(formulaPrice, (dtInvtID.Rows.Count + 7), 1);
+              
+                String formulaTypeInvtID = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AE,5,0)),\"\",VLOOKUP(B7,$AA:$AE,5,0))");
+                SheetPOSuggest.Cells["O7"].SetSharedFormula(formulaTypeInvtID, (dtInvtID.Rows.Count + 7), 1);
+              
+                String formulaZERO = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,5,0)),0,VLOOKUP(B7,$AA:$AD,5,0))");
+                SheetPOSuggest.Cells["G7"].SetSharedFormula(formulaZERO, (dtInvtID.Rows.Count + 7), 1);
+              
+               
+                String formulachuan = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,5,0)),0,VLOOKUP(B7,$AF:$AQ,5,0))");
+                SheetPOSuggest.Cells["I7"].SetSharedFormula(formulachuan, (dtInvtID.Rows.Count + 7), 1);
+              
+
+                String formulahientai = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,6,0)),0,VLOOKUP(B7,$AF:$AQ,6,0))");
+                SheetPOSuggest.Cells["J7"].SetSharedFormula(formulahientai, (dtInvtID.Rows.Count + 7), 1);
+           
+
+                String formulacth = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,6,0)),0,VLOOKUP(B7,$AF:$AQ,6,0))");
+                SheetPOSuggest.Cells["K7"].SetSharedFormula(formulacth, (dtInvtID.Rows.Count + 7), 1);
+            
+
+                String formulaSellout = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,7,0)),0,VLOOKUP(B7,$AF:$AQ,7,0))");
+                SheetPOSuggest.Cells["L7"].SetSharedFormula(formulaSellout, (dtInvtID.Rows.Count + 7), 1);
+              
+
+                String formulact = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,8,0)),0,VLOOKUP(B7,$AF:$AQ,8,0))");
+                SheetPOSuggest.Cells["M7"].SetSharedFormula(formulact, (dtInvtID.Rows.Count + 7), 1);
+               
+
+                String formuladn = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,9,0)),0,VLOOKUP(B7,$AF:$AQ,9,0))");
+                SheetPOSuggest.Cells["F7"].SetSharedFormula(formuladn, (dtInvtID.Rows.Count + 7), 1);
+                
+
+                String formulacl = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,10,0)),0,VLOOKUP(B7,$AF:$AQ,10,0))");
+                SheetPOSuggest.Cells["N7"].SetSharedFormula(formulacl, (dtInvtID.Rows.Count + 7), 1);
+
+                String formulaTB = string.Format("=IF(OR({0}={1},{2}={3}),{4},ROUND({5}*{6},0))", "E7", "\"\"", "G7", "\"\"", "\"\"", "E7", "G7");
+                SheetPOSuggest.Cells["H7"].SetSharedFormula(formulaTB, (dtInvtID.Rows.Count + 7), 1);
+               
+
+                String formulaTot = string.Format("=SUM({0}:{1})", "H7", "H" + (dtInvtID.Rows.Count + 7));
+                SheetPOSuggest.Cells["F3"].SetSharedFormula(formulaTot, 2, 1);
+             
+                #endregion
+                
+                #region truyen du lieu
+                int counter = 7;
+                int countPO = 2;
+                ////Instantiating a "Products" DataTable object
+                //DataTable dtSuggest = new DataTable("Suggest");
+
+                ////Adding columns to the DataTable object
+                //dtSuggest.Columns.Add("InvtID", typeof(string));
+                //dtSuggest.Columns.Add("Descr", typeof(string));
+                //dtSuggest.Columns.Add("PurchUnit", typeof(string));
+                //dtSuggest.Columns.Add("UnitPrice", typeof(string));
+                //dtSuggest.Columns.Add("TKchuan", typeof(string));
+                //dtSuggest.Columns.Add("TKHientai", typeof(string));
+                //dtSuggest.Columns.Add("TKCuoithang", typeof(string));
+                //dtSuggest.Columns.Add("SLChitieu", typeof(string));
+                //dtSuggest.Columns.Add("SLDenghi", typeof(string));
+                //dtSuggest.Columns.Add("SLConlai", typeof(string));
+                //dtSuggest.Columns.Add("SLDathang", typeof(string));
+
+              
+                for (int i = 0; i < dtData.Rows.Count; i++)
+                {
+                    cell = SheetPOSuggest.Cells["B"+ counter.ToString()];
+                    cell.PutValue(dtData.Rows[i]["InvtID"].ToString());
+                    ////Creating an empty row in the DataTable object
+                    //DataRow dr = dtSuggest.NewRow();
+
+                    cell = SheetPOSuggest.Cells["AF" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["InvtID"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AG" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["Descr"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AH" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["PurchUnit"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AI" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["UnitPrice"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AJ" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["TKchuan"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AK" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["TKHientai"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AL" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["TKCuoithang"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AM" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["SLChitieu"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AN" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["SLDenghi"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AO" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["SLConlai"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AP" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["SLDathang"].ToString());
+                
+                    countPO++;
+                    counter++;
+                }
+                //if (dtData.Rows.Count > 0)
+                //{
+                //    SheetPOSuggest.Cells.ImportDataTable(dtSuggest, true, "AF1");// du lieu Inventory
+                 
+                //}
+
+                #endregion
+
+
+                cell = SheetPOSuggest.Cells["C5"];
+                style = cell.GetStyle();
+                style.Custom = "#,##0";
+                cell.SetStyle(style);
+                SheetPOSuggest.Cells.Merge(4, 2, 1, 2);
+
+                cell = SheetPOSuggest.Cells["F3"];
+                cell.SetStyle(style);
+
+                cell = SheetPOSuggest.Cells["F4"];
+                cell.SetStyle(style);
+
+                cell = SheetPOSuggest.Cells["F5"];
+                cell.SetStyle(style);
+
+                cell = SheetPOSuggest.Cells["H2"];
+                cell.SetStyle(style);
+
+                cell = SheetPOSuggest.Cells["H3"];
+                cell.SetStyle(style);
+
+                cell = SheetPOSuggest.Cells["H4"];
+                cell.SetStyle(style);
+
+                cell = SheetPOSuggest.Cells["H5"];
+                cell.SetStyle(style);
+
+                cell = SheetPOSuggest.Cells["A6"];
+                style = SheetPOSuggest.Cells["A6"].GetStyle();
+                style.ForegroundColor = Color.Yellow;
+                style.Pattern = BackgroundType.Solid;
+
+                range = SheetPOSuggest.Cells.CreateRange("A6", "N6");
+                range.SetStyle(style);
+
+
+                style = SheetPOSuggest.Cells["A7"].GetStyle();
+                style.Font.Color = Color.Black;
+                style.HorizontalAlignment = TextAlignmentType.Right;
+
+                range = SheetPOSuggest.Cells.CreateRange("A7", "A" + dtInvtID.Rows.Count + 7);
+                range.SetStyle(style);
+
+
+
+
+
+                style = SheetPOSuggest.Cells["E7"].GetStyle();
+                style.Custom = "#,##0";
+                style.Font.Color = Color.Black;
+                style.HorizontalAlignment = TextAlignmentType.Right;
+                range = SheetPOSuggest.Cells.CreateRange("E7", "N" + dtInvtID.Rows.Count + 7);
+                range.SetStyle(style);
+
+                style = SheetPOSuggest.Cells["AI2"].GetStyle();
+                style.Custom = "#,##0";
+                style.Font.Color = Color.Transparent;
+                style.HorizontalAlignment = TextAlignmentType.Right;
+                range = SheetPOSuggest.Cells.CreateRange("AI2", "AP" + dtInvtID.Rows.Count + 7);
+                range.SetStyle(style);
+
+                style = SheetPOSuggest.Cells["C7"].GetStyle();
+                style.Number = 49; //Text
+                style.Font.Color = Color.Black;
+                style.HorizontalAlignment = TextAlignmentType.Left;
+                range = SheetPOSuggest.Cells.CreateRange("C7", "D" + dtInvtID.Rows.Count + 7);
+                range.SetStyle(style);
+
+
+
+
+                style = SheetPOSuggest.Cells["B7"].GetStyle();
+                style.Number = 49; //Text
+                style.Font.Color = Color.Black;
+                style.HorizontalAlignment = TextAlignmentType.Left;
+                style.IsLocked = false;
+                range = SheetPOSuggest.Cells.CreateRange("B7", "B" + dtInvtID.Rows.Count + 7);
+                range.SetStyle(style);
+
+
+                style = SheetPOSuggest.Cells["G7"].GetStyle();
+                style.Custom = "#,##0";
+                style.HorizontalAlignment = TextAlignmentType.Right;
+                style.Font.Color = Color.Black;
+                style.IsLocked = false;
+                range = SheetPOSuggest.Cells.CreateRange("G7", "G" + dtInvtID.Rows.Count + 7);
+                range.SetStyle(style);
+
+                style = SheetPOSuggest.Cells["O1"].GetStyle();
+                style.Font.Color = Color.Transparent;
+                flag.FontColor = true;
+                flag.NumberFormat = true;
+                flag.Locked = true;
+
+
+
+
+                range = SheetPOSuggest.Cells.CreateRange("O1", "ZZ" + (dtInvtID.Rows.Count + 7));
+                range.ApplyStyle(style, flag);
+
+
+
+
+                //Adds an empty conditional formatting
+                int index = SheetPOSuggest.ConditionalFormattings.Add();
+                FormatConditionCollection fcs = SheetPOSuggest.ConditionalFormattings[index];
+
+                //Sets the conditional format range.
+                CellArea ca = new CellArea();
+
+                ca.StartRow = 6;
+                ca.EndRow = dtInvtID.Rows.Count + 7;
+                ca.StartColumn = 0;
+                ca.EndColumn = 12;
+                fcs.AddArea(ca);
+
+
+
+                //Adds condition.
+                int conditionIndex = fcs.AddCondition(FormatConditionType.Expression, OperatorType.Equal, "=$O7=\"G\"", "O");
+
+                //Adds condition.
+                int conditionIndex2 = fcs.AddCondition(FormatConditionType.Expression, OperatorType.Equal, "=$O7=\"O\"", "G");
+
+                //Sets the background color.
+                FormatCondition fc = fcs[conditionIndex];
+                fc.Style.BackgroundColor = Color.Green;
+
+                //Sets the background color.
+                fc = fcs[conditionIndex2];
+                fc.Style.BackgroundColor = Color.Red;
+
+                SheetPOSuggest.AutoFitColumns();
+
+                SheetPOSuggest.Cells.Columns[1].Width = 30;
+                SheetPOSuggest.Cells.Columns[2].Width = 15;
+                SheetPOSuggest.Cells.Columns[4].Width = 15;
+                SheetPOSuggest.Cells.Columns[5].Width = 15;
+                SheetPOSuggest.Protect(ProtectionType.All);
+                workbook.Save(stream, SaveFormat.Xlsx);
+                stream.Flush();
+                stream.Position = 0;
+              
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "PO10100.xlsx" };
+                return Json(new { success = true });
+
+
+            }
+            catch (Exception ex)
+            {
+               
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
         #endregion
         #region Other
         public void Insert_IN_ItemSite(ref IN_ItemSite objIN_ItemSite, ref IN_Inventory objIN_Inventory, string SiteID)
@@ -1314,474 +1770,118 @@ namespace PO10100.Controllers
                 return false;
             }
         }
-        private string GetExcelPOSuggest(string strType, string strBranchID, DateTime strPODate, string strVendID)
-        {
+        //private string GetExcelPOSuggest(string strType, string strBranchID, DateTime strPODate, string strVendID)
+        //{
 
 
-            string fileName = Directory.GetParent(Server.MapPath("")) + "\\" + Guid.NewGuid().ToString() + ".xls";
-            System.Data.DataTable dtData = new System.Data.DataTable();
-            System.Data.DataTable dtHeader = new System.Data.DataTable();
-            System.Data.DataTable dtInvtID = new System.Data.DataTable();
-
-            Application excelApplication = new Application();
-            Workbook excelWorkBook;
-            Worksheet SheetKPI;
-            //Worksheet SheetInventory;
-            //Worksheet SheetWeek;
-            object oMissing = Missing.Value;
-            excelWorkBook = excelApplication.Workbooks.Add();
-            excelWorkBook.Worksheets.Add();
-            string cellName;
-            int counter = 2;
           
-            try
-            {
+        //    try
+        //    {
               
               
-              
-                Dictionary<string, string> para = new Dictionary<string, string>();
-                para.Add("@BranchID", strBranchID);
-                para.Add("@PODate", strPODate.ToString("yyyy-MM-dd"));
-                para.Add("@UserName", Current.UserName);
-                para.Add("@VendID", strVendID);
-                dtHeader = Util.getDataTableFromProc("PO10100_peHeader", para, false);
-
-                para = new Dictionary<string, string>();
-                para.Add("@BranchID", strBranchID);
-                para.Add("@PODate", strPODate.ToString("yyyy-MM-dd"));
-                para.Add("@User", Current.UserName);
-                para.Add("@VendID", strVendID);
-
-                dtData = Util.getDataTableFromProc("PO10100_peSuggest", para, false);
-
-                                            
-                para = new Dictionary<string, string>();
-                para.Add("@BranchID", strBranchID);
-                para.Add("@PODate", strPODate.ToString("yyyy-MM-dd"));
-                para.Add("@User", Current.UserName);
-                para.Add("@VendID", strVendID);
-                para.Add("@Type", strType);
-                dtInvtID = Util.getDataTableFromProc("PO10100_peInventory", para, false);
-                          
-                SheetKPI = excelWorkBook.Worksheets[1];
-                SheetKPI.Name = Util.GetLang("POSuggest");
-
-
-                #region sheet Inventory
-                Util.SetCellValueHeader(SheetKPI, "AA1", Util.GetLang("PO10100InvtID"));
-                Util.SetCellValueHeader(SheetKPI, "AB1", Util.GetLang("PO10100Descr"));
-                Util.SetCellValueHeader(SheetKPI, "AC1", Util.GetLang("PO10100Unit"));
-                Util.SetCellValueHeader(SheetKPI, "AD1", Util.GetLang("PO10100Price"));
-                Util.SetCellValueHeader(SheetKPI, "AE1", Util.GetLang("PO10100Type"));
-
-             
-
-
-                Util.SetCellValueHeader(SheetKPI, "AF1", Util.GetLang("PO10100InvtID"));
-                Util.SetCellValueHeader(SheetKPI, "AG1", Util.GetLang("PO10100Descr"));
-                Util.SetCellValueHeader(SheetKPI, "AH1", Util.GetLang("PO10100PurchUnit"));
-                Util.SetCellValueHeader(SheetKPI, "AI1", Util.GetLang("UnitPrice"));
-                Util.SetCellValueHeader(SheetKPI, "AJ1", Util.GetLang("TKchuan"));
-                Util.SetCellValueHeader(SheetKPI, "AK1", Util.GetLang("TKHientai"));
-                Util.SetCellValueHeader(SheetKPI, "AL1", Util.GetLang("TKCuoithang"));
-                Util.SetCellValueHeader(SheetKPI, "AM1", Util.GetLang("SLChitieu"));
-                Util.SetCellValueHeader(SheetKPI, "AN1", Util.GetLang("SLDenghi"));
-                Util.SetCellValueHeader(SheetKPI, "AO1", Util.GetLang("SLConlai"));
-                Util.SetCellValueHeader(SheetKPI, "AP1", Util.GetLang("SLDathang"));
-                ////now the list
-
-                object[,] array = new object[dtInvtID.Rows.Count, dtInvtID.Columns.Count];
-
-
-                for (int i = 0; i < dtInvtID.Rows.Count; i++)
-                {
-                    for (int j = 0; j < dtInvtID.Columns.Count; j++)
-                    {
-                        array[i, j] = dtInvtID.Rows[i].ItemArray[j].ToString().Trim();
-                    }
-                }
-                if (dtInvtID.Rows.Count > 0)
-                {
-                    SheetKPI.get_Range("AA2", "AC" + (dtInvtID.Rows.Count + 1).ToString()).NumberFormat = "@";
-                    SheetKPI.get_Range("AE2", "AE" + (dtInvtID.Rows.Count + 1).ToString()).NumberFormat = "@";
-                    SheetKPI.get_Range("AA2", "AE" + (dtInvtID.Rows.Count + 1).ToString()).Value2 = array;
-                }
-         
-                #endregion
-
-
-                #region template
-                Util.SetCellValueHeader(SheetKPI, "B1", Util.GetLang("PO10100EHeader"));
-                SheetKPI.Range["B1:G1"].Merge();
-                SheetKPI.Range["B1:G1"].Font.Bold = true;
-                SheetKPI.Range["B1:G1"].Font.Size = 20;
-                SheetKPI.Range["B1:G1"].Font.Color = Color.Blue;
-
-                Util.SetCellValueHeader(SheetKPI, "B2", Util.GetLang("PO10100VendName"));
-                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
-                SheetKPI.Range["B2:B2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["B2:B2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "C2", dtHeader.Rows[0]["VendName"]);
-                SheetKPI.Range["C2:C2"].Font.Color = Color.Blue;
-                SheetKPI.Range["C2:D2"].Merge();
-                SheetKPI.Range["C2:C2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["C2:C2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignLeft;
-
-
-                Util.SetCellValueHeader(SheetKPI, "B3", Util.GetLang("PO10100BranchID"));
-                SheetKPI.Range["B3:B3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["B3:B3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "C3", dtHeader.Rows[0]["CpnyID"]);
-                SheetKPI.Range["C3:C3"].Font.Color = Color.Blue;
-                SheetKPI.Range["C3:D3"].Merge();
-                SheetKPI.Range["C3:C3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["C3:C3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignLeft;
-
-
-
-                Util.SetCellValueHeader(SheetKPI, "B4", Util.GetLang("PO10100BranchName"));
-                SheetKPI.Range["B4:B4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["B4:B4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "C4", dtHeader.Rows[0]["CpnyName"]);
-                SheetKPI.Range["C4:C4"].Font.Color = Color.Blue;
-                SheetKPI.Range["C4:D4"].Merge();
-                SheetKPI.Range["C4:C4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["C4:C4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignLeft;
-
-                Util.SetCellValueHeader(SheetKPI, "B5", Util.GetLang("PO10100SNDD"));
-                SheetKPI.Range["B5:B5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["B5:B5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "C5", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["SNDD"] : "0");
-                SheetKPI.Range["C5:C5"].Font.Color = Color.Blue;
-                SheetKPI.Range["C5:D5"].Merge();
-                SheetKPI.Range["C5:C5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["C5:C5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-
-
-                Util.SetCellValueHeader(SheetKPI, "E2", Util.GetLang("PO10100PODate"));
-                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
-                SheetKPI.Range["E2:E2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["E2:E2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-                SheetKPI.Range["F2:F2"].NumberFormat = "@";
-
-                Util.SetCellValueHeader(SheetKPI, "F2", strPODate.ToString("dd-MM-yyyy"));
-                SheetKPI.Range["F2:F2"].Font.Color = Color.Blue;
-                //SheetKPI.Range["F2:G2"].Merge();
-                SheetKPI.Range["F2:F2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["F2:F2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-                SheetKPI.Range["F2:F2"].NumberFormat = "@";
-
-                Util.SetCellValueHeader(SheetKPI, "E3", Util.GetLang("PO10100TotAmtExcel"));
-                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
-                SheetKPI.Range["E3:E3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["E3:E3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "E4", Util.GetLang("PO10100MinValue"));
-                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
-                SheetKPI.Range["E4:E4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["E4:E4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "F4", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["MinValue"] : "0");
-                SheetKPI.Range["F4:F4"].Font.Color = Color.Blue;
-                SheetKPI.Range["F4:F4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["F4:F4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "E5", Util.GetLang("PO10100NXK"));
-                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
-                SheetKPI.Range["E5:E5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["E5:E5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                SheetKPI.Range["F5:F5"].NumberFormat = "@";
-                Util.SetCellValueHeader(SheetKPI, "F5", dtHeader.Rows.Count > 0 ? Convert.ToDateTime(dtHeader.Rows[0]["NXK"]).ToString("dd-MM-yyyy") : strPODate.ToString("dd-MM-yyyy"));
-                SheetKPI.Range["F5:F5"].Font.Color = Color.Blue;
-                SheetKPI.Range["F5:F5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["F5:F5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;          
-
-                Util.SetCellValueHeader(SheetKPI, "G2", Util.GetLang("PO10100CreditLimit"));
-                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
-                SheetKPI.Range["G2:G2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["G2:G2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "H2", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["CreditLimit"] : "0");
-                SheetKPI.Range["H2:H2"].NumberFormat = "#,##0";
-                SheetKPI.Range["H2:H2"].Font.Color = Color.Blue;
-                SheetKPI.Range["H2:H2"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["H2:H2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-                SheetKPI.Range["H2:H2"].NumberFormat = "#,##0";
-
-                Util.SetCellValueHeader(SheetKPI, "G3", Util.GetLang("PO10100Deposit"));
-                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
-                SheetKPI.Range["G3:G3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["G3:G3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "H3", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["Deposit"] : "0");
-                SheetKPI.Range["H3:H3"].NumberFormat = "#,##0";
-                SheetKPI.Range["H3:H3"].Font.Color = Color.Blue;
-                SheetKPI.Range["H3:H3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["H3:H3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-                SheetKPI.Range["H3:H3"].NumberFormat = "#,##0";
-
-                Util.SetCellValueHeader(SheetKPI, "G4", Util.GetLang("PO10100MaxValue"));
-                //SheetMCP.Range["B2:B2"].Font.Color = Color.Blue;
-                SheetKPI.Range["G4:G4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["G4:G4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "H4", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["MaxValue"] : "0");
-                SheetKPI.Range["H4:H4"].NumberFormat = "#,##0";
-                SheetKPI.Range["H4:H4"].Font.Color = Color.Blue;
-                SheetKPI.Range["H4:H4"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["H4:H4"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-                SheetKPI.Range["H4:H4"].NumberFormat = "#,##0";
-
-                Util.SetCellValueHeader(SheetKPI, "G5", Util.GetLang("PO10100CountShip"));
-                SheetKPI.Range["G5:G5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["G5:G5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                Util.SetCellValueHeader(SheetKPI, "H5", dtHeader.Rows.Count > 0 ? dtHeader.Rows[0]["CountShipment"] : "0");
-                SheetKPI.Range["H5:H5"].NumberFormat = "#,##0";
-                SheetKPI.Range["H5:H5"].Font.Color = Color.Blue;
-                SheetKPI.Range["H5:H5"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["H5:H5"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-                SheetKPI.Range["H5:H5"].NumberFormat = "#,##0";
-
-                SheetKPI.Range["A6:N6"].Interior.Color = Color.Yellow;
-                Util.SetCellValueHeader(SheetKPI, "A6", Util.GetLang("PO10100ESTT"));
-                Util.SetCellValueHeader(SheetKPI, "B6", Util.GetLang("PO10100InvtID"));
-                Util.SetCellValueHeader(SheetKPI, "C6", Util.GetLang("PO10100Descr"));
-                Util.SetCellValueHeader(SheetKPI, "D6", Util.GetLang("PO10100PurchUnit"));
-                Util.SetCellValueHeader(SheetKPI, "E6", Util.GetLang("PO10100UnitPrice"));
-
-                Util.SetCellValueHeader(SheetKPI, "N6", Util.GetLang("SLConlai"));
-                Util.SetCellValueHeader(SheetKPI, "G6", Util.GetLang("SLDathang"));
-                Util.SetCellValueHeader(SheetKPI, "H6", Util.GetLang("ThanhTien"));
-
-                Util.SetCellValueHeader(SheetKPI, "I6", Util.GetLang("TKchuan"));
-                Util.SetCellValueHeader(SheetKPI, "J6", Util.GetLang("TKHientai"));
-                Util.SetCellValueHeader(SheetKPI, "K6", Util.GetLang("TKCuoithang"));
-
-                Util.SetCellValueHeader(SheetKPI, "L6", Util.GetLang("TBSellout"));
-                Util.SetCellValueHeader(SheetKPI, "M6", Util.GetLang("SLChitieu"));
-                Util.SetCellValueHeader(SheetKPI, "F6", Util.GetLang("SLDenghi"));
-
-              
-                String formulaCustomer = "=$AA$2:$AA$" + (dtInvtID.Rows.Count + 2);           
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.Add(XlDVType.xlValidateList, XlDVAlertStyle.xlValidAlertStop, XlFormatConditionOperator.xlBetween, formulaCustomer, oMissing);
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.IgnoreBlank = false;
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.InputTitle = "";
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.ErrorTitle = "";
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.InputMessage = "Chọn Mã Sản Phẩm";
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.ErrorMessage = "Mã Sản Phẩm này không tồn tại hoặc đã hết tồn kho";
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.ShowInput = true;
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Validation.ShowError = true;
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).NumberFormat = "@";
-
-
-
-                String formulaDesctInvtID = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,2,0)),\"\",VLOOKUP(B7,$AA:$AD,2,0))");
-                SheetKPI.get_Range("C7", "C" + (dtInvtID.Rows.Count + 7)).Formula = formulaDesctInvtID;
-                String formulaUnit = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,3,0)),\"\",VLOOKUP(B7,$AA:$AD,3,0))");
-                SheetKPI.get_Range("D7", "D" + (dtInvtID.Rows.Count + 7)).Formula = formulaUnit;
-                String formulaPrice = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,4,0)),0,VLOOKUP(B7,$AA:$AD,4,0))");
-                SheetKPI.get_Range("E7", "E" + (dtInvtID.Rows.Count + 7)).Formula = formulaPrice;
-                String formulaTypeInvtID = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AE,5,0)),\"\",VLOOKUP(B7,$AA:$AE,5,0))");
-                SheetKPI.get_Range("O7", "O" + (dtInvtID.Rows.Count + 7)).Formula = formulaTypeInvtID;
-                String formulaZERO = string.Format("=IF(ISERROR(VLOOKUP(B7,$AA:$AD,5,0)),0,VLOOKUP(B7,$AA:$AD,5,0))");
-                SheetKPI.get_Range("G7", "G" + (dtInvtID.Rows.Count + 7)).Formula = formulaZERO;
-                String formulaSTT = "=IF(ISERROR(IF(C7<>\"\",A6+1 & \"\",\"\")),1,IF(C7<>\"\",A6+1 & \"\",\"\"))";
-                SheetKPI.get_Range("A7", "A" + (dtInvtID.Rows.Count + 7)).Formula = formulaSTT;
-                SheetKPI.get_Range("A7", "A" + (dtInvtID.Rows.Count + 7)).HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-
-                String formulachuan = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,5,0)),0,VLOOKUP(B7,$AF:$AQ,5,0))");
-                SheetKPI.get_Range("I7", "I" + (dtInvtID.Rows.Count + 7)).Formula = formulachuan;
-
-                String formulahientai = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,6,0)),0,VLOOKUP(B7,$AF:$AQ,6,0))");
-                SheetKPI.get_Range("J7", "J" + (dtInvtID.Rows.Count + 7)).Formula = formulahientai;
-
-                String formulacth = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,6,0)),0,VLOOKUP(B7,$AF:$AQ,6,0))");
-                SheetKPI.get_Range("K7", "K" + (dtInvtID.Rows.Count + 7)).Formula = formulacth;
-
-                String formulaSellout = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,7,0)),0,VLOOKUP(B7,$AF:$AQ,7,0))");
-                SheetKPI.get_Range("L7", "L" + (dtInvtID.Rows.Count + 7)).Formula = formulaSellout;
-
-                String formulact = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,8,0)),0,VLOOKUP(B7,$AF:$AQ,8,0))");
-                SheetKPI.get_Range("M7", "M" + (dtInvtID.Rows.Count + 7)).Formula = formulact;
-
-                String formuladn = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,9,0)),0,VLOOKUP(B7,$AF:$AQ,9,0))");
-                SheetKPI.get_Range("F7", "F" + (dtInvtID.Rows.Count + 7)).Formula = formuladn;
-
-                String formulacl = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,10,0)),0,VLOOKUP(B7,$AF:$AQ,10,0))");
-                SheetKPI.get_Range("N7", "N" + (dtInvtID.Rows.Count + 7)).Formula = formulacl;
-
-                #endregion
-                //#region Fomat kieu text
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).NumberFormat = "General";
-                SheetKPI.get_Range("C7", "C" + (dtInvtID.Rows.Count + 7)).NumberFormat = "@";
-                SheetKPI.get_Range("D7", "D" + (dtInvtID.Rows.Count + 7)).NumberFormat = "@";
-                SheetKPI.get_Range("E7", "E" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("F7", "F" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("G7", "G" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("H7", "H" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("I7", "I" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("J7", "J" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("K7", "K" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("L7", "L" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("M7", "M" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("N7", "N" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("O7", "O" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("P7", "P" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("Q7", "Q" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("R7", "R" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("S7", "S" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("T7", "T" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("U7", "U" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("V7", "V" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                SheetKPI.get_Range("B7", "B" + (dtInvtID.Rows.Count + 7)).Locked = false;
-                SheetKPI.get_Range("G7", "G" + (dtInvtID.Rows.Count + 7)).Locked = false;
-
-                //#endregion
-
-                #region truyen du lieu
-             
-                counter = 7;
-                int countPO = 2;
-             
-                object[,] arr = new object[dtData.Rows.Count, 11];
-                for (int i = 0; i < dtData.Rows.Count; i++)
-                {
-                  
-
-                    cellName = "B" + counter.ToString();
-                    SheetKPI.get_Range(cellName, cellName).Value2 = dtData.Rows[i]["InvtID"].ToString();
-                    arr[i, 0] = dtData.Rows[i]["InvtID"].ToString();
-                    arr[i, 1] = dtData.Rows[i]["Descr"].ToString();
-                    arr[i, 2] = dtData.Rows[i]["PurchUnit"].ToString();
-                    arr[i, 3] = dtData.Rows[i]["UnitPrice"].ToString();
-                    arr[i, 4] = dtData.Rows[i]["TKchuan"].ToString();
-                    arr[i, 5] = dtData.Rows[i]["TKHientai"].ToString();
-                    arr[i, 6] = dtData.Rows[i]["TKCuoithang"].ToString();
-                    arr[i, 7] = dtData.Rows[i]["SLChitieu"].ToString();
-                    arr[i, 8] = dtData.Rows[i]["SLDenghi"].ToString();
-                    arr[i, 9] = dtData.Rows[i]["SLConlai"].ToString();
-                    arr[i, 10] = dtData.Rows[i]["SLDathang"].ToString();                   
-                    countPO++;
-                    counter++;
-                }
-                if (dtData.Rows.Count > 0)
-                {
-                    SheetKPI.get_Range("AF2", "AP" + (dtData.Rows.Count + 1).ToString()).Value2 = arr;
-                }
-             
-                #endregion
-                #region Fomular
-                String formulaTB = string.Format("=IF(OR({0}={1},{2}={3}),{4},ROUND({5}*{6},0))", "E7", "\"\"", "G7", "\"\"", "\"\"", "E7", "G7");
-                SheetKPI.get_Range("H7", "H" + (dtInvtID.Rows.Count + 7)).Formula = formulaTB;
-                SheetKPI.get_Range("H7", "H" + (dtInvtID.Rows.Count + 7)).NumberFormat = "#,##0";
-                String formulaTot = string.Format("=SUM({0}:{1})", "H7", "H" + (dtInvtID.Rows.Count + 7));               
-                SheetKPI.Range["F3:F3"].NumberFormat = "#,##0";
-                SheetKPI.Range["F3:F3"].Font.Color = Color.Blue;             
-                SheetKPI.Range["F3:F3"].VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
-                SheetKPI.Range["F3:F3"].HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignRight;
-                SheetKPI.Range["F3:F3"].Formula = formulaTot;
-                SheetKPI.Range["F3:F3"].NumberFormat = "#,##0";
-                #endregion               
-                SheetKPI.Columns.AutoFit();
-                SheetKPI.Columns.WrapText = false;
-                SheetKPI.Columns["C", Type.Missing].ColumnWidth = 35;
-                SheetKPI.Columns["B", Type.Missing].ColumnWidth = 15;
-                SheetKPI.Columns["D", Type.Missing].ColumnWidth = 15;
-                SheetKPI.Columns["E", Type.Missing].ColumnWidth = 20;
-                SheetKPI.Columns["F", Type.Missing].ColumnWidth = 15;
-                SheetKPI.Columns["G", Type.Missing].ColumnWidth = 15;
-                SheetKPI.Columns["H", Type.Missing].ColumnWidth = 20;
-                SheetKPI.Columns["I", Type.Missing].ColumnWidth = 20;
-                SheetKPI.Columns["J", Type.Missing].ColumnWidth = 25;
-                SheetKPI.Columns["K", Type.Missing].ColumnWidth = 35;
-                SheetKPI.Columns["O", Type.Missing].ColumnWidth = 0;
-                SheetKPI.Range["O1:O" + (dtInvtID.Rows.Count + 7)].Font.Color = Color.White;               
-                SheetKPI.Range["A1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Name = "Arial";
-                SheetKPI.Range["A1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Size = 10;
-                SheetKPI.Range["AA1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Color = Color.White;         
-                SheetKPI.Range["B7:G" + (dtInvtID.Rows.Count + 7)].Interior.Color = Color.Silver;
-
-                FormatConditions fcs = SheetKPI.Range["A7:N" + (dtInvtID.Rows.Count + 7)].FormatConditions;
-                FormatCondition fc = (FormatCondition)fcs.Add
-                    (XlFormatConditionType.xlExpression, Type.Missing, "=$O7=\"G\"");
-                fc.Font.Color = ColorTranslator.ToOle(Color.Green);
-
-
-                FormatCondition fc1 = (FormatCondition)fcs.Add
-                    (XlFormatConditionType.xlExpression, Type.Missing, "=$O7=\"R\"");
-                fc1.Font.Color = ColorTranslator.ToOle(Color.Red);
-              
-                Microsoft.Office.Interop.Excel.Range firstRow = (Microsoft.Office.Interop.Excel.Range)SheetKPI.Rows[7];
-                firstRow.Activate();
-                firstRow.Select();
-                //firstRow.AutoFilter(5, Type.Missing, XlAutoFilterOperator.xlFilterValues, Type.Missing, true);
-                firstRow.Application.ActiveWindow.FreezePanes = true;
-
-                //Filter excel
-
-                string lastrow = "N" + (dtInvtID.Rows.Count + 7).ToString();
-                var _rng = SheetKPI.get_Range("A6", lastrow);
-                _rng.AutoFilter(1, Type.Missing, Microsoft.Office.Interop.Excel.XlAutoFilterOperator.xlAnd, Type.Missing, true);
-                _rng.Borders.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-
-
-
-
-                excelApplication.DisplayAlerts = false;
-                excelWorkBook.SaveAs(fileName, XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-                excelWorkBook.Close(true, Type.Missing, Type.Missing);
-                excelApplication.Quit();
-                excelApplication = null;
-                byte[] buffer = new byte[1];
-                using (FileStream fs = new FileStream(fileName, FileMode.Open,
-                                   FileAccess.Read, FileShare.Read))
-                {
-                    buffer = new byte[fs.Length];
-                    fs.Read(buffer, 0, (int)fs.Length);
-
-                }
-
-                return fileName;
-            }
-            catch (Exception ex)
-            {
-                excelApplication.Quit();
-                excelApplication = null;
-                throw ex;
-            }
-
-
-            finally
-            {
-                
-                //if (System.IO.File.Exists(fileName))
-                //    System.IO.File.Delete(fileName);
-                SheetKPI = null;
-                if (excelWorkBook != null)
-                    excelWorkBook = null;
-                if (excelApplication != null)
-                {
-                    excelApplication.Quit();
-                    excelApplication = null;
-                }
-                //Garbage collection.
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                
-            }
-
-
-        }
       
+
+      
+         
+        //        #endregion
+
+
+      
+
+              
+       
+     
+      
+        //        SheetKPI.Range["O1:O" + (dtInvtID.Rows.Count + 7)].Font.Color = Color.White;               
+        //        SheetKPI.Range["A1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Name = "Arial";
+        //        SheetKPI.Range["A1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Size = 10;
+        //        SheetKPI.Range["AA1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Color = Color.White;         
+        //        SheetKPI.Range["B7:G" + (dtInvtID.Rows.Count + 7)].Interior.Color = Color.Silver;
+
+        //        FormatConditions fcs = SheetKPI.Range["A7:N" + (dtInvtID.Rows.Count + 7)].FormatConditions;
+        //        FormatCondition fc = (FormatCondition)fcs.Add
+        //            (XlFormatConditionType.xlExpression, Type.Missing, "=$O7=\"G\"");
+        //        fc.Font.Color = ColorTranslator.ToOle(Color.Green);
+
+
+        //        FormatCondition fc1 = (FormatCondition)fcs.Add
+        //            (XlFormatConditionType.xlExpression, Type.Missing, "=$O7=\"R\"");
+        //        fc1.Font.Color = ColorTranslator.ToOle(Color.Red);
+              
+        //        Microsoft.Office.Interop.Excel.Range firstRow = (Microsoft.Office.Interop.Excel.Range)SheetKPI.Rows[7];
+        //        firstRow.Activate();
+        //        firstRow.Select();
+        //        //firstRow.AutoFilter(5, Type.Missing, XlAutoFilterOperator.xlFilterValues, Type.Missing, true);
+        //        firstRow.Application.ActiveWindow.FreezePanes = true;
+
+        //        //Filter excel
+
+        //        string lastrow = "N" + (dtInvtID.Rows.Count + 7).ToString();
+        //        var _rng = SheetKPI.get_Range("A6", lastrow);
+        //        _rng.AutoFilter(1, Type.Missing, Microsoft.Office.Interop.Excel.XlAutoFilterOperator.xlAnd, Type.Missing, true);
+        //        _rng.Borders.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
+
+
+
+
+        //        excelApplication.DisplayAlerts = false;
+        //        excelWorkBook.SaveAs(fileName, XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+        //        excelWorkBook.Close(true, Type.Missing, Type.Missing);
+        //        excelApplication.Quit();
+        //        excelApplication = null;
+        //        byte[] buffer = new byte[1];
+        //        using (FileStream fs = new FileStream(fileName, FileMode.Open,
+        //                           FileAccess.Read, FileShare.Read))
+        //        {
+        //            buffer = new byte[fs.Length];
+        //            fs.Read(buffer, 0, (int)fs.Length);
+
+        //        }
+
+        //        return fileName;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        excelApplication.Quit();
+        //        excelApplication = null;
+        //        throw ex;
+        //    }
+
+
+        //    finally
+        //    {
+                
+        //        //if (System.IO.File.Exists(fileName))
+        //        //    System.IO.File.Delete(fileName);
+        //        SheetKPI = null;
+        //        if (excelWorkBook != null)
+        //            excelWorkBook = null;
+        //        if (excelApplication != null)
+        //        {
+        //            excelApplication.Quit();
+        //            excelApplication = null;
+        //        }
+        //        //Garbage collection.
+        //        GC.Collect();
+        //        GC.WaitForPendingFinalizers();
+        //        GC.Collect();
+        //        GC.WaitForPendingFinalizers();
+                
+        //    }
+
+
+        //}
+        private void SetCellValueHeader(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
+        {
+            c.PutValue(" "+lang);
+            var style = c.GetStyle();
+            style.Font.IsBold = true;
+            style.Font.Size = 10;
+            style.Font.Color = Color.Blue;
+            style.HorizontalAlignment = alignH;
+            style.VerticalAlignment = alignV;
+            c.SetStyle(style);
+        }
         #endregion
     }
     public class CountInvtID

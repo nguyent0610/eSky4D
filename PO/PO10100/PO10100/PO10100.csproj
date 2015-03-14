@@ -46,6 +46,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.3.2.1, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\DLL\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Ext.Net, Version=2.5.1.25038, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Dll\Ext.Net.dll</HintPath>
@@ -62,6 +66,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Dll\HQ.eSkySys.dll</HintPath>
     </Reference>
+    <Reference Include="HQFramework.Common">
+      <HintPath>..\..\..\..\eBiz4DCloud_Client_201203\AutoApplication\ServerApp_Process\ServerApp_Process\ServerApp_Process\bin\Debug\HQFramework.Common.dll</HintPath>
+    </Reference>
     <Reference Include="HQFramework.DAL, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\DLL\HQFramework.DAL.dll</HintPath>
@@ -71,9 +78,6 @@
       <HintPath>..\..\..\HQSendMailApprove\HQSendMailApprove\bin\Debug\HQSendMailApprove.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\Dll\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -241,6 +245,7 @@
       <LastGenOutput>PO10100Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Scripts\Copy of hq.common.js" />
     <Content Include="Scripts\hq.common.js" />
     <Content Include="Scripts\hq.language0.js" />
     <Content Include="Scripts\hq.language1.js" />
@@ -297,7 +302,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>8727</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

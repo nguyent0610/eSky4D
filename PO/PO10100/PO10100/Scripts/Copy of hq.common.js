@@ -1,4 +1,4 @@
-ï»¿if (!Array.prototype.indexOf) {
+if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
 
@@ -42,19 +42,12 @@ var HQ = {
                 return false;
             }
         },
-        insertBlank: function (store, keys) {
-            if (keys == undefined) {
+        insertBlank: function (store, key) {
+            if (key == undefined) {
                 store.insert(store.getCount(), Ext.data.Record());
             } else {
                 var flat = store.findBy(function (record, id) {
-                    if (keys.constructor === Array) {
-                        for (var i = 0; i < keys.length; i++) {
-                            if (!record.get(keys[i])) {
-                                return true;
-                            }
-                        }
-                    }
-                    else if (!record.get(keys)) {
+                    if (!record.get(key)) {
                         return true;
                     }
                     return false;
@@ -124,132 +117,7 @@ var HQ = {
                 }
             });
             return data;
-        },
-        // TinhHV using for auto gen the LineRef
-        lastLineRef: function (store) {
-            var num = 0;
-            for (var j = 0; j < store.data.length; j++) {
-                var item = store.data.items[j];
-
-                if (!Ext.isEmpty(item.data.LineRef) && parseInt(item.data.LineRef) > num) {
-                    num = parseInt(item.data.LineRef);
-                }
-            };
-            num++;
-            var lineRef = num.toString();
-            var len = lineRef.length;
-            for (var i = 0; i < 5 - len; i++) {
-                lineRef = "0" + lineRef;
-            }
-            return lineRef;
-        },
-        //kiem tra key da nhap du chua
-        isAllValidKey: function (items, keys) {
-            if (items != undefined) {
-                for (var i = 0; i < items.length; i++) {
-                    for (var j = 0; j < keys.length; j++) {
-                        if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
-                            return false;
-                    }
-                }
-                return true;
-            } else {
-                return true;
-            }
-        },
-        checkRequirePass: function (store, keys, fieldsCheck, fieldsLang) {
-            items = store.getChangedData().Created;
-            if (items != undefined) {
-                for (var i = 0; i < items.length; i++) {
-                    for (var jkey = 0; jkey < keys.length; jkey++) {
-                        if (items[i][keys[jkey]]) {
-                            for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
-                                    HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            items = store.getChangedData().Updated;
-            if (items != undefined) {
-                for (var i = 0; i < items.length; i++) {
-                    for (var jkey = 0; jkey < keys.length; jkey++) {
-                        if (items[i][keys[jkey]]) {
-                            for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
-                                    HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return true;
         }
-    },
-    combo: {
-        first: function (cbo, isChange) {
-            if (isChange) {
-                HQ.message.show(150, '', '');
-            }
-            else {
-                var value = cbo.store.getAt(0);
-                if (value) {
-                    cbo.setValue(value.data[cbo.valueField]);
-                }
-            }
-        },
-        prev: function (cbo, isChange) {
-            if (isChange) {
-                HQ.message.show(150, '', '');
-            }
-            else {
-                var v = cbo.getValue();
-                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
-                var index = cbo.store.indexOf(record);
-                var value = cbo.store.getAt(index - 1);
-                if (value) {
-                    cbo.setValue(value.data[cbo.valueField]);
-                }
-                else HQ.combo.first(cbo);
-            }
-        },
-        next: function (cbo, isChange) {
-            if (isChange) {
-                HQ.message.show(150, '', '');
-            }
-            else {
-                var v = cbo.getValue();
-                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
-                var index = cbo.store.indexOf(record);
-                var value = cbo.store.getAt(index + 1);
-                if (value) {
-                    cbo.setValue(value.data[cbo.valueField]);
-                }
-                else HQ.combo.last(cbo);
-            }
-        },
-        last: function (cbo, isChange) {
-            if (isChange) {
-                HQ.message.show(150, '', '');
-            }
-            else {
-                var value = cbo.store.getAt(cbo.store.getCount() - 1);
-                if (value) {
-                    cbo.setValue(value.data[cbo.valueField]);
-                }
-            }
-
-        },
-        expand: function (cbo, delimiter) {
-            if (cbo.getValue())
-                cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
-        },
     },
     grid: {
         showBusy: function (grd, isBusy) {
@@ -257,42 +125,25 @@ var HQ = {
                 grd.view.loadMask.show();
             else grd.view.loadMask.hide();
         },
-        insert: function (grd, keys,indexColumn) {
+        insert: function (grd) {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
-                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
-                        //HQ.grid.last(grd);
-                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: indexColumn == undefined ? 1 : indexColumn }); }, 300);
+                        HQ.grid.last(grd);
+                        grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
                     }
                 });
-                //}
-                //else {
-                //    HQ.grid.last(grd);
-                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-                //}
                 return;
             }
-            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
             store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                 callback: function () {
-                    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-                        HQ.store.insertBlank(store, keys);
-                    }
-                    //HQ.grid.last(grd);
-                    setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                    HQ.store.insertBlank(store);
+                    HQ.grid.last(grd);
+                    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
                 }
             });
-            //}
-            //else {
-            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-            //        HQ.store.insertBlank(store, keys);
-            //    }
-            //    HQ.grid.last(grd);
-            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-            //}
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
@@ -310,15 +161,6 @@ var HQ = {
             var store = combo.up("gridpanel").getStore();
             store.pageSize = parseInt(combo.getValue(), 10);
             store.reload();
-        },
-        indexSelect: function (grd) {
-            var index = '';
-            var arr = grd.getSelectionModel().getSelection();
-            arr.forEach(function (itm) {
-                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
-            });
-
-            return index.substring(0, index.length - 1);
         },
         checkDuplicate: function (grd, row, keys) {
             var found = false;
@@ -364,11 +206,11 @@ var HQ = {
             }
             return found;
         },
-        //TrungHT dï¿½ng cho phï¿½n trang
+        //TrungHT dùng cho phân trang
         checkDuplicateAll: function (grd, row, keys) {
-            return HQ.grid.checkDuplicate(grd, row, keys);
+            return checkDuplicate(grd, row, keys);
         },
-        //Dï¿½ng trong ham before edit cua grid
+        //Dùng trong ham before edit cua grid
         //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
         //Cot nao la key thi khoa lai khi da co du lieu
         checkInput: function (row, keys) {
@@ -381,59 +223,18 @@ var HQ = {
                 }
             }
             if (keys.indexOf(row.field) != -1) {
-                for (var jkey = 0; jkey < keys.length; jkey++) {
-                    if (row.record.data[keys[jkey]] == "") return true;
-                }
-                return false;
+                if (row.record.data[row.field] != "") return false;
             }
             return true;
         },
         //Kiem tra khi check require bo qua cac dong la new 
-        checkRequirePass: function (items, keys) {
-            if (items != undefined && keys != undefined)
-                for (var jkey = 0; jkey < keys.length; jkey++) {
-                    if (items[keys[jkey]]) {
-                        return false;
-                    }
+        checkRequirePass: function (item, keys) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (item[keys[jkey]]) {
+                    return false;
                 }
+            }
             return true;
-        },
-        checkBeforeEdit: function (e, keys) {
-            if (!HQ.isUpdate) return false;
-            if (keys.indexOf(e.field) != -1) {
-                if (e.record.data.tstamp != "")
-                    return false;
-            }
-            return HQ.grid.checkInput(e, keys);
-        },
-        checkReject: function (record, grd) {
-            if (record.data.tstamp == '') {
-                grd.getStore().remove(record, grd);
-                grd.getView().focusRow(grd.getStore().getCount() - 1);
-                grd.getSelectionModel().select(grd.getStore().getCount() - 1);
-            } else {
-                record.reject();
-            }
-        },
-        checkValidateEdit: function (grd, e, keys) {
-            if (keys.indexOf(e.field) != -1) {
-                var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value).match(regex)) {
-                    HQ.message.show(20140811, e.column.text);
-                    return false;
-                }
-                if (HQ.grid.checkDuplicate(grd, e, keys)) {
-                    HQ.message.show(1112, e.value);
-                    return false;
-                }
-
-            }
-        },
-        checkInsertKey: function (grd, e, keys) {
-            if (keys.indexOf(e.field) != -1) {
-                if (e.value != '')
-                    HQ.store.insertBlank(grd.getStore(), keys);
-            }
         }
     },
     message: {
@@ -548,12 +349,6 @@ var HQ = {
                 });
             }
         },
-        changeData: function (isChange, screenNbr) {
-            if (parent.App['tab' + screenNbr] != undefined)
-                if (isChange)
-                    parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
-                else parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
-        },
         showBusy: function (busy, waitMsg, form) {
             if (form == undefined) {
                 if (busy) {
@@ -569,21 +364,6 @@ var HQ = {
                 }
             }
 
-        },
-        setRequire: function (ctr) {
-            if (typeof (ctr.items) != "undefined") {
-                ctr.items.each(function (itm) {
-                    if (typeof (itm.allowBlank) != "undefined") {
-                        itm.validate();
-                    }
-                    HQ.common.setRequire(itm);
-                });
-            }
-        },
-        control_render: function (control, itemfocus) {
-            control.getEl().on("click", function () {
-                HQ.focus = itemfocus;
-            });
         }
     },
     util: {
@@ -621,66 +401,9 @@ var HQ = {
             if (str == null) {
                 return "";
             } else return str;
-        },
-        focusControl: function () {
-            if (App[invalidField] && !App[invalidField].hasFocus) {
-                var tab = App[invalidField].findParentByType('tabpanel');
-                if (tab == undefined) {
-                    App[invalidField].focus();
-                }
-                else {
-                    HQ.util.focusControlInTab(tab, invalidField);
-                }
-            }
-        },
-        focusControlInTab: function (ctr, field) {
-            if (typeof (ctr.items) != "undefined") {
-                ctr.items.each(function (itm) {
-                    if (typeof (ctr.setActiveTab) != "undefined" && !App[field].hasFocus) {
-                        ctr.setActiveTab(App[itm.id]);
-                    }
-                    if (itm.id == field) {
-                        App[field].focus();
-                        return true;
-                    }
-                    HQ.util.focusControlInTab(itm, field);
-                });
-            }
-        },
-        checkEmail: function (value) {
-            var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-            if ((HQ.util.passNull(value)).match(regex)) {
-                return true;
-            } else {
-                HQ.message.show(09112014, '', null);
-                return false;
-            }
         }
     },
-    form: {
-        checkRequirePass: function (frm) {
-            frm.updateRecord();
-            var isValid = true;
-            frm.getForm().getFields().each(
-                            function (item) {
-                                if (!item.isValid()) {
-                                    invalidField = item.id;
-                                    HQ.message.show(1000, item.fieldLabel, 'HQ.util.focusControl');
-                                    isValid = false;
-                                    return false;
-                                }
-                            })
-            return isValid;
-        },
-        lockButtonChange: function (isChange, frmMain) {
-            frmMain.menuClickbtnFirst.setDisabled(isChange);
-            frmMain.menuClickbtnNext.setDisabled(isChange);
-            frmMain.menuClickbtnLast.setDisabled(isChange);
-            frmMain.menuClickbtnPrev.setDisabled(isChange);
-            frmMain.menuClickbtnNew.setDisabled(isChange);
-            frmMain.menuClickbtnDelete.setDisabled(isChange);
-        }
-    },
+
     tooltip: {
         // TinhHV: show the tootip in grid
         showOnGrid: function (toolTip, grid, isHtmlEncode) {
@@ -710,8 +433,6 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 2) value = '';//value.split(',')[value.split(',').length-1];
-        if (value.split(';').length > 2) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {
@@ -752,7 +473,7 @@ Ext.define("ThousandSeparatorNumberField", {
     * @cfg {Boolean} useThousandSeparator
     */
     useThousandSeparator: true,
-    //decimalPrecision: 0,
+    decimalPrecision: 0,
     style: 'text-align: right',
     fieldStyle: "text-align:right;",
     /**
