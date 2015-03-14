@@ -1,276 +1,304 @@
-﻿var selectedIndex = 0;
-var _hold = "H";
-//ATTENTION: isUpdate, isInsert, isDelete  -- from index.cshtml
+﻿// Declare
+var _beginStatus = "H";
 
-// Submit the changed data (created, updated) into server side
-function Save() {
-    if (HQ.isInsert || HQ.isUpdate) {
-        var curRecord = App.frmMain.getRecord();
-        curRecord.data.Images = App.imgPPCStorePicReq.imageUrl;
 
-        App.frmMain.getForm().updateRecord();
+// Processing Function
+var Process = {
+    displayImage: function (imgControl, fileName) {
+        Ext.Ajax.request({
+            url: 'AR20200/ImageToBin',
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            params: JSON.stringify({
+                fileName: fileName
+            }),
+            success: function (result) {
+                var jsonData = Ext.decode(result.responseText);
+                if (jsonData.imgSrc) {
+                    imgControl.setImageUrl(jsonData.imgSrc);
+                }
+                else {
+                    imgControl.setImageUrl("");
+                }
+            },
+            failure: function (errorMsg, data) {
+                HQ.message.process(errorMsg, data, true);
+            }
+        });
+    },
+
+    readImage: function (fup, imgControl) {
+        var files = fup.fileInputEl.dom.files;
+        if (files && files[0]) {
+            var FR = new FileReader();
+            FR.onload = function (e) {
+                imgControl.setImageUrl(e.target.result);
+            };
+            FR.readAsDataURL(files[0]);
+        }
+    },
+
+    saveData: function () {
         if (App.frmMain.isValid()) {
-            App.frmMain.submit({
-                waitMsg: HQ.common.getLang('Submiting...'),
-                url: 'AR20200/Save',
-                params: {
-                    lstARSalesPersonHeader: Ext.encode(App.stoSalesPerson.getChangedData({ skipIdForPhantomRecords: false }))
-                },
-                success: function (action, data) {
-                    if (data.result.msgCode) {
-                        HQ.message.show(data.result.msgCode, '', '');
-                    }
-                    App.cboSlsperid.getStore().reload();
-                    menuClick('refresh');
-                },
+            App.frmMain.updateRecord();
 
-                failure: function (action, data) {
+            App.frmMain.submit({
+                url: 'AR20200/SaveData',
+                waitMsg: HQ.common.getLang('Submiting') + "...",
+                timeout: 1800000,
+                params: {
+                    branchID: App.cboBranchID.getValue(),
+                    slsperID: App.cboSlsperid.getValue(),
+                    lstSalesPerson: Ext.encode(App.stoSalesPerson.getRecordsValues())
+                },
+                success: function (msg, data) {
                     if (data.result.msgCode) {
-                        HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                        HQ.message.show(data.result.msgCode);
+                    }
+                    Event.menuClick("refresh");
+                    App.cboSlsperid.store.load();
+                },
+                failure: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode);
+                    }
+                    else {
+                        HQ.message.process(msg, data, true);
                     }
                 }
             });
         }
+    },
+
+    deleteData: function () {
+        App.frmMain.submit({
+            url: 'AR20200/Delete',
+            clientValidation: false,
+            waitMsg: HQ.common.getLang('Deleting') + "...",
+            timeout: 1800000,
+            params: {
+                branchID: App.cboBranchID.getValue(),
+                slsperID: App.cboSlsperid.getValue()
+            },
+            success: function (msg, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode);
+                }
+                App.cboSlsperid.store.load();
+                App.cboSlsperid.clearValue();
+            },
+            failure: function (msg, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+            }
+        });
+    },
+
+    // Check the store of data is change or not
+    storeIsChange: function (store, isCreate) {
+        if (isCreate == undefined) isCreate = true;
+        if ((isCreate == true ? store.getChangedData().Created.length > 1 : false)
+            || store.getChangedData().Updated != undefined
+            || store.getChangedData().Deleted != undefined) {
+            return true;
+        }
+        return false;
+    },
+
+    closeScreen: function (item) {
+        if (item == "no") {
+            this.parentAutoLoadControl.close()
+        }
+    },
+
+    refresh: function (item) {
+        if (item == 'yes') {
+            HQ.isChange = false;
+            Event.menuClick("refresh");
+
+        }
     }
 };
 
-// Submit the deleted data into server side
-function Delete(item) {
-    if (item == 'yes') {
-        try{
-            App.direct.AR20200Delete(App.cboSlsperid.getValue(), App.cboBranchID.getValue(), {
-                success: function (data) {
-                    menuClick('refresh');
-                    App.cboSlsperid.getStore().load();
-                },
-                failure: function () {
-                    //
-                },
-                eventMask: { msg: HQ.common.getLang('DeletingData'), showMask: true }
+// Store Event
+var Store = {
+    stoSalesPerson_load: function (sto, records, successful, eOpts) {
+        if (sto.getCount() == 0) {
+            var newSlsper = Ext.create("App.mdlAR_Salesperson", {
+                SlsperId: App.cboSlsperid.getValue(),
+                BranchID: App.cboBranchID.getValue(),
+                Active: true,
+                Status: _beginStatus
             });
-        } catch (ex) {
-            alert(ex.message);
+            sto.insert(0, newSlsper);
         }
-    }
-};
+        var frmRecord = sto.getAt(0);
+        App.frmMain.loadRecord(frmRecord);
 
-// Upload the picture file to server
-function UploadImage() {
-    App.frmMain.submit({
-        waitMsg: 'Uploading your file...',
-        url: 'AR20200/Upload',
-
-        success: function (result) {
-            //
-        },
-        failure: function (error) {
-            //
-        }
-    });
-};
-
-// Load and show binding data to the form
-var stoSalesPerson_load = function () {
-    var record = App.stoSalesPerson.getAt(0);
-    if (record) {
-        // Edit record
-        App.frmMain.getForm().loadRecord(record);
-
-        if (record.data.Images) {
-            App.direct.AR20200GetImages(record.data.Images);
-        } else {
-            App.imgPPCStorePicReq.setImageUrl("");
-        }
-
-        if (record.data.Status == _hold) {
-            enableControls(true);
+        // display image
+        App.fupImages.reset();
+        if (frmRecord.data.Images) {
+            Process.displayImage(App.imgImages, frmRecord.data.Images);
         }
         else {
-            enableControls(false);
+            App.imgImages.setImageUrl("");
         }
-    } else {
-        // If has no record then create a new
-        var insertedRecord = Ext.create("App.mdlAR_Salesperson", {
-            BranchID: App.cboBranchID.value,
-            SlsperId: "",
-            Status: _hold
-        })
-        App.stoSalesPerson.insert(0, insertedRecord);
-        App.frmMain.getForm().loadRecord(insertedRecord);
-        App.imgPPCStorePicReq.setImageUrl("");
-
-        enableControls(true);
     }
 };
 
-// Event when cboBranchID is changed or selected item
-var cboBranchID_Change = function (sender, e) {
-    App.cboDeliveryMan.getStore().reload();
-    App.cboSlsperid.getStore().load();
-    App.cboVendID.getStore().reload();
-};
+// Form Event
+var Event = {
+    frmMain_boxReady: function (frm, width, height, eOpts) {
+        App.cboBranchID.store.load(function (records, operation, success) {
+            App.cboBranchID.setValue(HQ.cpnyID);
+        });
+    },
 
-// Event when cboSlsperid is changed or selected item
-var cboSlsperid_Change = function (sender, e) {
-    App.stoSalesPerson.reload();
-};
+    frmMain_fieldChange: function (frm) {
+        frm.getForm().updateRecord();
+        HQ.isChange = HQ.store.isChange(App.stoSalesPerson);
+        HQ.common.changeData(HQ.isChange, 'AR20200');//co thay doi du lieu gan * tren tab title header
+        //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+        App.cboBranchID.setReadOnly(HQ.isChange);
+        App.cboSlsperid.setReadOnly(HQ.isChange);
+    },
 
-// Event when cboCountryId is changed or selected item
-var cboCountryId_Change = function (sender, e) {
-    App.cboState.getStore().load();
-};
-
-// Event when cboState is changed or selected item
-var cboState_Change = function (sender, e) {
-    App.cboDistrict.getStore().load();
-};
-
-// Event when cboStatus is changed or selected item
-var cboStatus_Change = function (sender, e) {
-    App.cboHandle.getStore().reload();
-};
-
-// Event when cboHandle is changed or selected item
-var cboHandle_Change = function (sender, e) {
-    var curRecord = App.frmMain.getRecord();
-    curRecord.setDirty();
-};
-
-// Event when uplPPCStorePicReq is change a file
-var NamePPCStorePicReq_Change = function (sender, e) {
-    var fileName = sender.getValue();
-    var ext = fileName.split(".").pop().toLowerCase();
-    if (ext == "jpg" || ext == "png" || ext == "gif") {
-        UploadImage();
-        var curRecord = App.frmMain.getRecord();
-        curRecord.data.Images = App.imgPPCStorePicReq.imageUrl;
-        curRecord.setDirty();
-    } else {
-        alert("Please choose a picture! (.jpg, .png, .gif)");
-        sender.reset();
-    }
-};
-
-// Click to clear image of sales person
-var btnClearImage_Click = function (sender, e) {
-    App.imgPPCStorePicReq.setImageUrl("");
-    var curRecord = App.frmMain.getRecord();
-    curRecord.data.Images = "";
-    curRecord.setDirty();
-};
-
-// Command of the topbar on screen
-var menuClick = function (command) {
-    switch (command) {
-        case "first":
-            selectedIndex = 0;
-            var slsper = App.cboSlsperid.store.getAt(selectedIndex);
-            if (slsper) {
-                App.cboSlsperid.setValue(slsper.data.SlsperId);
-            }
-            break;
-        case "next":
-            if (selectedIndex < (App.cboSlsperid.store.getCount() - 1))
-                selectedIndex += 1;
-            var slsper = App.cboSlsperid.store.getAt(selectedIndex);
-            if (slsper) {
-                App.cboSlsperid.setValue(slsper.data.SlsperId);
-            }
-            break;
-        case "prev":
-            if (selectedIndex > 0)
-                selectedIndex -= 1;
-            var slsper = App.cboSlsperid.store.getAt(selectedIndex);
-            if (slsper) {
-                App.cboSlsperid.setValue(slsper.data.SlsperId);
-            }
-            break;
-        case "last":
-            selectedIndex = App.cboSlsperid.store.getCount() - 1;
-            var slsper = App.cboSlsperid.store.getAt(selectedIndex);
-            if (slsper) {
-                App.cboSlsperid.setValue(slsper.data.SlsperId);
-            }
-            break;
-        case "save":
-            Save();
-            break;
-        case "delete":
-            var curRecord = App.frmMain.getRecord();
-            if (curRecord && curRecord.data.Status == _hold) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'Delete');
-                }
-            }
-            break;
-        case "close":
-            if (App.frmMain.getRecord() != undefined) {
-                App.frmMain.updateRecord()
-            };
-            if (storeIsChange(App.stoSalesPerson, false)) {
-                HQ.message.show(5, '', 'closeScreen');
-            } else {
-                this.parentAutoLoadControl.close()
-            }
-            break;
-        case "new":
-            if (HQ.isInsert) {
-                selectedIndex = 0;
-                App.cboSlsperid.setValue("");
-                cboSlsperid_Change(App.cboSlsperid);
+    cboBranchID_change: function (cbo, newValue, oldValue, eOpts) {
+        if (!newValue) {
+            App.cboSlsperid.clearValue();
+        }
+        App.cboSlsperid.store.load(function (records, operation, success) {
+            if (records.length > 0) {
+                App.cboSlsperid.setValue(records[0].data.SlsperId);
             }
             else {
-                HQ.message.show(4, '', '');
+                App.cboSlsperid.clearValue();
             }
-            break;
-        case "refresh":
-            if (App.frmMain.isValid()) {
-                App.stoSalesPerson.reload();
-                App.cboHandle.setValue("");
+        });
+        App.cboDeliveryMan.store.reload();
+        App.cboSupID.store.reload();
+        App.cboVendID.store.reload();
+    },
+
+    cboSlsperid_change: function (cbo, newValue, oldValue, eOpts) {
+        App.stoSalesPerson.reload();
+    },
+
+    cboStatus_change: function (cbo, newValue, oldValue, eOpts) {
+        App.cboHandle.store.reload();
+    },
+
+    cboCountryId_change: function (cbo, newValue, oldValue, eOpts) {
+        App.cboState.store.load(function (records, operation, success) {
+            var formRecord = App.frmMain.getRecord();
+            if (formRecord) {
+                App.cboState.setValue(formRecord.data.State);
             }
-            break;
-        default:
-    }
-};
+        });
+    },
 
-// When anwser the confirmed closing
-var closeScreen = function (item) {
-    if (item == "no") {
-        this.parentAutoLoadControl.close()
-    }
-    else if (item == "yes") {
-        Save();
-    }
-};
+    cboState_change: function (cbo, newValue, oldValue, eOpts) {
+        App.cboDistrict.store.load(function (records, operation, success) {
+            var formRecord = App.frmMain.getRecord();
+            if (formRecord) {
+                App.cboDistrict.setValue(formRecord.data.District);
+            }
+        });
+    },
 
-// Check the store of data is change or not
-function storeIsChange(store, isCreate) {
-    if (isCreate == undefined) isCreate = true;
-    if ((isCreate == true ? store.getChangedData().Created.length > 1 : false)
-        || store.getChangedData().Updated != undefined
-        || store.getChangedData().Deleted != undefined) {
-        return true;
-    }
-    return false;
-};
+    fupImages_change: function (fup, newValue, oldValue, eOpts) {
+        if (fup.value) {
+            var ext = fup.value.split(".").pop().toLowerCase();
+            if (ext == "jpg" || ext == "png" || ext == "gif") {
+                App.hdnImages.setValue(fup.value);
+                Process.readImage(fup, App.imgImages);
+            }
+            else {
+                HQ.message.show(148, '', '');
+            }
+        }
+    },
 
-function enableControls(enable) {
-    //App.cboBranchID.setReadOnly(enable);
-    App.chkActive.setReadOnly(!enable);
-    App.txtName.setReadOnly(!enable);
-    App.cboPosition.setReadOnly(!enable);
-    App.txtAddr1.setReadOnly(!enable);
-    App.txtAddr2.setReadOnly(!enable);
-    App.txtEMailAddr.setReadOnly(!enable);
-    App.cboDeliveryMan.setReadOnly(!enable);
-    App.cboSupID.setReadOnly(!enable);
-    App.txtCrLmt.setReadOnly(!enable);
-    App.cboCountryId.setReadOnly(!enable);
-    App.cboState.setReadOnly(!enable);
-    App.cboDistrict.setReadOnly(!enable);
-    App.txtPhone.setReadOnly(!enable);
-    App.txtFax.setReadOnly(!enable);
-    App.txtCmmnPct.setReadOnly(!enable);
-    App.chkPPCStorePicReq.setReadOnly(!enable);
-    App.chkPPCAdmin.setReadOnly(!enable);
+    btnClearImage_click: function (btn, eOpts) {
+        App.fupImages.reset();
+        App.imgImages.setImageUrl("");
+        App.hdnImages.setValue("");
+    },
+
+    menuClick: function (command) {
+        switch (command) {
+            case "first":
+                HQ.combo.first(App.cboSlsperid, HQ.isChange);
+                break;
+
+            case "next":
+                HQ.combo.next(App.cboSlsperid, HQ.isChange);
+                break;
+
+            case "prev":
+                HQ.combo.prev(App.cboSlsperid, HQ.isChange);
+                break;
+
+            case "last":
+                HQ.combo.last(App.cboSlsperid, HQ.isChange);
+                break;
+
+            case "save":
+                if (HQ.isInsert || HQ.isUpdate) {
+                    Process.saveData();
+                }
+                else {
+                    HQ.message.show(4, '', '');
+                }
+                break;
+
+            case "delete":
+                if (HQ.isDelete) {
+                    if (App.cboSlsperid.getValue() && App.cboStatus.getValue() == _beginStatus) {
+                        HQ.message.show(11, '', 'Process.deleteData');
+                    }
+                    else {
+                        HQ.message.show(20140306, '', '');
+                    }
+                }
+                else {
+                    HQ.message.show(4, '', '');
+                }
+                break;
+
+            case "close":
+                if (App.frmMain.getRecord() != undefined) {
+                    App.frmMain.updateRecord()
+                };
+                if (Process.storeIsChange(App.stoSalesPerson, false)) {
+                    HQ.message.show(7, '', 'Process.closeScreen');
+                } else {
+                    this.parentAutoLoadControl.close()
+                }
+                break;
+
+            case "new":
+                if (HQ.isInsert) {
+                    App.cboSlsperid.clearValue();
+                }
+                break;
+
+            case "refresh":
+                if (HQ.isChange) {
+                    HQ.message.show(20150303, '', 'refresh');
+                }
+                else {
+                    App.cboSlsperid.store.load(function () {
+                        App.stoSalesPerson.reload();
+                    });
+                }
+                
+                break;
+            default:
+        }
+    }
 };

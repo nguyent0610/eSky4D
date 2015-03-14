@@ -55,8 +55,7 @@ var Process = {
                     if (data.result.msgCode) {
                         HQ.message.show(data.result.msgCode);
                     }
-                    Event.menuClick("refresh");
-                    App.cboSlsperid.store.load();
+                    Process.refresh("yes");
                 },
                 failure: function (msg, data) {
                     if (data.result.msgCode) {
@@ -113,12 +112,23 @@ var Process = {
         if (item == "no") {
             this.parentAutoLoadControl.close()
         }
+    },
+
+    refresh: function (item) {
+        if (item == 'yes') {
+            HQ.isChange = false;
+            Event.menuClick("refresh");
+
+        }
     }
 };
 
 // Store Event
 var Store = {
     stoSalesPerson_load: function (sto, records, successful, eOpts) {
+        App.cboState.forceSelection = false;
+        App.cboDistrict.forceSelection = false;
+
         if (sto.getCount() == 0) {
             var newSlsper = Ext.create("App.mdlAR_Salesperson", {
                 SlsperId: App.cboSlsperid.getValue(),
@@ -132,6 +142,7 @@ var Store = {
         App.frmMain.loadRecord(frmRecord);
 
         // display image
+        App.fupImages.reset();
         if (frmRecord.data.Images) {
             Process.displayImage(App.imgImages, frmRecord.data.Images);
         }
@@ -147,6 +158,17 @@ var Event = {
         App.cboBranchID.store.load(function (records, operation, success) {
             App.cboBranchID.setValue(HQ.cpnyID);
         });
+    },
+
+    frmMain_fieldChange: function () {
+        if (App.stoSalesPerson.getCount() > 0) {
+            App.frmMain.updateRecord();
+            HQ.isChange = HQ.store.isChange(App.stoSalesPerson);
+            HQ.common.changeData(HQ.isChange, 'AR20200');//co thay doi du lieu gan * tren tab title header
+            //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+            App.cboBranchID.setReadOnly(HQ.isChange);
+            App.cboSlsperid.setReadOnly(HQ.isChange);
+        }
     },
 
     cboBranchID_change: function (cbo, newValue, oldValue, eOpts) {
@@ -212,41 +234,21 @@ var Event = {
     },
 
     menuClick: function (command) {
-        var curRecord = HQ.store.findRecord(App.cboSlsperid.store, ["SlsperId"], [App.cboSlsperid.getValue()]);
-
         switch (command) {
             case "first":
-                var firstRec = App.cboSlsperid.store.getAt(0);
-                if (firstRec) {
-                    App.cboSlsperid.setValue(firstRec.data.SlsperId);
-                }
+                HQ.combo.first(App.cboSlsperid, HQ.isChange);
                 break;
 
             case "next":
-                if (curRecord) {
-                    var nextIdx = curRecord.index + 1;
-                    var nextRec = App.cboSlsperid.store.getAt(nextIdx);
-                    if (nextRec) {
-                        App.cboSlsperid.setValue(nextRec.data.SlsperId);
-                    }
-                }
+                HQ.combo.next(App.cboSlsperid, HQ.isChange);
                 break;
 
             case "prev":
-                if (curRecord) {
-                    var prevIdx = curRecord.index - 1;
-                    var prevRec = App.cboSlsperid.store.getAt(prevIdx);
-                    if (prevRec) {
-                        App.cboSlsperid.setValue(prevRec.data.SlsperId);
-                    }
-                }
+                HQ.combo.prev(App.cboSlsperid, HQ.isChange);
                 break;
 
             case "last":
-                var lastRec = App.cboSlsperid.store.getAt(App.cboSlsperid.store.getCount() - 1);
-                if (lastRec) {
-                    App.cboSlsperid.setValue(lastRec.data.SlsperId);
-                }
+                HQ.combo.last(App.cboSlsperid, HQ.isChange);
                 break;
 
             case "save":
@@ -290,7 +292,15 @@ var Event = {
                 break;
 
             case "refresh":
-                App.stoSalesPerson.reload();
+                if (HQ.isChange) {
+                    HQ.message.show(20150303, '', 'Process.refresh');
+                }
+                else {
+                    App.cboSlsperid.store.load(function () {
+                        App.stoSalesPerson.reload();
+                    });
+                }
+
                 break;
             default:
         }

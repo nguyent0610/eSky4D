@@ -19,7 +19,7 @@
         .DefaultAnchor("100%")
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
-        .TopBar(Util.SetupToolbar("PO20100","Event.menuClick"))
+        .TopBar(Util.SetupToolbar("AR20200","Event.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Items(
             X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.Center)
@@ -161,7 +161,7 @@
                     , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("State").HQProcedure("AR20200_pcStateByCountry")
                     .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").DataIndex("State")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
-                    .AllowBlank(false).ForceSelection(true)
+                    .AllowBlank(false)//.ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@Country", Value = "App.cboCountryId.getValue()", Mode = ParameterMode.Raw }                                                                                    
@@ -169,18 +169,22 @@
                     .LoadData()
                     .Listeners(lst=>{
                         lst.Change.Fn = "Event.cboState_change";
+                        lst.Focus.Handler = "this.forceSelection = true;";
                     })
 
                     , HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQLangCode("District").HQProcedure("AR20200_pcDistrictByCountryState")
                     .HQColumnShow("District,Name").DisplayField("Name").ValueField("District").DataIndex("District")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
-                    .AllowBlank(false).ForceSelection(true)
+                    .AllowBlank(false)//.ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@Country", Value = "App.cboCountryId.getValue()", Mode = ParameterMode.Raw },
                             new StoreParameter() { Name = "@State", Value = "App.cboState.getValue()", Mode = ParameterMode.Raw }
                         })
                     .LoadData()
+                    .Listeners(lst=>{
+                        lst.Focus.Handler = "this.forceSelection = true;";
+                    })
 
                     , HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("Phone").DataIndex("Phone")
                     .Width(300).MarginSpec("5 0 0 0")
@@ -223,6 +227,7 @@
         )
         .Listeners(lst => {
             lst.BoxReady.Fn = "Event.frmMain_boxReady";
+            lst.FieldChange.Fn = "Event.frmMain_fieldChange";
         })// Form: frmMain
     )
 )
