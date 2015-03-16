@@ -124,14 +124,6 @@ namespace SA02900
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SA02900_pgSI_ApprovalFlowStatus_Result> SA02900_pgSI_ApprovalFlowStatus()
-        {
-            return base.ExecuteFunction<SA02900_pgSI_ApprovalFlowStatus_Result>("SA02900_pgSI_ApprovalFlowStatus");
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="appFolID">No Metadata Documentation available.</param>
         /// <param name="roleID">No Metadata Documentation available.</param>
         /// <param name="status">No Metadata Documentation available.</param>
@@ -168,6 +160,25 @@ namespace SA02900
             }
     
             return base.ExecuteFunction<SA02900_pgSI_ApprovalFlowHandle_Result>("SA02900_pgSI_ApprovalFlowHandle", appFolIDParameter, roleIDParameter, statusParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="langid">No Metadata Documentation available.</param>
+        public ObjectResult<SA02900_pgSI_ApprovalFlowStatus_Result> SA02900_pgSI_ApprovalFlowStatus(Nullable<global::System.Int16> langid)
+        {
+            ObjectParameter langidParameter;
+            if (langid.HasValue)
+            {
+                langidParameter = new ObjectParameter("langid", langid);
+            }
+            else
+            {
+                langidParameter = new ObjectParameter("langid", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<SA02900_pgSI_ApprovalFlowStatus_Result>("SA02900_pgSI_ApprovalFlowStatus", langidParameter);
         }
 
         #endregion
@@ -1744,15 +1755,13 @@ namespace SA02900
         /// Create a new SA02900_pgSI_ApprovalFlowStatus_Result object.
         /// </summary>
         /// <param name="appFolID">Initial value of the AppFolID property.</param>
-        /// <param name="descrScreen">Initial value of the DescrScreen property.</param>
         /// <param name="roleID">Initial value of the RoleID property.</param>
         /// <param name="status">Initial value of the Status property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static SA02900_pgSI_ApprovalFlowStatus_Result CreateSA02900_pgSI_ApprovalFlowStatus_Result(global::System.String appFolID, global::System.String descrScreen, global::System.String roleID, global::System.String status, global::System.Byte[] tstamp)
+        public static SA02900_pgSI_ApprovalFlowStatus_Result CreateSA02900_pgSI_ApprovalFlowStatus_Result(global::System.String appFolID, global::System.String roleID, global::System.String status, global::System.Byte[] tstamp)
         {
             SA02900_pgSI_ApprovalFlowStatus_Result sA02900_pgSI_ApprovalFlowStatus_Result = new SA02900_pgSI_ApprovalFlowStatus_Result();
             sA02900_pgSI_ApprovalFlowStatus_Result.AppFolID = appFolID;
-            sA02900_pgSI_ApprovalFlowStatus_Result.DescrScreen = descrScreen;
             sA02900_pgSI_ApprovalFlowStatus_Result.RoleID = roleID;
             sA02900_pgSI_ApprovalFlowStatus_Result.Status = status;
             sA02900_pgSI_ApprovalFlowStatus_Result.tstamp = tstamp;
@@ -1790,7 +1799,7 @@ namespace SA02900
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String DescrScreen
         {
@@ -1802,7 +1811,7 @@ namespace SA02900
             {
                 OnDescrScreenChanging(value);
                 ReportPropertyChanging("DescrScreen");
-                _DescrScreen = StructuralObject.SetValidValue(value, false);
+                _DescrScreen = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("DescrScreen");
                 OnDescrScreenChanged();
             }

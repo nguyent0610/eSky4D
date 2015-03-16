@@ -38,12 +38,17 @@ X.Viewport()
                 .ID("stoTop")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(SA02900_pgSI_ApprovalFlowStatus_Result), "mdlSA02900_pgSI_ApprovalFlowStatus", "AppFolID,RoleID,Status"))
+                //.Parameters(ps =>
+                //{
+                //    ps.Add(new StoreParameter("langid", "HQ.langID", ParameterMode.Raw));
+                //})
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetTopGrid"))).AutoLoad(false)
                 .Listeners(l =>
                 {
                     l.BeforeLoad.Fn = "stoBeforeLoadTop";
                     l.Load.Fn = "stoLoadTop";
                     l.Update.Fn = "stoChangedTop";
+                    
                 })
             )
             .Listeners(p =>

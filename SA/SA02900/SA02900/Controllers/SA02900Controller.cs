@@ -27,15 +27,15 @@ namespace SA02900.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
         public ActionResult GetTopGrid()
-        {           
-            return this.Store(_db.SA02900_pgSI_ApprovalFlowStatus().ToList());
+        {
+            return this.Store(_db.SA02900_pgSI_ApprovalFlowStatus(Current.LangID).ToList());
         }
 
         public ActionResult GetBotGrid(string AppFolID, string RoleID, string Status)

@@ -67,7 +67,9 @@
           <Parameter Name="RoleID" Type="nvarchar" Mode="In" />
           <Parameter Name="Status" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="SA02900_pgSI_ApprovalFlowStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SA02900_pgSI_ApprovalFlowStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="langid" Type="smallint" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -75,11 +77,13 @@
         <EntityContainer Name="SA02900Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="SA02900Model.SI_ApprovalFlowHandle" />
           <EntitySet Name="SI_ApprovalFlowStatus" EntityType="SA02900Model.SI_ApprovalFlowStatus" />
-          <FunctionImport Name="SA02900_pgSI_ApprovalFlowStatus" ReturnType="Collection(SA02900Model.SA02900_pgSI_ApprovalFlowStatus_Result)" />
           <FunctionImport Name="SA02900_pgSI_ApprovalFlowHandle" ReturnType="Collection(SA02900Model.SA02900_pgSI_ApprovalFlowHandle_Result)">
             <Parameter Name="AppFolID" Mode="In" Type="String" />
             <Parameter Name="RoleID" Mode="In" Type="String" />
             <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA02900_pgSI_ApprovalFlowStatus" ReturnType="Collection(SA02900Model.SA02900_pgSI_ApprovalFlowStatus_Result)">
+            <Parameter Name="langid" Mode="In" Type="Int16" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="SI_ApprovalFlowHandle">
@@ -135,15 +139,6 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="SA02900_pgSI_ApprovalFlowStatus_Result">
-          <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="DescrScreen" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="400" />
-          <Property Type="String" Name="LangStatus" Nullable="true" MaxLength="50" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-        </ComplexType>
         <ComplexType Name="SA02900_pgSI_ApprovalFlowHandle_Result">
           <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" />
@@ -165,6 +160,15 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="MailApprove" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="ProcContent" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="SA02900_pgSI_ApprovalFlowStatus_Result">
+          <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="DescrScreen" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="400" />
+          <Property Type="String" Name="LangStatus" Nullable="true" MaxLength="50" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -222,19 +226,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA02900_pgSI_ApprovalFlowStatus" FunctionName="eBiz4DWebSysModel.Store.SA02900_pgSI_ApprovalFlowStatus">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA02900Model.SA02900_pgSI_ApprovalFlowStatus_Result">
-                <ScalarProperty Name="AppFolID" ColumnName="AppFolID" />
-                <ScalarProperty Name="DescrScreen" ColumnName="DescrScreen" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="LangStatus" ColumnName="LangStatus" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SA02900_pgSI_ApprovalFlowHandle" FunctionName="eBiz4DWebSysModel.Store.SA02900_pgSI_ApprovalFlowHandle">
             <ResultMapping>
               <ComplexTypeMapping TypeName="SA02900Model.SA02900_pgSI_ApprovalFlowHandle_Result">
@@ -258,6 +249,19 @@
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="MailApprove" ColumnName="MailApprove" />
                 <ScalarProperty Name="ProcContent" ColumnName="ProcContent" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA02900_pgSI_ApprovalFlowStatus" FunctionName="eBiz4DWebSysModel.Store.SA02900_pgSI_ApprovalFlowStatus">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA02900Model.SA02900_pgSI_ApprovalFlowStatus_Result">
+                <ScalarProperty Name="AppFolID" ColumnName="AppFolID" />
+                <ScalarProperty Name="DescrScreen" ColumnName="DescrScreen" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="LangStatus" ColumnName="LangStatus" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
