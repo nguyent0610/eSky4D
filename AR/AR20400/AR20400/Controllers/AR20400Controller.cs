@@ -161,7 +161,7 @@ namespace AR20400.Controllers
 
         //dang method co the load duoc node root slmTree
         [DirectMethod]
-        public ActionResult ReloadTree(string cpnyID)
+        public ActionResult ReloadTreeAR20400(string cpnyID)
         {
             brandID = cpnyID;
 
@@ -269,7 +269,7 @@ namespace AR20400.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult SaveTree(FormCollection data, string custID, string handle, string nodeID, int nodeLevel, string parentRecordID,
-            int hadChild, string status, string tmpSelectedNode, string branchID, string custName, bool isNew, bool tmpHiddenTree, string lTTContractNbr)
+            int hadChild, string status, string tmpSelectedNode, string branchID, string custName, bool isNew, string lTTContractNbr)
         {
             try
             {
@@ -555,13 +555,13 @@ namespace AR20400.Controllers
 
                         if (hadChild != 0)
                         {
-                             return Json(new { success = true, custID = custID, custName = custName, addNewOrUpdate = "addNew", changeTreeBranch = tmpChangeTreeDic, selectedNode = tmpSelectedNode, tmpHiddenTree = tmpHiddenTree }, JsonRequestBehavior.AllowGet);
+                             return Json(new { success = true, custID = custID, custName = custName, addNewOrUpdate = "addNew", changeTreeBranch = tmpChangeTreeDic, selectedNode = tmpSelectedNode }, JsonRequestBehavior.AllowGet);
                             //return Json(new { success = true });
                         }
                         else
                         {
                             //return Json(new { success = true });
-                             Json(new { success = true, custID = custID, custName = custName, addNewOrUpdate = "update", tmpHiddenTree = tmpHiddenTree}, JsonRequestBehavior.AllowGet);
+                             Json(new { success = true, custID = custID, custName = custName, addNewOrUpdate = "update"}, JsonRequestBehavior.AllowGet);
                         }
                     //}
                     //else //truong hop ko co tree
@@ -1201,63 +1201,83 @@ namespace AR20400.Controllers
             //UpdatingAR_SOAddress();
             try
             {
-
                 if (objAr_SOAddr != null)
                 {
-                    isNew = false;
+                    if (isNew)
+                    {
+                        objAr_SOAddr = new AR_SOAddress();
+                        objAr_SOAddr.CustId = data["cboCustId"];
+                        objAr_SOAddr.ShipToId = (data["cboDfltShipToId"] == "" ? "DEFAULT" : data["cboDfltShipToId"]);
 
+                        objAr_SOAddr.BranchID = data["cboCpnyID"];
+                        objAr_SOAddr.SOName = data["txtCustName"];
+                        objAr_SOAddr.Attn = data["txtAttn"];
+                        objAr_SOAddr.Addr1 = data["txtAddr1"];
+                        objAr_SOAddr.Addr2 = data["txtAddr2"];
+                        objAr_SOAddr.City = objAR_Customer.City;
+                        objAr_SOAddr.State = objAR_Customer.State;
+                        objAr_SOAddr.District = objAR_Customer.District;
+                        objAr_SOAddr.Zip = data["txtZip"];
+                        objAr_SOAddr.Country = objAR_Customer.Country;
+                        objAr_SOAddr.Phone = data["txtPhone"];
+                        objAr_SOAddr.Fax = data["txtFax"];
+                        objAr_SOAddr.TaxRegNbr = data["txtTaxRegNbr"];
+                        objAr_SOAddr.TaxLocId = data["txtTaxLocId"];
+                        objAr_SOAddr.TaxId00 = objAR_Customer.TaxID00;
+                        objAr_SOAddr.TaxId01 = objAR_Customer.TaxID01;
+                        objAr_SOAddr.TaxId02 = objAR_Customer.TaxID02;
+                        objAr_SOAddr.TaxId03 = objAR_Customer.TaxID03;
+                        objAr_SOAddr.Crtd_DateTime = objAR_Customer.Crtd_Datetime;
+                        objAr_SOAddr.Crtd_Prog = objAR_Customer.Crtd_Prog;
+                        objAr_SOAddr.Crtd_User = objAR_Customer.Crtd_User;
+                        objAr_SOAddr.LUpd_DateTime = objAR_Customer.LUpd_Datetime;
+                        objAr_SOAddr.LUpd_Prog = objAR_Customer.LUpd_Prog;
+                        objAr_SOAddr.LUpd_User = objAR_Customer.LUpd_User;
+                        objAr_SOAddr.tstamp = objAR_Customer.tstamp;
+                        _db.AR_SOAddress.AddObject(objAr_SOAddr);
+                        _db.SaveChanges();
+
+                    }
+                    else
+                    {
+
+                        objAr_SOAddr.BranchID = data["cboCpnyID"];
+                        objAr_SOAddr.SOName = data["txtCustName"];
+                        objAr_SOAddr.Attn = data["txtAttn"];
+                        objAr_SOAddr.Addr1 = data["txtAddr1"];
+                        objAr_SOAddr.Addr2 = data["txtAddr2"];
+                        objAr_SOAddr.City = objAR_Customer.City;
+                        objAr_SOAddr.State = objAR_Customer.State;
+                        objAr_SOAddr.District = objAR_Customer.District;
+                        objAr_SOAddr.Zip = data["txtZip"];
+                        objAr_SOAddr.Country = objAR_Customer.Country;
+                        objAr_SOAddr.Phone = data["txtPhone"];
+                        objAr_SOAddr.Fax = data["txtFax"];
+                        objAr_SOAddr.TaxRegNbr = data["txtTaxRegNbr"];
+                        objAr_SOAddr.TaxLocId = data["txtTaxLocId"];
+                        objAr_SOAddr.TaxId00 = objAR_Customer.TaxID00;
+                        objAr_SOAddr.TaxId01 = objAR_Customer.TaxID01;
+                        objAr_SOAddr.TaxId02 = objAR_Customer.TaxID02;
+                        objAr_SOAddr.TaxId03 = objAR_Customer.TaxID03;
+                        objAr_SOAddr.Crtd_DateTime = objAR_Customer.Crtd_Datetime;
+                        objAr_SOAddr.Crtd_Prog = objAR_Customer.Crtd_Prog;
+                        objAr_SOAddr.Crtd_User = objAR_Customer.Crtd_User;
+                        objAr_SOAddr.LUpd_DateTime = objAR_Customer.LUpd_Datetime;
+                        objAr_SOAddr.LUpd_Prog = objAR_Customer.LUpd_Prog;
+                        objAr_SOAddr.LUpd_User = objAR_Customer.LUpd_User;
+                        objAr_SOAddr.tstamp = objAR_Customer.tstamp;
+                        _db.SaveChanges();
+
+                    }
+
+         
                 }
-                else
-                {
-                    isNew = true;
-                    objAr_SOAddr = new AR_SOAddress();
-                    objAr_SOAddr.CustId = data["cboCustId"];
-                    objAr_SOAddr.ShipToId = (data["cboDfltShipToId"] == "" ? "DEFAULT" : data["cboDfltShipToId"]);
-                }
-
-                //objAr_SOAddr.BranchID = this.txtBranchID.Text;
-                objAr_SOAddr.BranchID = data["cboCpnyID"];
-                objAr_SOAddr.SOName = data["txtCustName"];
-                objAr_SOAddr.Attn = data["txtAttn"];
-                objAr_SOAddr.Addr1 = data["txtAddr1"];
-                objAr_SOAddr.Addr2 = data["txtAddr2"];
-                objAr_SOAddr.City = objAR_Customer.City;
-                objAr_SOAddr.State = objAR_Customer.State;
-                objAr_SOAddr.District = objAR_Customer.District;
-                objAr_SOAddr.Zip = data["txtZip"];
-                objAr_SOAddr.Country = objAR_Customer.Country;
-                objAr_SOAddr.Phone = data["txtPhone"];
-                objAr_SOAddr.Fax = data["txtFax"];
-                objAr_SOAddr.TaxRegNbr = data["txtTaxRegNbr"];
-                objAr_SOAddr.TaxLocId = data["txtTaxLocId"];
-                objAr_SOAddr.TaxId00 = objAR_Customer.TaxID00;
-                objAr_SOAddr.TaxId01 = objAR_Customer.TaxID01;
-                objAr_SOAddr.TaxId02 = objAR_Customer.TaxID02;
-                objAr_SOAddr.TaxId03 = objAR_Customer.TaxID03;
-                objAr_SOAddr.Crtd_DateTime = objAR_Customer.Crtd_Datetime;
-                objAr_SOAddr.Crtd_Prog = objAR_Customer.Crtd_Prog;
-                objAr_SOAddr.Crtd_User = objAR_Customer.Crtd_User;
-                objAr_SOAddr.LUpd_DateTime = objAR_Customer.LUpd_Datetime;
-                objAr_SOAddr.LUpd_Prog = objAR_Customer.LUpd_Prog;
-                objAr_SOAddr.LUpd_User = objAR_Customer.LUpd_User;
-                objAr_SOAddr.tstamp = objAR_Customer.tstamp;
-
             }
             catch (Exception ex)
             {
                 throw (ex);
             }
 
-            if (!isNew)
-            {
-
-            }
-            else
-            {
-                _db.AR_SOAddress.AddObject(objAr_SOAddr);
-                _db.SaveChanges();
-
-            }
 
             return true;
         }
