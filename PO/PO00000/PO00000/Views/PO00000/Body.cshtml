@@ -20,7 +20,7 @@
     .BodyBorder(0)
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
-    .TopBar(Util.SetupToolbar("Print", false, ""))
+    .TopBar(Util.SetupToolbar("Print,New,Delete", false, ""))
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
     .Listeners(l =>
     {
@@ -177,7 +177,7 @@
                     )//Column 2
                     
                     , X.FieldSet().Layout(LayoutType.VBox).MarginSpec("10 0 0 10")
-                    .Title(Util.GetLang("MainAddress"))
+                    .Title(Util.GetLang("AddrBill"))
                     .Items(
                         HQ.TextBox().ID("BillName").Name("BillName").Width(300).MaxLength(30)
                         .DataIndex("BillName").EnforceMaxLength(true),
