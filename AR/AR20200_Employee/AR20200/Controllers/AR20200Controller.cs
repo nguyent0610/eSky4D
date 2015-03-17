@@ -53,7 +53,7 @@ namespace AR20200.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -66,7 +66,7 @@ namespace AR20200.Controllers
         }
 
         [ValidateInput(false)]
-        public ActionResult SaveData(FormCollection data, string branchID, string slsperID)
+        public ActionResult SaveData(FormCollection data, string branchID, string slsperID, bool isNew)
         {
             try
             {
@@ -82,67 +82,83 @@ namespace AR20200.Controllers
                         var slsper = _db.AR_Salesperson.FirstOrDefault(x => x.BranchID == branchID && x.SlsperId == slsperID);
                         if (slsper != null)
                         {
-                            // update
-                            if (slsper.tstamp.ToHex() == inputSlsper.tstamp.ToHex())
+                            if (!isNew)
                             {
-                                updateSlsper(ref slsper, inputSlsper, false);
-
-                                if (!string.IsNullOrWhiteSpace(handle) && handle != _noneStatus)
+                                // update
+                                if (slsper.tstamp.ToHex() == inputSlsper.tstamp.ToHex())
                                 {
-                                    // Check pending task
-                                    var task = _db.HO_PendingTasks.FirstOrDefault(p => p.ObjectID == slsperID
-                                                && p.EditScreenNbr == _screenNbr && p.BranchID == branchID);
-                                    
-                                    // Checking right of approval
-                                    var roles = _sys.Users.FirstOrDefault(x => x.UserName == Current.UserName).UserTypes;
-                                    var approveHandle = _db.SI_ApprovalFlowHandle
-                                        .FirstOrDefault(p => p.AppFolID == _screenNbr
-                                                            && p.Status == inputSlsper.Status
-                                                            && p.Handle == handle
-                                                            && roles.Split(',').Contains(p.RoleID));
+                                    updateSlsper(ref slsper, inputSlsper, false);
 
-                                    // If not in pending task but has right of approval, then add pending task
-                                    if (task == null && approveHandle != null)
+                                    if (!string.IsNullOrWhiteSpace(handle) && handle != _noneStatus)
                                     {
-                                        updatePendingTask(slsper, approveHandle);
-                                        slsper.Status = approveHandle.ToStatus;
-                                    }
+                                        // Check pending task
+                                        var task = _db.HO_PendingTasks.FirstOrDefault(p => p.ObjectID == slsperID
+                                                    && p.EditScreenNbr == _screenNbr && p.BranchID == branchID);
 
-                                    // If has right of approval, then send email
-                                    if (approveHandle != null)
-                                    {
-                                        try
+                                        // Checking right of approval
+                                        var roles = _sys.Users.FirstOrDefault(x => x.UserName == Current.UserName).UserTypes;
+                                        var approveHandle = _db.SI_ApprovalFlowHandle
+                                            .FirstOrDefault(p => p.AppFolID == _screenNbr
+                                                                && p.Status == inputSlsper.Status
+                                                                && p.Handle == handle
+                                                                && roles.Split(',').Contains(p.RoleID));
+
+                                        // If not in pending task but has right of approval, then add pending task
+                                        if (task == null && approveHandle != null)
                                         {
-                                            // send email
-                                            Approve.Mail_Approve(_screenNbr, slsperID,
-                                                approveHandle.RoleID, approveHandle.Status, approveHandle.Handle,
-                                                Current.LangID.ToString(), Current.UserName, branchID, Current.CpnyID,
-                                                string.Empty, string.Empty, string.Empty);
+                                            updatePendingTask(slsper, approveHandle);
+                                            slsper.Status = approveHandle.ToStatus;
                                         }
-                                        catch
+
+                                        // If has right of approval, then send email
+                                        if (approveHandle != null)
                                         {
-                                            throw new MessageException(MessageType.Message, "11032015");
+                                            try
+                                            {
+                                                // send email
+                                                Approve.Mail_Approve(_screenNbr, slsperID,
+                                                    approveHandle.RoleID, approveHandle.Status, approveHandle.Handle,
+                                                    Current.LangID.ToString(), Current.UserName, branchID, Current.CpnyID,
+                                                    string.Empty, string.Empty, string.Empty);
+                                            }
+                                            catch
+                                            {
+                                                throw new MessageException(MessageType.Message, "11032015");
+                                            }
                                         }
                                     }
                                 }
+                                else
+                                {
+                                    throw new MessageException(MessageType.Message, "19");
+                                }
+                            }
+                            else
+                            {
+                                throw new MessageException(MessageType.Message, "2000","",new string[]{
+                                    Util.GetLang("Slsperid")
+                                });
+                            }
+                        }
+                        else
+                        {
+                            if (isNew)
+                            {
+                                // Create slsper
+                                slsper = new AR_Salesperson();
+                                slsper.BranchID = branchID;
+                                slsper.SlsperId = slsperID;
+
+                                updateSlsper(ref slsper, inputSlsper, true);
+                                _db.AR_Salesperson.AddObject(slsper);
+
+                                // Add data to Sales Per Hist
+                                AddSalesPerHist(slsper);
                             }
                             else
                             {
                                 throw new MessageException(MessageType.Message, "19");
                             }
-                        }
-                        else
-                        {
-                            // Create slsper
-                            slsper = new AR_Salesperson();
-                            slsper.BranchID = branchID;
-                            slsper.SlsperId = slsperID;
-
-                            updateSlsper(ref slsper, inputSlsper, true);
-                            _db.AR_Salesperson.AddObject(slsper);
-
-                            // Add data to Sales Per Hist
-                            AddSalesPerHist(slsper);
                         }
 
                         var files = Request.Files;
@@ -204,31 +220,39 @@ namespace AR20200.Controllers
             }
         }
 
-        public ActionResult Delete(string slsperID, string branchID)
+        public ActionResult Delete(string slsperID, string branchID, bool isNew)
         {
             try
             {
                 var slsper = _db.AR_Salesperson.FirstOrDefault(p => p.SlsperId == slsperID && p.BranchID == branchID);
-                if (slsper != null && slsper.Status == _beginStatus)
+                if (slsper != null)
                 {
-                    var fileName = slsper.Images;
-                    _db.AR_Salesperson.DeleteObject(slsper);
-                    _db.SaveChanges();
-
-                    if (!string.IsNullOrWhiteSpace(fileName))
+                    if (slsper.Status == _beginStatus)
                     {
-                        // Xoa file cu di
-                        var oldPath = string.Format("{0}\\{1}", FilePath, fileName);
-                        if (System.IO.File.Exists(oldPath))
-                        {
-                            System.IO.File.Delete(oldPath);
-                        }
-                    }
+                        var fileName = slsper.Images;
+                        _db.AR_Salesperson.DeleteObject(slsper);
+                        _db.SaveChanges();
 
-                    return Json(new { success = true });
+                        if (!string.IsNullOrWhiteSpace(fileName))
+                        {
+                            // Xoa file cu di
+                            var oldPath = string.Format("{0}\\{1}", FilePath, fileName);
+                            if (System.IO.File.Exists(oldPath))
+                            {
+                                System.IO.File.Delete(oldPath);
+                            }
+                        }
+
+                        return Json(new { success = true });
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "20140306");
+                    }
                 }
-                else {
-                    throw new MessageException(MessageType.Message, "20140306");
+                else
+                {
+                    return Json(new { success = true });
                 }
             }
             catch (Exception ex)

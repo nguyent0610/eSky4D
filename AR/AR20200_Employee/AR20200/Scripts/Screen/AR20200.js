@@ -49,7 +49,8 @@ var Process = {
                 params: {
                     branchID: App.cboBranchID.getValue(),
                     slsperID: App.cboSlsperid.getValue(),
-                    lstSalesPerson: Ext.encode(App.stoSalesPerson.getRecordsValues())
+                    lstSalesPerson: Ext.encode(App.stoSalesPerson.getRecordsValues()),
+                    isNew: HQ.isNew
                 },
                 success: function (msg, data) {
                     if (data.result.msgCode) {
@@ -69,48 +70,34 @@ var Process = {
         }
     },
 
-    deleteData: function () {
-        App.frmMain.submit({
-            url: 'AR20200/Delete',
-            clientValidation: false,
-            waitMsg: HQ.common.getLang('Deleting') + "...",
-            timeout: 1800000,
-            params: {
-                branchID: App.cboBranchID.getValue(),
-                slsperID: App.cboSlsperid.getValue()
-            },
-            success: function (msg, data) {
-                if (data.result.msgCode) {
-                    HQ.message.show(data.result.msgCode);
+    deleteData: function (item) {
+        if (item == "yes") {
+            App.frmMain.submit({
+                url: 'AR20200/Delete',
+                clientValidation: false,
+                waitMsg: HQ.common.getLang('Deleting') + "...",
+                timeout: 1800000,
+                params: {
+                    branchID: App.cboBranchID.getValue(),
+                    slsperID: App.cboSlsperid.getValue(),
+                    isNew: HQ.isNew
+                },
+                success: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode);
+                    }
+                    App.cboSlsperid.store.load();
+                    App.cboSlsperid.clearValue();
+                },
+                failure: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode);
+                    }
+                    else {
+                        HQ.message.process(msg, data, true);
+                    }
                 }
-                App.cboSlsperid.store.load();
-                App.cboSlsperid.clearValue();
-            },
-            failure: function (msg, data) {
-                if (data.result.msgCode) {
-                    HQ.message.show(data.result.msgCode);
-                }
-                else {
-                    HQ.message.process(msg, data, true);
-                }
-            }
-        });
-    },
-
-    // Check the store of data is change or not
-    storeIsChange: function (store, isCreate) {
-        if (isCreate == undefined) isCreate = true;
-        if ((isCreate == true ? store.getChangedData().Created.length > 1 : false)
-            || store.getChangedData().Updated != undefined
-            || store.getChangedData().Deleted != undefined) {
-            return true;
-        }
-        return false;
-    },
-
-    closeScreen: function (item) {
-        if (item == "no") {
-            this.parentAutoLoadControl.close()
+            });
         }
     },
 
@@ -129,6 +116,7 @@ var Store = {
         App.cboState.forceSelection = false;
         App.cboDistrict.forceSelection = false;
 
+        HQ.isNew = false;
         if (sto.getCount() == 0) {
             var newSlsper = Ext.create("App.mdlAR_Salesperson", {
                 SlsperId: App.cboSlsperid.getValue(),
@@ -137,6 +125,7 @@ var Store = {
                 Status: _beginStatus
             });
             sto.insert(0, newSlsper);
+            HQ.isNew = true;
         }
         var frmRecord = sto.getAt(0);
         App.frmMain.loadRecord(frmRecord);
@@ -149,6 +138,8 @@ var Store = {
         else {
             App.imgImages.setImageUrl("");
         }
+
+        Event.frmMain_fieldChange();
     }
 };
 
@@ -275,19 +266,17 @@ var Event = {
                 break;
 
             case "close":
-                if (App.frmMain.getRecord() != undefined) {
-                    App.frmMain.updateRecord()
-                };
-                if (Process.storeIsChange(App.stoSalesPerson, false)) {
-                    HQ.message.show(7, '', 'Process.closeScreen');
-                } else {
-                    this.parentAutoLoadControl.close()
-                }
+                HQ.common.close(this);
                 break;
 
             case "new":
                 if (HQ.isInsert) {
-                    App.cboSlsperid.clearValue();
+                    if (HQ.isChange) {
+                        HQ.message.show(150, '', '');
+                    }
+                    else {
+                        App.cboSlsperid.clearValue();
+                    }
                 }
                 break;
 
