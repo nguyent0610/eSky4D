@@ -189,6 +189,7 @@ namespace IN20500
                 if (File.Exists(fullFileName))
                 {
                     File.Delete(fullFileName);
+
                     isSuccess = true;
                 }
             }
@@ -197,7 +198,44 @@ namespace IN20500
             return isSuccess;
         }
 
+        public static bool IN20500CopyMedia(string fileName, string tmpOldFileName, string Path, bool isConfig)
+        {
+            var isSuccess = false;
 
+            string uploadDir = "";
+            string pathserver = HttpContext.Current.Server.MapPath("");
+            pathserver = pathserver.Substring(0, pathserver.Length - 7);
+            try
+            {
+                if (isConfig) uploadDir = Path.Substring(0, Path.Length - 14);
+                else
+                {
+                    uploadDir = pathserver + "Media";
+                    //uploadDir = HttpContext.Current.Server.MapPath(uploadDir);
+                }
+            }
+            catch
+            {
+                uploadDir = pathserver + "Media";
+                // uploadDir = HttpContext.Current.Server.MapPath(uploadDir);
+            }
+            var uploadDirLast = uploadDir + "Media";
+            string fullFileName = string.Format("{0}\\{1}", uploadDirLast, fileName);
+            string oldfullFileName = string.Format("{0}\\{1}", uploadDirLast, tmpOldFileName);
+            try
+            {
+                if (!File.Exists(fullFileName))
+                {
+                    File.Copy(oldfullFileName, fullFileName);
+
+                    isSuccess = true;
+                }
+            }
+            catch { }
+
+            return isSuccess;
+
+        }
 
 
         #endregion

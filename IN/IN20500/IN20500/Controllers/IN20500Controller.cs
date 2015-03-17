@@ -1,7 +1,7 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
+using HQ.eSkySys;
 using Ext.Net;
 using Ext.Net.MVC;
-using eBiz4DWebSys;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Text;
-
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
 namespace IN20500.Controllers
 {
     [DirectController]
@@ -19,8 +19,9 @@ namespace IN20500.Controllers
     {
         string screenNbr = "IN20500";
         IN20500Entities _db = Util.CreateObjectContext<IN20500Entities>(false);
-        eBiz4DWebSysEntities _sys = Util.CreateObjectContext<eBiz4DWebSysEntities>(true);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         string b = "";
+        string tmpChangeTreeDic = "0";
         private string _pathImage;
         internal string PathImage
         {
@@ -50,26 +51,26 @@ namespace IN20500.Controllers
         }
         public ActionResult Index()
         {
-            var user =_sys.Users.Where(p=> p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
-            ViewBag.Roles = user.UserTypes;
-            var root = new Node() { };
-            var nodeType = "I";
+            //var user =_sys.Users.Where(p=> p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
+            //ViewBag.Roles = user.UserTypes;
+            //var root = new Node() { };
+            //var nodeType = "I";
 
-            var hierarchy = new SI_Hierarchy()
-            {
-                RecordID = 0,
-                NodeID = "",
-                ParentRecordID = 0,
-                NodeLevel = 1,
-                Descr = "root",
-                Type = nodeType
-            };
-            var z = 0 ;
-            ViewData["resultRoot"] = createNode(root, hierarchy, hierarchy.NodeLevel, z);
+            //var hierarchy = new SI_Hierarchy()
+            //{
+            //    RecordID = 0,
+            //    NodeID = "",
+            //    ParentRecordID = 0,
+            //    NodeLevel = 1,
+            //    Descr = "root",
+            //    Type = nodeType
+            //};
+            //var z = 0 ;
+            //ViewData["resultRoot"] = createNode(root, hierarchy, hierarchy.NodeLevel, z);
             return View();
         }
 
-        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level , int z)
+        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z)
         {
             var node = new Node();
             var k = -1;
@@ -97,17 +98,17 @@ namespace IN20500.Controllers
             {
                 foreach (IN_Inventory tmp in tmps)
                 {
-                    
+
                     k++;
-                    
+
                     Node nodetmp = new Node();
                     nodetmp.Text = tmp.InvtID + "-" + tmp.Descr;
                     nodetmp.NodeID = tmp.InvtID + "-" + tmp.Descr;
                     nodetmp.Leaf = true;
 
                     node.Children.Add(nodetmp);
-                        //System.Diagnostics.Debug.WriteLine(nodetmp.Text);
-                    
+                    //System.Diagnostics.Debug.WriteLine(nodetmp.Text);
+
                 }
             }
 
@@ -116,7 +117,7 @@ namespace IN20500.Controllers
                 foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
                 {
 
-                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1 , z++));
+                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, z++));
 
                 }
             }
@@ -140,9 +141,56 @@ namespace IN20500.Controllers
         }
 
 
+        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
+        public PartialViewResult Body()
+        {
+            var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
+            ViewBag.Roles = user.UserTypes;
+            //var root = new Node() { };
+            //var nodeType = "I";
+
+            //var hierarchy = new SI_Hierarchy()
+            //{
+            //    RecordID = 0,
+            //    NodeID = "",
+            //    ParentRecordID = 0,
+            //    NodeLevel = 1,
+            //    Descr = "root",
+            //    Type = nodeType
+            //};
+            //var z = 0;
+            //ViewData["resultRoot"] = createNode(root, hierarchy, hierarchy.NodeLevel, z);
+            return PartialView();
+        }
+
+        [DirectMethod]
+        public ActionResult ReloadTreeIN20500()
+        {
+
+            var root = new Node() { };
+            var nodeType = "I";
+
+            var hierarchy = new SI_Hierarchy()
+            {
+                RecordID = 0,
+                NodeID = "",
+                ParentRecordID = 0,
+                NodeLevel = 1,
+                Descr = "root",
+                Type = nodeType
+            };
+            var z = 0;
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z);
+
+            //var m = ViewData["resultRoot2"];
 
 
+            //quan trong dung de refresh Tree
+            this.GetCmp<TreePanel>("IDTree").SetRootNode(node);
 
+            return this.Direct();
+
+        }
 
 
         public ActionResult GetProductClass(String classID)
@@ -184,11 +232,11 @@ namespace IN20500.Controllers
             return this.Store(rptInven);
         }
 
-        public ActionResult GetCompanyClass(String classID,String invtID, String chooseGrid)
+        public ActionResult GetCompanyClass(String classID, String invtID, String chooseGrid)
         {
-           // var lst = new List<>();
-            //var lst = _db.ppv_IN20500_getCompanyInvt(invtID).ToList();
-            //var lst = from p in _db.ppv_IN20500_getCompanyInvt(invtID).ToList()
+            // var lst = new List<>();
+            //var lst = _db.IN20500_pgGetCompanyInvt(invtID).ToList();
+            //var lst = from p in _db.IN20500_pgGetCompanyInvt(invtID).ToList()
 
             //          select new
             //          {
@@ -198,10 +246,10 @@ namespace IN20500.Controllers
 
 
             //          };
-            //var lst1 = _db.ppv_IN20500_getCompany(classID).ToList();
+            //var lst1 = _db.IN20500_pgGetCompany(classID).ToList();
             if (chooseGrid == "1")
             {
-                var lst = from p in _db.ppv_IN20500_getCompanyInvt(invtID).ToList()
+                var lst = from p in _db.IN20500_pgGetCompanyInvt(invtID).ToList()
 
                           select new
                           {
@@ -211,12 +259,13 @@ namespace IN20500.Controllers
 
 
                           };
-                //var lst = _db.ppv_IN20500_getCompanyInvt(invtID).ToList();
-                
+                //var lst = _db.IN20500_pgGetCompanyInvt(invtID).ToList();
+
                 return this.Store(lst);
-            }else 
+            }
+            else
             {
-                var lst = _db.ppv_IN20500_getCompany(classID).ToList();
+                var lst = _db.IN20500_pgGetCompany(classID).ToList();
                 return this.Store(lst);
             }
             //return this.Store(lst);
@@ -231,16 +280,19 @@ namespace IN20500.Controllers
 
         [DirectMethod]
         [HttpPost]
-        public ActionResult Save(FormCollection data, string invtID, string handle, string nodeID, int nodeLevel, int hadChild, string approveStatus, bool Public, bool StkItem,string imageChange)
+        [ValidateInput(false)]
+        public ActionResult Save(FormCollection data, string invtID, string handle, string nodeID, int nodeLevel, string parentRecordID, int hadChild, string approveStatus, bool Public, bool StkItem, string imageChange, int tmpImageDelete, string tmpImageForUpload, int tmpMediaDelete, string tmpSelectedNode, string tmpCopyFormSave, string tmpCopyForm, string tmpCopyFormImageUrl, string tmpCopyFormMedia, string tmpOldFileName, string mediaExist)
         {
             StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstheader"]);
             ChangeRecords<IN_Inventory> lstheader = dataHandler2.BatchObjectData<IN_Inventory>();
             StoreDataHandler dataHandler3 = new StoreDataHandler(data["lstheader2"]);
             ChangeRecords<IN_ProductClass> lstheader2 = dataHandler2.BatchObjectData<IN_ProductClass>();
             StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<ppv_IN20500_getCompanyInvt_Result> lstgrd = dataHandler1.BatchObjectData<ppv_IN20500_getCompanyInvt_Result>();
+            ChangeRecords<IN20500_pgGetCompanyInvt_Result> lstgrd = dataHandler1.BatchObjectData<IN20500_pgGetCompanyInvt_Result>();
 
-            ChangeRecords<ppv_IN20500_getCompany_Result> lstgrd2 = dataHandler1.BatchObjectData<ppv_IN20500_getCompany_Result>();
+            ChangeRecords<IN20500_pgGetCompany_Result> lstgrd2 = dataHandler1.BatchObjectData<IN20500_pgGetCompany_Result>();
+
+            tmpChangeTreeDic = "0";
 
             //StoreDataHandler dataImage = new StoreDataHandler(imageChange);
             //ChangeRecords<IN_Inventory> lstImage = dataImage.BatchObjectData<IN_Inventory>();
@@ -248,6 +300,7 @@ namespace IN20500.Controllers
             //StoreDataHandler sdh = new Ext.Net.StoreDataHandler("{" + imageChange + "}");
             //Ext.Net.ChangeRecords<Business.Entities.Cand> messagesCand = sdh.ObjectData<Business.Entities.Cand>(); 
 
+            string invtIDCopyForm = data["cboInvtID"];
             var BarCode = data[""];
             //var approveStatus = data["cboApproveStatus"];
             var Descr = data["txtDescr"];
@@ -303,13 +356,13 @@ namespace IN20500.Controllers
 
 
 
-                
-            
 
 
 
 
-            foreach (ppv_IN20500_getCompanyInvt_Result deleted in lstgrd.Deleted)
+
+
+            foreach (IN20500_pgGetCompanyInvt_Result deleted in lstgrd.Deleted)
             {
                 if (approveStatus != "H" && approveStatus != "D" && approveStatus != "C")
                 {
@@ -321,7 +374,7 @@ namespace IN20500.Controllers
                     }
                 }
             }
-            foreach (ppv_IN20500_getCompanyInvt_Result created in lstgrd.Created)
+            foreach (IN20500_pgGetCompanyInvt_Result created in lstgrd.Created)
             {
                 var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == created.CpnyID).FirstOrDefault();
                 if (record == null)
@@ -341,7 +394,7 @@ namespace IN20500.Controllers
 
 
 
-            foreach (ppv_IN20500_getCompanyInvt_Result updated in lstgrd.Updated)
+            foreach (IN20500_pgGetCompanyInvt_Result updated in lstgrd.Updated)
             {
                 var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == updated.CpnyID).FirstOrDefault();
                 if (record != null)
@@ -357,7 +410,7 @@ namespace IN20500.Controllers
             }
 
 
-            //foreach (ppv_IN20500_getCompany_Result deleted in lstgrd2.Deleted)
+            //foreach (IN20500_pgGetCompany_Result deleted in lstgrd2.Deleted)
             //{
             //    var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == deleted.CpnyID).FirstOrDefault();
             //    if (del != null)
@@ -367,7 +420,7 @@ namespace IN20500.Controllers
             //    }
 
             //}
-            //foreach (ppv_IN20500_getCompany_Result created in lstgrd2.Created)
+            //foreach (IN20500_pgGetCompany_Result created in lstgrd2.Created)
             //{
             //    var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == created.CpnyID).FirstOrDefault();
             //    if (record == null)
@@ -387,7 +440,7 @@ namespace IN20500.Controllers
 
 
 
-            //foreach (ppv_IN20500_getCompany_Result updated in lstgrd2.Updated)
+            //foreach (IN20500_pgGetCompany_Result updated in lstgrd2.Updated)
             //{
             //    var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == updated.CpnyID).FirstOrDefault();
             //    if (record != null)
@@ -411,7 +464,7 @@ namespace IN20500.Controllers
                 // Get the image path
 
                 string images = getPathThenUploadImage(updated, invtID);
-                string media = getPathMedia(updated, invtID);
+                string media = getPathMedia(updated, invtID, mediaExist);
                 var objHeader = _db.IN_Inventory.Where(p => p.InvtID == updated.InvtID).FirstOrDefault();
                 if (objHeader != null)
                 {
@@ -523,7 +576,7 @@ namespace IN20500.Controllers
                         objHeader.LotSerNumVal = LotSerNumVal;
                         //Node
 
-                        
+
 
 
                         //Image and Media
@@ -541,7 +594,8 @@ namespace IN20500.Controllers
 
                         _db.SaveChanges();
                     }
-                    else {
+                    else
+                    {
                         objHeader.BarCode = BarCode;
                         if (handle == "N" || handle == "")
                         {
@@ -647,8 +701,18 @@ namespace IN20500.Controllers
                         //Node
 
                         String[] nodeid = nodeID.Split('-');
+                        if (objHeader.NodeID != nodeid[0])
+                        {
+                            tmpChangeTreeDic = "1";
+                        }
+                        else
+                        {
+                            tmpChangeTreeDic = "0";
+                        }
                         objHeader.NodeID = nodeid[0];
                         objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
+                        var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "I").FirstOrDefault();
+                        objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
 
 
                         //Image and Media
@@ -666,13 +730,154 @@ namespace IN20500.Controllers
 
                         _db.SaveChanges();
                     }
-                    
+
                 }
                 else
                 {
-                    
-                     return Json(new { success = false, code = "8001" }, JsonRequestBehavior.AllowGet);
-                   
+                    //bo sung code add new copyForm neu update
+                    images = getPathThenUploadImageCopyForm(tmpCopyFormImageUrl, invtID);
+                    media = getPathMediaCopyForm(tmpCopyFormMedia, invtID, tmpOldFileName);
+                    objHeader.InvtID = invtID;
+                    objHeader.BarCode = BarCode;
+                    if (handle == "N" || handle == "")
+                    {
+                        objHeader.ApproveStatus = approveStatus;
+                    }
+                    else if (handle == "A")
+                    {
+                        objHeader.ApproveStatus = "C";
+                    }
+                    else if (handle == "I")
+                    {
+                        objHeader.ApproveStatus = "H";
+                    }
+
+
+                    if (approveStatus == "")
+                    {
+                        objHeader.ApproveStatus = "H";
+                    }
+
+                    objHeader.Descr = Descr;
+                    objHeader.Descr1 = Descr1;
+                    objHeader.Status = Status;
+
+
+
+                    objHeader.Public = Convert.ToBoolean(Public);
+                    if (Convert.ToBoolean(Public) == true)
+                    {
+                        var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID).ToList();
+                        for (int i = 0; i < del.Count; i++)
+                        {
+
+                            _db.IN_InvtCpny.DeleteObject(del[i]);
+
+                        }
+                        //foreach (IN_ProdClassCpny proclass in del)
+                        //{
+                        //    _db.IN_ProdClassCpny.DeleteObject(proclass);
+                        //}
+                    }
+                    //tab1
+
+                    objHeader.ClassID = ClassID;
+                    if (StkItem == true)
+                    {
+                        objHeader.StkItem = 1;
+                    }
+                    else
+                    {
+                        objHeader.StkItem = 0;
+                    }
+                    // ???
+                    objHeader.PriceClassID = PriceClassID;
+                    objHeader.InvtType = InvtType;
+
+                    objHeader.Source = Source;
+                    objHeader.ValMthd = ValMthd;
+                    objHeader.LotSerTrack = LotSerTrack;
+                    objHeader.Buyer = Buyer;
+                    objHeader.StkUnit = StkUnit;
+                    objHeader.DfltPOUnit = DfltPOUnit;
+                    objHeader.DfltSOUnit = DfltSOUnit;
+                    objHeader.MaterialType = MaterialType;
+                    //objHeader.DfltSite = created.DfltSite;
+                    objHeader.TaxCat = DfltSlsTaxCat;
+
+                    //tab 2
+
+                    objHeader.Color = Color;
+                    //if(created.PrePayPct == "")
+                    //{
+                    //    objHeader.PrepayPct = 0;
+                    //}else{
+                    //    objHeader.PrePayPct = created.PrePayPct;
+                    //}
+                    objHeader.PrePayPct = Convert.ToDouble(PrePayPct);
+                    objHeader.Size = Size;
+                    objHeader.POFee = Convert.ToDouble(POFee);
+                    objHeader.Style = Style;
+                    objHeader.SOFee = Convert.ToDouble(SOFee);
+                    objHeader.StkVol = Convert.ToDouble(StkVol);
+                    objHeader.VendID1 = Vendor1;
+                    objHeader.StkWt = Convert.ToDouble(StkWt);
+                    objHeader.VendID2 = Vendor2;
+                    objHeader.StkWtUnit = StkWtUnit;
+                    objHeader.LossRate00 = Convert.ToDouble(LossRate00);
+                    objHeader.SOPrice = Convert.ToDouble(SOPrice);
+                    objHeader.LossRate01 = Convert.ToDouble(LossRate01);
+                    objHeader.POPrice = Convert.ToDouble(POPrice);
+                    objHeader.LossRate02 = Convert.ToDouble(LossRate02);
+                    objHeader.IRSftyStkDays = Convert.ToDouble(IRSftyStkDays);
+                    objHeader.LossRate03 = Convert.ToDouble(LossRate03);
+                    objHeader.IRSftyStkPct = Convert.ToDouble(IRSftyStkPct);
+                    objHeader.IRSftyStkQty = Convert.ToDouble(IRSftyStkQty);
+                    objHeader.IROverStkQty = Convert.ToDouble(IROverStkQty);
+
+                    //tab 3
+
+                    objHeader.SerAssign = SerAssign;
+                    objHeader.LotSerIssMthd = LotSerIssMthd;
+                    objHeader.ShelfLife = Convert.ToInt16(ShelfLife);
+                    objHeader.WarrantyDays = Convert.ToInt16(WarrantyDays);
+                    objHeader.LotSerFxdTyp = LotSerFxdTyp;
+                    objHeader.LotSerFxdLen = Convert.ToInt16(LotSerFxdLen);
+                    objHeader.LotSerFxdVal = LotSerFxdVal;
+                    objHeader.LotSerNumLen = Convert.ToInt16(LotSerNumLen);
+                    objHeader.LotSerNumVal = LotSerNumVal;
+
+
+                    String[] nodeid = nodeID.Split('-');
+                    objHeader.NodeID = nodeid[0];
+                    objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
+                    var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "I").FirstOrDefault();
+                    objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
+                    objHeader.Exported = 0;
+
+                    //Image and Media
+
+                    objHeader.Picture = images;
+                    objHeader.Media = media;
+
+                    //
+                    objHeader.Crtd_DateTime = DateTime.Now;
+                    objHeader.Crtd_Prog = screenNbr;
+                    objHeader.Crtd_User = Current.UserName;
+                    objHeader.tstamp = new byte[0];
+                    objHeader.LUpd_DateTime = DateTime.Now;
+                    objHeader.LUpd_Prog = screenNbr;
+                    objHeader.LUpd_User = Current.UserName;
+
+
+
+
+                    _db.IN_Inventory.AddObject(objHeader);
+                    _db.SaveChanges();
+
+
+
+
                 }
 
 
@@ -689,7 +894,7 @@ namespace IN20500.Controllers
             foreach (IN_Inventory created in lstheader.Created)
             {
                 string images = getPathThenUploadImage(created, invtID);
-                string media = getPathMedia(created, invtID);
+                string media = getPathMedia(created, invtID, mediaExist);
                 var objHeader = _db.IN_Inventory.Where(p => p.InvtID == invtID).FirstOrDefault();
                 if (objHeader == null)
                 {
@@ -722,7 +927,7 @@ namespace IN20500.Controllers
                         objHeader.Descr1 = Descr1;
                         objHeader.Status = Status;
 
-                        
+
 
                         objHeader.Public = Convert.ToBoolean(Public);
                         if (Convert.ToBoolean(Public) == true)
@@ -811,8 +1016,10 @@ namespace IN20500.Controllers
                         String[] nodeid = nodeID.Split('-');
                         objHeader.NodeID = nodeid[0];
                         objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
+                        var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "I").FirstOrDefault();
+                        objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
                         objHeader.Exported = 0;
-
+                        //tmpChangeTreeDic = "1";
                         //Image and Media
 
                         objHeader.Picture = images;
@@ -825,9 +1032,9 @@ namespace IN20500.Controllers
                         objHeader.tstamp = new byte[0];
                         UpdatingHeader(created, ref objHeader);
 
-                        
-                        
-                          
+
+
+
                         _db.IN_Inventory.AddObject(objHeader);
                         _db.SaveChanges();
 
@@ -846,9 +1053,215 @@ namespace IN20500.Controllers
 
 
 
+            var objtmp = _db.IN_Inventory.Where(p => p.InvtID == invtIDCopyForm).FirstOrDefault();
+            if (objtmp != null)
+            {
+                objtmp.Picture = tmpImageForUpload;
+                if (tmpMediaDelete == 1)
+                {
+                    objtmp.Media = "";
+                }
+                string images = getPathThenUploadImage(objtmp, invtID);
+                string media = getPathMedia(objtmp, invtID, mediaExist);
+                if (tmpImageDelete == 0)
+                {
+                    objtmp.Picture = images;
+
+                }
+                else if (tmpImageDelete == 1)
+                {
+                    objtmp.Picture = "";
+                }
+                if (tmpMediaDelete == 0)
+                {
+                    objtmp.Media = media;
+                }
+                else if (tmpMediaDelete == 1)
+                {
+                    objtmp.Media = "";
+                }
+                if (handle == "N" || handle == "")
+                {
+                    objtmp.ApproveStatus = approveStatus;
+                }
+                else if (handle == "A")
+                {
+                    objtmp.ApproveStatus = "C";
+                }
+                else if (handle == "I")
+                {
+                    objtmp.ApproveStatus = "H";
+                }
+                if (lstheader.Updated.Count == 0 && hadChild != 0)
+                {
+                    String[] nodeid = nodeID.Split('-');
+                    if (objtmp.NodeID != nodeid[0])
+                    {
+                        tmpChangeTreeDic = "1";
+                    }
+                    else
+                    {
+                        tmpChangeTreeDic = "0";
+                    }
+                    objtmp.NodeID = nodeid[0];
+
+                    objtmp.NodeLevel = Convert.ToInt16(nodeLevel);
+                    var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "I").FirstOrDefault();
+                    objtmp.ParentRecordID = searchparentRecordID.ParentRecordID;
+                    //tmpChangeTreeDic = "1";
+                }
+            }
+            else if (objtmp == null)
+            {
+                if (tmpCopyForm == "1" && lstheader.Updated.Count == 0 && hadChild != 0)
+                {
+                    string images = getPathThenUploadImageCopyForm(tmpCopyFormImageUrl, invtID);
+                    string media = getPathMediaCopyForm(tmpCopyFormMedia, invtIDCopyForm, tmpOldFileName);
+                    objtmp = new IN_Inventory();
+                    objtmp.InvtID = invtIDCopyForm;
+                    objtmp.BarCode = BarCode;
+                    if (handle == "N" || handle == "")
+                    {
+                        objtmp.ApproveStatus = approveStatus;
+                    }
+                    else if (handle == "A")
+                    {
+                        objtmp.ApproveStatus = "C";
+                    }
+                    else if (handle == "I")
+                    {
+                        objtmp.ApproveStatus = "H";
+                    }
 
 
-           
+                    if (approveStatus == "")
+                    {
+                        objtmp.ApproveStatus = "H";
+                    }
+
+                    objtmp.Descr = Descr;
+                    objtmp.Descr1 = Descr1;
+                    objtmp.Status = Status;
+
+
+
+                    objtmp.Public = Convert.ToBoolean(Public);
+                    if (Convert.ToBoolean(Public) == true)
+                    {
+                        var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID).ToList();
+                        for (int i = 0; i < del.Count; i++)
+                        {
+
+                            _db.IN_InvtCpny.DeleteObject(del[i]);
+
+                        }
+                        //foreach (IN_ProdClassCpny proclass in del)
+                        //{
+                        //    _db.IN_ProdClassCpny.DeleteObject(proclass);
+                        //}
+                    }
+                    //tab1
+
+                    objtmp.ClassID = ClassID;
+                    if (StkItem == true)
+                    {
+                        objtmp.StkItem = 1;
+                    }
+                    else
+                    {
+                        objtmp.StkItem = 0;
+                    }
+                    // ???
+                    objtmp.PriceClassID = PriceClassID;
+                    objtmp.InvtType = InvtType;
+
+                    objtmp.Source = Source;
+                    objtmp.ValMthd = ValMthd;
+                    objtmp.LotSerTrack = LotSerTrack;
+                    objtmp.Buyer = Buyer;
+                    objtmp.StkUnit = StkUnit;
+                    objtmp.DfltPOUnit = DfltPOUnit;
+                    objtmp.DfltSOUnit = DfltSOUnit;
+                    objtmp.MaterialType = MaterialType;
+                    //objHeader.DfltSite = created.DfltSite;
+                    objtmp.TaxCat = DfltSlsTaxCat;
+
+                    //tab 2
+
+                    objtmp.Color = Color;
+                    //if(created.PrePayPct == "")
+                    //{
+                    //    objHeader.PrepayPct = 0;
+                    //}else{
+                    //    objHeader.PrePayPct = created.PrePayPct;
+                    //}
+                    objtmp.PrePayPct = Convert.ToDouble(PrePayPct);
+                    objtmp.Size = Size;
+                    objtmp.POFee = Convert.ToDouble(POFee);
+                    objtmp.Style = Style;
+                    objtmp.SOFee = Convert.ToDouble(SOFee);
+                    objtmp.StkVol = Convert.ToDouble(StkVol);
+                    objtmp.VendID1 = Vendor1;
+                    objtmp.StkWt = Convert.ToDouble(StkWt);
+                    objtmp.VendID2 = Vendor2;
+                    objtmp.StkWtUnit = StkWtUnit;
+                    objtmp.LossRate00 = Convert.ToDouble(LossRate00);
+                    objtmp.SOPrice = Convert.ToDouble(SOPrice);
+                    objtmp.LossRate01 = Convert.ToDouble(LossRate01);
+                    objtmp.POPrice = Convert.ToDouble(POPrice);
+                    objtmp.LossRate02 = Convert.ToDouble(LossRate02);
+                    objtmp.IRSftyStkDays = Convert.ToDouble(IRSftyStkDays);
+                    objtmp.LossRate03 = Convert.ToDouble(LossRate03);
+                    objtmp.IRSftyStkPct = Convert.ToDouble(IRSftyStkPct);
+                    objtmp.IRSftyStkQty = Convert.ToDouble(IRSftyStkQty);
+                    objtmp.IROverStkQty = Convert.ToDouble(IROverStkQty);
+
+                    //tab 3
+
+                    objtmp.SerAssign = SerAssign;
+                    objtmp.LotSerIssMthd = LotSerIssMthd;
+                    objtmp.ShelfLife = Convert.ToInt16(ShelfLife);
+                    objtmp.WarrantyDays = Convert.ToInt16(WarrantyDays);
+                    objtmp.LotSerFxdTyp = LotSerFxdTyp;
+                    objtmp.LotSerFxdLen = Convert.ToInt16(LotSerFxdLen);
+                    objtmp.LotSerFxdVal = LotSerFxdVal;
+                    objtmp.LotSerNumLen = Convert.ToInt16(LotSerNumLen);
+                    objtmp.LotSerNumVal = LotSerNumVal;
+
+
+                    String[] nodeid = nodeID.Split('-');
+                    objtmp.NodeID = nodeid[0];
+                    objtmp.NodeLevel = Convert.ToInt16(nodeLevel);
+                    var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "I").FirstOrDefault();
+                    objtmp.ParentRecordID = searchparentRecordID.ParentRecordID;
+                    objtmp.Exported = 0;
+
+                    //Image and Media
+
+                    objtmp.Picture = images;
+                    objtmp.Media = media;
+
+                    //
+                    objtmp.Crtd_DateTime = DateTime.Now;
+                    objtmp.Crtd_Prog = screenNbr;
+                    objtmp.Crtd_User = Current.UserName;
+                    objtmp.tstamp = new byte[0];
+                    objtmp.LUpd_DateTime = DateTime.Now;
+                    objtmp.LUpd_Prog = screenNbr;
+                    objtmp.LUpd_User = Current.UserName;
+
+
+
+
+                    _db.IN_Inventory.AddObject(objtmp);
+                    _db.SaveChanges();
+                }
+                else
+                {
+                    return Json(new { success = false, code = "8001" }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
 
 
 
@@ -856,11 +1269,11 @@ namespace IN20500.Controllers
 
             _db.SaveChanges();
             //this.Direct();
-            
+
 
             if (hadChild != 0)
             {
-                return Json(new { success = true, value = invtID, value2 = Descr, value3 = "addNew"}, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, value = invtID, value2 = Descr, value3 = "addNew", value4 = tmpChangeTreeDic, value5 = tmpSelectedNode }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -892,7 +1305,7 @@ namespace IN20500.Controllers
         private void UpdatingHeader(IN_Inventory s, ref IN_Inventory d)
         {
 
-            
+
 
 
             d.LUpd_DateTime = DateTime.Now;
@@ -1031,18 +1444,47 @@ namespace IN20500.Controllers
             return images;
         }
 
+        private string getPathThenUploadImageCopyForm(string tmpCopyFormImageUrl, string invtID)
+        {
+            string images = string.Format("{0}.jpg", invtID);
 
+            if (!string.IsNullOrWhiteSpace(tmpCopyFormImageUrl) && !tmpCopyFormImageUrl.Contains(".jpg"))
+            {
+                string strImage = tmpCopyFormImageUrl
+                    .Replace("data:image/jpg;base64,", "")
+                    .Replace("data:image/png;base64,", "")
+                    .Replace("data:image/gif;base64,", "");
+
+                // Upload a new file.
+                IN20500ImgHelper.IN20500UploadImage(images,
+                    Convert.FromBase64CharArray(strImage.ToCharArray(), 0, strImage.Length),
+                    PathImage, IsConfig);
+            }
+            else if (!string.IsNullOrWhiteSpace(tmpCopyFormImageUrl) && tmpCopyFormImageUrl.Contains(".jpg"))
+            {
+                images = tmpCopyFormImageUrl;
+            }
+            else // Images is empty
+            {
+                // If there is an existing file, delete it.
+                IN20500ImgHelper.DeleteFile(images, PathImage, IsConfig);
+            }
+
+            return images;
+        }
         [DirectMethod]
         public ActionResult PlayMedia(string fileVideo)
         {
-            //var k = "/Media/a.mp4";
+            var pathMedia = "/eBizWeb/Media/" + fileVideo;
             //var pathMedia = PathImage.Substring(0, PathImage.Length - 14) + "Media\\" + fileVideo;
             //var pathMedia = "/DevProjects/FrameworkWeb/App/Media/a.mp4";
-            var pathMedia = "file://192.168.130.4/DevProjects/FrameworkWeb/App/Media/a.mp4";
+            //var pathMedia = "file://192.168.130.4/DevProjects/FrameworkWeb/App/Media/a.mp4";
+            //var pathMedia = "http://techslides.com/demos/sample-videos/small.mp4";
+
             Window win = new Window
             {
                 ID = "Window1",
-                Title = "Example",
+                Title = "Media",
                 Height = 520,
                 Width = 640,
                 Closable = true,
@@ -1083,7 +1525,7 @@ namespace IN20500.Controllers
                     //string filePath = "C:\\nhac\\a.mp4";
 
                     //string fullFileName = "\\\\192.168.130.4\\DevProjects\\FrameworkWeb\\App\\Media\\a.mp4";
-                    fullFileName = invtID  + "." + typeFile;
+                    fullFileName = invtID + "." + typeFile;
                     //string fullFileName = PathImage + invtID + "_" + Descr + "." + typeFile;
                     // doi icon anh
                     var Images = this.GetCmp<Image>("imgPPCStoreMediaReq");
@@ -1097,7 +1539,7 @@ namespace IN20500.Controllers
                     string imgType = FileUpload1.PostedFile.ContentType;
 
                     FileUpload1.PostedFile.InputStream.Read(arrContent, 0, intLength);
-                    
+
                     //txtImages.Text = FileUpload1.PostedFile.FileName;
                     IN20500ImgHelper.IN20500UploadMedia(fullFileName, arrContent, PathImage, IsConfig);
                     //File.WriteAllBytes(fullFileName, arrContent);
@@ -1126,7 +1568,7 @@ namespace IN20500.Controllers
 
             return Json(new { success = true, value = b, value2 = fullFileName }, JsonRequestBehavior.AllowGet);
 
-           
+
 
         }
 
@@ -1146,22 +1588,49 @@ namespace IN20500.Controllers
 
 
 
-        private string getPathMedia(IN_Inventory inventory, string invtID)
+        private string getPathMedia(IN_Inventory inventory, string invtID, string mediaExist)
         {
-            string media = string.Format("{0}.mp4", invtID);
-
-           
-            if (!string.IsNullOrWhiteSpace(inventory.Picture) && inventory.Picture.Contains(".mp4"))
+            string media = "";
+            if (mediaExist != "")
             {
-                media = inventory.Picture;
+                media = string.Format("{0}.mp4", invtID);
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(inventory.Media) && inventory.Media.Contains(".mp4"))
+            {
+                media = inventory.Media;
             }
             else // Images is empty
             {
                 // If there is an existing file, delete it.
-                IN20500ImgHelper.DeleteFile(media, PathImage, IsConfig);
+                IN20500ImgHelper.DeleteMedia(media, PathImage, IsConfig);
             }
 
             return media;
         }
+
+        private string getPathMediaCopyForm(string tmpCopyFormMedia, string invtID, string tmpOldFileName)
+        {
+            string media = string.Format("{0}.mp4", invtID);
+
+
+            if (!string.IsNullOrWhiteSpace(media) && media.Contains(".mp4"))
+            {
+
+
+
+                IN20500ImgHelper.IN20500CopyMedia(media, tmpOldFileName, PathImage, IsConfig);
+
+            }
+            else // Images is empty
+            {
+                // If there is an existing file, delete it.
+                IN20500ImgHelper.DeleteMedia(media, PathImage, IsConfig);
+            }
+
+            return media;
+        }
+
     }
 }
