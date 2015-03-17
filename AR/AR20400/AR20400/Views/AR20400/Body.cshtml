@@ -116,9 +116,9 @@
                                     
                                 //Ma NPP
                                 , HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQLangCode("BRANCHID").HQProcedure("AR20400_pcGetCpny")
-                                .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
+                                .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID").ReadOnly(true)
                                 .Width(200).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").ForceSelection(false)//.SetValueAndFireSelect("LCUS-HCM-0004")
-                                .HQDBSys(false).HQValue(Current.CpnyID,false).LabelWidth(90)
+                                .HQDBSys(false).LabelWidth(90).HQValue(Current.CpnyID,false)
                                 .LoadData() 
                                 .Listeners(lst =>
                                     {
@@ -131,7 +131,7 @@
                                 ,HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("STATUS").HQProcedure("AR20400_pcStatus")
                                 .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Status")
                                 .Width(250).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").ReadOnly(true).LabelWidth(90)
-                                .HQDBSys(false).HQValue("H",false)
+                                .HQDBSys(false)//.HQValue("H",false)
                                 //.MaxLength(30).EnforceMaxLength(true)
                                 //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection()
@@ -155,7 +155,7 @@
                                     HQ.Combo().ID("cboClassId").Name("cboClassId").HQLangCode("CLASSID").HQProcedure("AR20400_pcCustClass_All")
                                     .HQColumnShow("ClassID,Descr").DisplayField("ClassID").ValueField("ClassID").DataIndex("ClassId")
                                     .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").AllowBlank(false).ForceSelection(false)
-                                    .HQDBSys(false).HQValue("CN",false)
+                                    .HQDBSys(false)//.HQValue("CN",false)
                                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection()
                                     {
@@ -174,7 +174,7 @@
                                      ,HQ.Combo().ID("cboCustType").Name("cboCustType").HQLangCode("CUSTTYPE").HQProcedure("AR20400_pcCustType")
                                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("CustType")
                                     .Width(200).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").AllowBlank(false).ForceSelection(false)
-                                    .HQDBSys(false).HQValue("N",false).LabelWidth(90)
+                                    .HQDBSys(false).LabelWidth(90)//.HQValue("N",false)
                                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection()
                                     {
@@ -275,7 +275,7 @@
                                                     HQ.Combo().ID("cboPriceClassID").Name("cboPriceClassID").HQLangCode("PRICECLASSID").HQProcedure("AR20400_pcPriceClass")
                                                     .HQColumnShow("PriceClassID,Descr").DisplayField("PriceClassID").ValueField("PriceClassID").DataIndex("PriceClassID")
                                                     .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").ForceSelection(false)
-                                                    .HQDBSys(false).HQValue("NPPCH",false)
+                                                    .HQDBSys(false)//.HQValue("NPPCH",false)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                     .HQParam(new StoreParameterCollection()
                                                     {
@@ -334,7 +334,7 @@
                                                     HQ.Combo().ID("cboCrRule").Name("cboCrRule").HQLangCode("CRRULE").HQProcedure("AR20400_pcCrRule")
                                                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("CrRule")
                                                     .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").ForceSelection(false)
-                                                    .HQDBSys(false).HQValue("N",false)
+                                                    .HQDBSys(false)//.HQValue("N",false)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                     .HQParam(new StoreParameterCollection()
                                                     {
@@ -388,7 +388,7 @@
                                                         HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQLangCode("TERRITORY").HQProcedure("AR20400_pcTerritory")
                                                         .HQColumnShow("Territory,Descr").DisplayField("Territory").ValueField("Territory").DataIndex("Territory")
                                                         .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").ForceSelection(false)
-                                                        .HQDBSys(false).HQValue("R001",false)
+                                                        .HQDBSys(false)//.HQValue("R001",false)
                                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                         .HQParam(new StoreParameterCollection()
                                                         {
@@ -658,15 +658,15 @@
                                                          
                                                          //Ngay Ngung GD
                                                          ,HQ.DateField().ID("calExpiryDate").Name("calExpiryDate").HQLangCode("CUSTEXPD").DataIndex("ExpiryDate")
-                                                        .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now).AllowBlank(false)
+                                                        .Width(300).MarginSpec("5 0 0 0")//.AllowBlank(false)//.Value(DateTime.Now)
                                                          
                                                          //Ngay Thanh Lap
                                                          ,HQ.DateField().ID("cboEstablishDate").Name("cboEstablishDate").HQLangCode("ESTABLISHDATE").DataIndex("EstablishDate")
-                                                        .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now)
+                                                        .Width(300).MarginSpec("5 0 0 0")//.AllowBlank(false)//.Value(DateTime.Now)
                                                          
                                                          //Ngay Sinh Nhat
                                                          ,HQ.DateField().ID("cboBirthday").Name("cboBirthday").HQLangCode("BIRTHDAY").DataIndex("Birthdate")
-                                                        .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now) 
+                                                        .Width(300).MarginSpec("5 0 0 0")//.AllowBlank(false)//.Value(DateTime.Now)
                             
                                                            
                                                     //ngoac ket thuc panel botright
@@ -995,7 +995,7 @@
                                                             HQ.Combo().ID("cboTaxDflt").Name("cboTaxDflt").HQLangCode("TAXDEFAULT").HQProcedure("AR20400_pcTaxDf")
                                                             .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("TaxDflt")
                                                             .Width(400).HQHeightWidth(400, 500).MarginSpec("10 0 0 0")
-                                                            .HQDBSys(false).ForceSelection(false).HQValue("C",false)
+                                                            .HQDBSys(false).ForceSelection(false)//.HQValue("C",false)
                                                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                             .HQParam(new StoreParameterCollection()
                                                             {
@@ -1021,7 +1021,7 @@
                                                             ,HQ.Combo().ID("cboTaxID00").Name("cboTaxID00").HQLangCode("TAXID00").HQProcedure("AR20400_pcTaxAll")
                                                             .HQColumnShow("TaxID,Descr").DisplayField("TaxID").ValueField("TaxID").DataIndex("TaxID00")
                                                             .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                                                            .HQDBSys(false).ForceSelection(false).AllowBlank(false).HQValue("VAT10",false)
+                                                            .HQDBSys(false).ForceSelection(false).AllowBlank(false)//.HQValue("VAT10",false)
                                                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                             .HQParam(new StoreParameterCollection()
                                                             {
@@ -1040,7 +1040,7 @@
                                                             ,HQ.Combo().ID("cboTaxID01").Name("cboTaxID01").HQLangCode("TAXID02").HQProcedure("AR20400_pcTaxAll")
                                                             .HQColumnShow("TaxID,Descr").DisplayField("TaxID").ValueField("TaxID").DataIndex("TaxID01")
                                                             .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                                                            .HQDBSys(false).ForceSelection(false).AllowBlank(false).HQValue("VAT10",false)
+                                                            .HQDBSys(false).ForceSelection(false).AllowBlank(false)//.HQValue("VAT10",false)
                                                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                             .HQParam(new StoreParameterCollection()
                                                             {
@@ -1059,7 +1059,7 @@
                                                             ,HQ.Combo().ID("cboTaxID02").Name("cboTaxID02").HQLangCode("TAXID03").HQProcedure("AR20400_pcTaxAll")
                                                             .HQColumnShow("TaxID,Descr").DisplayField("TaxID").ValueField("TaxID").DataIndex("TaxID02")
                                                             .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                                                            .HQDBSys(false).ForceSelection(false).AllowBlank(false).HQValue("VAT10",false)
+                                                            .HQDBSys(false).ForceSelection(false).AllowBlank(false)//.HQValue("VAT10",false)
                                                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                             .HQParam(new StoreParameterCollection()
                                                             {
@@ -1078,7 +1078,7 @@
                                                             ,HQ.Combo().ID("cboTaxID03").Name("cboTaxID03").HQLangCode("TAXID04").HQProcedure("AR20400_pcTaxAll")
                                                             .HQColumnShow("TaxID,Descr").DisplayField("TaxID").ValueField("TaxID").DataIndex("TaxID03")
                                                             .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                                                            .HQDBSys(false).ForceSelection(false).AllowBlank(false).HQValue("VAT10",false)
+                                                            .HQDBSys(false).ForceSelection(false).AllowBlank(false)//.HQValue("VAT10",false)
                                                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                             .HQParam(new StoreParameterCollection()
                                                             {
@@ -1262,7 +1262,7 @@
                                                                 .Name("cboType").HQProcedure("AR20400_pcLTTContractDetailType")
                                                                 .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
                                                                 .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                                                                .AllowBlank(true).ForceSelection(false).HQDBSys(false)
+                                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                                                 .HQParam(new StoreParameterCollection()
                                                                 {
                                                                    new StoreParameter() { Name = "@Langid", Value = "HQ.langID" , Mode = ParameterMode.Raw }
@@ -1381,7 +1381,7 @@
                                                                 .Name("cboType").HQProcedure("AR20400_pcCustAdvToolType")
                                                                 .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
                                                                 .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                                                                .AllowBlank(true).ForceSelection(false).HQDBSys(false)
+                                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                                                 .HQParam(new StoreParameterCollection()
                                                                 {
                                                                     new StoreParameter() { Name = "@Langid", Value = "HQ.langID" , Mode = ParameterMode.Raw }
@@ -1508,7 +1508,7 @@
                                                                 .Name("cboSellingProd").HQProcedure("AR20400_pcSellingProducts")
                                                                 .HQColumnShow("SellingProd,Descr").DisplayField("SellingProd").ValueField("SellingProd")
                                                                 .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                                                                .AllowBlank(true).ForceSelection(false).HQDBSys(false)
+                                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                                                 .HQParam(new StoreParameterCollection()
                                                                 {
                                                                     //new StoreParameter() { Name = "@Langid", Value = "HQ.langID" , Mode = ParameterMode.Raw }
@@ -1613,7 +1613,7 @@
                                                                 .Name("cboDispMethod").HQProcedure("AR20400_pcDisplayMethod")
                                                                 .HQColumnShow("DispMethod,Descr").DisplayField("DispMethod").ValueField("DispMethod")
                                                                 .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                                                                .AllowBlank(true).ForceSelection(false).HQDBSys(false)
+                                                                .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                                                 .HQParam(new StoreParameterCollection()
                                                                 {
                                                                     //new StoreParameter() { Name = "@Langid", Value = "HQ.langID" , Mode = ParameterMode.Raw }

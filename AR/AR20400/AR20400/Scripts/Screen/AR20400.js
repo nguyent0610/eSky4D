@@ -174,7 +174,8 @@ var menuClick = function (command) {
 
 
                         App.cboCustId.setValue('');
-                        cboCustId_Change(App.cboCustId);
+                        //cboCustId_Change(App.cboCustId);
+                        App.storeFormBig.reload();
                     }
                 } else if (HQ.focus == 'grdLTTContract') {
                     HQ.grid.insert(App.grdTop, keysTop);
@@ -985,8 +986,17 @@ var storeLoad = function (store) {
         //});
         //App.storeFormBig.insert(0, record);
         //App.frmMain.getForm().loadRecord(App.storeFormBig.getAt(0));
+    
+        
+        //var dateParts = HQ.businessDate.split("/");
+        //var dateParts2 = dateParts[2].split(" ");
+        //var date = new Date(dateParts[0] + "/" + dateParts[1] + "/" + dateParts2[0]);
+
+
+
         HQ.store.insertBlank(store, "CustId");
         record = store.getAt(0);
+        
         record.data.Status = 'H';
         record.data.ClassId = 'CN';
         record.data.CustType = 'N';
@@ -994,9 +1004,10 @@ var storeLoad = function (store) {
         record.data.CrRule = 'N';
         record.data.Territory = 'R001';
         record.data.Country = 'VN';
-        record.data.State = '0043';
-        record.data.City = 'HCM';
-        record.data.District = '0043001';
+        //record.data.State = '0043';
+        //record.data.City = 'HCM';
+        //record.data.District = '0043001';
+
         record.data.ExpiryDate = HQ.businessDate;
         record.data.EstablishDate = HQ.businessDate;
         record.data.Birthdate = HQ.businessDate;
@@ -1005,6 +1016,7 @@ var storeLoad = function (store) {
         record.data.TaxID01 = 'VAT10';
         record.data.TaxID02 = 'VAT10';
         record.data.TaxID03 = 'VAT10';
+
 
         store.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
@@ -1322,13 +1334,13 @@ var grdDispMethod_Reject = function (record) {
 var cboCountry_Change = function (sender, newValue, oldValue) {
     //bien tam tmpCountryloadStoreOrForm de bat neu chon CustID thi load form len du sau do set ve trang thai cu
     //cach cu
-    if (tmpCountryloadStoreOrForm == "1") {
-        App.cboState.getStore().reload();
-        App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
+    //if (tmpCountryloadStoreOrForm == "1") {
+    //    App.cboState.getStore().reload();
+    //    App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
 
-    } else {
-        App.cboState.getStore().reload();
-    }
+    //} else {
+    //    App.cboState.getStore().reload();
+    //}
 
     //cach moi
     App.cboState.getStore().load(function () {
@@ -1338,7 +1350,7 @@ var cboCountry_Change = function (sender, newValue, oldValue) {
                 App.cboState.setValue(curRecord.data.State);
             }
         var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
-        if (!dt) {
+        if (!dt && App.cboCountry.forceSelection == true) {
             curRecord.data.State = '';
             App.cboState.setValue("");
         }
@@ -1349,17 +1361,17 @@ var cboCountry_Change = function (sender, newValue, oldValue) {
 
 var cboState_Change = function (sender, newValue, oldValue) {
     //cach cu
-    if (tmpCountryloadStoreOrForm == "1") {
-        App.cboCity.getStore().reload();
-        App.cboDistrict.getStore().reload();
-        App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
-        App.cboCity.setValue(tmpCity);
-        App.cboDistrict.setValue(tmpDistrict);
-        tmpCountryloadStoreOrForm = "0";
-    } else {
-        App.cboCity.getStore().reload();
-        App.cboDistrict.getStore().reload();
-    }
+    //if (tmpCountryloadStoreOrForm == "1") {
+    //    App.cboCity.getStore().reload();
+    //    App.cboDistrict.getStore().reload();
+    //    App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
+    //    App.cboCity.setValue(tmpCity);
+    //    App.cboDistrict.setValue(tmpDistrict);
+    //    tmpCountryloadStoreOrForm = "0";
+    //} else {
+    //    App.cboCity.getStore().reload();
+    //    App.cboDistrict.getStore().reload();
+    //}
     //cach moi
     App.cboCity.getStore().load(function () {
         var curRecord = App.frmMain.getRecord();
@@ -1368,7 +1380,7 @@ var cboState_Change = function (sender, newValue, oldValue) {
                 App.cboCity.setValue(curRecord.data.City);
             }
         var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
-        if (!dt) {
+        if (!dt && App.cboState.forceSelection == true) {
             curRecord.data.City = '';
             App.cboCity.setValue("");
         }
@@ -1382,7 +1394,7 @@ var cboState_Change = function (sender, newValue, oldValue) {
                 App.cboDistrict.setValue(curRecord.data.District);
             }
         var dt = HQ.store.findInStore(App.cboCity.getStore(), ["District"], [App.cboDistrict.getValue()]);
-        if (!dt) {
+        if (!dt && App.cboState.forceSelection == true) {
             curRecord.data.City = '';
             App.cboDistrict.setValue("");
         }
@@ -1462,143 +1474,146 @@ var CopyFormToBill_Click = function () {
 }
 
 var disableForm = function () {
-    //App.cboCustId.readOnly = true;
-    App.cboCpnyID.readOnly = true;
-    App.cboClassId.readOnly = true;
-    App.cboCustType.readOnly = true;
-    App.txtCustName.readOnly = true;
-    App.cboPriceClassID.readOnly = true;
-    App.cboTerms.readOnly = true;
-    App.txtTradeDisc.readOnly = true;
-    App.cboCrRule.readOnly = true;
-    App.txtCrLmt.readOnly = true;
-    App.txtGracePer.readOnly = true;
-    App.cboTerritory.readOnly = true;
-    App.cboArea.readOnly = true;
-    App.cboLocation.readOnly = true;
-    App.cboChannel.readOnly = true;
-    App.cboShopType.readOnly = true;
-    App.chkGiftExch.readOnly = true;
-    App.chkHasPG.readOnly = true;
-    App.cboSlsperId.readOnly = true;
-    App.cboDeliveryID.readOnly = true;
-    App.cboSupID.readOnly = true;
-    App.cboSiteId.readOnly = true;
-    App.cboDfltShipToId.readOnly = true;
-    App.txtCustFillPriority.readOnly = true;
-    App.cboLTTContract.readOnly = true;
-    App.cboDfltSalesRouteID.readOnly = true;
-    App.txtEmpNum.readOnly = true;
-    App.calExpiryDate.readOnly = true;
-    App.cboEstablishDate.readOnly = true;
-    App.cboBirthday.readOnly = true;
-    App.txtCustNam2.readOnly = true;
-    App.txtAttn.readOnly = true;
-    App.txtSalut.readOnly = true;
-    App.txtAddr1.readOnly = true;
-    App.txtAddr2.readOnly = true;
-    App.cboCountry.readOnly = true;
-    App.cboState.readOnly = true;
-    App.cboCity.readOnly = true;
-    App.cboDistrict.readOnly = true;
-    App.txtZip.readOnly = true;
-    App.txtPhone.readOnly = true;
-    App.txtFax.readOnly = true;
-    App.txtEMailAddr.readOnly = true;
-    App.btnCopy.readOnly = true;
-    App.txtBillName.readOnly = true;
-    App.txtBillAttn.readOnly = true;
-    App.txtBillSalut.readOnly = true;
-    App.txtBillAddr1.readOnly = true;
-    App.txtBillAddr2.readOnly = true;
-    App.cboBillCountry.readOnly = true;
-    App.cboBillState.readOnly = true;
-    App.cboBillCity.readOnly = true;
-    App.txtBillZip.readOnly = true;
-    App.txtBillPhone.readOnly = true;
-    App.txtBillFax.readOnly = true;
-    App.cboTaxDflt.readOnly = true;
-    App.txtTaxRegNbr.readOnly = true;
-    App.txtTaxLocId.readOnly = true;
-    App.cboTaxID00.readOnly = true;
-    App.cboTaxID01.readOnly = true;
-    App.cboTaxID02.readOnly = true;
-    App.cboTaxID03.readOnly = true;
-    App.btnCopy.disable = true;
-    //App.frmTopLeftTab1.readOnly = true;
-    //App.frmTopRightTab1.readOnly = true;
-    //App.frmBotLeftTab1.readOnly = true;
-    //App.frmBotRightTab1.readOnly = true;
-    //App.frmLeftTab2.readOnly = true;
-    //App.frmRightTab2.readOnly = true;
-    //App.frmMidTab3.readOnly = true;
+    //App.cboCustId.setReadOnly(true);
+    App.cboCpnyID.setReadOnly(true);
+    App.cboClassId.setReadOnly(true);
+    App.cboCustType.setReadOnly(true);
+    App.txtCustName.setReadOnly(true);
+    App.cboPriceClassID.setReadOnly(true);
+    App.cboTerms.setReadOnly(true);
+    App.txtTradeDisc.setReadOnly(true);
+    App.cboCrRule.setReadOnly(true);
+    App.txtCrLmt.setReadOnly(true);
+    App.txtGracePer.setReadOnly(true);
+    App.cboTerritory.setReadOnly(true);
+    App.cboArea.setReadOnly(true);
+    App.cboLocation.setReadOnly(true);
+    App.cboChannel.setReadOnly(true);
+    App.cboShopType.setReadOnly(true);
+    App.chkGiftExch.setReadOnly(true);
+    App.chkHasPG.setReadOnly(true);
+    App.cboSlsperId.setReadOnly(true);
+    App.cboDeliveryID.setReadOnly(true);
+    App.cboSupID.setReadOnly(true);
+    App.cboSiteId.setReadOnly(true);
+    App.cboDfltShipToId.setReadOnly(true);
+    App.txtCustFillPriority.setReadOnly(true);
+    App.cboLTTContract.setReadOnly(true);
+    App.cboDfltSalesRouteID.setReadOnly(true);
+    App.txtEmpNum.setReadOnly(true);
+    App.calExpiryDate.setReadOnly(true);
+    App.cboEstablishDate.setReadOnly(true);
+    App.cboBirthday.setReadOnly(true);
+    App.txtCustNam2.setReadOnly(true);
+    App.txtAttn.setReadOnly(true);
+    App.txtSalut.setReadOnly(true);
+    App.txtAddr1.setReadOnly(true);
+    App.txtAddr2.setReadOnly(true);
+    App.cboCountry.setReadOnly(true);
+    App.cboState.setReadOnly(true);
+    App.cboCity.setReadOnly(true);
+    App.cboDistrict.setReadOnly(true);
+    App.txtZip.setReadOnly(true);
+    App.txtPhone.setReadOnly(true);
+    App.txtFax.setReadOnly(true);
+    App.txtEMailAddr.setReadOnly(true);
+    
+    App.txtBillName.setReadOnly(true);
+    App.txtBillAttn.setReadOnly(true);
+    App.txtBillSalut.setReadOnly(true);
+    App.txtBillAddr1.setReadOnly(true);
+    App.txtBillAddr2.setReadOnly(true);
+    App.cboBillCountry.setReadOnly(true);
+    App.cboBillState.setReadOnly(true);
+    App.cboBillCity.setReadOnly(true);
+    App.txtBillZip.setReadOnly(true);
+    App.txtBillPhone.setReadOnly(true);
+    App.txtBillFax.setReadOnly(true);
+    App.cboTaxDflt.setReadOnly(true);
+    App.txtTaxRegNbr.setReadOnly(true);
+    App.txtTaxLocId.setReadOnly(true);
+    App.cboTaxID00.setReadOnly(true);
+    App.cboTaxID01.setReadOnly(true);
+    App.cboTaxID02.setReadOnly(true);
+    App.cboTaxID03.setReadOnly(true);
+
+    //App.btnCopy.disable = true;
+    App.btnCopy.disabled = true;
+    //App.frmTopLeftTab1.setReadOnly(true);
+    //App.frmTopRightTab1.setReadOnly(true);
+    //App.frmBotLeftTab1.setReadOnly(true);
+    //App.frmBotRightTab1.setReadOnly(true);
+    //App.frmLeftTab2.setReadOnly(true);
+    //App.frmRightTab2.setReadOnly(true);
+    //App.frmMidTab3.setReadOnly(true);
 
 }
 
 var enableForm = function () {
     //App.cboCustId.readOnly = false;
-    App.cboCpnyID.readOnly = false;
-    App.cboClassId.readOnly = false;
-    App.cboCustType.readOnly = false;
-    App.txtCustName.readOnly = false;
-    App.cboPriceClassID.readOnly = false;
-    App.cboTerms.readOnly = false;
-    App.txtTradeDisc.readOnly = false;
-    App.cboCrRule.readOnly = false;
-    App.txtCrLmt.readOnly = false;
-    App.txtGracePer.readOnly = false;
-    App.cboTerritory.readOnly = false;
-    App.cboArea.readOnly = false;
-    App.cboLocation.readOnly = false;
-    App.cboChannel.readOnly = false;
-    App.cboShopType.readOnly = false;
-    App.chkGiftExch.readOnly = false;
-    App.chkHasPG.readOnly = false;
-    App.cboSlsperId.readOnly = false;
-    App.cboDeliveryID.readOnly = false;
-    App.cboSupID.readOnly = false;
-    App.cboSiteId.readOnly = false;
-    App.cboDfltShipToId.readOnly = false;
-    App.txtCustFillPriority.readOnly = false;
-    App.cboLTTContract.readOnly = false;
-    App.cboDfltSalesRouteID.readOnly = false;
-    App.txtEmpNum.readOnly = false;
-    App.calExpiryDate.readOnly = false;
-    App.cboEstablishDate.readOnly = false;
-    App.cboBirthday.readOnly = false;
-    App.txtCustNam2.readOnly = false;
-    App.txtAttn.readOnly = false;
-    App.txtSalut.readOnly = false;
-    App.txtAddr1.readOnly = false;
-    App.txtAddr2.readOnly = false;
-    App.cboCountry.readOnly = false;
-    App.cboState.readOnly = false;
-    App.cboCity.readOnly = false;
-    App.cboDistrict.readOnly = false;
-    App.txtZip.readOnly = false;
-    App.txtPhone.readOnly = false;
-    App.txtFax.readOnly = false;
-    App.txtEMailAddr.readOnly = false;
-    App.btnCopy.readOnly = false;
-    App.txtBillName.readOnly = false;
-    App.txtBillAttn.readOnly = false;
-    App.txtBillSalut.readOnly = false;
-    App.txtBillAddr1.readOnly = false;
-    App.txtBillAddr2.readOnly = false;
-    App.cboBillCountry.readOnly = false;
-    App.cboBillState.readOnly = false;
-    App.cboBillCity.readOnly = false;
-    App.txtBillZip.readOnly = false;
-    App.txtBillPhone.readOnly = false;
-    App.txtBillFax.readOnly = false;
-    App.cboTaxDflt.readOnly = false;
-    App.txtTaxRegNbr.readOnly = false;
-    App.txtTaxLocId.readOnly = false;
-    App.cboTaxID00.readOnly = false;
-    App.cboTaxID01.readOnly = false;
-    App.cboTaxID02.readOnly = false;
-    App.cboTaxID03.readOnly = false;
-    App.btnCopy.enable = false;
+    App.cboCpnyID.setReadOnly(false);
+    App.cboClassId.setReadOnly(false);
+    App.cboCustType.setReadOnly(false);
+    App.txtCustName.setReadOnly(false);
+    App.cboPriceClassID.setReadOnly(false);
+    App.cboTerms.setReadOnly(false);
+    App.txtTradeDisc.setReadOnly(false);
+    App.cboCrRule.setReadOnly(false);
+    App.txtCrLmt.setReadOnly(false);
+    App.txtGracePer.setReadOnly(false);
+    App.cboTerritory.setReadOnly(false);
+    App.cboArea.setReadOnly(false);
+    App.cboLocation.setReadOnly(false);
+    App.cboChannel.setReadOnly(false);
+    App.cboShopType.setReadOnly(false);
+    App.chkGiftExch.setReadOnly(false);
+    App.chkHasPG.setReadOnly(false);
+    App.cboSlsperId.setReadOnly(false);
+    App.cboDeliveryID.setReadOnly(false);
+    App.cboSupID.setReadOnly(false);
+    App.cboSiteId.setReadOnly(false);
+    App.cboDfltShipToId.setReadOnly(false);
+    App.txtCustFillPriority.setReadOnly(false);
+    App.cboLTTContract.setReadOnly(false);
+    App.cboDfltSalesRouteID.setReadOnly(false);
+    App.txtEmpNum.setReadOnly(false);
+    App.calExpiryDate.setReadOnly(false);
+    App.cboEstablishDate.setReadOnly(false);
+    App.cboBirthday.setReadOnly(false);
+    App.txtCustNam2.setReadOnly(false);
+    App.txtAttn.setReadOnly(false);
+    App.txtSalut.setReadOnly(false);
+    App.txtAddr1.setReadOnly(false);
+    App.txtAddr2.setReadOnly(false);
+    App.cboCountry.setReadOnly(false);
+    App.cboState.setReadOnly(false);
+    App.cboCity.setReadOnly(false);
+    App.cboDistrict.setReadOnly(false);
+    App.txtZip.setReadOnly(false);
+    App.txtPhone.setReadOnly(false);
+    App.txtFax.setReadOnly(false);
+    App.txtEMailAddr.setReadOnly(false);
+    
+    App.txtBillName.setReadOnly(false);
+    App.txtBillAttn.setReadOnly(false);
+    App.txtBillSalut.setReadOnly(false);
+    App.txtBillAddr1.setReadOnly(false);
+    App.txtBillAddr2.setReadOnly(false);
+    App.cboBillCountry.setReadOnly(false);
+    App.cboBillState.setReadOnly(false);
+    App.cboBillCity.setReadOnly(false);
+    App.txtBillZip.setReadOnly(false);
+    App.txtBillPhone.setReadOnly(false);
+    App.txtBillFax.setReadOnly(false);
+    App.cboTaxDflt.setReadOnly(false);
+    App.txtTaxRegNbr.setReadOnly(false);
+    App.txtTaxLocId.setReadOnly(false);
+    App.cboTaxID00.setReadOnly(false);
+    App.cboTaxID01.setReadOnly(false);
+    App.cboTaxID02.setReadOnly(false);
+    App.cboTaxID03.setReadOnly(false);
+
+    App.btnCopy.enable();
     //App.frmTopLeftTab1.readOnly = false;
     //App.frmTopRightTab1.readOnly = false;
     //App.frmBotLeftTab1.readOnly = false;
@@ -1610,37 +1625,37 @@ var enableForm = function () {
 }
 
 var setFocusAllCombo = function () {
-    App.cboCpnyID.forceSelection = true;
-    App.cboClassId.forceSelection = true;
-    App.cboCustType.forceSelection = true;
-    App.cboHandle.forceSelection = true;
-    App.cboPriceClassID.forceSelection = true;
-    App.cboTerms.forceSelection = true;
-    App.cboCrRule.forceSelection = true;
-    App.cboTerritory.forceSelection = true;
-    App.cboArea.forceSelection = true;
-    App.cboLocation.forceSelection = true;
-    App.cboChannel.forceSelection = true;
-    App.cboShopType.forceSelection = true;
-    App.cboSlsperId.forceSelection = true;
-    App.cboDeliveryID.forceSelection = true;
-    App.cboSupID.forceSelection = true;
-    App.cboSiteId.forceSelection = true;
-    App.cboDfltShipToId.forceSelection = true;
-    App.cboLTTContract.forceSelection = true;
-    App.cboDfltSalesRouteID.forceSelection = true;
-    App.cboCountry.forceSelection = true;
-    App.cboState.forceSelection = true;
-    App.cboCity.forceSelection = true;
-    App.cboDistrict.forceSelection = true;
-    App.cboBillCountry.forceSelection = true;
-    App.cboBillState.forceSelection = true;
-    App.cboBillCity.forceSelection = true;
-    App.cboTaxDflt.forceSelection = true;
-    App.cboTaxID00.forceSelection = true;
-    App.cboTaxID01.forceSelection = true;
-    App.cboTaxID02.forceSelection = true;
-    App.cboTaxID03.forceSelection = true;
+    App.cboCpnyID.forceSelection = false;
+    App.cboClassId.forceSelection = false;
+    App.cboCustType.forceSelection = false;
+    App.cboHandle.forceSelection = false;
+    App.cboPriceClassID.forceSelection = false;
+    App.cboTerms.forceSelection = false;
+    App.cboCrRule.forceSelection = false;
+    App.cboTerritory.forceSelection = false;
+    App.cboArea.forceSelection = false;
+    App.cboLocation.forceSelection = false;
+    App.cboChannel.forceSelection = false;
+    App.cboShopType.forceSelection = false;
+    App.cboSlsperId.forceSelection = false;
+    App.cboDeliveryID.forceSelection = false;
+    App.cboSupID.forceSelection = false;
+    App.cboSiteId.forceSelection = false;
+    App.cboDfltShipToId.forceSelection = false;
+    App.cboLTTContract.forceSelection = false;
+    App.cboDfltSalesRouteID.forceSelection = false;
+    App.cboCountry.forceSelection = false;
+    App.cboState.forceSelection = false;
+    App.cboCity.forceSelection = false;
+    App.cboDistrict.forceSelection = false;
+    App.cboBillCountry.forceSelection = false;
+    App.cboBillState.forceSelection = false;
+    App.cboBillCity.forceSelection = false;
+    App.cboTaxDflt.forceSelection = false;
+    App.cboTaxID00.forceSelection = false;
+    App.cboTaxID01.forceSelection = false;
+    App.cboTaxID02.forceSelection = false;
+    App.cboTaxID03.forceSelection = false;
 
 };
 

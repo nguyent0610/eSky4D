@@ -30,6 +30,8 @@ namespace AR20400.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.BusinessDate = DateTime.Now.ToDateShort();
+        
             return View();
         }
 
@@ -38,6 +40,7 @@ namespace AR20400.Controllers
         {
             var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
             ViewBag.Roles = user.UserTypes;
+            ViewBag.BusinessDate = DateTime.Now.ToDateShort();
             //var root = new Node() { };
             //var nodeType = "C";
 

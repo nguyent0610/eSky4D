@@ -125,6 +125,24 @@ var HQ = {
             });
             return data;
         },
+        // TinhHV using for auto gen the LineRef
+        lastLineRef: function (store) {
+            var num = 0;
+            for (var j = 0; j < store.data.length; j++) {
+                var item = store.data.items[j];
+
+                if (!Ext.isEmpty(item.data.LineRef) && parseInt(item.data.LineRef) > num) {
+                    num = parseInt(item.data.LineRef);
+                }
+            };
+            num++;
+            var lineRef = num.toString();
+            var len = lineRef.length;
+            for (var i = 0; i < 5 - len; i++) {
+                lineRef = "0" + lineRef;
+            }
+            return lineRef;
+        },
         //kiem tra key da nhap du chua
         isAllValidKey: function (items, keys) {
             if (items != undefined) {
@@ -228,6 +246,10 @@ var HQ = {
             }
 
         },
+        expand: function (cbo, delimiter) {
+            if (cbo.getValue())
+                cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
+        },
     },
     grid: {
         showBusy: function (grd, isBusy) {
@@ -288,6 +310,15 @@ var HQ = {
             var store = combo.up("gridpanel").getStore();
             store.pageSize = parseInt(combo.getValue(), 10);
             store.reload();
+        },
+        indexSelect: function (grd) {
+            var index = '';
+            var arr = grd.getSelectionModel().getSelection();
+            arr.forEach(function (itm) {
+                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+            });
+
+            return index.substring(0, index.length - 1);
         },
         checkDuplicate: function (grd, row, keys) {
             var found = false;
@@ -615,13 +646,22 @@ var HQ = {
                     HQ.util.focusControlInTab(itm, field);
                 });
             }
+        },
+        checkEmail: function (value) {
+            var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            if ((HQ.util.passNull(value)).match(regex)) {
+                return true;
+            } else {
+                HQ.message.show(09112014, '', null);
+                return false;
+            }
         }
     },
     form: {
-        checkRequirePass: function (frmMain) {
-            frmMain.updateRecord();
+        checkRequirePass: function (frm) {
+            frm.updateRecord();
             var isValid = true;
-            frmMain.getForm().getFields().each(
+            frm.getForm().getFields().each(
                             function (item) {
                                 if (!item.isValid()) {
                                     invalidField = item.id;
@@ -670,7 +710,8 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 2) value = '';
+        if (value.split(',').length > 2) value = '';//value.split(',')[value.split(',').length-1];
+        if (value.split(';').length > 2) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {
@@ -704,23 +745,30 @@ var loadDefault = function (fileNameStore, cbo) {
     }
 };
 //TrungHT
+Ext.define("NumbercurrencyPrecision", {
+    override: "Ext.util.Format.Number",
+    currencyPrecision: 0
+});
 Ext.define("ThousandSeparatorNumberField", {
     override: "Ext.form.field.Number",
 
     /**
     * @cfg {Boolean} useThousandSeparator
     */
-    useThousandSeparator: true,
-    decimalPrecision: 0,
+    useThousandSeparator: true,  
+    
     style: 'text-align: right',
-    fieldStyle: "text-align:right;",
+    fieldStyle: "text-align:right;",    
     /**
      * @inheritdoc
      */
+    //dung cho page
+   
     toRawNumber: function (value) {
+        this.decimalPrecision= this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
         return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
     },
-
+   
     /**
      * @inheritdoc
      */
@@ -842,6 +890,20 @@ Ext.define("ThousandSeparatorNumberField", {
         value = parseFloat(this.toRawNumber(value));
         return isNaN(value) ? null : value;
     }
+});
+
+Ext.define("Ext.locale.vn.toolbar.Paging", {
+    override: "Ext.PagingToolbar",
+    lable: HQ.common.getLang("PageSize"),
+    beforePageText:  HQ.common.getLang("Page"),
+    afterPageText: HQ.common.getLang("of")+" {0}",
+    firstText: HQ.common.getLang("PageFirst"),
+    prevText: HQ.common.getLang("PagePrev"),
+    nextText: HQ.common.getLang("PageNext"),
+    lastText: HQ.common.getLang("PageLast"),
+    refreshText: HQ.common.getLang("PageRefresh"),
+    displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
+    emptyMsg: HQ.common.getLang("DataEmty")
 });
 //window.onresize = function () {
 //    if ((window.outerHeight - window.innerHeight) > 100) {
