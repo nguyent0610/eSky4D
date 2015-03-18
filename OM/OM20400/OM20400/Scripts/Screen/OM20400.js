@@ -14,6 +14,7 @@ var loadSourceCombo = function () {
                         App.cboSalesType.getStore().load(function () {
                             App.cboDiscType.getStore().load(function () {
                                 HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                                App.btnCopyFrom.setDisabled(true);
                                 App.stoOM_OrderType.reload();
                             })
                         })
@@ -76,7 +77,9 @@ var menuClick = function (command) {
             else {
                 HQ.isChange = false;
                 if (App.cboOrderType_Main.valueModels == null) App.cboOrderType_Main.setValue('');
-                App.cboOrderType_Main.getStore().load(function () { App.stoOM_OrderType.reload(); });
+                App.cboOrderType_Main.getStore().load(function () {
+                    App.stoOM_OrderType.reload();
+                });
             }
             break;
         case "new":
@@ -90,7 +93,7 @@ var menuClick = function (command) {
                     }
                 }
                 else {
-                    HQ.grid.insert(App.grdOM_DocNumbering,keys);
+                    HQ.grid.insert(App.grdOM_DocNumbering, keys);
                 }
             }
             break;
@@ -102,14 +105,14 @@ var menuClick = function (command) {
                         HQ.message.show(11, '', 'deleteData');
                     }
                 }
-                else{
+                else {
                     if (App.slmOM_DocNumbering.selected.items[0] != undefined) {
                         var rowindex = HQ.grid.indexSelect(App.grdOM_DocNumbering);
                         if (rowindex != '')
                             HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdOM_DocNumbering), ''], 'deleteData', true)
                     }
                 }
-                
+
             }
             break;
         case "save":
@@ -170,13 +173,14 @@ var stoChanged = function (sto) {
 //load store khi co su thay doi CpnyID
 var stoLoad = function (sto) {
     HQ.isFirstLoad = true;
-    HQ.common.showBusy(false);
+   
     HQ.isNew = false;
     App.cboOrderType_Main.forceSelection = true;
+    //App.cboARDOCTYPE.forceSelection = false;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "OrderType");
         record = sto.getAt(0);
-       
+
         HQ.isNew = true;//record la new    
         App.cboOrderType_Main.forceSelection = false;
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
@@ -185,8 +189,8 @@ var stoLoad = function (sto) {
     }
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
+
     App.stoOM_DocNumbering.reload();
-   
 };
 
 var stoLoadOM_DocNumbering = function (sto) {
@@ -197,19 +201,88 @@ var stoLoadOM_DocNumbering = function (sto) {
         HQ.isFirstLoad = false;
     }
     frmChange();
+    HQ.common.showBusy(false);
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 
-// Event when cboVendID is changed or selected item 
+var btnCopyFrom_Click = function (sender, e) {
+
+    App.frmMain.submit({
+        waitMsg: HQ.waitMsg,
+        clientValidation: false,
+        method: 'POST',
+        url: 'OM20400/CopyFrom',
+        timeout: 1000000,
+        params: {
+            OrderType: App.cboOrderType_Sub.getValue()
+        },
+        success: function (msg, data) {
+            var objHeader = this.result.header;
+            if (objHeader != undefined) {
+
+                App.cboARDOCTYPE.setValue(objHeader.ARDocType);
+                App.Descr.setValue(objHeader.Descr);
+                App.cboINDocType.setValue(objHeader.INDocType);
+                App.DaysToKeep.setValue(objHeader.DaysToKeep);
+                App.cboDfltCustID.setValue(objHeader.DfltCustID);
+                App.cboSalesType.setValue(objHeader.SalesType);
+                App.cboDiscType.setValue(objHeader.DiscType);
+                App.ShippingReport.setValue(objHeader.ShippingReport);
+                App.Active.setValue(objHeader.Active);
+                App.AutoPromotion.setValue(objHeader.AutoPromotion);
+                App.RequiredVATInvcNbr.setValue(objHeader.RequiredVATInvcNbr);
+                App.ApplShift.setValue(objHeader.ApplShift);
+                App.BO.setValue(objHeader.BO);
+                App.TaxFee.setValue(objHeader.TaxFee);
+
+                this.result.lstgrd.forEach(function (item) {
+                    insertItemGrid(App.grdOM_DocNumbering, item);
+                });
+            }
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
+
+};
+var insertItemGrid = function (grd, item) {
+    var objDetail = App.stoOM_DocNumbering.data.items[App.stoOM_DocNumbering.getCount() - 1];
+
+    objDetail.set('BranchID', item.BranchID);
+    objDetail.set('LastARRefNbr', item.LastARRefNbr);
+    objDetail.set('LastInvcNbr', item.LastInvcNbr);
+    objDetail.set('LastInvcNote', item.LastInvcNote);
+    objDetail.set('LastOrderNbr', item.LastOrderNbr);
+    objDetail.set('LastShipperNbr', item.LastShipperNbr);
+    //objDetail.set('OrderType', item.OrderType);
+    objDetail.set('PreFixIN', item.PreFixIN);
+    objDetail.set('PreFixSO', item.PreFixSO);
+    objDetail.set('PreFixShip', item.PreFixShip);
+
+    HQ.store.insertBlank(App.stoOM_DocNumbering, keys);
+};
+// Event when cboOrderType_Main is changed or selected item 
+var cboOrderType_Sub_Change = function (sender, value) {
+    if (value != "" && App.cboOrderType_Main.getValue() != null) {
+        App.btnCopyFrom.setDisabled(false);
+    }
+    else {
+        App.btnCopyFrom.setDisabled(true);
+    }
+};
+
+// Event when cboOrderType_Main is changed or selected item 
 var cboOrderType_Main_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null) {
-        App.stoOM_OrderType.reload();
-        //App.stoOM_DocNumbering.reload();
+        App.stoOM_OrderType.reload();              
     }
+    App.btnCopyFrom.setDisabled(true);
+    App.cboOrderType_Sub.setValue("");
 };
 
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
@@ -227,7 +300,14 @@ var cboOrderType_Main_TriggerClick = function (sender, value) {
         menuClick('new');
     }
 };
-
+var cboOrderType_Sub_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
+    }
+};
 function save() {
     //dòng này để bắt các thay đổi của form 
     App.frmMain.getForm().updateRecord();
@@ -265,7 +345,6 @@ function deleteData(item) {
                 success: function (action, data) {
                     App.cboOrderType_Main.setValue("");
                     App.cboOrderType_Main.getStore().load(function () { cboOrderType_Main_Change(App.cboOrderType_Main); });
-
                 },
                 failure: function (action, data) {
                     if (data.result.msgCode) {
@@ -280,34 +359,6 @@ function deleteData(item) {
     }
 };
 
-//var deleteData = function (item) {
-//    if (item == "yes") {
-//        if (_focusNo == 0) {
-//            if (App.frmMain.isValid()) {
-//                App.frmMain.updateRecord();
-//                App.frmMain.submit({
-//                    waitMsg: HQ.common.getLang("DeletingData"),
-//                    url: 'OM20400/DeleteAll',
-//                    timeout: 7200,
-//                    success: function (msg, data) {
-//                        App.cboUserID.getStore().load();
-//                        menuClick("new");
-//                    },
-//                    failure: function (msg, data) {
-//                        HQ.message.process(msg, data, true);
-//                    }
-//                });
-//            }
-
-//        }
-//        else if (_focusNo == 1) {
-//            App.grdOM_DocNumbering.deleteSelected();
-//        }
-//        else if (_focusNo == 2) {
-//            App.grdSYS_SubCompany.deleteSelected();
-//        }
-//    }
-//};
 
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
@@ -320,8 +371,6 @@ function refresh(item) {
             App.cboOrderType_Main.setValue(OrderType);
             App.stoOM_OrderType.reload();
         });
-
-        //App.cboOrderType_Main.getStore().load(function () { App.stoSYS_Company.reload(); });
     }
 };
-///////////////////////////////////
+/////////////////////////////////////////////////////////////////////////

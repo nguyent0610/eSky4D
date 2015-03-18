@@ -50,10 +50,10 @@
                 })
                 .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
             )
-            .Parameters(ps =>
-            {
-                ps.Add(new StoreParameter("OrderType", "App.cboOrderType_Main.getValue()", ParameterMode.Raw));
-            })      
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("OrderType", "App.cboOrderType_Main.getValue()", ParameterMode.Raw));
+                    })      
             .Listeners(l =>
                 {
                     l.BeforeLoad.Fn = "stoBeforeLoad";

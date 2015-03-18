@@ -1,26 +1,45 @@
-var keys = ['GroupID'];
-var keysHeader = ['UserName'];
-
-var fieldsCheckRequireHeader = ["FirstName"];//, "LastName", "Address", "Name", "Email", "Tel", "Password", "PasswordQuestion", "PasswordAnswer", "CpnyID", "UserTypes", "Channel", "ExpireDay"];
-var fieldsLangCheckRequireHeader = ["FirstName"];//, "LastName", "Address", "Name", "Email", "Tel", "Password", "PasswordQuestion", "PasswordAnswer", "CpnyID", "UserTypes", "Channel", "ExpireDay"];
-
-var fieldsCheckRequireUserGroup = ["GroupID"];
-var fieldsLangCheckRequireUserGroup = ["GroupID"];
-
-var fieldsCheckRequireUserCompany = ["GroupID"];
-var fieldsLangCheckRequireUserCompany = ["GroupID"];
+﻿var keys = ['BranchID'];
+var fieldsCheckRequire = ["BranchID"];
+var fieldsLangCheckRequire = ["BranchID"];
 
 var _focusNo = 0;
 
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboOrderType_Main.getStore().load(function () {
+        App.cboOrderType_Sub.getStore().load(function () {
+            App.cboARDOCTYPE.getStore().load(function () {
+                App.cboINDocType.getStore().load(function () {
+                    App.cboDfltCustID.getStore().load(function () {
+                        App.cboSalesType.getStore().load(function () {
+                            App.cboDiscType.getStore().load(function () {
+                                HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                                App.btnCopyFrom.setDisabled(true);
+                                App.stoOM_OrderType.load({
+                                    params: {
+                                        OrderType: App.cboOrderType_Main.getValue()
+                                    }
+                                });
+                                App.stoOM_DocNumbering.reload({
+                                    params: {
+                                        OrderType: App.cboOrderType_Main.getValue()
+                                    }
+                                });
+                            })
+                        })
+                    })
+                })
+            })
+        })
+    });
+};
+
 var pnl_render = function (cmd) {
     cmd.getEl().on('mousedown', function () {
-        if (cmd.id == 'pnlUserGroup') {
+        if (cmd.id == 'pnlOM_Numbering') {
             _focusNo = 1;
         }
-        else if (cmd.id == 'pnlUserCompany') {
-            _focusNo = 2;
-        }
-        else {//pnlHeader
+        else {
             _focusNo = 0;
         }
     });
@@ -30,114 +49,89 @@ var menuClick = function (command) {
     switch (command) {
         case "first":
             if (_focusNo == 0) {
-                App.cboUserID.setValue(App.cboUserID.getStore().first().get('UserName'));
+                HQ.combo.first(App.cboOrderType_Main, HQ.isChange);
             }
-            else if (_focusNo == 1) {
-                HQ.grid.first(App.grdSYS_UserGroup);
-            }
-            else if (_focusNo == 2) {
-                HQ.grid.first(App.grdSYS_UserCompany);
+            else {
+                HQ.grid.first(App.grdOM_DocNumbering);
             }
             break;
         case "prev":
             if (_focusNo == 0) {
-                var combobox = App.cboUserID;
-                var v = combobox.getValue();
-                var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
-                var index = combobox.store.indexOf(record);
-                App.cboUserID.setValue(combobox.store.getAt(index - 1).data.UserName);
+                HQ.combo.prev(App.cboOrderType_Main, HQ.isChange);
             }
-            else if (_focusNo == 1) {
-                HQ.grid.prev(App.grdSYS_UserGroup);
-            }
-            else if (_focusNo == 2) {
-                HQ.grid.prev(App.grdSYS_UserCompany);
+            else {
+                HQ.grid.prev(App.grdOM_DocNumbering);
             }
             break;
         case "next":
             if (_focusNo == 0) {
-                var combobox = App.cboUserID;
-                var v = combobox.getValue();
-                var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
-                var index = combobox.store.indexOf(record);
-                App.cboUserID.setValue(combobox.store.getAt(index + 1).data.UserName);
+                HQ.combo.next(App.cboOrderType_Main, HQ.isChange);
             }
-            else if (_focusNo == 1) {
-                HQ.grid.next(App.grdSYS_UserGroup);
-            }
-            else if (_focusNo == 2) {
-                HQ.grid.next(App.grdSYS_UserCompany);
+            else {
+                HQ.grid.next(App.grdOM_DocNumbering);
             }
             break;
         case "last":
             if (_focusNo == 0) {
-                App.cboUserID.setValue(App.cboUserID.getStore().last().get('UserName'));
+                HQ.combo.last(App.cboOrderType_Main, HQ.isChange);
             }
-            else if (_focusNo == 1) {
-                HQ.grid.last(App.grdSYS_UserGroup);
-            }
-            else if (_focusNo == 2) {
-                HQ.grid.last(App.grdSYS_UserCompany);
+            else {
+                HQ.grid.last(App.grdOM_DocNumbering);
             }
             break;
         case "refresh":
-            App.stoUser.load();
-            App.stoSYS_UserGroup.reload();
-            App.stoSYS_UserCompany.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                if (App.cboOrderType_Main.valueModels == null) App.cboOrderType_Main.setValue('');
+                App.cboOrderType_Main.getStore().load(function () {
+                    App.stoOM_OrderType.reload({
+                        params: {
+                            OrderType: App.cboOrderType_Main.getValue()
+                        }
+                    });
+                });
+            }
             break;
         case "new":
-            if (_focusNo == 0) {
-                App.cboUserID.setValue("");
-                App.stoSYS_UserGroup.reload();
-                App.stoSYS_UserCompany.reload()
-            }
-            else if (_focusNo == 1) {
-                if (HQ.isInsert) {
-                    HQ.grid.insert(App.grdSYS_UserGroup);
+            if (HQ.isInsert) {
+                if (_focusNo == 0) {
+                    if (HQ.isChange) {
+                        HQ.message.show(150, '', '');
+                    }
+                    else {
+                        App.cboOrderType_Main.setValue('');
+                    }
                 }
-            }
-            else if (_focusNo == 2) {
-                if (HQ.isInsert) {
-                    HQ.grid.insert(App.grdSYS_UserCompany);
+                else {
+                    HQ.grid.insert(App.grdOM_DocNumbering, keys);
                 }
             }
             break;
         case "delete":
-            if (_focusNo == 0) {
-                if (App.cboUserID.value) {
-                    if (HQ.isDelete) {
-                        HQ.message.show(11, '', 'deleteData');
-                    }
-                } else {
-                    menuClick('new');
-                }
-            }
-            else if (_focusNo == 1) {
-                if (App.slmSYS_UserGroup.selected.items[0] != undefined) {
-                    if (HQ.isDelete) {
+            if (HQ.isDelete) {
+                if (_focusNo == 0) {
+                    var curRecord = App.frmMain.getRecord();
+                    if (curRecord) {
                         HQ.message.show(11, '', 'deleteData');
                     }
                 }
-            }
-            else if (_focusNo == 2) {
-                if (App.slmSYS_UserCompany.selected.items[0] != undefined) {
-                    if (HQ.isDelete) {
-                        HQ.message.show(11, '', 'deleteData');
+                else {
+                    if (App.slmOM_DocNumbering.selected.items[0] != undefined) {
+                        var rowindex = HQ.grid.indexSelect(App.grdOM_DocNumbering);
+                        if (rowindex != '')
+                            HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdOM_DocNumbering), ''], 'deleteData', true)
                     }
                 }
+
             }
             break;
         case "save":
-
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                //if (checkRequire(App.stoSYS_UserGroup.getChangedData().Created) && checkRequire(App.stoSYS_UserGroup.getChangedData().Updated)
-                //    || checkRequire(App.stoSYS_UserCompany.getChangedData().Created) && checkRequire(App.stoSYS_UserCompany.getChangedData().Updated)
-                //    ) {
-                //if (App.frmMain.isValid()) {
-                //App.frmMain.updateRecord();
-
-                if (HQ.form.checkRequirePass(App.frmMain) && HQ.util.checkEmail(App.Email.value) && HQ.store.checkRequirePass(App.stoSYS_UserGroup, keys, fieldsCheckRequireUserGroup, fieldsLangCheckRequireUserGroup)
-                        && HQ.store.checkRequirePass(App.stoSYS_UserCompany, keys, fieldsCheckRequireUserCompany, fieldsLangCheckRequireUserCompany)) {
+                if (HQ.form.checkRequirePass(App.frmMain)
+                    && HQ.store.checkRequirePass(App.stoOM_OrderType, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -145,197 +139,223 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
-            if (HQ.store.isChange(App.stoUser) || HQ.store.isChange(App.stoSYS_UserCompany) || HQ.store.isChange(App.stoSYS_UserGroup)) {
-                HQ.message.show(7, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
 };
 
-var focusChecking = function (item) {
-    if (App[invalidField]) {
-        App[invalidField].focus();
+//load lần đầu khi mở
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    loadSourceCombo();
+};
+////////////Kiem tra combo chinh CpnyID
+//khi co su thay doi du lieu cua cac conttol tren form
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = (HQ.store.isChange(App.stoOM_OrderType) == false ? HQ.store.isChange(App.stoOM_DocNumbering) : true);
+    HQ.common.changeData(HQ.isChange, 'OM20400');//co thay doi du lieu gan * tren tab title header
+    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+    if (App.cboOrderType_Main.valueModels == null || HQ.isNew == true)
+        App.cboOrderType_Main.setReadOnly(false);
+    else App.cboOrderType_Main.setReadOnly(HQ.isChange);
+};
+
+
+//xu li su kiem tren luoi giong nhu luoi binh thuong
+var grdOM_DocNumbering_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdOM_DocNumbering_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdOM_DocNumbering, e, keys);
+    frmChange();
+};
+var grdOM_DocNumbering_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdOM_DocNumbering, e, keys);
+};
+var grdOM_DocNumbering_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_DocNumbering);
+    //stoChanged(App.stoSys_CompanyAddr);
+    frmChange();
+};
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM20400');
+};
+
+//load store khi co su thay doi CpnyID
+var stoLoad = function (sto) {
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(false);
+    HQ.isNew = false;
+    App.cboOrderType_Main.forceSelection = true;
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "OrderType");
+        record = sto.getAt(0);
+
+        HQ.isNew = true;//record la new    
+        App.cboOrderType_Main.forceSelection = false;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboOrderType_Main.focus(true);//focus ma khi tao moi
+        sto.commitChanges();
     }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+
+    //App.stoOM_DocNumbering.reload({
+    //    params: {
+    //        OrderType: App.cboOrderType_Main.getValue()
+    //    }
+    //});
 };
 
-var tabOM20400_AfterRender = function (obj) {
-    if (this.parentAutoLoadControl != null)
-        obj.setHeight(this.parentAutoLoadControl.getHeight() - 100);
-    else {
-        obj.setHeight(Ext.getBody().getViewSize().height - 100);
-    }
-};
-
-var cboCpnyID_Change = function (item, newValue, oldValue) {
-    App.stoSYS_Company.load();
-    //App.grdSYS_UserGroup.store.reload();
-    //App.grdSYS_UserCompany.store.reload();
-};
-
-
-var frmloadAfterRender = function (obj) {
-    App.stoUser.load();
-    App.stoSYS_UserGroup.load();
-    App.stoSYS_UserCompany.load();
-};
-
-var loadData = function () {
-    var record = App.stoUser.getAt(0);
-    if (record) {
-        // Edit record
-        App.frmMain.getForm().loadRecord(record);
-
-        if (record.data.Images) {
-            App.direct.OM20400GetImages(record.data.Images);
-        } else {
-            App.imgPPCStorePicReq.setImageUrl("");
+var stoLoadOM_DocNumbering = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
         }
-
-    } else {
-        // If has no record then create a new
-        App.stoUser.insert(0, Ext.data.Record());
-        App.frmMain.getForm().loadRecord(App.stoUser.getAt(0));
-        App.imgPPCStorePicReq.setImageUrl("");
+        HQ.isFirstLoad = false;
     }
-
-
-    //if (App.stoUser.getCount() == 0) {
-    //    App.stoUser.insert(0, Ext.data.Record());
-    //}
-    //App.frmMain.getForm().loadRecord(App.stoUser.getAt(0));
-    //App.direct.OM20400GetImages(App.stoUser.getAt(0).data.Images);
+    frmChange();
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 
-function UploadImage() {
+var btnCopyFrom_Click = function (sender, e) {
+
     App.frmMain.submit({
-        waitMsg: 'Uploading your file...',
-        url: 'OM20400/OM20400Upload',
-        success: function (result) {
-            //
+        waitMsg: HQ.waitMsg,
+        clientValidation: false,
+        method: 'POST',
+        url: 'OM20400/CopyFrom',
+        timeout: 1000000,
+        params: {
+            OrderType: App.cboOrderType_Sub.getValue()
         },
-        failure: function (error) {
-            //
+        success: function (msg, data) {
+            var objHeader = this.result.header;
+            if (objHeader != undefined) {
+
+                App.cboARDOCTYPE.setValue(objHeader.ARDocType);
+                App.Descr.setValue(objHeader.Descr);
+                App.cboINDocType.setValue(objHeader.INDocType);
+                App.DaysToKeep.setValue(objHeader.DaysToKeep);
+                App.cboDfltCustID.setValue(objHeader.DfltCustID);
+                App.cboSalesType.setValue(objHeader.SalesType);
+                App.cboDiscType.setValue(objHeader.DiscType);
+                App.ShippingReport.setValue(objHeader.ShippingReport);
+                App.Active.setValue(objHeader.Active);
+                App.AutoPromotion.setValue(objHeader.AutoPromotion);
+                App.RequiredVATInvcNbr.setValue(objHeader.RequiredVATInvcNbr);
+                App.ApplShift.setValue(objHeader.ApplShift);
+                App.BO.setValue(objHeader.BO);
+                App.TaxFee.setValue(objHeader.TaxFee);
+
+                this.result.lstgrd.forEach(function (item) {
+                    insertItemGrid(App.grdOM_DocNumbering, item);
+                });
+            }
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
         }
     });
-};
 
-var NamePPCStorePicReq_Change = function (sender, e) {
-    var fileName = sender.getValue();
-    var ext = fileName.split(".").pop().toLowerCase();
-    if (ext == "jpg" || ext == "png" || ext == "gif") {
-        UploadImage();
-        var curRecord = App.frmMain.getRecord();
-        curRecord.data.Images = App.imgPPCStorePicReq.imageUrl;
-        curRecord.setDirty();
-    } else {
-        alert("Please choose a picture! (.jpg, .png, .gif)");
-        sender.reset();
-    }
 };
+var insertItemGrid = function (grd, item) {
+    var objDetail = App.stoOM_DocNumbering.data.items[App.stoOM_DocNumbering.getCount() - 1];
 
-var btnClearImage_Click = function (sender, e) {
-    App.imgPPCStorePicReq.setImageUrl("");
-    var curRecord = App.frmMain.getRecord();
-    curRecord.data.Images = "";
-    curRecord.setDirty();
+    objDetail.set('BranchID', item.BranchID);
+    objDetail.set('LastARRefNbr', item.LastARRefNbr);
+    objDetail.set('LastInvcNbr', item.LastInvcNbr);
+    objDetail.set('LastInvcNote', item.LastInvcNote);
+    objDetail.set('LastOrderNbr', item.LastOrderNbr);
+    objDetail.set('LastShipperNbr', item.LastShipperNbr);
+    //objDetail.set('OrderType', item.OrderType);
+    objDetail.set('PreFixIN', item.PreFixIN);
+    objDetail.set('PreFixSO', item.PreFixSO);
+    objDetail.set('PreFixShip', item.PreFixShip);
+
+    HQ.store.insertBlank(App.stoOM_DocNumbering, keys);
 };
-
-var chkPublic_Change = function (checkbox, checked) {
-    if (checked) {
-        App.tabOM20400.closeTab(App.pnlPO_PriceCpny);
+// Event when cboOrderType_Main is changed or selected item 
+var cboOrderType_Sub_Change = function (sender, value) {
+    if (value != "" && App.cboOrderType_Main.getValue() != null) {
+        App.btnCopyFrom.setDisabled(false);
     }
     else {
-        App.tabOM20400.addTab(App.pnlPO_PriceCpny);
+        App.btnCopyFrom.setDisabled(true);
     }
 };
 
-var cboInvtID_Change = function (item, newValue, oldValue) {
-
-};
-
-//grd SYS_UserGroup
-var grdSYS_UserGroup_BeforeEdit = function (editor, e) {
-    if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
-};
-
-var grdSYS_UserGroup_Edit = function (item, e) {
-    //Kiem tra cac key da duoc nhap se insert them dong moi
-    HQ.grid.checkInsertKey(App.grdSYS_UserGroup, e, keys);
-
-    if (e.field == "GroupID") {
-        var selectedRecord = App.cboGroupIDGroup.store.findRecord(e.field, e.value);
-        if (selectedRecord) {
-            e.record.set("Descr", selectedRecord.data.Descr);
-        }
-        else {
-            e.record.set("Descr", "");
-        }
+// Event when cboOrderType_Main is changed or selected item 
+var cboOrderType_Main_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null) {
+        App.stoOM_OrderType.load({
+            params: {
+                OrderType: App.cboOrderType_Main.getValue()
+            }
+        });
+        App.stoOM_DocNumbering.reload({
+            params: {
+                OrderType: App.cboOrderType_Main.getValue()
+            }
+        });
+        //App.stoOM_DocNumbering.reload();
     }
-
+    App.btnCopyFrom.setDisabled(true);
+    App.cboOrderType_Sub.setValue("");
 };
 
-var grdSYS_UserGroup_ValidateEdit = function (item, e) {
-    //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
-    return HQ.grid.checkValidateEdit(App.grdSYS_UserGroup, e, keys);
-};
-
-var grdSYS_UserGroup_Reject = function (record) {
-    //reject dong thay doi du lieu ve ban dau
-    HQ.grid.checkReject(record, App.grdSYS_UserGroup);
-};
-
-//grd SYS_UserCompany
-var grdSYS_UserCompany_BeforeEdit = function (editor, e) {
-    //Kiem tra cac key da duoc nhap se insert them dong moi
-    HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys);
-};
-
-var grdSYS_UserCompany_Edit = function (item, e) {
-    //Kiem tra cac key da duoc nhap se insert them dong moi
-    HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys);
-
-    if (e.field == "GroupID") {
-        var selectedRecord = App.cboGroupIDCompany.store.findRecord(e.field, e.value);
-        if (selectedRecord) {
-            e.record.set("ListCpny", selectedRecord.data.ListCpny);
-            e.record.set("Descr", selectedRecord.data.Descr);
-        }
-        else {
-            e.record.set("ListCpny", "");
-            e.record.set("Descr", "");
-        }
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboOrderType_Main_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboOrderType_Main.collapse();
     }
-
 };
-
-var grdSYS_UserCompany_ValidateEdit = function (item, e) {
-    //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
-    return HQ.grid.checkValidateEdit(App.grdSYS_UserCompany, e, keys);
+//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
+var cboOrderType_Main_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
+    }
 };
-
-var grdSYS_UserCompany_Reject = function (record) {
-    //reject dong thay doi du lieu ve ban dau
-    HQ.grid.checkReject(record, App.grdSYS_UserCompany);
+var cboOrderType_Sub_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
+    }
 };
-
-var save = function () {
+function save() {
+    //dòng này để bắt các thay đổi của form 
+    App.frmMain.getForm().updateRecord();
     if (App.frmMain.isValid()) {
-        App.frmMain.updateRecord();
         App.frmMain.submit({
-            waitMsg: HQ.common.getLang("WaitMsg"),
+            waitMsg: 'Submiting...',
             url: 'OM20400/Save',
             params: {
-                lstUser: HQ.store.getData(App.frmMain.getRecord().store),
-                lstSYS_UserCompany: HQ.store.getData(App.stoSYS_UserCompany),
-                lstSYS_UserGroup: HQ.store.getData(App.stoSYS_UserGroup)
+                lstOM_OrderType: Ext.encode(App.stoOM_OrderType.getChangedData({ skipIdForPhantomRecords: false })),
+                lstOM_DocNumbering: Ext.encode(App.stoOM_DocNumbering.getChangedData({ skipIdForPhantomRecords: false })),
+                isNew: HQ.isNew
             },
-            success: function (msg, data) {
-                HQ.message.show(201405071);
-                App.cboUserID.getStore().reload();
-                menuClick("refresh");
+            success: function (result, data) {
+                HQ.message.show(201405071, '', '');
+                var OrderType = data.result.OrderType;
+                App.cboOrderType_Main.getStore().load(function () {
+                    App.cboOrderType_Main.setValue(OrderType);
+                    App.stoOM_OrderType.reload({
+                        params: {
+                            OrderType: App.cboOrderType_Main.getValue()
+                        }
+                    });
+                });
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -344,38 +364,46 @@ var save = function () {
     }
 };
 
-var deleteData = function (item) {
-    if (item == "yes") {
+// Submit the deleted data into server side
+function deleteData(item) {
+    if (item == 'yes') {
         if (_focusNo == 0) {
-            if (App.frmMain.isValid()) {
-                App.frmMain.updateRecord();
-                App.frmMain.submit({
-                    waitMsg: HQ.common.getLang("DeletingData"),
-                    url: 'OM20400/DeleteAll',
-                    timeout: 7200,
-                    success: function (msg, data) {
-                        App.cboUserID.getStore().load();
-                        menuClick("new");
-                    },
-                    failure: function (msg, data) {
-                        HQ.message.process(msg, data, true);
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang('DeletingData'),
+                url: 'OM20400/DeleteAll',
+                success: function (action, data) {
+                    App.cboOrderType_Main.setValue("");
+                    App.cboOrderType_Main.getStore().load(function () { cboOrderType_Main_Change(App.cboOrderType_Main); });
+                },
+                failure: function (action, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode, data.result.msgParam, '');
                     }
-                });
-            }
-
+                }
+            });
         }
-        else if (_focusNo == 1) {
-            App.grdSYS_UserGroup.deleteSelected();
-        }
-        else if (_focusNo == 2) {
-            App.grdSYS_UserCompany.deleteSelected();
+        else {
+            App.grdOM_DocNumbering.deleteSelected();
         }
     }
 };
 
+
+/////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.close(this);
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        var OrderType = '';
+        if (App.cboOrderType_Main.valueModels != null) OrderType = App.cboOrderType_Main.getValue();
+        App.cboOrderType_Main.getStore().load(function () {
+            App.cboOrderType_Main.setValue(OrderType);
+            App.stoOM_OrderType.reload({
+                params: {
+                    OrderType: App.cboOrderType_Main.getValue()
+                }
+            });
+        });
     }
 };
+/////////////////////////////////////////////////////////////////////////

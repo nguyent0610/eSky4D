@@ -33,6 +33,12 @@ namespace OM20400.Controllers
             return PartialView();
         }
 
+        public ActionResult CopyFrom(string OrderType)
+        {
+            var obj=_db.OM_OrderType.FirstOrDefault(p => p.OrderType == OrderType);
+            var lstgrd = _db.OM20400_pgOM_DocNumbering(OrderType).ToList();
+            return Json(new { success = true, header = obj, lstgrd = lstgrd });
+        }
         #region Get information Company
         public ActionResult GetOM_OrderType(string OrderType)
         {
@@ -204,7 +210,7 @@ namespace OM20400.Controllers
         {
             try
             {
-                string OrderType = data["cboOrderType"];
+                string OrderType = data["cboOrderType_Main"];
                 var cpny = _db.OM_OrderType.FirstOrDefault(p => p.OrderType == OrderType);
                 if (cpny != null)
                 {
