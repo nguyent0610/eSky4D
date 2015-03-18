@@ -2,8 +2,8 @@
 
 
 var keys = ['Code'];
-var fieldsCheckRequire = ["Title00", "Title01", "Msg00", "Msg01"];
-var fieldsLangCheckRequire = ["Title00", "Title01", "Msg00", "Msg01"];
+var fieldsCheckRequire = ["Code","Type","Title00", "Title01", "Msg00", "Msg01"];
+var fieldsLangCheckRequire = ["Code","Type","Title00", "Title01", "Msg00", "Msg01"];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////

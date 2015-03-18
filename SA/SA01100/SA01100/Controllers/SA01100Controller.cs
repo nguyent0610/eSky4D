@@ -26,7 +26,7 @@ namespace SA01100.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -53,17 +53,17 @@ namespace SA01100.Controllers
 
                 lstSYS_Message.Created.AddRange(lstSYS_Message.Updated);
 
-                foreach (SA01100_pgSYS_Message_Result curRow in lstSYS_Message.Created)
+                foreach (SA01100_pgSYS_Message_Result curLang in lstSYS_Message.Created)
                 {
-                    if (curRow.Code.PassNull() == "") continue;
+                    if (curLang.Code.PassNull() == "") continue;
 
-                    var lang = _db.SYS_Message.Where(p => p.Code== curRow.Code).FirstOrDefault();
+                    var lang = _db.SYS_Message.FirstOrDefault(p => p.Code == curLang.Code);
 
                     if (lang != null)
                     {
-                        if (lang.tstamp.ToHex() == curRow.tstamp.ToHex())
+                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
                         {
-                            Update(lang, curRow, false);
+                            UpdateSYS_Message(lang, curLang, false);
                         }
                         else
                         {
@@ -73,11 +73,13 @@ namespace SA01100.Controllers
                     else
                     {
                         lang = new SYS_Message();
-                        Update(lang, curRow, true);
+                        UpdateSYS_Message(lang, curLang, true);
                         _db.SYS_Message.AddObject(lang);
                     }
                 }
+
                 _db.SaveChanges();
+     
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -86,7 +88,7 @@ namespace SA01100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        private void Update(SYS_Message t, SA01100_pgSYS_Message_Result s, bool isNew)
+        private void UpdateSYS_Message(SYS_Message t, SA01100_pgSYS_Message_Result s, bool isNew)
         {
             if (isNew)
             {
@@ -95,6 +97,8 @@ namespace SA01100.Controllers
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
+
+            t.Type = s.Type;
             t.Title00 = s.Title00;
             t.Title01 = s.Title01;
             t.Title02 = s.Title02;
