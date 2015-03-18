@@ -97,8 +97,8 @@
                                 //ma khach hang
                                 HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").HQProcedure("AR20400_pcCustomer")
                                 .HQColumnShow("CustId,CustName,Addr1,Addr2").DisplayField("CustId").ValueField("CustId")
-                                .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                                .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
+                                .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").Editable(false)
+                                .HQDBSys(false).MaxLength(50).EnforceMaxLength(true)
                                 //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .HQParam(new StoreParameterCollection()
                                 {
@@ -166,8 +166,8 @@
                                         {
                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                             lst.Focus.Handler = "this.forceSelection = true;";
-                                            
-                                            //lst.Focus.Fn = "Focus1_Change";
+
+                                            lst.Change.Fn = "cboClassId_Change";
                                         })    
                                     
                                      //Loai KH (CustType)
@@ -757,7 +757,7 @@
                                                                     //Dat nuoc
                                                                     ,HQ.Combo().ID("cboCountry").Name("cboCountry").HQProcedure("AR20400_pcCountryID")
                                                                     .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID").DataIndex("Country")
-                                                                    .Width(200).HQHeightWidth(400, 500).MarginSpec("10 0 0 0")
+                                                                    .Width(200).HQHeightWidth(400, 500).MarginSpec("10 0 0 0").AllowBlank(false)
                                                                     .HQDBSys(false).MaxLength(3).EnforceMaxLength(true).ForceSelection(false)
                                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                                     .LoadData()//.HQValue("VN",true)
@@ -772,7 +772,7 @@
                                                                     //Tinh
                                                                     ,HQ.Combo().ID("cboState").Name("cboState").HQProcedure("AR20400_pcStateByCountry")
                                                                     .HQColumnShow("State,Descr").DisplayField("State").ValueField("State").DataIndex("State")
-                                                                    .Width(200).HQHeightWidth(400, 500).MarginSpec("10 0 0 0")
+                                                                    .Width(200).HQHeightWidth(400, 500).MarginSpec("10 0 0 0").AllowBlank(false)
                                                                     .HQDBSys(false).MaxLength(10).EnforceMaxLength(true).ForceSelection(false)
                                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                                     .HQParam(new StoreParameterCollection()
@@ -811,7 +811,7 @@
                                                                     //Quan
                                                                     ,HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQProcedure("AR20400_pcDistrictByCountryState")
                                                                     .HQColumnShow("District,Name").DisplayField("District").ValueField("District").DataIndex("District")
-                                                                    .Width(200).HQHeightWidth(400, 500).MarginSpec("10 0 0 0")
+                                                                    .Width(200).HQHeightWidth(400, 500).MarginSpec("10 0 0 0").AllowBlank(false)
                                                                     .HQDBSys(false).MaxLength(30).EnforceMaxLength(true).ForceSelection(false)
                                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                                     .HQParam(new StoreParameterCollection()

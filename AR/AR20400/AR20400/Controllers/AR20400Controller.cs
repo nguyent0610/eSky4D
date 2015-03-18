@@ -285,7 +285,7 @@ namespace AR20400.Controllers
                 var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
                 var Role = user.UserTypes;
                 //var custName = data["txtCustName"];
-
+                var tmpCustID = "";
                 //var statusAfterAll = "";
                 foreach (AR_Customer updated in lstheader.Updated)
                 {
@@ -293,6 +293,9 @@ namespace AR20400.Controllers
 
 
                     var objAR_Customer = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
+                    var cpny = _db.AR_Setup.FirstOrDefault(p => p.BranchID == branchID && p.SetupId == "AR");
+                    //bien tam dung de xai khi co autoCustID xay ra
+                    
                     //if (tmpHiddenTree == false)
                     //{
                         if (isNew)//new record
@@ -307,7 +310,17 @@ namespace AR20400.Controllers
                                 if (hadChild != 0)
                                 {
                                     objAR_Customer = new AR_Customer();
-                                    objAR_Customer.CustId = custID;
+                                    String[] nodeid = nodeID.Split('-');
+                                    if (cpny.AutoCustID == false)
+                                    {
+                                        objAR_Customer.CustId = custID;
+                                        tmpCustID = objAR_Customer.CustId;
+                                    }
+                                    else
+                                    {
+                                        objAR_Customer.CustId = functionAutoCustID(branchID, nodeid[0]);
+                                        tmpCustID = objAR_Customer.CustId;
+                                    }
                                     objAR_Customer.BranchID = branchID;
 
                                     if (handle == "N" || handle == "")
@@ -330,7 +343,7 @@ namespace AR20400.Controllers
                                     }
                                     //statusAfterAll = objAR_Customer.Status;
 
-                                    String[] nodeid = nodeID.Split('-');
+                                    
                                     objAR_Customer.NodeID = nodeid[0];
                                     objAR_Customer.NodeLevel = Convert.ToInt16(nodeLevel);
                                     var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
@@ -346,9 +359,11 @@ namespace AR20400.Controllers
                                     {
                                         objAR_Customer.EstablishDate = null;
                                     }
-                                    _db.AR_Customer.AddObject(objAR_Customer);
-                                    _db.SaveChanges();
-
+                                    if (objAR_Customer.CustId != "" && objAR_Customer.BranchID != "")
+                                    {
+                                        _db.AR_Customer.AddObject(objAR_Customer);
+                                        _db.SaveChanges();
+                                    }
 
                                     //save may bang khac
                                     var objAR_Setup = _db.AR_Setup.Where(p => p.BranchID == brandID && p.SetupId == "AR").FirstOrDefault();
@@ -556,16 +571,7 @@ namespace AR20400.Controllers
                         //this.Direct();
 
 
-                        if (hadChild != 0)
-                        {
-                             return Json(new { success = true, custID = custID, custName = custName, addNewOrUpdate = "addNew", changeTreeBranch = tmpChangeTreeDic, selectedNode = tmpSelectedNode }, JsonRequestBehavior.AllowGet);
-                            //return Json(new { success = true });
-                        }
-                        else
-                        {
-                            //return Json(new { success = true });
-                             Json(new { success = true, custID = custID, custName = custName, addNewOrUpdate = "update"}, JsonRequestBehavior.AllowGet);
-                        }
+                 
                     //}
                     //else //truong hop ko co tree
                     //{
@@ -668,9 +674,45 @@ namespace AR20400.Controllers
 
                     //    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                     //}
-
+                        if (hadChild != 0)
+                        {
+                            return Json(new { success = true, custID = tmpCustID, custName = custName, addNewOrUpdate = "addNew", changeTreeBranch = tmpChangeTreeDic, selectedNode = tmpSelectedNode }, JsonRequestBehavior.AllowGet);
+                            //return Json(new { success = true });
+                        }
+                        else
+                        {
+                            //return Json(new { success = true });
+                            Json(new { success = true, custID = tmpCustID, custName = custName, addNewOrUpdate = "update" }, JsonRequestBehavior.AllowGet);
+                        }
                 //dong ngoac foreach Customer        
                 }
+
+                //de bat su thay doi chi handle thoi
+                var objAR_CustomerNoChange = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
+                if (objAR_CustomerNoChange != null)
+                {
+                    if (handle == "N" || handle == "")
+                    {
+                        objAR_CustomerNoChange.Status = status;
+                    }
+                    else
+                    {
+                        objAR_CustomerNoChange.Status = approveHandle.ToStatus;
+
+                    }
+                    if (objAR_CustomerNoChange.Status == "O")
+                    {
+                        X.Msg.Show(new MessageBoxConfig()
+                        {
+                            Message = "Email sent!"
+                        });
+                        Approve.Mail_Approve(screenNbr, custID, Role, objAR_CustomerNoChange.Status, handle,
+                                        lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
+                    }
+                    _db.SaveChanges();
+
+                }
+
 
                 //xet cac tab co the an xem co thay doi gi ko
                 var TabContract = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabContract");
@@ -702,8 +744,8 @@ namespace AR20400.Controllers
                     SaveAR_CustDisplayMethod(data, custID);
 
                 }
-
-                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true});
+                
             //dong ngoac try
             }
             catch (Exception ex)
@@ -731,8 +773,9 @@ namespace AR20400.Controllers
                 var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
                 var Role = user.UserTypes;
 
-                
+                var cpny = _db.AR_Setup.FirstOrDefault(p => p.BranchID == branchID && p.SetupId == "AR");
 
+                var tmpCustID = "";
                 foreach (AR_Customer updated in lstheader.Updated)
                 {
                     //Save AR_Customer
@@ -748,7 +791,16 @@ namespace AR20400.Controllers
                         {
 
                             objAR_Customer = new AR_Customer();
-                            objAR_Customer.CustId = custID;
+                            if (cpny.AutoCustID == false)
+                            {
+                                objAR_Customer.CustId = custID;
+                                tmpCustID = objAR_Customer.CustId ;
+                            }
+                            else
+                            {
+                                objAR_Customer.CustId = functionAutoCustID(branchID,"0");
+                                tmpCustID = objAR_Customer.CustId;
+                            }
                             objAR_Customer.BranchID = branchID;
 
                             if (handle == "N" || handle == "")
@@ -787,8 +839,11 @@ namespace AR20400.Controllers
                             {
                                 objAR_Customer.EstablishDate = null;
                             }
-                            _db.AR_Customer.AddObject(objAR_Customer);
-                            _db.SaveChanges();
+                            if (objAR_Customer.CustId != "" && objAR_Customer.BranchID != "")
+                            {
+                                _db.AR_Customer.AddObject(objAR_Customer);
+                                _db.SaveChanges();
+                            }
 
                             //save may bang khac
                             var objAR_Setup = _db.AR_Setup.Where(p => p.BranchID == brandID && p.SetupId == "AR").FirstOrDefault();
@@ -899,10 +954,37 @@ namespace AR20400.Controllers
                     }
 
   
-                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                   
 
 
                 } //dong ngoac foreach Customer  
+
+                //de bat su thay doi chi handle thoi
+                var objAR_CustomerNoChange = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
+                if (objAR_CustomerNoChange != null)
+                {
+                    if (handle == "N" || handle == "")
+                    {
+                        objAR_CustomerNoChange.Status = status;
+                    }
+                    else
+                    {
+                        objAR_CustomerNoChange.Status = approveHandle.ToStatus;
+
+                    }
+                    if (objAR_CustomerNoChange.Status == "O")
+                    {
+                        X.Msg.Show(new MessageBoxConfig()
+                        {
+                            Message = "Email sent!"
+                        });
+                        Approve.Mail_Approve(screenNbr, custID, Role, objAR_CustomerNoChange.Status, handle,
+                                        lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
+                    }
+                    _db.SaveChanges();
+
+                }
+
 
 
                 //xet cac tab co the an xem co thay doi gi ko
@@ -937,7 +1019,7 @@ namespace AR20400.Controllers
                 }
 
 
-                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, custID = tmpCustID }, JsonRequestBehavior.AllowGet);
 
 
 
@@ -1051,11 +1133,25 @@ namespace AR20400.Controllers
                 var tmpHiddenTabAdvTool = false;
                 var tmpHiddenTabSellingProduct = false;
                 var tmpHiddenTabDisplayMethod = false;
-                var cpny = _db.AR_Setup.FirstOrDefault(p => p.BranchID == cpnyID && p.SetupId == "AR" && p.HiddenHierarchy == true);
+                var tmpAutoCustID = false;
+                var cpny = _db.AR_Setup.FirstOrDefault(p => p.BranchID == cpnyID && p.SetupId == "AR");
+
                 var TabContract = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabContract");
                 var TabAdvTool = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabAdvTool");
                 var TabSellingProduct = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabSellingProduct");
                 var TabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
+
+                //autoCustID
+                if (cpny.AutoCustID == true)
+                {
+                    tmpAutoCustID = true;
+                }
+                else
+                {
+                    tmpAutoCustID = false;
+                }
+
+
                 //Contract
                 if (TabContract.IntVal == 1)
                 {
@@ -1093,7 +1189,7 @@ namespace AR20400.Controllers
                     tmpHiddenTabDisplayMethod = true;
                 }
 
-                if (cpny != null)
+                if (cpny.HiddenHierarchy == true)
                 {
                     //nếu có thì xóa Tree
                     return Json(new 
@@ -1101,7 +1197,8 @@ namespace AR20400.Controllers
                         success = false, tmpHiddenTabContract = tmpHiddenTabContract, 
                         tmpHiddenTabAdvTool = tmpHiddenTabAdvTool,
                         tmpHiddenTabSellingProduct = tmpHiddenTabSellingProduct,
-                        tmpHiddenTabDisplayMethod = tmpHiddenTabDisplayMethod
+                        tmpHiddenTabDisplayMethod = tmpHiddenTabDisplayMethod,
+                        tmpAutoCustID = tmpAutoCustID
                      });
                 }
                 else
@@ -1113,7 +1210,9 @@ namespace AR20400.Controllers
                         tmpHiddenTabContract = tmpHiddenTabContract,
                         tmpHiddenTabAdvTool = tmpHiddenTabAdvTool,
                         tmpHiddenTabSellingProduct = tmpHiddenTabSellingProduct,
-                        tmpHiddenTabDisplayMethod = tmpHiddenTabDisplayMethod
+                        tmpHiddenTabDisplayMethod = tmpHiddenTabDisplayMethod,
+                        tmpAutoCustID = tmpAutoCustID
+
                     });
                 }
             }
@@ -1757,6 +1856,11 @@ namespace AR20400.Controllers
         }
 
 
+        private string functionAutoCustID(string branchID,string nodeID)
+        {
+            var recordLastBatNbr = _db.AR20400_ppGetAutoCustID(branchID, nodeID,"","","","","","","","","").FirstOrDefault();
+            return recordLastBatNbr;
+        }
 
 
 

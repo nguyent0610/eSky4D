@@ -403,6 +403,23 @@
         <Function Name="AR20400_pcCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AR20400_ppARNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="GetType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_ppGetAutoCustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="KeyTree" Type="varchar" Mode="In" />
+          <Parameter Name="PreFix1" Type="varchar" Mode="In" />
+          <Parameter Name="PreFix2" Type="varchar" Mode="In" />
+          <Parameter Name="PreFix3" Type="varchar" Mode="In" />
+          <Parameter Name="PreFix4" Type="varchar" Mode="In" />
+          <Parameter Name="SufFix1" Type="varchar" Mode="In" />
+          <Parameter Name="SufFix2" Type="varchar" Mode="In" />
+          <Parameter Name="SufFix3" Type="varchar" Mode="In" />
+          <Parameter Name="SufFix4" Type="varchar" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -437,7 +454,24 @@
             <Parameter Name="Roles" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AR20400_pcCustomer" ReturnType="Collection(AR20400Model.AR20400_pcCustomer_Result)">
+          <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_ppARNumbering" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="GetType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_ppGetAutoCustID" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="KeyTree" Mode="In" Type="String" />
+            <Parameter Name="PreFix1" Mode="In" Type="String" />
+            <Parameter Name="PreFix2" Mode="In" Type="String" />
+            <Parameter Name="PreFix3" Mode="In" Type="String" />
+            <Parameter Name="PreFix4" Mode="In" Type="String" />
+            <Parameter Name="SufFix1" Mode="In" Type="String" />
+            <Parameter Name="SufFix2" Mode="In" Type="String" />
+            <Parameter Name="SufFix3" Mode="In" Type="String" />
+            <Parameter Name="SufFix4" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="ppv_AR20400_getCompany_Result">
@@ -1239,6 +1273,8 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_ppARNumbering" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppARNumbering" />
+          <FunctionImportMapping FunctionImportName="AR20400_ppGetAutoCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetAutoCustID" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

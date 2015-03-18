@@ -34,6 +34,7 @@ var tmpHiddenTabLTT = false;
 var tmpHiddenTabAdv = false;
 var tmpHiddenTabSellingProd = false;
 var tmpHiddenTabDispMethod = false;
+var tmpAutoCustID = false;
 var _index = 0;
 
 
@@ -288,9 +289,16 @@ var frmChange = function () {
         HQ.isChange = HQ.store.isChange(App.storeFormBig);
         HQ.common.changeData(HQ.isChange, 'AR20400');//co thay doi du lieu gan * tren tab title header
         //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
-        if (App.cboCustId.valueModels == null || HQ.isNew == true)//App.cboCustId.valueModels == null khi ko co select item nao
+        if (App.cboCustId.valueModels == null || HQ.isNew == true ) {//App.cboCustId.valueModels == null khi ko co select item nao
             App.cboCustId.setReadOnly(false);
-        else App.cboCustId.setReadOnly(HQ.isChange);
+        }
+        //else if (HQ.isNew == true && tmpAutoCustID == true && (App.cboCustId.getValue() != "" && App.cboCustId.getValue() != null)) {
+        //    App.cboCustId.setReadOnly(true);
+        //}
+        else {
+            App.cboCustId.setReadOnly(HQ.isChange);
+        }
+  
     }
 
 };
@@ -509,7 +517,7 @@ function Save() {
                     }
                     //if (data.result.tmpHiddenTree == false)
                     HQ.message.show(201405071, '', '');
-                    var custId = App.cboCustId.getValue();
+                    var custId = data.result.custID;
                     App.cboCustId.getStore().load(function () {
                         App.cboCustId.setValue(custId);
                         App.storeFormBig.reload();
@@ -845,6 +853,14 @@ var cboCpnyID_Change = function (sender, newValue, oldValue) {
                 tmpHiddenTabDispMethod = true;
                 App.tabAtAR20400.tabBar.items.items[6].hide();
             }
+
+            //set bien tam AutoCustID
+            if (data.result.tmpAutoCustID == false) {
+                tmpAutoCustID = false;
+            } else {
+                tmpAutoCustID = true;
+
+            }
         },
         failure: function (action, data) {
             tmpHiddenTree = true;
@@ -878,6 +894,14 @@ var cboCpnyID_Change = function (sender, newValue, oldValue) {
             } else {
                 tmpHiddenTabDispMethod = true;
                 App.tabAtAR20400.tabBar.items.items[6].hide();
+            }
+
+            //set bien tam AutoCustID
+            if (data.result.tmpAutoCustID == false) {
+                tmpAutoCustID = false;
+            } else {
+                tmpAutoCustID = true;
+       
             }
 
 
@@ -1012,18 +1036,27 @@ var storeLoad = function (store) {
         record.data.EstablishDate = HQ.businessDate;
         record.data.Birthdate = HQ.businessDate;
         record.data.TaxDflt = 'C';
-        record.data.TaxID00 = 'VAT10';
-        record.data.TaxID01 = 'VAT10';
-        record.data.TaxID02 = 'VAT10';
-        record.data.TaxID03 = 'VAT10';
+        record.data.TaxID00 = 'OVAT10-00';
+        record.data.TaxID01 = 'OVAT05-00';
+        record.data.TaxID02 = 'VAT00';
+        record.data.TaxID03 = 'NONEVAT';
 
 
         store.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
-        App.cboCustId.forceSelection = false;
+        if (tmpAutoCustID == false) {
+            App.cboCustId.forceSelection = false;
+        } else {
+            App.cboCustId.forceSelection = true;
+        }
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboCustId.focus(true);//focus ma khi tao moi
+
+        //setTimeout(function () { waitToSetAutoCustID(); }, 3000);
+     
     }
+
+
     var record = store.getAt(0);
     tmpCity = store.getAt(0).data.City;
     tmpDistrict = store.getAt(0).data.District;
@@ -1032,12 +1065,21 @@ var storeLoad = function (store) {
     frmChange();
 };
 
+//var waitToSetAutoCustID = function () {
+//    if (tmpAutoCustID == true) {
+//        App.cboCustId.setEditable = false;
+//    } else {
+//        App.cboCustId.setEditable = true;
+//    }
+//};
+
 var cboCustId_Change = function (sender, value) {
     if ((!HQ.isNew || sender.valueModels != null) && !App.storeFormBig.loading) {
         tmpCountryloadStoreOrForm = "1";
         App.storeFormBig.reload();
         App.cboDfltShipToId.getStore().reload();
         App.cboLTTContract.getStore().reload();
+
         setTimeout(function () { chooseNodeFromTree(); }, 1000);
 
         if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
@@ -1062,6 +1104,9 @@ var cboCustId_Change = function (sender, value) {
         if (tmpHiddenTabDispMethod == false) {// neu tab DispMethod ko bi an thi moi load store 
             App.storeGridDispMethod.reload();
         }
+
+   
+
     }
 
 }
@@ -1072,8 +1117,7 @@ var cboCustId_Select = function (sender, value) {
         App.storeFormBig.reload();
         App.cboDfltShipToId.getStore().reload();
         App.cboLTTContract.getStore().reload();
-        setTimeout(function () { chooseNodeFromTree(); }, 1000);
-
+     
         if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
             disableForm();
         } else if (App.cboStatus.value == "H") {
@@ -1113,220 +1157,7 @@ var cboCustId_Expand = function (sender, value) {
 
 
 
-//Grid LTT/////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-var GridTop_Change = function (sender, e) {
-    HQ.isFirstLoad = true;
-    App.storeGridLTTBot.reload();
-    _index = App.slmTopGrid.selected.items[0].index;
-};
 
-var loadDataGridLTTContract = function (store) {
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            if (App.cboCustId.getValue() != "") {
-                HQ.store.insertBlank(store, keysTop);
-            }
-        }
-        HQ.isFirstLoad = false;
-    }
-    frmChange();
-};
-
-var loadDataGridLTTContractDetail = function (store) {
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            if (App.slmTopGrid.selected.items[0] != undefined) {
-                HQ.store.insertBlank(store, keysBot);
-            }
-        }
-        HQ.isFirstLoad = false;
-    }
-    frmChange();
-};
-
-var deleteRecordGridLTTContract = function (item) {
-    if (item == "yes") {
-        App.grdTop.deleteSelected();
-        frmChange();
-    }
-};
-
-var deleteRecordGridLTTContractDetail = function (item) {
-    if (item == "yes") {
-        App.grdBot.deleteSelected();
-        frmChange();
-    }
-};
-
-//Top Grid LTTContract
-var grdTop_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
-        return false;
-    } else if (App.cboStatus.value == "H") {
-        return HQ.grid.checkBeforeEdit(e, keysTop);
-    }
-    
-};
-var grdTop_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdTop, e, keysTop);
-};
-var grdTop_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdTop, e, keysTop);
-};
-var grdTop_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdTop);
-    stoChangedTop(App.storeGridLTTTop);
-};
-
-//Bot Grid LTTContractDetail
-var grdBot_BeforeEdit = function (editor, e) {
-   
-    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
-        return false;
-    } else if (App.cboStatus.value == "H") {
-         return HQ.grid.checkBeforeEdit(e, keysBot);
-    }
-};
-var grdBot_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdBot, e, keysBot);
-};
-var grdBot_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdBot, e, keysBot);
-};
-var grdBot_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdBot);
-    stoChangedBot(App.storeGridLTTBot);
-};
-
-//Grid Adv/////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-var loadDataGridAdv = function (store) {
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            if (App.cboCustId.getValue() != "") {
-                HQ.store.insertBlank(store, keysAdv);
-            }
-        }
-        HQ.isFirstLoad = false;
-    }
-    frmChange();
-};
-
-var deleteRecordGridAdv = function (item) {
-    if (item == "yes") {
-        App.grdAdv.deleteSelected();
-        frmChange();
-    }
-};
-
-//Grid Adv
-var grdAdv_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
-        return false;
-    } else if (App.cboStatus.value == "H") {
-        return HQ.grid.checkBeforeEdit(e, keysAdv);
-    }
-    
-};
-var grdAdv_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdAdv, e, keysAdv);
-};
-var grdAdv_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdAdv, e, keysAdv);
-};
-var grdAdv_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdAdv);
-    stoChangedTop(App.storeGridAdv);
-};
-
-
-
-//Grid SellingProd/////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-
-var loadDataGridSellingProd = function (store) {
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            if (App.cboCustId.getValue() != "") {
-                HQ.store.insertBlank(store, keysSellingProd);
-            }
-        }
-        HQ.isFirstLoad = false;
-    }
-    frmChange();
-};
-
-var deleteRecordGridSellingProd = function (item) {
-    if (item == "yes") {
-        App.grdSellingProd.deleteSelected();
-        frmChange();
-    }
-};
-
-
-//Grid SellingProd
-var grdSellingProd_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
-        return false;
-    } else if (App.cboStatus.value == "H") {
-        return HQ.grid.checkBeforeEdit(e, keysSellingProd);
-    }
-    
-};
-var grdSellingProd_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdSellingProd, e, keysSellingProd);
-};
-var grdSellingProd_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdSellingProd, e, keysSellingProd);
-};
-var grdSellingProd_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdSellingProd);
-    stoChangedTop(App.storeGridSellingProd);
-};
-
-
-//Grid DispMethod/////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-
-var loadDataGridDispMethod = function (store) {
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            if (App.cboCustId.getValue() != "") {
-                HQ.store.insertBlank(store, keysDispMethod);
-            }
-        }
-        HQ.isFirstLoad = false;
-    }
-    frmChange();
-};
-
-var deleteRecordGridDispMethod = function (item) {
-    if (item == "yes") {
-        App.grdDispMethod.deleteSelected();
-        frmChange();
-    }
-};
-
-//Grid DispMethod
-var grdDispMethod_BeforeEdit = function (editor, e) {
-    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
-        return false;
-    } else if (App.cboStatus.value == "H") {
-        return HQ.grid.checkBeforeEdit(e, keysDispMethod);
-    }
-    
-};
-var grdDispMethod_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdDispMethod, e, keysDispMethod);
-};
-var grdDispMethod_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdDispMethod, e, keysDispMethod);
-};
-var grdDispMethod_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdDispMethod);
-    stoChangedTop(App.storeGridDispMethod);
-};
 
 
 
@@ -1416,10 +1247,10 @@ var cboBillCountry_Change = function (sender, newValue, oldValue) {
         var curRecord = App.frmMain.getRecord();
         if (curRecord != undefined)
             if (curRecord.data.State) {
-                App.cboBillState.setValue(curRecord.data.State);
+                App.cboBillState.setValue(curRecord.data.BillState);
             }
-        var dt = HQ.store.findInStore(App.cboBillState.getStore(), ["State"], [App.cboBillState.getValue()]);
-        if (!dt) {
+        var dt = HQ.store.findInStore(App.cboBillState.getStore(), ["BillState"], [App.cboBillState.getValue()]);
+        if (!dt && App.cboBillState.forceSelection == true) {
             curRecord.data.State = '';
             App.cboBillState.setValue("");
         }
@@ -1440,10 +1271,10 @@ var cboBillState_Change = function (sender, newValue, oldValue) {
         var curRecord = App.frmMain.getRecord();
         if (curRecord != undefined)
             if (curRecord.data.City) {
-                App.cboBillCity.setValue(curRecord.data.City);
+                App.cboBillCity.setValue(curRecord.data.BillCity);
             }
-        var dt = HQ.store.findInStore(App.cboBillCity.getStore(), ["City"], [App.cboBillCity.getValue()]);
-        if (!dt) {
+        var dt = HQ.store.findInStore(App.cboBillCity.getStore(), ["BillCity"], [App.cboBillCity.getValue()]);
+        if (!dt && App.cboBillCity.forceSelection == true) {
             curRecord.data.City = '';
             App.cboBillCity.setValue("");
         }
@@ -1472,6 +1303,222 @@ var CopyFormToBill_Click = function () {
     App.txtBillFax.setValue(App.txtFax.value);
 
 }
+
+//Grid LTT/////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+var GridTop_Change = function (sender, e) {
+    HQ.isFirstLoad = true;
+    App.storeGridLTTBot.reload();
+    _index = App.slmTopGrid.selected.items[0].index;
+};
+
+var loadDataGridLTTContract = function (store) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            if (App.cboCustId.getValue() != "") {
+                HQ.store.insertBlank(store, keysTop);
+            }
+        }
+        HQ.isFirstLoad = false;
+    }
+    frmChange();
+};
+
+var loadDataGridLTTContractDetail = function (store) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            if (App.slmTopGrid.selected.items[0] != undefined) {
+                HQ.store.insertBlank(store, keysBot);
+            }
+        }
+        HQ.isFirstLoad = false;
+    }
+    frmChange();
+};
+
+var deleteRecordGridLTTContract = function (item) {
+    if (item == "yes") {
+        App.grdTop.deleteSelected();
+        frmChange();
+    }
+};
+
+var deleteRecordGridLTTContractDetail = function (item) {
+    if (item == "yes") {
+        App.grdBot.deleteSelected();
+        frmChange();
+    }
+};
+
+//Top Grid LTTContract
+var grdTop_BeforeEdit = function (editor, e) {
+    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
+        return false;
+    } else if (App.cboStatus.value == "H") {
+        return HQ.grid.checkBeforeEdit(e, keysTop);
+    }
+
+};
+var grdTop_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdTop, e, keysTop);
+};
+var grdTop_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdTop, e, keysTop);
+};
+var grdTop_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdTop);
+    stoChangedTop(App.storeGridLTTTop);
+};
+
+//Bot Grid LTTContractDetail
+var grdBot_BeforeEdit = function (editor, e) {
+
+    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
+        return false;
+    } else if (App.cboStatus.value == "H") {
+        return HQ.grid.checkBeforeEdit(e, keysBot);
+    }
+};
+var grdBot_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdBot, e, keysBot);
+};
+var grdBot_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdBot, e, keysBot);
+};
+var grdBot_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdBot);
+    stoChangedBot(App.storeGridLTTBot);
+};
+
+//Grid Adv/////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+var loadDataGridAdv = function (store) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            if (App.cboCustId.getValue() != "") {
+                HQ.store.insertBlank(store, keysAdv);
+            }
+        }
+        HQ.isFirstLoad = false;
+    }
+    frmChange();
+};
+
+var deleteRecordGridAdv = function (item) {
+    if (item == "yes") {
+        App.grdAdv.deleteSelected();
+        frmChange();
+    }
+};
+
+//Grid Adv
+var grdAdv_BeforeEdit = function (editor, e) {
+    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
+        return false;
+    } else if (App.cboStatus.value == "H") {
+        return HQ.grid.checkBeforeEdit(e, keysAdv);
+    }
+
+};
+var grdAdv_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdAdv, e, keysAdv);
+};
+var grdAdv_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdAdv, e, keysAdv);
+};
+var grdAdv_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdAdv);
+    stoChangedTop(App.storeGridAdv);
+};
+
+
+
+//Grid SellingProd/////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+var loadDataGridSellingProd = function (store) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            if (App.cboCustId.getValue() != "") {
+                HQ.store.insertBlank(store, keysSellingProd);
+            }
+        }
+        HQ.isFirstLoad = false;
+    }
+    frmChange();
+};
+
+var deleteRecordGridSellingProd = function (item) {
+    if (item == "yes") {
+        App.grdSellingProd.deleteSelected();
+        frmChange();
+    }
+};
+
+
+//Grid SellingProd
+var grdSellingProd_BeforeEdit = function (editor, e) {
+    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
+        return false;
+    } else if (App.cboStatus.value == "H") {
+        return HQ.grid.checkBeforeEdit(e, keysSellingProd);
+    }
+
+};
+var grdSellingProd_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSellingProd, e, keysSellingProd);
+};
+var grdSellingProd_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSellingProd, e, keysSellingProd);
+};
+var grdSellingProd_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSellingProd);
+    stoChangedTop(App.storeGridSellingProd);
+};
+
+
+//Grid DispMethod/////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+var loadDataGridDispMethod = function (store) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            if (App.cboCustId.getValue() != "") {
+                HQ.store.insertBlank(store, keysDispMethod);
+            }
+        }
+        HQ.isFirstLoad = false;
+    }
+    frmChange();
+};
+
+var deleteRecordGridDispMethod = function (item) {
+    if (item == "yes") {
+        App.grdDispMethod.deleteSelected();
+        frmChange();
+    }
+};
+
+//Grid DispMethod
+var grdDispMethod_BeforeEdit = function (editor, e) {
+    if (App.cboStatus.value == "O" || App.cboStatus.value == "A") {
+        return false;
+    } else if (App.cboStatus.value == "H") {
+        return HQ.grid.checkBeforeEdit(e, keysDispMethod);
+    }
+
+};
+var grdDispMethod_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdDispMethod, e, keysDispMethod);
+};
+var grdDispMethod_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdDispMethod, e, keysDispMethod);
+};
+var grdDispMethod_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdDispMethod);
+    stoChangedTop(App.storeGridDispMethod);
+};
+
 
 var disableForm = function () {
     //App.cboCustId.setReadOnly(true);
@@ -1665,4 +1712,17 @@ var tabSA_Setup_AfterRender = function (obj, padding) {
     else {
         obj.setHeight(Ext.getBody().getViewSize().height - padding);
     }
+};
+
+var cboClassId_Change = function () {
+  
+        for (var i = 0; i < App.cboClassId.store.data.length; i++) {
+            if (App.cboClassId.value == App.cboClassId.store.data.items[i].data.ClassID) {
+                App.cboTaxID00.setValue(App.cboClassId.store.data.items[i].data.TaxID00);
+                App.cboTaxID01.setValue(App.cboClassId.store.data.items[i].data.TaxID01);
+                App.cboTaxID02.setValue(App.cboClassId.store.data.items[i].data.TaxID02);
+                App.cboTaxID03.setValue(App.cboClassId.store.data.items[i].data.TaxID03);
+            }
+        }
+    
 };
