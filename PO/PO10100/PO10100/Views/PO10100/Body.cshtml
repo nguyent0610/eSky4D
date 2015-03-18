@@ -196,7 +196,7 @@
                                 X.Panel()
                                 .ID("tabLineItem")
                                 .Layout(LayoutType.Fit)
-                                .Title("LINRITEM")
+                                .Title(Util.GetLang("LINRITEM"))
                                 .Padding(5)
                                 .Items(
 
@@ -403,7 +403,7 @@
                             .ID("tabTax").AutoScroll(true)
                             .Layout(LayoutType.VBox)
                             .LayoutConfig(config => { config.Add(new VBoxLayoutConfig() { Align = VBoxAlign.Stretch }); })
-                            .Title("TAX")
+                            .Title(Util.GetLang("TAX"))
                             .Padding(5)
                             .Items(
 
@@ -447,7 +447,7 @@
                             .ID("tabThongTinGiaoHang")
                             .Layout(LayoutType.VBox).AutoScroll(true)
                             .Anchor("100%")
-                            .Title("SHIPINFO")
+                            .Title(Util.GetLang("SHIPINFO"))
                             .Padding(5)
                             .Items(
                             X.Container().Layout(LayoutType.HBox).Items(
@@ -708,7 +708,7 @@
                             .ID("tabThongTinNhaCungCap")
                             .Layout(LayoutType.Fit)
                             .AnchorVertical("100%").AutoScroll(true)
-                            .Title("VENDINFO")
+                            .Title(Util.GetLang("VENDINFO"))
                             .Padding(5)
                             .Items(
                                     X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0").Items(
