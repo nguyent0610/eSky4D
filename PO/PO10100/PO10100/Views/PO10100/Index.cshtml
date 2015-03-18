@@ -126,7 +126,8 @@
 						                            }).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10100_pdIN_Inventory()"; }).AutoLoad(true)
 
         @HQ.Store().ID("stoPO10100_pdIN_UnitConversion").HQProcedure("PO10100_pdIN_UnitConversion").HQDBSys(false).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10100_pdIN_UnitConversion()"; }).AutoLoad(true)
-
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->  
         @{ Html.RenderAction("Body", new { lang =@Current.LangID}); }
         
     </body>
