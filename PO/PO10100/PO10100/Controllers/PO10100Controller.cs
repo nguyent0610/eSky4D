@@ -28,15 +28,16 @@ namespace PO10100.Controllers
         PO10100Entities _db = Util.CreateObjectContext<PO10100Entities>(false);
         private const string ScreenNbr = "PO10100";
         private FormCollection _form;   
-        private List<PO10100_pgDetail_Result> _lstPODetailLoad;     
+        private List<PO10100_pgDetail_Result> _lstPODetailLoad=new List<PO10100_pgDetail_Result>();     
         private PO_Setup _objPO_Setup;
         private PO_Header _poHead;
         bool _statusClose = false;
         string _ponbr = "";
         string _branchID = "";
         string _toStatus = "";
-        string _status = ""; 
-         
+        string _status = "";
+        private JsonResult _logMessage;
+
         List<PO10100_pdOM_DiscAllByBranchPO_Result> _lstPO10100_pdOM_DiscAllByBranchPO;      
         List<PO10100_pdIN_UnitConversion_Result> _PO10100_pdIN_UnitConversion_Result;
         private List <PO10100_pgDetail_Result> _lstTmpPO10100_pgDetail;
@@ -50,7 +51,7 @@ namespace PO10100.Controllers
             ViewBag.BussinessTime = DateTime.Now;
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -101,58 +102,14 @@ namespace PO10100.Controllers
             System.IO.File.Delete(filePath);
             return File(fileBytes, "application/xls", dlFileName);
         }
-        [HttpPost]
-        public ActionResult Report(FormCollection data)
-        {
-            try
-            {
-                _ponbr = data["PONbr"];
-                _branchID = data["BranchID"];
-                string reportName = "";
-                var rpt = new RPTRunning();
-                rpt.ResetET();
-
-                reportName = "PO_PurchaseOrder";
-                rpt.ReportNbr = "PO602";
-                rpt.MachineName = "Web";
-                rpt.ReportCap = "ReportName";
-                rpt.ReportName = reportName;
-                rpt.ReportDate = DateTime.Now;
-                rpt.DateParm00 = DateTime.Now;
-                rpt.DateParm01 = DateTime.Now;
-                rpt.DateParm02 = DateTime.Now;
-                rpt.DateParm03 = DateTime.Now;
-                rpt.StringParm00 = _branchID;
-                rpt.StringParm01 = _ponbr;
-                rpt.UserID = Current.UserName;
-                rpt.AppPath = "Reports\\";
-                rpt.ClientName = Current.UserName;
-                rpt.LoggedCpnyID = Current.CpnyID;
-                rpt.CpnyID = Current.CpnyID;
-                rpt.LangID = Current.LangID;
-                _db.RPTRunnings.AddObject(rpt);
-
-                _db.SaveChanges();
-
-                return Json(new { success = true, reportID = rpt.ReportID, reportName });
-            }
-            catch (Exception ex)
-            {
-                if (ex is MessageException)
-                {
-                    return (ex as MessageException).ToMessage();
-                }
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-            }
-        }
         [HttpPost]      
         public ActionResult Save(FormCollection data)
         {
             try
             {               
                 _form = data;
-                _ponbr = data["PONbr"];
-                _branchID = data["BranchID"];
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
                 _status = data["Status"].PassNull();
                 _toStatus = data["Handle"].PassNull() == "" ? _status : data["Handle"].PassNull();
                 DateTime dpoDate = data["PODate"].ToDateShort();
@@ -185,8 +142,8 @@ namespace PO10100.Controllers
             try
             {
                 _form = data;
-                _ponbr = data["PONbr"];
-                _branchID = data["BranchID"];
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
                 var detHeader = new StoreDataHandler(data["lstHeader"]);
                 if (_poHead == null)
                     _poHead = detHeader.ObjectData<PO_Header>().FirstOrDefault();
@@ -239,8 +196,8 @@ namespace PO10100.Controllers
             try
             {
                 _form = data;
-                _ponbr = data["PONbr"];
-                _branchID = data["BranchID"];
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
                 _status = data["Status"].PassNull();
                 _toStatus = data["Handle"].PassNull() == "" ? _status : data["Handle"].PassNull();
                 DateTime dpoDate = data["PODate"].ToDateShort();
@@ -794,7 +751,7 @@ namespace PO10100.Controllers
 
                 DataAccess dal = Util.Dal();
                 ParamCollection pc = new ParamCollection();
-                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["cboBranchID"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@PODate", DbType.DateTime, clsCommon.GetValueDBNull(data["PODate"].ToDateShort()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@User", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@VendID", DbType.String, clsCommon.GetValueDBNull(data["VendID"].PassNull()), ParameterDirection.Input, 30));
@@ -803,21 +760,21 @@ namespace PO10100.Controllers
                 SheetPOSuggest.Cells.ImportDataTable(dtInvtID, true, "AA1");// du lieu Inventory
 
                 pc = new ParamCollection();
-                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["cboBranchID"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@PODate", DbType.DateTime, clsCommon.GetValueDBNull(data["PODate"].ToDateShort()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@UserName", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@VendID", DbType.String, clsCommon.GetValueDBNull(data["VendID"].PassNull()), ParameterDirection.Input, 30));
                 DataTable dtHeader = dal.ExecDataTable("PO10100_peHeader", CommandType.StoredProcedure, ref pc);
 
                 pc = new ParamCollection();
-                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["cboBranchID"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@PODate", DbType.DateTime, clsCommon.GetValueDBNull(data["PODate"].ToDateShort()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@User", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@VendID", DbType.String, clsCommon.GetValueDBNull(data["VendID"].PassNull()), ParameterDirection.Input, 30));
                 DataTable dtData = dal.ExecDataTable("PO10100_peSuggest", CommandType.StoredProcedure, ref pc);
 
 
-                #region Fomat cell
+             
 
                 
 
@@ -825,17 +782,12 @@ namespace PO10100.Controllers
                 StyleFlag flag = new StyleFlag();
                 Range range;
                 Cell cell;
-
                 //LOCK TRUE
 
                 style = workbook.GetStyleInPool(0);
                 style.IsLocked = true;
                 range = SheetPOSuggest.Cells.CreateRange("A1", "ZZ" + dtInvtID.Rows.Count + 7);
                 range.SetStyle(style);
-
-                
-
-                #endregion
                
                 #region template
             
@@ -865,13 +817,13 @@ namespace PO10100.Controllers
                 SetCellValueHeader(SheetPOSuggest.Cells["E4"], Util.GetLang("PO10100MinValue"), TextAlignmentType.Center, TextAlignmentType.Right);
                 SetCellValueHeader(SheetPOSuggest.Cells["E5"], Util.GetLang("PO10100NXK"), TextAlignmentType.Center, TextAlignmentType.Right);
 
-                SetCellValueHeader(SheetPOSuggest.Cells["F2"], data["PODate"].ToDateShort().ToString("dd-MM-yyyy"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["F2"], data["PODate"].ToDateShort().ToString("dd-MM-yyyy"), TextAlignmentType.Center, TextAlignmentType.Left);
 
                 SetCellValueHeader(SheetPOSuggest.Cells["F3"], "0", TextAlignmentType.Center, TextAlignmentType.Right);
               
                 SetCellValueHeader(SheetPOSuggest.Cells["F4"], dtHeader.Rows[0]["MinValue"].ToString(), TextAlignmentType.Center, TextAlignmentType.Right);
               
-                SetCellValueHeader(SheetPOSuggest.Cells["F5"], Convert.ToDateTime(dtHeader.Rows[0]["NXK"]).ToString("dd-MM-yyyy"), TextAlignmentType.Center, TextAlignmentType.Right);
+                SetCellValueHeader(SheetPOSuggest.Cells["F5"], Convert.ToDateTime(dtHeader.Rows[0]["NXK"]).ToString("dd-MM-yyyy"), TextAlignmentType.Center, TextAlignmentType.Left);
                
 
                 SetCellValueHeader(SheetPOSuggest.Cells["G2"], Util.GetLang("PO10100CreditLimit"), TextAlignmentType.Center, TextAlignmentType.Right);
@@ -965,11 +917,11 @@ namespace PO10100.Controllers
                 SheetPOSuggest.Cells["J7"].SetSharedFormula(formulahientai, (dtInvtID.Rows.Count + 7), 1);
            
 
-                String formulacth = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,6,0)),0,VLOOKUP(B7,$AF:$AQ,6,0))");
+                String formulacth = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,7,0)),0,VLOOKUP(B7,$AF:$AQ,7,0))");
                 SheetPOSuggest.Cells["K7"].SetSharedFormula(formulacth, (dtInvtID.Rows.Count + 7), 1);
             
 
-                String formulaSellout = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,7,0)),0,VLOOKUP(B7,$AF:$AQ,7,0))");
+                String formulaSellout = string.Format("=IF(ISERROR(VLOOKUP(B7,AF:$AQ,12,0)),0,VLOOKUP(B7,$AF:$AQ,12,0))");
                 SheetPOSuggest.Cells["L7"].SetSharedFormula(formulaSellout, (dtInvtID.Rows.Count + 7), 1);
               
 
@@ -1000,17 +952,41 @@ namespace PO10100.Controllers
                 //DataTable dtSuggest = new DataTable("Suggest");
 
                 ////Adding columns to the DataTable object
-                //dtSuggest.Columns.Add("InvtID", typeof(string));
-                //dtSuggest.Columns.Add("Descr", typeof(string));
-                //dtSuggest.Columns.Add("PurchUnit", typeof(string));
-                //dtSuggest.Columns.Add("UnitPrice", typeof(string));
-                //dtSuggest.Columns.Add("TKchuan", typeof(string));
-                //dtSuggest.Columns.Add("TKHientai", typeof(string));
-                //dtSuggest.Columns.Add("TKCuoithang", typeof(string));
-                //dtSuggest.Columns.Add("SLChitieu", typeof(string));
-                //dtSuggest.Columns.Add("SLDenghi", typeof(string));
-                //dtSuggest.Columns.Add("SLConlai", typeof(string));
-                //dtSuggest.Columns.Add("SLDathang", typeof(string));
+                cell = SheetPOSuggest.Cells["AF1"];
+                cell.PutValue("InvtID");
+
+                cell = SheetPOSuggest.Cells["AG1"];
+                cell.PutValue("Descr");
+
+                cell = SheetPOSuggest.Cells["AH1"];
+                cell.PutValue("PurchUnit");
+
+                cell = SheetPOSuggest.Cells["AI1"];
+                cell.PutValue("UnitPrice");
+
+                cell = SheetPOSuggest.Cells["AJ1"];
+                cell.PutValue("TKchuan");
+
+                cell = SheetPOSuggest.Cells["AK1"];
+                cell.PutValue("TKHientai");
+
+                cell = SheetPOSuggest.Cells["AL1"];
+                cell.PutValue("TKCuoithang");
+
+                cell = SheetPOSuggest.Cells["AM1"];
+                cell.PutValue("SLChitieu");
+
+                cell = SheetPOSuggest.Cells["AN1"];
+                cell.PutValue("SLDenghi");
+
+                cell = SheetPOSuggest.Cells["AO1"];
+                cell.PutValue("SLConlai");
+
+                cell = SheetPOSuggest.Cells["AP1"];
+                cell.PutValue("SLDathang");
+
+                cell = SheetPOSuggest.Cells["AQ1"];
+                cell.PutValue("TBSellout");
 
               
                 for (int i = 0; i < dtData.Rows.Count; i++)
@@ -1052,6 +1028,9 @@ namespace PO10100.Controllers
 
                     cell = SheetPOSuggest.Cells["AP" + countPO.ToString()];
                     cell.PutValue(dtData.Rows[i]["SLDathang"].ToString());
+
+                    cell = SheetPOSuggest.Cells["AQ" + countPO.ToString()];
+                    cell.PutValue(dtData.Rows[i]["TBSellout"].ToString());
                 
                     countPO++;
                     counter++;
@@ -1064,6 +1043,8 @@ namespace PO10100.Controllers
 
                 #endregion
 
+                #region Fomat cell
+               
 
                 cell = SheetPOSuggest.Cells["C5"];
                 style = cell.GetStyle();
@@ -1077,8 +1058,7 @@ namespace PO10100.Controllers
                 cell = SheetPOSuggest.Cells["F4"];
                 cell.SetStyle(style);
 
-                cell = SheetPOSuggest.Cells["F5"];
-                cell.SetStyle(style);
+          
 
                 cell = SheetPOSuggest.Cells["H2"];
                 cell.SetStyle(style);
@@ -1123,7 +1103,7 @@ namespace PO10100.Controllers
                 style.Custom = "#,##0";
                 style.Font.Color = Color.Transparent;
                 style.HorizontalAlignment = TextAlignmentType.Right;
-                range = SheetPOSuggest.Cells.CreateRange("AI2", "AP" + dtInvtID.Rows.Count + 7);
+                range = SheetPOSuggest.Cells.CreateRange("AI2", "AQ" + dtInvtID.Rows.Count + 7);
                 range.SetStyle(style);
 
                 style = SheetPOSuggest.Cells["C7"].GetStyle();
@@ -1178,40 +1158,48 @@ namespace PO10100.Controllers
                 ca.StartRow = 6;
                 ca.EndRow = dtInvtID.Rows.Count + 7;
                 ca.StartColumn = 0;
-                ca.EndColumn = 12;
+                ca.EndColumn = 13;
                 fcs.AddArea(ca);
 
 
 
                 //Adds condition.
-                int conditionIndex = fcs.AddCondition(FormatConditionType.Expression, OperatorType.Equal, "=$O7=\"G\"", "O");
+                int conditionIndex = fcs.AddCondition(FormatConditionType.Expression, OperatorType.Equal, "=$O7=\"G\"", "G");
 
                 //Adds condition.
-                int conditionIndex2 = fcs.AddCondition(FormatConditionType.Expression, OperatorType.Equal, "=$O7=\"O\"", "G");
+                int conditionIndex2 = fcs.AddCondition(FormatConditionType.Expression, OperatorType.Equal, "=$O7=\"R\"", "R");
 
                 //Sets the background color.
                 FormatCondition fc = fcs[conditionIndex];
-                fc.Style.BackgroundColor = Color.Green;
+                fc.Style.Font.Color = Color.Green;
 
                 //Sets the background color.
                 fc = fcs[conditionIndex2];
-                fc.Style.BackgroundColor = Color.Red;
+                fc.Style.Font.Color = Color.Red;
 
+                SheetPOSuggest.AutoFilter.Range = "A6:N6";
+                style = SheetPOSuggest.Cells["A6"].GetStyle();               
+                //style.HorizontalAlignment = TextAlignmentType.Right;             
+                style.IsLocked = false;
+                range = SheetPOSuggest.Cells.CreateRange("A6:N6");
+                range.SetStyle(style);
+              
+                #endregion
+               
                 SheetPOSuggest.AutoFitColumns();
 
                 SheetPOSuggest.Cells.Columns[1].Width = 30;
                 SheetPOSuggest.Cells.Columns[2].Width = 15;
                 SheetPOSuggest.Cells.Columns[4].Width = 15;
                 SheetPOSuggest.Cells.Columns[5].Width = 15;
-                SheetPOSuggest.Protect(ProtectionType.All);
-                workbook.Save(stream, SaveFormat.Xlsx);
+                SheetPOSuggest.Cells.Columns[14].Width = 0;
+                //SheetPOSuggest.Protect(ProtectionType.Objects);
+                workbook.Save(stream, SaveFormat.Excel97To2003);
                 stream.Flush();
                 stream.Position = 0;
               
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "PO10100.xlsx" };
-                return Json(new { success = true });
-
-
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = "PO10100.xls" };
+       
             }
             catch (Exception ex)
             {
@@ -1226,6 +1214,216 @@ namespace PO10100.Controllers
                 }
             }
         }
+        public ActionResult Import(FormCollection data)
+        {
+            try
+            {
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
+                _status = data["Status"].PassNull();
+                _toStatus = data["Handle"].PassNull() == "" ? _status : data["Handle"].PassNull();
+                DateTime dpoDate = data["PODate"].ToDateShort();
+
+                FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
+                HttpPostedFile file = fileUploadField.PostedFile; // or: HttpPostedFileBase file = this.HttpContext.Request.Files[0];
+                FileInfo fileInfo = new FileInfo(file.FileName);
+                string message = string.Empty;
+                List<PO10100_pgDetail_Result> lstRecord = new List<PO10100_pgDetail_Result>();
+                if (data["lstDet"] != null)
+                {
+                    var detHandler = new StoreDataHandler(data["lstDet"]);
+                    _lstPODetailLoad = detHandler.ObjectData<PO10100_pgDetail_Result>()
+                                .Where(p => Util.PassNull(p.LineRef) != string.Empty)
+                                .ToList();
+                }
+                else _lstPODetailLoad = new List<PO10100_pgDetail_Result>();
+                if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
+                {
+                    try
+                    {
+                        Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+                        if (workbook.Worksheets.Count > 0)
+                        {
+                            Worksheet workSheet = workbook.Worksheets[0];
+                            string invtID = string.Empty;
+                            int qty=0;
+                            double price = 0; 
+                            string unit = string.Empty;
+                            string stt = string.Empty;
+                            
+                            int lineRef = 1;
+                            for (int i = 6; i < workSheet.Cells.MaxDataRow; i++)
+                            {
+                                stt = workSheet.Cells[i, 0].StringValue;
+                                qty = workSheet.Cells[i, 6].IntValue;
+                                if (stt == string.Empty) break;
+                                 if (qty == 0) continue;
+                                invtID = workSheet.Cells[i, 1].StringValue;
+                                unit = workSheet.Cells[i, 3].StringValue;
+                                price = workSheet.Cells[i, 4].DoubleValue;
+                       
+                               
+
+                                var objInvt = _db.PO10100_pcInventoryActive().FirstOrDefault(p => p.InvtID == invtID);
+
+                                if (objInvt == null)
+                                {
+                                   message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
+                                   continue;
+                                }
+                                var objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID.ToUpper().Trim() == invtID.ToUpper().Trim() && p.FromUnit.ToUpper().Trim() == unit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim()).FirstOrDefault();//truong hop tu From toi to
+                                if (objIN_UnitConversion == null)
+                                {
+                                    objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.InvtID.ToUpper().Trim() == invtID.ToUpper().Trim() && p.FromUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == unit.ToUpper().Trim()).FirstOrDefault();
+
+                                    if (objIN_UnitConversion != null) objIN_UnitConversion.MultDiv = objIN_UnitConversion.MultDiv == "D" ? "M" : "D";
+                                    else objIN_UnitConversion = _db.IN_UnitConversion.Where(p => p.FromUnit.ToUpper().Trim() == unit.ToUpper().Trim() && p.ToUnit.ToUpper().Trim() == objInvt.StkUnit.ToUpper().Trim() && p.ClassID == "*" && p.InvtID == "*").FirstOrDefault();
+
+                                    if (objIN_UnitConversion == null)
+                                    {
+                                        message += string.Format("Dòng {0} mặt hàng {1} sai đơn vị quy đổi <br/>", (i + 1).ToString(), invtID, unit);
+                                        continue;
+                                    }
+                                }
+                                
+
+                                if (_lstPODetailLoad.Where(p => p.InvtID == invtID).FirstOrDefault() != null || lstRecord.Where(p => p.InvtID == invtID).FirstOrDefault() != null)
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} đã tồn tại <br/>", (i + 1).ToString(), invtID, unit);
+                                    continue;
+                                }
+                            
+                                var objInvtAll = _db.PO10100_pdIN_Inventory(Current.UserName).FirstOrDefault(p => p.InvtID == invtID);                              
+                                var newrecord = new PO10100_pgDetail_Result();
+                                newrecord.InvtID = invtID;
+                                newrecord.PurchUnit = unit;
+                                newrecord.QtyOrd = qty;
+                                newrecord.TranDesc = objInvt.Descr;
+                                newrecord.UnitMultDiv = objIN_UnitConversion.MultDiv;
+                                newrecord.CnvFact = objIN_UnitConversion.CnvFact;
+                                newrecord.UnitWeight = objInvtAll.StkWt;
+                                newrecord.UnitVolume = objInvtAll.StkVol;
+
+                                newrecord.ExtVolume = objInvtAll.StkWt*newrecord.QtyOrd;
+                                newrecord.ExtWeight = objInvtAll.StkVol * newrecord.QtyOrd;
+                                newrecord.TaxCat = objInvtAll.TaxCat;
+
+                                var objUserDflt=_db.PO10100_pdOM_UserDefault(_branchID,Current.UserName).FirstOrDefault();
+                                var objSite = _db.PO10100_pcSiteAll(_branchID).FirstOrDefault();
+                                if (objUserDflt != null) {
+                                    newrecord.SiteID= objUserDflt.POSite;
+                                }
+                                else if (objSite != null)
+                                {
+                                    newrecord.SiteID = objSite.SiteID;
+                                }
+                                else
+                                {
+                                    newrecord.SiteID = objInvtAll.DfltSite;
+                                }
+                                var objPO_Setup = _db.PO_Setup.FirstOrDefault(p => p.SetupID == "PO" && p.BranchID == _branchID);
+                                //lay gia
+                                if (objPO_Setup.DfltLstUnitCost == "A")
+                                {
+                                    var objIN_ItemSite = _db.IN_ItemSite.Where(p => p.InvtID == newrecord.InvtID && p.SiteID == newrecord.SiteID).FirstOrDefault();
+
+                                    newrecord.UnitCost = objIN_ItemSite == null ? 0 : objIN_ItemSite.AvgCost;
+                                    newrecord.UnitCost = Math.Round((newrecord.UnitMultDiv == "D" ? (newrecord.UnitCost / newrecord.CnvFact) : (newrecord.UnitCost * newrecord.CnvFact)));
+                                    newrecord.ExtCost = newrecord.UnitCost * newrecord.QtyOrd - newrecord.DiscAmt;
+                                }
+                                else if (objPO_Setup.DfltLstUnitCost == "P")
+                                {
+                                    var result = _db.PO10100_ppGetPrice(_branchID, invtID, unit, dpoDate).FirstOrDefault().Value;
+                                    newrecord.UnitCost = result;
+                                    newrecord.ExtCost = result * newrecord.QtyOrd - newrecord.DiscAmt;
+                                }
+                                else if (objPO_Setup.DfltLstUnitCost == "I")
+                                {
+                                    var UnitCost = objInvtAll.POPrice;
+                                    UnitCost = Math.Round((newrecord.UnitMultDiv == "D" ? (UnitCost / newrecord.CnvFact) : (UnitCost * newrecord.CnvFact)));
+                                    newrecord.UnitCost = UnitCost;
+                                    newrecord.ExtCost = UnitCost * newrecord.QtyOrd - newrecord.DiscAmt;
+                                }
+
+                                if (newrecord.UnitCost == 0 && objPO_Setup.EditablePOPrice==false)
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} không có giá <br/>", (i + 1).ToString(), invtID, unit);
+                                    continue;
+                                }
+
+                                lstRecord.Add(newrecord);                              
+                            }
+                        }
+                        Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans = lstRecord });
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+                else
+                {
+                    Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
+                }
+                return _logMessage;
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+        [HttpPost]
+        public ActionResult Report(FormCollection data)
+        {
+            try
+            {
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
+                string reportName = "";
+                var rpt = new RPTRunning();
+                rpt.ResetET();
+
+                reportName = "PO_PurchaseOrder";
+                rpt.ReportNbr = "PO602";
+                rpt.MachineName = "Web";
+                rpt.ReportCap = "ReportName";
+                rpt.ReportName = reportName;
+                rpt.ReportDate = DateTime.Now;
+                rpt.DateParm00 = DateTime.Now;
+                rpt.DateParm01 = DateTime.Now;
+                rpt.DateParm02 = DateTime.Now;
+                rpt.DateParm03 = DateTime.Now;
+                rpt.StringParm00 = _branchID;
+                rpt.StringParm01 = _ponbr;
+                rpt.UserID = Current.UserName;
+                rpt.AppPath = "Reports\\";
+                rpt.ClientName = Current.UserName;
+                rpt.LoggedCpnyID = Current.CpnyID;
+                rpt.CpnyID = Current.CpnyID;
+                rpt.LangID = Current.LangID;
+                _db.RPTRunnings.AddObject(rpt);
+
+                _db.SaveChanges();
+
+                return Json(new { success = true, reportID = rpt.ReportID, reportName });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+  
         #endregion
         #region Other
         public void Insert_IN_ItemSite(ref IN_ItemSite objIN_ItemSite, ref IN_Inventory objIN_Inventory, string SiteID)
@@ -1770,107 +1968,7 @@ namespace PO10100.Controllers
                 return false;
             }
         }
-        //private string GetExcelPOSuggest(string strType, string strBranchID, DateTime strPODate, string strVendID)
-        //{
-
-
-          
-        //    try
-        //    {
-              
-              
-      
-
-      
-         
-        //        #endregion
-
-
-      
-
-              
-       
-     
-      
-        //        SheetKPI.Range["O1:O" + (dtInvtID.Rows.Count + 7)].Font.Color = Color.White;               
-        //        SheetKPI.Range["A1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Name = "Arial";
-        //        SheetKPI.Range["A1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Size = 10;
-        //        SheetKPI.Range["AA1:ZZ" + (dtInvtID.Rows.Count + 7)].Font.Color = Color.White;         
-        //        SheetKPI.Range["B7:G" + (dtInvtID.Rows.Count + 7)].Interior.Color = Color.Silver;
-
-        //        FormatConditions fcs = SheetKPI.Range["A7:N" + (dtInvtID.Rows.Count + 7)].FormatConditions;
-        //        FormatCondition fc = (FormatCondition)fcs.Add
-        //            (XlFormatConditionType.xlExpression, Type.Missing, "=$O7=\"G\"");
-        //        fc.Font.Color = ColorTranslator.ToOle(Color.Green);
-
-
-        //        FormatCondition fc1 = (FormatCondition)fcs.Add
-        //            (XlFormatConditionType.xlExpression, Type.Missing, "=$O7=\"R\"");
-        //        fc1.Font.Color = ColorTranslator.ToOle(Color.Red);
-              
-        //        Microsoft.Office.Interop.Excel.Range firstRow = (Microsoft.Office.Interop.Excel.Range)SheetKPI.Rows[7];
-        //        firstRow.Activate();
-        //        firstRow.Select();
-        //        //firstRow.AutoFilter(5, Type.Missing, XlAutoFilterOperator.xlFilterValues, Type.Missing, true);
-        //        firstRow.Application.ActiveWindow.FreezePanes = true;
-
-        //        //Filter excel
-
-        //        string lastrow = "N" + (dtInvtID.Rows.Count + 7).ToString();
-        //        var _rng = SheetKPI.get_Range("A6", lastrow);
-        //        _rng.AutoFilter(1, Type.Missing, Microsoft.Office.Interop.Excel.XlAutoFilterOperator.xlAnd, Type.Missing, true);
-        //        _rng.Borders.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-
-
-
-
-        //        excelApplication.DisplayAlerts = false;
-        //        excelWorkBook.SaveAs(fileName, XlFileFormat.xlWorkbookNormal, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-        //        excelWorkBook.Close(true, Type.Missing, Type.Missing);
-        //        excelApplication.Quit();
-        //        excelApplication = null;
-        //        byte[] buffer = new byte[1];
-        //        using (FileStream fs = new FileStream(fileName, FileMode.Open,
-        //                           FileAccess.Read, FileShare.Read))
-        //        {
-        //            buffer = new byte[fs.Length];
-        //            fs.Read(buffer, 0, (int)fs.Length);
-
-        //        }
-
-        //        return fileName;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        excelApplication.Quit();
-        //        excelApplication = null;
-        //        throw ex;
-        //    }
-
-
-        //    finally
-        //    {
-                
-        //        //if (System.IO.File.Exists(fileName))
-        //        //    System.IO.File.Delete(fileName);
-        //        SheetKPI = null;
-        //        if (excelWorkBook != null)
-        //            excelWorkBook = null;
-        //        if (excelApplication != null)
-        //        {
-        //            excelApplication.Quit();
-        //            excelApplication = null;
-        //        }
-        //        //Garbage collection.
-        //        GC.Collect();
-        //        GC.WaitForPendingFinalizers();
-        //        GC.Collect();
-        //        GC.WaitForPendingFinalizers();
-                
-        //    }
-
-
-        //}
+        
         private void SetCellValueHeader(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
         {
             c.PutValue(" "+lang);

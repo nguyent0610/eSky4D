@@ -257,7 +257,7 @@ var HQ = {
                 grd.view.loadMask.show();
             else grd.view.loadMask.hide();
         },
-        insert: function (grd, keys,indexColumn) {
+        insert: function (grd, keys) {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
@@ -265,7 +265,7 @@ var HQ = {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
                         //HQ.grid.last(grd);
-                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: indexColumn == undefined ? 1 : indexColumn }); }, 300);
+                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
                     }
                 });
                 //}
@@ -314,8 +314,8 @@ var HQ = {
         indexSelect: function (grd) {
             var index = '';
             var arr = grd.getSelectionModel().getSelection();
-            arr.forEach(function (itm) {
-                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+            arr.forEach(function (itm) {                
+                index += (grd.getStore().indexOf(itm)+1) + ',';
             });
 
             return index.substring(0, index.length - 1);
@@ -584,6 +584,27 @@ var HQ = {
             control.getEl().on("click", function () {
                 HQ.focus = itemfocus;
             });
+        },
+        setForceSelection: function (ctr, isForceSelection,cboex) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.forceSelection) != "undefined") {
+                        if (cboex != undefined) {                            
+                            if (!HQ.common.contains(cboex.split(','), itm.id)) itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;                           
+                        }else itm.forceSelection = isForceSelection==undefined?false:isForceSelection;
+                    }
+                      
+                    HQ.common.setForceSelection(itm, isForceSelection, cboex);
+                });
+            }
+        },
+        contains: function (a, obj) {
+            for (var i = 0; i < a.length; i++) {
+                if (a[i] === obj) {
+                    return true;
+                }
+            }
+            return false;
         }
     },
     util: {
@@ -706,6 +727,7 @@ var HQ = {
 };
 
 HQ.waitMsg = HQ.common.getLang('waitMsg');
+
 var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
@@ -745,6 +767,10 @@ var loadDefault = function (fileNameStore, cbo) {
     }
 };
 //TrungHT
+Ext.define("NumbercurrencyPrecision", {
+    override: "Ext.util.Format.Number",
+    currencyPrecision: 0
+});
 Ext.define("ThousandSeparatorNumberField", {
     override: "Ext.form.field.Number",
 
@@ -752,13 +778,16 @@ Ext.define("ThousandSeparatorNumberField", {
     * @cfg {Boolean} useThousandSeparator
     */
     useThousandSeparator: true,
-    //decimalPrecision: 0,
+
     style: 'text-align: right',
     fieldStyle: "text-align:right;",
     /**
      * @inheritdoc
      */
+    //dung cho page
+
     toRawNumber: function (value) {
+        this.decimalPrecision = this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
         return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
     },
 
@@ -884,6 +913,22 @@ Ext.define("ThousandSeparatorNumberField", {
         return isNaN(value) ? null : value;
     }
 });
+
+Ext.define("Ext.locale.vn.toolbar.Paging", {
+    override: "Ext.PagingToolbar",
+    lable: HQ.common.getLang("PageSize"),
+    beforePageText: HQ.common.getLang("Page"),
+    afterPageText: HQ.common.getLang("of") + " {0}",
+    firstText: HQ.common.getLang("PageFirst"),
+    prevText: HQ.common.getLang("PagePrev"),
+    nextText: HQ.common.getLang("PageNext"),
+    lastText: HQ.common.getLang("PageLast"),
+    refreshText: HQ.common.getLang("PageRefresh"),
+    displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
+    emptyMsg: HQ.common.getLang("DataEmty")
+});
+
+
 //window.onresize = function () {
 //    if ((window.outerHeight - window.innerHeight) > 100) {
 //        alert('Docked inspector was opened');

@@ -13,54 +13,7 @@
           <EntitySet Name="OM_UserDefault" EntityType="SA00300Model.Store.OM_UserDefault" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="PO_Detail" EntityType="SA00300Model.Store.PO_Detail" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="PO_Header" EntityType="SA00300Model.Store.PO_Header" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="PO_Setup" EntityType="SA00300Model.Store.PO_Setup" store:Type="Tables" store:Schema="dbo" store:Name="PO_Setup">
-            <DefiningQuery>SELECT 
-      [PO_Setup].[BranchID] AS [BranchID], 
-      [PO_Setup].[SetupID] AS [SetupID], 
-      [PO_Setup].[AutoRef] AS [AutoRef], 
-      [PO_Setup].[AutoReleaseAP] AS [AutoReleaseAP], 
-      [PO_Setup].[BillAddr1] AS [BillAddr1], 
-      [PO_Setup].[BillAddr2] AS [BillAddr2], 
-      [PO_Setup].[BillAttn] AS [BillAttn], 
-      [PO_Setup].[BillCity] AS [BillCity], 
-      [PO_Setup].[BillCountry] AS [BillCountry], 
-      [PO_Setup].[BillEmail] AS [BillEmail], 
-      [PO_Setup].[BillFax] AS [BillFax], 
-      [PO_Setup].[BillName] AS [BillName], 
-      [PO_Setup].[BillPhone] AS [BillPhone], 
-      [PO_Setup].[BillState] AS [BillState], 
-      [PO_Setup].[BillZip] AS [BillZip], 
-      [PO_Setup].[DfltLstUnitCost] AS [DfltLstUnitCost], 
-      [PO_Setup].[DfltRcptFrom] AS [DfltRcptFrom], 
-      [PO_Setup].[DfltRcptUnitFromIN] AS [DfltRcptUnitFromIN], 
-      [PO_Setup].[LastBatNbr] AS [LastBatNbr], 
-      [PO_Setup].[LastPONbr] AS [LastPONbr], 
-      [PO_Setup].[LastRcptNbr] AS [LastRcptNbr], 
-      [PO_Setup].[PreFixBat] AS [PreFixBat], 
-      [PO_Setup].[ShipAddr1] AS [ShipAddr1], 
-      [PO_Setup].[ShipAddr2] AS [ShipAddr2], 
-      [PO_Setup].[ShipAttn] AS [ShipAttn], 
-      [PO_Setup].[ShipCity] AS [ShipCity], 
-      [PO_Setup].[ShipCountry] AS [ShipCountry], 
-      [PO_Setup].[ShipEmail] AS [ShipEmail], 
-      [PO_Setup].[ShipFax] AS [ShipFax], 
-      [PO_Setup].[ShipName] AS [ShipName], 
-      [PO_Setup].[ShipPhone] AS [ShipPhone], 
-      [PO_Setup].[ShipState] AS [ShipState], 
-      [PO_Setup].[ShipZip] AS [ShipZip], 
-      [PO_Setup].[UseBarCode] AS [UseBarCode], 
-      [PO_Setup].[Crtd_DateTime] AS [Crtd_DateTime], 
-      [PO_Setup].[Crtd_Prog] AS [Crtd_Prog], 
-      [PO_Setup].[Crtd_User] AS [Crtd_User], 
-      [PO_Setup].[LUpd_DateTime] AS [LUpd_DateTime], 
-      [PO_Setup].[LUpd_Prog] AS [LUpd_Prog], 
-      [PO_Setup].[LUpd_User] AS [LUpd_User], 
-      [PO_Setup].[tstamp] AS [tstamp], 
-      [PO_Setup].[EditablePOPrice] AS [EditablePOPrice], 
-      [PO_Setup].[UseIN] AS [UseIN], 
-      [PO_Setup].[UseAP] AS [UseAP]
-      FROM [dbo].[PO_Setup] AS [PO_Setup]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="PO_Setup" EntityType="SA00300Model.Store.PO_Setup" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="RPTRunning" EntityType="SA00300Model.Store.RPTRunning" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="AP_Vendor">
@@ -394,28 +347,10 @@
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="IsExport" Type="bit" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'eSky4DApp.dbo.PO_Setup' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <EntityType Name="PO_Setup">
           <Key>
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="SetupID" />
-            <PropertyRef Name="AutoRef" />
-            <PropertyRef Name="AutoReleaseAP" />
-            <PropertyRef Name="DfltLstUnitCost" />
-            <PropertyRef Name="DfltRcptFrom" />
-            <PropertyRef Name="UseBarCode" />
-            <PropertyRef Name="Crtd_DateTime" />
-            <PropertyRef Name="Crtd_Prog" />
-            <PropertyRef Name="Crtd_User" />
-            <PropertyRef Name="LUpd_DateTime" />
-            <PropertyRef Name="LUpd_Prog" />
-            <PropertyRef Name="LUpd_User" />
-            <PropertyRef Name="tstamp" />
-            <PropertyRef Name="EditablePOPrice" />
-            <PropertyRef Name="UseIN" />
-            <PropertyRef Name="UseAP" />
           </Key>
           <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
           <Property Name="SetupID" Type="varchar" Nullable="false" MaxLength="2" />
@@ -498,6 +433,10 @@
           <Property Name="ListParm02" Type="nvarchar(max)" />
           <Property Name="ListParm03" Type="nvarchar(max)" />
         </EntityType>
+        <Function Name="PO10100_pcInventoryActive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="PO10100_pcSiteAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="PO10100_pdAP_VenDorTaxes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="VendID" Type="varchar" Mode="In" />
           <Parameter Name="OrdFromId" Type="varchar" Mode="In" />
@@ -584,7 +523,6 @@
           <EntitySet Name="IN_ItemSite" EntityType="PO10100Model.IN_ItemSite" />
           <EntitySet Name="IN_Inventory" EntityType="PO10100Model.IN_Inventory" />
           <EntitySet Name="IN_UnitConversion" EntityType="PO10100Model.IN_UnitConversion" />
-          <EntitySet Name="PO_Setup" EntityType="PO10100Model.PO_Setup" />
           <EntitySet Name="OM_UserDefault" EntityType="PO10100Model.OM_UserDefault" />
           <EntitySet Name="AP_Vendor" EntityType="PO10100Model.AP_Vendor" />
           <FunctionImport Name="PO10100_pdOM_DiscAllByBranchPO" ReturnType="Collection(PO10100Model.PO10100_pdOM_DiscAllByBranchPO_Result)">
@@ -616,6 +554,11 @@
           <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="RPTRunnings" EntityType="PO10100Model.RPTRunning" />
+          <FunctionImport Name="PO10100_pcInventoryActive" ReturnType="Collection(PO10100Model.PO10100_pcInventoryActive_Result)" />
+          <EntitySet Name="PO_Setup" EntityType="PO10100Model.PO_Setup" />
+          <FunctionImport Name="PO10100_pcSiteAll" ReturnType="Collection(PO10100Model.PO10100_pcSiteAll_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="PO10100_pgDetail_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -899,71 +842,6 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-        </EntityType>
-        <EntityType Name="PO_Setup">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="SetupID" />
-            <PropertyRef Name="AutoRef" />
-            <PropertyRef Name="AutoReleaseAP" />
-            <PropertyRef Name="DfltLstUnitCost" />
-            <PropertyRef Name="DfltRcptFrom" />
-            <PropertyRef Name="UseBarCode" />
-            <PropertyRef Name="Crtd_DateTime" />
-            <PropertyRef Name="Crtd_Prog" />
-            <PropertyRef Name="Crtd_User" />
-            <PropertyRef Name="LUpd_DateTime" />
-            <PropertyRef Name="LUpd_Prog" />
-            <PropertyRef Name="LUpd_User" />
-            <PropertyRef Name="tstamp" />
-            <PropertyRef Name="EditablePOPrice" />
-            <PropertyRef Name="UseIN" />
-            <PropertyRef Name="UseAP" />
-          </Key>
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="SetupID" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="AutoRef" Nullable="false" />
-          <Property Type="Int16" Name="AutoReleaseAP" Nullable="false" />
-          <Property Type="String" Name="BillAddr1" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillAddr2" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillAttn" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillCity" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillCountry" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillEmail" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillFax" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillName" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillPhone" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillState" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillZip" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltLstUnitCost" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltRcptFrom" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="DfltRcptUnitFromIN" />
-          <Property Type="String" Name="LastBatNbr" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastPONbr" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastRcptNbr" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="PreFixBat" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipAddr1" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ShipAddr2" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ShipAttn" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ShipCity" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipCountry" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipEmail" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipFax" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipName" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ShipPhone" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipState" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipZip" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="UseBarCode" Nullable="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Type="Boolean" Name="EditablePOPrice" Nullable="false" />
-          <Property Type="Boolean" Name="UseIN" Nullable="false" />
-          <Property Type="Boolean" Name="UseAP" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_UserDefault">
           <Key>
@@ -1313,6 +1191,80 @@
           <Property Type="String" Name="ListParm02" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ListParm03" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <ComplexType Name="PO10100_pcInventoryActive_Result">
+          <Property Type="String" Name="BarCode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Descr1" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Color" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="CpnyID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ClassID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="StkUnit" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="PriceClassID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxCat" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DfltSite" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DfltSOUnit" Nullable="true" MaxLength="15" />
+          <Property Type="Double" Name="SOPrice" Nullable="false" />
+          <Property Type="Double" Name="SOFee" Nullable="false" />
+          <Property Type="String" Name="ValMthd" Nullable="true" MaxLength="1" />
+          <Property Type="Int16" Name="StkItem" Nullable="false" />
+          <Property Type="Double" Name="StkWt" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="PO_Setup">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SetupID" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SetupID" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="AutoRef" Nullable="false" />
+          <Property Type="Int16" Name="AutoReleaseAP" Nullable="false" />
+          <Property Type="String" Name="BillAddr1" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAddr2" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAttn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillCity" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillCountry" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillEmail" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillFax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillName" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillPhone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillState" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillZip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltLstUnitCost" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltRcptFrom" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DfltRcptUnitFromIN" />
+          <Property Type="String" Name="LastBatNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastPONbr" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastRcptNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PreFixBat" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipAddr1" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipAddr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipAttn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipCity" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipCountry" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipEmail" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipFax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipPhone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipState" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipZip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="UseBarCode" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Boolean" Name="EditablePOPrice" Nullable="false" />
+          <Property Type="Boolean" Name="UseIN" Nullable="false" />
+          <Property Type="Boolean" Name="UseAP" Nullable="false" />
+        </EntityType>
+        <ComplexType Name="PO10100_pcSiteAll_Result">
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1608,56 +1560,6 @@
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="UnitType" ColumnName="UnitType" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PO_Setup">
-            <EntityTypeMapping TypeName="PO10100Model.PO_Setup">
-              <MappingFragment StoreEntitySet="PO_Setup">
-                <ScalarProperty Name="UseAP" ColumnName="UseAP" />
-                <ScalarProperty Name="UseIN" ColumnName="UseIN" />
-                <ScalarProperty Name="EditablePOPrice" ColumnName="EditablePOPrice" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="UseBarCode" ColumnName="UseBarCode" />
-                <ScalarProperty Name="ShipZip" ColumnName="ShipZip" />
-                <ScalarProperty Name="ShipState" ColumnName="ShipState" />
-                <ScalarProperty Name="ShipPhone" ColumnName="ShipPhone" />
-                <ScalarProperty Name="ShipName" ColumnName="ShipName" />
-                <ScalarProperty Name="ShipFax" ColumnName="ShipFax" />
-                <ScalarProperty Name="ShipEmail" ColumnName="ShipEmail" />
-                <ScalarProperty Name="ShipCountry" ColumnName="ShipCountry" />
-                <ScalarProperty Name="ShipCity" ColumnName="ShipCity" />
-                <ScalarProperty Name="ShipAttn" ColumnName="ShipAttn" />
-                <ScalarProperty Name="ShipAddr2" ColumnName="ShipAddr2" />
-                <ScalarProperty Name="ShipAddr1" ColumnName="ShipAddr1" />
-                <ScalarProperty Name="PreFixBat" ColumnName="PreFixBat" />
-                <ScalarProperty Name="LastRcptNbr" ColumnName="LastRcptNbr" />
-                <ScalarProperty Name="LastPONbr" ColumnName="LastPONbr" />
-                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
-                <ScalarProperty Name="DfltRcptUnitFromIN" ColumnName="DfltRcptUnitFromIN" />
-                <ScalarProperty Name="DfltRcptFrom" ColumnName="DfltRcptFrom" />
-                <ScalarProperty Name="DfltLstUnitCost" ColumnName="DfltLstUnitCost" />
-                <ScalarProperty Name="BillZip" ColumnName="BillZip" />
-                <ScalarProperty Name="BillState" ColumnName="BillState" />
-                <ScalarProperty Name="BillPhone" ColumnName="BillPhone" />
-                <ScalarProperty Name="BillName" ColumnName="BillName" />
-                <ScalarProperty Name="BillFax" ColumnName="BillFax" />
-                <ScalarProperty Name="BillEmail" ColumnName="BillEmail" />
-                <ScalarProperty Name="BillCountry" ColumnName="BillCountry" />
-                <ScalarProperty Name="BillCity" ColumnName="BillCity" />
-                <ScalarProperty Name="BillAttn" ColumnName="BillAttn" />
-                <ScalarProperty Name="BillAddr2" ColumnName="BillAddr2" />
-                <ScalarProperty Name="BillAddr1" ColumnName="BillAddr1" />
-                <ScalarProperty Name="AutoReleaseAP" ColumnName="AutoReleaseAP" />
-                <ScalarProperty Name="AutoRef" ColumnName="AutoRef" />
-                <ScalarProperty Name="SetupID" ColumnName="SetupID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2037,6 +1939,88 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PO10100_pcInventoryActive" FunctionName="SA00300Model.Store.PO10100_pcInventoryActive">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO10100Model.PO10100_pcInventoryActive_Result">
+                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
+                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="StkUnit" ColumnName="StkUnit" />
+                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
+                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
+                <ScalarProperty Name="DfltSite" ColumnName="DfltSite" />
+                <ScalarProperty Name="DfltSOUnit" ColumnName="DfltSOUnit" />
+                <ScalarProperty Name="SOPrice" ColumnName="SOPrice" />
+                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
+                <ScalarProperty Name="ValMthd" ColumnName="ValMthd" />
+                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
+                <ScalarProperty Name="StkWt" ColumnName="StkWt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PO_Setup">
+            <EntityTypeMapping TypeName="PO10100Model.PO_Setup">
+              <MappingFragment StoreEntitySet="PO_Setup">
+                <ScalarProperty Name="UseAP" ColumnName="UseAP" />
+                <ScalarProperty Name="UseIN" ColumnName="UseIN" />
+                <ScalarProperty Name="EditablePOPrice" ColumnName="EditablePOPrice" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="UseBarCode" ColumnName="UseBarCode" />
+                <ScalarProperty Name="ShipZip" ColumnName="ShipZip" />
+                <ScalarProperty Name="ShipState" ColumnName="ShipState" />
+                <ScalarProperty Name="ShipPhone" ColumnName="ShipPhone" />
+                <ScalarProperty Name="ShipName" ColumnName="ShipName" />
+                <ScalarProperty Name="ShipFax" ColumnName="ShipFax" />
+                <ScalarProperty Name="ShipEmail" ColumnName="ShipEmail" />
+                <ScalarProperty Name="ShipCountry" ColumnName="ShipCountry" />
+                <ScalarProperty Name="ShipCity" ColumnName="ShipCity" />
+                <ScalarProperty Name="ShipAttn" ColumnName="ShipAttn" />
+                <ScalarProperty Name="ShipAddr2" ColumnName="ShipAddr2" />
+                <ScalarProperty Name="ShipAddr1" ColumnName="ShipAddr1" />
+                <ScalarProperty Name="PreFixBat" ColumnName="PreFixBat" />
+                <ScalarProperty Name="LastRcptNbr" ColumnName="LastRcptNbr" />
+                <ScalarProperty Name="LastPONbr" ColumnName="LastPONbr" />
+                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
+                <ScalarProperty Name="DfltRcptUnitFromIN" ColumnName="DfltRcptUnitFromIN" />
+                <ScalarProperty Name="DfltRcptFrom" ColumnName="DfltRcptFrom" />
+                <ScalarProperty Name="DfltLstUnitCost" ColumnName="DfltLstUnitCost" />
+                <ScalarProperty Name="BillZip" ColumnName="BillZip" />
+                <ScalarProperty Name="BillState" ColumnName="BillState" />
+                <ScalarProperty Name="BillPhone" ColumnName="BillPhone" />
+                <ScalarProperty Name="BillName" ColumnName="BillName" />
+                <ScalarProperty Name="BillFax" ColumnName="BillFax" />
+                <ScalarProperty Name="BillEmail" ColumnName="BillEmail" />
+                <ScalarProperty Name="BillCountry" ColumnName="BillCountry" />
+                <ScalarProperty Name="BillCity" ColumnName="BillCity" />
+                <ScalarProperty Name="BillAttn" ColumnName="BillAttn" />
+                <ScalarProperty Name="BillAddr2" ColumnName="BillAddr2" />
+                <ScalarProperty Name="BillAddr1" ColumnName="BillAddr1" />
+                <ScalarProperty Name="AutoReleaseAP" ColumnName="AutoReleaseAP" />
+                <ScalarProperty Name="AutoRef" ColumnName="AutoRef" />
+                <ScalarProperty Name="SetupID" ColumnName="SetupID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PO10100_pcSiteAll" FunctionName="SA00300Model.Store.PO10100_pcSiteAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO10100Model.PO10100_pcSiteAll_Result">
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -2057,16 +2041,16 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="SA00300Model" ZoomLevel="48">
+      <Diagram Name="SA00300Model" ZoomLevel="94">
         <EntityTypeShape EntityType="PO10100Model.PO_Detail" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PO10100Model.IN_ItemSite" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PO10100Model.IN_Inventory" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PO10100Model.IN_UnitConversion" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PO10100Model.PO_Setup" Width="1.5" PointX="8.75" PointY="5.75" />
-        <EntityTypeShape EntityType="PO10100Model.OM_UserDefault" Width="1.5" PointX="10.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PO10100Model.AP_Vendor" Width="1.5" PointX="10.75" PointY="6.75" />
-        <EntityTypeShape EntityType="PO10100Model.PO_Header" Width="1.5" PointX="9.559022688101523" PointY="25.565159437044134" />
-        <EntityTypeShape EntityType="PO10100Model.RPTRunning" Width="1.5" PointX="0.72757150266672088" PointY="4.456704246092916" />
+        <EntityTypeShape EntityType="PO10100Model.IN_ItemSite" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PO10100Model.IN_Inventory" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PO10100Model.IN_UnitConversion" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PO10100Model.OM_UserDefault" Width="1.5" PointX="6.75" PointY="5.75" />
+        <EntityTypeShape EntityType="PO10100Model.AP_Vendor" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PO10100Model.PO_Header" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PO10100Model.RPTRunning" Width="1.5" PointX="6.75" PointY="11.75" />
+        <EntityTypeShape EntityType="PO10100Model.PO_Setup" Width="1.5" PointX="12.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
