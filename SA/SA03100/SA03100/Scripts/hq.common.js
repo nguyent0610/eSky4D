@@ -710,7 +710,7 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 2) value = '';//value.split(',')[value.split(',').length-1];
+        if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
         if (value.split(';').length > 2) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
             store.clearFilter();
