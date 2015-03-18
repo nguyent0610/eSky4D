@@ -268,7 +268,7 @@
                                                                                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
                                                                                     .LoadData()
                                                                                     )
-                                        , Html.X().NumberColumn().Align(Alignment.Right).Text("QtyOrd").DataIndex("QtyOrd").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
+                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("QtyOrd")).DataIndex("QtyOrd").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
 
                                         , Html.X().Column().Text(Util.GetLang("PurchUnit")).DataIndex("PurchUnit")
                                                                             .Editor(HQ.Combo().ID("cboPurchUnit").Name("PurchUnit").HideLabel(true).LabelWidth(0)
