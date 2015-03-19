@@ -1,9 +1,7 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
-
-
 var keys = ['Code'];
-var fieldsCheckRequire = ["Code","Type","Title00", "Title01", "Msg00", "Msg01"];
-var fieldsLangCheckRequire = ["Code","Type","Title00", "Title01", "Msg00", "Msg01"];
+var fieldsCheckRequire = ["Code", "Type", "Title00", "Title01", "Msg00", "Msg01"];
+var fieldsLangCheckRequire = ["Code", "Type", "Title00", "Title01", "Msg00", "Msg01"];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -59,48 +57,6 @@ var menuClick = function (command) {
     }
 
 };
-var grdSYS_Message_BeforeEdit = function (editor, e) {
-    return HQ.grid.checkBeforeEdit(e, keys);
-};
-var grdSYS_Message_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdSYS_Message, e, keys);
-};
-var grdSYS_Message_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdSYS_Message, e, keys);
-};
-var grdSYS_Message_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdSYS_Message);
-    stoChanged(App.stoSYS_Message);
-};
-/////////////////////////////////////////////////////////////////////////
-//// Process Data ///////////////////////////////////////////////////////
-var save = function () {
-    if (App.frmMain.isValid()) {
-        App.frmMain.submit({
-            waitMsg: HQ.common.getLang("SavingData"),
-            url: 'SA01100/Save',
-            params: {
-                lstSYS_Message: HQ.store.getData(App.stoSYS_Message)
-            },
-            success: function (msg, data) {
-                HQ.message.show(201405071);
-                HQ.isChange = false;
-                menuClick("refresh");
-            },
-            failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
-            }
-        });
-    }
-};
-
-var deleteData = function (item) {
-    if (item == "yes") {
-        App.grdSYS_Message.deleteSelected();
-        stoChanged(App.stoSYS_Message);
-    }
-};
-
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
@@ -127,6 +83,51 @@ var stoLoad = function (sto) {
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
+var grdSYS_Message_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdSYS_Message_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSYS_Message, e, keys);
+};
+var grdSYS_Message_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_Message, e, keys);
+};
+var grdSYS_Message_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_Message);
+    stoChanged(App.stoSYS_Message);
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SA01100/Save',
+            params: {
+                lstSYS_Message: HQ.store.getData(App.stoSYS_Message)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdSYS_Message.deleteSelected();
+        stoChanged(App.stoSYS_Message);
+    }
+};
+
 
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
@@ -138,3 +139,4 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
+

@@ -55,7 +55,7 @@ namespace SA01100.Controllers
 
                 foreach (SA01100_pgSYS_Message_Result curLang in lstSYS_Message.Created)
                 {
-                    if (curLang.Code.PassNull() == "") continue;
+                    if (curLang.Code.PassNull() == "" || curLang.Code == 0) continue;
 
                     var lang = _db.SYS_Message.FirstOrDefault(p => p.Code == curLang.Code);
 
