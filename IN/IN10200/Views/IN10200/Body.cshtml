@@ -270,6 +270,7 @@
                     .Name("TotQty")
                     .DataIndex("TotQty")
                     .HQLangCode("TotQ")
+                    .DecimalPrecision(0)
                     .Width(220)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                     ,
@@ -278,6 +279,7 @@
                     .Name("TotAmt")
                     .DataIndex("TotAmt")
                     .HQLangCode("TotAmt")
+                    .DecimalPrecision(0)
                     .Width(250)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                     ,
@@ -441,7 +443,7 @@
                 .Text(Util.GetLang("Qty"))
                 .Align(Alignment.Right)
                 .Width(100)
-                .Editor(HQ.NumberField().MaxValue(1000).MinValue(0).SpinUpEnabled(true))
+                .Editor(HQ.NumberField().MaxValue(100000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
                 .Renderer("rdrTrans_QtyAmt"),
                 
                 X.ComponentColumn()
@@ -456,7 +458,7 @@
                 .Text(Util.GetLang("UnitPrice"))
                 .Align(Alignment.Right)
                 .Width(100)
-                .Editor(HQ.NumberField().MaxValue(100000000).MinValue(0).SpinUpEnabled(true))
+                .Editor(HQ.NumberField().MaxValue(100000000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
                 .Renderer("rdrTrans_QtyAmt")
                 ,
 
