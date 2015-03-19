@@ -82,7 +82,7 @@ var menuClick = function (command) {
             break;
         case "prev":
             if (HQ.focus == 'header') {
-                HQ.combo.next(App.cboCustId, HQ.isChange);
+                HQ.combo.prev(App.cboCustId, HQ.isChange);
             } else if (HQ.focus == 'grdLTTContract') {
                 HQ.grid.prev(App.grdTop);
             } else if (HQ.focus == 'grdLTTContractDetail') {
@@ -97,7 +97,7 @@ var menuClick = function (command) {
             break;
         case "next":
             if (HQ.focus == 'header') {
-                HQ.combo.prev(App.cboCustId, HQ.isChange);
+                HQ.combo.next(App.cboCustId, HQ.isChange);
             } else if (HQ.focus == 'grdLTTContract') {
                 HQ.grid.next(App.grdTop);
             } else if (HQ.focus == 'grdLTTContractDetail') {
