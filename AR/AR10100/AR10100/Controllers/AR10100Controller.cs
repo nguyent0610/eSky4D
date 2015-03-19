@@ -23,10 +23,11 @@ namespace AR10100.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.BusinessDate = DateTime.Now.ToDateShort();
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

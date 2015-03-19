@@ -109,7 +109,7 @@ var menuClick = function (command) {
             if (HQ.isInsert) {
 
                 if (_focusrecord == 2) {
-                    if (App.tabDocument.getForm().getRecord() != null) {
+                    if (App.frmBot.getForm().getRecord() != null) {
                         App.slmGridTab1.select(App.storeGrid.getCount() - 1);
 
                         if (App.storeGrid.getCount() == 0) {
@@ -140,13 +140,13 @@ var menuClick = function (command) {
 
 
                 } else if (_focusrecord == 1) {
-                    tmpChangeForm1OrForm2 = "1";
+                    //tmpChangeForm1OrForm2 = "1";
                     App.cboRefNbr.setValue('');
                     //App.storeFormBot.reload();
                     setTimeout(function () { waitcboRefNbrForInsert(); }, 1500);
 
                 } else if (_focusrecord == 3) {
-                    tmpChangeForm1OrForm2 = "2";
+                    //tmpChangeForm1OrForm2 = "2";
                     App.cboBatNbr.setValue('');
 
                     App.frmTop.getForm().reset(true);
@@ -190,14 +190,14 @@ var menuClick = function (command) {
 
                     //});
                     //App.storeFormBot.insert(0, recordBot);
-                    //App.tabDocument.getForm().loadRecord(App.storeFormBot.getAt(0));
+                    //App.frmBot.getForm().loadRecord(App.storeFormBot.getAt(0));
                     //cboTerms_Change();
                 }
 
             }
             break;
         case "delete":
-            var curRecord = App.frm.getRecord();
+            var curRecord = App.frmMain.getRecord();
             if (HQ.isDelete) {
                 if (App.cboBatNbr.value != "") {
 
@@ -253,7 +253,7 @@ var waitcboRefNbrForInsert = function () {
 
         });
         App.storeFormBot.insert(0, record);
-        App.tabDocument.getForm().loadRecord(App.storeFormBot.getAt(0));
+        App.frmBot.getForm().loadRecord(App.storeFormBot.getAt(0));
     }
     cboTerms_Change();
     App.storeGrid.reload();
@@ -316,16 +316,16 @@ function Save() {
 
 
     }
-    //var curRecord = App.frm.getRecord();
+    //var curRecord = App.frmMain.getRecord();
     //if (tmpChangeForm1OrForm2 == "1") {
-    //    App.tabDocument.getForm().updateRecord();
+    //    App.frmBot.getForm().updateRecord();
     //} else if (tmpChangeForm1OrForm2 == "2") {
-    //    App.frm.getForm().updateRecord();
+    //    App.frmMain.getForm().updateRecord();
     //}
-    App.tabDocument.getForm().updateRecord();
+    App.frmBot.getForm().updateRecord();
 
-    if (App.frm.isValid()) {
-        App.frm.submit({
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
             waitMsg: 'Submiting...',
             url: 'AR10100/Save',
             params: {
@@ -399,7 +399,7 @@ function Save() {
             }
         });
     } else {
-        var fields = App.frm.getForm().getFields().each(
+        var fields = App.frmMain.getForm().getFields().each(
                 function (item) {
                     if (!item.isValid()) {
                         alert(item);
@@ -417,10 +417,10 @@ var AfterSaveWaitRefNbrStoreReload = function (data) {
 }
 // Xem lai
 function Close() {
-    if (App.frm.getRecord() != undefined) App.frm.updateRecord();
+    if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
     if (App.storeGrid.getChangedData().Updated == undefined &&
         App.storeGrid.getChangedData().Deleted == undefined &&
-        App.frm.getRecord() == undefined)
+        App.frmMain.getRecord() == undefined)
         parent.App.tabAR10100.close();
     else if (App.storeGrid.getChangedData().Updated != undefined ||
         App.storeGrid.getChangedData().Created != undefined ||
@@ -466,7 +466,7 @@ var deleteRecordFormTopBatch = function (item) {
                     App.frmTop.getForm().reset(true);
                     App.cboRefNbr.getStore().reload();
                     App.cboRefNbr.setValue('');
-                    App.tabDocument.getForm().reset(true);
+                    App.frmBot.getForm().reset(true);
                     setTimeout(function () { waitStoreRefNbrReLoad(); }, 1000);
                     App.cboStatus.setValue("H");
                     App.cboHandle.getStore().reload();
@@ -689,7 +689,7 @@ var loadDataAutoHeaderBot = function () {
     //}
     var record = App.storeFormBot.getAt(0);
     if (record) {
-        App.tabDocument.getForm().loadRecord(record);
+        App.frmBot.getForm().loadRecord(record);
         //App.cboRefNbr.getStore().reload();
         //setTimeout(function () { waitStoreRefNbrReLoad(); }, 1000);
     }
@@ -831,7 +831,7 @@ var tabSA_Setup_AfterRender = function (obj, padding) {
 //doi grid 1 load xong se load du lieu tu grid 1 len grid 2 , 3
 var waitStoreGridTab1ReLoad = function () {
 
-    App.tabAtAR10100.setActiveTab(App.tabDocument); // set tab dang su dung sang tab 1
+    App.tabAtAR10100.setActiveTab(App.frmBot); // set tab dang su dung sang tab 1
     App.storeGridTopTab2.removeAll();
     App.storeGridBotTab2.removeAll();
     ////duyet het tat cac dong cua grid 1 tab 1 de bat ra cac du lieu bo vao grid 2 cua tab 2
@@ -843,7 +843,7 @@ var waitStoreGridTab1ReLoad = function () {
 
 
     //App.slmGridTopTab2.select(0);
-    App.tabAtAR10100.setActiveTab(App.tabDocument); // set tab dang su dung sang tab 1
+    App.tabAtAR10100.setActiveTab(App.frmBot); // set tab dang su dung sang tab 1
     //App.slmGridTab1.select(0);//chon dong 1 cua grid 1 tab 1
     setTimeout(function () { waitGridLoadAndFocusIntoBatNbr(); }, 1000);
 
@@ -1040,7 +1040,7 @@ var reloadDataGrid1AndGrid2Tab2 = function (index) {
 
     //duyet grid 1 tab 2 de lay gia tri bo qua grid 2 tab 2 
     fillDataIntoGrid2Tab2();
-    App.tabAtAR10100.setActiveTab(App.tabDocument); // set tab dang su dung sang tab 1
+    App.tabAtAR10100.setActiveTab(App.frmBot); // set tab dang su dung sang tab 1
     App.slmGridTab1.select(index);
 }
 //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
@@ -1392,7 +1392,7 @@ var fillDataIntoGrid1Tab2 = function () {
 //        //    App.slmGridTab1.selected.items[0].set('TaxId02', "");
 //        //}
 //        //sau khi bat xong chuyen sang tab 2
-//        //App.tabAtAR10100.setActiveTab(App.tabDocument);
+//        //App.tabAtAR10100.setActiveTab(App.frmBot);
 //        //App.slmGridTab1.select();
 //        //App.slmGridTab1.selected.items[0].data.TaxId00;
 //        App.tabAtAR10100.setActiveTab(App.tabTax);
