@@ -125,6 +125,24 @@ var HQ = {
             });
             return data;
         },
+        // TinhHV using for auto gen the LineRef
+        lastLineRef: function (store) {
+            var num = 0;
+            for (var j = 0; j < store.data.length; j++) {
+                var item = store.data.items[j];
+
+                if (!Ext.isEmpty(item.data.LineRef) && parseInt(item.data.LineRef) > num) {
+                    num = parseInt(item.data.LineRef);
+                }
+            };
+            num++;
+            var lineRef = num.toString();
+            var len = lineRef.length;
+            for (var i = 0; i < 5 - len; i++) {
+                lineRef = "0" + lineRef;
+            }
+            return lineRef;
+        },
         //kiem tra key da nhap du chua
         isAllValidKey: function (items, keys) {
             if (items != undefined) {
@@ -146,7 +164,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -162,7 +180,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -173,6 +191,65 @@ var HQ = {
             }
             return true;
         }
+    },
+    combo: {
+        first: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var value = cbo.store.getAt(0);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+            }
+        },
+        prev: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var v = cbo.getValue();
+                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
+                var index = cbo.store.indexOf(record);
+                var value = cbo.store.getAt(index - 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+                else HQ.combo.first(cbo);
+            }
+        },
+        next: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var v = cbo.getValue();
+                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
+                var index = cbo.store.indexOf(record);
+                var value = cbo.store.getAt(index + 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+                else HQ.combo.last(cbo);
+            }
+        },
+        last: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var value = cbo.store.getAt(cbo.store.getCount() - 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+            }
+
+        },
+        expand: function (cbo, delimiter) {
+            if (cbo.getValue())
+                cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
+        },
     },
     grid: {
         showBusy: function (grd, isBusy) {
@@ -187,8 +264,8 @@ var HQ = {
                 //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
-                        HQ.grid.last(grd);
-                        grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                        //HQ.grid.last(grd);
+                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
                     }
                 });
                 //}
@@ -204,8 +281,8 @@ var HQ = {
                     if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
                         HQ.store.insertBlank(store, keys);
                     }
-                    HQ.grid.last(grd);
-                    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                    //HQ.grid.last(grd);
+                    setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
                 }
             });
             //}
@@ -233,6 +310,15 @@ var HQ = {
             var store = combo.up("gridpanel").getStore();
             store.pageSize = parseInt(combo.getValue(), 10);
             store.reload();
+        },
+        indexSelect: function (grd) {
+            var index = '';
+            var arr = grd.getSelectionModel().getSelection();
+            arr.forEach(function (itm) {
+                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+            });
+
+            return index.substring(0, index.length - 1);
         },
         checkDuplicate: function (grd, row, keys) {
             var found = false;
@@ -283,26 +369,6 @@ var HQ = {
             return HQ.grid.checkDuplicate(grd, row, keys);
         },
         //D�ng trong ham before edit cua grid
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
         //Cot nao la key thi khoa lai khi da co du lieu
         checkInput: function (row, keys) {
@@ -427,14 +493,6 @@ var HQ = {
         }
     },
     common: {
-
-
-
-
-
-
-
-
         close: function (app) {
             if (app["parentAutoLoadControl"] != undefined) {
                 app["parentAutoLoadControl"].close();
@@ -511,6 +569,42 @@ var HQ = {
                 }
             }
 
+        },
+        setRequire: function (ctr) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.allowBlank) != "undefined") {
+                        itm.validate();
+                    }
+                    HQ.common.setRequire(itm);
+                });
+            }
+        },
+        control_render: function (control, itemfocus) {
+            control.getEl().on("click", function () {
+                HQ.focus = itemfocus;
+            });
+        },
+        setForceSelection: function (ctr, isForceSelection, cboex) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.forceSelection) != "undefined") {
+                        if (cboex != undefined) {
+                            if (!HQ.common.contains(cboex.split(','), itm.id)) itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
+                        } else itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
+                    }
+
+                    HQ.common.setForceSelection(itm, isForceSelection, cboex);
+                });
+            }
+        },
+        contains: function (a, obj) {
+            for (var i = 0; i < a.length; i++) {
+                if (a[i] === obj) {
+                    return true;
+                }
+            }
+            return false;
         }
     },
     util: {
@@ -548,6 +642,40 @@ var HQ = {
             if (str == null) {
                 return "";
             } else return str;
+        },
+        focusControl: function () {
+            if (App[invalidField] && !App[invalidField].hasFocus) {
+                var tab = App[invalidField].findParentByType('tabpanel');
+                if (tab == undefined) {
+                    App[invalidField].focus();
+                }
+                else {
+                    HQ.util.focusControlInTab(tab, invalidField);
+                }
+            }
+        },
+        focusControlInTab: function (ctr, field) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (ctr.setActiveTab) != "undefined" && !App[field].hasFocus) {
+                        ctr.setActiveTab(App[itm.id]);
+                    }
+                    if (itm.id == field) {
+                        App[field].focus();
+                        return true;
+                    }
+                    HQ.util.focusControlInTab(itm, field);
+                });
+            }
+        },
+        checkEmail: function (value) {
+            var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            if ((HQ.util.passNull(value)).match(regex)) {
+                return true;
+            } else {
+                HQ.message.show(09112014, '', null);
+                return false;
+            }
         }
     },
     form: {
@@ -564,6 +692,14 @@ var HQ = {
                                 }
                             })
             return isValid;
+        },
+        lockButtonChange: function (isChange, frmMain) {
+            frmMain.menuClickbtnFirst.setDisabled(isChange);
+            frmMain.menuClickbtnNext.setDisabled(isChange);
+            frmMain.menuClickbtnLast.setDisabled(isChange);
+            frmMain.menuClickbtnPrev.setDisabled(isChange);
+            frmMain.menuClickbtnNew.setDisabled(isChange);
+            frmMain.menuClickbtnDelete.setDisabled(isChange);
         }
     },
     tooltip: {
@@ -595,7 +731,8 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 2) value = '';
+        if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
+        if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {
@@ -629,6 +766,10 @@ var loadDefault = function (fileNameStore, cbo) {
     }
 };
 //TrungHT
+Ext.define("NumbercurrencyPrecision", {
+    override: "Ext.util.Format.Number",
+    currencyPrecision: 0
+});
 Ext.define("ThousandSeparatorNumberField", {
     override: "Ext.form.field.Number",
 
@@ -636,13 +777,16 @@ Ext.define("ThousandSeparatorNumberField", {
     * @cfg {Boolean} useThousandSeparator
     */
     useThousandSeparator: true,
-    decimalPrecision: 0,
+    selectOnFocus: true,
     style: 'text-align: right',
     fieldStyle: "text-align:right;",
     /**
      * @inheritdoc
      */
+    //dung cho page
+
     toRawNumber: function (value) {
+        this.decimalPrecision = this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
         return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
     },
 
@@ -767,6 +911,20 @@ Ext.define("ThousandSeparatorNumberField", {
         value = parseFloat(this.toRawNumber(value));
         return isNaN(value) ? null : value;
     }
+});
+
+Ext.define("Ext.locale.vn.toolbar.Paging", {
+    override: "Ext.PagingToolbar",
+    lable: HQ.common.getLang("PageSize"),
+    beforePageText: HQ.common.getLang("Page"),
+    afterPageText: HQ.common.getLang("of") + " {0}",
+    firstText: HQ.common.getLang("PageFirst"),
+    prevText: HQ.common.getLang("PagePrev"),
+    nextText: HQ.common.getLang("PageNext"),
+    lastText: HQ.common.getLang("PageLast"),
+    refreshText: HQ.common.getLang("PageRefresh"),
+    displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
+    emptyMsg: HQ.common.getLang("DataEmty")
 });
 //window.onresize = function () {
 //    if ((window.outerHeight - window.innerHeight) > 100) {

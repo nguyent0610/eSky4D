@@ -43,7 +43,7 @@ namespace IN10100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -88,6 +88,12 @@ namespace IN10100.Controllers
             if (invt == null) invt = new IN_Inventory();
             List<IN10100_pcUnit_Result> lstUnit = _app.IN10100_pcUnit(invt.ClassID, invt.InvtID).ToList();
             return this.Store(lstUnit, lstUnit.Count);
+        }
+        public ActionResult GetSetup()
+        {
+            string cpnyID = Current.CpnyID;
+            var objSetup = _app.IN_Setup.FirstOrDefault(p => p.SetupID == "IN" && p.BranchID == cpnyID);
+            return this.Store(objSetup);
         }
 
         [HttpPost]
@@ -197,14 +203,20 @@ namespace IN10100.Controllers
                     batch.LUpd_User = _userName;
                 }
                
-               
+                
                 _app.SaveChanges();
+
+                string tstamp = "";
+                if (_objBatch != null)
+                {
+                    tstamp = _objBatch.tstamp.ToHex();
+                }
 
                 if (_logMessage != null)
                 {
                     return _logMessage;
                 }
-                return Json(new { success = true });
+                return Json(new { success = true, tstamp });
             }
             catch (Exception ex)
             {
@@ -243,7 +255,6 @@ namespace IN10100.Controllers
                     throw new MessageException(MessageType.Message, "301");
                 }
             }
-
             Batch batch = _app.Batches.FirstOrDefault(p => p.BatNbr == _objBatch.BatNbr && p.BranchID == _objBatch.BranchID);
             if (( _objBatch.Status == "U" ||  _objBatch.Status == "C") && (_handle == "C" || _handle == "V"))
             {
@@ -513,7 +524,11 @@ namespace IN10100.Controllers
                 pc.Add(new ParamStruct("@EffDate", DbType.DateTime, clsCommon.GetValueDBNull(data["DateEnd"].ToDateShort()), ParameterDirection.Input, 30));
                 DataTable dt = dal.ExecDataTable("IN10100_pdImportInventory", CommandType.StoredProcedure, ref pc);
 
+                List<IN10100_pgReceiptLoad_Result> lstDetail = _app.IN10100_pgReceiptLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(),"%","%").ToList();
+
                 sheetTrans.Cells.ImportDataTable(dt, false, "AA2");
+                
+            
 
                 Style style = workbook.GetStyleInPool(0);
                 style.Font.Color = Color.Transparent;
@@ -637,6 +652,15 @@ namespace IN10100.Controllers
                 sheetTrans.Cells.Columns[4].Width = 15;
                 sheetTrans.Cells.Columns[5].Width = 15;
                 sheetTrans.Protect(ProtectionType.All);
+
+                int row = 5;
+                foreach (var item in lstDetail)
+                {
+                    sheetTrans.Cells["A" + row].PutValue(item.InvtID);
+                    sheetTrans.Cells["D" + row].PutValue(item.Qty);
+                    row++;
+                }
+
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Position = 0;
                 return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = data["BatNbr"].PassNull() + ".xlsx" };
@@ -693,6 +717,9 @@ namespace IN10100.Controllers
                                 newTrans.InvtID = invtID;
                                 newTrans.LineRef = LastLineRef(lineRef);
                                 newTrans.ReasonCD = data["ReasonCD"].PassNull();
+
+                                workSheet.Cells[i, 2].Calculate(true, null);
+
                                 newTrans.UnitDesc = workSheet.Cells[i, 2].StringValue;
                                 newTrans.CnvFact = 1;
                                 newTrans.UnitMultDiv = "M";
@@ -701,6 +728,9 @@ namespace IN10100.Controllers
                                 newTrans.JrnlType = "IN";
                                 newTrans.TranDesc = objInvt.Descr;
                                 newTrans.Qty = workSheet.Cells[i, 3].FloatValue;
+
+                                workSheet.Cells[i, 4].Calculate(true, null);
+
                                 newTrans.UnitPrice = Math.Round(workSheet.Cells[i, 4].FloatValue, 0);
                                 newTrans.TranAmt = Math.Round(newTrans.UnitPrice * newTrans.Qty, 0);
                                 newTrans.SiteID = data["SiteID"].PassNull();

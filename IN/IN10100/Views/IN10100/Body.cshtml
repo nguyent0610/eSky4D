@@ -228,7 +228,8 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         lst.Change.Fn = "cboSiteID_Change";
                         lst.Focus.Handler = "HQ.focus='batch';";
-                    }),
+                    })
+                    ,
 
                     HQ.Combo().ID("Handle")
                     .HQLangCode("Handle")
@@ -253,7 +254,8 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         lst.Focus.Handler = "HQ.focus='batch';";
                     })
-                ),
+                )
+                ,
 
                 X.FieldContainer()
                 .Layout(LayoutType.HBox)
@@ -300,7 +302,8 @@
                     .LabelWidth(90)
                     .Width(220)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
-                ),
+                )
+                ,
 
                 X.FieldContainer()
                 .Layout(LayoutType.HBox)
@@ -308,11 +311,13 @@
                     HQ.NumberField().ID("TotQty")
                     .HQLangCode("TotQ")
                     .Width(220)
+                    .DecimalPrecision(0)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
 
                     HQ.NumberField().ID("TotAmt")
                     .HQLangCode("TotAmt")
                     .Width(250)
+                    .DecimalPrecision(0)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
 
                     HQ.Combo().ID("SlsperID")
@@ -336,7 +341,8 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         lst.Focus.Handler = "HQ.focus='batch';";
                     })
-                ),
+                )
+                ,
 
                 HQ.TextBox().ID("Descr")
                 .HQLangCode("Descr")
@@ -346,19 +352,22 @@
                 .HQControlFocus("BatNbr")
                 .BlankText(Util.GetLangPrefix("Input", "TranDate"))
                 .Width(720)
-                .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
+                .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                ,
 
                 X.Hidden().ID("tstamp"),
                 X.Hidden().ID("JrnlType")
 
-            ),
+            )
+            ,
 
             X.GridPanel().ID("grdTrans")
             .Border(false)
             .Region(Region.Center)
             .StoreID("stoTrans")
             .ColumnModel(
-                X.RowNumbererColumn(),
+                X.RowNumbererColumn()
+                ,
 
                 X.Column()
                 .DataIndex("InvtID")
@@ -384,14 +393,16 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     })
-                ),
+                )
+                ,
 
                 X.Column()
                 .DataIndex("TranDesc")
                 .MinWidth(250)
                 .MaxWidth(350)
                 .Flex(1)
-                .Text(Util.GetLang("Descr")),
+                .Text(Util.GetLang("Descr"))
+                ,
 
                 X.Column()
                 .DataIndex("UnitDesc")
@@ -408,28 +419,32 @@
                     .StoreID("stoUnit")
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                ),
+                )
+                ,
 
                 X.Column()
                 .DataIndex("Qty")
                 .Text(Util.GetLang("Qty"))
                 .Align(Alignment.Right)
                 .Width(100)
-                .Editor(HQ.NumberField().MaxValue(1000).MinValue(1).SpinUpEnabled(true))
-                .Renderer("rdrTrans_QtyAmt"),
+                .Editor(HQ.NumberField().MaxValue(100000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
+                .Renderer("rdrTrans_QtyAmt")
+                ,
                 
                 X.ComponentColumn()
                 .Text("")
                 .Width(20)
-                .Component(X.Button().Height(18).Text("").Listeners(p=>p.Click.Fn="btnLot_Click")),
+                .Component(X.Button().Height(18).Text("").Listeners(p=>p.Click.Fn="btnLot_Click"))
+                ,
                 
                 X.Column()
                 .DataIndex("UnitPrice")
                 .Text(Util.GetLang("UnitPrice"))
                 .Align(Alignment.Right)
                 .Width(100)
-                .Editor(HQ.NumberField().MaxValue(100000000).MinValue(0).SpinUpEnabled(true))
-                .Renderer("rdrTrans_QtyAmt"),
+                .Editor(HQ.NumberField().MaxValue(100000000).DecimalPrecision(0).SpinUpEnabled(true))
+                .Renderer("rdrTrans_QtyAmt")
+                ,
 
                 X.Column()
                 .DataIndex("TranAmt")
