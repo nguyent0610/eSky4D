@@ -23,22 +23,6 @@
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{
             
-            //X.FileUploadField()
-            //.ID("btnImport")
-            //.ButtonText("ImportTemplate")
-            //.ButtonOnly(true)
-            //.Icon(Icon.BookAdd)
-            //.Listeners(p=>{
-            //    p.Change.Fn = "btnImport_Click";
-            //}),
-                    
-            //X.Button()
-            //.ID("btnExport")
-            //.Text(Util.GetLang("ExportTemplate"))
-            //.Icon(Icon.ArrowTurnRight)
-            //.Listeners(p=>{
-            //    p.Click.Fn = "btnExport_Click";
-            //})
         }))
         .BottomBar(
             X.Toolbar()
@@ -70,7 +54,7 @@
                     .MaxLength(30)
                     .EnforceMaxLength(true)
                     .Width(220)
-                    .HQControlFocus("BatNbr")
+                    .HQControlFocus("cboBatNbr")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                     ,
                     
@@ -129,7 +113,7 @@
                         )
                     )
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{FromToSiteID}.focus();")); }))
+                    .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{cboSiteID}.focus();")); }))
                     .StoreID("stoBatch")
                     ,
                     
@@ -151,7 +135,7 @@
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
                     })
-                    .HQControlFocus("Handle")
+                    .HQControlFocus("txtDateEnt")
                     .LoadData()
                     .Listeners(lst =>
                     {
@@ -206,7 +190,7 @@
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "TranDate"))
                     .Width(250)
-                    .HQControlFocus("ReasonCD")
+                    .HQControlFocus("cboFromToSiteID")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                     ,
                     
@@ -226,7 +210,7 @@
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
                     })
-                    .HQControlFocus("TrnsferNbr")
+                    .HQControlFocus("cboHandle")
                     .LoadData()
                     .Listeners(lst =>
                     {
@@ -253,7 +237,7 @@
                         new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw },
                         new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
                     })
-                    .HQControlFocus("IntRefNbr")
+                    .HQControlFocus("cboReasonCD")
                     .LoadData()
                     .Listeners(lst =>
                     {
@@ -299,7 +283,7 @@
                     .ForceSelection(true)
                     .LabelWidth(90)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQControlFocus("SlsperID")
+                    .HQControlFocus("cboSlsperID")
                     .LoadData()
                     .Listeners(lst =>
                     {
@@ -320,12 +304,12 @@
                     .HQHeightWidth(400, 300)
                     .ForceSelection(true)
                     .LabelWidth(90)
-                    .HQControlFocus("Descr")
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
                     })
                     .LoadData()
+                    .HQControlFocus("txtDescr")
                     .Listeners(lst =>
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
@@ -346,7 +330,7 @@
                     .MaxLength(10)
                     .EnforceMaxLength(true)
                     .Width(220)
-                    .HQControlFocus("DateEnt")
+                    .HQControlFocus("txtDescr")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                     ,
                     
@@ -366,7 +350,7 @@
                     .LabelWidth(90)
                     .MaxLength(100)
                     .EnforceMaxLength(true)
-                    .HQControlFocus("BatNbr")
+                    .HQControlFocus("cboBatNbr")
                     .BlankText(Util.GetLangPrefix("Input", "TranDate"))
                     .Width(470)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
