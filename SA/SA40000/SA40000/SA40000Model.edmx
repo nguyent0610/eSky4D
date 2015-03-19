@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SYS_CloseDateSetUp" EntityType="eBiz4DWebSysModel.Store.SYS_CloseDateSetUp" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="SYS_CloseDateSetUp">
+          <Key>
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="WrkDateChk" Type="bit" Nullable="false" />
+          <Property Name="WrkAdjDate" Type="datetime" Nullable="false" />
+          <Property Name="WrkOpenDate" Type="datetime" Nullable="false" />
+          <Property Name="WrkLowerDays" Type="int" Nullable="false" />
+          <Property Name="WrkUpperDays" Type="int" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="SA40000_pgSYS_CloseDateSetUp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SA40000_ptCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SA40000_ptTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SA40000Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SA40000Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="SYS_CloseDateSetUp" EntityType="SA40000Model.SYS_CloseDateSetUp" />
+          <FunctionImport Name="SA40000_pgSYS_CloseDateSetUp" ReturnType="Collection(SA40000Model.SA40000_pgSYS_CloseDateSetUp_Result)" />
+          <FunctionImport Name="SA40000_ptTerritory" ReturnType="Collection(SA40000Model.SA40000_ptTerritory_Result)" />
+          <FunctionImport Name="SA40000_ptCompany" ReturnType="Collection(SA40000Model.SA40000_ptCompany_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="SYS_CloseDateSetUp">
+          <Key>
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="WrkDateChk" Nullable="false" />
+          <Property Type="DateTime" Name="WrkAdjDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="WrkOpenDate" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="WrkLowerDays" Nullable="false" />
+          <Property Type="Int32" Name="WrkUpperDays" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="SA40000_pgSYS_CloseDateSetUp_Result">
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
+          <Property Type="Boolean" Name="WrkDateChk" Nullable="false" />
+          <Property Type="DateTime" Name="WrkAdjDate" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="WrkOpenDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="WrkLowerDays" Nullable="false" />
+          <Property Type="Int32" Name="WrkUpperDays" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Boolean" Name="isChange" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SA40000_ptTerritory_Result">
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="SA40000_ptCompany_Result">
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SA40000Entities" >
+        <EntitySetMapping Name="SYS_CloseDateSetUp">
+            <EntityTypeMapping TypeName="SA40000Model.SYS_CloseDateSetUp">
+              <MappingFragment StoreEntitySet="SYS_CloseDateSetUp">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="WrkUpperDays" ColumnName="WrkUpperDays" />
+                <ScalarProperty Name="WrkLowerDays" ColumnName="WrkLowerDays" />
+                <ScalarProperty Name="WrkOpenDate" ColumnName="WrkOpenDate" />
+                <ScalarProperty Name="WrkAdjDate" ColumnName="WrkAdjDate" />
+                <ScalarProperty Name="WrkDateChk" ColumnName="WrkDateChk" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SA40000_pgSYS_CloseDateSetUp" FunctionName="eBiz4DWebSysModel.Store.SA40000_pgSYS_CloseDateSetUp">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA40000Model.SA40000_pgSYS_CloseDateSetUp_Result">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="WrkDateChk" ColumnName="WrkDateChk" />
+                <ScalarProperty Name="WrkAdjDate" ColumnName="WrkAdjDate" />
+                <ScalarProperty Name="WrkOpenDate" ColumnName="WrkOpenDate" />
+                <ScalarProperty Name="WrkLowerDays" ColumnName="WrkLowerDays" />
+                <ScalarProperty Name="WrkUpperDays" ColumnName="WrkUpperDays" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="isChange" ColumnName="isChange" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA40000_ptTerritory" FunctionName="eBiz4DWebSysModel.Store.SA40000_ptTerritory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA40000Model.SA40000_ptTerritory_Result">
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA40000_ptCompany" FunctionName="eBiz4DWebSysModel.Store.SA40000_ptCompany">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA40000Model.SA40000_ptCompany_Result">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="95" >
+        <EntityTypeShape EntityType="SA40000Model.SYS_CloseDateSetUp" Width="2" PointX="0.5" PointY="0.5" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

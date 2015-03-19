@@ -1,0 +1,209 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA40000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Region(Region.Center)
+    .Layout(LayoutType.Border)
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.Panel().ID("treeBranch")
+        .Region(Region.West).Flex(6)
+        .MinWidth(150).Split(true).AutoScroll(true)
+        .DirectEvents(de =>
+        {
+            de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
+            de.AfterRender.Url = Url.Action("SA40000GetTreeBranch");
+            de.AfterRender.CleanRequest = true;
+            de.AfterRender.Method = HttpMethod.POST;
+            de.AfterRender.Success = "";
+            de.AfterRender.Timeout = 60000;
+            de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+            de.AfterRender.EventMask.ShowMask = true;
+            de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+            de.AfterRender.EventMask.MinDelay = 500;
+
+            de.Expand.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
+            de.Expand.Url = Url.Action("SA40000GetTreeBranch");
+            de.Expand.CleanRequest = true;
+            de.Expand.Method = HttpMethod.POST;
+            de.Expand.Success = "";
+            de.Expand.Timeout = 60000;
+            de.Expand.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+            de.Expand.EventMask.ShowMask = true;
+            de.Expand.EventMask.Msg = Util.GetLang("LoadingData");
+            de.Expand.EventMask.MinDelay = 500;
+        })
+        .BottomBar(
+            X.Toolbar()
+            .Items(
+                X.ToolbarFill()
+
+                , HQ.Button().ID("btnExpand")
+                .HQLangCode("Expand")
+                .Icon(Icon.BulletTogglePlus)
+                //.Handler("DiscDefintion.Event.btnExpand_click")
+
+                , X.ToolbarSpacer()
+                , X.ToolbarSeparator()
+                , X.ToolbarSpacer()
+
+                , HQ.Button().ID("btnCollapse")
+                .HQLangCode("Collapse")
+                .Icon(Icon.BulletToggleMinus)
+                //.Handler("DiscDefintion.Event.btnCollapse_click")
+
+                , X.ToolbarFill()
+            )
+        ) // treeBranch
+        
+        // Second Column
+        , X.Panel()
+        .Region(Region.Center).Flex(1)
+        .Layout(LayoutType.VBox)
+        .MinWidth(50)
+        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+        .Items(
+            HQ.Button().ID("btnAddAll")
+            .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+            .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+            //.Handler("DiscDefintion.Event.btnAddAll_click")
+
+            , HQ.Button().ID("btnAdd")
+            .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+            .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+            //.Handler("DiscDefintion.Event.btnAdd_click")
+
+            , HQ.Button().ID("btnDel")
+            .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+            .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+            //.Handler("DiscDefintion.Event.btnDel_click")
+
+            , HQ.Button().ID("btnDelAll")
+            .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+            .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+            //.Handler("DiscDefintion.Event.btnDelAll_click")
+        ) // Container
+        
+            
+        //Third Column
+        , X.Panel()
+        .Region(Region.East).Flex(6)
+        .Layout(LayoutType.VBox)
+        .Split(true).AutoScroll(true)
+        .Items(
+            X.Panel().Region(Region.North)
+            .Items(
+                
+            )//header
+            
+            ,X.Panel().Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .Items(
+            
+            )//Grid
+        )//Panel
+        
+        //X.GridPanel()
+        //.Scroll(ScrollMode.Both)
+        //.View(X.GridView().TrackOver(false))
+        //.ID("grdSYS_Language")
+        //.SelectionMemory(false)
+        //.Store(
+        //    X.Store()
+        //    .ID("stoSYS_Language")
+        //    .PageSize(50)
+        //    .Model(Util.GenerateModel(typeof(SA00900_pgLoadSYS_Language_Result), "mdlSA00900_pgLoadSYS_Language", "Code"))
+        //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Language"))).AutoLoad(false)
+        //    .Listeners(l =>
+        //    {
+        //        l.BeforeLoad.Fn = "stoBeforeLoad";
+        //        l.Load.Fn = "stoLoad";
+        //        l.Update.Fn = "stoChanged";                 
+        //    })
+        //)
+        //.Listeners(p =>
+        //         {
+        //             p.BoxReady.Handler = "firstLoad();";
+        //         })
+        //.SortableColumns(false)
+        //.ColumnModel(
+        //    X.RowNumbererColumn().Width(40),
+        //    X.Column().ID("Code").Text(Util.GetLang("Code")).DataIndex("Code").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(20).EnforceMaxLength(true)),
+        //    X.Column().Text(Util.GetLang("Lang00")).DataIndex("Lang00").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
+        //    X.Column().Text(Util.GetLang("Lang01")).DataIndex("Lang01").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
+        //    X.Column().Text(Util.GetLang("Lang02")).DataIndex("Lang02").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
+        //    X.Column().Text(Util.GetLang("Lang03")).DataIndex("Lang03").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
+        //    X.Column().Text(Util.GetLang("Lang04")).DataIndex("Lang04").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
+        //    X.CommandColumn().Width(150)
+        //    .Commands(
+        //        X.GridCommand()
+        //        .Text(Util.GetLang("Reject"))
+        //        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+        //        .CommandName("reject")
+        //        .Icon(Icon.ArrowUndo)
+        //    )
+        //    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+        //    .Listeners(l => l.Command.Handler = "grdSYS_Language_Reject(record);")
+        //)
+        //.SelectionModel(X.RowSelectionModel().ID("slmSYS_Language").Mode(SelectionMode.Multi))
+        //.BottomBar(
+        //    X.PagingToolbar()
+        //    .Items(
+        //        X.Label("Page size:"),
+        //        X.ToolbarSpacer(10),
+        //        X.ComboBox()
+        //        .Width(80)
+        //        .Items("1", "2", "10", "20", "30", "50")
+        //        .SelectedItems("50")
+        //        .Listeners(l =>
+        //            {
+        //                l.Select.Fn = "HQ.grid.onPageSelect";                   
+        //            })
+        //    )
+        //    .Plugins(X.ProgressBarPager())
+        //)
+        //.Plugins(
+        //    X.CellEditing()
+        //    .ClicksToEdit(1)
+        //    .Listeners(ls =>
+        //    {
+        //        ls.BeforeEdit.Fn = "grdSYS_Language_BeforeEdit";
+        //        ls.Edit.Fn = "grdSYS_Language_Edit";
+        //        ls.ValidateEdit.Fn = "grdSYS_Language_ValidateEdit";
+
+        //    })
+        //)
+
+        //.Features(
+        //    X.GridFilters()
+        //        .Local(true)
+        //        .Filters(
+        //            X.StringFilter().DataIndex("Code"),
+        //            X.StringFilter().DataIndex("Lang00"),
+        //            X.StringFilter().DataIndex("Lang01"),
+        //            X.StringFilter().DataIndex("Lang02"),
+        //            X.StringFilter().DataIndex("Lang03"),
+        //            X.StringFilter().DataIndex("Lang04")
+        //        )
+        //)//Grid
+        
+        
+    )//frmMain
+    
+))
