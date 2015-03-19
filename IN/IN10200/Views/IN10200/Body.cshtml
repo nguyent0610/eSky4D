@@ -1,0 +1,484 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework
+@using HQ.eSkyFramework.HQControl;
+@using IN10200;
+
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport()
+    .Layout(LayoutType.Fit)
+    .Items(
+
+        X.FormPanel().ID("frmMain")
+        .Layout(LayoutType.Border)
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .Listeners(p=>p.FieldChange.Fn="frmMain_FieldChange")
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{
+            
+            //X.FileUploadField()
+            //.ID("btnImport")
+            //.ButtonText("ImportTemplate")
+            //.ButtonOnly(true)
+            //.Icon(Icon.BookAdd)
+            //.Listeners(p=>{
+            //    p.Change.Fn = "btnImport_Click";
+            //}),
+                    
+            //X.Button()
+            //.ID("btnExport")
+            //.Text(Util.GetLang("ExportTemplate"))
+            //.Icon(Icon.ArrowTurnRight)
+            //.Listeners(p=>{
+            //    p.Click.Fn = "btnExport_Click";
+            //})
+        }))
+        .BottomBar(
+            X.Toolbar()
+            .Items(
+                X.ToolbarFill(),
+                X.Label().ID("lblQtyAvail").Width(200).MarginSpec("0 0 0 30")
+            )
+        )
+        .FieldDefaults(a => { a.LabelAlign = LabelAlign.Right; a.LabelWidth = 120; })
+        .Listeners(p => p.BoxReady.Fn = "frmMain_BoxReady")
+        .Items(
+
+            X.Panel()
+            .Border(false)
+            .Region(Region.North)
+            .Layout(LayoutType.VBox)
+            .Items(
+                X.FieldContainer()
+                .MarginSpec("10 0 5 0")
+                .Layout(LayoutType.HBox)
+                .Items(
+
+                    HQ.TextBox().ID("txtBranchID")
+                    .Name("BranchID")
+                    .DataIndex("BranchID")
+                    .HQLangCode("BranchID")
+                    .AllowBlank(false)
+                    .BlankText(Util.GetLangPrefix("Input", "BranchID"))
+                    .MaxLength(30)
+                    .EnforceMaxLength(true)
+                    .Width(220)
+                    .HQControlFocus("BatNbr")
+                    .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                    ,
+                    
+                    X.ComboBox()
+                    .ID("cboBatNbr")
+                    .Name("BatNbr")
+                    .DataIndex("BatNbr")
+                    .MinChars(1)
+                    .PageSize(20)
+                    .TypeAhead(false)
+                    .ValueField("BatNbr")
+                    .DisplayField("BatNbr")
+                    .Width(250)
+                    .ForceSelection(true)
+                    .MaxLength(20)
+                    .FieldLabel(Util.GetLang("BatNbr"))
+                    .TriggerAction(TriggerAction.All)
+                    .Listeners(l =>
+                    {
+                        l.Change.Fn = "cboBatNbr_Change";
+                        l.Focus.Handler = "HQ.focus='batch'";
+                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();} defaultOnNew();";
+                    })
+                    .QueryMode(DataLoadMode.Remote)
+                    .QueryDelay(1000)
+                    .MatchFieldWidth(false)
+                    .ListConfig(
+                        X.BoundList()
+                        .Height(500)
+                        .ItemSelector(".x-boundlist-item")
+                        .LoadingText(Util.GetLang("Loading"))
+                        .Tpl(
+                            X.XTemplate()
+                            .Html(@"<tpl for='.'>   
+                                        <tpl if='[xindex] == 1'>
+                                            <table style='table-layout: fixed; width:500px !important'>
+                                                <tr>
+                                                    <th style='width:100px;'>" + Util.GetLang("BatNbr") + @"</th>
+                                                    <th style='width:100px;'>" + Util.GetLang("TranDate") + @"</th>
+                                                    <th style='width:100px;'>" + Util.GetLang("Status") + @"</th>
+                                                    <th>" + Util.GetLang("Descr") + @"</th>
+                                                   
+                                                </tr>
+                                        </tpl>
+                                        <tr class='x-boundlist-item'>
+                                            <td>{BatNbr}</td>
+                                            <td>{DateEnt:date(""m-d-Y"")}</td>
+                                            <td>{Status}</td>
+                                            <td>{Descr}</td>
+                                        </tr>
+                                        <tpl if='[xcount-xindex] == 0'>
+                                            </table>
+                                        </tpl>
+                                    </tpl>"
+                            )
+                        )
+                    )
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .KeyMap(X.KeyMap().Binding(b => { b.Add(X.KeyBinding().KeysString(((int)KeyCode.ENTER).ToString()).Handler(@"#{FromToSiteID}.focus();")); }))
+                    .StoreID("stoBatch")
+                    ,
+                    
+                    HQ.Combo().ID("cboSiteID")
+                    .Name("SiteID")
+                    .DataIndex("SiteID")
+                    .HQLangCode("Site")
+                    .HQProcedure("IN10200_pcSite")
+                    .HQColumnShow("SiteID,Name")
+                    .DisplayField("SiteID")
+                    .ValueField("SiteID")
+                    .AllowBlank(false)
+                    .BlankText(Util.GetLangPrefix("Input", "Site"))
+                    .Width(250)
+                    .LabelWidth(90)
+                    .HQHeightWidth(400, 300)
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    })
+                    .HQControlFocus("Handle")
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboSiteID_Change";
+                        lst.Focus.Handler = "HQ.focus='batch';";
+                    })
+                    ,
+                    
+                    HQ.Combo().ID("cboStatus")
+                    .Name("Status")
+                    .DataIndex("Status")
+                    .HQLangCode("Status")
+                    .HQProcedure("IN10200_pcStatus")
+                    .HQColumnShow("Code,Descr")
+                    .DisplayField("Descr")
+                    .ValueField("Code")
+                    .AllowBlank(false)
+                    .BlankText(Util.GetLangPrefix("Input", "Status"))
+                    .Width(220)
+                    .LabelWidth(90)
+                    .HQHeightWidth(400, 300)
+                    .ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.Change.Fn = "cboStatus_Change";
+                        lst.Focus.Handler = "HQ.focus='batch';";
+                    })
+                    
+                )
+                ,
+
+                X.FieldContainer()
+                .Layout(LayoutType.HBox)
+                .Items(
+                    HQ.TextBox().ID("txtRefNbr")
+                    .Name("RefNbr")
+                    .DataIndex("RefNbr")
+                    .HQLangCode("PerPost/RcptNbr")
+                    .Width(220)
+                    .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                    ,
+                    
+                    HQ.DateField().ID("txtDateEnt")
+                    .DataIndex("DateEnt")
+                    .Name("DateEnt")
+                    .HQLangCode("TranDate")
+                    .AllowBlank(false)
+                    .BlankText(Util.GetLangPrefix("Input", "TranDate"))
+                    .Width(250)
+                    .HQControlFocus("ReasonCD")
+                    .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                    ,
+                    
+                    HQ.Combo().ID("cboFromToSiteID")
+                    .Name("FromToSiteID")
+                    .DataIndex("FromToSiteID")
+                    .HQLangCode("FromSite")
+                    .HQProcedure("IN10200_pcSite")
+                    .HQColumnShow("SiteID,Name")
+                    .DisplayField("SiteID")
+                    .ValueField("SiteID")
+                    .Width(250)
+                    .LabelWidth(90)
+                    .HQHeightWidth(400, 300)
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    })
+                    .HQControlFocus("TrnsferNbr")
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboFromToSiteID_Change";
+                        lst.Focus.Handler = "HQ.focus='batch';";
+                    })
+                    ,
+                    
+                    HQ.Combo().ID("cboHandle")
+                    .Name("Handle")
+                    .HQLangCode("Handle")
+                    .HQProcedure("IN10200_pcHandle")
+                    .HQColumnShow("Code,Descr")
+                    .DisplayField("Descr")
+                    .ValueField("Code")
+                    .AllowBlank(false)
+                    .BlankText(Util.GetLangPrefix("Input", "Handle"))
+                    .Width(220)
+                    .LabelWidth(90)
+                    .HQHeightWidth(400, 300)
+                    .ForceSelection(true)
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
+                    })
+                    .HQControlFocus("IntRefNbr")
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Focus.Handler = "HQ.focus='batch';";
+                    })
+                )
+                ,
+
+                X.FieldContainer()
+                .Layout(LayoutType.HBox)
+                .Items(
+                    HQ.NumberField().ID("txtTotQty")
+                    .Name("TotQty")
+                    .DataIndex("TotQty")
+                    .HQLangCode("TotQ")
+                    .Width(220)
+                    .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                    ,
+                    
+                    HQ.NumberField().ID("txtTotAmt")
+                    .Name("TotAmt")
+                    .DataIndex("TotAmt")
+                    .HQLangCode("TotAmt")
+                    .Width(250)
+                    .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                    ,
+                    
+                    HQ.Combo().ID("cboReasonCD")
+                    .Name("ReasonCD")
+                    .DataIndex("ReasonCD")
+                    .HQLangCode("ReasonCD")
+                    .HQProcedure("IN10200_pcReasonCode")
+                    .HQColumnShow("ReasonCD,Descr")
+                    .DisplayField("Descr")
+                    .ValueField("ReasonCD")
+                    .AllowBlank(false)
+                    .BlankText(Util.GetLangPrefix("Input", "ReasonCD"))
+                    .Width(250)
+                    .HQHeightWidth(400, 300)
+                    .ForceSelection(true)
+                    .LabelWidth(90)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQControlFocus("SlsperID")
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Focus.Handler = "HQ.focus='batch';";
+                    })
+                    ,
+                    
+                    HQ.Combo().ID("cboSlsperID")
+                    .Name("SlsperID")
+                    .DataIndex("SlsperID")
+                    .HQLangCode("SlsperID")
+                    .HQProcedure("IN10200_pcSalesPerson")
+                    .HQColumnShow("SlsperID,Name")
+                    .DisplayField("SlsperID")
+                    .ValueField("SlsperID")
+                    .Width(220)
+                    .HQHeightWidth(400, 300)
+                    .ForceSelection(true)
+                    .LabelWidth(90)
+                    .HQControlFocus("Descr")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Focus.Handler = "HQ.focus='batch';";
+                    })
+                )
+                ,
+                
+                X.FieldContainer()
+                .MarginSpec("0 0 10 0")
+                .Layout(LayoutType.HBox)
+                .Items(
+                    
+                    HQ.TextBox().ID("txtIntRefNbr")
+                    .Name("IntRefNbr")
+                    .ID("IntRefNbr")
+                    .HQLangCode("IntNbr")
+                    .MaxLength(10)
+                    .EnforceMaxLength(true)
+                    .Width(220)
+                    .HQControlFocus("DateEnt")
+                    .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                    ,
+                    
+                    HQ.TextBox().ID("txtRvdBatNbr")
+                    .Name("RvdBatNbr")
+                    .DataIndex("RvdBatNbr")
+                    .HQLangCode("CancelledBatNbr")
+                    .Width(250)
+                    .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                    ,
+                    
+                    HQ.TextBox().ID("txtDescr")
+                    .DataIndex("Descr")
+                    .Name("Descr")
+                    .HQLangCode("Descr")
+                    .AllowBlank(false)
+                    .LabelWidth(90)
+                    .MaxLength(100)
+                    .EnforceMaxLength(true)
+                    .HQControlFocus("BatNbr")
+                    .BlankText(Util.GetLangPrefix("Input", "TranDate"))
+                    .Width(470)
+                    .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
+                )
+                ,
+                
+                X.Hidden().ID("tstamp")
+            )
+            ,
+        
+            X.GridPanel().ID("grdTrans")
+            .Border(false)
+            .Region(Region.Center)
+            .StoreID("stoTrans")
+            .ColumnModel(
+                X.RowNumbererColumn()
+                ,
+
+                X.Column()
+                .DataIndex("InvtID")
+                .ID("colInvtID")
+                .Width(100)
+                .Text(Util.GetLang("InvtID"))
+                .Editor(
+                    HQ.Combo().ID("cboTransInvtID")
+                    .HQProcedure("IN10200_pcInvt")
+                    .HQColumnShow("InvtID,Descr,Descr1,Color")
+                    .DisplayField("InvtID")
+                    .ValueField("InvtID")
+                    .Width(250)
+                    .HQHeightWidth(400, 300)
+                    .ForceSelection(true)
+                    .LabelWidth(90)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                )
+                ,
+
+                X.Column()
+                .DataIndex("TranDesc")
+                .MinWidth(250)
+                .MaxWidth(350)
+                .Flex(1)
+                .Text(Util.GetLang("Descr"))
+                ,
+
+                X.Column()
+                .DataIndex("UnitDesc")
+                .Width(100)
+                .Text(Util.GetLang("Unit"))
+                .Editor(
+                    X.ComboBox()
+                    .ID("cboTransUnitDesc")
+                    .ForceSelection(true)
+                    .TriggerAction(TriggerAction.All)
+                    .QueryMode(DataLoadMode.Local)
+                    .ValueField("FromUnit")
+                    .DisplayField("FromUnit")
+                    .StoreID("stoUnit")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                )
+                ,
+
+                X.Column()
+                .DataIndex("Qty")
+                .Text(Util.GetLang("Qty"))
+                .Align(Alignment.Right)
+                .Width(100)
+                .Editor(HQ.NumberField().MaxValue(1000).MinValue(0).SpinUpEnabled(true))
+                .Renderer("rdrTrans_QtyAmt"),
+                
+                X.ComponentColumn()
+                .Text("")
+                .Width(20)
+                .Component(X.Button().Height(18).Text(""))
+                //.Listeners(p=>p.Click.Fn="btnLot_Click"))
+                ,
+                
+                X.Column()
+                .DataIndex("UnitPrice")
+                .Text(Util.GetLang("UnitPrice"))
+                .Align(Alignment.Right)
+                .Width(100)
+                .Editor(HQ.NumberField().MaxValue(100000000).MinValue(0).SpinUpEnabled(true))
+                .Renderer("rdrTrans_QtyAmt")
+                ,
+
+                X.Column()
+                .DataIndex("TranAmt")
+                .Text(Util.GetLang("ExtAmt"))
+                .Align(Alignment.Right)
+                .Width(100)
+                .Renderer("rdrTrans_QtyAmt")
+            )
+            .Listeners(lst =>
+            {
+                lst.SelectionChange.Fn = "grdTrans_SelectionChange";
+                lst.Edit.Fn = "grdTrans_Edit";
+                lst.ValidateEdit.Fn = "grdTrans_ValidateEdit";
+                lst.BeforeEdit.Fn = "grdTrans_BeforeEdit";
+            })
+            .SelectionModel(X.RowSelectionModel().ID("smlTrans").Mode(SelectionMode.Single))
+            .View(X.GridView().TrackOver(false))
+            .Plugins(X.CellEditing().ClicksToEdit(1))
+        )
+    )
+)
+
+    

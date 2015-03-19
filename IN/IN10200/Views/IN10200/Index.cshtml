@@ -1,0 +1,192 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN10200;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "IN10200";
+    var acc = Session["IN10200"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/IN10200.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.businessDate = new Date();
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+@(
+    X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull()))
+)
+
+@(
+    X.Store().ID("stoBatch")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN10200_pcBatch_Result), "mdlBatch","BatNbr"))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetBatch", "IN10200"))
+        .ActionMethods(action =>{
+            action.Read = HttpMethod.POST;
+        })
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Parameters(ps =>{
+        ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
+    })
+    .Listeners(p => {
+        p.Load.Fn = "stoBatch_Load";
+        p.BeforeLoad.Fn = "stoBatch_BeforeLoad"; 
+    })
+)
+
+@(
+    X.Store()
+    .ID("stoUserDefault")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (OM_UserDefault),"mdlUserDefault",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetUserDefault", "IN10200"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
+
+@(
+    X.Store()
+    .ID("stoSetup")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_Setup),"mdlSetup",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetSetup", "IN10200"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
+
+@(X.Store().ID("stoTrans")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN10200_pgIssueLoad_Result), "mdlTrans", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetTrans", "IN10200"))
+        .ActionMethods(action =>
+        {
+            action.Read = HttpMethod.POST;
+        })
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Parameters(ps =>
+    {
+        ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("BranchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
+    })
+    .Listeners(p => {
+        p.Load.Fn = "stoTrans_Load";
+        p.BeforeLoad.Fn= "stoTrans_BeforeLoad";
+    })
+)
+
+@(
+    X.Store().ID("stoOldTrans")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(IN10200_pgIssueLoad_Result), "mdlOldTrans", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetTrans", "IN10200"))
+        .ActionMethods(action =>
+        {
+            action.Read = HttpMethod.POST;
+        })
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
+@(
+    X.Store()
+    .ID("stoUnit")
+    .Model(Util.GenerateModel(typeof (IN10200_pcUnit_Result),"mdlUnit", "FromUnit"))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetUnit", "IN10200"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
+
+@(
+    X.Store()
+    .ID("stoUnitConversion")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN10200_pcUnitConversion_Result),"mdlUnitConversion", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetUnitConversion", "IN10200"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
+
+@(
+    X.Store()
+    .ID("stoItemSite")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_ItemSite),"mdlItemSite",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemSite", "IN10200"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
+
+@*@(
+    X.Store()
+    .ID("stoPrice")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN10200_pdPrice_Result),"mdlPrice",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetPrice", "IN10200"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
+
+@(
+    X.Store()
+    .ID("stoTransfer")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN10200_pdTrnsfer_Result),"mdlTransfer",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetTransfer", "IN10200"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)*@
+
+@{ Html.RenderAction("Body", new { lang = Current.LangID.ToString() }); }
+</body>
+</html>
+ 
