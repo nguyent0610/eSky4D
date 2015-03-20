@@ -1,0 +1,207 @@
+
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM23100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(lst =>
+    {
+        //lst.BoxReady.Fn = "beforeSelectcombo";
+    })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+            .Region(Region.North)
+            .Items(
+
+                HQ.Combo().ID("cboZone")
+                    .Name("cboZone").HQLangCode("OM23100_Zone").HQProcedure("OM23100_pcZone")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("G")
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboZone_Change";
+                    })
+
+                , HQ.Combo().ID("cboTerritory")
+                    .Name("cboTerritory").HQLangCode("Area").HQProcedure("OM23100_pcTerritory")
+                    .HQColumnShow("Territory,Descr,Zone").DisplayField("Descr").ValueField("Territory")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
+                    .ForceSelection(true).EnforceMaxLength(true).AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@Zone", Value = "App.cboZone.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw } 
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboTerritory_Change";
+                    })
+
+                , HQ.Combo().ID("cboDist")
+                    .Name("cboDist").HQLangCode("Dist").HQProcedure("OM23100_pcCompany")
+                    .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyName").ValueField("CpnyID")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
+                    .ForceSelection(true).EnforceMaxLength(true).AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw } 
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboDist_Change";
+                    })
+
+                ,HQ.DateField().ID("dateFcs").MarginSpec("5 0 0 0").HQLangCode("OM23100_Date").Width(400)
+                .Type(DatePickerType.Month).Format("yyyy/MM").Value(DateTime.Now.ToString("yyyy/MM"))
+                .Listeners(p =>
+                {
+                    p.Expand.Fn = "dateFcs_expand";
+                })
+                
+                , X.Button().MarginSpec("5 0 5 160").Width(180)
+                    .Text(Util.GetLang("OM23100_Search")).Listeners(p =>
+                    {
+                        p.Click.Fn = "LoadGrid";
+                    })
+            )//pnl Header
+
+            ,
+            X.Panel().ID("pnlgrd")
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .Items(
+                X.GridPanel().ID("grdOM_FCS")
+                .Hidden(true)
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false).LoadMask(true))
+                .Region(Region.Center).Flex(1)
+                .SelectionMemory(false)
+                .Store(
+                    X.Store()
+                    .ID("stoOM_FCS")
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(OM23100_pgOM_FCS_Result), "mdlOM23100_pgOM_FCS", "SlsperId"))
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_FCS"))).AutoLoad(false)
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("BranchID", "App.cboDist.value", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("FCSDate", "App.dateFcs.value", ParameterMode.Raw));
+                    })
+                    .Listeners(l =>
+                    {
+                        l.BeforeLoad.Fn = "stoBeforeLoad";
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "stoChanged";
+                    })
+                )
+                .Listeners(p =>
+                {
+                    //p.BoxReady.Handler = "firstLoad();";
+                })
+                .SortableColumns(false)
+                .ColumnModel(
+                    X.RowNumbererColumn().Width(40)
+
+                    , X.Column().DataIndex("SlsperId").Text(Util.GetLang("SlsperId")).Width(150)
+                    .Editor(
+                        HQ.Combo().ID("cboSlsperId")
+                        .Name("cboSlsperId").HQProcedure("OM23100_pcSalesPerson")
+                        .HQColumnShow("SlsperId,Name,BranchID").DisplayField("Name").ValueField("SlsperId")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                    
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboDist.getValue()", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                    )
+                    , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(200)
+                    , X.NumberColumn().Text(Util.GetLang("OM23100_SellIn")).DataIndex("SellIn").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    , X.NumberColumn().Text(Util.GetLang("OM23100_Coverage")).DataIndex("Coverage").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    , X.NumberColumn().Text(Util.GetLang("OM23100_DNA")).DataIndex("DNA").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    , X.NumberColumn().Text(Util.GetLang("OM23100_Visit")).DataIndex("Visit").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    , X.NumberColumn().Text(Util.GetLang("OM23100_LPPC")).DataIndex("LPPC").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    , X.NumberColumn().Text(Util.GetLang("OM23100_ForcusedSKU")).DataIndex("ForcusedSKU").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    , X.NumberColumn().Text(Util.GetLang("OM23100_VisitTime")).DataIndex("VisitTime").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                        
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "grdOM_FCS_Reject(record);")
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmOM_FCS").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdOM_FCS_BeforeEdit";
+                        ls.Edit.Fn = "grdOM_FCS_Edit";
+                        ls.ValidateEdit.Fn = "grdOM_FCS_ValidateEdit";
+
+                    })
+                )
+
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("ScreenNumber"),
+                            X.StringFilter().DataIndex("Descr")
+                        )
+                )
+            )// pnl Grid
+
+    )//frm Main
+)//View port
+)

@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="OM_FCS" EntityType="eBiz4DWebSysModel.Store.OM_FCS" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="OM_FCS">
+          <Key>
+            <PropertyRef Name="SlsperId" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="FCSDate" />
+          </Key>
+          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="FCSDate" Type="datetime" Nullable="false" />
+          <Property Name="Coverage" Type="float" />
+          <Property Name="DNA" Type="float" />
+          <Property Name="Visit" Type="float" />
+          <Property Name="SellIn" Type="float" />
+          <Property Name="LPPC" Type="float" />
+          <Property Name="ForcusedSKU" Type="float" />
+          <Property Name="VisitTime" Type="float" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="OM23100_pgOM_FCS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="FCSDate" Type="datetime" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM23100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="OM23100Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="OM_FCS" EntityType="OM23100Model.OM_FCS" />
+          <FunctionImport Name="OM23100_pgOM_FCS" ReturnType="Collection(OM23100Model.OM23100_pgOM_FCS_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="FCSDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="OM_FCS">
+          <Key>
+            <PropertyRef Name="SlsperId" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="FCSDate" />
+          </Key>
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="FCSDate" Nullable="false" Precision="3" />
+          <Property Type="Double" Name="Coverage" />
+          <Property Type="Double" Name="DNA" />
+          <Property Type="Double" Name="Visit" />
+          <Property Type="Double" Name="SellIn" />
+          <Property Type="Double" Name="LPPC" />
+          <Property Type="Double" Name="ForcusedSKU" />
+          <Property Type="Double" Name="VisitTime" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="OM23100_pgOM_FCS_Result">
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="FCSDate" Nullable="false" Precision="23" />
+          <Property Type="Double" Name="Coverage" Nullable="true" />
+          <Property Type="Double" Name="DNA" Nullable="true" />
+          <Property Type="Double" Name="Visit" Nullable="true" />
+          <Property Type="Double" Name="SellIn" Nullable="true" />
+          <Property Type="Double" Name="LPPC" Nullable="true" />
+          <Property Type="Double" Name="ForcusedSKU" Nullable="true" />
+          <Property Type="Double" Name="VisitTime" Nullable="true" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="OM23100Entities" >
+          <EntitySetMapping Name="OM_FCS">
+            <EntityTypeMapping TypeName="OM23100Model.OM_FCS">
+              <MappingFragment StoreEntitySet="OM_FCS">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="VisitTime" ColumnName="VisitTime" />
+                <ScalarProperty Name="ForcusedSKU" ColumnName="ForcusedSKU" />
+                <ScalarProperty Name="LPPC" ColumnName="LPPC" />
+                <ScalarProperty Name="SellIn" ColumnName="SellIn" />
+                <ScalarProperty Name="Visit" ColumnName="Visit" />
+                <ScalarProperty Name="DNA" ColumnName="DNA" />
+                <ScalarProperty Name="Coverage" ColumnName="Coverage" />
+                <ScalarProperty Name="FCSDate" ColumnName="FCSDate" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM23100_pgOM_FCS" FunctionName="eBiz4DWebSysModel.Store.OM23100_pgOM_FCS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23100Model.OM23100_pgOM_FCS_Result">
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="FCSDate" ColumnName="FCSDate" />
+                <ScalarProperty Name="Coverage" ColumnName="Coverage" />
+                <ScalarProperty Name="DNA" ColumnName="DNA" />
+                <ScalarProperty Name="Visit" ColumnName="Visit" />
+                <ScalarProperty Name="SellIn" ColumnName="SellIn" />
+                <ScalarProperty Name="LPPC" ColumnName="LPPC" />
+                <ScalarProperty Name="ForcusedSKU" ColumnName="ForcusedSKU" />
+                <ScalarProperty Name="VisitTime" ColumnName="VisitTime" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" >
+        <EntityTypeShape EntityType="OM23100Model.OM_FCS" Width="1.5" PointX="6.2836149848455634" PointY="15.863980330463489" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
