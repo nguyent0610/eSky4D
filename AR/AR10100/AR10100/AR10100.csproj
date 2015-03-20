@@ -52,7 +52,8 @@
     <Reference Include="Ext.Net.Utilities">
       <HintPath>..\..\EbizWebMvc\AR10100_Language\AR10100\bin\Ext.Net.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="HQ.eSkyFramework">
+    <Reference Include="HQ.eSkyFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\DLL MVC moi\HQ.eSkyFramework.dll</HintPath>
     </Reference>
     <Reference Include="HQ.eSkySys">
@@ -221,6 +222,7 @@
       <LastGenOutput>AR10100Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Scripts\AR10100.js" />
     <Content Include="Scripts\hq.common.debug.js" />
     <Content Include="Scripts\hq.common.js" />
     <Content Include="Scripts\hq.language0.js" />
