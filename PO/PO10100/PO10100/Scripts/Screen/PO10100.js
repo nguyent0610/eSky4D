@@ -89,6 +89,7 @@ var loadDataHeader = function (sto) {
         lockControl(true);
         App.cboBranchID.setReadOnly(false);
     }
+  
 };
 var loadDataDetail = function (sto) {
     HQ.store.insertBlank(sto, keys);

@@ -541,6 +541,7 @@ var HQ = {
             if (typeof (ctr.items) != "undefined") {
                 ctr.items.each(function (itm) {
                     if (typeof (itm.setReadOnly) != "undefined") {
+                        if(itm.getTag()!="X")
                         itm.setReadOnly(lock)
 
                     }

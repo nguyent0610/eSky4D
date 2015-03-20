@@ -71,9 +71,9 @@
 
                                                 })
                                         .LoadData()
-                        , HQ.NumberField().DecimalPrecision(0).AllowDecimals(true).ReadOnly(true).ID("txtCA").Name("txtCA").HQLangCode("CAEA").LabelWidth(110).InputWidth(50).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
-                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("txtEA").Name("txtEA").HQLangCode("/").LabelSeparator("").LabelWidth(5).HideLabel(false).InputWidth(50).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
-                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("POFeeTot").Name("POFeeTot").HQLangCode("POFEETOT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
+                        , HQ.NumberField().DecimalPrecision(0).AllowDecimals(true).ReadOnly(true).ID("txtCA").Name("txtCA").HQLangCode("CAEA").LabelWidth(110).InputWidth(50).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
+                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("txtEA").Name("txtEA").HQLangCode("/").LabelSeparator("").LabelWidth(5).HideLabel(false).InputWidth(50).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
+                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("POFeeTot").Name("POFeeTot").HQLangCode("POFEETOT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
                         , HQ.Combo().ID("POType").Name("POType").AllowBlank(false).MarginSpec("3 0 0 0").LabelWidth(130).InputWidth(110)
                                                 .HQLangCode("POType").HQDBSys(false).HQProcedure("PO10100_pcPOType")
                                                 .HQColumnShow("Descr").ForceSelection(true)
@@ -89,8 +89,8 @@
 
                         )
                     , X.Container().Layout(LayoutType.HBox).Items(
-                        HQ.TextBox().ID("txtBranchName").Name("txtBranchName").ReadOnly(true).MaxLength(400).HQLangCode("BranchName").LabelWidth(110).InputWidth(375).MarginSpec("3 0 0 0").HQControlFocus("")
-                        , HQ.NumberField().DecimalPrecision(0).AllowDecimals(true).ReadOnly(true).ID("RcptTotAmt").Name("RcptTotAmt").HQLangCode("TXBLAMT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
+                        HQ.TextBox().ID("txtBranchName").Name("txtBranchName").ReadOnly(true).MaxLength(400).HQLangCode("BranchName").LabelWidth(110).InputWidth(375).MarginSpec("3 0 0 0")
+                        , HQ.NumberField().DecimalPrecision(0).AllowDecimals(true).ReadOnly(true).ID("RcptTotAmt").Name("RcptTotAmt").HQLangCode("TXBLAMT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
                         , HQ.Combo().ID("BlktPONbr").Name("BlktPONbr").MarginSpec("3 0 0 0").LabelWidth(130).InputWidth(110)
                                                     .HQLangCode("BlktPONbr").HQDBSys(false).HQProcedure("PO10100_pcBlankitPO")
                                                     .HQColumnShow("POnbr,POdate,vendid").ForceSelection(true)
@@ -127,7 +127,7 @@
                                                 .LoadData()
                         , HQ.Combo().ID("cboStatus").DataIndex("Status").Name("Status").MarginSpec("3 0 0 0").LabelWidth(110).InputWidth(110)
                                                 .HQLangCode("Status").HQDBSys(false).HQProcedure("PO10100_pcStatus").ForceSelection(false)
-                                                .HQColumnShow("Descr").ReadOnly(true)
+                                                .HQColumnShow("Descr").ReadOnly(true).Tag("X")
                                                 .DisplayField("Descr")
                                                 .ValueField("Code")
                                                 .HQHeightWidth(400, 400)
@@ -138,8 +138,8 @@
                                                 .Listeners(lst => { lst.Change.Fn = "cboStatus_Change"; })
                                                 .LoadData()
 
-                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("DISCOUNT").Name("DISCOUNT").HQLangCode("DISCOUNT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
-                        , HQ.TextBox().ID("ReqNbr").Name("ReqNbr").MaxLength(20).HQLangCode("ReqNbr").LabelWidth(130).InputWidth(110).MarginSpec("3 0 0 0").HQControlFocus("")
+                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("DISCOUNT").Name("DISCOUNT").HQLangCode("DISCOUNT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
+                        , HQ.TextBox().ID("ReqNbr").Name("ReqNbr").MaxLength(20).HQLangCode("ReqNbr").LabelWidth(130).InputWidth(110).MarginSpec("3 0 0 0").Tag("X")
                         )
                         , X.Container().Layout(LayoutType.HBox).Items(
                         HQ.Combo().ID("cboVendID").AllowBlank(false).DataIndex("VendID").Name("VendID").MarginSpec("3 0 0 0").LabelWidth(110).InputWidth(150).ForceSelection(true)
@@ -175,15 +175,15 @@
                                                         lst.Focus.Handler = "this.forceSelection = true;";
                                                     })
                                                 .LoadData()
-                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("TAX").Name("TAX").HQLangCode("TAX").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
-                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("EXTVOL").Name("EXTVOL").HQLangCode("EXTVOL").LabelWidth(130).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
+                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("TAX").Name("TAX").HQLangCode("TAX").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
+                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("EXTVOL").Name("EXTVOL").HQLangCode("EXTVOL").LabelWidth(130).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
                         )
                         , X.Container().Layout(LayoutType.HBox).Items(
-                        HQ.DateField().ID("dtPODate").Name("PODate").AllowBlank(false).HQLangCode("PODate").LabelWidth(110).InputWidth(150).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
+                        HQ.DateField().ID("dtPODate").Name("PODate").AllowBlank(false).HQLangCode("PODate").LabelWidth(110).InputWidth(150).AllowBlank(false).MarginSpec("3 0 0 0")
                         , HQ.Button().ID("btnClosePO").HQLangCode("CPO").MarginSpec("3 0 0 115").Width(110)
-                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("POAmt").Name("POAmt").HQLangCode("TOTAMT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
+                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("POAmt").Name("POAmt").HQLangCode("TOTAMT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
 
-                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("EXTWEIGHT").Name("EXTWEIGHT").HQLangCode("EXTWEIGHT").LabelWidth(130).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
+                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("EXTWEIGHT").Name("EXTWEIGHT").HQLangCode("EXTWEIGHT").LabelWidth(130).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0")
                         )
                     )//Header
                     , X.Container().MarginSpec("5 0 0 0")
@@ -593,10 +593,10 @@
                             )
                             , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0").Items(
                                 X.Container().Layout(LayoutType.VBox).Items(
-                                    HQ.TextBox().ID("txtShipName").Name("ShipName").DataIndex("ShipName").MaxLength(250).HQLangCode("NAME").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
-                                    , HQ.TextBox().ID("txtShipAttn").Name("ShipAttn").DataIndex("ShipAttn").MaxLength(250).HQLangCode("ATTN").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
-                                    , HQ.TextBox().ID("txtShipAddr1").Name("ShipAddr1").DataIndex("ShipAddr1").MaxLength(250).HQLangCode("ADDRESS1").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
-                                    , HQ.TextBox().ID("txtShipAddr2").Name("ShipAddr2").DataIndex("ShipAddr2").MaxLength(250).HQLangCode("ADDRESS2").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
+                                    HQ.TextBox().ID("txtShipName").Name("ShipName").DataIndex("ShipName").MaxLength(250).HQLangCode("NAME").Width(400).MarginSpec("3 0 0 0")
+                                    , HQ.TextBox().ID("txtShipAttn").Name("ShipAttn").DataIndex("ShipAttn").MaxLength(250).HQLangCode("ATTN").Width(400).MarginSpec("3 0 0 0")
+                                    , HQ.TextBox().ID("txtShipAddr1").Name("ShipAddr1").DataIndex("ShipAddr1").MaxLength(250).HQLangCode("ADDRESS1").Width(400).MarginSpec("3 0 0 0")
+                                    , HQ.TextBox().ID("txtShipAddr2").Name("ShipAddr2").DataIndex("ShipAddr2").MaxLength(250).HQLangCode("ADDRESS2").Width(400).MarginSpec("3 0 0 0")
                                     , HQ.Combo().ID("cboShipCity").Name("ShipCity").MarginSpec("3 0 0 0").ForceSelection(true)
                                                             .HQLangCode("City").HQDBSys(false).HQProcedure("PO10100_pcCityAll")
                                                             .HQColumnShow("City,Name")
@@ -623,7 +623,7 @@
                                                                     lst.Focus.Handler = "this.forceSelection = true;";
                                                                 })
                                                             .LoadData()
-                                    , HQ.TextBox().ID("txtShipZip").Name("ShipZip").MaxLength(10).HQLangCode("ZIP").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
+                                    , HQ.TextBox().ID("txtShipZip").Name("ShipZip").MaxLength(10).HQLangCode("ZIP").Width(400).MarginSpec("3 0 0 0")
                                     , HQ.Combo().ID("cboShipCountry").Name("ShipCountry").MarginSpec("3 0 0 0").ForceSelection(true)
                                                             .HQLangCode("COUNTRY").HQDBSys(false).HQProcedure("PO10100_pcCountryAll")
                                                             .HQColumnShow("CountryID,Descr")
@@ -639,9 +639,9 @@
                                                             .LoadData()
                                 )
                                 , X.Container().Layout(LayoutType.VBox).Items(
-                                    HQ.TextBox().ID("txtShipPhone").Name("ShipPhone").MaxLength(30).HQLangCode("PHONE").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
-                                    , HQ.TextBox().ID("txtShipFax").Name("ShipFax").MaxLength(30).HQLangCode("FAX").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
-                                    , HQ.TextBox().ID("txtShipEmail").Name("ShipEmail").MaxLength(40).HQLangCode("EMAILADDR").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
+                                    HQ.TextBox().ID("txtShipPhone").Name("ShipPhone").MaxLength(30).HQLangCode("PHONE").Width(400).MarginSpec("3 0 0 0")
+                                    , HQ.TextBox().ID("txtShipFax").Name("ShipFax").MaxLength(30).HQLangCode("FAX").Width(400).MarginSpec("3 0 0 0")
+                                    , HQ.TextBox().ID("txtShipEmail").Name("ShipEmail").MaxLength(40).HQLangCode("EMAILADDR").Width(400).MarginSpec("3 0 0 0")
                                         , HQ.Combo().ID("cboShipVia").Name("ShipVia").MarginSpec("3 0 0 0").ForceSelection(true)
                                                                 .HQLangCode("SHIPVIA").HQDBSys(false).HQProcedure("PO10100_pcShipViaID")
                                                                 .HQColumnShow("ShipViaID,Descr")
@@ -656,7 +656,7 @@
                                                                 })
                                                                 .LoadData()
 
-                                    , HQ.DateField().ID("txtBlktExprDate").Name("BlktExprDate").HQLangCode("BLANKET").Width(200).AllowBlank(false).MarginSpec("3 0 0 0").HQControlFocus("")
+                                    , HQ.DateField().ID("txtBlktExprDate").Name("BlktExprDate").HQLangCode("BLANKET").Width(200).AllowBlank(false).MarginSpec("3 0 0 0")
                                         , HQ.Combo().ID("cboRcptStage").Name("RcptStage").MarginSpec("3 0 0 0").ForceSelection(true)
                                                                 .HQLangCode("RECPTSTATUS").HQDBSys(false).HQProcedure("PO10100_pcRcptStage")
                                                                 .HQColumnShow("Descr")
@@ -731,10 +731,10 @@
                                                                             lst.Focus.Handler = "this.forceSelection = true;";
                                                                         })
                                                                     .LoadData()
-                                            , HQ.TextBox().ID("txtVendName").Name("VendName").MaxLength(250).HQLangCode("NAME").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
-                                            , HQ.TextBox().ID("txtVendAttn").Name("VendAttn").MaxLength(250).HQLangCode("ATTN").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
-                                            , HQ.TextBox().ID("txtVendAddr1").Name("VendAddr1").MaxLength(250).HQLangCode("ADDRESS1").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
-                                            , HQ.TextBox().ID("txtVendAddr2").Name("VendAddr2").MaxLength(250).HQLangCode("ADDRESS2").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
+                                            , HQ.TextBox().ID("txtVendName").Name("VendName").MaxLength(250).HQLangCode("NAME").Width(400).MarginSpec("3 0 0 0")
+                                            , HQ.TextBox().ID("txtVendAttn").Name("VendAttn").MaxLength(250).HQLangCode("ATTN").Width(400).MarginSpec("3 0 0 0")
+                                            , HQ.TextBox().ID("txtVendAddr1").Name("VendAddr1").MaxLength(250).HQLangCode("ADDRESS1").Width(400).MarginSpec("3 0 0 0")
+                                            , HQ.TextBox().ID("txtVendAddr2").Name("VendAddr2").MaxLength(250).HQLangCode("ADDRESS2").Width(400).MarginSpec("3 0 0 0")
                                             , HQ.Combo().ID("cboVendCity").Name("VendCity").MarginSpec("3 0 0 0").ForceSelection(true)
                                                                         .HQLangCode("City").HQDBSys(false).HQProcedure("PO10100_pcCityAll")
                                                                         .HQColumnShow("City,Name")
@@ -761,7 +761,7 @@
                                                                                 lst.Focus.Handler = "this.forceSelection = true;";
                                                                             })
                                                                         .LoadData()
-                                                , HQ.TextBox().ID("txtVendZip").Name("VendZip").MaxLength(10).HQLangCode("ZIP").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
+                                                , HQ.TextBox().ID("txtVendZip").Name("VendZip").MaxLength(10).HQLangCode("ZIP").Width(400).MarginSpec("3 0 0 0")
                                                 , HQ.Combo().ID("cboVendCountry").Name("VendCountry").MarginSpec("3 0 0 0").ForceSelection(true)
                                                                         .HQLangCode("COUNTRY").HQDBSys(false).HQProcedure("PO10100_pcCountryAll")
                                                                         .HQColumnShow("CountryID,Descr")
@@ -777,9 +777,9 @@
                                                                         .LoadData()
                                         )
                                         , X.Container().Layout(LayoutType.VBox).Items(
-                                            HQ.TextBox().ID("txtVendPhone").Name("VendPhone").MaxLength(30).HQLangCode("PHONE").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
-                                            , HQ.TextBox().ID("txtVendFax").Name("VendFax").MaxLength(30).HQLangCode("FAX").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
-                                            , HQ.TextBox().ID("txtVendEmail").Name("VendEmail").MaxLength(40).HQLangCode("EMAILADDR").Width(400).MarginSpec("3 0 0 0").HQControlFocus("")
+                                            HQ.TextBox().ID("txtVendPhone").Name("VendPhone").MaxLength(30).HQLangCode("PHONE").Width(400).MarginSpec("3 0 0 0")
+                                            , HQ.TextBox().ID("txtVendFax").Name("VendFax").MaxLength(30).HQLangCode("FAX").Width(400).MarginSpec("3 0 0 0")
+                                            , HQ.TextBox().ID("txtVendEmail").Name("VendEmail").MaxLength(40).HQLangCode("EMAILADDR").Width(400).MarginSpec("3 0 0 0")
 
 
                                         )
