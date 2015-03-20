@@ -584,6 +584,30 @@ var HQ = {
             control.getEl().on("click", function () {
                 HQ.focus = itemfocus;
             });
+        },
+        setForceSelection: function (ctr, isForceSelection, cboex) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.forceSelection) != "undefined") {
+                        itm.store.clearFilter();
+                        if (cboex != undefined) {
+                            if (!HQ.common.contains(cboex.split(','), itm.id))
+                                itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
+                        } else
+                            itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
+                    }
+
+                    HQ.common.setForceSelection(itm, isForceSelection, cboex);
+                });
+            }
+        },
+        contains: function (a, obj) {
+            for (var i = 0; i < a.length; i++) {
+                if (a[i] === obj) {
+                    return true;
+                }
+            }
+            return false;
         }
     },
     util: {
@@ -710,8 +734,8 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 2) value = '';//value.split(',')[value.split(',').length-1];
-        if (value.split(';').length > 2) value = '';//value.split(';')[value.split(',').length - 1];
+        if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
+        if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {
@@ -745,6 +769,10 @@ var loadDefault = function (fileNameStore, cbo) {
     }
 };
 //TrungHT
+Ext.define("NumbercurrencyPrecision", {
+    override: "Ext.util.Format.Number",
+    currencyPrecision: 0
+});
 Ext.define("ThousandSeparatorNumberField", {
     override: "Ext.form.field.Number",
 
@@ -752,13 +780,16 @@ Ext.define("ThousandSeparatorNumberField", {
     * @cfg {Boolean} useThousandSeparator
     */
     useThousandSeparator: true,
-    //decimalPrecision: 0,
+    selectOnFocus: true,
     style: 'text-align: right',
     fieldStyle: "text-align:right;",
     /**
      * @inheritdoc
      */
+    //dung cho page
+
     toRawNumber: function (value) {
+        this.decimalPrecision = this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
         return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
     },
 
@@ -883,6 +914,20 @@ Ext.define("ThousandSeparatorNumberField", {
         value = parseFloat(this.toRawNumber(value));
         return isNaN(value) ? null : value;
     }
+});
+
+Ext.define("Ext.locale.vn.toolbar.Paging", {
+    override: "Ext.PagingToolbar",
+    lable: HQ.common.getLang("PageSize"),
+    beforePageText: HQ.common.getLang("Page"),
+    afterPageText: HQ.common.getLang("of") + " {0}",
+    firstText: HQ.common.getLang("PageFirst"),
+    prevText: HQ.common.getLang("PagePrev"),
+    nextText: HQ.common.getLang("PageNext"),
+    lastText: HQ.common.getLang("PageLast"),
+    refreshText: HQ.common.getLang("PageRefresh"),
+    displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
+    emptyMsg: HQ.common.getLang("DataEmty")
 });
 //window.onresize = function () {
 //    if ((window.outerHeight - window.innerHeight) > 100) {

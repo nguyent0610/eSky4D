@@ -141,7 +141,7 @@
 
                     , HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20200_pcApproveHandle")
                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
-                    .HQValue("", false).Editable(false)
+                    .HQValue("", false).ForceSelection(true)
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .HQParam(new StoreParameterCollection() 
                         {

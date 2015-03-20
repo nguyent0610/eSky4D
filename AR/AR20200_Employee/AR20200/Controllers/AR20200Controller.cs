@@ -53,7 +53,7 @@ namespace AR20200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -96,12 +96,15 @@ namespace AR20200.Controllers
                                                     && p.EditScreenNbr == _screenNbr && p.BranchID == branchID);
 
                                         // Checking right of approval
-                                        var roles = _sys.Users.FirstOrDefault(x => x.UserName == Current.UserName).UserTypes;
+                                        var roles = _sys.Users.FirstOrDefault(x => x.UserName.ToLower() == Current.UserName.ToLower()).UserTypes;
+                                        var arrRoles = (!string.IsNullOrEmpty(roles) && roles.Contains(","))
+                                            ? roles.Split(',') : (!string.IsNullOrEmpty(roles) ? new string[] { roles } : new string[] { "" });
+                                        
                                         var approveHandle = _db.SI_ApprovalFlowHandle
                                             .FirstOrDefault(p => p.AppFolID == _screenNbr
                                                                 && p.Status == inputSlsper.Status
                                                                 && p.Handle == handle
-                                                                && roles.Split(',').Contains(p.RoleID));
+                                                                && arrRoles.Contains(p.RoleID));
 
                                         // If not in pending task but has right of approval, then add pending task
                                         if (task == null && approveHandle != null)

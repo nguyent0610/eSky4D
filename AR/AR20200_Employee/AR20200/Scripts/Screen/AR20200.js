@@ -113,8 +113,9 @@ var Process = {
 // Store Event
 var Store = {
     stoSalesPerson_load: function (sto, records, successful, eOpts) {
-        App.cboState.forceSelection = false;
-        App.cboDistrict.forceSelection = false;
+        //App.cboState.forceSelection = false;
+        //App.cboDistrict.forceSelection = false;
+        HQ.common.setForceSelection(App.frmMain, false, "cboBranchID,cboSlsperid")
 
         HQ.isNew = false;
         if (sto.getCount() == 0) {
