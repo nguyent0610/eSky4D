@@ -244,6 +244,7 @@ namespace IN10300.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
+
         private void SaveData(FormCollection data)
         {
 
@@ -341,7 +342,10 @@ namespace IN10300.Controllers
             {
                 throw new MessageException(MessageType.Message, "2015020803");
             }
-
+            if (_objBatch.BranchID != _objBatch.ToCpnyID && _objBatch.TransferType == "1")
+            {
+                throw new MessageException(MessageType.Message, "1092");
+            }
             if (_lstTrans.Count == 0)
             {
                 throw new MessageException(MessageType.Message, "2015020804", "");
@@ -582,52 +586,52 @@ namespace IN10300.Controllers
         }
 
 
-        //[HttpPost]
-        //public ActionResult Report(FormCollection data)
-        //{
-        //    try
-        //    {
-        //        _form = data;
-        //        _objBatch = data.ConvertToObject<IN10300_pcBatch_Result>();
-        //        User user = _sys.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
-        //        var rpt = new RPTRunning();
-        //        rpt.ResetET();
+        [HttpPost]
+        public ActionResult Report(FormCollection data)
+        {
+            try
+            {
+                _form = data;
+                _objBatch = data.ConvertToObject<IN10300_pcBatch_Result>();
+                User user = _sys.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
+                var rpt = new RPTRunning();
+                rpt.ResetET();
 
-        //        rpt.ReportNbr = "IN602";
-        //        rpt.MachineName = "Web";
-        //        rpt.ReportCap = "IN_Issue";
-        //        rpt.ReportName = "IN_Issue";
-        //        rpt.ReportDate = DateTime.Now;
-        //        rpt.DateParm00 = DateTime.Now;
-        //        rpt.DateParm01 = DateTime.Now;
-        //        rpt.DateParm02 = DateTime.Now;
-        //        rpt.DateParm03 = DateTime.Now;
-        //        rpt.StringParm00 = _objBatch.BranchID;
-        //        rpt.StringParm01 = _objBatch.BatNbr;
-        //        rpt.UserID = Current.UserName;
-        //        rpt.AppPath = "Reports\\";
-        //        rpt.ClientName = Current.UserName;
-        //        rpt.LoggedCpnyID = Current.CpnyID;
-        //        rpt.CpnyID = user.CpnyID;
-        //        rpt.LangID = Current.LangID;
+                rpt.ReportNbr = "IN602";
+                rpt.MachineName = "Web";
+                rpt.ReportCap = "IN_Issue";
+                rpt.ReportName = "IN_Issue";
+                rpt.ReportDate = DateTime.Now;
+                rpt.DateParm00 = DateTime.Now;
+                rpt.DateParm01 = DateTime.Now;
+                rpt.DateParm02 = DateTime.Now;
+                rpt.DateParm03 = DateTime.Now;
+                rpt.StringParm00 = _objBatch.BranchID;
+                rpt.StringParm01 = _objBatch.BatNbr;
+                rpt.UserID = Current.UserName;
+                rpt.AppPath = "Reports\\";
+                rpt.ClientName = Current.UserName;
+                rpt.LoggedCpnyID = Current.CpnyID;
+                rpt.CpnyID = user.CpnyID;
+                rpt.LangID = Current.LangID;
 
-        //        _app.RPTRunnings.AddObject(rpt);
-        //        _app.SaveChanges();
+                _app.RPTRunnings.AddObject(rpt);
+                _app.SaveChanges();
 
-        //        if (_logMessage != null)
-        //        {
-        //            return _logMessage;
-        //        }
-        //        return Json(new { success = true, reportID = rpt.ReportID, reportName = rpt.ReportName });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is MessageException)
-        //        {
-        //            return (ex as MessageException).ToMessage();
-        //        }
-        //        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-        //    }
-        //}
+                if (_logMessage != null)
+                {
+                    return _logMessage;
+                }
+                return Json(new { success = true, reportID = rpt.ReportID, reportName = rpt.ReportName });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
     }
 }

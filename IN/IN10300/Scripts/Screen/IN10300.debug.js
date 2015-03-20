@@ -543,6 +543,11 @@ var save = function () {
         return;
     }
 
+    if (App.txtBranchID.getValue() != App.cboToCpnyID.getValue() && App.cboTransferType.getValue() == "1") {
+        HQ.message.show(1092, '', '', true);
+        return;
+    }
+
     if (App.stoTrans.data.items.length <= 1) {
         HQ.message.show(2015020804, [App.cboBatNbr.value], '', true);
         return;
