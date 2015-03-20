@@ -599,8 +599,8 @@ namespace IN10300.Controllers
 
                 rpt.ReportNbr = "IN602";
                 rpt.MachineName = "Web";
-                rpt.ReportCap = "IN_Issue";
-                rpt.ReportName = "IN_Issue";
+                rpt.ReportCap = "IN_Transfer";
+                rpt.ReportName = "IN_Transfer";
                 rpt.ReportDate = DateTime.Now;
                 rpt.DateParm00 = DateTime.Now;
                 rpt.DateParm01 = DateTime.Now;
