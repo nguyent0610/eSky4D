@@ -541,7 +541,8 @@ var HQ = {
             if (typeof (ctr.items) != "undefined") {
                 ctr.items.each(function (itm) {
                     if (typeof (itm.setReadOnly) != "undefined") {
-                        itm.setReadOnly(lock)
+                        if (itm.getTag() != "X")
+                            itm.setReadOnly(lock)
 
                     }
                     HQ.common.lockItem(itm, lock);
@@ -589,6 +590,7 @@ var HQ = {
             if (typeof (ctr.items) != "undefined") {
                 ctr.items.each(function (itm) {
                     if (typeof (itm.forceSelection) != "undefined") {
+                        itm.store.clearFilter();
                         if (cboex != undefined) {
                             if (!HQ.common.contains(cboex.split(','), itm.id)) itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
                         } else itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
@@ -734,6 +736,13 @@ var FilterCombo = function (control, stkeyFilter) {
         if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
         if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
+            var filtersAux = [];
+            // get filter
+            store.filters.items.forEach(function (item) {
+                if (item.id != control.id + '-query-filter') {
+                    filtersAux.push(item);
+                }
+            });
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {
                 store.filterBy(function (record) {
@@ -756,6 +765,9 @@ var FilterCombo = function (control, stkeyFilter) {
                     }
                 });
             }
+            filtersAux.forEach(function (item) {
+                store.filter(item.property, item.value);
+            });
         }
     }
 };
