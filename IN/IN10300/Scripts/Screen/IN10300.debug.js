@@ -123,7 +123,7 @@ var frmMain_FieldChange = function (item, field, newValue, oldValue) {
         return;
     }
     if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
-    if (Object.keys(App.stoBatch.getChangedData()).length > 0 || grdTrans.isChange) {
+    if (Object.keys(App.stoBatch.getChangedData()).length > 0 || App.grdTrans.isChange) {
         setChange(true);
     } else {
         setChange(false);
@@ -134,7 +134,7 @@ var menuClick = function (command) {
     switch (command) {
         case "first":
             if (HQ.focus == 'batch') {
-                if (HQ.isChange || grdTrans.isChange) {
+                if (HQ.isChange || App.grdTrans.isChange) {
                     HQ.message.show(150, '', '', true);
                 } else {
                     App.frmMain.loadRecord(App.stoBatch.first());
@@ -145,7 +145,7 @@ var menuClick = function (command) {
             break;
         case "next":
             if (HQ.focus == 'batch') {
-                if (HQ.isChange || grdTrans.isChange) {
+                if (HQ.isChange || App.grdTrans.isChange) {
                     HQ.message.show(150, '', '', true);
                 } else {
                     var index = App.stoBatch.indexOf(App.stoBatch.getById(App.cboBatNbr.getValue()));
@@ -157,7 +157,7 @@ var menuClick = function (command) {
             break;
         case "prev":
             if (HQ.focus == 'batch') {
-                if (HQ.isChange || grdTrans.isChange) {
+                if (HQ.isChange || App.grdTrans.isChange) {
                     HQ.message.show(150, '', '', true);
                 } else {
                     var index = App.stoBatch.indexOf(App.stoBatch.getById(App.cboBatNbr.getValue()));
@@ -169,12 +169,12 @@ var menuClick = function (command) {
             break;
         case "last":
             if (HQ.focus == 'batch') {
-                if (HQ.isChange || grdTrans.isChange) {
+                if (HQ.isChange || App.grdTrans.isChange) {
                     HQ.message.show(150, '', '', true);
                 } else {
                     App.frmMain.loadRecord(App.stoBatch.last());
                 }
-            } else if (HQ.focus == 'det') {
+            } else if (HQ.focus == 'trans') {
                 HQ.grid.last(App.grdTrans);
             }
             break;
@@ -212,14 +212,14 @@ var menuClick = function (command) {
             break;
         case "close":
             if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
-            if (HQ.isChange || grdTrans.isChange) {
+            if (HQ.isChange || App.grdTrans.isChange) {
                 HQ.message.show(5, '', 'askClose');
             } else {
                 HQ.common.close(this);
             }
             break;
         case "new":
-            if ((HQ.isChange || grdTrans.isChange) && !Ext.isEmpty(App.cboBatNbr.getValue())) {
+            if ((HQ.isChange || App.grdTrans.isChange) && !Ext.isEmpty(App.cboBatNbr.getValue())) {
                 HQ.message.show(2015030201, '', "askNew", true);
             } else {
                 defaultOnNew();
@@ -419,7 +419,7 @@ var grdTrans_Edit = function (item, e) {
     HQ.focus = 'trans';
     var key = e.field;
     if (Object.keys(e.record.modified).length > 0) {
-        grdTrans.isChange = true;
+        App.grdTrans.isChange = true;
         if (e.record.invt == undefined) {
             e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
         }
@@ -987,7 +987,7 @@ var setChange = function (isChange) {
         }
 
     } else {
-        grdTrans.isChange = false;
+        App.grdTrans.isChange = false;
         App.cboBatNbr.setReadOnly(false);
     }
     HQ.common.changeData(isChange, 'IN10300');
