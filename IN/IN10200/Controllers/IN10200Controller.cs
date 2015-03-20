@@ -519,15 +519,16 @@ namespace IN10200.Controllers
                 if (objInvt != null && objInvt.StkItem == 1)
                 {
                     var objSite = _app.IN_ItemSite.FirstOrDefault(p=> p.InvtID == invtID && p.SiteID == siteID);
-                    if (objSite != null)
+
+                    if (objSite == null) objSite = new IN_ItemSite() { SiteID = siteID, InvtID = invtID };
+                    
+                    if (!_objIN.NegQty && newQty > 0 && objSite.QtyAvail + oldQty - newQty < 0)
                     {
-                        if (!_objIN.NegQty && newQty > 0 && objSite.QtyAvail + oldQty - newQty < 0)
-                        {
-                            throw new MessageException(MessageType.Message, "608","",new string[] {invtID,siteID});
-                        }
-                        objSite.QtyAllocIN = Math.Round(objSite.QtyAllocIN + newQty - oldQty, 0);
-                        objSite.QtyAvail = Math.Round(objSite.QtyAvail - newQty + oldQty, 0);
+                        throw new MessageException(MessageType.Message, "608","",new string[] {invtID,siteID});
                     }
+                    objSite.QtyAllocIN = Math.Round(objSite.QtyAllocIN + newQty - oldQty, 0);
+                    objSite.QtyAvail = Math.Round(objSite.QtyAvail - newQty + oldQty, 0);
+                    
                     return true;
                 }
                 return true;
