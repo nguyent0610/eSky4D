@@ -43,7 +43,7 @@ namespace IN10300.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -106,7 +106,7 @@ namespace IN10300.Controllers
                 {
                     return _logMessage;
                 }
-                return Json(new { success = true, data = new { batNbr = _objBatch.BatNbr } });
+                return Util.CreateMessage(MessageProcess.Save,  new { batNbr = _objBatch.BatNbr });
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace IN10300.Controllers
                 {
                     return (ex as MessageException).ToMessage();
                 }
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Util.CreateError(ex.ToString());
             }
         }
         [HttpPost]
@@ -160,7 +160,7 @@ namespace IN10300.Controllers
                 {
                     return _logMessage;
                 }
-                return Json(new { success = true });
+                return Util.CreateMessage(MessageProcess.Delete);
             }
             catch (Exception ex)
             {
@@ -168,7 +168,7 @@ namespace IN10300.Controllers
                 {
                     return (ex as MessageException).ToMessage();
                 }
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Util.CreateError(ex.ToString());
             }
         }
         [HttpPost]
@@ -233,7 +233,7 @@ namespace IN10300.Controllers
                 {
                     return _logMessage;
                 }
-                return Json(new { success = true, tstamp });
+                return Util.CreateMessage(MessageProcess.Delete, new { tstamp });
             }
             catch (Exception ex)
             {
@@ -241,7 +241,7 @@ namespace IN10300.Controllers
                 {
                     return (ex as MessageException).ToMessage();
                 }
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Util.CreateError(ex.ToString());
             }
         }
 

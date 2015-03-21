@@ -479,12 +479,14 @@
             ), // Panel
             
             X.GridPanel().ID("grdTrans")
-            .Border(false)
+            .Border(true)
+            .BorderSpec("1 0 0 0")
+            .ColumnLines(true)
+            .RowLines(true)
             .Region(Region.Center)
             .StoreID("stoTrans")
             .ColumnModel(
-                X.RowNumbererColumn()
-                ,
+                X.RowNumbererColumn(),
 
                 X.Column()
                 .DataIndex("InvtID")
