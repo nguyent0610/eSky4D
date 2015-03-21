@@ -1,0 +1,147 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM20500;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM20500";
+    var acc = Session["OM20500"] as AccessRight;
+    var HQ = Html.HQ();
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/OM20500.js")' type="text/javascript"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("stoOrder")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500_pgOrder_Result), "mdlOrder", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetOrder", "OM20500"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custID", "App.cboCustID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("status", "App.cboStatus.getValue().join(',')", ParameterMode.Raw));
+                ps.Add(new StoreParameter("startDate", "App.dteStartDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("endDate", "App.dteEndDate.getValue()", ParameterMode.Raw)); 
+            })      
+            .Listeners(p=>p.Load.Fn="Store.stoOrder_load" )
+            // Store: stoOrder
+        )
+
+        @(
+            X.Store().ID("stoDet")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500_pgDet_Result), "mdlDet", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetDet", "OM20500"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custID", "App.cboCustID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("status", "App.cboStatus.getValue().join(',')", ParameterMode.Raw));
+                ps.Add(new StoreParameter("startDate", "App.dteStartDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("endDate", "App.dteEndDate.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(p => { 
+                p.Load.Fn = "Store.stoDet_load";
+                //p.Update.Fn = "Store.stoDet_update";
+            })
+                // Store: stoDet
+        )
+
+        @(
+            X.Store().ID("stoHisOrd")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500_pgHistoryOrd_Result), "mdlHisOrd", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetHisOrd", "OM20500"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                //ps.Add(new StoreParameter("orderNbr", "Process.getCheckedOrders(App.grdOrder).join(',')", ParameterMode.Raw));
+                ps.Add(new StoreParameter("orderNbr", "App.slmOrder.selected.items.length?App.slmOrder.selected.items[0].data.OrderNbr:''", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Fn="Store.stoHisOrd_load" )
+            // Store: stoHisOrd
+        )
+
+        @(
+            X.Store().ID("stoHisDet")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500_pgHisDet_Result), "mdlHisDet", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetHisDet", "OM20500"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                //ps.Add(new StoreParameter("orderNbr", "Process.getCheckedOrders(App.grdHisOrd).join(',')", ParameterMode.Raw));
+                ps.Add(new StoreParameter("orderNbr", "App.slmHisOrd.selected.items.length?App.slmHisOrd.selected.items[0].data.OrderNbr:''", ParameterMode.Raw));
+            })      
+            //.Listeners(p=>p.Load.Fn="Store.stoHisDet_load" )
+            // Store: stoHisDet
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong OM20500Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>
