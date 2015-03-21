@@ -29,7 +29,6 @@ namespace IN10200.Controllers
     {
         private string _screenNbr = "IN10200";
         private string _userName = Current.UserName;
-        private string _tstamp = "";
         private string _handle = "";
         private IN10200Entities _app = Util.CreateObjectContext<IN10200Entities>();
         private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);     
@@ -107,7 +106,7 @@ namespace IN10200.Controllers
                 {
                     return _logMessage;
                 }
-                return Json(new { success = true, data = new { batNbr = _objBatch.BatNbr } });
+                return Util.CreateMessage(MessageProcess.Save, new { batNbr = _objBatch.BatNbr } );
             }
             catch (Exception ex)
             {
@@ -115,7 +114,7 @@ namespace IN10200.Controllers
                 {
                     return (ex as MessageException).ToMessage();
                 }
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Util.CreateError(ex.ToString());
             }
         }
         [HttpPost]
@@ -159,7 +158,7 @@ namespace IN10200.Controllers
                 {
                     return _logMessage;
                 }
-                return Json(new { success = true });
+                return Util.CreateMessage(MessageProcess.Delete);
             }
             catch (Exception ex)
             {
@@ -167,7 +166,7 @@ namespace IN10200.Controllers
                 {
                     return (ex as MessageException).ToMessage();
                 }
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Util.CreateError(ex.ToString());
             }
         }
         [HttpPost]
@@ -233,7 +232,7 @@ namespace IN10200.Controllers
                 {
                     return _logMessage;
                 }
-                return Json(new { success = true, tstamp  });
+                return Util.CreateMessage(MessageProcess.Delete, new { tstamp });
             }
             catch (Exception ex)
             {
@@ -241,7 +240,7 @@ namespace IN10200.Controllers
                 {
                     return (ex as MessageException).ToMessage();
                 }
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Util.CreateError(ex.ToString());
             }
         }
         private void SaveData(FormCollection data)
@@ -272,13 +271,12 @@ namespace IN10200.Controllers
                     throw new MessageException(MessageType.Message, "301");
                 }
             }
-            _tstamp = data["tstamp"].StartsWith("0x") ? data["tstamp"].ToHex() : data["tstamp"].ToString();
             Batch batch = _app.Batches.FirstOrDefault(p => p.BatNbr == _objBatch.BatNbr && p.BranchID == _objBatch.BranchID);
             if ((_objBatch.Status == "U" || _objBatch.Status == "C") && (_handle == "C" || _handle == "V"))
             {
                 if (batch != null)
                 {
-                    if (batch.tstamp.ToHex() != _tstamp)
+                    if (batch.tstamp.ToHex() != data["tstamp"].ToHex())
                     {
                         throw new MessageException(MessageType.Message, "19");
                     }
@@ -317,7 +315,15 @@ namespace IN10200.Controllers
                             dal.CommitTrans();
                         }
 
-                        Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
+                        if (inventory.LogList != null)
+                        {
+                            MessageException msg = inventory.LogList.FirstOrDefault();
+                            Util.AppendLog(ref _logMessage, msg.Code, parm: msg.Parm);
+                        }
+                        else
+                        {
+                            Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
+                        }
                     }
                     else if (_handle == "C" || _handle == "V")
                     {
@@ -330,7 +336,16 @@ namespace IN10200.Controllers
                         {
                             dal.CommitTrans();
                         }
-                        Util.AppendLog(ref _logMessage, "9999", "");
+
+                        if (inventory.LogList != null)
+                        {
+                            MessageException msg = inventory.LogList.FirstOrDefault();
+                            Util.AppendLog(ref _logMessage, msg.Code, parm: msg.Parm);
+                        }
+                        else
+                        {
+                            Util.AppendLog(ref _logMessage, "9999", "");
+                        }
                     }
                     inventory = null;
                 }
@@ -365,7 +380,7 @@ namespace IN10200.Controllers
         {
             if (batch != null)
             {
-                if (batch.tstamp.ToHex() != _tstamp)
+                if (batch.tstamp.ToHex() != _form["tstamp"].ToHex())
                 {
                     throw new MessageException(MessageType.Message, "19");
                 }

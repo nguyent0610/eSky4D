@@ -362,7 +362,10 @@
             ,
         
             X.GridPanel().ID("grdTrans")
-            .Border(false)
+            .Border(true)
+            .RowLines(true)
+            .ColumnLines(true)
+            .BorderSpec("1 0 0 0")
             .Region(Region.Center)
             .StoreID("stoTrans")
             .ColumnModel(
