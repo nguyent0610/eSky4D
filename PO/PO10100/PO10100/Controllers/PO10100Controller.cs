@@ -125,7 +125,64 @@ namespace PO10100.Controllers
                             .ToList();
 
                 Save_PO_Header();
-                return Json(new { success = true, PONbr =_ponbr });
+                return Util.CreateMessage(MessageProcess.Save, new { pONbr = _ponbr });
+              
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+        [HttpPost]
+        public ActionResult ClosePO(FormCollection data)
+        {
+            try
+            {
+                _form = data;
+                _ponbr = data["cboPONbr"];
+                _branchID = data["cboBranchID"];
+                _status = data["Status"].PassNull();
+                _toStatus = data["Handle"].PassNull() == "" ? _status : data["Handle"].PassNull();
+                DateTime dpoDate = data["PODate"].ToDateShort();
+
+
+                var detHeader = new StoreDataHandler(data["lstHeader"]);
+                _poHead = detHeader.ObjectData<PO_Header>().FirstOrDefault();
+
+
+                var detHandler = new StoreDataHandler(data["lstDet"]);
+                _lstPODetailLoad = detHandler.ObjectData<PO10100_pgDetail_Result>()
+                            .Where(p => Util.PassNull(p.LineRef) != string.Empty)
+                            .ToList();
+                var obj = _db.PO10100_ppCheckingPONbr(_branchID, _ponbr).FirstOrDefault();
+                if (obj != null)
+                {
+                     throw new MessageException(MessageType.Message, "60");
+                   
+                }
+                  var objPO_Header = _db.PO_Header.FirstOrDefault(p => p.PONbr == _ponbr && p.BranchID == _branchID);
+                     objPO_Header.Status = "C";
+                     objPO_Header.LUpd_DateTime = DateTime.Now;
+                     objPO_Header.LUpd_Prog = ScreenNbr;
+                     objPO_Header.LUpd_User = Current.UserName;
+              
+                for (int i = 0; i < _lstPODetailLoad.Count; i++)
+                {
+                    var objrPO_Detail = _lstPODetailLoad[i];
+                    var objDetail = _db.PO_Detail.Where(p => p.BranchID == _branchID && p.PONbr == _ponbr && p.LineRef == objrPO_Detail.LineRef).FirstOrDefault();
+                    if (objrPO_Detail.PurchaseType == "GI" || objrPO_Detail.PurchaseType == "PR" || objrPO_Detail.PurchaseType == "GP" || objrPO_Detail.PurchaseType == "GS")
+                    {
+                        double OldQty = Math.Round((objDetail.UnitMultDiv == "D" ? ((objDetail.QtyOrd - objDetail.QtyRcvd) / objDetail.CnvFact) : (objDetail.QtyOrd - objDetail.QtyRcvd) * objDetail.CnvFact));
+                        UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, 0, 2);                     
+                    }
+                }
+                _db.SaveChanges();
+                return Util.CreateMessage(MessageProcess.Save, new { pONbr = _ponbr });
+
             }
             catch (Exception ex)
             {
@@ -168,6 +225,7 @@ namespace PO10100.Controllers
                         {
                             if (objDetail.PurchaseType == "GI" || objDetail.PurchaseType == "PR" || objDetail.PurchaseType == "GS")
                             {
+
                                 double OldQty = Math.Round((objDetail.UnitMultDiv == "D" ? ((objDetail.QtyOrd - objDetail.QtyRcvd) / objDetail.CnvFact) : (objDetail.QtyOrd - objDetail.QtyRcvd) * objDetail.CnvFact));
                                 UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, 0, 2);
                             }
@@ -178,7 +236,7 @@ namespace PO10100.Controllers
                     }
                 }
                 _db.SaveChanges();
-                return Json(new { success = true, PONbr = "" });
+                return Util.CreateMessage(MessageProcess.Delete, new { pONbr = _ponbr });
             }
             catch (Exception ex)
             {
@@ -236,7 +294,7 @@ namespace PO10100.Controllers
                     }
                     Save_PO_Header(true);
                 }
-                return Json(new { success = true, PONbr = _ponbr });
+                return Util.CreateMessage(MessageProcess.Delete, new { pONbr = _ponbr });
             }
             catch (Exception ex)
             {
@@ -405,13 +463,13 @@ namespace PO10100.Controllers
                 objHeader.Terms = _poHead.Terms.PassNull();
                 objHeader.Buyer = _poHead.Buyer.PassNull();
                 objHeader.Status = _toStatus;
-                if (_statusClose) objHeader.Status = "C";
+              
 
                 objHeader.LUpd_DateTime = DateTime.Now;
                 objHeader.LUpd_Prog = ScreenNbr;
                 objHeader.LUpd_User = Current.UserName;
                 objHeader.tstamp = new byte[0];
-                _statusClose = false;
+             
             }
             catch (Exception ex)
             {
@@ -1967,8 +2025,7 @@ namespace PO10100.Controllers
                 throw (ex);
                 return false;
             }
-        }
-        
+        }        
         private void SetCellValueHeader(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
         {
             c.PutValue(" "+lang);
@@ -1980,6 +2037,8 @@ namespace PO10100.Controllers
             style.VerticalAlignment = alignV;
             c.SetStyle(style);
         }
+
+      
         #endregion
     }
     public class CountInvtID

@@ -179,11 +179,15 @@
                         , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("EXTVOL").Name("EXTVOL").HQLangCode("EXTVOL").LabelWidth(130).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
                         )
                         , X.Container().Layout(LayoutType.HBox).Items(
-                        HQ.DateField().ID("dtPODate").Name("PODate").AllowBlank(false).HQLangCode("PODate").LabelWidth(110).InputWidth(150).AllowBlank(false).MarginSpec("3 0 0 0")
-                        , HQ.Button().ID("btnClosePO").HQLangCode("CPO").MarginSpec("3 0 0 115").Width(110)
-                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("POAmt").Name("POAmt").HQLangCode("TOTAMT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
+                            HQ.DateField().ID("dtPODate").Name("PODate").AllowBlank(false).HQLangCode("PODate").LabelWidth(110).InputWidth(150).AllowBlank(false).MarginSpec("3 0 0 0")
+                            , HQ.Button().ID("btnClosePO").HQLangCode("CPO").MarginSpec("3 0 0 115").Width(110)
+                                .Listeners(lst =>
+                                {
+                                    lst.Click.Fn = "btnClosePO_Click";
+                                })
+                            , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("POAmt").Name("POAmt").HQLangCode("TOTAMT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
 
-                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("EXTWEIGHT").Name("EXTWEIGHT").HQLangCode("EXTWEIGHT").LabelWidth(130).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0")
+                            , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("EXTWEIGHT").Name("EXTWEIGHT").HQLangCode("EXTWEIGHT").LabelWidth(130).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0")
                         )
                     )//Header
                     , X.Container().MarginSpec("5 0 0 0")
@@ -379,7 +383,7 @@
                                                                 ls.BeforeEdit.Fn = "grdPO_Detail_BeforeEdit";
                                                                 ls.Edit.Fn = "grdPO_Detail_Edit";
                                                                 ls.ValidateEdit.Fn = "grdPO_Detail_ValidateEdit";
-                                                             
+
                                                             })
                                                         )
                                                         .BottomBar(

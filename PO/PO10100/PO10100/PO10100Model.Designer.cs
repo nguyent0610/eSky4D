@@ -716,6 +716,36 @@ namespace PO10100
     
             return base.ExecuteFunction<PO10100_pcSiteAll_Result>("PO10100_pcSiteAll", branchIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="pONbr">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> PO10100_ppCheckingPONbr(global::System.String branchID, global::System.String pONbr)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter pONbrParameter;
+            if (pONbr != null)
+            {
+                pONbrParameter = new ObjectParameter("PONbr", pONbr);
+            }
+            else
+            {
+                pONbrParameter = new ObjectParameter("PONbr", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("PO10100_ppCheckingPONbr", branchIDParameter, pONbrParameter);
+        }
 
         #endregion
 

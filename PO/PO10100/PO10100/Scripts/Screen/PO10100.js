@@ -89,7 +89,8 @@ var loadDataHeader = function (sto) {
         lockControl(true);
         App.cboBranchID.setReadOnly(false);
     }
-  
+    if(HQ.currRecord.data.Status=="C") App.btnClosePO.disable();
+    else App.btnClosePO.enable();
 };
 var loadDataDetail = function (sto) {
     HQ.store.insertBlank(sto, keys);
@@ -245,6 +246,8 @@ var frmChange = function (sender) {
         //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
         App.cboBranchID.setReadOnly(HQ.isChange);
         App.cboPONbr.setReadOnly(HQ.isChange);
+        if (HQ.isChange || App.cboStatus.getValue() == "C") App.btnClosePO.disable();
+        else App.btnClosePO.enable();
     }
     else {
         HQ.isChange = false;
@@ -818,6 +821,44 @@ var cboStatus_Change = function (item, newValue, oldValue) {
         App.cboPONbr.setReadOnly(false);
     }
 };
+
+var btnClosePO_Click = function () {
+    if (Ext.isEmpty(App.cboPONbr.getValue())) {
+        HQ.message.show(61, '', '');
+        return;
+    }
+
+    App.frmMain.getForm().updateRecord();
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang('Closing PO'),
+            method: 'POST',
+            url: 'PO10100/ClosePO',
+            timeout: 1800000,
+            params: {
+                lstDet: Ext.encode(App.stoPO10100_pgDetail.getRecordsValues()),
+                lstHeader: Ext.encode(App.stoPO_Header.getRecordsValues())
+
+            },
+            success: function (msg, data) {
+                HQ.message.process(msg, data, true);
+                var PONbr = '';
+
+                if (this.result.data != undefined && this.result.data.pONbr != null) {
+                    PONbr = this.result.data.pONbr;
+                }
+            
+                App.cboPONbr.getStore().load(function () {
+                    App.cboPONbr.setValue(PONbr);
+                    App.stoPO_Header.reload();
+                });
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+}
 ///////DataProcess///
 function save() {
     App.frmMain.getForm().updateRecord();
@@ -833,8 +874,11 @@ function save() {
 
             },
             success: function (msg, data) {              
-                HQ.message.show(201405071, '', '');
-                var PONbr = data.result.PONbr;
+                HQ.message.process(msg, data, true);
+                var PONbr = '';
+                if (this.result.data != undefined && this.result.data.pONbr != null) {
+                    PONbr = this.result.data.pONbr;
+                }
                 App.cboPONbr.getStore().load(function () {
                     App.cboPONbr.setValue(PONbr);
                     App.stoPO_Header.reload();
@@ -859,9 +903,12 @@ function deleteHeader(item) {
 
                 },
                 success: function (msg, data) {
-                    App.cboPONbr.setValue("");
-                    HQ.message.show(201405071);
-                    menuClick('refresh');
+                  
+                    HQ.message.process(msg, data, true);
+                    App.cboPONbr.getStore().load(function () {
+                        App.cboPONbr.setValue('');
+                        App.stoPO_Header.reload();
+                    });
                 },
                 failure: function (msg, data) {
                     HQ.message.process(msg, data, true);
@@ -891,16 +938,15 @@ var deleteRecordGrid = function (item) {
 
                         },
                         success: function (msg, data) {
-                            if (this.result.PONbr != null) {
-                                var PONbr = this.result.PONbr;
-                                App.cboPONbr.getStore().load(function () {
-                                    App.cboPONbr.setValue(PONbr);
-                                    HQ.message.show(201405071);
-                                    App.stoPO_Header.reload();
-                                });
+                            HQ.message.process(msg, data, true);
+                            var PONbr = '';
+                            if (this.result.data != undefined && this.result.data.pONbr != null) {
+                                PONbr = this.result.data.pONbr;
                             }
-
-
+                            App.cboPONbr.getStore().load(function () {
+                                App.cboPONbr.setValue(PONbr);
+                                App.stoPO_Header.reload();
+                            });                            
                         },
                         failure: function (msg, data) {
                             HQ.message.process(msg, data, true);
@@ -1264,7 +1310,7 @@ function calcTax(index) {
 
                         if (chk) {
 
-                            if (totPrcTaxInclAmt + taxAmtL1 + txblAmtL1 != _lstOrdDet[i].ExtCost)
+                            if (totPrcTaxInclAmt + taxAmtL1 + txblAmtL1 != det.ExtCost)
                                 taxAmtL1 = Math.round(det.ExtCost - (totPrcTaxInclAmt + txblAmtL1), 0);
 
                         }

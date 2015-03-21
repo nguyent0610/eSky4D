@@ -473,6 +473,10 @@
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="PO10100_ppCheckingPONbr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="PONbr" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="PO10100_ppCheckPODate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -557,7 +561,11 @@
           <FunctionImport Name="PO10100_pcInventoryActive" ReturnType="Collection(PO10100Model.PO10100_pcInventoryActive_Result)" />
           <EntitySet Name="PO_Setup" EntityType="PO10100Model.PO_Setup" />
           <FunctionImport Name="PO10100_pcSiteAll" ReturnType="Collection(PO10100Model.PO10100_pcSiteAll_Result)">
+          <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PO10100_ppCheckingPONbr" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="PONbr" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="PO10100_pgDetail_Result">
@@ -2021,6 +2029,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO10100_ppCheckingPONbr" FunctionName="SA00300Model.Store.PO10100_ppCheckingPONbr" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -2041,7 +2050,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="SA00300Model" ZoomLevel="94">
+      <Diagram Name="SA00300Model" ZoomLevel="33">
         <EntityTypeShape EntityType="PO10100Model.PO_Detail" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.IN_ItemSite" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.IN_Inventory" Width="1.5" PointX="4.75" PointY="0.75" />
