@@ -108,7 +108,7 @@ namespace IN10100.Controllers
                 {
                     return _logMessage;
                 }
-                return Json(new { success = true, data= new {batNbr= _objBatch.BatNbr} });
+                return Util.CreateMessage(MessageProcess.Save, new {batNbr = _objBatch.BatNbr });
             }
             catch (Exception ex)
             {
@@ -116,7 +116,7 @@ namespace IN10100.Controllers
                 {
                     return (ex as MessageException).ToMessage();
                 }
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Util.CreateError(ex.ToString());
             }
         }
         [HttpPost]
@@ -151,7 +151,7 @@ namespace IN10100.Controllers
                 {
                     return _logMessage;
                 }
-                return Json(new { success = true });
+                return Util.CreateMessage(MessageProcess.Delete);
             }
             catch (Exception ex)
             {
@@ -159,7 +159,7 @@ namespace IN10100.Controllers
                 {
                     return (ex as MessageException).ToMessage();
                 }
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Util.CreateError(ex.ToString());
             }
         }
         [HttpPost]
@@ -207,16 +207,16 @@ namespace IN10100.Controllers
                 _app.SaveChanges();
 
                 string tstamp = "";
-                if (_objBatch != null)
+                if (batch != null)
                 {
-                    tstamp = _objBatch.tstamp.ToHex();
+                    tstamp = batch.tstamp.ToHex();
                 }
 
                 if (_logMessage != null)
                 {
                     return _logMessage;
                 }
-                return Json(new { success = true, tstamp });
+                return Util.CreateMessage(MessageProcess.Delete, new { tstamp });
             }
             catch (Exception ex)
             {
@@ -224,7 +224,7 @@ namespace IN10100.Controllers
                 {
                     return (ex as MessageException).ToMessage();
                 }
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Util.CreateError(ex.ToString());
             }
         }
         private void SaveData(FormCollection data)
@@ -298,8 +298,12 @@ namespace IN10100.Controllers
                         {
                             dal.CommitTrans();
                         }
-
-                        Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
+                        if (inventory.LogList != null)
+                        {
+                            MessageException msg = inventory.LogList.FirstOrDefault();
+                            Util.AppendLog(ref _logMessage, msg.Code, parm: msg.Parm);
+                        } else 
+                            Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
                     }
                     else if (_handle == "C" || _handle == "V")
                     {
@@ -312,7 +316,15 @@ namespace IN10100.Controllers
                         {
                             dal.CommitTrans();
                         }
-                        Util.AppendLog(ref _logMessage, "9999", "");
+                        if (inventory.LogList != null)
+                        {
+                            MessageException msg = inventory.LogList.FirstOrDefault();
+                            Util.AppendLog(ref _logMessage, msg.Code, parm: msg.Parm);
+                        }
+                        else
+                        {
+                            Util.AppendLog(ref _logMessage, "9999", "");
+                        }
                     }
                     inventory = null;
                 }

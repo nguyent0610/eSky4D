@@ -723,8 +723,8 @@ var deleteTrans = function (item) {
                     lineRef: App.smlTrans.selected.items[0].data.LineRef,
                 },
                 success: function (msg, data) {
-                    if (!Ext.isEmpty(data.result.tstamp)) {
-                        App.tstamp.setValue(data.result.tstamp);
+                    if (!Ext.isEmpty(data.result.data.tstamp)) {
+                        App.tstamp.setValue(data.result.data.tstamp);
                     }
                     App.grdTrans.deleteSelected();
                     calculate();

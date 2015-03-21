@@ -350,6 +350,7 @@
                 .MaxLength(100)
                 .EnforceMaxLength(true)
                 .HQControlFocus("BatNbr")
+                .MarginSpec("0 0 10 0")
                 .BlankText(Util.GetLangPrefix("Input", "TranDate"))
                 .Width(720)
                 .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
@@ -358,16 +359,15 @@
                 X.Hidden().ID("tstamp"),
                 X.Hidden().ID("JrnlType")
 
-            )
-            ,
+            ),
 
             X.GridPanel().ID("grdTrans")
-            .Border(false)
             .Region(Region.Center)
             .StoreID("stoTrans")
+            .RowLines(true)
+            .ColumnLines(true)
             .ColumnModel(
-                X.RowNumbererColumn()
-                ,
+                X.RowNumbererColumn(),
 
                 X.Column()
                 .DataIndex("InvtID")
