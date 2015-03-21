@@ -1,0 +1,269 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework
+@using HQ.eSkyFramework.HQControl;
+@using OM40100;
+
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport()
+    .Layout(LayoutType.Fit)
+    .Items(
+
+        X.FormPanel().ID("frmMain")
+        .Layout(LayoutType.Border)
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{ }))
+        .FieldDefaults(a => { a.LabelAlign = LabelAlign.Right; a.LabelWidth = 120; })
+        .Listeners(p => {
+            p.BoxReady.Fn = "frmMain_BoxReady";
+        })
+        .Items(
+
+            X.Panel()
+            .Border(false)
+            .Region(Region.North)
+            .Layout(LayoutType.VBox)
+            .Items(
+                X.FieldContainer()
+                .MarginSpec("10 0 5 0")
+                .Layout(LayoutType.HBox)
+                .Items(
+
+                    HQ.Combo().ID("cboProcessType")
+                    .Name("ProcessType")
+                    .HQLangCode("Type")
+                    .HQProcedure("OM40100_pcProcessType")
+                    .HQColumnShow("Code,Descr")
+                    .DisplayField("Descr")
+                    .ValueField("Code")
+                    .Width(250)
+                    .HQHeightWidth(400, 300)
+                    .BlankText(Util.GetLangPrefix("Input","Type"))
+                    .AllowBlank(false)
+                    .ForceSelection(true)               
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .HQControlFocus("txtFromDate")
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.Change.Fn = "cboProcessType_Change";
+                    }),
+                    
+                    HQ.TextBox().ID("txtBranchID")
+                    .HQLangCode("BranchID")
+                    .AllowBlank(false)
+                    .BlankText(Util.GetLangPrefix("Input", "BranchID"))
+                    .MaxLength(30)
+                    .EnforceMaxLength(true)
+                    .Width(230)
+                    .LabelWidth(120)
+                    .HQControlFocus("cboCustomer"),
+                    
+                    HQ.Combo().ID("cboDeliveryID")
+                    .HQLangCode("DeliveryID")
+                    .HQProcedure("OM40100_pcDeliveryID")
+                    .HQColumnShow("SlsperID,Name")
+                    .DisplayField("SlsperID")
+                    .ValueField("SlsperID")
+                    .Width(200)
+                    .LabelWidth(90)
+                    .HQHeightWidth(400, 300)
+                    .ForceSelection(true)   
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    })
+                    .HQControlFocus("cboProcessType")
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+
+                ),
+
+                X.FieldContainer()
+                .Layout(LayoutType.HBox)
+                .Items(
+                    HQ.DateField().ID("txtFromDate")
+                    .HQLangCode("FromDate")
+                    .AllowBlank(false)
+                    .BlankText(Util.GetLangPrefix("Input", "FromDate"))
+                    .Width(250)
+                    .HQControlFocus("txtToDate"),
+                    
+                    HQ.Combo().ID("cboCustomer")
+                    .HQLangCode("CustID")
+                    .HQProcedure("OM40100_pcCustomer")
+                    .HQColumnShow("CustID,Name")
+                    .DisplayField("CustID")
+                    .ValueField("CustID")
+                    .Width(230)
+                    .LabelWidth(120)
+                    .HQHeightWidth(400, 300)
+                    .ForceSelection(true)   
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    })
+                    .HQControlFocus("cboSlsperID")
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    }),
+                    
+                    X.Button()
+                    .ID("btnLoad")
+                    .Text(Util.GetLang("LoadData"))
+                    .Width(105)
+                    .MarginSpec("0 0 0 95")
+                    .Listeners(l=> l.Click.Fn = "btnLoad_Click")
+                ),
+
+                X.FieldContainer()
+                .Layout(LayoutType.HBox)
+                .Items(
+                     HQ.DateField().ID("txtToDate")
+                    .HQLangCode("ToDate")
+                    .AllowBlank(false)
+                    .BlankText(Util.GetLangPrefix("Input", "ToDate"))
+                    .Width(250)
+                    .HQControlFocus("cboCustomer")
+                    .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
+                    
+                    HQ.Combo().ID("cboSlsperID")
+                    .HQLangCode("SlsperID")
+                    .HQProcedure("OM40100_pcSalesPerson")
+                    .HQColumnShow("SlsperID,Name")
+                    .DisplayField("SlsperID")
+                    .ValueField("SlsperID")
+                    .Width(230)
+                    .LabelWidth(120)
+                    .HQHeightWidth(400, 300)
+                    .ForceSelection(true)   
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    })
+                    .HQControlFocus("cboDeliveryID")
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    }),
+                    
+                    X.Button()
+                    .ID("btnProcess")
+                    .Text(Util.GetLang("Handle"))
+                    .Width(105)
+                    .MarginSpec("0 0 10 95")
+                    .Listeners(l=> l.Click.Fn = "btnProcess_Click")
+                )
+            ),
+
+            X.GridPanel().ID("grdOrder")
+            .Region(Region.Center)
+            .ColumnLines(true)
+            .RowLines(true)
+            .StoreID("stoOrder")
+            .ColumnModel(
+                X.RowNumbererColumn(),
+
+                X.CheckColumn()
+                .RenderTpl(
+                    X.XTemplate().Html(
+                        @"<div id=""{id}-titleEl"" {tipMarkup}class=""x-column-header-inner"">
+                            <span id=""{id}-textEl"" class=""x-column-header-text"">
+                                <input id=""my-header-checkbox-{id}"" type=""checkbox"" class=""my-header-checkbox""></input>
+                                {text}
+                            </span>
+                            <tpl if=""!menuDisabled"">
+                                <div id=""{id}-triggerEl"" class=""x-column-header-trigger""></div>
+                            </tpl>
+                        </div>
+                        {%this.renderContainer(out,values)%}"
+                    )
+                )
+                .DataIndex("Sel")
+                .Editable(true)
+                .Width(45),
+                                                
+                X.Column()
+                .DataIndex("OrderNbr")
+                .Width(100)
+                .Text(Util.GetLang("OrderNbr")),
+                
+                X.DateColumn()
+                .DataIndex("OrderDate")
+                .Width(100)
+                .Text(Util.GetLang("OrderDate")),
+                
+                X.DateColumn()
+                .DataIndex("ShipDate")
+                .Width(100)
+                .Text(Util.GetLang("ShipDate")),
+                
+                X.Column()
+                .DataIndex("CustID")
+                .Text(Util.GetLang("CustID")),
+               
+                X.Column()
+                .DataIndex("CustName")
+                .Text(Util.GetLang("CustName")),
+              
+                X.Column()
+                .DataIndex("SlsPerID")
+                .Text(Util.GetLang("SlsPerID")),
+                
+                X.Column()
+                .DataIndex("DeliveryID")
+                .Text(Util.GetLang("DeliveryID")),
+                
+                X.Column()
+                .Align(Alignment.Right)
+                .DataIndex("DocAmt")
+                .Text(Util.GetLang("InvcAmt"))
+                .Renderer("rdrTrans_QtyAmt"),
+                
+                X.DateColumn()
+                .DataIndex("DocDate")
+                .Width(100)
+                .Text(Util.GetLang("DocDate")),
+                
+                X.Column()
+                .DataIndex("RefNbr")
+                .Text(Util.GetLang("RefNbr")),
+                
+                X.Column()
+                .DataIndex("Terms")
+                .Text(Util.GetLang("Term"))
+                               
+                
+            )
+            .ColumnModel(act => { act.Listeners.HeaderClick.Fn = "grdOrder_HeaderClick"; })
+            //.Listeners(lst =>
+            //{
+            //    lst.SelectionChange.Fn = "grdTrans_SelectionChange";
+            //    lst.Edit.Fn = "grdTrans_Edit";
+            //    lst.ValidateEdit.Fn = "grdTrans_ValidateEdit";
+            //    lst.BeforeEdit.Fn = "grdTrans_BeforeEdit";
+            //})
+            .SelectionModel(X.RowSelectionModel().ID("smlOrder").Mode(SelectionMode.Single))
+            .View(X.GridView().TrackOver(false))
+            .Plugins(X.CellEditing().ClicksToEdit(1))
+        )
+    )
+)
+
+    

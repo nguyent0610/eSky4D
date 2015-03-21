@@ -1,0 +1,177 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using Ext.Net;
+using Ext.Net.MVC;
+using HQ.eSkyFramework;
+using HQ.eSkySys;
+using System.Xml;
+using System.Xml.Linq;
+using System.Data.Objects;
+using Aspose.Cells;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.Data;
+using System.Drawing;
+using HQFramework.DAL;
+using System.Dynamic;
+using HQFramework.Common;
+namespace OM40100.Controllers
+{
+    [DirectController]
+    [CustomAuthorize]
+    [CheckSessionOut]
+    public class OM40100Controller : Controller
+    {
+        private string _screenNbr = "OM40100";
+        private string _userName = Current.UserName;
+        private OM40100Entities _app = Util.CreateObjectContext<OM40100Entities>();
+        private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);     
+        private FormCollection _form;
+        private JsonResult _logMessage;
+        private List<OM40100_pgInvoice_Result> _lstOrder;
+
+        public ActionResult Index()
+        {
+            Util.InitRight(_screenNbr);
+            return View();
+        }
+
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
+        {
+            return PartialView();
+        }
+
+
+        public ActionResult GetOrder(string branchID, string custID, string slsperID, string deliveryID, DateTime fromDate, DateTime toDate)
+        {
+            var lstOrder = _app.OM40100_pgInvoice(branchID, custID, slsperID, deliveryID, fromDate.PassMin(), toDate.PassMin(), "").ToList();
+            return this.Store(lstOrder);
+        }
+
+        [HttpPost]
+        public ActionResult Process(FormCollection data)
+        {
+            try
+            {
+                _form = data;
+
+                var orderHandler = new StoreDataHandler(data["lstOrder"]);
+                if (_lstOrder == null)
+                {
+                    _lstOrder = orderHandler.ObjectData<OM40100_pgInvoice_Result>().Where(p => Util.PassNull(p.OrderNbr) != string.Empty).ToList();
+                }
+
+                var type = data["ProcessType"].PassNull();
+
+                CheckData();
+
+                if (type != "N")
+                {
+                    DataAccess dal = Util.Dal();
+                   
+                    if (type == "R")
+                    {
+                        string message = "";
+                        foreach (var item in _lstOrder)
+                        {	
+                            try 
+	                        {	    
+		                        OMProcess.Order order = new OMProcess.Order(_userName, _screenNbr, dal);
+                                dal.BeginTrans(IsolationLevel.ReadCommitted);        
+		                        if (!order.OM10100_InvoiceRelease(item.BranchID,item.OrderNbr,"R",DateTime.Now.ToDateShort()))
+                                {
+                                    var log = order.LogList.FirstOrDefault();
+                                    if(log!=null){
+                                        message += "Đơn hàng " + item.OrderNbr + ":" + Message.GetString(log.Code, log.Parm)+"</br>";
+                                    }
+                                    dal.RollbackTrans();
+                                }
+                                else
+                                {
+                                    dal.CommitTrans();
+                                }
+	                        }
+	                        catch (Exception ex)
+	                        {
+                                message += "Đơn hàng " + item.OrderNbr + " bị lỗi: " + ex.ToString()+"</br>";
+		                        dal.RollbackTrans();
+	                        }  
+                        }
+
+                        if (message != string.Empty)
+                        {
+                            Util.AppendLog(ref _logMessage, "20410", parm: new []{message});
+                        }
+                        else
+                            Util.AppendLog(ref _logMessage, "9999");
+                    } 
+                    else if (type=="L")
+                    {
+                        string message = "";
+                        foreach (var item in _lstOrder)
+                        {	
+                            try 
+	                        {	    
+		                        OMProcess.Order order = new OMProcess.Order(_userName, _screenNbr, dal);
+                                dal.BeginTrans(IsolationLevel.ReadCommitted);        
+		                        if (!order.OM10100_InvoiceRelease(item.BranchID,item.OrderNbr,"L",DateTime.Now.ToDateShort()))
+                                {
+                                    var log = order.LogList.FirstOrDefault();
+                                    if(log!=null){
+                                        message += "Đơn hàng " + item.OrderNbr + ":" + Message.GetString(log.Code.ToString() ,log.Parm)+"</br>";
+                                    }
+                                    dal.RollbackTrans();
+                                }
+                                else
+                                {
+                                    dal.CommitTrans();
+                                }
+	                        }
+	                        catch (Exception ex)
+	                        {
+                                message += "Đơn hàng " + item.OrderNbr + " bị lỗi: " + ex.ToString()+"</br>";
+		                        dal.RollbackTrans();
+	                        }  
+                        }
+
+                        if (message != string.Empty)
+                        {
+                            Util.AppendLog(ref _logMessage, "20410", parm: new []{message});
+                        }
+                        else
+                            Util.AppendLog(ref _logMessage, "9999");
+                    }
+                }
+                if (_logMessage != null)
+                {
+                    return _logMessage;
+                }
+                return Util.CreateMessage(MessageProcess.Save);
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Util.CreateError(ex.ToString());
+            }
+        }
+
+        private void CheckData()
+        {
+            var access = Session[_screenNbr] as AccessRight;
+
+            if (!access.Release)
+            {
+                throw new MessageException(MessageType.Message, "728");
+            }
+        }
+    }
+}
