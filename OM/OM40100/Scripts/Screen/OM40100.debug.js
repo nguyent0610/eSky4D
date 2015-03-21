@@ -34,7 +34,7 @@ var checkSetDefault = function () {
 var frmMain_BoxReady = function () {
     HQ.numSource = 0;
     HQ.maxSource = 4;
-  
+
     App.txtBranchID.setValue(HQ.cpnyID);
 
     App.cboProcessType.getStore().addListener('load', store_Load);
@@ -49,9 +49,9 @@ var frmMain_BoxReady = function () {
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            
-             HQ.grid.first(App.grdOrder);
-            
+
+            HQ.grid.first(App.grdOrder);
+
             break;
         case "next":
             HQ.grid.next(App.grdOrder);
@@ -128,16 +128,16 @@ var btnLoad_Click = function () {
 var cboProcessType_Change = function () {
     if (App.chkHeader != null) App.chkHeader.checked = false;
     App.stoOrder.clearData();
-    App.grdOrder.view.update();
+    App.grdOrder.view.refresh();
 }
 
 var grdOrder_HeaderClick = function (ct, column, e, t) {
     if (Ext.fly(t).hasCls("my-header-checkbox")) {
         App.chkHeader = t;
         App.stoOrder.data.each(function (item) {
-            item.set('Sel', t.checked ? true : false);
+            item.data.Sel = t.checked ? true : false;
         });
-        App.stoOrder.commitChanges();
+        App.grdOrder.view.refresh();
     }
 };
 //////////////////////////////////////////////////////////////////
@@ -160,7 +160,7 @@ var bindOrder = function () {
 
 
 var defaultOnNew = function () {
-   
+
     App.cboProcessType.setValue('R');
     App.txtFromDate.setValue(HQ.businessDate);
     App.txtToDate.setValue(HQ.businessDate);
