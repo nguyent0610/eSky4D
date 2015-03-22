@@ -32,7 +32,7 @@ namespace APProcess
         }
 
         #region AP10100
-        public bool AP10100_Cancel( string BranchID, string BatNbr, string RefNbr, string Handle)
+        public bool AP10100_Cancel( string BranchID, string BatNbr, string RefNbr, string Handle="")
         {
             try
             {
