@@ -54,7 +54,7 @@ namespace ARProcess
                     }
                 }
               
-                if (AR10100CancelFD(  BranchID, BatNbr, RefNbr))
+                if (AR10100Cancel(  BranchID, BatNbr, RefNbr))
                 {
                     clsBatch newobjBatch = new clsBatch(Dal);
                     clsAR_Doc newobjAR_Doc = new clsAR_Doc(Dal);
@@ -275,7 +275,7 @@ namespace ARProcess
             }
         }
 
-        private bool AR10100CancelFD(string BranchID, string BatNbr, string RefNbr)
+        private bool AR10100Cancel(string BranchID, string BatNbr, string RefNbr)
         {
             IList<clsAR_Doc> dtARDoc;
             clsAR_Doc objAR_Doc = new clsAR_Doc(Dal);
@@ -544,13 +544,13 @@ namespace ARProcess
         #endregion
         #endregion
         #region AR10300
-        public bool AR10300Release(  string BranchID, string BatNbr)
+        public bool AR10300_Release(  string BranchID, string BatNbr)
         {
             clsSQL objSql = new clsSQL(Dal);
             try
             {
                 //this.objProgress.AddMess("Update ARHist, Balance and CASumD " + Constants.vbCrLf);
-                if (AR10300_Release(  BranchID, BatNbr))
+                if (AR10300Release(  BranchID, BatNbr))
                 {
                     //Insert into GL_trans
                     //Step progress bar
@@ -592,7 +592,7 @@ namespace ARProcess
         }
         #region "Public Method AR10300"
 
-        private bool AR10300_Release(string BranchID, string BatNbr)
+        private bool AR10300Release(string BranchID, string BatNbr)
         {
             try
             {
