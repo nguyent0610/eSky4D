@@ -147,9 +147,9 @@ namespace INProcess
         {
             return (bool)row[columnName];
         }
-        public static void AppendLog(List<ProcessException> log, ProcessException ex)
+        public static void AppendLog(List<MessageException> log, MessageException ex)
         {
-            if (log == null) log = new List<ProcessException>();
+            if (log == null) log = new List<MessageException>();
             log.Add(ex);
         }
     }

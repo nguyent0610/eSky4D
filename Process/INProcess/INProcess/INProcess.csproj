@@ -56,27 +56,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\Auto Application\Server Modules\ServerApp_Process\ServerApp_Process\bin\Debug\eBiz4DApp.dll</HintPath>
+      <HintPath>..\..\APProcess\APProcess\bin\Release\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DSys">
-      <HintPath>..\..\..\..\Auto Application\Server Modules\ServerApp_Process\ServerApp_Process\bin\Debug\eBiz4DSys.dll</HintPath>
+      <HintPath>..\..\APProcess\APProcess\bin\Release\eBiz4DSys.dll</HintPath>
     </Reference>
     <Reference Include="Encryption">
-      <HintPath>..\..\..\..\Auto Application\Server Modules\ServerApp_Process\ServerApp_Process\bin\Debug\Encryption.dll</HintPath>
+      <HintPath>..\..\APProcess\APProcess\bin\Release\Encryption.dll</HintPath>
     </Reference>
     <Reference Include="HQ.eSkyFramework">
       <HintPath>..\..\..\..\eSky Framework\HQ.eSkyFramework\bin\HQ.eSkyFramework.dll</HintPath>
     </Reference>
     <Reference Include="HQFramework.Common, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\eBiz4DSky\ServerApp_Process\ServerApp_Process\bin\Debug\HQFramework.Common.DLL</HintPath>
+      <HintPath>..\..\APProcess\APProcess\bin\Release\HQFramework.Common.dll</HintPath>
     </Reference>
     <Reference Include="HQFramework.DAL">
-      <HintPath>..\..\..\..\Auto Application\Server Modules\ServerApp_Process\ServerApp_Process\bin\Debug\HQFramework.DAL.DLL</HintPath>
+      <HintPath>..\..\APProcess\APProcess\bin\Release\HQFramework.DAL.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Auto Application\Server Modules\ServerApp_Process\ServerApp_Process\bin\Debug\log4net.dll</HintPath>
+      <HintPath>..\..\APProcess\APProcess\bin\Release\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -110,7 +110,7 @@
     <Compile Include="clsSQL.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Inventory.cs">
+    <Compile Include="IN.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -129,7 +129,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

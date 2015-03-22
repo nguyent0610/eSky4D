@@ -17,15 +17,15 @@ using log4net;
 using HQ.eSkyFramework;
 namespace INProcess
 {
-    public class Inventory 
+    public class IN 
     {
         private static readonly ILog mLogger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public string Prog { get; set; }
         public string User { get; set; }
         public DataAccess Dal { get; set; }
-        public List<ProcessException> LogList { get; set; }
+        public List<MessageException> LogList { get; set; }
 
-        public Inventory(string User, string prog,DataAccess dal)
+        public IN(string User, string prog,DataAccess dal)
         {
             this.User = User;
             this.Prog = prog;
@@ -328,7 +328,7 @@ namespace INProcess
                         }
                         else
                         {
-                            throw new ProcessException("738");
+                            throw new MessageException(MessageType.Message, "738");
                         }
 
                     }
@@ -340,7 +340,7 @@ namespace INProcess
                     objInvt.GetByKey(tran.String("InvtID"));
                     if (!objSite.GetByKey(tran.String("InvtID"), tran.String("SiteID")))
                     {
-                        throw new ProcessException("606");
+                        throw new MessageException(MessageType.Message,"606");
                     }
 
                     if (objInvt.StkItem == 1)
@@ -352,7 +352,7 @@ namespace INProcess
                     }
                     if (!objSetup.NegQty && Math.Round(objSite.QtyOnHand + qty, 0) < 0)
                     {
-                        throw new ProcessException("608", new[] { objSite.InvtID, objSite.SiteID });
+                        throw new MessageException(MessageType.Message, "608","", new[] { objSite.InvtID, objSite.SiteID });
                     }
 
                     if (tran.String("JrnlType") == "IN" || (tran.String("JrnlType") == "OM" && Prog == "OM10300"))
@@ -371,7 +371,7 @@ namespace INProcess
                     }
                     if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0) < 0)
                     {
-                        throw new ProcessException("607", new[] { objSite.InvtID, objSite.SiteID  });
+                        throw new MessageException(MessageType.Message, "607","", new[] { objSite.InvtID, objSite.SiteID });
                     }
 
                     objSite.TotCost = Math.Round(objSite.TotCost + tran.Double("ExtCost") * tran.Short("InvtMult"), 0);
@@ -451,7 +451,7 @@ namespace INProcess
 
                         if (!objItem.GetByKey(tran["InvtID"].ToString(),tran["SiteID"].ToString()))
                         {
-                            throw new ProcessException("606");
+                            throw new MessageException(MessageType.Message, "606");
                         }
                         if (objInvt.StkItem == 1)
                         {
@@ -467,7 +467,7 @@ namespace INProcess
                         }
                         if(!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItem.TotCost+ tran.Double("ExtCost") * tran.Short("InvtMult"),0)<0)
                         {
-                            throw new ProcessException("607", new[] { objItem.InvtID, objItem.SiteID });
+                            throw new MessageException(MessageType.Message, "607","", new[] { objItem.InvtID, objItem.SiteID });
                         }
 
                         objItem.TotCost = Math.Round(objItem.TotCost + tran.Double("ExtCost")*tran.Short("InvtMult"), 0);
@@ -591,7 +591,7 @@ namespace INProcess
 
                     if (!objItem.GetByKey(tran.String("InvtID"),tran.String("SiteID")))
                     {
-                        throw new ProcessException("606");
+                        throw new MessageException(MessageType.Message, "606");
                     }
                     if (objInvt.StkItem == 1)
                     {
@@ -607,7 +607,7 @@ namespace INProcess
                     }
                     if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItem.TotCost + tran.Double("ExtCost"), 0) < 0)
                     {
-                        throw new ProcessException("607", new[] { objItem.InvtID, objItem.SiteID });
+                        throw new MessageException(MessageType.Message, "607","", new[] { objItem.InvtID, objItem.SiteID });
                     }
                     objItem.TotCost = Math.Round(objItem.TotCost + tran.Double("ExtCost"), 0);
                     objItem.LUpd_DateTime = DateTime.Now;
@@ -624,24 +624,24 @@ namespace INProcess
                 throw ex;
             }
         }
-        public bool IN10500_Release(string tagID, string batNbr, string refNbr, string branchID)
+        public bool IN10500_Release(string tagID, string branchID, string siteID)
         {
             try
             {
                 string lineRef = string.Empty;
 
                 clsSQL objSql = new clsSQL(Dal);
-                batNbr = objSql.INNumbering(branchID, "BatNbr");
-                refNbr = objSql.INNumbering(branchID, "RefNbr");
+                var batNbr = objSql.INNumbering(branchID, "BatNbr");
+                var refNbr = objSql.INNumbering(branchID, "RefNbr");
 
                 clsIN_Setup objSetup = new clsIN_Setup(Dal);
                 objSetup.GetByKey(branchID, "IN");
 
                 clsIN_TagDetail objTagDetail = new clsIN_TagDetail(Dal);
-                DataTable lstTagDetail = objTagDetail.GetAll(tagID, "%", "%");
+                DataTable lstTagDetail = objTagDetail.GetAll(tagID,branchID, siteID, "%");
 
                 clsIN_TagHeader objTagHeader = new clsIN_TagHeader(Dal);
-                objTagHeader.GetByKey(tagID);
+                objTagHeader.GetByKey(tagID,branchID,siteID);
                 objTagHeader.INBatNbr = batNbr;
                 objTagHeader.Status = "C";
           
@@ -796,9 +796,7 @@ namespace INProcess
             else
             {
                 objSql.IN_Integrity_ReBuildBatch(Prog, User, parm02, parm03, parm04);
-            }
-
-            Utility.AppendLog(LogList,new ProcessException("8009",new string[]{mMessage}));
+            }         
             return true;
         }
         public bool Issue_Cancel(string branchID, string batNbr, string rcptNbr, bool release)
@@ -839,8 +837,8 @@ namespace INProcess
 
                     if (!objItem.GetByKey(tran.String("InvtID"),tran.String("SiteID")))
                     {
-                        Utility.AppendLog(LogList, new ProcessException("606"));
-                        return false;
+                        throw new MessageException(MessageType.Message,"606");
+                      
                     }
                     if (objInvt.StkItem == 1)
                     {
@@ -985,8 +983,8 @@ namespace INProcess
 
                     if (!setup.NegQty && setup.CheckINVal && Math.Round(objSite.TotCost - tran.Double("ExtCost"), 0) < 0)
                     {
-                        Utility.AppendLog(LogList, new ProcessException("607", new[] { objInvt.InvtID, objSite.SiteID }));
-                        return false;
+                        throw new MessageException(MessageType.Message,"607","", new[] { objInvt.InvtID, objSite.SiteID });
+                    
                     }
 
                     objSite.TotCost = Math.Round(objSite.TotCost - tran.Double("ExtCost"), 0);
