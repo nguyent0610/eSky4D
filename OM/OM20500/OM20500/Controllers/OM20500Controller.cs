@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
-using HQSendMailApprove;
+
 namespace OM20500.Controllers
 {
     [DirectController]

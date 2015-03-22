@@ -105,22 +105,21 @@ var Event = {
         },
 
         chkSelectHeaderOrder_change: function (chk, newValue, oldValue, eOpts) {
-            var store = chk.up("grid").store;
-            store.each(function (record) {
-                record.set("Selected", chk.value);
+            App.stoOrder.data.each(function (record) {
+                record.data.Selected = chk.value;
             });
+            App.grdOrder.view.refresh();
         },
 
         chkSelectHeaderDet_change: function (chk, newValue, oldValue, eOpts) {
-            var store = chk.up("grid").store;
-            store.each(function (record) {
-                record.set("Selected", chk.value);
+            App.stoDet.each(function (record) {
+                record.data.Selected = chk.value;
 
                 if (chk.value) {
-                    record.set("QtyShip", record.data.LineQty);
+                    record.data.QtyShip = (record.data.LineQty - record.data.QtyShipped);
                 }
                 else {
-                    record.set("QtyShip", 0);
+                    record.data.QtyShip = 0;
                 }
             });
         },
@@ -128,20 +127,21 @@ var Event = {
         grdDet_edit: function (editor, e) {
             if (e.field == "Selected") {
                 if (e.record.data.Selected) {
-                    e.record.set("QtyShip", e.record.data.LineQty);
+                    e.record.data.QtyShip = e.record.data.LineQty;
                 }
                 else {
-                    e.record.set("QtyShip", 0);
+                    e.record.data.QtyShip = 0;
                 }
             }
             else if (e.field == "QtyShip") {
                 if (e.record.data.QtyShip) {
-                    e.record.set("Selected", true);
+                    e.record.data.Selected = true;
                 }
                 else {
-                    e.record.set("Selected", false);
+                    e.record.data.Selected = false;
                 }
             }
+            e.record.commit();
         },
 
         grdDet_validateEdit: function (editor, e) {

@@ -17,7 +17,6 @@
         .ID("frmMain")
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
-        .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
         .DefaultButton("btnLoad")
         .TopBar(Util.SetupToolbar("new,delete,refresh,close", false, "Event.menuClick"))
@@ -130,7 +129,7 @@
                 
                 // Forth Column
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 5")
-                .Flex(1)
+                .Width(120)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
                     HQ.Button().ID("btnLoad")
@@ -195,17 +194,17 @@
                 , X.Column().Align(Alignment.Right)
                 .Text(Util.GetLang("TotTax")).DataIndex("TaxTot")
 
-                , X.CommandColumn()
-                .Width(150)
-                .Commands(
-                    X.GridCommand()
-                    .Text(Util.GetLang("Reject"))
-                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                    .CommandName("reject")
-                    .Icon(Icon.ArrowUndo)
-                )
-                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                .Listeners(l => l.Command.Handler = "Event.Grid.grd_Reject(record, this);")
+                //, X.CommandColumn()
+                //.Width(150)
+                //.Commands(
+                //    X.GridCommand()
+                //    .Text(Util.GetLang("Reject"))
+                //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                //    .CommandName("reject")
+                //    .Icon(Icon.ArrowUndo)
+                //)
+                //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                //.Listeners(l => l.Command.Handler = "Event.Grid.grd_Reject(record, this);")
             )
             .SelectionModel(
                 X.RowSelectionModel().ID("slmOrder").Mode(SelectionMode.Single)
@@ -256,7 +255,7 @@
                         .Text(Util.GetLang("FreeItem")).DataIndex("FreeItem")
                         
                         , X.Column().Align(Alignment.Right)
-                        .Text(Util.GetLang("Qty")).DataIndex("LineQty")
+                        .Text(Util.GetLang("OrdQty")).DataIndex("LineQty")
                         
                         , X.NumberColumn().Format("0").Align(Alignment.Right)
                         .Text(Util.GetLang("ShipQty")).DataIndex("QtyShip")
@@ -289,17 +288,17 @@
                         , X.Column()
                         .Text(Util.GetLang("TaxID")).DataIndex("TaxID")
                         
-                        , X.CommandColumn()
-                        .Width(150)
-                        .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
-                        )
-                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        .Listeners(l => l.Command.Handler = "Event.Grid.grd_Reject(record, this);")
+                        //, X.CommandColumn()
+                        //.Width(150)
+                        //.Commands(
+                        //    X.GridCommand()
+                        //    .Text(Util.GetLang("Reject"))
+                        //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        //    .CommandName("reject")
+                        //    .Icon(Icon.ArrowUndo)
+                        //)
+                        //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                        //.Listeners(l => l.Command.Handler = "Event.Grid.grd_Reject(record, this);")
                     )
                     .SelectionModel(
                         X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single)
@@ -364,16 +363,16 @@
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("TotTax")).DataIndex("TaxTot")
 
-                        , X.CommandColumn()
-                        .Width(150)
-                        .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
-                        )
-                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                        //, X.CommandColumn()
+                        //.Width(150)
+                        //.Commands(
+                        //    X.GridCommand()
+                        //    .Text(Util.GetLang("Reject"))
+                        //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        //    .CommandName("reject")
+                        //    .Icon(Icon.ArrowUndo)
+                        //)
+                        //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
                         //.Listeners(l => l.Command.Handler = "Event.grdSalesRouteMaster_Reject(record);")
                     )
                     .SelectionModel(
@@ -422,16 +421,16 @@
                         , X.Column()
                         .Text(Util.GetLang("TaxID")).DataIndex("TaxID")
 
-                        , X.CommandColumn()
-                        .Width(150)
-                        .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
-                        )
-                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                        //, X.CommandColumn()
+                        //.Width(150)
+                        //.Commands(
+                        //    X.GridCommand()
+                        //    .Text(Util.GetLang("Reject"))
+                        //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        //    .CommandName("reject")
+                        //    .Icon(Icon.ArrowUndo)
+                        //)
+                        //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
                         //.Listeners(l => l.Command.Handler = "Event.grdSalesRouteMaster_Reject(record);")
                     )
                     .SelectionModel(
