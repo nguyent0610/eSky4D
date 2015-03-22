@@ -1017,7 +1017,7 @@ namespace POProcess
                 throw ex;
             }
         }
-        public void Insert_IN_ItemSite( ref clsIN_ItemSite objIN_ItemSite, clsIN_Inventory objIN_Inventory, string SiteID)
+        private void Insert_IN_ItemSite(ref clsIN_ItemSite objIN_ItemSite, clsIN_Inventory objIN_Inventory, string SiteID)
         {
             try
             {
@@ -1056,7 +1056,7 @@ namespace POProcess
                
             }
         }
-        public void Insert_IN_ItemLot(ref clsIN_ItemLot objIN_ItemLot, string InvtID, string SiteID, string LotSerNbr, System.DateTime ExpDate, string MfgrLotSerNbr, double Cost, double Qty)
+        private void Insert_IN_ItemLot(ref clsIN_ItemLot objIN_ItemLot, string InvtID, string SiteID, string LotSerNbr, System.DateTime ExpDate, string MfgrLotSerNbr, double Cost, double Qty)
         {
             try
             {
@@ -1089,7 +1089,7 @@ namespace POProcess
                 throw ex;
             }
         }
-        public bool AP10100_Release( string BranchID, string BatNbr)
+        private bool AP10100_Release(string BranchID, string BatNbr)
         {
             DataTable dtAPDoc ;//= new List<AP_Doc>();
             try
@@ -1163,11 +1163,11 @@ namespace POProcess
         
         #endregion
         #region PO10200 Cancel
-        public bool PO10200_Cancel( string BranchID, string BatNbr, string RcptNbr, bool bCheck714)
-        {          
+        public bool PO10200_Cancel(string BranchID, string BatNbr, string RcptNbr, bool bCheck714)
+        {
             DataTable dtReceipt;// = new List<PO_Receipt>();
             DataTable dtPOInvoice;// = new List<PO_Invoice>();
-            DataTable dtAP_Doc ;//= new List<AP_Doc>();
+            DataTable dtAP_Doc;//= new List<AP_Doc>();
             DataTable dtIN_Trans;// = new List<IN_Trans>();
             clsPO_Receipt objPO_Receipt = new clsPO_Receipt(Dal);
             clsPO_Invoice objPO_Invoice = new clsPO_Invoice(Dal);
@@ -1183,12 +1183,12 @@ namespace POProcess
                 {
                     if (obj.Rlsed != -1)
                     {
-                        if (objSql.PO_CheckForCancel(BranchID, BatNbr, obj.RcptNbr)== "1")
+                        if (objSql.PO_CheckForCancel(BranchID, BatNbr, obj.RcptNbr) == "1")
                         {
-                            throw new MessageException(MessageType.Message, "144","", new[] { obj.RcptNbr });                            
-                            
+                            throw new MessageException(MessageType.Message, "144", "", new[] { obj.RcptNbr });
+
                         }
-                       
+
                     }
                 }
             }
@@ -1199,8 +1199,8 @@ namespace POProcess
             if (dtPOInvoice.Rows.Count > 0)
                 objPO_Invoice = DataTableHelper.ConvertTo<clsPO_Invoice>(dtPOInvoice).FirstOrDefault();// dtPOInvoice.Rows.OfType<clsPO_Invoice>().FirstOrDefault();
             //var objInvoice = objPO_Invoice.FirstOrDefault();
-            dtAP_Doc = objAP_Doc.GetAll(BranchID, objPO_Invoice.APBatNbr,"%");// app.AP_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == objInvoice.APBatNbr).ToList();
-            if (dtAP_Doc.Rows.Count>0)
+            dtAP_Doc = objAP_Doc.GetAll(BranchID, objPO_Invoice.APBatNbr, "%");// app.AP_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == objInvoice.APBatNbr).ToList();
+            if (dtAP_Doc.Rows.Count > 0)
             {
                 IList<clsAP_Doc> ListdtAP_Doc = DataTableHelper.ConvertTo<clsAP_Doc>(dtAP_Doc);
                 foreach (clsAP_Doc obj in ListdtAP_Doc)
@@ -1209,9 +1209,9 @@ namespace POProcess
                     {
                         if (objSql.AP_CheckForCancel(BranchID, objPO_Invoice.APBatNbr, obj.RefNbr) == "1")
                         {
-                            throw new MessageException(MessageType.Message, "715","", new[] { obj.RefNbr });                                                    
+                            throw new MessageException(MessageType.Message, "715", "", new[] { obj.RefNbr });
                         }
-                       
+
                     }
                 }
             }
@@ -1219,19 +1219,19 @@ namespace POProcess
             //Check IN
             if (!bCheck714)
             {
-                dtIN_Trans = objIN_Trans.GetAll(BranchID, BatNbr, RcptNbr,"%");// app.IN_Trans.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.RefNbr == refNbr).ToList();
+                dtIN_Trans = objIN_Trans.GetAll(BranchID, BatNbr, RcptNbr, "%");// app.IN_Trans.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.RefNbr == refNbr).ToList();
                 IList<clsIN_Trans> ListdtIN_Trans = DataTableHelper.ConvertTo<clsIN_Trans>(dtIN_Trans);
                 foreach (clsIN_Trans obj in ListdtIN_Trans)
                 {
                     clsIN_ItemSite objIN_ItemSite = new clsIN_ItemSite(Dal);
                     //var objIN_ItemSite = app.IN_ItemSite.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID).FirstOrDefault();
 
-                    if (objIN_ItemSite.GetByKey(obj.InvtID,obj.SiteID))
+                    if (objIN_ItemSite.GetByKey(obj.InvtID, obj.SiteID))
                     {
                         if (objIN_ItemSite.AvgCost != obj.UnitCost)
-                        {                           
-                            throw new MessageException(MessageType.Message,"714","process714", new[] { obj.InvtID, obj.SiteID });                         
-                         
+                        {
+                            throw new MessageException(MessageType.Message, "714", "process714", new[] { obj.InvtID, obj.SiteID });
+
                         }
                     }
                 }
@@ -1239,22 +1239,24 @@ namespace POProcess
             try
             {
                 //cancel IN
-              
-                if (Receipt_Cancel( BranchID, BatNbr, RcptNbr, false))
-                {                  
+
+                if (Receipt_Cancel(BranchID, BatNbr, RcptNbr, false))
+                {
                     //cancel PO          
-                    if (POReceipt_Cancel( BranchID, BatNbr, RcptNbr))
-                    {                       
+                    if (POReceipt_Cancel(BranchID, BatNbr, RcptNbr))
+                    {
                         clsPO_Invoice objPO_Invoice1 = new clsPO_Invoice(Dal);
                         objPO_Invoice1.GetByKey(BranchID, BatNbr, RcptNbr);
+                        APProcess.AP ap = new APProcess.AP(User, "PO10200", Dal);
+                        if (ap.AP10100_Cancel(BranchID, objPO_Invoice1.APBatNbr, RcptNbr))
+                        {
 
-                        if (AP10100_Cancel(BranchID, objPO_Invoice1.APBatNbr, RcptNbr))
-                            {
-                              
-                                return true;
-                            }
-                            else return false;                       
-                    }else return false;                    
+                            return true;
+                        }
+                        else return false;
+                        ap = null;
+                    }
+                    else return false;
                 }
                 else return false;
             }
@@ -1264,7 +1266,7 @@ namespace POProcess
             }
 
         }
-        public bool Receipt_Cancel( string branchID, string batNbr, string rcptNbr, bool isTransfer)
+        private bool Receipt_Cancel(string branchID, string batNbr, string rcptNbr, bool isTransfer)
         {
             try
             {
@@ -1419,7 +1421,7 @@ namespace POProcess
                 throw ex;
             }
         }
-        public bool Issue_Cancel( string branchID, string batNbr, string rcptNbr)
+        private bool Issue_Cancel(string branchID, string batNbr, string rcptNbr)
         {
             try
             {
@@ -1559,7 +1561,7 @@ namespace POProcess
 
 
         }
-        public bool POReceipt_Cancel(  string BranchID, string BatNbr, string refNbr)
+        private bool POReceipt_Cancel(string BranchID, string BatNbr, string refNbr)
         {           
             DataTable dt1 ;//= new List<PO_Trans>();
             DataTable dtReceipt;// = new List<PO_Receipt>();           
@@ -1685,41 +1687,41 @@ namespace POProcess
                 throw ex;
             }
         }
-        public bool AP10100_Cancel( string BranchID, string BatNbr, string RefNbr)
-        {
+        //private bool AP10100_Cancel(string BranchID, string BatNbr, string RefNbr)
+        //{
          
-            DataTable dtAPDoc;
-            try
-            {
-                clsAP_Doc objAP_Doc = new clsAP_Doc(Dal);
-                clsAP_Balances objAP_Balances = new clsAP_Balances(Dal);
+        //    DataTable dtAPDoc;
+        //    try
+        //    {
+        //        clsAP_Doc objAP_Doc = new clsAP_Doc(Dal);
+        //        clsAP_Balances objAP_Balances = new clsAP_Balances(Dal);
              
-                if (RefNbr!="%")
-                {
-                    dtAPDoc = objAP_Doc.GetAll(BranchID, BatNbr, RefNbr);
-                }
-                else
-                {
-                    dtAPDoc = objAP_Doc.GetAll(BranchID, BatNbr, "%");
-                }
-                IList<clsAP_Doc> ListdtAPDoc = DataTableHelper.ConvertTo<clsAP_Doc>(dtAPDoc);
-                foreach (clsAP_Doc dr in ListdtAPDoc)
-                {
-                    if (dr.Rlsed != -1)
-                    {
-                        ProcessAPBalance(dr.VendID, dr.DocDate, dr.DocType, -dr.OrigDocAmt);
-                    }
-                }
-                clsSQL sql = new clsSQL(Dal);
-                sql.AP_CancelBatch(BranchID, BatNbr, RefNbr, Prog, User);
+        //        if (RefNbr!="%")
+        //        {
+        //            dtAPDoc = objAP_Doc.GetAll(BranchID, BatNbr, RefNbr);
+        //        }
+        //        else
+        //        {
+        //            dtAPDoc = objAP_Doc.GetAll(BranchID, BatNbr, "%");
+        //        }
+        //        IList<clsAP_Doc> ListdtAPDoc = DataTableHelper.ConvertTo<clsAP_Doc>(dtAPDoc);
+        //        foreach (clsAP_Doc dr in ListdtAPDoc)
+        //        {
+        //            if (dr.Rlsed != -1)
+        //            {
+        //                ProcessAPBalance(dr.VendID, dr.DocDate, dr.DocType, -dr.OrigDocAmt);
+        //            }
+        //        }
+        //        clsSQL sql = new clsSQL(Dal);
+        //        sql.AP_CancelBatch(BranchID, BatNbr, RefNbr, Prog, User);
               
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
        
        
 
