@@ -32,19 +32,14 @@ namespace APProcess
         }
 
         #region AP10100
-        public bool AP10100Cancel( string BranchID, string BatNbr, string RefNbr, string Handle)
+        public bool AP10100_Cancel( string BranchID, string BatNbr, string RefNbr, string Handle)
         {
             try
             {
                 IList<clsAP_Doc> dtDocCheck ;//= new List<AP_Doc>();
                 clsSQL objSql = new clsSQL(Dal);
                 clsAP_Doc objAP_Doc = new clsAP_Doc(Dal);
-                //if (RefNbr != "%")
-                //{
-                //    dtDocCheck = dal.AP_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.RefNbr == RefNbr).ToList();
-                //}
-                //else dtDocCheck = dal.AP_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr).ToList();
-                
+              
                 dtDocCheck =DataTableHelper.ConvertTo<clsAP_Doc>(objAP_Doc.GetAll(BranchID,BatNbr,RefNbr));// dal.AP_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.RefNbr == RefNbr).ToList();
            
                 if (dtDocCheck.Count > 0)
@@ -66,7 +61,7 @@ namespace APProcess
                     }
                 }
                
-                if (AP10100_Cancel( BranchID, BatNbr, RefNbr))
+                if (AP10100Cancel( BranchID, BatNbr, RefNbr))
                 {
                  
                     //Copy to new batch
@@ -246,7 +241,7 @@ namespace APProcess
             }
             
         }
-        public bool AP10100Release( string BranchID, string BatNbr)
+        public bool AP10100_Release( string BranchID, string BatNbr)
         {
             clsSQL objSql = new clsSQL(Dal);
             clsBatch objBatch = new clsBatch(Dal);
@@ -263,7 +258,7 @@ namespace APProcess
             //Update APHist, balance, CASumD
             //this.objProgress.AddMess("Update APHist, Balance and CASumD " + Constants.vbCrLf);
        
-            if (AP10100_Release( BranchID,BatNbr))
+            if (AP10100Release( BranchID,BatNbr))
             {
                 //Insert into GL_trans
                 //Step progress bar
@@ -298,7 +293,7 @@ namespace APProcess
 
         }
         #region "Public Method AP10100"    
-        public bool AP10100_Release( string BranchID, string BatNbr)
+        private bool AP10100Release(string BranchID, string BatNbr)
         {
            
             try
@@ -320,7 +315,7 @@ namespace APProcess
                 throw ex;
             }
         }
-        public bool AP10100_Cancel( string BranchID, string BatNbr, string RefNbr)
+        private bool AP10100Cancel(string BranchID, string BatNbr, string RefNbr)
         {
             IList<clsAP_Doc> dtAPDoc = new List<clsAP_Doc>();
             clsAP_Doc objAP_Doc=new clsAP_Doc(Dal);
@@ -390,11 +385,11 @@ namespace APProcess
         #endregion
         #endregion
         #region AP10200      
-        public bool AP10200Release( string BranchID, string BatNbr)
+        public bool AP10200_Release( string BranchID, string BatNbr)
         {
             clsSQL objSql = new clsSQL(Dal);
             
-            if (AP10200_Release( BranchID, BatNbr))
+            if (AP10200Release( BranchID, BatNbr))
             {
                
                 objSql.AP_ReleaseBatch(BranchID, BatNbr, Prog, User);
@@ -406,10 +401,32 @@ namespace APProcess
                 return false;
             }
 
-        }       
+        }
+        public bool AP10200_Cancel(string BranchID, string BatNbr, string RefNbr)
+        {
+            IList<clsAP_Doc> dtAPDoc = new List<clsAP_Doc>();
+            clsAP_Doc objAP_Doc = new clsAP_Doc(Dal);
+            try
+            {
+
+                dtAPDoc = DataTableHelper.ConvertTo<clsAP_Doc>(objAP_Doc.GetAll(BranchID, BatNbr, RefNbr));
+                foreach (var dr in dtAPDoc)
+                {
+                    if (dr.Rlsed != -1)
+                    {
+                        ProcessAPBalance10200(dr.VendID, dr.DocDate, dr.DocType, -dr.OrigDocAmt);
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #region "Public Method"
 
-        public bool AP10200_Release( string BranchID, string BatNbr)
+        private bool AP10200Release(string BranchID, string BatNbr)
         {
             IList<clsAP_Doc> dtAPDoc = new List<clsAP_Doc>();
             clsAP_Doc objAP_Doc = new clsAP_Doc(Dal);
@@ -432,28 +449,7 @@ namespace APProcess
                 return false;
             }
         }
-        public bool AP10200_Cancel( string BranchID, string BatNbr, string RefNbr)
-        {
-            IList<clsAP_Doc> dtAPDoc = new List<clsAP_Doc>();
-            clsAP_Doc objAP_Doc = new clsAP_Doc(Dal);
-            try
-            {
-              
-                dtAPDoc =DataTableHelper.ConvertTo<clsAP_Doc>(objAP_Doc.GetAll(BranchID, BatNbr, RefNbr));
-                foreach(var dr in dtAPDoc)
-                {
-                    if (dr.Rlsed != -1)
-                    {
-                        ProcessAPBalance10200( dr.VendID, dr.DocDate, dr.DocType, -dr.OrigDocAmt);
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+       
         private void ProcessAPBalance10200( string VendID, DateTime DocDate, string DocType, double OrigDocAmt)
         {
             try
@@ -551,7 +547,7 @@ namespace APProcess
                 throw ex;
             }
         }
-        public bool AP10300_Cancel( string BranchID, string BatNbr, string Handle)
+        public bool AP10300_Cancel( string BranchID, string BatNbr)
         {
             IList<clsAP_Adjust> dt = new List<clsAP_Adjust>();
             clsAP_Adjust objAP_Adjust = new clsAP_Adjust(Dal);
@@ -715,7 +711,7 @@ namespace APProcess
             }
         }
 
-        public void ProcessAPBalance10400( string VendID, double OrigDocAmt)
+        private void ProcessAPBalance10400(string VendID, double OrigDocAmt)
         {
             try
             {
@@ -746,7 +742,7 @@ namespace APProcess
 
         }
 
-        public void UpdateAPBalance10400(ref clsAP_Balances objAP_Balances,  string VendID, double OrigDocAmt)
+        private void UpdateAPBalance10400(ref clsAP_Balances objAP_Balances, string VendID, double OrigDocAmt)
         {
             try
             {

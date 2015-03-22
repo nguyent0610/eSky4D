@@ -34,7 +34,7 @@ namespace ARProcess
 
 
         #region AR10100
-        public bool AR10100Cancel(  string BranchID, string BatNbr, string RefNbr, string Handle)
+        public bool AR10100_Cancel(  string BranchID, string BatNbr, string RefNbr, string Handle)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace ARProcess
                     }
                 }
               
-                if (AR10100_Cancel(  BranchID, BatNbr, RefNbr))
+                if (AR10100CancelFD(  BranchID, BatNbr, RefNbr))
                 {
                     clsBatch newobjBatch = new clsBatch(Dal);
                     clsAR_Doc newobjAR_Doc = new clsAR_Doc(Dal);
@@ -212,7 +212,7 @@ namespace ARProcess
             }
             
         }
-        public bool AR10100Release(  string BranchID, string BatNbr)
+        public bool AR10100_Release(  string BranchID, string BatNbr)
         {
 
             try
@@ -230,7 +230,7 @@ namespace ARProcess
                     }
                 }
               
-                if (AR10100_Release(  BranchID, BatNbr))
+                if (AR10100Release(  BranchID, BatNbr))
                 {                   
                     objSql.AR_ReleaseBatch(BranchID, BatNbr, Prog, User);
                     return true;
@@ -248,7 +248,7 @@ namespace ARProcess
         }
         #region "Public Method AR10100"
 
-        private bool AR10100_Release(  string BranchID, string BatNbr)
+        private bool AR10100Release(  string BranchID, string BatNbr)
         {          
             DataTable dtARTrans = new DataTable();
             clsSQL objSql = new clsSQL(Dal);
@@ -275,7 +275,7 @@ namespace ARProcess
             }
         }
 
-        private bool AR10100_Cancel(string BranchID, string BatNbr, string RefNbr)
+        private bool AR10100CancelFD(string BranchID, string BatNbr, string RefNbr)
         {
             IList<clsAR_Doc> dtARDoc;
             clsAR_Doc objAR_Doc = new clsAR_Doc(Dal);
