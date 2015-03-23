@@ -43,6 +43,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ARProcess">
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\ARProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="eBiz4DApp">
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\eBiz4DApp.dll</HintPath>
+    </Reference>
+    <Reference Include="eBiz4DSys">
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\eBiz4DSys.dll</HintPath>
+    </Reference>
+    <Reference Include="Encryption">
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\Encryption.dll</HintPath>
+    </Reference>
     <Reference Include="Ext.Net, Version=2.4.0.28524, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\eSky Framework\HQ.eSkyFramework\bin\Ext.Net.dll</HintPath>
@@ -59,10 +71,27 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\eSky Framework\HQ.eSkyFramework\bin\HQ.eSkySys.dll</HintPath>
     </Reference>
+    <Reference Include="HQFramework.Common">
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\HQFramework.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="HQFramework.DAL, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\HQFramework.DAL.dll</HintPath>
+    </Reference>
+    <Reference Include="INProcess">
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\INProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\IN\IN10100\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OMProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Debug\OMProcess.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -132,9 +161,6 @@
     <Reference Include="Transformer.NET, Version=2.1.1.22883, Culture=neutral, PublicKeyToken=e274d618e7c603a7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\OM40100\bin\Transformer.NET.dll</HintPath>
-    </Reference>
-    <Reference Include="WebActivatorEx">
-      <HintPath>..\..\OM40100\bin\WebActivatorEx.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -248,7 +274,6 @@
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\Screen\OM20500.js" />
-    <Content Include="Scripts\Screen\OM20500.debug.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

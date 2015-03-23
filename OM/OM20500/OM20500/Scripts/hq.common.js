@@ -93,6 +93,38 @@ var HQ = {
             }
             return Ext.encode(store.getChangedData({ skipIdForPhantomRecords: skip }));
         },
+        getAllData: function (store,fields,values) {
+            var lstData =[];
+            if (store.snapshot != undefined) {
+                store.snapshot.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
+                            }
+                        }                            
+                    }
+                    if(isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
+            } else {
+                store.data.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
+            }
+        },
         findInStore: function (store, fields, values) {
             var data;
             store.data.each(function (item) {

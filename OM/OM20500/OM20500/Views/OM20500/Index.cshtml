@@ -137,6 +137,17 @@
             //.Listeners(p=>p.Load.Fn="Store.stoHisDet_load" )
             // Store: stoHisDet
         )
+        @(
+            X.Store()
+            .ID("stoItemSite")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof (IN_ItemSite),"mdlItemSite",""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetItemSite", "OM20500"))
+                .ActionMethods(action => { action.Read = HttpMethod.POST; })
+                .Reader(X.JsonReader().Root("data")))
+        )
 
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->

@@ -1,4 +1,4 @@
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Ext.Net;
 using Ext.Net.MVC;
 using HQ.eSkyFramework;
@@ -13,6 +13,9 @@ using System.Security.Cryptography;
 using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
+using OMProcess;
+using HQFramework.DAL;
+using System.Data;
 
 namespace OM20500.Controllers
 {
@@ -24,8 +27,8 @@ namespace OM20500.Controllers
         private string _screenNbr = "OM20500";
         private string _holdStatus = "H";
         private string _openStatus = "O";
-        private string _closePOStatus = "E";
-
+        private string _closePOStatus = "E";     
+        private FormCollection _form;   
         OM20500Entities _db = Util.CreateObjectContext<OM20500Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         //
@@ -69,9 +72,87 @@ namespace OM20500.Controllers
             var hisDets = _db.OM20500_pgHisDet(branchID, orderNbr).ToList();
             return this.Store(hisDets);
         }
+        public ActionResult GetItemSite(string invtID, string siteID)
+        {
+            var objSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
+            return this.Store(objSite);
+        }
+       
+        #region DataProcess
+        [HttpPost]
+        public ActionResult Save(FormCollection data)
+        {
+            DataAccess dal = Util.Dal();
+            try
+            {
 
+                _form = data;
+                var detHeader = new StoreDataHandler(data["lstOrder"]);
+                var lstOrd = detHeader.ObjectData<OM20500_pgOrder_Result>().Where(p => p.Selected == true).ToList();
+
+
+                var detHandler = new StoreDataHandler(data["lstDet"]);
+                var lstDet = detHandler.ObjectData<OM20500_pgDet_Result>().Where(p => p.Selected == true).ToList();
+                string Delivery = data["delivery"];
+                DateTime dteShipDate = data["shipDate"].ToDateShort();
+                DateTime dteARDocDate = data["aRDocDate"].ToDateShort();
+                string message = "";
+                foreach (var objHeader in lstOrd)
+                {
+                    var lstDetOrNbr = lstDet.Where(p => p.OrderNbr == objHeader.OrderNbr).ToList();
+                    Dictionary<string, double> dicRef = new Dictionary<string, double>();
+                    for (int i = 0; i < lstDetOrNbr.Count; i++)
+                    {
+                        dicRef.Add(lstDetOrNbr[i].LineRef, lstDetOrNbr[i].QtyShip);
+                    }
+                    try
+                    {
+                        OM om = new OM(Current.UserName, _screenNbr, dal);
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+
+                        if (!om.OM20500_Release(objHeader.BranchID, objHeader.OrderNbr, dicRef, Delivery, dteShipDate, dteARDocDate))
+                        {
+                            dal.RollbackTrans();
+                        }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        dal.RollbackTrans();
+                        if (ex is MessageException)
+                        {
+                            var msg = ex as MessageException;
+                            message += "Đơn hàng " + objHeader.OrderNbr + ":" + Message.GetString(msg.Code, msg.Parm) + "</br>";
+                        }
+                        else
+                        {
+                            message += "Đơn hàng " + objHeader.OrderNbr + " bị lỗi: " + ex.ToString() + "</br>";
+                        }
+                    }
+                }
+                if (message != string.Empty)
+                {
+                    throw new MessageException("20410", parm: new[] { message });
+                }
+
+                return Util.CreateMessage(MessageProcess.Process);
+
+            }
+            catch (Exception ex)
+            {
+              
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
         [ValidateInput(false)]
-        public ActionResult ClosePO(FormCollection data) 
+        public ActionResult ClosePO(FormCollection data)
         {
             var lstOrderChangeHandler = new StoreDataHandler(data["lstOrderChange"]);
             var lstOrderChange = lstOrderChangeHandler.BatchObjectData<OM20500_pgOrder_Result>();
@@ -93,7 +174,7 @@ namespace OM20500.Controllers
                         lstOrderNbrError.Add(orderChange.OrderNbr);
                     }
                 }
-                
+
             }
             _db.SaveChanges();
 
@@ -103,7 +184,7 @@ namespace OM20500.Controllers
                 {
                     success = true,
                     msgCode = 20150320,
-                    msgParam = new string[]{string.Join(",", lstOrderNbrError)}
+                    msgParam = new string[] { string.Join(",", lstOrderNbrError) }
                 });
             }
             else
@@ -115,5 +196,6 @@ namespace OM20500.Controllers
                 });
             }
         }
+        #endregion
     }
 }

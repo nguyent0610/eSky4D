@@ -21,6 +21,13 @@
         .DefaultButton("btnLoad")
         .TopBar(Util.SetupToolbar("new,delete,refresh,close", false, "Event.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .BottomBar(
+            X.Toolbar()
+            .Items(
+                X.ToolbarFill(),
+                X.Label().ID("lblQtyAvail").Width(200).MarginSpec("0 0 0 30")
+            )
+        )
         .Items(
             X.Panel().ID("pnlHeader")
             .Layout(LayoutType.HBox).Region(Region.North)
@@ -48,8 +55,8 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             lst.Change.Fn = "Event.Form.cboCpnyID_change";
                         })
-                        
-                    ,HQ.DateField().ID("dteStartDate")
+
+                    , HQ.DateField().ID("dteStartDate")
                     .HQLangCode("FromDate").Value(DateTime.Now)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
@@ -79,8 +86,8 @@
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
-                        
-                    ,HQ.DateField().ID("dteEndDate")
+
+                    , HQ.DateField().ID("dteEndDate")
                     .HQLangCode("ToDate").Value(DateTime.Now)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
@@ -88,7 +95,7 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
                         })
                 ) // Second Column
-                
+
                 // Third Column
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
                 .Flex(2).MinWidth(200)
@@ -108,11 +115,11 @@
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
-                    
-                    ,HQ.Combo().ID("cboStatus")
+
+                    , HQ.Combo().ID("cboStatus")
                     .Name("cboStatus").HQLangCode("STATUS").HQProcedure("OM20500_pcApproveStatus")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                    .ForceSelection(true).HQValue("H",false).MultiSelect(true)
+                    .ForceSelection(true).HQValue("H", false).MultiSelect(true)
                     .Width(300).HQHeightWidth(400, 300)
                     .HQParam(new StoreParameterCollection() 
                         { 
@@ -126,7 +133,7 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         })
                 ) // Third Column
-                
+
                 // Forth Column
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 5")
                 .Width(120)
@@ -135,13 +142,14 @@
                     HQ.Button().ID("btnLoad")
                     .HQLangCode("LoadData").Icon(Icon.ArrowRefresh)
                     .Handler("Event.Form.btnLoad_click")
-                    
-                    ,HQ.Button().ID("btnClose")
+
+
+                    , HQ.Button().ID("btnClose")
                     .Icon(Icon.LockEdit)
                     .HQLangCode("ClosePO").MarginSpec("5 0 0 0")
                     .Handler("Event.Form.btnClose_click")
                 ) // Forth Column
-                
+
             ) // pnlHeader
 
             , X.GridPanel().ID("grdOrder")
@@ -163,62 +171,63 @@
 
                 , X.Column()
                 .Text(Util.GetLang("OrderNbr")).DataIndex("OrderNbr")
-                
+
                 , X.Column()
                 .Text(Util.GetLang("CustID")).DataIndex("CustID")
-                
+
                 , X.Column()
                 .Text(Util.GetLang("CustName")).DataIndex("CustName")
-                
+
                 , X.Column()
                 .Text(Util.GetLang("OrderDate")).DataIndex("OrderDate")
-                
+
                 , X.Column()
                 .Text(Util.GetLang("ClassID")).DataIndex("PriceClassID")
-                
+
                 , X.Column()
                 .Text(Util.GetLang("Address")).DataIndex("Addr1")
-                
+
                 , X.Column()
                 .Text(Util.GetLang("SlsperID")).DataIndex("SlsPerID")
-                
+
                 , X.Column()
                 .Text(Util.GetLang("Status")).DataIndex("Status")
-                
+
                 , X.Column().Align(Alignment.Right)
                 .Text(Util.GetLang("Qty")).DataIndex("OrdQty")
-                
+
                 , X.Column().Align(Alignment.Right)
                 .Text(Util.GetLang("LineAmt")).DataIndex("OrdAmt")
-                
+
                 , X.Column().Align(Alignment.Right)
                 .Text(Util.GetLang("TotTax")).DataIndex("TaxTot")
 
                 //, X.CommandColumn()
-                //.Width(150)
-                //.Commands(
-                //    X.GridCommand()
-                //    .Text(Util.GetLang("Reject"))
-                //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                //    .CommandName("reject")
-                //    .Icon(Icon.ArrowUndo)
-                //)
-                //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                //.Listeners(l => l.Command.Handler = "Event.Grid.grd_Reject(record, this);")
+        //.Width(150)
+        //.Commands(
+        //    X.GridCommand()
+        //    .Text(Util.GetLang("Reject"))
+        //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+        //    .CommandName("reject")
+        //    .Icon(Icon.ArrowUndo)
+        //)
+        //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+        //.Listeners(l => l.Command.Handler = "Event.Grid.grd_Reject(record, this);")
             )
             .SelectionModel(
                 X.RowSelectionModel().ID("slmOrder").Mode(SelectionMode.Single)
-                .Listeners(lst=>lst.Select.Fn="Event.Grid.slmOrder_select")
+                .Listeners(lst => lst.Select.Fn = "Event.Grid.slmOrder_select")
             )
             .Plugins(
                 X.CellEditing()
                 .ClicksToEdit(1)
                 .Listeners(ls =>
                 {
-                    //ls.Edit.Fn = "Event.Grid.grdOrder_edit";
+                    ls.Edit.Fn = "Event.Grid.grdOrder_edit";
+                    ls.BeforeEdit.Fn = "Event.Grid.grdOrder_beforeEdit";
                 })
             )// grdOrder
-            
+
             , X.TabPanel().ID("tabInfo")
             .Layout(LayoutType.Border)
             .Region(Region.South).Flex(2).Split(true)
@@ -250,58 +259,59 @@
 
                         , X.Column()
                         .Text(Util.GetLang("Descr")).DataIndex("Descr")
-                        
+
                         , X.CheckColumn()
                         .Text(Util.GetLang("FreeItem")).DataIndex("FreeItem")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("OrdQty")).DataIndex("LineQty")
-                        
+
                         , X.NumberColumn().Format("0").Align(Alignment.Right)
                         .Text(Util.GetLang("ShipQty")).DataIndex("QtyShip")
                         .Editor(
                             HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
                             .MinValue(0)
                         )
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("ShippedQty")).DataIndex("QtyShipped")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("Unit")).DataIndex("SlsUnit")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("SalesPrice")).DataIndex("SlsPrice")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("DiscAmt")).DataIndex("DiscAmt")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("LineAmt")).DataIndex("LineAmt")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("DiscCode")).DataIndex("DiscCode")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("SiteID")).DataIndex("SiteID")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("TaxID")).DataIndex("TaxID")
-                        
+
                         //, X.CommandColumn()
-                        //.Width(150)
-                        //.Commands(
-                        //    X.GridCommand()
-                        //    .Text(Util.GetLang("Reject"))
-                        //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                        //    .CommandName("reject")
-                        //    .Icon(Icon.ArrowUndo)
-                        //)
-                        //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        //.Listeners(l => l.Command.Handler = "Event.Grid.grd_Reject(record, this);")
+        //.Width(150)
+        //.Commands(
+        //    X.GridCommand()
+        //    .Text(Util.GetLang("Reject"))
+        //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+        //    .CommandName("reject")
+        //    .Icon(Icon.ArrowUndo)
+        //)
+        //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+        //.Listeners(l => l.Command.Handler = "Event.Grid.grd_Reject(record, this);")
                     )
                     .SelectionModel(
                         X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single)
+                        .Listeners(lst => lst.Select.Fn = "Event.Grid.slmDet_select")
                     )
                     .Plugins(
                         X.CellEditing()
@@ -310,11 +320,13 @@
                         {
                             ls.Edit.Fn = "Event.Grid.grdDet_edit";
                             ls.ValidateEdit.Fn = "Event.Grid.grdDet_validateEdit";
+                            ls.BeforeEdit.Fn = "Event.Grid.grdDet_beforeEdit";
+
                         })
                     )// grdDet
                 )
-                
-                ,X.Panel()
+
+                , X.Panel()
                 .Title(Util.GetLang("History"))
                 .Layout(LayoutType.Border)
                 .Region(Region.Center)
@@ -329,57 +341,57 @@
 
                         , X.Column()
                         .Text(Util.GetLang("OrderNbr")).DataIndex("OrderNbr")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("CustID")).DataIndex("CustID")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("CustName")).DataIndex("CustName")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("Address")).DataIndex("Addr1")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("SlsperID")).DataIndex("SlsPerID")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("DeliveryID")).DataIndex("DeliveryID")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("OrderDate")).DataIndex("OrderDate")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("ARDocDate")).DataIndex("ARDocDate")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("Status")).DataIndex("Status")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("Qty")).DataIndex("OrdQty")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("LineAmt")).DataIndex("OrdAmt")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("TotTax")).DataIndex("TaxTot")
 
                         //, X.CommandColumn()
-                        //.Width(150)
-                        //.Commands(
-                        //    X.GridCommand()
-                        //    .Text(Util.GetLang("Reject"))
-                        //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                        //    .CommandName("reject")
-                        //    .Icon(Icon.ArrowUndo)
-                        //)
-                        //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        //.Listeners(l => l.Command.Handler = "Event.grdSalesRouteMaster_Reject(record);")
+        //.Width(150)
+        //.Commands(
+        //    X.GridCommand()
+        //    .Text(Util.GetLang("Reject"))
+        //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+        //    .CommandName("reject")
+        //    .Icon(Icon.ArrowUndo)
+        //)
+        //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+        //.Listeners(l => l.Command.Handler = "Event.grdSalesRouteMaster_Reject(record);")
                     )
                     .SelectionModel(
                         X.RowSelectionModel().ID("slmHisOrd").Mode(SelectionMode.Single)
-                        .Listeners(lst=>lst.Select.Fn="Event.Grid.slmHisOrd_select")
+                        .Listeners(lst => lst.Select.Fn = "Event.Grid.slmHisOrd_select")
                     )// grdHisOrd
-                    
+
                     , X.GridPanel().ID("grdHisDet")
                     .Region(Region.Center).Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false))
@@ -390,48 +402,48 @@
 
                         , X.Column()
                         .Text(Util.GetLang("InvtID")).DataIndex("InvtID")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("Descr")).DataIndex("Descr")
-                        
+
                         , X.CheckColumn()
                         .Text(Util.GetLang("FreeItem")).DataIndex("FreeItem")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("Qty")).DataIndex("LineQty")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("Unit")).DataIndex("SlsUnit")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("SalesPrice")).DataIndex("SlsPrice")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("DiscAmt")).DataIndex("DiscAmt")
-                        
+
                         , X.Column().Align(Alignment.Right)
                         .Text(Util.GetLang("LineAmt")).DataIndex("LineAmt")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("DiscCode")).DataIndex("DiscCode")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("SiteID")).DataIndex("SiteID")
-                        
+
                         , X.Column()
                         .Text(Util.GetLang("TaxID")).DataIndex("TaxID")
 
                         //, X.CommandColumn()
-                        //.Width(150)
-                        //.Commands(
-                        //    X.GridCommand()
-                        //    .Text(Util.GetLang("Reject"))
-                        //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                        //    .CommandName("reject")
-                        //    .Icon(Icon.ArrowUndo)
-                        //)
-                        //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        //.Listeners(l => l.Command.Handler = "Event.grdSalesRouteMaster_Reject(record);")
+        //.Width(150)
+        //.Commands(
+        //    X.GridCommand()
+        //    .Text(Util.GetLang("Reject"))
+        //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+        //    .CommandName("reject")
+        //    .Icon(Icon.ArrowUndo)
+        //)
+        //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+        //.Listeners(l => l.Command.Handler = "Event.grdSalesRouteMaster_Reject(record);")
                     )
                     .SelectionModel(
                         X.RowSelectionModel().ID("slmHisDet").Mode(SelectionMode.Single)
@@ -443,5 +455,61 @@
         {
             lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
         })// Form: frmMain
+
+        ,
+        X.Window()
+        .ID("winOrder")
+        .Hidden(true)
+        .Modal(true)
+        .Closable(false)
+        .Title(Util.GetLang("OM205Order"))        
+        .Height(150)
+        .Width(400)
+        .Items(
+           X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0").Width(350)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboDelivery").LabelWidth(150)
+                        .Name("Delivery").HQLangCode("Delivery").HQProcedure("OM20500_pcDeliveryPerson")
+                        .HQColumnShow("SlsperID,Name").DisplayField("Name").ValueField("SlsperID")
+                        .ForceSelection(true)
+                        .Width(300).HQHeightWidth(400, 300).HQAutoLoad(false)
+                        .HQParam(new StoreParameterCollection() 
+                            { 
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                                ,new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
+                            })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                    , HQ.DateField().ID("dteShipDate").Name("dteShipDate").LabelWidth(150).AllowBlank(false)
+                        .HQLangCode("ShipDate").Value(DateTime.Now)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
+                            })
+                    , HQ.DateField().ID("dteARDocDate").Name("dteARDocDate").LabelWidth(150).AllowBlank(false)
+                        .HQLangCode("ARDocDate").Value(DateTime.Now)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
+                            })
+                )
+                , X.Container().Layout(LayoutType.HBox)
+                        .Items(
+                                HQ.Button().ID("btnOK")
+                                    .HQLangCode("btnOK")
+                                    .Handler("Event.Popup.btnOK_click").Width(95).MarginSpec("0 0 0 155")
+                                , HQ.Button().ID("btnCancel").Width(95)                                
+                                    .HQLangCode("btnCancel").MarginSpec("0 0 0 5")
+                                    .Handler("Event.Popup.btnCancel_click")
+
+                        )
+        )
     )
 )
