@@ -164,22 +164,6 @@ namespace PO10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<PO_Header> PO_Header
-        {
-            get
-            {
-                if ((_PO_Header == null))
-                {
-                    _PO_Header = base.CreateObjectSet<PO_Header>("PO_Header");
-                }
-                return _PO_Header;
-            }
-        }
-        private ObjectSet<PO_Header> _PO_Header;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<RPTRunning> RPTRunnings
         {
             get
@@ -208,6 +192,22 @@ namespace PO10100
             }
         }
         private ObjectSet<PO_Setup> _PO_Setup;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<PO_Header> PO_Header
+        {
+            get
+            {
+                if ((_PO_Header == null))
+                {
+                    _PO_Header = base.CreateObjectSet<PO_Header>("PO_Header");
+                }
+                return _PO_Header;
+            }
+        }
+        private ObjectSet<PO_Header> _PO_Header;
 
         #endregion
 
@@ -262,14 +262,6 @@ namespace PO10100
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the PO_Header EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToPO_Header(PO_Header pO_Header)
-        {
-            base.AddObject("PO_Header", pO_Header);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the RPTRunnings EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToRPTRunnings(RPTRunning rPTRunning)
@@ -283,6 +275,14 @@ namespace PO10100
         public void AddToPO_Setup(PO_Setup pO_Setup)
         {
             base.AddObject("PO_Setup", pO_Setup);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the PO_Header EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPO_Header(PO_Header pO_Header)
+        {
+            base.AddObject("PO_Header", pO_Header);
         }
 
         #endregion

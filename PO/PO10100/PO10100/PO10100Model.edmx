@@ -323,17 +323,17 @@
           <Property Name="ShipZip" Type="varchar" MaxLength="10" />
           <Property Name="Status" Type="varchar" MaxLength="2" />
           <Property Name="Terms" Type="varchar" MaxLength="2" />
-          <Property Name="VendAddr1" Type="nvarchar" MaxLength="30" />
-          <Property Name="VendAddr2" Type="nvarchar" MaxLength="30" />
+          <Property Name="VendAddr1" Type="nvarchar" MaxLength="200" />
+          <Property Name="VendAddr2" Type="nvarchar" MaxLength="200" />
           <Property Name="VendAddrID" Type="varchar" MaxLength="10" />
           <Property Name="ShipDistAddrID" Type="varchar" MaxLength="10" />
-          <Property Name="VendAttn" Type="nvarchar" MaxLength="30" />
+          <Property Name="VendAttn" Type="nvarchar" MaxLength="200" />
           <Property Name="VendCity" Type="varchar" MaxLength="30" />
           <Property Name="VendCountry" Type="varchar" MaxLength="3" />
           <Property Name="VendEmail" Type="varchar" MaxLength="40" />
           <Property Name="VendFax" Type="varchar" MaxLength="30" />
           <Property Name="VendID" Type="varchar" MaxLength="15" />
-          <Property Name="VendName" Type="nvarchar" MaxLength="30" />
+          <Property Name="VendName" Type="nvarchar" MaxLength="200" />
           <Property Name="VendPhone" Type="varchar" MaxLength="30" />
           <Property Name="VendState" Type="varchar" MaxLength="10" />
           <Property Name="VendZip" Type="varchar" MaxLength="10" />
@@ -541,7 +541,6 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="PO_Header" EntityType="PO10100Model.PO_Header" />
           <FunctionImport Name="PO10100_pdIN_Inventory" ReturnType="Collection(PO10100Model.PO10100_pdIN_Inventory_Result)">
           <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
@@ -567,6 +566,7 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="PONbr" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="PO_Header" EntityType="PO10100Model.PO_Header" />
         </EntityContainer>
         <ComplexType Name="PO10100_pgDetail_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -958,71 +958,6 @@
           <Property Type="String" Name="LineRef" Nullable="true" MaxLength="5" />
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" />
         </ComplexType>
-        <EntityType Name="PO_Header">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="PONbr" />
-          </Key>
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="PONbr" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="BillShipAddr" Nullable="false" />
-          <Property Type="DateTime" Name="BlktExprDate" Nullable="false" Precision="0" />
-          <Property Type="String" Name="BlktPONbr" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Buyer" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ImpExp" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="NoteID" Nullable="false" />
-          <Property Type="Double" Name="POAmt" Nullable="false" />
-          <Property Type="Double" Name="POFeeTot" Nullable="false" />
-          <Property Type="DateTime" Name="PODate" Nullable="false" Precision="0" />
-          <Property Type="String" Name="POType" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="RcptStage" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="RcptTotAmt" Nullable="false" />
-          <Property Type="String" Name="ReqNbr" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipAddr1" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ShipAddr2" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ShipAddrID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipAttn" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ShipCity" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipCountry" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipCustID" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipEmail" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipFax" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipName" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ShipPhone" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipSiteID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipState" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShiptoID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShiptoType" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipVendAddrID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipVendID" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipVia" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipZip" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Terms" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendAddr1" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="VendAddr2" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="VendAddrID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ShipDistAddrID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendAttn" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="VendCity" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendCountry" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendEmail" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendFax" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendID" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendName" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="VendPhone" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendState" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendZip" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VouchStage" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Type="Boolean" Name="IsExport" />
-        </EntityType>
         <ComplexType Name="PO10100_pdIN_Inventory_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BarCode" Nullable="true" MaxLength="20" />
@@ -1273,6 +1208,71 @@
           <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
         </ComplexType>
+        <EntityType Name="PO_Header">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="PONbr" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PONbr" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="BillShipAddr" Nullable="false" />
+          <Property Type="DateTime" Name="BlktExprDate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="BlktPONbr" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Buyer" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ImpExp" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="NoteID" Nullable="false" />
+          <Property Type="Double" Name="POAmt" Nullable="false" />
+          <Property Type="Double" Name="POFeeTot" Nullable="false" />
+          <Property Type="DateTime" Name="PODate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="POType" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RcptStage" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="RcptTotAmt" Nullable="false" />
+          <Property Type="String" Name="ReqNbr" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipAddr1" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipAddr2" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipAddrID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipAttn" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipCity" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipCountry" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipCustID" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipEmail" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipFax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipName" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShipPhone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipSiteID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipState" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShiptoID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShiptoType" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipVendAddrID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipVendID" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipVia" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipZip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Terms" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendAddr1" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="VendAddr2" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="VendAddrID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipDistAddrID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendAttn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="VendCity" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendCountry" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendEmail" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendFax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendID" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="VendPhone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendState" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendZip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VouchStage" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="Boolean" Name="IsExport" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1687,71 +1687,6 @@
           <FunctionImportMapping FunctionImportName="PO10100_ppCheckPODate" FunctionName="SA00300Model.Store.PO10100_ppCheckPODate" />
           <FunctionImportMapping FunctionImportName="PO10100_ppGetPrice" FunctionName="SA00300Model.Store.PO10100_ppGetPrice" />
           <FunctionImportMapping FunctionImportName="PONumbering" FunctionName="SA00300Model.Store.PONumbering" />
-          <EntitySetMapping Name="PO_Header">
-            <EntityTypeMapping TypeName="PO10100Model.PO_Header">
-              <MappingFragment StoreEntitySet="PO_Header">
-                <ScalarProperty Name="IsExport" ColumnName="IsExport" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="VouchStage" ColumnName="VouchStage" />
-                <ScalarProperty Name="VendZip" ColumnName="VendZip" />
-                <ScalarProperty Name="VendState" ColumnName="VendState" />
-                <ScalarProperty Name="VendPhone" ColumnName="VendPhone" />
-                <ScalarProperty Name="VendName" ColumnName="VendName" />
-                <ScalarProperty Name="VendID" ColumnName="VendID" />
-                <ScalarProperty Name="VendFax" ColumnName="VendFax" />
-                <ScalarProperty Name="VendEmail" ColumnName="VendEmail" />
-                <ScalarProperty Name="VendCountry" ColumnName="VendCountry" />
-                <ScalarProperty Name="VendCity" ColumnName="VendCity" />
-                <ScalarProperty Name="VendAttn" ColumnName="VendAttn" />
-                <ScalarProperty Name="ShipDistAddrID" ColumnName="ShipDistAddrID" />
-                <ScalarProperty Name="VendAddrID" ColumnName="VendAddrID" />
-                <ScalarProperty Name="VendAddr2" ColumnName="VendAddr2" />
-                <ScalarProperty Name="VendAddr1" ColumnName="VendAddr1" />
-                <ScalarProperty Name="Terms" ColumnName="Terms" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ShipZip" ColumnName="ShipZip" />
-                <ScalarProperty Name="ShipVia" ColumnName="ShipVia" />
-                <ScalarProperty Name="ShipVendID" ColumnName="ShipVendID" />
-                <ScalarProperty Name="ShipVendAddrID" ColumnName="ShipVendAddrID" />
-                <ScalarProperty Name="ShiptoType" ColumnName="ShiptoType" />
-                <ScalarProperty Name="ShiptoID" ColumnName="ShiptoID" />
-                <ScalarProperty Name="ShipState" ColumnName="ShipState" />
-                <ScalarProperty Name="ShipSiteID" ColumnName="ShipSiteID" />
-                <ScalarProperty Name="ShipPhone" ColumnName="ShipPhone" />
-                <ScalarProperty Name="ShipName" ColumnName="ShipName" />
-                <ScalarProperty Name="ShipFax" ColumnName="ShipFax" />
-                <ScalarProperty Name="ShipEmail" ColumnName="ShipEmail" />
-                <ScalarProperty Name="ShipCustID" ColumnName="ShipCustID" />
-                <ScalarProperty Name="ShipCountry" ColumnName="ShipCountry" />
-                <ScalarProperty Name="ShipCity" ColumnName="ShipCity" />
-                <ScalarProperty Name="ShipAttn" ColumnName="ShipAttn" />
-                <ScalarProperty Name="ShipAddrID" ColumnName="ShipAddrID" />
-                <ScalarProperty Name="ShipAddr2" ColumnName="ShipAddr2" />
-                <ScalarProperty Name="ShipAddr1" ColumnName="ShipAddr1" />
-                <ScalarProperty Name="ReqNbr" ColumnName="ReqNbr" />
-                <ScalarProperty Name="RcptTotAmt" ColumnName="RcptTotAmt" />
-                <ScalarProperty Name="RcptStage" ColumnName="RcptStage" />
-                <ScalarProperty Name="POType" ColumnName="POType" />
-                <ScalarProperty Name="PODate" ColumnName="PODate" />
-                <ScalarProperty Name="POFeeTot" ColumnName="POFeeTot" />
-                <ScalarProperty Name="POAmt" ColumnName="POAmt" />
-                <ScalarProperty Name="NoteID" ColumnName="NoteID" />
-                <ScalarProperty Name="ImpExp" ColumnName="ImpExp" />
-                <ScalarProperty Name="Buyer" ColumnName="Buyer" />
-                <ScalarProperty Name="BlktPONbr" ColumnName="BlktPONbr" />
-                <ScalarProperty Name="BlktExprDate" ColumnName="BlktExprDate" />
-                <ScalarProperty Name="BillShipAddr" ColumnName="BillShipAddr" />
-                <ScalarProperty Name="PONbr" ColumnName="PONbr" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PO10100_pdIN_Inventory" FunctionName="SA00300Model.Store.PO10100_pdIN_Inventory">
             <ResultMapping>
               <ComplexTypeMapping TypeName="PO10100Model.PO10100_pdIN_Inventory_Result">
@@ -2030,6 +1965,71 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="PO10100_ppCheckingPONbr" FunctionName="SA00300Model.Store.PO10100_ppCheckingPONbr" />
+          <EntitySetMapping Name="PO_Header">
+            <EntityTypeMapping TypeName="PO10100Model.PO_Header">
+              <MappingFragment StoreEntitySet="PO_Header">
+                <ScalarProperty Name="IsExport" ColumnName="IsExport" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="VouchStage" ColumnName="VouchStage" />
+                <ScalarProperty Name="VendZip" ColumnName="VendZip" />
+                <ScalarProperty Name="VendState" ColumnName="VendState" />
+                <ScalarProperty Name="VendPhone" ColumnName="VendPhone" />
+                <ScalarProperty Name="VendName" ColumnName="VendName" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+                <ScalarProperty Name="VendFax" ColumnName="VendFax" />
+                <ScalarProperty Name="VendEmail" ColumnName="VendEmail" />
+                <ScalarProperty Name="VendCountry" ColumnName="VendCountry" />
+                <ScalarProperty Name="VendCity" ColumnName="VendCity" />
+                <ScalarProperty Name="VendAttn" ColumnName="VendAttn" />
+                <ScalarProperty Name="ShipDistAddrID" ColumnName="ShipDistAddrID" />
+                <ScalarProperty Name="VendAddrID" ColumnName="VendAddrID" />
+                <ScalarProperty Name="VendAddr2" ColumnName="VendAddr2" />
+                <ScalarProperty Name="VendAddr1" ColumnName="VendAddr1" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ShipZip" ColumnName="ShipZip" />
+                <ScalarProperty Name="ShipVia" ColumnName="ShipVia" />
+                <ScalarProperty Name="ShipVendID" ColumnName="ShipVendID" />
+                <ScalarProperty Name="ShipVendAddrID" ColumnName="ShipVendAddrID" />
+                <ScalarProperty Name="ShiptoType" ColumnName="ShiptoType" />
+                <ScalarProperty Name="ShiptoID" ColumnName="ShiptoID" />
+                <ScalarProperty Name="ShipState" ColumnName="ShipState" />
+                <ScalarProperty Name="ShipSiteID" ColumnName="ShipSiteID" />
+                <ScalarProperty Name="ShipPhone" ColumnName="ShipPhone" />
+                <ScalarProperty Name="ShipName" ColumnName="ShipName" />
+                <ScalarProperty Name="ShipFax" ColumnName="ShipFax" />
+                <ScalarProperty Name="ShipEmail" ColumnName="ShipEmail" />
+                <ScalarProperty Name="ShipCustID" ColumnName="ShipCustID" />
+                <ScalarProperty Name="ShipCountry" ColumnName="ShipCountry" />
+                <ScalarProperty Name="ShipCity" ColumnName="ShipCity" />
+                <ScalarProperty Name="ShipAttn" ColumnName="ShipAttn" />
+                <ScalarProperty Name="ShipAddrID" ColumnName="ShipAddrID" />
+                <ScalarProperty Name="ShipAddr2" ColumnName="ShipAddr2" />
+                <ScalarProperty Name="ShipAddr1" ColumnName="ShipAddr1" />
+                <ScalarProperty Name="ReqNbr" ColumnName="ReqNbr" />
+                <ScalarProperty Name="RcptTotAmt" ColumnName="RcptTotAmt" />
+                <ScalarProperty Name="RcptStage" ColumnName="RcptStage" />
+                <ScalarProperty Name="POType" ColumnName="POType" />
+                <ScalarProperty Name="PODate" ColumnName="PODate" />
+                <ScalarProperty Name="POFeeTot" ColumnName="POFeeTot" />
+                <ScalarProperty Name="POAmt" ColumnName="POAmt" />
+                <ScalarProperty Name="NoteID" ColumnName="NoteID" />
+                <ScalarProperty Name="ImpExp" ColumnName="ImpExp" />
+                <ScalarProperty Name="Buyer" ColumnName="Buyer" />
+                <ScalarProperty Name="BlktPONbr" ColumnName="BlktPONbr" />
+                <ScalarProperty Name="BlktExprDate" ColumnName="BlktExprDate" />
+                <ScalarProperty Name="BillShipAddr" ColumnName="BillShipAddr" />
+                <ScalarProperty Name="PONbr" ColumnName="PONbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -2050,16 +2050,16 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="SA00300Model" ZoomLevel="33">
+      <Diagram Name="SA00300Model" ZoomLevel="71">
         <EntityTypeShape EntityType="PO10100Model.PO_Detail" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.IN_ItemSite" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.IN_Inventory" Width="1.5" PointX="4.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.IN_UnitConversion" Width="1.5" PointX="6.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.OM_UserDefault" Width="1.5" PointX="6.75" PointY="5.75" />
         <EntityTypeShape EntityType="PO10100Model.AP_Vendor" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PO10100Model.PO_Header" Width="1.5" PointX="10.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PO10100Model.RPTRunning" Width="1.5" PointX="6.75" PointY="11.75" />
-        <EntityTypeShape EntityType="PO10100Model.PO_Setup" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PO10100Model.RPTRunning" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PO10100Model.PO_Setup" Width="1.5" PointX="10.75" PointY="8.75" />
+        <EntityTypeShape EntityType="PO10100Model.PO_Header" Width="1.5" PointX="11.777696611256197" PointY="27.955009011530787" />
       </Diagram>
     </Diagrams>
   </Designer>
