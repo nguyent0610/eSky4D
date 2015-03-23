@@ -276,15 +276,15 @@
 
                                         , Html.X().Column().Text(Util.GetLang("PurchUnit")).DataIndex("PurchUnit")
                                                                             .Editor(HQ.Combo().ID("cboPurchUnit").Name("PurchUnit").HideLabel(true).LabelWidth(0)
-                                                                                    .HQDBSys(false).HQProcedure("PO10100_pcINUnit_Invt_Class_From_To").HQValue("purUnit", true)
+                                                                                    .HQDBSys(false).HQProcedure("PO10100_pcINUnit_Invt_Class_From_To").HQValue("_purUnit", true)
                                                                                     .HQColumnShow("FromUnit").ForceSelection(true)
                                                                                     .DisplayField("FromUnit")
                                                                                     .ValueField("FromUnit")
                                                                                     .HQHeightWidth(400, 300)
                                                                     .HQParam(new StoreParameterCollection() {
-                                                                                new StoreParameter() { Name = "@ClassID", Value = "strClassID", Mode = ParameterMode.Raw}
-                                                                                ,new StoreParameter() { Name = "@StkUnit", Value = "strStkUnit", Mode = ParameterMode.Raw}
-                                                                                ,new StoreParameter() { Name = "@InvtID", Value = "strInvtID", Mode = ParameterMode.Raw}											                          
+                                                                                new StoreParameter() { Name = "@ClassID", Value = "_classID", Mode = ParameterMode.Raw}
+                                                                                ,new StoreParameter() { Name = "@StkUnit", Value = "_stkUnit", Mode = ParameterMode.Raw}
+                                                                                ,new StoreParameter() { Name = "@InvtID", Value = "_invtID", Mode = ParameterMode.Raw}											                          
                                                             })
                                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                                                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })

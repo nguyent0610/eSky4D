@@ -3,17 +3,19 @@
 
 var _keys = ['InvtID'];
 var _fieldsCheckRequire = ["InvtID", "PurchaseType", "SiteID", "PurchUnit"];
-var fieldsLangCheckRequire = ["InvtID", "PurchaseType", "SiteID", "PurchUnit"];
+var _fieldsLangCheckRequire = ["InvtID", "PurchaseType", "SiteID", "PurchUnit"];
 
 var _objUserDflt = null;
 var _objPO_Setup = null;
-
-var strInvtID = "";
-var strClassID = "";
-var strStkUnit = "";
-
 var _objIN_ItemSite = null;
-var purUnit = "";
+
+var _invtID = "";//dung cho boby combo load store cboPurchUnit
+var _classID = "";//dung cho boby combo load store cboPurchUnit
+var _stkUnit = "";//dung cho boby combo load store cboPurchUnit
+var _purUnit = "";//dung cho boby combo load store cboPurchUnit
+
+
+
 //////////////////////////////////////////////////////////////////
 //// Store ///////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
@@ -147,7 +149,7 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 //checkRequire để kiếm tra các field yêu cầu có rỗng hay ko
-                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoPO10100_pgDetail, _keys, _fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoPO10100_pgDetail, _keys, _fieldsCheckRequire, _fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -301,7 +303,7 @@ var grdPO_Detail_BeforeEdit = function (editor, e) {
         return false;
     }
     var det = e.record.data;
-    purUnit = e.record.data.PurchUnit;
+    _purUnit = e.record.data.PurchUnit;
   
     if (det.PurchaseType == "") {
         e.record.set("PurchaseType", "GI");
@@ -332,9 +334,9 @@ var grdPO_Detail_BeforeEdit = function (editor, e) {
     }
     if (e.field == 'PurchUnit') {
         var objIN_Inventory = HQ.store.findInStore(App.stoPO10100_pdIN_Inventory, ["InvtID"], [det.InvtID]);
-        strInvtID = objIN_Inventory.InvtID;
-        strClassID = objIN_Inventory.ClassID;
-        strStkUnit = objIN_Inventory.StkUnit;
+        _invtID = objIN_Inventory.InvtID;
+        _classID = objIN_Inventory.ClassID;
+        _stkUnit = objIN_Inventory.StkUnit;
         App.cboPurchUnit.getStore().reload();
     }
 
@@ -358,9 +360,9 @@ var grdPO_Detail_ValidateEdit = function (item, e) {
         }
         else {
             var objIN_Inventory = HQ.store.findInStore(App.stoPO10100_pdIN_Inventory, ["InvtID"], [r.InvtID]);
-            strInvtID = objIN_Inventory.InvtID;
-            strClassID = objIN_Inventory.ClassID;
-            strStkUnit = objIN_Inventory.StkUnit;
+            _invtID = objIN_Inventory.InvtID;
+            _classID = objIN_Inventory.ClassID;
+            _stkUnit = objIN_Inventory.StkUnit;
 
             App.cboPurchUnit.getStore().reload();
            
