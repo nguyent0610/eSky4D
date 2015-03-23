@@ -303,20 +303,17 @@ namespace IN10300.Controllers
             if (_handle != "N")
             {
                 DataAccess dal = Util.Dal();
+                INProcess.IN inventory = new INProcess.IN(_userName, _screenNbr, dal);
                 try
                 {
-                    INProcess.Inventory inventory = new INProcess.Inventory(_userName, _screenNbr, dal);
+                   
                     if (_handle == "R")
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!inventory.IN10300_Release(_objBatch.BranchID, _objBatch.BatNbr))
-                        {
-                            dal.RollbackTrans();
-                        }
-                        else
-                        {
-                            dal.CommitTrans();
-                        }
+
+                        inventory.IN10300_Release(_objBatch.BranchID, _objBatch.BatNbr);
+
+                        dal.CommitTrans();
 
                         Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
                     }
@@ -326,6 +323,11 @@ namespace IN10300.Controllers
                 {
                     dal.RollbackTrans();
                     throw;
+                }
+                finally
+                {
+                    dal = null;
+                    inventory = null;
                 }
             }
         }
