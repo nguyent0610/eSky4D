@@ -1,21 +1,20 @@
 //// Declare //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
-var lock = false;
-var keys = ['InvtID'];
-var fieldsCheckRequire = ["InvtID", "PurchaseType", "SiteID", "RcptUnitDescr"];
-var fieldsLangCheckRequire = ["InvtID", "PurchaseType", "SiteID", "RcptUnitDescr"];
+var _keys = ['InvtID'];
+var _fieldsCheckRequire = ["InvtID", "PurchaseType", "SiteID", "RcptUnitDescr"];
+var _fieldsLangCheckRequire = ["InvtID", "PurchaseType", "SiteID", "RcptUnitDescr"];
 
 var _objUserDflt = null;
 var _objPO_Setup = null;
 
-var strInvtID = "";
-var strClassID = "";
-var strStkUnit = "";
-var paramInvtID = "";
-var poNbr = "";
+var _invtID = "";
+var _classID = "";
+var _stkUnit = "";
+var _purUnit = "";
+
 var _objIN_ItemSite = null;
-var handle = "";
-var purUnit = "";
+
+
 //////////////////////////////////////////////////////////////////
 //// Store ///////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
@@ -82,7 +81,7 @@ var loadDataDetail = function (sto) {
         App.cboVendID.setReadOnly(false);
       
     }
-    HQ.store.insertBlank(sto, keys);
+    HQ.store.insertBlank(sto, _keys);
     calcDet();
     frmChange();
     HQ.common.showBusy(false);
@@ -144,7 +143,7 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 //checkRequire để kiếm tra các field yêu cầu có rỗng hay ko
-                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoPO10200_pgDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoPO10200_pgDetail, _keys, _fieldsCheckRequire, _fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -180,7 +179,7 @@ var menuClick = function (command) {
                         App.cboBatNbr.setValue(null);
                     }
                 } else if (HQ.focus == 'grdDetail') {
-                    HQ.grid.insert(App.grdDetail, keys);
+                    HQ.grid.insert(App.grdDetail, _keys);
                 }
             }
             break;
@@ -311,7 +310,7 @@ var grdPO_Trans_BeforeEdit = function (editor, e) {
     }
    
     var det = e.record.data;
-    purUnit = e.record.data.RcptUnitDescr;
+    _purUnit = e.record.data.RcptUnitDescr;
   
     if (det.PurchaseType == "") {
         e.record.set("PurchaseType", "GI");
@@ -345,9 +344,9 @@ var grdPO_Trans_BeforeEdit = function (editor, e) {
     }
     if (e.field == 'RcptUnitDescr') {
         var objIN_Inventory = HQ.store.findInStore(App.stoPO10200_pdIN_Inventory, ["InvtID"], [det.InvtID]);
-        strInvtID = objIN_Inventory.InvtID;
-        strClassID = objIN_Inventory.ClassID;
-        strStkUnit = objIN_Inventory.StkUnit;
+        _invtID = objIN_Inventory.InvtID;
+        _classID = objIN_Inventory.ClassID;
+        _stkUnit = objIN_Inventory.StkUnit;
         App.cboRcptUnitDescr.getStore().reload();
     }
    
@@ -379,8 +378,8 @@ var grdPO_Trans_BeforeEdit = function (editor, e) {
 var grdPO_Trans_ValidateEdit = function (item, e) {
     var Qty = 0;
     var objdet = App.slmPO_Trans.getSelection()[0];
-    if (keys.indexOf(e.field) != -1) {
-        if (HQ.grid.checkDuplicate(App.grdDetail, e, keys)) {
+    if (_keys.indexOf(e.field) != -1) {
+        if (HQ.grid.checkDuplicate(App.grdDetail, e, _keys)) {
             HQ.message.show(1112, e.value, '');
             return false;
         }
@@ -398,9 +397,9 @@ var grdPO_Trans_ValidateEdit = function (item, e) {
         }
         else {
             var objIN_Inventory = HQ.store.findInStore(App.stoPO10200_pdIN_Inventory, ["InvtID"], [r.InvtID]);
-            strInvtID = objIN_Inventory.InvtID;
-            strClassID = objIN_Inventory.ClassID;
-            strStkUnit = objIN_Inventory.StkUnit;
+            _invtID = objIN_Inventory.InvtID;
+            _classID = objIN_Inventory.ClassID;
+            _stkUnit = objIN_Inventory.StkUnit;
 
             App.cboRcptUnitDescr.getStore().reload();
 
@@ -478,7 +477,7 @@ var grdPO_Trans_Edit = function (item, e) {
             e.record.set('RcptUnitDescr', "");
             return;
         }
-        HQ.grid.checkInsertKey(App.grdDetail, e, keys);
+        HQ.grid.checkInsertKey(App.grdDetail, e, _keys);
     }
     if (e.field == "RcptQty") {
         if (objDetail.PurchaseType == "FA") {
@@ -802,6 +801,7 @@ var cboRcptFrom_Change = function (item, newValue, oldValue) {
         if (item.valueModels[0] != undefined) {
             if (item.valueModels[0].data.Code == "DR" && (App.cboStatus.getValue() == null ? "H" : App.cboStatus.getValue() == "H")) {
                 App.cboPONbr.setReadOnly(true);
+				App.cboPONbr.setValue('');
                 App.cboVendID.setReadOnly(false);
                 App.cboPONbr.allowBlank = true;
                 App.cboPONbr.validate();
@@ -973,7 +973,7 @@ var btnImport_Click = function (c, e) {
             },
             success: function (msg, data) {
                 if (this.result.data.lstTrans != undefined) {                   
-                    HQ.store.insertBlank(App.stoPO10200_pgDetail, keys);                  
+                    HQ.store.insertBlank(App.stoPO10200_pgDetail, _keys);                  
                         this.result.data.lstTrans.forEach(function (item) {
                             insertItemGrid(App.grdDetail, item);
                             //grdPO_Trans_ValidateEdit(App.grdDetail, App.stoPO10200_pgDetail.data.items[0]);
@@ -1114,8 +1114,8 @@ var insertItemGrid = function (grd, item) {
     delTax(App.stoPO10200_pgDetail.getCount() - 1);
     calcTax(App.stoPO10200_pgDetail.getCount() - 1);
     calcTaxTotal();
-    //HQ.grid.insert(App.grdDetail, keys);
-    HQ.store.insertBlank(App.stoPO10200_pgDetail, keys);
+    //HQ.grid.insert(App.grdDetail, _keys);
+    HQ.store.insertBlank(App.stoPO10200_pgDetail, _keys);
 };
 //////////////////////////////////////////////////////////////////
 //// Function ////////////////////////////////////////////////////
