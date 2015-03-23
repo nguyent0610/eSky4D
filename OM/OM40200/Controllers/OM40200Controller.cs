@@ -78,28 +78,30 @@ namespace OM40200.Controllers
                     string message = "";
                     foreach (var item in _lstOrder)
                     {
+                         OMProcess.OM order = new OMProcess.OM(_userName, _screenNbr, dal);
                         try
                         {
-                            OMProcess.Order order = new OMProcess.Order(_userName, _screenNbr, dal);
+                          
                             dal.BeginTrans(IsolationLevel.ReadCommitted);
-                            if (!order.OM10100_PrintInvoice(item.BranchID, item.OrderNbr))
-                            {
-                                var log = order.LogList.FirstOrDefault();
-                                if (log != null)
-                                {
-                                    message += "Đơn hàng " + item.OrderNbr + ":" + Message.GetString(log.Code, log.Parm) + "</br>";
-                                }
-                                dal.RollbackTrans();
-                            }
-                            else
-                            {
-                                dal.CommitTrans();
-                            }
+
+                            order.OM10100_PrintInvoice(item.BranchID, item.OrderNbr);
+                            
+                            dal.CommitTrans();
+                            
                         }
                         catch (Exception ex)
                         {
-                            message += "Đơn hàng " + item.OrderNbr + " bị lỗi: " + ex.ToString() + "</br>";
                             dal.RollbackTrans();
+                            if (ex is MessageException)
+                            {
+                                var msg = ex as MessageException;
+                                message += "Đơn hàng " + item.OrderNbr + ":" + Message.GetString(msg.Code, msg.Parm) + "</br>";
+
+                            }
+                            else
+                            {
+                                message += "Đơn hàng " + item.OrderNbr + " bị lỗi: " + ex.ToString() + "</br>";
+                            }
                         }
                     }
 
