@@ -16,6 +16,7 @@ using eBiz4DApp;
 using log4net;
 using HQ.eSkyFramework;
 using INProcess;
+using ARProcess;
 namespace OMProcess
 {
     public class OM 
@@ -38,21 +39,21 @@ namespace OMProcess
             {
                 if(string.IsNullOrEmpty(orderNbr))
                 {
-                    Utility.AppendLog(LogList, new MessageException("8012", new[] { orderNbr }));
+                    throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
                     return false;
                 }
 
                 clsOM_SalesOrd objSalesOrd = new clsOM_SalesOrd(Dal);
                 if (!objSalesOrd.GetByKey(branchID, orderNbr))
                 {
-                    Utility.AppendLog(LogList, new MessageException("8012", new[] { orderNbr }));
+                    throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
                     return false;
                 }
 
                 clsOM_OrderType objType = new clsOM_OrderType(Dal);
                 if (!objType.GetByKey(objSalesOrd.OrderType))
                 {
-                    Utility.AppendLog(LogList, new MessageException("8013", new[] { objSalesOrd.OrderType }));
+                    throw new MessageException(MessageType.Message,"8013","", new[] { objSalesOrd.OrderType });
                     return false;
                 }
 
@@ -80,7 +81,7 @@ namespace OMProcess
                 }
                 else
                 {
-                    Utility.AppendLog(LogList, new MessageException("48", new[] { orderNbr }));
+                    throw new MessageException(MessageType.Message,"48","", new[] { orderNbr });
                 }
 
                 objSql.OM_NoneShipPrintInvc(Environment.MachineName.Trim(), branchID, objSalesOrd.ARDocDate.Short(), Prog, User);
@@ -103,14 +104,14 @@ namespace OMProcess
                 clsSQL objSql = new clsSQL(Dal);
                 if (string.IsNullOrEmpty(orderNbr))
                 {
-                    Utility.AppendLog(LogList, new MessageException("8012", new[] { orderNbr }));
+                    throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
                     return false;
                 }
 
                 clsOM_SalesOrd objSalesOrd = new clsOM_SalesOrd(Dal);
                 if (!objSalesOrd.GetByKey(branchID, orderNbr))
                 {
-                    Utility.AppendLog(LogList, new MessageException("8012", new[] { orderNbr }));
+                    throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
                     return false;
                 }
 
@@ -118,7 +119,7 @@ namespace OMProcess
                 clsOM_OrderType objType = new clsOM_OrderType(Dal);
                 if (!objInvoice.GetByKey(branchID, objSalesOrd.ARRefNbr))
                 {
-                    Utility.AppendLog(LogList, new MessageException("8015", new[] { objSalesOrd.ARRefNbr }));
+                    throw new MessageException(MessageType.Message,"8015","", new[] { objSalesOrd.ARRefNbr });
                     return false;
                 }
 
@@ -128,15 +129,15 @@ namespace OMProcess
                     DataTable lstDocDesc = objSql.OM_GetDocDesc(branchID, orderNbr);
                     if (lstDocDesc.Rows.Count == 0)
                     {
-                        Utility.AppendLog(LogList, new MessageException("9991", new[] { "not found doc desc" }));
-                        return false;
+                        throw new MessageException(MessageType.Message,"9991","", new[] { "not found doc desc" });
+                       
                     }
 
                     DataRow docDesc = lstDocDesc.Rows[0];
                     if (!objType.GetByKey(objSalesOrd.OrderType))
                     {
-                        Utility.AppendLog(LogList, new MessageException("8013", new[] { objSalesOrd.OrderType }));
-                        return false;
+                        throw new MessageException(MessageType.Message,"8013","", new[] { objSalesOrd.OrderType });
+                      
                     }
 
                     objWrk.Reset();
@@ -157,8 +158,8 @@ namespace OMProcess
                 }
                 else
                 {
-                    Utility.AppendLog(LogList, new MessageException("48"));
-                    return false;
+                    throw new MessageException(MessageType.Message, "48");
+                  
                 }
 
                 clsIN_Setup objINSetup = new clsIN_Setup(Dal);
@@ -169,20 +170,20 @@ namespace OMProcess
                 {
                     if (!objARSetup.GetByKey(branchID, "AR"))
                     {
-                        Utility.AppendLog(LogList, new MessageException("9991", new[] { "chưa có cấu hình AR" }));
-                        return false;
+                        throw new MessageException(MessageType.Message,"9991","", new[] { "chưa có cấu hình AR" });
+                       
                     }
 
                     if (!objINSetup.GetByKey(branchID, "IN"))
                     {
-                        Utility.AppendLog(LogList, new MessageException("9991", new[] { "chưa có cấu hình IN" }));
-                        return false;
+                       throw new MessageException(MessageType.Message,"9991","", new[] { "chưa có cấu hình IN" });
+                     
                     }
 
                     if (!objOMSetup.GetByKey("OM"))
                     {
-                        Utility.AppendLog(LogList, new MessageException("9991", new[] { "chưa có cấu hình OM" }));
-                        return false;
+                        throw new MessageException(MessageType.Message,"9991","", new[] { "chưa có cấu hình OM" });
+                       
                     }
 
 
@@ -220,7 +221,8 @@ namespace OMProcess
 
                         if (objOMSetup.AutoReleaseAR != 0)
                         {
-                            if (!AR10100Release(branchID, ARNbr))
+                            AR arr = new AR(User, Prog, Dal);
+                            if (!arr.AR10100_Release(branchID, ARNbr))
                             {
                                 return false;
                             }
@@ -261,7 +263,7 @@ namespace OMProcess
                         objSql.OM_ReleaseToINFinalUpdate(Environment.MachineName.Trim(), branchID, INNbr, Prog, User);
                         if (objOMSetup.AutoReleaseIN != 0)
                         {
-                            Inventory inventory = new Inventory(User, Prog, Dal);
+                            IN inventory = new IN(User, Prog, Dal);
                             inventory.LogList = LogList;
                             if (!inventory.IN10200_Release(branchID, INNbr))
                             {
@@ -360,18 +362,18 @@ namespace OMProcess
                 var omCheck = objSql.OM_CheckForCancel(branchID, orderNbr);
                 if (omCheck == 1)
                 {
-                    Utility.AppendLog(LogList, new MessageException("144", new[] { orderNbr }));
+                    throw new MessageException(MessageType.Message,"144","", new[] { orderNbr });
                     return false;
                 }
                 else if (omCheck == 2 && !string.IsNullOrEmpty(voidRefNbr))
                 {
-                    Utility.AppendLog(LogList, new MessageException("145", new[] { orderNbr }));
+                    throw new MessageException(MessageType.Message,"145","", new[] { orderNbr });
                     return false;
                 }
 
                 if (!objSalesOrd.GetByKey(branchID, orderNbr))
                 {
-                    Utility.AppendLog(LogList, new MessageException("8012", new[] { orderNbr }));
+                    throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
                     return false;
                 }
 
@@ -393,7 +395,7 @@ namespace OMProcess
                         var arCheck = objSql.AR_CheckForCancel(branchID, objSalesOrd.ARBatNbr, doc.String("RefNbr"));
                         if (arCheck == "1")
                         {
-                            Utility.AppendLog(LogList, new MessageException("715", new[] { doc.String("RefNbr") }));
+                            throw new MessageException(MessageType.Message,"715","", new[] { doc.String("RefNbr") });
                             return false;
                         }
                     }
@@ -416,8 +418,8 @@ namespace OMProcess
                 {
                     if (!objSite.GetByKey(tran.String("InvtID"), tran.String("SiteID")))
                     {
-                        Utility.AppendLog(LogList, new MessageException("9991", new[] { string.Format("Sản phẩm {0} trong kho {1} không tồn tại", tran.String("InvtID"), tran.String("SiteID")) }));
-                        return false;
+                        throw new MessageException(MessageType.Message,"9991","", new[] { string.Format("Sản phẩm {0} trong kho {1} không tồn tại", tran.String("InvtID"), tran.String("SiteID")) });
+                     
                     }
                     else
                     {
@@ -439,18 +441,19 @@ namespace OMProcess
 
                 if (!string.IsNullOrEmpty(objSalesOrd.ARBatNbr))
                 {
-                    if (AR10100Cancel(branchID, objSalesOrd.ARBatNbr, voidRefNbr))
+                    AR ar = new AR(User, Prog, Dal);
+                    if (ar.AR10100_Cancel(branchID, objSalesOrd.ARBatNbr, voidRefNbr,""))
                     {
                         objSql.AR_CancelBatch(branchID, objSalesOrd.ARBatNbr, string.IsNullOrEmpty(voidRefNbr) ? "%" : voidRefNbr, Prog, User);
                     }
                     else
                     {
-                        Utility.AppendLog(LogList, new MessageException("9991"));
-                        return false;
+                        throw new MessageException(MessageType.Message,"9991");
+                     
                     }
                 }
 
-                Inventory inv = new Inventory(User, Prog, Dal);
+                IN inv = new IN(User, Prog, Dal);
                 inv.LogList = LogList;
                 if (!string.IsNullOrEmpty(objSalesOrd.INBatNbr))
                 {
@@ -460,8 +463,7 @@ namespace OMProcess
                     }
                     else
                     {
-                        Utility.AppendLog(LogList, new MessageException("9991"));
-                        return false;
+                        throw new MessageException(MessageType.Message, "9991");
                     }
                 }
 
@@ -549,22 +551,22 @@ namespace OMProcess
             {
                 if (string.IsNullOrEmpty(orderNbr))
                 {
-                    Utility.AppendLog(LogList, new MessageException("8012", new[] { orderNbr }));
-                    return false;
+                    throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
+                  
                 }
 
                 clsOM_PDASalesOrd objPDAOrd = new clsOM_PDASalesOrd(Dal);
                 if (!objPDAOrd.GetByKey(branchID, orderNbr))
                 {
-                    Utility.AppendLog(LogList, new MessageException("8012", new[] { orderNbr }));
-                    return false;
+                    throw new MessageException(MessageType.Message, "8012", "", new[] { orderNbr });
+                 
                 }
 
                 clsOM_OrderType objType = new clsOM_OrderType(Dal);
                 if (!objType.GetByKey(objPDAOrd.OrderType))
                 {
-                    Utility.AppendLog(LogList, new MessageException("8013", new[] { objPDAOrd.OrderType }));
-                    return false;
+                    throw new MessageException(MessageType.Message, "8013", "", new[] { objPDAOrd.OrderType });
+                   
                 }
 
                 clsIN_Setup objINSetup = new clsIN_Setup(Dal);
@@ -793,15 +795,15 @@ namespace OMProcess
                                     {
                                         if (qtyTot > objItemSite.QtyAvail)
                                         {
-                                            Utility.AppendLog(LogList, new MessageException("10431", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID }));
-                                            return false;
+                                            throw new MessageException(MessageType.Message,"10431","", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID });
+
                                         }
                                     }
                                     else if (objSalesOrd.OrderType != "SR" && objSalesOrd.OrderType != "BL" && objSalesOrd.OrderType != "OC" && objType.INDocType != "CM" && objType.INDocType != "DM" && objType.INDocType != "NA" && objType.INDocType != "RC")
                                     {
                                         if (editQty > objItemSite.QtyAvail)
                                         {
-                                            Utility.AppendLog(LogList, new MessageException("10431", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID }));
+                                            throw new MessageException(MessageType.Message,"10431","", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID });
                                             return false;
                                         }
                                     }
@@ -813,7 +815,7 @@ namespace OMProcess
                                 {
                                     if (editQty > objItemSite.QtyAvail)
                                     {
-                                        Utility.AppendLog(LogList, new MessageException("10431", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID }));
+                                        throw new MessageException(MessageType.Message,"10431","", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID });
                                         return false;
                                     }
                                 }
@@ -832,12 +834,12 @@ namespace OMProcess
                             }
                         }
 
-                        DataTable checkShipQty = objSql.ppv_OM20500CheckShipQty(branchID, objPDAOrd.OrderNbr);
+                        DataTable checkShipQty = objSql.OM20500_ppCheckShipQty(branchID, objPDAOrd.OrderNbr);
                         foreach (DataRow check in checkShipQty.Rows)
                         {
                             if (check.String("InvtID") == objPDADet.InvtID && check.Bool("FreeItem") == objPDADet.FreeItem && objPDADet.LineQty - check.Double("Qty") < objSalesDet.LineQty)
                             {
-                                Utility.AppendLog(LogList, new MessageException("10211", new[] { orderNbr, check.String("InvtID"), (objPDADet.LineQty - check.Double("Qty")).ToString() }));
+                                throw new MessageException(MessageType.Message,"10211","", new[] { orderNbr, check.String("InvtID"), (objPDADet.LineQty - check.Double("Qty")).ToString() });
                                 return false;
                             }
                         }
@@ -866,7 +868,7 @@ namespace OMProcess
                                     double spent = objSalesDet.DiscAmt1 * rtrn;
                                     if (objAlloc.QtyAmtAlloc - (objAlloc.QtyAmtSpent + spent) < 0)
                                     {
-                                        Utility.AppendLog(LogList, new MessageException("7531", new[] { orderNbr, objSalesDet.DiscID1, objSalesDet.DiscSeq1 }));
+                                        throw new MessageException(MessageType.Message,"7531","", new[] { orderNbr, objSalesDet.DiscID1, objSalesDet.DiscSeq1 });
                                         return false;
                                     }
                                     else
@@ -950,7 +952,7 @@ namespace OMProcess
                                     double spent = objSalesDet.DiscAmt2 * rtrn;
                                     if (objAlloc.QtyAmtAlloc - (objAlloc.QtyAmtSpent + spent) < 0)
                                     {
-                                        Utility.AppendLog(LogList, new MessageException("7531", new[] { orderNbr, objSalesDet.DiscID1, objSalesDet.DiscSeq1 }));
+                                        throw new MessageException(MessageType.Message,"7531","", new[] { orderNbr, objSalesDet.DiscID1, objSalesDet.DiscSeq1 });
                                         return false;
                                     }
                                     else
@@ -1291,52 +1293,52 @@ namespace OMProcess
         #endregion
 
 
-        private bool AR10100Cancel(string branchID, string batNbr, string refNbr)
-        {
-            try
-            {
-                clsAR_Doc objARDoc = new clsAR_Doc(Dal);
-                DataTable lstDoc = new DataTable();
-                if (string.IsNullOrEmpty(refNbr))
-                    lstDoc = objARDoc.GetAll(branchID, batNbr, "%");
-                else
-                    lstDoc = objARDoc.GetAll(branchID, batNbr, refNbr);
-                foreach (DataRow doc in lstDoc.Rows)
-                {
-                    if (doc.Short("Rlsed") != -1)
-                    {
-                        if (doc.String("DocType") == "IN" || doc.String("DocType") == "CM" || doc.String("DocType") == "DM")
-                            ProcessARBalance(doc.String("CustId"), branchID, doc.Date("DocDate"), doc.String("DocType"), doc.Double("OrigDocAmt") * -1);
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        private bool AR10100Release(string branchID, string batNbr)
-        {
-            try
-            {
-                clsAR_Doc doc = new clsAR_Doc(Dal);
-                DataTable lstDoc = doc.GetAll(branchID, batNbr, "%");
-                foreach (DataRow arDoc in lstDoc.Rows)
-                {
-                    if (arDoc["DocType"].ToString() == "IN" || arDoc["DocType"].ToString() == "CM" || arDoc["DocType"].ToString() == "DM")
-                    {
-                        ProcessARBalance(arDoc["CustId"].ToString(), branchID, (DateTime)arDoc["DocDate"], arDoc["DocType"].ToString(), (double)arDoc["OrigDocAmt"]);
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
+        //private bool AR10100Cancel(string branchID, string batNbr, string refNbr)
+        //{
+        //    try
+        //    {
+        //        clsAR_Doc objARDoc = new clsAR_Doc(Dal);
+        //        DataTable lstDoc = new DataTable();
+        //        if (string.IsNullOrEmpty(refNbr))
+        //            lstDoc = objARDoc.GetAll(branchID, batNbr, "%");
+        //        else
+        //            lstDoc = objARDoc.GetAll(branchID, batNbr, refNbr);
+        //        foreach (DataRow doc in lstDoc.Rows)
+        //        {
+        //            if (doc.Short("Rlsed") != -1)
+        //            {
+        //                if (doc.String("DocType") == "IN" || doc.String("DocType") == "CM" || doc.String("DocType") == "DM")
+        //                    ProcessARBalance(doc.String("CustId"), branchID, doc.Date("DocDate"), doc.String("DocType"), doc.Double("OrigDocAmt") * -1);
+        //            }
+        //        }
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+        //private bool AR10100Release(string branchID, string batNbr)
+        //{
+        //    try
+        //    {
+        //        clsAR_Doc doc = new clsAR_Doc(Dal);
+        //        DataTable lstDoc = doc.GetAll(branchID, batNbr, "%");
+        //        foreach (DataRow arDoc in lstDoc.Rows)
+        //        {
+        //            if (arDoc["DocType"].ToString() == "IN" || arDoc["DocType"].ToString() == "CM" || arDoc["DocType"].ToString() == "DM")
+        //            {
+        //                ProcessARBalance(arDoc["CustId"].ToString(), branchID, (DateTime)arDoc["DocDate"], arDoc["DocType"].ToString(), (double)arDoc["OrigDocAmt"]);
+        //            }
+        //        }
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw ex;
-            }
-        }
+        //        throw ex;
+        //    }
+        //}
 
         private void ProcessARBalance(string custID, string branchID, DateTime docDate, string docType, double origDocAmt)
         {
@@ -1388,7 +1390,7 @@ namespace OMProcess
                 {
                     if (!setup.NegQty && newQty > 0 && objItemSite.QtyAvail + oldQty - newQty < 0)
                     {
-                        Utility.AppendLog(LogList, new MessageException("608", new[] { objItemSite.InvtID, objItemSite.SiteID }));
+                        throw new MessageException(MessageType.Message,"608","", new[] { objItemSite.InvtID, objItemSite.SiteID });
                         return false;
                     }
                     objItemSite.QtyAllocSO = Math.Round(objItemSite.QtyAllocSO + newQty - oldQty, decQty);
@@ -1431,8 +1433,8 @@ namespace OMProcess
                                     budgetID = string.Empty;
                                     discID = string.Empty;
                                     discSeq = string.Empty;
-                                    Utility.AppendLog(LogList, new MessageException("402"));
-                                    return false;
+                                    throw new MessageException(MessageType.Message,"402");
+                                 
                                 }
                             }
                             else if (objBudget.ApplyTo != "A" && lineDisc)
@@ -1468,8 +1470,8 @@ namespace OMProcess
                                             budgetID = string.Empty;
                                             discID = string.Empty;
                                             discSeq = string.Empty;
-                                            Utility.AppendLog(LogList, new MessageException("402"));
-                                            return false;
+                                             throw new MessageException(MessageType.Message,"402");
+                                        
 
                                         }
                                     }
@@ -1480,7 +1482,7 @@ namespace OMProcess
                         {
                             if (!lineDisc)
                                 discAmtQty = 0;
-                            Utility.AppendLog(LogList, new MessageException("403", new string[] { discSeq, budgetID }));
+                           throw new MessageException(MessageType.Message,"403","", new string[] { discSeq, budgetID });
                             budgetID = string.Empty;
                             discID = string.Empty;
                             discSeq = string.Empty;

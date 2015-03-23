@@ -621,14 +621,14 @@ namespace OMProcess
                 throw ex;
             }
         }
-        public DataTable ppv_OM20500CheckShipQty(string branchID, string orderNbr)
+        public DataTable OM20500_ppCheckShipQty(string branchID, string orderNbr)
         {
             try
             {
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@OrderNbr", DbType.String, clsCommon.GetValueDBNull(orderNbr), ParameterDirection.Input, 50));
-                return mDal.ExecDataTable("ppv_OM20500CheckShipQty", CommandType.StoredProcedure, ref pc);
+                return mDal.ExecDataTable("OM20500_ppCheckShipQty", CommandType.StoredProcedure, ref pc);
             }
             catch (Exception ex)
             {

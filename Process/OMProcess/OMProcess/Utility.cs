@@ -147,11 +147,7 @@ namespace OMProcess
         {
             return (bool)row[columnName];
         }
-        public static void AppendLog(List<ProcessException> log, ProcessException ex)
-        {
-            if (log == null) log = new List<ProcessException>();
-            log.Add(ex);
-        }
+    
         public static void AppendLog(List<MessageException> log, MessageException ex)
         {
             if (log == null) log = new List<MessageException>();
