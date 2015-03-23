@@ -4,18 +4,17 @@ var fieldsCheckRequire = ["SlsperId"];
 var fieldsLangCheckRequire = ["SlsperId"];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
-//var loadSourceCombo = function () {
-//    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-//    App.cboRecType.getStore().load(function () {
-//        App.cboUsr_GrByType.getStore().load(function () {
-//            App.cboCpny.getStore().load(function () {
-//                App.cboModule.getStore().load(function () {
-//                    HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
-//                })
-//            })
-//        })
-//    })
-//};
+
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboZone.getStore().load(function () {
+        App.cboTerritory.getStore().load(function () {
+            App.cboDist.getStore().load(function () {
+                    HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+            })
+        })
+    })
+};
 
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
@@ -73,7 +72,7 @@ var menuClick = function (command) {
 };
 
 var beforeSelectcombo = function () {
-    //loadSourceCombo();
+    loadSourceCombo();
 };
 
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
@@ -86,6 +85,11 @@ var firstLoad = function () {
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'OM23100');
+    App.cboDist.setReadOnly(HQ.isChange);
+    App.cboTerritory.setReadOnly(HQ.isChange);
+    App.cboZone.setReadOnly(HQ.isChange);
+    App.dateFcs.setReadOnly(HQ.isChange);
+    //App.dateFcs.setDisabled(HQ.isChange);
 };
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
@@ -99,6 +103,7 @@ var stoLoad = function (sto) {
         HQ.isFirstLoad = false;
     }
     HQ.common.showBusy(false);
+    stoChanged(App.stoOM_FCS);
 };
 
 //trước khi load trang busy la dang load data
@@ -112,7 +117,6 @@ var grdOM_FCS_BeforeEdit = function (editor, e) {
 
 var grdOM_FCS_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdOM_FCS, e, keys);
-
     if (e.field == "SlsperId") {
         var selectedRecord = App.cboSlsperId.store.findRecord(e.field, e.value);
         if (selectedRecord) {
@@ -144,15 +148,43 @@ var dateFcs_expand = function (dte, eOpts) {
 };
 
 var cboZone_Change = function (sender, e) {
-    App.grdOM_FCS.hide();
-    App.cboTerritory.store.load();
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+        App.cboTerritory.store.load();
+    }
 };
 var cboTerritory_Change = function (sender, e) {
-    App.grdOM_FCS.hide();
-    App.cboDist.store.load();
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+        App.cboDist.store.load();
+    }
 };
 var cboDist_Change = function (sender, e) {
-    App.grdOM_FCS.hide();
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+    }
+};
+
+var dateFcs_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+    }
 };
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
@@ -194,7 +226,7 @@ function refresh(item) {
         App.stoOM_FCS.reload();
     }
 };
-///////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 
 
 

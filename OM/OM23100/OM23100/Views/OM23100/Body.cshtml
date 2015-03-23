@@ -11,7 +11,7 @@
 }
 
 @(
- X.Viewport()
+ X.Viewport()   
 .Layout(LayoutType.Fit)
 .Items(
     X.FormPanel()
@@ -22,7 +22,7 @@
     .Layout(LayoutType.Border)
     .Listeners(lst =>
     {
-        //lst.BoxReady.Fn = "beforeSelectcombo";
+        lst.BoxReady.Fn = "beforeSelectcombo";
     })
     .Items(
         ////Thiet ke giao dien o day
@@ -32,7 +32,7 @@
 
                 HQ.Combo().ID("cboZone")
                     .Name("cboZone").HQLangCode("OM23100_Zone").HQProcedure("OM23100_pcZone")
-                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQAutoLoad(false)
                     .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
                     .ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("G")
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -83,6 +83,7 @@
                 .Type(DatePickerType.Month).Format("yyyy/MM").Value(DateTime.Now.ToString("yyyy/MM"))
                 .Listeners(p =>
                 {
+                    p.Change.Fn = "dateFcs_Change";
                     p.Expand.Fn = "dateFcs_expand";
                 })
                 

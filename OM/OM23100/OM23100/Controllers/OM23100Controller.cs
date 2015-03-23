@@ -39,15 +39,14 @@ namespace OM23100.Controllers
         {
             string BranchID = data["cboDist"];
             string FCSDate_temp = data["dateFcs"];
-            DateTime FCSDate_Parse = DateTime.Parse(FCSDate_temp).ToDateShort();
-            DateTime FCSDate = FCSDate_Parse;
+            DateTime FCSDate = DateTime.Parse(FCSDate_temp);
             try
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_FCS"]);
                 ChangeRecords<OM23100_pgOM_FCS_Result> lstOM_FCS = dataHandler.BatchObjectData<OM23100_pgOM_FCS_Result>();
                 foreach (OM23100_pgOM_FCS_Result deleted in lstOM_FCS.Deleted)
                 {
-                    var del = _db.OM_FCS.FirstOrDefault(p => p.SlsperId == deleted.SlsperId && p.BranchID == BranchID && p.FCSDate==FCSDate);
+                    var del = _db.OM_FCS.FirstOrDefault(p => p.SlsperId == deleted.SlsperId && p.BranchID == BranchID && p.FCSDate.Year==FCSDate.Year && p.FCSDate.Month==FCSDate.Month);
                     if (del != null)
                     {
                         _db.OM_FCS.DeleteObject(del);
@@ -60,7 +59,7 @@ namespace OM23100.Controllers
                 {
                     if (curLang.SlsperId.PassNull() == "") continue;
 
-                    var lang = _db.OM_FCS.FirstOrDefault(p => p.SlsperId.ToLower() == curLang.SlsperId.ToLower() && p.BranchID.ToLower() == BranchID.ToLower() &&p.FCSDate==FCSDate);
+                    var lang = _db.OM_FCS.FirstOrDefault(p => p.SlsperId.ToLower() == curLang.SlsperId.ToLower() && p.BranchID.ToLower() == BranchID.ToLower() && p.FCSDate.Year == FCSDate.Year && p.FCSDate.Month == FCSDate.Month);
 
                     if (lang != null)
                     {
