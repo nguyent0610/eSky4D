@@ -1,45 +1,37 @@
 //// Declare //////////////////////////////////////////////////////////
-
-var keys = ['ScreenNumber'];
-var fieldsCheckRequire = ["ScreenNumber"];
-var fieldsLangCheckRequire = ["ScreenNumber"];
+var keys = ['SlsperId'];
+var fieldsCheckRequire = ["SlsperId"];
+var fieldsLangCheckRequire = ["SlsperId"];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
+
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.cboRecType.getStore().load(function () {
-        App.cboUsr_GrByType.getStore().load(function () {
-            App.cboCpny.getStore().load(function () {
-                App.cboModule.getStore().load(function () {
-                    HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
-                })
+    App.cboZone.getStore().load(function () {
+        App.cboTerritory.getStore().load(function () {
+            App.cboDist.getStore().load(function () {
+                HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
             })
         })
     })
 };
 
-var loadCheck = function () {
-    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.txtInitRights.getStore().load(function (){
-        HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
-    })
-};
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
 
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            HQ.grid.first(App.grdSYS_AccessDetRights);
+            HQ.grid.first(App.grdOM_FCS);
             break;
         case "prev":
-            HQ.grid.prev(App.grdSYS_AccessDetRights);
+            HQ.grid.prev(App.grdOM_FCS);
             break;
         case "next":
-            HQ.grid.next(App.grdSYS_AccessDetRights);
+            HQ.grid.next(App.grdOM_FCS);
             break;
         case "last":
-            HQ.grid.last(App.grdSYS_AccessDetRights);
+            HQ.grid.last(App.grdOM_FCS);
             break;
         case "refresh":
             if (HQ.isChange) {
@@ -48,12 +40,16 @@ var menuClick = function (command) {
             else {
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
-                App.stoSYS_AccessDetRights.reload();
-            }          
+                App.stoOM_FCS.reload();
+            }
             break;
         case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdOM_FCS, keys);
+            }
+            break;
         case "delete":
-            if (App.slmSYS_AccessDetRights.selected.items[0] != undefined) {
+            if (App.slmOM_FCS.selected.items[0] != undefined) {
                 if (HQ.isDelete) {
                     HQ.message.show(11, '', 'deleteData');
                 }
@@ -61,7 +57,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoSYS_AccessDetRights, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.store.checkRequirePass(App.stoOM_FCS, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -69,27 +65,35 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            HQ.common.close(this);            
+            HQ.common.close(this);
             break;
     }
 
 };
+
 var beforeSelectcombo = function () {
     loadSourceCombo();
 };
+
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
-    App.stoSYS_AccessDetRights.reload();
+    App.stoOM_FCS.reload();
 };
+
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'OM23100');
+    App.cboDist.setReadOnly(HQ.isChange);
+    App.cboTerritory.setReadOnly(HQ.isChange);
+    App.cboZone.setReadOnly(HQ.isChange);
+    App.dateFcs.setReadOnly(HQ.isChange);
+    //App.dateFcs.setDisabled(HQ.isChange);
 };
+
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
-    HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'OM23100');
     if (HQ.isFirstLoad) {
@@ -98,114 +102,105 @@ var stoLoad = function (sto) {
         }
         HQ.isFirstLoad = false;
     }
+    HQ.common.showBusy(false);
+    stoChanged(App.stoOM_FCS);
 };
+
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
-var grdSYS_AccessDetRights_BeforeEdit = function (editor, e) {
+
+var grdOM_FCS_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
-var grdSYS_AccessDetRights_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdSYS_AccessDetRights, e, keys);
-};
-var grdSYS_AccessDetRights_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdSYS_AccessDetRights, e, keys);
-};
-var grdSYS_AccessDetRights_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdSYS_AccessDetRights);
-    stoChanged(App.stoSYS_AccessDetRights);
-};
 
-var InitRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("InitRights", value.checked);
-        });
-    }
-
-};
-
-var InsertRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("InsertRights", value.checked);
-        });
+var grdOM_FCS_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdOM_FCS, e, keys);
+    if (e.field == "SlsperId") {
+        var selectedRecord = App.cboSlsperId.store.findRecord(e.field, e.value);
+        if (selectedRecord) {
+            e.record.set("Name", selectedRecord.data.Name);
+        }
+        else {
+            e.record.set("Name", "");
+        }
     }
 };
 
-var UpdateRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("UpdateRights", value.checked);
-        });
-    }
+var grdOM_FCS_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdOM_FCS, e, keys);
 };
-
-var DeleteRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("DeleteRights", value.checked);
-        });
-    }
-};
-
-var ViewRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("ViewRights", value.checked);
-        });
-    }
-};
-
-var ReleaseRightsCheckAll_Change = function (value) {
-    if (value) {
-        App.grdSYS_AccessDetRights.getStore().each(function (item) {
-            item.set("ReleaseRights", value.checked);
-        });
-    }
+var grdOM_FCS_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_FCS);
+    stoChanged(App.stoOM_FCS);
 };
 
 var LoadGrid = function (sender, e) {
-    App.grdSYS_AccessDetRights.show();
-    App.stoSYS_AccessDetRights.reload();
-    if (App.InitRightsCheckAll.value == true || App.InsertRightsCheckAll.value == true ||
-        App.UpdateRightsCheckAll.value == true || App.DeleteRightsCheckAll.value == true ||
-        App.ViewRightsCheckAll.value == true || App.ReleaseRightsCheckAll.value == true) {
-        App.InitRightsCheckAll.setValue(false);
-        App.InsertRightsCheckAll.setValue(false);
-        App.UpdateRightsCheckAll.setValue(false);
-        App.DeleteRightsCheckAll.setValue(false);
-        App.ViewRightsCheckAll.setValue(false);
-        App.ReleaseRightsCheckAll.setValue(false);
+    HQ.isFirstLoad = true;
+    App.grdOM_FCS.show();
+    App.stoOM_FCS.reload();
+};
+
+var dateFcs_expand = function (dte, eOpts) {
+    dte.picker.setWidth(300);
+    dte.picker.monthEl.setWidth(200);
+};
+
+var cboZone_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+        App.cboTerritory.store.load();
+    }
+};
+var cboTerritory_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+        App.cboDist.store.load();
+    }
+};
+var cboDist_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
     }
 };
 
-var cboRecType_Change = function (sender, e) {
-    App.cboUsr_GrByType.store.load();
-};
-
-var cboScreenNumber_Change = function (value) {
-    var k = value.displayTplData[0].Descr;
-    App.slmSYS_AccessDetRights.selected.items[0].set('Descr', k);
+var dateFcs_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+    }
 };
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
 var save = function () {
+    HQ.isFirstLoad = true;
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'OM23100/Save',
             params: {
-                lstSYS_AccessDetRights: HQ.store.getData(App.stoSYS_AccessDetRights),
-                RecType: App.cboRecType.getValue(),
-                UserID: App.cboUsr_GrByType.getValue(),
-                CpnyID: App.cboCpny.getValue()
+                lstOM_FCS: HQ.store.getData(App.stoOM_FCS)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
-                //menuClick("refresh");
-                App.stoSYS_AccessDetRights.reload();
+                HQ.isChange = false;
+                App.stoOM_FCS.reload();
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -216,8 +211,8 @@ var save = function () {
 
 var deleteData = function (item) {
     if (item == "yes") {
-        App.grdSYS_AccessDetRights.deleteSelected();
-        stoChanged(App.stoSYS_AccessDetRights);
+        App.grdOM_FCS.deleteSelected();
+        stoChanged(App.stoOM_FCS);
     }
 };
 
@@ -228,15 +223,7 @@ function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         HQ.isFirstLoad = true;
-        App.stoSYS_AccessDetRights.reload();
+        App.stoOM_FCS.reload();
     }
 };
-///////////////////////////////////
-
-
-
-
-
-
-
-
+////////////////////////////////////////////////////////////////////////
