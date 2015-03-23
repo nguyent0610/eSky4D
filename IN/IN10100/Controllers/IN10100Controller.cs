@@ -284,54 +284,43 @@ namespace IN10100.Controllers
             if (_handle != "N")
             {
                 DataAccess dal = Util.Dal();
+                INProcess.IN inventory = new INProcess.IN(_userName, _screenNbr, dal);
                 try
                 {
-                    INProcess.Inventory inventory = new INProcess.Inventory(_userName, _screenNbr, dal);
+                   
                     if (_handle == "R")
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!inventory.IN10100_Release(_objBatch.BranchID, _objBatch.BatNbr, data["isTransfer"].ToBool(), data["isTransfer"].ToBool() ? _lstTrans[0].RefNbr : ""))
-                        {
-                            dal.RollbackTrans();
-                        }
-                        else
-                        {
-                            dal.CommitTrans();
-                        }
-                        if (inventory.LogList != null)
-                        {
-                            MessageException msg = inventory.LogList.FirstOrDefault();
-                            Util.AppendLog(ref _logMessage, msg.Code, parm: msg.Parm);
-                        } else 
-                            Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
+
+                        inventory.IN10100_Release(_objBatch.BranchID, _objBatch.BatNbr, data["isTransfer"].ToBool(), data["isTransfer"].ToBool() ? _lstTrans[0].RefNbr : "");
+                        
+                        dal.CommitTrans();
+
+                        Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
+  
                     }
                     else if (_handle == "C" || _handle == "V")
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!inventory.IN10100_Cancel(_objBatch.BranchID, _objBatch.BatNbr, data["isTransfer"].ToBool(), data["isTransfer"].ToBool() ? _lstTrans[0].RefNbr : "", _handle == "C"))
-                        {
-                            dal.RollbackTrans();
-                        }
-                        else
-                        {
-                            dal.CommitTrans();
-                        }
-                        if (inventory.LogList != null)
-                        {
-                            MessageException msg = inventory.LogList.FirstOrDefault();
-                            Util.AppendLog(ref _logMessage, msg.Code, parm: msg.Parm);
-                        }
-                        else
-                        {
-                            Util.AppendLog(ref _logMessage, "9999", "");
-                        }
+
+                        inventory.IN10100_Cancel(_objBatch.BranchID, _objBatch.BatNbr, data["isTransfer"].ToBool(), data["isTransfer"].ToBool() ? _lstTrans[0].RefNbr : "", _handle == "C");
+                        
+                        dal.CommitTrans();
+                       
+                        Util.AppendLog(ref _logMessage, "9999", "");
                     }
-                    inventory = null;
+
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     dal.RollbackTrans();
-                    throw;
+                    throw ex;
+                   
+                }
+                finally
+                {
+                    inventory = null;
+                    dal = null;
                 }
             }
         }
