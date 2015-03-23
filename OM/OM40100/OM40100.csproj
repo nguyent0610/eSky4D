@@ -48,6 +48,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ARProcess">
+      <HintPath>..\..\Process\OMProcess\OMProcess\bin\Release\ARProcess.dll</HintPath>
+    </Reference>
     <Reference Include="Aspose.Cells, Version=8.3.2.1, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Aspose\Aspose.Cells for .NET\Bin\net3.5\Aspose.Cells.dll</HintPath>
@@ -81,7 +84,7 @@
     </Reference>
     <Reference Include="INProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Process\OMProcess\OMProcess\bin\Debug\INProcess.dll</HintPath>
+      <HintPath>..\..\Process\OMProcess\OMProcess\bin\Release\INProcess.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\INProcess\INProcess\bin\Debug\log4net.dll</HintPath>
@@ -94,8 +97,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="OMProcess">
-      <HintPath>..\..\Process\OMProcess\OMProcess\bin\Debug\OMProcess.dll</HintPath>
+    <Reference Include="OMProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Process\OMProcess\OMProcess\bin\Release\OMProcess.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -388,7 +392,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="D:\Working Project\Cloud\MVC.nrproj" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="D:\Working Project\Cloud\MVC.nrproj" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
