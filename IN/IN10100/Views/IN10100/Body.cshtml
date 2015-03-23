@@ -435,8 +435,9 @@
                 
                 X.ComponentColumn()
                 .Text("")
-                .Width(20)
-                .Component(X.Button().Height(18).Text("").Listeners(p=>p.Click.Fn="btnLot_Click"))
+                .Width(26)
+                .Component(X.Button().MarginSpec("1 4 1 3").Height(18).Text(""))
+                //.Listeners(p=>p.Click.Fn="btnLot_Click"))
                 ,
                 
                 X.Column()

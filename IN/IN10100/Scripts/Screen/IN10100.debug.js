@@ -151,6 +151,9 @@ var menuClick = function (command) {
             }
             break;
         case "save":
+            if (!App.grdTrans.view.loadMask.isHidden()) {
+                return;
+            }
             save();
             break;
         case "delete":

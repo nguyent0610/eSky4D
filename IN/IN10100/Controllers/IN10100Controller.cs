@@ -287,7 +287,6 @@ namespace IN10100.Controllers
                 INProcess.IN inventory = new INProcess.IN(_userName, _screenNbr, dal);
                 try
                 {
-                   
                     if (_handle == "R")
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
@@ -315,7 +314,6 @@ namespace IN10100.Controllers
                 {
                     dal.RollbackTrans();
                     throw ex;
-                   
                 }
                 finally
                 {
