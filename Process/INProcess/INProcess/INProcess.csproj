@@ -55,28 +55,28 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\APProcess\APProcess\bin\Release\eBiz4DApp.dll</HintPath>
+    <Reference Include="eBiz4DApp">
+      <HintPath>..\..\eBiz4DApp\eBiz4DApp\eBiz4DApp\bin\Release\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DSys">
-      <HintPath>..\..\APProcess\APProcess\bin\Release\eBiz4DSys.dll</HintPath>
+      <HintPath>..\..\OMProcess\OMProcess\bin\Debug\eBiz4DSys.dll</HintPath>
     </Reference>
     <Reference Include="Encryption">
-      <HintPath>..\..\APProcess\APProcess\bin\Release\Encryption.dll</HintPath>
+      <HintPath>..\..\OMProcess\OMProcess\bin\Debug\Encryption.dll</HintPath>
     </Reference>
     <Reference Include="HQ.eSkyFramework">
       <HintPath>..\..\..\..\eSky Framework\HQ.eSkyFramework\bin\HQ.eSkyFramework.dll</HintPath>
     </Reference>
     <Reference Include="HQFramework.Common, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\APProcess\APProcess\bin\Release\HQFramework.Common.dll</HintPath>
+      <HintPath>..\..\OMProcess\OMProcess\bin\Debug\HQFramework.Common.DLL</HintPath>
     </Reference>
     <Reference Include="HQFramework.DAL">
-      <HintPath>..\..\APProcess\APProcess\bin\Release\HQFramework.DAL.dll</HintPath>
+      <HintPath>..\..\OMProcess\OMProcess\bin\Debug\HQFramework.DAL.DLL</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\APProcess\APProcess\bin\Release\log4net.dll</HintPath>
+      <HintPath>..\..\OMProcess\OMProcess\bin\Debug\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -129,7 +129,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
