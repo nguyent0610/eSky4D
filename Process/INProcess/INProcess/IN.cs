@@ -490,8 +490,11 @@ namespace INProcess
                             objToItem.Add();
                         }
 
-                        if(objInvt.StkItem==1 && transfer.String("TransferType")=="2")
+                        if (objInvt.StkItem == 1 && transfer.String("TransferType") == "2")
+                        {
                             objToItem.QtyInTransit = Math.Round(objToItem.QtyInTransit + Math.Abs(qty), 0);
+                            objToItem.Update();
+                        }
 
                         if(objInvt.StkItem ==1 && transfer.String("TransferType")=="1")
                         {
