@@ -300,59 +300,40 @@ namespace IN10200.Controllers
             if (_handle != "N")
             {
                 DataAccess dal = Util.Dal();
+                INProcess.IN inventory = new INProcess.IN(_userName, _screenNbr, dal);
                 try
                 {
-                    INProcess.Inventory inventory = new INProcess.Inventory(_userName, _screenNbr, dal);
                     if (_handle == "R")
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!inventory.IN10200_Release(_objBatch.BranchID, _objBatch.BatNbr))
-                        {
-                            dal.RollbackTrans();
-                        }
-                        else
-                        {
-                            dal.CommitTrans();
-                        }
 
-                        if (inventory.LogList != null)
-                        {
-                            MessageException msg = inventory.LogList.FirstOrDefault();
-                            Util.AppendLog(ref _logMessage, msg.Code, parm: msg.Parm);
-                        }
-                        else
-                        {
-                            Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
-                        }
+                        inventory.IN10200_Release(_objBatch.BranchID, _objBatch.BatNbr);
+                       
+                        dal.CommitTrans();
+
+                        Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
                     }
                     else if (_handle == "C" || _handle == "V")
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!inventory.IN10200_Cancel(_objBatch.BranchID, _objBatch.BatNbr))
-                        {
-                            dal.RollbackTrans();
-                        }
-                        else
-                        {
-                            dal.CommitTrans();
-                        }
 
-                        if (inventory.LogList != null)
-                        {
-                            MessageException msg = inventory.LogList.FirstOrDefault();
-                            Util.AppendLog(ref _logMessage, msg.Code, parm: msg.Parm);
-                        }
-                        else
-                        {
-                            Util.AppendLog(ref _logMessage, "9999", "");
-                        }
+                        inventory.IN10200_Cancel(_objBatch.BranchID, _objBatch.BatNbr);
+                      
+                        dal.CommitTrans();
+                       
+                        Util.AppendLog(ref _logMessage, "9999", "");
                     }
-                    inventory = null;
+                    
                 }
                 catch (Exception)
                 {
                     dal.RollbackTrans();
                     throw;
+                }
+                finally
+                {
+                    inventory = null;
+                    dal = null;
                 }
             }
         }
