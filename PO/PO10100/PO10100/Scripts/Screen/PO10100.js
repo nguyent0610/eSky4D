@@ -1,22 +1,18 @@
 ﻿//// Declare //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
-var lock = false;
-var keys = ['InvtID'];
-var fieldsCheckRequire = ["InvtID", "PurchaseType", "SiteID", "PurchUnit"];
+
+var _keys = ['InvtID'];
+var _fieldsCheckRequire = ["InvtID", "PurchaseType", "SiteID", "PurchUnit"];
 var fieldsLangCheckRequire = ["InvtID", "PurchaseType", "SiteID", "PurchUnit"];
 
-var objUserDflt = null;
-var objPO_Setup = null;
-var lstobjSI_Tax = null;
-var lstobjIN_UnitConversion = null;
-var lstShipSiteID = null;
+var _objUserDflt = null;
+var _objPO_Setup = null;
+
 var strInvtID = "";
 var strClassID = "";
 var strStkUnit = "";
-var paramInvtID = "";
-var poNbr = "";
-var objIN_ItemSite = null;
-var handle = "";
+
+var _objIN_ItemSite = null;
 var purUnit = "";
 //////////////////////////////////////////////////////////////////
 //// Store ///////////////////////////////////////////////////////
@@ -93,23 +89,19 @@ var loadDataHeader = function (sto) {
     else App.btnClosePO.enable();
 };
 var loadDataDetail = function (sto) {
-    HQ.store.insertBlank(sto, keys);
+    HQ.store.insertBlank(sto, _keys);
     calcDet();
     frmChange();
     HQ.common.showBusy(false);
 };
 var loadPO10100_pdSI_Tax = function () {
-    if (App.stoPO10100_pdSI_Tax.getCount() > 0) {
-        lstobjSI_Tax = App.stoPO10100_pdSI_Tax;
-    }
+   
 };
 var loadPO10100_pdIN_Inventory = function () {
    
 };
 var loadPO10100_pdIN_UnitConversion = function () {
-    if (App.stoPO10100_pdIN_UnitConversion.getCount() > 0) {
-        lstobjIN_UnitConversion = App.stoPO10100_pdIN_UnitConversion;
-    }
+  
 };
 var loadstoPO10100_pgLoadTaxTrans = function () {
     App.stoPO10100_LoadTaxDoc.clearData();
@@ -155,7 +147,7 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 //checkRequire để kiếm tra các field yêu cầu có rỗng hay ko
-                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoPO10100_pgDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoPO10100_pgDetail, _keys, _fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -191,7 +183,7 @@ var menuClick = function (command) {
                         App.cboPONbr.setValue(null);
                     }
                 } else if (HQ.focus == 'grdDetail') {
-                    HQ.grid.insert(App.grdDetail, keys);
+                    HQ.grid.insert(App.grdDetail, _keys);
                 }
             }
             break;
@@ -261,14 +253,14 @@ var frmChange = function (sender) {
     }
 
     if (App.cboStatus.getValue() != "H") App.btnImport.disable();
-    if (objPO_Setup == null) {
+    if (_objPO_Setup == null) {
         App.btnImport.disable();
 
     }
     else if (HQ.util.passNull(App.cboBranchID.getValue()) == "") {
         App.btnImport.disable();
     }
-    else if (HQ.util.passNull(App.cboPONbr.getValue()) == "" && objPO_Setup.AutoRef == 0) {
+    else if (HQ.util.passNull(App.cboPONbr.getValue()) == "" && _objPO_Setup.AutoRef == 0) {
         App.btnImport.disable();
     }
     else if (HQ.util.passNull(App.cboVendID.getValue()) == "") {
@@ -285,12 +277,12 @@ var frmChange = function (sender) {
 };
 var grdPO_Detail_BeforeEdit = function (editor, e) {
     if (App.cboStatus.getValue() != "H") return false;
-    if (objPO_Setup == null) {
+    if (_objPO_Setup == null) {
         HQ.message.show(20404, 'PO_Setup', '');
         return false;
 
     }
-    else if (HQ.util.passNull(App.cboPONbr.getValue()) == "" && objPO_Setup.AutoRef == 0) {
+    else if (HQ.util.passNull(App.cboPONbr.getValue()) == "" && _objPO_Setup.AutoRef == 0) {
         HQ.message.show(15, App.cboPONbr.fieldLabel, '');
         return false;
     }
@@ -313,7 +305,7 @@ var grdPO_Detail_BeforeEdit = function (editor, e) {
   
     if (det.PurchaseType == "") {
         e.record.set("PurchaseType", "GI");
-        e.record.set("SiteID", objUserDflt == undefined ? "" : objUserDflt.POSite);
+        e.record.set("SiteID", _objUserDflt == undefined ? "" : _objUserDflt.POSite);
         e.record.set("VouchStage", 'N');
         e.record.set("RcptStage", 'N');
         var valueTax = '';
@@ -332,7 +324,7 @@ var grdPO_Detail_BeforeEdit = function (editor, e) {
         HQ.message.show(15, e.grid.columns[1].text, '');
         return false;
     }
-    if (!objPO_Setup.EditablePOPrice && e.column.dataIndex == "UnitCost") {
+    if (!_objPO_Setup.EditablePOPrice && e.column.dataIndex == "UnitCost") {
         return false;
     }
     if (Ext.isEmpty(det.LineRef)) {
@@ -349,8 +341,8 @@ var grdPO_Detail_BeforeEdit = function (editor, e) {
 
 };
 var grdPO_Detail_ValidateEdit = function (item, e) {
-    if (keys.indexOf(e.field) != -1) {
-        if (HQ.grid.checkDuplicate(App.grdDetail, e, keys)) {
+    if (_keys.indexOf(e.field) != -1) {
+        if (HQ.grid.checkDuplicate(App.grdDetail, e, _keys)) {
             HQ.message.show(1112, e.value, '');
             return false;
         }
@@ -371,13 +363,13 @@ var grdPO_Detail_ValidateEdit = function (item, e) {
             strStkUnit = objIN_Inventory.StkUnit;
 
             App.cboPurchUnit.getStore().reload();
-            lstShipSiteID = App.cboShipSiteID.getStore();
+           
             if (objdet.get("SiteID") == "") {
-                if (objUserDflt != null) {
-                    objdet.set('SiteID', objUserDflt.POSite);
+                if (_objUserDflt != null) {
+                    objdet.set('SiteID', _objUserDflt.POSite);
                 }
-                else if (lstShipSiteID.getCount() > 0) {
-                    objdet.set('SiteID', lstShipSiteID.getAt(0).data.SiteID);
+                else if (App.cboShipSiteID.getStore().getCount() > 0) {
+                    objdet.set('SiteID', App.cboShipSiteID.getStore().getAt(0).data.SiteID);
                 }
                 else {
                     objdet.set('SiteID', objIN_Inventory.DfltSite);
@@ -410,7 +402,7 @@ var grdPO_Detail_Edit = function (item, e) {
             e.record.set('PurchUnit', "");
             return;
         }
-        HQ.grid.checkInsertKey(App.grdDetail, e, keys);
+        HQ.grid.checkInsertKey(App.grdDetail, e, _keys);
     }
     if (e.field == "QtyOrd") {
         if (objDetail.PurchaseType == "FA") {
@@ -455,13 +447,13 @@ var grdPO_Detail_Edit = function (item, e) {
         e.record.set("ExtCost", objDetail.UnitCost * objDetail.QtyOrd - objDetail.DiscAmt);
     }
     else if (e.field == "PurchUnit" || e.field == "InvtID" || e.field == "SiteID") {
-        if (objPO_Setup.DfltLstUnitCost == "A") {
+        if (_objPO_Setup.DfltLstUnitCost == "A") {
             //HQ.grid.showBusy(App.grdDetail, true);                     
             App.direct.PO10100ItemSitePrice(
                 App.cboBranchID.getValue(), objDetail.InvtID, objDetail.SiteID,
                {
                    success: function (result) {
-                       objIN_ItemSite = result;
+                       _objIN_ItemSite = result;
                        UnitCost = result == null ? 0 : result.AvgCost;
                        UnitCost = Math.round((objDetail.UnitMultDiv == "D" ? (UnitCost / objDetail.CnvFact) : (UnitCost * objDetail.CnvFact)));
                        objDetail.UnitCost = UnitCost;
@@ -474,7 +466,7 @@ var grdPO_Detail_Edit = function (item, e) {
                           
                });
         }
-        else if (objPO_Setup.DfltLstUnitCost == "P") {
+        else if (_objPO_Setup.DfltLstUnitCost == "P") {
             //HQ.grid.showBusy(App.grdDetail, true);
             App.direct.PO10100POPrice(
                App.cboBranchID.getValue(), objDetail.InvtID, objDetail.PurchUnit, Ext.Date.format(App.dtPODate.getValue(), 'Y-m-d'),
@@ -491,7 +483,7 @@ var grdPO_Detail_Edit = function (item, e) {
                 });
 
         }
-        else if (objPO_Setup.DfltLstUnitCost == "I") {
+        else if (_objPO_Setup.DfltLstUnitCost == "I") {
             var UnitCost = objIN_Inventory.POPrice;
             UnitCost = Math.round((objDetail.UnitMultDiv == "D" ? (UnitCost / objDetail.CnvFact) : (UnitCost * objDetail.CnvFact)));
             e.record.set("UnitCost", UnitCost);
@@ -550,7 +542,7 @@ var cboBranchID_Change = function (item, newValue, oldValue) {
                     App.cboShipSiteID.getStore().load(function () {
                         App.cboShipCustID.getStore().load(function () {
                             App.cboSiteID.getStore().load(function () {
-                                objUserDflt = App.stoPO10100_pdOM_UserDefault.data.length > 0 ? App.stoPO10100_pdOM_UserDefault.getAt(0).data : { POSite: '', };;
+                                _objUserDflt = App.stoPO10100_pdOM_UserDefault.data.length > 0 ? App.stoPO10100_pdOM_UserDefault.getAt(0).data : { POSite: '', };;
                                 if (App.stoPO10100_pdPO_Setup.data.length == 0) {
                                     if (item.hasFocus) {
                                         App.cboPONbr.setValue('');
@@ -562,8 +554,8 @@ var cboBranchID_Change = function (item, newValue, oldValue) {
                                 }
                                 else {
                                     lockControl(false);
-                                    objPO_Setup = App.stoPO10100_pdPO_Setup.getAt(0).data;
-                                    if (objPO_Setup.AutoRef == 1) App.cboPONbr.forceSelection = true;
+                                    _objPO_Setup = App.stoPO10100_pdPO_Setup.getAt(0).data;
+                                    if (_objPO_Setup.AutoRef == 1) App.cboPONbr.forceSelection = true;
                                     else App.cboPONbr.forceSelection = false;
                                     App.cboPONbr.getStore().load(function () {
                                         App.cboPONbr.setValue('');
@@ -982,7 +974,7 @@ var btnImport_Click = function (c, e) {
             },
             success: function (msg, data) {
                 if (this.result.data.lstTrans != undefined) {                   
-                    HQ.store.insertBlank(App.stoPO10100_pgDetail, keys);                  
+                    HQ.store.insertBlank(App.stoPO10100_pgDetail, _keys);                  
                         this.result.data.lstTrans.forEach(function (item) {
                             insertItemGrid(App.grdDetail, item);
                             //grdPO_Detail_ValidateEdit(App.grdDetail, App.stoPO10100_pgDetail.data.items[0]);
@@ -1080,8 +1072,8 @@ var insertItemGrid = function (grd, item) {
     delTax(App.stoPO10100_pgDetail.getCount() - 1);
     calcTax(App.stoPO10100_pgDetail.getCount() - 1);
     calcTaxTotal();
-    //HQ.grid.insert(App.grdDetail, keys);
-    HQ.store.insertBlank(App.stoPO10100_pgDetail, keys);
+    //HQ.grid.insert(App.grdDetail, _keys);
+    HQ.store.insertBlank(App.stoPO10100_pgDetail, _keys);
 };
 //////////////////////////////////////////////////////////////////
 //// Function ////////////////////////////////////////////////////
