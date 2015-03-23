@@ -901,7 +901,7 @@ var checkExitEdit = function (row) {
             }
 
             if (!HQ.objSetup.NegQty && trans.TranType != "RI") {
-                totQty = editQty + calculateInvtTotal(trans.InvtID, trans.SiteID, "%");
+                totQty = editQty + calculateInvtTotal(trans.InvtID, trans.SiteID, trans.LineRef);
                 if (totQty > site.QtyAvail) {
                     trans.Qty = 0;
                     row.record.commit();
@@ -960,7 +960,7 @@ var calculateInvtTotal = function (invtID, siteID, lineRef) {
     var qty = 0;
     var qtyOld = 0;
     App.stoTrans.each(function (item) {
-        if (item.data.InvtID == invtID && item.data.SiteID == siteID) {
+        if (item.data.InvtID == invtID && item.data.SiteID == siteID && ((lineRef != "" && item.data.LineRef != lineRef) || lineRef == "")) {
             qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
         }
     });
