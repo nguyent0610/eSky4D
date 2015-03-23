@@ -43,6 +43,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ARProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\DLL MVC moi\ARProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\DLL MVC moi\eBiz4DApp.dll</HintPath>
+    </Reference>
+    <Reference Include="eBiz4DSys, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\DLL MVC moi\eBiz4DSys.dll</HintPath>
+    </Reference>
     <Reference Include="Encryption">
       <HintPath>..\..\..\eBiz4DWebFrame\bin\Encryption.dll</HintPath>
     </Reference>
@@ -58,6 +70,14 @@
     </Reference>
     <Reference Include="HQ.eSkySys">
       <HintPath>..\..\..\..\..\..\DLL MVC moi\HQ.eSkySys.dll</HintPath>
+    </Reference>
+    <Reference Include="HQFramework.Common, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\DLL MVC moi\HQFramework.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="HQFramework.DAL, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\DLL MVC moi\HQFramework.DAL.dll</HintPath>
     </Reference>
     <Reference Include="HQWebCommon">
       <HintPath>..\..\EbizWebMvc\SI20500_City\SI20500\bin\HQWebCommon.dll</HintPath>

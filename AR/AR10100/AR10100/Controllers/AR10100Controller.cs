@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 
 using Ext.Net;
 using Ext.Net.MVC;
@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using HQFramework.DAL;
 namespace AR10100.Controllers
 {
     [DirectController]
@@ -85,12 +86,16 @@ namespace AR10100.Controllers
                             objHeaderTop.BranchID = branchID;
                             objHeaderTop.Module = "AR";
     
+
                             objHeaderTop.Crtd_DateTime = DateTime.Now;
                             objHeaderTop.Crtd_Prog = screenNbr;
                             objHeaderTop.Crtd_User = Current.UserName;
 
 
                             UpdatingHeaderTopBatch(updated, ref objHeaderTop, data);
+
+                         
+
                             if (objHeaderTop.BatNbr != "" && objHeaderTop.BranchID != "" && objHeaderTop.Module != "")
                             {
                                 _db.Batches.AddObject(objHeaderTop);
@@ -103,6 +108,7 @@ namespace AR10100.Controllers
                     if (objHeaderTop.tstamp.ToHex() == updated.tstamp.ToHex())
                     {
                         UpdatingHeaderTopBatch(updated, ref objHeaderTop, data);
+                        
                         _db.SaveChanges();
                     }
                     else
@@ -262,7 +268,85 @@ namespace AR10100.Controllers
 
 
             _db.SaveChanges();
-            
+
+
+
+            //xử lý ARProcess
+            var batNbrRls = "";
+            var refNbrRls = "";
+            if (handle != "N")
+            {
+                DataAccess dal = Util.Dal();
+                try
+                {
+
+                    ARProcess.AR ar = new ARProcess.AR(Current.UserName, screenNbr, dal);
+                    if (handle == "R")
+                    {
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                        
+                        if (batNbr != "")
+                        {
+                            batNbrRls = batNbr;
+                        }else{
+                            batNbrRls = tmpBatNbr;
+                        }
+
+                        if (!ar.AR10100_Release(branchID, batNbrRls))
+                        {
+                            dal.RollbackTrans();
+                        }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
+                        
+                  
+
+                        //Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
+                    }
+                    else if (handle == "C" || handle == "V")
+                    {
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                        if (batNbr != "")
+                        {
+                            batNbrRls = batNbr;
+                        }
+                        else
+                        {
+                            batNbrRls = tmpBatNbr;
+                        }
+
+                        if (refNbr != "")
+                        {
+                            refNbrRls = refNbr;
+                        }
+                        else
+                        {
+                            refNbrRls = tmpRefNbr;
+                        }
+
+
+                        if (!ar.AR10100_Cancel(branchID, batNbrRls, refNbrRls, handle))
+                        {
+                            dal.RollbackTrans();
+                        }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
+                        //Util.AppendLog(ref _logMessage, "9999", "");
+                    }
+                    ar = null;
+                }
+                catch (Exception)
+                {
+                    dal.RollbackTrans();
+                    throw;
+                }
+            }
+
+
             return Json(new { success = true, tmpRefNbr = tmpRefNbr, tmpBatNbr = tmpBatNbr }, JsonRequestBehavior.AllowGet);
 
         }

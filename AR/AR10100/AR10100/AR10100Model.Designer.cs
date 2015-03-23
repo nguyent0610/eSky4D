@@ -335,6 +335,36 @@ namespace AR10100
     
             return base.ExecuteFunction<global::System.String>("AR10100_ppARNumbering", branchIDParameter, getTypeParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="screenNbr">No Metadata Documentation available.</param>
+        public ObjectResult<AR10100_pcBatch_Result> AR10100_pcBatch(global::System.String branchID, global::System.String screenNbr)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter screenNbrParameter;
+            if (screenNbr != null)
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", screenNbr);
+            }
+            else
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<AR10100_pcBatch_Result>("AR10100_pcBatch", branchIDParameter, screenNbrParameter);
+        }
 
         #endregion
 
@@ -7909,6 +7939,257 @@ namespace AR10100
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="AR10100Model", Name="AR10100_pcBatch_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class AR10100_pcBatch_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new AR10100_pcBatch_Result object.
+        /// </summary>
+        /// <param name="batNbr">Initial value of the BatNbr property.</param>
+        /// <param name="totAmt">Initial value of the TotAmt property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static AR10100_pcBatch_Result CreateAR10100_pcBatch_Result(global::System.String batNbr, global::System.Double totAmt, global::System.Byte[] tstamp, global::System.String branchID)
+        {
+            AR10100_pcBatch_Result aR10100_pcBatch_Result = new AR10100_pcBatch_Result();
+            aR10100_pcBatch_Result.BatNbr = batNbr;
+            aR10100_pcBatch_Result.TotAmt = totAmt;
+            aR10100_pcBatch_Result.tstamp = tstamp;
+            aR10100_pcBatch_Result.BranchID = branchID;
+            return aR10100_pcBatch_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BatNbr
+        {
+            get
+            {
+                return _BatNbr;
+            }
+            set
+            {
+                OnBatNbrChanging(value);
+                ReportPropertyChanging("BatNbr");
+                _BatNbr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BatNbr");
+                OnBatNbrChanged();
+            }
+        }
+        private global::System.String _BatNbr;
+        partial void OnBatNbrChanging(global::System.String value);
+        partial void OnBatNbrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.String _Status;
+        partial void OnStatusChanging(global::System.String value);
+        partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double TotAmt
+        {
+            get
+            {
+                return _TotAmt;
+            }
+            set
+            {
+                OnTotAmtChanging(value);
+                ReportPropertyChanging("TotAmt");
+                _TotAmt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TotAmt");
+                OnTotAmtChanged();
+            }
+        }
+        private global::System.Double _TotAmt;
+        partial void OnTotAmtChanging(global::System.Double value);
+        partial void OnTotAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String IntRefNbr
+        {
+            get
+            {
+                return _IntRefNbr;
+            }
+            set
+            {
+                OnIntRefNbrChanging(value);
+                ReportPropertyChanging("IntRefNbr");
+                _IntRefNbr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("IntRefNbr");
+                OnIntRefNbrChanged();
+            }
+        }
+        private global::System.String _IntRefNbr;
+        partial void OnIntRefNbrChanging(global::System.String value);
+        partial void OnIntRefNbrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String RvdBatNbr
+        {
+            get
+            {
+                return _RvdBatNbr;
+            }
+            set
+            {
+                OnRvdBatNbrChanging(value);
+                ReportPropertyChanging("RvdBatNbr");
+                _RvdBatNbr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("RvdBatNbr");
+                OnRvdBatNbrChanged();
+            }
+        }
+        private global::System.String _RvdBatNbr;
+        partial void OnRvdBatNbrChanging(global::System.String value);
+        partial void OnRvdBatNbrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String JrnlType
+        {
+            get
+            {
+                return _JrnlType;
+            }
+            set
+            {
+                OnJrnlTypeChanging(value);
+                ReportPropertyChanging("JrnlType");
+                _JrnlType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("JrnlType");
+                OnJrnlTypeChanged();
+            }
+        }
+        private global::System.String _JrnlType;
+        partial void OnJrnlTypeChanging(global::System.String value);
+        partial void OnJrnlTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

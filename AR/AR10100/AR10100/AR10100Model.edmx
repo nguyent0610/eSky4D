@@ -351,6 +351,10 @@
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="AR10100_pcBatch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="AR10100_pgLoadGridTrans" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
@@ -381,6 +385,10 @@
           <FunctionImport Name="AR10100_ppARNumbering" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="GetType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR10100_pcBatch" ReturnType="Collection(AR10100Model.AR10100_pcBatch_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="ScreenNbr" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Batch">
@@ -742,6 +750,17 @@
           <Property Type="Double" Name="TxblAmt01" Nullable="false" />
           <Property Type="Double" Name="TxblAmt02" Nullable="false" />
           <Property Type="Double" Name="TxblAmt03" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="AR10100_pcBatch_Result">
+          <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="TotAmt" Nullable="false" />
+          <Property Type="String" Name="IntRefNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="RvdBatNbr" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="JrnlType" Nullable="true" MaxLength="2" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1114,6 +1133,21 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AR10100_ppARNumbering" FunctionName="eBiz4DWebSysModel.Store.AR10100_ppARNumbering" />
+          <FunctionImportMapping FunctionImportName="AR10100_pcBatch" FunctionName="eBiz4DWebSysModel.Store.AR10100_pcBatch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR10100Model.AR10100_pcBatch_Result">
+                <ScalarProperty Name="BatNbr" ColumnName="BatNbr" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+                <ScalarProperty Name="IntRefNbr" ColumnName="IntRefNbr" />
+                <ScalarProperty Name="RvdBatNbr" ColumnName="RvdBatNbr" />
+                <ScalarProperty Name="JrnlType" ColumnName="JrnlType" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
