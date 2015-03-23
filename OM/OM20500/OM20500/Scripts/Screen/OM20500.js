@@ -283,9 +283,11 @@ var save = function () {
             success: function (msg, data) {
                 HQ.message.process(msg, data, true);
                 Event.Form.btnLoad_click();
+                App.winOrder.hide();
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
+                App.winOrder.hide();
             }
         });
     }
