@@ -237,7 +237,7 @@ namespace AR10100.Controllers
                         objGrid.Crtd_User = Current.UserName;
                         objGrid.tstamp = new byte[0];
                         UpdatingGridAP_Trans(created, ref objGrid,data);
-                        if (objGrid.BatNbr != "" && objGrid.BranchID != "" && objGrid.RefNbr != "" && objGrid.LineRef != "")
+                        if (objGrid.BatNbr != "" && objGrid.BranchID != "" && objGrid.RefNbr != "" && objGrid.LineRef != "" && objGrid.InvtId != "")
                         {
                             _db.AR_Trans.AddObject(objGrid);
                             _db.SaveChanges();
@@ -516,7 +516,7 @@ namespace AR10100.Controllers
             d.TaxId02 = s.TaxId02;
             d.TaxId03 = s.TaxId03;
             d.TranAmt = s.TranAmt;
-            d.TranDate = DateTime.Today;
+            d.TranDate = Convert.ToDateTime(data["txtDocDate"]).ToDateShort();
             d.TranDesc = s.TranDesc;
             d.TranType = s.TranType;
             d.TxblAmt00 = s.TxblAmt00;

@@ -43,6 +43,9 @@ var fieldsCheckRequire = ["InvtID"];
 var fieldsLangCheckRequire = ["InvtID"];
 var isNewRef = false;
 
+var tmpTrantAmtWhenChange = 0;
+
+
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -103,7 +106,7 @@ var menuClick = function (command) {
                     }
                     else {
                         App.cboBatNbr.setValue('');
-                        App.storeFormTop.reload();
+                        App.storeFormTop.load();
                     }
                 } else if (HQ.focus == 'headerBot') {
                     if (HQ.isChange) {
@@ -111,11 +114,17 @@ var menuClick = function (command) {
                     }
                     else {
                         App.cboRefNbr.setValue('');
-                        App.storeFormBot.reload();
+                        App.storeFormBot.load();
                     }
                 } else if (HQ.focus == 'Grid') {
-                    HQ.grid.insert(App.grd, keys);
-                    setTimeout(function () { WaitAddNewGridWaitToSetLineRef(); }, 500);
+                    //HQ.grid.insert(App.grd, keys);
+                    
+                    insertNewRecordGrid1();
+                    App.slmGridTab1.select(App.storeGrid.getCount() - 1);
+                    App.grd.editingPlugin.startEditByPosition({ row: App.storeGrid.getCount() - 1, column: 2 });
+
+                  
+                    
                 }
 
             }
@@ -163,19 +172,24 @@ var menuClick = function (command) {
 };
 
 var WaitAddNewGridWaitToSetLineRef = function () {
-    var lineRef = HQ.store.lastLineRef(App.storeGrid);
-    App.storeGrid.data.items[App.storeGrid.getCount() - 1].set('LineRef', lineRef);
+    //var lineRef = HQ.store.lastLineRef(App.storeGrid);
+    //App.storeGrid.data.items[App.storeGrid.getCount() - 1].set('LineRef', lineRef);
+    //App.storeGrid.data.items[App.storeGrid.getCount() - 1].set('LineType', 'N');
+    //App.slmGridTab1.select(App.storeGrid.getCount() - 1);
+    //App.grd.editingPlugin.startEditByPosition({ row: App.storeGrid.getCount() - 1, column: 2 });
 };
 
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         if (App.cboBatNbr.valueModels == null) App.cboBatNbr.setValue('');
-        App.cboBatNbr.getStore().reload();
+        App.cboBatNbr.getStore().load();
         App.storeFormTop.reload();
-        App.storeFormBot.reload();
-        App.storeGrid.reload();
+        App.storeFormBot.load();
+        App.storeGrid.load();
 
+
+        
     }
 };
 
@@ -183,7 +197,17 @@ function refresh(item) {
 
 var setStatusValueH = function () {
     App.cboStatus.setValue("H");
-    App.cboHandle.getStore().reload();
+    App.cboHandle.getStore().load(function (records, operation, success) {
+        if (records.length) {
+            if (App.cboStatus.value == "H") {
+                //setReadOnly();
+                App.cboHandle.setValue("N");
+            } else {
+                //setReadOnly();
+                App.cboHandle.setValue("N");
+            }
+        }
+    });
 }
 ////////Save////////////////
 ////////////////////////////
@@ -249,8 +273,8 @@ function Save() {
             },
             success: function (result, data) {
                 HQ.message.show(201405071, '', null);
-                App.cboBatNbr.getStore().reload();
-                App.cboRefNbr.getStore().reload();
+                App.cboBatNbr.getStore().load();
+                App.cboRefNbr.getStore().load();
 
                 if (App.cboBatNbr.getValue() == "" || App.cboBatNbr.getValue() == null) { // tao moi BatNbr , RefNbr va Grid
                     App.cboBatNbr.getStore().load(function () {
@@ -264,7 +288,7 @@ function Save() {
 
                         });
                     } else { // neu chi tao moi Grid
-                        App.storeGrid.reload();
+                        App.storeGrid.load();
                     }
 
                 }
@@ -385,6 +409,7 @@ var deleteRecordFormBotAR_Doc = function (item) {
 var deleteRecordGrid = function (item) {
     if (item == "yes") {
         App.grd.deleteSelected();
+        reloadAmountMustPayTotal();
         frmChange();
     }
 };
@@ -403,7 +428,7 @@ var firstLoad = function () {
     App.cboBatNbr.getStore().reload();
     App.cboRefNbr.getStore().reload();
     App.storeFormTop.reload();
-    App.storeFormBot.reload();
+    App.storeFormBot.load();
 
 };
 var frmChange = function () {
@@ -493,6 +518,8 @@ var frmChange = function () {
         }
     }
 
+
+
 };
 //////////////Form Top///////////////////////////
 /////////////////////////////////////////////////
@@ -569,7 +596,7 @@ var cboBatNbr_Select = function (sender, value) {
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
 var cboBatNbr_Expand = function (sender, value) {
     if (App.cboBatNbr.getStore().data.length == 0) {
-        App.cboBatNbr.getStore().reload();
+        App.cboBatNbr.getStore().load();
     }
     if (HQ.isChange && App.cboBatNbr.getValue()) {
         App.cboBatNbr.collapse();
@@ -622,16 +649,23 @@ var storeLoadBot = function (store) {
 
 var cboRefNbr_Change = function () {
 
-    App.storeFormBot.reload();
-    setTimeout(function () { waitStoreFormBotReLoad(); }, 1000);
+    App.storeFormBot.load(function (records, operation, success) {
+        
+            StoreFormBotReLoad();
+        
+    });
+
 
 }
 
 var cboRefNbr_Select = function (sender, value) {
     if (sender.valueModels != null && !App.storeFormBot.loading) {
 
-        App.storeFormBot.reload();
-        setTimeout(function () { waitStoreFormBotReLoad(); }, 1000);
+        App.storeFormBot.load(function (records, operation, success) {
+       
+                StoreFormBotReLoad();
+            
+        });
     }
 
 };
@@ -652,13 +686,24 @@ var loadDataGrid = function (store) {
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             if (App.slmGridTab1.selected.items[0] != undefined) {
-                HQ.store.insertBlank(store, keys);
+                insertNewRecordGrid1();
                 HQ.store.lastLineRef(App.storeGrid);
             }
         }
         HQ.isFirstLoad = false;
     }
+    //khi refresh thi update lai cho Grid1 va Grid2 cua Tab2
+    if (App.slmGridTab1.selected.items[0] != undefined) {
+        var index = App.slmGridTab1.selected.items[0].index;
+
+        //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+        reloadDataGrid1AndGrid2Tab2(index);
+
+        //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+        reloadAmountMustPayTotal(index);
+    }
     frmChange();
+
 };
 
 
@@ -674,31 +719,27 @@ var grd_BeforeEdit = function (editor, e) {
     if (!HQ.isUpdate)
         return false;
     //keys = e.record.idProperty.split(',');
-    if (keys.indexOf(e.field) != -1) {
-        if (e.record.data.tstamp != "") {
-            return false;
-        }
-    }
-    return HQ.grid.checkInput(e, keys);
+    //if (keys.indexOf(e.field) != -1) {
+    //    if (e.record.data.tstamp != "") {
+    //        return false;
+    //    }
+    //}
+    //return HQ.grid.checkInput(e, keys);
 
 };
 var grd_Edit = function (item, e) {
 
     if (keys.indexOf(e.field) != -1) {
-        if (e.value != '' && HQ.store.checkRequirePass(App.storeGrid, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+        if (e.value != '' && HQ.store.checkRequirePass(App.storeGrid, keys, fieldsCheckRequire, fieldsLangCheckRequire) && App.storeGrid.data.items[App.storeGrid.getCount() - 1].data.InvtID != "") {
             //App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());//Ext.data.Record() 
             //App.slmGridTab1.selected.items[0].set('TranDesc', vendIDAndDescr);
-
-            var record = Ext.create("App.AR10100_pgLoadGridTrans_ResultModel", {
-                //CustId: "",
-                TranDesc: App.slmGridTab1.selected.items[0].data.TranDesc
-
-
-
-            });
-            App.storeGrid.insert(App.storeGrid.getCount(), record);
+            insertNewRecordGrid1();
         }
     }
+
+
+
+
 
 };
 var grd_ValidateEdit = function (item, e) {
@@ -713,13 +754,7 @@ var grd_ValidateEdit = function (item, e) {
     return true;
 };
 
-var grd_CancelEdit = function (editor, e) {
-    if (e.record.phantom) {
-        if (App.cboLineType.getValue == "") {
-            e.store.remove(e.record);
-        }
-    }
-};
+
 var grd_Reject = function (record) {
     if (record.data.tstamp == '') {
         App.storeGrid.remove(record);
@@ -737,6 +772,18 @@ var onComboBoxSelect = function (combo) {
 };
 
 
+var insertNewRecordGrid1 =  function(){
+    var lineRef = HQ.store.lastLineRef(App.storeGrid);
+    var record = Ext.create("App.AR10100_pgLoadGridTrans_ResultModel", {
+        //CustId: "",
+        LineRef: lineRef,
+        LineType: "N",
+        TranDesc: App.storeGrid.data.items[App.storeGrid.getCount() - 1] != undefined ? App.storeGrid.data.items[App.storeGrid.getCount() - 1].data.TranDesc : "",
+
+
+    });
+    App.storeGrid.insert(App.storeGrid.getCount(), record);
+};
 
 
 
@@ -745,18 +792,19 @@ var onComboBoxSelect = function (combo) {
 
 
 
-var waitcboStatusReLoad = function () {
-    if (App.cboStatus.value == "H") {
-        setReadOnly();
-        App.cboHandle.setValue(App.cboHandle.store.data.items[0].data.Code);
-    } else {
-        setReadOnly();
-        App.cboHandle.setValue(App.cboHandle.store.data.items[1].data.Code);
-    }
-}
 var cboStatus_Change = function () {
-    App.cboHandle.getStore().reload();
-    setTimeout(function () { waitcboStatusReLoad(); }, 800);
+    App.cboHandle.getStore().load(function (records, operation, success) {
+        if (records.length) {
+            if (App.cboStatus.value == "H") {
+                setReadOnly();
+                App.cboHandle.setValue("N");
+            } else {
+                setReadOnly();
+                App.cboHandle.setValue("N");
+            }
+        }
+    });
+    //setTimeout(function () { waitcboStatusReLoad(); }, 800);
 }
 
 //var waitcboRefNbrReLoad = function () {
@@ -768,45 +816,10 @@ var cboStatus_Change = function () {
 
 var setValueBranchID = function () {
     App.txtBranchID.setValue(HQ.cpnyID);
-
 };
 
 
-var checkRequire = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            //if (items[i]["LineType"] == undefined)
-            //    continue;
-            //if (items[i]["LineType"] == "")
-            //    continue;
-            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
 
-            if (items[i]["LineType"].trim() == "") {
-                HQ.message.show(15, '@Util.GetLang("LineType")', null);
-                return false;
-            }
-            //if (items[i]["InvtID"].trim() == "") {
-            //    HQ.message.show(15, '@Util.GetLang("InvtID")', null);
-            //    return false;
-            //}
-            if (items[i]["LineType"].trim() != "" && items[i]["Qty"] == 0) {
-                HQ.message.show(15, '@Util.GetLang("Qty")', null);
-                return false;
-            }
-            if (items[i]["LineType"].trim() != "" && items[i]["UnitPrice"] == 0) {
-                HQ.message.show(15, '@Util.GetLang("UnitPrice")', null);
-                return false;
-            }
-
-
-
-        }
-        return true;
-    }
-    else {
-        return true;
-    }
-};
 
 
 
@@ -886,9 +899,9 @@ var tabSA_Setup_AfterRender = function (obj, padding) {
 
 
 //doi grid 1 load xong se load du lieu tu grid 1 len grid 2 , 3
-var waitStoreGridTab1ReLoad = function () {
+var StoreGridTab1ReLoad = function () {
 
-    App.tabAtAR10100.setActiveTab(App.frmBot); // set tab dang su dung sang tab 1
+    //App.tabAtAR10100.setActiveTab(App.frmBot); // set tab dang su dung sang tab 1
     App.storeGridTopTab2.removeAll();
     App.storeGridBotTab2.removeAll();
     ////duyet het tat cac dong cua grid 1 tab 1 de bat ra cac du lieu bo vao grid 2 cua tab 2
@@ -900,7 +913,7 @@ var waitStoreGridTab1ReLoad = function () {
 
 
     //App.slmGridTopTab2.select(0);
-    App.tabAtAR10100.setActiveTab(App.frmBot); // set tab dang su dung sang tab 1
+    //App.tabAtAR10100.setActiveTab(App.frmBot); // set tab dang su dung sang tab 1
     //App.slmGridTab1.select(0);//chon dong 1 cua grid 1 tab 1
     setTimeout(function () { waitGridLoadAndFocusIntoBatNbr(); }, 1000);
 
@@ -912,11 +925,16 @@ var waitGridLoadAndFocusIntoBatNbr = function () {
 
 
 //doi form 2 tab 1 load xong
-var waitStoreFormBotReLoad = function () {
+var StoreFormBotReLoad = function () {
     App.cboTaxID.getStore().reload();
     //App.cboTaxID1.getStore().reload();
-    App.storeGrid.reload();
-    setTimeout(function () { waitStoreGridTab1ReLoad(); }, 1000);
+    
+    App.storeGrid.load(function (records, operation, success) {
+        
+            StoreGridTab1ReLoad();
+        
+    });
+ 
 
 }
 
@@ -1035,6 +1053,10 @@ var txtUnitPrice_Change = function (item) {
         index = 0;
     }
     App.slmGridTab1.selected.items[0].set('TranAmt', quantity * unitprice);
+
+    ////tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+    //reloadDataGrid1AndGrid2Tab2(index);
+
     //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
     reloadDataGrid1AndGrid2Tab2(index);
     //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
@@ -1058,7 +1080,11 @@ var txtTranAmt_Change = function (item) {
     } else if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID == "") {
         index = 0;
     }
-    App.slmGridTab1.selected.items[0].set('UnitPrice', tranAmt / quantity);
+    if (quantity != 0) {
+        App.slmGridTab1.selected.items[0].set('UnitPrice', tranAmt / quantity);
+    }
+    //bien tam tmpTrantAmtWhenChange dung de fix bug khi thay doi TrantAmt dong dau tien thi grid 1 tab 2 ko thay doi
+    tmpTrantAmtWhenChange = tranAmt;
     //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
     reloadDataGrid1AndGrid2Tab2(index);
     //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
@@ -1080,7 +1106,11 @@ var reloadDataGrid1AndGrid2Tab2 = function (index) {
     //duyet grid 1 tab 2 de lay gia tri bo qua grid 2 tab 2 
     fillDataIntoGrid2Tab2();
     App.tabAtAR10100.setActiveTab(App.frmBot); // set tab dang su dung sang tab 1
-    App.slmGridTab1.select(index);
+    //if (!isNaN(index)) {
+    //    return true;
+    //} else {
+        App.slmGridTab1.select(index);
+    //}
 }
 //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
 var reloadAmountMustPayTotal = function (index) {
@@ -1102,7 +1132,11 @@ var reloadAmountMustPayTotal = function (index) {
     App.txtCuryDocBal.setValue(totalTaxMustPay + totalAmountMustPay);
     App.txtTxblTot.setValue(totalAmountMustPay);
     App.txtTaxTot.setValue(totalTaxMustPay);
-    App.slmGridTab1.select(index);
+    //if (!isNaN(index)) {
+    //    return true;
+    //} else {
+        App.slmGridTab1.select(index);
+    //}
 }
 //khi VendID thay doi
 var cboCustId_Change = function () {
@@ -1121,7 +1155,7 @@ var validatePossitiveNumber = function (field, e) {
 
 var setReadOnly = function () {
     if (App.cboStatus.value != "H") {
-        App.cboHandle.setReadOnly(true);
+       
         App.cboRefNbr.setReadOnly(true);
         App.txtInvcNbr.setReadOnly(true);
         App.txtInvcNote.setReadOnly(true);
@@ -1135,7 +1169,7 @@ var setReadOnly = function () {
         App.txtDueDate.setReadOnly(true);
         App.grd.disable(true);
     } else {
-        App.cboHandle.setReadOnly(false);
+       
         App.cboRefNbr.setReadOnly(false);
         App.txtInvcNbr.setReadOnly(false);
         App.txtInvcNote.setReadOnly(false);
@@ -1291,22 +1325,22 @@ var fillDataIntoGrid2Tab2 = function () {
 
 var fillDataIntoGrid1Tab2 = function () {
     for (var i = 0; i <= App.storeGrid.getCount() - 1; i++) {
+
         App.slmGridTab1.select(i);
-        //lay gia tri lineRef
-        var lineRef = "";
-        if (i < 10) {
-            lineRef = "0000" + (i + 1).toString();
-        } else if ((i + 1) >= 10 && (i + 1) < 100) {
-            lineRef = "000" + (i + 1).toString();
-        } else if ((i + 1) >= 100 && (i + 1) < 1000) {
-            lineRef = "00" + (i + 1).toString();
-        } else if ((i + 1) >= 1000 && (i + 1) < 10000) {
-            lineRef = "0" + (i + 1).toString();
-        } else if ((i + 1) >= 10000 && (i + 1) < 100000) {
-            lineRef = (i + 1).toString();
-        }
+
         //lay cac gia tri can thiet khac
-        var tranAmt = App.slmGridTab1.selected.items[0].data.TranAmt;
+        var lineRef = App.slmGridTab1.selected.items[0].data.LineRef;
+        //truong hop i == 0  nay la dung de fix loi khi TrantAmt thay doi thi ko set duoc gia tri
+        //ben grid 1 tab 2 thay doi ngay
+        if (i == 0) {
+            if (tmpTrantAmtWhenChange != 0) {
+                var tranAmt = tmpTrantAmtWhenChange;
+            } else {
+                var tranAmt = App.slmGridTab1.selected.items[0].data.TranAmt;
+            }
+        } else {
+            var tranAmt = App.slmGridTab1.selected.items[0].data.TranAmt;
+        }
         var taxCat = App.slmGridTab1.selected.items[0].data.TaxCat;
         var taxID0 = App.slmGridTab1.selected.items[0].data.TaxId00;
         var taxID1 = App.slmGridTab1.selected.items[0].data.TaxId01;

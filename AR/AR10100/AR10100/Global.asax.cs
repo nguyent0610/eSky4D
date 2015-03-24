@@ -48,7 +48,7 @@ namespace AR10100
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
-            Session["Language"] = Current.Language = "en";
+            Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }
     }

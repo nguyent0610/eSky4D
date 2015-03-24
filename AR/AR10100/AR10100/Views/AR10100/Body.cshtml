@@ -169,7 +169,7 @@
                 , X.TabPanel()
                 //.Layout(LayoutType.Fit)
                 .Anchor("100% -120")
-                .AutoScroll(true)
+                //.AutoScroll(true)
                 .ID("tabAtAR10100")
                 .Listeners(p =>
                 {  
@@ -244,7 +244,7 @@
                                     ,HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQLangCode("SLSPERID").HQProcedure("AR10100_pcSalesPerson")
                                     .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid").DataIndex("SlsperId")
                                     .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
-                                    .HQDBSys(false).ForceSelection(false)
+                                    .HQDBSys(false).ForceSelection(false).AllowBlank(false)
                                     //.MaxLength(30).EnforceMaxLength(true)
                                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection()
@@ -389,7 +389,7 @@
                                  
                                     //DOcument Description
                                     HQ.TextBox().ID("txtDocDescr").Name("txtDocDescr").HQLangCode("DOCDESC").DataIndex("DocDesc")
-                                  .Width(600).MarginSpec("5 0 10 0").MaxLength(100).EnforceMaxLength(true).AllowBlank(false)
+                                  .Width(600).MarginSpec("5 0 10 0").MaxLength(100).EnforceMaxLength(true)//.AllowBlank(false)
                         
                                   //txtTxblTot
                                   ,HQ.NumberField().ID("txtTaxTot").Name("txtTaxTot").HQLangCode("TAXAMT").DataIndex("TaxTot00")
@@ -403,7 +403,7 @@
                         )
                         
                         ,Html.X().GridPanel()
-                        .Layout(LayoutType.Fit)
+                        .Layout(LayoutType.Anchor)
                         //.Frame(true)
                         //.AnchorHorizontal("100%")
                         //.AnchorVertical("50%")
@@ -411,7 +411,7 @@
                         //.Width(1300)
                         .Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
                         .RenderTo("contentCenter")
-                        .AutoScroll(true)
+                        //.AutoScroll(true)
                         .View(X.GridView().TrackOver(false))
                         .ID("grd").SetAutoScroll(true)
                         .StoreID("storeGrid")
@@ -419,7 +419,7 @@
                         .SortableColumns(false)
                          .Listeners(lst =>
                         {
-                       
+                           
                             lst.Render.Handler = "HQ.common.control_render(this,'Grid')";
                         })
                              //.Features(
@@ -592,7 +592,7 @@
                                     ls.BeforeEdit.Fn = "grd_BeforeEdit";
                                     ls.Edit.Fn = "grd_Edit";
                                     ls.ValidateEdit.Fn = "grd_ValidateEdit";
-                                    ls.CancelEdit.Fn = "grd_CancelEdit";
+                       
 
                                 })
                         //ngoac ket thuc Plugin        
