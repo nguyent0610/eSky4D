@@ -164,14 +164,16 @@ var Event = {
             });
         },
         chkSelectHeaderOrder_change: function (chk, newValue, oldValue, eOpts) {
-            App.stoOrder.data.each(function (record) {
-                record.data.Selected = chk.value;
-                if (record.data.Selected == true) {
-                    Process.processOrderDet(record.data.OrderNbr);
-                }
-                else {
-                    Process.processOrderDet(record.data.OrderNbr, true);
-                   
+            App.stoOrder.data.each(function (record) {             
+                if (record.data.Status != 'C' && record.data.Status != 'E') {
+                    record.data.Selected = chk.value;
+                    if (record.data.Selected == true) {
+                        Process.processOrderDet(record.data.OrderNbr);
+                    }
+                    else {
+                        Process.processOrderDet(record.data.OrderNbr, true);
+
+                    }
                 }
             });
             App.grdOrder.view.refresh();
@@ -192,17 +194,21 @@ var Event = {
         },
         chkSelectHeaderDet_change: function (chk, newValue, oldValue, eOpts) {
             App.stoDet.each(function (record) {
-                record.data.Selected = chk.value;
-                if (chk.value) {
-                    Process.processOrderDet(record.data.OrderNbr);
-                    var record = HQ.store.findRecord(App.stoOrder, ["OrderNbr"], [record.data.OrderNbr]);
-                    record.set("Selected", true);
+                var recordOrder = HQ.store.findRecord(App.stoOrder, ["OrderNbr"], [record.data.OrderNbr]);
+                if (recordOrder.data.Status != 'C' && recordOrder.data.Status != 'E' )
+                {
+                    record.data.Selected = chk.value;
+                    if (chk.value) {
+                        Process.processOrderDet(record.data.OrderNbr);
+                        var record = HQ.store.findRecord(App.stoOrder, ["OrderNbr"], [record.data.OrderNbr]);
+                        record.set("Selected", true);
                     
-                }
-                else {
-                    Process.processOrderDet(record.data.OrderNbr, true);
-                    var record = HQ.store.findRecord(App.stoOrder, ["OrderNbr"], [record.data.OrderNbr]);
-                    record.set("Selected", false);
+                    }
+                    else {
+                        Process.processOrderDet(record.data.OrderNbr, true);
+                        var record = HQ.store.findRecord(App.stoOrder, ["OrderNbr"], [record.data.OrderNbr]);
+                        record.set("Selected", false);
+                    }
                 }
             });
         },
@@ -277,6 +283,7 @@ var save = function () {
             params: {
                 lstDet: HQ.store.getAllData(App.stoDet,["Selected"],[true]),
                 lstOrder: HQ.store.getAllData(App.stoOrder, ["Selected"], [true]),
+                delivery: App.cboDelivery.getValue(),
                 shipDate: App.dteShipDate.getValue(),
                 aRDocDate: App.dteARDocDate.getValue()
             },
