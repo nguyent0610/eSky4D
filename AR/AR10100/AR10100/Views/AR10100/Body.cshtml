@@ -474,7 +474,8 @@
                                  .Editor(Html.X().NumberField().EnableKeyEvents(true).MinValue(0).DecimalPrecision(0)
                                  .Listeners(lst =>
                                  {
-                                     lst.Change.Fn = "txtQty_Change";
+                                     //lst.Blur.Fn = "txtQty_Blur";
+                                     //lst.Change.Fn = "txtQty_Change";
                                      lst.KeyDown.Fn = "validatePossitiveNumber";
                                  })
                                  )
@@ -484,7 +485,7 @@
                                  .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(0)
                                  .Listeners(lst =>
                                  {
-                                     lst.Change.Fn = "txtUnitPrice_Change";
+                                     //lst.Blur.Fn = "txtUnitPrice_Blur";
                                  })
                                  )
                                  
@@ -493,7 +494,7 @@
                                  .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(0)
                                  .Listeners(lst =>
                                  {
-                                     lst.Change.Fn = "txtTranAmt_Change";
+                                     //lst.Blur.Fn = "txtTranAmt_Blur";
                                  })
                                  )
                                  
@@ -513,7 +514,7 @@
                                   .HQDBSys(false).AllowBlank(false)
                                   .Listeners(lst =>
                                  {
-                                     lst.Change.Fn = "cboTaxCat_Change";
+                                     //lst.Change.Fn = "cboTaxCat_Change";
                                  })
                                  .LoadData()
                                  )

@@ -44,7 +44,7 @@ var fieldsLangCheckRequire = ["InvtID"];
 var isNewRef = false;
 
 var tmpTrantAmtWhenChange = 0;
-
+var tmpRowSelectedEdit = 0;
 
 var menuClick = function (command) {
     switch (command) {
@@ -408,7 +408,11 @@ var deleteRecordFormBotAR_Doc = function (item) {
 // Xac nhan xoa record cua Grid
 var deleteRecordGrid = function (item) {
     if (item == "yes") {
+        //var index = App.slmGridTab1.selected.items[0].index;
         App.grd.deleteSelected();
+        //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+        reloadDataGrid1AndGrid2Tab2();
+        //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
         reloadAmountMustPayTotal();
         frmChange();
     }
@@ -694,13 +698,13 @@ var loadDataGrid = function (store) {
     }
     //khi refresh thi update lai cho Grid1 va Grid2 cua Tab2
     if (App.slmGridTab1.selected.items[0] != undefined) {
-        var index = App.slmGridTab1.selected.items[0].index;
+        //var index = App.slmGridTab1.selected.items[0].index;
 
         //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
-        reloadDataGrid1AndGrid2Tab2(index);
+        reloadDataGrid1AndGrid2Tab2();
 
         //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
-        reloadAmountMustPayTotal(index);
+        reloadAmountMustPayTotal();
     }
     frmChange();
 
@@ -737,9 +741,63 @@ var grd_Edit = function (item, e) {
         }
     }
 
+    if (e.field == 'Qty') {
+        var quantity = e.value;
+        var unitprice = e.record.data.UnitPrice;
+        e.record.set('TranAmt', quantity * unitprice);
+        //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+        reloadDataGrid1AndGrid2Tab2();
+        //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+        reloadAmountMustPayTotal();
+    } else if (e.field == 'UnitPrice') {
+        var unitprice = e.value;
+        var quantity = e.record.data.Qty;
+        e.record.set('TranAmt', quantity * unitprice);
+        //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+        reloadDataGrid1AndGrid2Tab2();
+        //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+        reloadAmountMustPayTotal();
+    } else if (e.field == 'TranAmt') {
+        var tranAmt = e.value;
+        var quantity = e.record.data.Qty;
+        e.record.set('UnitPrice', tranAmt / quantity);
+        //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+        reloadDataGrid1AndGrid2Tab2();
+        //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+        reloadAmountMustPayTotal();
+    } else if (e.field == 'TaxCat') {
+        //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+        reloadDataGrid1AndGrid2Tab2();
+        //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+        reloadAmountMustPayTotal();
+    } else if (e.field == null) { // TaxID
+        if (e.value.length == 4) {
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId00', e.value[0])
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId01', e.value[1])
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId02', e.value[2])
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId03', e.value[3])
 
-
-
+        } else if (e.value.length == 3) {
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId00', e.value[0])
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId01', e.value[1])
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId02', e.value[2])
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId03', '')
+        } else if (e.value.length == 2) {
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId00', e.value[0])
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId01', e.value[1])
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId02', '')
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId03', '')
+        } else if (e.value.length == 1) {
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId00', e.value)
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId01', '')
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId02', '')
+            App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId03', '')
+        }
+        //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+        reloadDataGrid1AndGrid2Tab2();
+        //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+        reloadAmountMustPayTotal();
+    }
 
 };
 var grd_ValidateEdit = function (item, e) {
@@ -952,149 +1010,43 @@ var renderLineType = function (value) {
 };
 
 
-//khi cboTaxCat thay doi thi
-var cboTaxCat_Change = function (item) {
-    App.slmGridTab1.selected.items[0].set('TaxCat', item.value);
-    var index = App.slmGridTab1.selected.items[0].index;
-    //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
-    if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
-        for (var i = 0; i < App.storeGrid.data.length; i++) {
-            if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
-                index = i;
-            }
-        }
-    }
-    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
-    reloadDataGrid1AndGrid2Tab2(index);
-    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
-    reloadAmountMustPayTotal(index);
-
-}
-
-
-
-
-
 //khi cboTaxID thay doi thi
 var cboTaxID_Change = function (item) {//obj = App.cboTaxID
     //obj.value
-    App.slmGridTab1.selected.items[0].set('TaxId01', "");
-    App.slmGridTab1.selected.items[0].set('TaxId02', "");
-    App.slmGridTab1.selected.items[0].set('TaxId03', "");
-    for (var i = 0; i < item.value.length; i++) {
+    //App.slmGridTab1.selected.items[0].set('TaxId00', "");
+    //App.slmGridTab1.selected.items[0].set('TaxId01', "");
+    //App.slmGridTab1.selected.items[0].set('TaxId02', "");
+    //App.slmGridTab1.selected.items[0].set('TaxId03', "");
+    //for (var i = 0; i < item.value.length; i++) {
 
-        if (i == 0) {
-            App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-        } else if (i == 1) {
-            App.slmGridTab1.selected.items[0].set('TaxId01', item.value[1]);
-        } else if (i == 2) {
-            App.slmGridTab1.selected.items[0].set('TaxId02', item.value[2]);
-        } else if (i == 3) {
-            App.slmGridTab1.selected.items[0].set('TaxId03', item.value[3]);
+    //    if (i == 0) {
+    //        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
+    //    } else if (i == 1) {
+    //        App.slmGridTab1.selected.items[0].set('TaxId01', item.value[1]);
+    //    } else if (i == 2) {
+    //        App.slmGridTab1.selected.items[0].set('TaxId02', item.value[2]);
+    //    } else if (i == 3) {
+    //        App.slmGridTab1.selected.items[0].set('TaxId03', item.value[3]);
+    //    }
+    //}
+
+    ////tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+    //reloadDataGrid1AndGrid2Tab2();
+    ////reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+    //reloadAmountMustPayTotal();
+    for (var i = 0; i < App.storeGrid.getCount() ; i++) {
+        if (App.slmGridTab1.selected.items[0].data.LineRef == App.storeGrid.data.items[i].data.LineRef) {
+            tmpRowSelectedEdit = i;
         }
     }
-    var index = App.slmGridTab1.selected.items[0].index;
-    //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
-    if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
-        for (var i = 0; i < App.storeGrid.data.length; i++) {
-            if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
-                index = i;
-            }
-        }
-    }
-    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
-    reloadDataGrid1AndGrid2Tab2(index);
-    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
-    reloadAmountMustPayTotal(index);
+
 
 
 };
 
-//thay doi so luong
-var txtQty_Change = function (item) {
-    //bat cac gia tri de chuan bi tinh toan lai
-    var quantity = item.value;
-    var unitprice = App.slmGridTab1.selected.items[0].data.UnitPrice;
-    var index = App.slmGridTab1.selected.items[0].index;
-    //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
-    if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
-        for (var i = 0; i < App.storeGrid.data.length; i++) {
-            if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
-                index = i;
-            }
-        }
-    } else if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID == "") {
-        index = 0;
-    }
-    App.slmGridTab1.selected.items[0].set('TranAmt', quantity * unitprice);
-    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
-    reloadDataGrid1AndGrid2Tab2(index);
-    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
-    reloadAmountMustPayTotal(index);
-    //chon lai cot minh dang edit
-    App.grd.editingPlugin.startEditByPosition({ row: index, column: 3 });
 
-}
-//thay doi gia cho 1 dv san pham
-var txtUnitPrice_Change = function (item) {
-    //bat cac gia tri de chuan bi tinh toan lai
-    var quantity = App.slmGridTab1.selected.items[0].data.Qty;
-    var unitprice = item.value;
-    var index = App.slmGridTab1.selected.items[0].index;
-    //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
-    if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
-        for (var i = 0; i < App.storeGrid.data.length; i++) {
-            if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
-                index = i;
-            }
-        }
-
-    } else if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID == "") {
-        index = 0;
-    }
-    App.slmGridTab1.selected.items[0].set('TranAmt', quantity * unitprice);
-
-    ////tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
-    //reloadDataGrid1AndGrid2Tab2(index);
-
-    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
-    reloadDataGrid1AndGrid2Tab2(index);
-    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
-    reloadAmountMustPayTotal(index);
-    //chon lai cot minh dang edit
-    App.grd.editingPlugin.startEditByPosition({ row: index, column: 4 });
-}
-//thay doi gia tong cong 
-var txtTranAmt_Change = function (item) {
-    //bat cac gia tri de chuan bi tinh toan lai
-    var tranAmt = item.value;
-    var quantity = App.slmGridTab1.selected.items[0].data.Qty;
-    var index = App.slmGridTab1.selected.items[0].index;
-    //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
-    if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
-        for (var i = 0; i < App.storeGrid.data.length; i++) {
-            if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
-                index = i;
-            }
-        }
-    } else if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID == "") {
-        index = 0;
-    }
-    if (quantity != 0) {
-        App.slmGridTab1.selected.items[0].set('UnitPrice', tranAmt / quantity);
-    }
-    //bien tam tmpTrantAmtWhenChange dung de fix bug khi thay doi TrantAmt dong dau tien thi grid 1 tab 2 ko thay doi
-    tmpTrantAmtWhenChange = tranAmt;
-    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
-    reloadDataGrid1AndGrid2Tab2(index);
-    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
-    reloadAmountMustPayTotal(index);
-    //chon lai cot minh dang edit
-    App.grd.editingPlugin.startEditByPosition({ row: index, column: 5 });
-
-}
 //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
-var reloadDataGrid1AndGrid2Tab2 = function (index) {
+var reloadDataGrid1AndGrid2Tab2 = function () {
     //xoa du lieu cu de cap nhap du lieu moi
     App.storeGridTopTab2.removeAll();
     App.storeGridBotTab2.removeAll();
@@ -1109,11 +1061,11 @@ var reloadDataGrid1AndGrid2Tab2 = function (index) {
     //if (!isNaN(index)) {
     //    return true;
     //} else {
-        App.slmGridTab1.select(index);
+        //App.slmGridTab1.select(index);
     //}
 }
 //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
-var reloadAmountMustPayTotal = function (index) {
+var reloadAmountMustPayTotal = function () {
     totalAmountMustPay = 0;
     totalTaxMustPay = 0;
     //duyet grid bot tab 2 de lay ra so tien thue phai nop
@@ -1135,7 +1087,7 @@ var reloadAmountMustPayTotal = function (index) {
     //if (!isNaN(index)) {
     //    return true;
     //} else {
-        App.slmGridTab1.select(index);
+        //App.slmGridTab1.select(index);
     //}
 }
 //khi VendID thay doi
@@ -1197,36 +1149,6 @@ var setFocusAllCombo = function () {
     App.cboTerms.forceSelection = false;
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1428,6 +1350,128 @@ var fillDataIntoGrid1Tab2 = function () {
     }
 }
 
+
+
+////khi cboTaxCat thay doi thi
+//var cboTaxCat_Change = function (item) {
+//    App.slmGridTab1.selected.items[0].set('TaxCat', item.value);
+//    //var index = App.slmGridTab1.selected.items[0].index;
+//    ////xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
+//    //if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
+//    //    for (var i = 0; i < App.storeGrid.data.length; i++) {
+//    //        if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
+//    //            index = i;
+//    //        }
+//    //    }
+//    //}
+//    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+//    reloadDataGrid1AndGrid2Tab2();
+//    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+//    reloadAmountMustPayTotal();
+
+//}
+
+////thay doi so luong
+//var txtQty_Blur = function (item) {
+//    //bat cac gia tri de chuan bi tinh toan lai
+//    var quantity = item.value;
+
+//    //var unitprice = App.slmGridTab1.selected.items[0].data.UnitPrice;
+//    //var index = App.slmGridTab1.selected.items[0].index;
+
+//    var unitprice = App.grd.editingPlugin.activeRecord.data.UnitPrice;
+//    //var index = App.slmGridTab1.selected.items[0].index;
+//    //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
+//    //if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
+//    //    for (var i = 0; i < App.storeGrid.data.length; i++) {
+//    //        if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
+//    //            index = i;
+//    //        }
+//    //    }
+//    //} else if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID == "") {
+//    //    index = 0;
+//    //}
+//    //App.slmGridTab1.selected.items[0].set('TranAmt', quantity * unitprice);
+//    App.grd.editingPlugin.activeRecord.set('TranAmt', quantity * unitprice);
+//    //if (quantity == 0) {
+//    //    App.storeGrid.data.items[tmpRowSelectedEdit].set('Qty', 1);
+//    //    App.storeGrid.data.items[tmpRowSelectedEdit].set('Qty', quantity);
+//    //} else {
+//    //    App.storeGrid.data.items[tmpRowSelectedEdit].set('Qty', 0);
+//    //    App.storeGrid.data.items[tmpRowSelectedEdit].set('Qty', quantity);
+//    //}
+//    //App.grd.editingPlugin.activeRecord.set('Qty', quantity);
+//    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+//    reloadDataGrid1AndGrid2Tab2();
+//    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+//    reloadAmountMustPayTotal();
+//    //chon lai cot minh dang edit
+//    //App.grd.editingPlugin.startEditByPosition({ row: index, column: 3 });
+
+//}
+////thay doi gia cho 1 dv san pham
+//var txtUnitPrice_Blur = function (item) {
+//    //bat cac gia tri de chuan bi tinh toan lai
+//    //var quantity = App.slmGridTab1.selected.items[0].data.Qty;
+//    var quantity = App.grd.editingPlugin.activeRecord.data.Qty;
+//    var unitprice = item.value;
+//    //var index = App.slmGridTab1.selected.items[0].index;
+//    //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
+//    //if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
+//    //    for (var i = 0; i < App.storeGrid.data.length; i++) {
+//    //        if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
+//    //            index = i;
+//    //        }
+//    //    }
+
+//    //} else if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID == "") {
+//    //    index = 0;
+//    //}
+//    //App.slmGridTab1.selected.items[0].set('TranAmt', quantity * unitprice);
+//    App.grd.editingPlugin.activeRecord.set('TranAmt', quantity * unitprice);
+//    //App.grd.editingPlugin.activeRecord.set('UnitPrice', unitprice);
+//    ////tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+//    //reloadDataGrid1AndGrid2Tab2();
+
+//    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+//    reloadDataGrid1AndGrid2Tab2();
+//    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+//    reloadAmountMustPayTotal();
+//    //chon lai cot minh dang edit
+//    //App.grd.editingPlugin.startEditByPosition({ row: index, column: 4 });
+//}
+////thay doi gia tong cong 
+//var txtTranAmt_Blur = function (item) {
+//    //bat cac gia tri de chuan bi tinh toan lai
+//    var tranAmt = item.value;
+//    var quantity = App.grd.editingPlugin.activeRecord.data.Qty;
+//    //var quantity = App.slmGridTab1.selected.items[0].data.Qty;
+//    //var index = App.slmGridTab1.selected.items[0].index;
+//    //xet dieu kien neu them moi thi index se bat khac di , do LineType khac rong se tao ra dong moi nen neu LineType chua co ta bat index tu dong la getCount()-1
+//    //if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID != "") {
+//    //    for (var i = 0; i < App.storeGrid.data.length; i++) {
+//    //        if (App.storeGrid.data.items[i].data.InvtID == App.slmGridTab1.selected.items[0].data.InvtID) {
+//    //            index = i;
+//    //        }
+//    //    }
+//    //} else if (index == undefined && App.slmGridTab1.selected.items[0].data.InvtID == "") {
+//    //    index = 0;
+//    //}
+//    if (quantity != 0) {
+//        App.grd.editingPlugin.activeRecord.set('UnitPrice', tranAmt / quantity);
+//        //App.grd.editingPlugin.activeRecord.set('TranAmt', tranAmt);
+//        //App.slmGridTab1.selected.items[0].set('UnitPrice', tranAmt / quantity);
+//    }
+//    //bien tam tmpTrantAmtWhenChange dung de fix bug khi thay doi TrantAmt dong dau tien thi grid 1 tab 2 ko thay doi
+//    tmpTrantAmtWhenChange = tranAmt;
+//    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
+//    reloadDataGrid1AndGrid2Tab2();
+//    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
+//    reloadAmountMustPayTotal();
+//    //chon lai cot minh dang edit
+//    //App.grd.editingPlugin.startEditByPosition({ row: index, column: 5 });
+
+//}
 
 
 //ham dung doi de doi refresh form sau do insert
@@ -2369,9 +2413,9 @@ var fillDataIntoGrid1Tab2 = function () {
 //    }
 //    var index = App.slmGridTab1.selected.items[0].index;
 //    //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
-//    reloadDataGrid1AndGrid2Tab2(index);
+//    reloadDataGrid1AndGrid2Tab2();
 //    //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
-//    reloadAmountMustPayTotal(index);
+//    reloadAmountMustPayTotal();
 //    var taxid00 = App.slmGridTab1.selected.items[0].data.TaxId00;
 //    //if(taxid00.search(","){
 //    //    var taxid00change = taxid00.substring(0, r.data.TaxId00.search(","));
