@@ -511,13 +511,13 @@ var grdPO_Trans_Edit = function (item, e) {
     else if (e.field == "DocDiscAmt") {
         e.record.set("TranAmt", objDetail.UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
         if (objDetail.RcptQty != 0) {
-            e.record.set("DiscPct", Math.round((objDetail.DocDiscAmt / (objDetail.UnitCost * objDetail.RcptQty)) * 100, 2));
+            e.record.set("DiscPct", HQ.util.mathRound((objDetail.DocDiscAmt / (objDetail.UnitCost * objDetail.RcptQty)) * 100, 2));//Math.round((objDetail.DocDiscAmt / (objDetail.UnitCost * objDetail.RcptQty)) * 100, 2));
         }
 
     }
     else if (e.field == "DiscPct") {
         if (objDetail.TranAmt != 0) {
-            e.record.set("DocDiscAmt", Math.round((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));
+            e.record.set("DocDiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));//Math.round((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));
         }
         e.record.set("TranAmt", objDetail.UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
     }
@@ -1317,7 +1317,7 @@ function calcTax(index) {
                     taxID = dt[j].taxid;
                     lineRef = det.LineRef;
                     taxRate = objTax.TaxRate;
-                    taxAmtL1 = Math.round(txblAmtL1 * objTax.TaxRate / 100, 0);
+                    taxAmtL1 = HQ.util.mathRound(txblAmtL1 * objTax.TaxRate / 100, 2); //Math.round(txblAmtL1 * objTax.TaxRate / 100, 0);
 
                     if (objTax.Lvl2Exmpt == 0) txblAmtAddL2 += txblAmtL1;
 
@@ -1350,7 +1350,7 @@ function calcTax(index) {
                         if (chk) {
 
                             if (totPrcTaxInclAmt + taxAmtL1 + txblAmtL1 != det.TranAmt)
-                                taxAmtL1 = Math.round(det.TranAmt - (totPrcTaxInclAmt + txblAmtL1), 0);
+                                taxAmtL1 = HQ.util.mathRound(det.TranAmt - (totPrcTaxInclAmt + txblAmtL1), 2);//Math.round(det.TranAmt - (totPrcTaxInclAmt + txblAmtL1), 0);
 
                         }
                         else
@@ -1380,7 +1380,7 @@ function calcTax(index) {
                     lineRef = det.LineRef;
                     taxRate = objTax.TaxRate;
                     txblAmtL2 = Math.round(txblAmtAddL2 + txblAmtL1, 0);
-                    taxAmtL2 = Math.round(txblAmtAddL2 * objTax.TaxRate / 100, 0);
+                    taxAmtL2 = HQ.util.mathRound(txblAmtAddL2 * objTax.TaxRate / 100,2);//Math.round(txblAmtAddL2 * objTax.TaxRate / 100, 0);
                     insertUpdateTax(taxID, lineRef, taxRate, taxAmtL2, txblAmtL2, 2);
                 }
             }
@@ -1466,7 +1466,7 @@ function calcTaxTotal() {
         flat = true;
         for (var j = 0; j < App.stoPO10200_LoadTaxDoc.data.length; j++) {
             var taxDoc = App.stoPO10200_LoadTaxDoc.data.items[j];
-            if (tax.data.BranchID == taxDoc.data.BranchID && tax.data.BatNbr == taxDoc.data.BatNbr && tax.data.RcptNbr == taxDoc.data.RcptNbr && tax.data.TaxID == taxDoc.data.TaxID) {
+            if ( tax.data.TaxID == taxDoc.data.TaxID) {
                 taxDoc.data.TxblAmt += tax.data.TxblAmt;
                 taxDoc.data.TaxAmt += tax.data.TaxAmt;
                 flat = false;

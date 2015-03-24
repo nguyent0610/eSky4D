@@ -93,6 +93,38 @@ var HQ = {
             }
             return Ext.encode(store.getChangedData({ skipIdForPhantomRecords: skip }));
         },
+        getAllData: function (store, fields, values) {
+            var lstData = [];
+            if (store.snapshot != undefined) {
+                store.snapshot.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
+            } else {
+                store.data.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
+            }
+        },
         findInStore: function (store, fields, values) {
             var data;
             store.data.each(function (item) {
@@ -436,21 +468,21 @@ var HQ = {
             }
         },
         hide: function (grd, arrcolumnName) {
-            var columns=grd.columns;
+            var columns = grd.columns;
             arrcolumnName.forEach(function (itm) {
                 var index = HQ.grid.findColumnIndex(columns, itm);
                 grd.columns[index].hide();
-               
+
             });
         },
         show: function (grd, arrcolumnName) {
-            var columns=grd.columns;
-            arrcolumnName.forEach(function(itm){
+            var columns = grd.columns;
+            arrcolumnName.forEach(function (itm) {
                 var index = HQ.grid.findColumnIndex(columns, itm);
                 grd.columns[index].show();
             });
         },
-        findColumnIndex : function(columns, dataIndex) {
+        findColumnIndex: function (columns, dataIndex) {
             var index;
             for (index = 0; index < columns.length; ++index) {
                 if (columns[index].dataIndex == dataIndex) { break; }
@@ -700,7 +732,17 @@ var HQ = {
                 HQ.message.show(09112014, '', null);
                 return false;
             }
+        },
+        mathRound: function (value, exp) {
+            return decimalAdjust('round', value, exp);
+        },
+        mathFloor: function (value, exp) {
+            return decimalAdjust('floor', value, exp);
+        },
+        mathCeil: function (value, exp) {
+            return decimalAdjust('ceil', value, exp);
         }
+
     },
     form: {
         checkRequirePass: function (frm) {
@@ -758,6 +800,13 @@ var FilterCombo = function (control, stkeyFilter) {
         if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
         if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
+            var filtersAux = [];
+            // get filter
+            store.filters.items.forEach(function (item) {
+                if (item.id != control.id + '-query-filter') {
+                    filtersAux.push(item);
+                }
+            });
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {
                 store.filterBy(function (record) {
@@ -780,6 +829,9 @@ var FilterCombo = function (control, stkeyFilter) {
                     }
                 });
             }
+            filtersAux.forEach(function (item) {
+                store.filter(item.property, item.value);
+            });
         }
     }
 };
@@ -789,7 +841,52 @@ var loadDefault = function (fileNameStore, cbo) {
 
     }
 };
-//TrungHT
+//MathRound 2015-03-24
+// Closure
+function decimalAdjust(type, value, exp) {
+    exp = exp * -1;
+    // If the exp is undefined or zero...
+    if (typeof exp === 'undefined' || +exp === 0) {
+        return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    // If the value is not a number or the exp is not an integer...
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+        return NaN;
+    }
+    // Shift
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    // Shift back
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+}
+
+
+
+//////Example Round
+////Math.round10(55.55, -1);   // 55.6
+////Math.round10(55.549, -1);  // 55.5
+////Math.round10(55, 1);       // 60
+////Math.round10(54.9, 1);     // 50
+////Math.round10(-55.55, -1);  // -55.5
+////Math.round10(-55.551, -1); // -55.6
+////Math.round10(-55, 1);      // -50
+////Math.round10(-55.1, 1);    // -60
+////Math.round10(1.005, -2);   // 1.01 -- compare this with Math.round(1.005*100)/100 above
+////// Floor
+////Math.floor10(55.59, -1);   // 55.5
+////Math.floor10(59, 1);       // 50
+////Math.floor10(-55.51, -1);  // -55.6
+////Math.floor10(-51, 1);      // -60
+////// Ceil
+////Math.ceil10(55.51, -1);    // 55.6
+////Math.ceil10(51, 1);        // 60
+////Math.ceil10(-55.59, -1);   // -55.5
+////Math.ceil10(-59, 1);       // -50
+
+//TrungHT override control ext
 Ext.define("NumbercurrencyPrecision", {
     override: "Ext.util.Format.Number",
     currencyPrecision: 0

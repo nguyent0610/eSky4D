@@ -401,8 +401,8 @@
                                                                                                 .LoadData()
                                                                                                 )
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Price")).DataIndex("UnitCost").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
-                                                    , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("DiscPct")).DataIndex("DiscPct").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
-                                                    , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Discount")).DataIndex("DocDiscAmt").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
+                                                    , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("DiscPct")).DataIndex("DiscPct").Width(150).Format("0,000,000.00").Editor(Html.X().NumberField().DecimalPrecision(2))
+                                                    , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Discount")).DataIndex("DocDiscAmt").Width(150).Format("0,000,000.00").Editor(Html.X().NumberField().DecimalPrecision(2))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TranAmt")).DataIndex("TranAmt").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
 
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("POFee")).Hidden(true).DataIndex("RcptFee").Width(150).Format("0,000,000").Editor(HQ.NumberField())
@@ -572,7 +572,7 @@
                                                                         , Html.X().Column().Text(Util.GetLang("LineRef")).DataIndex("LineRef").Width(150)
                                                                         , Html.X().Column().Text(Util.GetLang("TaxID")).DataIndex("TaxID").Width(150)
                                                                         , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TxblAmt")).DataIndex("TxblAmt").Width(150).Format("0,000,000")
-                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxAmt")).DataIndex("TaxAmt").Width(150).Format("0,000,000")
+                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxAmt")).DataIndex("TaxAmt").Width(150).Format("0,000,000.00")
                                                                         , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxRate")).DataIndex("TaxRate").Width(150).Format("0,000,000")
                                                                         , Html.X().Column().Text(Util.GetLang("TaxLevel")).DataIndex("TaxLevel").Width(150)
                                                                     )
@@ -592,10 +592,11 @@
                                                                 )
                                                         .ColumnModel(
                                                                         Html.X().RowNumbererColumn()
-                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxRate")).DataIndex("TaxRate").Width(150).Format("0,000,000")
                                                                         , Html.X().Column().Text(Util.GetLang("TaxID")).DataIndex("TaxID").Width(150)
+                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TxblAmt")).DataIndex("TxblAmt").Width(150).Format("0,000,000")                                                                                                                                               
                                                                         , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxAmt")).DataIndex("TaxAmt").Width(150).Format("0,000,000")
-                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TxblAmt")).DataIndex("TxblAmt").Width(150).Format("0,000,000")
+                                                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxRate")).DataIndex("TaxRate").Width(150).Format("0,000,000")
+                                                                      
 
                                                                     )
 
