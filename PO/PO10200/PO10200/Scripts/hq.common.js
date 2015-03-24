@@ -433,7 +433,7 @@ var HQ = {
         checkBeforeEdit: function (e, keys) {
             if (!HQ.isUpdate) return false;
             if (keys.indexOf(e.field) != -1) {
-                if (e.record.data.tstamp != "")
+                if (e.record.data.tstamp)
                     return false;
             }
             return HQ.grid.checkInput(e, keys);
