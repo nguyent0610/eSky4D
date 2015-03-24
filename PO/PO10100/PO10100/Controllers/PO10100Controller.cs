@@ -528,12 +528,12 @@ namespace PO10100.Controllers
                 objrPO_Detail.BlktLineRef = objDetail.BlktLineRef == null ? "" : objDetail.BlktLineRef;
                 objrPO_Detail.CnvFact = (objDetail.CnvFact == 0 ? 1 : objDetail.CnvFact);
 
-                objrPO_Detail.CostReceived = Math.Round(objDetail.CostReceived);
-                objrPO_Detail.CostReturned = Math.Round(objDetail.CostReturned);
-                objrPO_Detail.CostVouched = Math.Round(objDetail.CostVouched);
-                objrPO_Detail.ExtCost = Math.Round(objDetail.ExtCost);
-                objrPO_Detail.POFee = Math.Round(objDetail.POFee);
-                objrPO_Detail.UnitCost = Math.Round(objDetail.UnitCost);
+                objrPO_Detail.CostReceived =objDetail.CostReceived;
+                objrPO_Detail.CostReturned =objDetail.CostReturned;
+                objrPO_Detail.CostVouched = objDetail.CostVouched;
+                objrPO_Detail.ExtCost = objDetail.ExtCost;
+                objrPO_Detail.POFee = objDetail.POFee;
+                objrPO_Detail.UnitCost = objDetail.UnitCost;
 
                 objrPO_Detail.ExtWeight = objDetail.ExtWeight;
                 objrPO_Detail.ExtVolume = objDetail.ExtVolume;
@@ -542,10 +542,10 @@ namespace PO10100.Controllers
                 objrPO_Detail.PurchaseType = objDetail.PurchaseType;
                 objrPO_Detail.PurchUnit = objDetail.PurchUnit;
 
-                objrPO_Detail.QtyOrd = Math.Round(objDetail.QtyOrd);
-                objrPO_Detail.QtyRcvd = Math.Round(objDetail.QtyRcvd);
-                objrPO_Detail.QtyReturned = Math.Round(objDetail.QtyReturned);
-                objrPO_Detail.QtyVouched = Math.Round(objDetail.QtyVouched);
+                objrPO_Detail.QtyOrd = objDetail.QtyOrd;
+                objrPO_Detail.QtyRcvd = objDetail.QtyRcvd;
+                objrPO_Detail.QtyReturned = objDetail.QtyReturned;
+                objrPO_Detail.QtyVouched = objDetail.QtyVouched;
 
                 objrPO_Detail.RcptStage = objDetail.RcptStage;
                 objrPO_Detail.ReasonCd = objDetail.ReasonCd;
@@ -559,15 +559,15 @@ namespace PO10100.Controllers
                 objrPO_Detail.TaxID02 = objDetail.TaxID02;
                 objrPO_Detail.TaxID03 = objDetail.TaxID03;
                 
-                objrPO_Detail.TxblAmt00 = Math.Round(objDetail.TxblAmt00);
-                objrPO_Detail.TxblAmt01 = Math.Round(objDetail.TxblAmt01);
-                objrPO_Detail.TxblAmt02 = Math.Round(objDetail.TxblAmt02);
-                objrPO_Detail.TxblAmt03 = Math.Round(objDetail.TxblAmt03);
+                objrPO_Detail.TxblAmt00 = objDetail.TxblAmt00;
+                objrPO_Detail.TxblAmt01 = objDetail.TxblAmt01;
+                objrPO_Detail.TxblAmt02 = objDetail.TxblAmt02;
+                objrPO_Detail.TxblAmt03 =objDetail.TxblAmt03;
 
-                objrPO_Detail.TaxAmt00 = Math.Round(objDetail.TaxAmt00);
-                objrPO_Detail.TaxAmt01 = Math.Round(objDetail.TaxAmt01);
-                objrPO_Detail.TaxAmt02 = Math.Round(objDetail.TaxAmt02);
-                objrPO_Detail.TaxAmt03 = Math.Round(objDetail.TaxAmt03);
+                objrPO_Detail.TaxAmt00 = objDetail.TaxAmt00;
+                objrPO_Detail.TaxAmt01 = objDetail.TaxAmt01;
+                objrPO_Detail.TaxAmt02 = objDetail.TaxAmt02;
+                objrPO_Detail.TaxAmt03 = objDetail.TaxAmt03;
 
                 objrPO_Detail.DiscAmt = objDetail.DiscAmt;
                 objrPO_Detail.DiscID = objDetail.DiscID;

@@ -93,6 +93,38 @@ var HQ = {
             }
             return Ext.encode(store.getChangedData({ skipIdForPhantomRecords: skip }));
         },
+        getAllData: function (store, fields, values) {
+            var lstData = [];
+            if (store.snapshot != undefined) {
+                store.snapshot.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
+            } else {
+                store.data.each(function (item) {
+                    var isb = true;
+                    if (fields != null) {
+                        for (var i = 0; i < fields.length; i++) {
+                            if (item.data[fields[i]] != values[i]) {
+                                isb = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (isb) lstData.push(item.data);
+                });
+                return Ext.encode(lstData);
+            }
+        },
         findInStore: function (store, fields, values) {
             var data;
             store.data.each(function (item) {
@@ -314,8 +346,8 @@ var HQ = {
         indexSelect: function (grd) {
             var index = '';
             var arr = grd.getSelectionModel().getSelection();
-            arr.forEach(function (itm) {                
-                index += (grd.getStore().indexOf(itm)+1) + ',';
+            arr.forEach(function (itm) {
+                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
             });
 
             return index.substring(0, index.length - 1);
@@ -434,6 +466,28 @@ var HQ = {
                 if (e.value != '')
                     HQ.store.insertBlank(grd.getStore(), keys);
             }
+        },
+        hide: function (grd, arrcolumnName) {
+            var columns = grd.columns;
+            arrcolumnName.forEach(function (itm) {
+                var index = HQ.grid.findColumnIndex(columns, itm);
+                grd.columns[index].hide();
+
+            });
+        },
+        show: function (grd, arrcolumnName) {
+            var columns = grd.columns;
+            arrcolumnName.forEach(function (itm) {
+                var index = HQ.grid.findColumnIndex(columns, itm);
+                grd.columns[index].show();
+            });
+        },
+        findColumnIndex: function (columns, dataIndex) {
+            var index;
+            for (index = 0; index < columns.length; ++index) {
+                if (columns[index].dataIndex == dataIndex) { break; }
+            }
+            return index == columns.length ? -1 : index;
         }
     },
     message: {
@@ -541,8 +595,8 @@ var HQ = {
             if (typeof (ctr.items) != "undefined") {
                 ctr.items.each(function (itm) {
                     if (typeof (itm.setReadOnly) != "undefined") {
-                        if(itm.getTag()!="X")
-                        itm.setReadOnly(lock)
+                        if (itm.getTag() != "X")
+                            itm.setReadOnly(lock)
 
                     }
                     HQ.common.lockItem(itm, lock);
@@ -586,15 +640,16 @@ var HQ = {
                 HQ.focus = itemfocus;
             });
         },
-        setForceSelection: function (ctr, isForceSelection,cboex) {
+        setForceSelection: function (ctr, isForceSelection, cboex) {
             if (typeof (ctr.items) != "undefined") {
                 ctr.items.each(function (itm) {
                     if (typeof (itm.forceSelection) != "undefined") {
-                        if (cboex != undefined) {                            
-                            if (!HQ.common.contains(cboex.split(','), itm.id)) itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;                           
-                        }else itm.forceSelection = isForceSelection==undefined?false:isForceSelection;
+                        itm.store.clearFilter();
+                        if (cboex != undefined) {
+                            if (!HQ.common.contains(cboex.split(','), itm.id)) itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
+                        } else itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
                     }
-                      
+
                     HQ.common.setForceSelection(itm, isForceSelection, cboex);
                 });
             }
@@ -677,7 +732,17 @@ var HQ = {
                 HQ.message.show(09112014, '', null);
                 return false;
             }
+        },
+        mathRound: function (value, exp) {
+            return decimalAdjust('round', value, exp);
+        },
+        mathFloor: function (value, exp) {
+            return decimalAdjust('floor', value, exp);
+        },
+        mathCeil: function (value, exp) {
+            return decimalAdjust('ceil', value, exp);
         }
+
     },
     form: {
         checkRequirePass: function (frm) {
@@ -728,14 +793,20 @@ var HQ = {
 };
 
 HQ.waitMsg = HQ.common.getLang('waitMsg');
-
 var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 2) value = '';//value.split(',')[value.split(',').length-1];
-        if (value.split(';').length > 2) value = '';//value.split(';')[value.split(',').length - 1];
+        if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
+        if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
+            var filtersAux = [];
+            // get filter
+            store.filters.items.forEach(function (item) {
+                if (item.id != control.id + '-query-filter') {
+                    filtersAux.push(item);
+                }
+            });
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {
                 store.filterBy(function (record) {
@@ -758,6 +829,9 @@ var FilterCombo = function (control, stkeyFilter) {
                     }
                 });
             }
+            filtersAux.forEach(function (item) {
+                store.filter(item.property, item.value);
+            });
         }
     }
 };
@@ -767,7 +841,52 @@ var loadDefault = function (fileNameStore, cbo) {
 
     }
 };
-//TrungHT
+//MathRound 2015-03-24
+// Closure
+function decimalAdjust(type, value, exp) {
+    exp = exp * -1;
+    // If the exp is undefined or zero...
+    if (typeof exp === 'undefined' || +exp === 0) {
+        return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    // If the value is not a number or the exp is not an integer...
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+        return NaN;
+    }
+    // Shift
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    // Shift back
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+}
+
+
+
+//////Example Round
+////Math.round10(55.55, -1);   // 55.6
+////Math.round10(55.549, -1);  // 55.5
+////Math.round10(55, 1);       // 60
+////Math.round10(54.9, 1);     // 50
+////Math.round10(-55.55, -1);  // -55.5
+////Math.round10(-55.551, -1); // -55.6
+////Math.round10(-55, 1);      // -50
+////Math.round10(-55.1, 1);    // -60
+////Math.round10(1.005, -2);   // 1.01 -- compare this with Math.round(1.005*100)/100 above
+////// Floor
+////Math.floor10(55.59, -1);   // 55.5
+////Math.floor10(59, 1);       // 50
+////Math.floor10(-55.51, -1);  // -55.6
+////Math.floor10(-51, 1);      // -60
+////// Ceil
+////Math.ceil10(55.51, -1);    // 55.6
+////Math.ceil10(51, 1);        // 60
+////Math.ceil10(-55.59, -1);   // -55.5
+////Math.ceil10(-59, 1);       // -50
+
+//TrungHT override control ext
 Ext.define("NumbercurrencyPrecision", {
     override: "Ext.util.Format.Number",
     currencyPrecision: 0
@@ -779,7 +898,7 @@ Ext.define("ThousandSeparatorNumberField", {
     * @cfg {Boolean} useThousandSeparator
     */
     useThousandSeparator: true,
-
+    selectOnFocus: true,
     style: 'text-align: right',
     fieldStyle: "text-align:right;",
     /**
@@ -928,8 +1047,6 @@ Ext.define("Ext.locale.vn.toolbar.Paging", {
     displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
     emptyMsg: HQ.common.getLang("DataEmty")
 });
-
-
 //window.onresize = function () {
 //    if ((window.outerHeight - window.innerHeight) > 100) {
 //        alert('Docked inspector was opened');

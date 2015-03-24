@@ -91,6 +91,13 @@ var loadDataHeader = function (sto) {
     else App.btnClosePO.enable();
 };
 var loadDataDetail = function (sto) {
+    //neu sto da co du lieu thi ko duoc sua cac combo ben duoi
+    if (sto.data.length > 0) {     
+        App.cboVendID.setReadOnly(true);     
+    }
+    else {     
+        App.cboVendID.setReadOnly(false);
+    }
     HQ.store.insertBlank(sto, _keys);
     calcDet();
     frmChange();
@@ -240,7 +247,7 @@ var frmChange = function (sender) {
         //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
         App.cboBranchID.setReadOnly(HQ.isChange);
         App.cboPONbr.setReadOnly(HQ.isChange);
-        if (HQ.isChange || App.cboStatus.getValue() == "C") App.btnClosePO.disable();
+        if (HQ.isChange || (App.cboStatus.getValue() != "M" && App.cboStatus.getValue() != "O")) App.btnClosePO.disable();
         else App.btnClosePO.enable();
     }
     else {
@@ -276,6 +283,25 @@ var frmChange = function (sender) {
         App.btnImport.disable();
     }
     else App.btnImport.enable();
+    if (!Ext.isEmpty(App.cboPONbr.getValue()) || App.stoPO10100_pgDetail.data.length > 1) {
+        App.cboVendID.setReadOnly(true);
+    }
+    else {
+        App.cboVendID.setReadOnly(false);
+        if (!HQ.store.isChange(App.stoPO_Header))
+            App.cboPONbr.setReadOnly(false);
+    }
+   
+};
+var stoChanged = function (sto) {
+    if (!Ext.isEmpty(App.cboPONbr.getValue()) || App.stoPO10100_pgDetail.data.length > 1) {
+        App.cboVendID.setReadOnly(true);
+    }
+    else {
+        App.cboVendID.setReadOnly(false);
+        if(!HQ.store.isChange(App.stoPO_Header))
+            App.cboPONbr.setReadOnly(false);
+    }
 };
 var grdPO_Detail_BeforeEdit = function (editor, e) {
     if (App.cboStatus.getValue() != "H") return false;
@@ -438,28 +464,29 @@ var grdPO_Detail_Edit = function (item, e) {
     else if (e.field == "DiscAmt") {
         e.record.set("ExtCost", objDetail.UnitCost * objDetail.QtyOrd - objDetail.DiscAmt);
         if (objDetail.QtyOrd != 0) {
-            e.record.set("DiscPct", Math.round((objDetail.DiscAmt / (objDetail.UnitCost * objDetail.QtyOrd)) * 100, 2));
+            e.record.set("DiscPct", HQ.util.mathRound((objDetail.DiscAmt / (objDetail.UnitCost * objDetail.QtyOrd)) * 100, 2));//Math.round((objDetail.DiscAmt / (objDetail.UnitCost * objDetail.QtyOrd)) * 100, 2));
         }
 
     }
     else if (e.field == "DiscPct") {
         if (objDetail.ExtCost != 0) {
-            e.record.set("DiscAmt", Math.round((objDetail.UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
+            e.record.set("DiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));//Math.round((objDetail.UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
         }
         e.record.set("ExtCost", objDetail.UnitCost * objDetail.QtyOrd - objDetail.DiscAmt);
     }
     else if (e.field == "PurchUnit" || e.field == "InvtID" || e.field == "SiteID") {
-        if (_objPO_Setup.DfltLstUnitCost == "A") {
+        if (_objPO_Setup.DfltLstUnitCost == "A" || _objPO_Setup.DfltLstUnitCost == "L") {
             //HQ.grid.showBusy(App.grdDetail, true);                     
             App.direct.PO10100ItemSitePrice(
                 App.cboBranchID.getValue(), objDetail.InvtID, objDetail.SiteID,
                {
                    success: function (result) {
                        _objIN_ItemSite = result;
-                       UnitCost = result == null ? 0 : result.AvgCost;
+                       UnitCost = result == null ? 0 : (_objPO_Setup.DfltLstUnitCost == "A" ? result.AvgCost : result.LastPurchasePrice);
                        UnitCost = Math.round((objDetail.UnitMultDiv == "D" ? (UnitCost / objDetail.CnvFact) : (UnitCost * objDetail.CnvFact)));
-                       objDetail.UnitCost = UnitCost;
-                       objDetail.ExtCost = UnitCost * objDetail.QtyOrd - objDetail.DiscAmt;
+                       e.record.set("UnitCost", UnitCost);
+                       e.record.set("ExtCost", UnitCost * objDetail.QtyOrd - objDetail.DiscAmt);
+                    
                        //HQ.grid.showBusy(App.grdDetail, false);
                    },
                    failure: function (result) {
@@ -1272,7 +1299,7 @@ function calcTax(index) {
                     taxID = dt[j].taxid;
                     lineRef = det.LineRef;
                     taxRate = objTax.TaxRate;
-                    taxAmtL1 = Math.round(txblAmtL1 * objTax.TaxRate / 100, 0);
+                    taxAmtL1 = HQ.util.mathRound(txblAmtL1 * objTax.TaxRate/100, 2);//Math.round(txblAmtL1 * objTax.TaxRate / 100, 2);
 
                     if (objTax.Lvl2Exmpt == 0) txblAmtAddL2 += txblAmtL1;
 
@@ -1305,7 +1332,7 @@ function calcTax(index) {
                         if (chk) {
 
                             if (totPrcTaxInclAmt + taxAmtL1 + txblAmtL1 != det.ExtCost)
-                                taxAmtL1 = Math.round(det.ExtCost - (totPrcTaxInclAmt + txblAmtL1), 0);
+                                taxAmtL1 = HQ.util.mathRound(det.ExtCost - (totPrcTaxInclAmt + txblAmtL1), 2); //Math.round(det.ExtCost - (totPrcTaxInclAmt + txblAmtL1), 2);
 
                         }
                         else
@@ -1335,7 +1362,7 @@ function calcTax(index) {
                     lineRef = det.LineRef;
                     taxRate = objTax.TaxRate;
                     txblAmtL2 = Math.round(txblAmtAddL2 + txblAmtL1, 0);
-                    taxAmtL2 = Math.round(txblAmtAddL2 * objTax.TaxRate / 100, 0);
+                    taxAmtL2 = HQ.util.mathRound(txblAmtAddL2 * objTax.TaxRate / 100, 2);//Math.round(txblAmtAddL2 * objTax.TaxRate / 100, 2);
                     insertUpdateTax(taxID, lineRef, taxRate, taxAmtL2, txblAmtL2, 2);
                 }
             }

@@ -161,6 +161,8 @@
           <Property Name="QtyShipNotInv" Type="float" Nullable="false" />
           <Property Name="StkItem" Type="smallint" Nullable="false" />
           <Property Name="TotCost" Type="float" Nullable="false" />
+          <Property Name="LastPurchaseDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="LastPurchasePrice" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
@@ -168,7 +170,6 @@
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="QtyUncosted" Type="float" Nullable="false" />
-          <Property Name="LastPurchaseDate" Type="smalldatetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="IN_UnitConversion">
@@ -524,7 +525,6 @@
             <Parameter Name="PONbr" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="PO_Detail" EntityType="PO10100Model.PO_Detail" />
-          <EntitySet Name="IN_ItemSite" EntityType="PO10100Model.IN_ItemSite" />
           <EntitySet Name="IN_Inventory" EntityType="PO10100Model.IN_Inventory" />
           <EntitySet Name="IN_UnitConversion" EntityType="PO10100Model.IN_UnitConversion" />
           <EntitySet Name="OM_UserDefault" EntityType="PO10100Model.OM_UserDefault" />
@@ -567,6 +567,7 @@
             <Parameter Name="PONbr" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="PO_Header" EntityType="PO10100Model.PO_Header" />
+          <EntitySet Name="IN_ItemSite" EntityType="PO10100Model.IN_ItemSite" />
         </EntityContainer>
         <ComplexType Name="PO10100_pgDetail_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -725,38 +726,6 @@
           <Property Type="String" Name="TaxID01" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxID02" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxID03" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="IN_ItemSite">
-          <Key>
-            <PropertyRef Name="InvtID" />
-            <PropertyRef Name="SiteID" />
-          </Key>
-          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="AvgCost" Nullable="false" />
-          <Property Type="Double" Name="QtyAlloc" Nullable="false" />
-          <Property Type="Double" Name="QtyAllocIN" Nullable="false" />
-          <Property Type="Double" Name="QtyAllocPORet" Nullable="false" />
-          <Property Type="Double" Name="QtyAllocSO" Nullable="false" />
-          <Property Type="Double" Name="QtyAvail" Nullable="false" />
-          <Property Type="Double" Name="QtyInTransit" Nullable="false" />
-          <Property Type="Double" Name="QtyOnBO" Nullable="false" />
-          <Property Type="Double" Name="QtyOnHand" Nullable="false" />
-          <Property Type="Double" Name="QtyOnPO" Nullable="false" />
-          <Property Type="Double" Name="QtyOnTransferOrders" Nullable="false" />
-          <Property Type="Double" Name="QtyOnSO" Nullable="false" />
-          <Property Type="Double" Name="QtyShipNotInv" Nullable="false" />
-          <Property Type="Int16" Name="StkItem" Nullable="false" />
-          <Property Type="Double" Name="TotCost" Nullable="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="QtyUncosted" Nullable="false" />
-          <Property Type="DateTime" Name="LastPurchaseDate" Nullable="false" Precision="0" />
-          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
         </EntityType>
         <EntityType Name="IN_Inventory">
           <Key>
@@ -1273,6 +1242,39 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Boolean" Name="IsExport" />
         </EntityType>
+        <EntityType Name="IN_ItemSite">
+          <Key>
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="SiteID" />
+          </Key>
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="AvgCost" Nullable="false" />
+          <Property Type="Double" Name="QtyAlloc" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocIN" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocPORet" Nullable="false" />
+          <Property Type="Double" Name="QtyAllocSO" Nullable="false" />
+          <Property Type="Double" Name="QtyAvail" Nullable="false" />
+          <Property Type="Double" Name="QtyInTransit" Nullable="false" />
+          <Property Type="Double" Name="QtyOnBO" Nullable="false" />
+          <Property Type="Double" Name="QtyOnHand" Nullable="false" />
+          <Property Type="Double" Name="QtyOnPO" Nullable="false" />
+          <Property Type="Double" Name="QtyOnTransferOrders" Nullable="false" />
+          <Property Type="Double" Name="QtyOnSO" Nullable="false" />
+          <Property Type="Double" Name="QtyShipNotInv" Nullable="false" />
+          <Property Type="Int16" Name="StkItem" Nullable="false" />
+          <Property Type="Double" Name="TotCost" Nullable="false" />
+          <Property Type="DateTime" Name="LastPurchaseDate" Nullable="false" Precision="0" />
+          <Property Type="Double" Name="LastPurchasePrice" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="QtyUncosted" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1445,38 +1447,6 @@
                 <ScalarProperty Name="LineRef" ColumnName="LineRef" />
                 <ScalarProperty Name="PONbr" ColumnName="PONbr" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IN_ItemSite">
-            <EntityTypeMapping TypeName="PO10100Model.IN_ItemSite">
-              <MappingFragment StoreEntitySet="IN_ItemSite">
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LastPurchaseDate" ColumnName="LastPurchaseDate" />
-                <ScalarProperty Name="QtyUncosted" ColumnName="QtyUncosted" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="TotCost" ColumnName="TotCost" />
-                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
-                <ScalarProperty Name="QtyShipNotInv" ColumnName="QtyShipNotInv" />
-                <ScalarProperty Name="QtyOnSO" ColumnName="QtyOnSO" />
-                <ScalarProperty Name="QtyOnTransferOrders" ColumnName="QtyOnTransferOrders" />
-                <ScalarProperty Name="QtyOnPO" ColumnName="QtyOnPO" />
-                <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
-                <ScalarProperty Name="QtyOnBO" ColumnName="QtyOnBO" />
-                <ScalarProperty Name="QtyInTransit" ColumnName="QtyInTransit" />
-                <ScalarProperty Name="QtyAvail" ColumnName="QtyAvail" />
-                <ScalarProperty Name="QtyAllocSO" ColumnName="QtyAllocSO" />
-                <ScalarProperty Name="QtyAllocPORet" ColumnName="QtyAllocPORet" />
-                <ScalarProperty Name="QtyAllocIN" ColumnName="QtyAllocIN" />
-                <ScalarProperty Name="QtyAlloc" ColumnName="QtyAlloc" />
-                <ScalarProperty Name="AvgCost" ColumnName="AvgCost" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2030,6 +2000,39 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="IN_ItemSite">
+            <EntityTypeMapping TypeName="PO10100Model.IN_ItemSite">
+              <MappingFragment StoreEntitySet="IN_ItemSite">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="QtyUncosted" ColumnName="QtyUncosted" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LastPurchasePrice" ColumnName="LastPurchasePrice" />
+                <ScalarProperty Name="LastPurchaseDate" ColumnName="LastPurchaseDate" />
+                <ScalarProperty Name="TotCost" ColumnName="TotCost" />
+                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
+                <ScalarProperty Name="QtyShipNotInv" ColumnName="QtyShipNotInv" />
+                <ScalarProperty Name="QtyOnSO" ColumnName="QtyOnSO" />
+                <ScalarProperty Name="QtyOnTransferOrders" ColumnName="QtyOnTransferOrders" />
+                <ScalarProperty Name="QtyOnPO" ColumnName="QtyOnPO" />
+                <ScalarProperty Name="QtyOnHand" ColumnName="QtyOnHand" />
+                <ScalarProperty Name="QtyOnBO" ColumnName="QtyOnBO" />
+                <ScalarProperty Name="QtyInTransit" ColumnName="QtyInTransit" />
+                <ScalarProperty Name="QtyAvail" ColumnName="QtyAvail" />
+                <ScalarProperty Name="QtyAllocSO" ColumnName="QtyAllocSO" />
+                <ScalarProperty Name="QtyAllocPORet" ColumnName="QtyAllocPORet" />
+                <ScalarProperty Name="QtyAllocIN" ColumnName="QtyAllocIN" />
+                <ScalarProperty Name="QtyAlloc" ColumnName="QtyAlloc" />
+                <ScalarProperty Name="AvgCost" ColumnName="AvgCost" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -2050,9 +2053,8 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="SA00300Model" ZoomLevel="71">
+      <Diagram Name="SA00300Model" ZoomLevel="74">
         <EntityTypeShape EntityType="PO10100Model.PO_Detail" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PO10100Model.IN_ItemSite" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.IN_Inventory" Width="1.5" PointX="4.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.IN_UnitConversion" Width="1.5" PointX="6.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.OM_UserDefault" Width="1.5" PointX="6.75" PointY="5.75" />
@@ -2060,6 +2062,7 @@
         <EntityTypeShape EntityType="PO10100Model.RPTRunning" Width="1.5" PointX="10.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10100Model.PO_Setup" Width="1.5" PointX="10.75" PointY="8.75" />
         <EntityTypeShape EntityType="PO10100Model.PO_Header" Width="1.5" PointX="11.777696611256197" PointY="27.955009011530787" />
+        <EntityTypeShape EntityType="PO10100Model.IN_ItemSite" Width="1.5" PointX="5.9352452018927995" PointY="5.1839857423603473" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -84,22 +84,6 @@ namespace PO10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_ItemSite> IN_ItemSite
-        {
-            get
-            {
-                if ((_IN_ItemSite == null))
-                {
-                    _IN_ItemSite = base.CreateObjectSet<IN_ItemSite>("IN_ItemSite");
-                }
-                return _IN_ItemSite;
-            }
-        }
-        private ObjectSet<IN_ItemSite> _IN_ItemSite;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_Inventory> IN_Inventory
         {
             get
@@ -208,6 +192,22 @@ namespace PO10100
             }
         }
         private ObjectSet<PO_Header> _PO_Header;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_ItemSite> IN_ItemSite
+        {
+            get
+            {
+                if ((_IN_ItemSite == null))
+                {
+                    _IN_ItemSite = base.CreateObjectSet<IN_ItemSite>("IN_ItemSite");
+                }
+                return _IN_ItemSite;
+            }
+        }
+        private ObjectSet<IN_ItemSite> _IN_ItemSite;
 
         #endregion
 
@@ -219,14 +219,6 @@ namespace PO10100
         public void AddToPO_Detail(PO_Detail pO_Detail)
         {
             base.AddObject("PO_Detail", pO_Detail);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_ItemSite EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_ItemSite(IN_ItemSite iN_ItemSite)
-        {
-            base.AddObject("IN_ItemSite", iN_ItemSite);
         }
     
         /// <summary>
@@ -283,6 +275,14 @@ namespace PO10100
         public void AddToPO_Header(PO_Header pO_Header)
         {
             base.AddObject("PO_Header", pO_Header);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_ItemSite EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_ItemSite(IN_ItemSite iN_ItemSite)
+        {
+            base.AddObject("IN_ItemSite", iN_ItemSite);
         }
 
         #endregion
@@ -3697,6 +3697,8 @@ namespace PO10100
         /// <param name="qtyShipNotInv">Initial value of the QtyShipNotInv property.</param>
         /// <param name="stkItem">Initial value of the StkItem property.</param>
         /// <param name="totCost">Initial value of the TotCost property.</param>
+        /// <param name="lastPurchaseDate">Initial value of the LastPurchaseDate property.</param>
+        /// <param name="lastPurchasePrice">Initial value of the LastPurchasePrice property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
@@ -3704,8 +3706,7 @@ namespace PO10100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="qtyUncosted">Initial value of the QtyUncosted property.</param>
-        /// <param name="lastPurchaseDate">Initial value of the LastPurchaseDate property.</param>
-        public static IN_ItemSite CreateIN_ItemSite(global::System.String invtID, global::System.String siteID, global::System.Double avgCost, global::System.Double qtyAlloc, global::System.Double qtyAllocIN, global::System.Double qtyAllocPORet, global::System.Double qtyAllocSO, global::System.Double qtyAvail, global::System.Double qtyInTransit, global::System.Double qtyOnBO, global::System.Double qtyOnHand, global::System.Double qtyOnPO, global::System.Double qtyOnTransferOrders, global::System.Double qtyOnSO, global::System.Double qtyShipNotInv, global::System.Int16 stkItem, global::System.Double totCost, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Double qtyUncosted, global::System.DateTime lastPurchaseDate)
+        public static IN_ItemSite CreateIN_ItemSite(global::System.String invtID, global::System.String siteID, global::System.Double avgCost, global::System.Double qtyAlloc, global::System.Double qtyAllocIN, global::System.Double qtyAllocPORet, global::System.Double qtyAllocSO, global::System.Double qtyAvail, global::System.Double qtyInTransit, global::System.Double qtyOnBO, global::System.Double qtyOnHand, global::System.Double qtyOnPO, global::System.Double qtyOnTransferOrders, global::System.Double qtyOnSO, global::System.Double qtyShipNotInv, global::System.Int16 stkItem, global::System.Double totCost, global::System.DateTime lastPurchaseDate, global::System.Double lastPurchasePrice, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Double qtyUncosted)
         {
             IN_ItemSite iN_ItemSite = new IN_ItemSite();
             iN_ItemSite.InvtID = invtID;
@@ -3725,6 +3726,8 @@ namespace PO10100
             iN_ItemSite.QtyShipNotInv = qtyShipNotInv;
             iN_ItemSite.StkItem = stkItem;
             iN_ItemSite.TotCost = totCost;
+            iN_ItemSite.LastPurchaseDate = lastPurchaseDate;
+            iN_ItemSite.LastPurchasePrice = lastPurchasePrice;
             iN_ItemSite.Crtd_DateTime = crtd_DateTime;
             iN_ItemSite.Crtd_Prog = crtd_Prog;
             iN_ItemSite.Crtd_User = crtd_User;
@@ -3732,7 +3735,6 @@ namespace PO10100
             iN_ItemSite.LUpd_Prog = lUpd_Prog;
             iN_ItemSite.LUpd_User = lUpd_User;
             iN_ItemSite.QtyUncosted = qtyUncosted;
-            iN_ItemSite.LastPurchaseDate = lastPurchaseDate;
             return iN_ItemSite;
         }
 
@@ -4159,6 +4161,54 @@ namespace PO10100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
+        public global::System.DateTime LastPurchaseDate
+        {
+            get
+            {
+                return _LastPurchaseDate;
+            }
+            set
+            {
+                OnLastPurchaseDateChanging(value);
+                ReportPropertyChanging("LastPurchaseDate");
+                _LastPurchaseDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LastPurchaseDate");
+                OnLastPurchaseDateChanged();
+            }
+        }
+        private global::System.DateTime _LastPurchaseDate;
+        partial void OnLastPurchaseDateChanging(global::System.DateTime value);
+        partial void OnLastPurchaseDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double LastPurchasePrice
+        {
+            get
+            {
+                return _LastPurchasePrice;
+            }
+            set
+            {
+                OnLastPurchasePriceChanging(value);
+                ReportPropertyChanging("LastPurchasePrice");
+                _LastPurchasePrice = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LastPurchasePrice");
+                OnLastPurchasePriceChanged();
+            }
+        }
+        private global::System.Double _LastPurchasePrice;
+        partial void OnLastPurchasePriceChanging(global::System.Double value);
+        partial void OnLastPurchasePriceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
         public global::System.DateTime Crtd_DateTime
         {
             get
@@ -4321,30 +4371,6 @@ namespace PO10100
         private global::System.Double _QtyUncosted;
         partial void OnQtyUncostedChanging(global::System.Double value);
         partial void OnQtyUncostedChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime LastPurchaseDate
-        {
-            get
-            {
-                return _LastPurchaseDate;
-            }
-            set
-            {
-                OnLastPurchaseDateChanging(value);
-                ReportPropertyChanging("LastPurchaseDate");
-                _LastPurchaseDate = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("LastPurchaseDate");
-                OnLastPurchaseDateChanged();
-            }
-        }
-        private global::System.DateTime _LastPurchaseDate;
-        partial void OnLastPurchaseDateChanging(global::System.DateTime value);
-        partial void OnLastPurchaseDateChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
