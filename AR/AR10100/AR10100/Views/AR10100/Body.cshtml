@@ -19,6 +19,7 @@
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
         .BodyPadding(10)
+        //.AutoScroll(true)
         .TopBar(Util.SetupToolbar("Print",true,""))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         //.Listeners(itm => itm.AfterRender.Fn = "frmloadAfterRender")
@@ -29,8 +30,8 @@
                     l.FieldChange.Fn = "frmChange";
                 })
         .Items(
-            X.Panel().ID("Header").Layout(LayoutType.Anchor)
-            .Items(
+            //X.Panel().ID("Header").Layout(LayoutType.Anchor)
+            //.Items(
             
                 X.FormPanel()
                 .ID("frmTop")
@@ -166,7 +167,9 @@
                 //ngoac dong frmTop
                 )
                 , X.TabPanel()
-                .Layout(LayoutType.Fit)
+                //.Layout(LayoutType.Fit)
+                .Anchor("100% -120")
+                .AutoScroll(true)
                 .ID("tabAtAR10100")
                 .Listeners(p =>
                 {  
@@ -183,7 +186,9 @@
                         .Items(
                         
                         
-                            X.Panel()    
+                            X.Panel() 
+                            .Layout(LayoutType.Anchor)
+                               
                             .Listeners(l =>
                             {
                                 l.Render.Handler = "HQ.common.control_render(this,'headerBot')";
@@ -398,9 +403,10 @@
                         )
                         
                         ,Html.X().GridPanel()
-                        .Frame(true)
-                        .AnchorHorizontal("100%")
-                        .AnchorVertical("65%")
+                        .Layout(LayoutType.Fit)
+                        //.Frame(true)
+                        //.AnchorHorizontal("100%")
+                        //.AnchorVertical("50%")
                         //.Height(400)
                         //.Width(1300)
                         .Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
@@ -429,7 +435,7 @@
                         .ColumnModel(
                             Html.X().RowNumbererColumn().ID("RowNumber")
                                 //LineType Column
-                                 , Html.X().Column().Text(Util.GetLang("LineType")).Width(150).DataIndex("LineType")
+                                 , Html.X().Column().Text(Util.GetLang("LineType")).Width(100).DataIndex("LineType")
                                 .Editor(
                                   HQ.Combo().ID("cboLineType").Name("cboLineType").HQProcedure("AR10100_pcLineType")
                                   .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
@@ -464,8 +470,8 @@
 
                                  )
                                  //quantity
-                                 , Html.X().NumberColumn().Format("0,000").ID("txtQty").Text(Util.GetLang("Qty")).DataIndex("Qty").Width(100)
-                                 .Editor(Html.X().NumberField().EnableKeyEvents(true).MinValue(0)
+                                 , Html.X().NumberColumn().Format("0,000").ID("txtQty").Align(Alignment.Right).Text(Util.GetLang("Qty")).DataIndex("Qty").Width(100)
+                                 .Editor(Html.X().NumberField().EnableKeyEvents(true).MinValue(0).DecimalPrecision(0)
                                  .Listeners(lst =>
                                  {
                                      lst.Change.Fn = "txtQty_Change";
@@ -474,8 +480,8 @@
                                  )
                                  
                                  //Sales Price
-                                 , Html.X().NumberColumn().Format("0,000").ID("txtUnitPrice").Text(Util.GetLang("SalesPrice")).DataIndex("UnitPrice").Width(150)
-                                 .Editor(Html.X().NumberField()
+                                 , Html.X().NumberColumn().Format("0,000").ID("txtUnitPrice").Align(Alignment.Right).Text(Util.GetLang("SalesPrice")).DataIndex("UnitPrice").Width(150)
+                                 .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(0)
                                  .Listeners(lst =>
                                  {
                                      lst.Change.Fn = "txtUnitPrice_Change";
@@ -483,8 +489,8 @@
                                  )
                                  
                                  //Extended Amount
-                                 , Html.X().NumberColumn().Format("0,000").ID("txtTranAmt").Text(Util.GetLang("ExtAmt")).DataIndex("TranAmt").Width(150)
-                                 .Editor(Html.X().NumberField()
+                                 , Html.X().NumberColumn().Format("0,000").ID("txtTranAmt").Align(Alignment.Right).Text(Util.GetLang("ExtAmt")).DataIndex("TranAmt").Width(150)
+                                 .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(0)
                                  .Listeners(lst =>
                                  {
                                      lst.Change.Fn = "txtTranAmt_Change";
@@ -596,24 +602,27 @@
                  )
                 , X.Panel()
                 .ID("tabTax")
-                .Layout(LayoutType.Anchor)
+                .Layout(LayoutType.VBox)
                 .AnchorHorizontal("100%")
                 .AnchorVertical("100%")
                 .Padding(5)
                 .Title(Util.GetLang("TAX"))
+                .LayoutConfig(config => { config.Add(new VBoxLayoutConfig() { Align = VBoxAlign.Stretch }); })
                 .CloseAction(CloseAction.Hide)
                 //.Disabled(true)
                 .Items(
                         //Grid 1 tab 2
                         Html.X().GridPanel()
-                        .Frame(true)
-                        .AnchorHorizontal("100%")
-                        .AnchorVertical("40%")
+                        //.Frame(true)
+                        //.Layout(LayoutType.VBox)
+                        //.AnchorHorizontal("100%")
+                        //.AnchorVertical("40%")
                         .Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
+                        .Flex(1)
                         .RenderTo("contentCenter")
-                        .AutoScroll(true)
+                        //.AutoScroll(true)
                         .View(X.GridView().TrackOver(false))
-                        .ID("grdTopTab2").SetAutoScroll(true)
+                        .ID("grdTopTab2")//.SetAutoScroll(true)
                         .StoreID("storeGridTopTab2")
                         .SortableColumns(false)
                         //.Listeners(l =>
@@ -638,17 +647,18 @@
                      .SelectionModel(Html.X().RowSelectionModel().ID("slmGridTopTab2").Mode(SelectionMode.Multi))
                      
                      
-                     
+                     , X.BoxSplitter()
                      //Grid 2 tab 2
                      ,Html.X().GridPanel()
-                        .Frame(true)
-                        .AnchorHorizontal("100%")
-                        .AnchorVertical("40%")
+                        //.Frame(true)
+                        .Flex(1)
+                        //.AnchorHorizontal("100%")
+                        //.AnchorVertical("40%")
                         .Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
-                        .RenderTo("contentCenter")
-                        .AutoScroll(true)
-                        .View(X.GridView().TrackOver(false))
-                        .ID("grdBotTab2").SetAutoScroll(true)
+                        //.RenderTo("contentCenter")
+                        //.AutoScroll(true)
+                        //.View(X.GridView().TrackOver(false))
+                        .ID("grdBotTab2")//.SetAutoScroll(true)
                         .StoreID("storeGridBotTab2")
                         .SortableColumns(false)
                         //.Listeners(l =>
@@ -684,8 +694,8 @@
                   
          
                         
-                    //ngoac ngoai bao gom panel tren va tab o duoi
-                    )
+                    //ngoac ngoai bao gom panel tren va tab o duoi (header Panel)
+                    //)
      
 
                 )
