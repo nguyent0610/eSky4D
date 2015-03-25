@@ -103,7 +103,7 @@ $.fn.extend({
 					// other browsers return a string
 					// we ignore the case of nested elements with an explicit value of 0
 					// <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
-					value = parseFloat( elem.css( "zIndex" ), 10 );
+					value = parseInt( elem.css( "zIndex" ), 10 );
 					if ( !isNaN( value ) && value !== 0 ) {
 						return value;
 					}
@@ -940,7 +940,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true || ($.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
 			var self = this;
-			$(this.helper).animate(this.originalPosition, parseFloat(this.options.revertDuration, 10), function() {
+			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10), function() {
 				if(self._trigger("stop", event) !== false) {
 					self._clear();
 				}
@@ -1049,8 +1049,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 			po = { top: 0, left: 0 };
 
 		return {
-			top: po.top + (parseFloat(this.offsetParent.css("borderTopWidth"),10) || 0),
-			left: po.left + (parseFloat(this.offsetParent.css("borderLeftWidth"),10) || 0)
+			top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
+			left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
 		};
 
 	},
@@ -1060,8 +1060,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if(this.cssPosition == "relative") {
 			var p = this.element.position();
 			return {
-				top: p.top - (parseFloat(this.helper.css("top"),10) || 0) + this.scrollParent.scrollTop(),
-				left: p.left - (parseFloat(this.helper.css("left"),10) || 0) + this.scrollParent.scrollLeft()
+				top: p.top - (parseInt(this.helper.css("top"),10) || 0) + this.scrollParent.scrollTop(),
+				left: p.left - (parseInt(this.helper.css("left"),10) || 0) + this.scrollParent.scrollLeft()
 			};
 		} else {
 			return { top: 0, left: 0 };
@@ -1071,10 +1071,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	_cacheMargins: function() {
 		this.margins = {
-			left: (parseFloat(this.element.css("marginLeft"),10) || 0),
-			top: (parseFloat(this.element.css("marginTop"),10) || 0),
-			right: (parseFloat(this.element.css("marginRight"),10) || 0),
-			bottom: (parseFloat(this.element.css("marginBottom"),10) || 0)
+			left: (parseInt(this.element.css("marginLeft"),10) || 0),
+			top: (parseInt(this.element.css("marginTop"),10) || 0),
+			right: (parseInt(this.element.css("marginRight"),10) || 0),
+			bottom: (parseInt(this.element.css("marginBottom"),10) || 0)
 		};
 	},
 
@@ -1103,10 +1103,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 			var over = ($(ce).css("overflow") != 'hidden');
 
 			this.containment = [
-				(parseFloat($(ce).css("borderLeftWidth"),10) || 0) + (parseFloat($(ce).css("paddingLeft"),10) || 0),
-				(parseFloat($(ce).css("borderTopWidth"),10) || 0) + (parseFloat($(ce).css("paddingTop"),10) || 0),
-				(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseFloat($(ce).css("borderLeftWidth"),10) || 0) - (parseFloat($(ce).css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left - this.margins.right,
-				(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseFloat($(ce).css("borderTopWidth"),10) || 0) - (parseFloat($(ce).css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top  - this.margins.bottom
+				(parseInt($(ce).css("borderLeftWidth"),10) || 0) + (parseInt($(ce).css("paddingLeft"),10) || 0),
+				(parseInt($(ce).css("borderTopWidth"),10) || 0) + (parseInt($(ce).css("paddingTop"),10) || 0),
+				(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - (parseInt($(ce).css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left - this.margins.right,
+				(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - (parseInt($(ce).css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top  - this.margins.bottom
 			];
 			this.relative_container = c;
 
@@ -1522,11 +1522,11 @@ $.ui.plugin.add("draggable", "stack", {
 		var o = $(this).data("draggable").options;
 
 		var group = $.makeArray($(o.stack)).sort(function(a,b) {
-			return (parseFloat($(a).css("zIndex"),10) || 0) - (parseFloat($(b).css("zIndex"),10) || 0);
+			return (parseInt($(a).css("zIndex"),10) || 0) - (parseInt($(b).css("zIndex"),10) || 0);
 		});
 		if (!group.length) { return; }
 		
-		var min = parseFloat(group[0].style.zIndex) || 0;
+		var min = parseInt(group[0].style.zIndex) || 0;
 		$(group).each(function(i) {
 			this.style.zIndex = min + i;
 		});
@@ -2141,8 +2141,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 				soffsetw = ista ? 0 : self.sizeDiff.width;
 
 			var s = { width: (self.helper.width()  - soffsetw), height: (self.helper.height() - soffseth) },
-				left = (parseFloat(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
-				top = (parseFloat(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
+				left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
+				top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
 
 			if (!o.animate)
 				this.element.css($.extend(s, { top: top, left: left }));
@@ -2260,7 +2260,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 					p = [prel.css('paddingTop'), prel.css('paddingRight'), prel.css('paddingBottom'), prel.css('paddingLeft')];
 
 				this.borderDif = $.map(b, function(v, i) {
-					var border = parseFloat(v,10)||0, padding = parseFloat(p[i],10)||0;
+					var border = parseInt(v,10)||0, padding = parseInt(p[i],10)||0;
 					return border + padding;
 				});
 			}
@@ -2376,8 +2376,8 @@ $.ui.plugin.add("resizable", "alsoResize", {
 			$(exp).each(function() {
 				var el = $(this);
 				el.data("resizable-alsoresize", {
-					width: parseFloat(el.width(), 10), height: parseFloat(el.height(), 10),
-					left: parseFloat(el.css('left'), 10), top: parseFloat(el.css('top'), 10)
+					width: parseInt(el.width(), 10), height: parseInt(el.height(), 10),
+					left: parseInt(el.css('left'), 10), top: parseInt(el.css('top'), 10)
 				});
 			});
 		};
@@ -2435,8 +2435,8 @@ $.ui.plugin.add("resizable", "animate", {
 						soffsetw = ista ? 0 : self.sizeDiff.width;
 
 		var style = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
-					left = (parseFloat(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
-						top = (parseFloat(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
+					left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
+						top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
 
 		self.element.animate(
 			$.extend(style, top && left ? { top: top, left: left } : {}), {
@@ -2445,10 +2445,10 @@ $.ui.plugin.add("resizable", "animate", {
 				step: function() {
 
 					var data = {
-						width: parseFloat(self.element.css('width'), 10),
-						height: parseFloat(self.element.css('height'), 10),
-						top: parseFloat(self.element.css('top'), 10),
-						left: parseFloat(self.element.css('left'), 10)
+						width: parseInt(self.element.css('width'), 10),
+						height: parseInt(self.element.css('height'), 10),
+						top: parseInt(self.element.css('top'), 10),
+						left: parseInt(self.element.css('left'), 10)
 					};
 
 					if (pr && pr.length) $(pr[0]).css({ width: data.width, height: data.height });
@@ -2617,11 +2617,11 @@ $.ui.plugin.add("resizable", "grid", {
 });
 
 var num = function(v) {
-	return parseFloat(v, 10) || 0;
+	return parseInt(v, 10) || 0;
 };
 
 var isNumber = function(value) {
-	return !isNaN(parseFloat(value, 10));
+	return !isNaN(parseInt(value, 10));
 };
 
 })(jQuery);
@@ -3215,7 +3215,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			$(this.helper).animate({
 				left: cur.left - this.offset.parent.left - self.margins.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft),
 				top: cur.top - this.offset.parent.top - self.margins.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop)
-			}, parseFloat(this.options.revert, 10) || 500, function() {
+			}, parseInt(this.options.revert, 10) || 500, function() {
 				self._clear(event);
 			});
 		} else {
@@ -3543,8 +3543,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 					if(className && !o.forcePlaceholderSize) return;
 
 					//If the element doesn't have a actual height by itself (without styles coming from a stylesheet), it receives the inline height from the dragged item
-					if(!p.height()) { p.height(self.currentItem.innerHeight() - parseFloat(self.currentItem.css('paddingTop')||0, 10) - parseFloat(self.currentItem.css('paddingBottom')||0, 10)); };
-					if(!p.width()) { p.width(self.currentItem.innerWidth() - parseFloat(self.currentItem.css('paddingLeft')||0, 10) - parseFloat(self.currentItem.css('paddingRight')||0, 10)); };
+					if(!p.height()) { p.height(self.currentItem.innerHeight() - parseInt(self.currentItem.css('paddingTop')||0, 10) - parseInt(self.currentItem.css('paddingBottom')||0, 10)); };
+					if(!p.width()) { p.width(self.currentItem.innerWidth() - parseInt(self.currentItem.css('paddingLeft')||0, 10) - parseInt(self.currentItem.css('paddingRight')||0, 10)); };
 				}
 			};
 		}
@@ -3688,8 +3688,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 			po = { top: 0, left: 0 };
 
 		return {
-			top: po.top + (parseFloat(this.offsetParent.css("borderTopWidth"),10) || 0),
-			left: po.left + (parseFloat(this.offsetParent.css("borderLeftWidth"),10) || 0)
+			top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
+			left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
 		};
 
 	},
@@ -3699,8 +3699,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(this.cssPosition == "relative") {
 			var p = this.currentItem.position();
 			return {
-				top: p.top - (parseFloat(this.helper.css("top"),10) || 0) + this.scrollParent.scrollTop(),
-				left: p.left - (parseFloat(this.helper.css("left"),10) || 0) + this.scrollParent.scrollLeft()
+				top: p.top - (parseInt(this.helper.css("top"),10) || 0) + this.scrollParent.scrollTop(),
+				left: p.left - (parseInt(this.helper.css("left"),10) || 0) + this.scrollParent.scrollLeft()
 			};
 		} else {
 			return { top: 0, left: 0 };
@@ -3710,8 +3710,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	_cacheMargins: function() {
 		this.margins = {
-			left: (parseFloat(this.currentItem.css("marginLeft"),10) || 0),
-			top: (parseFloat(this.currentItem.css("marginTop"),10) || 0)
+			left: (parseInt(this.currentItem.css("marginLeft"),10) || 0),
+			top: (parseInt(this.currentItem.css("marginTop"),10) || 0)
 		};
 	},
 
@@ -3739,10 +3739,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 			var over = ($(ce).css("overflow") != 'hidden');
 
 			this.containment = [
-				co.left + (parseFloat($(ce).css("borderLeftWidth"),10) || 0) + (parseFloat($(ce).css("paddingLeft"),10) || 0) - this.margins.left,
-				co.top + (parseFloat($(ce).css("borderTopWidth"),10) || 0) + (parseFloat($(ce).css("paddingTop"),10) || 0) - this.margins.top,
-				co.left+(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseFloat($(ce).css("borderLeftWidth"),10) || 0) - (parseFloat($(ce).css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left,
-				co.top+(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseFloat($(ce).css("borderTopWidth"),10) || 0) - (parseFloat($(ce).css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top
+				co.left + (parseInt($(ce).css("borderLeftWidth"),10) || 0) + (parseInt($(ce).css("paddingLeft"),10) || 0) - this.margins.left,
+				co.top + (parseInt($(ce).css("borderTopWidth"),10) || 0) + (parseInt($(ce).css("paddingTop"),10) || 0) - this.margins.top,
+				co.left+(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - (parseInt($(ce).css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left,
+				co.top+(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - (parseInt($(ce).css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top
 			];
 		}
 
@@ -3970,9 +3970,9 @@ function(i, attr) {
 		}
 
 		fx.elem.style[attr] = 'rgb(' +
-			Math.max(Math.min(parseFloat((fx.pos * (fx.end[0] - fx.start[0])) + fx.start[0], 10), 255), 0) + ',' +
-			Math.max(Math.min(parseFloat((fx.pos * (fx.end[1] - fx.start[1])) + fx.start[1], 10), 255), 0) + ',' +
-			Math.max(Math.min(parseFloat((fx.pos * (fx.end[2] - fx.start[2])) + fx.start[2], 10), 255), 0) + ')';
+			Math.max(Math.min(parseInt((fx.pos * (fx.end[0] - fx.start[0])) + fx.start[0], 10), 255), 0) + ',' +
+			Math.max(Math.min(parseInt((fx.pos * (fx.end[1] - fx.start[1])) + fx.start[1], 10), 255), 0) + ',' +
+			Math.max(Math.min(parseInt((fx.pos * (fx.end[2] - fx.start[2])) + fx.start[2], 10), 255), 0) + ')';
 	};
 });
 
@@ -3990,7 +3990,7 @@ function getRGB(color) {
 
 		// Look for rgb(num,num,num)
 		if (result = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(color))
-				return [parseFloat(result[1],10), parseFloat(result[2],10), parseFloat(result[3],10)];
+				return [parseInt(result[1],10), parseInt(result[2],10), parseInt(result[3],10)];
 
 		// Look for rgb(num%,num%,num%)
 		if (result = /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(color))
@@ -3998,11 +3998,11 @@ function getRGB(color) {
 
 		// Look for #a0b1c2
 		if (result = /#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(color))
-				return [parseFloat(result[1],16), parseFloat(result[2],16), parseFloat(result[3],16)];
+				return [parseInt(result[1],16), parseInt(result[2],16), parseInt(result[3],16)];
 
 		// Look for #fff
 		if (result = /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(color))
-				return [parseFloat(result[1]+result[1],16), parseFloat(result[2]+result[2],16), parseFloat(result[3]+result[3],16)];
+				return [parseInt(result[1]+result[1],16), parseInt(result[2]+result[2],16), parseInt(result[3]+result[3],16)];
 
 		// Look for rgba(0, 0, 0, 0) == transparent in Safari 3
 		if (result = /rgba\(0, 0, 0, 0\)/.exec(color))
@@ -4331,7 +4331,7 @@ $.extend($.effects, {
 			});
 			$.each(['top', 'left', 'bottom', 'right'], function(i, pos) {
 				props[pos] = element.css(pos);
-				if (isNaN(parseFloat(props[pos], 10))) {
+				if (isNaN(parseInt(props[pos], 10))) {
 					props[pos] = 'auto';
 				}
 			});
@@ -4904,8 +4904,8 @@ $.effects.explode = function(o) {
 	var offset = el.offset();
 
 	//Substract the margins - not fixing the problem yet.
-	offset.top -= parseFloat(el.css("marginTop"),10) || 0;
-	offset.left -= parseFloat(el.css("marginLeft"),10) || 0;
+	offset.top -= parseInt(el.css("marginTop"),10) || 0;
+	offset.left -= parseInt(el.css("marginLeft"),10) || 0;
 
 	var width = el.outerWidth(true);
 	var height = el.outerHeight(true);
@@ -5001,7 +5001,7 @@ $.effects.fold = function(o) {
 		var ref = widthFirst ? ['width', 'height'] : ['height', 'width'];
 		var distance = widthFirst ? [wrapper.width(), wrapper.height()] : [wrapper.height(), wrapper.width()];
 		var percent = /([0-9]+)%/.exec(size);
-		if(percent) size = parseFloat(percent[1],10) / 100 * distance[mode == 'hide' ? 0 : 1];
+		if(percent) size = parseInt(percent[1],10) / 100 * distance[mode == 'hide' ? 0 : 1];
 		if(mode == 'show') wrapper.css(horizFirst ? {height: 0, width: size} : {height: size, width: 0}); // Shift
 
 		// Animation
@@ -5109,7 +5109,7 @@ $.effects.puff = function(o) {
 	return this.queue(function() {
 		var elem = $(this),
 			mode = $.effects.setMode(elem, o.options.mode || 'hide'),
-			percent = parseFloat(o.options.percent, 10) || 150,
+			percent = parseInt(o.options.percent, 10) || 150,
 			factor = percent / 100,
 			original = { height: elem.height(), width: elem.width() };
 
@@ -5140,7 +5140,7 @@ $.effects.scale = function(o) {
 		// Set options
 		var options = $.extend(true, {}, o.options);
 		var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
-		var percent = parseFloat(o.options.percent,10) || (parseFloat(o.options.percent,10) == 0 ? 0 : (mode == 'hide' ? 0 : 100)); // Set default scaling percent
+		var percent = parseInt(o.options.percent,10) || (parseInt(o.options.percent,10) == 0 ? 0 : (mode == 'hide' ? 0 : 100)); // Set default scaling percent
 		var direction = o.options.direction || 'both'; // Set default axis
 		var origin = o.options.origin; // The origin of the scaling
 		if (mode != 'effect') { // Set default origin and restore for show/hide
@@ -7885,7 +7885,7 @@ $.extend(Datepicker.prototype, {
 		var inst = this._getInst(target[0]);
 		inst['selected' + (period == 'M' ? 'Month' : 'Year')] =
 		inst['draw' + (period == 'M' ? 'Month' : 'Year')] =
-			parseFloat(select.options[select.selectedIndex].value,10);
+			parseInt(select.options[select.selectedIndex].value,10);
 		this._notifyChange(inst);
 		this._adjustDate(target);
 	},
@@ -7987,7 +7987,7 @@ $.extend(Datepicker.prototype, {
 			return null;
 		var shortYearCutoff = (settings ? settings.shortYearCutoff : null) || this._defaults.shortYearCutoff;
 		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
-				new Date().getFullYear() % 100 + parseFloat(shortYearCutoff, 10));
+				new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
 		var dayNamesShort = (settings ? settings.dayNamesShort : null) || this._defaults.dayNamesShort;
 		var dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames;
 		var monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort;
@@ -8014,7 +8014,7 @@ $.extend(Datepicker.prototype, {
 			if (!num)
 				throw 'Missing number at position ' + iValue;
 			iValue += num[0].length;
-			return parseFloat(num[0], 10);
+			return parseInt(num[0], 10);
 		};
 		// Extract a name from the string value and convert to an index
 		var getName = function(match, shortNames, longNames) {
@@ -8335,15 +8335,15 @@ $.extend(Datepicker.prototype, {
 			while (matches) {
 				switch (matches[2] || 'd') {
 					case 'd' : case 'D' :
-						day += parseFloat(matches[1],10); break;
+						day += parseInt(matches[1],10); break;
 					case 'w' : case 'W' :
-						day += parseFloat(matches[1],10) * 7; break;
+						day += parseInt(matches[1],10) * 7; break;
 					case 'm' : case 'M' :
-						month += parseFloat(matches[1],10);
+						month += parseInt(matches[1],10);
 						day = Math.min(day, $.datepicker._getDaysInMonth(year, month));
 						break;
 					case 'y': case 'Y' :
-						year += parseFloat(matches[1],10);
+						year += parseInt(matches[1],10);
 						day = Math.min(day, $.datepicker._getDaysInMonth(year, month));
 						break;
 				}
@@ -8465,7 +8465,7 @@ $.extend(Datepicker.prototype, {
 			(this._isInRange(inst, gotoDate) ? '<button type="button" class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" onclick="DP_jQuery_' + dpuuid +
 			'.datepicker._gotoToday(\'#' + inst.id + '\');"' +
 			'>' + currentText + '</button>' : '') + (isRTL ? '' : controls) + '</div>' : '';
-		var firstDay = parseFloat(this._get(inst, 'firstDay'),10);
+		var firstDay = parseInt(this._get(inst, 'firstDay'),10);
 		firstDay = (isNaN(firstDay) ? 0 : firstDay);
 		var showWeek = this._get(inst, 'showWeek');
 		var dayNames = this._get(inst, 'dayNames');
@@ -8566,7 +8566,7 @@ $.extend(Datepicker.prototype, {
 			}
 			html += group;
 		}
-		html += buttonPanel + ($.browser.msie && parseFloat($.browser.version,10) < 7 && !inst.inline ?
+		html += buttonPanel + ($.browser.msie && parseInt($.browser.version,10) < 7 && !inst.inline ?
 			'<iframe src="javascript:false;" class="ui-datepicker-cover" frameborder="0"></iframe>' : '');
 		inst._keyEvent = false;
 		return html;
@@ -8610,9 +8610,9 @@ $.extend(Datepicker.prototype, {
 				var years = this._get(inst, 'yearRange').split(':');
 				var thisYear = new Date().getFullYear();
 				var determineYear = function(value) {
-					var year = (value.match(/c[+-].*/) ? drawYear + parseFloat(value.substring(1), 10) :
-						(value.match(/[+-].*/) ? thisYear + parseFloat(value, 10) :
-						parseFloat(value, 10)));
+					var year = (value.match(/c[+-].*/) ? drawYear + parseInt(value.substring(1), 10) :
+						(value.match(/[+-].*/) ? thisYear + parseInt(value, 10) :
+						parseInt(value, 10)));
 					return (isNaN(year) ? thisYear : year);
 				};
 				var year = determineYear(years[0]);
@@ -8715,7 +8715,7 @@ $.extend(Datepicker.prototype, {
 	_getFormatConfig: function(inst) {
 		var shortYearCutoff = this._get(inst, 'shortYearCutoff');
 		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
-			new Date().getFullYear() % 100 + parseFloat(shortYearCutoff, 10));
+			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
 		return {shortYearCutoff: shortYearCutoff,
 			dayNamesShort: this._get(inst, 'dayNamesShort'), dayNames: this._get(inst, 'dayNames'),
 			monthNamesShort: this._get(inst, 'monthNamesShort'), monthNames: this._get(inst, 'monthNames')};
@@ -9751,11 +9751,11 @@ $.fn.position = function( options ) {
 	}
 
 	// normalize offset option
-	offset[ 0 ] = parseFloat( offset[0], 10 ) || 0;
+	offset[ 0 ] = parseInt( offset[0], 10 ) || 0;
 	if ( offset.length === 1 ) {
 		offset[ 1 ] = offset[ 0 ];
 	}
-	offset[ 1 ] = parseFloat( offset[1], 10 ) || 0;
+	offset[ 1 ] = parseInt( offset[1], 10 ) || 0;
 
 	if ( options.at[0] === "right" ) {
 		basePosition.left += targetWidth;
@@ -9776,12 +9776,12 @@ $.fn.position = function( options ) {
 		var elem = $( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),
-			marginLeft = parseFloat( $.curCSS( this, "marginLeft", true ) ) || 0,
-			marginTop = parseFloat( $.curCSS( this, "marginTop", true ) ) || 0,
+			marginLeft = parseInt( $.curCSS( this, "marginLeft", true ) ) || 0,
+			marginTop = parseInt( $.curCSS( this, "marginTop", true ) ) || 0,
 			collisionWidth = elemWidth + marginLeft +
-				( parseFloat( $.curCSS( this, "marginRight", true ) ) || 0 ),
+				( parseInt( $.curCSS( this, "marginRight", true ) ) || 0 ),
 			collisionHeight = elemHeight + marginTop +
-				( parseFloat( $.curCSS( this, "marginBottom", true ) ) || 0 ),
+				( parseInt( $.curCSS( this, "marginBottom", true ) ) || 0 ),
 			position = $.extend( {}, basePosition ),
 			collisionPosition;
 
@@ -9901,8 +9901,8 @@ if ( !$.offset.setOffset ) {
 		}
 		var curElem   = $( elem ),
 			curOffset = curElem.offset(),
-			curTop    = parseFloat( $.curCSS( elem, "top",  true ), 10 ) || 0,
-			curLeft   = parseFloat( $.curCSS( elem, "left", true ), 10)  || 0,
+			curTop    = parseInt( $.curCSS( elem, "top",  true ), 10 ) || 0,
+			curLeft   = parseInt( $.curCSS( elem, "left", true ), 10)  || 0,
 			props     = {
 				top:  (options.top  - curOffset.top)  + curTop,
 				left: (options.left - curOffset.left) + curLeft
@@ -10339,9 +10339,9 @@ $.widget( "ui.slider", $.ui.mouse, {
 			left: event.pageX - offset.left - ( closestHandle.width() / 2 ),
 			top: event.pageY - offset.top -
 				( closestHandle.height() / 2 ) -
-				( parseFloat( closestHandle.css("borderTopWidth"), 10 ) || 0 ) -
-				( parseFloat( closestHandle.css("borderBottomWidth"), 10 ) || 0) +
-				( parseFloat( closestHandle.css("marginTop"), 10 ) || 0)
+				( parseInt( closestHandle.css("borderTopWidth"), 10 ) || 0 ) -
+				( parseInt( closestHandle.css("borderBottomWidth"), 10 ) || 0) +
+				( parseInt( closestHandle.css("marginTop"), 10 ) || 0)
 		};
 
 		if ( !this.handles.hasClass( "ui-state-hover" ) ) {
@@ -10884,7 +10884,7 @@ $.widget( "ui.tabs", {
 					});
 				}
 				if ( typeof o.selected !== "number" && o.cookie ) {
-					o.selected = parseFloat( self._cookie(), 10 );
+					o.selected = parseInt( self._cookie(), 10 );
 				}
 				if ( typeof o.selected !== "number" && this.lis.filter( ".ui-tabs-selected" ).length ) {
 					o.selected = this.lis.index( this.lis.filter( ".ui-tabs-selected" ) );

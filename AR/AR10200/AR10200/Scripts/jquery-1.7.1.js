@@ -1484,7 +1484,7 @@ jQuery.support = (function() {
 		div.style.width = "2px";
 		div.appendChild( marginDiv );
 		support.reliableMarginRight =
-			( parseFloat( ( window.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
+			( parseInt( ( window.getComputedStyle( marginDiv, null ) || { marginRight: 0 } ).marginRight, 10 ) || 0 ) === 0;
 	}
 
 	// Technique from Juriy Zaytsev
@@ -2628,7 +2628,7 @@ jQuery.extend({
 				var attributeNode = elem.getAttributeNode("tabindex");
 
 				return attributeNode && attributeNode.specified ?
-					parseFloat( attributeNode.value, 10 ) :
+					parseInt( attributeNode.value, 10 ) :
 					rfocusable.test( elem.nodeName ) || rclickable.test( elem.nodeName ) && elem.href ?
 						0 :
 						undefined;

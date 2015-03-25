@@ -1,13 +1,13 @@
+using HQ.eSkyFramework;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using HQ.eSkyFramework;
-using System.Configuration;
 
 namespace AR10200
 {
@@ -24,32 +24,23 @@ namespace AR10200
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-
         }
+
         protected void Session_Start(object sender, EventArgs e)
         {
-            //Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
-            //Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
-            //Session["DBApp"] = Current.DBApp = "eBiz4DWebApp";
-            //Session["UserName"] = Current.UserName = "admin";
-            //Session["CpnyID"] = Current.CpnyID = "HQH00000";
-            //Session["Language"] = Current.Language = "vi";
-            //Session["LangID"] = 1;
-
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "MARSSVR\\SQL2012";
+            Current.DBSys = "eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["AR10200"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "en";
-            Session["LangID"] = 1;
+            Session["LangID"] = 0;
         }
     }
 }

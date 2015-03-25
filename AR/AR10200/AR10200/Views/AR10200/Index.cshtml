@@ -5,107 +5,143 @@
 @using AR10200;
 
 @model System.Collections.IEnumerable
+  
 @{
     Layout = null;
     var X = Html.X();
-    //var HQ = Html.HQ();
     ViewBag.Title = "AR10200";
     var acc = Session["AR10200"] as AccessRight;
+    var HQ = Html.HQ();
 }
 <!DOCTYPE html>
 <html>
     <head>
         <meta name="viewport" content="width=device-width" />
-<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/AR10200.js")' type="text/javascript"></script>
 
-   <script src='@Url.Content("Scripts/hq.language"+ Current.LangID + ".js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common.debug.js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/AR10200.debug.js")' type="text/javascript"></script>
-<style type="text/css"> @*Thuoc tinh hover tren grid *@
-    .x-grid-row-over .x-grid-cell-inner {
-        font-weight : bold;
-    }
-</style>
-<script>
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.isRelease = HQ.util.toBool('@acc.Release.ToString()');
+            HQ.currentDate = new Date('@DateTime.Now.ToString("dd-MMM-yyyy")');
+        </script>
 
-
-</script>
-<script>
-    HQ.cpnyID = '@Current.CpnyID';
-    HQ.langID = '@Current.LangID';
-    HQ.userName = '@Current.UserName';
-    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-</script>
-  <title>@ViewBag.Title</title>
+        <title>@ViewBag.Title</title>
     </head>
     <body>
-@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
 
-
-@(Html.X().Store().ID("storeFormTop").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(Batch), "BatchClassModel", "BranchID,Module,BatNbr"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataFormTop", "AR10200"))
-            .ActionMethods(action =>
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("stoBatNbr")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(Batch), "mdlBatNbr", "BranchID,Module,BatNbr"))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetBatNbr", "AR10200"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
             {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ps.Add(new StoreParameter("branchID", "HQ.cpnyID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("module", "AR", ParameterMode.Value));
+                ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.value", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Fn="Store.stoBatNbr_load" )
+            // Store: stoBatNbr
         )
+
+        @(
+            X.Store().ID("stoRefNbr")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR_Doc), "mdlRefNbr", "BranchID,RefNbr,BatNbr"))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetRefNbr", "AR10200"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "HQ.cpnyID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("refNbr", "App.cboRefNbr.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.value", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Fn="Store.stoRefNbr_load" )
+            // Store: stoRefNbr
+        )
+
+        @(X.Store().ID("stoAdjust")
+        .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR10200_pgBindingGrid_Result), "mdlAdjust", "")) //InvcNbr,DocDate,DocBal,VendID,Descr
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetAdjust", "AR10200"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
         .Parameters(ps =>
         {
-            ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
             ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
-            
-        })
-        .Listeners(p => p.Load.Handler = "loadDataAutoHeaderTop()")
-  )
-
-
-@(Html.X().Store().ID("storeFormBotRight").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR_Doc), "AR_DocClassModel", "BranchID,BatNbr,RefNbr"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataFormBotRight", "AR10200"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-        .Parameters(ps =>
-        {
             ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
-            ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
+            ps.Add(new StoreParameter("CustId", "App.cboCustID.getValue()", ParameterMode.Raw));
+            ps.Add(new StoreParameter("SlsperId", "App.cboSlsperID.getValue()", ParameterMode.Raw));
+            ps.Add(new StoreParameter("DeliveryId", "App.cboDeliveryID.getValue()", ParameterMode.Raw));
             ps.Add(new StoreParameter("RefNbr", "App.cboRefNbr.value", ParameterMode.Raw));
+            ps.Add(new StoreParameter("FromDate", "App.dteFromDate.getValue()", ParameterMode.Raw));
+            ps.Add(new StoreParameter("ToDate", "App.dteToDate.getValue()", ParameterMode.Raw));
+            ps.Add(new StoreParameter("DateType", "App.cboDateType.value", ParameterMode.Raw));
+            ps.Add(new StoreParameter("IsGridF3", "0", ParameterMode.Value));
         })
-        .Listeners(p => p.Load.Handler = "loadDataAutoHeaderBotRight()")
-  )
-@(Html.X().Store().ID("storeGrid").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR10200_pgBindingGrid_Result), "AR10200_BindingGrid_ResultModel", "InvcNbr,DocDate,DocBal,VendID,Descr"))
-        .ServerProxy(Html.X().AjaxProxy().Url(Url.Action("GetDataGrid")))
-        .Parameters(ps =>
-                        {
-                            ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.value", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("BranchID", "App.txtBranchID.value", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("CustId", "App.cboCustID.getValue()", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("SlsperId", "App.cboSlsperID.getValue()", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("DeliveryId", "App.cboDeliveryID.getValue()", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("RefNbr", "App.cboRefNbr.value", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("FromDate", "App.dteFromDate.getValue()", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("ToDate", "App.dteToDate.getValue()", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("DateType", "App.cboDateType.value", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("IsGridF3", "0", ParameterMode.Value));
-                        })
-        .Listeners(p=>p.Load.Fn="waitstoreGridReload" )
-  )
+                .Listeners(p => { 
+                    p.Load.Fn = "Store.stoAdjust_load";
+                    p.DataChanged.Fn = "Store.stoAdjust_dataChanged";
+                })
+        )
 
+        @(
+            X.Store().ID("stoRef")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR10200_pgBindingGridCancel_Result), "mdlRef", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetRef", "AR10200"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "HQ.cpnyID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.value", ParameterMode.Raw));
+            })      
+            //.Listeners(p=>p.Load.Fn="Store.stoRef_load" )
+            // Store: stoRef
+        )
 
-       @{Html.RenderAction("Body", new { lang=@Current.LangID});}
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong AR10200Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
     </body>
 </html>
-
-
