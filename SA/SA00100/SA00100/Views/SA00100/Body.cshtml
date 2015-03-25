@@ -66,9 +66,11 @@
                     new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value)
                     }).HQDBSys(true).AllowBlank(false).Editable(false)
                     .LoadData()
-                )                  
-            , X.Column().Text(Util.GetLang("SortNbr")).DataIndex("SortNbr").Width(150).Editor(X.TextField().AllowBlank(false).EnforceMaxLength(true))
-
+                )
+            
+            , X.NumberColumn().ID("SortNbr").Text(Util.GetLang("SortNbr")).DataIndex("SortNbr").Format("0,000").Width(150).Align(Alignment.Right)
+                    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
+                    
             , X.Column().Text(Util.GetLang("CatID")).Width(150).DataIndex("CatID")
                 .Editor(
                     HQ.Combo().ID("cboCatID").Name("cboCatID").HQProcedure("SA00100_pcGetScreenCatIDDescr")
