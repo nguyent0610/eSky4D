@@ -522,14 +522,14 @@ var grdPO_Trans_Edit = function (item, e) {
         e.record.set("TranAmt", objDetail.UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
     }
     else if (e.field == "RcptUnitDescr" || e.field == "InvtID" || e.field == "SiteID") {
-        if (_objPO_Setup.DfltLstUnitCost == "A") {
+        if (_objPO_Setup.DfltLstUnitCost == "A" || _objPO_Setup.DfltLstUnitCost == "L") {
             HQ.common.showBusy(true);
             App.direct.PO10200ItemSitePrice(
                 App.cboBranchID.getValue(), objDetail.InvtID, objDetail.SiteID,
                {
                    success: function (result) {
                        _objIN_ItemSite = result;
-                       UnitCost = result == null ? 0 : result.AvgCost;
+                       UnitCost = result == null ? 0 : (_objPO_Setup.DfltLstUnitCost == "A" ? result.AvgCost : result.LastPurchasePrice);
                        UnitCost = Math.round((objDetail.RcptMultDiv == "D" ? (UnitCost / objDetail.RcptConvFact) : (UnitCost * objDetail.RcptConvFact)));
                        objDetail.UnitCost = UnitCost;
                        objDetail.TranAmt = UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt;
