@@ -436,17 +436,32 @@ namespace AR10100.Controllers
             d.DateEnt = Convert.ToDateTime(data["txtDocDate"]);
 
             d.IntRefNbr = data["txtOrigRefNbr"];
-            if (data["cboHandle"] == "R")
+            if (data["cboStatus"] == "H")
             {
-                d.Rlsed = 1;
-                d.Status = "C"; // sua lai sau
+                if (data["cboHandle"] == "R")
+                {
+                    d.Rlsed = 1;
+                    d.Status = "C"; // sua lai sau
+                }
+                else if (data["cboHandle"] == "N")
+                {
+                    d.Rlsed = 0;
+                    d.Status = "H";
+                }
             }
-            else if (data["cboHandle"] == "N")
+            else if (data["cboStatus"] == "C")
             {
-                d.Rlsed = 0;
-                d.Status = "H";
+                if (data["cboHandle"] == "V")
+                {
+                   
+                    d.Status = "V"; 
+                }
+                else if (data["cboHandle"] == "C")
+                {
+                   
+                    d.Status = "B";
+                }
             }
-
             d.LUpd_DateTime = DateTime.Now;
             d.LUpd_Prog = screenNbr;
             d.LUpd_User = Current.UserName;
@@ -473,18 +488,19 @@ namespace AR10100.Controllers
             //d.PONbr = s.PONbr;
             //d.RcptNbr = s.RcptNbr;
             d.Terms = s.Terms;
-
-            if (data["cboHandle"] == "R")
+            if (data["cboStatus"] == "H")
             {
-                d.Rlsed = 1;
-              
-            }
-            else if (data["cboHandle"] == "N")
-            {
-                d.Rlsed = 0;
-              
-            }
+                if (data["cboHandle"] == "R")
+                {
+                    d.Rlsed = 1;
 
+                }
+                else if (data["cboHandle"] == "N")
+                {
+                    d.Rlsed = 0;
+
+                }
+            }
 
             d.LUpd_DateTime = DateTime.Now;
             d.LUpd_Prog = screenNbr;

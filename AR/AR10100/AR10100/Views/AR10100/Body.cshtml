@@ -14,7 +14,7 @@
  Html.X().Viewport().Layout(LayoutType.Fit)
 .Items(
         X.FormPanel()
-        .Layout(LayoutType.Anchor)
+        .Layout(LayoutType.Border)
         .ID("frmMain")
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
@@ -36,7 +36,8 @@
                 X.FormPanel()
                 .ID("frmTop")
                 .Layout(LayoutType.Anchor)
-                .AnchorVertical("20%")
+                .Region(Region.North)
+                //.AnchorVertical("20%")
                 //.Title(Util.GetLang("DOC"))
                 .Padding(5)
                 .Listeners(lst =>
@@ -167,9 +168,10 @@
                 //ngoac dong frmTop
                 )
                 , X.TabPanel()
-                //.Layout(LayoutType.Fit)
+                .Layout(LayoutType.Border)
                 .Anchor("100% -120")
                 //.AutoScroll(true)
+                .Region(Region.Center)
                 .ID("tabAtAR10100")
                 .Listeners(p =>
                 {  
@@ -179,7 +181,8 @@
                 .Items(
                         X.FormPanel()
                         .ID("frmBot")
-                        .Layout(LayoutType.Anchor)
+                        .Layout(LayoutType.Border)
+                        .Region(Region.Center)
                         .AnchorVertical("100%")
                         .Title(Util.GetLang("DOC"))
                         .Padding(5)
@@ -188,7 +191,7 @@
                         
                             X.Panel() 
                             .Layout(LayoutType.Anchor)
-                               
+                            .Region(Region.North)
                             .Listeners(l =>
                             {
                                 l.Render.Handler = "HQ.common.control_render(this,'headerBot')";
@@ -403,19 +406,12 @@
                         )
                         
                         ,Html.X().GridPanel()
-                        .Layout(LayoutType.Anchor)
-                        //.Frame(true)
-                        //.AnchorHorizontal("100%")
-                        //.AnchorVertical("50%")
-                        //.Height(400)
-                        //.Width(1300)
-                        .Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
-                        .RenderTo("contentCenter")
-                        //.AutoScroll(true)
+                        .Region(Region.Center)
+                        .Scroll(ScrollMode.Both)
+                        .AutoScroll(true)
                         .View(X.GridView().TrackOver(false))
-                        .ID("grd").SetAutoScroll(true)
+                        .ID("grd")
                         .StoreID("storeGrid")
-                        //.Hidden(true)
                         .SortableColumns(false)
                          .Listeners(lst =>
                         {
@@ -601,29 +597,25 @@
 
                   //ngoac ket thuc Grid      
                  )
+                 
                 , X.Panel()
                 .ID("tabTax")
-                .Layout(LayoutType.VBox)
+                .Layout(LayoutType.Border)
+                .Region(Region.Center)
                 .AnchorHorizontal("100%")
                 .AnchorVertical("100%")
                 .Padding(5)
                 .Title(Util.GetLang("TAX"))
-                .LayoutConfig(config => { config.Add(new VBoxLayoutConfig() { Align = VBoxAlign.Stretch }); })
                 .CloseAction(CloseAction.Hide)
-                //.Disabled(true)
                 .Items(
                         //Grid 1 tab 2
                         Html.X().GridPanel()
-                        //.Frame(true)
-                        //.Layout(LayoutType.VBox)
-                        //.AnchorHorizontal("100%")
-                        //.AnchorVertical("40%")
-                        .Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
+                        .Split(true)
+                        .Region(Region.North)
                         .Flex(1)
                         .RenderTo("contentCenter")
-                        //.AutoScroll(true)
                         .View(X.GridView().TrackOver(false))
-                        .ID("grdTopTab2")//.SetAutoScroll(true)
+                        .ID("grdTopTab2")
                         .StoreID("storeGridTopTab2")
                         .SortableColumns(false)
                         //.Listeners(l =>
@@ -648,18 +640,15 @@
                      .SelectionModel(Html.X().RowSelectionModel().ID("slmGridTopTab2").Mode(SelectionMode.Multi))
                      
                      
-                     , X.BoxSplitter()
+                     //, X.BoxSplitter()
                      //Grid 2 tab 2
                      ,Html.X().GridPanel()
                         //.Frame(true)
+                        .Region(Region.Center)
                         .Flex(1)
-                        //.AnchorHorizontal("100%")
-                        //.AnchorVertical("40%")
                         .Listeners(p => p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 140)")
-                        //.RenderTo("contentCenter")
-                        //.AutoScroll(true)
-                        //.View(X.GridView().TrackOver(false))
-                        .ID("grdBotTab2")//.SetAutoScroll(true)
+                        .View(X.GridView().TrackOver(false))
+                        .ID("grdBotTab2")
                         .StoreID("storeGridBotTab2")
                         .SortableColumns(false)
                         //.Listeners(l =>
