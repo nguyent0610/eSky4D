@@ -1,1 +1,1013 @@
-var _0x31f5 = ["\x73\x65\x6C\x65\x63\x74", "\x53\x65\x6C\x65\x63\x74\x69\x6F\x6E\x4D\x6F\x64\x65\x6C\x50\x4F\x53\x5F\x41\x63\x74\x75\x61\x6C\x56\x69\x73\x69\x74", "\x66\x69\x72\x73\x74", "\x73\x65\x6C\x65\x63\x74\x50\x72\x65\x76\x69\x6F\x75\x73", "\x70\x72\x65\x76", "\x73\x65\x6C\x65\x63\x74\x4E\x65\x78\x74", "\x6E\x65\x78\x74", "\x67\x65\x74\x43\x6F\x75\x6E\x74", "\x73\x74\x6F\x72\x65", "\x67\x72\x64\x41\x63\x74\x75\x61\x6C\x56\x69\x73\x69\x74", "\x6C\x61\x73\x74", "\x68\x69\x64\x64\x65\x6E", "\x70\x6E\x6C\x4D\x43\x50", "\x69\x73\x56\x61\x6C\x69\x64", "\x72\x65\x6C\x6F\x61\x64", "\x67\x72\x64\x56\x69\x73\x69\x74\x43\x75\x73\x74\x6F\x6D\x65\x72\x50\x6C\x61\x6E", "\x66\x6F\x63\x75\x73", "\x65\x61\x63\x68", "\x67\x65\x74\x46\x69\x65\x6C\x64\x73", "\x67\x65\x74\x46\x6F\x72\x6D", "\x70\x6E\x6C\x4D\x43\x4C", "\x67\x72\x64\x4D\x43\x4C", "\x70\x6E\x6C\x41\x63\x74\x75\x61\x6C\x56\x69\x73\x69\x74", "\x76\x61\x6C\x75\x65", "\x72\x61\x64\x53\x61\x6C\x65\x73\x6D\x61\x6E\x41\x6C\x6C", "\x67\x72\x64\x41\x6C\x6C\x43\x75\x72\x72\x65\x6E\x74\x53\x61\x6C\x65\x73\x6D\x61\x6E", "\x67\x72\x64\x56\x69\x73\x69\x74\x43\x75\x73\x74\x6F\x6D\x65\x72\x41\x63\x74\x75\x61\x6C", "\x70\x6E\x6C\x43\x75\x73\x74\x48\x69\x73\x74\x6F\x72\x79", "\x67\x72\x64\x43\x75\x73\x74\x48\x69\x73\x74\x6F\x72\x79", "\x72\x65\x66\x72\x65\x73\x68", "\x74\x61\x62\x4F\x4D\x33\x30\x34\x30\x30", "\x41\x70\x70", "\x63\x6C\x6F\x73\x65", "\x63\x6C\x65\x61\x72\x56\x61\x6C\x75\x65", "\x63\x62\x6F\x50\x72\x6F\x76\x69\x6E\x63\x65\x50\x6C\x61\x6E", "\x63\x62\x6F\x44\x69\x73\x74\x72\x69\x62\x75\x74\x6F\x72\x50\x6C\x61\x6E", "\x63\x62\x6F\x53\x61\x6C\x65\x73\x4D\x61\x6E\x50\x6C\x61\x6E", "\x67\x65\x74\x54\x69\x6D\x65", "\x67\x65\x74\x44\x61\x79", "\x67\x65\x74\x44\x61\x74\x65", "\x73\x65\x74\x44\x61\x74\x65", "\x6D\x65\x6E\x75\x43\x6C\x69\x63\x6B", "\x43\x75\x73\x74\x49\x64", "\x64\x61\x74\x61", "\x3A\x20", "\x43\x75\x73\x74\x4E\x61\x6D\x65", "\x4C\x61\x74", "\x4C\x6E\x67", "\x3C\x64\x69\x76\x20\x69\x64\x3D\x22\x63\x6F\x6E\x74\x65\x6E\x74\x22\x3E", "\x3C\x64\x69\x76\x20\x69\x64\x3D\x22\x73\x69\x74\x65\x4E\x6F\x74\x69\x63\x65\x22\x3E", "\x3C\x2F\x64\x69\x76\x3E", "\x3C\x68\x31\x20\x69\x64\x3D\x22\x66\x69\x72\x73\x74\x48\x65\x61\x64\x69\x6E\x67\x22\x20\x63\x6C\x61\x73\x73\x3D\x22\x66\x69\x72\x73\x74\x48\x65\x61\x64\x69\x6E\x67\x22\x3E", "\x3C\x2F\x68\x31\x3E", "\x3C\x64\x69\x76\x20\x69\x64\x3D\x22\x62\x6F\x64\x79\x43\x6F\x6E\x74\x65\x6E\x74\x22\x3E", "\x3C\x70\x3E", "\x41\x64\x64\x72", "\x3C\x2F\x70\x3E", "\x70\x75\x73\x68", "\x66\x6F\x72\x45\x61\x63\x68", "\x64\x72\x61\x77\x52\x6F\x75\x74\x65\x73", "\x6E\x61\x76\x4D\x61\x70\x43\x65\x6E\x74\x65\x72\x42\x79\x4C\x6F\x63\x61\x74\x69\x6F\x6E", "\x63\x62\x6F\x50\x72\x6F\x76\x69\x6E\x63\x65\x4D\x43\x4C", "\x63\x62\x6F\x44\x69\x73\x74\x72\x69\x62\x75\x74\x6F\x72\x4D\x43\x4C", "\x70\x61\x67\x65\x53\x69\x7A\x65", "\x67\x65\x74\x56\x61\x6C\x75\x65", "\x41\x64\x64\x72\x31", "\x75\x6E\x6D\x61\x73\x6B", "\x67\x65\x74\x45\x6C", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x63\x62\x6F\x53\x61\x6C\x65\x73\x4D\x61\x6E\x41\x63\x74\x75\x61\x6C", "\x64\x69\x73\x61\x62\x6C\x65", "\x62\x74\x6E\x47\x65\x74\x43\x75\x72\x72\x65\x6E\x74\x4C\x6F\x63\x61\x74\x69\x6F\x6E", "\x68\x69\x64\x65", "\x73\x68\x6F\x77", "\x65\x6E\x61\x62\x6C\x65", "\x54\x79\x70\x65", "\x49\x4F", "\x63\x69\x2D\x72\x6F\x77", "\x4F\x4F", "\x63\x6F\x2D\x72\x6F\x77", "\x67\x65\x74\x41\x74", "\x53\x65\x6C\x65\x63\x74\x69\x6F\x6E\x4D\x6F\x64\x65\x6C\x56\x69\x73\x69\x74\x43\x75\x73\x74\x6F\x6D\x65\x72\x41\x63\x74\x75\x61\x6C", "\x53\x6C\x73\x70\x65\x72\x49\x44", "\x4E\x61\x6D\x65", "\x20\x2D\x20", "", "\x63\x62\x6F\x53\x61\x6C\x65\x73\x4D\x61\x6E\x48\x69\x73\x74\x6F\x72\x79", "\x63\x62\x6F\x43\x75\x73\x74\x6F\x6D\x65\x72\x48\x69\x73\x74\x6F\x72\x79", "\x43\x75\x73\x74\x49\x44", "\x64\x2D\x6D\x2D\x59\x20\x48\x3A\x69", "\x66\x6F\x72\x6D\x61\x74", "\x44\x61\x74\x65", "\x63\x6F\x6C\x75\x6D\x6E\x73", "\x64\x61\x74\x61\x49\x6E\x64\x65\x78", "\x43\x68\x65\x63\x6B\x4F\x75\x74", "\x43\x68\x65\x63\x6B\x49\x6E", "\x6D\x61\x70\x5F\x63\x61\x6E\x76\x61\x73", "\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64", "\x6D\x61\x70\x73", "\x52\x4F\x41\x44\x4D\x41\x50", "\x4D\x61\x70\x54\x79\x70\x65\x49\x64", "\x73\x65\x74\x43\x65\x6E\x74\x65\x72", "\x67\x65\x74\x5A\x6F\x6F\x6D", "\x73\x65\x74\x5A\x6F\x6F\x6D", "\x66\x69\x6E\x64\x5F\x63\x6C\x6F\x73\x65\x73\x74\x5F\x6D\x61\x72\x6B\x65\x72", "\x67\x65\x74\x41\x6E\x69\x6D\x61\x74\x69\x6F\x6E", "\x73\x65\x74\x41\x6E\x69\x6D\x61\x74\x69\x6F\x6E", "\x41\x6E\x69\x6D\x61\x74\x69\x6F\x6E", "\x50\x49", "\x6C\x65\x6E\x67\x74\x68", "\x73\x74\x6F\x70\x4D\x61\x72\x6B\x65\x72\x73", "\x6C\x61\x74", "\x70\x6F\x73\x69\x74\x69\x6F\x6E", "\x6C\x6E\x67", "\x73\x69\x6E", "\x63\x6F\x73", "\x73\x71\x72\x74", "\x61\x74\x61\x6E\x32", "\x73\x65\x74\x4D\x61\x70", "\x64\x69\x72\x65\x63\x74\x69\x6F\x6E\x73\x44\x69\x73\x70\x6C\x61\x79\x73", "\x46\x45\x36\x32\x35\x36", "\x74\x79\x70\x65", "\x43\x43\x46\x46\x33\x33", "\x46\x46\x30\x30\x30\x30", "\x73\x74\x6F\x70", "\x74\x69\x74\x6C\x65", "\x49\x6D\x61\x67\x65\x73\x2F\x4F\x4D\x33\x30\x34\x30\x30\x2F\x63\x69\x72\x63\x6C\x65\x5F\x67\x72\x65\x65\x6E\x2E\x70\x6E\x67", "\x68\x74\x74\x70\x3A\x2F\x2F\x63\x68\x61\x72\x74\x2E\x61\x70\x69\x73\x2E\x67\x6F\x6F\x67\x6C\x65\x2E\x63\x6F\x6D\x2F\x63\x68\x61\x72\x74\x3F\x63\x68\x73\x74\x3D\x64\x5F\x6D\x61\x70\x5F\x70\x69\x6E\x5F\x6C\x65\x74\x74\x65\x72\x26\x63\x68\x6C\x64\x3D\x7B\x30\x7D\x7C\x7B\x31\x7D\x7C\x30\x30\x30\x30\x30\x30", "\x53\x74\x72\x69\x6E\x67", "\x63\x6C\x69\x63\x6B", "\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6F\x6E", "\x73\x65\x74\x43\x6F\x6E\x74\x65\x6E\x74", "\x6F\x70\x65\x6E", "\x61\x64\x64\x4C\x69\x73\x74\x65\x6E\x65\x72", "\x65\x76\x65\x6E\x74", "\x63\x61\x6C\x63\x52\x6F\x75\x74\x65", "\x72\x65\x71\x75\x65\x73\x74\x46\x6F\x72\x57\x61\x79\x73\x52\x6F\x75\x74\x65", "\x44\x52\x49\x56\x49\x4E\x47", "\x54\x72\x61\x76\x65\x6C\x4D\x6F\x64\x65", "\x4F\x4B", "\x44\x69\x72\x65\x63\x74\x69\x6F\x6E\x73\x53\x74\x61\x74\x75\x73", "\x73\x65\x74\x4F\x70\x74\x69\x6F\x6E\x73", "\x73\x65\x74\x44\x69\x72\x65\x63\x74\x69\x6F\x6E\x73", "\x4E\x4F\x54\x5F\x46\x4F\x55\x4E\x44", "\x5A\x45\x52\x4F\x5F\x52\x45\x53\x55\x4C\x54\x53", "\x4D\x41\x58\x5F\x57\x41\x59\x50\x4F\x49\x4E\x54\x53\x5F\x45\x58\x43\x45\x45\x44\x45\x44", "\x49\x4E\x56\x41\x4C\x49\x44\x5F\x52\x45\x51\x55\x45\x53\x54", "\x4F\x56\x45\x52\x5F\x51\x55\x45\x52\x59\x5F\x4C\x49\x4D\x49\x54", "\x52\x45\x51\x55\x45\x53\x54\x5F\x44\x45\x4E\x49\x45\x44", "\x72\x6F\x75\x74\x65", "\x67\x72\x65\x65\x6E", "\x73\x65\x74\x50\x61\x74\x68", "\x57\x41\x4C\x4B\x49\x4E\x47", "\x6F\x76\x65\x72\x76\x69\x65\x77\x5F\x70\x61\x74\x68", "\x72\x6F\x75\x74\x65\x73"]; var pointsArray = []; var Index = { menuClick: function (_0x34dcx3) { switch (_0x34dcx3) { case _0x31f5[2]: { App[_0x31f5[1]][_0x31f5[0]](0); }; break;; case _0x31f5[4]: { App[_0x31f5[1]][_0x31f5[3]](); }; break;; case _0x31f5[6]: { App[_0x31f5[1]][_0x31f5[5]](); }; break;; case _0x31f5[10]: { App[_0x31f5[1]][_0x31f5[0]](App[_0x31f5[9]][_0x31f5[8]][_0x31f5[7]]() - 1); }; break;; case _0x31f5[29]: { if (!App[_0x31f5[12]][_0x31f5[11]]) { if (App[_0x31f5[12]][_0x31f5[13]]()) { App[_0x31f5[15]][_0x31f5[8]][_0x31f5[14]](); } else { App[_0x31f5[12]][_0x31f5[19]]()[_0x31f5[18]]()[_0x31f5[17]](function (_0x34dcx4) { if (!_0x34dcx4[_0x31f5[13]]()) { _0x34dcx4[_0x31f5[16]](); return false; }; }); }; } else { if (!App[_0x31f5[20]][_0x31f5[11]]) { if (App[_0x31f5[20]][_0x31f5[13]]()) { App[_0x31f5[21]][_0x31f5[8]][_0x31f5[14]](); } else { App[_0x31f5[20]][_0x31f5[19]]()[_0x31f5[18]]()[_0x31f5[17]](function (_0x34dcx4) { if (!_0x34dcx4[_0x31f5[13]]()) { _0x34dcx4[_0x31f5[16]](); return false; }; }); }; } else { if (!App[_0x31f5[22]][_0x31f5[11]]) { if (App[_0x31f5[22]][_0x31f5[13]]()) { if (App[_0x31f5[24]][_0x31f5[23]]) { App[_0x31f5[25]][_0x31f5[8]][_0x31f5[14]](); } else { App[_0x31f5[26]][_0x31f5[8]][_0x31f5[14]](); }; } else { App[_0x31f5[22]][_0x31f5[19]]()[_0x31f5[18]]()[_0x31f5[17]](function (_0x34dcx4) { if (!_0x34dcx4[_0x31f5[13]]()) { _0x34dcx4[_0x31f5[16]](); return false; }; }); }; } else { if (!App[_0x31f5[27]][_0x31f5[11]]) { if (App[_0x31f5[27]][_0x31f5[13]]()) { App[_0x31f5[28]][_0x31f5[8]][_0x31f5[14]](); } else { App[_0x31f5[27]][_0x31f5[19]]()[_0x31f5[18]]()[_0x31f5[17]](function (_0x34dcx4) { if (!_0x34dcx4[_0x31f5[13]]()) { _0x34dcx4[_0x31f5[16]](); return false; }; }); }; }; }; }; }; }; break;; case _0x31f5[32]: { if (parent[_0x31f5[31]][_0x31f5[30]]) { parent[_0x31f5[31]][_0x31f5[30]][_0x31f5[32]](); } else { parent[_0x31f5[32]](); }; }; break;; }; }, btnHideTrigger_click: function (_0x34dcx5) { _0x34dcx5[_0x31f5[33]](); }, cboAreaPlan_change: function (_0x34dcx6, _0x34dcx7, _0x34dcx8, _0x34dcx9) { App[_0x31f5[34]][_0x31f5[8]][_0x31f5[14]](); App[_0x31f5[35]][_0x31f5[8]][_0x31f5[14]](); }, cboDistributorPlan_change: function (_0x34dcx6, _0x34dcx7, _0x34dcx8, _0x34dcx9) { App[_0x31f5[36]][_0x31f5[8]][_0x31f5[14]](); }, addDays: function (_0x34dcxa, _0x34dcxb) { return new Date(_0x34dcxa[_0x31f5[37]]() + _0x34dcxb * 24 * 60 * 60 * 1000); }, getMonday: function (_0x34dcxc) { _0x34dcxc = new Date(_0x34dcxc); var _0x34dcxd = _0x34dcxc[_0x31f5[38]](), _0x34dcxe = _0x34dcxc[_0x31f5[39]]() - _0x34dcxd + (_0x34dcxd == 0 ? -6 : 1); return new Date(_0x34dcxc[_0x31f5[40]](_0x34dcxe)); }, btnLoadDataPlan_click: function (_0x34dcxf, _0x34dcx10, _0x34dcx9) { Index[_0x31f5[41]](_0x31f5[29]); }, stoVisitCustomerPlan_load: function (_0x34dcx11, _0x34dcx12, _0x34dcx13, _0x34dcx9) { if (_0x34dcx13) { var _0x34dcx14 = []; _0x34dcx12[_0x31f5[58]](function (_0x34dcx15) { var _0x34dcx16 = { "\x74\x69\x74\x6C\x65": _0x34dcx15[_0x31f5[43]][_0x31f5[42]] + _0x31f5[44] + _0x34dcx15[_0x31f5[43]][_0x31f5[45]], "\x6C\x61\x74": _0x34dcx15[_0x31f5[43]][_0x31f5[46]], "\x6C\x6E\x67": _0x34dcx15[_0x31f5[43]][_0x31f5[47]], "\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6F\x6E": _0x31f5[48] + _0x31f5[49] + _0x31f5[50] + _0x31f5[51] + _0x34dcx15[_0x31f5[43]][_0x31f5[45]] + _0x31f5[52] + _0x31f5[53] + _0x31f5[54] + _0x34dcx15[_0x31f5[43]][_0x31f5[55]] + _0x31f5[56] + _0x31f5[50] + _0x31f5[50] }; _0x34dcx14[_0x31f5[57]](_0x34dcx16); }); PosGmap[_0x31f5[59]](_0x34dcx14, false); }; }, selectionModelVisitCustomerPlan_Select: function (_0x34dcx17, _0x34dcx15, _0x34dcx18, _0x34dcx9) { if (_0x34dcx15) { PosGmap[_0x31f5[60]](_0x34dcx15[_0x31f5[43]].Lat, _0x34dcx15[_0x31f5[43]].Lng); }; }, cboAreaMCL_change: function (_0x34dcx6, _0x34dcx7, _0x34dcx8, _0x34dcx9) { App[_0x31f5[61]][_0x31f5[8]][_0x31f5[14]](); App[_0x31f5[62]][_0x31f5[8]][_0x31f5[14]](); }, cboDistributorMCL_change: function (_0x34dcx6, _0x34dcx7, _0x34dcx8, _0x34dcx9) { }, btnLoadDataMCL_click: function (_0x34dcxf, _0x34dcx10, _0x34dcx9) { Index[_0x31f5[41]](_0x31f5[29]); }, onComboBoxSelect: function (_0x34dcx6) { App[_0x31f5[21]][_0x31f5[8]][_0x31f5[63]] = parseInt(_0x34dcx6[_0x31f5[64]](), 10); App[_0x31f5[21]][_0x31f5[8]][_0x31f5[14]](); }, stoMCL_load: function (_0x34dcx11, _0x34dcx12, _0x34dcx13, _0x34dcx9) { if (_0x34dcx13) { var _0x34dcx14 = []; _0x34dcx11[_0x31f5[17]](function (_0x34dcx15) { var _0x34dcx16 = { "\x74\x69\x74\x6C\x65": _0x34dcx15[_0x31f5[43]][_0x31f5[42]] + _0x31f5[44] + _0x34dcx15[_0x31f5[43]][_0x31f5[45]], "\x6C\x61\x74": _0x34dcx15[_0x31f5[43]][_0x31f5[46]], "\x6C\x6E\x67": _0x34dcx15[_0x31f5[43]][_0x31f5[47]], "\x73\x74\x6F\x70": true, "\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6F\x6E": _0x31f5[48] + _0x31f5[49] + _0x31f5[50] + _0x31f5[51] + _0x34dcx15[_0x31f5[43]][_0x31f5[45]] + _0x31f5[52] + _0x31f5[53] + _0x31f5[54] + _0x34dcx15[_0x31f5[43]][_0x31f5[65]] + _0x31f5[56] + _0x31f5[50] + _0x31f5[50] }; _0x34dcx14[_0x31f5[57]](_0x34dcx16); }); PosGmap[_0x31f5[59]](_0x34dcx14, false); }; App[_0x31f5[68]][_0x31f5[67]]()[_0x31f5[66]](); }, selectionModelMCL_Select: function (_0x34dcx17, _0x34dcx15, _0x34dcx18, _0x34dcx9) { if (_0x34dcx15) { PosGmap[_0x31f5[60]](_0x34dcx15[_0x31f5[43]].Lat, _0x34dcx15[_0x31f5[43]].Lng); }; }, cboDistributorActual_change: function (_0x34dcx6, _0x34dcx7, _0x34dcx8, _0x34dcx9) { App[_0x31f5[69]][_0x31f5[8]][_0x31f5[14]](); }, radSalesmanAll_change: function (_0x34dcx19, _0x34dcx7, _0x34dcx8, _0x34dcx9) { if (_0x34dcx19[_0x31f5[23]]) { App[_0x31f5[69]][_0x31f5[33]](); App[_0x31f5[69]][_0x31f5[70]](); App[_0x31f5[71]][_0x31f5[70]](); App[_0x31f5[26]][_0x31f5[72]](); App[_0x31f5[25]][_0x31f5[73]](); } else { App[_0x31f5[69]][_0x31f5[74]](); App[_0x31f5[71]][_0x31f5[74]](); App[_0x31f5[26]][_0x31f5[73]](); App[_0x31f5[25]][_0x31f5[72]](); }; }, btnLoadDataActual_click: function (_0x34dcxf, _0x34dcx10, _0x34dcx9) { Index[_0x31f5[41]](_0x31f5[29]); }, grdVisitCustomerActual_viewGetRowClass: function (_0x34dcx15) { if (_0x34dcx15[_0x31f5[43]][_0x31f5[75]] == _0x31f5[76]) { return _0x31f5[77]; } else { if (_0x34dcx15[_0x31f5[43]][_0x31f5[75]] == _0x31f5[78]) { return _0x31f5[79]; }; }; }, btnGetCurrentLocation_click: function (_0x34dcxf, _0x34dcx10, _0x34dcx9) { var _0x34dcx11 = App[_0x31f5[26]][_0x31f5[8]]; if (_0x34dcx11[_0x31f5[7]]() > 0) { var _0x34dcx1a = _0x34dcx11[_0x31f5[80]](_0x34dcx11[_0x31f5[7]]() - 1); PosGmap[_0x31f5[60]](_0x34dcx1a[_0x31f5[43]].Lat, _0x34dcx1a[_0x31f5[43]].Lng); App[_0x31f5[81]][_0x31f5[0]](_0x34dcx11[_0x31f5[7]]() - 1); }; }, stoVisitCustomerActual_load: function (_0x34dcx11, _0x34dcx12, _0x34dcx13, _0x34dcx9) { if (_0x34dcx13) { var _0x34dcx14 = []; _0x34dcx12[_0x31f5[58]](function (_0x34dcx15) { var _0x34dcx16 = { "\x74\x69\x74\x6C\x65": _0x34dcx15[_0x31f5[43]][_0x31f5[42]] + _0x31f5[44] + _0x34dcx15[_0x31f5[43]][_0x31f5[45]], "\x6C\x61\x74": _0x34dcx15[_0x31f5[43]][_0x31f5[46]], "\x6C\x6E\x67": _0x34dcx15[_0x31f5[43]][_0x31f5[47]], "\x74\x79\x70\x65": _0x34dcx15[_0x31f5[43]][_0x31f5[75]], "\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6F\x6E": _0x31f5[48] + _0x31f5[49] + _0x31f5[50] + _0x31f5[51] + _0x34dcx15[_0x31f5[43]][_0x31f5[45]] + _0x31f5[52] + _0x31f5[53] + _0x31f5[54] + _0x34dcx15[_0x31f5[43]][_0x31f5[55]] + _0x31f5[56] + _0x31f5[50] + _0x31f5[50] }; _0x34dcx14[_0x31f5[57]](_0x34dcx16); }); PosGmap[_0x31f5[59]](_0x34dcx14, true); }; }, stoAllCurrentSalesman_load: function (_0x34dcx11, _0x34dcx12, _0x34dcx13, _0x34dcx9) { if (_0x34dcx13) { var _0x34dcx14 = []; _0x34dcx12[_0x31f5[58]](function (_0x34dcx15) { var _0x34dcx16 = { "\x74\x69\x74\x6C\x65": _0x34dcx15[_0x31f5[43]][_0x31f5[82]] + _0x31f5[44] + _0x34dcx15[_0x31f5[43]][_0x31f5[83]], "\x6C\x61\x74": _0x34dcx15[_0x31f5[43]][_0x31f5[46]], "\x6C\x6E\x67": _0x34dcx15[_0x31f5[43]][_0x31f5[47]], "\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6F\x6E": _0x31f5[48] + _0x31f5[49] + _0x31f5[50] + _0x31f5[51] + _0x34dcx15[_0x31f5[43]][_0x31f5[82]] + _0x31f5[44] + _0x34dcx15[_0x31f5[43]][_0x31f5[83]] + _0x31f5[52] + _0x31f5[53] + _0x31f5[54] + (_0x34dcx15[_0x31f5[43]][_0x31f5[42]] ? (_0x34dcx15[_0x31f5[43]][_0x31f5[42]] + _0x31f5[44] + _0x34dcx15[_0x31f5[43]][_0x31f5[45]] + _0x31f5[84]) : _0x31f5[85]) + _0x34dcx15[_0x31f5[43]][_0x31f5[55]] + _0x31f5[56] + _0x31f5[50] + _0x31f5[50] }; _0x34dcx14[_0x31f5[57]](_0x34dcx16); }); PosGmap[_0x31f5[59]](_0x34dcx14, false); }; }, cboDistributorHistory_change: function (_0x34dcx6, _0x34dcx7, _0x34dcx8, _0x34dcx9) { App[_0x31f5[86]][_0x31f5[8]][_0x31f5[14]](); App[_0x31f5[87]][_0x31f5[8]][_0x31f5[14]](); }, cboSalesManHistory_change: function (_0x34dcx6, _0x34dcx7, _0x34dcx8, _0x34dcx9) { App[_0x31f5[87]][_0x31f5[8]][_0x31f5[14]](); }, btnLoadDataHistory_click: function (_0x34dcxf, _0x34dcx10, _0x34dcx9) { Index[_0x31f5[41]](_0x31f5[29]); }, stoCustHistory_load: function (_0x34dcx11, _0x34dcx12, _0x34dcx13, _0x34dcx9) { if (_0x34dcx13) { var _0x34dcx14 = []; _0x34dcx12[_0x31f5[58]](function (_0x34dcx15) { var _0x34dcx16 = { "\x74\x69\x74\x6C\x65": _0x34dcx15[_0x31f5[43]][_0x31f5[88]] + _0x31f5[44] + _0x34dcx15[_0x31f5[43]][_0x31f5[45]], "\x6C\x61\x74": _0x34dcx15[_0x31f5[43]][_0x31f5[46]], "\x6C\x6E\x67": _0x34dcx15[_0x31f5[43]][_0x31f5[47]], "\x64\x65\x73\x63\x72\x69\x70\x74\x69\x6F\x6E": _0x31f5[48] + _0x31f5[49] + _0x31f5[50] + _0x31f5[51] + Ext[_0x31f5[91]][_0x31f5[90]](_0x34dcx15[_0x31f5[43]].VisitDate, _0x31f5[89]) + _0x31f5[52] + _0x31f5[53] + _0x31f5[54] + _0x34dcx15[_0x31f5[43]][_0x31f5[55]] + _0x31f5[56] + _0x31f5[50] + _0x31f5[50] }; _0x34dcx14[_0x31f5[57]](_0x34dcx16); }); PosGmap[_0x31f5[59]](_0x34dcx14, false); }; }, selectionModelPOS_ActualVisit_Select: function (_0x34dcx17, _0x34dcx15, _0x34dcx18, _0x34dcx9) { if (_0x34dcx15) { PosGmap[_0x31f5[60]](_0x34dcx15[_0x31f5[43]].CiLat, _0x34dcx15[_0x31f5[43]].CiLng); }; }, grdActualVisit_cellClick: function (_0x34dcx1b, _0x34dcx1c, _0x34dcx1d, _0x34dcx15, _0x34dcx1e, _0x34dcx1f, _0x34dcx10, _0x34dcx9) { var _0x34dcx20 = App[_0x31f5[9]][_0x31f5[92]][_0x34dcx1d]; if (_0x34dcx20) { if (_0x34dcx20[_0x31f5[93]] === _0x31f5[94]) { PosGmap[_0x31f5[60]](_0x34dcx15[_0x31f5[43]].CoLat, _0x34dcx15[_0x31f5[43]].CoLng); } else { if (_0x34dcx20[_0x31f5[93]] === _0x31f5[95]) { PosGmap[_0x31f5[60]](_0x34dcx15[_0x31f5[43]].CiLat, _0x34dcx15[_0x31f5[43]].CiLng); }; }; }; } }; var PosGmap = { map_canvas: {}, map: {}, directionsService: {}, directionsDisplay: {}, directionsDisplays: [], infoWindow: {}, stopMarkers: [], initialize: function () { map_canvas = document[_0x31f5[97]](_0x31f5[96]); var _0x34dcx22 = new google[_0x31f5[98]].LatLng(10.782171, 106.654012, 17); var _0x34dcx23 = { center: _0x34dcx22, zoom: 16, mapTypeId: google[_0x31f5[98]][_0x31f5[100]][_0x31f5[99]] }; map = new google[_0x31f5[98]].Map(map_canvas, _0x34dcx23); directionsService = new google[_0x31f5[98]].DirectionsService(); directionsDisplay = new google[_0x31f5[98]].DirectionsRenderer(); infoWindow = new google[_0x31f5[98]].InfoWindow(); stopMarkers: []; }, navMapCenterByLocation: function (_0x34dcx24, _0x34dcx25) { var _0x34dcx26 = new google[_0x31f5[98]].LatLng(_0x34dcx24, _0x34dcx25); map[_0x31f5[101]](_0x34dcx26); map[_0x31f5[103]](map[_0x31f5[102]]()); var _0x34dcx27 = PosGmap[_0x31f5[104]](_0x34dcx24, _0x34dcx25); if (_0x34dcx27) { if (_0x34dcx27[_0x31f5[105]]() != null) { _0x34dcx27[_0x31f5[106]](null); } else { _0x34dcx27[_0x31f5[106]](google[_0x31f5[98]][_0x31f5[107]].BOUNCE); setTimeout(function () { _0x34dcx27[_0x31f5[106]](null); }, 1400); }; }; }, find_closest_marker: function (_0x34dcx28, _0x34dcx29) { var _0x34dcx2a = Math[_0x31f5[108]]; var _0x34dcx2b = 6371; var _0x34dcx2c = []; var _0x34dcx2d = -1; for (i = 0; i < PosGmap[_0x31f5[110]][_0x31f5[109]]; i++) { var _0x34dcx2e = PosGmap[_0x31f5[110]][i][_0x31f5[112]][_0x31f5[111]](); var _0x34dcx2f = PosGmap[_0x31f5[110]][i][_0x31f5[112]][_0x31f5[113]](); var _0x34dcx30 = _0x34dcx2e - _0x34dcx28; var _0x34dcx31 = _0x34dcx2f - _0x34dcx29; var _0x34dcx32 = _0x34dcx30 * (_0x34dcx2a / 180); var _0x34dcx33 = _0x34dcx31 * (_0x34dcx2a / 180); var _0x34dcx34 = _0x34dcx28 * (_0x34dcx2a / 180); var _0x34dcx35 = _0x34dcx2e * (_0x34dcx2a / 180); var _0x34dcx36 = Math[_0x31f5[114]](_0x34dcx32 / 2) * Math[_0x31f5[114]](_0x34dcx32 / 2) + Math[_0x31f5[114]](_0x34dcx33 / 2) * Math[_0x31f5[114]](_0x34dcx33 / 2) * Math[_0x31f5[115]](_0x34dcx34) * Math[_0x31f5[115]](_0x34dcx35); var _0x34dcx37 = 2 * Math[_0x31f5[117]](Math[_0x31f5[116]](_0x34dcx36), Math[_0x31f5[116]](1 - _0x34dcx36)); var _0x34dcxc = _0x34dcx2b * _0x34dcx37; _0x34dcx2c[i] = _0x34dcxc; if (_0x34dcx2d == -1 || _0x34dcxc < _0x34dcx2c[_0x34dcx2d]) { _0x34dcx2d = i; }; }; return PosGmap[_0x31f5[110]][_0x34dcx2d]; }, drawRoutes: function (_0x34dcx14, _0x34dcx38) { if (directionsDisplay) { directionsDisplay[_0x31f5[118]](null); if (PosGmap[_0x31f5[119]] && PosGmap[_0x31f5[119]][_0x31f5[109]] > 0) { for (var _0x34dcx39 = 0; _0x34dcx39 < PosGmap[_0x31f5[119]][_0x31f5[109]]; _0x34dcx39++) { PosGmap[_0x31f5[119]][_0x34dcx39][_0x31f5[118]](null); }; }; }; directionsService = new google[_0x31f5[98]].DirectionsService(); directionsDisplay = new google[_0x31f5[98]].DirectionsRenderer(); if (_0x34dcx14[_0x31f5[109]] > 0) { PosGmap[_0x31f5[110]] = []; var _0x34dcx3a = new Array(); for (_0x34dcx39 = 0; _0x34dcx39 < _0x34dcx14[_0x31f5[109]]; _0x34dcx39++) { var _0x34dcx3b = _0x34dcx14[_0x34dcx39]; var _0x34dcx26 = new google[_0x31f5[98]].LatLng(_0x34dcx3b[_0x31f5[111]], _0x34dcx3b[_0x31f5[113]]); var _0x34dcx3c = _0x31f5[120]; if (_0x34dcx3b[_0x31f5[121]]) { if (_0x34dcx3b[_0x31f5[121]] == _0x31f5[76]) { _0x34dcx3c = _0x31f5[122]; } else { if (_0x34dcx3b[_0x31f5[121]] == _0x31f5[78]) { _0x34dcx3c = _0x31f5[123]; }; }; }; _0x34dcx3a[_0x31f5[57]](_0x34dcx26); if (_0x34dcx39 == 0) { var _0x34dcx23 = { center: _0x34dcx26, zoom: 16, mapTypeId: google[_0x31f5[98]][_0x31f5[100]][_0x31f5[99]] }; map = new google[_0x31f5[98]].Map(map_canvas, _0x34dcx23); }; if (_0x34dcx3b[_0x31f5[124]]) { var _0x34dcx16 = new google[_0x31f5[98]].Marker({ position: _0x34dcx26, map: map, title: _0x34dcx3b[_0x31f5[125]], icon: _0x31f5[126] }); } else { var _0x34dcx16 = new google[_0x31f5[98]].Marker({ position: _0x34dcx26, map: map, title: _0x34dcx3b[_0x31f5[125]], icon: Ext[_0x31f5[128]][_0x31f5[90]](_0x31f5[127], _0x34dcx39 + 1, _0x34dcx3c) }); }; (function (_0x34dcx16, _0x34dcx3b) { google[_0x31f5[98]][_0x31f5[134]][_0x31f5[133]](_0x34dcx16, _0x31f5[129], function (_0x34dcx10) { infoWindow[_0x31f5[131]](_0x34dcx3b[_0x31f5[130]]); infoWindow[_0x31f5[132]](map, _0x34dcx16); if (_0x34dcx16[_0x31f5[105]]() != null) { _0x34dcx16[_0x31f5[106]](null); } else { _0x34dcx16[_0x31f5[106]](google[_0x31f5[98]][_0x31f5[107]].BOUNCE); setTimeout(function () { _0x34dcx16[_0x31f5[106]](null); }, 1400); }; }); })(_0x34dcx16, _0x34dcx3b); PosGmap[_0x31f5[110]][_0x31f5[57]](_0x34dcx16); }; directionsDisplay[_0x31f5[118]](map); if (_0x34dcx38) { PosGmap[_0x31f5[135]](_0x34dcx3a); }; } else { for (_0x34dcx39 = 0; _0x34dcx39 < PosGmap[_0x31f5[110]][_0x31f5[109]]; _0x34dcx39++) { PosGmap[_0x31f5[110]][_0x34dcx39][_0x31f5[118]](null); if (_0x34dcx39 == PosGmap[_0x31f5[110]][_0x31f5[109]] - 1) { PosGmap[_0x31f5[110]] = []; }; }; directionsDisplay[_0x31f5[118]](map); }; }, calcRoute: function (_0x34dcx3a) { var _0x34dcx3d = 0; var _0x34dcx3e = []; for (var _0x34dcx39 = 0; _0x34dcx39 < _0x34dcx3a[_0x31f5[109]]; _0x34dcx39++) { if (_0x34dcx39 > 0 && _0x34dcx39 % 8 == 0) { _0x34dcx3d++; }; if (!_0x34dcx3e[_0x34dcx3d]) { _0x34dcx3e[_0x34dcx3d] = []; PosGmap[_0x31f5[119]][_0x31f5[57]](new google[_0x31f5[98]].DirectionsRenderer()); }; if (_0x34dcx39 > 0 && _0x34dcx39 % 8 == 0) { _0x34dcx3e[_0x34dcx3d][_0x31f5[57]](_0x34dcx3a[_0x34dcx39 - 1]); _0x34dcx3e[_0x34dcx3d][_0x31f5[57]](_0x34dcx3a[_0x34dcx39]); } else { _0x34dcx3e[_0x34dcx3d][_0x31f5[57]](_0x34dcx3a[_0x34dcx39]); }; }; if (_0x34dcx3e[_0x31f5[109]] > 0) { var _0x34dcx3f = 0; PosGmap[_0x31f5[136]](_0x34dcx3e, _0x34dcx3f); }; }, requestForWaysRoute: function (_0x34dcx3e, _0x34dcx3f) { var _0x34dcx40; var _0x34dcx41; var _0x34dcx42 = []; for (var _0x34dcx39 = 0; _0x34dcx39 < _0x34dcx3e[_0x34dcx3f][_0x31f5[109]]; _0x34dcx39++) { if (_0x34dcx39 == 0) { _0x34dcx40 = _0x34dcx3e[_0x34dcx3f][_0x34dcx39]; }; if (_0x34dcx39 == _0x34dcx3e[_0x34dcx3f][_0x31f5[109]] - 1) { _0x34dcx41 = _0x34dcx3e[_0x34dcx3f][_0x34dcx39]; }; if (_0x34dcx39 > 0 && _0x34dcx39 < _0x34dcx3e[_0x34dcx3f][_0x31f5[109]] - 1) { _0x34dcx42[_0x31f5[57]]({ location: _0x34dcx3e[_0x34dcx3f][_0x34dcx39], stopover: true }); }; }; var _0x34dcx43 = { origin: _0x34dcx40, destination: _0x34dcx41, waypoints: _0x34dcx42, optimizeWaypoints: false, travelMode: google[_0x31f5[98]][_0x31f5[138]][_0x31f5[137]] }; directionsService[_0x31f5[149]](_0x34dcx43, function (_0x34dcx44, _0x34dcx45) { if (_0x34dcx45 == google[_0x31f5[98]][_0x31f5[140]][_0x31f5[139]]) { PosGmap[_0x31f5[119]][_0x34dcx3f][_0x31f5[118]](map); PosGmap[_0x31f5[119]][_0x34dcx3f][_0x31f5[141]]({ preserveViewport: true, suppressMarkers: true }); PosGmap[_0x31f5[119]][_0x34dcx3f][_0x31f5[142]](_0x34dcx44); _0x34dcx3f = _0x34dcx3f + 1; var _0x34dcx46 = _0x34dcx3e[_0x34dcx3f]; if (_0x34dcx46 && _0x34dcx46[_0x31f5[109]] > 0) { setTimeout(function () { PosGmap[_0x31f5[136]](_0x34dcx3e, _0x34dcx3f); }, 300); }; } else { if (_0x34dcx45 == google[_0x31f5[98]][_0x31f5[140]][_0x31f5[143]]) { } else { if (_0x34dcx45 == google[_0x31f5[98]][_0x31f5[140]][_0x31f5[144]]) { } else { if (_0x34dcx45 == google[_0x31f5[98]][_0x31f5[140]][_0x31f5[145]]) { } else { if (_0x34dcx45 == google[_0x31f5[98]][_0x31f5[140]][_0x31f5[146]]) { } else { if (_0x34dcx45 == google[_0x31f5[98]][_0x31f5[140]][_0x31f5[147]]) { } else { if (_0x34dcx45 == google[_0x31f5[98]][_0x31f5[140]][_0x31f5[148]]) { } else { }; }; }; }; }; }; }; }); }, drawRouteByMarkers: function (_0x34dcx14) { var _0x34dcx47 = { center: new google[_0x31f5[98]].LatLng(_0x34dcx14[0][_0x31f5[111]], _0x34dcx14[0][_0x31f5[113]]), zoom: 8, mapTypeId: google[_0x31f5[98]][_0x31f5[100]][_0x31f5[99]] }; var _0x34dcx48 = new google[_0x31f5[98]].MVCArray(); var _0x34dcx49 = new google[_0x31f5[98]].DirectionsService(); var _0x34dcx4a = new google[_0x31f5[98]].InfoWindow(); var _0x34dcx4b = new google[_0x31f5[98]].Map(document[_0x31f5[97]](_0x31f5[96]), _0x34dcx47); var _0x34dcx4c = new google[_0x31f5[98]].Polyline({ map: _0x34dcx4b, strokeColor: _0x31f5[150] }); var _0x34dcx3a = new Array(); for (_0x34dcx39 = 0; _0x34dcx39 < _0x34dcx14[_0x31f5[109]]; _0x34dcx39++) { var _0x34dcx3b = _0x34dcx14[_0x34dcx39]; var _0x34dcx26 = new google[_0x31f5[98]].LatLng(_0x34dcx3b[_0x31f5[111]], _0x34dcx3b[_0x31f5[113]]); _0x34dcx3a[_0x31f5[57]](_0x34dcx26); var _0x34dcx16 = new google[_0x31f5[98]].Marker({ position: _0x34dcx26, map: _0x34dcx4b, title: _0x34dcx3b[_0x31f5[125]] }); (function (_0x34dcx16, _0x34dcx3b) { google[_0x31f5[98]][_0x31f5[134]][_0x31f5[133]](_0x34dcx16, _0x31f5[129], function (_0x34dcx10) { _0x34dcx4a[_0x31f5[131]](_0x34dcx3b[_0x31f5[130]]); _0x34dcx4a[_0x31f5[132]](_0x34dcx4b, _0x34dcx16); }); })(_0x34dcx16, _0x34dcx3b); }; for (var _0x34dcx39 = 0; _0x34dcx39 < _0x34dcx3a[_0x31f5[109]]; _0x34dcx39++) { if ((_0x34dcx39 + 1) < _0x34dcx3a[_0x31f5[109]]) { var _0x34dcx4d = _0x34dcx3a[_0x34dcx39]; var _0x34dcx4e = _0x34dcx3a[_0x34dcx39 + 1]; _0x34dcx48[_0x31f5[57]](_0x34dcx4d); _0x34dcx4c[_0x31f5[151]](_0x34dcx48); _0x34dcx49[_0x31f5[149]]({ origin: _0x34dcx4d, destination: _0x34dcx4e, travelMode: google[_0x31f5[98]][_0x31f5[138]][_0x31f5[152]] }, function (_0x34dcx4f, _0x34dcx45) { if (_0x34dcx45 == google[_0x31f5[98]][_0x31f5[140]][_0x31f5[139]]) { for (var _0x34dcx39 = 0, _0x34dcx50 = _0x34dcx4f[_0x31f5[154]][0][_0x31f5[153]][_0x31f5[109]]; _0x34dcx39 < _0x34dcx50; _0x34dcx39++) { _0x34dcx48[_0x31f5[57]](_0x34dcx4f[_0x31f5[154]][0][_0x31f5[153]][_0x34dcx39]); }; }; }); }; }; } };
+var pointsArray = [];
+// JS Code for Index View
+var Index = {
+    menuClick: function (cmd) {
+        switch (cmd) {
+
+            case "refresh":
+                {
+                    if (!App.pnlMCP.hidden) {
+                        if (App.pnlMCP.isValid()) {
+                            App.grdVisitCustomerPlan.store.reload();
+                        }
+                        else {
+                            App.pnlMCP.getForm().getFields().each(
+                                function (item) {
+                                    if (!item.isValid()) {
+                                        item.focus();
+                                        return false;
+                                    }
+                                }
+                            );
+                        }
+                    }
+                    else if (!App.pnlMCL.hidden) {
+                        if (App.pnlMCL.isValid()) {
+                            App.grdMCL.store.reload();
+                        }
+                        else {
+                            App.pnlMCL.getForm().getFields().each(
+                                function (item) {
+                                    if (!item.isValid()) {
+                                        item.focus();
+                                        return false;
+                                    }
+                                }
+                            );
+                        }
+                    }
+                    else if (!App.pnlActualVisit.hidden) {
+                        if (App.pnlActualVisit.isValid()) {
+                            if (App.radSalesmanAll.value) {
+                                App.grdAllCurrentSalesman.store.reload();
+                            }
+                            else {
+                                App.grdVisitCustomerActual.store.reload();
+                                App.storeVisitCustomerActual.reload();
+                            }
+                        }
+                        else {
+                            App.pnlActualVisit.getForm().getFields().each(
+                                function (item) {
+                                    if (!item.isValid()) {
+                                        item.focus();
+                                        return false;
+                                    }
+                                }
+                            );
+                        }
+                    }
+                    else if (!App.pnlCustHistory.hidden) {
+                        if (App.pnlCustHistory.isValid()) {
+                            App.grdCustHistory.store.reload();
+                        }
+                        else {
+                            App.pnlCustHistory.getForm().getFields().each(
+                                function (item) {
+                                    if (!item.isValid()) {
+                                        item.focus();
+                                        return false;
+                                    }
+                                }
+                            );
+                        }
+                    }
+                }
+                break;
+
+            case "close":
+                {
+                    HQ.common.close(this);
+                }
+                break;
+        }
+    },
+
+    btnHideTrigger_click: function (sender) {
+        sender.clearValue();
+    },
+
+    // tab MCP
+
+    cboAreaPlan_change: function (cbo, newValue, oldValue, eOpts) {
+        App.cboProvincePlan.store.reload();
+        App.cboDistributorPlan.store.reload();
+    },
+
+    cboDistributorPlan_change: function (cbo, newValue, oldValue, eOpts) {
+        App.cboSalesManPlan.store.reload();
+    },
+
+    addDays: function (theDate, days) {
+        return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000);
+    },
+
+    getMonday: function (d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+        return new Date(d.setDate(diff));
+    },
+
+    btnLoadDataPlan_click: function (btn, e, eOpts) {
+        Index.menuClick("refresh");
+    },
+
+    storeVisitCustomerPlan_load: function (store, records, successful, eOpts) {
+        if (successful) {
+            var markers = [];
+            records.forEach(function (record) {
+                var marker = {
+                    "title": record.data.CustId + ": " + record.data.CustName,
+                    "lat": record.data.Lat,
+                    "lng": record.data.Lng,
+                    "description":
+                        '<div id="content">' +
+                            '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h1 id="firstHeading" class="firstHeading">' +
+                                record.data.CustName +
+                            '</h1>' +
+                            '<div id="bodyContent">' +
+                                '<p>' +
+                                    record.data.Addr +
+                                '</p>' +
+                            '</div>' +
+                        '</div>'
+                }
+                markers.push(marker);
+            });
+            PosGmap.drawRoutes(markers, false);
+        }
+    },
+
+    selectionModelVisitCustomerPlan_Select: function (rowModel, record, index, eOpts) {
+        if (record) {
+            PosGmap.navMapCenterByLocation(record.data.Lat, record.data.Lng);
+        }
+    },
+
+    grdVisitCustomerActual_cellClick: function (gridview, td, cellIndex, record, tr, rowIndex, e, eOpts) {
+        var clickCol = gridview.up('grid').columns[cellIndex];
+        if (clickCol) {
+            if (clickCol.dataIndex === "Checkout") {
+                PosGmap.navMapCenterByLocation(record.data.CoLat, record.data.CoLng);
+            }
+            else if (clickCol.dataIndex === "Checkin") {
+                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng);
+            }
+            else if (!record.data.CustId) {
+                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng);
+            }
+        }
+    },
+    // tab MCL
+
+    cboAreaMCL_change: function (cbo, newValue, oldValue, eOpts) {
+        App.cboProvinceMCL.store.reload();
+        App.cboDistributorMCL.store.reload();
+    },
+
+    cboDistributorMCL_change: function (cbo, newValue, oldValue, eOpts) {
+        App.cboSalesManMCL.store.reload();
+    },
+
+    btnLoadDataMCL_click: function (btn, e, eOpts) {
+        Index.menuClick("refresh");
+    },
+
+    pnlGridMCL_viewGetRowClass: function (record, rowIndex, rowParams, store) {
+        return "row-" + record.data.Color;
+    },
+
+    onComboBoxSelect: function (cbo) {
+        App.grdMCL.store.pageSize = parseInt(cbo.getValue(), 10);
+        App.grdMCL.store.reload();
+    },
+
+    getDisplayDaysOfWeek: function (record) {
+        var totalStrs = [];
+        if (record.data.Sun) {
+            totalStrs.push(HQ.common.getLang("Sun"));
+        }
+        if (record.data.Mon) {
+            totalStrs.push(HQ.common.getLang("Mon"));
+        }
+        if (record.data.Tue) {
+            totalStrs.push(HQ.common.getLang("Tue"));
+        }
+        if (record.data.Wed) {
+            totalStrs.push(HQ.common.getLang("Wed"));
+        }
+        if (record.data.Thu) {
+            totalStrs.push(HQ.common.getLang("Thu"));
+        }
+        if (record.data.Fri) {
+            totalStrs.push(HQ.common.getLang("Fri"));
+        }
+        if (record.data.Sat) {
+            totalStrs.push(HQ.common.getLang("Sat"));
+        }
+        return totalStrs.join(", ");
+    },
+
+    createMarkerDescription: function (record) {
+        var dayOfWeekStr = Index.getDisplayDaysOfWeek(record);
+        return '<div id="content">' +
+            '<div id="siteNotice">' +
+                '<b>' +
+                (record.data.Name ? (record.data.Name + ', ' + record.data.Distributor) : (record.data.Distributor)) +
+                '</b>' +
+            '</div>' +
+            '<h2 id="firstHeading" class="firstHeading">' +
+                record.data.CustName +
+            '</h2>' +
+            '<h3>' +
+                record.data.CustId +
+            '</h3>' +
+            '<div id="bodyContent">' +
+                '<p>' +
+                    record.data.Addr1 +
+                '</p>' +
+                '<p>' +
+                    (record.data.SlsFreq ? (HQ.common.getLang("SLSFREQ") + ': ' + record.data.SlsFreq + '<br/>') : '') +
+                    (record.data.WeekofVisit ? (HQ.common.getLang(record.data.WeekofVisit) + '<br/>') : '') +
+                    (record.data.VisitSort ? (HQ.common.getLang("VisitSort") + ': ' + record.data.VisitSort + '<br/>') : '') +
+                    (dayOfWeekStr ? (' (' + dayOfWeekStr + ')') : '') +
+                '</p>' +
+                '<a class="x-btn-default-toolbar-small-icon" href="javascript: McpInfo.editFromMap(\'' + record.data.CustId + '\',\'' + record.data.SlsperId + '\',\'' + record.data.BranchID + '\') ">edit</a>' +
+            '</div>' +
+        '</div>';
+    },
+
+    storeMCL_load: function (store, records, successful, eOpts) {
+        if (successful) {
+            var markers = [];
+
+            store.each(function (record) {
+
+
+                var marker = {
+                    "title": record.data.CustId + ": " + record.data.CustName,
+                    "lat": record.data.Lat,
+                    "lng": record.data.Lng,
+                    "stop": true,
+                    "color": record.data.Color,
+                    "description": Index.createMarkerDescription(record)
+                }
+                markers.push(marker);
+            });
+            PosGmap.drawRoutes(markers, false);
+        }
+        App.dataForm.getEl().unmask();
+
+        //drawingManager.setOptions({
+        //    drawingControl: true
+        //});
+    },
+
+    grdMCL_commandEdit: function (item, command, record, index, eOpts) {
+        if (command == "Edit") {
+            //App.storeMcpInfo.load({
+            //    params: {
+            //        brachID: record.data.BranchID,
+            //        custID: record.data.CustId,
+            //        slsPerID: record.data.SlsperId
+            //    }, scope: this
+            //});
+            App.txtCustIDMcpInfo.setValue(record.data.CustId);
+            App.txtCustNameMcpInfo.setValue(record.data.CustName);
+            App.txtAddressMcpInfo.setValue(record.data.Addr1);
+            App.hdnSlsperIDMcpInfo.setValue(record.data.SlsperId);
+            App.txtSlsperIDMcpInfo.setValue(record.data.SlsperId + "_" + record.data.Name);
+            App.hdnBranchIDMcpInfo.setValue(record.data.BranchID);
+            App.txtDistributorMcpInfo.setValue(record.data.Distributor);
+            App.chkCustStatusMcpInfo.setValue(record.data.Status == "A" ? true : false);
+
+            App.storeMcpInfo.serverProxy.url =
+                Ext.String.format("OM30400/LoadSalesRouteMaster?brachID={0}&custID={1}&slsPerID={2}", record.data.BranchID, record.data.CustId, record.data.SlsperId);
+            App.storeMcpInfo.reload();
+        }
+    },
+
+    selectionModelMCL_Select: function (rowModel, record, index, eOpts) {
+        if (record) {
+            PosGmap.navMapCenterByLocation(record.data.Lat, record.data.Lng);
+        }
+    },
+
+    // tab Actual visit
+    cboDistributorActual_change: function (cbo, newValue, oldValue, eOpts) {
+        App.cboSalesManActual.store.reload();
+    },
+
+    radSalesmanAll_change: function (rad, newValue, oldValue, eOpts) {
+        if (rad.value) {
+            App.cboSalesManActual.clearValue();
+            App.cboSalesManActual.disable();
+            App.btnGetCurrentLocation.disable();
+            App.chkRealTime.disable();
+
+            App.grdVisitCustomerActual.hide();
+            App.grdAllCurrentSalesman.show();
+        }
+        else {
+            App.cboSalesManActual.enable();
+            App.btnGetCurrentLocation.enable();
+            App.chkRealTime.enable();
+
+            App.grdVisitCustomerActual.show();
+            App.grdAllCurrentSalesman.hide();
+        }
+    },
+
+    btnLoadDataActual_click: function (btn, e, eOpts) {
+        Index.menuClick("refresh");
+    },
+
+    grdVisitCustomerActual_viewGetRowClass: function (record) {
+        if (record.data.Type == "IO") {
+            return "ci-row"
+        }
+        else if (record.data.Type == "OO") {
+            return "co-row";
+        }
+    },
+
+    renderColorInOut: function (value, metaData, record, rowIndex, colIndex, store) {
+        if (value) {
+            if (record.data.CustId) {
+                if (metaData.column.dataIndex == "Checkin") {
+                    metaData.tdAttr = 'style="background-color: #CCFF33"';//#CCFF33
+                }
+                else if (metaData.column.dataIndex == "Checkout") {
+                    metaData.tdAttr = 'style="background-color: #FF0000"';
+                }
+            }
+        }
+
+        return value;
+    },
+
+    btnGetCurrentLocation_click: function (btn, e, eOpts) {
+        var store = App.storeGridActualVisit;
+        if (store.getCount() > 0) {
+            var lastRecord = store.getAt(store.getCount() - 1);
+            PosGmap.navMapCenterByLocation(lastRecord.data.CoLat, lastRecord.data.CoLng);
+
+            App.SelectionModelVisitCustomerActual.select(store.getCount() - 1);
+        }
+    },
+
+    chkRealTime_change: function (chk, newValue, oldValue, eOpts) {
+        if (chk.value) {
+            App.grdVisitCustomerActual.store.clearFilter();
+        }
+        else {
+            App.grdVisitCustomerActual.store.filterBy(function (record) {
+                if (record.data.CustId) {
+                    return record;
+                }
+            });
+        }
+    },
+
+    storeVisitCustomerActual_load: function (store, records, successful, eOpts) {
+        if (successful) {
+            var markers = [];
+            records.forEach(function (record) {
+                var marker = {
+                    "title": record.data.CustId + ": " + record.data.CustName,
+                    "lat": record.data.Lat,
+                    "lng": record.data.Lng,
+                    "type": record.data.Type,
+                    "description":
+                        '<div id="content">' +
+                            '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h1 id="firstHeading" class="firstHeading">' +
+                                record.data.CustName +
+                            '</h1>' +
+                            '<div id="bodyContent">' +
+                                '<p>' +
+                                    record.data.Addr +
+                                '</p>' +
+                            '</div>' +
+                        '</div>'
+                }
+                markers.push(marker);
+            });
+            PosGmap.drawRoutes(markers, true);
+        }
+
+        // pretend to change chkRealTime check
+        Index.chkRealTime_change(App.chkRealTime);
+    },
+
+    storeAllCurrentSalesman_load: function (store, records, successful, eOpts) {
+        if (successful) {
+            var markers = [];
+            records.forEach(function (record) {
+                var marker = {
+                    "title": record.data.SlsperID + ": " + record.data.Name,
+                    "lat": record.data.Lat,
+                    "lng": record.data.Lng,
+                    "description":
+                        '<div id="content">' +
+                            '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h1 id="firstHeading" class="firstHeading">' +
+                                record.data.SlsperID + ": " + record.data.Name +
+                            '</h1>' +
+                            '<div id="bodyContent">' +
+                                '<p>' +
+                                    (record.data.CustId ? (record.data.CustId + ": " + record.data.CustName + " - ") : "") +
+                                    record.data.Addr +
+                                '</p>' +
+                            '</div>' +
+                        '</div>'
+                }
+                markers.push(marker);
+            });
+            PosGmap.drawRoutes(markers, false);
+        }
+    },
+
+    // tab history
+    cboDistributorHistory_change: function (cbo, newValue, oldValue, eOpts) {
+        App.cboSalesManHistory.store.reload();
+        App.cboCustomerHistory.store.reload();
+    },
+
+    cboSalesManHistory_change: function (cbo, newValue, oldValue, eOpts) {
+        App.cboCustomerHistory.store.reload();
+    },
+
+    btnLoadDataHistory_click: function (btn, e, eOpts) {
+        Index.menuClick("refresh");
+    },
+
+    storeCustHistory_load: function (store, records, successful, eOpts) {
+        if (successful) {
+            var markers = [];
+            records.forEach(function (record) {
+                var marker = {
+                    "title": record.data.CustID + ": " + record.data.CustName,
+                    "lat": record.data.Lat,
+                    "lng": record.data.Lng,
+                    "description":
+                        '<div id="content">' +
+                            '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h1 id="firstHeading" class="firstHeading">' +
+                                Ext.Date.format(record.data.VisitDate, 'd-m-Y H:i') +
+                            '</h1>' +
+                            '<div id="bodyContent">' +
+                                '<p>' +
+                                    record.data.Addr +
+                                '</p>' +
+                            '</div>' +
+                        '</div>'
+                }
+                markers.push(marker);
+            });
+            PosGmap.drawRoutes(markers, false);
+        }
+    },
+
+    //
+
+    selectionModelPOS_ActualVisit_Select: function (rowModel, record, index, eOpts) {
+        if (record) {
+            PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng);
+        }
+    },
+
+    grdActualVisit_cellClick: function (gridview, td, cellIndex, record, tr, rowIndex, e, eOpts) {
+        var clickCol = App.grdActualVisit.columns[cellIndex];
+        if (clickCol) {
+            if (clickCol.dataIndex === "CheckOut") {
+                PosGmap.navMapCenterByLocation(record.data.CoLat, record.data.CoLng);
+            }
+            else if (clickCol.dataIndex === "CheckIn") {
+                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng);
+            }
+        }
+    },
+
+    // Show the tooltip in grid
+    onShow: function (toolTip, grid, isHtmlEncode) {
+        var view = grid.getView(),
+            store = grid.getStore(),
+            record = view.getRecord(view.findItemByChild(toolTip.triggerElement)),
+            column = view.getHeaderByCell(toolTip.triggerElement),
+            data = record.get(column.dataIndex);
+
+        if (data) {
+            if (isHtmlEncode) {
+                toolTip.update(Ext.util.Format.htmlEncode(data));
+            }
+            else {
+                toolTip.update(data);
+            }
+        }
+        else {
+            toolTip.hide();
+        }
+    }
+};
+
+// JS Code for Mcp Info window
+
+var McpInfo = {
+    editFromMap: function (custId, slsperId, branchId) {
+        var record = findRecord(App.grdMCL.store,
+                        ["CustId", "SlsperId", "BranchID"],
+                        [custId, slsperId, branchId]);
+        if (record) {
+            Index.grdMCL_commandEdit(null, "Edit", record, 0);
+        }
+    },
+
+    storeMcpInfo_load: function (store, records, successful, eOpts) {
+        App.winMcpInfo.show();
+        var record;
+        if (store.getCount() > 0) {
+
+            App.btnDeleteMcpInfo.enable();
+        }
+        else {
+            record = Ext.create("App.OM_SalesRouteMasterModel", {
+                BranchID: App.hdnBranchIDMcpInfo.value,
+                CustID: App.txtCustIDMcpInfo.value,
+                SlsperID: App.hdnSlsperIDMcpInfo.value
+            });
+            store.insert(0, record);
+            App.btnDeleteMcpInfo.disable();
+        }
+        var record = store.getAt(0);
+        App.frmMcpInfo.loadRecord(record);
+    },
+
+    chkCustStatusMcpInfo_change: function (chk, value) {
+        if (value) {
+            App.fdsContentMcp.enable();
+        }
+        else {
+            App.fdsContentMcp.disable();
+        }
+    },
+
+    btnSaveMcpInfo_click: function () {
+        McpInfo.saveMcp();
+    },
+
+    btnDeleteMcpInfo_click: function () {
+        HQ.message.show(11, '', 'McpInfo.deleteMcpInfo');
+    },
+
+    btnCancelMcpInfo_click: function () {
+        App.winMcpInfo.close();
+    },
+
+    deleteMcpInfo: function (item) {
+        if (item == "yes") {
+            App.storeMcpInfo.removeAt(0);
+            McpInfo.saveMcp();
+        }
+    },
+
+    saveMcp: function () {
+        if (App.frmMcpInfo.isValid()) {
+            App.frmMcpInfo.updateRecord();
+            //var record = App.frmMcpInfo.getRecord();
+            App.frmMcpInfo.submit({
+                waitMsg: 'Submiting...',
+                url: 'OM30400/SaveMcp',
+                params: {
+                    custActive: App.chkCustStatusMcpInfo.value,
+                    lstMcpInfo: Ext.encode(App.storeMcpInfo.getChangedData({ skipIdForPhantomRecords: false }))
+                },
+                success: function (action, data) {
+                    if (data.result.msgcode) {
+                        HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
+                    }
+                    App.winMcpInfo.close();
+
+                    var record = findRecord(App.grdMCL.store,
+                        ["CustId", "SlsperId", "BranchID"],
+                        [data.result.CustID, data.result.SlsPerID, data.result.BranchID]);
+                    if (record) {
+                        var fields = ["Color", "SlsFreq", "WeekofVisit", "VisitSort", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Status"];
+                        for (var i = 0; i < fields.length; i++) {
+                            if (data.result[fields[i]] != undefined) {
+                                record.set(fields[i], data.result[fields[i]]);
+                            }
+
+                            if (i == fields.length - 1) {
+                                var selectedMarker = PosGmap.find_closest_marker(record.data.Lat, record.data.Lng);
+                                if (selectedMarker) {
+                                    google.maps.event.addListener(selectedMarker, "click", function (e) {
+                                        infoWindow.setContent(Index.createMarkerDescription(record));
+                                        infoWindow.open(map, selectedMarker);
+                                    });
+
+                                    selectedMarker.icon = "Images/OM30400/circle_" + data.result.Color + ".png";
+                                    if (selectedMarker.getAnimation() != null) {
+                                        selectedMarker.setAnimation(null);
+                                    } else {
+                                        selectedMarker.setAnimation(google.maps.Animation.BOUNCE);
+                                        setTimeout(function () {
+                                            selectedMarker.setAnimation(null);
+                                        }, 1400);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                failure: function (errorMsg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
+                    }
+                    else {
+                        HQ.message.process(errorMsg, data, true);
+                    }
+                }
+            });
+        }
+    }
+};
+
+// JS Code for POS Gmap
+var PosGmap = {
+    map_canvas: {},
+    map: {},
+    directionsService: {},
+    directionsDisplay: {},
+    directionsDisplays: [],
+    infoWindow: {},
+    stopMarkers: [],
+    drawingManager: {},
+
+    initialize: function () {
+        map_canvas = document.getElementById("map_canvas");
+
+        var initLatLng = new google.maps.LatLng(10.782171, 106.654012, 17);
+        var myOptions = {
+            center: initLatLng,
+            zoom: 16,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        map = new google.maps.Map(map_canvas, myOptions);
+        directionsService = new google.maps.DirectionsService();
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        infoWindow = new google.maps.InfoWindow();
+
+        //var marker = new google.maps.Marker({
+        //    position: initLatLng,
+        //    map: map,
+        //    title: "HQ Soft"
+        //});
+        stopMarkers: [];
+
+        drawingManager = new google.maps.drawing.DrawingManager({
+            //drawingMode: google.maps.drawing.OverlayType.MARKER,
+            drawingControl: false,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: [
+                  //google.maps.drawing.OverlayType.MARKER,
+                  //google.maps.drawing.OverlayType.CIRCLE,
+                  google.maps.drawing.OverlayType.POLYGON
+                  //google.maps.drawing.OverlayType.POLYLINE,
+                  //google.maps.drawing.OverlayType.RECTANGLE
+                ]
+            },
+            circleOptions: {
+                fillColor: '#ffff00',
+                fillOpacity: 1,
+                strokeWeight: 5,
+                clickable: false,
+                editable: true,
+                zIndex: 1
+            }
+        });
+        drawingManager.setMap(map);
+    },
+
+    navMapCenterByLocation: function (lat, lng) {
+        var myLatlng = new google.maps.LatLng(lat, lng);
+        map.setCenter(myLatlng);
+        map.setZoom(map.getZoom());
+
+        var selectedMarker = PosGmap.find_closest_marker(lat, lng);
+
+        if (selectedMarker) {
+            if (selectedMarker.getAnimation() != null) {
+                selectedMarker.setAnimation(null);
+            } else {
+                selectedMarker.setAnimation(google.maps.Animation.BOUNCE);
+                setTimeout(function () {
+                    selectedMarker.setAnimation(null);
+                }, 1400);
+            }
+        }
+    },
+
+    find_closest_marker: function (lat1, lon1) {
+        var pi = Math.PI;
+        var R = 6371; //equatorial radius
+        var distances = [];
+        var closest = -1;
+
+        for (i = 0; i < PosGmap.stopMarkers.length; i++) {
+            var lat2 = PosGmap.stopMarkers[i].position.lat();
+            var lon2 = PosGmap.stopMarkers[i].position.lng();
+
+            var chLat = lat2 - lat1;
+            var chLon = lon2 - lon1;
+
+            var dLat = chLat * (pi / 180);
+            var dLon = chLon * (pi / 180);
+
+            var rLat1 = lat1 * (pi / 180);
+            var rLat2 = lat2 * (pi / 180);
+
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(rLat1) * Math.cos(rLat2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var d = R * c;
+
+            distances[i] = d;
+            if (closest == -1 || d < distances[closest]) {
+                closest = i;
+            }
+        }
+
+        // (debug) The closest marker is:
+        return PosGmap.stopMarkers[closest];
+    },
+
+    drawRoutes: function (markers, showDirections) {
+        if (directionsDisplay) {
+            directionsDisplay.setMap(null);
+            if (PosGmap.directionsDisplays && PosGmap.directionsDisplays.length > 0) {
+                for (var i = 0; i < PosGmap.directionsDisplays.length; i++) {
+                    PosGmap.directionsDisplays[i].setMap(null);
+                    //directionsDisplay[i] = new google.maps.DirectionsRenderer();
+                }
+            }
+        }
+        directionsService = new google.maps.DirectionsService();
+        directionsDisplay = new google.maps.DirectionsRenderer();
+
+        if (markers.length > 0) {
+            PosGmap.stopMarkers = [];
+            // List of locations
+            var lat_lng = new Array();
+
+            // For each marker in lisr
+            for (i = 0; i < markers.length; i++) {
+                var data = markers[i];
+                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+                // Change color for Checkin and checkout point (for Actual Visit)
+                var pinColor = "BDBDBD";//FE6256
+                if (data.type) {
+                    if (data.type == "IO") { // Check in
+                        pinColor = "CCFF33";
+                    }
+                    else if (data.type == "OO") { // Check out
+                        pinColor = "FF0000";
+                    }
+                }
+
+                // Push the location to list
+                lat_lng.push(myLatlng);
+
+                // Maps center at the first location
+                if (i == 0) {
+                    var myOptions = {
+                        center: myLatlng,
+                        zoom: 16,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    map = new google.maps.Map(map_canvas, myOptions);
+                }
+
+                // Make the marker at each location
+                if (data.stop) {
+                    var marker = new google.maps.Marker({
+                        position: myLatlng,
+                        map: map,
+                        title: data.title,
+                        icon: Ext.String.format('Images/OM30400/circle_{0}.png', data.color ? data.color : "white")
+                        //animation: google.maps.Animation.DROP
+                    });
+                }
+                else {
+                    var marker = new google.maps.Marker({
+                        position: myLatlng,
+                        map: map,
+                        title: data.title,
+                        icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i + 1, pinColor)
+                        //animation: google.maps.Animation.DROP
+                    });
+                }
+
+                // Set info display of the marker
+                (function (marker, data) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent(data.description);
+                        infoWindow.open(map, marker);
+
+                        // Set animation of marker
+                        if (marker.getAnimation() != null) {
+                            marker.setAnimation(null);
+                        } else {
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                            setTimeout(function () {
+                                marker.setAnimation(null);
+                            }, 1400);
+                        }
+                    });
+                })(marker, data);
+
+                PosGmap.stopMarkers.push(marker);
+            }
+
+            directionsDisplay.setMap(map);
+            //directionsDisplay.setOptions({ suppressMarkers: true });
+
+            if (showDirections) {
+                PosGmap.calcRoute(lat_lng);
+            }
+
+        }
+        else {
+            //PosGmap.initialize();
+            for (i = 0; i < PosGmap.stopMarkers.length; i++) {
+                PosGmap.stopMarkers[i].setMap(null);
+
+                if (i == PosGmap.stopMarkers.length - 1) {
+                    PosGmap.stopMarkers = [];
+                }
+            }
+            directionsDisplay.setMap(map);
+        }
+    },
+
+    calcRoute: function (lat_lng) {
+        var x = 0;
+        var lat_lngCols = [];
+
+        for (var i = 0; i < lat_lng.length; i++) {
+            if (i > 0 && i % 8 == 0) {
+                x++;
+            }
+            if (!lat_lngCols[x]) {
+                lat_lngCols[x] = [];
+                PosGmap.directionsDisplays.push(new google.maps.DirectionsRenderer());
+            }
+            if (i > 0 && i % 8 == 0) {
+                lat_lngCols[x].push(lat_lng[i - 1]);
+                lat_lngCols[x].push(lat_lng[i]);
+            }
+            else {
+                lat_lngCols[x].push(lat_lng[i]);
+            }
+        }
+
+        if (lat_lngCols.length > 0) {
+            var idx = 0;
+            PosGmap.requestForWaysRoute(lat_lngCols, idx);
+        }
+    },
+
+    requestForWaysRoute: function (lat_lngCols, idx) {
+        var start;
+        var end;
+        var waypts = [];
+
+        for (var i = 0; i < lat_lngCols[idx].length; i++) {
+            // Set start location
+            if (i == 0) {
+                start = lat_lngCols[idx][i];
+            }
+
+            // Set end location
+            if (i == lat_lngCols[idx].length - 1) {
+                end = lat_lngCols[idx][i];
+            }
+
+            // Set waypts locations
+            if (i > 0 && i < lat_lngCols[idx].length - 1) {
+                waypts.push({
+                    location: lat_lngCols[idx][i],
+                    stopover: true
+                });
+            }
+        }
+
+        var request = {
+            origin: start,
+            destination: end,
+            waypoints: waypts,
+            optimizeWaypoints: false,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                PosGmap.directionsDisplays[idx].setMap(map);
+                PosGmap.directionsDisplays[idx].setOptions({ preserveViewport: true, suppressMarkers: true });
+                PosGmap.directionsDisplays[idx].setDirections(response);
+
+                idx = idx + 1;
+
+                var lat_lngCol = lat_lngCols[idx];
+                if (lat_lngCol && lat_lngCol.length > 0) {
+                    setTimeout(function () {
+                        PosGmap.requestForWaysRoute(lat_lngCols, idx);
+                    }, 300);
+                }
+            }
+            else if (status == google.maps.DirectionsStatus.NOT_FOUND) {
+                //alert("NOT_FOUND");
+            }
+            else if (status == google.maps.DirectionsStatus.ZERO_RESULTS) {
+                //alert("ZERO_RESULTS");
+            }
+            else if (status == google.maps.DirectionsStatus.MAX_WAYPOINTS_EXCEEDED) {
+                //alert("MAX_WAYPOINTS_EXCEEDED");
+            }
+            else if (status == google.maps.DirectionsStatus.INVALID_REQUEST) {
+                //alert("INVALID_REQUEST");
+            }
+            else if (status == google.maps.DirectionsStatus.OVER_QUERY_LIMIT) {
+                //alert("OVER_QUERY_LIMIT");
+            }
+            else if (status == google.maps.DirectionsStatus.REQUEST_DENIED) {
+                //alert("REQUEST_DENIED");
+            }
+            else {
+                //alert("UNKNOWN_ERROR");
+            }
+        });
+    },
+
+    drawRouteByMarkers: function (markers) {
+        var mapOptions = {
+            center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+            zoom: 8,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var path = new google.maps.MVCArray();
+        var service = new google.maps.DirectionsService();
+
+        var infoWindow = new google.maps.InfoWindow();
+        var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+        var poly = new google.maps.Polyline({ map: map, strokeColor: 'green' });
+        var lat_lng = new Array();
+
+        for (i = 0; i < markers.length; i++) {
+            var data = markers[i]
+            var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+            lat_lng.push(myLatlng);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: data.title
+            });
+            (function (marker, data) {
+                google.maps.event.addListener(marker, "click", function (e) {
+                    infoWindow.setContent(data.description);
+                    infoWindow.open(map, marker);
+                });
+            })(marker, data);
+        }
+
+        for (var i = 0; i < lat_lng.length; i++) {
+            if ((i + 1) < lat_lng.length) {
+                var src = lat_lng[i];
+                var des = lat_lng[i + 1];
+                path.push(src);
+                poly.setPath(path);
+                service.route({
+                    origin: src,
+                    destination: des,
+                    travelMode: google.maps.TravelMode.WALKING
+                }, function (result, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        for (var i = 0, len = result.routes[0].overview_path.length; i < len; i++) {
+                            path.push(result.routes[0].overview_path[i]);
+                        }
+                    }
+                });
+            }
+        }
+    }
+}
+

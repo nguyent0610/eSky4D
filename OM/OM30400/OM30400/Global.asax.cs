@@ -35,7 +35,7 @@ namespace OM30400
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
-            Session["AR20200"] = acc;
+            Session["OM30400"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004";
