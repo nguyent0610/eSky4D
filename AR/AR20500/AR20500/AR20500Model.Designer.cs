@@ -245,6 +245,69 @@ namespace AR20500
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="startDate">No Metadata Documentation available.</param>
+        /// <param name="endDate">No Metadata Documentation available.</param>
+        /// <param name="slsperID">No Metadata Documentation available.</param>
+        /// <param name="status">No Metadata Documentation available.</param>
+        public ObjectResult<AR20500_pgDetail_Result> AR20500_pgDetail(global::System.String branchID, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate, global::System.String slsperID, global::System.String status)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter startDateParameter;
+            if (startDate.HasValue)
+            {
+                startDateParameter = new ObjectParameter("StartDate", startDate);
+            }
+            else
+            {
+                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter endDateParameter;
+            if (endDate.HasValue)
+            {
+                endDateParameter = new ObjectParameter("EndDate", endDate);
+            }
+            else
+            {
+                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter slsperIDParameter;
+            if (slsperID != null)
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
+            }
+            else
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
+            }
+    
+            ObjectParameter statusParameter;
+            if (status != null)
+            {
+                statusParameter = new ObjectParameter("Status", status);
+            }
+            else
+            {
+                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<AR20500_pgDetail_Result>("AR20500_pgDetail", branchIDParameter, startDateParameter, endDateParameter, slsperIDParameter, statusParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="keyTree">No Metadata Documentation available.</param>
         /// <param name="preFix1">No Metadata Documentation available.</param>
         /// <param name="preFix2">No Metadata Documentation available.</param>
@@ -255,7 +318,7 @@ namespace AR20500
         /// <param name="sufFix3">No Metadata Documentation available.</param>
         /// <param name="sufFix4">No Metadata Documentation available.</param>
         /// <param name="classID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR20400CustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID)
+        public ObjectResult<global::System.String> AR20500_CustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -367,70 +430,7 @@ namespace AR20500
                 classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("AR20400CustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="startDate">No Metadata Documentation available.</param>
-        /// <param name="endDate">No Metadata Documentation available.</param>
-        /// <param name="slsperID">No Metadata Documentation available.</param>
-        /// <param name="status">No Metadata Documentation available.</param>
-        public ObjectResult<AR20500_pgDetail_Result> AR20500_pgDetail(global::System.String branchID, Nullable<global::System.DateTime> startDate, Nullable<global::System.DateTime> endDate, global::System.String slsperID, global::System.String status)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter startDateParameter;
-            if (startDate.HasValue)
-            {
-                startDateParameter = new ObjectParameter("StartDate", startDate);
-            }
-            else
-            {
-                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.DateTime));
-            }
-    
-            ObjectParameter endDateParameter;
-            if (endDate.HasValue)
-            {
-                endDateParameter = new ObjectParameter("EndDate", endDate);
-            }
-            else
-            {
-                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.DateTime));
-            }
-    
-            ObjectParameter slsperIDParameter;
-            if (slsperID != null)
-            {
-                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
-            }
-            else
-            {
-                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
-            }
-    
-            ObjectParameter statusParameter;
-            if (status != null)
-            {
-                statusParameter = new ObjectParameter("Status", status);
-            }
-            else
-            {
-                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<AR20500_pgDetail_Result>("AR20500_pgDetail", branchIDParameter, startDateParameter, endDateParameter, slsperIDParameter, statusParameter);
+            return base.ExecuteFunction<global::System.String>("AR20500_CustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter);
         }
     
         /// <summary>
@@ -441,7 +441,7 @@ namespace AR20500
         /// <param name="routeID">No Metadata Documentation available.</param>
         /// <param name="custID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
-        public int OM_DeleteSalesRouteDetByDate(Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate, global::System.String routeID, global::System.String custID, global::System.String branchID)
+        public int AR20500_DeleteSalesRouteDetByDate(Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate, global::System.String routeID, global::System.String custID, global::System.String branchID)
         {
             ObjectParameter fromDateParameter;
             if (fromDate.HasValue)
@@ -493,7 +493,7 @@ namespace AR20500
                 branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction("OM_DeleteSalesRouteDetByDate", fromDateParameter, toDateParameter, routeIDParameter, custIDParameter, branchIDParameter);
+            return base.ExecuteFunction("AR20500_DeleteSalesRouteDetByDate", fromDateParameter, toDateParameter, routeIDParameter, custIDParameter, branchIDParameter);
         }
 
         #endregion

@@ -265,7 +265,7 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="AR20400CustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="AR20500_CustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="KeyTree" Type="varchar" Mode="In" />
           <Parameter Name="PreFix1" Type="varchar" Mode="In" />
@@ -278,19 +278,19 @@
           <Parameter Name="SufFix4" Type="varchar" Mode="In" />
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="AR20500_DeleteSalesRouteDetByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FromDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="ToDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="RouteID" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="AR20500_pgDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="StartDate" Type="smalldatetime" Mode="In" />
           <Parameter Name="EndDate" Type="smalldatetime" Mode="In" />
           <Parameter Name="SlsperID" Type="varchar(max)" Mode="In" />
           <Parameter Name="Status" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="OM_DeleteSalesRouteDetByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="FromDate" Type="smalldatetime" Mode="In" />
-          <Parameter Name="ToDate" Type="smalldatetime" Mode="In" />
-          <Parameter Name="RouteID" Type="varchar" Mode="In" />
-          <Parameter Name="CustID" Type="varchar" Mode="In" />
-          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -303,7 +303,15 @@
           <EntitySet Name="OM_SalesRouteDet" EntityType="AR20500Model.OM_SalesRouteDet" />
           <EntitySet Name="OM_SalesRouteMaster" EntityType="AR20500Model.OM_SalesRouteMaster" />
           <EntitySet Name="SI_State" EntityType="AR20500Model.SI_State" />
-          <FunctionImport Name="AR20400CustID" ReturnType="Collection(String)">
+          <FunctionImport Name="AR20500_pgDetail" ReturnType="Collection(AR20500Model.AR20500_pgDetail_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="AR_NewCustomerInfor" EntityType="AR20500Model.AR_NewCustomerInfor" />
+          <FunctionImport Name="AR20500_CustID" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="KeyTree" Mode="In" Type="String" />
             <Parameter Name="PreFix1" Mode="In" Type="String" />
@@ -316,21 +324,13 @@
             <Parameter Name="SufFix4" Mode="In" Type="String" />
             <Parameter Name="ClassID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AR20500_pgDetail" ReturnType="Collection(AR20500Model.AR20500_pgDetail_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
-            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
-            <Parameter Name="SlsperID" Mode="In" Type="String" />
-            <Parameter Name="Status" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="OM_DeleteSalesRouteDetByDate">
+          <FunctionImport Name="AR20500_DeleteSalesRouteDetByDate">
             <Parameter Name="FromDate" Mode="In" Type="DateTime" />
             <Parameter Name="ToDate" Mode="In" Type="DateTime" />
             <Parameter Name="RouteID" Mode="In" Type="String" />
             <Parameter Name="CustID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="AR_NewCustomerInfor" EntityType="AR20500Model.AR_NewCustomerInfor" />
         </EntityContainer>
         <EntityType Name="AR_Customer">
           <Key>
@@ -832,7 +832,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AR20400CustID" FunctionName="eBiz4DWebSysModel.Store.AR20400CustID" />
           <FunctionImportMapping FunctionImportName="AR20500_pgDetail" FunctionName="eBiz4DWebSysModel.Store.AR20500_pgDetail">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AR20500Model.AR20500_pgDetail_Result">
@@ -894,7 +893,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="OM_DeleteSalesRouteDetByDate" FunctionName="eBiz4DWebSysModel.Store.OM_DeleteSalesRouteDetByDate" />
           <EntitySetMapping Name="AR_NewCustomerInfor">
             <EntityTypeMapping TypeName="AR20500Model.AR_NewCustomerInfor">
               <MappingFragment StoreEntitySet="AR_NewCustomerInfor">
@@ -954,6 +952,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR20500_CustID" FunctionName="eBiz4DWebSysModel.Store.AR20500_CustID" />
+          <FunctionImportMapping FunctionImportName="AR20500_DeleteSalesRouteDetByDate" FunctionName="eBiz4DWebSysModel.Store.AR20500_DeleteSalesRouteDetByDate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -100,7 +100,7 @@ namespace AR20500.Controllers
                                 objCust.DeliveryID = item.DeliveryID.PassNull(); ;
                                 objCust.Country = objCust.BillCountry = "VN";
                                 objCust.District = item.District.PassNull(); ;
-                                objCust.CustId = _db.AR20400CustID(Current.CpnyID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId).FirstOrDefault();
+                                objCust.CustId = _db.AR20500_CustID(Current.CpnyID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId).FirstOrDefault();
 
 
                                 objCust.LUpd_Datetime = DateTime.Now;
@@ -236,7 +236,7 @@ namespace AR20500.Controllers
             var dFri = default(System.DateTime);
             var dSat = default(System.DateTime);
             var dSun = default(System.DateTime);
-            _db.OM_DeleteSalesRouteDetByDate(fromdate, todate, master.SalesRouteID, master.CustID, master.BranchID);
+            _db.AR20500_DeleteSalesRouteDetByDate(fromdate, todate, master.SalesRouteID, master.CustID, master.BranchID);
             if (master.SlsFreqType == "R")
             {
                 weekStart = Utility.WeeksInYear(fromdate);
