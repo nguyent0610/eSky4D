@@ -730,6 +730,9 @@ var grd_BeforeEdit = function (editor, e) {
     //}
     //return HQ.grid.checkInput(e, keys);
 
+    if (App.cboStatus.value != "H") {
+        return false;
+    }
 };
 var grd_Edit = function (item, e) {
 
@@ -1119,7 +1122,7 @@ var setReadOnly = function () {
         App.txtDiscDate.setReadOnly(true);
         App.txtDocDescr.setReadOnly(true);
         App.txtDueDate.setReadOnly(true);
-        App.grd.disable(true);
+        //App.grd.disable(true);
     } else {
        
         App.cboRefNbr.setReadOnly(false);
@@ -1133,7 +1136,7 @@ var setReadOnly = function () {
         App.txtDiscDate.setReadOnly(false);
         App.txtDocDescr.setReadOnly(false);
         App.txtDueDate.setReadOnly(false);
-        App.grd.enable(true);
+        //App.grd.enable(true);
     }
 }
 

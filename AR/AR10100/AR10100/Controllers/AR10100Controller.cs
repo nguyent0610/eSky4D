@@ -99,7 +99,7 @@ namespace AR10100.Controllers
                             if (objHeaderTop.BatNbr != "" && objHeaderTop.BranchID != "" && objHeaderTop.Module != "")
                             {
                                 _db.Batches.AddObject(objHeaderTop);
-                                _db.SaveChanges();
+                                
                             }
                         }
                 }
@@ -109,7 +109,7 @@ namespace AR10100.Controllers
                     {
                         UpdatingHeaderTopBatch(updated, ref objHeaderTop, data);
                         
-                        _db.SaveChanges();
+                       
                     }
                     else
                     {
@@ -163,7 +163,7 @@ namespace AR10100.Controllers
                         if (objHeaderBot.BatNbr != "" && objHeaderBot.BranchID != "" && objHeaderBot.RefNbr != "")
                         {
                             _db.AR_Doc.AddObject(objHeaderBot);
-                            _db.SaveChanges();
+                            
                         }
                     }
                 }
@@ -172,7 +172,7 @@ namespace AR10100.Controllers
                     if (objHeaderBot.tstamp.ToHex() == updated.tstamp.ToHex())
                     {
                         UpdatingFormBotAP_Doc(updated, ref objHeaderBot, data);
-                        _db.SaveChanges();
+                        
                     }
                     else
                     {
@@ -240,7 +240,7 @@ namespace AR10100.Controllers
                         if (objGrid.BatNbr != "" && objGrid.BranchID != "" && objGrid.RefNbr != "" && objGrid.LineRef != "" && objGrid.InvtId != "")
                         {
                             _db.AR_Trans.AddObject(objGrid);
-                            _db.SaveChanges();
+                           
                         }
 
                     }
@@ -254,7 +254,7 @@ namespace AR10100.Controllers
                     if (created.tstamp.ToHex() == objGrid.tstamp.ToHex())
                     {
                         UpdatingGridAP_Trans(created, ref objGrid,data);
-                        _db.SaveChanges();
+                        
                     }
                     else
                     {
@@ -267,7 +267,7 @@ namespace AR10100.Controllers
             
 
 
-            _db.SaveChanges();
+            
 
 
 
@@ -345,7 +345,7 @@ namespace AR10100.Controllers
                     throw;
                 }
             }
-
+            _db.SaveChanges();
 
             return Json(new { success = true, tmpRefNbr = tmpRefNbr, tmpBatNbr = tmpBatNbr }, JsonRequestBehavior.AllowGet);
 
