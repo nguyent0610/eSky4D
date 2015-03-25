@@ -131,7 +131,7 @@
                 .ColumnModel(
                     X.RowNumbererColumn().Width(40)
 
-                    , X.Column().DataIndex("SlsperId").Text(Util.GetLang("SlsperId")).Width(150)
+                    , X.Column().DataIndex("SlsperId").Text(Util.GetLang("SlsperId")).Width(80).Locked(true)
                     .Editor(
                         HQ.Combo().ID("cboSlsperId")
                         .Name("cboSlsperId").HQProcedure("OM23100_pcSalesPerson")
@@ -144,7 +144,7 @@
                         })
                         .LoadData()
                     )
-                    , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(200)
+                    , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(150).Locked(true)
                     , X.NumberColumn().Text(Util.GetLang("OM23100_SellIn")).DataIndex("SellIn").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
                     , X.NumberColumn().Text(Util.GetLang("OM23100_Coverage")).DataIndex("Coverage").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
                     , X.NumberColumn().Text(Util.GetLang("OM23100_DNA")).DataIndex("DNA").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
