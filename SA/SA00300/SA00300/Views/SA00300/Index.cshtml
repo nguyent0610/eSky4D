@@ -56,7 +56,7 @@
             .Listeners(p=>p.Load.Handler="loadData()" )
         )
         <!-- Gọi hàm Body trong SA00300Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
-        @{Html.RenderAction("Body", new {lang=@Current.LangID});}
+        @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>
 </html>
  

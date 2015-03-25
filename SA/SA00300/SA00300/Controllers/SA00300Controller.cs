@@ -11,6 +11,8 @@ using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
 
+
+
 namespace SA00300.Controllers
 {
     [DirectController]
@@ -22,31 +24,21 @@ namespace SA00300.Controllers
         private string _userName = Current.UserName;
         SA00300Entities _db = Util.CreateObjectContext<SA00300Entities>(true);
 
-        private string _pathImage;
-        internal string PathImage
+        private string _filePath;
+        internal string FilePath
         {
             get
             {
                 var config = _db.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadSA00300");
                 if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
                 {
-                    _pathImage = config.TextVal;
+                    _filePath = config.TextVal;
                 }
                 else
                 {
-                    _pathImage = string.Empty;
+                    _filePath = Server.MapPath("\\Images\\SA00300");
                 }
-                return _pathImage;
-            }
-        }
-
-        private bool _isConfig;
-        internal bool IsConfig
-        {
-            get
-            {
-                _isConfig = string.IsNullOrWhiteSpace(PathImage) ? false : true;
-                return _isConfig;
+                return _filePath;
             }
         }
 
@@ -55,7 +47,8 @@ namespace SA00300.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -128,14 +121,41 @@ namespace SA00300.Controllers
                 foreach (User curHeader in lstUser.Created)
                 {
                    if (UserID.PassNull() == "") continue;
-                   string images = getPathThenUploadImage(curHeader, UserID);
                    var header = _db.Users.FirstOrDefault(p => p.UserName == UserID);
+
+                   var files = Request.Files;
+                   if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
+                   {
+                       // Xoa file cu di
+                       var oldPath = string.Format("{0}\\{1}", FilePath, curHeader.Images);
+                       if (System.IO.File.Exists(oldPath))
+                       {
+                           System.IO.File.Delete(oldPath);
+                       }
+
+                       // Upload file moi
+                       string newFileName = string.Format("{0}_{1}", UserID, Path.GetExtension(files[0].FileName));
+                       files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
+                       curHeader.Images = newFileName;
+                   }
+                   else
+                   {
+                       if (!string.IsNullOrWhiteSpace(curHeader.Images) && string.IsNullOrWhiteSpace(header.Images))
+                       {
+                           // Xoa file cu di
+                           var oldPath = string.Format("{0}\\{1}", FilePath, curHeader.Images);
+                           if (System.IO.File.Exists(oldPath))
+                           {
+                               System.IO.File.Delete(oldPath);
+                           }
+                           curHeader.Images = string.Empty;
+                       }
+                   }
+
                     if (header != null)
                     {
                         if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                         {
-                            
-                            header.Images = images;
                             UpdatingHeader(header, curHeader, false);
                         }
                         else
@@ -145,15 +165,15 @@ namespace SA00300.Controllers
                     }
                     else
                     {
-                        //string images = getPathThenUploadImage(curHeader, UserID);
                         header = new User();
                         header.UserName = UserID;
-                        header.Images = images;
                         UpdatingHeader(header, curHeader, true);
                         _db.Users.AddObject(header);
                     }
                 }
                 #endregion
+
+               
 
                 #region Save SYS_UserGroup
                 foreach (SA00300_pgLoadSYS_UserGroup_Result deleted in lstSYS_UserGroup.Deleted)
@@ -343,8 +363,19 @@ namespace SA00300.Controllers
             var cpny = _db.Users.FirstOrDefault(p => p.UserName == UserID);
             if (cpny != null)
             {
+                var fileName = cpny.Images;
                 _db.Users.DeleteObject(cpny);
-                SA00300ImgHelper.DeleteFile(cpny.Images, PathImage, IsConfig);
+                _db.SaveChanges();
+
+                if (!string.IsNullOrWhiteSpace(fileName))
+                {
+                    // Xoa file cu di
+                    var oldPath = string.Format("{0}\\{1}", FilePath, fileName);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                }
             }
 
             var lstAddr = _db.SYS_UserGroup.Where(p => p.UserID == UserID).ToList();
@@ -369,136 +400,41 @@ namespace SA00300.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        // Upload and preview the image.
-        [HttpPost]
-        public ActionResult SA00300Upload()
+
+        public ActionResult ImageToBin(string fileName)
         {
-            if (this.GetCmp<FileUploadField>("NamePPCStorePicReq").HasFile)
+            try
             {
-                var FileUpload1 = this.GetCmp<FileUploadField>("NamePPCStorePicReq");//.PostedFile.InputStream;
-                string typeFile = "";
-                if (FileUpload1.PostedFile.FileName.EndsWith(".jpg"))
+                string filename = FilePath + "\\" + fileName;
+                if (System.IO.File.Exists(filename))
                 {
-                    typeFile = "jpg";
-                }
-                else if (FileUpload1.PostedFile.FileName.EndsWith(".png"))
-                {
-                    typeFile = "png";
-                }
-                else if (FileUpload1.PostedFile.FileName.EndsWith(".gif"))
-                {
-                    typeFile = "gif";
-                }
-                if (typeFile != "")
-                {
-                    var Images = this.GetCmp<Image>("imgPPCStorePicReq");
-                    var txtImages = this.GetCmp<TextField>("PPCStorePicReq");
+                    FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                    BinaryReader reader = new BinaryReader(fileStream);
+                    byte[] imageBytes = reader.ReadBytes((int)fileStream.Length);
+                    reader.Close();
 
-                    int intLength = Convert.ToInt32(FileUpload1.PostedFile.InputStream.Length);
-                    byte[] arrContent = new byte[intLength];
-                    string imgType = FileUpload1.PostedFile.ContentType;
+                    var imgString64 = Convert.ToBase64String(imageBytes, 0, imageBytes.Length);
 
-                    FileUpload1.PostedFile.InputStream.Read(arrContent, 0, intLength);
-                    Images.ImageUrl = @"data:image/" + typeFile + ";base64," + Convert.ToBase64String(arrContent); ;
-                    txtImages.Text = FileUpload1.PostedFile.FileName;
+                    var jsonResult = Json(new { success = true, imgSrc = @"data:image/jpg;base64," + imgString64 }, JsonRequestBehavior.AllowGet);
+                    jsonResult.MaxJsonLength = int.MaxValue;
+                    return jsonResult;
                 }
                 else
                 {
-                    X.Msg.Show(new MessageBoxConfig
-                    {
-                        Buttons = MessageBox.Button.OK,
-                        Icon = MessageBox.Icon.ERROR,
-                        Title = "Fail",
-                        Message = "File format .jpg,.png,.gif"
-                    });
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                X.Msg.Show(new MessageBoxConfig
+                if (ex is MessageException)
                 {
-                    Buttons = MessageBox.Button.OK,
-                    Icon = MessageBox.Icon.ERROR,
-                    Title = "Fail",
-                    Message = "No file uploaded"
-                });
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
             }
-            DirectResult result = new DirectResult();
-            result.IsUpload = true;
-
-            return result;
-        }
-
-        // Get image path and then upload the image.
-        private string getPathThenUploadImage(User updatedUser, string UserID)
-        {
-            string images = string.Format("{0}.jpg", UserID);
-
-            if (!string.IsNullOrWhiteSpace(updatedUser.Images) && !updatedUser.Images.Contains(".jpg"))
-            {
-                string strImage = updatedUser.Images
-                    .Replace("data:image/jpg;base64,", "")
-                    .Replace("data:image/png;base64,", "")
-                    .Replace("data:image/gif;base64,", "");
-
-                // Upload a new file.
-                SA00300ImgHelper.SA00300UploadImage(images,
-                    Convert.FromBase64CharArray(strImage.ToCharArray(), 0, strImage.Length),
-                    PathImage, IsConfig);
-            }
-            else if (!string.IsNullOrWhiteSpace(updatedUser.Images) && updatedUser.Images.Contains(".jpg"))
-            {
-                images = updatedUser.Images;
-            }
-            else // Images is empty
-            {
-                // If there is an existing file, delete it.
-                SA00300ImgHelper.DeleteFile(images, PathImage, IsConfig);
-            }
-
-            return images;
-        }
-
-        [DirectMethod]
-        public ActionResult SA00300GetImages(string Name)
-        {
-            string typeFile = "";
-            if (Name.EndsWith(".jpg"))
-            {
-                typeFile = "jpg";
-            }
-            else if (Name.EndsWith(".png"))
-            {
-                typeFile = "png";
-            }
-            else if (Name.EndsWith(".gif"))
-            {
-                typeFile = "gif";
-            }
-            var Images = this.GetCmp<Image>("imgPPCStorePicReq");
-            string a = getStringImage(Name);
-
-            Images.ImageUrl = @"data:image/" + typeFile + ";base64," + a;
-
-            return this.Direct();
-        }
-
-        private string getStringImage(string name)
-        {
-            var a = SA00300ImgHelper.SA00300GetImage(name, PathImage, string.IsNullOrWhiteSpace(PathImage) ? false : true);
-            if (a == null)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return Convert.ToBase64String(a);
-            }
-        }
-
-        private byte[] getByteImage(string dataImage)
-        {
-            return Encoding.ASCII.GetBytes(dataImage);
         }
     }
 }
