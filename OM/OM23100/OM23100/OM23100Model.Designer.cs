@@ -100,9 +100,17 @@ namespace OM23100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectResult<OM23100_getIN_ProductClass_Result> OM23100_getIN_ProductClass()
+        {
+            return base.ExecuteFunction<OM23100_getIN_ProductClass_Result>("OM23100_getIN_ProductClass");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="fCSDate">No Metadata Documentation available.</param>
-        public ObjectResult<OM23100_pgOM_FCS_Result> OM23100_pgOM_FCS(global::System.String branchID, Nullable<global::System.DateTime> fCSDate)
+        public int OM23100_pgLoadGrid(global::System.String branchID, Nullable<global::System.DateTime> fCSDate)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -124,7 +132,7 @@ namespace OM23100
                 fCSDateParameter = new ObjectParameter("FCSDate", typeof(global::System.DateTime));
             }
     
-            return base.ExecuteFunction<OM23100_pgOM_FCS_Result>("OM23100_pgOM_FCS", branchIDParameter, fCSDateParameter);
+            return base.ExecuteFunction("OM23100_pgLoadGrid", branchIDParameter, fCSDateParameter);
         }
 
         #endregion
@@ -158,7 +166,8 @@ namespace OM23100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_FCS CreateOM_FCS(global::System.String slsperId, global::System.String branchID, global::System.DateTime fCSDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="classID">Initial value of the ClassID property.</param>
+        public static OM_FCS CreateOM_FCS(global::System.String slsperId, global::System.String branchID, global::System.DateTime fCSDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String classID)
         {
             OM_FCS oM_FCS = new OM_FCS();
             oM_FCS.SlsperId = slsperId;
@@ -171,6 +180,7 @@ namespace OM23100
             oM_FCS.LUpd_Prog = lUpd_Prog;
             oM_FCS.LUpd_User = lUpd_User;
             oM_FCS.tstamp = tstamp;
+            oM_FCS.ClassID = classID;
             return oM_FCS;
         }
 
@@ -594,6 +604,33 @@ namespace OM23100
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ClassID
+        {
+            get
+            {
+                return _ClassID;
+            }
+            set
+            {
+                if (_ClassID != value)
+                {
+                    OnClassIDChanging(value);
+                    ReportPropertyChanging("ClassID");
+                    _ClassID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("ClassID");
+                    OnClassIDChanged();
+                }
+            }
+        }
+        private global::System.String _ClassID;
+        partial void OnClassIDChanging(global::System.String value);
+        partial void OnClassIDChanged();
 
         #endregion
 
@@ -607,28 +644,22 @@ namespace OM23100
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="OM23100Model", Name="OM23100_pgOM_FCS_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="OM23100Model", Name="OM23100_getIN_ProductClass_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class OM23100_pgOM_FCS_Result : ComplexObject
+    public partial class OM23100_getIN_ProductClass_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new OM23100_pgOM_FCS_Result object.
+        /// Create a new OM23100_getIN_ProductClass_Result object.
         /// </summary>
-        /// <param name="slsperId">Initial value of the SlsperId property.</param>
-        /// <param name="branchID">Initial value of the BranchID property.</param>
-        /// <param name="fCSDate">Initial value of the FCSDate property.</param>
-        /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM23100_pgOM_FCS_Result CreateOM23100_pgOM_FCS_Result(global::System.String slsperId, global::System.String branchID, global::System.DateTime fCSDate, global::System.Byte[] tstamp)
+        /// <param name="classID">Initial value of the ClassID property.</param>
+        public static OM23100_getIN_ProductClass_Result CreateOM23100_getIN_ProductClass_Result(global::System.String classID)
         {
-            OM23100_pgOM_FCS_Result oM23100_pgOM_FCS_Result = new OM23100_pgOM_FCS_Result();
-            oM23100_pgOM_FCS_Result.SlsperId = slsperId;
-            oM23100_pgOM_FCS_Result.BranchID = branchID;
-            oM23100_pgOM_FCS_Result.FCSDate = fCSDate;
-            oM23100_pgOM_FCS_Result.tstamp = tstamp;
-            return oM23100_pgOM_FCS_Result;
+            OM23100_getIN_ProductClass_Result oM23100_getIN_ProductClass_Result = new OM23100_getIN_ProductClass_Result();
+            oM23100_getIN_ProductClass_Result.ClassID = classID;
+            return oM23100_getIN_ProductClass_Result;
         }
 
         #endregion
@@ -640,288 +671,48 @@ namespace OM23100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String SlsperId
+        public global::System.String ClassID
         {
             get
             {
-                return _SlsperId;
+                return _ClassID;
             }
             set
             {
-                OnSlsperIdChanging(value);
-                ReportPropertyChanging("SlsperId");
-                _SlsperId = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("SlsperId");
-                OnSlsperIdChanged();
+                OnClassIDChanging(value);
+                ReportPropertyChanging("ClassID");
+                _ClassID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ClassID");
+                OnClassIDChanged();
             }
         }
-        private global::System.String _SlsperId;
-        partial void OnSlsperIdChanging(global::System.String value);
-        partial void OnSlsperIdChanged();
+        private global::System.String _ClassID;
+        partial void OnClassIDChanging(global::System.String value);
+        partial void OnClassIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String Name
+        public global::System.String Descr
         {
             get
             {
-                return _Name;
+                return _Descr;
             }
             set
             {
-                OnNameChanging(value);
-                ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Name");
-                OnNameChanged();
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
             }
         }
-        private global::System.String _Name;
-        partial void OnNameChanging(global::System.String value);
-        partial void OnNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String BranchID
-        {
-            get
-            {
-                return _BranchID;
-            }
-            set
-            {
-                OnBranchIDChanging(value);
-                ReportPropertyChanging("BranchID");
-                _BranchID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("BranchID");
-                OnBranchIDChanged();
-            }
-        }
-        private global::System.String _BranchID;
-        partial void OnBranchIDChanging(global::System.String value);
-        partial void OnBranchIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime FCSDate
-        {
-            get
-            {
-                return _FCSDate;
-            }
-            set
-            {
-                OnFCSDateChanging(value);
-                ReportPropertyChanging("FCSDate");
-                _FCSDate = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("FCSDate");
-                OnFCSDateChanged();
-            }
-        }
-        private global::System.DateTime _FCSDate;
-        partial void OnFCSDateChanging(global::System.DateTime value);
-        partial void OnFCSDateChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> Coverage
-        {
-            get
-            {
-                return _Coverage;
-            }
-            set
-            {
-                OnCoverageChanging(value);
-                ReportPropertyChanging("Coverage");
-                _Coverage = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Coverage");
-                OnCoverageChanged();
-            }
-        }
-        private Nullable<global::System.Double> _Coverage;
-        partial void OnCoverageChanging(Nullable<global::System.Double> value);
-        partial void OnCoverageChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> DNA
-        {
-            get
-            {
-                return _DNA;
-            }
-            set
-            {
-                OnDNAChanging(value);
-                ReportPropertyChanging("DNA");
-                _DNA = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("DNA");
-                OnDNAChanged();
-            }
-        }
-        private Nullable<global::System.Double> _DNA;
-        partial void OnDNAChanging(Nullable<global::System.Double> value);
-        partial void OnDNAChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> Visit
-        {
-            get
-            {
-                return _Visit;
-            }
-            set
-            {
-                OnVisitChanging(value);
-                ReportPropertyChanging("Visit");
-                _Visit = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Visit");
-                OnVisitChanged();
-            }
-        }
-        private Nullable<global::System.Double> _Visit;
-        partial void OnVisitChanging(Nullable<global::System.Double> value);
-        partial void OnVisitChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> SellIn
-        {
-            get
-            {
-                return _SellIn;
-            }
-            set
-            {
-                OnSellInChanging(value);
-                ReportPropertyChanging("SellIn");
-                _SellIn = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("SellIn");
-                OnSellInChanged();
-            }
-        }
-        private Nullable<global::System.Double> _SellIn;
-        partial void OnSellInChanging(Nullable<global::System.Double> value);
-        partial void OnSellInChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> LPPC
-        {
-            get
-            {
-                return _LPPC;
-            }
-            set
-            {
-                OnLPPCChanging(value);
-                ReportPropertyChanging("LPPC");
-                _LPPC = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("LPPC");
-                OnLPPCChanged();
-            }
-        }
-        private Nullable<global::System.Double> _LPPC;
-        partial void OnLPPCChanging(Nullable<global::System.Double> value);
-        partial void OnLPPCChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> ForcusedSKU
-        {
-            get
-            {
-                return _ForcusedSKU;
-            }
-            set
-            {
-                OnForcusedSKUChanging(value);
-                ReportPropertyChanging("ForcusedSKU");
-                _ForcusedSKU = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ForcusedSKU");
-                OnForcusedSKUChanged();
-            }
-        }
-        private Nullable<global::System.Double> _ForcusedSKU;
-        partial void OnForcusedSKUChanging(Nullable<global::System.Double> value);
-        partial void OnForcusedSKUChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> VisitTime
-        {
-            get
-            {
-                return _VisitTime;
-            }
-            set
-            {
-                OnVisitTimeChanging(value);
-                ReportPropertyChanging("VisitTime");
-                _VisitTime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("VisitTime");
-                OnVisitTimeChanged();
-            }
-        }
-        private Nullable<global::System.Double> _VisitTime;
-        partial void OnVisitTimeChanging(Nullable<global::System.Double> value);
-        partial void OnVisitTimeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Byte[] tstamp
-        {
-            get
-            {
-                return StructuralObject.GetValidValue(_tstamp);
-            }
-            set
-            {
-                OntstampChanging(value);
-                ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("tstamp");
-                OntstampChanged();
-            }
-        }
-        private global::System.Byte[] _tstamp;
-        partial void OntstampChanging(global::System.Byte[] value);
-        partial void OntstampChanged();
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
 
         #endregion
 

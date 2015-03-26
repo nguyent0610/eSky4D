@@ -13,6 +13,7 @@
             <PropertyRef Name="SlsperId" />
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="FCSDate" />
+            <PropertyRef Name="ClassID" />
           </Key>
           <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
@@ -31,8 +32,10 @@
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
         </EntityType>
-        <Function Name="OM23100_pgOM_FCS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="OM23100_getIN_ProductClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="OM23100_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="FCSDate" Type="datetime" Mode="In" />
         </Function>
@@ -42,7 +45,8 @@
       <Schema Namespace="OM23100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="OM23100Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="OM_FCS" EntityType="OM23100Model.OM_FCS" />
-          <FunctionImport Name="OM23100_pgOM_FCS" ReturnType="Collection(OM23100Model.OM23100_pgOM_FCS_Result)">
+          <FunctionImport Name="OM23100_getIN_ProductClass" ReturnType="Collection(OM23100Model.OM23100_getIN_ProductClass_Result)" />
+          <FunctionImport Name="OM23100_pgLoadGrid">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="FCSDate" Mode="In" Type="DateTime" />
           </FunctionImport>
@@ -52,6 +56,7 @@
             <PropertyRef Name="SlsperId" />
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="FCSDate" />
+            <PropertyRef Name="ClassID" />
           </Key>
           <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
@@ -70,20 +75,11 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="OM23100_pgOM_FCS_Result">
-          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="DateTime" Name="FCSDate" Nullable="false" Precision="23" />
-          <Property Type="Double" Name="Coverage" Nullable="true" />
-          <Property Type="Double" Name="DNA" Nullable="true" />
-          <Property Type="Double" Name="Visit" Nullable="true" />
-          <Property Type="Double" Name="SellIn" Nullable="true" />
-          <Property Type="Double" Name="LPPC" Nullable="true" />
-          <Property Type="Double" Name="ForcusedSKU" Nullable="true" />
-          <Property Type="Double" Name="VisitTime" Nullable="true" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        <ComplexType Name="OM23100_getIN_ProductClass_Result">
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -94,6 +90,7 @@
           <EntitySetMapping Name="OM_FCS">
             <EntityTypeMapping TypeName="OM23100Model.OM_FCS">
               <MappingFragment StoreEntitySet="OM_FCS">
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -114,24 +111,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="OM23100_pgOM_FCS" FunctionName="eBiz4DWebSysModel.Store.OM23100_pgOM_FCS">
+          <FunctionImportMapping FunctionImportName="OM23100_getIN_ProductClass" FunctionName="eBiz4DWebSysModel.Store.OM23100_getIN_ProductClass">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="OM23100Model.OM23100_pgOM_FCS_Result">
-                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="FCSDate" ColumnName="FCSDate" />
-                <ScalarProperty Name="Coverage" ColumnName="Coverage" />
-                <ScalarProperty Name="DNA" ColumnName="DNA" />
-                <ScalarProperty Name="Visit" ColumnName="Visit" />
-                <ScalarProperty Name="SellIn" ColumnName="SellIn" />
-                <ScalarProperty Name="LPPC" ColumnName="LPPC" />
-                <ScalarProperty Name="ForcusedSKU" ColumnName="ForcusedSKU" />
-                <ScalarProperty Name="VisitTime" ColumnName="VisitTime" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              <ComplexTypeMapping TypeName="OM23100Model.OM23100_getIN_ProductClass_Result">
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM23100_pgLoadGrid" FunctionName="eBiz4DWebSysModel.Store.OM23100_pgLoadGrid" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -153,7 +141,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="OM23100Model.OM_FCS" Width="1.5" PointX="6.2836149848455634" PointY="15.863980330463489" />
+        <EntityTypeShape EntityType="OM23100Model.OM_FCS" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
