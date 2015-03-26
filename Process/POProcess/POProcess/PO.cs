@@ -606,6 +606,7 @@ namespace POProcess
             //PO_Receipt objPO_Receipt = new PO_Receipt();
             try
             {
+                double QtyRcpt = (row.RcptMultDiv == "D" ? row.RcptQty / row.RcptConvFact : row.RcptQty * row.RcptConvFact);//quy ve don vi luu kho 20150326
                 //objPO_Receipt = app.PO_Receipt.Where(p => p.BranchID == row.BranchID && p.BatNbr == row.BatNbr && p.RcptNbr == row.RcptNbr).FirstOrDefault();
                 if (objPO_Detail.GetByKey(row.BranchID, row.PONbr, row.POLineRef))
                 {
@@ -646,14 +647,17 @@ namespace POProcess
                                 //POCommon.UpdateOnPOQty(row.InvtID, row.SiteID, OldQty, 0, 0);
                             }
                         }
-                        objPO_Detail.QtyRcvd = objPO_Detail.QtyRcvd + row.Qty;
+                        //QUY doi ve don vi theo PODetail  20150326
+                        double qty = (objPO_Detail.UnitMultDiv == "M" ? QtyRcpt / objPO_Detail.CnvFact : QtyRcpt * objPO_Detail.CnvFact);
+                        objPO_Detail.QtyRcvd = objPO_Detail.QtyRcvd + qty; 
                         objPO_Detail.CostReceived = objPO_Detail.CostReceived + row.TranAmt;
                     }
                     else if (row.TranType == "X")
                     {
                         objPO_Detail.QtyRcvd = objPO_Detail.QtyRcvd - row.Qty;
                         objPO_Detail.CostReceived = objPO_Detail.CostReceived - row.TranAmt;
-                        objPO_Detail.QtyReturned = objPO_Detail.QtyReturned + row.Qty;
+                        double qty = (objPO_Detail.UnitMultDiv == "M" ? QtyRcpt / objPO_Detail.CnvFact : QtyRcpt * objPO_Detail.CnvFact);
+                        objPO_Detail.QtyReturned = objPO_Detail.QtyReturned + qty;
                         objPO_Detail.CostReturned = objPO_Detail.QtyReturned + row.TranAmt;
                         double OldQty = 0;
                         if ((row.PurchaseType == "GN" || row.PurchaseType == "GI" | row.PurchaseType == "PR") & objPO_Detail.RcptStage != "N")
@@ -667,11 +671,11 @@ namespace POProcess
 
                             }
                         }
-                        if (row.Qty == objPO_Detail.QtyOrd)
+                        if (qty == objPO_Detail.QtyOrd)
                         {
                             objPO_Detail.RcptStage = "N";
                         }
-                        else if (row.Qty < objPO_Detail.QtyOrd)
+                        else if (qty < objPO_Detail.QtyOrd)
                         {
                             objPO_Detail.RcptStage = "P";
                         }
@@ -1248,7 +1252,7 @@ namespace POProcess
                         clsPO_Invoice objPO_Invoice1 = new clsPO_Invoice(Dal);
                         objPO_Invoice1.GetByKey(BranchID, BatNbr, RcptNbr);
                         APProcess.AP ap = new APProcess.AP(User, "PO10200", Dal);
-                        if (ap.AP10100_Cancel(BranchID, objPO_Invoice1.APBatNbr, RcptNbr))
+                        if (ap.AP10100_Cancel(BranchID, objPO_Invoice1.APBatNbr, objPO_Invoice1.APRefNbr))
                         {
 
                             return true;
