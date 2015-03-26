@@ -42,8 +42,8 @@ namespace PO10200.Controllers
         private JsonResult _logMessage;
 
 
-    
-      
+
+
         public ActionResult Index()
         {
             Util.InitRight(ScreenNbr);
@@ -79,7 +79,7 @@ namespace PO10200.Controllers
         {
             return this.Store(_db.PO10200_pgLoadTaxTrans(branchID, batNbr, rcptNbr).ToList());
         }
-        public ActionResult GetPO10200_ppCheckingPONbr(string branchID,string poNbr)
+        public ActionResult GetPO10200_ppCheckingPONbr(string branchID, string poNbr)
         {
             var obj = _db.PO10200_ppCheckingPONbr(branchID, poNbr).FirstOrDefault();
             return this.Store(obj);
@@ -87,7 +87,7 @@ namespace PO10200.Controllers
         }
         public ActionResult GetPO10200_pdPODetailReceipt(string branchID, string poNbr)
         {
-            var obj = _db.PO10200_pdPODetailReceipt(branchID, poNbr,0,0,0).ToList();
+            var obj = _db.PO10200_pdPODetailReceipt(branchID, poNbr, 0, 0, 0).ToList();
             return this.Store(obj);
 
         }
@@ -111,7 +111,7 @@ namespace PO10200.Controllers
                 _branchID = data["cboBranchID"];
                 _status = data["Status"].PassNull();
                 _handle = data["Handle"].PassNull() == "" ? _status : data["Handle"].PassNull();
-            
+
                 _objPO_Setup = _db.PO10200_pdPO_Setup(_branchID, "PO").FirstOrDefault();
 
                 var detHeader = new StoreDataHandler(data["lstHeader"]);
@@ -153,10 +153,10 @@ namespace PO10200.Controllers
                     return _logMessage;
                 }
                 return Util.CreateMessage(MessageProcess.Save, new { batNbr = _batNbr });
-                
+
             }
             catch (Exception ex)
-            {               
+            {
                 if (ex is MessageException)
                 {
                     return (ex as MessageException).ToMessage();
@@ -176,7 +176,7 @@ namespace PO10200.Controllers
                 _branchID = data["cboBranchID"];
                 _status = data["Status"].PassNull();
                 _handle = data["Handle"].PassNull() == "" ? _status : data["Handle"].PassNull();
-           
+
                 _objPO_Setup = _db.PO10200_pdPO_Setup(_branchID, "PO").FirstOrDefault();
 
 
@@ -225,7 +225,7 @@ namespace PO10200.Controllers
                     _db.SaveChanges();
                 }
                 return Util.CreateMessage(MessageProcess.Delete, new { batNbr = "" });
-              
+
             }
             catch (Exception ex)
             {
@@ -272,24 +272,24 @@ namespace PO10200.Controllers
                     foreach (PO10200_pgDetail_Result deleted in lst.Deleted.Where(p => p.tstamp != ""))
                     {
                         var obj = _db.PO_Trans.Where(p => p.BranchID == deleted.BranchID && p.BatNbr == deleted.BatNbr && p.RcptNbr == deleted.RcptNbr && p.LineRef == deleted.LineRef).FirstOrDefault();
-                        if(obj!=null && _poHead.RcptType=="X")
+                        if (obj != null && _poHead.RcptType == "X")
                         {
-                        var objItemSite = _db.IN_ItemSite.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID).FirstOrDefault();
-                        double dblQty = (obj.RcptMultDiv == "D" ? (obj.RcptQty / obj.RcptConvFact) : obj.RcptQty * obj.RcptConvFact);
-                        //Clear old alloc
-                        objItemSite.QtyAllocPORet = Math.Round(objItemSite.QtyAllocPORet - dblQty, 0);
-                        objItemSite.QtyAvail = Math.Round(objItemSite.QtyAvail + dblQty, 0);
-                        objItemSite.LUpd_DateTime = DateTime.Now;
-                        objItemSite.LUpd_Prog = ScreenNbr;
-                        objItemSite.LUpd_User = Current.UserName;
+                            var objItemSite = _db.IN_ItemSite.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID).FirstOrDefault();
+                            double dblQty = (obj.RcptMultDiv == "D" ? (obj.RcptQty / obj.RcptConvFact) : obj.RcptQty * obj.RcptConvFact);
+                            //Clear old alloc
+                            objItemSite.QtyAllocPORet = Math.Round(objItemSite.QtyAllocPORet - dblQty, 0);
+                            objItemSite.QtyAvail = Math.Round(objItemSite.QtyAvail + dblQty, 0);
+                            objItemSite.LUpd_DateTime = DateTime.Now;
+                            objItemSite.LUpd_Prog = ScreenNbr;
+                            objItemSite.LUpd_User = Current.UserName;
                         }
                         _db.PO_Trans.DeleteObject(obj);
                     }
                     Save_Batch(true);
                 }
                 return Util.CreateMessage(MessageProcess.Delete, new { batNbr = _batNbr });
-              
-              
+
+
             }
             catch (Exception ex)
             {
@@ -619,7 +619,7 @@ namespace PO10200.Controllers
 
                 objPO_Tr.CostVouched = objr.CostVouched;
                 objPO_Tr.UnitCost = objr.UnitCost;
-                objPO_Tr.RcptFee =objr.RcptFee;
+                objPO_Tr.RcptFee = objr.RcptFee;
 
                 objPO_Tr.DocDiscAmt = objr.DocDiscAmt;
                 objPO_Tr.DiscPct = objr.DiscPct;
@@ -852,43 +852,49 @@ namespace PO10200.Controllers
 
             return true;
         }
-    
+
         private void Data_Release()
         {
             if (_handle != "N")
             {
                 DataAccess dal = Util.Dal();
-
-                POProcess.PO po = new POProcess.PO(Current.UserName, ScreenNbr, dal);
-                if (_handle == "R")
+                try
                 {
-                    dal.BeginTrans(IsolationLevel.ReadCommitted);
-                    if (!po.PO10200_Release(_branchID, _batNbr, _rcptNbr))
+                    POProcess.PO po = new POProcess.PO(Current.UserName, ScreenNbr, dal);
+                    if (_handle == "R")
                     {
-                        dal.RollbackTrans();
-                    }
-                    else
-                    {
-                        dal.CommitTrans();
-                    }
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                        if (!po.PO10200_Release(_branchID, _batNbr, _rcptNbr))
+                        {
+                            dal.RollbackTrans();
+                        }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
 
-                    Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _batNbr });
+                        Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _batNbr });
+                    }
+                    else if (_handle == "C" || _handle == "V")
+                    {
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                        if (!po.PO10200_Cancel(_branchID, _batNbr, _rcptNbr, _form["b714"].ToBool()))
+                        {
+                            dal.RollbackTrans();
+                        }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
+                        Util.AppendLog(ref _logMessage, "9999", data: new { success = true, batNbr = _batNbr });
+                    }
+                    po = null;
                 }
-                else if (_handle == "C" || _handle == "V")
+                catch (Exception)
                 {
-                    dal.BeginTrans(IsolationLevel.ReadCommitted);
-                    if (!po.PO10200_Cancel(_branchID, _batNbr, _rcptNbr, _form["b714"].ToBool()))
-                    {
-                        dal.RollbackTrans();
-                    }
-                    else
-                    {
-                        dal.CommitTrans();
-                    }
-                    Util.AppendLog(ref _logMessage, "9999", data: new { success = true, batNbr = _batNbr });
+                    dal.RollbackTrans();
+                    throw;
                 }
-                po = null;
-
             }
         }
     }
