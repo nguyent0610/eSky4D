@@ -224,8 +224,12 @@ namespace APProcess
                             }
                         }
                     }
+                    //NEU LA DON HANG CUOI CUNG HUY HUY HUY LUN BATCH TRUYEN VAO LA % 20150326
+                    dtDocCheck = DataTableHelper.ConvertTo<clsAP_Doc>(objAP_Doc.GetAll(BranchID, BatNbr, "%"));
+                    if (dtDocCheck.Where(p => p.Rlsed != short.Parse("-1") && p.RefNbr != RefNbr).Count() > 1)
                     //update AP_Doc set rlsed=-1               
                     objSql.AP_CancelBatch(BranchID, BatNbr, RefNbr, Prog, User);
+                    else objSql.AP_CancelBatch(BranchID, BatNbr, "%", Prog, User);
                     //dal.SaveChanges(SaveOptions.DetectChangesBeforeSave);
                     return true;
                 }
