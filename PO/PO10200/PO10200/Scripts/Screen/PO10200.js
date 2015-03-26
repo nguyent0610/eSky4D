@@ -65,7 +65,7 @@ var loadDataHeader = function (sto) {
     }
     App.cboHandle.setValue("N");
     HQ.common.showBusy(false);
-    if (record.data.RcptFrom=="PO") HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty"]);
+    if (record.data.RcptFrom == "PO") HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
 };
 var loadDataDetail = function (sto) {
     //neu sto da co du lieu thi ko duoc sua cac combo ben duoi
@@ -377,7 +377,7 @@ var grdPO_Trans_BeforeEdit = function (editor, e) {
 };
 var grdPO_Trans_ValidateEdit = function (item, e) {
     var Qty = 0;
-    var objdet = App.slmPO_Trans.getSelection()[0];
+    var objdet = e.record;// App.slmPO_Trans.getSelection()[0];
     if (_keys.indexOf(e.field) != -1) {
         if (HQ.grid.checkDuplicate(App.grdDetail, e, _keys)) {
             HQ.message.show(1112, e.value, '');
@@ -422,18 +422,43 @@ var grdPO_Trans_ValidateEdit = function (item, e) {
             objdet.set('TranDesc', r.Descr);
         }
     }
-    if (e.field == "RcptQty") {
+    if (e.field == "RcptQty" || e.field == "RcptUnitDescr") {
+        var RcptUnitDescr = e.field == "RcptUnitDescr" ? e.value : objdet.data.RcptUnitDescr;
+        var RcptQty = e.field == "RcptQty" ? e.value : objdet.data.RcptQty;
+
+        var objIN_Inventory = HQ.store.findInStore(App.stoPO10200_pdIN_Inventory, ["InvtID"], [objdet.data.InvtID]);
+        var cnv = setUOM(objIN_Inventory.InvtID, objIN_Inventory.ClassID, objIN_Inventory.StkUnit, RcptUnitDescr);
+
+        if (!Ext.isEmpty(cnv)) {
+            e.record.set('RcptConvFact', cnv.CnvFact);
+            e.record.set('RcptMultDiv', cnv.MultDiv);
+        } else {
+            e.record.set('RcptUnitDescr', "");
+            return;
+        }
         if (objdet.data.RcptMultDiv == "M") {
-            Qty = e.value * objdet.data.RcptConvFact;
+            Qty = RcptQty * objdet.data.RcptConvFact;
         }
         else {
-            Qty = e.value / objdet.data.RcptConvFact == 0 ? 1 : objdet.data.RcptConvFact;
+            Qty = RcptQty / objdet.data.RcptConvFact == 0 ? 1 : objdet.data.RcptConvFact;
         }
-
+        if (objdet.data.PONbr != '') {
+            if (Qty > (objdet.data.UnitMultDiv == "M" ? objdet.data.Qty * objdet.data.CnvFact : objdet.data.Qty / objdet.data.CnvFact)) {
+                HQ.message.show(20150326, '', '');
+                return false;
+            }
+        }
         if (App.cboRcptType.getValue() == "X" && (objdet.data.PurchaseType == "GI" | objdet.data.PurchaseType == "PR" | objdet.data.PurchaseType == "GS")) {
+            if (objdet.data.PONbr != '') {
+                if (Qty > (objdet.data.UnitMultDiv == "M" ? objdet.data.Qty * objdet.data.CnvFact : objdet.data.Qty / objdet.data.CnvFact)) {
+                    HQ.message.show(201503261, '', '');
+                    return false;
+                }
+            }
+
             QtyAvail = _objIN_ItemSite == null ? 0 : _objIN_ItemSite.QtyAvail;
-            var QtyTot = Qty;//+ CalculateInvtTotals(dtIntrans, objDetail.InvtID, objDetail.SiteID, objDetail.LineRef);XX vi chi co 1 san pham nen ko tinh lai
-            if (QtyTot > QtyAvail) {
+            //var QtyTot = Qty;//+ CalculateInvtTotals(dtIntrans, objDetail.InvtID, objDetail.SiteID, objDetail.LineRef);XX vi chi co 1 san pham nen ko tinh lai
+            if (Qty > QtyAvail) {
                 HQ.message.show(35, '', '');
                 objdet.set('RcptQty', 0);
               
@@ -447,16 +472,16 @@ var grdPO_Trans_ValidateEdit = function (item, e) {
               
             }
         }
-        else if (objdet.data.PurchaseType == "GI" | objdet.data.PurchaseType == "PR" | objdet.data.PurchaseType == "GS") {
-            if (objdet.data.UnitMultDiv == "M") {
-                objdet.set('Qty', Qty / objdet.data.CnvFact);
+        //else if (objdet.data.PurchaseType == "GI" | objdet.data.PurchaseType == "PR" | objdet.data.PurchaseType == "GS") {
+        //    if (objdet.data.UnitMultDiv == "M") {
+        //        objdet.set('Qty', Qty / objdet.data.CnvFact);
               
-            }
-            else {
-                objdet.set('Qty', Qty * objdet.data.CnvFact);
+        //    }
+        //    else {
+        //        objdet.set('Qty', Qty * objdet.data.CnvFact);
             
-            }
-        }
+        //    }
+        //}
     }
 }
 var grdPO_Trans_Edit = function (item, e) {
@@ -466,16 +491,29 @@ var grdPO_Trans_Edit = function (item, e) {
   
     if (e.field == "RcptUnitDescr" || e.field == "InvtID") {
         var cnv = setUOM(objIN_Inventory.InvtID, objIN_Inventory.ClassID, objIN_Inventory.StkUnit, objDetail.RcptUnitDescr);
+
         if (!Ext.isEmpty(cnv)) {
-            var cnvFact = cnv.CnvFact;
-            var unitMultDiv = cnv.MultDiv;
+           
             objDetail.RcptConvFact = cnv.CnvFact;
             objDetail.RcptMultDiv = cnv.MultDiv;
-            e.record.set('RcptConvFact', cnvFact);
-            e.record.set('RcptMultDiv', unitMultDiv);
+            e.record.set('RcptConvFact', cnv.CnvFact);
+            e.record.set('RcptMultDiv', cnv.MultDiv);
         } else {
             e.record.set('RcptUnitDescr', "");
             return;
+        }
+        if (objDetail.PONbr=="") {
+            var cnv1 = setUOM(objIN_Inventory.InvtID, objIN_Inventory.ClassID, objIN_Inventory.StkUnit, objIN_Inventory.DfltPOUnit);
+            if (!Ext.isEmpty(cnv1)) {
+                objDetail.CnvFact = cnv1.CnvFact;
+                objDetail.UnitMultDiv = cnv1.MultDiv;
+                e.record.set('CnvFact', cnv1.CnvFact);
+                e.record.set('UnitMultDiv', cnv1.MultDiv);
+                e.record.set('UnitDescr', objIN_Inventory.DfltPOUnit);
+            } else {
+                e.record.set('UnitDescr', '');
+                return;
+            }
         }
         HQ.grid.checkInsertKey(App.grdDetail, e, _keys);
     }
@@ -492,9 +530,11 @@ var grdPO_Trans_Edit = function (item, e) {
         StkQty = Math.round((objDetail.RcptMultDiv == "D" ? (objDetail.RcptQty / objDetail.RcptConvFact) : (objDetail.RcptQty * objDetail.RcptConvFact)));
         e.record.set("TranAmt", objDetail.RcptQty * objDetail.UnitCost - objDetail.DocDiscAmt);
         objDetail.POFee = StkQty * objIN_Inventory.POFee;
-
+      
         e.record.set("ExtWeight", objDetail.RcptQty * objDetail.UnitWeight);
         e.record.set("ExtVolume", objDetail.RcptQty * objDetail.UnitVolume);
+
+       
     }
     else if (e.field == "UnitWeight") {
         e.record.set("ExtWeight", objDetail.RcptQty * objDetail.UnitWeight);
@@ -531,8 +571,12 @@ var grdPO_Trans_Edit = function (item, e) {
                        _objIN_ItemSite = result;
                        UnitCost = result == null ? 0 : (_objPO_Setup.DfltLstUnitCost == "A" ? result.AvgCost : result.LastPurchasePrice);
                        UnitCost = Math.round((objDetail.RcptMultDiv == "D" ? (UnitCost / objDetail.RcptConvFact) : (UnitCost * objDetail.RcptConvFact)));
-                       objDetail.UnitCost = UnitCost;
-                       objDetail.TranAmt = UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt;
+                       e.record.set("UnitCost", UnitCost);
+                       e.record.set("TranAmt", result * UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
+               
+                       delTax(e.rowIdx);
+                       calcTax(e.rowIdx);
+                       calcTaxTotal();
                        HQ.common.showBusy(false);
                    },
                    failure: function (result) {
@@ -550,7 +594,11 @@ var grdPO_Trans_Edit = function (item, e) {
                         UnitCost = result;
                         e.record.set("UnitCost", result);
                         e.record.set("TranAmt", result * objDetail.RcptQty - objDetail.DocDiscAmt);
+                        delTax(e.rowIdx);
+                        calcTax(e.rowIdx);
+                        calcTaxTotal();
                         HQ.common.showBusy(false);
+                       
                     },
                     failure: function (result) {
                         HQ.common.showBusy(false);
@@ -563,18 +611,20 @@ var grdPO_Trans_Edit = function (item, e) {
             UnitCost = Math.round((objDetail.RcptMultDiv == "D" ? (UnitCost / objDetail.RcptConvFact) : (UnitCost * objDetail.RcptConvFact)));
             e.record.set("UnitCost", UnitCost);
             e.record.set("TranAmt", UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
-
-
+            delTax(e.rowIdx);
+            calcTax(e.rowIdx);
+            calcTaxTotal();
         }
     }
     if (objDetail.PurchaseType == "PR") {
         e.record.set("UnitCost", 0);
     }
-
- 
-    delTax(e.rowIdx);
-    calcTax(e.rowIdx);
-    calcTaxTotal();
+    if (e.field == "RcptQty" || e.field == "DiscPct" || e.field == "DocDiscAmt" || e.field == "UnitCost") {
+        delTax(e.rowIdx);
+        calcTax(e.rowIdx);
+        calcTaxTotal();
+    }
+   
 };
 var grdPO_Trans_Deselect = function (item, e) {
     calcDet();
@@ -697,6 +747,7 @@ var cboPONbr_Change = function (item, newValue, oldValue) {
                             insertItemGrid(App.grdDetail, det.data);
                         });
                         frmChange();
+                        App.cboPONbr.setReadOnly(false);
                     });
                 } else {
                     App.stoPO10200_pdPODetailReturn.load(function () {
@@ -704,6 +755,7 @@ var cboPONbr_Change = function (item, newValue, oldValue) {
                             insertItemGrid(App.grdDetail, det.data);
                         });
                         frmChange();
+                        App.cboPONbr.setReadOnly(false);
                     });
                 }
             }
@@ -728,6 +780,7 @@ var cboPONbr_Select = function (item, newValue, oldValue) {
                             insertItemGrid(App.grdDetail,det.data);
                         });
                         frmChange();
+                        App.cboPONbr.setReadOnly(false);
                     });
                 } else {
                     App.stoPO10200_pdPODetailReturn.load(function () {
@@ -735,6 +788,7 @@ var cboPONbr_Select = function (item, newValue, oldValue) {
                             insertItemGrid(App.grdDetail, det.data);
                         });
                         frmChange();
+                        App.cboPONbr.setReadOnly(false);
                     });
                 }
             }
@@ -767,19 +821,19 @@ var cboRcptType_Change = function (item, newValue, oldValue) {
             {                          
                 if (App.cboRcptFrom.getValue() == "PO")
                 {
-                    HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty"]);
+                    HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
                
                     //GridPO_Trans.Columns["OrigRcptDate"].Visibility = Visibility.Visible;
                    
                 }
                 else
                 {
-                    HQ.grid.hide(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty"]);
+                    HQ.grid.hide(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
                 }
             }
             else
             {
-                HQ.grid.hide(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty"]);
+                HQ.grid.hide(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
            
              
              
@@ -796,7 +850,7 @@ var cboRcptType_Change = function (item, newValue, oldValue) {
 }
 var cboRcptFrom_Change = function (item, newValue, oldValue) {
 
-    
+    HQ.grid.hide(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
     if (item.valueModels != null) {
         if (item.valueModels[0] != undefined) {
             if (item.valueModels[0].data.Code == "DR" && (App.cboStatus.getValue() == null ? "H" : App.cboStatus.getValue() == "H")) {
@@ -808,7 +862,7 @@ var cboRcptFrom_Change = function (item, newValue, oldValue) {
                 App.cboDocType.setValue(App.cboRcptType.getValue() == "R" ? "VO" : "AD");
                 App.txtDescr.setValue("Directly Receipt/Return");
                 if (App.txtRcptNbr.value.length == 0) {
-                    HQ.grid.hide(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty"]);
+                    HQ.grid.hide(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty","UnitDescr"]);
 
                 }
                 if (item.hasFocus)
@@ -823,7 +877,7 @@ var cboRcptFrom_Change = function (item, newValue, oldValue) {
                 App.cboPONbr.validate();
 
                 if (App.txtRcptNbr.value.length == 0) {
-                    HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty"]);
+                    HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
                 }
 
                 App.cboPONbr.getStore().load(function () {
@@ -902,9 +956,16 @@ function deleteHeader(item) {
 
                 },
                 success: function (msg, data) {
-                    App.cboBatNbr.setValue("");
-                    HQ.message.show(201405071);
-                    menuClick('refresh');
+                    HQ.message.process(msg, data, true);
+                    var batNbr = '';
+                    if (this.result.data != undefined && this.result.data.batNbr != null) {
+                        batNbr = this.result.data.batNbr;
+
+                    }
+                    App.cboBatNbr.getStore().load(function () {
+                        App.cboBatNbr.setValue(batNbr);
+                        App.stoHeader.reload();
+                    });
                 },
                 failure: function (msg, data) {
                     HQ.message.process(msg, data, true);
@@ -934,14 +995,16 @@ var deleteRecordGrid = function (item) {
 
                         },
                         success: function (msg, data) {
-                            if (this.result.batNbr != null) {
-                                var batNbr = this.result.batNbr;
-                                App.cboBatNbr.getStore().load(function () {
-                                    App.cboBatNbr.setValue(batNbr);
-                                    HQ.message.show(201405071);
-                                    App.stoHeader.reload();
-                                });
+                            HQ.message.process(msg, data, true);
+                            var batNbr = '';                          
+                            if (this.result.data != undefined && this.result.data.batNbr != null) {
+                                batNbr = this.result.data.batNbr;
+                               
                             }
+                            App.cboBatNbr.getStore().load(function () {
+                                App.cboBatNbr.setValue(batNbr);
+                                App.stoHeader.reload();
+                            });
                         },
                         failure: function (msg, data) {
                             HQ.message.process(msg, data, true);                          
@@ -976,11 +1039,13 @@ var btnImport_Click = function (c, e) {
                     HQ.store.insertBlank(App.stoPO10200_pgDetail, _keys);                  
                         this.result.data.lstTrans.forEach(function (item) {
                             insertItemGrid(App.grdDetail, item);
+                         
                             //grdPO_Trans_ValidateEdit(App.grdDetail, App.stoPO10200_pgDetail.data.items[0]);
                             //HQ.store.insertRecord(App.stoPO10200_pgDetail, 'InvtID', newTrans, true);
                         });
-
                      
+                        //App.stoHeader.commitChanges();
+                        //App.stoPO10200_pgDetail.commitChanges();
                         //HQ.store.insertRecord(App.stoPO10200_pgDetail, "InvtID", Ext.create('App.mdlPO10200_pgDetailModel'), true);
                         //calculate();
                         //checkTransAdd();

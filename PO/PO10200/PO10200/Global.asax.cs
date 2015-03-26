@@ -35,6 +35,7 @@ namespace PO10200
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
+            acc.Release = true;
             Session["PO10200"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";

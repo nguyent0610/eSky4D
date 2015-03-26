@@ -208,15 +208,17 @@ namespace PO10200.Controllers
                     while (lstdel.FirstOrDefault() != null)
                     {
                         var obj = lstdel.FirstOrDefault();
-                        var objItemSite = _db.IN_ItemSite.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID).FirstOrDefault();
-                        double dblQty = (obj.RcptMultDiv == "D" ? (obj.RcptQty / obj.RcptConvFact) : obj.RcptQty * obj.RcptConvFact);
-                        //Clear old alloc
-                        objItemSite.QtyAllocPORet = Math.Round(objItemSite.QtyAllocPORet - dblQty, 0);
-                        objItemSite.QtyAvail = Math.Round(objItemSite.QtyAvail + dblQty, 0);
-                        objItemSite.LUpd_DateTime = DateTime.Now;
-                        objItemSite.LUpd_Prog = ScreenNbr;
-                        objItemSite.LUpd_User = Current.UserName;
-
+                        if (obj != null && _poHead.RcptType == "X")
+                        {
+                            var objItemSite = _db.IN_ItemSite.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID).FirstOrDefault();
+                            double dblQty = (obj.RcptMultDiv == "D" ? (obj.RcptQty / obj.RcptConvFact) : obj.RcptQty * obj.RcptConvFact);
+                            //Clear old alloc
+                            objItemSite.QtyAllocPORet = Math.Round(objItemSite.QtyAllocPORet - dblQty, 0);
+                            objItemSite.QtyAvail = Math.Round(objItemSite.QtyAvail + dblQty, 0);
+                            objItemSite.LUpd_DateTime = DateTime.Now;
+                            objItemSite.LUpd_Prog = ScreenNbr;
+                            objItemSite.LUpd_User = Current.UserName;
+                        }
                         _db.PO_Trans.DeleteObject(obj);
                         lstdel.Remove(obj);
                     }
@@ -270,6 +272,8 @@ namespace PO10200.Controllers
                     foreach (PO10200_pgDetail_Result deleted in lst.Deleted.Where(p => p.tstamp != ""))
                     {
                         var obj = _db.PO_Trans.Where(p => p.BranchID == deleted.BranchID && p.BatNbr == deleted.BatNbr && p.RcptNbr == deleted.RcptNbr && p.LineRef == deleted.LineRef).FirstOrDefault();
+                        if(obj!=null && _poHead.RcptType=="X")
+                        {
                         var objItemSite = _db.IN_ItemSite.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID).FirstOrDefault();
                         double dblQty = (obj.RcptMultDiv == "D" ? (obj.RcptQty / obj.RcptConvFact) : obj.RcptQty * obj.RcptConvFact);
                         //Clear old alloc
@@ -278,7 +282,7 @@ namespace PO10200.Controllers
                         objItemSite.LUpd_DateTime = DateTime.Now;
                         objItemSite.LUpd_Prog = ScreenNbr;
                         objItemSite.LUpd_User = Current.UserName;
-
+                        }
                         _db.PO_Trans.DeleteObject(obj);
                     }
                     Save_Batch(true);
@@ -631,15 +635,19 @@ namespace PO10200.Controllers
                 objPO_Tr.POOriginal = objr.POOriginal;
                 objPO_Tr.PurchaseType = objr.PurchaseType;
                 objPO_Tr.RcptConvFact = objr.RcptConvFact == 0 ? 1 : objr.RcptConvFact;
-                objPO_Tr.UnitMultDiv = string.IsNullOrEmpty(objr.PONbr) ? objr.RcptMultDiv : objr.UnitMultDiv;
-                objPO_Tr.CnvFact = string.IsNullOrEmpty(objr.PONbr) ? objr.RcptConvFact : objr.CnvFact;
-                if (objr.UnitMultDiv == "M")
+                objPO_Tr.UnitMultDiv = objr.UnitMultDiv;
+                objPO_Tr.CnvFact = objr.CnvFact;
+                objPO_Tr.Qty = objr.Qty;
+                if (string.IsNullOrEmpty(objr.PONbr))
                 {
-                    objPO_Tr.Qty = objr.RcptMultDiv == "M" ? objr.RcptConvFact * objr.RcptQty / objPO_Tr.CnvFact : (objr.RcptQty / objr.RcptConvFact) / objPO_Tr.CnvFact;
-                }
-                else
-                {
-                    objPO_Tr.Qty = objr.RcptMultDiv == "M" ? objr.RcptConvFact * objr.RcptQty * objPO_Tr.CnvFact : objr.RcptQty / objr.RcptConvFact * objPO_Tr.CnvFact;
+                    if (objr.UnitMultDiv == "M")
+                    {
+                        objPO_Tr.Qty = objr.RcptMultDiv == "M" ? objr.RcptConvFact * objr.RcptQty / objPO_Tr.CnvFact : (objr.RcptQty / objr.RcptConvFact) / objPO_Tr.CnvFact;
+                    }
+                    else
+                    {
+                        objPO_Tr.Qty = objr.RcptMultDiv == "M" ? objr.RcptConvFact * objr.RcptQty * objPO_Tr.CnvFact : objr.RcptQty / objr.RcptConvFact * objPO_Tr.CnvFact;
+                    }
                 }
                 objPO_Tr.QtyVouched = objr.QtyVouched;
 
@@ -670,7 +678,7 @@ namespace PO10200.Controllers
                 objPO_Tr.TranDate = _poHead.RcptDate.ToDateShort();
                 objPO_Tr.TranDesc = objr.TranDesc;
                 objPO_Tr.TranType = _poHead.RcptType;
-                objPO_Tr.UnitDescr = string.IsNullOrEmpty(objr.PONbr) ? objr.RcptUnitDescr : objr.UnitDescr;// objr.UnitDescr.PassNull()==""?;
+                objPO_Tr.UnitDescr = objr.UnitDescr;
 
                 objPO_Tr.UnitVolume = objr.UnitVolume;
                 objPO_Tr.UnitWeight = objr.UnitWeight;
@@ -831,7 +839,7 @@ namespace PO10200.Controllers
                         throw new MessageException(MessageType.Message, "222");
 
                     }
-                    if (objPO_Trans.RcptQty == 0 && objPO_Trans.TranAmt == 0)
+                    if (objPO_Trans.RcptQty == 0 || objPO_Trans.TranAmt == 0)
                     {
                         throw new MessageException(MessageType.Message, "44");
 
