@@ -122,7 +122,7 @@ namespace SA00300.Controllers
                 {
                    if (UserID.PassNull() == "") continue;
                    var header = _db.Users.FirstOrDefault(p => p.UserName == UserID);
-
+                   
                    var files = Request.Files;
                    if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
                    {
@@ -134,9 +134,9 @@ namespace SA00300.Controllers
                        }
 
                        // Upload file moi
-                       string newFileName = string.Format("{0}_{1}", UserID, Path.GetExtension(files[0].FileName));
+                       string newFileName = string.Format("{0}_{1}{2}", UserID,curHeader.CpnyID, Path.GetExtension(files[0].FileName));
                        files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
-                       curHeader.Images = newFileName;
+                       header.Images = newFileName;
                    }
                    else
                    {
@@ -148,7 +148,7 @@ namespace SA00300.Controllers
                            {
                                System.IO.File.Delete(oldPath);
                            }
-                           curHeader.Images = string.Empty;
+                           header.Images = string.Empty;
                        }
                    }
 

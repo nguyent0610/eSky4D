@@ -198,24 +198,20 @@ var frmloadAfterRender = function (obj) {
 };
 
 var loadData = function () {
-    var record = App.stoUser.getAt(0);
-    if (record) {
-        // Edit record
-        App.frmMain.getForm().loadRecord(record);
-
-        if (record.data.Images) {
-            App.direct.SA00300GetImages(record.data.Images);
-        } else {
-            App.imgPPCStorePicReq.setImageUrl("");
-        }
-
-    } else {
+    if (App.stoUser.getCount() == 0) {
         // If has no record then create a new
         App.stoUser.insert(0, Ext.data.Record());
-        App.frmMain.getForm().loadRecord(App.stoUser.getAt(0));
-        App.imgPPCStorePicReq.setImageUrl("");
     }
+    var record = App.stoUser.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
 
+    // display image
+    if (record.data.Images) {
+        displayImage(App.imgImages, record.data.Images);
+    }
+    else {
+        App.imgImages.setImageUrl("");
+    }
 
     //if (App.stoUser.getCount() == 0) {
     //    App.stoUser.insert(0, Ext.data.Record());
@@ -224,39 +220,7 @@ var loadData = function () {
     //App.direct.SA00300GetImages(App.stoUser.getAt(0).data.Images);
 };
 
-function UploadImage() {
-    App.frmMain.submit({
-        waitMsg: 'Uploading your file...',
-        url: 'SA00300/SA00300Upload',
-        success: function (result) {
-            //
-        },
-        failure: function (error) {
-            //
-        }
-    });
-};
 
-var NamePPCStorePicReq_Change = function (sender, e) {
-    var fileName = sender.getValue();
-    var ext = fileName.split(".").pop().toLowerCase();
-    if (ext == "jpg" || ext == "png" || ext == "gif") {
-        UploadImage();
-        var curRecord = App.frmMain.getRecord();
-        curRecord.data.Images = App.imgPPCStorePicReq.imageUrl;
-        curRecord.setDirty();
-    } else {
-        alert("Please choose a picture! (.jpg, .png, .gif)");
-        sender.reset();
-    }
-};
-
-var btnClearImage_Click = function (sender, e) {
-    App.imgPPCStorePicReq.setImageUrl("");
-    var curRecord = App.frmMain.getRecord();
-    curRecord.data.Images = "";
-    curRecord.setDirty();
-};
 
 var chkPublic_Change = function (checkbox, checked) {
     if (checked) {
@@ -388,6 +352,58 @@ var deleteData = function (item) {
     }
 };
 
+var displayImage = function (imgControl, fileName) {
+    Ext.Ajax.request({
+        url: 'SA00300/ImageToBin',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        params: JSON.stringify({
+            fileName: fileName
+        }),
+        success: function (result) {
+            var jsonData = Ext.decode(result.responseText);
+            if (jsonData.imgSrc) {
+                imgControl.setImageUrl(jsonData.imgSrc);
+            }
+            else {
+                imgControl.setImageUrl("");
+            }
+        },
+        failure: function (errorMsg, data) {
+            HQ.message.process(errorMsg, data, true);
+        }
+    });
+};
+
+var readImage = function (fup, imgControl) {
+    var files = fup.fileInputEl.dom.files;
+    if (files && files[0]) {
+        var FR = new FileReader();
+        FR.onload = function (e) {
+            imgControl.setImageUrl(e.target.result);
+        };
+        FR.readAsDataURL(files[0]);
+    }
+};
+
+var fupImages_change = function (fup, newValue, oldValue, eOpts) {
+    if (fup.value) {
+        var ext = fup.value.split(".").pop().toLowerCase();
+        if (ext == "jpg" || ext == "png" || ext == "gif") {
+            App.hdnImages.setValue(fup.value);
+            readImage(fup, App.imgImages);
+        }
+        else {
+            HQ.message.show(148, '', '');
+        }
+    }
+};
+
+var btnClearImage_click = function (btn, eOpts) {
+    App.fupImages.reset();
+    App.imgImages.setImageUrl("");
+    App.hdnImages.setValue("");
+};
 //// Other Functions ////////////////////////////////////////////////////
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
