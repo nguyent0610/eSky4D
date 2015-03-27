@@ -465,7 +465,7 @@
                     .Width(50).Editable(true)
                     .HeaderItems(
                         HQ.Checkbox().ID("chkSelectHeaderRef")
-                        //.Handler("Event.chkSelectHeaderCust_change")
+                        .Handler("Event.Form.chkSelectHeaderRef_change")
                     )
                             
                     , X.Column().Text(Util.GetLang("InvcNbr")).DataIndex("InvcNbr")

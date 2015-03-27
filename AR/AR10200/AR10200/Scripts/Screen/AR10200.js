@@ -119,7 +119,6 @@ var Process = {
                             App.cboRefNbr.setValue(data.result.refNbr);
                         }
                         App.stoRefNbr.reload();
-                        App.grdAdjust.store.reload();
                     });
                 });
             },
@@ -161,6 +160,7 @@ var Store = {
             HQ.store.insertRecord(sto, [], batRec, true);
         }
         App.pnlDocument.loadRecord(sto.getAt(0));
+        App.grdAdjust.store.reload();
     },
 
     stoAdjust_load: function (sto, records, successful, eOpts) {
@@ -260,7 +260,6 @@ var Event = {
 
         cboRefNbr_change: function (cbo, newValue, oldValue, eOpts) {
             App.stoRefNbr.reload();
-            App.grdAdjust.store.reload();
         },
 
         btnAutoPayment_click: function (btn, e) {
@@ -448,12 +447,20 @@ var Event = {
             }
         },
 
+        chkSelectHeaderRef_change: function (chk, newValue, oldValue, eOpts) {
+            App.grdRef.store.each(function (record) {
+                if (record.data.Selected != chk.value) {
+                    record.set("Selected", chk.value);
+                }
+            });
+        },
+
         btnOK_click: function (btn, e) {
             var strAdjdRefNbr = "";
             var arrAdjdRefNbr = [];
             App.grdRef.store.each(function(record){
                 if(record.data.Selected){
-                    strAdjdRefNbr.push(record.data.AdjdRefNbr);
+                    arrAdjdRefNbr.push(record.data.AdjdRefNbr);
                 }
             });
             if (App.grdRef.store.getCount()) {

@@ -241,7 +241,7 @@ namespace AR10200.Controllers
                     };
                 }
             }
-            _db.SaveChanges();
+            //_db.SaveChanges();
             if (data["cboHandle"] == "R")
             {
                 Data_Release("R", refObj.BranchID, refObj.BatNbr, "");
