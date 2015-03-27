@@ -90,7 +90,7 @@
                         )
                     , X.Container().Layout(LayoutType.HBox).Items(
                         HQ.TextBox().ID("txtBranchName").Name("txtBranchName").ReadOnly(true).MaxLength(400).HQLangCode("BranchName").LabelWidth(110).InputWidth(375).MarginSpec("3 0 0 0")
-                        , HQ.NumberField().DecimalPrecision(0).AllowDecimals(true).ReadOnly(true).ID("RcptTotAmt").Name("RcptTotAmt").HQLangCode("TXBLAMT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
+                        , HQ.NumberField().DecimalPrecision(0).AllowDecimals(true).ReadOnly(true).ID("txtRcptTotAmt").Name("txtRcptTotAmt").HQLangCode("TXBLAMT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
                         , HQ.Combo().ID("BlktPONbr").Name("BlktPONbr").MarginSpec("3 0 0 0").LabelWidth(130).InputWidth(110)
                                                     .HQLangCode("BlktPONbr").HQDBSys(false).HQProcedure("PO10100_pcBlankitPO")
                                                     .HQColumnShow("POnbr,POdate,vendid").ForceSelection(true)

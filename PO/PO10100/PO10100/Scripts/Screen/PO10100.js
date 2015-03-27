@@ -261,7 +261,11 @@ var frmChange = function (sender) {
         App.cboBranchID.setReadOnly(false);
     }
 
-    if (App.cboStatus.getValue() != "H") App.btnImport.disable();
+    if (App.cboStatus.getValue() != "H") {
+        App.btnImport.disable();
+        HQ.isChange = false;//HQ.store.isChange(App.stoPO_Header) == false ? HQ.store.isChange(App.stoPO10100_pgDetail) : true;
+        HQ.common.changeData(HQ.isChange, 'PO10100');//co thay doi du lieu gan * tren tab title header
+    }
     if (_objPO_Setup == null) {
         App.btnImport.disable();
 
@@ -476,7 +480,7 @@ var grdPO_Detail_Edit = function (item, e) {
     }
     else if (e.field == "PurchUnit" || e.field == "InvtID" || e.field == "SiteID") {
         if (_objPO_Setup.DfltLstUnitCost == "A" || _objPO_Setup.DfltLstUnitCost == "L") {
-            //HQ.grid.showBusy(App.grdDetail, true);                     
+            HQ.common.showBusy(true);
             App.direct.PO10100ItemSitePrice(
                 App.cboBranchID.getValue(), objDetail.InvtID, objDetail.SiteID,
                {
@@ -487,16 +491,19 @@ var grdPO_Detail_Edit = function (item, e) {
                        e.record.set("UnitCost", UnitCost);
                        e.record.set("ExtCost", UnitCost * objDetail.QtyOrd - objDetail.DiscAmt);
                     
-                       //HQ.grid.showBusy(App.grdDetail, false);
+                       HQ.common.showBusy(false);
+                       delTax(e.rowIdx);
+                       calcTax(e.rowIdx);
+                       calcTaxTotal();
                    },
                    failure: function (result) {
-                       //HQ.grid.showBusy(App.grdDetail, false);
+                       HQ.common.showBusy(false);
                    }
                           
                });
         }
         else if (_objPO_Setup.DfltLstUnitCost == "P") {
-            //HQ.grid.showBusy(App.grdDetail, true);
+            HQ.common.showBusy(true);
             App.direct.PO10100POPrice(
                App.cboBranchID.getValue(), objDetail.InvtID, objDetail.PurchUnit, Ext.Date.format(App.dtPODate.getValue(), 'Y-m-d'),
                 {
@@ -504,10 +511,13 @@ var grdPO_Detail_Edit = function (item, e) {
                         UnitCost = result;
                         e.record.set("UnitCost", result);
                         e.record.set("ExtCost", result * objDetail.QtyOrd - objDetail.DiscAmt);
-                        //HQ.grid.showBusy(App.grdDetail, false);
+                        HQ.common.showBusy(false);
+                        delTax(e.rowIdx);
+                        calcTax(e.rowIdx);
+                        calcTaxTotal();
                     },
                     failure: function (result) {
-                        //HQ.grid.showBusy(App.grdDetail, false);
+                        HQ.common.showBusy(false);
                     }
                 });
 
@@ -517,18 +527,22 @@ var grdPO_Detail_Edit = function (item, e) {
             UnitCost = Math.round((objDetail.UnitMultDiv == "D" ? (UnitCost / objDetail.CnvFact) : (UnitCost * objDetail.CnvFact)));
             e.record.set("UnitCost", UnitCost);
             e.record.set("ExtCost", UnitCost * objDetail.QtyOrd - objDetail.DiscAmt);
-
+            delTax(e.rowIdx);
+            calcTax(e.rowIdx);
+            calcTaxTotal();
 
         }
     }
     if (objDetail.PurchaseType == "PR") {
         e.record.set("UnitCost", 0);
     }
-
-    calcDet();
-    delTax(e.rowIdx);
-    calcTax(e.rowIdx);
-    calcTaxTotal();
+    if (e.field == "QtyOrd" || e.field == "DiscPct" || e.field == "DiscAmt" || e.field == "UnitCost") {
+        delTax(e.rowIdx);
+        calcTax(e.rowIdx);
+        calcTaxTotal();
+    }
+    //calcDet();
+  
 };
 var grdPO_Detail_Deselect = function (item, e) {
     calcDet();
@@ -1170,18 +1184,19 @@ function calcDet() {
         }
 
     };
-
-    App.txtCA.setValue(Math.round(CTN, 0));
-    App.txtEA.setValue(Math.round(PCS, 0));
-    App.POFeeTot.setValue(Math.round(poFee, 0));
-    App.TAX.setValue(Math.round(taxAmt00 + taxAmt01 + taxAmt02 + taxAmt03, 0));
-    App.EXTVOL.setValue(Math.round(extvol, 0));
-    App.EXTWEIGHT.setValue(Math.round(extwei, 0));
-    App.RcptTotAmt.setValue(Math.round(extCost, 0) + Math.round(poFee, 0));
-    App.POAmt.setValue(Math.round(taxAmt00 + taxAmt01 + taxAmt02 + taxAmt03, 0) + Math.round(extCost, 0) + Math.round(poFee, 0));
-    //App.CuryLineAmt.setValue(Math.round(curyLineAmt, 0));
-    App.DISCOUNT.setValue(Math.round(discount, 0));
-
+   
+        App.txtCA.setValue(Math.round(CTN, 0));
+        App.txtEA.setValue(Math.round(PCS, 0));
+        App.POFeeTot.setValue(Math.round(poFee, 0));
+        App.TAX.setValue(Math.round(taxAmt00 + taxAmt01 + taxAmt02 + taxAmt03, 0));
+        App.EXTVOL.setValue(Math.round(extvol, 0));
+        App.EXTWEIGHT.setValue(Math.round(extwei, 0));
+     
+        App.POAmt.setValue(Math.round(taxAmt00 + taxAmt01 + taxAmt02 + taxAmt03, 0) + Math.round(extCost, 0) + Math.round(poFee, 0));
+        //App.CuryLineAmt.setValue(Math.round(curyLineAmt, 0));
+        App.DISCOUNT.setValue(Math.round(discount, 0));      
+        App.txtRcptTotAmt.setValue(Math.round(extCost, 0) + Math.round(poFee, 0));
+    
 }
 function delTaxMutil() {
 

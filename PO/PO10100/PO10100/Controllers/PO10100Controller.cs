@@ -124,7 +124,27 @@ namespace PO10100.Controllers
                             .Where(p => Util.PassNull(p.LineRef) != string.Empty)
                             .ToList();
 
-                Save_PO_Header();
+                if (_status == "H")
+                    Save_PO_Header();
+                else
+                {
+                    var obj = _db.PO_Header.FirstOrDefault(p => p.PONbr == _ponbr && p.BranchID == _branchID);
+                    if (obj != null)
+                    {
+
+                        if (obj.tstamp.ToHex() != _poHead.tstamp.ToHex())
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                        obj.Status = _toStatus;
+                        _db.SaveChanges();
+                        if (_toStatus != _status) SendMail(obj);
+                    }
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
+                }
                 return Util.CreateMessage(MessageProcess.Save, new { pONbr = _ponbr });
               
             }
@@ -331,6 +351,7 @@ namespace PO10100.Controllers
             var obj = _db.PO_Header.FirstOrDefault(p => p.PONbr == _ponbr && p.BranchID == _branchID);
             if (Data_Checking(isDeleteGrd))
             {
+                
                 if (obj != null)
                 {
 
@@ -412,7 +433,7 @@ namespace PO10100.Controllers
             {
                 objHeader.VouchStage =_poHead.VouchStage.PassNull();
                 objHeader.POAmt = _poHead.POAmt.ToDouble();
-                objHeader.RcptTotAmt = _poHead.RcptTotAmt.ToDouble();
+                //objHeader.RcptTotAmt = _poHead.RcptTotAmt.ToDouble();
                 objHeader.POFeeTot = lst.Sum(p => p.POFee);
 
                 //tap main
