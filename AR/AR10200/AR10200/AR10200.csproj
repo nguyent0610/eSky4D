@@ -45,15 +45,15 @@
   <ItemGroup>
     <Reference Include="ARProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\DlleSky4D\ARProcess.dll</HintPath>
+      <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Release\ARProcess.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\DlleSky4D\eBiz4DApp.dll</HintPath>
+      <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Release\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DSys, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\DlleSky4D\eBiz4DSys.dll</HintPath>
+      <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Release\eBiz4DSys.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net, Version=2.4.0.28524, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -73,19 +73,15 @@
     </Reference>
     <Reference Include="HQFramework.Common, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\DlleSky4D\HQFramework.Common.DLL</HintPath>
+      <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Release\HQFramework.Common.dll</HintPath>
     </Reference>
     <Reference Include="HQFramework.DAL, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\DlleSky4D\HQFramework.DAL.DLL</HintPath>
     </Reference>
-    <Reference Include="HQSendMailApprove, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\DlleSky4D\HQSendMailApprove.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\DlleSky4D\log4net.dll</HintPath>
+      <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Release\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -330,7 +326,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

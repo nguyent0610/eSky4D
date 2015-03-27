@@ -13,7 +13,6 @@ using System.Security.Cryptography;
 using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
-using HQSendMailApprove;
 using HQFramework.DAL;
 using System.Data;
 namespace AR10200.Controllers
@@ -27,7 +26,7 @@ namespace AR10200.Controllers
         private string _moduleAR = "AR";
         private string _holdStatus = "H";
         AR10200Entities _db = Util.CreateObjectContext<AR10200Entities>(false);
-  
+        private JsonResult _logMessage;
         //
         // GET: /AR10200/
         public ActionResult Index()
@@ -45,8 +44,8 @@ namespace AR10200.Controllers
         public ActionResult GetBatNbr(string branchID,
             string module, string batNbr)
         {
-            var batch = _db.Batches.FirstOrDefault(x => x.BatNbr == batNbr 
-                && x.BranchID == branchID 
+            var batch = _db.Batches.FirstOrDefault(x => x.BatNbr == batNbr
+                && x.BranchID == branchID
                 && x.Module == module);
             return this.Store(batch);
         }
@@ -66,9 +65,9 @@ namespace AR10200.Controllers
             string refNbr, DateTime fromDate, DateTime toDate,
             string dateType, string isGridF3)
         {
-            var lst = _db.AR10200_pgBindingGrid(batNbr, branchID, 
-                custID, slsperId, deliveryId, 
-                refNbr, fromDate, toDate, 
+            var lst = _db.AR10200_pgBindingGrid(batNbr, branchID,
+                custID, slsperId, deliveryId,
+                refNbr, fromDate, toDate,
                 dateType, isGridF3).ToList();
 
             return this.Store(lst);
@@ -80,10 +79,12 @@ namespace AR10200.Controllers
             return this.Store(refs);
         }
 
-        public ActionResult ReleaseAdjdRef(string strAdjdRefNbr)
+        public ActionResult ReleaseAdjdRef(FormCollection data, string strAdjdRefNbr)
         {
-            //Data_Release("V");
-            return Json(new { success = true }); 
+
+            var cboBatNbr = data["cboBatNbr"];
+            Data_Release("V", cboBatNbr, Current.CpnyID, strAdjdRefNbr);
+            return Util.CreateMessage(MessageProcess.Save, new { batNbr = cboBatNbr });
         }
 
         public ActionResult SaveBatch(FormCollection data)
@@ -134,7 +135,7 @@ namespace AR10200.Controllers
                     {
                         inputRefNbr.BatNbr = batchObj.BatNbr;
                         inputRefNbr.OrigDocAmt = data["txtTotAmt"] != null ? double.Parse(data["txtTotAmt"]) : 0;
-                        
+
                         // Save RefNbr/AR_Doc
                         var refObj = _db.AR_Doc.FirstOrDefault(x => x.BranchID == Current.CpnyID
                             && x.BatNbr == batchObj.BatNbr
@@ -144,12 +145,14 @@ namespace AR10200.Controllers
                         {
                             if (refObj.tstamp.ToHex() == inputRefNbr.tstamp.ToHex())
                             {
-                                
+
                                 Updating_AR_Doc(ref refObj, inputRefNbr, false);
                                 SaveAR_Adjust(data, refObj);
-                                return Json(new { 
-                                    success = true, msgCode = 201405071, 
-                                    batNbr = batchObj.BatNbr, 
+                                return Json(new
+                                {
+                                    success = true,
+                                    msgCode = 201405071,
+                                    batNbr = batchObj.BatNbr,
                                     refNbr = refObj.RefNbr
                                 });
                             }
@@ -163,7 +166,8 @@ namespace AR10200.Controllers
                             Updating_AR_Doc(ref refObj, inputRefNbr, true);
                             _db.AR_Doc.AddObject(refObj);
                             SaveAR_Adjust(data, refObj);
-                            return Json(new {
+                            return Json(new
+                            {
                                 success = true,
                                 msgCode = 201405071,
                                 batNbr = batchObj.BatNbr,
@@ -180,12 +184,19 @@ namespace AR10200.Controllers
                 {
                     throw new MessageException(MessageType.Message, "22701");
                 }
+
+                if (_logMessage != null)
+                {
+                    return _logMessage;
+                }
+                return Util.CreateMessage(MessageProcess.Save, new { batNbr = data["cboBatNbr"] });
+
             }
             catch (Exception ex)
             {
                 if (ex is MessageException)
                     return (ex as MessageException).ToMessage();
-                return 
+                return
                     Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
@@ -194,10 +205,10 @@ namespace AR10200.Controllers
         {
             var adjHandler = new StoreDataHandler(data["lstAdjust"]);
             var lstAdjust = adjHandler.ObjectData<AR10200_pgBindingGrid_Result>()
-                .Where(x=>!string.IsNullOrWhiteSpace(x.InvcNbr)).ToList();
+                .Where(x => !string.IsNullOrWhiteSpace(x.InvcNbr)).ToList();
 
-            var adjusts = _db.AR_Adjust.Where(x => x.BranchID == Current.CpnyID 
-                && x.AdjgBatNbr == refObj.BatNbr 
+            var adjusts = _db.AR_Adjust.Where(x => x.BranchID == Current.CpnyID
+                && x.AdjgBatNbr == refObj.BatNbr
                 && x.AdjgRefNbr == refObj.RefNbr).ToList();
             foreach (var adjust in adjusts)
             {
@@ -206,8 +217,8 @@ namespace AR10200.Controllers
 
             foreach (var adjust in lstAdjust)
             {
-                var result = _db.AR_Adjust.FirstOrDefault(x => x.BranchID == Current.CpnyID 
-                    && x.BatNbr == adjust.BatNbr 
+                var result = _db.AR_Adjust.FirstOrDefault(x => x.BranchID == Current.CpnyID
+                    && x.BatNbr == adjust.BatNbr
                     && x.AdjgBatNbr == refObj.BatNbr
                     && x.AdjgRefNbr == refObj.RefNbr);
                 if (result != null)
@@ -224,13 +235,18 @@ namespace AR10200.Controllers
                     obj.BatNbr = refObj.BatNbr;
                     obj.AdjgBatNbr = refObj.BatNbr;
                     obj.AdjgRefNbr = refObj.RefNbr;
-                    if (obj.AdjAmt > 0) {
+                    if (obj.AdjAmt > 0)
+                    {
                         _db.AR_Adjust.AddObject(obj);
                     };
                 }
             }
             _db.SaveChanges();
-            //Data_Release("R");
+            if (data["cboHandle"] == "R")
+            {
+                Data_Release("R", refObj.BranchID, refObj.BatNbr, "");
+            }
+
         }
 
         private void Updating_AR_Adjust(ref AR_Adjust objAd, AR10200_pgBindingGrid_Result adjust)
@@ -302,7 +318,7 @@ namespace AR10200.Controllers
             }
             catch (Exception ex)
             {
-                if (ex is MessageException) 
+                if (ex is MessageException)
                     return (ex as MessageException).ToMessage();
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
@@ -342,7 +358,8 @@ namespace AR10200.Controllers
 
         private void Updating_Batch(ref Batch objB, Batch input, bool isNew)
         {
-            if (isNew) {
+            if (isNew)
+            {
                 objB = new Batch();
 
 
@@ -359,7 +376,7 @@ namespace AR10200.Controllers
             objB.NoteID = 0;
             objB.EditScrnNbr = _screenNbr;
             objB.JrnlType = _moduleAR;
-            
+
             objB.Rlsed = 0;
             objB.Status = input.Status;
             objB.Descr = input.Descr;//data["txtDescr"]
@@ -375,7 +392,8 @@ namespace AR10200.Controllers
         }
         private void Updating_AR_Doc(ref AR_Doc objD, AR_Doc inputRef, bool isNew)
         {
-            if (isNew) {
+            if (isNew)
+            {
                 objD = new AR_Doc();
 
                 objD.BatNbr = inputRef.BatNbr;
@@ -390,7 +408,8 @@ namespace AR10200.Controllers
             {
                 objD.InvcNbr = _db.ARNumbering(Current.CpnyID, "ReceiptNbr").FirstOrDefault();
             }
-            else {
+            else
+            {
                 objD.InvcNbr = inputRef.InvcNbr;
             }
             objD.NoteId = 0;
@@ -406,6 +425,50 @@ namespace AR10200.Controllers
             objD.LUpd_DateTime = DateTime.Now;
             objD.LUpd_Prog = _screenNbr;
             objD.LUpd_User = Current.UserName;
+        }
+
+        private void Data_Release(string handle, string BranchID, string BatNbr, string refNbr)
+        {
+            if (handle != "N")
+            {
+                DataAccess dal = Util.Dal();
+                try
+                {
+                    ARProcess.AR ar = new ARProcess.AR(Current.UserName, _screenNbr, dal);
+                    if (handle == "R")
+                    {
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                        if (!ar.AR10200_Release(BatNbr, BranchID))
+                        {
+                            dal.RollbackTrans();
+                        }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
+                        Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = BatNbr });
+                    }
+                    else if (handle == "C" || handle == "V")
+                    {
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                        if (!ar.AR10200_Cancel(BatNbr, BranchID, refNbr))
+                        {
+                            dal.RollbackTrans();
+                        }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
+                        Util.AppendLog(ref _logMessage, "9999", data: new { success = true, batNbr = BatNbr });
+                    }
+                    ar = null;
+                }
+                catch (Exception)
+                {
+                    dal.RollbackTrans();
+                    throw;
+                }
+            }
         }
     }
 }
