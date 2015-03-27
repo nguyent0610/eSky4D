@@ -83,7 +83,7 @@ namespace AR10200.Controllers
         {
 
             var cboBatNbr = data["cboBatNbr"];
-            Data_Release("V", cboBatNbr, Current.CpnyID, strAdjdRefNbr);
+            Data_Release("V", Current.CpnyID, cboBatNbr, strAdjdRefNbr);
             return Util.CreateMessage(MessageProcess.Save, new { batNbr = cboBatNbr });
         }
 
@@ -241,7 +241,7 @@ namespace AR10200.Controllers
                     };
                 }
             }
-            //_db.SaveChanges();
+            _db.SaveChanges();
             if (data["cboHandle"] == "R")
             {
                 Data_Release("R", refObj.BranchID, refObj.BatNbr, "");
@@ -448,17 +448,16 @@ namespace AR10200.Controllers
                         }
                         Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = BatNbr });
                     }
-                    else if (handle == "C" || handle == "V")
+                    else if (handle == "V")
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!ar.AR10200_Cancel(BatNbr, BranchID, refNbr))
-                        {
-                            dal.RollbackTrans();
-                        }
+                        if (refNbr == "%")
+                            ar.AR10200_Cancel(BatNbr, BranchID);
                         else
-                        {
-                            dal.CommitTrans();
-                        }
+                            ar.AR10200_Cancel(BatNbr, BranchID, refNbr);
+
+                        dal.CommitTrans();
+
                         Util.AppendLog(ref _logMessage, "9999", data: new { success = true, batNbr = BatNbr });
                     }
                     ar = null;

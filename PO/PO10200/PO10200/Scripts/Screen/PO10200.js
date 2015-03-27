@@ -619,7 +619,7 @@ var grdPO_Trans_Edit = function (item, e) {
     if (objDetail.PurchaseType == "PR") {
         e.record.set("UnitCost", 0);
     }
-    if (e.field == "RcptQty" || e.field == "DiscPct" || e.field == "DocDiscAmt" || e.field == "UnitCost") {
+    if (e.field == "RcptQty" || e.field == "DiscPct" || e.field == "DocDiscAmt" || e.field == "UnitCost" || e.field == "TaxCat" || e.field == "TaxID") {
         delTax(e.rowIdx);
         calcTax(e.rowIdx);
         calcTaxTotal();
