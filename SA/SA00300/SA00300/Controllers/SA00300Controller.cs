@@ -127,14 +127,14 @@ namespace SA00300.Controllers
                    if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
                    {
                        // Xoa file cu di
-                       var oldPath = string.Format("{0}\\{1}", FilePath, curHeader.Images);
+                       var oldPath = string.Format("{0}\\{1}", FilePath, header.Images);
                        if (System.IO.File.Exists(oldPath))
                        {
                            System.IO.File.Delete(oldPath);
                        }
 
                        // Upload file moi
-                       string newFileName = string.Format("{0}_{1}{2}", UserID,curHeader.CpnyID, Path.GetExtension(files[0].FileName));
+                       string newFileName = string.Format("{0}_{1}{2}", UserID, header.CpnyID, Path.GetExtension(files[0].FileName));
                        files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
                        header.Images = newFileName;
                    }
@@ -143,7 +143,7 @@ namespace SA00300.Controllers
                        if (!string.IsNullOrWhiteSpace(header.Images) && string.IsNullOrWhiteSpace(curHeader.Images))
                        {
                            // Xoa file cu di
-                           var oldPath = string.Format("{0}\\{1}", FilePath, curHeader.Images);
+                           var oldPath = string.Format("{0}\\{1}", FilePath, header.Images);
                            if (System.IO.File.Exists(oldPath))
                            {
                                System.IO.File.Delete(oldPath);
