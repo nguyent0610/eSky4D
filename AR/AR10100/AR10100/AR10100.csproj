@@ -45,18 +45,18 @@
   <ItemGroup>
     <Reference Include="ARProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\DLL MVC moi\ARProcess.dll</HintPath>
+      <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Debug\ARProcess.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\DLL MVC moi\eBiz4DApp.dll</HintPath>
+      <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Debug\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DSys, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\DLL MVC moi\eBiz4DSys.dll</HintPath>
+      <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Debug\eBiz4DSys.dll</HintPath>
     </Reference>
     <Reference Include="Encryption">
-      <HintPath>..\..\..\eBiz4DWebFrame\bin\Encryption.dll</HintPath>
+      <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Debug\Encryption.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net">
       <HintPath>..\..\EbizWebMvc\AR10100_Language\AR10100\bin\Ext.Net.dll</HintPath>
@@ -66,21 +66,18 @@
     </Reference>
     <Reference Include="HQ.eSkyFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\DLL MVC moi\HQ.eSkyFramework.dll</HintPath>
+      <HintPath>..\..\..\DLL\HQ.eSkyFramework.dll</HintPath>
     </Reference>
     <Reference Include="HQ.eSkySys">
       <HintPath>..\..\..\..\..\..\DLL MVC moi\HQ.eSkySys.dll</HintPath>
     </Reference>
     <Reference Include="HQFramework.Common, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\DLL MVC moi\HQFramework.Common.dll</HintPath>
+      <HintPath>..\..\..\Process\ARProcess\ARProcess\bin\Debug\HQFramework.Common.dll</HintPath>
     </Reference>
     <Reference Include="HQFramework.DAL, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\DLL MVC moi\HQFramework.DAL.dll</HintPath>
-    </Reference>
-    <Reference Include="HQWebCommon">
-      <HintPath>..\..\EbizWebMvc\SI20500_City\SI20500\bin\HQWebCommon.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -242,7 +239,6 @@
       <LastGenOutput>AR10100Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
-    <Content Include="Scripts\AR10100.js" />
     <Content Include="Scripts\hq.common.debug.js" />
     <Content Include="Scripts\hq.common.js" />
     <Content Include="Scripts\hq.language0.js" />

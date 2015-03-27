@@ -272,7 +272,10 @@ function Save() {
                 isNewRef: isNewRef,
             },
             success: function (result, data) {
-                HQ.message.show(201405071, '', null);
+                if (App.cboHandle.getValue() == "V" || App.cboHandle.getValue() == "C" || App.cboHandle.getValue() == "R") {
+                    HQ.message.process(errorMsg, data, true);
+                }
+                else HQ.message.show(201405071, '', null);
                 App.cboBatNbr.getStore().load();
                 App.cboRefNbr.getStore().load();
 
@@ -297,9 +300,13 @@ function Save() {
 
             }
             , failure: function (errorMsg, data) {
-
-                var dt = Ext.decode(data.response.responseText);
-                HQ.message.show(dt.code, dt.colName + ',' + dt.value, null);
+                if (App.cboHandle.getValue() == "V" || App.cboHandle.getValue() == "C" || App.cboHandle.getValue() == "R") {
+                    HQ.message.process(errorMsg, data, true);
+                }
+                else {
+                    var dt = Ext.decode(data.response.responseText);
+                    HQ.message.show(dt.code, dt.colName + ',' + dt.value, null);
+                }
             }
         });
     } else {
