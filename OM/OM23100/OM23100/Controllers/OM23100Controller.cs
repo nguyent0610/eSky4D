@@ -11,6 +11,8 @@ using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
 using HQ.eSkyFramework.HQControl;
+using System.Text.RegularExpressions;
+
 namespace OM23100.Controllers
 {
     [DirectController]
@@ -41,8 +43,8 @@ namespace OM23100.Controllers
                 NumberColumn nbcl = new NumberColumn
                 {
                     Text = lstIN_ProductClass[i].Descr,
-                    //DataIndex = "SellIn_"+lstIN_ProductClass[i].ClassID,
-                    Width=50,
+                    DataIndex = "SellIn_"+lstIN_ProductClass[i].ClassID,
+                    Align=Alignment.Right,
                     Editor =
                     {
                         new NumberField
@@ -68,8 +70,8 @@ namespace OM23100.Controllers
                 NumberColumn nbcl = new NumberColumn
                 {
                     Text = lstIN_ProductClass[i].Descr,
-                    //DataIndex = "Coverage_"+lstIN_ProductClass[i].ClassID,
-                    Width = 50,
+                    DataIndex = "Coverage_"+lstIN_ProductClass[i].ClassID,
+                    Align = Alignment.Right,
                     Editor =
                     {
                         new NumberField
@@ -95,8 +97,8 @@ namespace OM23100.Controllers
                 NumberColumn nbcl = new NumberColumn
                 {
                     Text = lstIN_ProductClass[i].Descr,
-                    //DataIndex = "DNA_"+lstIN_ProductClass[i].ClassID,
-                    Width = 50,
+                    DataIndex = "DNA_"+lstIN_ProductClass[i].ClassID,
+                    Align = Alignment.Right,
                     Editor =
                     {
                         new NumberField
@@ -115,7 +117,7 @@ namespace OM23100.Controllers
             {
                 Text = Util.GetLang("OM23100_Visit"),
                 ID = "txt_Visit",
-                Width = 50,
+                Align = Alignment.Right,
                 DataIndex="Visit",
                 Editor =
                 {
@@ -133,14 +135,15 @@ namespace OM23100.Controllers
             {
                 Text = Util.GetLang("OM23100_LPPC")+"(%)",
                 ID = "txt_LPPC",
-                Width = 50,
+                Align = Alignment.Right,
                 DataIndex = "LPPC",
                 Editor =
                 {
                     new NumberField
                     {
                         DecimalPrecision=2,
-                        MinValue=0
+                        MinValue=0,
+                        MaxValue=100
                     }
                 }
             };
@@ -158,8 +161,8 @@ namespace OM23100.Controllers
                 NumberColumn nbcl = new NumberColumn
                 {
                     Text = lstIN_ProductClass[i].Descr,
-                    //DataIndex = "ForcusedSKU_"+lstIN_ProductClass[i].ClassID,
-                    Width = 50,
+                    DataIndex = "ForcusedSKU_"+lstIN_ProductClass[i].ClassID,
+                    Align = Alignment.Right,
                     Editor =
                     {
                         new NumberField
@@ -178,7 +181,8 @@ namespace OM23100.Controllers
             {
                 Text = Util.GetLang("OM23100_VisitTime"),
                 ID = "txt_VisitTime",
-                Width = 50,
+                Width=120,
+                Align = Alignment.Right,
                 DataIndex = "VisitTime",
                 Editor =
                 {
@@ -227,7 +231,7 @@ namespace OM23100.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -236,85 +240,168 @@ namespace OM23100.Controllers
         {
             return this.Store(_db.OM23100_pgLoadGrid(BranchID, FCSDate));
         }
-        //[HttpPost]
-        //public ActionResult Save(FormCollection data)
-        //{
-        //    string BranchID = data["cboDist"];
-        //    string FCSDate_temp = data["dateFcs"];
-        //    DateTime FCSDate = DateTime.Parse(FCSDate_temp);
-        //    try
-        //    {
-        //        StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_FCS"]);
-        //        ChangeRecords<OM23100_pgOM_FCS_Result> lstOM_FCS = dataHandler.BatchObjectData<OM23100_pgOM_FCS_Result>();
-        //        foreach (OM23100_pgOM_FCS_Result deleted in lstOM_FCS.Deleted)
-        //        {
-        //            var del = _db.OM_FCS.FirstOrDefault(p => p.SlsperId == deleted.SlsperId && p.BranchID == BranchID && p.FCSDate.Year==FCSDate.Year && p.FCSDate.Month==FCSDate.Month);
-        //            if (del != null)
-        //            {
-        //                _db.OM_FCS.DeleteObject(del);
-        //            }
-        //        }
+        [HttpPost]
+        public ActionResult Save(FormCollection data)
+        {
+            string BranchID = data["cboDist"];
+            string FCSDate_temp = data["dateFcs"];
+            DateTime FCSDate = DateTime.Parse(FCSDate_temp);
+            DataTable dtUpdated = data["lstOM_FCS"] == "{}" ? new DataTable() : ConvertJSONToDataTable(data["lstOM_FCS"].Replace("{\"Updated\":[{", "{\"Status\":\"Updated\",").Replace("\"Created\":[{", "{\"Status\":\"Created\",").Replace("\"Deleted\":[{", "{\"Status\":\"Deleted\",").Replace("}]}", ""));
+            try
+            {
+                var lstIN_ProductClass = _db.OM23100_getIN_ProductClass().ToList();
+                var listRecordChange = dtUpdated.Rows;
+                for (int i = 0; i < listRecordChange.Count; i++)
+                {
+                    for (int k = 0; k < lstIN_ProductClass.Count; k++)
+                    {
+                        var tmpBranchID = BranchID;
+                        var tmpSlsperId = listRecordChange[i]["SlsperId"];
+                        var tmpClassID = lstIN_ProductClass[k].ClassID;
+                        var tmpSellIn = listRecordChange[i]["SellIn_" + lstIN_ProductClass[k].ClassID];
+                        var tmpCoverage = listRecordChange[i]["Coverage_" + lstIN_ProductClass[k].ClassID];
+                        var tmpDNA = listRecordChange[i]["DNA_" + lstIN_ProductClass[k].ClassID];
+                        var tmpForcusedSKU = listRecordChange[i]["ForcusedSKU_" + lstIN_ProductClass[k].ClassID];
+                        var tmpLPPC = listRecordChange[i]["LPPC"];
+                        var tmpVisit = listRecordChange[i]["Visit"];
+                        var tmpVisitTime = listRecordChange[i]["VisitTime"];
+                        var Status = listRecordChange[i]["Status"];
 
-        //        lstOM_FCS.Created.AddRange(lstOM_FCS.Updated);
+                        var record = _db.OM_FCS.FirstOrDefault(p => p.BranchID == tmpBranchID && p.ClassID == tmpClassID && p.SlsperId == tmpSlsperId && p.FCSDate.Month == FCSDate.Month && p.FCSDate.Year == FCSDate.Year);
+                        if (record != null)
+                        {
+                            record.SellIn = Convert.ToDouble(tmpSellIn);
+                            record.Coverage = Convert.ToDouble(tmpCoverage);
+                            record.DNA = Convert.ToDouble(tmpDNA);
+                            record.Visit = Convert.ToDouble(tmpVisit);
+                            record.LPPC = Convert.ToDouble(tmpLPPC);
+                            record.ForcusedSKU = Convert.ToDouble(tmpForcusedSKU);
+                            record.VisitTime = Convert.ToDouble(tmpVisitTime);
 
-        //        foreach (OM23100_pgOM_FCS_Result curLang in lstOM_FCS.Created)
-        //        {
-        //            if (curLang.SlsperId.PassNull() == "") continue;
+                            record.LUpd_DateTime = DateTime.Now;
+                            record.LUpd_Prog = _screenNbr;
+                            record.LUpd_User = _userName;
 
-        //            var lang = _db.OM_FCS.FirstOrDefault(p => p.SlsperId.ToLower() == curLang.SlsperId.ToLower() && p.BranchID.ToLower() == BranchID.ToLower() && p.FCSDate.Year == FCSDate.Year && p.FCSDate.Month == FCSDate.Month);
+                            if (record.SellIn == 0 && record.Coverage == 0 && record.DNA == 0 && record.Visit == 0 && record.LPPC == 0 && record.ForcusedSKU == 0 && record.VisitTime == 0)
+                            {
+                                _db.OM_FCS.DeleteObject(record);
+                            }
+                            if (Status.Equals("Deleted"))
+                            {
+                                var lstDeleted = _db.OM_FCS.Where(p => p.SlsperId == tmpSlsperId && p.BranchID == BranchID && p.ClassID == tmpClassID && p.FCSDate.Year==FCSDate.Year && p.FCSDate.Month==FCSDate.Month).ToList();
+                                foreach (var item in lstDeleted)
+                                {
+                                    _db.OM_FCS.DeleteObject(item);
+                                }
+                            }
 
-        //            if (lang != null)
-        //            {
-        //                if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
-        //                {
-        //                    Update_AccessDetRights(lang, curLang, false);
-        //                }
-        //                else
-        //                {
-        //                    throw new MessageException(MessageType.Message, "19");
-        //                }
-        //            }
-        //            else
-        //            {
-        //                lang = new OM_FCS();
-        //                lang.BranchID = BranchID;
-        //                lang.FCSDate=FCSDate;
-        //                Update_AccessDetRights(lang, curLang, true);
-        //                _db.OM_FCS.AddObject(lang);
-        //            }
-        //        }
+                        }
+                        else
+                        {
+                            var recordNew = new OM_FCS();
 
-        //        _db.SaveChanges();
-        //        return Json(new { success = true });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is MessageException) return (ex as MessageException).ToMessage();
-        //        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-        //    }
-        //}
-        //private void Update_AccessDetRights(OM_FCS t, OM23100_pgOM_FCS_Result s, bool isNew)
-        //{
-        //    if (isNew)
-        //    {
-        //        t.SlsperId = s.SlsperId;
-        //        t.Crtd_DateTime = DateTime.Now;
-        //        t.Crtd_Prog = _screenNbr;
-        //        t.Crtd_User = _userName;
-        //    }
+                            recordNew.BranchID = Convert.ToString(tmpBranchID);
+                            recordNew.SlsperId = Convert.ToString(tmpSlsperId);
+                            recordNew.ClassID = Convert.ToString(tmpClassID);
+                            recordNew.FCSDate = Convert.ToDateTime(FCSDate);
 
-        //    t.Coverage = s.Coverage;
-        //    t.DNA = s.DNA;
-        //    t.Visit = s.Visit;
-        //    t.SellIn = s.SellIn;
-        //    t.LPPC = s.LPPC;
-        //    t.ForcusedSKU = s.ForcusedSKU;
-        //    t.VisitTime = s.VisitTime;
+                            recordNew.SellIn = Convert.ToDouble(tmpSellIn);
+                            recordNew.Coverage = Convert.ToDouble(tmpCoverage);
+                            recordNew.DNA = Convert.ToDouble(tmpDNA);
+                            recordNew.Visit = Convert.ToDouble(tmpVisit);
+                            recordNew.LPPC = Convert.ToDouble(tmpLPPC);
+                            recordNew.ForcusedSKU = Convert.ToDouble(tmpForcusedSKU);
+                            recordNew.VisitTime = Convert.ToDouble(tmpVisitTime);
 
-        //    t.LUpd_DateTime = DateTime.Now;
-        //    t.LUpd_Prog = _screenNbr;
-        //    t.LUpd_User = _userName;
+                            recordNew.Crtd_DateTime = DateTime.Now;
+                            recordNew.Crtd_Prog = _screenNbr;
+                            recordNew.Crtd_User = _userName;
+                            recordNew.LUpd_DateTime = DateTime.Now;
+                            recordNew.LUpd_Prog = _screenNbr;
+                            recordNew.LUpd_User = _userName;
 
-        //}
+                            if (recordNew.ClassID != "" && recordNew.SlsperId != "" && recordNew.BranchID != "" && recordNew.FCSDate != null)
+                            {
+                                _db.OM_FCS.AddObject(recordNew);
+                            }
+
+                        }
+                    }
+                }
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+           
+            
+        }
+
+        private DataTable ConvertJSONToDataTable(string jsonString)
+        {
+          
+            DataTable dt = new DataTable();
+            //strip out bad characters
+            string[] jsonParts = Regex.Split(jsonString.Replace("[", "").Replace("]", ""), "},{");
+
+            //hold column names
+            List<string> dtColumns = new List<string>();
+
+            //get columns
+            foreach (string jp in jsonParts)
+            {
+                //only loop thru once to get column names
+                string[] propData = Regex.Split(jp.Replace("{", "").Replace("}", ""), ",");
+                foreach (string rowData in propData)
+                {
+                    try
+                    {
+                        int idx = rowData.IndexOf(":");
+                        string n = rowData.Substring(0, idx - 1).Replace("\"", "");
+                        string v = rowData.Substring(idx + 1);
+                        if (!dtColumns.Contains(n))
+                        {
+                            dtColumns.Add(n);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(string.Format("Error Parsing Column Name : {0}", rowData));
+                    }
+
+                }
+                break; // TODO: might not be correct. Was : Exit For
+            }
+            //build dt
+            foreach (string c in dtColumns)
+            {
+                dt.Columns.Add(c);
+            }
+            //get table data
+            foreach (string jp in jsonParts)
+            {
+                string[] propData = Regex.Split(jp.Replace("{", "").Replace("}", ""), ",");
+                DataRow nr = dt.NewRow();
+                foreach (string rowData in propData)
+                {
+                    try
+                    {
+                        int idx = rowData.IndexOf(":");
+                        string n = rowData.Substring(0, idx - 1).Replace("\"", "");
+                        string v = rowData.Substring(idx + 1).Replace("\"", "");
+                        nr[n] = v;
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
+                }
+                dt.Rows.Add(nr);
+            }
+            return dt;
+        }
     }
 }

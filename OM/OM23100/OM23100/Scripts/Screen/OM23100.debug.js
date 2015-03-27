@@ -89,6 +89,7 @@ var stoChanged = function (sto) {
     App.cboTerritory.setReadOnly(HQ.isChange);
     App.cboZone.setReadOnly(HQ.isChange);
     App.dateFcs.setReadOnly(HQ.isChange);
+    App.btnSearch.setDisabled(HQ.isChange);
     //App.dateFcs.setDisabled(HQ.isChange);
 };
 
@@ -174,6 +175,7 @@ var cboDist_Change = function (sender, e) {
     else {
         App.grdOM_FCS.store.removeAll();
         App.grdOM_FCS.hide();
+        App.cboSlsperId.store.reload();
     }
 };
 
@@ -195,7 +197,8 @@ var save = function () {
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'OM23100/Save',
             params: {
-                lstOM_FCS: HQ.store.getData(App.stoOM_FCS)
+                //lstOM_FCS: Ext.HQ.store.getData(App.stoOM_FCS)
+                lstOM_FCS: Ext.encode(App.stoOM_FCS.getChangedData({ skipIdForPhantomRecords: false })),
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);

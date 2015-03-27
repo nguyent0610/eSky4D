@@ -41,9 +41,19 @@
     
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
+
+        @HQ.Builder.Store().ID("stoOM_FCS").HQDBSys(false).HQProcedure("OM23100_pgLoadGrid").HQParam(new StoreParameterCollection()
+        {      
+            new StoreParameter("@BranchID", "App.cboDist.value", ParameterMode.Raw),
+            new StoreParameter("@FCSDate", "App.dateFcs.value", ParameterMode.Raw)           
+        }).LoadData().Listeners(l=>{l.BeforeLoad.Fn = "stoBeforeLoad";
+                                    l.Load.Fn = "stoLoad";
+                                    l.Update.Fn = "stoChanged";})
+        
+        
         <!-- Gọi hàm Body trong OM23100Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
         @{Html.RenderAction("Body", new { lang=Current.LangID});}   
-    
+        
 </body>
 </html>
  

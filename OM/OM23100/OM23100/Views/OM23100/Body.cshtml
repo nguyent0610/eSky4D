@@ -87,7 +87,7 @@
                     p.Expand.Fn = "dateFcs_expand";
                 })
                 
-                , X.Button().MarginSpec("5 0 5 160").Width(180)
+                , X.Button().ID("btnSearch").MarginSpec("5 0 5 160").Width(180)
                     .Text(Util.GetLang("OM23100_Search")).Listeners(p =>
                     {
                         p.Click.Fn = "LoadGrid";
@@ -105,28 +105,29 @@
                 .View(X.GridView().TrackOver(false).LoadMask(true))
                 .Region(Region.Center).Flex(1)
                 .SelectionMemory(false)
-                .Store(
-                    X.Store()
-                    .ID("stoOM_FCS")
-                    .PageSize(50)
-                    .Model(Util.GenerateModel(typeof(OM2), "mdlOM23100_pgOM_FCS", "SlsperId"))
-                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_FCS"))).AutoLoad(false)
-                    .Parameters(ps =>
-                    {
-                        ps.Add(new StoreParameter("BranchID", "App.cboDist.value", ParameterMode.Raw));
-                        ps.Add(new StoreParameter("FCSDate", "App.dateFcs.value", ParameterMode.Raw));
-                    })
-                    .Listeners(l =>
-                    {
-                        l.BeforeLoad.Fn = "stoBeforeLoad";
-                        l.Load.Fn = "stoLoad";
-                        l.Update.Fn = "stoChanged";
-                    })
-                )
-                .Listeners(p =>
-                {
-                    //p.BoxReady.Handler = "firstLoad();";
-                })
+                .StoreID("stoOM_FCS")
+                //.Store(
+                //    X.Store()
+                //    .ID("stoOM_FCS")
+                //    .PageSize(50)
+                //    .Model(Util.GenerateModel(typeof(), "mdlOM23100_pgOM_FCS", "SlsperId"))
+                //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_FCS"))).AutoLoad(false)
+                //    .Parameters(ps =>
+                //    {
+                //        ps.Add(new StoreParameter("BranchID", "App.cboDist.value", ParameterMode.Raw));
+                //        ps.Add(new StoreParameter("FCSDate", "App.dateFcs.value", ParameterMode.Raw));
+                //    })
+                //    .Listeners(l =>
+                //    {
+                //        l.BeforeLoad.Fn = "stoBeforeLoad";
+                //        l.Load.Fn = "stoLoad";
+                //        l.Update.Fn = "stoChanged";
+                //    })
+                //)
+                //.Listeners(p =>
+                //{
+                //    p.BoxReady.Handler = "firstLoad();";
+                //})
                 .SortableColumns(false)
                 .ColumnModel(
                     X.RowNumbererColumn().Width(40)
@@ -135,8 +136,8 @@
                     .Editor(
                         HQ.Combo().ID("cboSlsperId")
                         .Name("cboSlsperId").HQProcedure("OM23100_pcSalesPerson")
-                        .HQColumnShow("SlsperId,Name,BranchID").DisplayField("Name").ValueField("SlsperId")
-                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                        .HQColumnShow("SlsperId,Name,BranchID").DisplayField("SlsperId").ValueField("SlsperId")
+                        .Width(300).HQHeightWidth(500, 400).ForceSelection(true)
                     
                         .HQParam(new StoreParameterCollection() 
                         { 
