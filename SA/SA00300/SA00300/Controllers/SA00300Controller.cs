@@ -140,7 +140,7 @@ namespace SA00300.Controllers
                    }
                    else
                    {
-                       if (!string.IsNullOrWhiteSpace(curHeader.Images) && string.IsNullOrWhiteSpace(header.Images))
+                       if (!string.IsNullOrWhiteSpace(header.Images) && string.IsNullOrWhiteSpace(curHeader.Images))
                        {
                            // Xoa file cu di
                            var oldPath = string.Format("{0}\\{1}", FilePath, curHeader.Images);
