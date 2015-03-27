@@ -126,7 +126,7 @@
                         .DataIndex("ShipAddr2").EnforceMaxLength(true),
 
                         HQ.Combo().ID("cboShipCountry").Name("cboShipCountry").HQProcedure("PO00000_pcCountryID").HQAutoLoad(false)
-                        .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").Width(300).DataIndex("ShipCountry")
+                        .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID").Width(300).DataIndex("ShipCountry")
                         .HQHeightWidth(300, 300)
                         .LoadData()
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -137,7 +137,7 @@
                         }),
 
                         HQ.Combo().ID("cboShipState").Name("cboShipState").HQProcedure("PO00000_pcStateByCountry").HQAutoLoad(false)
-                        .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").Width(300).DataIndex("ShipState")
+                        .HQColumnShow("State,Descr").DisplayField("State").ValueField("State").Width(300).DataIndex("ShipState")
                         .HQHeightWidth(300, 300)
                         .HQParam(new StoreParameterCollection() 
                         { 
@@ -152,7 +152,7 @@
                         }),
                         
                         HQ.Combo().ID("cboShipCity").Name("cboShipCity").HQProcedure("PO00000_pcCityByCountryState").HQAutoLoad(false)
-                        .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").Width(300).DataIndex("ShipCity")
+                        .HQColumnShow("City,Name").DisplayField("City").ValueField("City").Width(300).DataIndex("ShipCity")
                         .HQHeightWidth(300, 300)
                         .HQParam(new StoreParameterCollection() 
                         { 
@@ -189,7 +189,7 @@
                         .DataIndex("BillAddr2").EnforceMaxLength(true),
 
                         HQ.Combo().ID("cboBillCountry").Name("cboBillCountry").HQProcedure("PO00000_pcCountryID").HQAutoLoad(false)
-                        .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").Width(300).DataIndex("BillCountry")
+                        .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID").Width(300).DataIndex("BillCountry")
                         .HQHeightWidth(300, 300)
                         .LoadData()
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -200,7 +200,7 @@
                         }),
 
                         HQ.Combo().ID("cboBillState").Name("cboBillState").HQProcedure("PO00000_pcStateByCountry").HQAutoLoad(false)
-                        .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").Width(300).DataIndex("BillState")
+                        .HQColumnShow("State,Descr").DisplayField("State").ValueField("State").Width(300).DataIndex("BillState")
                         .HQHeightWidth(300, 300)
                         .HQParam(new StoreParameterCollection() 
                         { 
@@ -215,7 +215,7 @@
                         }),
                         
                         HQ.Combo().ID("cboBillCity").Name("cboBillCity").HQProcedure("PO00000_pcCityByCountryState").HQAutoLoad(false)
-                        .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").Width(300).DataIndex("BillCity")
+                        .HQColumnShow("City,Name").DisplayField("City").ValueField("City").Width(300).DataIndex("BillCity")
                         .HQHeightWidth(300, 300)
                         .HQParam(new StoreParameterCollection() 
                         { 

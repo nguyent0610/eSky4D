@@ -1,10 +1,19 @@
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboShipCountry.getStore().load(function () {
-        App.cboBillCountry.getStore().load(function () {
-            App.cboDfltLstUnitCost.getStore().load(function () {
-                App.cboDfltRcptFrom.getStore().load(function () {
-                    App.stoPO00000.reload();
+        App.cboShipState.getStore().load(function (){
+            App.cboShipCity.getStore().load(function (){
+                App.cboBillCountry.getStore().load(function () {
+                    App.cboBillState.getStore().load(function(){
+                        App.cboBillCity.getStore.load(function(){
+                            App.cboDfltLstUnitCost.getStore().load(function () {
+                                App.cboDfltRcptFrom.getStore().load(function () {
+                                    HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                                    App.stoPO00000.reload();
+                                })
+                            })
+                        })
+                    })
                 })
             })
         })
