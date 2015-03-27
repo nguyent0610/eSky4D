@@ -36,7 +36,7 @@ namespace SA00300.Controllers
                 }
                 else
                 {
-                    _filePath = Server.MapPath("\\Images\\SA00300");
+                    _filePath = Server.MapPath("~\\Images\\SA00300");
                 }
                 return _filePath;
             }
