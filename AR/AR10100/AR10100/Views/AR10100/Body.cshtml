@@ -37,6 +37,7 @@
                 .ID("frmTop")
                 .Layout(LayoutType.Anchor)
                 .Region(Region.North)
+                //.AutoScroll(true)
                 //.AnchorVertical("20%")
                 //.Title(Util.GetLang("DOC"))
                 .Padding(5)
@@ -247,7 +248,7 @@
                                     ,HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQLangCode("SLSPERID").HQProcedure("AR10100_pcSalesPerson")
                                     .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid").DataIndex("SlsperId")
                                     .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
-                                    .HQDBSys(false).ForceSelection(false).AllowBlank(false)
+                                    .HQDBSys(false).ForceSelection(false)//.AllowBlank(false)
                                     //.MaxLength(30).EnforceMaxLength(true)
                                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection()
@@ -295,7 +296,7 @@
                                     HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").HQProcedure("AR10100_pcCustomerActive")
                                     .HQColumnShow("CustID,Name,Addr1,Addr2").DisplayField("CustID").ValueField("CustID").DataIndex("CustId")
                                     .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
-                                    .HQDBSys(false).ForceSelection(false)
+                                    .HQDBSys(false).ForceSelection(false).AllowBlank(false)
                                     //.MaxLength(30).EnforceMaxLength(true)
                                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .HQParam(new StoreParameterCollection()
@@ -392,7 +393,7 @@
                                  
                                     //DOcument Description
                                     HQ.TextBox().ID("txtDocDescr").Name("txtDocDescr").HQLangCode("DOCDESC").DataIndex("DocDesc")
-                                  .Width(600).MarginSpec("5 0 10 0").MaxLength(100).EnforceMaxLength(true)//.AllowBlank(false)
+                                  .Width(600).MarginSpec("5 0 10 0").MaxLength(100).EnforceMaxLength(true).AllowBlank(false)
                         
                                   //txtTxblTot
                                   ,HQ.NumberField().ID("txtTaxTot").Name("txtTaxTot").HQLangCode("TAXAMT").DataIndex("TaxTot00")
@@ -449,7 +450,7 @@
                                  ).Renderer("renderLineType")
 
                                  //InventoryID collumn (InvtID)
-                                 , Html.X().Column().Text(Util.GetLang("InvtID")).Width(100).DataIndex("InvtID")
+                                 , Html.X().Column().Text(Util.GetLang("InvtID")).Width(100).DataIndex("InvtId")
                                 .Editor(
                                   HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQProcedure("AR10100_pcInventoryActiveByBranch")
                                   .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
@@ -533,8 +534,28 @@
                                 //    ).Renderer("RenderTaxId")
                                  
                                 //Tax ID
-                                , X.TemplateColumn().Text(Util.GetLang("TaxID")).Width(165)
-                                .TemplateString("<tpl for=\".\">{TaxId00}<tpl if=\"TaxId01\">,{TaxId01}</tpl><tpl if=\"TaxId02\">,{TaxId02}</tpl><tpl if=\"TaxId03\">,{TaxId03}</tpl></tpl>")
+                                //, X.TemplateColumn().Text(Util.GetLang("TaxID")).Width(165)
+                                //.TemplateString("<tpl for=\".\">{TaxId00}<tpl if=\"TaxId01\">,{TaxId01}</tpl><tpl if=\"TaxId02\">,{TaxId02}</tpl><tpl if=\"TaxId03\">,{TaxId03}</tpl></tpl>")
+                                //.Editor(
+                                //    HQ.Combo().ID("cboTaxID").Name("cboTaxID").HQProcedure("AR10100_pcCustomerTaxes")
+                                //    .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID")
+                                //    .Width(500).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").MultiSelect(true).ForceSelection(true)
+                                //    .HQParam(new StoreParameterCollection() { 
+                                //    new StoreParameter() { Name = "@CustID", Value = "App.cboCustId.value", Mode = ParameterMode.Raw },
+                                //    new StoreParameter() { Name = "@ShipToID", Value = "DEFAULT" , Mode = ParameterMode.Value},
+                                //    new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                //})
+                                //    .HQDBSys(false).AllowBlank(false)
+                                //    .Listeners(lst =>
+                                //    {
+                                //        lst.Change.Fn = "cboTaxID_Change";
+
+                                //    })
+                                //    .LoadData()
+                                //    )
+
+                                //Tax ID
+                                ,Html.X().Column().Text(Util.GetLang("TaxID")).Width(100).DataIndex("TaxID")//.DataIndex("TaxId01")
                                 .Editor(
                                     HQ.Combo().ID("cboTaxID").Name("cboTaxID").HQProcedure("AR10100_pcCustomerTaxes")
                                     .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID")
@@ -552,7 +573,11 @@
                                     })
                                     .LoadData()
                                     )
-
+                                
+                                
+                                
+                                
+                                
                               //, Html.X().Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(250).ID("cboCpnyName")
                       
                       

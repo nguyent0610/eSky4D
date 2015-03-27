@@ -37,10 +37,10 @@ var countTaxAmt = 0;
 var tmpChangeForm1OrForm2 = "0";
 
 var tmpFormChangeTopBot = false;
-var keys = ['InvtID'];
+var keys = ['InvtId'];
 
-var fieldsCheckRequire = ["InvtID"];
-var fieldsLangCheckRequire = ["InvtID"];
+var fieldsCheckRequire = ["InvtId"];
+var fieldsLangCheckRequire = ["InvtId"];
 var isNewRef = false;
 
 var tmpTrantAmtWhenChange = 0;
@@ -217,39 +217,39 @@ function Save() {
 
     
 
-    for (var i = 0; i <= App.storeGrid.getCount() - 1; i++) {
+    //for (var i = 0; i <= App.storeGrid.getCount() - 1; i++) {
 
-        //duyet grid top tab 2 de lay ra cac gia tri co cung LineRef de lay TaxAmt va txblAmt  
-        for (var k = 0; k <= App.storeGridTopTab2.getCount() - 1; k++) {
-            App.slmGridTopTab2.select(k);
-            if (App.slmGridTopTab2.selected.items[0].data.LineRef == App.storeGrid.data.items[i].data.LineRef) {
-                //bien count de dem xem co bao nhieu cai cung LineRef de save vao cac bien TaxAmt 0 > 3 va bien txblAmt 0 > 3 cho dung 
-                countTaxAmt++;
-                if (countTaxAmt == 1) {
-                    //taxAmt[0] = parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt);
-                    //txblAmt = parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt);
-                    App.storeGrid.data.items[i].set('TaxAmt00', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
-                    App.storeGrid.data.items[i].set('TaxAmt01', 0);
-                    App.storeGrid.data.items[i].set('TaxAmt02', 0);
-                    App.storeGrid.data.items[i].set('TaxAmt03', 0);
-                    App.storeGrid.data.items[i].set('TxblAmt00', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
-                } else if (countTaxAmt == 2) {
-                    App.storeGrid.data.items[i].set('TaxAmt01', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
-                    App.storeGrid.data.items[i].set('TxblAmt01', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
-                } else if (countTaxAmt == 3) {
-                    App.storeGrid.data.items[i].set('TaxAmt02', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
-                    App.storeGrid.data.items[i].set('TxblAmt02', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
-                } else if (countTaxAmt == 4) {
-                    App.storeGrid.data.items[i].set('TaxAmt03', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
-                    App.storeGrid.data.items[i].set('TxblAmt03', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
-                }
-            }
+    //    //duyet grid top tab 2 de lay ra cac gia tri co cung LineRef de lay TaxAmt va txblAmt  
+    //    for (var k = 0; k <= App.storeGridTopTab2.getCount() - 1; k++) {
+    //        App.slmGridTopTab2.select(k);
+    //        if (App.slmGridTopTab2.selected.items[0].data.LineRef == App.storeGrid.data.items[i].data.LineRef) {
+    //            //bien count de dem xem co bao nhieu cai cung LineRef de save vao cac bien TaxAmt 0 > 3 va bien txblAmt 0 > 3 cho dung 
+    //            countTaxAmt++;
+    //            if (countTaxAmt == 1) {
+    //                //taxAmt[0] = parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt);
+    //                //txblAmt = parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt);
+    //                App.storeGrid.data.items[i].set('TaxAmt00', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
+    //                App.storeGrid.data.items[i].set('TaxAmt01', 0);
+    //                App.storeGrid.data.items[i].set('TaxAmt02', 0);
+    //                App.storeGrid.data.items[i].set('TaxAmt03', 0);
+    //                App.storeGrid.data.items[i].set('TxblAmt00', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
+    //            } else if (countTaxAmt == 2) {
+    //                App.storeGrid.data.items[i].set('TaxAmt01', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
+    //                App.storeGrid.data.items[i].set('TxblAmt01', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
+    //            } else if (countTaxAmt == 3) {
+    //                App.storeGrid.data.items[i].set('TaxAmt02', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
+    //                App.storeGrid.data.items[i].set('TxblAmt02', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
+    //            } else if (countTaxAmt == 4) {
+    //                App.storeGrid.data.items[i].set('TaxAmt03', parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt));
+    //                App.storeGrid.data.items[i].set('TxblAmt03', parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt));
+    //            }
+    //        }
 
-        }
-        countTaxAmt = 0;
+    //    }
+    //    countTaxAmt = 0;
 
 
-    }
+    //}
 
     App.frmTop.getForm().updateRecord();
     App.frmBot.getForm().updateRecord();
@@ -292,7 +292,8 @@ function Save() {
                     }
 
                 }
-                refresh('yes');
+                //refresh('yes');
+                setTimeout(function () { refresh('yes'); }, 2000);
 
             }
             , failure: function (errorMsg, data) {
@@ -631,6 +632,7 @@ var storeLoadBot = function (store) {
         record.data.DocDate = HQ.businessDate;
         record.data.InvcDate = HQ.businessDate;
         record.data.DiscDate = HQ.businessDate;
+        record.data.DocType = "IN";
         record.data.OrigDocAmt = 0;
         record.data.DocBalL = 0;
         record.data.OrigDocAmt = 0;
@@ -763,7 +765,9 @@ var grd_Edit = function (item, e) {
     } else if (e.field == 'TranAmt') {
         var tranAmt = e.value;
         var quantity = e.record.data.Qty;
-        e.record.set('UnitPrice', tranAmt / quantity);
+        if (quantity != 0) {
+            e.record.set('UnitPrice', tranAmt / quantity);
+        }
         //tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
         reloadDataGrid1AndGrid2Tab2();
         //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
@@ -773,7 +777,7 @@ var grd_Edit = function (item, e) {
         reloadDataGrid1AndGrid2Tab2();
         //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
         reloadAmountMustPayTotal();
-    } else if (e.field == null) { // TaxID
+    } else if (e.field == "TaxID") { // TaxID
         if (e.value.length == 4) {
             App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId00', e.value[0])
             App.storeGrid.data.items[tmpRowSelectedEdit].set('TaxId01', e.value[1])
@@ -835,12 +839,17 @@ var onComboBoxSelect = function (combo) {
 
 var insertNewRecordGrid1 =  function(){
     var lineRef = HQ.store.lastLineRef(App.storeGrid);
-    var record = Ext.create("App.AR10100_pgLoadGridTrans_ResultModel", {
+    //tim trong store de kiem cai Descr do vao TranDescr trong Grid
+    var indexCustIdToGetDescr = App.cboCustId.store.indexOf(App.cboCustId.store.findRecord("CustID", App.cboCustId.getValue()));
+    
+    var tranDesc = App.cboCustId.store.data.items[indexCustIdToGetDescr].data.Name;
+    var record = Ext.create("App.AR10100_pgLoadInvoiceMemo_ResultModel", {
         //CustId: "",
         LineRef: lineRef,
         LineType: "N",
-        TranDesc: App.storeGrid.data.items[App.storeGrid.getCount() - 1] != undefined ? App.storeGrid.data.items[App.storeGrid.getCount() - 1].data.TranDesc : "",
-
+        TranDesc: tranDesc != "" ? tranDesc : "",
+        TaxCat: "*",
+        TaxID: App.cboTaxID.store.data.items[0] != undefined ? App.cboTaxID.store.data.items[0].data.TaxID : "",
 
     });
     App.storeGrid.insert(App.storeGrid.getCount(), record);
@@ -989,7 +998,11 @@ var waitGridLoadAndFocusIntoBatNbr = function () {
 var StoreFormBotReLoad = function () {
     App.cboTaxID.getStore().reload();
     //App.cboTaxID1.getStore().reload();
-    
+    if (App.cboDocType.readOnly == false && HQ.isNew) {
+        App.cboDocType.setValue('IN')
+    }
+
+      
     App.storeGrid.load(function (records, operation, success) {
         
             StoreGridTab1ReLoad();
@@ -1015,28 +1028,7 @@ var renderLineType = function (value) {
 
 //khi cboTaxID thay doi thi
 var cboTaxID_Change = function (item) {//obj = App.cboTaxID
-    //obj.value
-    //App.slmGridTab1.selected.items[0].set('TaxId00', "");
-    //App.slmGridTab1.selected.items[0].set('TaxId01', "");
-    //App.slmGridTab1.selected.items[0].set('TaxId02', "");
-    //App.slmGridTab1.selected.items[0].set('TaxId03', "");
-    //for (var i = 0; i < item.value.length; i++) {
 
-    //    if (i == 0) {
-    //        App.slmGridTab1.selected.items[0].set('TaxId00', item.value[0]);
-    //    } else if (i == 1) {
-    //        App.slmGridTab1.selected.items[0].set('TaxId01', item.value[1]);
-    //    } else if (i == 2) {
-    //        App.slmGridTab1.selected.items[0].set('TaxId02', item.value[2]);
-    //    } else if (i == 3) {
-    //        App.slmGridTab1.selected.items[0].set('TaxId03', item.value[3]);
-    //    }
-    //}
-
-    ////tai lai du lieu cua grid 1 va 2 cua tab 2 do moi cap nhap o grid 1 tab 1
-    //reloadDataGrid1AndGrid2Tab2();
-    ////reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
-    //reloadAmountMustPayTotal();
     for (var i = 0; i < App.storeGrid.getCount() ; i++) {
         if (App.slmGridTab1.selected.items[0].data.LineRef == App.storeGrid.data.items[i].data.LineRef) {
             tmpRowSelectedEdit = i;
@@ -1059,8 +1051,9 @@ var reloadDataGrid1AndGrid2Tab2 = function () {
 
 
     //duyet grid 1 tab 2 de lay gia tri bo qua grid 2 tab 2 
-    fillDataIntoGrid2Tab2();
-    App.tabAtAR10100.setActiveTab(App.frmBot); // set tab dang su dung sang tab 1
+    //setTimeout(function () { fillDataIntoGrid2Tab2(); }, 2000);
+    //fillDataIntoGrid2Tab2();
+    //App.tabAtAR10100.setActiveTab(App.frmBot); // set tab dang su dung sang tab 1
     //if (!isNaN(index)) {
     //    return true;
     //} else {
@@ -1094,9 +1087,12 @@ var reloadAmountMustPayTotal = function () {
     //}
 }
 //khi VendID thay doi
-var cboCustId_Change = function () {
+var cboCustId_Change = function (sender,e) {
     App.cboTaxID.getStore().reload();
     App.cboTerms.setValue("10");
+    if (HQ.isNew && e != "") {
+        insertNewRecordGrid1();
+    }
 }
 
 
@@ -1110,7 +1106,7 @@ var validatePossitiveNumber = function (field, e) {
 
 var setReadOnly = function () {
     if (App.cboStatus.value != "H") {
-       
+        App.txtOrigRefNbr.setReadOnly(true);
         App.cboRefNbr.setReadOnly(true);
         App.txtInvcNbr.setReadOnly(true);
         App.txtInvcNote.setReadOnly(true);
@@ -1124,7 +1120,7 @@ var setReadOnly = function () {
         App.txtDueDate.setReadOnly(true);
         //App.grd.disable(true);
     } else {
-       
+        App.txtOrigRefNbr.setReadOnly(false);
         App.cboRefNbr.setReadOnly(false);
         App.txtInvcNbr.setReadOnly(false);
         App.txtInvcNote.setReadOnly(false);
@@ -1158,45 +1154,80 @@ var setFocusAllCombo = function () {
 
 //duyet grid 1 tab 2 de lay gia tri bo qua grid 2 tab 2 , sau nay se tach ra thanh function rieng
 var fillDataIntoGrid2Tab2 = function () {
-    //mai 3-10-2014 sua cai ham nay
+
 
     taxAmtTotalVAT00 = 0;
     tranAmtTotalVAT00 = 0;
+
     taxAmtTotalNoneVat = 0;
     tranAmtTotalNoneVat = 0;
+
     taxAmtTotalOVAT05 = 0;
     tranAmtTotalOVAT05 = 0;
+
     taxAmtTotalOVAT10 = 0;
     tranAmtTotalOVAT10 = 0;
 
+    taxAmtTotalIVAT05 = 0;
+    tranAmtTotalIVAT05 = 0;
 
-    Vat00 = "0";
-    noneVat = "0";
-    oVat05 = "0";
-    oVat10 = "0";
+    taxAmtTotalIVAT10 = 0;
+    tranAmtTotalIVAT10 = 0;
 
-    for (var i = 0; i <= App.storeGridTopTab2.getCount() - 1; i++) {
+    taxAmtTotalVAT10 = 0;
+    tranAmtTotalVAT10 = 0;
+
+    taxAmtTotalVAT02 = 0;
+    tranAmtTotalVAT02 = 0;
+
+    Vat00 = false;
+    noneVat = false;
+    oVat05 = false;
+    oVat10 = false;
+    iVAT05 = false;
+    iVAT10 = false;
+    vAT10 = false;
+    vAT02 = false;
+
+    for (var i = 0; i < App.storeGridTopTab2.getCount(); i++) {
         App.slmGridTopTab2.select(i);
         //cac bien tam phai khai bao de truyen gia tri vao
         // taxAmtTotalOVAT05        taxAmtTotalVAT00          oVat05             Vat00             noneVat
         // tranAmtTotalOVAT05      tranAmtTotalVAT00        tranAmtTotalNoneVat
-
-        if (App.slmGridTopTab2.selected.items[0].data.TaxID == "OVAT05-00") {
-            oVat05 = "1";
-            taxAmtTotalOVAT05 = taxAmtTotalOVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-            tranAmtTotalOVAT05 = tranAmtTotalOVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-        } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "VAT00") {
-            Vat00 = "1";
-            taxAmtTotalVAT00 = taxAmtTotalVAT00 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-            tranAmtTotalVAT00 = tranAmtTotalVAT00 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-        } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "NONEVAT") {
-            noneVat = "1";
-            taxAmtTotalNoneVat = taxAmtTotalNoneVat + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-            tranAmtTotalNoneVat = tranAmtTotalNoneVat + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-        } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "OVAT10-00") {
-            oVat10 = "1";
-            taxAmtTotalOVAT10 = taxAmtTotalOVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-            tranAmtTotalOVAT10 = tranAmtTotalOVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+        if (App.slmGridTopTab2.selected.items[0] != undefined) {
+            if (App.slmGridTopTab2.selected.items[0].data.TaxID == "OVAT05-00") {
+                oVat05 = true;
+                taxAmtTotalOVAT05 = taxAmtTotalOVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+                tranAmtTotalOVAT05 = tranAmtTotalOVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "VAT00") {
+                Vat00 = true;
+                taxAmtTotalVAT00 = taxAmtTotalVAT00 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+                tranAmtTotalVAT00 = tranAmtTotalVAT00 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "NONEVAT") {
+                noneVat = true;
+                taxAmtTotalNoneVat = taxAmtTotalNoneVat + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+                tranAmtTotalNoneVat = tranAmtTotalNoneVat + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "OVAT10-00") {
+                oVat10 = true;
+                taxAmtTotalOVAT10 = taxAmtTotalOVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+                tranAmtTotalOVAT10 = tranAmtTotalOVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "IVAT05") {
+                iVAT05 = true;
+                taxAmtTotalIVAT05 = taxAmtTotalIVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+                tranAmtTotalIVAT05 = tranAmtTotalIVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "IVAT10") {
+                iVAT10 = true;
+                taxAmtTotalIVAT10 = taxAmtTotalIVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+                tranAmtTotalIVAT10 = tranAmtTotalIVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "VAT10") {
+                vAT10 = true;
+                taxAmtTotalVAT10 = taxAmtTotalVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+                tranAmtTotalVAT10 = tranAmtTotalVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "VAT02") {
+                vAT02 = true;
+                taxAmtTotalVAT02 = taxAmtTotalVAT02 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
+                tranAmtTotalVAT02 = tranAmtTotalVAT02 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
+            }
         }
     }
     //khai bao cac record cho tung truong hop
@@ -1230,26 +1261,72 @@ var fillDataIntoGrid2Tab2 = function () {
         TxblAmt2: tranAmtTotalOVAT10.toString(),
     });
 
+    var recordIVAT05Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
+        TaxRate2: "5",
+        TaxID2: "IVAT05",
+        TaxAmt2: taxAmtTotalIVAT05.toString(),
+        TxblAmt2: tranAmtTotalIVAT05.toString(),
+    });
+
+    var recordIVAT10Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
+        TaxRate2: "10",
+        TaxID2: "IVAT10",
+        TaxAmt2: taxAmtTotalIVAT10.toString(),
+        TxblAmt2: tranAmtTotalIVAT10.toString(),
+    });
+
+    var recordVAT10Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
+        TaxRate2: "10",
+        TaxID2: "VAT10",
+        TaxAmt2: taxAmtTotalVAT10.toString(),
+        TxblAmt2: tranAmtTotalVAT10.toString(),
+    });
+
+    var recordVAT02Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
+        TaxRate2: "10",
+        TaxID2: "VAT02",
+        TaxAmt2: taxAmtTotalVAT02.toString(),
+        TxblAmt2: tranAmtTotalVAT02.toString(),
+    });
 
     //xet tung truong hop de tao ra cac dong tuong ung
-    if (oVat05 == "1") {
+    if (oVat05 == true) {
         App.storeGridBotTab2.insert(0, recordOVAT05Grid2Tab2);
     }
-    if (Vat00 == "1") {
+    if (Vat00 == true) {
         App.storeGridBotTab2.insert(0, recordVAT00Grid2Tab2);
     }
-    if (noneVat == "1") {
+    if (noneVat == true) {
         App.storeGridBotTab2.insert(0, recordVATNONEGrid2Tab2);
     }
-    if (oVat10 == "1") {
+    if (oVat10 == true) {
         App.storeGridBotTab2.insert(0, recordOVAT10Grid2Tab2);
+    }
+    if (iVAT05 == true) {
+        App.storeGridBotTab2.insert(0, recordIVAT05Grid2Tab2);
+    }
+    if (iVAT10 == true) {
+        App.storeGridBotTab2.insert(0, recordIVAT10Grid2Tab2);
+    }
+    if (vAT10 == true) {
+        App.storeGridBotTab2.insert(0, recordVAT10Grid2Tab2);
+    }
+    if (vAT02 == true) {
+        App.storeGridBotTab2.insert(0, recordVAT02Grid2Tab2);
     }
 
 }
 
 
 var fillDataIntoGrid1Tab2 = function () {
-    for (var i = 0; i <= App.storeGrid.getCount() - 1; i++) {
+    var PrcTaxInclRate00 = 0;
+    var PrcTaxInclRate01 = 0;
+    var PrcTaxInclRate02 = 0;
+    var PrcTaxInclRate03 = 0;
+    var TotPrcTaxInclAmt = 0;
+    var TxblAmtL1 = 0;
+    var TxblAmtAddL2 = 0;
+    for (var i = 0; i < App.storeGrid.getCount() ; i++) {
 
         App.slmGridTab1.select(i);
 
@@ -1267,90 +1344,141 @@ var fillDataIntoGrid1Tab2 = function () {
             var tranAmt = App.slmGridTab1.selected.items[0].data.TranAmt;
         }
         var taxCat = App.slmGridTab1.selected.items[0].data.TaxCat;
+        //var taxID = App.slmGridTab1.selected.items[0].data.TaxID;
+        //var taxIDArray = taxID.split(',');
         var taxID0 = App.slmGridTab1.selected.items[0].data.TaxId00;
         var taxID1 = App.slmGridTab1.selected.items[0].data.TaxId01;
         var taxID2 = App.slmGridTab1.selected.items[0].data.TaxId02;
         var taxID3 = App.slmGridTab1.selected.items[0].data.TaxId03;
-        App.tabAtAR10100.setActiveTab(App.tabTax);
-
-        var taxAmtVAT05 = tranAmt * 5 / 100;
-        var taxAmtVAT10 = tranAmt / 10;
-        var taxAmtVATNONE = 0;
-        var taxAmtVAT00 = 0;
-
-        //khai bao cac record cho tung truong hop
 
 
 
+        //xu ly taxID , taxCat
+        
+        
+        var indexTaxRate00 = App.storeSITaxAll.indexOf(App.storeSITaxAll.findRecord("TaxID", taxID0));
+        if (indexTaxRate00 != -1) { // neu ton tai taxID00
+            var taxRate00 = App.storeSITaxAll.data.items[indexTaxRate00].data.TaxRate;
+            var objTax00 = App.storeSITaxAll.data.items[indexTaxRate00].data;
 
-        var recordVATNONEGrid1Tab2 = Ext.create("App.GetGrid1Tab2ResultModel", {
-            //CustId: "",
-            LineRef: lineRef,
-            TaxID: "NONEVAT",
-            TaxRate: "0",
-            TaxAmt: taxAmtVATNONE.toString(),
-            TxblAmt: tranAmt.toString(),
-            Level: "1"
-        });
+            if (taxCat == "*" || (objTax00.CatFlg == "A" && objTax00.CatExcept00 != taxCat && objTax00.CatExcept01 != taxCat && objTax00.CatExcept02 != taxCat && objTax00.CatExcept03 != taxCat && objTax00.CatExcept04 != taxCat && objTax00.CatExcept05 != taxCat) ||
+                (objTax00.CatFlg == "N" && (objTax00.CatExcept00 == taxCat || objTax00.CatExcept01 == taxCat || objTax00.CatExcept02 == taxCat || objTax00.CatExcept03 == taxCat || objTax00.CatExcept04 == taxCat || objTax00.CatExcept05 == taxCat))) {
+                if (objTax00.TaxCalcLvl == "1" && objTax00.PrcTaxIncl != "0") {
+                    PrcTaxInclRate00 = PrcTaxInclRate00 + objTax00.TaxRate;
+                } else {
+                    PrcTaxInclRate00 = objTax00.TaxRate;
+                }
+                //insert dong moi vao
+                var taxAmtTaxID00 = tranAmt * PrcTaxInclRate00 / 100;
 
-        var recordVAT00Grid1Tab2 = Ext.create("App.GetGrid1Tab2ResultModel", {
-            //CustId: "",
-            LineRef: lineRef,
-            TaxID: "VAT00",
-            TaxRate: "0",
-            TaxAmt: taxAmtVAT00.toString(),
-            TxblAmt: tranAmt.toString(),
-            Level: "1"
-        });
+                var recordGrid1Tab2TaxID00 = Ext.create("App.GetGrid1Tab2ResultModel", {
+                    //CustId: "",
+                    LineRef: lineRef,
+                    TaxID: taxID0,
+                    TaxRate: taxRate00,
+                    TaxAmt: taxAmtTaxID00,
+                    TxblAmt: tranAmt.toString(),
+                    Level: "1"
+                });
+                App.storeGridTopTab2.insert(App.storeGridTopTab2.data.length, recordGrid1Tab2TaxID00);
+                App.slmGridTab1.selected.items[0].set('TaxAmt00', taxAmtTaxID00)
+              
 
-        var recordOVAT05Grid1Tab2 = Ext.create("App.GetGrid1Tab2ResultModel", {
-
-            LineRef: lineRef,
-            TaxID: "OVAT05-00",
-            TaxRate: "5",
-            TaxAmt: taxAmtVAT05.toString(),
-            TxblAmt: tranAmt.toString(),
-            Level: "1"
-        });
-
-        var recordOVAT10Grid1Tab2 = Ext.create("App.GetGrid1Tab2ResultModel", {
-            //CustId: "",
-            LineRef: lineRef,
-            TaxID: "OVAT10-00",
-            TaxRate: "10",
-            TaxAmt: taxAmtVAT10.toString(),
-            TxblAmt: tranAmt.toString(),
-            Level: "1"
-        });
-
-        if (taxCat == "NONE" || taxCat == "") {
-            if (taxID0 == "NONEVAT" || taxID1 == "NONEVAT" || taxID2 == "NONEVAT" || taxID3 == "NONEVAT") {
-                App.storeGridTopTab2.insert(App.storeGridTopTab2.data.length, recordVATNONEGrid1Tab2);
             }
-            //co the se thieu su ly sau
-
-        } else if (taxCat == "VAT00") {
-            if (taxID0 == "VAT00" || taxID1 == "VAT00" || taxID2 == "VAT00" || taxID3 == "VAT00") {
-                App.storeGridTopTab2.insert(App.storeGridTopTab2.data.length, recordVAT00Grid1Tab2);
-            }
-
-
-        } else if (taxCat == "VAT05") {
-            if (taxID0 == "OVAT05-00" || taxID1 == "OVAT05-00" || taxID2 == "OVAT05-00" || taxID3 == "OVAT05-00") {
-                App.storeGridTopTab2.insert(App.storeGridTopTab2.data.length, recordOVAT05Grid1Tab2);
-            }
-
-        } else if (taxCat == "VAT10") {
-
-            if (taxID0 == "OVAT10-00" || taxID1 == "OVAT10-00" || taxID2 == "OVAT10-00" || taxID3 == "OVAT10-00") {
-                App.storeGridTopTab2.insert(App.storeGridTopTab2.data.length, recordOVAT10Grid1Tab2);
-            }
-
         }
 
 
+        var indexTaxRate01 = App.storeSITaxAll.indexOf(App.storeSITaxAll.findRecord("TaxID", taxID1));
+        if (indexTaxRate01 != -1) {// neu ton tai taxID01
+            var taxRate01 = App.storeSITaxAll.data.items[indexTaxRate01].data.TaxRate;
+            var objTax01 = App.storeSITaxAll.data.items[indexTaxRate01].data;
 
-    }
+            if (taxCat == "*" || (objTax01.CatFlg == "A" && objTax01.CatExcept00 != taxCat && objTax01.CatExcept01 != taxCat && objTax01.CatExcept02 != taxCat && objTax01.CatExcept03 != taxCat && objTax01.CatExcept04 != taxCat && objTax01.CatExcept05 != taxCat) ||
+                (objTax01.CatFlg == "N" && (objTax01.CatExcept00 == taxCat || objTax01.CatExcept01 == taxCat || objTax01.CatExcept02 == taxCat || objTax01.CatExcept03 == taxCat || objTax01.CatExcept04 == taxCat || objTax01.CatExcept05 == taxCat))) {
+                if (objTax01.TaxCalcLvl == "1" && objTax01.PrcTaxIncl != "0") {
+                    PrcTaxInclRate01 = PrcTaxInclRate01 + objTax01.TaxRate;
+                } else {
+                    PrcTaxInclRate01 = objTax01.TaxRate;
+                }
+
+                //insert dong moi vao
+                var taxAmtTaxID01 = tranAmt * PrcTaxInclRate01 / 100;
+                var recordGrid1Tab2TaxID01 = Ext.create("App.GetGrid1Tab2ResultModel", {
+                    //CustId: "",
+                    LineRef: lineRef,
+                    TaxID: taxID1,
+                    TaxRate: taxRate01,
+                    TaxAmt: taxAmtTaxID01,
+                    TxblAmt: tranAmt.toString(),
+                    Level: "1"
+                });
+                App.storeGridTopTab2.insert(App.storeGridTopTab2.data.length, recordGrid1Tab2TaxID01);
+                App.slmGridTab1.selected.items[0].set('TaxAmt01', taxAmtTaxID01)
+            }
+        }
+
+        var indexTaxRate02 = App.storeSITaxAll.indexOf(App.storeSITaxAll.findRecord("TaxID", taxID2));
+        if (indexTaxRate02 != -1) {// neu ton tai taxID02
+            var taxRate02 = App.storeSITaxAll.data.items[indexTaxRate02].data.TaxRate;
+            var objTax02 = App.storeSITaxAll.data.items[indexTaxRate02].data;
+
+            if (taxCat == "*" || (objTax02.CatFlg == "A" && objTax02.CatExcept00 != taxCat && objTax02.CatExcept01 != taxCat && objTax02.CatExcept02 != taxCat && objTax02.CatExcept03 != taxCat && objTax02.CatExcept04 != taxCat && objTax02.CatExcept05 != taxCat) ||
+                (objTax02.CatFlg == "N" && (objTax02.CatExcept00 == taxCat || objTax02.CatExcept01 == taxCat || objTax02.CatExcept02 == taxCat || objTax02.CatExcept03 == taxCat || objTax02.CatExcept04 == taxCat || objTax02.CatExcept05 == taxCat))) {
+                if (objTax02.TaxCalcLvl == "1" && objTax02.PrcTaxIncl != "0") {
+                    PrcTaxInclRate02 = PrcTaxInclRate02 + objTax02.TaxRate;
+                } else {
+                    PrcTaxInclRate02 = objTax02.TaxRate;
+                }
+                //insert dong moi vao
+                var taxAmtTaxID02 = tranAmt * PrcTaxInclRate02 / 100;
+                var recordGrid1Tab2TaxID02 = Ext.create("App.GetGrid1Tab2ResultModel", {
+                    //CustId: "",
+                    LineRef: lineRef,
+                    TaxID: taxID2,
+                    TaxRate: taxRate02,
+                    TaxAmt: taxAmtTaxID02,
+                    TxblAmt: tranAmt.toString(),
+                    Level: "1"
+                });
+                App.storeGridTopTab2.insert(App.storeGridTopTab2.data.length, recordGrid1Tab2TaxID02);
+                App.slmGridTab1.selected.items[0].set('TaxAmt02', taxAmtTaxID02)
+            }
+        }
+
+        var indexTaxRate03 = App.storeSITaxAll.indexOf(App.storeSITaxAll.findRecord("TaxID", taxID3));
+        if (indexTaxRate03 != -1) {// neu ton tai taxID03
+            var taxRate03 = App.storeSITaxAll.data.items[indexTaxRate03].data.TaxRate;
+            var objTax03 = App.storeSITaxAll.data.items[indexTaxRate03].data;
+
+            if (taxCat == "*" || (objTax03.CatFlg == "A" && objTax03.CatExcept00 != taxCat && objTax03.CatExcept01 != taxCat && objTax03.CatExcept02 != taxCat && objTax03.CatExcept03 != taxCat && objTax03.CatExcept04 != taxCat && objTax03.CatExcept05 != taxCat) ||
+                (objTax03.CatFlg == "N" && (objTax03.CatExcept00 == taxCat || objTax03.CatExcept01 == taxCat || objTax03.CatExcept02 == taxCat || objTax03.CatExcept03 == taxCat || objTax03.CatExcept04 == taxCat || objTax03.CatExcept05 == taxCat))) {
+                if (objTax03.TaxCalcLvl == "1" && objTax03.PrcTaxIncl != "0") {
+                    PrcTaxInclRate03 = PrcTaxInclRate03 + objTax03.TaxRate;
+                } else {
+                    PrcTaxInclRate03 = objTax01.TaxRate;
+                }
+                //insert dong moi vao
+                var taxAmtTaxID03 = tranAmt * PrcTaxInclRate03 / 100;
+                var recordGrid1Tab2TaxID03 = Ext.create("App.GetGrid1Tab2ResultModel", {
+                    //CustId: "",
+                    LineRef: lineRef,
+                    TaxID: taxID3,
+                    TaxRate: taxRate03,
+                    TaxAmt: taxAmtTaxID03,
+                    TxblAmt: tranAmt.toString(),
+                    Level: "1"
+                });
+                App.storeGridTopTab2.insert(App.storeGridTopTab2.data.length, recordGrid1Tab2TaxID03);
+                App.slmGridTab1.selected.items[0].set('TaxAmt03', taxAmtTaxID03)
+            }
+        }
+
+        App.slmGridTab1.selected.items[0].set('TxblAmt00', tranAmt * (1 + PrcTaxInclRate00 + PrcTaxInclRate01 + PrcTaxInclRate02 + PrcTaxInclRate03) / 100);
+
+    }//ngoac ket thuc vong for
+    //fillDataIntoGrid2Tab2();
+    setTimeout(function () { fillDataIntoGrid2Tab2(); }, 3000);
+
 }
 
 

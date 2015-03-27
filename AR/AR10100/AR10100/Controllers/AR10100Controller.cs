@@ -34,20 +34,20 @@ namespace AR10100.Controllers
             return PartialView();
         }
 
-        public ActionResult GetDataFormTop(String branchID, String batNbr)
+        public ActionResult GetDataFormTop(string branchID, string batNbr)
         {
             var rptCtrl = _db.Batches.FirstOrDefault(p => p.BranchID == branchID && p.Module == "AR" && p.BatNbr == batNbr);
             return this.Store(rptCtrl);
         }
-        public ActionResult GetDataFormBot(String branchID, String batNbr, String refNbr)
+        public ActionResult GetDataFormBot(string branchID, string batNbr, string refNbr)
         {
             var lst = _db.AR_Doc.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr).FirstOrDefault();
             return this.Store(lst);
         }
 
-        public ActionResult GetDataGrid(String branchID, String batNbr, String refNbr)
+        public ActionResult GetDataGrid(string branchID, string batNbr, string refNbr)
         {
-            var lst = _db.AR10100_pgLoadGridTrans(branchID,batNbr,refNbr).ToList();
+            var lst = _db.AR10100_pgLoadInvoiceMemo(branchID,batNbr,refNbr,"%").ToList();
 
             return this.Store(lst);
         }
@@ -62,7 +62,7 @@ namespace AR10100.Controllers
             StoreDataHandler dataHandlerBot = new StoreDataHandler(data["lstheaderBot"]);
             ChangeRecords<AR_Doc> lstheaderBot = dataHandlerBot.BatchObjectData<AR_Doc>();
             StoreDataHandler dataHandlerGrid = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AR10100_pgLoadGridTrans_Result> lstgrd = dataHandlerGrid.BatchObjectData<AR10100_pgLoadGridTrans_Result>();
+            ChangeRecords<AR10100_pgLoadInvoiceMemo_Result> lstgrd = dataHandlerGrid.BatchObjectData<AR10100_pgLoadInvoiceMemo_Result>();
 
             var tmpBatNbr = "";
             var tmpRefNbr = "";
@@ -187,7 +187,7 @@ namespace AR10100.Controllers
             }// ngoac ket thuc foreach cua HeaderBot AR_Doc
 
 
-            foreach (AR10100_pgLoadGridTrans_Result deleted in lstgrd.Deleted)
+            foreach (AR10100_pgLoadInvoiceMemo_Result deleted in lstgrd.Deleted)
             {
                 var delGrid = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
                                              p.LineRef == deleted.LineRef).FirstOrDefault();
@@ -201,7 +201,7 @@ namespace AR10100.Controllers
             //them hoac update cac record tren luoi
             lstgrd.Created.AddRange(lstgrd.Updated);
 
-            foreach (AR10100_pgLoadGridTrans_Result created in lstgrd.Created)
+            foreach (AR10100_pgLoadInvoiceMemo_Result created in lstgrd.Created)
             {
 
                 var objGrid = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -231,13 +231,13 @@ namespace AR10100.Controllers
                             objGrid.RefNbr = tmpRefNbr;
                         }
                         objGrid.LineRef = created.LineRef;
-
+                        objGrid.InvtId = created.InvtId;
                         objGrid.Crtd_DateTime = DateTime.Now;
                         objGrid.Crtd_Prog = screenNbr;
                         objGrid.Crtd_User = Current.UserName;
                         objGrid.tstamp = new byte[0];
-                        UpdatingGridAP_Trans(created, ref objGrid,data);
-                        if (objGrid.BatNbr != "" && objGrid.BranchID != "" && objGrid.RefNbr != "" && objGrid.LineRef != "" && objGrid.InvtId != "")
+                        UpdatingGridAR_Trans(created, ref objGrid,data);
+                        if (objGrid.BatNbr != "" && objGrid.BranchID != "" && objGrid.RefNbr != "" && objGrid.LineRef != "" && objGrid.InvtId != "" && objGrid.InvtId != null)
                         {
                             _db.AR_Trans.AddObject(objGrid);
                            
@@ -253,7 +253,7 @@ namespace AR10100.Controllers
                 {
                     if (created.tstamp.ToHex() == objGrid.tstamp.ToHex())
                     {
-                        UpdatingGridAP_Trans(created, ref objGrid,data);
+                        UpdatingGridAR_Trans(created, ref objGrid,data);
                         
                     }
                     else
@@ -264,12 +264,43 @@ namespace AR10100.Controllers
             } // ngoac ket thuc foreach cua Grid
 
 
-            
+
+            var objHeaderTopNoChange = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AR" && p.BatNbr == batNbr).FirstOrDefault();
+            if (objHeaderTopNoChange != null)
+            {
+                if (handle != "N")
+                {
 
 
-            
+                    if (data["cboStatus"] == "H")
+                    {
+                        if (data["cboHandle"] == "R")
+                        {
+                            objHeaderTopNoChange.Rlsed = 1;
+                            objHeaderTopNoChange.Status = "C"; // sua lai sau
+                        }
+                        else if (data["cboHandle"] == "N")
+                        {
+                            objHeaderTopNoChange.Rlsed = 0;
+                            objHeaderTopNoChange.Status = "H";
+                        }
+                    }
+                    else if (data["cboStatus"] == "C")
+                    {
+                        if (data["cboHandle"] == "V")
+                        {
 
+                            objHeaderTopNoChange.Status = "V";
+                        }
+                        else if (data["cboHandle"] == "C")
+                        {
 
+                            objHeaderTopNoChange.Status = "B";
+                        }
+                    }
+
+                }
+            }
 
             //xử lý ARProcess
             var batNbrRls = "";
@@ -509,10 +540,10 @@ namespace AR10100.Controllers
 
 
 
-        private void UpdatingGridAP_Trans(AR10100_pgLoadGridTrans_Result s, ref AR_Trans d, FormCollection data)
+        private void UpdatingGridAR_Trans(AR10100_pgLoadInvoiceMemo_Result s, ref AR_Trans d, FormCollection data)
         {
-           
-            d.InvtId = s.InvtID;
+
+            
             d.LineType = s.LineType;
 
      
@@ -751,7 +782,7 @@ namespace AR10100.Controllers
 
 
 
-        //foreach (AR10100_pgLoadGridTrans_Result created in lstgrd.Created)
+        //foreach (AR10100_pgLoadInvoiceMemo_Result created in lstgrd.Created)
         //{
         //    tmpGridChangeOrNot = 1;
         //    var record = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -802,7 +833,7 @@ namespace AR10100.Controllers
         //        record.JrnlType = "AR";
         //        record.InvcNbr = invcNbr;
         //        record.InvcNote = invcNote;
-        //        UpdatingGridAP_Trans(created, ref record);
+        //        UpdatingGridAR_Trans(created, ref record);
 
         //        //record.VendID = vendID;
         //        //record.VendName = recordVendor.Name;
@@ -832,7 +863,7 @@ namespace AR10100.Controllers
 
 
 
-        //foreach (AR10100_pgLoadGridTrans_Result updated in lstgrd.Updated)
+        //foreach (AR10100_pgLoadInvoiceMemo_Result updated in lstgrd.Updated)
         //{
         //    tmpGridChangeOrNot = 1;
         //    var record = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -846,7 +877,7 @@ namespace AR10100.Controllers
         //        //    return Json(new { success = false, code = "19" }, JsonRequestBehavior.AllowGet);
         //        //}
 
-        //        UpdatingGridAP_Trans(updated, ref record);
+        //        UpdatingGridAR_Trans(updated, ref record);
         //        var recordBatNbrUpdate = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AR" && p.EditScrnNbr == "AR10100" && p.BatNbr == record.BatNbr).FirstOrDefault();
         //        var recordRefNbrUpdate = _db.AR_Doc.Where(p => p.BranchID == branchID && p.BatNbr == record.BatNbr && p.RefNbr == record.RefNbr).FirstOrDefault();
         //        if (recordBatNbrUpdate != null)
@@ -904,7 +935,7 @@ namespace AR10100.Controllers
         //                record.JrnlType = "AR";
         //                record.InvcNbr = invcNbr;
         //                record.InvcNote = invcNote;
-        //                UpdatingGridAP_Trans(updated, ref record);
+        //                UpdatingGridAR_Trans(updated, ref record);
 
         //                //record.VendID = vendID;
         //                //record.VendName = recordVendor.Name;
@@ -929,7 +960,7 @@ namespace AR10100.Controllers
         //}
 
 
-        //foreach (AR10100_pgLoadGridTrans_Result deleted in lstgrd.Deleted)
+        //foreach (AR10100_pgLoadInvoiceMemo_Result deleted in lstgrd.Deleted)
         //{
 
         //    var del = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&

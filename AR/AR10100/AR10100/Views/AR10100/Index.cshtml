@@ -102,7 +102,7 @@
             })
   )
 @(Html.X().Store().ID("storeGrid").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR10100_pgLoadGridTrans_Result), "AR10100_pgLoadGridTrans_ResultModel", "InvtID"))
+        .Model(Util.GenerateModel(typeof(AR10100_pgLoadInvoiceMemo_Result), "AR10100_pgLoadInvoiceMemo_ResultModel", "InvtId"))
         .Proxy(
             X.AjaxProxy()
             .Url(Url.Action("GetDataGrid", "AR10100"))
@@ -187,6 +187,9 @@
         //.Listeners(p=>p.Load.Handler="loadDataHeaderDetail()" )
         
   )
+
+        @(Html.HQ().Store().ID("storeSITaxAll").HQProcedure("AR10100_ppSITaxAll").HQDBSys(false).LoadData())
+
      @{Html.RenderAction("Body", new { lang=@Current.LangID});}
     </body>
 </html>
