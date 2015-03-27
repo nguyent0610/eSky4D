@@ -1611,6 +1611,13 @@ var renderRcptStage = function (value) {
     }
     return value;
 };
+var renderSiteID = function (value) {
+    var obj = App.cboSiteID.getStore().findRecord("SiteID", value);
+    if (obj) {
+        return obj.data.Name;
+    }
+    return value;
+};
 var renderTaxID = function (value) {
     //App.stoPO10100_pgDetail.data.each(function (det) {
     //    value.split(',')
