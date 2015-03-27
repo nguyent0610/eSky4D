@@ -79,29 +79,34 @@ namespace OM40100.Controllers
                     {
                         string message = "";
                         foreach (var item in _lstOrder)
-                        {	
-                            try 
-	                        {
-                                OMProcess.OM order = new OMProcess.OM(_userName, _screenNbr, dal);
-                                dal.BeginTrans(IsolationLevel.ReadCommitted);        
-		                        if (!order.OM10100_InvoiceRelease(item.BranchID,item.OrderNbr,"R",DateTime.Now.ToDateShort()))
+                        {
+                            OMProcess.OM order = new OMProcess.OM(_userName, _screenNbr, dal);
+                            try
+                            {
+                           
+                                dal.BeginTrans(IsolationLevel.ReadCommitted);
+                                
+                                order.OM10100_InvoiceRelease(item.BranchID, item.OrderNbr, "R", DateTime.Now.ToDateShort());
+
+                                dal.CommitTrans();
+                            }
+                            catch (Exception ex)
+                            {
+                                dal.RollbackTrans();
+                                if (ex is MessageException)
                                 {
-                                    var log = order.LogList.FirstOrDefault();
-                                    if(log!=null){
-                                        message += "Đơn hàng " + item.OrderNbr + ":" + Message.GetString(log.Code, log.Parm)+"</br>";
-                                    }
-                                    dal.RollbackTrans();
+                                    var msg = ex as MessageException;
+                                    message += "Đơn hàng " + item.OrderNbr + ":" + Message.GetString(msg.Code, msg.Parm) + "</br>";
                                 }
                                 else
                                 {
-                                    dal.CommitTrans();
+                                    message += "Đơn hàng " + item.OrderNbr + " bị lỗi: " + ex.ToString() + "</br>";
                                 }
-	                        }
-	                        catch (Exception ex)
-	                        {
-                                message += "Đơn hàng " + item.OrderNbr + " bị lỗi: " + ex.ToString()+"</br>";
-		                        dal.RollbackTrans();
-	                        }  
+                            }
+                            finally
+                            {
+                                order = null;
+                            }
                         }
 
                         if (message != string.Empty)
