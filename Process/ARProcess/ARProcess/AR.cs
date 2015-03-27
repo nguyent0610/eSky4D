@@ -246,7 +246,7 @@ namespace ARProcess
             }
 
         }
-        #region "Public Method AR10100"
+        #region "private Method AR10100"
 
         private bool AR10100Release(  string BranchID, string BatNbr)
         {          
@@ -495,7 +495,7 @@ namespace ARProcess
         
                 foreach (clsAR_Adjust objAR_A  in lstdtAR_A)
                 {
-                    if (RefNbr.Split(',').Contains(objAR_A.AdjdRefNbr))
+                    if (RefNbr.Split(',').Contains(objAR_A.AdjdRefNbr) )
                     {
                         //Update AP_Adjust
                         objAR_Adjust=new clsAR_Adjust(Dal);
@@ -590,7 +590,7 @@ namespace ARProcess
             }
 
         }
-        #region "Public Method AR10300"
+        #region "private Method AR10300"
 
         private bool AR10300Release(string BranchID, string BatNbr)
         {
@@ -663,7 +663,7 @@ namespace ARProcess
         #endregion
         #endregion
         #region AR10400      
-        #region "Public Method AR10400"
+        #region "private Method AR10400"
         public bool AR10400_Release(  string BranchID, string BatNbr)
         {
             IList<clsAR_Adjust> dt ;//= new List<AR_Adjust>();
