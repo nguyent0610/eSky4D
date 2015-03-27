@@ -32,8 +32,7 @@ namespace PO10200.Controllers
         private List<PO10200_pgLoadTaxTrans_Result> _lstTax = new List<PO10200_pgLoadTaxTrans_Result>();
         private PO10200_pdPO_Setup_Result _objPO_Setup;
         private PO10200_pdHeader_Result _poHead;
-        private Batch _objBatch;
-        bool _statusClose = false;
+        private Batch _objBatch;  
         string _batNbr = "";
         string _rcptNbr = "";
         string _branchID = "";
@@ -51,7 +50,7 @@ namespace PO10200.Controllers
             ViewBag.BussinessTime = DateTime.Now;
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
