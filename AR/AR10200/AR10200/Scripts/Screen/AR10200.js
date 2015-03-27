@@ -69,21 +69,22 @@ var Process = {
             params: {
                 strAdjdRefNbr: strAdjdRefNbr
             },
-            success: function (action, data) {
-                if (data.result.msgCode) {
-                    HQ.message.show(data.result.msgCode, '', '');
-                }
-                App.winRef.close();
-            },
+            success: function (msg, data) {
+                var batNbr = '';
 
-            failure: function (errorMsg, data) {
-                if (data.result.msgCode) {
-                    HQ.message.show(data.result.msgCode, '', '');
+                if (this.result.data != undefined && this.result.data.batNbr != null) {
+                    batNbr = this.result.data.batNbr;
                 }
-                else {
-                    HQ.message.process(errorMsg, data, true);
-                }
-            }
+                HQ.message.process(msg, data, true);
+                App.winRef.close();
+                App.cboBatNbr.getStore().load(function () {
+                    App.cboBatNbr.setValue(batNbr);
+                    App.stoBatNbr.reload();
+                });
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }           
         });
     },
 
