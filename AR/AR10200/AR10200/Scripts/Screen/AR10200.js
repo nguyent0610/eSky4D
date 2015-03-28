@@ -147,7 +147,12 @@ var Store = {
             //batRec.commit();
             HQ.store.insertRecord(sto, [], batRec, true);
         }
-        App.pnlBatch.loadRecord(sto.getAt(0));
+        var frmRecord = sto.getAt(0);
+        App.pnlBatch.loadRecord(frmRecord);
+
+        App.cboBankAcct.setValue(frmRecord.data.ReasonCD);
+        App.txtAutoPayment.setValue(0);
+        App.txtOdd.setValue(0);
     },
 
     stoRefNbr_load: function (sto, records, successful, eOpts) {
@@ -160,21 +165,23 @@ var Store = {
             //batRec.commit();
             HQ.store.insertRecord(sto, [], batRec, true);
         }
-        App.pnlDocument.loadRecord(sto.getAt(0));
-        App.grdAdjust.store.reload();
+        var docRec = sto.getAt(0);
+        App.pnlDocument.loadRecord(docRec);
+        if (docRec.data.RefNbr) {
+            App.grdAdjust.store.reload();
+        }
+        else {
+            App.grdAdjust.store.removeAll();
+        }
     },
 
     stoAdjust_load: function (sto, records, successful, eOpts) {
         App.chkSelectHeader.setValue(false);
-        var batNbr = App.cboBatNbr.value;
-        var refNbr = App.cboRefNbr.value;
         var status = App.cboStatus.value;
 
-        if (batNbr && refNbr && status == _hold) {
+        if (status == _hold) {
             var adjustRec = Ext.create("App.mdlAdjust", {
                 BranchID: HQ.cpnyID,
-                BatNbr: batNbr,
-                RefNbr: refNbr,
                 DocDate: App.dteDocDate.value ? App.dteDocDate.value : HQ.currentDate
             });
             HQ.store.insertRecord(sto, _keys, adjustRec);
@@ -199,9 +206,11 @@ var Event = {
     Form: {
         frmMain_boxReady: function (frm, width, height, eOpts) {
             App.cboBatNbr.store.load(function (records, operation, success) {
-                if (records.length) {
-                    App.cboBatNbr.setValue(records[0].data.BatNbr);
-                }
+                App.stoBatNbr.reload();
+                App.cboHandle.store.reload();
+                App.cboRefNbr.store.load(function (records0, operation0, success0) {
+                    App.stoRefNbr.reload();
+                });
             });
         },
 
@@ -235,14 +244,11 @@ var Event = {
         },
 
         cboBatNbr_change: function (cbo, newValue, oldValue, eOpts) {
-            App.stoBatNbr.reload();
             App.cboRefNbr.store.load(function (records, operation, success) {
                 if (records.length) {
                     App.cboRefNbr.setValue(records[0].data.RefNbr);
                 }
-                else {
-                    App.stoRefNbr.reload();
-                }
+                App.stoBatNbr.reload();
             });
         },
 
@@ -577,11 +583,9 @@ var Event = {
                 var refNbr = App.cboRefNbr.value;
                 var status = App.cboStatus.value;
 
-                if (batNbr && refNbr && status == _hold) {
+                if (status == _hold) {
                     var adjustRec = Ext.create("App.mdlAdjust", {
                         BranchID: HQ.cpnyID,
-                        BatNbr: batNbr,
-                        RefNbr: refNbr,
                         DocDate: App.dteDocDate.value ? App.dteDocDate.value : HQ.currentDate
                     });
                     HQ.store.insertRecord(e.store, _keys, adjustRec);

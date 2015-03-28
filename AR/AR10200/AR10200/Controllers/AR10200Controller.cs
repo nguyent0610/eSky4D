@@ -94,6 +94,7 @@ namespace AR10200.Controllers
                 var cboBatNbr = data["cboBatNbr"];
                 var txtDescr = data["txtDescr"];
                 var txtTotAmt = data["txtTotAmt"];
+                var cboBankAcct = data["cboBankAcct"];
                 var batHandler = new StoreDataHandler(data["lstBatNbr"]);
                 var inputBatNbr = batHandler.ObjectData<Batch>().FirstOrDefault();
 
@@ -101,6 +102,7 @@ namespace AR10200.Controllers
                 if (inputBatNbr != null)
                 {
                     inputBatNbr.Descr = txtDescr;
+                    inputBatNbr.ReasonCD = cboBankAcct;
 
                     // Save Batch
                     var batchObj = _db.Batches.FirstOrDefault(
@@ -417,7 +419,6 @@ namespace AR10200.Controllers
             objD.DocDate = inputRef.DocDate.Short();
             objD.DiscDate = inputRef.DocDate.Short();
             objD.DueDate = inputRef.DocDate.Short();
-
             objD.SlsperId = inputRef.SlsperId;
             objD.OrigDocAmt = inputRef.OrigDocAmt;//data["txtTotAmt"]
             objD.DocDesc = inputRef.DocDesc;
