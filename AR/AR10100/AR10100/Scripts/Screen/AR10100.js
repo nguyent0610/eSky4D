@@ -1161,169 +1161,152 @@ var setFocusAllCombo = function () {
 
 //duyet grid 1 tab 2 de lay gia tri bo qua grid 2 tab 2 , sau nay se tach ra thanh function rieng
 var fillDataIntoGrid2Tab2 = function () {
+    var tmpTaxIDName00 = "";
+    var tmpTaxIDName01 = "";
+    var tmpTaxIDName02 = "";
+    var tmpTaxIDName03 = "";
 
+    var tmpTaxIDValue00 = "";
+    var tmpTaxIDValue01 = "";
+    var tmpTaxIDValue02 = "";
+    var tmpTaxIDValue03 = "";
 
-    taxAmtTotalVAT00 = 0;
-    tranAmtTotalVAT00 = 0;
+    var tranAmt00 = "";
+    var tranAmt01 = "";
+    var tranAmt02 = "";
+    var tranAmt03 = "";
 
-    taxAmtTotalNoneVat = 0;
-    tranAmtTotalNoneVat = 0;
+    var boolTax00 = false;
+    var boolTax01 = false;
+    var boolTax02 = false;
+    var boolTax03 = false;
 
-    taxAmtTotalOVAT05 = 0;
-    tranAmtTotalOVAT05 = 0;
+    var taxRate00 = "";
+    var taxRate01 = "";
+    var taxRate02 = "";
+    var taxRate03 = "";
+    for (var i = 0; i < App.storeGridTopTab2.data.length; i++) {
+        if (App.storeGridTopTab2.data.items[0] != undefined) { // nếu store có dữ liệu
+            if (tmpTaxIDName00 == "") {// biến tạm TaxIDName00 chưa set
+                boolTax00 = true;
+                tmpTaxIDName00 = App.storeGridTopTab2.data.items[i].data.TaxID;
+                tmpTaxIDValue00 = App.storeGridTopTab2.data.items[i].data.TaxAmt;
+                tranAmt00 = App.storeGridTopTab2.data.items[i].data.TxblAmt;
+                taxRate00 = App.storeGridTopTab2.data.items[i].data.TaxRate;
 
-    taxAmtTotalOVAT10 = 0;
-    tranAmtTotalOVAT10 = 0;
-
-    taxAmtTotalIVAT05 = 0;
-    tranAmtTotalIVAT05 = 0;
-
-    taxAmtTotalIVAT10 = 0;
-    tranAmtTotalIVAT10 = 0;
-
-    taxAmtTotalVAT10 = 0;
-    tranAmtTotalVAT10 = 0;
-
-    taxAmtTotalVAT02 = 0;
-    tranAmtTotalVAT02 = 0;
-
-    Vat00 = false;
-    noneVat = false;
-    oVat05 = false;
-    oVat10 = false;
-    iVAT05 = false;
-    iVAT10 = false;
-    vAT10 = false;
-    vAT02 = false;
-
-    for (var i = 0; i < App.storeGridTopTab2.getCount(); i++) {
-        App.slmGridTopTab2.select(i);
-        //cac bien tam phai khai bao de truyen gia tri vao
-        // taxAmtTotalOVAT05        taxAmtTotalVAT00          oVat05             Vat00             noneVat
-        // tranAmtTotalOVAT05      tranAmtTotalVAT00        tranAmtTotalNoneVat
-        if (App.slmGridTopTab2.selected.items[0] != undefined) {
-            if (App.slmGridTopTab2.selected.items[0].data.TaxID == "OVAT05-00") {
-                oVat05 = true;
-                taxAmtTotalOVAT05 = taxAmtTotalOVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-                tranAmtTotalOVAT05 = tranAmtTotalOVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "VAT00") {
-                Vat00 = true;
-                taxAmtTotalVAT00 = taxAmtTotalVAT00 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-                tranAmtTotalVAT00 = tranAmtTotalVAT00 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "NONEVAT") {
-                noneVat = true;
-                taxAmtTotalNoneVat = taxAmtTotalNoneVat + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-                tranAmtTotalNoneVat = tranAmtTotalNoneVat + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "OVAT10-00") {
-                oVat10 = true;
-                taxAmtTotalOVAT10 = taxAmtTotalOVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-                tranAmtTotalOVAT10 = tranAmtTotalOVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "IVAT05") {
-                iVAT05 = true;
-                taxAmtTotalIVAT05 = taxAmtTotalIVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-                tranAmtTotalIVAT05 = tranAmtTotalIVAT05 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "IVAT10") {
-                iVAT10 = true;
-                taxAmtTotalIVAT10 = taxAmtTotalIVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-                tranAmtTotalIVAT10 = tranAmtTotalIVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "VAT10") {
-                vAT10 = true;
-                taxAmtTotalVAT10 = taxAmtTotalVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-                tranAmtTotalVAT10 = tranAmtTotalVAT10 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-            } else if (App.slmGridTopTab2.selected.items[0].data.TaxID == "VAT02") {
-                vAT02 = true;
-                taxAmtTotalVAT02 = taxAmtTotalVAT02 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TaxAmt)
-                tranAmtTotalVAT02 = tranAmtTotalVAT02 + parseFloat(App.slmGridTopTab2.selected.items[0].data.TxblAmt)
-            }
-        }
-    }
-    //khai bao cac record cho tung truong hop
-
-    var recordVAT00Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
-        TaxRate2: "0",
-        TaxID2: "VAT00",
-        TaxAmt2: taxAmtTotalVAT00.toString(),
-        TxblAmt2: tranAmtTotalVAT00.toString(),
+            } else {// biến tạm TaxIDName00 da set
+                if (tmpTaxIDValue01 == "") {
+                    if (App.storeGridTopTab2.data.items[i].data.TaxID == tmpTaxIDName00) {// biến tạm TaxIDName01 = TaxIDName00
+                        tmpTaxIDValue00 = parseFloat(tmpTaxIDValue00) + parseFloat(App.storeGridTopTab2.data.items[i].data.TaxAmt)
+                        tranAmt00 = parseFloat(tranAmt00) + parseFloat(App.storeGridTopTab2.data.items[i].data.TxblAmt)
+                    } else {
+                        boolTax01 = true;
+                        tmpTaxIDName01 = App.storeGridTopTab2.data.items[i].data.TaxID;
+                        tmpTaxIDValue01 = App.storeGridTopTab2.data.items[i].data.TaxAmt;
+                        tranAmt01 = App.storeGridTopTab2.data.items[i].data.TxblAmt;
+                        taxRate01 = App.storeGridTopTab2.data.items[i].data.TaxRate;
+                    }
+                } else {
+                    if (tmpTaxIDValue02 == "") {
+                        if (App.storeGridTopTab2.data.items[i].data.TaxID == tmpTaxIDName00) {// biến tạm TaxIDName01 = TaxIDName00
+                            tmpTaxIDValue00 = parseFloat(tmpTaxIDValue00) + parseFloat(App.storeGridTopTab2.data.items[i].data.TaxAmt)
+                            tranAmt00 = parseFloat(tranAmt00) + parseFloat(App.storeGridTopTab2.data.items[i].data.TxblAmt)
+                        }
+                        else if (App.storeGridTopTab2.data.items[i].data.TaxID == tmpTaxIDName01) {// biến tạm TaxIDName01 = TaxIDName00
+                            tmpTaxIDValue01 = parseFloat(tmpTaxIDValue01) + parseFloat(App.storeGridTopTab2.data.items[i].data.TaxAmt)
+                            tranAmt01 = parseFloat(tranAmt01) + parseFloat(App.storeGridTopTab2.data.items[i].data.TxblAmt)
+                        } else {
+                            boolTax02 = true;
+                            tmpTaxIDName02 = App.storeGridTopTab2.data.items[i].data.TaxID;
+                            tmpTaxIDValue02 = App.storeGridTopTab2.data.items[i].data.TaxAmt;
+                            tranAmt02 = App.storeGridTopTab2.data.items[i].data.TxblAmt;
+                            taxRate02 = App.storeGridTopTab2.data.items[i].data.TaxRate;
+                        }
+                    } else {
+                        if (tmpTaxIDValue03 == "") {
+                            if (App.storeGridTopTab2.data.items[i].data.TaxID == tmpTaxIDName00) {// biến tạm TaxIDName01 = TaxIDName00
+                                tmpTaxIDValue00 = parseFloat(tmpTaxIDValue00) + parseFloat(App.storeGridTopTab2.data.items[i].data.TaxAmt)
+                                tranAmt00 = parseFloat(tranAmt00) + parseFloat(App.storeGridTopTab2.data.items[i].data.TxblAmt)
+                            }
+                            else if (App.storeGridTopTab2.data.items[i].data.TaxID == tmpTaxIDName01) {// biến tạm TaxIDName01 = TaxIDName00
+                                tmpTaxIDValue01 = parseFloat(tmpTaxIDValue01) + parseFloat(App.storeGridTopTab2.data.items[i].data.TaxAmt)
+                                tranAmt01 = parseFloat(tranAmt01) + parseFloat(App.storeGridTopTab2.data.items[i].data.TxblAmt)
+                            }
+                            else if (App.storeGridTopTab2.data.items[i].data.TaxID == tmpTaxIDName02) {// biến tạm TaxIDName01 = TaxIDName00
+                                tmpTaxIDValue02 = parseFloat(tmpTaxIDValue02) + parseFloat(App.storeGridTopTab2.data.items[i].data.TaxAmt)
+                                tranAmt02 = parseFloat(tranAmt02) + parseFloat(App.storeGridTopTab2.data.items[i].data.TxblAmt)
+                            } else {
+                                boolTax03 = true;
+                                tmpTaxIDName03 = App.storeGridTopTab2.data.items[i].data.TaxID;
+                                tmpTaxIDValue03 = App.storeGridTopTab2.data.items[i].data.TaxAmt;
+                                tranAmt03 = App.storeGridTopTab2.data.items[i].data.TxblAmt;
+                                taxRate03 = App.storeGridTopTab2.data.items[i].data.TaxRate;
+                            }
+                        } else {
+                            if (App.storeGridTopTab2.data.items[i].data.TaxID == tmpTaxIDName00) {// biến tạm TaxIDName01 = TaxIDName00
+                                tmpTaxIDValue00 = parseFloat(tmpTaxIDValue00) + parseFloat(App.storeGridTopTab2.data.items[i].data.TaxAmt)
+                                tranAmt00 = parseFloat(tranAmt00) + parseFloat(App.storeGridTopTab2.data.items[i].data.TxblAmt)
+                            }
+                            else if (App.storeGridTopTab2.data.items[i].data.TaxID == tmpTaxIDName01) {// biến tạm TaxIDName01 = TaxIDName00
+                                tmpTaxIDValue01 = parseFloat(tmpTaxIDValue01) + parseFloat(App.storeGridTopTab2.data.items[i].data.TaxAmt)
+                                tranAmt01 = parseFloat(tranAmt01) + parseFloat(App.storeGridTopTab2.data.items[i].data.TxblAmt)
+                            }
+                            else if (App.storeGridTopTab2.data.items[i].data.TaxID == tmpTaxIDName02) {// biến tạm TaxIDName01 = TaxIDName00
+                                tmpTaxIDValue02 = parseFloat(tmpTaxIDValue02) + parseFloat(App.storeGridTopTab2.data.items[i].data.TaxAmt)
+                                tranAmt02 = parseFloat(tranAmt02) + parseFloat(App.storeGridTopTab2.data.items[i].data.TxblAmt)
+                            }
+                            else if (App.storeGridTopTab2.data.items[i].data.TaxID == tmpTaxIDName03) {// biến tạm TaxIDName01 = TaxIDName00
+                                tmpTaxIDValue03 = parseFloat(tmpTaxIDValue03) + parseFloat(App.storeGridTopTab2.data.items[i].data.TaxAmt)
+                                tranAmt03 = parseFloat(tranAmt03) + parseFloat(App.storeGridTopTab2.data.items[i].data.TxblAmt)
+                            }
+                        }// ngoac else biến tạm TaxIDName00 da set
+                    }// ngoac else biến tạm TaxIDName02 da set
+                }// ngoac else biến tạm TaxIDName01 da set
+            }// ngoac else biến tạm TaxIDName00 da set
+        }//ngoac undefined
+    }//ngoac dong vong for
+    var recordGrid2Tab2TaxID00 = Ext.create("App.GetGrid2Tab2ResultModel", {
+        TaxRate2: taxRate00,
+        TaxID2: tmpTaxIDName00,
+        TaxAmt2: tmpTaxIDValue00.toString(),
+        TxblAmt2: tranAmt00.toString(),
     });
 
-    var recordVATNONEGrid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
-        TaxRate2: "0",
-        TaxID2: "NONEVAT",
-        TaxAmt2: taxAmtTotalNoneVat.toString(),
-        TxblAmt2: tranAmtTotalNoneVat.toString(),
+    var recordGrid2Tab2TaxID01 = Ext.create("App.GetGrid2Tab2ResultModel", {
+        TaxRate2: taxRate01,
+        TaxID2: tmpTaxIDName01,
+        TaxAmt2: tmpTaxIDValue01.toString(),
+        TxblAmt2: tranAmt01.toString(),
     });
 
-    var recordOVAT05Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
-        TaxRate2: "5",
-        TaxID2: "OVAT05-00",
-        TaxAmt2: taxAmtTotalOVAT05.toString(),
-        TxblAmt2: tranAmtTotalOVAT05.toString(),
-
+    var recordGrid2Tab2TaxID02 = Ext.create("App.GetGrid2Tab2ResultModel", {
+        TaxRate2: taxRate02,
+        TaxID2: tmpTaxIDName02,
+        TaxAmt2: tmpTaxIDValue02.toString(),
+        TxblAmt2: tranAmt02.toString(),
     });
 
-    var recordOVAT10Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
-        TaxRate2: "10",
-        TaxID2: "OVAT10-00",
-        TaxAmt2: taxAmtTotalOVAT10.toString(),
-        TxblAmt2: tranAmtTotalOVAT10.toString(),
+    var recordGrid2Tab2TaxID03 = Ext.create("App.GetGrid2Tab2ResultModel", {
+        TaxRate2: taxRate03,
+        TaxID2: tmpTaxIDName03,
+        TaxAmt2: tmpTaxIDValue03.toString(),
+        TxblAmt2: tranAmt03.toString(),
     });
 
-    var recordIVAT05Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
-        TaxRate2: "5",
-        TaxID2: "IVAT05",
-        TaxAmt2: taxAmtTotalIVAT05.toString(),
-        TxblAmt2: tranAmtTotalIVAT05.toString(),
-    });
-
-    var recordIVAT10Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
-        TaxRate2: "10",
-        TaxID2: "IVAT10",
-        TaxAmt2: taxAmtTotalIVAT10.toString(),
-        TxblAmt2: tranAmtTotalIVAT10.toString(),
-    });
-
-    var recordVAT10Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
-        TaxRate2: "10",
-        TaxID2: "VAT10",
-        TaxAmt2: taxAmtTotalVAT10.toString(),
-        TxblAmt2: tranAmtTotalVAT10.toString(),
-    });
-
-    var recordVAT02Grid2Tab2 = Ext.create("App.GetGrid2Tab2ResultModel", {
-        TaxRate2: "10",
-        TaxID2: "VAT02",
-        TaxAmt2: taxAmtTotalVAT02.toString(),
-        TxblAmt2: tranAmtTotalVAT02.toString(),
-    });
-
-    //xet tung truong hop de tao ra cac dong tuong ung
-    if (oVat05 == true) {
-        App.storeGridBotTab2.insert(0, recordOVAT05Grid2Tab2);
+    if (boolTax00 == true) {
+        App.storeGridBotTab2.insert(0, recordGrid2Tab2TaxID00);
     }
-    if (Vat00 == true) {
-        App.storeGridBotTab2.insert(0, recordVAT00Grid2Tab2);
+    if (boolTax01 == true) {
+        App.storeGridBotTab2.insert(0, recordGrid2Tab2TaxID01);
     }
-    if (noneVat == true) {
-        App.storeGridBotTab2.insert(0, recordVATNONEGrid2Tab2);
+    if (boolTax02 == true) {
+        App.storeGridBotTab2.insert(0, recordGrid2Tab2TaxID02);
     }
-    if (oVat10 == true) {
-        App.storeGridBotTab2.insert(0, recordOVAT10Grid2Tab2);
-    }
-    if (iVAT05 == true) {
-        App.storeGridBotTab2.insert(0, recordIVAT05Grid2Tab2);
-    }
-    if (iVAT10 == true) {
-        App.storeGridBotTab2.insert(0, recordIVAT10Grid2Tab2);
-    }
-    if (vAT10 == true) {
-        App.storeGridBotTab2.insert(0, recordVAT10Grid2Tab2);
-    }
-    if (vAT02 == true) {
-        App.storeGridBotTab2.insert(0, recordVAT02Grid2Tab2);
+    if (boolTax03 == true) {
+        App.storeGridBotTab2.insert(0, recordGrid2Tab2TaxID03);
     }
 
 }
-
 
 var fillDataIntoGrid1Tab2 = function () {
     var PrcTaxInclRate00 = 0;
