@@ -112,6 +112,7 @@
                                                         lst.Change.Fn = "cboBatNbr_Change";
                                                         lst.Select.Fn = "cboBatNbr_Select";
                                                         lst.TriggerClick.Handler = "if (index == 0) { this.focus(true); this.clearValue();}";
+                                                        lst.Focus.Handler = "this.forceSelection=true;";
                                                     })
                                                 .LoadData()
                                 , HQ.TextBox().ID("txtIssueRcptNbr").Name("RefNbr").MaxLength(20).HQLangCode("ISSRCPTNBR").LabelWidth(100).InputWidth(110).MarginSpec("3 0 0 0")
@@ -361,7 +362,12 @@
                                                                                                 .DisplayField("InvtID")
                                                                                                 .ValueField("InvtID")
                                                                                                 .HQHeightWidth(400, 300).Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                                                                .Listeners(lst => { lst.Change.Fn = "cboGInvtID_Change"; lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                                                                                                .Listeners(lst =>
+                                                                                                    {
+                                                                                                        lst.Change.Fn = "cboGInvtID_Change";
+                                                                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                                                        lst.Focus.Handler = "this.forceSelection=true;";
+                                                                                                    })
                                                                                                 .LoadData()
                                                                                                 )
                                                     , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("TranDesc").Width(150).Editor(Html.X().TextField().MaxLength(100100))
@@ -376,7 +382,11 @@
                                                                                             new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw}											                          
                                                                         })
                                                                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                                                                .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                                                                                                .Listeners(lst =>
+                                                                                                {
+                                                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                                                    lst.Focus.Handler = "this.forceSelection=true;";
+                                                                                                })
                                                                                                 .LoadData()
                                                                                                 )
 
@@ -398,7 +408,11 @@
                                                                                         ,new StoreParameter() { Name = "@InvtID", Value = "_invtID", Mode = ParameterMode.Raw}											                          
                                                                     })
                                                                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                                                                .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                                                                                                .Listeners(lst =>
+                                                                                                {
+                                                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                                                    lst.Focus.Handler = "this.forceSelection=true;";
+                                                                                                })
                                                                                                 .LoadData()
                                                                                                 )
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Price")).DataIndex("UnitCost").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
@@ -425,7 +439,11 @@
                                                                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
                                                                         })
                                                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                                                                                        .Listeners(lst =>
+                                                                                        {
+                                                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                                            lst.Focus.Handler = "this.forceSelection=true;";
+                                                                                        })
                                                                                         .LoadData()
                                                                                         )
 
@@ -436,7 +454,11 @@
                                                                 .DisplayField("CatID")
                                                                 .ValueField("CatID")
                                                                 .HQHeightWidth(400, 300).Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                                .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                                                                .Listeners(lst =>
+                                                                {
+                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                    lst.Focus.Handler = "this.forceSelection=true;";
+                                                                })
                                                                 .LoadData()
                                                                 )
                                                     , Html.X().Column().Text(Util.GetLang("TaxID")).DataIndex("TaxID").Width(0)
@@ -522,12 +544,17 @@
                                         X.Container().Layout(LayoutType.HBox)
                                             .Items(
                                                  HQ.TextBox().ID("txtAPRefNbr").Name("APRefNbr").HQLangCode("REFNBR").LabelWidth(100).InputWidth(120).ReadOnly(true)
-                                                , HQ.Combo().ID("cboTerms").Name("Terms").HQLangCode("TERM").HQProcedure("PO10200_pcTerms").HQAutoLoad(false)
+                                                , HQ.Combo().ID("cboTerms").Name("Terms").HQLangCode("TERM").HQProcedure("PO10200_pcTerms").HQAutoLoad(true)
                                                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Descr").AllowBlank(false)
                                                     .LabelWidth(100).InputWidth(120).HQHeightWidth(400, 300)
                                                     .HQDBSys(false)
                                                     .LoadData()
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                    .Listeners(lst =>
+                                                    {
+                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                        lst.Focus.Handler = "this.forceSelection=true;";
+                                                    })
                                                 )
 
                                       , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
@@ -549,7 +576,11 @@
                                                         })
                                                         .LoadData()
                                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-
+                                                        .Listeners(lst =>
+                                                            {
+                                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                lst.Focus.Handler = "this.forceSelection=true;";
+                                                            })
                                                      , HQ.DateField().ID("dtDocDate").Name("DocDate").AllowBlank(false).HQLangCode("DOCDATE").LabelWidth(100).InputWidth(120).AllowBlank(false)
 
 
