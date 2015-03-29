@@ -36,8 +36,8 @@
                 X.FormPanel()
                 .ID("frmTop")
                 .Layout(LayoutType.Anchor)
-                .Region(Region.North)
-                //.AutoScroll(true)
+                .Region(Region.North).Height(90)
+                .AutoScroll(true)
                 //.AnchorVertical("20%")
                 //.Title(Util.GetLang("DOC"))
                 .Padding(5)
@@ -54,7 +54,7 @@
                    //Bat.No
                     HQ.Combo().ID("cboBatNbr").Name("cboBatNbr").HQLangCode("BATNBR").HQProcedure("AR10100_pcBatch")
                     .HQColumnShow("BatNbr,TotAmt,Descr,Status").DisplayField("BatNbr").ValueField("BatNbr").Editable(false)
-                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.ForceSelection(false)
+                    .Width(300).HQHeightWidth(400, 500).MarginSpec("3 0 0 0")//.ForceSelection(false)
                     .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
@@ -76,7 +76,7 @@
 
                     //BrandID    
                     ,HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BRANCHID")
-                    .Width(300).MarginSpec("5 0 5 0").MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
+                    .Width(300).MarginSpec("3 0 0 0").MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
                     .ReadOnly(true).Value(Current.CpnyID.ToString())
                     .Listeners(lst =>
                     {
@@ -86,14 +86,14 @@
                     })
                     //BrandID     Hide
                     ,HQ.TextBox().ID("txtBranchIDHide").Name("txtBranchIDHide")
-                    .Width(300).MarginSpec("5 0 5 0").MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
+                    .Width(300).MarginSpec("3 0 0 0").MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
                     .ReadOnly(true).Hidden(true).Value(Current.CpnyID.ToString())
                
                     
                     //Status
                     ,HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("STATUS").HQProcedure("AR10100_pcGetStatus")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Status")
-                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.Disabled(true)
+                    .Width(300).HQHeightWidth(400, 500).MarginSpec("3 0 0 0")//.Disabled(true)
                     .HQDBSys(false).ReadOnly(true)//.HQValue("H",false)
                     //.MaxLength(30).EnforceMaxLength(true)
                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -118,7 +118,7 @@
                     .Items(
                     //internal Ref
                     HQ.TextBox().ID("txtOrigRefNbr").Name("txtOrigRefNbr").HQLangCode("INTREFNBR").DataIndex("IntRefNbr")
-                    .Width(300).MarginSpec("5 0 5 0").MaxLength(10).EnforceMaxLength(true)
+                    .Width(300).MarginSpec("3 0 0 0").MaxLength(10).EnforceMaxLength(true)
                     
                     .Listeners(lst =>
                     {
@@ -130,7 +130,7 @@
                     //Xu ly (Handle)   
                     ,HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("HANDLE").HQProcedure("AR10100_pcHandle")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").ForceSelection(false).AllowBlank(false)
+                    .Width(300).HQHeightWidth(400, 500).MarginSpec("3 0 0 0").ForceSelection(false).AllowBlank(false)
                     .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
@@ -149,7 +149,7 @@
                         }) 
                     
                     ,HQ.NumberField().ID("txtCuryCrTot").Name("txtCuryCrTot").HQLangCode("TOTAMT").DataIndex("TotAmt")
-                    .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)    
+                    .Width(300).MarginSpec("3 0 0 0").ReadOnly(true)    
                         
                         
                 //ngoac ket thuc dan hang ngang 3 combo  sau form
@@ -157,7 +157,7 @@
                 
                  // xu ly cai nay sau Canncelled Batch
                     ,HQ.TextBox().ID("txtRvdBatNbr").Name("txtRvdBatNbr").HQLangCode("CANCELLEDBATNBR").DataIndex("RvdBatNbr")
-                    .Width(300).MarginSpec("5 0 5 0").MaxLength(200).EnforceMaxLength(true)
+                    .Width(300).MarginSpec("3 0 0 0").MaxLength(200).EnforceMaxLength(true)
                     .ReadOnly(true)
                     .Listeners(lst =>
                     {
@@ -171,7 +171,7 @@
                 , X.TabPanel()
                 .Layout(LayoutType.Border)
                 .Anchor("100% -120")
-                //.AutoScroll(true)
+                
                 .Region(Region.Center)
                 .ID("tabAtAR10100")
                 .Listeners(p =>
@@ -191,8 +191,8 @@
                         
                         
                             X.Panel() 
-                            .Layout(LayoutType.Anchor)
-                            .Region(Region.North)
+                            .Layout(LayoutType.Anchor).Height(140)
+                            .Region(Region.North).AutoScroll(true)
                             .Listeners(l =>
                             {
                                 l.Render.Handler = "HQ.common.control_render(this,'headerBot')";
@@ -205,7 +205,7 @@
                                     //Doctype     
                                     HQ.Combo().ID("cboDocType").Name("cboDocType").HQLangCode("DOCTYPE").HQProcedure("AR10100_pcDocType")
                                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("DocType").AllowBlank(false)
-                                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
+                                    .Width(300).HQHeightWidth(400, 500).MarginSpec("3 0 0 0")//.LabelWidth(90)//.Disabled(true)
                                     .HQDBSys(false).ForceSelection(false)//.HQValue("CC",false)
                                     //.MaxLength(30).EnforceMaxLength(true)
                                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -225,7 +225,7 @@
                                     //RefNbr
                                     ,HQ.Combo().ID("cboRefNbr").Name("cboRefNbr").HQLangCode("REFNBR").HQProcedure("AR10100_pcRefNbr")
                                     .HQColumnShow("RefNbr,DocType,OrigDocAmt,DocDesc").DisplayField("RefNbr").ValueField("RefNbr").Editable(false)
-                                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
+                                    .Width(300).HQHeightWidth(400, 500).MarginSpec("3 0 0 0")//.LabelWidth(90)//.Disabled(true)
                                     .HQDBSys(false)
                                     //.MaxLength(30).EnforceMaxLength(true)
                                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -247,7 +247,7 @@
                                      //SlsperID
                                     ,HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQLangCode("SLSPERID").HQProcedure("AR10100_pcSalesPerson")
                                     .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid").DataIndex("SlsperId")
-                                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
+                                    .Width(300).HQHeightWidth(400, 500).MarginSpec("3 0 0 0")//.LabelWidth(90)//.Disabled(true)
                                     .HQDBSys(false).ForceSelection(false)//.AllowBlank(false)
                                     //.MaxLength(30).EnforceMaxLength(true)
                                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -266,7 +266,7 @@
                                    ////Vendor
                                    //,HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("VENDID").HQProcedure("ppv_vendor")
                                    // .HQColumnShow("VendID,name,Address").DisplayField("VendID").ValueField("VendID").DataIndex("VendID").AllowBlank(false)
-                                   // .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.Disabled(true)//.LabelWidth(90)//.Disabled(true)
+                                   // .Width(300).HQHeightWidth(400, 500).MarginSpec("3 0 0 0")//.Disabled(true)//.LabelWidth(90)//.Disabled(true)
                                    // .HQDBSys(false).ForceSelection(false)
                                    // //.MaxLength(30).EnforceMaxLength(true)
                                    // //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -295,7 +295,7 @@
                                      //CustID
                                     HQ.Combo().ID("cboCustId").Name("cboCustId").HQLangCode("CUSTID").HQProcedure("AR10100_pcCustomerActive")
                                     .HQColumnShow("CustID,Name,Addr1,Addr2").DisplayField("CustID").ValueField("CustID").DataIndex("CustId")
-                                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
+                                    .Width(300).HQHeightWidth(400, 500).MarginSpec("3 0 0 0")//.LabelWidth(90)//.Disabled(true)
                                     .HQDBSys(false).ForceSelection(false).AllowBlank(false)
                                     //.MaxLength(30).EnforceMaxLength(true)
                                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -315,14 +315,14 @@
                                 
                                     //InvcNbr
                                      ,HQ.TextBox().ID("txtInvcNbr").Name("txtInvcNbr").HQLangCode("INVCNBR").DataIndex("InvcNbr")
-                                     .Width(225).MarginSpec("5 0 0 0").MaxLength(15).EnforceMaxLength(true)
+                                     .Width(225).MarginSpec("3 0 0 0").MaxLength(15).EnforceMaxLength(true)
                                      //InvcNote  
                                     ,HQ.TextBox().ID("txtInvcNote").Name("txtInvcNote").DataIndex("InvcNote")
-                                     .Width(75).MarginSpec("5 0 0 0").MaxLength(10).EnforceMaxLength(true)
+                                     .Width(75).MarginSpec("3 0 0 0").MaxLength(10).EnforceMaxLength(true)
 
                                     //Original DocAmount
                                     , HQ.NumberField().ID("txtCuryOrigDocAmt").Name("txtCuryOrigDocAmt").HQLangCode("ORIGDOCAMT").DataIndex("OrigDocAmt")
-                                    .Width(300).MarginSpec("5 0 0 0").ReadOnly(true)   
+                                    .Width(300).MarginSpec("3 0 0 0").ReadOnly(true)   
                              
                              
                                 //ngoac ket thuc dan hang ngang hang 2 tab 1
@@ -333,7 +333,7 @@
                                  
                                     //DocDate
                                     HQ.DateField().ID("txtDocDate").Name("txtDocDate").HQLangCode("DOCDATE").DataIndex("DocDate")
-                                    .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now).AllowBlank(false)
+                                    .Width(300).MarginSpec("3 0 0 0").Value(DateTime.Now).AllowBlank(false)
                                     .Listeners(lst =>
                                      {
                                         lst.Change.Fn = "txtDocDate_Change";
@@ -343,7 +343,7 @@
                                     //Term
                                     ,HQ.Combo().ID("cboTerms").Name("cboTerms").HQLangCode("TERM").HQProcedure("AR10100_pcterms")
                                     .HQColumnShow("TermsID,Descr").DisplayField("TermsID").ValueField("TermsID").DataIndex("Terms").AllowBlank(false)
-                                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")//.LabelWidth(90)//.Disabled(true)
+                                    .Width(300).HQHeightWidth(400, 500).MarginSpec("3 0 0 0")//.LabelWidth(90)//.Disabled(true)
                                     .HQDBSys(false).ForceSelection(false)
                                     //.MaxLength(30).EnforceMaxLength(true)
                                     //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -362,7 +362,7 @@
 
                                     //Currentcy Document
                                     , HQ.NumberField().ID("txtCuryDocBal").Name("txtCuryDocBal").HQLangCode("CURYDOCBAL").DataIndex("DocBal")
-                                     .Width(300).MarginSpec("5 0 0 0").ReadOnly(true) 
+                                     .Width(300).MarginSpec("3 0 0 0").ReadOnly(true) 
                             
                             
                             
@@ -373,15 +373,15 @@
                                 .Items(
                                    //Due Date = NowDay + Term xu ly sau
                                    HQ.DateField().ID("txtDueDate").Name("txtDueDate").HQLangCode("DUEDATE").DataIndex("DueDate")
-                                  .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now).AllowBlank(false)
+                                  .Width(300).MarginSpec("3 0 0 0").Value(DateTime.Now).AllowBlank(false)
                         
                                   //DIscount Date
                                   ,HQ.DateField().ID("txtDiscDate").Name("txtDiscDate").HQLangCode("DISCDATE").DataIndex("DiscDate")
-                                  .Width(300).MarginSpec("5 0 0 0").Value(DateTime.Now).AllowBlank(false)
+                                  .Width(300).MarginSpec("3 0 0 0").Value(DateTime.Now).AllowBlank(false)
                           
                                   //txtTxblTot
                                   ,HQ.NumberField().ID("txtTxblTot").Name("txtTxblTot").HQLangCode("TXBLAMT").DataIndex("TxblTot00")
-                                  .Width(300).MarginSpec("5 0 0 0").ReadOnly(true) 
+                                  .Width(300).MarginSpec("3 0 0 0").ReadOnly(true) 
                         
                           
                         
@@ -397,7 +397,7 @@
                         
                                   //txtTxblTot
                                   ,HQ.NumberField().ID("txtTaxTot").Name("txtTaxTot").HQLangCode("TAXAMT").DataIndex("TaxTot00")
-                                  .Width(300).MarginSpec("5 0 0 0").ReadOnly(true) 
+                                  .Width(300).MarginSpec("3 0 0 0").ReadOnly(true) 
                           
                           
                                 //ngoac ket thuc dan hang ngang hang 5 tab 1
@@ -436,11 +436,11 @@
                                 .Editor(
                                   HQ.Combo().ID("cboLineType").Name("cboLineType").HQProcedure("AR10100_pcLineType")
                                   .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
-                                  .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                                 .HQHeightWidth(500, 400).MarginSpec("3 0 0 0").ForceSelection(true)
                                  .HQParam(new StoreParameterCollection() { 
                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                   })
-                                  .HQDBSys(false).AllowBlank(false)
+                                  .HQDBSys(false)//.AllowBlank(false)
                                   .Listeners(lst =>
                                  {
                                      //lst.Change.Fn = "cboCpnyID_Change";
@@ -454,11 +454,11 @@
                                 .Editor(
                                   HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQProcedure("AR10100_pcInventoryActiveByBranch")
                                   .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
-                                  .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                                  .HQHeightWidth(500, 400).MarginSpec("3 0 0 0").ForceSelection(true)
                                  .HQParam(new StoreParameterCollection() { 
                                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
                                   })
-                                  .HQDBSys(false).AllowBlank(false)
+                                  .HQDBSys(false)//.AllowBlank(false)
                                   .Listeners(lst =>
                                  {
                                      //lst.Change.Fn = "cboCpnyID_Change";
@@ -504,11 +504,11 @@
                                 .Editor(
                                   HQ.Combo().ID("cboTaxCat").Name("cboTaxCat").HQProcedure("AR10100_pcTaxCat")
                                   .HQColumnShow("CatID,Descr").DisplayField("CatID").ValueField("CatID")
-                                  .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                                 .HQHeightWidth(500, 400).MarginSpec("3 0 0 0").ForceSelection(true)
                                  .HQParam(new StoreParameterCollection() { 
                                        //new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
                                   })
-                                  .HQDBSys(false).AllowBlank(false)
+                                  .HQDBSys(false)//.AllowBlank(false)
                                   .Listeners(lst =>
                                  {
                                      //lst.Change.Fn = "cboTaxCat_Change";
@@ -520,7 +520,7 @@
                                 //.Editor(
                                 //    HQ.Combo().ID("cboTaxID").Name("cboTaxID").HQProcedure("AP_VendorTaxes")
                                 //    .HQColumnShow("taxid,Descr,TaxRate").DisplayField("taxid").ValueField("taxid")
-                                //    .Width(400).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(false).MultiSelect(true)
+                                //    .Width(400).HQHeightWidth(500, 400).MarginSpec("3 0 0 0").ForceSelection(false).MultiSelect(true)
                                 //    .HQParam(new StoreParameterCollection() { 
                                 //    new StoreParameter() { Name = "@VendID", Value = "App.cboCustId.value", Mode = ParameterMode.Raw },
                                 //    new StoreParameter() { Name = "@OrdFromId", Value = @ViewBag.OrdFromId , Mode = ParameterMode.Value}
@@ -539,7 +539,7 @@
                                 //.Editor(
                                 //    HQ.Combo().ID("cboTaxID").Name("cboTaxID").HQProcedure("AR10100_pcCustomerTaxes")
                                 //    .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID")
-                                //    .Width(500).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").MultiSelect(true).ForceSelection(true)
+                                //    .Width(500).HQHeightWidth(500, 400).MarginSpec("3 0 0 0").MultiSelect(true).ForceSelection(true)
                                 //    .HQParam(new StoreParameterCollection() { 
                                 //    new StoreParameter() { Name = "@CustID", Value = "App.cboCustId.value", Mode = ParameterMode.Raw },
                                 //    new StoreParameter() { Name = "@ShipToID", Value = "DEFAULT" , Mode = ParameterMode.Value},
@@ -559,13 +559,13 @@
                                 .Editor(
                                     HQ.Combo().ID("cboTaxID").Name("cboTaxID").HQProcedure("AR10100_pcCustomerTaxes")
                                     .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID")
-                                    .Width(500).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").MultiSelect(true).ForceSelection(true)
+                                    .HQHeightWidth(500, 400).MarginSpec("3 0 0 0").MultiSelect(true).ForceSelection(true)
                                     .HQParam(new StoreParameterCollection() { 
                                     new StoreParameter() { Name = "@CustID", Value = "App.cboCustId.value", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@ShipToID", Value = "DEFAULT" , Mode = ParameterMode.Value},
                                     new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
                                 })
-                                    .HQDBSys(false).AllowBlank(false)
+                                    .HQDBSys(false)//.AllowBlank(false)
                                     .Listeners(lst =>
                                     {
                                         lst.Change.Fn = "cboTaxID_Change";

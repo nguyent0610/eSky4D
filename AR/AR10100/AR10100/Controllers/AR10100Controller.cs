@@ -203,7 +203,7 @@ namespace AR10100.Controllers
             //them hoac update cac record tren luoi
             lstgrd.Created.AddRange(lstgrd.Updated);
 
-            foreach (AR10100_pgLoadInvoiceMemo_Result created in lstgrd.Created)
+            foreach (AR10100_pgLoadInvoiceMemo_Result created in lstgrd.Created.Where(p=>p.TranAmt!=0))
             {
 
                 var objGrid = _db.AR_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RefNbr == refNbr &&
@@ -239,7 +239,7 @@ namespace AR10100.Controllers
                         objGrid.Crtd_User = Current.UserName;
                         objGrid.tstamp = new byte[0];
                         UpdatingGridAR_Trans(created, ref objGrid,data);
-                        if (objGrid.BatNbr != "" && objGrid.BranchID != "" && objGrid.RefNbr != "" && objGrid.LineRef != "" && objGrid.InvtId != "" && objGrid.InvtId != null)
+                        if (objGrid.BatNbr != "" && objGrid.BranchID != "" && objGrid.RefNbr != "" && objGrid.LineRef != "" )
                         {
                             _db.AR_Trans.AddObject(objGrid);
                            
@@ -334,6 +334,7 @@ namespace AR10100.Controllers
                         else
                         {
                             dal.CommitTrans();
+
                         }
                         
                   
@@ -379,6 +380,7 @@ namespace AR10100.Controllers
                     dal.RollbackTrans();
                     throw;
                 }
+                return Util.CreateMessage(MessageProcess.Save, new { tmpRefNbr = tmpRefNbr, tmpBatNbr = tmpBatNbr });
             }
             
 
@@ -579,7 +581,7 @@ namespace AR10100.Controllers
             d.TranAmt = s.TranAmt;
             d.TranDate = Convert.ToDateTime(data["txtDocDate"]).ToDateShort();
             d.TranDesc = s.TranDesc;
-            d.TranType = s.TranType;
+            d.TranType = data["cboDocType"];// s.TranType;
             d.TxblAmt00 = s.TxblAmt00;
             d.TxblAmt01 = s.TxblAmt01;
             d.TxblAmt02 = s.TxblAmt02;

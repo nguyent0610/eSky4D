@@ -37,10 +37,10 @@ var countTaxAmt = 0;
 var tmpChangeForm1OrForm2 = "0";
 
 var tmpFormChangeTopBot = false;
-var keys = ['InvtId'];
+var keys = ['InvtId','TranAmt'];
 
-var fieldsCheckRequire = ["InvtId"];
-var fieldsLangCheckRequire = ["InvtId"];
+var fieldsCheckRequire = [ 'TranAmt'];
+var fieldsLangCheckRequire = [ 'TranAmt'];
 var isNewRef = false;
 
 var tmpTrantAmtWhenChange = 0;
@@ -95,6 +95,7 @@ var menuClick = function (command) {
                 HQ.message.show(20150303, '', 'refresh');
             } else {
                 HQ.isChange = false;
+                refresh('yes');
             }
             break;
         case "new":
@@ -250,7 +251,7 @@ function Save() {
 
 
     //}
-
+   
     App.frmTop.getForm().updateRecord();
     App.frmBot.getForm().updateRecord();
 
@@ -273,7 +274,7 @@ function Save() {
             },
             success: function (result, data) {
                 if (App.cboHandle.getValue() == "V" || App.cboHandle.getValue() == "C" || App.cboHandle.getValue() == "R") {
-                    HQ.message.process(errorMsg, data, true);
+                    HQ.message.process(result, data, true);
                 }
                 else HQ.message.show(201405071, '', null);
                 App.cboBatNbr.getStore().load();
@@ -444,12 +445,12 @@ var firstLoad = function () {
 
 };
 var frmChange = function () {
-    if (HQ.focus == 'headerTop' || HQ.focus == 'Grid') {
+    //if (HQ.focus == 'headerTop' || HQ.focus == 'Grid') {
         //đề phòng trường hợp nếu store chưa có gì cả giao diện chưa load xong mà App.frmMain.getForm().updateRecord(); được gọi sẽ gây lỗi
         if (App.storeFormTop.data.length > 0) {
             App.frmTop.getForm().updateRecord();
 
-            HQ.isChange = HQ.store.isChange(App.storeFormTop);
+            HQ.isChange = HQ.store.isChange(App.storeFormTop) == false ? HQ.store.isChange(App.storeGrid) : true;
             HQ.common.changeData(HQ.isChange, 'AR10100');//co thay doi du lieu gan * tren tab title header
             //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
             if (App.cboBatNbr.valueModels == null || HQ.isNew == true) {//App.cboCustId.valueModels == null khi ko co select item nao
@@ -467,7 +468,7 @@ var frmChange = function () {
         if (App.storeFormBot.data.length > 0) {
             App.frmBot.getForm().updateRecord();
 
-            HQ.isChange = HQ.store.isChange(App.storeFormBot);
+            HQ.isChange = HQ.store.isChange(App.storeFormBot) == false ? HQ.store.isChange(App.storeGrid) : true;
             HQ.common.changeData(HQ.isChange, 'AR10100');//co thay doi du lieu gan * tren tab title header
             //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
             if (App.cboRefNbr.valueModels == null || HQ.isNew == true) {//App.cboCustId.valueModels == null khi ko co select item nao
@@ -486,11 +487,11 @@ var frmChange = function () {
             }
 
         }
-    } else if (HQ.focus == 'headerBot') {
+    //} else if (HQ.focus == 'headerBot') {
         if (App.storeFormBot.data.length > 0) {
             App.frmBot.getForm().updateRecord();
 
-            HQ.isChange = HQ.store.isChange(App.storeFormBot);
+            HQ.isChange = HQ.store.isChange(App.storeFormBot) == false ? HQ.store.isChange(App.storeGrid) : true;
             HQ.common.changeData(HQ.isChange, 'AR10100');//co thay doi du lieu gan * tren tab title header
             //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
             if (App.cboRefNbr.valueModels == null || HQ.isNew == true) {//App.cboCustId.valueModels == null khi ko co select item nao
@@ -509,7 +510,7 @@ var frmChange = function () {
         if (App.storeFormTop.data.length > 0) {
             App.frmTop.getForm().updateRecord();
 
-            HQ.isChange = HQ.store.isChange(App.storeFormTop);
+            HQ.isChange = HQ.store.isChange(App.storeFormTop) == false ? HQ.store.isChange(App.storeGrid) : true;
             HQ.common.changeData(HQ.isChange, 'AR10100');//co thay doi du lieu gan * tren tab title header
             //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
             if (App.cboBatNbr.valueModels == null || HQ.isNew == true) {//App.cboCustId.valueModels == null khi ko co select item nao
@@ -528,7 +529,7 @@ var frmChange = function () {
             }
 
         }
-    }
+    //}
 
 
 
@@ -745,13 +746,13 @@ var grd_BeforeEdit = function (editor, e) {
 };
 var grd_Edit = function (item, e) {
 
-    if (keys.indexOf(e.field) != -1) {
-        if (e.value != '' && HQ.store.checkRequirePass(App.storeGrid, keys, fieldsCheckRequire, fieldsLangCheckRequire) && App.storeGrid.data.items[App.storeGrid.getCount() - 1].data.InvtID != "") {
+    //if (keys.indexOf(e.field) != -1 || e.field=='InvtID') {
+        if (e.value != '' && HQ.store.checkRequirePass(App.storeGrid, keys, fieldsCheckRequire, fieldsLangCheckRequire) && App.storeGrid.data.items[App.storeGrid.getCount() - 1].data.TranAmt != "0") {
             //App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());//Ext.data.Record() 
             //App.slmGridTab1.selected.items[0].set('TranDesc', vendIDAndDescr);
             insertNewRecordGrid1();
         }
-    }
+    //}
 
     if (e.field == 'Qty') {
         var quantity = e.value;
@@ -811,6 +812,7 @@ var grd_Edit = function (item, e) {
         reloadDataGrid1AndGrid2Tab2();
         //reload lai tong tien , so tien no goc , so du chung tu (TotAmt, OrigDocAmt , DocBal)
         reloadAmountMustPayTotal();
+        frmChange();
     }
 
 };
@@ -848,17 +850,19 @@ var insertNewRecordGrid1 =  function(){
     var lineRef = HQ.store.lastLineRef(App.storeGrid);
     //tim trong store de kiem cai Descr do vao TranDescr trong Grid
     var indexCustIdToGetDescr = App.cboCustId.store.indexOf(App.cboCustId.store.findRecord("CustID", App.cboCustId.getValue()));
-    
-    var tranDesc = App.cboCustId.store.data.items[indexCustIdToGetDescr].data.Name;
+    var obj = HQ.store.findInStore(App.cboCustId.getStore(), ["CustID"], [App.cboCustId.getValue()]);
+    var tranDesc = obj == undefined ? "" : obj.CustID + ' - ' + obj.Name;
     var record = Ext.create("App.AR10100_pgLoadInvoiceMemo_ResultModel", {
         //CustId: "",
         LineRef: lineRef,
         LineType: "N",
         TranDesc: tranDesc != "" ? tranDesc : "",
         TaxCat: "*",
-        TaxID: App.cboTaxID.store.data.items[0] != undefined ? App.cboTaxID.store.data.items[0].data.TaxID : "",
+        TaxID: obj == undefined ? "" : obj.TaxID00,
+        TaxId00: obj == undefined ? "" : obj.TaxID00
 
     });
+    record.commit();
     App.storeGrid.insert(App.storeGrid.getCount(), record);
 };
 
@@ -1097,9 +1101,16 @@ var reloadAmountMustPayTotal = function () {
 var cboCustId_Change = function (sender,e) {
     App.cboTaxID.getStore().reload();
     App.cboTerms.setValue("10");
-    if (HQ.isNew && e != "") {
-        insertNewRecordGrid1();
+    var obj = HQ.store.findInStore(App.cboCustId.getStore(), ["CustID"], [e]);
+    if (obj != undefined) {
+        App.storeGrid.data.each(function (item) {
+            item.set("TranDesc", obj.CustID + " - " + obj.Name);
+         
+        });
     }
+    //if (HQ.isNew && e != "") {
+    //    insertNewRecordGrid1();
+    //}
 }
 
 
