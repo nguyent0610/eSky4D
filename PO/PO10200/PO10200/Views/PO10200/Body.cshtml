@@ -163,7 +163,7 @@
                                                  HQ.TextBox().ID("txtRcptNbr").Name("RcptNbr").MaxLength(20).HQLangCode("RCPTNBR").LabelWidth(105).InputWidth(150).ReadOnly(true)
                                                 , HQ.Combo().ID("cboPONbr").Name("PONbr").HQLangCode("PONBR").HQProcedure("PO10200_pcPONbr").HQAutoLoad(false).ReadOnly(true)
                                                     .HQColumnShow("PONbr,Status,Name,Notes").DisplayField("PONbr").ValueField("PONbr").Tag("X")
-                                                    .LabelWidth(100).InputWidth(110).HQHeightWidth(400, 300)
+                                                    .LabelWidth(100).InputWidth(110).HQHeightWidth(400, 500)
                                                     .HQDBSys(false)
                                                     .HQParam(new StoreParameterCollection() {
                                                                 new StoreParameter() { Name = "@Type", Value = "App.cboRcptType.getValue()", Mode = ParameterMode.Raw}
@@ -512,7 +512,7 @@
                                                 })
                                             )
                                             .BottomBar(
-                                                    X.PagingToolbar()
+                                                    X.PagingToolbar().ID("pg")
                                                     .Items(
                                                         X.Label("Page size:"),
                                                         X.ToolbarSpacer(10),

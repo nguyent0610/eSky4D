@@ -65,7 +65,9 @@ var loadDataHeader = function (sto) {
     }
     App.cboHandle.setValue("N");
     HQ.common.showBusy(false);
-    if (record.data.RcptFrom == "PO") HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
+    if (record.data.RcptFrom == "PO") {
+        HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
+    }
 };
 var loadDataDetail = function (sto) {
     //neu sto da co du lieu thi ko duoc sua cac combo ben duoi
@@ -730,6 +732,13 @@ var cboBatNbr_Select = function (item) {
     }
 };
 var cboPONbr_Change = function (item, newValue, oldValue) {
+    if (item.hasFocus) {
+        App.stoPO10200_pgDetail.clearData();
+        App.stoPO10200_pgDetail.loadData([], false);
+        App.grdDetail.view.refresh();
+        HQ.store.insertBlank(App.stoPO10200_pgDetail, _keys);
+        
+    }
     if ((HQ.isNew && item.valueModels != null && !App.stoPO10200_ppCheckingPONbr.loading) && !Ext.isEmpty(newValue)) {
         App.stoPO10200_ppCheckingPONbr.load(function () {
             if (App.stoPO10200_ppCheckingPONbr.data.length > 0 ) {
@@ -743,6 +752,7 @@ var cboPONbr_Change = function (item, newValue, oldValue) {
                 App.txtDescr.setValue(HQ.common.getLang("Receipt from vendor:") + item.valueModels[0].data.VendID);
                 if (!Ext.isEmpty(App.cboRcptType.getValue()) && App.cboRcptType.getValue() == "R") {
                     App.stoPO10200_pdPODetailReceipt.load(function () {
+                     
                         App.stoPO10200_pdPODetailReceipt.data.each(function (det) {
                             insertItemGrid(App.grdDetail, det.data);
                         });
@@ -750,8 +760,11 @@ var cboPONbr_Change = function (item, newValue, oldValue) {
                         App.cboPONbr.setReadOnly(false);
                     });
                 } else {
+
                     App.stoPO10200_pdPODetailReturn.load(function () {
+                        
                         App.stoPO10200_pdPODetailReturn.data.each(function (det) {
+                           
                             insertItemGrid(App.grdDetail, det.data);
                         });
                         frmChange();
@@ -763,7 +776,14 @@ var cboPONbr_Change = function (item, newValue, oldValue) {
     }
 };
 var cboPONbr_Select = function (item, newValue, oldValue) {
+    if (item.hasFocus) {
+        App.stoPO10200_pgDetail.clearData();
+        App.stoPO10200_pgDetail.loadData([], false);
+        App.grdDetail.view.refresh();
+        HQ.store.insertBlank(App.stoPO10200_pgDetail, _keys);
+    }
     if (HQ.isNew && item.valueModels != null && !App.stoPO10200_ppCheckingPONbr.loading && !Ext.isEmpty(newValue)) {
+       
         App.stoPO10200_ppCheckingPONbr.load(function () {
             if (App.stoPO10200_ppCheckingPONbr.data.length > 0) {
                 HQ.message.show(60, '', '');
@@ -776,6 +796,7 @@ var cboPONbr_Select = function (item, newValue, oldValue) {
                 App.txtDescr.setValue(HQ.common.getLang("Receipt from vendor:") + item.valueModels[0].data.VendID);
                 if (!Ext.isEmpty(App.cboRcptType.getValue()) && App.cboRcptType.getValue() == "R") {
                     App.stoPO10200_pdPODetailReceipt.load(function () {
+                      
                         App.stoPO10200_pdPODetailReceipt.data.each(function (det) {
                             insertItemGrid(App.grdDetail,det.data);
                         });
@@ -784,6 +805,7 @@ var cboPONbr_Select = function (item, newValue, oldValue) {
                     });
                 } else {
                     App.stoPO10200_pdPODetailReturn.load(function () {
+                       
                         App.stoPO10200_pdPODetailReturn.data.each(function (det) {
                             insertItemGrid(App.grdDetail, det.data);
                         });
@@ -834,6 +856,17 @@ var cboRcptType_Change = function (item, newValue, oldValue) {
             else
             {
                 HQ.grid.hide(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
+                if (App.cboRcptFrom.getValue() == "PO") {
+                    HQ.grid.show(App.grdDetail, ["POLineRef", "Qty", "UnitDescr"]);
+
+                    //GridPO_Trans.Columns["OrigRcptDate"].Visibility = Visibility.Visible;
+
+                }
+                else {
+                    HQ.grid.hide(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
+                }
+
+                //HQ.grid.hide(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
            
              
              
@@ -877,7 +910,12 @@ var cboRcptFrom_Change = function (item, newValue, oldValue) {
                 App.cboPONbr.validate();
 
                 if (App.txtRcptNbr.value.length == 0) {
-                    HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
+                    if (App.cboRcptType.getValue() == "X") {
+                        HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
+                    }
+                    else {
+                        HQ.grid.show(App.grdDetail, ["POLineRef",  "Qty", "UnitDescr"]);
+                    }
                 }
 
                 App.cboPONbr.getStore().load(function () {
