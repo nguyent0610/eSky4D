@@ -46,7 +46,8 @@ namespace ARProcess
                 {
                     foreach (clsAR_Doc obj in dtDocCheck)
                     {
-                        if (obj.Rlsed != -1)
+                        string dt = objSql.AR_CheckForCancel(BranchID, BatNbr, obj.RefNbr);
+                        if (dt == "1")
                         {
                             throw new MessageException(MessageType.Message, "715", "", new[] { obj.RefNbr });   
                                         
