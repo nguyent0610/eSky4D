@@ -381,7 +381,7 @@ namespace IN10100.Controllers
         {
             _objIN = _app.IN_Setup.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
             if (_objIN == null) _objIN = new IN_Setup();
-            foreach (var trans in _lstTrans)
+            foreach (var trans in _lstTrans.Where(p=>p.InvtID != ""))//fix luu dong co invtid==''
             {
 
                 var transDB = _app.IN_Trans.FirstOrDefault(p =>
