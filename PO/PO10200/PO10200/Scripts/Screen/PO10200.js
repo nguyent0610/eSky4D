@@ -924,8 +924,8 @@ var cboRcptFrom_Change = function (item, newValue, oldValue) {
                 });
 
             }
-        }
-    }
+        } else App.cboPONbr.setReadOnly(true);
+    } else App.cboPONbr.setReadOnly(true);
 }
 
 
