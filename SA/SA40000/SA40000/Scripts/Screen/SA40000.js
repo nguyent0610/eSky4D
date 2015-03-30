@@ -60,6 +60,127 @@ var menuClick = function (command) {
 
 };
 
+var treePanelBranch_checkChange= function (node, checked, eOpts) {
+    node.childNodes.forEach(function (childNode) {
+        childNode.set("checked", checked);
+    });
+};
+
+var btnExpand_click = function (btn, e, eOpts) {
+    App.treePanelBranch.expandAll();
+};
+
+var btnCollapse_click = function (btn, e, eOpts) {
+    App.treePanelBranch.collapseAll();
+};
+
+var btnAddAll_click= function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        var allNodes = getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
+        if (allNodes && allNodes.length > 0) {
+            allNodes.forEach(function (node) {
+                if (node.data.Type == "Company") {
+                    var idx = App.grdSYS_CloseDateSetUp.store.getCount()-1;
+                    var record = HQ.store.findInStore(App.grdSYS_CloseDateSetUp.store,
+                        ['BranchID'],
+                        [ node.data.RecID]);
+                    if (!record) {
+                        App.grdSYS_CloseDateSetUp.store.insert(idx, Ext.create("App.mdlSA40000_pgSYS_CloseDateSetUp", {
+                            BranchID: node.data.RecID, WrkAdjDate: new Date(_dateServer), WrkOpenDate: new Date(_dateServer)
+                        }));
+                    }
+                }
+            });
+        }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnAdd_click= function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        var allNodes = App.treePanelBranch.getCheckedNodes();
+        if (allNodes && allNodes.length > 0) {
+            allNodes.forEach(function (node) {
+                if (node.attributes.Type == "Company") {
+                    var idx = App.grdSYS_CloseDateSetUp.store.getCount()-1;
+                    var record = HQ.store.findInStore(App.grdSYS_CloseDateSetUp.store,
+                        ['BranchID'],
+                        [node.attributes.RecID]);
+                    if (!record) {
+                        App.grdSYS_CloseDateSetUp.store.insert(idx, Ext.create("App.mdlSA40000_pgSYS_CloseDateSetUp", {
+                            BranchID: node.attributes.RecID, WrkAdjDate: new Date(_dateServer), WrkOpenDate:new Date(_dateServer)
+                        }));
+                    }
+                }
+            });
+            App.stoSYS_CloseDateSetUp.fireEvent('datachanged', App.stoSYS_CloseDateSetUp);
+        }
+        //HQ.isChange = true;
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnDel_click= function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+
+        var selRecs = App.grdSYS_CloseDateSetUp.selModel.selected.items;
+                if (selRecs.length > 0) {
+                    var params = [];
+                    selRecs.forEach(function (record) {
+                        params.push(record.data.CpnyID);
+                    });
+                    HQ.message.show(2015020806,
+                        params.join(" & ") + "," + HQ.common.getLang("AppComp"),
+                        'deleteSelectedCompanies');
+                }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnDelAll_click= function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        HQ.message.show(11, '', 'deleteAllCompanies');
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var getDeepAllLeafNodes = function (node, onlyLeaf) {
+    var allNodes = new Array();
+    if (!Ext.value(node, false)) {
+        return [];
+    }
+    if (node.isLeaf()) {
+        return node;
+    } else {
+        node.eachChild(
+         function (Mynode) {
+             allNodes = allNodes.concat(Mynode.childNodes);
+         }
+        );
+    }
+    return allNodes;
+};
+
+var deleteSelectedCompanies= function (item) {
+    if (item == "yes") {
+        App.grdSYS_CloseDateSetUp.deleteSelected();
+    }
+};
+
+var deleteAllCompanies= function (item) {
+    if (item == "yes") {
+        App.grdSYS_CloseDateSetUp.store.removeAll();
+    }
+};
+
 var renderBranchName = function (value) {
     var record = App.cboBranchIDSA40000_pcCompany.findRecord("CpnyID", value);
     if (record) {
@@ -101,6 +222,7 @@ var stoChanged = function (sto) {
 };
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
+    //App.stoSYS_CloseDateSetUp.reload();
     HQ.isFirstLoad = true;
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
@@ -108,7 +230,7 @@ var stoLoad = function (sto) {
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             //HQ.store.insertBlank(sto, keys);
-            HQ.store.insertRecord(sto, keys, { WrkAdjDate: new Date(_dateServer) });
+            HQ.store.insertRecord(sto, keys, { WrkAdjDate: new Date(_dateServer),WrkOpenDate:new Date(_dateServer) });
                 //, WrkOpenDate: new Date(_dateServer)
         }
         HQ.isFirstLoad = false;
@@ -201,12 +323,4 @@ function refresh(item) {
         App.stoSYS_CloseDateSetUp.reload();
     }
 };
-///////////////////////////////////
-
-
-
-
-
-
-
-
+/////////////////////////////////////////////////////////////////////////

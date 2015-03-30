@@ -19,7 +19,7 @@ namespace SA40000.Controllers
     {
         private string _screenNbr = "SA40000";
         private string _userName = Current.UserName;
-        SA40000Entities _db = Util.CreateObjectContext<SA40000Entities>(true);
+        SA40000Entities _sys = Util.CreateObjectContext<SA40000Entities>(true);
 
         public ActionResult Index()
         {  
@@ -35,12 +35,12 @@ namespace SA40000.Controllers
 
         public ActionResult GetSYS_CloseDateSetUp()
         {
-            return this.Store(_db.SA40000_pgSYS_CloseDateSetUp().ToList());
+            return this.Store(_sys.SA40000_pgSYS_CloseDateSetUp().ToList());
         }
 
 
         [DirectMethod]
-        public ActionResult OM21100GetTreeBranch(string panelID)
+        public ActionResult SA40000GetTreeBranch(string panelID)
         {
             TreePanel tree = new TreePanel();
             tree.ID = "treePanelBranch";
@@ -57,8 +57,8 @@ namespace SA40000.Controllers
             node.NodeID = "Root";
             tree.Root.Add(node);
 
-            var lstTerritories = _db.SA40000_ptTerritory().ToList();//tam thoi
-            var companies = _db.SA40000_ptCompany(Current.UserName).ToList();
+            var lstTerritories = _sys.SA40000_ptTerritory().ToList();//tam thoi
+            var companies = _sys.SA40000_ptCompany(Current.UserName).ToList();
 
             foreach (var item in lstTerritories)
             {
@@ -97,7 +97,7 @@ namespace SA40000.Controllers
             var treeBranch = X.GetCmp<Panel>(panelID);
 
             //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
-            tree.Listeners.CheckChange.Fn = "DiscDefintion.Event.treePanelBranch_checkChange";
+            tree.Listeners.CheckChange.Fn = "treePanelBranch_checkChange";
 
             tree.AddTo(treeBranch);
 
@@ -117,10 +117,10 @@ namespace SA40000.Controllers
                 #region Save SYS_CloseDateSetUp
                 foreach (SA40000_pgSYS_CloseDateSetUp_Result deleted in lstSYS_CloseDateSetUp.Deleted)
                 {
-                    var objDelete = _db.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == deleted.BranchID);
+                    var objDelete = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == deleted.BranchID);
                     if (objDelete != null)
                     {
-                        _db.SYS_CloseDateSetUp.DeleteObject(objDelete);
+                        _sys.SYS_CloseDateSetUp.DeleteObject(objDelete);
                     }
                 }
 
@@ -130,7 +130,7 @@ namespace SA40000.Controllers
                 {
                     if (curLang.BranchID.PassNull() == "") continue;
 
-                    var lang = _db.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID.ToLower() == curLang.BranchID.ToLower());
+                    var lang = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID.ToLower() == curLang.BranchID.ToLower());
 
                     if (lang != null)
                     {
@@ -147,12 +147,12 @@ namespace SA40000.Controllers
                     {
                         lang = new SYS_CloseDateSetUp();
                         UpdatingSYS_CloseDateSetUp(lang, curLang, true);
-                        _db.SYS_CloseDateSetUp.AddObject(lang);
+                        _sys.SYS_CloseDateSetUp.AddObject(lang);
                     }
                 }
                 #endregion
 
-                _db.SaveChanges();
+                _sys.SaveChanges();
                 return Json(new { success = true });
             }
             catch (Exception ex)
