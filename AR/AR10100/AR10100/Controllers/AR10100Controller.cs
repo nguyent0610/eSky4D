@@ -79,7 +79,7 @@ namespace AR10100.Controllers
                      else
                         {
                             objHeaderTop = new Batch();
-                            
+                            objHeaderTop.ResetET();
                             objHeaderTop.BatNbr = functionBatNbrIfNull(branchID);
                             tmpBatNbr = objHeaderTop.BatNbr;
  
@@ -135,6 +135,7 @@ namespace AR10100.Controllers
                     else
                     {
                         objHeaderBot = new AR_Doc();
+                        objHeaderBot.ResetET();
                         objHeaderBot.BranchID = branchID;
 
 
@@ -213,6 +214,7 @@ namespace AR10100.Controllers
                     if (objGrid == null)
                     {
                         objGrid = new AR_Trans();
+                        objGrid.ResetET();
                         objGrid.BranchID = branchID;
 
                         if (batNbr != "") // neu batNbr da co roi tuc la chi tao moi RefNbr thoi
@@ -267,42 +269,42 @@ namespace AR10100.Controllers
 
 
 
-            var objHeaderTopNoChange = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AR" && p.BatNbr == batNbr).FirstOrDefault();
-            if (objHeaderTopNoChange != null)
-            {
-                if (handle != "N")
-                {
+            //var objHeaderTopNoChange = _db.Batches.Where(p => p.BranchID == branchID && p.Module == "AR" && p.BatNbr == batNbr).FirstOrDefault();
+            //if (objHeaderTopNoChange != null)
+            //{
+            //    if (handle != "N")
+            //    {
 
 
-                    if (data["cboStatus"] == "H")
-                    {
-                        if (data["cboHandle"] == "R")
-                        {
-                            objHeaderTopNoChange.Rlsed = 1;
-                            objHeaderTopNoChange.Status = "C"; // sua lai sau
-                        }
-                        else if (data["cboHandle"] == "N")
-                        {
-                            objHeaderTopNoChange.Rlsed = 0;
-                            objHeaderTopNoChange.Status = "H";
-                        }
-                    }
-                    else if (data["cboStatus"] == "C")
-                    {
-                        if (data["cboHandle"] == "V")
-                        {
+            //        if (data["cboStatus"] == "H")
+            //        {
+            //            if (data["cboHandle"] == "R")
+            //            {
+            //                objHeaderTopNoChange.Rlsed = 1;
+            //                objHeaderTopNoChange.Status = "C"; // sua lai sau
+            //            }
+            //            else if (data["cboHandle"] == "N")
+            //            {
+            //                objHeaderTopNoChange.Rlsed = 0;
+            //                objHeaderTopNoChange.Status = "H";
+            //            }
+            //        }
+            //        else if (data["cboStatus"] == "C")
+            //        {
+            //            if (data["cboHandle"] == "V")
+            //            {
 
-                            objHeaderTopNoChange.Status = "V";
-                        }
-                        else if (data["cboHandle"] == "C")
-                        {
+            //                objHeaderTopNoChange.Status = "V";
+            //            }
+            //            else if (data["cboHandle"] == "C")
+            //            {
 
-                            objHeaderTopNoChange.Status = "B";
-                        }
-                    }
+            //                objHeaderTopNoChange.Status = "B";
+            //            }
+            //        }
 
-                }
-            }
+            //    }
+            //}
 
             _db.SaveChanges();
 
@@ -483,32 +485,39 @@ namespace AR10100.Controllers
             d.DateEnt = Convert.ToDateTime(data["txtDocDate"]);
 
             d.IntRefNbr = data["txtOrigRefNbr"];
-            if (data["cboStatus"] == "H")
-            {
-                if (data["cboHandle"] == "R")
-                {
-                    d.Rlsed = 1;
-                    d.Status = "C"; // sua lai sau
-                }
-                else if (data["cboHandle"] == "N")
-                {
-                    d.Rlsed = 0;
-                    d.Status = "H";
-                }
-            }
-            else if (data["cboStatus"] == "C")
-            {
-                if (data["cboHandle"] == "V")
-                {
+
+            if (data["cboHandle"] == "C" || data["cboHandle"] == "V")
+                d.Status = "H";
+            else
+                d.Status = s.Status;
+          
+
+            //if (data["cboStatus"] == "H")
+            //{
+            //    if (data["cboHandle"] == "R")
+            //    {
+            //        d.Rlsed = 1;
+            //        d.Status = "C"; // sua lai sau
+            //    }
+            //    else if (data["cboHandle"] == "N")
+            //    {
+            //        d.Rlsed = 0;
+            //        d.Status = "H";
+            //    }
+            //}
+            //else if (data["cboStatus"] == "C")
+            //{
+            //    if (data["cboHandle"] == "V")
+            //    {
                    
-                    d.Status = "V"; 
-                }
-                else if (data["cboHandle"] == "C")
-                {
+            //        d.Status = "V"; 
+            //    }
+            //    else if (data["cboHandle"] == "C")
+            //    {
                    
-                    d.Status = "B";
-                }
-            }
+            //        d.Status = "B";
+            //    }
+            //}
             d.LUpd_DateTime = DateTime.Now;
             d.LUpd_Prog = screenNbr;
             d.LUpd_User = Current.UserName;
@@ -535,20 +544,22 @@ namespace AR10100.Controllers
             //d.PONbr = s.PONbr;
             //d.RcptNbr = s.RcptNbr;
             d.Terms = s.Terms;
-            if (data["cboStatus"] == "H")
-            {
-                if (data["cboHandle"] == "R")
-                {
-                    d.Rlsed = 1;
+            //if (data["cboStatus"] == "H")
+            //{
+            //    if (data["cboHandle"] == "R")
+            //    {
+            //        d.Rlsed = 1;
 
-                }
-                else if (data["cboHandle"] == "N")
-                {
-                    d.Rlsed = 0;
+            //    }
+            //    else if (data["cboHandle"] == "N")
+            //    {
+            //        d.Rlsed = 0;
 
-                }
-            }
-
+            //    }
+            //}
+            var obj = _db.AR_Salesperson.Where(p => p.SlsperId == s.SlsperId).FirstOrDefault();
+            if(obj!=null)
+                d.DeliveryID = obj.DeliveryMan;
             d.LUpd_DateTime = DateTime.Now;
             d.LUpd_Prog = screenNbr;
             d.LUpd_User = Current.UserName;
