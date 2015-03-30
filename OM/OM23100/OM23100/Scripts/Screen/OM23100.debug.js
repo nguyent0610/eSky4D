@@ -45,6 +45,7 @@ var menuClick = function (command) {
             break;
         case "new":
             if (HQ.isInsert) {
+                //App.App
                 HQ.grid.insert(App.grdOM_FCS, keys);
             }
             break;
@@ -137,10 +138,12 @@ var grdOM_FCS_Reject = function (record) {
     stoChanged(App.stoOM_FCS);
 };
 
-var LoadGrid = function (sender, e) {
-    HQ.isFirstLoad = true;
-    App.grdOM_FCS.show();
-    App.stoOM_FCS.reload();
+var btnSearch_Click = function (sender, e) {
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        HQ.isFirstLoad = true;
+        App.grdOM_FCS.show();
+        App.stoOM_FCS.reload();
+    }
 };
 
 var dateFcs_expand = function (dte, eOpts) {
@@ -191,7 +194,7 @@ var dateFcs_Change = function (sender, e) {
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
 var save = function () {
-    HQ.isFirstLoad = true;
+    //HQ.isFirstLoad = true;
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             waitMsg: HQ.common.getLang("SavingData"),

@@ -34,7 +34,7 @@
                     .Name("cboZone").HQLangCode("OM23100_Zone").HQProcedure("OM23100_pcZone")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQAutoLoad(false)
                     .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
-                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true).SelectedItems("G")
+                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
                     .Listeners(lst =>
@@ -90,7 +90,7 @@
                 , X.Button().ID("btnSearch").MarginSpec("5 0 5 160").Width(180)
                     .Text(Util.GetLang("OM23100_Search")).Listeners(p =>
                     {
-                        p.Click.Fn = "LoadGrid";
+                        p.Click.Fn = "btnSearch_Click";
                     })
             )//pnl Header
 
@@ -198,8 +198,8 @@
                     X.GridFilters()
                         .Local(true)
                         .Filters(
-                            X.StringFilter().DataIndex("ScreenNumber"),
-                            X.StringFilter().DataIndex("Descr")
+                            X.StringFilter().DataIndex("SlsperId"),
+                            X.StringFilter().DataIndex("Name")
                         )
                 )
             )// pnl Grid

@@ -30,7 +30,7 @@ namespace OM23100.Controllers
             var grid = this.GetCmp<GridPanel>("grdOM_FCS");
             DataSource ds = new DataSource();
             var lstIN_ProductClass = _db.OM23100_getIN_ProductClass().ToList();
-            
+
             //Column Sell In
             clm = new Column
             {
@@ -43,8 +43,8 @@ namespace OM23100.Controllers
                 NumberColumn nbcl = new NumberColumn
                 {
                     Text = lstIN_ProductClass[i].Descr,
-                    DataIndex = "SellIn_"+lstIN_ProductClass[i].ClassID,
-                    Align=Alignment.Right,
+                    DataIndex = "SellIn_" + lstIN_ProductClass[i].ClassID,
+                    Align = Alignment.Right,
                     Editor =
                     {
                         new NumberField
@@ -70,7 +70,7 @@ namespace OM23100.Controllers
                 NumberColumn nbcl = new NumberColumn
                 {
                     Text = lstIN_ProductClass[i].Descr,
-                    DataIndex = "Coverage_"+lstIN_ProductClass[i].ClassID,
+                    DataIndex = "Coverage_" + lstIN_ProductClass[i].ClassID,
                     Align = Alignment.Right,
                     Editor =
                     {
@@ -97,7 +97,7 @@ namespace OM23100.Controllers
                 NumberColumn nbcl = new NumberColumn
                 {
                     Text = lstIN_ProductClass[i].Descr,
-                    DataIndex = "DNA_"+lstIN_ProductClass[i].ClassID,
+                    DataIndex = "DNA_" + lstIN_ProductClass[i].ClassID,
                     Align = Alignment.Right,
                     Editor =
                     {
@@ -118,7 +118,7 @@ namespace OM23100.Controllers
                 Text = Util.GetLang("OM23100_Visit"),
                 ID = "txt_Visit",
                 Align = Alignment.Right,
-                DataIndex="Visit",
+                DataIndex = "Visit",
                 Editor =
                 {
                     new NumberField
@@ -133,7 +133,7 @@ namespace OM23100.Controllers
             //Column LPPC
             nbc = new NumberColumn
             {
-                Text = Util.GetLang("OM23100_LPPC")+"(%)",
+                Text = Util.GetLang("OM23100_LPPC") + "(%)",
                 ID = "txt_LPPC",
                 Align = Alignment.Right,
                 DataIndex = "LPPC",
@@ -161,7 +161,7 @@ namespace OM23100.Controllers
                 NumberColumn nbcl = new NumberColumn
                 {
                     Text = lstIN_ProductClass[i].Descr,
-                    DataIndex = "ForcusedSKU_"+lstIN_ProductClass[i].ClassID,
+                    DataIndex = "ForcusedSKU_" + lstIN_ProductClass[i].ClassID,
                     Align = Alignment.Right,
                     Editor =
                     {
@@ -181,7 +181,7 @@ namespace OM23100.Controllers
             {
                 Text = Util.GetLang("OM23100_VisitTime"),
                 ID = "txt_VisitTime",
-                Width=120,
+                Width = 120,
                 Align = Alignment.Right,
                 DataIndex = "VisitTime",
                 Editor =
@@ -231,7 +231,7 @@ namespace OM23100.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

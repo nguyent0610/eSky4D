@@ -293,12 +293,11 @@ var HQ = {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
-                if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)&&store.totalCount!=0) {
+                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
                 store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                     callback: function () {
-                        HQ.grid.last(grd);
+                        //HQ.grid.last(grd);
                         setTimeout(function () {
-                            //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
                             if (grd.editingPlugin) {
                                 grd.editingPlugin.startEditByPosition({
                                     row: store.getCount() - 1,
@@ -314,33 +313,21 @@ var HQ = {
                         }, 300);
                     }
                 });
-                }
-                else {
-                    HQ.grid.last(grd);
-                    if (grd.editingPlugin) {
-                        grd.editingPlugin.startEditByPosition({
-                            row: store.getCount() - 1,
-                            column: 1
-                        });
-                    }
-                    else {
-                        grd.lockedGrid.editingPlugin.startEditByPosition({
-                            row: store.getCount() - 1,
-                            column: 1
-                        });
-                    }
-                }
+                //}
+                //else {
+                //    HQ.grid.last(grd);
+                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                //}
                 return;
             }
-            if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
             store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
                 callback: function () {
                     if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
                         HQ.store.insertBlank(store, keys);
                     }
-                    HQ.grid.last(grd);
+                    //HQ.grid.last(grd);
                     setTimeout(function () {
-                        // grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
                         if (grd.editingPlugin) {
                             grd.editingPlugin.startEditByPosition({
                                 row: store.getCount() - 1,
@@ -356,27 +343,14 @@ var HQ = {
                     }, 300);
                 }
             });
-            }
-            else {
-                if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-                    HQ.store.insertBlank(store, keys);
-                }
-                HQ.grid.last(grd);
-                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-               
-                if (grd.editingPlugin) {
-                    grd.editingPlugin.startEditByPosition({
-                        row: store.getCount() - 1,
-                        column: 1
-                    });
-                }
-                else {
-                    grd.lockedGrid.editingPlugin.startEditByPosition({
-                        row: store.getCount() - 1,
-                        column: 1
-                    });
-                }
-            }
+            //}
+            //else {
+            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+            //        HQ.store.insertBlank(store, keys);
+            //    }
+            //    HQ.grid.last(grd);
+            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+            //}
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
@@ -798,7 +772,7 @@ var HQ = {
     },
     form: {
         checkRequirePass: function (frm) {
-            //frm.updateRecord();
+            frm.updateRecord();
             var isValid = true;
             frm.getForm().getFields().each(
                             function (item) {
