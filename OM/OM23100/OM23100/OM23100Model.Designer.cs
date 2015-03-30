@@ -100,14 +100,6 @@ namespace OM23100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<OM23100_getIN_ProductClass_Result> OM23100_getIN_ProductClass()
-        {
-            return base.ExecuteFunction<OM23100_getIN_ProductClass_Result>("OM23100_getIN_ProductClass");
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="fCSDate">No Metadata Documentation available.</param>
         public int OM23100_pgLoadGrid(global::System.String branchID, Nullable<global::System.DateTime> fCSDate)
@@ -133,6 +125,25 @@ namespace OM23100
             }
     
             return base.ExecuteFunction("OM23100_pgLoadGrid", branchIDParameter, fCSDateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<OM23100_getIN_ProductClass_Result> OM23100_getIN_ProductClass(global::System.String branchID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM23100_getIN_ProductClass_Result>("OM23100_getIN_ProductClass", branchIDParameter);
         }
 
         #endregion
