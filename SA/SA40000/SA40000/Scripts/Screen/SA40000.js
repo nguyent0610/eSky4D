@@ -79,18 +79,26 @@ var btnAddAll_click= function (btn, e, eOpts) {
         var allNodes = getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
         if (allNodes && allNodes.length > 0) {
             allNodes.forEach(function (node) {
+                HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
                 if (node.data.Type == "Company") {
-                    var idx = App.grdSYS_CloseDateSetUp.store.getCount()-1;
+                    //var idx = App.grdSYS_CloseDateSetUp.store.getTotalCount() - 1;
                     var record = HQ.store.findInStore(App.grdSYS_CloseDateSetUp.store,
                         ['BranchID'],
                         [ node.data.RecID]);
                     if (!record) {
-                        App.grdSYS_CloseDateSetUp.store.insert(idx, Ext.create("App.mdlSA40000_pgSYS_CloseDateSetUp", {
-                            BranchID: node.data.RecID, WrkAdjDate: new Date(_dateServer), WrkOpenDate: new Date(_dateServer)
-                        }));
+                        //App.grdSYS_CloseDateSetUp.store.insert(idx, Ext.create("App.mdlSA40000_pgSYS_CloseDateSetUp", {
+                        //    //BranchID: node.data.RecID, WrkAdjDate: new Date(_dateServer), WrkOpenDate: new Date(_dateServer)
+                        //}));
+
+                       
+                        record = App.stoSYS_CloseDateSetUp.getAt(App.grdSYS_CloseDateSetUp.store.getCount()-1);
+                        record.set('BranchID', node.data.RecID);
+                        record.set('WrkAdjDate', new Date(_dateServer));
+                        record.set('WrkOpenDate', new Date(_dateServer));
                     }
                 }
             });
+            HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
         }
     }
     else {
@@ -109,9 +117,14 @@ var btnAdd_click= function (btn, e, eOpts) {
                         ['BranchID'],
                         [node.attributes.RecID]);
                     if (!record) {
-                        App.grdSYS_CloseDateSetUp.store.insert(idx, Ext.create("App.mdlSA40000_pgSYS_CloseDateSetUp", {
-                            BranchID: node.attributes.RecID, WrkAdjDate: new Date(_dateServer), WrkOpenDate:new Date(_dateServer)
-                        }));
+                        HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
+                        record = App.stoSYS_CloseDateSetUp.getAt(idx);
+                        record.set('BranchID', node.attributes.RecID);
+                        record.set('WrkAdjDate', new Date(_dateServer));
+                        record.set('WrkOpenDate', new Date(_dateServer));
+                        //App.grdSYS_CloseDateSetUp.store.insert(idx, Ext.create("App.mdlSA40000_pgSYS_CloseDateSetUp", {
+                        //    BranchID: node.attributes.RecID, WrkAdjDate: new Date(_dateServer), WrkOpenDate:new Date(_dateServer)
+                        //}));
                     }
                 }
             });
