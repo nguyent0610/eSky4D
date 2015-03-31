@@ -45,8 +45,8 @@
         .SortableColumns(false)
         .ColumnModel(
          X.RowNumbererColumn()
-            , X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(7).EnforceMaxLength(true))
-            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true))
+            , X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(150).Editor(X.TextField().MaxLength(7).EnforceMaxLength(true))
+            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
             , X.Column().Text(Util.GetLang("ModuleID")).Width(150).DataIndex("ModuleID")
                 .Editor(
                     HQ.Combo().ID("cboModuleID").Name("cboModuleID").HQProcedure("SA00100_pcGetScreenModuleIDName")
@@ -54,7 +54,7 @@
                     .HQHeightWidth(500, 400)
                     .HQParam(new StoreParameterCollection() { 
                     new StoreParameter("@UserID", Current.UserName, ParameterMode.Value)
-                    }).HQDBSys(true).AllowBlank(false).Editable(false)
+                    }).HQDBSys(true).Editable(false)
                     .LoadData()
                 )
             , X.Column().Text(Util.GetLang("ScreenType")).Width(150).DataIndex("ScreenType")
@@ -64,7 +64,7 @@
                     .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
                     .HQParam(new StoreParameterCollection() {                   
                     new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value)
-                    }).HQDBSys(true).AllowBlank(false).Editable(false)
+                    }).HQDBSys(true).Editable(false)
                     .LoadData()
                 )
             
@@ -78,10 +78,10 @@
                     .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
                     .HQParam(new StoreParameterCollection() {                       
                     new StoreParameter("@UserID", Current.UserName, ParameterMode.Value)
-                    }).HQDBSys(true).AllowBlank(false).Editable(false)
+                    }).HQDBSys(true).Editable(false)
                     .LoadData()
                 )                         
-            , X.Column().Text(Util.GetLang("ExecPath")).DataIndex("ExecPath").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(50).EnforceMaxLength(true))
+            , X.Column().Text(Util.GetLang("ExecPath")).DataIndex("ExecPath").Width(150).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
             , X.CommandColumn().Width(150)
             .Commands(
                     X.GridCommand()
