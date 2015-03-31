@@ -46,7 +46,7 @@ namespace OM23100
             acc.Update = true;
             Session["OM23100"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
-            Session["UserName"] = Current.UserName = "phuchd";
+            Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD1120";//18510580
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;

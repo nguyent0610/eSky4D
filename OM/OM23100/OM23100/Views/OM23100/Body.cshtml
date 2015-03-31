@@ -78,23 +78,21 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         lst.Change.Fn = "cboDist_Change";
                     }).DirectEvents(de =>
-                                                    {
-                                                        de.Change.EventMask.ShowMask = true;
-                                                        de.Change.EventMask.Msg = Util.GetLang("LoadingData");
-                                                        de.Change.EventMask.MinDelay = 500;
+                            {
+                                de.Change.EventMask.ShowMask = true;
+                                de.Change.EventMask.Msg = Util.GetLang("LoadingData");
+                                de.Change.EventMask.MinDelay = 500;
 
-                                                        de.Change.Url = Url.Action("LoadRPTParm");
-                                                        de.Change.ExtraParams.Add(new Parameter
-                                                        {
-                                                            Name = "BranchID",
-                                                            Value = "App.cboDist.getValue()",
-                                                            Mode = ParameterMode.Raw
+                                de.Change.Url = Url.Action("LoadRPTParm");
+                                de.Change.ExtraParams.Add(new Parameter
+                                {
+                                    Name = "BranchID",
+                                    Value = "App.cboDist.getValue()",
+                                    Mode = ParameterMode.Raw
+                                });                                                       
 
-
-                                                        });                                                       
-
-                                                    }
-                                        )
+                            }
+                        )
 
                 ,HQ.DateField().ID("dateFcs").MarginSpec("5 0 0 0").HQLangCode("OM23100_Date").Width(400)
                 .Type(DatePickerType.Month).Format("yyyy/MM").Value(DateTime.Now.ToString("yyyy/MM"))

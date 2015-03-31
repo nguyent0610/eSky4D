@@ -81,10 +81,10 @@ namespace OM23100.Controllers
                             record.LUpd_Prog = _screenNbr;
                             record.LUpd_User = _userName;
 
-                            if (record.SellIn == 0 && record.Coverage == 0 && record.DNA == 0 && record.Visit == 0 && record.LPPC == 0 && record.ForcusedSKU == 0 && record.VisitTime == 0)
-                            {
-                                _db.OM_FCS.DeleteObject(record);
-                            }
+                            //if (record.SellIn == 0 && record.Coverage == 0 && record.DNA == 0 && record.Visit == 0 && record.LPPC == 0 && record.ForcusedSKU == 0 && record.VisitTime == 0)
+                            //{
+                            //    _db.OM_FCS.DeleteObject(record);
+                            //}
                             if (Status.Equals("Deleted"))
                             {
                                 var lstDeleted = _db.OM_FCS.Where(p => p.SlsperId == tmpSlsperId && p.BranchID == BranchID && p.ClassID == tmpClassID && p.FCSDate.Year==FCSDate.Year && p.FCSDate.Month==FCSDate.Month).ToList();
