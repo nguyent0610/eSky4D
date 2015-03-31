@@ -89,8 +89,6 @@ var btnAddAll_click= function (btn, e, eOpts) {
                         //App.grdSYS_CloseDateSetUp.store.insert(idx, Ext.create("App.mdlSA40000_pgSYS_CloseDateSetUp", {
                         //    //BranchID: node.data.RecID, WrkAdjDate: new Date(_dateServer), WrkOpenDate: new Date(_dateServer)
                         //}));
-
-                       
                         record = App.stoSYS_CloseDateSetUp.getAt(App.grdSYS_CloseDateSetUp.store.getCount()-1);
                         record.set('BranchID', node.data.RecID);
                         record.set('WrkAdjDate', new Date(_dateServer));
@@ -99,6 +97,9 @@ var btnAddAll_click= function (btn, e, eOpts) {
                 }
             });
             HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
+            var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount() - 1);
+            record.set('WrkAdjDate', new Date(_dateServer));
+            record.set('WrkOpenDate', new Date(_dateServer));
         }
     }
     else {
@@ -111,26 +112,34 @@ var btnAdd_click= function (btn, e, eOpts) {
         var allNodes = App.treePanelBranch.getCheckedNodes();
         if (allNodes && allNodes.length > 0) {
             allNodes.forEach(function (node) {
+                HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
                 if (node.attributes.Type == "Company") {
-                    var idx = App.grdSYS_CloseDateSetUp.store.getCount()-1;
+                    //var idx = App.grdSYS_CloseDateSetUp.store.getCount()-1;
                     var record = HQ.store.findInStore(App.grdSYS_CloseDateSetUp.store,
                         ['BranchID'],
                         [node.attributes.RecID]);
                     if (!record) {
-                        HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
-                        record = App.stoSYS_CloseDateSetUp.getAt(idx);
+                        record = App.stoSYS_CloseDateSetUp.getAt(App.grdSYS_CloseDateSetUp.store.getCount()-1);
                         record.set('BranchID', node.attributes.RecID);
                         record.set('WrkAdjDate', new Date(_dateServer));
                         record.set('WrkOpenDate', new Date(_dateServer));
+                        //HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
+                        //var record = App.stoSYS_CloseDateSetUp.getAt(idx);
+                        //record.set('BranchID', node.attributes.RecID);
+                        //record.set('WrkAdjDate', new Date(_dateServer));
+                        //record.set('WrkOpenDate', new Date(_dateServer));
                         //App.grdSYS_CloseDateSetUp.store.insert(idx, Ext.create("App.mdlSA40000_pgSYS_CloseDateSetUp", {
                         //    BranchID: node.attributes.RecID, WrkAdjDate: new Date(_dateServer), WrkOpenDate:new Date(_dateServer)
                         //}));
                     }
+                    
                 }
             });
-            App.stoSYS_CloseDateSetUp.fireEvent('datachanged', App.stoSYS_CloseDateSetUp);
+            HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
+            var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount() - 1);
+            record.set('WrkAdjDate', new Date(_dateServer));
+            record.set('WrkOpenDate', new Date(_dateServer));
         }
-        //HQ.isChange = true;
     }
     else {
         HQ.message.show(4, '', '');
@@ -242,9 +251,8 @@ var stoLoad = function (sto) {
     HQ.common.changeData(HQ.isChange, 'SA40000');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            //HQ.store.insertBlank(sto, keys);
+            ///HQ.store.insertBlank(sto, keys);
             HQ.store.insertRecord(sto, keys, { WrkAdjDate: new Date(_dateServer),WrkOpenDate:new Date(_dateServer) });
-                //, WrkOpenDate: new Date(_dateServer)
         }
         HQ.isFirstLoad = false;
     }
@@ -258,14 +266,20 @@ var grdSYS_CloseDateSetUp_BeforeEdit = function (editor, e) {
 };
 var grdSYS_CloseDateSetUp_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdSYS_CloseDateSetUp, e, keys);
-
+    var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount()-1);
+    record.set('WrkAdjDate', new Date(_dateServer));
+    record.set('WrkOpenDate', new Date(_dateServer));
     //if (e.field == "BranchID") {
     //    var selectedRecord = App.cboBranchID.store.findRecord(e.field, e.value);
     //    if (selectedRecord) {
     //        e.record.set("Territory", selectedRecord.data.Territory);
+    //        e.record.set("CpnyName", selectedRecord.data.CpnyName);
+    //        e.record.set("Address", selectedRecord.data.Address);
     //    }
     //    else {
     //        e.record.set("Territory", "");
+    //        e.record.set("CpnyName", "");
+    //        e.record.set("Address", "");
     //    }
     //}
 
