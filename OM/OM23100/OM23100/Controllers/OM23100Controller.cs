@@ -203,7 +203,7 @@ namespace OM23100.Controllers
         }
 
         [DirectMethod]
-        public ActionResult LoadRPTParm(string BranchID)
+        public ActionResult OM23100_LoadParm(string BranchID)
         {
             Column clm;
             NumberColumn nbc;
