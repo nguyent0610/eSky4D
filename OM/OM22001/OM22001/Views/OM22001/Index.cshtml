@@ -1,0 +1,146 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM22001;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM22001";
+    var acc = Session["OM22001"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/OM22001.js")' type="text/javascript"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.dateNow = new Date('@DateTime.Now.Date');
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("stoDisplay")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM_TDisplay), "mdlOM_TDisplay", "DisplayID"))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetDisplayById", "OM22001"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Fn="Store.stoDisplay_load" )
+            // Store: stoDisplay
+        )
+
+        @(
+            X.Store().ID("stoCompany")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM22001_pgCompany_Result), "mdlCompany", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetCompany", "OM22001"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Handler = "this.HQFieldKeys=['CpnyID'];";
+                l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                //l.Load.Fn = "Main.Event.sto_load"; 
+            })
+                // Store: stoCompany
+        )
+
+        @(
+            X.Store().ID("stoLevel")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM22001_pgLevel_Result), "mdlLevel", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetLevel", "OM22001"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Handler = "this.HQFieldKeys=['LevelID'];";
+                l.Load.Fn = "Store.stoGrid_load";
+                l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+                // Store: stoLevel
+        )
+
+        @(
+            X.Store().ID("stoInventory")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM22001_pgInventory_Result), "mdlInventory", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetInventory", "OM22001"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Handler = "this.HQFieldKeys=['InvtID'];";
+                l.Load.Fn = "Store.stoGrid_load";
+                l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+                // Store: stoInventory
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong OM22001Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>
