@@ -37,7 +37,7 @@
                 de.AfterRender.EventMask.ShowMask = true;
                 de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
                 de.AfterRender.EventMask.MinDelay = 500;
-
+                
                 de.Expand.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
                 de.Expand.Url = Url.Action("SA40000GetTreeBranch");
                 de.Expand.CleanRequest = true;
@@ -48,6 +48,7 @@
                 de.Expand.EventMask.ShowMask = true;
                 de.Expand.EventMask.Msg = Util.GetLang("LoadingData");
                 de.Expand.EventMask.MinDelay = 500;
+                
             })
         .BottomBar(
             X.Toolbar()
@@ -117,22 +118,26 @@
                     .Items(
                         X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                         .Items(
-                            HQ.DateField().ID("lblWRKADJDATE").MarginSpec("5 0 0 0").HQLangCode("WRKADJDATE").Width(250)
+                            HQ.DateField().ID("lblWrkAdjDate").MarginSpec("5 0 0 0").HQLangCode("WRKADJDATE").Width(250)
                             .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
-                            , HQ.DateField().ID("lblWRKOPENDATE").MarginSpec("5 0 10 0").HQLangCode("WRKOPENDATE").Width(250)
+                            , HQ.DateField().ID("lblWrkOpenDate").MarginSpec("5 0 10 0").HQLangCode("WRKOPENDATE").Width(250)
                             .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
                         )
                         , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                         .Items(
-                            HQ.NumberField().ID("lblWRKLOWERDAYS").Name("WRKLOWERDAYS").HQLangCode("WRKLOWERDAYS").MarginSpec("5 0 0 0").Width(250).MinValue(0)
-                            , HQ.NumberField().ID("lblWRKUPPERDAYS").Name("WRKUPPERDAYS").HQLangCode("WRKUPPERDAYS").MarginSpec("5 0 10 0").Width(250).MinValue(0)
+                            HQ.NumberField().ID("lblWrkLowerDays").Name("WRKLOWERDAYS").HQLangCode("WRKLOWERDAYS").MarginSpec("5 0 0 0").Width(250).MinValue(0)
+                            , HQ.NumberField().ID("lblWrkUpperDays").Name("WRKUPPERDAYS").HQLangCode("WRKUPPERDAYS").MarginSpec("5 0 10 0").Width(250).MinValue(0)
                         )
                         , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
      
                         .Items(
                             HQ.Checkbox().ID("chkWrkDateChk").Name("WRKDATECHK").HQLangCode("WRKDATECHK").MarginSpec("5 0 0 10")
                             , HQ.Button().ID("btnUpdate").HQLangCode("SA40000_Update").MarginSpec("5 0 0 10").Width(150)
-                        )
+                            .Listeners(p =>
+                                {
+                                    p.Click.Fn = "btnUpdate_Click";
+                                })
+                            )
 
                     )//
 
@@ -166,6 +171,8 @@
                 {
                     p.BoxReady.Handler = "firstLoad();";
                 })
+                .ViewConfig(X.GridView().Plugins(X.GridDragDrop().EnableDrag(true).DDGroup("BranchID")).Listeners(l=>l.BeforeDrop.Fn="beforenodedrop"))
+                
                 .SortableColumns(false)
                 .ColumnModel(
                     X.RowNumbererColumn().Width(40)

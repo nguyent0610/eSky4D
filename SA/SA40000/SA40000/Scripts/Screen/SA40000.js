@@ -60,6 +60,27 @@ var menuClick = function (command) {
 
 };
 
+var btnUpdate_Click = function (sender, e) {
+    App.grdSYS_CloseDateSetUp.getStore().each(function (item) {
+        item.set("WrkDateChk", App.chkWrkDateChk.checked);
+        item.set("WrkUpperDays", App.lblWrkUpperDays.getValue());
+        item.set("WrkLowerDays", App.lblWrkLowerDays.getValue());
+        item.set("WrkOpenDate", App.lblWrkOpenDate.getValue());
+        item.set("WrkAdjDate", App.lblWrkAdjDate.getValue());
+    });
+};
+
+var beforenodedrop = function (node, data, overModel, dropPosition, dropFn) {
+    if (Ext.isArray(data.records)) {
+        var records = data.records;
+             
+        data.records = [];
+        HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
+        addNode(records[0]);
+        //return true;
+    }
+};
+
 var treePanelBranch_checkChange= function (node, checked, eOpts) {
     node.childNodes.forEach(function (childNode) {
         childNode.set("checked", checked);
@@ -106,7 +127,28 @@ var btnAddAll_click= function (btn, e, eOpts) {
         HQ.message.show(4, '', '');
     }
 };
-
+var addNode = function (node) {
+    if (node.data.Type == "Company") {
+       
+        //var idx = App.grdSYS_CloseDateSetUp.store.getCount()-1;
+        var record = HQ.store.findInStore(App.grdSYS_CloseDateSetUp.store,
+            ['BranchID'],
+            [node.data.RecID]);
+        if (!record) {
+            record = App.stoSYS_CloseDateSetUp.getAt(App.grdSYS_CloseDateSetUp.store.getCount() - 1);
+            record.set('BranchID', node.data.RecID);
+            record.set('WrkAdjDate', new Date(_dateServer));
+            record.set('WrkOpenDate', new Date(_dateServer));
+            
+        }
+        HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
+    }
+    else if (node.childNodes) {
+        node.childNodes.forEach(function (itm) {
+            addNode(itm);
+        });
+    }
+}
 var btnAdd_click= function (btn, e, eOpts) {
     if (HQ.isUpdate) {
         var allNodes = App.treePanelBranch.getCheckedNodes();
@@ -123,14 +165,7 @@ var btnAdd_click= function (btn, e, eOpts) {
                         record.set('BranchID', node.attributes.RecID);
                         record.set('WrkAdjDate', new Date(_dateServer));
                         record.set('WrkOpenDate', new Date(_dateServer));
-                        //HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
-                        //var record = App.stoSYS_CloseDateSetUp.getAt(idx);
-                        //record.set('BranchID', node.attributes.RecID);
-                        //record.set('WrkAdjDate', new Date(_dateServer));
-                        //record.set('WrkOpenDate', new Date(_dateServer));
-                        //App.grdSYS_CloseDateSetUp.store.insert(idx, Ext.create("App.mdlSA40000_pgSYS_CloseDateSetUp", {
-                        //    BranchID: node.attributes.RecID, WrkAdjDate: new Date(_dateServer), WrkOpenDate:new Date(_dateServer)
-                        //}));
+                      
                     }
                     
                 }
@@ -236,6 +271,7 @@ var renderAddress = function (value) {
 var firstLoad = function () {
     HQ.isFirstLoad = true;
     App.stoSYS_CloseDateSetUp.reload();
+    //App.cboBranchID.store.reload();
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {

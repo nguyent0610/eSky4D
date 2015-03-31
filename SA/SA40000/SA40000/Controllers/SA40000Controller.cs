@@ -42,20 +42,33 @@ namespace SA40000.Controllers
         [DirectMethod]
         public ActionResult SA40000GetTreeBranch(string panelID)
         {
-            TreePanel tree = new TreePanel();
+            var a=new ItemsCollection<Plugin>();
+            a.Add(Html.X().TreeViewDragDrop().DDGroup("BranchID").EnableDrop(false));
+
+            TreeView v = new TreeView();
+            v.Plugins.Add(a);
+            v.Copy= true;
+            TreePanel tree = new TreePanel()
+            {
+                ViewConfig = v
+                
+            };
+            
+          
             tree.ID = "treePanelBranch";
             tree.ItemID = "treePanelBranch";
-
             tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
             tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
-
+       
             tree.Border = false;
             tree.RootVisible = true;
             tree.Animate = true;
-
+           
             Node node = new Node();
             node.NodeID = "Root";
+         
             tree.Root.Add(node);
+           
 
             var lstTerritories = _sys.SA40000_ptTerritory().ToList();//tam thoi
             var companies = _sys.SA40000_ptCompany(Current.UserName).ToList();
@@ -95,10 +108,10 @@ namespace SA40000.Controllers
             }
 
             var treeBranch = X.GetCmp<Panel>(panelID);
-
+            
             //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
             tree.Listeners.CheckChange.Fn = "treePanelBranch_checkChange";
-
+            
             tree.AddTo(treeBranch);
 
             return this.Direct();
