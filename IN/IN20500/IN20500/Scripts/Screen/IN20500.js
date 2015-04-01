@@ -118,35 +118,6 @@ var menuClick = function (command) {
         case "new":
             if (HQ.isInsert) {
 
-                //if (_focusrecord == 2) {
-
-                //    App.slmGrid.select(App.storeGrid.getCount() - 1);
-
-                //    if (App.storeGrid.getCount() == 0) {
-
-                //        App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());
-                //        App.slmGrid.select(App.storeGrid.getCount() - 1);
-                //        App.grd.editingPlugin.startEditByPosition({ row: App.storeGrid.getCount() - 1, column: 1 });
-
-                //    } else if (App.slmGrid.selected.items[0].data.CpnyID != "") {
-                //        App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());
-                //        App.slmGrid.select(App.storeGrid.getCount() - 1);
-                //        App.grd.editingPlugin.startEditByPosition({ row: App.storeGrid.getCount() - 1, column: 1 });
-                //    }
-
-
-
-
-                //} else if (_focusrecord == 1) {
-                   
-                //        App.cboInvtID.setValue('');
-                //        App.storeFormBig.reload();
-                //        //var index = App.ApproveStatusAll.indexOf(App.ApproveStatusAll.findRecord("Code", "H"));
-                    
-
-                   
-                //}
-
                 if (HQ.focus == 'header') {
                     if (HQ.isChange) {
                         HQ.message.show(150, '', '');
@@ -165,17 +136,7 @@ var menuClick = function (command) {
         case "delete":
             var curRecord = App.frmMain.getRecord();
             if (HQ.isDelete) {
-                //if (App.cboInvtID.value != "") {
-
-                //    if (_focusrecord == 1) {
-                //        callMessage(11, '', 'deleteRecordForm');
-                //    } else if (_focusrecord == 2) {
-                //        callMessage(11, '', 'deleteRecordGrid')
-                //    }
-                //}
-
-
-
+             
                 if (HQ.focus == 'header') {
                     if (App.cboInvtID.value != "" && App.cboStatus.value != "A" && App.cboStatus.value != "O") {
 
@@ -184,27 +145,23 @@ var menuClick = function (command) {
                         var rowindex = HQ.grid.indexSelect(App.grd);
                         if (rowindex != '')
                             HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grd), ''], 'deleteRecordGrid', true)
-                    } 
+                    }
                 }
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
 
-                //if (isAllValid(App.storeGrid.getChangedData().Created)
-                //    && isAllValid(App.storeGrid.getChangedData().Updated)) {
-                //   // if (App.Tree.selected.items[0].childNodes.length != 0) {
-                //        Save();
-                //   // } else {
-                //    //    callMessage(8081, '', null);
-                //    //}
-                //}
+                if (!App.slmTree.selected.items.length>0) {
+                    HQ.message.show(213, '', '', '');
+                    return;
+                }
                 if (HQ.form.checkRequirePass(App.frmMain) &&
                     HQ.store.checkRequirePass(App.storeGrid, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     Save();
                 }
             }
-                break;
+            break;
         case "print":
             alert(command);
             break;
@@ -222,7 +179,7 @@ function refresh(item) {
         App.cboInvtID.getStore().reload();
         App.storeFormBig.reload();
         App.storeGrid.reload();
-        
+
     }
 };
 
@@ -277,10 +234,10 @@ function Save() {
                 lstgrd: Ext.encode(App.storeGrid.getChangedData({ skipIdForPhantomRecords: false })),
                 InvtID: App.cboInvtID.getValue(),
                 Handle: App.cboHandle.getValue(),
-                NodeID: App.Tree.selected.items[0].data.text,
-                NodeLevel: App.Tree.selected.items[0].data.depth,
+                NodeID: App.slmTree.selected.items[0].data.text,
+                NodeLevel: App.slmTree.selected.items[0].data.depth,
                 ParentRecordID: parentRecordID,
-                hadchild: App.Tree.selected.items[0].childNodes.length,
+                hadchild: App.slmTree.selected.items[0].childNodes.length,
                 approveStatus: App.cboApproveStatus.getValue(),
                 Public: App.chkPublic.getValue(),
                 StkItem: App.chkStkItem.getValue(),
@@ -300,23 +257,23 @@ function Save() {
                 tmpCopyForm = "0";
                 App.cboInvtID.getStore().reload();
                 //App.cboHandle.setValue("");
-                callMessage(201405071, '', null);
+                HQ.message.show(201405071, '', null);
                 //App.cboInvtID.setValue('');
-                menuClick("refresh");
+                //menuClick("refresh");
                 //var dt = Ext.decode(data.response.responseText);
                 //App.cboInvtID.setValue("");
 
                 //setTimeout(function () { refreshTree(dt); }, 2000);
                 //App.cboInvtID.setValue(dt);
 
-                
+                refresh('yes');
 
                 //setTimeout(function () { refreshTree(result,data); }, 1000);
-                if (data.result.value3 == "addNew") {
-                    if (data.result.value4 == "0") {
-                        var newNode = App.Tree.selected.items[0].data.id;
+                if (data.result.addNewOrUpdate == "addNew") {
+                    if (data.result.tmpChangeTreeDic == "0") {
+                        var newNode = App.slmTree.selected.items[0].data.id;
                         var record = App.IDTree.getStore().getNodeById(newNode);
-                        var node = data.result.value + "-" + data.result.value2;
+                        var node = data.result.invtID + "-" + data.result.Descr;
 
                         record.appendChild({ text: node, leaf: true, id: node });
 
@@ -324,30 +281,30 @@ function Save() {
                         for (var i = 0; i < findNode.length; i++) {
                             if (findNode[i].data.id == node) {
                                 //click = 1;
-                                App.Tree.select(i);
+                                App.slmTree.select(i);
                                 //setTimeout(function () { refreshTree(i); }, 7000);
                                 break;
                             }
                         }
-                    } else if (data.result.value4 == "1") {
-                        var tmpSelectedNode = data.result.value5;
+                    } else if (data.result.tmpChangeTreeDic == "1") {
+                        var tmpSelectedNode = data.result.tmpSelectedNode;
                         var recordtmpSelectedNode = App.IDTree.getStore().getNodeById(tmpSelectedNode);
                         recordtmpSelectedNode.remove(true);
 
-                        var newNode = App.Tree.selected.items[0].data.id;
+                        var newNode = App.slmTree.selected.items[0].data.id;
                         var record = App.IDTree.getStore().getNodeById(newNode);
 
-                        var node = data.result.value + "-" + data.result.value2;
+                        var node = data.result.invtID + "-" + data.result.Descr;
                         //var findNode = App.IDTree.items.items[0].store.data.items;
                         //for (var i = 0; i < findNode.length; i++) {
                         //    if (findNode[i].data.id == node) {
                         //        //click = 1;
-                        //        App.Tree.select(i);
+                        //        App.slmTree.select(i);
                         //        //setTimeout(function () { refreshTree(i); }, 7000);
                         //        break;
                         //    }
                         //}
-                        //var newNode2 = App.Tree.selected.items[0].data.id;
+                        //var newNode2 = App.slmTree.selected.items[0].data.id;
                         //var recordDeleteNode = App.IDTree.getStore().getNodeById(newNode2);
                         //recordDeleteNode.remove(true);
                         record.appendChild({ text: node, leaf: true, id: node });
@@ -355,7 +312,7 @@ function Save() {
                         //for (var i = 0; i < findNode.length; i++) {
                         //    if (findNode[i].data.id == node) {
                         //        //click = 1;
-                        //        App.Tree.select(i);
+                        //        App.slmTree.select(i);
                         //        //setTimeout(function () { refreshTree(i); }, 7000);
 
                         //        break;
@@ -366,22 +323,22 @@ function Save() {
 
                     }
                 }
-                if (data.result.value3 == "update") {
-                    var newNode = App.Tree.selected.items[0].data.id;
+                if (data.result.addNewOrUpdate == "update") {
+                    var newNode = App.slmTree.selected.items[0].data.id;
                     var record = App.IDTree.getStore().getNodeById(newNode);
-                    var node = data.result.value + "-" + data.result.value2;
+                    var node = data.result.invtID + "-" + data.result.Descr;
                     if (newNode != node) {
                         record.parentNode.appendChild({ text: node, leaf: true, id: node });
                         var findNode = App.IDTree.items.items[0].store.data.items;
                         for (var i = 0; i < findNode.length; i++) {
                             if (findNode[i].data.id == node) {
                                 //click = 1;
-                                App.Tree.select(i);
+                                App.slmTree.select(i);
                                 //setTimeout(function () { refreshTree(i); }, 7000);
 
                             }
                         }
-                        var newNode2 = App.Tree.selected.items[0].data.id;
+                        var newNode2 = App.slmTree.selected.items[0].data.id;
                         var record2 = App.IDTree.getStore().getNodeById(newNode2);
                         record2.remove(true);
                         record.parentNode.replaceChild(record2, record);
@@ -389,7 +346,7 @@ function Save() {
                         for (var i = 0; i < findNode.length; i++) {
                             if (findNode[i].data.id == node) {
                                 //click = 1;
-                                App.Tree.select(i);
+                                App.slmTree.select(i);
                                 //setTimeout(function () { refreshTree(i); }, 7000);
                                 break;
                             }
@@ -403,12 +360,12 @@ function Save() {
             , failure: function (errorMsg, data) {
 
                 //var dt = Ext.decode(data.response.responseText);
-                //callMessage(dt.code, dt.colName + ',' + dt.value, null);
+                //HQ.message.show(dt.code, dt.colName + ',' + dt.value, null);
                 if (data.result.code) {
-                    callMessage(data.result.code, '', '');
+                    HQ.message.show(data.result.code, '', '');
                 }
                 else {
-                    processMessage(errorMsg, data);
+                    HQ.message.process(errorMsg, data, true);
                 }
             }
         });
@@ -436,7 +393,7 @@ function Close() {
         App.storeGrid.getChangedData().Created != undefined ||
         App.storeGrid.getChangedData().Deleted != undefined ||
         storeIsChange(App.storeFormSmall, false)) {
-        callMessage(5, '', 'closeScreen');
+        HQ.message.show(5, '', 'closeScreen');
     } else {
         parent.App.tabIN20500.close();
     }
@@ -477,7 +434,7 @@ var deleteRecordForm = function (item) {
         //            //App.Tree.selected().remove(true);
         //            record.remove(true)
 
-                    
+
         //        },
         //        failure: function () {
         //            //
@@ -628,9 +585,10 @@ var loadDataAutoHeaderBig = function (store) {
         HQ.store.insertBlank(store, "InvtID");
         record = store.getAt(0);
         //App.storeFormBig.insert(0, record);
+        record.data.ApproveStatus = 'H';
         //App.cboCountry.setValue("VN");
         //setTimeout(function () { waitStateLoad(); }, 1500);
-        App.frmMain.getForm().loadRecord(App.storeFormBig.getAt(0));
+        //App.frmMain.getForm().loadRecord(App.storeFormBig.getAt(0));
 
         store.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
@@ -653,7 +611,7 @@ var loadDataAutoHeaderSmall = function () {
     var record = App.storeFormSmall.getAt(0);
     if (record) {
         App.frmMain.getForm().loadRecord(record);
-       
+
         frmChange();
         App.cboCpnyID.getStore().reload();
     }
@@ -703,8 +661,8 @@ var choosefromcboInvtID = function () {
         var findNode = App.IDTree.items.items[0].store.data.items;
         for (var i = 0; i < findNode.length; i++) {
             if (findNode[i].data.id == invtIDDescr) {
-                App.Tree.select(i);
-                tmpSelectedNode = App.Tree.selected.items[0].data.id;
+                App.slmTree.select(i);
+                tmpSelectedNode = App.slmTree.selected.items[0].data.id;
                 break;
             }
 
@@ -729,7 +687,7 @@ var waitapproveStatus = function () {
         if (curRecord.data.Media) {
             setMediaImage();
         }
-    }else{
+    } else {
         App.imgPPCStorePicReq.setImageUrl("");
 
     }
@@ -799,7 +757,7 @@ var cboClassID_Change = function (sender, e) {
         App.storeGrid.load();
         setTimeout(function () { setValueToGrid(); }, 1500);
     }
-  
+
 
 
 
@@ -850,14 +808,14 @@ var cboStkUnit_Change = function (sender, e) {
 
     App.cboDfltPOUnit.getStore().reload();
     App.cboDfltSOUnit.getStore().reload();
-    if (_focusrecord != 3) {
-        App.storeFormBig.reload();
-    }
+    //if (_focusrecord != 3) {
+    //    App.storeFormBig.reload();
+    //}
 }
 
 var PrefixValue_Change = function (sender, e) {
     if (App.txtLotSerFxdVal.value.length != App.txtLotSerFxdLen.value) {
-        callMessage(22, e.value, '');
+        HQ.message.show(22, e.value, '');
     } else {
         prefixvalue = App.txtLotSerFxdVal.getValue();
         shownextlotserial = prefixvalue + lastfixvalue;
@@ -869,7 +827,7 @@ var PrefixValue_Change = function (sender, e) {
 
 var LastFixValue_Change = function (sender, e) {
     if (App.txtLotSerNumVal.value.length != App.txtLotSerNumLen.value) {
-        callMessage(22, e.value, '');
+        HQ.message.show(22, e.value, '');
     } else {
         lastfixvalue = App.txtLotSerNumVal.getValue();
         shownextlotserial = prefixvalue + lastfixvalue;
@@ -880,8 +838,7 @@ var LastFixValue_Change = function (sender, e) {
 }
 
 var cboLotSerTrack_Change = function () {
-    if(App.cboLotSerTrack.value == null)
-    {
+    if (App.cboLotSerTrack.value == null) {
         App.tabLotSerial.tab.disable(true);
         App.tabLotSerial.disable(true);
         App.storeGrid.reload();
@@ -894,7 +851,7 @@ var cboLotSerTrack_Change = function () {
         shownextlotserial = prefixvalue + lastfixvalue;
         App.lblShowNextLotSerial.setText(shownextlotserial);
         App.lblShowNextLotSerial.show();
-    } else if(App.cboLotSerTrack.displayTplData[0].Code == "N"){
+    } else if (App.cboLotSerTrack.displayTplData[0].Code == "N") {
         App.tabLotSerial.tab.disable(true);
         App.tabLotSerial.disable(true);
         App.storeGrid.reload();
@@ -955,17 +912,29 @@ var NodeSelected_Change = function (store, operation, options) {
 
 var cboApproveStatus_Change = function () {
     //App.cboApproveStatus.setValue("H");
-    App.cboHandle.store.reload();
-    
 
+    App.cboHandle.getStore().load(function (records, operation, success) {
+        if (records.length) {
+            if (App.cboApproveStatus.value == "H") {
+                //setReadOnly();
+                App.cboHandle.setValue("N");
+            } else {
+                //setReadOnly();
+                App.cboHandle.setValue("N");
+            }
+        }
+    });
 
 }
 
 
+//var cboStatus_Change = function () {
+//    App.cboHandle.getStore().reload();
+//    
+//}
 
 
-var Tab_Change = function (sender, e)
-{
+var Tab_Change = function (sender, e) {
 
 }
 
@@ -990,7 +959,7 @@ function UploadImage() {
 
 
 var upload = function () {
-   
+
 }
 
 // Event when uplPPCStorePicReq is change a file
@@ -1025,12 +994,14 @@ var btnClearImage_Click = function (sender, e) {
 
 function UploadMedia() {
     App.frmMain.submit({
+        clientValidation: false,
         waitMsg: 'Uploading your file...',
-        url: 'IN20500/UploadMedia',
+        url: 'IN20500/IN20500UploadMedia',
+        timeout: 1800000,
         params: {
-            
-            InvtID: App.cboInvtID.getValue(),
-            Descr: App.txtDescr.getValue()
+
+            invtID: App.cboInvtID.getValue(),
+            //Descr: App.txtDescr.getValue()
 
         },
         success: function (result, data) {
@@ -1040,15 +1011,15 @@ function UploadMedia() {
             //curRecord.data.Picture = App.imgPPCStorePicReq.imageUrl;
             //curRecord.setDirty();
 
-            //App.imgPPCStoreMediaReq.setimageUrl(data.result.value);
+            //App.imgPPCStoreMediaReq.setimageUrl(data.result.invtID);
             alert("da upload xong");
-            App.imgPPCStoreMediaReq.setImageUrl(data.result.value);
+            App.imgPPCStoreMediaReq.setImageUrl(data.result.imageStream);
             var curRecord = App.frmMain.getRecord();
-            curRecord.data.Media = data.result.value2;
+            curRecord.data.Media = data.result.fullFileName;
             curRecord.setDirty();
             //App.Window.show();
         },
-        failure: function (error) {
+        failure: function (error, data) {
             alert("Please Choose InvtID");
         }
     });
@@ -1086,12 +1057,12 @@ var btnDeleteMedia_Click = function (sender, e) {
 
 function setMediaImage() {
     App.frmMain.submit({
-        
-        url: 'IN20500/SetMediaImage',
 
-        success: function (result,data) {
+        url: 'IN20500/IN20500SetMediaImage',
+
+        success: function (result, data) {
             //
-            App.imgPPCStoreMediaReq.setImageUrl(data.result.value);
+            App.imgPPCStoreMediaReq.setImageUrl(data.result.imageStream);
         },
         failure: function (error) {
             //
@@ -1111,7 +1082,7 @@ var PlayVideo = function (sender, e) {
 var waitCopyFormLoad = function () {
     tmpCopyForm = "1";
     App.cboInvtID.setValue("");
-    
+
 }
 var CopyForm_Click = function (sender, e) {
     if (App.txtBarCode.value != "") {
@@ -1120,14 +1091,14 @@ var CopyForm_Click = function (sender, e) {
         var barcode = App.txtBarCode.value;
         App.cboInvtID.setValue(barcode);
         setTimeout(function () { waitCopyFormLoad(); }, 4500);
-        
+
 
     }
 };
 
 var LoadTree_AfterRender = function () {
     try {
-        App.direct.LoadTree( {
+        App.direct.LoadTree({
             success: function (data) {
                 //if (tampSaveButton == "1") {
                 //    tampSaveButton = "0";
@@ -1149,7 +1120,7 @@ var LoadTree_AfterRender = function () {
 
 var txtLoadTree_Change = function (sender, newValue, oldValue) {
     //cpnyIDTree = App.cboCpnyID.value;
-    
+
     ReloadTreeIN20500();
     //setTimeout(function () { ReloadTree(); }, 1000);
 
