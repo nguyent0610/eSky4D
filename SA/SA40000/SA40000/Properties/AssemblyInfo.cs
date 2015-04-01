@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SA40000")]
-[assembly: AssemblyDescription("OrderType Maintenance")]
+[assembly: AssemblyDescription("Setup Close Day")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Han Quang Software Solution")]
 [assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]

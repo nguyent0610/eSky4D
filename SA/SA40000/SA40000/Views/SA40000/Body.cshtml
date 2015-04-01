@@ -156,7 +156,7 @@
                 .Region(Region.Center).Flex(1)
                 .Store(
                     X.Store()
-                    .ID("stoSYS_CloseDateSetUp")
+                    .ID("stoSYS_CloseDateSetUp").AutoLoad(false)
                     .PageSize(50)
                     .Model(Util.GenerateModel(typeof(SA40000_pgSYS_CloseDateSetUp_Result), "mdlSA40000_pgSYS_CloseDateSetUp", "BranchID"))
                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_CloseDateSetUp")))
@@ -184,7 +184,7 @@
                         HQ.Combo().ID("cboBranchID")
                         .Name("cboBranchID").HQProcedure("SA40000_pcCompany").HQDBSys(true)
                         .HQColumnShow("CpnyID,CpnyName,Territory,Address").DisplayField("CpnyID").ValueField("CpnyID")
-                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
 
                         .HQParam(new StoreParameterCollection() 
                         { 
