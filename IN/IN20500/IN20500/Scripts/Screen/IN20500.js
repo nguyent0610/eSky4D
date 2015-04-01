@@ -118,6 +118,35 @@ var menuClick = function (command) {
         case "new":
             if (HQ.isInsert) {
 
+                //if (_focusrecord == 2) {
+
+                //    App.slmGrid.select(App.storeGrid.getCount() - 1);
+
+                //    if (App.storeGrid.getCount() == 0) {
+
+                //        App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());
+                //        App.slmGrid.select(App.storeGrid.getCount() - 1);
+                //        App.grd.editingPlugin.startEditByPosition({ row: App.storeGrid.getCount() - 1, column: 1 });
+
+                //    } else if (App.slmGrid.selected.items[0].data.CpnyID != "") {
+                //        App.storeGrid.insert(App.storeGrid.getCount(), Ext.data.Record());
+                //        App.slmGrid.select(App.storeGrid.getCount() - 1);
+                //        App.grd.editingPlugin.startEditByPosition({ row: App.storeGrid.getCount() - 1, column: 1 });
+                //    }
+
+
+
+
+                //} else if (_focusrecord == 1) {
+                   
+                //        App.cboInvtID.setValue('');
+                //        App.storeFormBig.reload();
+                //        //var index = App.ApproveStatusAll.indexOf(App.ApproveStatusAll.findRecord("Code", "H"));
+                    
+
+                   
+                //}
+
                 if (HQ.focus == 'header') {
                     if (HQ.isChange) {
                         HQ.message.show(150, '', '');
@@ -136,7 +165,17 @@ var menuClick = function (command) {
         case "delete":
             var curRecord = App.frmMain.getRecord();
             if (HQ.isDelete) {
-             
+                //if (App.cboInvtID.value != "") {
+
+                //    if (_focusrecord == 1) {
+                //        HQ.message.show(11, '', 'deleteRecordForm');
+                //    } else if (_focusrecord == 2) {
+                //        HQ.message.show(11, '', 'deleteRecordGrid')
+                //    }
+                //}
+
+
+
                 if (HQ.focus == 'header') {
                     if (App.cboInvtID.value != "" && App.cboStatus.value != "A" && App.cboStatus.value != "O") {
 
@@ -145,23 +184,27 @@ var menuClick = function (command) {
                         var rowindex = HQ.grid.indexSelect(App.grd);
                         if (rowindex != '')
                             HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grd), ''], 'deleteRecordGrid', true)
-                    }
+                    } 
                 }
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
 
-                if (!App.slmTree.selected.items.length>0) {
-                    HQ.message.show(213, '', '', '');
-                    return;
-                }
+                //if (isAllValid(App.storeGrid.getChangedData().Created)
+                //    && isAllValid(App.storeGrid.getChangedData().Updated)) {
+                //   // if (App.Tree.selected.items[0].childNodes.length != 0) {
+                //        Save();
+                //   // } else {
+                //    //    HQ.message.show(8081, '', null);
+                //    //}
+                //}
                 if (HQ.form.checkRequirePass(App.frmMain) &&
                     HQ.store.checkRequirePass(App.storeGrid, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     Save();
                 }
             }
-            break;
+                break;
         case "print":
             alert(command);
             break;
@@ -179,7 +222,7 @@ function refresh(item) {
         App.cboInvtID.getStore().reload();
         App.storeFormBig.reload();
         App.storeGrid.reload();
-
+        
     }
 };
 
@@ -365,7 +408,7 @@ function Save() {
                     HQ.message.show(data.result.code, '', '');
                 }
                 else {
-                    HQ.message.process(errorMsg, data, true);
+                    processMessage(errorMsg, data);
                 }
             }
         });
@@ -434,7 +477,7 @@ var deleteRecordForm = function (item) {
         //            //App.Tree.selected().remove(true);
         //            record.remove(true)
 
-
+                    
         //        },
         //        failure: function () {
         //            //
@@ -611,7 +654,7 @@ var loadDataAutoHeaderSmall = function () {
     var record = App.storeFormSmall.getAt(0);
     if (record) {
         App.frmMain.getForm().loadRecord(record);
-
+       
         frmChange();
         App.cboCpnyID.getStore().reload();
     }
@@ -687,7 +730,7 @@ var waitapproveStatus = function () {
         if (curRecord.data.Media) {
             setMediaImage();
         }
-    } else {
+    }else{
         App.imgPPCStorePicReq.setImageUrl("");
 
     }
@@ -757,7 +800,7 @@ var cboClassID_Change = function (sender, e) {
         App.storeGrid.load();
         setTimeout(function () { setValueToGrid(); }, 1500);
     }
-
+  
 
 
 
@@ -838,7 +881,8 @@ var LastFixValue_Change = function (sender, e) {
 }
 
 var cboLotSerTrack_Change = function () {
-    if (App.cboLotSerTrack.value == null) {
+    if(App.cboLotSerTrack.value == null)
+    {
         App.tabLotSerial.tab.disable(true);
         App.tabLotSerial.disable(true);
         App.storeGrid.reload();
@@ -851,7 +895,7 @@ var cboLotSerTrack_Change = function () {
         shownextlotserial = prefixvalue + lastfixvalue;
         App.lblShowNextLotSerial.setText(shownextlotserial);
         App.lblShowNextLotSerial.show();
-    } else if (App.cboLotSerTrack.displayTplData[0].Code == "N") {
+    } else if(App.cboLotSerTrack.displayTplData[0].Code == "N"){
         App.tabLotSerial.tab.disable(true);
         App.tabLotSerial.disable(true);
         App.storeGrid.reload();
@@ -934,7 +978,8 @@ var cboApproveStatus_Change = function () {
 //}
 
 
-var Tab_Change = function (sender, e) {
+var Tab_Change = function (sender, e)
+{
 
 }
 
@@ -959,7 +1004,7 @@ function UploadImage() {
 
 
 var upload = function () {
-
+   
 }
 
 // Event when uplPPCStorePicReq is change a file
@@ -999,7 +1044,7 @@ function UploadMedia() {
         url: 'IN20500/IN20500UploadMedia',
         timeout: 1800000,
         params: {
-
+            
             invtID: App.cboInvtID.getValue(),
             //Descr: App.txtDescr.getValue()
 
@@ -1057,10 +1102,10 @@ var btnDeleteMedia_Click = function (sender, e) {
 
 function setMediaImage() {
     App.frmMain.submit({
-
+        
         url: 'IN20500/IN20500SetMediaImage',
 
-        success: function (result, data) {
+        success: function (result,data) {
             //
             App.imgPPCStoreMediaReq.setImageUrl(data.result.imageStream);
         },
@@ -1082,7 +1127,7 @@ var PlayVideo = function (sender, e) {
 var waitCopyFormLoad = function () {
     tmpCopyForm = "1";
     App.cboInvtID.setValue("");
-
+    
 }
 var CopyForm_Click = function (sender, e) {
     if (App.txtBarCode.value != "") {
@@ -1091,14 +1136,14 @@ var CopyForm_Click = function (sender, e) {
         var barcode = App.txtBarCode.value;
         App.cboInvtID.setValue(barcode);
         setTimeout(function () { waitCopyFormLoad(); }, 4500);
-
+        
 
     }
 };
 
 var LoadTree_AfterRender = function () {
     try {
-        App.direct.LoadTree({
+        App.direct.LoadTree( {
             success: function (data) {
                 //if (tampSaveButton == "1") {
                 //    tampSaveButton = "0";
@@ -1120,7 +1165,7 @@ var LoadTree_AfterRender = function () {
 
 var txtLoadTree_Change = function (sender, newValue, oldValue) {
     //cpnyIDTree = App.cboCpnyID.value;
-
+    
     ReloadTreeIN20500();
     //setTimeout(function () { ReloadTree(); }, 1000);
 

@@ -737,6 +737,7 @@ namespace IN20500.Controllers
                     //bo sung code add new copyForm neu update
                     images = getPathThenUploadImageCopyForm(tmpCopyFormImageUrl, invtID);
                     media = getPathMediaCopyForm(tmpCopyFormMedia, invtID, tmpOldFileName);
+                    objHeader = new IN_Inventory();
                     objHeader.InvtID = invtID;
                     objHeader.BarCode = BarCode;
                     if (handle == "N" || handle == "")
@@ -1273,11 +1274,11 @@ namespace IN20500.Controllers
 
             if (hadChild != 0)
             {
-                return Json(new { success = true, value = invtID, value2 = Descr, value3 = "addNew", value4 = tmpChangeTreeDic, value5 = tmpSelectedNode }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, invtID = invtID, Descr = Descr, addNewOrUpdate = "addNew", tmpChangeTreeDic = tmpChangeTreeDic, tmpSelectedNode = tmpSelectedNode }, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return Json(new { success = true, value = invtID, value2 = Descr, value3 = "update" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, invtID = invtID, Descr = Descr, addNewOrUpdate = "update" }, JsonRequestBehavior.AllowGet);
             }
 
         }
@@ -1475,7 +1476,7 @@ namespace IN20500.Controllers
         [DirectMethod]
         public ActionResult PlayMedia(string fileVideo)
         {
-            var pathMedia = "/eBizWeb/Media/" + fileVideo;
+            var pathMedia = "/eSky4D/Media/" + fileVideo;
             //var pathMedia = PathImage.Substring(0, PathImage.Length - 14) + "Media\\" + fileVideo;
             //var pathMedia = "/DevProjects/FrameworkWeb/App/Media/a.mp4";
             //var pathMedia = "file://192.168.130.4/DevProjects/FrameworkWeb/App/Media/a.mp4";
@@ -1503,8 +1504,8 @@ namespace IN20500.Controllers
 
 
 
-        [DirectMethod]
-        public ActionResult UploadMedia(string invtID)
+        [ValidateInput(false)]
+        public ActionResult IN20500UploadMedia(string invtID)
         {
             string fullFileName = "";
             if (this.GetCmp<FileUploadField>("NamePPCStoreMediaReq").HasFile)
@@ -1522,12 +1523,10 @@ namespace IN20500.Controllers
 
                 if (typeFile != "")
                 {
-                    //string filePath = "C:\\nhac\\a.mp4";
 
-                    //string fullFileName = "\\\\192.168.130.4\\DevProjects\\FrameworkWeb\\App\\Media\\a.mp4";
                     fullFileName = invtID + "." + typeFile;
-                    //string fullFileName = PathImage + invtID + "_" + Descr + "." + typeFile;
-                    // doi icon anh
+
+                    //doi icon anh
                     var Images = this.GetCmp<Image>("imgPPCStoreMediaReq");
                     string a = getStringImage("anh1.jpg");
                     Images.ImageUrl = @"data:image/" + "jpg" + ";base64," + a;
@@ -1539,10 +1538,8 @@ namespace IN20500.Controllers
                     string imgType = FileUpload1.PostedFile.ContentType;
 
                     FileUpload1.PostedFile.InputStream.Read(arrContent, 0, intLength);
-
-                    //txtImages.Text = FileUpload1.PostedFile.FileName;
                     IN20500ImgHelper.IN20500UploadMedia(fullFileName, arrContent, PathImage, IsConfig);
-                    //File.WriteAllBytes(fullFileName, arrContent);
+
                 }
                 else
                 {
@@ -1566,15 +1563,15 @@ namespace IN20500.Controllers
                 });
             }
 
-            return Json(new { success = true, value = b, value2 = fullFileName }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, imageStream = b, fullFileName = fullFileName });
 
-
+            //return Json(new { success = true, imageStream = "123", fullFileName = "456" });
 
         }
 
 
         [DirectMethod]
-        public ActionResult SetMediaImage()
+        public ActionResult IN20500SetMediaImage()
         {
 
             // doi icon anh
@@ -1582,7 +1579,7 @@ namespace IN20500.Controllers
             string a = getStringImage("anh1.jpg");
             Images.ImageUrl = @"data:image/" + "jpg" + ";base64," + a;
             b = Images.ImageUrl;
-            return Json(new { success = true, value = b }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, imageStream = b }, JsonRequestBehavior.AllowGet);
         }
 
 

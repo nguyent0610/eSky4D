@@ -153,7 +153,15 @@ namespace IN20500
                 Directory.CreateDirectory(di.FullName);
             }
             string fullFileName = string.Format("{0}\\{1}", uploadDirLast, fileName);
-
+            try
+            {
+                if (File.Exists(fullFileName))
+                {
+                    File.Delete(fullFileName);
+                    
+                }
+            }
+            catch { }
             File.WriteAllBytes(fullFileName, Context);
             //File.WriteAllBytes(fileName, Context);
 
