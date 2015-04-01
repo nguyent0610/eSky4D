@@ -114,7 +114,24 @@ var stoBeforeLoad = function (sto) {
 };
 
 var grdOM_FCS_BeforeEdit = function (editor, e) {
-    return HQ.grid.checkBeforeEdit(e, keys);
+    // thang nho hon thi khong cho sua
+    var d = new Date(App.dateFcs.getValue());
+
+    if (d.getYear() > _dateServer.getYear()) {
+        return HQ.grid.checkBeforeEdit(e, keys);
+    }
+    else if (d.getYear() == _dateServer.getYear()) {
+        if (d.getMonth() < _dateServer.getMonth()) {
+            return false;
+        }
+        else if (d.getMonth() >= _dateServer.getMonth()) {
+            return HQ.grid.checkBeforeEdit(e, keys);
+        }
+    }
+    else if (d.getYear() > _dateServer.getYear()) {
+        return false;
+    }
+
 };
 
 var grdOM_FCS_Edit = function (item, e) {
