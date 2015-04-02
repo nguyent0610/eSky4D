@@ -68,7 +68,7 @@
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->  
 
-@(Html.X().Store().ID("storeFormBig").AutoLoad(false)
+@(Html.X().Store().ID("stoIN_Inventory").AutoLoad(false)
         .Model(Util.GenerateModel(typeof(IN_Inventory), "IN_InventoryModel", "InvtID",false,"StkItem"))
         .Proxy(
             X.AjaxProxy()
@@ -86,7 +86,7 @@
         .Listeners(p => 
             {
                 p.BeforeLoad.Fn = "storeBeforeLoad";
-                p.Load.Fn = "loadDataAutoHeaderBig";
+                p.Load.Fn = "stoIN_Inventory_Loaded";
                 
                 
             })
@@ -95,7 +95,7 @@
 
 
 
-@(Html.X().Store().ID("storeFormSmall").AutoLoad(false)
+@(Html.X().Store().ID("stoIN_ProductClass").AutoLoad(false)
         //.Model(Util.GenerateModel(typeof(IN_ProductClass), "IN_ProductClassModel", "ClassID",false,"DfltStkItem"))
         .Model(
             X.Model()
@@ -141,11 +141,11 @@
         {
             ps.Add(new StoreParameter("ClassID", "App.cboClassID.value", ParameterMode.Raw));
         })
-        .Listeners(p => p.Load.Handler = "loadDataAutoHeaderSmall()")
+        .Listeners(p => p.Load.Handler = "stoIN_ProductClass_Loaded()")
   )
 
 
-@(Html.X().Store().ID("storeGrid").AutoLoad(false)
+@(Html.X().Store().ID("stoCompany").AutoLoad(false)
         //.Model(Util.GenerateModel(typeof(ppv_IN20500_getCompany_Result), "ppv_IN20500_getCompany_ResultModel", "CpnyID"))
         .Model(
             X.Model()

@@ -39,7 +39,7 @@ namespace IN20500.Controllers
                 return _pathImage;
             }
         }
-
+        IN_Inventory _objHeader = new IN_Inventory();
         private bool _isConfig;
         internal bool IsConfig
         {
@@ -82,7 +82,7 @@ namespace IN20500.Controllers
             else
             {
                 node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
-                node.NodeID = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
+                node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString();            
             }
 
             var tmps = _db.IN_Inventory
@@ -103,9 +103,8 @@ namespace IN20500.Controllers
 
                     Node nodetmp = new Node();
                     nodetmp.Text = tmp.InvtID + "-" + tmp.Descr;
-                    nodetmp.NodeID = tmp.InvtID + "-" + tmp.Descr;
-                    nodetmp.Leaf = true;
-
+                    nodetmp.NodeID ="InvtID-"+ tmp.InvtID;
+                    nodetmp.Leaf = true;                
                     node.Children.Add(nodetmp);
                     //System.Diagnostics.Debug.WriteLine(nodetmp.Text);
 
@@ -181,11 +180,6 @@ namespace IN20500.Controllers
             };
             var z = 0;
             Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z);
-
-            //var m = ViewData["resultRoot2"];
-
-
-            //quan trong dung de refresh Tree
             this.GetCmp<TreePanel>("IDTree").SetRootNode(node);
 
             return this.Direct();
@@ -271,502 +265,53 @@ namespace IN20500.Controllers
             //return this.Store(lst);
         }
 
-
-
-
-
-
-
-
-        [DirectMethod]
         [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult Save(FormCollection data, string invtID, string handle, string nodeID, int nodeLevel, string parentRecordID, int hadChild, string approveStatus, bool Public, bool StkItem, string imageChange, int tmpImageDelete, string tmpImageForUpload, int tmpMediaDelete, string tmpSelectedNode, string tmpCopyFormSave, string tmpCopyForm, string tmpCopyFormImageUrl, string tmpCopyFormMedia, string tmpOldFileName, string mediaExist)
+        public ActionResult Save(FormCollection data, string invtID,bool isNew, string handle, string nodeID, string nodeLevel, string parentRecordID, int hadChild, string approveStatus, bool Public, bool StkItem, string imageChange, int tmpImageDelete, string tmpImageForUpload, int tmpMediaDelete, string tmpSelectedNode, string tmpCopyFormSave, string tmpCopyForm, string tmpCopyFormImageUrl, string tmpCopyFormMedia, string tmpOldFileName, string mediaExist)
         {
-            StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstheader"]);
-            ChangeRecords<IN_Inventory> lstheader = dataHandler2.BatchObjectData<IN_Inventory>();
-            StoreDataHandler dataHandler3 = new StoreDataHandler(data["lstheader2"]);
-            ChangeRecords<IN_ProductClass> lstheader2 = dataHandler2.BatchObjectData<IN_ProductClass>();
-            StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<IN20500_pgGetCompanyInvt_Result> lstgrd = dataHandler1.BatchObjectData<IN20500_pgGetCompanyInvt_Result>();
-
-            ChangeRecords<IN20500_pgGetCompany_Result> lstgrd2 = dataHandler1.BatchObjectData<IN20500_pgGetCompany_Result>();
-
-            tmpChangeTreeDic = "0";
-
-            //StoreDataHandler dataImage = new StoreDataHandler(imageChange);
-            //ChangeRecords<IN_Inventory> lstImage = dataImage.BatchObjectData<IN_Inventory>();
-
-            //StoreDataHandler sdh = new Ext.Net.StoreDataHandler("{" + imageChange + "}");
-            //Ext.Net.ChangeRecords<Business.Entities.Cand> messagesCand = sdh.ObjectData<Business.Entities.Cand>(); 
-
-            string invtIDCopyForm = data["cboInvtID"];
-            var BarCode = data[""];
-            //var approveStatus = data["cboApproveStatus"];
-            var Descr = data["txtDescr"];
-            var Descr1 = data["txtDescr1"];
-            var Status = data["cboStatus"];
-            //var Public = data["chkPublic"];
-            var ClassID = data["cboClassID"];
-            //var StkItem = data["chkStkItem"];
-            var PriceClassID = data["cboPriceClassID"];
-            var InvtType = data["cboInvtType"];
-            var Source = data["cboSource"];
-            var ValMthd = data["cboValMthd"];
-            var LotSerTrack = data["cboLotSerTrack"];
-            var Buyer = data["cboBuyer"];
-            var StkUnit = data["cboStkUnit"];
-            var DfltPOUnit = data["cboDfltPOUnit"];
-            var DfltSOUnit = data["cboDfltSOUnit"];
-            var MaterialType = data["cboMaterialType"];
-            var DfltSlsTaxCat = data["cboDfltSlsTaxCat"];
-            var Color = data["txtColor"];
-            var PrePayPct = data["txtPrePayPct"];
-            var Size = data["txtSize"];
-            var POFee = data["txtPOFee"];
-            var Style = data["cboStyle"];
-            var SOFee = data["txtSOFee"];
-            var StkVol = data["txtStkVol"];
-            var Vendor1 = data["cboVendor1"];
-            var StkWt = data["txtStkWt"];
-            var Vendor2 = data["cboVendor2"];
-            var StkWtUnit = data["cboStkWtUnit"];
-            var LossRate00 = data["txtLossRate00"];
-            var SOPrice = data["txtSOPrice"];
-            var LossRate01 = data["txtLossRate01"];
-            var POPrice = data["txtPOPrice"];
-            var LossRate02 = data["txtLossRate02"];
-            var IRSftyStkDays = data["txtIRSftyStkDays"];
-            var LossRate03 = data["txtLossRate03"];
-            var IRSftyStkPct = data["txtIRSftyStkPct"];
-            var IRSftyStkQty = data["txtIRSftyStkQty"];
-            var IROverStkQty = data["txtIROverStkQty"];
-            var SerAssign = data["cboSerAssign"];
-            var LotSerIssMthd = data["cboLotSerIssMthd"];
-            var ShelfLife = data["txtShelfLife"];
-            var WarrantyDays = data["txtWarrantyDays"];
-            var LotSerFxdTyp = data["cboLotSerFxdTyp"];
-            var LotSerFxdLen = data["txtLotSerFxdLen"];
-            var LotSerFxdVal = data["txtLotSerFxdVal"];
-            var LotSerNumLen = data["txtLotSerNumLen"];
-            var LotSerNumVal = data["txtLotSerNumVal"];
-
-
-
-
-
-
-
-
-
-
-
-
-            foreach (IN20500_pgGetCompanyInvt_Result deleted in lstgrd.Deleted)
+            try
             {
-                if (approveStatus != "H" && approveStatus != "D" && approveStatus != "C")
+                StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstheader"]);
+                IN_Inventory obj = dataHandler2.ObjectData<IN_Inventory>().FirstOrDefault();
+
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstgrd"]);
+                ChangeRecords<IN20500_pgGetCompanyInvt_Result> lstgrd = dataHandler1.BatchObjectData<IN20500_pgGetCompanyInvt_Result>();
+
+                string invtIDCopyForm = data["cboInvtID"];
+                string images = getPathThenUploadImage(obj, invtID);
+                string media = getPathMedia(obj, invtID, mediaExist);
+                obj.InvtID = invtID;
+                obj.NodeID = nodeID;
+                obj.NodeLevel = short.Parse(nodeLevel);
+                obj.ParentRecordID = int.Parse(parentRecordID);
+                obj.Picture = images;
+                obj.Media = media;
+
+                _objHeader = _db.IN_Inventory.Where(p => p.InvtID == obj.InvtID).FirstOrDefault();
+                if (_objHeader != null && !isNew)
                 {
-                    var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == deleted.CpnyID).FirstOrDefault();
-                    if (del != null)
+                    Updating_Inventory(_objHeader, obj);
+                    if (obj.Public == true)
                     {
-                        _db.IN_InvtCpny.DeleteObject(del);
-
+                        var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID).ToList();
+                        for (int i = 0; i < del.Count; i++)
+                        {
+                            _db.IN_InvtCpny.DeleteObject(del[i]);
+                        }
                     }
+
                 }
-            }
-            foreach (IN20500_pgGetCompanyInvt_Result created in lstgrd.Created)
-            {
-                var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == created.CpnyID).FirstOrDefault();
-                if (record == null)
+                else if (_objHeader != null && isNew)
                 {
-                    record = new IN_InvtCpny();
-                    record.InvtID = invtID;
-                    record.CpnyID = created.CpnyID;
-
-
-                    if (record.InvtID != "" && record.CpnyID != "")
-                    {
-
-                        _db.IN_InvtCpny.AddObject(record);
-                    }
-                }
-            }
-
-
-
-            foreach (IN20500_pgGetCompanyInvt_Result updated in lstgrd.Updated)
-            {
-                var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == updated.CpnyID).FirstOrDefault();
-                if (record != null)
-                {
-                }
-                else
-                {
-                    record = new IN_InvtCpny();
-                    record.InvtID = invtID;
-                    record.CpnyID = updated.CpnyID;
-                    _db.IN_InvtCpny.AddObject(record);
-                }
-            }
-
-
-            //foreach (IN20500_pgGetCompany_Result deleted in lstgrd2.Deleted)
-            //{
-            //    var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == deleted.CpnyID).FirstOrDefault();
-            //    if (del != null)
-            //    {
-            //        _db.IN_InvtCpny.DeleteObject(del);
-
-            //    }
-
-            //}
-            //foreach (IN20500_pgGetCompany_Result created in lstgrd2.Created)
-            //{
-            //    var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == created.CpnyID).FirstOrDefault();
-            //    if (record == null)
-            //    {
-            //        record = new IN_InvtCpny();
-            //        record.InvtID = invtID;
-            //        record.CpnyID = created.CpnyID;
-
-
-            //        if (record.InvtID != "" && record.CpnyID != "")
-            //        {
-
-            //            _db.IN_InvtCpny.AddObject(record);
-            //        }
-            //    }
-            //}
-
-
-
-            //foreach (IN20500_pgGetCompany_Result updated in lstgrd2.Updated)
-            //{
-            //    var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == updated.CpnyID).FirstOrDefault();
-            //    if (record != null)
-            //    {
-            //    }
-            //    else
-            //    {
-            //        record = new IN_InvtCpny();
-            //        record.InvtID = invtID;
-            //        record.CpnyID = updated.CpnyID;
-            //        _db.IN_InvtCpny.AddObject(record);
-            //    }
-            //}
-
-
-
-
-
-            foreach (IN_Inventory updated in lstheader.Updated)
-            {
-                // Get the image path
-
-                string images = getPathThenUploadImage(updated, invtID);
-                string media = getPathMedia(updated, invtID, mediaExist);
-                var objHeader = _db.IN_Inventory.Where(p => p.InvtID == updated.InvtID).FirstOrDefault();
-                if (objHeader != null)
-                {
-                    //updating
-                    if (hadChild == 0)
-                    {
-
-                        objHeader.BarCode = BarCode;
-                        if (handle == "N" || handle == "")
-                        {
-                            objHeader.ApproveStatus = approveStatus;
-                        }
-                        else if (handle == "A")
-                        {
-                            objHeader.ApproveStatus = "C";
-                        }
-                        else if (handle == "I")
-                        {
-                            objHeader.ApproveStatus = "H";
-                        }
-
-
-                        if (approveStatus == "")
-                        {
-                            objHeader.ApproveStatus = "H";
-                        }
-                        objHeader.Descr = Descr;
-                        objHeader.Descr1 = Descr1;
-                        objHeader.Status = Status;
-
-
-
-                        objHeader.Public = Convert.ToBoolean(Public);
-                        if (Convert.ToBoolean(Public) == true)
-                        {
-                            var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID).ToList();
-                            for (int i = 0; i < del.Count; i++)
-                            {
-
-                                _db.IN_InvtCpny.DeleteObject(del[i]);
-
-                            }
-                            //foreach (IN_ProdClassCpny proclass in del)
-                            //{
-                            //    _db.IN_ProdClassCpny.DeleteObject(proclass);
-                            //}
-                        }
-                        //tab1
-
-                        objHeader.ClassID = ClassID;
-                        if (StkItem == true)
-                        {
-                            objHeader.StkItem = 1;
-                        }
-                        else
-                        {
-                            objHeader.StkItem = 0;
-                        }
-                        // ???
-                        objHeader.PriceClassID = PriceClassID;
-                        objHeader.InvtType = InvtType;
-
-                        objHeader.Source = Source;
-                        objHeader.ValMthd = ValMthd;
-                        objHeader.LotSerTrack = LotSerTrack;
-                        objHeader.Buyer = Buyer;
-                        objHeader.StkUnit = StkUnit;
-                        objHeader.DfltPOUnit = DfltPOUnit;
-                        objHeader.DfltSOUnit = DfltSOUnit;
-                        objHeader.MaterialType = MaterialType;
-                        //objHeader.DfltSite = created.DfltSite;
-                        objHeader.TaxCat = DfltSlsTaxCat;
-
-                        //tab 2
-
-                        objHeader.Color = Color;
-
-                        objHeader.PrePayPct = Convert.ToDouble(PrePayPct);
-                        objHeader.Size = Size;
-                        objHeader.POFee = Convert.ToDouble(POFee);
-                        objHeader.Style = Style;
-                        objHeader.SOFee = Convert.ToDouble(SOFee);
-                        objHeader.StkVol = Convert.ToDouble(StkVol);
-                        objHeader.VendID1 = Vendor1;
-                        objHeader.StkWt = Convert.ToDouble(StkWt);
-                        objHeader.VendID2 = Vendor2;
-                        objHeader.StkWtUnit = StkWtUnit;
-                        objHeader.LossRate00 = Convert.ToDouble(LossRate00);
-                        objHeader.SOPrice = Convert.ToDouble(SOPrice);
-                        objHeader.LossRate01 = Convert.ToDouble(LossRate01);
-                        objHeader.POPrice = Convert.ToDouble(POPrice);
-                        objHeader.LossRate02 = Convert.ToDouble(LossRate02);
-                        objHeader.IRSftyStkDays = Convert.ToDouble(IRSftyStkDays);
-                        objHeader.LossRate03 = Convert.ToDouble(LossRate03);
-                        objHeader.IRSftyStkPct = Convert.ToDouble(IRSftyStkPct);
-                        objHeader.IRSftyStkQty = Convert.ToDouble(IRSftyStkQty);
-                        objHeader.IROverStkQty = Convert.ToDouble(IROverStkQty);
-
-                        //tab 3
-
-                        objHeader.SerAssign = SerAssign;
-                        objHeader.LotSerIssMthd = LotSerIssMthd;
-                        objHeader.ShelfLife = Convert.ToInt16(ShelfLife);
-                        objHeader.WarrantyDays = Convert.ToInt16(WarrantyDays);
-                        objHeader.LotSerFxdTyp = LotSerFxdTyp;
-                        objHeader.LotSerFxdLen = Convert.ToInt16(LotSerFxdLen);
-                        objHeader.LotSerFxdVal = LotSerFxdVal;
-                        objHeader.LotSerNumLen = Convert.ToInt16(LotSerNumLen);
-                        objHeader.LotSerNumVal = LotSerNumVal;
-                        //Node
-
-
-
-
-                        //Image and Media
-
-                        objHeader.Picture = images;
-                        objHeader.Media = media;
-
-                        //String[] nodeid = nodeID.Split('-');
-                        //objHeader.NodeID = nodeid[0];
-                        //objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
-                        objHeader.LUpd_DateTime = DateTime.Now;
-                        objHeader.LUpd_Prog = screenNbr;
-                        objHeader.LUpd_User = Current.UserName;
-                        //UpdatingHeader(created, ref objHeader);
-
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        objHeader.BarCode = BarCode;
-                        if (handle == "N" || handle == "")
-                        {
-                            objHeader.ApproveStatus = approveStatus;
-                        }
-                        else if (handle == "A")
-                        {
-                            objHeader.ApproveStatus = "C";
-                        }
-                        else if (handle == "I")
-                        {
-                            objHeader.ApproveStatus = "H";
-                        }
-
-
-                        if (approveStatus == "")
-                        {
-                            objHeader.ApproveStatus = "H";
-                        }
-                        objHeader.Descr = Descr;
-                        objHeader.Descr1 = Descr1;
-                        objHeader.Status = Status;
-
-
-
-                        objHeader.Public = Convert.ToBoolean(Public);
-                        if (Convert.ToBoolean(Public) == true)
-                        {
-                            var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID).ToList();
-                            for (int i = 0; i < del.Count; i++)
-                            {
-
-                                _db.IN_InvtCpny.DeleteObject(del[i]);
-
-                            }
-                            //foreach (IN_ProdClassCpny proclass in del)
-                            //{
-                            //    _db.IN_ProdClassCpny.DeleteObject(proclass);
-                            //}
-                        }
-                        //tab1
-
-                        objHeader.ClassID = ClassID;
-                        if (StkItem == true)
-                        {
-                            objHeader.StkItem = 1;
-                        }
-                        else
-                        {
-                            objHeader.StkItem = 0;
-                        }
-                        // ???
-                        objHeader.PriceClassID = PriceClassID;
-                        objHeader.InvtType = InvtType;
-
-                        objHeader.Source = Source;
-                        objHeader.ValMthd = ValMthd;
-                        objHeader.LotSerTrack = LotSerTrack;
-                        objHeader.Buyer = Buyer;
-                        objHeader.StkUnit = StkUnit;
-                        objHeader.DfltPOUnit = DfltPOUnit;
-                        objHeader.DfltSOUnit = DfltSOUnit;
-                        objHeader.MaterialType = MaterialType;
-                        //objHeader.DfltSite = created.DfltSite;
-                        objHeader.TaxCat = DfltSlsTaxCat;
-
-                        //tab 2
-
-                        objHeader.Color = Color;
-
-                        objHeader.PrePayPct = Convert.ToDouble(PrePayPct);
-                        objHeader.Size = Size;
-                        objHeader.POFee = Convert.ToDouble(POFee);
-                        objHeader.Style = Style;
-                        objHeader.SOFee = Convert.ToDouble(SOFee);
-                        objHeader.StkVol = Convert.ToDouble(StkVol);
-                        objHeader.VendID1 = Vendor1;
-                        objHeader.StkWt = Convert.ToDouble(StkWt);
-                        objHeader.VendID2 = Vendor2;
-                        objHeader.StkWtUnit = StkWtUnit;
-                        objHeader.LossRate00 = Convert.ToDouble(LossRate00);
-                        objHeader.SOPrice = Convert.ToDouble(SOPrice);
-                        objHeader.LossRate01 = Convert.ToDouble(LossRate01);
-                        objHeader.POPrice = Convert.ToDouble(POPrice);
-                        objHeader.LossRate02 = Convert.ToDouble(LossRate02);
-                        objHeader.IRSftyStkDays = Convert.ToDouble(IRSftyStkDays);
-                        objHeader.LossRate03 = Convert.ToDouble(LossRate03);
-                        objHeader.IRSftyStkPct = Convert.ToDouble(IRSftyStkPct);
-                        objHeader.IRSftyStkQty = Convert.ToDouble(IRSftyStkQty);
-                        objHeader.IROverStkQty = Convert.ToDouble(IROverStkQty);
-
-                        //tab 3
-
-                        objHeader.SerAssign = SerAssign;
-                        objHeader.LotSerIssMthd = LotSerIssMthd;
-                        objHeader.ShelfLife = Convert.ToInt16(ShelfLife);
-                        objHeader.WarrantyDays = Convert.ToInt16(WarrantyDays);
-                        objHeader.LotSerFxdTyp = LotSerFxdTyp;
-                        objHeader.LotSerFxdLen = Convert.ToInt16(LotSerFxdLen);
-                        objHeader.LotSerFxdVal = LotSerFxdVal;
-                        objHeader.LotSerNumLen = Convert.ToInt16(LotSerNumLen);
-                        objHeader.LotSerNumVal = LotSerNumVal;
-                        //Node
-
-                        String[] nodeid = nodeID.Split('-');
-                        if (objHeader.NodeID != nodeid[0])
-                        {
-                            tmpChangeTreeDic = "1";
-                        }
-                        else
-                        {
-                            tmpChangeTreeDic = "0";
-                        }
-                        objHeader.NodeID = nodeid[0];
-                        objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
-                        var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "I").FirstOrDefault();
-                        objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
-
-
-                        //Image and Media
-
-                        objHeader.Picture = images;
-                        objHeader.Media = media;
-
-                        //String[] nodeid = nodeID.Split('-');
-                        //objHeader.NodeID = nodeid[0];
-                        //objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
-                        objHeader.LUpd_DateTime = DateTime.Now;
-                        objHeader.LUpd_Prog = screenNbr;
-                        objHeader.LUpd_User = Current.UserName;
-                        //UpdatingHeader(created, ref objHeader);
-
-                        _db.SaveChanges();
-                    }
+                    throw new MessageException(MessageType.Message, "8001",
+                          parm: new[] { Util.GetLang("InvtID") + " " + obj.InvtID });
 
                 }
                 else
                 {
-                    //bo sung code add new copyForm neu update
-                    images = getPathThenUploadImageCopyForm(tmpCopyFormImageUrl, invtID);
-                    media = getPathMediaCopyForm(tmpCopyFormMedia, invtID, tmpOldFileName);
-                    objHeader = new IN_Inventory();
-                    objHeader.InvtID = invtID;
-                    objHeader.BarCode = BarCode;
-                    if (handle == "N" || handle == "")
-                    {
-                        objHeader.ApproveStatus = approveStatus;
-                    }
-                    else if (handle == "A")
-                    {
-                        objHeader.ApproveStatus = "C";
-                    }
-                    else if (handle == "I")
-                    {
-                        objHeader.ApproveStatus = "H";
-                    }
-
-
-                    if (approveStatus == "")
-                    {
-                        objHeader.ApproveStatus = "H";
-                    }
-
-                    objHeader.Descr = Descr;
-                    objHeader.Descr1 = Descr1;
-                    objHeader.Status = Status;
-
-
-
-                    objHeader.Public = Convert.ToBoolean(Public);
-                    if (Convert.ToBoolean(Public) == true)
+                    _objHeader = new IN_Inventory();
+                    _objHeader.ResetET();
+                    _objHeader.InvtID = obj.InvtID;
+                    if (obj.Public == true)
                     {
                         var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID).ToList();
                         for (int i = 0; i < del.Count; i++)
@@ -775,546 +320,193 @@ namespace IN20500.Controllers
                             _db.IN_InvtCpny.DeleteObject(del[i]);
 
                         }
-                        //foreach (IN_ProdClassCpny proclass in del)
-                        //{
-                        //    _db.IN_ProdClassCpny.DeleteObject(proclass);
-                        //}
                     }
-                    //tab1
+                    Updating_Inventory(_objHeader, obj);
 
-                    objHeader.ClassID = ClassID;
-                    if (StkItem == true)
-                    {
-                        objHeader.StkItem = 1;
-                    }
-                    else
-                    {
-                        objHeader.StkItem = 0;
-                    }
-                    // ???
-                    objHeader.PriceClassID = PriceClassID;
-                    objHeader.InvtType = InvtType;
-
-                    objHeader.Source = Source;
-                    objHeader.ValMthd = ValMthd;
-                    objHeader.LotSerTrack = LotSerTrack;
-                    objHeader.Buyer = Buyer;
-                    objHeader.StkUnit = StkUnit;
-                    objHeader.DfltPOUnit = DfltPOUnit;
-                    objHeader.DfltSOUnit = DfltSOUnit;
-                    objHeader.MaterialType = MaterialType;
-                    //objHeader.DfltSite = created.DfltSite;
-                    objHeader.TaxCat = DfltSlsTaxCat;
-
-                    //tab 2
-
-                    objHeader.Color = Color;
-                    //if(created.PrePayPct == "")
-                    //{
-                    //    objHeader.PrepayPct = 0;
-                    //}else{
-                    //    objHeader.PrePayPct = created.PrePayPct;
-                    //}
-                    objHeader.PrePayPct = Convert.ToDouble(PrePayPct);
-                    objHeader.Size = Size;
-                    objHeader.POFee = Convert.ToDouble(POFee);
-                    objHeader.Style = Style;
-                    objHeader.SOFee = Convert.ToDouble(SOFee);
-                    objHeader.StkVol = Convert.ToDouble(StkVol);
-                    objHeader.VendID1 = Vendor1;
-                    objHeader.StkWt = Convert.ToDouble(StkWt);
-                    objHeader.VendID2 = Vendor2;
-                    objHeader.StkWtUnit = StkWtUnit;
-                    objHeader.LossRate00 = Convert.ToDouble(LossRate00);
-                    objHeader.SOPrice = Convert.ToDouble(SOPrice);
-                    objHeader.LossRate01 = Convert.ToDouble(LossRate01);
-                    objHeader.POPrice = Convert.ToDouble(POPrice);
-                    objHeader.LossRate02 = Convert.ToDouble(LossRate02);
-                    objHeader.IRSftyStkDays = Convert.ToDouble(IRSftyStkDays);
-                    objHeader.LossRate03 = Convert.ToDouble(LossRate03);
-                    objHeader.IRSftyStkPct = Convert.ToDouble(IRSftyStkPct);
-                    objHeader.IRSftyStkQty = Convert.ToDouble(IRSftyStkQty);
-                    objHeader.IROverStkQty = Convert.ToDouble(IROverStkQty);
-
-                    //tab 3
-
-                    objHeader.SerAssign = SerAssign;
-                    objHeader.LotSerIssMthd = LotSerIssMthd;
-                    objHeader.ShelfLife = Convert.ToInt16(ShelfLife);
-                    objHeader.WarrantyDays = Convert.ToInt16(WarrantyDays);
-                    objHeader.LotSerFxdTyp = LotSerFxdTyp;
-                    objHeader.LotSerFxdLen = Convert.ToInt16(LotSerFxdLen);
-                    objHeader.LotSerFxdVal = LotSerFxdVal;
-                    objHeader.LotSerNumLen = Convert.ToInt16(LotSerNumLen);
-                    objHeader.LotSerNumVal = LotSerNumVal;
-
-
-                    String[] nodeid = nodeID.Split('-');
-                    objHeader.NodeID = nodeid[0];
-                    objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
-                    var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "I").FirstOrDefault();
-                    objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
-                    objHeader.Exported = 0;
-
-                    //Image and Media
-
-                    objHeader.Picture = images;
-                    objHeader.Media = media;
-
-                    //
-                    objHeader.Crtd_DateTime = DateTime.Now;
-                    objHeader.Crtd_Prog = screenNbr;
-                    objHeader.Crtd_User = Current.UserName;
-                    objHeader.tstamp = new byte[0];
-                    objHeader.LUpd_DateTime = DateTime.Now;
-                    objHeader.LUpd_Prog = screenNbr;
-                    objHeader.LUpd_User = Current.UserName;
-
-
-
-
-                    _db.IN_Inventory.AddObject(objHeader);
-                    _db.SaveChanges();
-
-
-
-
+                    _objHeader.Crtd_DateTime = DateTime.Now;
+                    _objHeader.Crtd_Prog = screenNbr;
+                    _objHeader.Crtd_User = Current.UserName;
+                    _db.IN_Inventory.AddObject(_objHeader);
                 }
-
-
-                // If there is a change in handling status (keepStatus is False),
-                // add a new pending task with an approved handle.
-
-
-
-                // ===============================================================
-
-                // Get out of the loop (only update the first data)
-
-            }
-            foreach (IN_Inventory created in lstheader.Created)
-            {
-                string images = getPathThenUploadImage(created, invtID);
-                string media = getPathMedia(created, invtID, mediaExist);
-                var objHeader = _db.IN_Inventory.Where(p => p.InvtID == invtID).FirstOrDefault();
-                if (objHeader == null)
+                // cap nhat Compay
+                if (obj.Public != true)
                 {
-                    if (hadChild != 0)
+                    foreach (IN20500_pgGetCompanyInvt_Result deleted in lstgrd.Deleted)
                     {
-                        objHeader = new IN_Inventory();
-
-                        objHeader.InvtID = invtID;
-                        objHeader.BarCode = BarCode;
-                        if (handle == "N" || handle == "")
+                        if (approveStatus != "H" && approveStatus != "D" && approveStatus != "C")
                         {
-                            objHeader.ApproveStatus = approveStatus;
-                        }
-                        else if (handle == "A")
-                        {
-                            objHeader.ApproveStatus = "C";
-                        }
-                        else if (handle == "I")
-                        {
-                            objHeader.ApproveStatus = "H";
-                        }
-
-
-                        if (approveStatus == "")
-                        {
-                            objHeader.ApproveStatus = "H";
-                        }
-
-                        objHeader.Descr = Descr;
-                        objHeader.Descr1 = Descr1;
-                        objHeader.Status = Status;
-
-
-
-                        objHeader.Public = Convert.ToBoolean(Public);
-                        if (Convert.ToBoolean(Public) == true)
-                        {
-                            var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID).ToList();
-                            for (int i = 0; i < del.Count; i++)
+                            var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == deleted.CpnyID).FirstOrDefault();
+                            if (del != null)
                             {
-
-                                _db.IN_InvtCpny.DeleteObject(del[i]);
+                                _db.IN_InvtCpny.DeleteObject(del);
 
                             }
-                            //foreach (IN_ProdClassCpny proclass in del)
-                            //{
-                            //    _db.IN_ProdClassCpny.DeleteObject(proclass);
-                            //}
                         }
-                        //tab1
-
-                        objHeader.ClassID = ClassID;
-                        if (StkItem == true)
+                    }
+                    foreach (IN20500_pgGetCompanyInvt_Result created in lstgrd.Created)
+                    {
+                        var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == created.CpnyID).FirstOrDefault();
+                        if (record == null)
                         {
-                            objHeader.StkItem = 1;
+                            record = new IN_InvtCpny();
+                            record.InvtID = invtID;
+                            record.CpnyID = created.CpnyID;
+
+
+                            if (record.InvtID != "" && record.CpnyID != "")
+                            {
+
+                                _db.IN_InvtCpny.AddObject(record);
+                            }
+                        }
+                    }
+
+
+
+                    foreach (IN20500_pgGetCompanyInvt_Result updated in lstgrd.Updated)
+                    {
+                        var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == updated.CpnyID).FirstOrDefault();
+                        if (record != null)
+                        {
                         }
                         else
                         {
-                            objHeader.StkItem = 0;
+                            record = new IN_InvtCpny();
+                            record.InvtID = invtID;
+                            record.CpnyID = updated.CpnyID;
+                            _db.IN_InvtCpny.AddObject(record);
                         }
-                        // ???
-                        objHeader.PriceClassID = PriceClassID;
-                        objHeader.InvtType = InvtType;
-
-                        objHeader.Source = Source;
-                        objHeader.ValMthd = ValMthd;
-                        objHeader.LotSerTrack = LotSerTrack;
-                        objHeader.Buyer = Buyer;
-                        objHeader.StkUnit = StkUnit;
-                        objHeader.DfltPOUnit = DfltPOUnit;
-                        objHeader.DfltSOUnit = DfltSOUnit;
-                        objHeader.MaterialType = MaterialType;
-                        //objHeader.DfltSite = created.DfltSite;
-                        objHeader.TaxCat = DfltSlsTaxCat;
-
-                        //tab 2
-
-                        objHeader.Color = Color;
-                        //if(created.PrePayPct == "")
-                        //{
-                        //    objHeader.PrepayPct = 0;
-                        //}else{
-                        //    objHeader.PrePayPct = created.PrePayPct;
-                        //}
-                        objHeader.PrePayPct = Convert.ToDouble(PrePayPct);
-                        objHeader.Size = Size;
-                        objHeader.POFee = Convert.ToDouble(POFee);
-                        objHeader.Style = Style;
-                        objHeader.SOFee = Convert.ToDouble(SOFee);
-                        objHeader.StkVol = Convert.ToDouble(StkVol);
-                        objHeader.VendID1 = Vendor1;
-                        objHeader.StkWt = Convert.ToDouble(StkWt);
-                        objHeader.VendID2 = Vendor2;
-                        objHeader.StkWtUnit = StkWtUnit;
-                        objHeader.LossRate00 = Convert.ToDouble(LossRate00);
-                        objHeader.SOPrice = Convert.ToDouble(SOPrice);
-                        objHeader.LossRate01 = Convert.ToDouble(LossRate01);
-                        objHeader.POPrice = Convert.ToDouble(POPrice);
-                        objHeader.LossRate02 = Convert.ToDouble(LossRate02);
-                        objHeader.IRSftyStkDays = Convert.ToDouble(IRSftyStkDays);
-                        objHeader.LossRate03 = Convert.ToDouble(LossRate03);
-                        objHeader.IRSftyStkPct = Convert.ToDouble(IRSftyStkPct);
-                        objHeader.IRSftyStkQty = Convert.ToDouble(IRSftyStkQty);
-                        objHeader.IROverStkQty = Convert.ToDouble(IROverStkQty);
-
-                        //tab 3
-
-                        objHeader.SerAssign = SerAssign;
-                        objHeader.LotSerIssMthd = LotSerIssMthd;
-                        objHeader.ShelfLife = Convert.ToInt16(ShelfLife);
-                        objHeader.WarrantyDays = Convert.ToInt16(WarrantyDays);
-                        objHeader.LotSerFxdTyp = LotSerFxdTyp;
-                        objHeader.LotSerFxdLen = Convert.ToInt16(LotSerFxdLen);
-                        objHeader.LotSerFxdVal = LotSerFxdVal;
-                        objHeader.LotSerNumLen = Convert.ToInt16(LotSerNumLen);
-                        objHeader.LotSerNumVal = LotSerNumVal;
-
-
-                        String[] nodeid = nodeID.Split('-');
-                        objHeader.NodeID = nodeid[0];
-                        objHeader.NodeLevel = Convert.ToInt16(nodeLevel);
-                        var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "I").FirstOrDefault();
-                        objHeader.ParentRecordID = searchparentRecordID.ParentRecordID;
-                        objHeader.Exported = 0;
-                        //tmpChangeTreeDic = "1";
-                        //Image and Media
-
-                        objHeader.Picture = images;
-                        objHeader.Media = media;
-
-                        //
-                        objHeader.Crtd_DateTime = DateTime.Now;
-                        objHeader.Crtd_Prog = screenNbr;
-                        objHeader.Crtd_User = Current.UserName;
-                        objHeader.tstamp = new byte[0];
-                        UpdatingHeader(created, ref objHeader);
-
-
-
-
-                        _db.IN_Inventory.AddObject(objHeader);
-                        _db.SaveChanges();
-
-
-
-
+                    }
+                }
+                #region save task
+                if (handle != "" && handle != "N")
+                {
+                    string branch = "";
+                    if (obj.Public == true)
+                    {
+                        var lstCpny = _sys.SYS_Company.ToList();
+                        foreach (var item in lstCpny)
+                            branch += item.CpnyID + ',';
                     }
                     else
                     {
-                        return Json(new { success = false, code = "8001" }, JsonRequestBehavior.AllowGet);
+                        foreach (var cpny in _db.IN_InvtCpny.Where(p => p.InvtID == invtID))
+                            branch += cpny.CpnyID + ',';
                     }
+                    if (branch.Length > 0) branch = branch.Substring(0, branch.Length - 1);
 
-                }
-            }
+                    var objHO_Pending = _db.HO_PendingTasks.Where(p => p.ObjectID == obj.InvtID && p.EditScreenNbr == screenNbr && p.BranchID == branch).FirstOrDefault();
 
+                    var objHandle = _db.SI_ApprovalFlowHandle.Where(p => p.AppFolID == screenNbr && p.Status == obj.ApproveStatus && p.Handle == handle).FirstOrDefault();
 
-
-
-            var objtmp = _db.IN_Inventory.Where(p => p.InvtID == invtIDCopyForm).FirstOrDefault();
-            if (objtmp != null)
-            {
-                objtmp.Picture = tmpImageForUpload;
-                if (tmpMediaDelete == 1)
-                {
-                    objtmp.Media = "";
-                }
-                string images = getPathThenUploadImage(objtmp, invtID);
-                string media = getPathMedia(objtmp, invtID, mediaExist);
-                if (tmpImageDelete == 0)
-                {
-                    objtmp.Picture = images;
-
-                }
-                else if (tmpImageDelete == 1)
-                {
-                    objtmp.Picture = "";
-                }
-                if (tmpMediaDelete == 0)
-                {
-                    objtmp.Media = media;
-                }
-                else if (tmpMediaDelete == 1)
-                {
-                    objtmp.Media = "";
-                }
-                if (handle == "N" || handle == "")
-                {
-                    objtmp.ApproveStatus = approveStatus;
-                }
-                else if (handle == "A")
-                {
-                    objtmp.ApproveStatus = "C";
-                }
-                else if (handle == "I")
-                {
-                    objtmp.ApproveStatus = "H";
-                }
-                if (lstheader.Updated.Count == 0 && hadChild != 0)
-                {
-                    String[] nodeid = nodeID.Split('-');
-                    if (objtmp.NodeID != nodeid[0])
+                    if (objHO_Pending == null && objHandle != null)
                     {
-                        tmpChangeTreeDic = "1";
-                    }
-                    else
-                    {
-                        tmpChangeTreeDic = "0";
-                    }
-                    objtmp.NodeID = nodeid[0];
-
-                    objtmp.NodeLevel = Convert.ToInt16(nodeLevel);
-                    var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "I").FirstOrDefault();
-                    objtmp.ParentRecordID = searchparentRecordID.ParentRecordID;
-                    //tmpChangeTreeDic = "1";
-                }
-            }
-            else if (objtmp == null)
-            {
-                if (tmpCopyForm == "1" && lstheader.Updated.Count == 0 && hadChild != 0)
-                {
-                    string images = getPathThenUploadImageCopyForm(tmpCopyFormImageUrl, invtID);
-                    string media = getPathMediaCopyForm(tmpCopyFormMedia, invtIDCopyForm, tmpOldFileName);
-                    objtmp = new IN_Inventory();
-                    objtmp.InvtID = invtIDCopyForm;
-                    objtmp.BarCode = BarCode;
-                    if (handle == "N" || handle == "")
-                    {
-                        objtmp.ApproveStatus = approveStatus;
-                    }
-                    else if (handle == "A")
-                    {
-                        objtmp.ApproveStatus = "C";
-                    }
-                    else if (handle == "I")
-                    {
-                        objtmp.ApproveStatus = "H";
-                    }
-
-
-                    if (approveStatus == "")
-                    {
-                        objtmp.ApproveStatus = "H";
-                    }
-
-                    objtmp.Descr = Descr;
-                    objtmp.Descr1 = Descr1;
-                    objtmp.Status = Status;
-
-
-
-                    objtmp.Public = Convert.ToBoolean(Public);
-                    if (Convert.ToBoolean(Public) == true)
-                    {
-                        var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID).ToList();
-                        for (int i = 0; i < del.Count; i++)
+                        if (!objHandle.Param00.PassNull().Split(',').Any(p => p.ToLower() == "notapprove"))
                         {
-
-                            _db.IN_InvtCpny.DeleteObject(del[i]);
-
+                            HO_PendingTasks newTask = new HO_PendingTasks();
+                            newTask.BranchID = branch;
+                            newTask.ObjectID = _objHeader.InvtID;
+                            newTask.EditScreenNbr = screenNbr;
+                            newTask.Content = string.Format(objHandle.ContentApprove, _objHeader.InvtID, _objHeader.Descr, branch);
+                            newTask.Crtd_Datetime = newTask.LUpd_Datetime = DateTime.Now;
+                            newTask.Crtd_Prog = newTask.LUpd_Prog = screenNbr;
+                            newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
+                            newTask.Status = objHandle.ToStatus;
+                            newTask.tstamp = new byte[1];
+                            _db.HO_PendingTasks.AddObject(newTask);
                         }
-                        //foreach (IN_ProdClassCpny proclass in del)
-                        //{
-                        //    _db.IN_ProdClassCpny.DeleteObject(proclass);
-                        //}
+                      
                     }
-                    //tab1
-
-                    objtmp.ClassID = ClassID;
-                    if (StkItem == true)
-                    {
-                        objtmp.StkItem = 1;
-                    }
-                    else
-                    {
-                        objtmp.StkItem = 0;
-                    }
-                    // ???
-                    objtmp.PriceClassID = PriceClassID;
-                    objtmp.InvtType = InvtType;
-
-                    objtmp.Source = Source;
-                    objtmp.ValMthd = ValMthd;
-                    objtmp.LotSerTrack = LotSerTrack;
-                    objtmp.Buyer = Buyer;
-                    objtmp.StkUnit = StkUnit;
-                    objtmp.DfltPOUnit = DfltPOUnit;
-                    objtmp.DfltSOUnit = DfltSOUnit;
-                    objtmp.MaterialType = MaterialType;
-                    //objHeader.DfltSite = created.DfltSite;
-                    objtmp.TaxCat = DfltSlsTaxCat;
-
-                    //tab 2
-
-                    objtmp.Color = Color;
-                    //if(created.PrePayPct == "")
-                    //{
-                    //    objHeader.PrepayPct = 0;
-                    //}else{
-                    //    objHeader.PrePayPct = created.PrePayPct;
-                    //}
-                    objtmp.PrePayPct = Convert.ToDouble(PrePayPct);
-                    objtmp.Size = Size;
-                    objtmp.POFee = Convert.ToDouble(POFee);
-                    objtmp.Style = Style;
-                    objtmp.SOFee = Convert.ToDouble(SOFee);
-                    objtmp.StkVol = Convert.ToDouble(StkVol);
-                    objtmp.VendID1 = Vendor1;
-                    objtmp.StkWt = Convert.ToDouble(StkWt);
-                    objtmp.VendID2 = Vendor2;
-                    objtmp.StkWtUnit = StkWtUnit;
-                    objtmp.LossRate00 = Convert.ToDouble(LossRate00);
-                    objtmp.SOPrice = Convert.ToDouble(SOPrice);
-                    objtmp.LossRate01 = Convert.ToDouble(LossRate01);
-                    objtmp.POPrice = Convert.ToDouble(POPrice);
-                    objtmp.LossRate02 = Convert.ToDouble(LossRate02);
-                    objtmp.IRSftyStkDays = Convert.ToDouble(IRSftyStkDays);
-                    objtmp.LossRate03 = Convert.ToDouble(LossRate03);
-                    objtmp.IRSftyStkPct = Convert.ToDouble(IRSftyStkPct);
-                    objtmp.IRSftyStkQty = Convert.ToDouble(IRSftyStkQty);
-                    objtmp.IROverStkQty = Convert.ToDouble(IROverStkQty);
-
-                    //tab 3
-
-                    objtmp.SerAssign = SerAssign;
-                    objtmp.LotSerIssMthd = LotSerIssMthd;
-                    objtmp.ShelfLife = Convert.ToInt16(ShelfLife);
-                    objtmp.WarrantyDays = Convert.ToInt16(WarrantyDays);
-                    objtmp.LotSerFxdTyp = LotSerFxdTyp;
-                    objtmp.LotSerFxdLen = Convert.ToInt16(LotSerFxdLen);
-                    objtmp.LotSerFxdVal = LotSerFxdVal;
-                    objtmp.LotSerNumLen = Convert.ToInt16(LotSerNumLen);
-                    objtmp.LotSerNumVal = LotSerNumVal;
-
-
-                    String[] nodeid = nodeID.Split('-');
-                    objtmp.NodeID = nodeid[0];
-                    objtmp.NodeLevel = Convert.ToInt16(nodeLevel);
-                    var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "I").FirstOrDefault();
-                    objtmp.ParentRecordID = searchparentRecordID.ParentRecordID;
-                    objtmp.Exported = 0;
-
-                    //Image and Media
-
-                    objtmp.Picture = images;
-                    objtmp.Media = media;
-
-                    //
-                    objtmp.Crtd_DateTime = DateTime.Now;
-                    objtmp.Crtd_Prog = screenNbr;
-                    objtmp.Crtd_User = Current.UserName;
-                    objtmp.tstamp = new byte[0];
-                    objtmp.LUpd_DateTime = DateTime.Now;
-                    objtmp.LUpd_Prog = screenNbr;
-                    objtmp.LUpd_User = Current.UserName;
-
-
-
-
-                    _db.IN_Inventory.AddObject(objtmp);
-                    _db.SaveChanges();
+                    if (objHandle != null) _objHeader.ApproveStatus = objHandle.ToStatus;
                 }
-                else
+                #endregion
+
+                _db.SaveChanges();
+                return Json(new { success = true, invtID = _objHeader.InvtID, Descr = _objHeader.Descr }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
                 {
-                    return Json(new { success = false, code = "8001" }, JsonRequestBehavior.AllowGet);
+                    return (ex as MessageException).ToMessage();
                 }
-
-            }
-
-
-
-
-
-            _db.SaveChanges();
-            //this.Direct();
-
-
-            if (hadChild != 0)
-            {
-                return Json(new { success = true, invtID = invtID, Descr = Descr, addNewOrUpdate = "addNew", tmpChangeTreeDic = tmpChangeTreeDic, tmpSelectedNode = tmpSelectedNode }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(new { success = true, invtID = invtID, Descr = Descr, addNewOrUpdate = "update" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
 
         }
 
 
+        private void Updating_Inventory(IN_Inventory t, IN_Inventory s)
+        {
+           
+                t.LUpd_DateTime = DateTime.Now;
+                t.LUpd_Prog = screenNbr;
+                t.LUpd_User = Current.UserName;
 
+                t.Public = s.Public;
+                t.BarCode = s.BarCode;
+                t.Buyer = s.Buyer;
+                t.ClassID = s.ClassID;
+                t.Color = s.Color;
+                t.Descr = s.Descr;
+                t.Descr1 = s.Descr1;
+                t.DfltPOUnit = s.DfltPOUnit;
+                t.DfltSOUnit = s.DfltSOUnit;          
+                t.IROverStkQty = s.IROverStkQty;
+                t.IRSftyStkDays = s.IRSftyStkDays;
+                t.IRSftyStkPct = s.IRSftyStkPct;
+                t.IRSftyStkQty = s.IRSftyStkQty;
+                t.InvtType = s.InvtType;
+                t.LossRate00 = s.LossRate00;
+                t.LossRate01 = s.LossRate01;
+                t.LossRate02 = s.LossRate02;
+                t.LossRate03 = s.LossRate03;
+                t.LotSerFxdLen = s.LotSerFxdLen;
+                t.LotSerFxdTyp = s.LotSerFxdTyp;
+                t.LotSerFxdVal = s.LotSerFxdVal;
+                t.LotSerIssMthd = s.LotSerIssMthd;
+                t.LotSerNumLen = s.LotSerNumLen;
+                t.LotSerNumVal = s.LotSerNumVal;
+                t.LotSerTrack = s.LotSerTrack;
+                t.MaterialType = s.MaterialType;
+                t.NodeID = s.NodeID;
+                t.NodeLevel = s.NodeLevel;
+                t.POFee = s.POFee;
+                t.POPrice = s.POPrice;
+                t.ParentRecordID = s.ParentRecordID;
+                t.PrePayPct = s.PrePayPct;
+                t.PriceClassID = s.PriceClassID;
+                t.SOFee = s.SOFee;
+                t.SOPrice = s.SOPrice;
+                t.SerAssign = s.SerAssign;
+                t.ShelfLife = s.ShelfLife;
+                t.WarrantyDays = s.WarrantyDays;
+                t.Size = s.Size;
+                t.Source = s.Source;
+                t.Status = s.Status;
+                t.StkItem = s.StkItem;
+                t.StkUnit = s.StkUnit;
+                t.StkVol = s.StkVol;
+                t.StkWt = s.StkWt;
+                t.StkWtUnit = s.StkWtUnit;
+                t.Style = s.Style;
+                t.TaxCat = s.TaxCat;
+                t.ValMthd = s.ValMthd;
+                t.VendID2 = s.VendID2;
+                t.VendID1 = s.VendID1;
+                t.ApproveStatus = s.ApproveStatus;
+        }
 
-
-
+       
         [DirectMethod]
         public ActionResult IN20500Delete(string invtID)
         {
             var inv = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-
-
             _db.IN_Inventory.DeleteObject(inv);
-
-
-
             _db.SaveChanges();
             return this.Direct();
         }
-
-
-        private void UpdatingHeader(IN_Inventory s, ref IN_Inventory d)
-        {
-
-
-
-
-            d.LUpd_DateTime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
-        }
-
-
+       
         [DirectMethod]
         public ActionResult GetImages(string Name)
         {
@@ -1350,12 +542,10 @@ namespace IN20500.Controllers
                 return Convert.ToBase64String(a);
             }
         }
-
         private byte[] getByteImage(string dataIamge)
         {
             return Encoding.ASCII.GetBytes(dataIamge);
         }
-
         [DirectMethod]
         public ActionResult Upload()
         {
@@ -1414,8 +604,6 @@ namespace IN20500.Controllers
 
             return result;
         }
-
-
         private string getPathThenUploadImage(IN_Inventory inventory, string invtID)
         {
             string images = string.Format("{0}.jpg", invtID);
@@ -1444,7 +632,6 @@ namespace IN20500.Controllers
 
             return images;
         }
-
         private string getPathThenUploadImageCopyForm(string tmpCopyFormImageUrl, string invtID)
         {
             string images = string.Format("{0}.jpg", invtID);
@@ -1501,9 +688,6 @@ namespace IN20500.Controllers
             return this.Direct();
 
         }
-
-
-
         [ValidateInput(false)]
         public ActionResult IN20500UploadMedia(string invtID)
         {
@@ -1568,8 +752,6 @@ namespace IN20500.Controllers
             //return Json(new { success = true, imageStream = "123", fullFileName = "456" });
 
         }
-
-
         [DirectMethod]
         public ActionResult IN20500SetMediaImage()
         {
@@ -1581,10 +763,6 @@ namespace IN20500.Controllers
             b = Images.ImageUrl;
             return Json(new { success = true, imageStream = b }, JsonRequestBehavior.AllowGet);
         }
-
-
-
-
         private string getPathMedia(IN_Inventory inventory, string invtID, string mediaExist)
         {
             string media = "";
@@ -1606,7 +784,6 @@ namespace IN20500.Controllers
 
             return media;
         }
-
         private string getPathMediaCopyForm(string tmpCopyFormMedia, string invtID, string tmpOldFileName)
         {
             string media = string.Format("{0}.mp4", invtID);
