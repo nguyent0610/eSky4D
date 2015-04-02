@@ -89,11 +89,12 @@ var menuClick = function (command) {
                     if (App.cboInvtID.value != "" && App.cboStatus.value != "A" && App.cboStatus.value != "O") {
 
                         HQ.message.show(11, '', 'deleteRecordForm');
-                    } else if (HQ.focus == 'grdL') {
-                        var rowindex = HQ.grid.indexSelect(App.grd);
-                        if (rowindex != '')
-                            HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grd), ''], 'deleteRecordGrid', true)
                     } 
+                }
+                else if (HQ.focus == 'grd') {
+                    var rowindex = HQ.grid.indexSelect(App.grd);
+                    if (rowindex != '')
+                        HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grd), ''], 'deleteRecordGrid', true)
                 }
             }
             break;
@@ -143,18 +144,13 @@ function refresh(item) {
 
 //    }
 //}
-function Save() {
-
-    if (tmpCopyForm == "1") {
-        setValueToGrid();
-    }
+function Save() {  
     var curRecord = App.frmMain.getRecord();
     curRecord.data.Picture = App.imgPPCStorePicReq.imageUrl;
     App.frmMain.getForm().updateRecord();
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
-            waitMsg: HQ.common.getLang('SavingData'),
-            method: 'POST',
+            waitMsg: HQ.common.getLang('SavingData'),         
             url: 'IN20500/Save',
             timeout: 1800000,
 
@@ -185,9 +181,15 @@ function Save() {
             },
             success: function (result, data) {
                 tmpCopyForm = "0";
-                App.cboInvtID.getStore().reload();               
+                var InvtID = App.cboInvtID.getValue();
+                App.cboInvtID.getStore().reload();
+                App.cboInvtID.getStore().load(function () {
+                    App.cboInvtID.setValue(InvtID);
+                    App.stoIN_Inventory.reload();
+                });
+
                 HQ.message.show(201405071, '', null);              
-                refresh('yes');             
+                         
                 //if (data.result.addNewOrUpdate == "addNew") {
                 //    if (data.result.tmpChangeTreeDic == "0") {
                 //        var newNode = App.slmTree.selected.items[0].data.id;
@@ -304,27 +306,14 @@ var deleteRecordForm = function (item) {
                 cpnyID: App.cboCpnyID.getValue(),
                 status: App.cboStatus.getValue()
             },
-            success: function (data) {
-                menuClick('refresh');
-                //var invtIDDescr = App.cboInvtID.value + "-" + App.txtDescr.value;
-                var record = App.IDTree.getStore().getNodeById(invtIDDescr);
-                record.remove(true)
+            success: function (msg, data) {
                 App.cboInvtID.getStore().reload();
-                App.cboInvtID.setValue('');
+                App.cboInvtID.setValue('');                             
                 App.stoIN_Inventory.reload();                        
             },
-            failure: function () {
-                //
-                if (data.result.msgCode) {
-                    if (data.result.msgCode == 2000)//loi trung key ko the add
-                        HQ.message.show(data.result.msgCode, [App.cboInvtID.fieldLabel, App.cboInvtID.getValue()], '', true);
-                    else HQ.message.show(data.result.msgCode, data.result.msgParam, '');
-                }
-                else {
-                    HQ.message.process(msg, data, true);
-                }
-            },
-            eventMask: { msg: '@Util.GetLang("DeletingData")', showMask: true }
+            failure: function (msg, data) {               
+                    HQ.message.process(msg, data, true);                
+            }
         });
     }
 };
@@ -423,6 +412,23 @@ var stoIN_Inventory_Loaded = function (store) {
         HQ.common.lockItem(App.frmMain, true);
     }
     else HQ.common.lockItem(App.frmMain, false);
+    // display image
+    App.fupPPCStorePicReq.reset();
+    if (record.data.Picture) {
+        displayImage(App.imgPPCStorePicReq, record.data.Picture);
+    }
+    else {
+        App.imgPPCStorePicReq.setImageUrl("");
+    }
+    // display media
+    App.fupPPCStoreMediaReq.reset();
+    if (record.data.Media) {
+        displayImage(App.imgPPCStoreMediaReq, record.data.Media);
+    }
+    else {
+        App.imgPPCStoreMediaReq.setImageUrl("");
+    }
+
 };
 var stoIN_ProductClass_Loaded = function () {
 
@@ -527,41 +533,9 @@ var cboClassID_Change = function (sender, e) {
         App.stoIN_ProductClass.load();
         App.stoCompany.load();
         setTimeout(function () { setValueToGrid(); }, 1500);
-    }
-  
-
-
-
-
-
+    } 
 };
-var txtDescr_Change = function (sender, e) {
-    //var combobox = App.cboInvtID;
-    //var v = combobox.getValue();
-    //var d = App.cboInvtID.value + "-" + App.txtDescr.value;
-    //var record = combobox.findRecord(d, v);
-    //var index = combobox.store.indexOf(record);
-    //App.Tree.select(index);
-}
-var chkIsAttachFile_Change = function (sender, e) {
-    if (e) {
-        App.chkIsDeleteFile.setValue(true);
-        App.chkIsDeleteFile.disable();
-    }
-    else {
-        App.chkIsDeleteFile.enable();
-    }
 
-
-}
-var tabSA_Setup_AfterRender = function (obj, padding) {
-    if (this.parentAutoLoadControl != null) {
-        obj.setHeight(this.parentAutoLoadControl.getHeight() - padding);
-    }
-    else {
-        obj.setHeight(Ext.getBody().getViewSize().height - padding);
-    }
-};
 var frmloadAfterRender = function (obj) {
     App.storePOPriceHeader.load();
     App.storePOPrice.load();
@@ -693,57 +667,43 @@ var Tab_Change = function (sender, e)
 }
 
 
-function UploadImage() {
-    App.frmMain.submit({
-        waitMsg: 'Uploading your file...',
-        url: 'IN20500/Upload',
 
-        success: function (result) {
-            //
-            var curRecord = App.frmMain.getRecord();
-            curRecord.data.Picture = App.imgPPCStorePicReq.imageUrl;
-            //App.txtImageChange.setValue("1");
-            curRecord.setDirty();
-        },
-        failure: function (error) {
-            //
-        }
-    });
-};
-
-
-var upload = function () {
-   
-}
 
 // Event when uplPPCStorePicReq is change a file
-var NamePPCStorePicReq_Change = function (sender, e) {
-    tmpImageDelete = 0;
-    var fileName = sender.getValue();
-    var ext = fileName.split(".").pop().toLowerCase();
-    if (ext == "jpg" || ext == "png" || ext == "gif") {
-        UploadImage();
-        //setTimeout(function () { upload(); }, 5000);
-        //var curRecord = App.frmMain.getRecord();
-        //curRecord.data.Picture = App.imgPPCStorePicReq.imageUrl;
-        //curRecord.setDirty();
-    } else {
-        alert("Please choose a picture! (.jpg, .png, .gif)");
-        sender.reset();
+var fupPPCStorePicReq_Change = function (fup, newValue, oldValue, eOpts) { 
+        if (fup.value) {
+            var ext = fup.value.split(".").pop().toLowerCase();
+            if (ext == "jpg" || ext == "png" || ext == "gif") {
+                HQ.common.showBusy(true, HQ.common.getLang('uploading'), App.frmMain);
+                App.hdnPPCStorePicReq.setValue(fup.value);               
+                readImage(fup, App.imgPPCStorePicReq);
+            }
+            else {
+                HQ.message.show(148, '', '');
+            }
+        }    
+};
+
+// Event when uplPPCStorePicReq is change a file
+var fupPPCStoreMediaReq_Change = function (fup, newValue, oldValue, eOpts) {
+    if (fup.value) {
+        var ext = fup.value.split(".").pop().toLowerCase();
+        if (ext == "mp4") {
+            HQ.common.showBusy(true, HQ.common.getLang('uploading'), App.frmMain);
+            App.hdnPPCStoreMediaReq.setValue(fup.value);
+            readImage(fup, App.imgPPCStoreMediaReq);
+        }
+        else {
+            HQ.message.show(148, '', '');
+        }
     }
 };
 
 // Click to clear image of sales person
 var btnClearImage_Click = function (sender, e) {
-    if (tmpCopyForm == "1") {
-
-    } else {
-        App.imgPPCStorePicReq.setImageUrl("");
-        var curRecord = App.frmMain.getRecord();
-        curRecord.data.Picture = "";
-        curRecord.setDirty();
-        tmpImageDelete = 1;
-    }
+    App.fupPPCStorePicReq.reset();
+    App.imgPPCStorePicReq.setImageUrl("");
+    App.hdnPPCStorePicReq.setValue("");
 };
 
 function UploadMedia() {
@@ -779,50 +739,12 @@ function UploadMedia() {
     });
 };
 
-var NamePPCStoreMediaReq_Change = function (sender, e) {
-    //App.Window.show();
-    //runProgress4(App.Progress4, App.ButtonProgress);
-    tmpMediaDelete = 0;
-    var fileName = sender.getValue();
-    var ext = fileName.split(".").pop().toLowerCase();
-    if (ext == "mp4" || ext == "wmv") {
-        UploadMedia();
-        //setTimeout(function () { upload(); }, 5000);
-        //var curRecord = App.frmMain.getRecord();
-        //curRecord.data.Picture = App.imgPPCStorePicReq.imageUrl;
-        //curRecord.setDirty();
-    } else {
-        alert("Please choose a Media! (.mp4, .wmv)");
-        sender.reset();
-    }
-};
-
 var btnDeleteMedia_Click = function (sender, e) {
-    if (tmpCopyForm == "1") {
-
-    } else {
-        App.imgPPCStoreMediaReq.setImageUrl("");
-        var curRecord = App.frmMain.getRecord();
-        curRecord.data.Media = "";
-        curRecord.setDirty();
-        tmpMediaDelete = 1;
-    }
+    App.fupPPCStoreMediaReq.reset();
+    App.imgPPCStoreMediaReq.setImageUrl("");
+    App.hdnPPCStoreMediaReq.setValue("");
 };
 
-function setMediaImage() {
-    App.frmMain.submit({
-        
-        url: 'IN20500/IN20500SetMediaImage',
-
-        success: function (result,data) {
-            //
-            App.imgPPCStoreMediaReq.setImageUrl(data.result.imageStream);
-        },
-        failure: function (error) {
-            //
-        }
-    });
-};
 
 var PlayVideo = function (sender, e) {
     var curRecord = App.frmMain.getRecord();
@@ -843,34 +765,6 @@ var CopyForm_Click = function (sender, e) {
         HQ.isNew = true;
     }
 };
-
-var LoadTree_AfterRender = function () {
-    try {
-        App.direct.LoadTree( {
-            success: function (data) {
-                //if (tampSaveButton == "1") {
-                //    tampSaveButton = "0";
-                //} else {
-                //App.cboCustId.getStore().reload();
-
-                // }
-            },
-            failure: function () {
-                //
-                alert("fail");
-            },
-            eventMask: { msg: 'Loading Tree', showMask: true }
-        });
-    } catch (ex) {
-        alert(ex.message);
-    }
-}
-
-var txtLoadTree_Change = function (sender, newValue, oldValue) {
-
-    ReloadTreeIN20500();
-
-}
 
 function ReloadTreeIN20500() {
     try {
@@ -918,3 +812,37 @@ var setFocusAllCombo = function () {
 
 };
 
+//other
+var displayImage= function (imgControl, fileName) {
+    Ext.Ajax.request({
+        url: 'IN20500/ImageToBin',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        params: JSON.stringify({
+            fileName: fileName
+        }),
+        success: function (result) {
+            var jsonData = Ext.decode(result.responseText);
+            if (jsonData.imgSrc) {
+                imgControl.setImageUrl(jsonData.imgSrc);
+            }
+            else {
+                imgControl.setImageUrl("");
+            }
+        },
+        failure: function (errorMsg, data) {
+            HQ.message.process(errorMsg, data, true);
+        }
+    });
+};
+var readImage= function (fup, imgControl) {
+    var files = fup.fileInputEl.dom.files;
+    if (files && files[0]) {
+        var FR = new FileReader();
+        FR.onload = function (e) {
+            imgControl.setImageUrl(e.target.result);
+            HQ.common.showBusy(fasle, HQ.common.getLang(''), App.frmMain);
+        };
+        FR.readAsDataURL(files[0]);
+    }
+}

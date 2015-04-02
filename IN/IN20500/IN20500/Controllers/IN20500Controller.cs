@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
 namespace IN20500.Controllers
 {
     [DirectController]
@@ -22,33 +23,47 @@ namespace IN20500.Controllers
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         string b = "";
         string tmpChangeTreeDic = "0";
-        private string _pathImage;
-        internal string PathImage
+        private string _pathImage;   
+        
+        IN_Inventory _objHeader = new IN_Inventory();
+        private string _filePath;
+        private string _Path;
+        internal string FilePath
         {
             get
             {
                 var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadIN20500");
                 if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
                 {
-                    _pathImage = config.TextVal;
+                    _filePath = Server.MapPath("\\"+config.TextVal);
+                    _Path = config.TextVal;
                 }
                 else
                 {
-                    _pathImage = string.Empty;
+                    _filePath = Server.MapPath("\\" + "Images\\IN20500");
+                 
                 }
-                return _pathImage;
+                return _filePath;
             }
         }
-        IN_Inventory _objHeader = new IN_Inventory();
-        private bool _isConfig;
-        internal bool IsConfig
+        internal string PathVideo
         {
             get
             {
-                _isConfig = string.IsNullOrWhiteSpace(PathImage) ? false : true;
-                return _isConfig;
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadIN20500");
+                if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
+                {                 
+                    _Path = config.TextVal;
+                }
+                else
+                {
+                  
+                    _Path = "Images\\IN20500";
+                }
+                return _Path;
             }
         }
+     
         public ActionResult Index()
         {
             //var user =_sys.Users.Where(p=> p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
@@ -265,7 +280,7 @@ namespace IN20500.Controllers
             //return this.Store(lst);
         }
 
-        [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Save(FormCollection data, string invtID,bool isNew, string handle, string nodeID, string nodeLevel, string parentRecordID, int hadChild, string approveStatus, bool Public, bool StkItem, string imageChange, int tmpImageDelete, string tmpImageForUpload, int tmpMediaDelete, string tmpSelectedNode, string tmpCopyFormSave, string tmpCopyForm, string tmpCopyFormImageUrl, string tmpCopyFormMedia, string tmpOldFileName, string mediaExist)
         {
             try
@@ -277,15 +292,12 @@ namespace IN20500.Controllers
                 ChangeRecords<IN20500_pgGetCompanyInvt_Result> lstgrd = dataHandler1.BatchObjectData<IN20500_pgGetCompanyInvt_Result>();
 
                 string invtIDCopyForm = data["cboInvtID"];
-                string images = getPathThenUploadImage(obj, invtID);
-                string media = getPathMedia(obj, invtID, mediaExist);
+              
                 obj.InvtID = invtID;
                 obj.NodeID = nodeID;
                 obj.NodeLevel = short.Parse(nodeLevel);
                 obj.ParentRecordID = int.Parse(parentRecordID);
-                obj.Picture = images;
-                obj.Media = media;
-
+           
                 _objHeader = _db.IN_Inventory.Where(p => p.InvtID == obj.InvtID).FirstOrDefault();
                 if (_objHeader != null && !isNew)
                 {
@@ -327,6 +339,66 @@ namespace IN20500.Controllers
                     _objHeader.Crtd_Prog = screenNbr;
                     _objHeader.Crtd_User = Current.UserName;
                     _db.IN_Inventory.AddObject(_objHeader);
+                }
+
+                var files = Request.Files;
+                if (files.Count > 0 ) // Co chon file de upload
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        if (files[i].ContentLength > 0)
+                        {
+                            if (Path.GetExtension(files[i].FileName).ToLower().Contains("jpg") || Path.GetExtension(files[i].FileName).ToLower().Contains("png") || Path.GetExtension(files[i].FileName).ToLower().Contains("gif"))
+                            {
+                                // Xoa file cu di
+                                var oldPath = string.Format("{0}\\{1}", FilePath, _objHeader.Picture);
+                                if (System.IO.File.Exists(oldPath))
+                                {
+                                    System.IO.File.Delete(oldPath);
+                                }
+
+                                // Upload file moi
+                                string newFileName = string.Format("{0}{1}", invtID, Path.GetExtension(files[i].FileName));
+                                files[i].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
+                                _objHeader.Picture = newFileName;
+                            }
+                            else if (Path.GetExtension(files[i].FileName).ToLower().Contains("mp4") || Path.GetExtension(files[i].FileName).ToLower().Contains("wmv"))
+                            {
+                                // Xoa file cu di
+                                var oldPath = string.Format("{0}\\{1}", FilePath, _objHeader.Media);
+                                if (System.IO.File.Exists(oldPath))
+                                {
+                                    System.IO.File.Delete(oldPath);
+                                }
+
+                                // Upload file moi
+                                string newFileName = string.Format("{0}{1}", invtID, Path.GetExtension(files[i].FileName));
+                                files[i].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
+                                _objHeader.Media = newFileName;
+                            }
+                        }
+                    }
+                }
+               
+                if (!string.IsNullOrWhiteSpace(_objHeader.Picture) && string.IsNullOrWhiteSpace(obj.Picture))
+                {
+                    // Xoa file cu di
+                    var oldPath = string.Format("{0}\\{1}", FilePath, _objHeader.Picture);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                    _objHeader.Picture = string.Empty;
+                }
+                if (!string.IsNullOrWhiteSpace(_objHeader.Media) && string.IsNullOrWhiteSpace(obj.Media))
+                {
+                    // Xoa file cu di
+                    var oldPath = string.Format("{0}\\{1}", FilePath, _objHeader.Media);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                    _objHeader.Media = string.Empty;
                 }
                 // cap nhat Compay
                 if (obj.Public != true)
@@ -497,173 +569,63 @@ namespace IN20500.Controllers
                 t.ApproveStatus = s.ApproveStatus;
         }
 
-       
-        [DirectMethod]
-        public ActionResult IN20500Delete(string invtID)
-        {
-            var inv = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-            _db.IN_Inventory.DeleteObject(inv);
-            _db.SaveChanges();
-            return this.Direct();
-        }
-       
-        [DirectMethod]
-        public ActionResult GetImages(string Name)
-        {
-            string typeFile = "";
-            if (Name.EndsWith(".jpg"))
-            {
-                typeFile = "jpg";
-            }
-            else if (Name.EndsWith(".png"))
-            {
-                typeFile = "png";
-            }
-            else if (Name.EndsWith(".gif"))
-            {
-                typeFile = "gif";
-            }
-            var Images = this.GetCmp<Image>("imgPPCStorePicReq");
-            string a = getStringImage(Name);
 
-            Images.ImageUrl = @"data:image/" + typeFile + ";base64," + a;
-
-            return this.Direct();
-        }
-        private string getStringImage(string name)
+        [HttpPost]
+        public ActionResult Delete(FormCollection data, string invtID)
         {
-            var a = IN20500ImgHelper.IN20500GetImage(name, PathImage, string.IsNullOrWhiteSpace(PathImage) ? false : true);
-            if (a == null)
+            try
             {
-                return string.Empty;
-            }
-            else
-            {
-                return Convert.ToBase64String(a);
-            }
-        }
-        private byte[] getByteImage(string dataIamge)
-        {
-            return Encoding.ASCII.GetBytes(dataIamge);
-        }
-        [DirectMethod]
-        public ActionResult Upload()
-        {
-            if (this.GetCmp<FileUploadField>("NamePPCStorePicReq").HasFile)
-            {
-                var FileUpload1 = this.GetCmp<FileUploadField>("NamePPCStorePicReq");//.PostedFile.InputStream;
-                string typeFile = "";
-                if (FileUpload1.PostedFile.FileName.EndsWith(".jpg"))
+                var objInvtID = _db.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                if (objInvtID != null)
                 {
-                    typeFile = "jpg";
-                }
-                else if (FileUpload1.PostedFile.FileName.EndsWith(".png"))
-                {
-                    typeFile = "png";
-                }
-                else if (FileUpload1.PostedFile.FileName.EndsWith(".gif"))
-                {
-                    typeFile = "gif";
-                }
-                if (typeFile != "")
-                {
-                    var Images = this.GetCmp<Image>("imgPPCStorePicReq");
-                    var txtImages = this.GetCmp<TextField>("PPCStorePicReq");
+                    var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID).ToList();
+                    for (int i = 0; i < del.Count; i++)
+                    {
+                        _db.IN_InvtCpny.DeleteObject(del[i]);
+                    }
+                    _db.IN_Inventory.DeleteObject(objInvtID);
 
-                    int intLength = Convert.ToInt32(FileUpload1.PostedFile.InputStream.Length);
-                    byte[] arrContent = new byte[intLength];
-                    string imgType = FileUpload1.PostedFile.ContentType;
 
-                    FileUpload1.PostedFile.InputStream.Read(arrContent, 0, intLength);
-                    Images.ImageUrl = @"data:image/" + typeFile + ";base64," + Convert.ToBase64String(arrContent); ;
-                    txtImages.Text = FileUpload1.PostedFile.FileName;
+                    // Xoa file cu di
+                    var oldPath = string.Format("{0}\\{1}", FilePath, _objHeader.Picture);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                    _objHeader.Picture = string.Empty;
+
+
+                    // Xoa file cu di
+                    oldPath = string.Format("{0}\\{1}", FilePath, _objHeader.Media);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                    _objHeader.Media = string.Empty;
+
+                    return Json(new { success = true });
                 }
                 else
                 {
-                    X.Msg.Show(new MessageBoxConfig
-                    {
-                        Buttons = MessageBox.Button.OK,
-                        Icon = MessageBox.Icon.ERROR,
-                        Title = "Fail",
-                        Message = "File format .jpg,.png,.gif"
-                    });
+                    return Json(new { success = true });
                 }
             }
-            else
+            catch (Exception ex)
             {
-                X.Msg.Show(new MessageBoxConfig
+                if (ex is MessageException)
                 {
-                    Buttons = MessageBox.Button.OK,
-                    Icon = MessageBox.Icon.ERROR,
-                    Title = "Fail",
-                    Message = "No file uploaded"
-                });
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
             }
-            DirectResult result = new DirectResult();
-            result.IsUpload = true;
-
-            return result;
-        }
-        private string getPathThenUploadImage(IN_Inventory inventory, string invtID)
-        {
-            string images = string.Format("{0}.jpg", invtID);
-
-            if (!string.IsNullOrWhiteSpace(inventory.Picture) && !inventory.Picture.Contains(".jpg"))
-            {
-                string strImage = inventory.Picture
-                    .Replace("data:image/jpg;base64,", "")
-                    .Replace("data:image/png;base64,", "")
-                    .Replace("data:image/gif;base64,", "");
-
-                // Upload a new file.
-                IN20500ImgHelper.IN20500UploadImage(images,
-                    Convert.FromBase64CharArray(strImage.ToCharArray(), 0, strImage.Length),
-                    PathImage, IsConfig);
-            }
-            else if (!string.IsNullOrWhiteSpace(inventory.Picture) && inventory.Picture.Contains(".jpg"))
-            {
-                images = inventory.Picture;
-            }
-            else // Images is empty
-            {
-                // If there is an existing file, delete it.
-                IN20500ImgHelper.DeleteFile(images, PathImage, IsConfig);
-            }
-
-            return images;
-        }
-        private string getPathThenUploadImageCopyForm(string tmpCopyFormImageUrl, string invtID)
-        {
-            string images = string.Format("{0}.jpg", invtID);
-
-            if (!string.IsNullOrWhiteSpace(tmpCopyFormImageUrl) && !tmpCopyFormImageUrl.Contains(".jpg"))
-            {
-                string strImage = tmpCopyFormImageUrl
-                    .Replace("data:image/jpg;base64,", "")
-                    .Replace("data:image/png;base64,", "")
-                    .Replace("data:image/gif;base64,", "");
-
-                // Upload a new file.
-                IN20500ImgHelper.IN20500UploadImage(images,
-                    Convert.FromBase64CharArray(strImage.ToCharArray(), 0, strImage.Length),
-                    PathImage, IsConfig);
-            }
-            else if (!string.IsNullOrWhiteSpace(tmpCopyFormImageUrl) && tmpCopyFormImageUrl.Contains(".jpg"))
-            {
-                images = tmpCopyFormImageUrl;
-            }
-            else // Images is empty
-            {
-                // If there is an existing file, delete it.
-                IN20500ImgHelper.DeleteFile(images, PathImage, IsConfig);
-            }
-
-            return images;
-        }
+        }        
         [DirectMethod]
         public ActionResult PlayMedia(string fileVideo)
         {
-            var pathMedia = "/eSky4D/Media/" + fileVideo;
+            var pathMedia = PathVideo + "\\" + fileVideo;
             //var pathMedia = PathImage.Substring(0, PathImage.Length - 14) + "Media\\" + fileVideo;
             //var pathMedia = "/DevProjects/FrameworkWeb/App/Media/a.mp4";
             //var pathMedia = "file://192.168.130.4/DevProjects/FrameworkWeb/App/Media/a.mp4";
@@ -679,7 +641,7 @@ namespace IN20500.Controllers
                 CloseAction = CloseAction.Destroy,
                 Modal = true,
 
-                Html = "<video width='640' height='480' controls autoplay><source src='" + pathMedia + "' type='video/mp4'></video>"
+                Html = "<video width='640' height='480' controls autoplay><source src='" + pathMedia + (pathMedia.ToLower().Contains("mp4") ? "' type='video/mp4'></video>" : "' type='video/wmv'></video>")
 
             };
 
@@ -688,123 +650,44 @@ namespace IN20500.Controllers
             return this.Direct();
 
         }
-        [ValidateInput(false)]
-        public ActionResult IN20500UploadMedia(string invtID)
+       
+       
+        public ActionResult ImageToBin(string fileName)
         {
-            string fullFileName = "";
-            if (this.GetCmp<FileUploadField>("NamePPCStoreMediaReq").HasFile)
+            try
             {
-                var FileUpload1 = this.GetCmp<FileUploadField>("NamePPCStoreMediaReq");//.PostedFile.InputStream;
-                string typeFile = "";
-                if (FileUpload1.PostedFile.FileName.EndsWith(".mp4"))
+                if (fileName.ToLower().Contains("mp4") || fileName.ToLower().Contains("wmv")) fileName = "anh1.jpg";
+                string filename = FilePath + "\\" + fileName;
+                if (System.IO.File.Exists(filename))
                 {
-                    typeFile = "mp4";
-                }
-                else if (FileUpload1.PostedFile.FileName.EndsWith(".wmv"))
-                {
-                    typeFile = "wmv";
-                }
+                    FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                    BinaryReader reader = new BinaryReader(fileStream);
+                    byte[] imageBytes = reader.ReadBytes((int)fileStream.Length);
+                    reader.Close();
 
-                if (typeFile != "")
-                {
+                    var imgString64 = Convert.ToBase64String(imageBytes, 0, imageBytes.Length);
 
-                    fullFileName = invtID + "." + typeFile;
-
-                    //doi icon anh
-                    var Images = this.GetCmp<Image>("imgPPCStoreMediaReq");
-                    string a = getStringImage("anh1.jpg");
-                    Images.ImageUrl = @"data:image/" + "jpg" + ";base64," + a;
-                    b = Images.ImageUrl;
-
-                    // upload media len
-                    int intLength = Convert.ToInt32(FileUpload1.PostedFile.InputStream.Length);
-                    byte[] arrContent = new byte[intLength];
-                    string imgType = FileUpload1.PostedFile.ContentType;
-
-                    FileUpload1.PostedFile.InputStream.Read(arrContent, 0, intLength);
-                    IN20500ImgHelper.IN20500UploadMedia(fullFileName, arrContent, PathImage, IsConfig);
-
+                    var jsonResult = Json(new { success = true, imgSrc = @"data:image/jpg;base64," + imgString64 }, JsonRequestBehavior.AllowGet);
+                    jsonResult.MaxJsonLength = int.MaxValue;
+                    return jsonResult;
                 }
                 else
                 {
-                    X.Msg.Show(new MessageBoxConfig
-                    {
-                        Buttons = MessageBox.Button.OK,
-                        Icon = MessageBox.Icon.ERROR,
-                        Title = "Fail",
-                        Message = "File format .mp4,.wmv"
-                    });
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                X.Msg.Show(new MessageBoxConfig
+                if (ex is MessageException)
                 {
-                    Buttons = MessageBox.Button.OK,
-                    Icon = MessageBox.Icon.ERROR,
-                    Title = "Fail",
-                    Message = "No file uploaded"
-                });
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
             }
-
-            return Json(new { success = true, imageStream = b, fullFileName = fullFileName });
-
-            //return Json(new { success = true, imageStream = "123", fullFileName = "456" });
-
         }
-        [DirectMethod]
-        public ActionResult IN20500SetMediaImage()
-        {
-
-            // doi icon anh
-            var Images = this.GetCmp<Image>("imgPPCStoreMediaReq");
-            string a = getStringImage("anh1.jpg");
-            Images.ImageUrl = @"data:image/" + "jpg" + ";base64," + a;
-            b = Images.ImageUrl;
-            return Json(new { success = true, imageStream = b }, JsonRequestBehavior.AllowGet);
-        }
-        private string getPathMedia(IN_Inventory inventory, string invtID, string mediaExist)
-        {
-            string media = "";
-            if (mediaExist != "")
-            {
-                media = string.Format("{0}.mp4", invtID);
-            }
-
-
-            if (!string.IsNullOrWhiteSpace(inventory.Media) && inventory.Media.Contains(".mp4"))
-            {
-                media = inventory.Media;
-            }
-            else // Images is empty
-            {
-                // If there is an existing file, delete it.
-                IN20500ImgHelper.DeleteMedia(media, PathImage, IsConfig);
-            }
-
-            return media;
-        }
-        private string getPathMediaCopyForm(string tmpCopyFormMedia, string invtID, string tmpOldFileName)
-        {
-            string media = string.Format("{0}.mp4", invtID);
-
-
-            if (!string.IsNullOrWhiteSpace(media) && media.Contains(".mp4"))
-            {
-
-
-
-                IN20500ImgHelper.IN20500CopyMedia(media, tmpOldFileName, PathImage, IsConfig);
-
-            }
-            else // Images is empty
-            {
-                // If there is an existing file, delete it.
-                IN20500ImgHelper.DeleteMedia(media, PathImage, IsConfig);
-            }
-
-            return media;
-        }
-
+ 
     }
 }
