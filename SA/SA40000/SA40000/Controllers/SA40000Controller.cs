@@ -134,6 +134,7 @@ namespace SA40000.Controllers
                     if (objDelete != null)
                     {
                         _sys.SYS_CloseDateSetUp.DeleteObject(objDelete);
+                       
                     }
                 }
 
@@ -145,7 +146,7 @@ namespace SA40000.Controllers
 
                     var lang = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID.ToLower() == curLang.BranchID.ToLower());
 
-                    if (lang != null)
+                    if (lang != null && lstSYS_CloseDateSetUp.Deleted.Where(p => p.BranchID.ToLower() == curLang.BranchID.ToLower()).Count()==0)
                     {
                         if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
                         {

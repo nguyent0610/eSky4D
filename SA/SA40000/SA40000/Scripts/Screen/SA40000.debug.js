@@ -116,7 +116,9 @@ var btnAddAll_click = function (btn, e, eOpts) {
             var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount() - 1);
             record.set('WrkAdjDate', new Date(_dateServer));
             record.set('WrkOpenDate', new Date(_dateServer));
+            App.treePanelBranch.clearChecked();
         }
+
     }
     else {
         HQ.message.show(4, '', '');
@@ -167,7 +169,9 @@ var btnAdd_click = function (btn, e, eOpts) {
             var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount() - 1);
             record.set('WrkAdjDate', new Date(_dateServer));
             record.set('WrkOpenDate', new Date(_dateServer));
+            App.treePanelBranch.clearChecked();
         }
+
     }
     else {
         HQ.message.show(4, '', '');

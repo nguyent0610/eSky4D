@@ -111,8 +111,6 @@
                 X.Panel().Region(Region.North)
                 .Items(
                     X.Panel().ID("pnlheader")
-                    .Title(Util.GetLang("ORDERTYPE"))
-        //.Layout(LayoutType.Anchor)
                     .Layout(LayoutType.HBox)
                     .AutoScroll(true)
                     .Items(
@@ -140,8 +138,6 @@
                             )
 
                     )//
-
-
             )//header
 
             , X.Panel().ID("pnlgrid")
@@ -185,7 +181,6 @@
                         .Name("cboBranchID").HQProcedure("SA40000_pcCompany").HQDBSys(true)
                         .HQColumnShow("CpnyID,CpnyName,Territory,Address").DisplayField("CpnyID").ValueField("CpnyID")
                         .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
-
                         .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
@@ -267,10 +262,6 @@
                 )
             )//Grid
         )//Panel
-
-
-
-
     )//frmMain
 
 ))
