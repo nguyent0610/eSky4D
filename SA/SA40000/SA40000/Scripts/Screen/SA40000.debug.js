@@ -234,33 +234,33 @@ var deleteAllCompanies = function (item) {
     }
 };
 
-var renderBranchName = function (value) {
-    var record = App.cboBranchIDSA40000_pcCompany.findRecord("CpnyID", value);
+var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboBranchIDSA40000_pcCompany.findRecord("CpnyID", rec.data.BranchID);
     if (record) {
         return record.data.CpnyName;
     }
     else {
-        return '';
+        return value;
     }
 };
 
-var renderTerritory = function (value) {
-    var record = App.cboBranchIDSA40000_pcCompany.findRecord("CpnyID", value);
+var renderTerritory = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboBranchIDSA40000_pcCompany.findRecord("CpnyID", rec.data.BranchID);
     if (record) {
         return record.data.Territory;
     }
     else {
-        return '';
+        return value;
     }
 };
 
-var renderAddress = function (value) {
-    var record = App.cboBranchIDSA40000_pcCompany.findRecord("CpnyID", value);
+var renderAddress = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboBranchIDSA40000_pcCompany.findRecord("CpnyID", rec.data.BranchID);
     if (record) {
         return record.data.Address;
     }
     else {
-        return '';
+        return value;
     }
 };
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
@@ -302,6 +302,20 @@ var grdSYS_CloseDateSetUp_Edit = function (item, e) {
     var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount() - 1);
     record.set('WrkAdjDate', new Date(_dateServer));
     record.set('WrkOpenDate', new Date(_dateServer));
+
+    //if (e.field == "BranchID") {
+    //    var selectedRecord = App.cboBranchID.store.findRecord('CpnyID', e.value);
+    //    if (selectedRecord) {
+    //        e.record.set("Territory", selectedRecord.data.Territory);
+    //        e.record.set("BranchName", selectedRecord.data.CpnyName);
+    //        e.record.set("Address", selectedRecord.data.Address);
+    //    }
+    //    else {
+    //        e.record.set("Territory", "");
+    //        e.record.set("BranchName", "");
+    //        e.record.set("Address", "");
+    //    }
+    //}
 };
 var grdSYS_CloseDateSetUp_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdSYS_CloseDateSetUp, e, keys);
@@ -310,6 +324,8 @@ var grdSYS_CloseDateSetUp_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSYS_CloseDateSetUp);
     stoChanged(App.stoSYS_CloseDateSetUp);
 };
+
+
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
 var save = function () {
@@ -349,5 +365,21 @@ function refresh(item) {
         HQ.isFirstLoad = true;
         App.stoSYS_CloseDateSetUp.reload();
     }
+};
+
+//Filter dung trong truong hop co treeview
+var myValidateRecord = function (filter, record, columnName) {
+    var filterValue = filter.getValue();
+    if (filterValue.length == 0) {
+        return true;
+    }
+    var values = filterValue.split(",");
+    for (var i = 0; i < values.length; i++) {
+
+        if (record.get(columnName).indexOf(values[i].trim()) > -1) {
+            return true;
+        }
+    }
+    return false;
 };
 /////////////////////////////////////////////////////////////////////////

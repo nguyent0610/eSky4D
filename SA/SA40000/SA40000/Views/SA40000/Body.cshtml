@@ -173,7 +173,7 @@
                 .ColumnModel(
                     X.RowNumbererColumn().Width(40)
 
-                    , X.Column().Text(Util.GetLang("Territory")).DataIndex("BranchID").Width(90).Renderer("renderTerritory")
+                    , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(90).Renderer("renderTerritory")
 
                     , X.Column().DataIndex("BranchID").Text(Util.GetLang("BranchID")).Width(100)
                     .Editor(
@@ -188,9 +188,9 @@
                         .LoadData()
                     )
 
-                    , X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchID").Width(150).Renderer("renderBranchName")
+                    , X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchName").Width(150).Renderer("renderBranchName")
 
-                    , X.Column().Text(Util.GetLang("Address")).DataIndex("BranchID").Width(150).Renderer("renderAddress")
+                    , X.Column().Text(Util.GetLang("Address")).DataIndex("Address").Width(150).Renderer("renderAddress")
 
                     , X.CheckColumn().ID("WrkDateChk").Text(Util.GetLang("WrkDateChk")).DataIndex("WrkDateChk").Width(150).Editable(true)
 
@@ -201,10 +201,10 @@
                     .Width(150).ID("txtWrkOpenDate").Editor(X.DateField().Format("MM/dd/yyyy"))
 
                     , X.NumberColumn().ID("WrkLowerDays").Text(Util.GetLang("WrkLowerDays")).DataIndex("WrkLowerDays").Format("0,000").Width(150).Align(Alignment.Right)
-                    .Editor(X.NumberField().DecimalPrecision(0))
+                    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
 
                     , X.NumberColumn().ID("WrkUpperDays").Text(Util.GetLang("WrkUpperDays")).DataIndex("WrkUpperDays").Format("0,000").Width(150).Align(Alignment.Right)
-                    .Editor(X.NumberField().DecimalPrecision(0))
+                    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
 
                     , X.CommandColumn().Width(150)
                     .Commands(
