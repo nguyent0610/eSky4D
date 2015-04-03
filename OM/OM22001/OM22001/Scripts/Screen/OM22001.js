@@ -21,6 +21,16 @@ var Process = {
         }
     },
 
+    renderLocDescr: function (value) {
+        var record = App.cboColLocID.store.findRecord("Code", value);
+        if (record) {
+            return record.data.Descr;
+        }
+        else {
+            return value;
+        }
+    },
+
     renderInvtCategory: function(value){
         var record = App.cboColInvtID.store.findRecord("Code", value);
         if (record) {
@@ -107,7 +117,8 @@ var Process = {
                     lstCpny: Ext.encode(App.grdCompany.store.getRecordsValues()),
                     lstCpnyChange: HQ.store.getData(App.grdCompany.store),
                     lstLevelChange: HQ.store.getData(App.grdLevel.store),
-                    lstInvtChange: HQ.store.getData(App.grdInventory.store),
+                    //lstInvtChange: HQ.store.getData(App.grdInventory.store),
+                    lstLocChange: HQ.store.getData(App.grdLocation.store),
                     isNew: HQ.isNew
                 },
                 success: function (msg, data) {
@@ -139,8 +150,8 @@ var Process = {
                 waitMsg: HQ.common.getLang('Deleting') + "...",
                 timeout: 1800000,
                 params: {
-                    displayID: App.cboDisplayID.getValue(),
-                    isNew: HQ.isNew
+                    displayID: App.cboDisplayID.getValue()//,
+                    //isNew: HQ.isNew
                 },
                 success: function (msg, data) {
                     if (data.result.msgCode) {
@@ -177,6 +188,12 @@ var Process = {
         if (item == "yes") {
             App.grdInventory.deleteSelected();
         }
+    },
+
+    deleteLoc: function (item) {
+        if (item == "yes") {
+            App.grdLocation.deleteSelected();
+        }
     }
 };
 
@@ -197,7 +214,11 @@ var Store = {
 
         App.grdCompany.store.reload();
         App.grdLevel.store.reload();
-        App.grdInventory.store.reload();
+        //App.grdInventory.store.reload();
+        App.grdLocation.store.reload();
+
+        App.cboApplyFor.setReadOnly(frmRecord.data.Status != _beginStatus);
+        App.cboApplyType.setReadOnly(frmRecord.data.Status != _beginStatus);
 
         Event.Form.frmMain_fieldChange();
     },
@@ -210,6 +231,21 @@ var Store = {
             if (status == _beginStatus) {
                 if (successful) {
                     HQ.store.insertBlank(sto, keys);
+                }
+            }
+        }
+    },
+
+    stoInventory_load: function (sto, records, successful, eOpts) {
+        if (HQ.isUpdate) {
+            var status = App.cboStatus.getValue();
+            var keys = sto.HQFieldKeys ? sto.HQFieldKeys : "";
+
+            if (status == _beginStatus) {
+                if (successful) {
+                    if (sto.getCount() == 0) {
+                        HQ.store.insertBlank(sto, keys);
+                    }
                 }
             }
         }
@@ -278,6 +314,9 @@ var Event = {
                     else if (HQ.focus == 'invt') {
                         HQ.grid.first(App.grdInventory);
                     }
+                    else if (HQ.focus == 'loc') {
+                        HQ.grid.first(App.grdLocation);
+                    }
                     break;
                 case "next":
                     if (HQ.focus == 'display') {
@@ -291,6 +330,9 @@ var Event = {
                     }
                     else if (HQ.focus == 'invt') {
                         HQ.grid.next(App.grdInventory);
+                    }
+                    else if (HQ.focus == 'loc') {
+                        HQ.grid.next(App.grdLocation);
                     }
                     break;
                 case "prev":
@@ -306,6 +348,9 @@ var Event = {
                     else if (HQ.focus == 'invt') {
                         HQ.grid.prev(App.grdInventory);
                     }
+                    else if (HQ.focus == 'loc') {
+                        HQ.grid.prev(App.grdLocation);
+                    }
                     break;
 
                 case "last":
@@ -320,6 +365,9 @@ var Event = {
                     }
                     else if (HQ.focus == 'invt') {
                         HQ.grid.last(App.grdInventory);
+                    }
+                    else if (HQ.focus == 'loc') {
+                        HQ.grid.last(App.grdLocation);
                     }
                     break;
                 case "refresh":
@@ -341,6 +389,9 @@ var Event = {
                         else if (HQ.focus == 'invt') {
                             App.grdInventory.store.reload();
                         }
+                        else if (HQ.focus == 'loc') {
+                            App.grdLocation.store.reload();
+                        }
                     }
                     break;
                 case "new":
@@ -355,32 +406,44 @@ var Event = {
                     break;
                 case "delete":
                     if (HQ.isDelete) {
-                        if (HQ.focus == 'display') {
-                            if (App.cboDisplayID.getValue()) {
-                                HQ.message.show(11, '', 'Process.deleteDisplay');
+                        if (App.cboStatus.getValue() == _beginStatus) {
+                            if (HQ.focus == 'display') {
+                                if (App.cboDisplayID.getValue()) {
+                                    HQ.message.show(11, '', 'Process.deleteDisplay');
+                                }
+                            }
+                            else if (HQ.focus == 'cpny') {
+                                if (App.cboDisplayID.getValue() && App.slmCompany.getCount()) {
+                                    HQ.message.show(2015020806,
+                                        HQ.common.getLang('CpnyID') + " " + App.slmCompany.selected.items[0].data.CpnyID,
+                                        'Process.deleteCpny');
+                                }
+                            }
+                            else if (HQ.focus == 'level') {
+                                if (App.cboDisplayID.getValue() && App.slmLevel.getCount()) {
+                                    HQ.message.show(2015020806,
+                                        HQ.common.getLang('LevelID') + " " + App.slmLevel.selected.items[0].data.LevelID,
+                                        'Process.deleteLevel');
+                                }
+                            }
+                            else if (HQ.focus == 'invt') {
+                                if (App.cboDisplayID.getValue() && App.slmInventory.getCount()) {
+                                    HQ.message.show(2015020806,
+                                        HQ.common.getLang('InvtID') + " " + App.slmInventory.selected.items[0].data.InvtID,
+                                        'Process.deleteInvt');
+                                }
+                            }
+                            else if (HQ.focus == 'loc') {
+                                if (App.cboDisplayID.getValue() && App.slmLocation.getCount()) {
+                                    HQ.message.show(2015020806,
+                                        HQ.common.getLang('LocID') + " " + App.slmLocation.selected.items[0].data.LocID,
+                                        'Process.deleteLoc');
+                                }
                             }
                         }
-                        else if (HQ.focus == 'cpny') {
-                            if (App.cboDisplayID.getValue() && App.slmCompany.getCount()) {
-                                HQ.message.show(2015020806,
-                                    HQ.common.getLang('CpnyID') + " " + App.slmCompany.selected.items[0].data.CpnyID,
-                                    'Process.deleteCpny');
-                            }
-                        }
-                        else if (HQ.focus == 'level') {
-                            if (App.cboDisplayID.getValue() && App.slmLevel.getCount()) {
-                                HQ.message.show(2015020806,
-                                    HQ.common.getLang('LevelID') + " " + App.slmLevel.selected.items[0].data.LevelID,
-                                    'Process.deleteLevel');
-                            }
-                        }
-                        else if (HQ.focus == 'invt') {
-                            if (App.cboDisplayID.getValue() && App.slmInventory.getCount()) {
-                                HQ.message.show(2015020806,
-                                    HQ.common.getLang('InvtID') + " " + App.slmInventory.selected.items[0].data.InvtID,
-                                    'Process.deleteInvt');
-                            }
-                        }
+                    }
+                    else {
+                        HQ.message.show(4, '', '');
                     }
                     break;
                 case "save":

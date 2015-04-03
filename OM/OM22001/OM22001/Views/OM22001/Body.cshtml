@@ -114,7 +114,7 @@
                     .HQLangCode("Status").HQProcedure("OM22001_pcStatus")
                     .HQColumnShow("Code,Descr").DataIndex("Status")
                     .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
-                    .AllowBlank(false).AllowOnlyWhitespace(false)//.ReadOnly(true)
+                    .AllowBlank(false).AllowOnlyWhitespace(false).ReadOnly(true)
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                     })
@@ -330,9 +330,9 @@
                         )
 
                         , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("Bonus")
-                        .Format("0,000.00").Align(Alignment.Right)
+                        .Format("0,000").Align(Alignment.Right)
                         .Editor(
-                            HQ.NumberField().DecimalPrecision(2).SelectOnFocus(true)
+                            HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
                         )
 
                         , X.CommandColumn()
@@ -364,7 +364,7 @@
 
                 , X.Panel().ID("tabInventory")
                 .Title(Util.GetLang("OM22001Inventory"))
-                .Region(Region.Center)
+                .Region(Region.Center).Hidden(true)
                 .Layout(LayoutType.Border)
                 .Items(
                     X.GridPanel().ID("grdInventory")
@@ -449,6 +449,73 @@
                 .Listeners(x => { 
                     x.Render.Handler = "HQ.common.control_render(this,'invt')"; 
                 })// tabInventory
+                
+                , X.Panel().ID("tabLocation")
+                .Title(Util.GetLang("OM22001Location"))
+                .Region(Region.Center)
+                .Layout(LayoutType.Border)
+                .Items(
+                    X.GridPanel().ID("grdLocation")
+                    .Region(Region.Center)
+                    .Scroll(ScrollMode.Both)
+                    .View(X.GridView().TrackOver(false))
+                    .SortableColumns(false)
+                    .StoreID("stoLocation")
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40)
+                        , X.Column().Text(Util.GetLang("LocID")).DataIndex("LocID")
+                        .Editor(
+                            HQ.Combo().ID("cboColLocID")
+                            .HQProcedure("OM22001_pcLocID").HQColumnShow("Code,Descr")
+                            .HQHeightWidth(400, 300)
+                            .ValueField("Code").DisplayField("Code")
+                            .ForceSelection(true)
+                            .HQParam(new StoreParameterCollection() { 
+                                new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
+                                , new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw)
+                            })
+                            .LoadData()
+                        )
+
+                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("LocID")
+                        .Renderer("Process.renderLocDescr")
+
+                        , X.Column().Text(Util.GetLang("PPTB")).DataIndex("PPTB")
+                        .Editor(
+                            HQ.Combo().ID("cboColPPTBLoc")
+                            .HQProcedure("OM22001_pcPPTB").HQColumnShow("Code,Descr")
+                            .HQHeightWidth(400, 300)
+                            .ValueField("Code").DisplayField("Code")
+                            .ForceSelection(true)
+                            .LoadData()
+                        )
+
+                        , X.CommandColumn()
+                        .Commands(
+                            X.GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                        )
+                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                        .Listeners(l => l.Command.Handler = "record.reject();")
+                    )
+                    .SelectionModel(X.RowSelectionModel().ID("slmLocation").Mode(SelectionMode.Single))
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.BeforeEdit.Fn = "Event.Grid.grd_beforeEdit";
+                            //ls.Edit.Fn = "Event.Grid.grd_edit";
+                            //ls.ValidateEdit.Fn = "Event.Grid.grd_validateEdit";
+                        })
+                    ) // grdLocation
+                )
+                .Listeners(x => { 
+                    x.Render.Handler = "HQ.common.control_render(this,'loc')"; 
+                })// tabLocation
             )
         )
         .Listeners(lst =>

@@ -11,6 +11,7 @@
           <EntitySet Name="OM_TDisplayCpny" EntityType="eBiz4DWebAppModel.Store.OM_TDisplayCpny" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_TDisplayInventory" EntityType="eBiz4DWebAppModel.Store.OM_TDisplayInventory" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_TDisplayLevel" EntityType="eBiz4DWebAppModel.Store.OM_TDisplayLevel" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_TDisplayLocation" EntityType="eBiz4DWebAppModel.Store.OM_TDisplayLocation" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="eBiz4DWebAppModel.Store.SI_ApprovalFlowHandle" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
@@ -93,6 +94,22 @@
           <Property Name="Target" Type="float" />
           <Property Name="Bonus" Type="float" />
         </EntityType>
+        <EntityType Name="OM_TDisplayLocation">
+          <Key>
+            <PropertyRef Name="DisplayID" />
+            <PropertyRef Name="LocID" />
+          </Key>
+          <Property Name="DisplayID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="LocID" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="PPTB" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
             <PropertyRef Name="AppFolID" />
@@ -137,6 +154,9 @@
         <Function Name="OM22001_pgLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DisplayID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="OM22001_pgLocation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DisplayID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="OM22001_ptCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
@@ -170,6 +190,10 @@
           <EntitySet Name="OM_TDisplayLevel" EntityType="OM22001Model.OM_TDisplayLevel" />
           <EntitySet Name="HO_PendingTasks" EntityType="OM22001Model.HO_PendingTasks" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="OM22001Model.SI_ApprovalFlowHandle" />
+          <FunctionImport Name="OM22001_pgLocation" ReturnType="Collection(OM22001Model.OM22001_pgLocation_Result)">
+          <Parameter Name="DisplayID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="OM_TDisplayLocation" EntityType="OM22001Model.OM_TDisplayLocation" />
         </EntityContainer>
         <ComplexType Name="OM22001_ptCompany_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -314,6 +338,27 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="MailApprove" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProcContent" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="OM22001_pgLocation_Result">
+          <Property Type="String" Name="LocID" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="PPTB" Nullable="false" MaxLength="30" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <EntityType Name="OM_TDisplayLocation">
+          <Key>
+            <PropertyRef Name="DisplayID" />
+            <PropertyRef Name="LocID" />
+          </Key>
+          <Property Type="String" Name="DisplayID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LocID" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PPTB" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -485,6 +530,31 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM22001_pgLocation" FunctionName="eBiz4DWebAppModel.Store.OM22001_pgLocation">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM22001Model.OM22001_pgLocation_Result">
+                <ScalarProperty Name="LocID" ColumnName="LocID" />
+                <ScalarProperty Name="PPTB" ColumnName="PPTB" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OM_TDisplayLocation">
+            <EntityTypeMapping TypeName="OM22001Model.OM_TDisplayLocation">
+              <MappingFragment StoreEntitySet="OM_TDisplayLocation">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="PPTB" ColumnName="PPTB" />
+                <ScalarProperty Name="LocID" ColumnName="LocID" />
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -511,8 +581,9 @@
         <EntityTypeShape EntityType="OM22001Model.OM_TDisplayCpny" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM22001Model.OM_TDisplayInventory" Width="1.5" PointX="2.75" PointY="3.75" />
         <EntityTypeShape EntityType="OM22001Model.OM_TDisplayLevel" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="OM22001Model.HO_PendingTasks" Width="1.5" PointX="3.81671360312808" PointY="2.8288880301773958" />
-        <EntityTypeShape EntityType="OM22001Model.SI_ApprovalFlowHandle" Width="1.5" PointX="8.9108330611655653" PointY="6.8139961542626821" />
+        <EntityTypeShape EntityType="OM22001Model.HO_PendingTasks" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="OM22001Model.SI_ApprovalFlowHandle" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM22001Model.OM_TDisplayLocation" Width="1.5" PointX="0.75" PointY="7.75" />
       </Diagram>
     </Diagrams>
   </Designer>

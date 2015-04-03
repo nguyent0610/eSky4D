@@ -130,6 +130,12 @@ namespace OM22001.Controllers
             return this.Store(invts);
         }
 
+        public ActionResult GetLocation(string displayID)
+        {
+            var locs = _db.OM22001_pgLocation(displayID).ToList();
+            return this.Store(locs);
+        }
+
         public ActionResult SaveData(FormCollection data, bool isNew)
         {
             try
@@ -160,7 +166,8 @@ namespace OM22001.Controllers
 
                             Save_Cpny(data, display);
                             Save_Level(data, display);
-                            Save_Invt(data, display);
+                            //Save_Invt(data, display);
+                            Save_Loc(data, display);
 
                             // handle here
                             if (handle != _noneStatus && handle != null)
@@ -182,7 +189,8 @@ namespace OM22001.Controllers
 
                         Save_Cpny(data, display);
                         Save_Level(data, display);
-                        Save_Invt(data, display);
+                        //Save_Invt(data, display);
+                        Save_Loc(data, display);
 
                         // handle here
                         if (handle != _noneStatus && handle != null)
@@ -215,7 +223,41 @@ namespace OM22001.Controllers
         {
             try
             {
-                return Json(new { success = false, type = "error", errorMsg = displayID });
+                var display = _db.OM_TDisplay.FirstOrDefault(p => p.DisplayID == displayID);
+                if (display != null)
+                {
+                    _db.OM_TDisplay.DeleteObject(display);
+
+                    var cpnies = _db.OM_TDisplayCpny.Where(c => c.DisplayID == displayID).ToList();
+                    foreach (var cpny in cpnies)
+                    {
+                        _db.OM_TDisplayCpny.DeleteObject(cpny);
+                    }
+
+                    var levels = _db.OM_TDisplayLevel.Where(l => l.DisplayID == displayID).ToList();
+                    foreach (var level in levels)
+                    {
+                        _db.OM_TDisplayLevel.DeleteObject(level);
+                    }
+
+                    //var invts = _db.OM_TDisplayInventory.Where(i => i.DisplayID == displayID).ToList();
+                    //foreach (var invt in invts)
+                    //{
+                    //    _db.OM_TDisplayInventory.DeleteObject(invt);
+                    //}
+
+                    var locs = _db.OM_TDisplayLocation.Where(loc => loc.DisplayID == displayID).ToList();
+                    foreach (var loc in locs)
+                    {
+                        _db.OM_TDisplayLocation.DeleteObject(loc);
+                    }
+
+                    _db.SaveChanges();
+                    return Json(new { success = true });
+                }
+                else {
+                    throw new MessageException(MessageType.Message, "89", "",new string[]{ Util.GetLang("DisplayID") });
+                }
             }
             catch (Exception ex)
             {
@@ -334,6 +376,46 @@ namespace OM22001.Controllers
             }
         }
 
+        private void Save_Loc(FormCollection data, OM_TDisplay display)
+        {
+            var locChangeHandler = new StoreDataHandler(data["lstLocChange"]);
+            var lstLocChange = locChangeHandler.BatchObjectData<OM22001_pgLocation_Result>();
+
+            foreach (var created in lstLocChange.Created)
+            {
+                var createdLoc = _db.OM_TDisplayLocation.FirstOrDefault(x => x.DisplayID == display.DisplayID 
+                    && x.LocID == created.LocID);
+                if (!string.IsNullOrWhiteSpace(created.LocID) && createdLoc == null)
+                {
+                    createdLoc = new OM_TDisplayLocation();
+                    createdLoc.DisplayID = display.DisplayID;
+                    createdLoc.LocID = created.LocID;
+                    update_Loc(ref createdLoc, created, true);
+                    _db.OM_TDisplayLocation.AddObject(createdLoc);
+                }
+            }
+
+            foreach (var updated in lstLocChange.Updated)
+            {
+                var updatedLoc = _db.OM_TDisplayLocation.FirstOrDefault(x => x.DisplayID == display.DisplayID
+                    && x.LocID == updated.LocID);
+                if (!string.IsNullOrWhiteSpace(updated.LocID) && updatedLoc != null)
+                {
+                    update_Loc(ref updatedLoc, updated, false);
+                }
+            }
+
+            foreach (var deleted in lstLocChange.Deleted)
+            {
+                var deletedLoc = _db.OM_TDisplayLocation.FirstOrDefault(x => x.DisplayID == display.DisplayID
+                    && x.LocID == deleted.LocID);
+                if (!string.IsNullOrWhiteSpace(deleted.LocID) && deletedLoc != null)
+                {
+                    _db.OM_TDisplayLocation.DeleteObject(deletedLoc);
+                }
+            }
+        }
+
         private void Save_Cpny(FormCollection data, OM_TDisplay display)
         {
             var cpnyChangeHandler = new StoreDataHandler(data["lstCpnyChange"]);
@@ -433,6 +515,20 @@ namespace OM22001.Controllers
             display.LUpd_DateTime = DateTime.Now;
             display.LUpd_Prog = _screenNbr;
             display.LUpd_User = Current.UserName;
+        }
+
+        private void update_Loc(ref OM_TDisplayLocation createdInvt, OM22001_pgLocation_Result created, bool isNew)
+        {
+            if (isNew)
+            {
+                createdInvt.Crtd_DateTime = DateTime.Now;
+                createdInvt.Crtd_Prog = _screenNbr;
+                createdInvt.Crtd_User = Current.UserName;
+            }
+            createdInvt.PPTB = created.PPTB;
+            createdInvt.LUpd_DateTime = DateTime.Now;
+            createdInvt.LUpd_Prog = _screenNbr;
+            createdInvt.LUpd_User = Current.UserName;
         }
 
         private void update_Invt(ref OM_TDisplayInventory createdInvt, OM22001_pgInventory_Result created, bool isNew)
