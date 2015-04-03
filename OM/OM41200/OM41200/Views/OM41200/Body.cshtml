@@ -1,0 +1,220 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM41200;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Border)
+        .ID("frmMain")
+        .TrackResetOnLoad(true)
+        //.DefaultAnchor("100%")
+        .BodyPadding(10)
+        .BodyBorder(0).AutoScroll(true)
+        .TopBar(Util.SetupToolbar("save,new,delete,close,print", true, "Event.Form.menuClick"))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .Items(
+            X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.North)
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
+            .Items(
+
+                // First Column
+                X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
+                .MinWidth(250).Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboZone")
+                    .HQLangCode("Zone").HQProcedure("OM41200_pcZone")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Code")
+                    .HQHeightWidth(400, 300).MultiSelect(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Handler = "App.cboCpny.store.reload();";
+                    })
+
+                    , HQ.Combo().ID("cboTerritory")
+                    .HQLangCode("Territory").HQProcedure("OM41200_pcTerritory")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Code")
+                    .HQHeightWidth(400, 300).MultiSelect(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Handler = "App.cboCpny.store.reload();";
+                    })
+
+                    , HQ.Combo().ID("cboCpny")
+                     .HQLangCode("Branch").HQProcedure("OM41200_pcBranchID")
+                    .HQColumnShow("BranchID,BranchName").ValueField("BranchID").DisplayField("BranchID")
+                    .HQHeightWidth(400, 300).MultiSelect(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
+                        ,new StoreParameter("@Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw) 
+                        ,new StoreParameter("@Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Handler = "App.cboDisplayID.store.reload();";
+                    })
+
+                    , HQ.Combo().ID("cboDisplayID")
+                    .HQLangCode("DisplayID").HQProcedure("OM41200_pcDisplayID")
+                    .HQColumnShow("DisplayID,Descr").ValueField("DisplayID").DisplayField("DisplayID")
+                    .HQHeightWidth(400, 300)//.MultiSelect(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@CpnyID", "App.cboCpny.getValue().join(',')", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                    })
+                ) // First Column
+
+                // Second Column
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
+                .MinWidth(250).Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.DateField().ID("dtpFromDate")
+                    .HQLangCode("FromDate")
+                    .Listeners(l => l.Change.Fn = "Event.Form.dtpFromDate_change")
+
+                    , HQ.DateField().ID("dtpToDate")
+                    .HQLangCode("ToDate")
+
+                    , HQ.Combo().ID("cboStatusFilter")
+                    .HQLangCode("Status").HQProcedure("OM41200_pcStatus")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
+                    .HQHeightWidth(400, 300).MultiSelect(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                    })
+
+                    , HQ.Button().ID("btnLoad").MarginSpec("0 0 0 105")
+                    .HQLangCode("LoadData").Icon(Icon.ArrowRefresh)
+                    .Handler("Event.Form.btnLoad_click")
+
+                ) // Second Column
+
+                // Third Column
+                , X.FieldSet().Layout(LayoutType.VBox).MarginSpec("5 5 0 5")
+                .MinWidth(250).Flex(1).Title(Util.GetLang("Handle"))
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    HQ.Combo().ID("cboStatus")
+                    .HQLangCode("Status").HQProcedure("OM41200_pcStatus")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
+                    .HQHeightWidth(400, 300)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Handler = "App.cboHandle.store.reload()";
+                    })
+
+                    , HQ.Combo().ID("cboHandle")
+                    .HQLangCode("Handle").HQProcedure("OM41200_pcHandle")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
+                    .HQHeightWidth(400, 300)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@Status", "App.cboStatus.getValue()", ParameterMode.Raw) 
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                    })
+
+                    , HQ.Button().ID("btnImport").MarginSpec("0 0 5 105")
+                    .HQLangCode("ImportExcel").Icon(Icon.DiskDownload)
+                    .Handler("Event.Form.btnImport_click")
+                ) // Third Column
+            ) // pnlHeader
+
+            , X.GridPanel().ID("grdDet")
+            .Region(Region.Center)
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .SortableColumns(false)
+            .StoreID("stoDet")
+            .ColumnModel(
+                X.RowNumbererColumn()
+
+                , X.CheckColumn().HideTitleEl(true)
+                .Align(Alignment.Center).Width(25).Editable(true)
+                .HeaderItems(
+                    HQ.Checkbox().ID("chkSelectHeader")
+                    .Handler("Event.Grid.chkSelectHeader_click")
+                )
+
+                , X.Column().Text(Util.GetLang("Zone")).DataIndex("Zone")
+                , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory")
+                , X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID")
+                , X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchName")
+                , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID")
+                , X.Column().Text(Util.GetLang("SlsName")).DataIndex("SlsName")
+                , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
+                , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")
+                , X.Column().Text(Util.GetLang("DisplayID")).DataIndex("DisplayID")
+                , X.Column().Text(Util.GetLang("TDisplayName")).DataIndex("Descr").Flex(1).MinWidth(100)
+                , X.Column().Text(Util.GetLang("LevelID")).DataIndex("LevelID")
+                , X.Column().Text(Util.GetLang("Rate")).DataIndex("Rate")
+                , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Renderer("Process.renderStatus")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls => {
+                    ls.BeforeEdit.Fn = "Event.Grid.grdDet_beforeEdit";
+                })
+            ) // grdDet
+        )
+        .Listeners(lst =>
+        {
+            lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
+            //lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
+        })// Form: frmMain
+    )
+)
