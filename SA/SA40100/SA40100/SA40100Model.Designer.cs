@@ -96,6 +96,22 @@ namespace SA40100
             }
         }
         private ObjectSet<SYS_CloseDateHistHeader> _SYS_CloseDateHistHeader;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SYS_CloseDateSetUp> SYS_CloseDateSetUp
+        {
+            get
+            {
+                if ((_SYS_CloseDateSetUp == null))
+                {
+                    _SYS_CloseDateSetUp = base.CreateObjectSet<SYS_CloseDateSetUp>("SYS_CloseDateSetUp");
+                }
+                return _SYS_CloseDateSetUp;
+            }
+        }
+        private ObjectSet<SYS_CloseDateSetUp> _SYS_CloseDateSetUp;
 
         #endregion
 
@@ -116,51 +132,18 @@ namespace SA40100
         {
             base.AddObject("SYS_CloseDateHistHeader", sYS_CloseDateHistHeader);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SYS_CloseDateSetUp EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSYS_CloseDateSetUp(SYS_CloseDateSetUp sYS_CloseDateSetUp)
+        {
+            base.AddObject("SYS_CloseDateSetUp", sYS_CloseDateSetUp);
+        }
 
         #endregion
 
         #region Function Imports
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="histID">No Metadata Documentation available.</param>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="screenNumber">No Metadata Documentation available.</param>
-        public ObjectResult<SA40100_pfSYS_CloseDateHistHeader_Result> SA40100_pfSYS_CloseDateHistHeader(global::System.String histID, global::System.String userID, global::System.String screenNumber)
-        {
-            ObjectParameter histIDParameter;
-            if (histID != null)
-            {
-                histIDParameter = new ObjectParameter("HistID", histID);
-            }
-            else
-            {
-                histIDParameter = new ObjectParameter("HistID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter screenNumberParameter;
-            if (screenNumber != null)
-            {
-                screenNumberParameter = new ObjectParameter("ScreenNumber", screenNumber);
-            }
-            else
-            {
-                screenNumberParameter = new ObjectParameter("ScreenNumber", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<SA40100_pfSYS_CloseDateHistHeader_Result>("SA40100_pfSYS_CloseDateHistHeader", histIDParameter, userIDParameter, screenNumberParameter);
-        }
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -206,6 +189,93 @@ namespace SA40100
             }
     
             return base.ExecuteFunction<SA40100_pgSYS_CloseDateHistDetail_Result>("SA40100_pgSYS_CloseDateHistDetail", histIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="date">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> SA40100_pcCreateHistID(global::System.String date)
+        {
+            ObjectParameter dateParameter;
+            if (date != null)
+            {
+                dateParameter = new ObjectParameter("Date", date);
+            }
+            else
+            {
+                dateParameter = new ObjectParameter("Date", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("SA40100_pcCreateHistID", dateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="openDate">No Metadata Documentation available.</param>
+        /// <param name="closeToDate">No Metadata Documentation available.</param>
+        /// <param name="listBranch">No Metadata Documentation available.</param>
+        /// <param name="loadBlank">No Metadata Documentation available.</param>
+        public ObjectResult<SA40100_CloseDateChecking_Result> SA40100_CloseDateChecking(Nullable<global::System.DateTime> openDate, Nullable<global::System.DateTime> closeToDate, global::System.String listBranch, global::System.String loadBlank)
+        {
+            ObjectParameter openDateParameter;
+            if (openDate.HasValue)
+            {
+                openDateParameter = new ObjectParameter("OpenDate", openDate);
+            }
+            else
+            {
+                openDateParameter = new ObjectParameter("OpenDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter closeToDateParameter;
+            if (closeToDate.HasValue)
+            {
+                closeToDateParameter = new ObjectParameter("CloseToDate", closeToDate);
+            }
+            else
+            {
+                closeToDateParameter = new ObjectParameter("CloseToDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter listBranchParameter;
+            if (listBranch != null)
+            {
+                listBranchParameter = new ObjectParameter("ListBranch", listBranch);
+            }
+            else
+            {
+                listBranchParameter = new ObjectParameter("ListBranch", typeof(global::System.String));
+            }
+    
+            ObjectParameter loadBlankParameter;
+            if (loadBlank != null)
+            {
+                loadBlankParameter = new ObjectParameter("LoadBlank", loadBlank);
+            }
+            else
+            {
+                loadBlankParameter = new ObjectParameter("LoadBlank", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<SA40100_CloseDateChecking_Result>("SA40100_CloseDateChecking", openDateParameter, closeToDateParameter, listBranchParameter, loadBlankParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SA40100_ppGetDayCloseDateSetUp_Result> SA40100_ppGetDayCloseDateSetUp()
+        {
+            return base.ExecuteFunction<SA40100_ppGetDayCloseDateSetUp_Result>("SA40100_ppGetDayCloseDateSetUp");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SA40100_pfSYS_CloseDateHistHeader_Result> SA40100_pfSYS_CloseDateHistHeader()
+        {
+            return base.ExecuteFunction<SA40100_pfSYS_CloseDateHistHeader_Result>("SA40100_pfSYS_CloseDateHistHeader");
         }
 
         #endregion
@@ -1006,10 +1076,506 @@ namespace SA40100
 
     
     }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="SA40100Model", Name="SYS_CloseDateSetUp")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class SYS_CloseDateSetUp : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SYS_CloseDateSetUp object.
+        /// </summary>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="wrkDateChk">Initial value of the WrkDateChk property.</param>
+        /// <param name="wrkAdjDate">Initial value of the WrkAdjDate property.</param>
+        /// <param name="wrkOpenDate">Initial value of the WrkOpenDate property.</param>
+        /// <param name="wrkLowerDays">Initial value of the WrkLowerDays property.</param>
+        /// <param name="wrkUpperDays">Initial value of the WrkUpperDays property.</param>
+        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
+        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
+        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static SYS_CloseDateSetUp CreateSYS_CloseDateSetUp(global::System.String branchID, global::System.Boolean wrkDateChk, global::System.DateTime wrkAdjDate, global::System.DateTime wrkOpenDate, global::System.Int32 wrkLowerDays, global::System.Int32 wrkUpperDays, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        {
+            SYS_CloseDateSetUp sYS_CloseDateSetUp = new SYS_CloseDateSetUp();
+            sYS_CloseDateSetUp.BranchID = branchID;
+            sYS_CloseDateSetUp.WrkDateChk = wrkDateChk;
+            sYS_CloseDateSetUp.WrkAdjDate = wrkAdjDate;
+            sYS_CloseDateSetUp.WrkOpenDate = wrkOpenDate;
+            sYS_CloseDateSetUp.WrkLowerDays = wrkLowerDays;
+            sYS_CloseDateSetUp.WrkUpperDays = wrkUpperDays;
+            sYS_CloseDateSetUp.Crtd_DateTime = crtd_DateTime;
+            sYS_CloseDateSetUp.Crtd_Prog = crtd_Prog;
+            sYS_CloseDateSetUp.Crtd_User = crtd_User;
+            sYS_CloseDateSetUp.LUpd_DateTime = lUpd_DateTime;
+            sYS_CloseDateSetUp.LUpd_Prog = lUpd_Prog;
+            sYS_CloseDateSetUp.LUpd_User = lUpd_User;
+            sYS_CloseDateSetUp.tstamp = tstamp;
+            return sYS_CloseDateSetUp;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                if (_BranchID != value)
+                {
+                    OnBranchIDChanging(value);
+                    ReportPropertyChanging("BranchID");
+                    _BranchID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("BranchID");
+                    OnBranchIDChanged();
+                }
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean WrkDateChk
+        {
+            get
+            {
+                return _WrkDateChk;
+            }
+            set
+            {
+                OnWrkDateChkChanging(value);
+                ReportPropertyChanging("WrkDateChk");
+                _WrkDateChk = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WrkDateChk");
+                OnWrkDateChkChanged();
+            }
+        }
+        private global::System.Boolean _WrkDateChk;
+        partial void OnWrkDateChkChanging(global::System.Boolean value);
+        partial void OnWrkDateChkChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime WrkAdjDate
+        {
+            get
+            {
+                return _WrkAdjDate;
+            }
+            set
+            {
+                OnWrkAdjDateChanging(value);
+                ReportPropertyChanging("WrkAdjDate");
+                _WrkAdjDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WrkAdjDate");
+                OnWrkAdjDateChanged();
+            }
+        }
+        private global::System.DateTime _WrkAdjDate;
+        partial void OnWrkAdjDateChanging(global::System.DateTime value);
+        partial void OnWrkAdjDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime WrkOpenDate
+        {
+            get
+            {
+                return _WrkOpenDate;
+            }
+            set
+            {
+                OnWrkOpenDateChanging(value);
+                ReportPropertyChanging("WrkOpenDate");
+                _WrkOpenDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WrkOpenDate");
+                OnWrkOpenDateChanged();
+            }
+        }
+        private global::System.DateTime _WrkOpenDate;
+        partial void OnWrkOpenDateChanging(global::System.DateTime value);
+        partial void OnWrkOpenDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 WrkLowerDays
+        {
+            get
+            {
+                return _WrkLowerDays;
+            }
+            set
+            {
+                OnWrkLowerDaysChanging(value);
+                ReportPropertyChanging("WrkLowerDays");
+                _WrkLowerDays = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WrkLowerDays");
+                OnWrkLowerDaysChanged();
+            }
+        }
+        private global::System.Int32 _WrkLowerDays;
+        partial void OnWrkLowerDaysChanging(global::System.Int32 value);
+        partial void OnWrkLowerDaysChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 WrkUpperDays
+        {
+            get
+            {
+                return _WrkUpperDays;
+            }
+            set
+            {
+                OnWrkUpperDaysChanging(value);
+                ReportPropertyChanging("WrkUpperDays");
+                _WrkUpperDays = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WrkUpperDays");
+                OnWrkUpperDaysChanged();
+            }
+        }
+        private global::System.Int32 _WrkUpperDays;
+        partial void OnWrkUpperDaysChanging(global::System.Int32 value);
+        partial void OnWrkUpperDaysChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime Crtd_DateTime
+        {
+            get
+            {
+                return _Crtd_DateTime;
+            }
+            set
+            {
+                OnCrtd_DateTimeChanging(value);
+                ReportPropertyChanging("Crtd_DateTime");
+                _Crtd_DateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Crtd_DateTime");
+                OnCrtd_DateTimeChanged();
+            }
+        }
+        private global::System.DateTime _Crtd_DateTime;
+        partial void OnCrtd_DateTimeChanging(global::System.DateTime value);
+        partial void OnCrtd_DateTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_Prog
+        {
+            get
+            {
+                return _Crtd_Prog;
+            }
+            set
+            {
+                OnCrtd_ProgChanging(value);
+                ReportPropertyChanging("Crtd_Prog");
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Crtd_Prog");
+                OnCrtd_ProgChanged();
+            }
+        }
+        private global::System.String _Crtd_Prog;
+        partial void OnCrtd_ProgChanging(global::System.String value);
+        partial void OnCrtd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_User
+        {
+            get
+            {
+                return _Crtd_User;
+            }
+            set
+            {
+                OnCrtd_UserChanging(value);
+                ReportPropertyChanging("Crtd_User");
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Crtd_User");
+                OnCrtd_UserChanged();
+            }
+        }
+        private global::System.String _Crtd_User;
+        partial void OnCrtd_UserChanging(global::System.String value);
+        partial void OnCrtd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime LUpd_DateTime
+        {
+            get
+            {
+                return _LUpd_DateTime;
+            }
+            set
+            {
+                OnLUpd_DateTimeChanging(value);
+                ReportPropertyChanging("LUpd_DateTime");
+                _LUpd_DateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LUpd_DateTime");
+                OnLUpd_DateTimeChanged();
+            }
+        }
+        private global::System.DateTime _LUpd_DateTime;
+        partial void OnLUpd_DateTimeChanging(global::System.DateTime value);
+        partial void OnLUpd_DateTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_Prog
+        {
+            get
+            {
+                return _LUpd_Prog;
+            }
+            set
+            {
+                OnLUpd_ProgChanging(value);
+                ReportPropertyChanging("LUpd_Prog");
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LUpd_Prog");
+                OnLUpd_ProgChanged();
+            }
+        }
+        private global::System.String _LUpd_Prog;
+        partial void OnLUpd_ProgChanging(global::System.String value);
+        partial void OnLUpd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_User
+        {
+            get
+            {
+                return _LUpd_User;
+            }
+            set
+            {
+                OnLUpd_UserChanging(value);
+                ReportPropertyChanging("LUpd_User");
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LUpd_User");
+                OnLUpd_UserChanged();
+            }
+        }
+        private global::System.String _LUpd_User;
+        partial void OnLUpd_UserChanging(global::System.String value);
+        partial void OnLUpd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    
+    }
 
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA40100Model", Name="SA40100_CloseDateChecking_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA40100_CloseDateChecking_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA40100_CloseDateChecking_Result object.
+        /// </summary>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="bat">Initial value of the Bat property.</param>
+        public static SA40100_CloseDateChecking_Result CreateSA40100_CloseDateChecking_Result(global::System.String branchID, global::System.String bat)
+        {
+            SA40100_CloseDateChecking_Result sA40100_CloseDateChecking_Result = new SA40100_CloseDateChecking_Result();
+            sA40100_CloseDateChecking_Result.BranchID = branchID;
+            sA40100_CloseDateChecking_Result.Bat = bat;
+            return sA40100_CloseDateChecking_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Module
+        {
+            get
+            {
+                return _Module;
+            }
+            set
+            {
+                OnModuleChanging(value);
+                ReportPropertyChanging("Module");
+                _Module = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Module");
+                OnModuleChanged();
+            }
+        }
+        private global::System.String _Module;
+        partial void OnModuleChanging(global::System.String value);
+        partial void OnModuleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Screen
+        {
+            get
+            {
+                return _Screen;
+            }
+            set
+            {
+                OnScreenChanging(value);
+                ReportPropertyChanging("Screen");
+                _Screen = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Screen");
+                OnScreenChanged();
+            }
+        }
+        private global::System.String _Screen;
+        partial void OnScreenChanging(global::System.String value);
+        partial void OnScreenChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Bat
+        {
+            get
+            {
+                return _Bat;
+            }
+            set
+            {
+                OnBatChanging(value);
+                ReportPropertyChanging("Bat");
+                _Bat = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Bat");
+                OnBatChanged();
+            }
+        }
+        private global::System.String _Bat;
+        partial void OnBatChanging(global::System.String value);
+        partial void OnBatChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -1474,6 +2040,189 @@ namespace SA40100
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA40100Model", Name="SA40100_ppGetDayCloseDateSetUp_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA40100_ppGetDayCloseDateSetUp_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA40100_ppGetDayCloseDateSetUp_Result object.
+        /// </summary>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="wrkDateChk">Initial value of the WrkDateChk property.</param>
+        /// <param name="wrkAdjDate">Initial value of the WrkAdjDate property.</param>
+        /// <param name="wrkOpenDate">Initial value of the WrkOpenDate property.</param>
+        /// <param name="wrkLowerDays">Initial value of the WrkLowerDays property.</param>
+        /// <param name="wrkUpperDays">Initial value of the WrkUpperDays property.</param>
+        public static SA40100_ppGetDayCloseDateSetUp_Result CreateSA40100_ppGetDayCloseDateSetUp_Result(global::System.String branchID, global::System.Boolean wrkDateChk, global::System.DateTime wrkAdjDate, global::System.DateTime wrkOpenDate, global::System.Int32 wrkLowerDays, global::System.Int32 wrkUpperDays)
+        {
+            SA40100_ppGetDayCloseDateSetUp_Result sA40100_ppGetDayCloseDateSetUp_Result = new SA40100_ppGetDayCloseDateSetUp_Result();
+            sA40100_ppGetDayCloseDateSetUp_Result.BranchID = branchID;
+            sA40100_ppGetDayCloseDateSetUp_Result.WrkDateChk = wrkDateChk;
+            sA40100_ppGetDayCloseDateSetUp_Result.WrkAdjDate = wrkAdjDate;
+            sA40100_ppGetDayCloseDateSetUp_Result.WrkOpenDate = wrkOpenDate;
+            sA40100_ppGetDayCloseDateSetUp_Result.WrkLowerDays = wrkLowerDays;
+            sA40100_ppGetDayCloseDateSetUp_Result.WrkUpperDays = wrkUpperDays;
+            return sA40100_ppGetDayCloseDateSetUp_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean WrkDateChk
+        {
+            get
+            {
+                return _WrkDateChk;
+            }
+            set
+            {
+                OnWrkDateChkChanging(value);
+                ReportPropertyChanging("WrkDateChk");
+                _WrkDateChk = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WrkDateChk");
+                OnWrkDateChkChanged();
+            }
+        }
+        private global::System.Boolean _WrkDateChk;
+        partial void OnWrkDateChkChanging(global::System.Boolean value);
+        partial void OnWrkDateChkChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime WrkAdjDate
+        {
+            get
+            {
+                return _WrkAdjDate;
+            }
+            set
+            {
+                OnWrkAdjDateChanging(value);
+                ReportPropertyChanging("WrkAdjDate");
+                _WrkAdjDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WrkAdjDate");
+                OnWrkAdjDateChanged();
+            }
+        }
+        private global::System.DateTime _WrkAdjDate;
+        partial void OnWrkAdjDateChanging(global::System.DateTime value);
+        partial void OnWrkAdjDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime WrkOpenDate
+        {
+            get
+            {
+                return _WrkOpenDate;
+            }
+            set
+            {
+                OnWrkOpenDateChanging(value);
+                ReportPropertyChanging("WrkOpenDate");
+                _WrkOpenDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WrkOpenDate");
+                OnWrkOpenDateChanged();
+            }
+        }
+        private global::System.DateTime _WrkOpenDate;
+        partial void OnWrkOpenDateChanging(global::System.DateTime value);
+        partial void OnWrkOpenDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 WrkLowerDays
+        {
+            get
+            {
+                return _WrkLowerDays;
+            }
+            set
+            {
+                OnWrkLowerDaysChanging(value);
+                ReportPropertyChanging("WrkLowerDays");
+                _WrkLowerDays = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WrkLowerDays");
+                OnWrkLowerDaysChanged();
+            }
+        }
+        private global::System.Int32 _WrkLowerDays;
+        partial void OnWrkLowerDaysChanging(global::System.Int32 value);
+        partial void OnWrkLowerDaysChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 WrkUpperDays
+        {
+            get
+            {
+                return _WrkUpperDays;
+            }
+            set
+            {
+                OnWrkUpperDaysChanging(value);
+                ReportPropertyChanging("WrkUpperDays");
+                _WrkUpperDays = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("WrkUpperDays");
+                OnWrkUpperDaysChanged();
+            }
+        }
+        private global::System.Int32 _WrkUpperDays;
+        partial void OnWrkUpperDaysChanging(global::System.Int32 value);
+        partial void OnWrkUpperDaysChanged();
 
         #endregion
 

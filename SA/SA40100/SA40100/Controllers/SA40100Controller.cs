@@ -20,7 +20,7 @@ namespace SA40100.Controllers
         private string _screenNbr = "SA40100";
         private string _userName = Current.UserName;
         SA40100Entities _sys = Util.CreateObjectContext<SA40100Entities>(true);
-
+        SA40100Entities _app = Util.CreateObjectContext<SA40100Entities>(false);
         public ActionResult Index()
         {  
             Util.InitRight(_screenNbr);
@@ -37,7 +37,16 @@ namespace SA40100.Controllers
         {
             return this.Store(_sys.SA40100_pgSYS_CloseDateHistDetail(HistID).ToList());
         }
-
+        public ActionResult GetSYS_CloseDateHistHeader()
+        {
+            return this.Store(_sys.SA40100_pfSYS_CloseDateHistHeader().ToList());
+        }
+        
+        public ActionResult GetDayCloseDateSetUp()
+        {
+            return this.Store(_sys.SA40100_ppGetDayCloseDateSetUp().ToList());
+        }
+        
         [DirectMethod]
         public ActionResult SA40100GetTreeBranch(string panelID)
         {
@@ -112,52 +121,157 @@ namespace SA40100.Controllers
             return this.Direct();
         }
 
-        #region Save & Update 
+        #region Save & Update
         //Save information Company
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
+                string Task = data["cboTask"];
+                string WrkDate_temp = data["lblDate"];
+                DateTime dtOpen;
+                DateTime WrkDate = DateTime.Parse(WrkDate_temp).ToDateShort();
+
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_CloseDateHistHeader"]);
+                ChangeRecords<SYS_CloseDateHistHeader> lstSYS_CloseDateHistHeader = dataHandler.BatchObjectData<SYS_CloseDateHistHeader>();
+
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSYS_CloseDateHistDetail"]);
-                ChangeRecords<SA40100_pgSYS_CloseDateSetUp_Result> lstSYS_CloseDateHistDetail = dataHandler1.BatchObjectData<SA40100_pgSYS_CloseDateSetUp_Result>();
+                ChangeRecords<SA40100_pgSYS_CloseDateHistDetail_Result> lstSYS_CloseDateHistDetail = dataHandler1.BatchObjectData<SA40100_pgSYS_CloseDateHistDetail_Result>();
 
-                #region Save SYS_CloseDateSetUp
-                foreach (SA40100_pgSYS_CloseDateSetUp_Result deleted in lstSYS_CloseDateHistDetail.Deleted)
-                {
-                    var objDelete = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == deleted.BranchID);
-                    if (objDelete != null)
+                #region Save Header
+                //lstSYS_CloseDateHistHeader.Created.AddRange(lstSYS_CloseDateHistHeader.Updated);
+                //foreach (SYS_CloseDateHistHeader curHeader in lstSYS_CloseDateHistHeader.Created)
+                //{
+                    string _dateServer = DateTime.Now.ToString("yyyyMMdd");
+                    var ID = _sys.SA40100_pcCreateHistID(_dateServer).FirstOrDefault();
+                    
+                    var header = new SYS_CloseDateHistHeader();
+                    header.HistID = ID;
+                    header.Task = Task;
+                    header.WrkDate = WrkDate;
+                    header.Crtd_DateTime = DateTime.Now;
+                    header.Crtd_Prog = _screenNbr;
+                    header.Crtd_User = _userName;
+                    header.LUpd_DateTime = DateTime.Now;
+                    header.LUpd_Prog = _screenNbr;
+                    header.LUpd_User = _userName;
+
+                    _sys.SYS_CloseDateHistHeader.AddObject(header);
+                    #region Save CD
+                    if (Task.Trim() == "CD")
                     {
-                        _sys.SYS_CloseDateSetUp.DeleteObject(objDelete);
-                    }
-                }
+                        lstSYS_CloseDateHistDetail.Created.AddRange(lstSYS_CloseDateHistDetail.Updated);
 
-                lstSYS_CloseDateHistDetail.Created.AddRange(lstSYS_CloseDateHistDetail.Updated);
-
-                foreach (SA40100_pgSYS_CloseDateSetUp_Result curLang in lstSYS_CloseDateHistDetail.Created)
-                {
-                    if (curLang.BranchID.PassNull() == "") continue;
-
-                    var lang = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID.ToLower() == curLang.BranchID.ToLower());
-
-                    if (lang != null)
-                    {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        dtOpen = lstSYS_CloseDateHistDetail.Updated.OrderBy(p => p.WrkOpenDateBefore).FirstOrDefault().WrkOpenDateBefore;
+                        var strBranch = "";
+                        foreach (var obj in lstSYS_CloseDateHistDetail.Updated)
                         {
-                            UpdatingSYS_CloseDateSetUp(lang, curLang, false);
+                            strBranch += obj.BranchID + ",";
                         }
-                        else
+                        var lstCloseDateChecking = _app.SA40100_CloseDateChecking(dtOpen, WrkDate, strBranch, "").ToList();
+                        foreach (var grdSetup in lstSYS_CloseDateHistDetail.Updated)
                         {
-                            throw new MessageException(MessageType.Message, "19");
+
+                            var obj = _sys.SYS_CloseDateHistDetail.Where(p => p.BranchID == grdSetup.BranchID && p.HistID == ID).FirstOrDefault();
+                            if (obj == null)
+                            {
+                                obj = new SYS_CloseDateHistDetail();
+                                obj.HistID = ID;
+                                obj.BranchID = grdSetup.BranchID;
+                                obj.Crtd_DateTime = DateTime.Now;
+                                obj.Crtd_Prog = _screenNbr;
+                                obj.Crtd_User = _userName;
+                                obj.LUpd_DateTime = DateTime.Now;
+                                obj.LUpd_Prog = _screenNbr;
+                                obj.LUpd_User = _userName;
+                               
+                                obj.WrkAdjDateBefore = grdSetup.WrkAdjDateBefore.Short();
+                                obj.WrkDateChk = grdSetup.WrkDateChk;
+                                obj.WrkLowerDays = grdSetup.WrkLowerDays;
+                                obj.WrkOpenDateBefore = grdSetup.WrkOpenDateBefore.Short();
+                                obj.WrkUpperDays = grdSetup.WrkUpperDays;
+                                obj.WrkOpenDateAfter = grdSetup.WrkAdjDateBefore.Short();
+                                obj.WrkAdjDateAfter = grdSetup.WrkOpenDateBefore.Short();
+                                obj.Status = "H";
+                                obj.ContentHist = "";
+                                string content = "";
+                                foreach (var objitem in lstCloseDateChecking)
+                                {
+                                    if (objitem.BranchID == grdSetup.BranchID)
+                                    {
+                                        content += objitem.BranchID + "  " + objitem.Bat + "  " + objitem.Module + " " + objitem.Screen + "\\r";
+                                    }
+                                }
+                                if (content == "")
+                                {
+                                    var objSetup = _sys.SYS_CloseDateSetUp.Where(p => p.BranchID == grdSetup.BranchID).FirstOrDefault();
+                                    objSetup.WrkOpenDate = WrkDate;
+                                    objSetup.WrkAdjDate = WrkDate;
+                                    objSetup.LUpd_DateTime = DateTime.Now;
+                                    objSetup.LUpd_Prog = _screenNbr;
+                                    objSetup.LUpd_User = _userName;
+                                    obj.WrkOpenDateAfter = WrkDate;
+                                    obj.WrkAdjDateAfter = WrkDate;
+                                    obj.Status = "C";
+                                }
+                                else obj.ContentHist = content;
+                                _sys.SYS_CloseDateHistDetail.AddObject(obj);
+
+                            }
                         }
                     }
+                    #endregion
+                    #region Save OD
                     else
                     {
-                        lang = new SYS_CloseDateSetUp();
-                        UpdatingSYS_CloseDateSetUp(lang, curLang, true);
-                        _sys.SYS_CloseDateSetUp.AddObject(lang);
+
+                        lstSYS_CloseDateHistDetail.Created.AddRange(lstSYS_CloseDateHistDetail.Updated);
+
+                        dtOpen = lstSYS_CloseDateHistDetail.Updated.OrderBy(p => p.WrkOpenDateBefore).FirstOrDefault().WrkOpenDateBefore;
+                        var strBranch = "";
+                        foreach (var obj in lstSYS_CloseDateHistDetail.Updated)
+                        {
+                            strBranch += obj.BranchID + ",";
+                        }
+                        var lstCloseDateChecking = _app.SA40100_CloseDateChecking(dtOpen, WrkDate, strBranch, "").ToList();
+                        foreach (SA40100_pgSYS_CloseDateHistDetail_Result curGrd in lstSYS_CloseDateHistDetail.Created)
+                        {
+                            if (curGrd.BranchID.PassNull() == "") continue;
+
+                            var obj = _sys.SYS_CloseDateHistDetail.FirstOrDefault(p => p.BranchID.ToLower() == curGrd.BranchID.ToLower() && p.HistID == ID);
+
+                            if (obj == null)
+                            {
+                                obj = new SYS_CloseDateHistDetail();
+
+                                obj.HistID = ID;
+                                obj.BranchID = curGrd.BranchID;
+                                obj.WrkAdjDateBefore = curGrd.WrkAdjDateBefore;
+                                obj.WrkAdjDateAfter = curGrd.WrkAdjDateAfter;
+                                obj.WrkOpenDateBefore = curGrd.WrkOpenDateBefore;
+                                obj.WrkOpenDateAfter = curGrd.WrkOpenDateAfter;
+                                obj.WrkDateChk = curGrd.WrkDateChk;
+                                obj.WrkLowerDays = curGrd.WrkLowerDays;
+                                obj.WrkUpperDays = curGrd.WrkUpperDays;
+                                obj.Status = "C";
+                                obj.ContentHist = "";
+                                obj.Crtd_DateTime = DateTime.Now;
+                                obj.Crtd_Prog = _screenNbr;
+                                obj.Crtd_User = _userName;
+                                obj.LUpd_DateTime = DateTime.Now;
+                                obj.LUpd_Prog = _screenNbr;
+                                obj.LUpd_User = _userName;
+                                string content = "";
+                                var objSetup = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == curGrd.BranchID);
+                                objSetup.WrkAdjDate = WrkDate;
+                                obj.WrkAdjDateAfter = WrkDate;
+                                _sys.SYS_CloseDateHistDetail.AddObject(obj);
+                            }
+                        }
                     }
-                }
+                    #endregion
+                //}
                 #endregion
 
                 _sys.SaveChanges();
@@ -173,26 +287,26 @@ namespace SA40100.Controllers
 
         //Update SYS_CloseDateSetUp
         #region Update SYS_CloseDateSetUp
-        private void UpdatingSYS_CloseDateSetUp(SYS_CloseDateHistDetail t, SA40100_pgSYS_CloseDateHistDetail_Result s, bool isNew)
-        {
-            if (isNew)
-            {
-                t.BranchID = s.BranchID;
-                t.Crtd_DateTime = DateTime.Now;
-                t.Crtd_Prog = _screenNbr;
-                t.Crtd_User = _userName;
-            }
-            t.WrkAdjDate = s.WrkAdjDate;
-            t.WrkDateChk = s.WrkDateChk;
-            t.WrkLowerDays = s.WrkLowerDays;
-            t.WrkOpenDate = s.WrkOpenDate;
-            t.WrkUpperDays = s.WrkUpperDays;
+        //private void UpdatingSYS_CloseDateSetUp(SYS_CloseDateHistDetail t, SA40100_pgSYS_CloseDateHistDetail_Result s, bool isNew)
+        //{
+        //    if (isNew)
+        //    {
+        //        t.BranchID = s.BranchID;
+        //        t.Crtd_DateTime = DateTime.Now;
+        //        t.Crtd_Prog = _screenNbr;
+        //        t.Crtd_User = _userName;
+        //    }
+        //    t.WrkAdjDate = s.WrkAdjDate;
+        //    t.WrkDateChk = s.WrkDateChk;
+        //    t.WrkLowerDays = s.WrkLowerDays;
+        //    t.WrkOpenDate = s.WrkOpenDate;
+        //    t.WrkUpperDays = s.WrkUpperDays;
 
-            t.LUpd_DateTime = DateTime.Now;
-            t.LUpd_Prog = _screenNbr;
-            t.LUpd_User = _userName;
+        //    t.LUpd_DateTime = DateTime.Now;
+        //    t.LUpd_Prog = _screenNbr;
+        //    t.LUpd_User = _userName;
 
-        }
+        //}
         #endregion
     }
 }

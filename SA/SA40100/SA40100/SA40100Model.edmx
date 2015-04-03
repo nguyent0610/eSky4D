@@ -8,6 +8,7 @@
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="SYS_CloseDateHistDetail" EntityType="eBiz4DWebSysModel.Store.SYS_CloseDateHistDetail" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SYS_CloseDateHistHeader" EntityType="eBiz4DWebSysModel.Store.SYS_CloseDateHistHeader" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SYS_CloseDateSetUp" EntityType="eBiz4DWebSysModel.Store.SYS_CloseDateSetUp" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="SYS_CloseDateHistDetail">
           <Key>
@@ -48,14 +49,38 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="SA40100_pfSYS_CloseDateHistHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="HistID" Type="varchar" Mode="In" />
-          <Parameter Name="UserID" Type="varchar" Mode="In" />
-          <Parameter Name="ScreenNumber" Type="varchar" Mode="In" />
+        <EntityType Name="SYS_CloseDateSetUp">
+          <Key>
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="WrkDateChk" Type="bit" Nullable="false" />
+          <Property Name="WrkAdjDate" Type="datetime" Nullable="false" />
+          <Property Name="WrkOpenDate" Type="datetime" Nullable="false" />
+          <Property Name="WrkLowerDays" Type="int" Nullable="false" />
+          <Property Name="WrkUpperDays" Type="int" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="SA40100_CloseDateChecking" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OpenDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="CloseToDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="ListBranch" Type="varchar(max)" Mode="In" />
+          <Parameter Name="LoadBlank" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="SA40100_pcCreateHistID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SA40100_pfSYS_CloseDateHistHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SA40100_pgSYS_CloseDateHistDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="HistID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="SA40100_ppGetDayCloseDateSetUp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SA40100_ptCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
@@ -67,18 +92,25 @@
         <EntityContainer Name="SA40100Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SYS_CloseDateHistDetail" EntityType="SA40100Model.SYS_CloseDateHistDetail" />
           <EntitySet Name="SYS_CloseDateHistHeader" EntityType="SA40100Model.SYS_CloseDateHistHeader" />
-          <FunctionImport Name="SA40100_pfSYS_CloseDateHistHeader" ReturnType="Collection(SA40100Model.SA40100_pfSYS_CloseDateHistHeader_Result)">
-            <Parameter Name="HistID" Mode="In" Type="String" />
-            <Parameter Name="UserID" Mode="In" Type="String" />
-            <Parameter Name="ScreenNumber" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="SA40100_ptCompany" ReturnType="Collection(SA40100Model.SA40100_ptCompany_Result)">
           <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SA40100_ptTerritory" ReturnType="Collection(SA40100Model.SA40100_ptTerritory_Result)" />
           <FunctionImport Name="SA40100_pgSYS_CloseDateHistDetail" ReturnType="Collection(SA40100Model.SA40100_pgSYS_CloseDateHistDetail_Result)">
-            <Parameter Name="HistID" Mode="In" Type="String" />
+          <Parameter Name="HistID" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="SA40100_pcCreateHistID" ReturnType="Collection(String)">
+          <Parameter Name="Date" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="SYS_CloseDateSetUp" EntityType="SA40100Model.SYS_CloseDateSetUp" />
+          <FunctionImport Name="SA40100_CloseDateChecking" ReturnType="Collection(SA40100Model.SA40100_CloseDateChecking_Result)">
+            <Parameter Name="OpenDate" Mode="In" Type="DateTime" />
+            <Parameter Name="CloseToDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ListBranch" Mode="In" Type="String" />
+            <Parameter Name="LoadBlank" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA40100_ppGetDayCloseDateSetUp" ReturnType="Collection(SA40100Model.SA40100_ppGetDayCloseDateSetUp_Result)" />
+          <FunctionImport Name="SA40100_pfSYS_CloseDateHistHeader" ReturnType="Collection(SA40100Model.SA40100_pfSYS_CloseDateHistHeader_Result)" />
         </EntityContainer>
         <EntityType Name="SYS_CloseDateHistDetail">
           <Key>
@@ -119,12 +151,6 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="SA40100_pfSYS_CloseDateHistHeader_Result">
-          <Property Type="String" Name="HistID" Nullable="false" MaxLength="12" />
-          <Property Type="String" Name="Task" Nullable="false" MaxLength="10" />
-          <Property Type="DateTime" Name="WrkDate" Nullable="false" Precision="23" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-        </ComplexType>
         <ComplexType Name="SA40100_ptCompany_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
@@ -146,6 +172,44 @@
           <Property Type="Int32" Name="WrkUpperDays" Nullable="false" />
           <Property Type="String" Name="ContentHist" Nullable="true" />
           <Property Type="String" Name="Status" Nullable="false" MaxLength="2" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <EntityType Name="SYS_CloseDateSetUp">
+          <Key>
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="WrkDateChk" Nullable="false" />
+          <Property Type="DateTime" Name="WrkAdjDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="WrkOpenDate" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="WrkLowerDays" Nullable="false" />
+          <Property Type="Int32" Name="WrkUpperDays" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="SA40100_CloseDateChecking_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Module" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Screen" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Bat" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="SA40100_ppGetDayCloseDateSetUp_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="Boolean" Name="WrkDateChk" Nullable="false" />
+          <Property Type="DateTime" Name="WrkAdjDate" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="WrkOpenDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="WrkLowerDays" Nullable="false" />
+          <Property Type="Int32" Name="WrkUpperDays" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SA40100_pfSYS_CloseDateHistHeader_Result">
+          <Property Type="String" Name="HistID" Nullable="false" MaxLength="12" />
+          <Property Type="String" Name="Task" Nullable="false" MaxLength="10" />
+          <Property Type="DateTime" Name="WrkDate" Nullable="false" Precision="23" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
       </Schema>
@@ -194,16 +258,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA40100_pfSYS_CloseDateHistHeader" FunctionName="eBiz4DWebSysModel.Store.SA40100_pfSYS_CloseDateHistHeader">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA40100Model.SA40100_pfSYS_CloseDateHistHeader_Result">
-                <ScalarProperty Name="HistID" ColumnName="HistID" />
-                <ScalarProperty Name="Task" ColumnName="Task" />
-                <ScalarProperty Name="WrkDate" ColumnName="WrkDate" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SA40100_ptCompany" FunctionName="eBiz4DWebSysModel.Store.SA40100_ptCompany">
             <ResultMapping>
               <ComplexTypeMapping TypeName="SA40100Model.SA40100_ptCompany_Result">
@@ -239,6 +293,58 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA40100_pcCreateHistID" FunctionName="eBiz4DWebSysModel.Store.SA40100_pcCreateHistID" />
+          <EntitySetMapping Name="SYS_CloseDateSetUp">
+            <EntityTypeMapping TypeName="SA40100Model.SYS_CloseDateSetUp">
+              <MappingFragment StoreEntitySet="SYS_CloseDateSetUp">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="WrkUpperDays" ColumnName="WrkUpperDays" />
+                <ScalarProperty Name="WrkLowerDays" ColumnName="WrkLowerDays" />
+                <ScalarProperty Name="WrkOpenDate" ColumnName="WrkOpenDate" />
+                <ScalarProperty Name="WrkAdjDate" ColumnName="WrkAdjDate" />
+                <ScalarProperty Name="WrkDateChk" ColumnName="WrkDateChk" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SA40100_CloseDateChecking" FunctionName="eBiz4DWebSysModel.Store.SA40100_CloseDateChecking" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA40100Model.SA40100_CloseDateChecking_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="Screen" ColumnName="Screen" />
+                <ScalarProperty Name="Bat" ColumnName="Bat" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA40100_ppGetDayCloseDateSetUp" FunctionName="eBiz4DWebSysModel.Store.SA40100_ppGetDayCloseDateSetUp">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA40100Model.SA40100_ppGetDayCloseDateSetUp_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="WrkDateChk" ColumnName="WrkDateChk" />
+                <ScalarProperty Name="WrkAdjDate" ColumnName="WrkAdjDate" />
+                <ScalarProperty Name="WrkOpenDate" ColumnName="WrkOpenDate" />
+                <ScalarProperty Name="WrkLowerDays" ColumnName="WrkLowerDays" />
+                <ScalarProperty Name="WrkUpperDays" ColumnName="WrkUpperDays" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA40100_pfSYS_CloseDateHistHeader" FunctionName="eBiz4DWebSysModel.Store.SA40100_pfSYS_CloseDateHistHeader">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA40100Model.SA40100_pfSYS_CloseDateHistHeader_Result">
+                <ScalarProperty Name="HistID" ColumnName="HistID" />
+                <ScalarProperty Name="Task" ColumnName="Task" />
+                <ScalarProperty Name="WrkDate" ColumnName="WrkDate" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -262,6 +368,7 @@
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="95" >
         <EntityTypeShape EntityType="SA40100Model.SYS_CloseDateHistDetail" Width="2.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SA40100Model.SYS_CloseDateHistHeader" Width="2.125" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="SA40100Model.SYS_CloseDateSetUp" Width="2" PointX="5.625" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

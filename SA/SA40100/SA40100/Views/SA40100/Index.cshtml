@@ -39,7 +39,32 @@
     @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
-        
+        @(Html.X().Store().ID("stoGetDayCloseDateSetUp")
+            .Model(Util.GenerateModel(typeof(SA40100_ppGetDayCloseDateSetUp_Result), "mdlSA40100_ppGetDayCloseDateSetUp", "BranchID"))       
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetDayCloseDateSetUp", "SA40100"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )      
+            //.Listeners(p=>p.Load.Handler="loadData()" )
+        )
+        @(Html.X().Store().ID("stoSYS_CloseDateHistHeader")
+            .Model(Util.GenerateModel(typeof(SA40100_pfSYS_CloseDateHistHeader_Result), "mdlSA40100_pfSYS_CloseDateHistHeader", "HistID"))       
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetSYS_CloseDateHistHeader", "SA40100"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )      
+            .Listeners(p=>p.Load.Handler="loadData()" )
+        )
         <!-- Gọi hàm Body trong SA40100Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
         @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>

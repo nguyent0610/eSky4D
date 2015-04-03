@@ -74,10 +74,10 @@
         ) // treeBranch
 
         // Second Column
-        , X.Panel()
+        , X.Panel().ID("buttonTree")
         .Region(Region.Center).Flex(1)
         .Layout(LayoutType.VBox)
-        .MinWidth(50)
+        .MinWidth(50).Split(true)
         .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
         .Items(
             HQ.Button().ID("btnAddAll")
@@ -130,7 +130,8 @@
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst => { 
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                    
+                                    lst.Change.Fn = ("cboHistID_Change");
+                                    lst.Select.Fn = ("cboHistID_Select");
                                 })
                                 .LoadData().Width(300)
                                 
