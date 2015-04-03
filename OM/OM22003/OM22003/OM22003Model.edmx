@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="OM_TDisplayCustomer" EntityType="eBiz4DWebAppModel.Store.OM_TDisplayCustomer" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_TDisplayImage" EntityType="eBiz4DWebAppModel.Store.OM_TDisplayImage" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="OM_TDisplayCustomer">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="DisplayID" />
+            <PropertyRef Name="LevelID" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="SlsperID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="DisplayID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="LevelID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Rate" Type="float" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="Territory" Type="varchar" MaxLength="50" />
+          <Property Name="Zone" Type="varchar" MaxLength="50" />
+          <Property Name="PercentSales" Type="float" Nullable="false" />
+          <Property Name="PercentImage" Type="float" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="2" />
+          <Property Name="Type" Type="varchar" MaxLength="2" />
+        </EntityType>
+        <EntityType Name="OM_TDisplayImage">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="DisplayID" />
+            <PropertyRef Name="LevelID" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="SlsperID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="DisplayID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="LevelID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ImageFile" Type="nvarchar" MaxLength="500" />
+          <Property Name="Pass" Type="bit" Nullable="false" />
+          <Property Name="ASM" Type="nvarchar" MaxLength="200" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="OM22003_pgAppraise" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Zone" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Territory" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="DisplayID" Type="varchar" Mode="In" />
+          <Parameter Name="FromDate" Type="datetime" Mode="In" />
+          <Parameter Name="Todate" Type="datetime" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM22003_pgImage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+          <Parameter Name="DisplayID" Type="varchar" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
+          <Parameter Name="LevelID" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM22003Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="OM22003Entities" p1:LazyLoadingEnabled="true">
+          <FunctionImport Name="OM22003_pgAppraise" ReturnType="Collection(OM22003Model.OM22003_pgAppraise_Result)">
+            <Parameter Name="Zone" Mode="In" Type="String" />
+            <Parameter Name="Territory" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="DisplayID" Mode="In" Type="String" />
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Todate" Mode="In" Type="DateTime" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM22003_pgImage" ReturnType="Collection(OM22003Model.OM22003_pgImage_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="DisplayID" Mode="In" Type="String" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="LevelID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="OM_TDisplayImage" EntityType="OM22003Model.OM_TDisplayImage" />
+          <EntitySet Name="OM_TDisplayCustomer" EntityType="OM22003Model.OM_TDisplayCustomer" />
+        </EntityContainer>
+        <ComplexType Name="OM22003_pgAppraise_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="DisplayID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="LevelID" Nullable="false" MaxLength="50" />
+          <Property Type="Double" Name="Rate" Nullable="false" />
+          <Property Type="String" Name="Territory" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Zone" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="SlsName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Handle" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="SalesLevel" Nullable="false" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="2" />
+          <Property Type="Double" Name="Sales" Nullable="true" />
+          <Property Type="Double" Name="PercentSales" Nullable="true" />
+          <Property Type="Double" Name="PercentImage" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="OM_TDisplayImage">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="DisplayID" />
+            <PropertyRef Name="LevelID" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DisplayID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LevelID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ImageFile" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="Pass" Nullable="false" />
+          <Property Type="String" Name="ASM" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_TDisplayCustomer">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="DisplayID" />
+            <PropertyRef Name="LevelID" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DisplayID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LevelID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="Rate" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="Territory" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Zone" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="PercentSales" Nullable="false" />
+          <Property Type="Double" Name="PercentImage" Nullable="false" />
+          <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Type" MaxLength="2" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="OM22003_pgImage_Result">
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="ImageFile" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ASM" Nullable="true" MaxLength="200" />
+          <Property Type="Boolean" Name="Pass" Nullable="true" />
+          <Property Type="String" Name="AuditImage" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ImageFileSrc" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="AuditImageSrc" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="OM22003Entities">
+          <FunctionImportMapping FunctionImportName="OM22003_pgAppraise" FunctionName="eBiz4DWebAppModel.Store.OM22003_pgAppraise" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM22003Model.OM22003_pgAppraise_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="SlsName" ColumnName="SlsName" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Handle" ColumnName="Handle" />
+                <ScalarProperty Name="SalesLevel" ColumnName="SalesLevel" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Sales" ColumnName="Sales" />
+                <ScalarProperty Name="PercentSales" ColumnName="PercentSales" />
+                <ScalarProperty Name="PercentImage" ColumnName="PercentImage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM22003_pgImage" FunctionName="eBiz4DWebAppModel.Store.OM22003_pgImage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM22003Model.OM22003_pgImage_Result">
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
+                <ScalarProperty Name="ASM" ColumnName="ASM" />
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
+                <ScalarProperty Name="AuditImage" ColumnName="AuditImage" />
+                <ScalarProperty Name="ImageFileSrc" ColumnName="ImageFileSrc" />
+                <ScalarProperty Name="AuditImageSrc" ColumnName="AuditImageSrc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OM_TDisplayImage">
+            <EntityTypeMapping TypeName="OM22003Model.OM_TDisplayImage">
+              <MappingFragment StoreEntitySet="OM_TDisplayImage">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="ASM" ColumnName="ASM" />
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
+                <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_TDisplayCustomer">
+            <EntityTypeMapping TypeName="OM22003Model.OM_TDisplayCustomer">
+              <MappingFragment StoreEntitySet="OM_TDisplayCustomer">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PercentImage" ColumnName="PercentImage" />
+                <ScalarProperty Name="PercentSales" ColumnName="PercentSales" />
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
+        <EntityTypeShape EntityType="OM22003Model.OM_TDisplayImage" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM22003Model.OM_TDisplayCustomer" Width="1.5" PointX="2.75" PointY="0.75" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
