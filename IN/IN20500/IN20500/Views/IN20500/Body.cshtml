@@ -41,18 +41,23 @@
                                     //lst.Focus.Fn = "Focus1_Change";
                                 })//tree                
                 ,X.Panel()
-                .Region(Region.Center).Flex(8) 
+                .Region(Region.Center).Flex(8)
                 .Layout(LayoutType.Border).Border(false)
                 .Split(true)                                           
                 .Items(
-                    X.Panel().ID("Header").Region(Region.North).Border(false).MarginSpec("3 5 0 0")            
+                    X.Panel().ID("pnlHeader").Layout(LayoutType.VBox).Border(false).MarginSpec("3 5 0 0").AutoScroll(true).Region(Region.North)             
+                    .Listeners(l =>
+                        {
+                            //l.Render.Handler = "HQ.common.control_render(this,'header')";
+                            l.Resize.Handler = "pnlHeader_Resize();";
+                        })
                     .Items(
                         X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                         .Listeners(l =>
-                        {
-                            l.Render.Handler = "HQ.common.control_render(this,'header')";
+                        .Listeners(l =>
+                                {
+                                    l.Render.Handler = "HQ.common.control_render(this,'header')";
                    
-                        })
+                                })                         
                         .Items(                                                                                                            
                             HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQLangCode("InvtID").HQProcedure("IN20500_pcloadInvtID")
                             .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
@@ -68,26 +73,25 @@
                                         //lst.Focus.Fn = "Focus1_Change";
                                     })
 
-                                 , HQ.Button().ID("btnCopy").Width(100).MarginSpec("0 5 0 5")
+                            , HQ.Button().ID("btnCopy").Width(100).MarginSpec("0 5 0 5")
                                  .HQLangCode("CopyFrom").Listeners(p =>
                                  {
                                     p.Click.Fn = "CopyForm_Click";
                                  })
                                 
                                  
-                             , HQ.TextBox().ID("txtBarCode").Name("txtBarCode").HQLangCode("InvtID")
+                             , HQ.TextBox().ID("txtBarCode").Name("txtBarCode").HQLangCode("InvtID").Tag("X")
                             .InputWidth(90).MaxLength(20).EnforceMaxLength(true).LabelWidth(85)
                             
                             
                             , HQ.Combo().ID("cboApproveStatus").Name("cboApproveStatus").HQLangCode("ApproveStatus").HQProcedure("IN20500_pcApproveStatus")
-                            .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("ApproveStatus").Disabled(true)//.SelectedItems("H")//.SetValueAndFireSelect("H")
+                            .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("ApproveStatus").ReadOnly(true).Tag("X")//.SelectedItems("H")//.SetValueAndFireSelect("H")
                             .HQHeightWidth(400, 300).LabelWidth(150).InputWidth(150)
-                            .HQDBSys(false).ForceSelection(false)//.MaxLength(5).EnforceMaxLength(true)
-                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                            .HQParam(new StoreParameterCollection()
-                                {
-
-                                })
+                            .HQDBSys(false).ForceSelection(false)//.MaxLength(5).EnforceMaxLength(true)                           
+                             .HQParam(new StoreParameterCollection() 
+                                        { 
+                                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                        })
                             .LoadData()
                             .Listeners(lst =>
                                 {
@@ -138,28 +142,22 @@
                                 .Width(595).MaxLength(100).EnforceMaxLength(true)
                             
 
-                                , HQ.TextBox().ID("chooseGrid").Name("chooseGrid").Hidden(true) 
-                                
+                               
                                 
                                 )
                                 
-                                ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                .Listeners(l =>
-                                {
-                                    l.Render.Handler = "HQ.common.control_render(this,'header')";
-                   
-                                })
+                                ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")                                
                                 .Items(
                                 
                                     HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("Status").HQProcedure("IN20500_pcStatus")
                                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("Status")
-                                    .Width(400).HQHeightWidth(400, 300).ReadOnly(true)
+                                    .Width(400).HQHeightWidth(400, 300).ReadOnly(true)//.HQA
+                                        .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    })
                                     .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                    .HQParam(new StoreParameterCollection() 
-                                        { 
-                                        
-                                        })
+                                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })                                   
                                     .LoadData()
                                     .Listeners(lst =>
                                         {
@@ -178,737 +176,707 @@
                                         })                                                                                                                                                                                          
                                 )
                             )//pnlHeader 
-                                                       
-                            ,X.TabPanel().Border(false)
-                                .Layout(LayoutType.Fit)  
-                                .Region(Region.Center)                                                                             
-                                .ID("tabAtIN20500")
-                                .Listeners(p =>
-                                {                                     
-                                    p.TabChange.Fn = "Tab_Change";
-                                })
-                                .Items(
-                                        X.Panel().Listeners(l =>
-                                            {
-                                                l.Render.Handler = "HQ.common.control_render(this,'header')";
-                   
-                                            })
-                                        .ID("tabInfo").Region(Region.Center)
-                                        .Layout(LayoutType.HBox).Border(false)                                       
-                                        .Title(Util.GetLang("DfltInfo"))
-                                        .Padding(0)                   
-                                        .Items(
-                                            X.Panel()
-                                            .Layout(LayoutType.VBox).Border(false)                                                                                        
-                                            .DefaultAnchor("100%")                                             
-                                            .BodyPadding(0)                                                                                         
-                                            .Items(                                                                                      
-                                                 HQ.Combo().ID("cboClassID").Name("cboClassID").HQLangCode("ClassID").HQProcedure("IN20500_pcProductCLassAll")
-                                                .HQColumnShow("ClassID,Descr").DisplayField("Descr").ValueField("ClassID").DataIndex("ClassID")
-                                                .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                .HQParam(new StoreParameterCollection() 
-                                                { 
-                                                   // new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                , X.Container().MarginSpec("5 0 0 0")
+                                , X.TabPanel().Border(false).Region(Region.Center)                                                                                                                           
+                                    .ID("tabDetail")
+                                    .Listeners(p =>
+                                    {
+                                        p.TabChange.Fn = "Tab_Change";
+                                    })
+                                    .Items(
+                                            X.Panel().Listeners(l =>
+                                                {
+                                                    l.Render.Handler = "HQ.common.control_render(this,'header')";
+
                                                 })
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Change.Fn = "cboClassID_Change";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";
-                                                       
-                                                    })
-                                              
-                                                ,HQ.Combo().ID("cboPriceClassID").Name("cboPriceClassID").HQLangCode("PriceClassID").HQProcedure("IN20500_pcItemPriceClass")
-                                                .HQColumnShow("PriceClassID,Descr").DisplayField("Descr").ValueField("PriceClassID").DataIndex("PriceClassID")
-                                                .Width(400).HQHeightWidth(400, 300)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })                                               
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";                                                        
-                                                    })
-                                                    
-                                                    
-                                                ,HQ.Combo().ID("cboInvtType").Name("cboInvtType").HQLangCode("Type").HQProcedure("IN20500_pcIvntType")
-                                                .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("InvtType")
-                                                .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                .HQParam(new StoreParameterCollection() 
-                                                    { 
-                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                                                    })
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";
-                                                        //lst.Focus.Fn = "Focus1_Change";
-                                                    })        
-                                                        
-                                                
-                                                ,HQ.Combo().ID("cboSource").Name("cboSource").HQLangCode("Source").HQProcedure("IN20500_pcSource")
-                                                .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("Source")
-                                                .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                .HQParam(new StoreParameterCollection() 
-                                                    { 
-                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                                                    })
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";
-                                                        //lst.Focus.Fn = "Focus1_Change";
-                                                    })     
-                                                            
-                                                 ,HQ.Combo().ID("cboValMthd").Name("cboValMthd").HQLangCode("ValMthd").HQProcedure("IN20500_pcValMthd")
-                                                .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("ValMthd")
-                                                .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                .HQParam(new StoreParameterCollection() 
-                                                    { 
-                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                                                    })
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";
-                                                        //lst.Focus.Fn = "Focus1_Change";
-                                                    })   
-                            
-                                                 ,HQ.Combo().ID("cboLotSerTrack").Name("cboLotSerTrack").HQLangCode("LotSerTrack").HQProcedure("IN20500_pcLotSerTrack")
-                                                .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("LotSerTrack")
-                                                .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                .HQParam(new StoreParameterCollection() 
-                                                    { 
-                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                                                    })
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Change.Fn = "cboLotSerTrack_Change";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";
-                                                    })        
-                                                    
-                                                    
-                                                 ,HQ.Combo().ID("cboBuyer").Name("cboBuyer").HQLangCode("Buyer").HQProcedure("IN20500_pcBuyerAll")
-                                                .HQColumnShow("Buyer,BuyerName").DisplayField("Buyer").ValueField("Buyer").DataIndex("Buyer")
-                                                .Width(400).HQHeightWidth(400, 300)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                        
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";
-                                                        //lst.Focus.Fn = "Focus1_Change";
-                                                    })     
-                                                    
-                                                    
-                                                      
-                                                    // sua store cua cai nay lai sau cung voi ben IN20200
-                                                   ,HQ.Combo().ID("cboStkUnit").Name("cboStkUnit").HQLangCode("StkUnit").HQProcedure("IN20500_pcgetToUnit")
-                                                    .HQColumnShow("ToUnit").DisplayField("ToUnit").ValueField("ToUnit").DataIndex("StkUnit")
+                                            .ID("tabInfo").Layout(LayoutType.HBox).Border(false).AutoScroll(true)
+                                            .Title(Util.GetLang("DfltInfo"))
+                                            .Padding(0)
+                                            .Items(
+                                                X.Panel()
+                                                .Layout(LayoutType.VBox).Border(false)                                             
+                                                .BodyPadding(0)
+                                                .Items(
+                                                     HQ.Combo().ID("cboClassID").Name("cboClassID").HQLangCode("ClassID").HQProcedure("IN20500_pcProductCLassAll")
+                                                    .HQColumnShow("ClassID,Descr").DisplayField("Descr").ValueField("ClassID").DataIndex("ClassID")
                                                     .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
                                                     .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                        .HQParam(new StoreParameterCollection() 
-                                                        { 
-                                                            //new StoreParameter() { Name = "@ClassID", Value = "App.cboClassID.value", Mode = ParameterMode.Raw }
-                                                        })
+                                                    .HQParam(new StoreParameterCollection()
+                                                    {
+                                                        // new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                    })
                                                     .LoadData()
                                                     .Listeners(lst =>
                                                         {
                                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                            lst.Change.Fn = "cboStkUnit_Change";
+                                                            lst.Change.Fn = "cboClassID_Change";
                                                             lst.Focus.Handler = "this.forceSelection = true;";
-                                                        })    
-                                                    
-                                                      ,HQ.Combo().ID("cboDfltPOUnit").Name("cboDfltPOUnit").HQLangCode("POUnit").HQProcedure("IN20500_pcGetDfltPOUnitSOUnit")
-                                                        .HQColumnShow("FromUnit").DisplayField("FromUnit").ValueField("FromUnit").DataIndex("DfltPOUnit")
+
+                                                        })
+
+                                                    , HQ.Combo().ID("cboPriceClassID").Name("cboPriceClassID").HQLangCode("PriceClassID").HQProcedure("IN20500_pcItemPriceClass")
+                                                    .HQColumnShow("PriceClassID,Descr").DisplayField("Descr").ValueField("PriceClassID").DataIndex("PriceClassID")
+                                                    .Width(400).HQHeightWidth(400, 300)
+                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                    .LoadData()
+                                                    .Listeners(lst =>
+                                                        {
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Focus.Handler = "this.forceSelection = true;";
+                                                        })
+
+
+                                                    , HQ.Combo().ID("cboInvtType").Name("cboInvtType").HQLangCode("Type").HQProcedure("IN20500_pcIvntType")
+                                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("InvtType")
+                                                    .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
+                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                    .HQParam(new StoreParameterCollection() 
+                                                    { 
+                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                    })
+                                                    .LoadData()
+                                                    .Listeners(lst =>
+                                                        {
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Focus.Handler = "this.forceSelection = true;";
+                                                            //lst.Focus.Fn = "Focus1_Change";
+                                                        })
+
+
+                                                    , HQ.Combo().ID("cboSource").Name("cboSource").HQLangCode("Source").HQProcedure("IN20500_pcSource")
+                                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("Source")
+                                                    .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
+                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                    .HQParam(new StoreParameterCollection() 
+                                                    { 
+                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                    })
+                                                    .LoadData()
+                                                    .Listeners(lst =>
+                                                        {
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Focus.Handler = "this.forceSelection = true;";
+                                                            //lst.Focus.Fn = "Focus1_Change";
+                                                        })
+
+                                                     , HQ.Combo().ID("cboValMthd").Name("cboValMthd").HQLangCode("ValMthd").HQProcedure("IN20500_pcValMthd")
+                                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("ValMthd")
+                                                    .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
+                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                    .HQParam(new StoreParameterCollection() 
+                                                    { 
+                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                    })
+                                                    .LoadData()
+                                                    .Listeners(lst =>
+                                                        {
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Focus.Handler = "this.forceSelection = true;";
+                                                            //lst.Focus.Fn = "Focus1_Change";
+                                                        })
+
+                                                     , HQ.Combo().ID("cboLotSerTrack").Name("cboLotSerTrack").HQLangCode("LotSerTrack").HQProcedure("IN20500_pcLotSerTrack")
+                                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("LotSerTrack")
+                                                    .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
+                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                    .HQParam(new StoreParameterCollection() 
+                                                    { 
+                                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                    })
+                                                    .LoadData()
+                                                    .Listeners(lst =>
+                                                        {
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Change.Fn = "cboLotSerTrack_Change";
+                                                            lst.Focus.Handler = "this.forceSelection = true;";
+                                                        })
+
+
+                                                     , HQ.Combo().ID("cboBuyer").Name("cboBuyer").HQLangCode("Buyer").HQProcedure("IN20500_pcBuyerAll")
+                                                    .HQColumnShow("Buyer,BuyerName").DisplayField("Buyer").ValueField("Buyer").DataIndex("Buyer")
+                                                    .Width(400).HQHeightWidth(400, 300)
+                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+
+                                                    .LoadData()
+                                                    .Listeners(lst =>
+                                                        {
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Focus.Handler = "this.forceSelection = true;";
+                                                            //lst.Focus.Fn = "Focus1_Change";
+                                                        })
+
+
+
+                                                        // sua store cua cai nay lai sau cung voi ben IN20200
+                                                       , HQ.Combo().ID("cboStkUnit").Name("cboStkUnit").HQLangCode("StkUnit").HQProcedure("IN20500_pcgetToUnit")
+                                                        .HQColumnShow("ToUnit").DisplayField("ToUnit").ValueField("ToUnit").DataIndex("StkUnit")
                                                         .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
                                                         .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
                                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                            .HQParam(new StoreParameterCollection() 
-                                                            { 
-                                                                new StoreParameter() { Name = "@ToUnit", Value = "App.cboStkUnit.value", Mode = ParameterMode.Raw }
+                                                            .HQParam(new StoreParameterCollection()
+                                                            {
+                                                                //new StoreParameter() { Name = "@ClassID", Value = "App.cboClassID.value", Mode = ParameterMode.Raw }
                                                             })
                                                         .LoadData()
                                                         .Listeners(lst =>
                                                             {
                                                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                lst.Change.Fn = "cboStkUnit_Change";
                                                                 lst.Focus.Handler = "this.forceSelection = true;";
-                                                                //lst.Focus.Fn = "Focus1_Change";
                                                             })
-                                                    
-                                                            
-                                                            
-                                                        , HQ.Combo().ID("cboDfltSOUnit").Name("cboDfltSOUnit").HQLangCode("SOUnit").HQProcedure("IN20500_pcGetDfltPOUnitSOUnit")
-                                                        .HQColumnShow("FromUnit").DisplayField("FromUnit").ValueField("FromUnit").DataIndex("DfltSOUnit")
-                                                        .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
-                                                        .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                            .HQParam(new StoreParameterCollection() 
-                                                            { 
-                                                                new StoreParameter() { Name = "@ToUnit", Value = "App.cboStkUnit.value", Mode = ParameterMode.Raw }
-                                                            })
-                                                        .LoadData()
-                                                        .Listeners(lst =>
-                                                            {
-                                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                                lst.Focus.Handler = "this.forceSelection = true;";
-                                                                //lst.Focus.Fn = "Focus1_Change";
-                                                            })   
-                                                    
-                                                            
-                                                            
-                                                          , HQ.Combo().ID("cboMaterialType").Name("cboMaterialType").HQLangCode("MaterialType").HQProcedure("IN20500_pcMaterialTypeAll")
-                                                        .HQColumnShow("MaterialType,Descr").DisplayField("Descr").ValueField("MaterialType").DataIndex("MaterialType")
-                                                        .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
-                                                        .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                           
-                                                        .LoadData()
-                                                        .Listeners(lst =>
-                                                            {
-                                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                                lst.Focus.Handler = "this.forceSelection = true;";
-                                                                //lst.Focus.Fn = "Focus1_Change";
-                                                            })         
-                                                            
-                                                    
-                                                            , HQ.Combo().ID("cboDfltSlsTaxCat").Name("cboDfltSlsTaxCat").HQLangCode("TaxCat").HQProcedure("IN20500_pcTaxCat")
-                                                            .HQColumnShow("CatID,Descr").DisplayField("CatID").ValueField("CatID").DataIndex("TaxCat")
+
+                                                          , HQ.Combo().ID("cboDfltPOUnit").Name("cboDfltPOUnit").HQLangCode("POUnit").HQProcedure("IN20500_pcGetDfltPOUnitSOUnit")
+                                                            .HQColumnShow("FromUnit").DisplayField("FromUnit").ValueField("FromUnit").DataIndex("DfltPOUnit")
                                                             .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
                                                             .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
                                                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                
+                                                                .HQParam(new StoreParameterCollection() 
+                                                            { 
+                                                                new StoreParameter() { Name = "@ToUnit", Value = "App.cboStkUnit.value", Mode = ParameterMode.Raw }
+                                                            })
                                                             .LoadData()
                                                             .Listeners(lst =>
                                                                 {
                                                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                                                     lst.Focus.Handler = "this.forceSelection = true;";
                                                                     //lst.Focus.Fn = "Focus1_Change";
-                                                                })    
-                                                             
-                                                              
-                                                        
-                                                )
-                                                , X.Panel()
-                                                        .Layout(LayoutType.HBox).Border(false)                                                                                                                                                        
-                                                        .DefaultAnchor("100%").MarginSpec("3 10 10 10")     
-                                                        .BodyPadding(0)                                                           
-                                                        .Items(
+                                                                })
 
-                                                              X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                                                .Items(
 
-                                                                X.Container().Layout(LayoutType.VBox)
-                                                            .Items(
 
-                                                                    HQ.Checkbox().ID("chkStkItem").Name("chkStkItem").HQLangCode("StkItem").DataIndex("StkItem")
-                                                                .Width(400).MarginSpec("3 0 0 5")
+                                                            , HQ.Combo().ID("cboDfltSOUnit").Name("cboDfltSOUnit").HQLangCode("SOUnit").HQProcedure("IN20500_pcGetDfltPOUnitSOUnit")
+                                                            .HQColumnShow("FromUnit").DisplayField("FromUnit").ValueField("FromUnit").DataIndex("DfltSOUnit")
+                                                            .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
+                                                            .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                                .HQParam(new StoreParameterCollection() 
+                                                            { 
+                                                                new StoreParameter() { Name = "@ToUnit", Value = "App.cboStkUnit.value", Mode = ParameterMode.Raw }
+                                                            })
+                                                            .LoadData()
+                                                            .Listeners(lst =>
+                                                                {
+                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                    lst.Focus.Handler = "this.forceSelection = true;";
+                                                                    //lst.Focus.Fn = "Focus1_Change";
+                                                                })
+
+
+
+                                                              , HQ.Combo().ID("cboMaterialType").Name("cboMaterialType").HQLangCode("MaterialType").HQProcedure("IN20500_pcMaterialTypeAll")
+                                                            .HQColumnShow("MaterialType,Descr").DisplayField("Descr").ValueField("MaterialType").DataIndex("MaterialType")
+                                                            .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
+                                                            .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+
+                                                            .LoadData()
+                                                            .Listeners(lst =>
+                                                                {
+                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                    lst.Focus.Handler = "this.forceSelection = true;";
+                                                                    //lst.Focus.Fn = "Focus1_Change";
+                                                                })
+
+
+                                                                , HQ.Combo().ID("cboDfltSlsTaxCat").Name("cboDfltSlsTaxCat").HQLangCode("TaxCat").HQProcedure("IN20500_pcTaxCat")
+                                                                .HQColumnShow("CatID,Descr").DisplayField("CatID").ValueField("CatID").DataIndex("TaxCat")
+                                                                .Width(400).HQHeightWidth(400, 300).AllowBlank(false)
+                                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+
+                                                                .LoadData()
                                                                 .Listeners(lst =>
                                                                     {
-                                                                        //lst.Change.Fn = "chkPublic_Change";
-
+                                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                        lst.Focus.Handler = "this.forceSelection = true;";
+                                                                        //lst.Focus.Fn = "Focus1_Change";
                                                                     })
-        //Image
-
-                                                                    , X.Hidden().ID("hdnPPCStorePicReq").DataIndex("Picture")
-                                                                    , X.Image().ID("imgPPCStorePicReq").Width(200).Height(200)
-
-                                                                   , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                                                   .Items(
 
 
-                                                                        X.FileUploadField().ID("fupPPCStorePicReq").Icon(Icon.ImageAdd)
-                                                                        .ButtonText(Util.GetLang("ChooseImage"))
-                                                                        .ButtonOnly(true).Width(100)
-                                                                        .Listeners(l =>
-                                                                            {
-                                                                                l.Change.Fn = "fupPPCStorePicReq_Change";
-                                                                            })
 
-                                                                        , X.Button().ID("btnClearImage").Icon(Icon.ImageDelete).Text(Util.GetLang("ClearImage"))
-                                                                        .Listeners(lst => lst.Click.Fn = "btnClearImage_Click").Width(100)
+                                                    )
+                                                    , X.Panel()
+                                                            .Layout(LayoutType.Anchor).Border(false)
+                                                            .DefaultAnchor("100%").MarginSpec("3 10 10 10")
+                                                            .BodyPadding(0)
+                                                            .Items(
 
-                                                                        , HQ.TextBox().ID("txtImageChange").Name("txtImageChange").Hidden(true)
-
-                                                                       )
-
-                                                                   )
-        //Media
-                                                                    , X.Container().Layout(LayoutType.VBox).MarginSpec("25 0 0 -190")
+                                                                  X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
                                                                     .Items(
 
-                                                                        X.Hidden().ID("hdnPPCStoreMediaReq").DataIndex("Media")
-                                                                        , X.Image().ID("imgPPCStoreMediaReq").Width(200).Height(200)
-                                                                        .Listeners(l =>
-                                                                                    {
-                                                                                        l.Click.Fn = "PlayVideo";
-                                                                                    })
+                                                                    X.Container().Layout(LayoutType.VBox)
+                                                                .Items(
 
-                                                                        , X.Container().Layout(LayoutType.HBox)
+                                                                        HQ.Checkbox().ID("chkStkItem").Name("chkStkItem").HQLangCode("StkItem").DataIndex("StkItem")
+                                                                    .Width(400).MarginSpec("3 0 0 5")
+                                                                    .Listeners(lst =>
+                                                                        {
+                                                                            //lst.Change.Fn = "chkPublic_Change";
+
+                                                                        })
+        //Image
+
+                                                                        , X.Hidden().ID("hdnPPCStorePicReq").DataIndex("Picture")
+                                                                        , X.Image().ID("imgPPCStorePicReq").Width(200).Height(200)
+
+                                                                       , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                                                       .Items(
+
+
+                                                                            X.FileUploadField().ID("fupPPCStorePicReq").Icon(Icon.ImageAdd)
+                                                                            .ButtonText(Util.GetLang("ChooseImage"))
+                                                                            .ButtonOnly(true).Width(100)
+                                                                            .Listeners(l =>
+                                                                                {
+                                                                                    l.Change.Fn = "fupPPCStorePicReq_Change";
+                                                                                })
+
+                                                                            , X.Button().ID("btnClearImage").Icon(Icon.ImageDelete).Text(Util.GetLang("ClearImage"))
+                                                                            .Listeners(lst => lst.Click.Fn = "btnClearImage_Click").Width(100)
+
+                                                                            , HQ.TextBox().ID("txtImageChange").Name("txtImageChange").Hidden(true)
+
+                                                                           )
+
+                                                                       )
+        //Media
+                                                                        , X.Container().Layout(LayoutType.VBox).MarginSpec("25 0 0 -190")
                                                                         .Items(
 
+                                                                            X.Hidden().ID("hdnPPCStoreMediaReq").DataIndex("Media")
+                                                                            , X.Image().ID("imgPPCStoreMediaReq").Width(200).Height(200)
+                                                                            .Listeners(l =>
+                                                                                        {
+                                                                                            l.Click.Fn = "PlayVideo";
+                                                                                        })
 
-                                                                                X.FileUploadField().ID("fupPPCStoreMediaReq").Icon(Icon.ImageAdd).ButtonText(Util.GetLang("ChooseMedia"))
-                                                                                .ButtonOnly(true).MarginSpec("3 0 0 0").Width(100)
-                                                                                .Listeners(l =>
-                                                                                    {
-                                                                                        l.Change.Fn = "fupPPCStoreMediaReq_Change";
-                                                                                    })
-
-                                                                                 , X.Button().ID("btnDeleteMedia").Icon(Icon.ImageDelete).Text(Util.GetLang("DeleteMedia")).MarginSpec("3 0 0 0")
-                                                                                .Listeners(lst => lst.Click.Fn = "btnDeleteMedia_Click").Width(100)
-
+                                                                            , X.Container().Layout(LayoutType.HBox)
+                                                                            .Items(
 
 
-                                                                              )
-                                                                       )
+                                                                                    X.FileUploadField().ID("fupPPCStoreMediaReq").Icon(Icon.ImageAdd).ButtonText(Util.GetLang("ChooseMedia"))
+                                                                                    .ButtonOnly(true).MarginSpec("3 0 0 0").Width(100)
+                                                                                    .Listeners(l =>
+                                                                                        {
+                                                                                            l.Change.Fn = "fupPPCStoreMediaReq_Change";
+                                                                                        })
+
+                                                                                     , X.Button().ID("btnDeleteMedia").Icon(Icon.ImageDelete).Text(Util.GetLang("DeleteMedia")).MarginSpec("3 0 0 0")
+                                                                                    .Listeners(lst => lst.Click.Fn = "btnDeleteMedia_Click").Width(100)
+
+
+
+                                                                                  )
+                                                                           )
+
+                                                                    )
 
                                                                 )
+                                           )// ngoac ket thuc tab 1  
 
-                                                            )                                                     
-                                       )// ngoac ket thuc tab 1  
-                                       
-                                      ,X.Panel()
-                                        .ID("tabAttribute").Layout(LayoutType.Anchor).Region(Region.Center)                                          
-                                        .Title(Util.GetLang("Attribute")).Border(false)
-                                        .Padding(0)
-                                        .Listeners(l =>
-                                                {
-                                                    l.Render.Handler = "HQ.common.control_render(this,'header')";
-                                                })
-                                        .Items(
-                        
-                                         X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                        .Items(
-                                        
-                                                HQ.TextBox().ID("txtColor").Name("txtColor").HQLangCode("Color").DataIndex("Color")
-                                                .LabelWidth(150).InputWidth(150).MaxLength(20).EnforceMaxLength(true)
-
-                                                ,HQ.NumberField().ID("txtPrePayPct").Name("txtPrePayPct").HQLangCode("PrePayPct").DataIndex("PrePayPct")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-
-                                              )
-                                              
-                                        ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                        .Items(
-                                        
-                                                HQ.TextBox().ID("txtSize").Name("txtSize").HQLangCode("Size").DataIndex("Size")
-                                                .LabelWidth(150).InputWidth(150).MaxLength(10).EnforceMaxLength(true)
-
-                                                ,HQ.NumberField().ID("txtPOFee").Name("txtPOFee").HQLangCode("POFee").DataIndex("POFee")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                              )
-                                        
-                                        ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                        .Items(
-                                        
-                                                 HQ.Combo().ID("cboStyle").Name("cboStyle").HQLangCode("Style").HQProcedure("IN20500_pcStyle")
-                                                .HQColumnShow("Nganh").DisplayField("Nganh").ValueField("Ma").DataIndex("Style")
-                                                .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 300)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";
-                                                        //lst.Focus.Fn = "Focus1_Change";
-                                                    }) 
-                                        
-                                        
-                                                ,HQ.NumberField().ID("txtSOFee").Name("txtSOFee").HQLangCode("SOFee").DataIndex("SOFee")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                                                               
-                                              )
-                                                        
-                                          ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                        .Items(
-                                        
-                                                HQ.NumberField().ID("txtStkVol").Name("txtStkVol").HQLangCode("StkVol").DataIndex("StkVol")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                        
-                                                
-                                                 ,HQ.Combo().ID("cboVendor1").Name("cboVendor1").HQLangCode("Vendor1").HQProcedure("IN20500_pcVendor")
-                                                .HQColumnShow("VendID,name").DisplayField("name").ValueField("VendID").DataIndex("VendID1")
-                                                .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 300)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";
-                                                        //lst.Focus.Fn = "Focus1_Change";
-                                                    }) 
-                                        
-                                        
-                                               
-                                                                               
-                                              )          
-                                              
-                                              ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                              .Items(
-                                        
-                                                HQ.NumberField().ID("txtStkWt").Name("txtStkWt").HQLangCode("StkWt").DataIndex("StkWt")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                        
-                                                
-                                                 ,HQ.Combo().ID("cboVendor2").Name("cboVendor2").HQLangCode("Vendor2").HQProcedure("IN20500_pcVendor")
-                                                .HQColumnShow("VendID,name").DisplayField("name").ValueField("VendID").DataIndex("VendID2")
-                                                .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 300)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";
-                                                        //lst.Focus.Fn = "Focus1_Change";
-                                                    }) 
-                                        
-                                        
-                                               
-                                                                               
-                                              )   
-                                              
-                                              ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                            .Items(
-                                                    // cai nay cung sua sau
-                                                 HQ.Combo().ID("cboStkWtUnit").Name("cboStkWtUnit").HQLangCode("StkWtUnit").HQProcedure("IN20500_pcGetToUnit")
-                                                .HQColumnShow("ToUnit").DisplayField("ToUnit").ValueField("ToUnit").DataIndex("StkWtUnit")
-                                                .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 300)
-                                                .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
-                                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                
-                                                .LoadData()
-                                                .Listeners(lst =>
-                                                    {
-                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                        lst.Focus.Handler = "this.forceSelection = true;";
-                                                        //lst.Focus.Fn = "Focus1_Change";
-                                                    }) 
-                                        
-                                        
-                                                ,HQ.NumberField().ID("txtLossRate00").Name("txtLossRate00").HQLangCode("LossRate1").DataIndex("LossRate00")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                                                               
-                                              )
-                                              
-                                              ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                            .Items(
-                                                   
-                                                 HQ.NumberField().ID("txtSOPrice").Name("txtSOPrice").HQLangCode("SOPrice").DataIndex("SOPrice")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                        
-                                        
-                                                ,HQ.NumberField().ID("txtLossRate01").Name("txtLossRate01").HQLangCode("LossRate2").DataIndex("LossRate01")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                                                               
-                                              )
-                                              
-                                              ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                            .Items(
-                                                   
-                                                 HQ.NumberField().ID("txtPOPrice").Name("txtPOPrice").HQLangCode("POPrice").DataIndex("POPrice")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                        
-                                        
-                                                ,HQ.NumberField().ID("txtLossRate02").Name("txtLossRate02").HQLangCode("LossRate3").DataIndex("LossRate02")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                                                               
-                                              )
-                                              
-                                              ,X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
-                                            .Items(
-                                                   
-                                                 HQ.NumberField().ID("txtIRSftyStkDays").Name("txtIRSftyStkDays").HQLangCode("SftyStkDay").DataIndex("IRSftyStkDays")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                        
-                                        
-                                                ,HQ.NumberField().ID("txtLossRate03").Name("txtLossRate03").HQLangCode("LossRate4").DataIndex("LossRate03")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                                                               
-                                              )
-                                              
-                                              ,HQ.NumberField().ID("txtIRSftyStkPct").Name("txtIRSftyStkPct").HQLangCode("SftyStkPct").DataIndex("IRSftyStkPct").MarginSpec("3 0 0 0")
-                                               .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                              
-                                              ,HQ.NumberField().ID("txtIRSftyStkQty").Name("txtIRSftyStkQty").HQLangCode("SftyStkQty").DataIndex("IRSftyStkQty").MarginSpec("3 0 0 0")
-                                                .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                                                                           
-                                              ,HQ.NumberField().ID("txtIROverStkQty").Name("txtIROverStkQty").HQLangCode("OverStkQty").DataIndex("IROverStkQty").MarginSpec("3 0 0 0")
-                                              .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
-                                              
-                                              
-                                              
-                                      // ngoac ket thuc tab 2              
-                                       ) 
-                                       , X.Panel()
-                                            .ID("tabLotSerial")
-                                            .Layout(LayoutType.Anchor).Region(Region.Center)
-                                            .Border(false)
-                                            .AnchorHorizontal("100%")
-                                            .AnchorVertical("100%")
-                                            .Padding(5)
-                                            .Title(Util.GetLang("LotSerial"))
-                                            .CloseAction(CloseAction.Hide)
-                                            .Disabled(true)
+                                          , X.Panel()
+                                            .ID("tabAttribute").Layout(LayoutType.VBox)
+                                            .Title(Util.GetLang("Attribute")).Border(false).AutoScroll(true)                                         
                                             .Listeners(l =>
-                                                {
-                                                    l.Render.Handler = "HQ.common.control_render(this,'header')";
-                   
-                                                })
+                                                    {
+                                                        l.Render.Handler = "HQ.common.control_render(this,'header')";
+                                                    })
                                             .Items(
-                
-                                                    HQ.Combo().ID("cboSerAssign").Name("cboSerAssign").HQLangCode("Assignment").HQProcedure("IN20500_pcSerAssign")
-                                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("SerAssign")
-                                                    .Width(400).HQHeightWidth(400, 300)
-                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true).AllowBlank(true)
-                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                    .HQParam(new StoreParameterCollection() 
-                                                        { 
-                                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                                                        })        
-                                                    .LoadData()
-                                                    .Listeners(lst =>
-                                                        {
-                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                            lst.Focus.Handler = "this.forceSelection = true;";
-                                                            //lst.Focus.Fn = "Focus1_Change";
-                                                        })      
-                        
-                            
-                            
-                                                    ,HQ.Combo().ID("cboLotSerIssMthd").Name("cboLotSerIssMthd").HQLangCode("IssMthd").HQProcedure("IN20500_pcLotSerIssMthd")
-                                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("LotSerIssMthd")
-                                                    .Width(400).HQHeightWidth(400, 300)
-                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true).AllowBlank(true)
-                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                    .HQParam(new StoreParameterCollection() 
-                                                        { 
-                                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                                                        })        
-                                                    .LoadData()
-                                                    .Listeners(lst =>
-                                                        {
-                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                            lst.Focus.Handler = "this.forceSelection = true;";
-                                                            //lst.Focus.Fn = "Focus1_Change";
-                                                        })
 
+                                             X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                            .Items(
 
-                                                        , HQ.NumberField().ID("txtShelfLife").Name("txtShelfLife").HQLangCode("ShelfLife").DataIndex("ShelfLife")
-                                                        .Width(400).DecimalPrecision(0).MinValue(0)   
-                            
-                                                         , HQ.NumberField().ID("txtWarrantyDays").Name("txtWarrantyDays").HQLangCode("WarrantyDays").DataIndex("WarrantyDays")
-                                                        .Width(400).DecimalPrecision(0).MinValue(0)
-                            
-                            
-                                                        ,HQ.Label().ID("lblPrefix").HQLangCode("Prefix").MarginSpec("30 0 0 0") 
-                
-                
-                                                    ,HQ.Combo().ID("cboLotSerFxdTyp").Name("cboLotSerFxdTyp").HQLangCode("Type").HQProcedure("IN20500_pcLotSerType")
-                                                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("LotSerFxdTyp")
-                                                    .Width(400).HQHeightWidth(400, 300)
+                                                    HQ.TextBox().ID("txtColor").Name("txtColor").HQLangCode("Color").DataIndex("Color")
+                                                    .LabelWidth(150).InputWidth(150).MaxLength(20).EnforceMaxLength(true)
+
+                                                    , HQ.NumberField().ID("txtPrePayPct").Name("txtPrePayPct").HQLangCode("PrePayPct").DataIndex("PrePayPct")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+                                                  )
+
+                                            , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                            .Items(
+
+                                                    HQ.TextBox().ID("txtSize").Name("txtSize").HQLangCode("Size").DataIndex("Size")
+                                                    .LabelWidth(150).InputWidth(150).MaxLength(10).EnforceMaxLength(true)
+
+                                                    , HQ.NumberField().ID("txtPOFee").Name("txtPOFee").HQLangCode("POFee").DataIndex("POFee")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+                                                  )
+
+                                            , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                            .Items(
+
+                                                     HQ.Combo().ID("cboStyle").Name("cboStyle").HQLangCode("Style").HQProcedure("IN20500_pcStyle")
+                                                    .HQColumnShow("Nganh").DisplayField("Nganh").ValueField("Ma").DataIndex("Style")
+                                                    .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 300)
                                                     .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                    .HQParam(new StoreParameterCollection() 
-                                                        { 
-                                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                                                        })        
+
                                                     .LoadData()
                                                     .Listeners(lst =>
                                                         {
                                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                                             lst.Focus.Handler = "this.forceSelection = true;";
                                                             //lst.Focus.Fn = "Focus1_Change";
-                                                        }) 
-                            
-                            
-                            
-                                                       , HQ.NumberField().ID("txtLotSerFxdLen").Name("txtLotSerFxdLen").HQLangCode("Length").DataIndex("LotSerFxdLen")
-                                                        .Width(400).DecimalPrecision(0).MinValue(0)  
-                
-                            
-                                                       , HQ.TextBox().ID("txtLotSerFxdVal").Name("txtLotSerFxdVal").HQLangCode("Value").DataIndex("LotSerFxdVal")
-                                                         .Width(400).MaxLength(12).EnforceMaxLength(true)
-                                                         .Listeners(lst =>
-                                                        {
-                                
-                                                            lst.Blur.Fn = "PrefixValue_Change";
-                                                            //lst.Focus.Fn = "Focus1_Change";
-                                                        }) 
-                            
-                
-                                                         ,HQ.Label().ID("lblNumberic").HQLangCode("Numeric").MarginSpec("30 0 0 0") 
-                             
-                             
-                                                          ,HQ.NumberField().ID("txtLotSerNumLen").Name("txtLotSerNumLen").HQLangCode("Length").DataIndex("LotSerNumLen")
-                                                        .Width(400).DecimalPrecision(0).MinValue(0)//.AllowBlank(false)
-                
-                            
-                                                       ,HQ.TextBox().ID("txtLotSerNumVal").Name("txtLotSerNumVal").HQLangCode("Value").DataIndex("LotSerNumVal")
-                                                         .Width(400).MaxLength(25).EnforceMaxLength(true)
-                                                         .Listeners(lst =>
-                                                        {
-
-                                                            lst.Blur.Fn = "LastFixValue_Change";
-                                                            //lst.Focus.Fn = "Focus1_Change";
-                                                        }) 
-                          
-                             
-                                                        ,HQ.Label().ID("lblNextLotSerial").HQLangCode("NextLotSer").MarginSpec("30 0 0 0")
-                            
-                            
-                                                        ,HQ.Label().ID("lblShowNextLotSerial").Hidden(true).MarginSpec("0 0 0 50")
-                                                       .Listeners(lst =>
-                                                        {
-
-                                                            lst.AfterRender.Fn = "NextShowNextLotSerial_AfterRender";
-                                
-                                                        })                                                                                                                        
-                                            // ngoac ket thuc tab 3             
-                                            )
-                                            , X.Panel()
-                                            .ID("tabCompany").Region(Region.Center)
-                                            .Layout(LayoutType.Fit).Border(false)                                      
-                                            .Padding(0)
-                                            .Title(Util.GetLang("CpnyID"))
-                                            .CloseAction(CloseAction.Hide)
-                                            .Listeners(l =>
-                                                {
-                                                    l.Render.Handler = "HQ.common.control_render(this,'grd')";
-                   
-                                                })
-                                            .DefaultAnchor("100%")
-                                            //.Disabled(true)
-                                            .Items(
-                        
-                    
-                                                Html.X().GridPanel()
-                                                .Frame(true)
-                                                //.AnchorHorizontal("100%")
-                                                //.AnchorVertical("100%")
-                                                .Height(400)
-                                                .RenderTo("contentCenter")
-                                                .AutoScroll(true)
-                                                .View(X.GridView().TrackOver(false))
-                                                .ID("grd").SetAutoScroll(true)
-                                                .StoreID("stoCompany")
-                                                //.Hidden(true)
-                                                .SortableColumns(false)
-                                                    .Listeners(l =>
-                                                            {
-                                                                l.Render.Handler = "HQ.common.control_render(this,'grd');";   
-                                                                //l.ContainerMouseUp.Fn = "Focus2_Change";
-                                                                //l.Select.Fn = "Focus2_Change";
-                                                                //l.BeforeEdit.Fn = "Focus2_Change";
-                                                                //l.CellClick.Fn = "Focus2_Change";
-                                                            })
-                                                     //.Features(
-                                                     //               Html.X().GridFilters()//Filter
-                                                     //                   .Local(true)
-                                                     //                       .Filters(
-                                                     //                            Html.X().StringFilter().DataIndex("CpnyID"),
-                                                     //                            Html.X().StringFilter().DataIndex("CpnyName")
-
-                                                     //                       )
-
-                                                     //           )       
-                                                .ColumnModel(
-                                                    Html.X().RowNumbererColumn()
-
-                                                         , Html.X().Column().Text(Util.GetLang("CpnyID")).Width(100).DataIndex("CpnyID")
-                                                        .Editor(
-                                                          HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQProcedure("IN20500_pcClassCpnyID")
-                                                          .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
-                                                          .LabelWidth(150).InputWidth(150).HQHeightWidth(500, 400).ForceSelection(true)
-                                                         //.HQParam(new StoreParameterCollection() { 
-                                                          //     new StoreParameter("@ClassID", "App.cboClassID.value" , ParameterMode.Raw),
-                                                          //})
-                                                          .HQDBSys(false).AllowBlank(false)
-                                                          .Listeners(lst =>
-                                                         {
-
-                                                             lst.Change.Fn = "cboCpnyID_Change";
-
-                                                         })
-
-                                                         .LoadData()
-                                                      )
-
-                                                      , Html.X().Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(250).ID("cboCpnyName")
-                      
-                      
-                                              , Html.X().CommandColumn().Width(150)
-                                                    .Commands(
-                                                        Html.X().GridCommand()
-                                                            .Text(Util.GetLang("Reject"))
-                                                            .ToolTip(t =>
-                                                            {
-                                                                t.Text = Util.GetLang("Rejectrowchanges");
-                                                            })
-                                                            .CommandName("reject")
-                                                            .Icon(Icon.ArrowUndo)
-                                                    )
-                            
-                            
-                                                .PrepareToolbar(t =>
-                                                {
-                                                    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                                                })
-                                                .Listeners(l =>
-                                                {
-                                                    l.Command.Handler = "grd_Reject(record);";
-                                                })
-                                                
-                        
-                                                )
-
-                                             .SelectionModel(Html.X().RowSelectionModel().ID("slmGrid").Mode(SelectionMode.Multi))
-
-                                                .Plugins(
-                                                    Html.X()//Cho phep edit )
-                                                        .CellEditing()
-                                                        .ClicksToEdit(1)
-                                                        .Listeners(ls =>
-                                                        {
-                                                            ls.BeforeEdit.Fn = "grd_BeforeEdit";
-                                                            ls.Edit.Fn = "grd_Edit";
-                                                            ls.ValidateEdit.Fn = "grd_ValidateEdit";
-                                                            //ls.CancelEdit.Fn = "grd_CancelEdit";
-
                                                         })
+
+
+                                                    , HQ.NumberField().ID("txtSOFee").Name("txtSOFee").HQLangCode("SOFee").DataIndex("SOFee")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+                                                  )
+
+                                              , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                            .Items(
+
+                                                    HQ.NumberField().ID("txtStkVol").Name("txtStkVol").HQLangCode("StkVol").DataIndex("StkVol")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+
+                                                     , HQ.Combo().ID("cboVendor1").Name("cboVendor1").HQLangCode("Vendor1").HQProcedure("IN20500_pcVendor")
+                                                    .HQColumnShow("VendID,name").DisplayField("name").ValueField("VendID").DataIndex("VendID1")
+                                                    .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 300)
+                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+
+                                                    .LoadData()
+                                                    .Listeners(lst =>
+                                                        {
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Focus.Handler = "this.forceSelection = true;";
+                                                            //lst.Focus.Fn = "Focus1_Change";
+                                                        })
+
+
+
+
+                                                  )
+
+                                                  , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                                  .Items(
+
+                                                    HQ.NumberField().ID("txtStkWt").Name("txtStkWt").HQLangCode("StkWt").DataIndex("StkWt")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+
+                                                     , HQ.Combo().ID("cboVendor2").Name("cboVendor2").HQLangCode("Vendor2").HQProcedure("IN20500_pcVendor")
+                                                    .HQColumnShow("VendID,name").DisplayField("name").ValueField("VendID").DataIndex("VendID2")
+                                                    .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 300)
+                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+
+                                                    .LoadData()
+                                                    .Listeners(lst =>
+                                                        {
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Focus.Handler = "this.forceSelection = true;";
+                                                            //lst.Focus.Fn = "Focus1_Change";
+                                                        })
+
+
+
+
+                                                  )
+
+                                                  , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                                .Items(
+        // cai nay cung sua sau
+                                                     HQ.Combo().ID("cboStkWtUnit").Name("cboStkWtUnit").HQLangCode("StkWtUnit").HQProcedure("IN20500_pcGetToUnit")
+                                                    .HQColumnShow("ToUnit").DisplayField("ToUnit").ValueField("ToUnit").DataIndex("StkWtUnit")
+                                                    .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 300)
+                                                    .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+
+                                                    .LoadData()
+                                                    .Listeners(lst =>
+                                                        {
+                                                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                            lst.Focus.Handler = "this.forceSelection = true;";
+                                                            //lst.Focus.Fn = "Focus1_Change";
+                                                        })
+
+
+                                                    , HQ.NumberField().ID("txtLossRate00").Name("txtLossRate00").HQLangCode("LossRate1").DataIndex("LossRate00")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+                                                  )
+
+                                                  , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                                .Items(
+
+                                                     HQ.NumberField().ID("txtSOPrice").Name("txtSOPrice").HQLangCode("SOPrice").DataIndex("SOPrice")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+
+                                                    , HQ.NumberField().ID("txtLossRate01").Name("txtLossRate01").HQLangCode("LossRate2").DataIndex("LossRate01")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+                                                  )
+
+                                                  , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                                .Items(
+
+                                                     HQ.NumberField().ID("txtPOPrice").Name("txtPOPrice").HQLangCode("POPrice").DataIndex("POPrice")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+
+                                                    , HQ.NumberField().ID("txtLossRate02").Name("txtLossRate02").HQLangCode("LossRate3").DataIndex("LossRate02")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+                                                  )
+
+                                                  , X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
+                                                .Items(
+
+                                                     HQ.NumberField().ID("txtIRSftyStkDays").Name("txtIRSftyStkDays").HQLangCode("SftyStkDay").DataIndex("IRSftyStkDays")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+
+                                                    , HQ.NumberField().ID("txtLossRate03").Name("txtLossRate03").HQLangCode("LossRate4").DataIndex("LossRate03")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+                                                  )
+
+                                                  , HQ.NumberField().ID("txtIRSftyStkPct").Name("txtIRSftyStkPct").HQLangCode("SftyStkPct").DataIndex("IRSftyStkPct").MarginSpec("3 0 0 0")
+                                                   .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+                                                  , HQ.NumberField().ID("txtIRSftyStkQty").Name("txtIRSftyStkQty").HQLangCode("SftyStkQty").DataIndex("IRSftyStkQty").MarginSpec("3 0 0 0")
+                                                    .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+                                                  , HQ.NumberField().ID("txtIROverStkQty").Name("txtIROverStkQty").HQLangCode("OverStkQty").DataIndex("IROverStkQty").MarginSpec("3 0 0 0")
+                                                  .LabelWidth(150).InputWidth(150).DecimalPrecision(0).MinValue(0)
+
+
+
+                                          // ngoac ket thuc tab 2              
+                                           )
+                                           , X.Panel()
+                                                .ID("tabLotSerial").AutoScroll(true) 
+                                                .Layout(LayoutType.Anchor)
+                                                .Border(false)
+                                                .AnchorHorizontal("100%")
+                                                .AnchorVertical("100%")
+                                                .Padding(5)
+                                                .Title(Util.GetLang("LotSerial"))
+                                                .CloseAction(CloseAction.Hide)
+                                                .Disabled(true)
+                                                .Listeners(l =>
+                                                    {
+                                                        l.Render.Handler = "HQ.common.control_render(this,'header')";
+
+                                                    })
+                                                .Items(
+
+                                                        HQ.Combo().ID("cboSerAssign").Name("cboSerAssign").HQLangCode("Assignment").HQProcedure("IN20500_pcSerAssign")
+                                                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("SerAssign")
+                                                        .Width(400).HQHeightWidth(400, 300)
+                                                        .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true).AllowBlank(true)
+                                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                        .HQParam(new StoreParameterCollection() 
+                                                        { 
+                                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                        })
+                                                        .LoadData()
+                                                        .Listeners(lst =>
+                                                            {
+                                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                lst.Focus.Handler = "this.forceSelection = true;";
+                                                                //lst.Focus.Fn = "Focus1_Change";
+                                                            })
+
+
+
+                                                        , HQ.Combo().ID("cboLotSerIssMthd").Name("cboLotSerIssMthd").HQLangCode("IssMthd").HQProcedure("IN20500_pcLotSerIssMthd")
+                                                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("LotSerIssMthd")
+                                                        .Width(400).HQHeightWidth(400, 300)
+                                                        .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true).AllowBlank(true)
+                                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                        .HQParam(new StoreParameterCollection() 
+                                                        { 
+                                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                        })
+                                                        .LoadData()
+                                                        .Listeners(lst =>
+                                                            {
+                                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                lst.Focus.Handler = "this.forceSelection = true;";
+                                                                //lst.Focus.Fn = "Focus1_Change";
+                                                            })
+
+
+                                                            , HQ.NumberField().ID("txtShelfLife").Name("txtShelfLife").HQLangCode("ShelfLife").DataIndex("ShelfLife")
+                                                            .Width(400).DecimalPrecision(0).MinValue(0)
+
+                                                             , HQ.NumberField().ID("txtWarrantyDays").Name("txtWarrantyDays").HQLangCode("WarrantyDays").DataIndex("WarrantyDays")
+                                                            .Width(400).DecimalPrecision(0).MinValue(0)
+
+
+                                                            , HQ.Label().ID("lblPrefix").HQLangCode("Prefix").MarginSpec("30 0 0 0")
+
+
+                                                        , HQ.Combo().ID("cboLotSerFxdTyp").Name("cboLotSerFxdTyp").HQLangCode("Type").HQProcedure("IN20500_pcLotSerType")
+                                                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("LotSerFxdTyp")
+                                                        .Width(400).HQHeightWidth(400, 300)
+                                                        .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true)
+                                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                        .HQParam(new StoreParameterCollection() 
+                                                        { 
+                                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                                        })
+                                                        .LoadData()
+                                                        .Listeners(lst =>
+                                                            {
+                                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                lst.Focus.Handler = "this.forceSelection = true;";
+                                                                //lst.Focus.Fn = "Focus1_Change";
+                                                            })
+
+
+
+                                                           , HQ.NumberField().ID("txtLotSerFxdLen").Name("txtLotSerFxdLen").HQLangCode("Length").DataIndex("LotSerFxdLen")
+                                                            .Width(400).DecimalPrecision(0).MinValue(0)
+
+
+                                                           , HQ.TextBox().ID("txtLotSerFxdVal").Name("txtLotSerFxdVal").HQLangCode("Value").DataIndex("LotSerFxdVal")
+                                                             .Width(400).MaxLength(12).EnforceMaxLength(true)
+                                                             .Listeners(lst =>
+                                                            {
+
+                                                                lst.Blur.Fn = "PrefixValue_Change";
+                                                                //lst.Focus.Fn = "Focus1_Change";
+                                                            })
+
+
+                                                             , HQ.Label().ID("lblNumberic").HQLangCode("Numeric").MarginSpec("30 0 0 0")
+
+
+                                                              , HQ.NumberField().ID("txtLotSerNumLen").Name("txtLotSerNumLen").HQLangCode("Length").DataIndex("LotSerNumLen")
+                                                            .Width(400).DecimalPrecision(0).MinValue(0)//.AllowBlank(false)
+
+
+                                                           , HQ.TextBox().ID("txtLotSerNumVal").Name("txtLotSerNumVal").HQLangCode("Value").DataIndex("LotSerNumVal")
+                                                             .Width(400).MaxLength(25).EnforceMaxLength(true)
+                                                             .Listeners(lst =>
+                                                            {
+
+                                                                lst.Blur.Fn = "LastFixValue_Change";
+                                                                //lst.Focus.Fn = "Focus1_Change";
+                                                            })
+
+
+                                                            , HQ.Label().ID("lblNextLotSerial").HQLangCode("NextLotSer").MarginSpec("30 0 0 0")
+
+
+                                                            , HQ.Label().ID("lblShowNextLotSerial").Hidden(true).MarginSpec("0 0 0 50")
+                                                           .Listeners(lst =>
+                                                            {
+
+                                                                lst.AfterRender.Fn = "NextShowNextLotSerial_AfterRender";
+
+                                                            })
+        // ngoac ket thuc tab 3             
                                                 )
-         
-                        
-                    
-                                            )                                                                                                                                                                                                                                                                                                                                    
-                                //ngoac panel chinh cua tat ca tab        
-                                    )
-                                                                                                                                                                                                  
+                                                , X.Panel()
+                                                .ID("tabCompany")
+                                                .Layout(LayoutType.Anchor)
+                                                 
+                                                .Border(false)
+                                                .Title(Util.GetLang("CpnyID"))
+                                                .CloseAction(CloseAction.Hide)
+                                                .Listeners(l =>
+                                                    {
+                                                        l.Render.Handler = "HQ.common.control_render(this,'grd')";
+                                                        l.Focus.Handler = "HQ.focus='grd';";
+                                                    })                                              
+       //.Disabled(true)
+                                                .Items(
+
+                                                    Html.X().GridPanel()//.Height(400)
+                                                    .RenderTo("contentCenter").Border(true)
+                                                    .AutoScroll(true).Layout(LayoutType.Fit)                                                    
+                                                    .Anchor("100% -0")// WIDTH HEIGHT  
+                                                    .View(X.GridView().TrackOver(false))
+                                                    .ID("grd").SetAutoScroll(true)
+                                                    .StoreID("stoCompany")
+        //.Hidden(true)
+                                                    .SortableColumns(false)
+                                                        .Listeners(l =>
+                                                                {
+                                                                    l.Render.Handler = "HQ.common.control_render(this,'grd');";                                                               
+                                                                })
+       
+                                                    .ColumnModel(
+                                                        Html.X().RowNumbererColumn()
+
+                                                             , Html.X().Column().Text(Util.GetLang("CpnyID")).Width(100).DataIndex("CpnyID")
+                                                            .Editor(
+                                                              HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQProcedure("IN20500_pcClassCpnyID")
+                                                              .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
+                                                              .HQHeightWidth(500, 400).ForceSelection(true)
+                                                               .HQDBSys(false)
+                                                              
+
+                                                             .LoadData()
+                                                          )
+
+                                                          , Html.X().Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(250).ID("cboCpnyName")
+
+
+                                                  , Html.X().CommandColumn().Width(150)
+                                                        .Commands(
+                                                            Html.X().GridCommand()
+                                                                .Text(Util.GetLang("Reject"))
+                                                                .ToolTip(t =>
+                                                                {
+                                                                    t.Text = Util.GetLang("Rejectrowchanges");
+                                                                })
+                                                                .CommandName("reject")
+                                                                .Icon(Icon.ArrowUndo)
+                                                        )
+
+
+                                                    .PrepareToolbar(t =>
+                                                    {
+                                                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                                                    })
+                                                    .Listeners(l =>
+                                                    {
+                                                        l.Command.Handler = "grd_Reject(record);";
+                                                    })
+
+
+                                                    )
+
+                                                 .SelectionModel(Html.X().RowSelectionModel().ID("slmGrid").Mode(SelectionMode.Multi))
+
+                                                    .Plugins(
+                                                        Html.X()//Cho phep edit )
+                                                            .CellEditing()
+                                                            .ClicksToEdit(1)
+                                                            .Listeners(ls =>
+                                                            {
+                                                                ls.BeforeEdit.Fn = "grd_BeforeEdit";
+                                                                ls.Edit.Fn = "grd_Edit";
+                                                                ls.ValidateEdit.Fn = "grd_ValidateEdit";
+                                                                //ls.CancelEdit.Fn = "grd_CancelEdit";
+
+                                                            })
+                                                    )
+
+
+
+                                                
+        //ngoac panel chinh cua tat ca tab        
+                                        )
+                                )                                                                                                                                                         
               //ngoac ket thuc panel ben phai           
                   )                                                                                                                                                
             )                                    

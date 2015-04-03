@@ -153,10 +153,10 @@
             .IDProperty("CpnyID")
             .Fields(
                 X.ModelField().Name("ClassID").Type(ModelFieldType.String)
-                ,X.ModelField().Name("CpnyID").Type(ModelFieldType.String)
-                ,X.ModelField().Name("CpnyName").Type(ModelFieldType.String)
-                
-                
+                , X.ModelField().Name("CpnyID").Type(ModelFieldType.String)
+                , X.ModelField().Name("CpnyName").Type(ModelFieldType.String)
+
+
             )
         )
         .Proxy(
@@ -172,9 +172,13 @@
                             {
                                 ps.Add(new StoreParameter("ClassID", "App.cboClassID.value", ParameterMode.Raw));
                                 ps.Add(new StoreParameter("InvtID", "App.cboInvtID.value", ParameterMode.Raw));
-                                ps.Add(new StoreParameter("chooseGrid", "App.chooseGrid.value",ParameterMode.Raw));
+                                ps.Add(new StoreParameter("chooseGrid", "chooseGrid", ParameterMode.Raw));
                             })
-        .Listeners(p=>p.Load.Fn="loadDataGrid" )
+        .Listeners(p =>
+        {
+            p.Load.Fn = "loadDataGrid";
+            p.DataChanged.Handler = "frmChange();";
+        })
   )
 
 

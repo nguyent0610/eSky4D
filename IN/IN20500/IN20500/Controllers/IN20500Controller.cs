@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
+using System.Web.Hosting;
 namespace IN20500.Controllers
 {
     [DirectController]
@@ -35,12 +36,12 @@ namespace IN20500.Controllers
                 var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadIN20500");
                 if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
                 {
-                    _filePath = Server.MapPath("\\"+config.TextVal);
+                    _filePath = HostingEnvironment.ApplicationPhysicalPath+"\\" + config.TextVal;
                     _Path = config.TextVal;
                 }
                 else
                 {
-                    _filePath = Server.MapPath("\\" + "Images\\IN20500");
+                    _filePath =  HostingEnvironment.ApplicationPhysicalPath+"\\" + "Images\\IN20500";
                  
                 }
                 return _filePath;
@@ -155,7 +156,7 @@ namespace IN20500.Controllers
         }
 
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
+        [OutputCache(Duration = 1000000, VaryByParam = "none")]
         public PartialViewResult Body()
         {
             var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
@@ -602,8 +603,10 @@ namespace IN20500.Controllers
                         System.IO.File.Delete(oldPath);
                     }
                     _objHeader.Media = string.Empty;
-
+                    _db.SaveChanges();
                     return Json(new { success = true });
+
+                   
                 }
                 else
                 {
