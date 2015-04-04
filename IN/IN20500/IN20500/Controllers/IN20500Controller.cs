@@ -588,21 +588,20 @@ namespace IN20500.Controllers
 
 
                     // Xoa file cu di
-                    var oldPath = string.Format("{0}\\{1}", FilePath, _objHeader.Picture);
+                    var oldPath = string.Format("{0}\\{1}", FilePath, objInvtID.Picture);
                     if (System.IO.File.Exists(oldPath))
                     {
                         System.IO.File.Delete(oldPath);
                     }
-                    _objHeader.Picture = string.Empty;
-
+                  
 
                     // Xoa file cu di
-                    oldPath = string.Format("{0}\\{1}", FilePath, _objHeader.Media);
+                    oldPath = string.Format("{0}\\{1}", FilePath, objInvtID.Media);
                     if (System.IO.File.Exists(oldPath))
                     {
                         System.IO.File.Delete(oldPath);
                     }
-                    _objHeader.Media = string.Empty;
+                
                     _db.SaveChanges();
                     return Json(new { success = true });
 

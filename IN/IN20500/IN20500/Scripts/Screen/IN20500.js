@@ -90,7 +90,7 @@ var menuClick = function (command) {
             var curRecord = App.frmMain.getRecord();
             if (HQ.isDelete) {               
                 if (HQ.focus == 'header') {
-                    if (App.cboInvtID.value =="H") {
+                    if (App.cboApproveStatus.value == "H") {
 
                         HQ.message.show(11, '', 'deleteRecordForm');
                     } 
