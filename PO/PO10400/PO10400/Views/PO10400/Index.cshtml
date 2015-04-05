@@ -67,25 +67,43 @@
                 }               
                 else return "row-none";
             };
-            var onShowTooltip = function (toolTip, grid) {
-                var view = grid.getView(),
-                    record = view.getRecord(toolTip.triggerElement);
-                if (record.data.IsWarningStock) {
-                    data = HQ.common.getLang("row-pink");// + record.data.color;
+            var onShowTooltip = function (toolTip, grid, isHtmlEncode) {
+                var view = grid.getView().lockedView,
+                    store = grid.getStore(),
+                    record = view.getRecord(view.findItemByChild(toolTip.triggerElement)),
+                    column = view.getHeaderByCell(toolTip.triggerElement),
+                    data = "";
+                if (record.data.IsOverdue) {
+                    data = HQ.common.getLang("rowpink");// + record.data.color;
                 }
                 else if (record.data.IsWarningStock && record.data.IsWarningDeposit) {
-                    data = HQ.common.getLang("row-orange");// + record.data.color;
+                    data = HQ.common.getLang("roworange");// + record.data.color;
                 }
                 else if (record.data.IsWarningStock) {
-                    data = HQ.common.getLang("row-red");// + record.data.color;
+                    data = HQ.common.getLang("rowred");// + record.data.color;
                 }
                 else if (record.data.IsWarningDeposit) {
-                    data =HQ.common.getLang("row-yellow");// + record.data.color;
+                    data = HQ.common.getLang("rowyellow");// + record.data.color;
                 }
                 else data = "";
+                if (data) {
+                    if (isHtmlEncode) {
+                        toolTip.update(Ext.util.Format.htmlEncode(data));
+                    }
+                    else {
+                        toolTip.update(data);
+                    }
+                }
+                else {
+                    toolTip.hide();
+                }
+            }
+            //    var view = grid.getView(),
+            //        record = view.getRecord(toolTip.triggerElement);
+            //    
                     
-                toolTip.update(data);
-            };
+            //    toolTip.update(data);
+            //};
         </script>
 
         <title>@ViewBag.Title</title>

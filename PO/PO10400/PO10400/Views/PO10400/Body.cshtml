@@ -303,9 +303,14 @@
             lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
             //lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
         })
-            //, X.ToolTip().Target("App.grdDet.getView().el").Delegate(".x-grid-cell").TrackMouse(true).Listeners(lst => lst.Show.Handler = "onShowTooltip(this, App.grdDet);")                
+                     
     )// Form: frmMain
 )
+  @(X.ToolTip().Target("App.grdDet.getView().el")
+        .Delegate(".x-grid-cell")
+        .TrackMouse(true)
+        .Listeners(lst => lst.Show.Handler = "onShowTooltip(this, App.grdDet,true);") )
+
 @(X.Window()
         .ID("winDetail")
         .Title(Util.GetLang("EditPONbr"))
