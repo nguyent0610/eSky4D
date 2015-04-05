@@ -1,0 +1,194 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using PO10400;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "PO10400";
+    var acc = Session["PO10400"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/PO10400.js")' type="text/javascript"></script>
+        <style type="text/css">
+            .row-pink .x-grid-cell{
+                background-color: pink !important;
+            }
+            .row-orange .x-grid-cell{
+                background-color: orange !important;
+            }
+            .row-red .x-grid-cell{
+                background-color: red !important;
+            }
+
+            .row-yellow .x-grid-cell{
+                background-color: yellow !important;
+            }
+
+            .row-none .x-grid-cell{
+                background-color: none !important;
+            }
+        </style>    
+     
+   
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.bussinessDate = new Date('@DateTime.Now.Date');
+
+            var getRowClass = function (record, index) {
+                if (record.data.IsOverdue) {
+                    return "row-pink";// + record.data.color;
+                }
+                else if (record.data.IsWarningStock && record.data.IsWarningDeposit) {
+                    return "row-orange";// + record.data.color;
+                }
+                else if (record.data.IsWarningStock) {
+                    return "row-red";// + record.data.color;
+                }
+                else if (record.data.IsWarningDeposit) {
+                    return "row-yellow";// + record.data.color;
+                }               
+                else return "row-none";
+            };
+            var onShowTooltip = function (toolTip, grid) {
+                var view = grid.getView(),
+                    record = view.getRecord(toolTip.triggerElement);
+                if (record.data.IsWarningStock) {
+                    data = HQ.common.getLang("row-pink");// + record.data.color;
+                }
+                else if (record.data.IsWarningStock && record.data.IsWarningDeposit) {
+                    data = HQ.common.getLang("row-orange");// + record.data.color;
+                }
+                else if (record.data.IsWarningStock) {
+                    data = HQ.common.getLang("row-red");// + record.data.color;
+                }
+                else if (record.data.IsWarningDeposit) {
+                    data =HQ.common.getLang("row-yellow");// + record.data.color;
+                }
+                else data = "";
+                    
+                toolTip.update(data);
+            };
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+        @(HQ.Store().ID("stoPOType").HQProcedure("PO10400_pcPOType")
+                                    .HQParam(new StoreParameterCollection() { 
+                                                    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)                                   
+                                }).LoadData()
+        )
+        @*Make the store - the binding data of the form*@
+        <!-- Begin Cac store phu thuoc vao cboPONbr-->
+        @(Html.X().Store().ID("stoPO_Header").AutoLoad(false)   
+            .Model(Util.GenerateModel(typeof(PO_Header), "PO_HeaderModel", "BranchID,PONbr"))          
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetPO_Header", "PO10400"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("pONbr", "App.txtPONbr.getValue()", ParameterMode.Raw));
+                            })  
+            .Listeners(p=>p.Load.Fn="Popup.loadDataHeader" )            
+        )
+
+        @(Html.X().Store().ID("stoPO10400_pgLoadTaxTrans").AutoLoad(false)   
+                                .Model(Util.GenerateModel(typeof(PO10400_pgLoadTaxTrans_Result), "ModelPO10400_pgLoadTaxTrans_Result", ""))                                 
+                                .Proxy(
+                                        X.AjaxProxy()                
+                                        .Url(Url.Action("GetPO10400_pgLoadTaxTrans", "PO10400"))                
+                                        .ActionMethods(action =>
+                                        {
+                                            action.Read = HttpMethod.POST;
+                                        })
+                                        .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                                    ) 
+                                .Parameters(ps =>
+                                                {
+                                                    ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
+                                                    ps.Add(new StoreParameter("pONbr", "App.txtPONbr.getValue()", ParameterMode.Raw));
+                                                })
+                            .Listeners(p => p.Load.Handler = "Popup.loadstoPO10400_pgLoadTaxTrans();")       
+   
+        )
+         <!-- End Cac store phu thuoc vao cboPONbr-->
+         <!-- Begin Cac store phu thuoc vao cboBranchID-->
+        @HQ.Store().ID("stoPO10400_pdOM_UserDefault").HQProcedure("PO10400_pdOM_UserDefault").HQDBSys(false).AutoLoad(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                                                                        ,new StoreParameter() { Name = "@BranchID", Value = "App.txtBranchID.getValue()", Mode = ParameterMode.Raw}
+						                            }).LoadData()
+
+        @HQ.Store().ID("stoPO10400_pdPO_Setup").HQProcedure("PO10400_pdPO_Setup").AutoLoad(false).HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                                                                        ,new StoreParameter() { Name = "@BranchID", Value = "App.txtBranchID.getValue()", Mode = ParameterMode.Raw}
+						                            }).LoadData()
+
+        
+
+        <!-- End Cac store phu thuoc vao cboBranchID-->
+        
+        @(Html.X().Store().ID("stoPO10400_pdAP_VenDorTaxes").AutoLoad(false)   
+            .Model(Util.GenerateModel(typeof(PO10400_pdAP_VenDorTaxes_Result), "PO10400_pdAP_VenDorTaxes_ResultModel", "taxid"))          
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetAP_VendorTax", "PO10400"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("vendID", "App.txtVendID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("ordFromId", "", ParameterMode.Value));
+                            })          
+        )
+
+        @(HQ.Store().ID("stoPO10400_pdSI_Tax").HQProcedure("PO10400_pdSI_Tax").HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                                                                
+						                            }).LoadData().Listeners(lst => { lst.Load.Handler = "Popup.loadPO10400_pdSI_Tax()"; }).AutoLoad(true))
+
+        @(HQ.Store().ID("stoPO10400_pdIN_Inventory").HQProcedure("PO10400_pdIN_Inventory").HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                                                                
+						                            }).LoadData()
+                                                    .Listeners(lst => { lst.Load.Handler = "Popup.loadPO10400_pdIN_Inventory()"; }).AutoLoad(true))
+
+        @(HQ.Store().ID("stoPO10400_pdIN_UnitConversion").HQProcedure("PO10400_pdIN_UnitConversion").HQDBSys(false).LoadData()
+                        .Listeners(lst => { lst.Load.Handler = "Popup.loadPO10400_pdIN_UnitConversion()"; }).AutoLoad(true))
+      
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong PO10400Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>
