@@ -33,8 +33,11 @@ var menuClick = function (command) {
             }
             break;
         case "new":
-            App.buttonTree.setDisabled(false);
-            App.treeBranch.setDisabled(false);
+            App.pnlLeft.show();
+            App.cboTask.setDisabled(false);
+            App.lblDate.setDisabled(false);
+            App.btnProcess.setDisabled(false);
+            App.pnlDetail.hide();
             App.cboHistID.setValue('');
             App.lblDate.setValue(_dateServer);
             break;
@@ -68,11 +71,23 @@ var loadData = function () {
     var record = App.stoSYS_CloseDateHistHeader.getAt(0);
     App.frmMain.getForm().loadRecord(record);
 };
+
+var slmSYS_CloseDateHistDetail_SelectionChange = function (mdl, selected, eOpts) {
+    if (selected.length) {
+        App.tplDetail.overwrite(App.pnlDetail.body, selected[0].data);
+    }
+};
+
 var cboHistID_Select = function (sender,e) {
     if ((!HQ.isNew || sender.valueModels != null) && !App.stoSYS_CloseDateHistDetail.loading) {
         if (e) {
-            App.buttonTree.setDisabled(true);
-            App.treeBranch.setDisabled(true);
+            App.pnlLeft.hide();
+            App.cboTask.setDisabled(true);
+            App.lblDate.setDisabled(true);
+            App.btnProcess.setDisabled(true);
+            App.pnlDetail.show();
+            App.tplDetail.overwrite(App.pnlDetail.body, '');
+            App.grdSYS_CloseDateHistDetail.getSelectionModel().clearSelections();
             App.stoSYS_CloseDateHistDetail.reload();
         }
 
@@ -80,8 +95,13 @@ var cboHistID_Select = function (sender,e) {
 }
 var cboHistID_Change = function (sender, e) {
     if (!e) {
-        App.buttonTree.setDisabled(false);
-        App.treeBranch.setDisabled(false);
+        App.pnlLeft.show();
+        App.cboTask.setDisabled(false);
+        App.lblDate.setDisabled(false);
+        App.btnProcess.setDisabled(false);
+        App.pnlDetail.hide();
+        App.tplDetail.overwrite(App.pnlDetail.body, '');
+        App.grdSYS_CloseDateHistDetail.getSelectionModel().clearSelections();
         App.stoSYS_CloseDateHistDetail.reload();
     }
     
@@ -381,5 +401,15 @@ var myValidateRecord = function (filter, record, columnName) {
         }
     }
     return false;
+};
+
+var getRowClass = function (record, index) {
+    if (record.data.Status=='H') {
+        return "row-red";// + record.data.color;
+    }
+    else if (record.data.Status=='C') {
+        return "row-Yellow";// + record.data.color;
+    }
+    else return "row-none";
 };
 /////////////////////////////////////////////////////////////////////////

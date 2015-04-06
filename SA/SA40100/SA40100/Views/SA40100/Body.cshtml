@@ -21,90 +21,94 @@
     .Layout(LayoutType.Border)
     .Items(
         ////Thiet ke giao dien o day
-
-        X.Panel().ID("treeBranch")
+        X.Panel().ID("pnlLeft")
         .Region(Region.West).Flex(2)
-        .MinWidth(150).Split(true).AutoScroll(true)
-            .DirectEvents(de =>
-            {
-                de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
-                de.AfterRender.Url = Url.Action("SA40100GetTreeBranch");
-                de.AfterRender.CleanRequest = true;
-                de.AfterRender.Method = HttpMethod.POST;
-                de.AfterRender.Success = "";
-                de.AfterRender.Timeout = 60000;
-                de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                de.AfterRender.EventMask.ShowMask = true;
-                de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                de.AfterRender.EventMask.MinDelay = 500;
-                
-                de.Expand.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
-                de.Expand.Url = Url.Action("SA40100GetTreeBranch");
-                de.Expand.CleanRequest = true;
-                de.Expand.Method = HttpMethod.POST;
-                de.Expand.Success = "";
-                de.Expand.Timeout = 60000;
-                de.Expand.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                de.Expand.EventMask.ShowMask = true;
-                de.Expand.EventMask.Msg = Util.GetLang("LoadingData");
-                de.Expand.EventMask.MinDelay = 500;
-                
-            })
-        .BottomBar(
-            X.Toolbar()
-            .Items(
-                X.ToolbarFill()
-
-                , HQ.Button().ID("btnExpand")
-                .HQLangCode("Expand")
-                .Icon(Icon.BulletTogglePlus)
-                .Handler("btnExpand_click")
-
-                , X.ToolbarSpacer()
-                , X.ToolbarSeparator()
-                , X.ToolbarSpacer()
-
-                , HQ.Button().ID("btnCollapse")
-                .HQLangCode("Collapse")
-                .Icon(Icon.BulletToggleMinus)
-                .Handler("btnCollapse_click")
-
-                , X.ToolbarFill()
-            )
-        ) // treeBranch
-
-        // Second Column
-        , X.Panel().ID("buttonTree")
-        .Region(Region.Center).Flex(1)
-        .Layout(LayoutType.VBox)
-        .MinWidth(50).Split(true)
-        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+        .Layout(LayoutType.Border)
+        .Split(true)
         .Items(
-            HQ.Button().ID("btnAddAll")
-            .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
-            .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
-            .Handler("btnAddAll_click")
+            X.Panel().ID("treeBranch")
+            .Region(Region.West).Flex(4)
+            .Split(true).AutoScroll(true).MinWidth(150)
+                .DirectEvents(de =>
+                {
+                    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
+                    de.AfterRender.Url = Url.Action("SA40100GetTreeBranch");
+                    de.AfterRender.CleanRequest = true;
+                    de.AfterRender.Method = HttpMethod.POST;
+                    de.AfterRender.Success = "";
+                    de.AfterRender.Timeout = 60000;
+                    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                    de.AfterRender.EventMask.ShowMask = true;
+                    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                    de.AfterRender.EventMask.MinDelay = 500;
+                
+                    de.Expand.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
+                    de.Expand.Url = Url.Action("SA40100GetTreeBranch");
+                    de.Expand.CleanRequest = true;
+                    de.Expand.Method = HttpMethod.POST;
+                    de.Expand.Success = "";
+                    de.Expand.Timeout = 60000;
+                    de.Expand.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                    de.Expand.EventMask.ShowMask = true;
+                    de.Expand.EventMask.Msg = Util.GetLang("LoadingData");
+                    de.Expand.EventMask.MinDelay = 500;
+                
+                })
+            .BottomBar(
+                X.Toolbar()
+                .Items(
+                    X.ToolbarFill()
 
-            , HQ.Button().ID("btnAdd")
-            .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
-            .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
-            .Handler("btnAdd_click")
+                    , HQ.Button().ID("btnExpand")
+                    .HQLangCode("Expand")
+                    .Icon(Icon.BulletTogglePlus)
+                    .Handler("btnExpand_click")
 
-            , HQ.Button().ID("btnDel")
-            .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
-            .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
-            .Handler("btnDel_click")
+                    , X.ToolbarSpacer()
+                    , X.ToolbarSeparator()
+                    , X.ToolbarSpacer()
 
-            , HQ.Button().ID("btnDelAll")
-            .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
-            .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
-            .Handler("btnDelAll_click")
-        ) // Container
+                    , HQ.Button().ID("btnCollapse")
+                    .HQLangCode("Collapse")
+                    .Icon(Icon.BulletToggleMinus)
+                    .Handler("btnCollapse_click")
 
+                    , X.ToolbarFill()
+                )
+            ) // treeBranch
+
+            // Second Column
+            , X.Panel().ID("treeButton")
+            .Region(Region.Center)
+            .Layout(LayoutType.VBox)
+            .MinWidth(100).Flex(2).Split(true)
+            .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+            .Items(
+                HQ.Button().ID("btnAddAll")
+                .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                .Handler("btnAddAll_click").Width(100)
+
+                , HQ.Button().ID("btnAdd")
+                .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                .Handler("btnAdd_click").Width(100)
+
+                , HQ.Button().ID("btnDel")
+                .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                .Handler("btnDel_click").Width(100)
+
+                , HQ.Button().ID("btnDelAll")
+                .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                .Handler("btnDelAll_click").Width(100)
+            ) // Container
+        )
 
         //Third Column
         , X.Panel()
-        .Region(Region.East).Flex(6)
+        .Region(Region.Center).Flex(4)
         .Layout(LayoutType.Border)
         .Split(true).AutoScroll(true)
         .Items(
@@ -172,7 +176,7 @@
             .Items(
                 X.GridPanel()
                 .Scroll(ScrollMode.Both)
-                .View(X.GridView().TrackOver(false))
+                .View(X.GridView().GetRowClass(function => function.Fn = "getRowClass").TrackOver(false))
                 .ID("grdSYS_CloseDateHistDetail")
                 .SelectionMemory(false)
                 .Region(Region.Center).Flex(1)
@@ -247,7 +251,10 @@
                     .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
                     .Listeners(l => l.Command.Handler = "grdSYS_CloseDateHistDetail_Reject(record);")
                 )
-                .SelectionModel(X.RowSelectionModel().ID("slmSYS_CloseDateHistDetail").Mode(SelectionMode.Multi))
+                .SelectionModel(
+                    X.RowSelectionModel().ID("slmSYS_CloseDateHistDetail").Mode(SelectionMode.Multi)
+                    //.Listeners(lst=>lst.SelectionChange.Fn="slmSYS_CloseDateHistDetail_SelectionChange")
+                )
                 .BottomBar(
                     X.PagingToolbar()
                     .Items(
@@ -290,7 +297,25 @@
                             X.NumericFilter().DataIndex("WrkUpperDays")
                         )
                 )
+                .Listeners(ls =>
+                    ls.SelectionChange.Handler = "selected.length && App.tplDetail.overwrite(App.pnlDetail.body, selected[0].data);"
+                )            
             )//Grid
+            ,X.Panel().ID("pnlDetail")
+            .Region(Region.South)
+            .Layout(LayoutType.Border)
+            .Html("")
+            .MinHeight(170)
+            .AutoScroll(true)
+            .Hidden(true)
+            //panel detail duoi grid
         )//Panel
     )//frmMain
 ))
+
+@(X.XTemplate()
+    .ID("tplDetail")
+    .Html(@<text>
+        <h3 style="color:red" >{ContentHist}</h3><br/>
+    </text>)
+)

@@ -128,6 +128,7 @@ namespace SA40100.Controllers
         {
             try
             {
+                string HistID = data["cboHistID"];
                 string Task = data["cboTask"];
                 string WrkDate_temp = data["lblDate"];
                 DateTime dtOpen;
@@ -143,9 +144,12 @@ namespace SA40100.Controllers
                 //lstSYS_CloseDateHistHeader.Created.AddRange(lstSYS_CloseDateHistHeader.Updated);
                 //foreach (SYS_CloseDateHistHeader curHeader in lstSYS_CloseDateHistHeader.Created)
                 //{
+                var objHeader = _sys.SYS_CloseDateHistHeader.FirstOrDefault(p => p.HistID == HistID);
+                if (objHeader == null)
+                {
                     string _dateServer = DateTime.Now.ToString("yyyyMMdd");
                     var ID = _sys.SA40100_pcCreateHistID(_dateServer).FirstOrDefault();
-                    
+
                     var header = new SYS_CloseDateHistHeader();
                     header.HistID = ID;
                     header.Task = Task;
@@ -158,6 +162,7 @@ namespace SA40100.Controllers
                     header.LUpd_User = _userName;
 
                     _sys.SYS_CloseDateHistHeader.AddObject(header);
+
                     #region Save CD
                     if (Task.Trim() == "CD")
                     {
@@ -185,7 +190,7 @@ namespace SA40100.Controllers
                                 obj.LUpd_DateTime = DateTime.Now;
                                 obj.LUpd_Prog = _screenNbr;
                                 obj.LUpd_User = _userName;
-                               
+
                                 obj.WrkAdjDateBefore = grdSetup.WrkAdjDateBefore.Short();
                                 obj.WrkDateChk = grdSetup.WrkDateChk;
                                 obj.WrkLowerDays = grdSetup.WrkLowerDays;
@@ -222,6 +227,7 @@ namespace SA40100.Controllers
                         }
                     }
                     #endregion
+
                     #region Save OD
                     else
                     {
@@ -271,8 +277,20 @@ namespace SA40100.Controllers
                         }
                     }
                     #endregion
-                //}
+
                 #endregion
+                }
+                else
+                {
+                    foreach (SA40100_pgSYS_CloseDateHistDetail_Result deleted in lstSYS_CloseDateHistDetail.Deleted)
+                    {
+                        var del = _sys.SYS_CloseDateHistDetail.FirstOrDefault(p => p.BranchID == deleted.BranchID && p.HistID == HistID);
+                        if (del != null)
+                        {
+                            _sys.SYS_CloseDateHistDetail.DeleteObject(del);
+                        }
+                    }
+                }
 
                 _sys.SaveChanges();
                 return Json(new { success = true });
