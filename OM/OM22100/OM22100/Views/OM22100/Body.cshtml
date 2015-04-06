@@ -1,0 +1,56 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM22100;
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Anchor)
+        .ID("dataForm")
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(10)
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar(tools:new AbstractComponent[]{
+                X.FileUploadField()
+                .ID("ImportTemplate")
+                .ButtonText("Import")            
+                .ButtonOnly(true)
+                .Icon(Icon.ImageAdd)
+                .Listeners(p=>{
+                    p.Change.Fn = "ImportTemplate_Change";
+                })
+                    
+                ,X.Button()
+                .ID("ExportTemplate")                
+                .Text(Util.GetLang("ExportTemplate"))
+                .Icon(Icon.ImageAdd)
+                .Listeners(p=>{
+                    p.Click.Fn = "ExportExel";
+                })
+            }))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .Items(
+           X.Panel().ID("pnlHeader")
+            .Region(Region.North)
+            .Items(
+                
+            )
+
+            , X.Panel().ID("pnlGrid")
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .Items(
+            
+            )    
+        )//FrmMain
+    )
+)

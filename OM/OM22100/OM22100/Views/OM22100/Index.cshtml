@@ -1,0 +1,48 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM22100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;    
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "OM22100";
+    var acc = Session["OM22100"] as AccessRight;
+    DateTime bussinessDate = DateTime.Now.ToDateShort();
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình OM22100.js tùy theo màn hình đổi lại-->
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/OM22100.js")' type="text/javascript"></script>
+        <style>
+            .x-grid-row-over .x-grid-cell-inner {
+                font-weight : bold;
+            }
+        </style>
+        <script>
+            HQ.bussinessDate = new Date('@ViewBag.BussinessDate');//lay ngay server trong controller
+            HQ.bussinessTime = new Date('@ViewBag.BussinessTime');//lay ngay co gio cua server trong controller
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+
+        </script>  
+        <title>@ViewBag.Title</title>
+    </head>
+    <body> 
+        @Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme))
+        @{ Html.RenderAction("Body", new { lang =@Current.LangID}); }
+        
+    </body>
+</html>
+ 
