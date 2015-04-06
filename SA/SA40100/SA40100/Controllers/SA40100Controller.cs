@@ -130,10 +130,7 @@ namespace SA40100.Controllers
             {
                 string HistID = data["cboHistID"];
                 string Task = data["cboTask"];
-                string WrkDate_temp = data["lblDate"];
-                DateTime dtOpen;
-                DateTime WrkDate = DateTime.Parse(WrkDate_temp).ToDateShort();
-
+                
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_CloseDateHistHeader"]);
                 ChangeRecords<SYS_CloseDateHistHeader> lstSYS_CloseDateHistHeader = dataHandler.BatchObjectData<SYS_CloseDateHistHeader>();
 
@@ -141,12 +138,13 @@ namespace SA40100.Controllers
                 ChangeRecords<SA40100_pgSYS_CloseDateHistDetail_Result> lstSYS_CloseDateHistDetail = dataHandler1.BatchObjectData<SA40100_pgSYS_CloseDateHistDetail_Result>();
 
                 #region Save Header
-                //lstSYS_CloseDateHistHeader.Created.AddRange(lstSYS_CloseDateHistHeader.Updated);
-                //foreach (SYS_CloseDateHistHeader curHeader in lstSYS_CloseDateHistHeader.Created)
-                //{
                 var objHeader = _sys.SYS_CloseDateHistHeader.FirstOrDefault(p => p.HistID == HistID);
                 if (objHeader == null)
                 {
+                    string WrkDate_temp = data["lblDate"];
+                    DateTime dtOpen;
+                    DateTime WrkDate = DateTime.Parse(WrkDate_temp).ToDateShort();
+
                     string _dateServer = DateTime.Now.ToString("yyyyMMdd");
                     var ID = _sys.SA40100_pcCreateHistID(_dateServer).FirstOrDefault();
 
@@ -301,30 +299,6 @@ namespace SA40100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        #endregion
-
-        //Update SYS_CloseDateSetUp
-        #region Update SYS_CloseDateSetUp
-        //private void UpdatingSYS_CloseDateSetUp(SYS_CloseDateHistDetail t, SA40100_pgSYS_CloseDateHistDetail_Result s, bool isNew)
-        //{
-        //    if (isNew)
-        //    {
-        //        t.BranchID = s.BranchID;
-        //        t.Crtd_DateTime = DateTime.Now;
-        //        t.Crtd_Prog = _screenNbr;
-        //        t.Crtd_User = _userName;
-        //    }
-        //    t.WrkAdjDate = s.WrkAdjDate;
-        //    t.WrkDateChk = s.WrkDateChk;
-        //    t.WrkLowerDays = s.WrkLowerDays;
-        //    t.WrkOpenDate = s.WrkOpenDate;
-        //    t.WrkUpperDays = s.WrkUpperDays;
-
-        //    t.LUpd_DateTime = DateTime.Now;
-        //    t.LUpd_Prog = _screenNbr;
-        //    t.LUpd_User = _userName;
-
-        //}
         #endregion
     }
 }

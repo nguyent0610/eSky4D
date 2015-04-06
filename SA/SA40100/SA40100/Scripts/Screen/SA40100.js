@@ -107,7 +107,11 @@ var cboHistID_Change = function (sender, e) {
     
 };
 var btnProcess_Click = function (sender, e) {
-    
+    if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+        if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoSYS_CloseDateHistDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+            save();
+        }
+    }
 };
 
 var beforenodedrop = function (node, data, overModel, dropPosition, dropFn) {
@@ -168,6 +172,7 @@ var btnAddAll_click = function (btn, e, eOpts) {
         HQ.message.show(4, '', '');
     }
 };
+
 var addNode = function (node) {
     if (node.data.Type == "Company") {
         var record = HQ.store.findInStore(App.grdSYS_CloseDateHistDetail.store,
@@ -196,7 +201,8 @@ var addNode = function (node) {
             addNode(itm);
         });
     }
-}
+};
+
 var btnAdd_click = function (btn, e, eOpts) {
     if (HQ.isUpdate) {
         var allNodes = App.treePanelBranch.getCheckedNodes();
@@ -303,9 +309,7 @@ var firstLoad = function () {
     App.cboBranchID.store.load(function () {
         App.stoSYS_CloseDateHistDetail.reload();
     });
-
-
-}
+};
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
