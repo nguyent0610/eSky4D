@@ -264,7 +264,7 @@
                     , X.Column().Text(Util.GetLang("Shipping Address")).DataIndex("ShipAddr1")
                     , X.Column().Text(Util.GetLang("POTypeDescr")).DataIndex("POType").Renderer("Process.renderPOType")
                     , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Renderer("Process.renderStatus")
-                    , X.Column().Text(Util.GetLang("ReasonRSM")).DataIndex("ReasonRSM").Hidden(true)                               
+                    //, X.Column().Text(Util.GetLang("ReasonRSM")).DataIndex("ReasonRSM").Hidden(true)                               
                     , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TotQty")).DataIndex("TotalQty").Format("0,000,000")
                     , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TxblAmt")).DataIndex("TxblAmt").Format("0,000,000")
                     , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TaxAmt")).DataIndex("TaxAmt").Format("0,000,000")
@@ -296,6 +296,23 @@
                         )
                         .Plugins(X.ProgressBarPager().ID("pagDetail"))
                     )
+            .Features(
+                        X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("BranchID"),
+                            X.StringFilter().DataIndex("BranchName"),
+                            X.StringFilter().DataIndex("PONbr"),
+                            X.DateFilter().DataIndex("PODate"),
+                            X.StringFilter().DataIndex("ShipmentPlan"),
+                            X.StringFilter().DataIndex("ShipAddr1"),
+                            X.StringFilter().DataIndex("POType"),
+                            X.StringFilter().DataIndex("Status"),
+                            X.NumericFilter().DataIndex("TotalQty"),
+                            X.NumericFilter().DataIndex("TxblAmt"),
+                            X.NumericFilter().DataIndex("TaxAmt"),
+                            X.NumericFilter().DataIndex("TotAmt")
+                        ))
                     // grdDet
         )
         .Listeners(lst =>

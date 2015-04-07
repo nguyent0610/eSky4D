@@ -330,8 +330,11 @@ var Popup = {
         App.txtPONbr.setValue('');
         App.txtVendID.setValue('');
         App.txtBranchName.setValue('');
+		App.cboHandle.setValue('');
         App.stoPO_Header.reload();
         App.grdDet.store.reload();
+        App.txtTotAmt.setValue(0);
+        App.txtTotQty.setValue(0);
     },
     loadSourcePopup: function () {     
         HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));       
