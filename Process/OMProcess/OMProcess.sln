@@ -5,13 +5,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMProcess", "OMProcess\OMPr
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
+		SccNumberOfProjects = 1
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.130.4:8088/tfs/hqsoft
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = OMProcess\\OMProcess.csproj
-		SccProjectName1 = OMProcess
-		SccLocalPath1 = OMProcess
+		SccProjectUniqueName0 = OMProcess\\OMProcess.csproj
+		SccProjectName0 = OMProcess
+		SccAuxPath0 = http://192.168.130.4:8088/tfs/hqsoft
+		SccLocalPath0 = OMProcess
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
