@@ -1,7 +1,17 @@
 var _beginStatus = "H";
 
 var Process = {
-
+    checkAllValid: function (store) {
+        var flag = true;
+        store.each(function (record) {
+            if (record.data.Selected && !record.data.LevelID) {
+                flag = false;
+                HQ.message.show(15, HQ.common.getLang("LevelID"));
+                return false;
+            }
+        });
+        return flag;
+    }
 };
 
 var Store = {
@@ -11,7 +21,9 @@ var Store = {
 var Event = {
     Form: {
         btnLoad_click: function (btn, e) {
-            App.grdDet.store.reload();
+            if (App.frmMain.isValid()) {
+                App.grdDet.store.reload();
+            }
         },
 
         btnImport_click: function (btn, e) {
@@ -27,7 +39,7 @@ var Event = {
         },
 
         cboDisplayID_change: function (cbo, newValue, oldValue, eOpts) {
-            App.cboLevelID.store.reload();
+            //App.cboLevelID.store.reload();
         },
 
         menuClick: function (command) {
@@ -45,33 +57,37 @@ var Event = {
                     HQ.grid.last(App.grdDet);
                     break;
                 case "refresh":
-                    App.grdDet.store.reload();
+                    if (App.frmMain.isValid()) {
+                        App.grdDet.store.reload();
+                    }
                     break;
                 case "save":
                     if (HQ.isUpdate) {
                         if (App.frmMain.isValid()) {
-                            App.frmMain.submit({
-                                url: 'OM22002/SaveData',
-                                waitMsg: HQ.common.getLang('Submiting') + "...",
-                                timeout: 1800000,
-                                params: {
-                                    lstCustChange: HQ.store.getData(App.grdDet.store),
-                                },
-                                success: function (msg, data) {
-                                    if (data.result.msgCode) {
-                                        HQ.message.show(data.result.msgCode);
+                            if (Process.checkAllValid(App.grdDet.store)) {
+                                App.frmMain.submit({
+                                    url: 'OM22002/SaveData',
+                                    waitMsg: HQ.common.getLang('Submiting') + "...",
+                                    timeout: 1800000,
+                                    params: {
+                                        lstCustChange: HQ.store.getData(App.grdDet.store),
+                                    },
+                                    success: function (msg, data) {
+                                        if (data.result.msgCode) {
+                                            HQ.message.show(data.result.msgCode);
+                                        }
+                                        App.grdDet.store.reload();
+                                    },
+                                    failure: function (msg, data) {
+                                        if (data.result.msgCode) {
+                                            HQ.message.show(data.result.msgCode);
+                                        }
+                                        else {
+                                            HQ.message.process(msg, data, true);
+                                        }
                                     }
-                                    App.grdDet.store.reload();
-                                },
-                                failure: function (msg, data) {
-                                    if (data.result.msgCode) {
-                                        HQ.message.show(data.result.msgCode);
-                                    }
-                                    else {
-                                        HQ.message.process(msg, data, true);
-                                    }
-                                }
-                            });
+                                });
+                            }
                         }
                     }
                     else {

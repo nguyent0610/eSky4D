@@ -100,33 +100,10 @@ namespace OM22002
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="zone">No Metadata Documentation available.</param>
-        /// <param name="territory">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="displayID">No Metadata Documentation available.</param>
-        /// <param name="levelID">No Metadata Documentation available.</param>
-        public ObjectResult<OM22002_pgCust_Result> OM22002_pgCust(global::System.String zone, global::System.String territory, global::System.String branchID, global::System.String displayID, global::System.String levelID)
+        public ObjectResult<OM22002_pgCust_Result> OM22002_pgCust(global::System.String branchID, global::System.String displayID)
         {
-            ObjectParameter zoneParameter;
-            if (zone != null)
-            {
-                zoneParameter = new ObjectParameter("Zone", zone);
-            }
-            else
-            {
-                zoneParameter = new ObjectParameter("Zone", typeof(global::System.String));
-            }
-    
-            ObjectParameter territoryParameter;
-            if (territory != null)
-            {
-                territoryParameter = new ObjectParameter("Territory", territory);
-            }
-            else
-            {
-                territoryParameter = new ObjectParameter("Territory", typeof(global::System.String));
-            }
-    
             ObjectParameter branchIDParameter;
             if (branchID != null)
             {
@@ -147,17 +124,7 @@ namespace OM22002
                 displayIDParameter = new ObjectParameter("DisplayID", typeof(global::System.String));
             }
     
-            ObjectParameter levelIDParameter;
-            if (levelID != null)
-            {
-                levelIDParameter = new ObjectParameter("LevelID", levelID);
-            }
-            else
-            {
-                levelIDParameter = new ObjectParameter("LevelID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<OM22002_pgCust_Result>("OM22002_pgCust", zoneParameter, territoryParameter, branchIDParameter, displayIDParameter, levelIDParameter);
+            return base.ExecuteFunction<OM22002_pgCust_Result>("OM22002_pgCust", branchIDParameter, displayIDParameter);
         }
 
         #endregion
@@ -330,7 +297,7 @@ namespace OM22002
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String LevelID
         {
@@ -340,14 +307,11 @@ namespace OM22002
             }
             set
             {
-                if (_LevelID != value)
-                {
-                    OnLevelIDChanging(value);
-                    ReportPropertyChanging("LevelID");
-                    _LevelID = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("LevelID");
-                    OnLevelIDChanged();
-                }
+                OnLevelIDChanging(value);
+                ReportPropertyChanging("LevelID");
+                _LevelID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LevelID");
+                OnLevelIDChanged();
             }
         }
         private global::System.String _LevelID;
@@ -712,14 +676,16 @@ namespace OM22002
         /// <summary>
         /// Create a new OM22002_pgCust_Result object.
         /// </summary>
+        /// <param name="levelID">Initial value of the LevelID property.</param>
         /// <param name="rate">Initial value of the Rate property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="custName">Initial value of the CustName property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="slsperID">Initial value of the SlsperID property.</param>
-        public static OM22002_pgCust_Result CreateOM22002_pgCust_Result(global::System.Double rate, global::System.String custID, global::System.String custName, global::System.String branchID, global::System.String slsperID)
+        public static OM22002_pgCust_Result CreateOM22002_pgCust_Result(global::System.String levelID, global::System.Double rate, global::System.String custID, global::System.String custName, global::System.String branchID, global::System.String slsperID)
         {
             OM22002_pgCust_Result oM22002_pgCust_Result = new OM22002_pgCust_Result();
+            oM22002_pgCust_Result.LevelID = levelID;
             oM22002_pgCust_Result.Rate = rate;
             oM22002_pgCust_Result.CustID = custID;
             oM22002_pgCust_Result.CustName = custName;
@@ -783,7 +749,7 @@ namespace OM22002
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String LevelID
         {
@@ -795,7 +761,7 @@ namespace OM22002
             {
                 OnLevelIDChanging(value);
                 ReportPropertyChanging("LevelID");
-                _LevelID = StructuralObject.SetValidValue(value, true);
+                _LevelID = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("LevelID");
                 OnLevelIDChanged();
             }

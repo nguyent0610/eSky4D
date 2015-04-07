@@ -37,9 +37,9 @@ namespace OM22002.Controllers
             return PartialView();
         }
 
-        public ActionResult GetDet(string zone, string territory, string cpnyID, string displayID, string levelID)
+        public ActionResult GetDet(string cpnyID, string displayID)
         {
-            var dets = _db.OM22002_pgCust(zone, territory, cpnyID, displayID, levelID).ToList();
+            var dets = _db.OM22002_pgCust(cpnyID, displayID).ToList();
             return this.Store(dets);
         }
 
@@ -52,43 +52,57 @@ namespace OM22002.Controllers
 
                 foreach (var updated in lstCustChange.Updated)
                 {
-                    var regisObj = _db.OM_TDisplayCustomer.FirstOrDefault(p => p.BranchID == updated.BranchID 
-                        && p.SlsperID == updated.SlsperID && p.CustID == updated.CustID 
-                        && p.DisplayID == updated.DisplayID && p.LevelID != updated.LevelID);
-                    if (regisObj != null) continue;
-
-                    regisObj = _db.OM_TDisplayCustomer.FirstOrDefault(p => p.BranchID == updated.BranchID
-                         && p.SlsperID == updated.SlsperID && p.CustID == updated.CustID
-                        && p.DisplayID == updated.DisplayID && p.LevelID == updated.LevelID);
-                    if (regisObj == null)
+                    if (!string.IsNullOrWhiteSpace(updated.DisplayID))
                     {
-                        regisObj = new OM_TDisplayCustomer()
+                        var regisObj = _db.OM_TDisplayCustomer.FirstOrDefault(p => p.BranchID == updated.BranchID
+                            && p.SlsperID == updated.SlsperID && p.CustID == updated.CustID
+                            && p.DisplayID == updated.DisplayID);// && p.LevelID != updated.LevelID);
+                        if (regisObj != null)
                         {
-                            BranchID = updated.BranchID,
-                            CustID = updated.CustID,
-                            DisplayID = updated.DisplayID,
-                            LevelID = updated.LevelID,
-                            Rate = (double)updated.Rate,
-                            SlsperID = updated.SlsperID,
-                            Crtd_DateTime = DateTime.Now,
-                            Crtd_Prog = _screenNbr,
-                            Crtd_User = Current.UserName,
+                            throw new MessageException("1003","");
+                        }
+                        else
+                        {
+                            //regisObj = _db.OM_TDisplayCustomer.FirstOrDefault(p => p.BranchID == updated.BranchID
+                            //     && p.SlsperID == updated.SlsperID && p.CustID == updated.CustID
+                            //    && p.DisplayID == updated.DisplayID && p.LevelID == updated.LevelID);
+                            if (regisObj == null)
+                            {
+                                regisObj = new OM_TDisplayCustomer()
+                                {
+                                    BranchID = updated.BranchID,
+                                    CustID = updated.CustID,
+                                    DisplayID = updated.DisplayID,
+                                    LevelID = updated.LevelID,
+                                    Rate = (double)updated.Rate,
+                                    SlsperID = updated.SlsperID,
+                                    Crtd_DateTime = DateTime.Now,
+                                    Crtd_Prog = _screenNbr,
+                                    Crtd_User = Current.UserName,
 
-                        };
-                        _db.OM_TDisplayCustomer.AddObject(regisObj);
+                                };
+                                _db.OM_TDisplayCustomer.AddObject(regisObj);
 
+                            }
+                            regisObj.LUpd_DateTime = DateTime.Now;
+                            regisObj.LUpd_Prog = _screenNbr;
+                            regisObj.LUpd_User = Current.UserName;
+                            regisObj.Rate = (double)updated.Rate;
+                            regisObj.Territory = updated.Territory.PassNull();
+                            regisObj.Zone = updated.Zone;
+                            regisObj.Status = "H";
+                            regisObj.PercentImage = 0;
+                            regisObj.PercentSales = 0;
+
+                            _db.SaveChanges();
+                        }
                     }
-                    regisObj.LUpd_DateTime = DateTime.Now;
-                    regisObj.LUpd_Prog = _screenNbr;
-                    regisObj.LUpd_User = Current.UserName;
-                    regisObj.Rate = (double)updated.Rate;
-                    regisObj.Territory = updated.Territory.PassNull();
-                    regisObj.Zone = updated.Zone;
-                    regisObj.Status = "H";
-                    regisObj.PercentImage = 0;
-                    regisObj.PercentSales = 0;
-
-                    _db.SaveChanges();
+                    else
+                    {
+                        throw new MessageException("15", "", new string[] { 
+                            Util.GetLang("LevelID")
+                        });
+                    }
                 }
 
                 return Json(new { success = true });

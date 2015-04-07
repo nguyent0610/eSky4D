@@ -37,32 +37,6 @@
     <body>
         @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
 
-        @*Make the store - the binding data of the form*@
-        @(
-            X.Store().ID("stoDet")
-            .AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(OM22002_pgCust_Result), "mdlDet", ""))       
-            .Proxy(
-                X.AjaxProxy()                
-                .Url(Url.Action("GetDet", "OM22002"))                
-                .ActionMethods(action =>
-                {
-                    action.Read = HttpMethod.POST;
-                })
-                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-            ) 
-            .Parameters(ps =>
-            {
-                ps.Add(new StoreParameter("zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                ps.Add(new StoreParameter("territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
-                ps.Add(new StoreParameter("cpnyID", "App.cboCpny.getValue().join(',')", ParameterMode.Raw));
-                ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
-                ps.Add(new StoreParameter("levelID", "App.cboLevelID.getValue()", ParameterMode.Raw));
-            })      
-            //.Listeners(p=>p.Load.Fn="Store.stoDet_load" )
-            // Store: stoDet
-        )
-
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 

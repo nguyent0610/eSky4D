@@ -14,7 +14,6 @@
             <PropertyRef Name="SlsperID" />
             <PropertyRef Name="CustID" />
             <PropertyRef Name="DisplayID" />
-            <PropertyRef Name="LevelID" />
           </Key>
           <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="SlsperID" Type="varchar" Nullable="false" MaxLength="50" />
@@ -37,25 +36,19 @@
           <Property Name="Type" Type="varchar" MaxLength="2" />
         </EntityType>
         <Function Name="OM22002_pgCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Zone" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="Territory" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="BranchID" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="DisplayID" Type="varchar" Mode="In" />
-          <Parameter Name="LevelID" Type="varchar" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OM22002Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
         <EntityContainer Name="OM22002Entities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="OM_TDisplayCustomer" EntityType="OM22002Model.OM_TDisplayCustomer" />
           <FunctionImport Name="OM22002_pgCust" ReturnType="Collection(OM22002Model.OM22002_pgCust_Result)">
-            <Parameter Name="Zone" Mode="In" Type="String" />
-            <Parameter Name="Territory" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="DisplayID" Mode="In" Type="String" />
-            <Parameter Name="LevelID" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="OM_TDisplayCustomer" EntityType="OM22002Model.OM_TDisplayCustomer" />
         </EntityContainer>
         <EntityType Name="OM_TDisplayCustomer">
           <Key>
@@ -63,7 +56,6 @@
             <PropertyRef Name="SlsperID" />
             <PropertyRef Name="CustID" />
             <PropertyRef Name="DisplayID" />
-            <PropertyRef Name="LevelID" />
           </Key>
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -88,7 +80,7 @@
         <ComplexType Name="OM22002_pgCust_Result">
           <Property Type="Boolean" Name="Selected" Nullable="true" />
           <Property Type="String" Name="DisplayID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="LevelID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LevelID" Nullable="false" MaxLength="50" />
           <Property Type="Double" Name="Rate" Nullable="false" />
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
@@ -104,23 +96,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="OM22002Entities">
-          <FunctionImportMapping FunctionImportName="OM22002_pgCust" FunctionName="eBiz4DWebAppModel.Store.OM22002_pgCust">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM22002Model.OM22002_pgCust_Result">
-                <ScalarProperty Name="Selected" ColumnName="Selected" />
-                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
-                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
-                <ScalarProperty Name="Rate" ColumnName="Rate" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="CustName" ColumnName="CustName" />
-                <ScalarProperty Name="Zone" ColumnName="Zone" />
-                <ScalarProperty Name="Territory" ColumnName="Territory" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
-                <ScalarProperty Name="SlsName" ColumnName="SlsName" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="OM_TDisplayCustomer">
             <EntityTypeMapping TypeName="OM22002Model.OM_TDisplayCustomer">
               <MappingFragment StoreEntitySet="OM_TDisplayCustomer">
@@ -146,6 +121,23 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM22002_pgCust" FunctionName="eBiz4DWebAppModel.Store.OM22002_pgCust">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM22002Model.OM22002_pgCust_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="SlsName" ColumnName="SlsName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

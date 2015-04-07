@@ -28,7 +28,7 @@
 
                 // First Column
                 X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
-                .MinWidth(250)//.Flex(1)
+                .MinWidth(250).Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
                     HQ.Combo().ID("cboZone")
@@ -43,6 +43,7 @@
                     .Listeners(l =>
                     {
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Handler = "App.cboTerritory.store.reload()";
                     })
                     
                     ,HQ.Combo().ID("cboTerritory")
@@ -52,26 +53,29 @@
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        , new StoreParameter("@Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw)
                     })
                     .LoadData()
                     .Listeners(l =>
                     {
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Handler = "App.cboCpny.store.reload()";
                     })
                 ) // First Column
 
                 // Second Column
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
-                .MinWidth(250)//.Flex(1)
+                .MinWidth(250).Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
-                     HQ.Combo().ID("cboCpny")
+                    HQ.Combo().ID("cboCpny")
                      .HQLangCode("Branch").HQProcedure("OM22002_pcBranchAllByUser")
                     .HQColumnShow("BranchID,BranchName").ValueField("BranchID").DisplayField("BranchID")
-                    .HQHeightWidth(400, 300).MultiSelect(true)
+                    .HQHeightWidth(400, 300).MultiSelect(true).AllowBlank(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        , new StoreParameter("@Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw)
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -94,29 +98,23 @@
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                         l.Change.Fn = "Event.Form.cboDisplayID_change";
                     })
+                    
+                    //, HQ.Combo().ID("cboLevelID")
+                    //.HQLangCode("Level").HQProcedure("OM22002_pcLevel")
+                    //.HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
+                    //.HQHeightWidth(400, 300).AllowBlank(false).ForceSelection(true)
+                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    //.HQParam(new StoreParameterCollection() { 
+                    //    new StoreParameter("@DisplayID", "App.cboDisplayID.getValue()", ParameterMode.Raw) 
+                    //})
+                    //.LoadData()
+                    //.Listeners(l =>
+                    //{
+                    //    l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                    //})
                 ) // Second Column
                 
                 // Third Column
-                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
-                .MinWidth(250)//.Flex(1)
-                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
-                .Items(
-                    HQ.Combo().ID("cboLevelID")
-                    .HQLangCode("Level").HQProcedure("OM22002_pcLevel")
-                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
-                    .HQHeightWidth(400, 300).AllowBlank(false).ForceSelection(true)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@DisplayID", "App.cboDisplayID.getValue()", ParameterMode.Raw) 
-                    })
-                    .LoadData()
-                    .Listeners(l =>
-                    {
-                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                    })
-                ) // Third Column
-                
-                // Forth Column
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 105")
                 //.MinWidth(250)//.Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
@@ -128,7 +126,7 @@
                      ,HQ.Button().ID("btnImport").MarginSpec("5 0 0 0")
                      .HQLangCode("ImportExcel").Icon(Icon.DiskDownload)
                      .Handler("Event.Form.btnImport_click")
-                ) // Forth Column
+                ) // Third Column
             ) // pnlHeader
 
             , X.GridPanel().ID("grdDet")
@@ -136,7 +134,30 @@
             .Scroll(ScrollMode.Both)
             .View(X.GridView().TrackOver(false))
             .SortableColumns(false)
-            .StoreID("stoDet")
+            .Store(
+                 X.Store().ID("stoDet")
+                .AutoLoad(false).PageSize(50)//.RemotePaging(true)
+                .Model(Util.GenerateModel(typeof(OM22002_pgCust_Result), "mdlDet", ""))       
+                .ServerProxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetDet", "OM22002"))                
+                    //.ActionMethods(action =>
+                    //{
+                    //    action.Read = HttpMethod.POST;
+                    //})
+                    //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+                .Parameters(ps =>
+                {
+                    //ps.Add(new StoreParameter("zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
+                    //ps.Add(new StoreParameter("territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("cpnyID", "App.cboCpny.getValue().join(',')", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
+                    //ps.Add(new StoreParameter("levelID", "App.cboLevelID.getValue()", ParameterMode.Raw));
+                })      
+                //.Listeners(p=>p.Load.Fn="Store.stoDet_load" )
+                // Store: stoDet
+            )
             .ColumnModel(
                 X.RowNumbererColumn()
                 , X.CheckColumn().Text(Util.GetLang("Register")).DataIndex("Selected")
@@ -188,7 +209,36 @@
                     //ls.Edit.Fn = "Event.Grid.grd_edit";
                     //ls.ValidateEdit.Fn = "Event.Grid.grd_validateEdit";
                 })
-            ) // grdDet
+            )
+            .Features(
+                X.GridFilters().Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("Zone")
+                    , X.StringFilter().DataIndex("Territory")
+                    , X.StringFilter().DataIndex("BranchID")
+                    , X.StringFilter().DataIndex("SlsperID")
+                    , X.StringFilter().DataIndex("SlsName")
+                    , X.StringFilter().DataIndex("CustID")
+                    , X.StringFilter().DataIndex("CustName")
+                    , X.StringFilter().DataIndex("DisplayID")
+                )
+            )
+            .BottomBar(
+                X.PagingToolbar().ID("pag")
+                .Items(
+                    X.Label(Util.GetLang("PageSize")),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )// grdDet
         )
         .Listeners(lst =>
         {
