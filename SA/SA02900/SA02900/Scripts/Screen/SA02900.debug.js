@@ -61,7 +61,7 @@ var menuClick = function (command) {
             }
             break;
         case "refresh":
-            if (HQ.isChange) {
+            if (HQ.isChange || _botChange) {
                 HQ.message.show(20150303, '', 'refresh');
             }
             else {
