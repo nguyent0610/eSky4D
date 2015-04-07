@@ -293,38 +293,90 @@ var HQ = {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
-                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                    callback: function () {
-                        //HQ.grid.last(grd);
-                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                if (store.currentPage != Math.ceil(store.totalCount / store.pageSize) && store.totalCount != 0) {
+                    store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                        callback: function () {
+                            HQ.grid.last(grd);
+                            setTimeout(function () {
+                                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                                if (grd.editingPlugin) {
+                                    grd.editingPlugin.startEditByPosition({
+                                        row: store.getCount() - 1,
+                                        column: 1
+                                    });
+                                }
+                                else {
+                                    grd.lockedGrid.editingPlugin.startEditByPosition({
+                                        row: store.getCount() - 1,
+                                        column: 1
+                                    });
+                                }
+                            }, 300);
+                        }
+                    });
+                }
+                else {
+                    HQ.grid.last(grd);
+                    if (grd.editingPlugin) {
+                        grd.editingPlugin.startEditByPosition({
+                            row: store.getCount() - 1,
+                            column: 1
+                        });
                     }
-                });
-                //}
-                //else {
-                //    HQ.grid.last(grd);
-                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-                //}
+                    else {
+                        grd.lockedGrid.editingPlugin.startEditByPosition({
+                            row: store.getCount() - 1,
+                            column: 1
+                        });
+                    }
+                }
                 return;
             }
-            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-            store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                callback: function () {
-                    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-                        HQ.store.insertBlank(store, keys);
+            if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                    callback: function () {
+                        if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                            HQ.store.insertBlank(store, keys);
+                        }
+                        HQ.grid.last(grd);
+                        setTimeout(function () {
+                            // grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                            if (grd.editingPlugin) {
+                                grd.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                            else {
+                                grd.lockedGrid.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                        }, 300);
                     }
-                    //HQ.grid.last(grd);
-                    setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                });
+            }
+            else {
+                if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                    HQ.store.insertBlank(store, keys);
                 }
-            });
-            //}
-            //else {
-            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-            //        HQ.store.insertBlank(store, keys);
-            //    }
-            //    HQ.grid.last(grd);
-            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-            //}
+                HQ.grid.last(grd);
+                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+
+                if (grd.editingPlugin) {
+                    grd.editingPlugin.startEditByPosition({
+                        row: store.getCount() - 1,
+                        column: 1
+                    });
+                }
+                else {
+                    grd.lockedGrid.editingPlugin.startEditByPosition({
+                        row: store.getCount() - 1,
+                        column: 1
+                    });
+                }
+            }
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
@@ -433,7 +485,7 @@ var HQ = {
         checkBeforeEdit: function (e, keys) {
             if (!HQ.isUpdate) return false;
             if (keys.indexOf(e.field) != -1) {
-                if (e.record.data.tstamp != "")
+                if (e.record.data.tstamp)
                     return false;
             }
             return HQ.grid.checkInput(e, keys);
@@ -746,7 +798,7 @@ var HQ = {
     },
     form: {
         checkRequirePass: function (frm) {
-            frm.updateRecord();
+            //frm.updateRecord();
             var isValid = true;
             frm.getForm().getFields().each(
                             function (item) {
@@ -897,20 +949,20 @@ Ext.define("ThousandSeparatorNumberField", {
     /**
     * @cfg {Boolean} useThousandSeparator
     */
-    useThousandSeparator: true,  
+    useThousandSeparator: true,
     selectOnFocus: true,
     style: 'text-align: right',
-    fieldStyle: "text-align:right;",    
+    fieldStyle: "text-align:right;",
     /**
      * @inheritdoc
      */
     //dung cho page
-   
+
     toRawNumber: function (value) {
-        this.decimalPrecision= this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
+        this.decimalPrecision = this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
         return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
     },
-   
+
     /**
      * @inheritdoc
      */
@@ -1037,8 +1089,8 @@ Ext.define("ThousandSeparatorNumberField", {
 Ext.define("Ext.locale.vn.toolbar.Paging", {
     override: "Ext.PagingToolbar",
     lable: HQ.common.getLang("PageSize"),
-    beforePageText:  HQ.common.getLang("Page"),
-    afterPageText: HQ.common.getLang("of")+" {0}",
+    beforePageText: HQ.common.getLang("Page"),
+    afterPageText: HQ.common.getLang("of") + " {0}",
     firstText: HQ.common.getLang("PageFirst"),
     prevText: HQ.common.getLang("PagePrev"),
     nextText: HQ.common.getLang("PageNext"),

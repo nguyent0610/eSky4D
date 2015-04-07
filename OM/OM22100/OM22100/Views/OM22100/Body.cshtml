@@ -42,14 +42,70 @@
            X.Panel().ID("pnlHeader")
             .Region(Region.North)
             .Items(
-                
+            
+                HQ.DateField().ID("dateKPI").HQLangCode("OM22100_Year")
+                .MarginSpec("5 0 0 0").Width(300).Format("yyyy").Value(DateTime.Now.ToString("yyyy"))
+                .Type(DatePickerType.Month).AllowBlank(false)
+                .Listeners(l=>{
+                    l.Expand.Fn = "dateKPI_expand";
+                    l.Select.Fn = "dateKPI_Select";
+                })
+
+                , HQ.Combo().ID("cboCycle")
+                    .Name("cboCycle").HQLangCode("OM22100_Cycle").HQProcedure("OM22100_pcCycle")
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@YearNbr", Value = "App.dateKPI.getRawValue()", Mode = ParameterMode.Raw }
+                    })
+                    .HQColumnShow("CycleNbr,StartDate,EndDate").DisplayField("CycleNbr").ValueField("CycleNbr")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboCycle_Change";
+                        lst.Select.Fn = "cboCycle_Select";
+                    })
+
+                , HQ.Combo().ID("cboBranchID")
+                    .Name("cboBranchID").HQLangCode("OM22100_BranchID").HQProcedure("OM22100_pcLoadBranchAllByUser")
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                    })
+                    .HQColumnShow("BranchID,BranchName,Addr").DisplayField("BranchID").ValueField("BranchID")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn ="cboBranchID_Change";
+                        lst.Select.Fn = "cboBranchID_Select";
+                    })
+
+                    , HQ.TextBox().ID("txtBranchName").Name("").HQLangCode("OM22100_BranchName")
+                    .MarginSpec("5 0 0 0").Width(300).ReadOnly(true)
+
+                    , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
+                    .Items(
+                    HQ.TextBox().ID("txtStartDate").Name("").HQLangCode("OM22100_StartDate")
+                    .MarginSpec("5 0 0 0").Width(300).ReadOnly(true)
+                    , HQ.TextBox().ID("txtEndDate").Name("").HQLangCode("OM22100_EndDate")
+                    .MarginSpec("5 0 0 0").Width(300).ReadOnly(true)
+                    )
+                  
+                    
             )
 
             , X.Panel().ID("pnlGrid")
             .Region(Region.Center)
             .Layout(LayoutType.Border)
             .Items(
-            
+                
             )    
         )//FrmMain
     )

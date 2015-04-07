@@ -46,9 +46,6 @@
     <Reference Include="Aspose.Cells">
       <HintPath>..\..\eSky4D\DLL\Aspose.Cells.dll</HintPath>
     </Reference>
-    <Reference Include="eBiz4DApp_PJP">
-      <HintPath>..\..\eBiz4DCloud_Client_201203\AutoApplication\ServerApp_PJP\ServerApp_PJP\ServerApp_PJP\bin\Debug\eBiz4DApp_PJP.dll</HintPath>
-    </Reference>
     <Reference Include="Encryption">
       <HintPath>..\..\..\eBiz4DWebFrame\bin\Encryption.dll</HintPath>
     </Reference>

@@ -89,11 +89,11 @@ namespace OM22100.Controllers
         //    //        {
         //    //            record = new POS_MasterData();
         //    //            record.POSCode = created.POSCode;
-                        
+
         //    //            record.Crtd_DateTime = DateTime.Now;
         //    //            record.Crtd_Prog = screenNbr;
         //    //            record.Crtd_User = Current.UserName;
-                        
+
         //    //            UpdatingPOS_MasterData(created, ref record);
         //    //            if ((record.SDSM != "" && record.POSCode != "") || (record.DSM != "" && record.POSCode != "") || 
         //    //                ((record.SDSM != "" && record.DSM != "" && record.POSCode != "")))
@@ -108,7 +108,7 @@ namespace OM22100.Controllers
         //    //                success = false,
         //    //                code = "151",
         //    //                colName = Util.GetLang("Type"),
-                      
+
         //    //            }, JsonRequestBehavior.AllowGet);
         //    //            //tra ve loi da ton tai ma ngon ngu nay ko the them
         //    //        }
@@ -155,7 +155,7 @@ namespace OM22100.Controllers
         //    //}
         //    //_db.SaveChanges();
 
-        //    return Json(new { success = true}, JsonRequestBehavior.AllowGet);
+        //    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         //}
 
         //[HttpPost]
@@ -181,10 +181,10 @@ namespace OM22100.Controllers
         //        string messagestrEBeginDate = string.Empty;
         //        string messagestrEEndDate = string.Empty;
         //        string messagestrETBH = string.Empty;
-        //        string messagestrETS = string.Empty;                
+        //        string messagestrETS = string.Empty;
         //        string messageDate = string.Empty;
-        //        string messageerror= string.Empty;
-        //        string messageduplicate= string.Empty;                
+        //        string messageerror = string.Empty;
+        //        string messageduplicate = string.Empty;
         //        string message = string.Empty;
         //        if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
         //        {
@@ -260,7 +260,7 @@ namespace OM22100.Controllers
         //                    {
         //                        if (strERouteID == "")
         //                        {
-        //                            messagestrERouteID += (i + 1).ToString()+",";
+        //                            messagestrERouteID += (i + 1).ToString() + ",";
         //                            continue;
 
         //                        }
@@ -269,7 +269,7 @@ namespace OM22100.Controllers
         //                            messagestrECustID += (i + 1).ToString() + ",";
         //                            continue;
         //                        }
-                                              
+
         //                        if (strESlsperID == "")
         //                        {
         //                            messagestrESlsperID += (i + 1).ToString() + ",";
@@ -299,7 +299,7 @@ namespace OM22100.Controllers
         //                            messagestrEEndDate += (i + 1).ToString() + ",";
         //                            continue;
 
-        //                        }                              
+        //                        }
 
         //                    }
 
@@ -382,9 +382,9 @@ namespace OM22100.Controllers
         //                }
 
         //                _db.SaveChanges();
-        //               // toi day thoi
+        //                // toi day thoi
         //                Exec(id);
-        //                message =messagestrECustID==""?"": string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrECustID, workSheet.Cells[3, 1].StringValue);
+        //                message = messagestrECustID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrECustID, workSheet.Cells[3, 1].StringValue);
         //                message += messagestrESlsperID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrESlsperID, workSheet.Cells[3, 4].StringValue);
         //                message += messagestrETS == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrETS, workSheet.Cells[3, 8].StringValue);
         //                message += messagestrETBH == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrETBH, workSheet.Cells[3, 9].StringValue);
@@ -394,7 +394,7 @@ namespace OM22100.Controllers
         //                message += messagestrERouteID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrERouteID, workSheet.Cells[3, 13].StringValue);
         //                message += messageerror == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ<br/>", messageerror);
         //                message += messageduplicate == "" ? "" : string.Format("Dòng {0} dữ liệu bi trùng<br/>", messageduplicate);
-                                                                                                                             
+
         //                Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
         //            }
         //            return _logMessage;
@@ -411,403 +411,158 @@ namespace OM22100.Controllers
         //        return Json(new { success = false, messid = 9991, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
         //    }
         //    return _logMessage;
-        //}     
-
-        //private string renameFileName(string oldfileName, string newName, bool isPlus)
-        //{
-        //    var fileName = string.Empty;
-
-        //    var fileNameNotExt = Path.GetFileNameWithoutExtension(oldfileName);
-        //    var ext = Path.GetExtension(oldfileName);
-
-        //    if (isPlus)
-        //    {
-        //        fileName = string.Format("{0}{1}{2}", fileNameNotExt, newName, ext);
-        //    }
-        //    else
-        //    {
-        //        fileName = string.Format("{0}{2}", fileNameNotExt, ext);
-        //    }
-
-        //    return fileName;
         //}
 
-        //[HttpPost]
-        //public ActionResult Export(FormCollection data)
-        //{
-        //    try
-        //    { 
-        //        //string branchID = data["BranchID"].PassNull();
-        //        string branchID = data["BranchID"].PassNull();
-        //        string pjp = data["BranchID"].PassNull();
-        //        string branchName = data["BranchName"].PassNull();
-        //        string routeID = data["RouteID"].PassNull();
-        //        string slsperID = data["SlsperID"].PassNull();
-        //        var headerRowIdx = 3;
+        private string renameFileName(string oldfileName, string newName, bool isPlus)
+        {
+            var fileName = string.Empty;
+            var fileNameNotExt = Path.GetFileNameWithoutExtension(oldfileName);
+            var ext = Path.GetExtension(oldfileName);
+            if (isPlus)
+            {
+                fileName = string.Format("{0}{1}{2}", fileNameNotExt, newName, ext);
+            }
+            else
+            {
+                fileName = string.Format("{0}{2}", fileNameNotExt, ext);
+            }
+            return fileName;
+        }
 
-        //        Stream stream = new MemoryStream();
-        //        Workbook workbook = new Workbook();
-        //        Worksheet SheetMCP = workbook.Worksheets[0];
-        //        SheetMCP.Name = Util.GetLang("MCP");
-        //        DataAccess dal = Util.Dal();
-        //        Style style = workbook.GetStyleInPool(0);
-        //        StyleFlag flag = new StyleFlag();
-        //        Range range;
-        //        Cell cell;
-              
-        //        #region header info
-        //        // Title header
-        //        SetCellValue(SheetMCP.Cells["B1"],
-        //            string.Format("{0} {1}", Util.GetLang("OM22100EHeader") + "(" + pjp + ")", (string.IsNullOrWhiteSpace(branchID) ? string.Format("({0})", branchID) : string.Empty)), 
-        //            TextAlignmentType.Center, TextAlignmentType.Center, true, 16,true);
-        //        SheetMCP.Cells.Merge(0, 1, 1, 6);
+        [HttpPost]
+        public ActionResult Export(FormCollection data)
+        {
+            try
+            {
+       
+                string BranchID = data["BranchID"].PassNull();
+                string BranchName=data["BranchName"].PassNull();
+                string CycleNbr = data["CycleNbr"].PassNull();
+                string StartDate = data["StartDate"].PassNull();
+                string EndDate = data["EndDate"].PassNull();
+                var headerRowIdx = 5;
 
-        //        // Title info
-        //        SetCellValue(SheetMCP.Cells["B2"], Util.GetLang("BranchID"), TextAlignmentType.Center, TextAlignmentType.Right, true, 10,true);
-        //        SetCellValue(SheetMCP.Cells["B3"], Util.GetLang("BranchName"), TextAlignmentType.Center, TextAlignmentType.Right, true, 10, true);
-        //        SetCellValue(SheetMCP.Cells["C2"], branchID, TextAlignmentType.Center, TextAlignmentType.Left, false, 10, true);
-        //        SetCellValue(SheetMCP.Cells["C3"], branchName, TextAlignmentType.Center, TextAlignmentType.Left, false, 10, true);
-             
-        //        // Header text columns
-        //        // before of Route column
-        //        var beforeColTexts = new string[] { "N0", "CustID", "CustName", "Address", "SlsperID", "SlsName", "StartDate", "EndDate", "SlsFreq", "WeekofVisit" };
-        //        for (int i = 0; i < beforeColTexts.Length; i++)
-        //        {
-        //            var colIdx = i;
-        //            SetCellValue(SheetMCP.Cells[3, colIdx], Util.GetLang(beforeColTexts[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10);
-        //            SheetMCP.Cells.Merge(headerRowIdx, colIdx, 2, 1);
-        //        }
+                Stream stream = new MemoryStream();
+                Workbook workbook = new Workbook();
+                Worksheet SheetKPI = workbook.Worksheets[0];
+                SheetKPI.Name = Util.GetLang("OM22100_KPI");
+                DataAccess dal = Util.Dal();
+                Style style = workbook.GetStyleInPool(0);
+                StyleFlag flag = new StyleFlag();
+                Range range;
+                Cell cell;
 
-        //        //Route column
-        //        var daysOfWeeks = new string[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+                #region header info
+                // Title header
+                SetCellValue(SheetKPI.Cells["A1"],
+                    string.Format("{0} {1}", Util.GetLang("OM22100_ExportHeader") + "(" + BranchID + ")", (string.IsNullOrWhiteSpace(BranchID) ? string.Format("({0})", BranchID) : string.Empty)),
+                    TextAlignmentType.Center, TextAlignmentType.Center, true, 20,true);
+                SheetKPI.Cells.Merge(0,0,1,8);
 
-        //        SetCellValue(SheetMCP.Cells[headerRowIdx, beforeColTexts.Length], Util.GetLang("Route"), TextAlignmentType.Center, TextAlignmentType.Center, true, 10);
-        //        SheetMCP.Cells.Merge(headerRowIdx, beforeColTexts.Length, 1, daysOfWeeks.Length);
-        //        for (int i = 0; i < daysOfWeeks.Length; i++)
-        //        {
-        //            var colIdx = beforeColTexts.Length + i;
-        //            SetCellValue(SheetMCP.Cells[headerRowIdx+1, colIdx], Util.GetLang(daysOfWeeks[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10);
-        //        }
+                // Title info
+                SetCellValue(SheetKPI.Cells["B2"], Util.GetLang("OM22100_Cycle"), TextAlignmentType.Center, TextAlignmentType.Right, true, 12, false);
+                SetCellValue(SheetKPI.Cells["B3"], Util.GetLang("OM22100_BranchID"), TextAlignmentType.Center, TextAlignmentType.Right, true, 12, false);
+                SetCellValue(SheetKPI.Cells["B4"], Util.GetLang("OM22100_BranchName"), TextAlignmentType.Center, TextAlignmentType.Right, true, 12, false);
+                SetCellValue(SheetKPI.Cells["B5"], Util.GetLang("OM22100_StartDate"), TextAlignmentType.Center, TextAlignmentType.Right, true, 12, false);
+                SetCellValue(SheetKPI.Cells["E5"], Util.GetLang("OM22100_EndDate"), TextAlignmentType.Center, TextAlignmentType.Right, true, 12, false);
 
-        //        // after of Route column
-        //        var afterColTexts = new string[] { "SalesRouteID", "RouteName", "VisitSort", "CustCancel" };
-        //        for (int i = 0; i < afterColTexts.Length; i++)
-        //        {
-        //            var colIdx = beforeColTexts.Length + daysOfWeeks.Length + i;
-        //            SetCellValue(SheetMCP.Cells[headerRowIdx, colIdx], Util.GetLang(afterColTexts[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10);
+                SetCellValue(SheetKPI.Cells["C2"], CycleNbr, TextAlignmentType.Center, TextAlignmentType.Left, true, 12, true);
+                SetCellValue(SheetKPI.Cells["C3"], BranchID, TextAlignmentType.Center, TextAlignmentType.Left, true, 12, true);
+                SetCellValue(SheetKPI.Cells["C4"], BranchName, TextAlignmentType.Center, TextAlignmentType.Left, true, 12, true);
+                SetCellValue(SheetKPI.Cells["C5"], StartDate, TextAlignmentType.Center, TextAlignmentType.Left, true, 12, true);
+                SetCellValue(SheetKPI.Cells["F5"], EndDate, TextAlignmentType.Center, TextAlignmentType.Left, true, 12, true);
+  
+                // Header text columns
+                // before of Route column
+                var ColTexts = new string[] { "No", "BranchID", "BranchName", "SlsperId", "SlsName", "PC", "LPPC", "ASO"};
+                for (int i = 0; i < ColTexts.Length; i++)
+                {
+                    var colIdx = i;
+                    SetCellValue(SheetKPI.Cells[5, colIdx], Util.GetLang(ColTexts[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 12);
+                    SheetKPI.Cells.Merge(headerRowIdx, colIdx, 2, 1);
+                }
 
-                   
+                var allColumns = new List<string>();
+                allColumns.AddRange(ColTexts);
 
-        //            SheetMCP.Cells.Merge(headerRowIdx, colIdx, 2, 1);
-        //        }
+                #endregion
 
+                #region export data
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(BranchID), ParameterDirection.Input,30));
+                pc.Add(new ParamStruct("@CycleNbr", DbType.String, clsCommon.GetValueDBNull(CycleNbr), ParameterDirection.Input, 6));
+        
 
+                DataTable dtDataExport = dal.ExecDataTable("OM22100_peExportData", CommandType.StoredProcedure, ref pc);
+     
+                for (int i = 0; i < dtDataExport.Rows.Count; i++)
+                {
+                    for (int j = 0; j < allColumns.Count; j++)
+                    {
+                        if (dtDataExport.Columns.Contains(allColumns[j]))
+                        {
+                            SheetKPI.Cells[7 + i, j].PutValue(dtDataExport.Rows[i][allColumns[j]]);
+                        }
+                    }
+                }
+                #endregion
 
-        //        var allColumns = new List<string>();
-        //        allColumns.AddRange(beforeColTexts);
-        //        allColumns.AddRange(daysOfWeeks);
-        //        allColumns.AddRange(afterColTexts);
+                SheetKPI.AutoFitColumns();
+                //SheetKPI.Cells.Columns[allColumns.IndexOf("CustID")].Width = 30;
+                //SheetKPI.Cells.Columns[allColumns.IndexOf("CustName")].Width = 30;
+                //SheetKPI.Cells.Columns[allColumns.IndexOf("SlsName")].Width = 30;
+                //SheetKPI.Cells.Columns[allColumns.IndexOf("Address")].Width = 30;
 
-        //        #endregion
+                ////SheetPOSuggest.Protect(ProtectionType.Objects);
+                workbook.Save(stream, SaveFormat.Xlsx);
+                stream.Flush();
+                stream.Position = 0;
 
-        //        #region formular
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = Util.GetLang("OM22100") + ".xlsx" };
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
 
-               
+        }
 
-        //        Validation validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
-        //        validation.IgnoreBlank = true;
-        //        validation.Type = Aspose.Cells.ValidationType.Date;
-        //        validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
-        //        validation.Operator = OperatorType.GreaterOrEqual;
-        //        validation.Formula1 = DateTime.Now.ToShortDateString();
-        //        validation.InputTitle = "Chọn Ngày Bắt Đầu(MM/dd/yyyy)";
-        //        validation.InputMessage = "Ngày Bắt Đầu Không Thể Nhỏ Hơn Ngày " + DateTime.Now.ToString("MM/dd/yyyy");
-        //        validation.ErrorMessage = "Ngày Bắt Đầu Không Thể Nhỏ Hơn Ngày " + DateTime.Now.ToString("MM/dd/yyyy");
+        private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size, bool isTitle = false)
+        {
+            c.PutValue(" " + lang);
+            var style = c.GetStyle();
+            style.Font.IsBold = isBold;
+            style.Font.Size = size;
+            style.HorizontalAlignment = alignH;
+            style.VerticalAlignment = alignV;
+            if (isTitle)
+                style.Font.Color = Color.Blue;
+            c.SetStyle(style);
+        }
 
-
-        //        CellArea area;
-        //        area.StartRow = 5;
-        //        area.EndRow = dtCustomer.Rows.Count + 5;
-        //        area.StartColumn = allColumns.IndexOf("StartDate");
-        //        area.EndColumn = allColumns.IndexOf("StartDate") ;                
-        //        validation.AddArea(area);
-
-        //        string formulaDate = "=$" + Getcell(allColumns.IndexOf("StartDate")) + "$6";
-        //        validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
-        //        validation.IgnoreBlank = true;
-        //        validation.Type = Aspose.Cells.ValidationType.Date;
-        //        validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
-        //        validation.Operator = OperatorType.GreaterOrEqual;
-        //        validation.Formula1 = formulaDate;
-        //        validation.InputTitle = "Chọn Ngày Kết Thúc(MM/dd/yyyy)";
-        //        validation.InputMessage = "Ngày Kết Thúc Không Thể Nhỏ Hơn Ngày Bắt Đầu ";
-        //        validation.ErrorMessage = "Ngày Kết Thúc Không Thể Nhỏ Hơn Ngày Bắt Đầu ";
-
-        //        area = new CellArea();
-        //        area.StartRow = 5;
-        //        area.EndRow = dtCustomer.Rows.Count + 5;
-        //        area.StartColumn = allColumns.IndexOf("EndDate");
-        //        area.EndColumn = allColumns.IndexOf("EndDate") ;
-        //        validation.AddArea(area);
-
-        //        //custid
-        //        string formulaCustomer = "=$AA$2:$AA$" + (dtCustomer.Rows.Count + 2);
-        //        validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
-        //        validation.IgnoreBlank = true;
-        //        validation.Type = Aspose.Cells.ValidationType.List;
-        //        validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
-        //        validation.Operator = OperatorType.Between;
-        //        validation.Formula1 = formulaCustomer;
-        //        validation.InputTitle = "";
-        //        validation.InputMessage = "Chọn Mã Khách Hàng ";
-        //        validation.ErrorMessage = "Mã Khách Hàng này không tồn tại";
-
-        //        area = new CellArea();
-        //        area.StartRow = 5;
-        //        area.EndRow = dtCustomer.Rows.Count + 5;
-        //        area.StartColumn = allColumns.IndexOf("CustID");
-        //        area.EndColumn = allColumns.IndexOf("CustID") ;
-        //        validation.AddArea(area);
-
-        //        //SALES
-        //        string formulaSales = "=$BA$2:$BA$" + (dtSales.Rows.Count + 2);
-        //        validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
-        //        validation.IgnoreBlank = true;
-        //        validation.Type = Aspose.Cells.ValidationType.List;
-        //        validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
-        //        validation.Operator = OperatorType.Between;
-        //        validation.Formula1 = formulaSales;
-        //        validation.InputTitle = "";
-        //        validation.InputMessage = "Chọn Mã Nhân Viên Bán Hàng";
-        //        validation.ErrorMessage = "Mã Nhân Viên này không tồn tại";
-
-        //        area = new CellArea();
-        //        area.StartRow = 5;
-        //        area.EndRow = dtCustomer.Rows.Count + 5;
-        //        area.StartColumn = allColumns.IndexOf("SlsperID");
-        //        area.EndColumn = allColumns.IndexOf("SlsperID") ;
-        //        validation.AddArea(area);
-
-        //        //Route
-        //        string formulaRoutes = "=$CA$2:$CA$" + (dtRoute.Rows.Count + 2);
-        //        validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
-        //        validation.IgnoreBlank = true;
-        //        validation.Type = Aspose.Cells.ValidationType.List;
-        //        validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
-        //        validation.Operator = OperatorType.Between;
-        //        validation.Formula1 = formulaRoutes;
-        //        validation.InputTitle = "";
-        //        validation.InputMessage = "Chọn Mã Tuyến Đường";
-        //        validation.ErrorMessage = "Mã Tuyến Đường này không tồn tại";
-
-        //        area = new CellArea();
-        //        area.StartRow = 5;
-        //        area.EndRow = dtCustomer.Rows.Count + 5;
-        //        area.StartColumn = allColumns.IndexOf("SalesRouteID");
-        //        area.EndColumn = allColumns.IndexOf("SalesRouteID") ;
-        //        validation.AddArea(area);
-        //        //Requency LIST
-        //        string formulaRequenc = "F1,F2,F4,F8,F12,A";
-        //        validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
-        //        validation.IgnoreBlank = true;
-        //        validation.Type = Aspose.Cells.ValidationType.List;
-        //        validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
-        //        validation.Operator = OperatorType.Between;
-        //        validation.Formula1 = formulaRequenc;
-        //        validation.InputTitle = "";
-        //        validation.InputMessage = "Chọn Tần Suất Thăm Viếng";
-        //        validation.ErrorMessage = "Mã Tần Suất này không tồn tại";
-                
-        //        area = new CellArea();
-        //        area.StartRow = 5;
-        //        area.EndRow = dtCustomer.Rows.Count + 5;
-        //        area.StartColumn = allColumns.IndexOf("SlsFreq");
-        //        area.EndColumn = allColumns.IndexOf("SlsFreq") ;
-        //        validation.AddArea(area);
-
-
-        //        string formula = "=IF(I6=\"F1\",$Z$1:$Z$4,IF(I6=\"F2\",$Z$5:$Z$6,$Z$7:$Z$7))";// + dtOMRoute.Rows.Count + 2;               
-        //        validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
-        //        validation.IgnoreBlank = true;
-        //        validation.Type = Aspose.Cells.ValidationType.List;
-        //        validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
-        //        validation.Operator = OperatorType.Between;
-        //        validation.Formula1 = formula;
-        //        validation.InputTitle = "";
-        //        validation.InputMessage = "Chọn Tuần Bán Hàng";
-        //        validation.ErrorMessage = "Mã Tuần Bán Hàng Không tồn tại";
-                
-        //        area = new CellArea();
-        //        area.StartRow = 5;
-        //        area.EndRow = dtCustomer.Rows.Count + 5;
-        //        area.StartColumn = allColumns.IndexOf("WeekofVisit");
-        //        area.EndColumn = allColumns.IndexOf("WeekofVisit") ;
-        //        validation.AddArea(area);
-
-        //        string formulaCheck = "X";
-        //        validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
-        //        validation.IgnoreBlank = true;
-        //        validation.Type = Aspose.Cells.ValidationType.List;
-        //        validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
-        //        validation.Operator = OperatorType.Between;
-        //        validation.Formula1 = formulaCheck;
-        //        area = new CellArea();
-        //        area.StartRow = 5;
-        //        area.EndRow = dtCustomer.Rows.Count + 5;
-        //        area.StartColumn = allColumns.IndexOf("Mon");
-        //        area.EndColumn = allColumns.IndexOf("Sun");
-        //        validation.AddArea(area);
-
-        //        area = new CellArea();
-        //        area.StartRow = 5;
-        //        area.EndRow = dtCustomer.Rows.Count + 5;
-        //        area.StartColumn = allColumns.IndexOf("CustCancel");
-        //        area.EndColumn = allColumns.IndexOf("CustCancel");
-        //        validation.AddArea(area);
-
-
-        //        string formulaCustName = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AC,2,0)),\"\",VLOOKUP({0},AA:AC,2,0))", "B6");
-        //        SheetMCP.Cells[Getcell(allColumns.IndexOf("CustName")) + "6"].SetSharedFormula(formulaCustName, (dtCustomer.Rows.Count + 6), 1);
-
-
-        //        string formulaCustAddr = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AC,3,0)),\"\",VLOOKUP({0},AA:AC,3,0))", "B6");
-        //        SheetMCP.Cells[Getcell(allColumns.IndexOf("Address")) + "6"].SetSharedFormula(formulaCustAddr, (dtCustomer.Rows.Count + 6), 1);
-
-
-        //        string formulaSalesName = string.Format("=IF(ISERROR(VLOOKUP({0},BA:BC,2,0)),\"\",VLOOKUP({0},BA:BC,2,0))", "E6");
-        //        SheetMCP.Cells[Getcell(allColumns.IndexOf("SlsName")) + "6"].SetSharedFormula(formulaSalesName, (dtCustomer.Rows.Count + 6), 1);
-
-
-        //        string formulaRoute = string.Format("=IF(ISERROR(VLOOKUP({0},CA:CC,2,0)),\"\",VLOOKUP({0},CA:CC,2,0))", "R6");
-        //        SheetMCP.Cells[Getcell(allColumns.IndexOf("RouteName")) + "6"].SetSharedFormula(formulaRoute, (dtCustomer.Rows.Count + 6), 1);
-
-
-        //        string formulaSTT = "=IFERROR( IF(B6<>\"\",A5+1 & \"\",\"\"),1)";
-        //        SheetMCP.Cells["A6"].SetSharedFormula(formulaSTT, (dtCustomer.Rows.Count + 6), 1);
-
-
-
-        //        #endregion
-
-        //        #region export data
-        //        pc = new ParamCollection();
-        //        pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
-        //        pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
-        //        pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
-        //        pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
-
-        //        DataTable dtDataExport = dal.ExecDataTable("OM22100_peExportData", CommandType.StoredProcedure, ref pc);
-        //        //SheetMCP.Cells.ImportDataTable(dtDataExport, false, "B6");// du lieu data export
-
-
-        //        for (int i = 0; i < dtDataExport.Rows.Count; i++)
-        //        {
-        //            for (int j = 0; j < allColumns.Count; j++)
-        //            {
-        //                if (allColumns[j] == "N0" || allColumns[j] == "CustName" || allColumns[j] == "SlsName" || allColumns[j] == "Address" || allColumns[j] == "RouteName")
-        //                {
-        //                    //SheetMCP.Cells[5 + i, j].PutValue(i + 1);
-        //                }
-        //                else if (dtDataExport.Columns.Contains(allColumns[j]))
-        //                {
-        //                    SheetMCP.Cells[5 + i, j].PutValue(dtDataExport.Rows[i][allColumns[j]]);
-        //                }
-        //            }
-        //        }
-        //        #endregion
-
-        //        #region Fomat cell
-
-        //        style = SheetMCP.Cells[allColumns.IndexOf("StartDate")].GetStyle();
-        //        style.Custom = "MM/dd/yyyy";
-        //        style.Font.Color = Color.Black;
-        //        style.HorizontalAlignment = TextAlignmentType.Left;
-
-        //        range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("StartDate"))+"5", Getcell(allColumns.IndexOf("StartDate"))+dtCustomer.Rows.Count+5);
-        //        range.SetStyle(style);
-
-        //        range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("EndDate")) + "5", Getcell(allColumns.IndexOf("EndDate")) + dtCustomer.Rows.Count + 5);
-        //        range.SetStyle(style);
-
-
-        //        style = SheetMCP.Cells[allColumns.IndexOf("VisitSort")].GetStyle();
-        //        style.Custom = "#,##0";
-        //        style.Font.Color = Color.Black;
-        //        style.HorizontalAlignment = TextAlignmentType.Right;
-
-        //        range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("VisitSort")) + "5", Getcell(allColumns.IndexOf("VisitSort")) + dtCustomer.Rows.Count + 5);
-        //        range.SetStyle(style);
-
-                
-        //        style = SheetMCP.Cells["Z1"].GetStyle();
-        //        style.Font.Color = Color.Transparent;
-        //        flag.FontColor = true;
-        //        flag.NumberFormat = true;
-        //        flag.Locked = true;
-
-        //        range = SheetMCP.Cells.CreateRange("Z1", "ZZ" + (dtCustomer.Rows.Count + 1));
-        //        range.ApplyStyle(style, flag);
-
-
-        //        #endregion
-
-        //        SheetMCP.AutoFitColumns();
-        //        SheetMCP.Cells.Columns[allColumns.IndexOf("CustID")].Width = 30;
-        //        SheetMCP.Cells.Columns[allColumns.IndexOf("CustName")].Width = 30;
-        //        SheetMCP.Cells.Columns[allColumns.IndexOf("SlsName")].Width = 30;
-        //        SheetMCP.Cells.Columns[allColumns.IndexOf("Address")].Width = 30;
-               
-        //        //SheetPOSuggest.Protect(ProtectionType.Objects);
-        //        workbook.Save(stream, SaveFormat.Xlsx);
-        //        stream.Flush();
-        //        stream.Position = 0;
-
-        //        return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = Util.GetLang("OM22100")+ ".xlsx" };
-
-        //    }          
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is MessageException)
-        //        {
-        //            return (ex as MessageException).ToMessage();
-        //        }
-        //        else
-        //        {
-        //            return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-        //        }
-        //    }
-           
-        //}
-
-        //private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size,bool isTitle=false)
-        //{
-        //    c.PutValue(" " + lang);
-        //    var style = c.GetStyle();
-        //    style.Font.IsBold = isBold;
-        //    style.Font.Size = size;
-        //    style.HorizontalAlignment = alignH;
-        //    style.VerticalAlignment = alignV;
-        //    if (isTitle) 
-        //    style.Font.Color = Color.Blue;
-        //    c.SetStyle(style);
-        //}
-
-        //#region other
-      
-        //private string Getcell(int column)
-        //{   string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        //    string cell="";
-        //    while (column / 26 > 1)
-        //    {
-        //        cell += ABC.Substring(column / 26,1);
-        //        column+=column-26;
-        //    }
-        //    if (column %26!=0)
-        //    {
-        //        cell += ABC.Substring(column % 26, 1);
-        //    }
-        //    return cell;
-        //}
-        //#endregion
+        #region other
+        private string Getcell(int column)
+        {
+            string ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string cell = "";
+            while (column / 26 > 1)
+            {
+                cell += ABC.Substring(column / 26, 1);
+                column += column - 26;
+            }
+            if (column % 26 != 0)
+            {
+                cell += ABC.Substring(column % 26, 1);
+            }
+            return cell;
+        }
+        #endregion
     }
 }
