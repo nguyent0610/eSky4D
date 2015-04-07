@@ -205,7 +205,7 @@
                 .Region(Region.Center)
                 .Scroll(ScrollMode.Both)                
                 .View(X.GridView().GetRowClass(function => function.Fn = "getRowClass"))
-                .SortableColumns(false)
+                .SortableColumns(true)
                 .Store(X.Store().ID("stoDet")
                     .AutoLoad(false).PageSize(50)
                     .Model(Util.GenerateModel(typeof(PO10400_pgLoadPOHeader_Result), "mdlDet", ""))       
