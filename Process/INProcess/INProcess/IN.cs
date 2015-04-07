@@ -136,7 +136,7 @@ namespace INProcess
                         objItemLot.Cost = itemSite.TotCost;
                         objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
                         objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
-                        objItemLot.AvgCost = itemSite.AvgCost;
+                       
                         objItemLot.LUpd_DateTime = DateTime.Now;
                         objItemLot.LUpd_Prog = Prog;
                         objItemLot.LUpd_User = User;
@@ -450,7 +450,7 @@ namespace INProcess
                             {
                                 objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
                                 objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
-                                objItemLot.AvgCost = objSite.AvgCost;
+                              
                             }
                             else if (tran.String("JrnlType") == "OM" || Prog != "OM10300")
                             {
@@ -699,7 +699,7 @@ namespace INProcess
                                     objItemLot.QtyOnHand = Math.Round(objToItem.QtyOnHand + Math.Abs(qty), 0);
                                     objItemLot.QtyAvail = Math.Round(objToItem.QtyAvail + Math.Abs(qty), 0);
                                     objItemLot.Cost = objToItem.TotCost;
-                                    objItemLot.AvgCost = objToItem.AvgCost;
+                                  
                                     objItemLot.LUpd_DateTime = DateTime.Now;
                                     objItemLot.LUpd_Prog = Prog;
                                     objItemLot.LUpd_User = User;
@@ -1040,7 +1040,7 @@ namespace INProcess
                             objItemLot.Cost = objItem.TotCost;
                             objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
                             objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
-                            objItemLot.AvgCost = objItem.AvgCost;
+                          
 
                             if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItemLot.Cost, 0) < 0)
                             {
@@ -1221,7 +1221,7 @@ namespace INProcess
 
                             objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail - qty, 0);
                             objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand - qty, 0);
-                            objItemLot.AvgCost = objSite.AvgCost;
+                           
 
                             if (setup.CheckINVal && objItemLot.Cost < 0)
                             {
