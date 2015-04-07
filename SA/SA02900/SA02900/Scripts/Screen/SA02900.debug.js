@@ -10,7 +10,7 @@ var fieldsLangCheckRequireBot = ["Handle"];
 
 var _focusNo = 0;
 var _topChange = false;
-
+var _botChange = false;
 var pnl_render = function (cmd) {
     cmd.getEl().on('mousedown', function () {
         if (cmd.id == 'pnlTop') {
@@ -21,7 +21,7 @@ var pnl_render = function (cmd) {
         }
     });
 };
-///////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
@@ -112,12 +112,11 @@ var menuClick = function (command) {
             HQ.common.close(this);
             break;
     }
-
 };
 
 var GridTop_Change = function (sender, e) {
     HQ.isFirstLoad = true;
-    if (HQ.isChange || _topChange) {
+    if (_botChange) {
         HQ.message.show(20150303, '', 'refresh');
         App.slmTopGrid.select(_index);
     } else {
@@ -199,6 +198,7 @@ var deleteData = function (item) {
     if (item == "yes") {
         if (_focusNo == 0) {
             App.grdTop.deleteSelected();
+            App.grdBot.store.removeAll();
             stoChangedTop(App.stoTop);
         }
         else {
@@ -311,6 +311,7 @@ function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         _topChange = false;
+        _botChange = false;
         HQ.isFirstLoad = true;
         App.stoTop.reload();
     }
@@ -409,7 +410,7 @@ function refresh(item) {
 //                    }
 //                }
 //            }
-            
+
 //            break;
 //        case "save":
 //            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
