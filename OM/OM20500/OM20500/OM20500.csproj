@@ -46,14 +46,15 @@
     <Reference Include="ARProcess">
       <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\ARProcess.dll</HintPath>
     </Reference>
-    <Reference Include="eBiz4DApp">
-      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\eBiz4DApp.dll</HintPath>
+    <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Process\INProcess\INProcess\bin\Release\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DSys">
       <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\eBiz4DSys.dll</HintPath>
     </Reference>
     <Reference Include="Encryption">
-      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\Encryption.dll</HintPath>
+      <HintPath>..\..\..\Process\INProcess\INProcess\bin\Release\Encryption.dll</HintPath>
     </Reference>
     <Reference Include="Ext.Net, Version=2.4.0.28524, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -78,8 +79,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\HQFramework.DAL.dll</HintPath>
     </Reference>
-    <Reference Include="INProcess">
-      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\INProcess.dll</HintPath>
+    <Reference Include="INProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Process\INProcess\INProcess\bin\Release\INProcess.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\log4net.dll</HintPath>
@@ -325,7 +327,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
