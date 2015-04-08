@@ -40,21 +40,21 @@ namespace OMProcess
                 if(string.IsNullOrEmpty(orderNbr))
                 {
                     throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
-                    return false;
+                  
                 }
 
                 clsOM_SalesOrd objSalesOrd = new clsOM_SalesOrd(Dal);
                 if (!objSalesOrd.GetByKey(branchID, orderNbr))
                 {
                     throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
-                    return false;
+                   
                 }
 
                 clsOM_OrderType objType = new clsOM_OrderType(Dal);
                 if (!objType.GetByKey(objSalesOrd.OrderType))
                 {
                     throw new MessageException(MessageType.Message,"8013","", new[] { objSalesOrd.OrderType });
-                    return false;
+                 
                 }
 
                 clsSQL objSql = new clsSQL(Dal);
@@ -105,14 +105,14 @@ namespace OMProcess
                 if (string.IsNullOrEmpty(orderNbr))
                 {
                     throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
-                    return false;
+                    
                 }
 
                 clsOM_SalesOrd objSalesOrd = new clsOM_SalesOrd(Dal);
                 if (!objSalesOrd.GetByKey(branchID, orderNbr))
                 {
                     throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
-                    return false;
+               
                 }
 
                 clsOM_Invoice objInvoice = new clsOM_Invoice(Dal);
@@ -120,7 +120,7 @@ namespace OMProcess
                 if (!objInvoice.GetByKey(branchID, objSalesOrd.ARRefNbr))
                 {
                     throw new MessageException(MessageType.Message,"8015","", new[] { objSalesOrd.ARRefNbr });
-                    return false;
+                  
                 }
 
 
@@ -363,18 +363,18 @@ namespace OMProcess
                 if (omCheck == 1)
                 {
                     throw new MessageException(MessageType.Message,"144","", new[] { orderNbr });
-                    return false;
+             
                 }
                 else if (omCheck == 2 && !string.IsNullOrEmpty(voidRefNbr))
                 {
                     throw new MessageException(MessageType.Message,"145","", new[] { orderNbr });
-                    return false;
+            
                 }
 
                 if (!objSalesOrd.GetByKey(branchID, orderNbr))
                 {
                     throw new MessageException(MessageType.Message,"8012","", new[] { orderNbr });
-                    return false;
+             
                 }
 
                 DataTable lstDoc = new DataTable();
@@ -396,7 +396,7 @@ namespace OMProcess
                         if (arCheck == "1")
                         {
                             throw new MessageException(MessageType.Message,"715","", new[] { doc.String("RefNbr") });
-                            return false;
+                            
                         }
                     }
                 }
@@ -575,7 +575,8 @@ namespace OMProcess
                 clsSQL objSql = new clsSQL(Dal);
 
                 string nbr = objSql.OMNumbering(branchID, "OrderNbr", objType.OrderType);
-
+                clsOM_Setup objOM = new clsOM_Setup(Dal);
+                objOM.GetByKey("OM");
                 clsOM_SalesOrd objSalesOrd = new clsOM_SalesOrd(Dal);
                 if (objPDAOrd.PriceClassID == string.Empty)
                 {
@@ -752,7 +753,7 @@ namespace OMProcess
                         objSalesDet.UnitRate = objPDADet.UnitRate;
                         objSalesDet.UnitWeight = objPDADet.UnitWeight;
                         objSalesDet.OrderNbr = objSalesOrd.OrderNbr;
-
+                      
 
                         taxAmt00 += objSalesDet.TaxAmt00;
                         taxAmt01 += objSalesDet.TaxAmt01;
@@ -770,9 +771,10 @@ namespace OMProcess
                         objSalesDet.Add();
 
                         clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
-                        objInvt.GetByKey(objPDADet.InvtID);
-
+                        clsOM_LotTrans objLotTrans = new clsOM_LotTrans(Dal);
                         clsIN_ItemSite objItemSite = new clsIN_ItemSite(Dal);
+                        clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
+                        objInvt.GetByKey(objPDADet.InvtID);
                         double editQty = 0;
                         double qtyTot = 0;
 
@@ -804,7 +806,7 @@ namespace OMProcess
                                         if (editQty > objItemSite.QtyAvail)
                                         {
                                             throw new MessageException(MessageType.Message,"10431","", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID });
-                                            return false;
+                                           
                                         }
                                     }
                                 }
@@ -816,7 +818,7 @@ namespace OMProcess
                                     if (editQty > objItemSite.QtyAvail)
                                     {
                                         throw new MessageException(MessageType.Message,"10431","", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID });
-                                        return false;
+                                       
                                     }
                                 }
                             }
@@ -840,7 +842,6 @@ namespace OMProcess
                             if (check.String("InvtID") == objPDADet.InvtID && check.Bool("FreeItem") == objPDADet.FreeItem && objPDADet.LineQty - check.Double("Qty") < objSalesDet.LineQty)
                             {
                                 throw new MessageException(MessageType.Message,"10211","", new[] { orderNbr, check.String("InvtID"), (objPDADet.LineQty - check.Double("Qty")).ToString() });
-                                return false;
                             }
                         }
 
@@ -869,7 +870,6 @@ namespace OMProcess
                                     if (objAlloc.QtyAmtAlloc - (objAlloc.QtyAmtSpent + spent) < 0)
                                     {
                                         throw new MessageException(MessageType.Message,"7531","", new[] { orderNbr, objSalesDet.DiscID1, objSalesDet.DiscSeq1 });
-                                        return false;
                                     }
                                     else
                                     {
@@ -953,7 +953,6 @@ namespace OMProcess
                                     if (objAlloc.QtyAmtAlloc - (objAlloc.QtyAmtSpent + spent) < 0)
                                     {
                                         throw new MessageException(MessageType.Message,"7531","", new[] { orderNbr, objSalesDet.DiscID1, objSalesDet.DiscSeq1 });
-                                        return false;
                                     }
                                     else
                                     {
@@ -1092,7 +1091,93 @@ namespace OMProcess
                                 }
                             }
                         }
+                        if (objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N")
+                        {
+                            DataTable dtItemLot = objSql.OM_GetItemLot(objSalesDet.SiteID, objSalesDet.InvtID);
 
+                            double needQty = objPDADet.UnitMultDiv == "M" ? objSalesDet.LineQty * objSalesDet.UnitRate : objSalesDet.LineQty / objSalesDet.UnitRate;
+
+                            foreach (DataRow lotRow in dtItemLot.Rows)
+                            {
+                                double newQty = 0;
+
+                                if (objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr")))
+                                {
+                                    if (objItemLot.QtyAvail >= needQty)
+                                    {
+                                        newQty = needQty;
+                                        objItemLot.QtyAvail = objItemLot.QtyAvail - needQty;
+                                        objItemLot.QtyAllocSO = objItemLot.QtyAllocSO + needQty;
+
+                                        needQty = 0;
+                                    }
+                                    else
+                                    {
+                                        newQty = objItemLot.QtyAvail;
+                                        needQty -= objItemLot.QtyAvail;
+                                        objItemLot.QtyAvail = 0;
+                                        objItemLot.QtyAllocSO = objItemLot.QtyAllocSO + newQty;
+                                    }
+                                    objItemLot.LUpd_DateTime = DateTime.Now;
+                                    objItemLot.LUpd_Prog = Prog;
+                                    objItemLot.LUpd_User = User;
+                                    objItemLot.Update();
+
+                                    if (newQty != 0)
+                                    {
+                                        objLotTrans.Reset();
+                                        objLotTrans.BranchID = objSalesDet.BranchID;
+                                        objLotTrans.OrderNbr = objSalesDet.OrderNbr;
+                                        objLotTrans.LotSerNbr = lotRow.String("LotSerNbr");
+                                        objLotTrans.ExpDate = lotRow.Date("ExpDate");
+                                        objLotTrans.MfgrLotSerNbr = lotRow.String("MfgrLotSerNbr");
+                                        objLotTrans.WarrantyDate = lotRow.Date("WarrantyDate");
+                                        objLotTrans.TranDate = objSalesOrd.OrderDate;
+                                        objLotTrans.INDocType = "IN";
+                                        objLotTrans.OMLineRef = objSalesDet.LineRef;
+                                        objLotTrans.SiteID = objSalesDet.SiteID;
+                                        objLotTrans.InvtID = objSalesDet.InvtID;
+                                        objLotTrans.InvtMult = -1;
+
+                                        if ((objSalesDet.UnitMultDiv == "M" ? newQty / objSalesDet.UnitRate : newQty * objSalesDet.UnitRate) % 1 > 0)
+                                        {
+                                            objLotTrans.CnvFact = 1;
+                                            objLotTrans.UnitMultDiv = "M";
+                                            objLotTrans.Qty = newQty;
+                                            objLotTrans.UnitDesc = objInvt.StkUnit;
+                                            if (objOM.DfltSalesPrice == "I")
+                                            {
+                                                double price = Math.Round(objLotTrans.UnitMultDiv == "M" ? objInvt.SOPrice * objLotTrans.CnvFact : objInvt.SOPrice / objLotTrans.CnvFact, 0);
+                                                objLotTrans.UnitPrice = price;
+                                                objLotTrans.UnitCost = price;
+                                            }
+                                            else
+                                            {
+                                                objLotTrans.UnitPrice = Math.Round(objSalesDet.UnitMultDiv == "M" ? objSalesDet.SlsPrice / objSalesDet.UnitRate : objSalesDet.SlsPrice * objSalesDet.UnitRate, 0);
+                                                objLotTrans.UnitCost = objLotTrans.UnitPrice;
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            objLotTrans.Qty = Math.Round(objSalesDet.UnitMultDiv == "M" ? newQty / objSalesDet.UnitRate : newQty * objSalesDet.UnitRate, 0);
+                                            objLotTrans.CnvFact = objSalesDet.UnitRate;
+                                            objLotTrans.UnitMultDiv = objSalesDet.UnitMultDiv;
+                                            objLotTrans.UnitPrice = objSalesDet.SlsPrice;
+                                            objLotTrans.UnitCost = objSalesDet.SlsPrice;
+                                            objLotTrans.UnitDesc = objSalesDet.SlsUnit;
+                                        }
+                                        objLotTrans.LUpd_DateTime = objLotTrans.Crtd_DateTime =  DateTime.Now;
+                                        objLotTrans.LUpd_Prog = objLotTrans.Crtd_Prog = Prog;
+                                        objLotTrans.LUpd_User = objLotTrans.Crtd_User = User;
+
+                                        objLotTrans.Add();
+                                    }
+                                }
+
+                                if (needQty == 0) break;
+                            }
+                        }
                     }
                 }
                 objSalesOrd.TaxAmtTot00 = taxAmt00;
@@ -1391,7 +1476,6 @@ namespace OMProcess
                     if (!setup.NegQty && newQty > 0 && objItemSite.QtyAvail + oldQty - newQty < 0)
                     {
                         throw new MessageException(MessageType.Message,"608","", new[] { objItemSite.InvtID, objItemSite.SiteID });
-                        return false;
                     }
                     objItemSite.QtyAllocSO = Math.Round(objItemSite.QtyAllocSO + newQty - oldQty, decQty);
                     objItemSite.QtyAvail = Math.Round(objItemSite.QtyAvail + oldQty - newQty, decQty);
@@ -1482,11 +1566,11 @@ namespace OMProcess
                         {
                             if (!lineDisc)
                                 discAmtQty = 0;
-                           throw new MessageException(MessageType.Message,"403","", new string[] { discSeq, budgetID });
+                          
                             budgetID = string.Empty;
                             discID = string.Empty;
                             discSeq = string.Empty;
-                            return false;
+                            throw new MessageException(MessageType.Message, "403", "", new string[] { discSeq, budgetID });
                         }
                     }
                 }

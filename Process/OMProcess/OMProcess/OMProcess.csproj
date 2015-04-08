@@ -58,7 +58,8 @@
     <Reference Include="ARProcess">
       <HintPath>..\..\ARProcess\ARProcess\bin\Release\ARProcess.dll</HintPath>
     </Reference>
-    <Reference Include="eBiz4DApp">
+    <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\INProcess\INProcess\bin\Debug\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DSys">
@@ -134,7 +135,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
