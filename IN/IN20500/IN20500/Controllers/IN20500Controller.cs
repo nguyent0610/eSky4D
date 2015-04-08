@@ -156,7 +156,7 @@ namespace IN20500.Controllers
         }
 
 
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
         public PartialViewResult Body()
         {
             var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
@@ -302,7 +302,7 @@ namespace IN20500.Controllers
                 _objHeader = _db.IN_Inventory.Where(p => p.InvtID == obj.InvtID).FirstOrDefault();
                 if (_objHeader != null && !isNew)
                 {
-                    Updating_Inventory(_objHeader, obj);
+                    Updating_Inventory(_objHeader, obj,data);
                     if (obj.Public == true)
                     {
                         var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID).ToList();
@@ -334,7 +334,7 @@ namespace IN20500.Controllers
 
                         }
                     }
-                    Updating_Inventory(_objHeader, obj);
+                    Updating_Inventory(_objHeader, obj,data);
 
                     _objHeader.Crtd_DateTime = DateTime.Now;
                     _objHeader.Crtd_Prog = screenNbr;
@@ -509,7 +509,7 @@ namespace IN20500.Controllers
         }
 
 
-        private void Updating_Inventory(IN_Inventory t, IN_Inventory s)
+        private void Updating_Inventory(IN_Inventory t, IN_Inventory s,FormCollection data)
         {
            
                 t.LUpd_DateTime = DateTime.Now;
@@ -518,55 +518,55 @@ namespace IN20500.Controllers
 
                 t.Public = s.Public;
                 t.BarCode = s.BarCode;
-                t.Buyer = s.Buyer;
-                t.ClassID = s.ClassID;
-                t.Color = s.Color;
-                t.Descr = s.Descr;
-                t.Descr1 = s.Descr1;
-                t.DfltPOUnit = s.DfltPOUnit;
-                t.DfltSOUnit = s.DfltSOUnit;          
-                t.IROverStkQty = s.IROverStkQty;
-                t.IRSftyStkDays = s.IRSftyStkDays;
-                t.IRSftyStkPct = s.IRSftyStkPct;
-                t.IRSftyStkQty = s.IRSftyStkQty;
-                t.InvtType = s.InvtType;
-                t.LossRate00 = s.LossRate00;
-                t.LossRate01 = s.LossRate01;
-                t.LossRate02 = s.LossRate02;
-                t.LossRate03 = s.LossRate03;
-                t.LotSerFxdLen = s.LotSerFxdLen;
-                t.LotSerFxdTyp = s.LotSerFxdTyp;
-                t.LotSerFxdVal = s.LotSerFxdVal;
-                t.LotSerIssMthd = s.LotSerIssMthd;
-                t.LotSerNumLen = s.LotSerNumLen;
-                t.LotSerNumVal = s.LotSerNumVal;
-                t.LotSerTrack = s.LotSerTrack;
-                t.MaterialType = s.MaterialType;
+                t.Buyer = data["cboBuyer"];
+                t.ClassID = data["cboClassID"];
+                t.Color = data["txtColor"];
+                t.Descr = data["txtDescr"];
+                t.Descr1 = data["txtDescr1"];
+                t.DfltPOUnit = data["cboDfltPOUnit"];
+                t.DfltSOUnit = data["cboDfltSOUnit"];
+                t.IROverStkQty = Convert.ToDouble(data["txtIROverStkQty"]);
+                t.IRSftyStkDays = Convert.ToDouble(data["txtIRSftyStkDays"]);
+                t.IRSftyStkPct = Convert.ToDouble(data["txtIRSftyStkPct"]);
+                t.IRSftyStkQty = Convert.ToDouble(data["txtIRSftyStkQty"]);
+                t.InvtType = data["cboInvtType"];
+                t.LossRate00 = Convert.ToDouble(data["txtLossRate00"]);
+                t.LossRate01 = Convert.ToDouble(data["txtLossRate01"]);
+                t.LossRate02 = Convert.ToDouble(data["txtLossRate02"]);
+                t.LossRate03 = Convert.ToDouble(data["txtLossRate03"]);
+                t.LotSerFxdLen = Convert.ToInt16(data["txtLotSerFxdLen"]);
+                t.LotSerFxdTyp = data["cboLotSerFxdTyp"];
+                t.LotSerFxdVal = data["txtLotSerFxdVal"];
+                t.LotSerIssMthd = data["cboLotSerIssMthd"];
+                t.LotSerNumLen = Convert.ToInt16(data["txtLotSerNumLen"]);
+                t.LotSerNumVal = data["txtLotSerNumVal"];
+                t.LotSerTrack = data["cboLotSerTrack"];
+                t.MaterialType = data["cboMaterialType"];
                 t.NodeID = s.NodeID;
                 t.NodeLevel = s.NodeLevel;
-                t.POFee = s.POFee;
-                t.POPrice = s.POPrice;
+                t.POFee = Convert.ToDouble(data["txtPOFee"]);
+                t.POPrice = Convert.ToDouble(data["txtPOPrice"]);
                 t.ParentRecordID = s.ParentRecordID;
-                t.PrePayPct = s.PrePayPct;
-                t.PriceClassID = s.PriceClassID;
-                t.SOFee = s.SOFee;
-                t.SOPrice = s.SOPrice;
-                t.SerAssign = s.SerAssign;
-                t.ShelfLife = s.ShelfLife;
-                t.WarrantyDays = s.WarrantyDays;
+                t.PrePayPct = Convert.ToDouble(data["txtPrePayPct"]);
+                t.PriceClassID = data["cboPriceClassID"];
+                t.SOFee = Convert.ToDouble(data["txtSOFee"]);
+                t.SOPrice = Convert.ToDouble(data["txtSOPrice"]);
+                t.SerAssign = data["cboSerAssign"];
+                t.ShelfLife = Convert.ToInt16(data["txtShelfLife"]);
+                t.WarrantyDays = Convert.ToInt16(data["txtWarrantyDays"]);
                 t.Size = s.Size;
-                t.Source = s.Source;
+                t.Source = data["cboSource"];
                 t.Status = s.Status;
                 t.StkItem = s.StkItem;
-                t.StkUnit = s.StkUnit;
-                t.StkVol = s.StkVol;
-                t.StkWt = s.StkWt;
-                t.StkWtUnit = s.StkWtUnit;
-                t.Style = s.Style;
-                t.TaxCat = s.TaxCat;
-                t.ValMthd = s.ValMthd;
-                t.VendID2 = s.VendID2;
-                t.VendID1 = s.VendID1;
+                t.StkUnit = data["cboStkUnit"];
+                t.StkVol = Convert.ToDouble(data["txtStkVol"]);
+                t.StkWt = Convert.ToDouble(data["txtStkWt"]);
+                t.StkWtUnit = data["cboStkWtUnit"];
+                t.Style = data["cboStyle"];
+                t.TaxCat = data["cboDfltSlsTaxCat"];
+                t.ValMthd = data["cboValMthd"];
+                t.VendID2 = data["cboVendor2"];
+                t.VendID1 = data["cboVendor1"];
                 t.ApproveStatus = s.ApproveStatus;
         }
 

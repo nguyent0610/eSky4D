@@ -452,6 +452,7 @@ var stoIN_Inventory_Loaded = function (store) {
         record = store.getAt(0);     
         record.data.ApproveStatus = 'H';
         record.data.Public = true;
+        record.Status = 'AC';
         store.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
         App.cboInvtID.forceSelection = false;

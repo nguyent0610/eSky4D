@@ -186,7 +186,7 @@
                                     .Items(
                                             X.Panel().Listeners(l =>
                                                 {
-                                                    l.Render.Handler = "HQ.common.control_render(this,'header')";
+                                                    //l.Render.Handler = "HQ.common.control_render(this,'header')";
 
                                                 })
                                             .ID("tabInfo").Layout(LayoutType.HBox).Border(false).AutoScroll(true)
@@ -212,7 +212,7 @@
                                                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                                             lst.Change.Fn = "cboClassID_Change";
                                                             lst.Focus.Handler = "this.forceSelection = true;";
-
+                                                            lst.Render.Handler = "HQ.common.control_render(this,'ClassID')";
                                                         })
 
                                                     , HQ.Combo().ID("cboPriceClassID").Name("cboPriceClassID").HQLangCode("PriceClassID").HQProcedure("IN20500_pcItemPriceClass")
