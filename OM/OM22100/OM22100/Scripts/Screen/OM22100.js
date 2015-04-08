@@ -93,13 +93,11 @@ var ImportExel = function () {
     App.dataForm.submit({
         waitMsg: "Importing....",
         url: 'OM22100/OM22100Import',
-        timeout:1800,
+        timeout:18000000,
         clientValidation: false,
         method: 'POST',
         params: {
-            BranchID: App.cboBranchID.getValue()
-           
-
+            //BranchID: App.cboBranchID.getValue()
         },
         success: function (msg, data) {
             if (!Ext.isEmpty(this.result.data.message)) {
@@ -108,7 +106,6 @@ var ImportExel = function () {
             else {
                 HQ.message.process(msg, data, true);
             }
-
         },
         failure: function (msg, data) {           
            HQ.message.process(msg, data, true);
