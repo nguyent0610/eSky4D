@@ -23,6 +23,7 @@ namespace OM23101.Controllers
         private string _screenNbr = "OM23101";
         private string _userName = Current.UserName;
         OM23101Entities _db = Util.CreateObjectContext<OM23101Entities>(false);
+
         public ActionResult Index()
         {
             Column clm;
@@ -93,16 +94,18 @@ namespace OM23101.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetOM_FCSBranch(string BranchID, DateTime FCSDate)
+        public ActionResult GetOM_FCSBranch(string State, DateTime FCSDate)
         {
-            return this.Store(_db.OM23101_pgLoadGrid(BranchID, FCSDate));
+            return this.Store(_db.OM23101_pgLoadGrid(State, FCSDate));
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
