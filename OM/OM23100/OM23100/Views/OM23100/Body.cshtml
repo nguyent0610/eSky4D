@@ -29,8 +29,15 @@
         X.Panel().ID("pnlHeader")
             .Region(Region.North)
             .Items(
-
-                HQ.Combo().ID("cboZone")
+                HQ.DateField().ID("dateFcs").MarginSpec("5 0 0 0").HQLangCode("OM23100_Date").Width(400)
+                .Type(DatePickerType.Month).Format("yyyy/MM").Value(DateTime.Now.ToString("yyyy/MM"))
+                .Listeners(p =>
+                {
+                    p.Change.Fn = "dateFcs_Change";
+                    p.Expand.Fn = "dateFcs_expand";
+                })
+                
+                , HQ.Combo().ID("cboZone")
                     .Name("cboZone").HQLangCode("OM23100_Zone").HQProcedure("OM23100_pcZone")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQAutoLoad(false)
                     .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
@@ -94,14 +101,6 @@
                             }
                         )
 
-                ,HQ.DateField().ID("dateFcs").MarginSpec("5 0 0 0").HQLangCode("OM23100_Date").Width(400)
-                .Type(DatePickerType.Month).Format("yyyy/MM").Value(DateTime.Now.ToString("yyyy/MM"))
-                .Listeners(p =>
-                {
-                    p.Change.Fn = "dateFcs_Change";
-                    p.Expand.Fn = "dateFcs_expand";
-                })
-                
                 , X.Button().ID("btnSearch").MarginSpec("5 0 5 160").Width(180)
                     .Text(Util.GetLang("OM23100_Search")).Listeners(p =>
                     {

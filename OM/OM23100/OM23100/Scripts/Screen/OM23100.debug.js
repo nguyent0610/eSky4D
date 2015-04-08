@@ -131,7 +131,6 @@ var grdOM_FCS_BeforeEdit = function (editor, e) {
     else if (d.getYear() > _dateServer.getYear()) {
         return false;
     }
-
 };
 
 var grdOM_FCS_Edit = function (item, e) {
@@ -223,6 +222,7 @@ var save = function () {
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 HQ.isChange = false;
+                HQ.isFirstLoad = true;
                 App.stoOM_FCS.reload();
             },
             failure: function (msg, data) {
