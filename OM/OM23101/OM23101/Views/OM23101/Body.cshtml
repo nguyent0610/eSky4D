@@ -1,0 +1,209 @@
+@using System.Globalization;
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM23101;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport()   
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(lst =>
+    {
+        lst.BoxReady.Fn = "beforeSelectcombo";
+    })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+            .Region(Region.North)
+            .Items(
+                HQ.DateField().ID("dateFcs").MarginSpec("5 0 0 0").HQLangCode("OM23100_Date").Width(400)
+                .Type(DatePickerType.Month).Format("yyyy/MM").Value(DateTime.Now.ToString("yyyy/MM"))
+                .Listeners(p =>
+                {
+                    p.Change.Fn = "dateFcs_Change";
+                    p.Expand.Fn = "dateFcs_expand";
+                })
+                
+                , HQ.Combo().ID("cboZone")
+                    .Name("cboZone").HQLangCode("OM23100_Zone").HQProcedure("OM23101_pcZone")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQAutoLoad(false)
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboZone_Change";
+                    })
+
+                , HQ.Combo().ID("cboTerritory")
+                    .Name("cboTerritory").HQLangCode("Area").HQProcedure("OM23101_pcTerritory")
+                    .HQColumnShow("Territory,Descr,Zone").DisplayField("Descr").ValueField("Territory")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
+                    .ForceSelection(true).EnforceMaxLength(true).AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@Zone", Value = "App.cboZone.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw } 
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboTerritory_Change";
+                    })
+
+                , HQ.Combo().ID("cboState")
+                    .Name("cboState").HQLangCode("OM23100_State").HQProcedure("OM23101_pcState")
+                    .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
+                    .ForceSelection(true).EnforceMaxLength(true).AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw } 
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboState_Change";
+                    })
+
+                , X.Button().ID("btnSearch").MarginSpec("5 0 5 160").Width(180)
+                    .Text(Util.GetLang("OM23100_Search")).Listeners(p =>
+                    {
+                        p.Click.Fn = "btnSearch_Click";
+                    })
+            )//pnl Header
+
+            ,
+            X.Panel().ID("pnlgrd")
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            //.Loader(
+            //    X.ComponentLoader()
+            //    .Url(Url.Action("RenderChild"))
+            //    .Mode(LoadMode.Html)
+            //    .LoadMask(lm=>lm.ShowMask=true)
+            //)
+            .Items(
+                X.GridPanel().ID("grdOM_FCSBranch")
+                .Hidden(true)
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false).LoadMask(true))
+                .Region(Region.Center).Flex(1)
+                .SelectionMemory(false)
+                .StoreID("stoOM_FCSBranch")
+                //.Store(
+                //    X.Store()
+                //    .ID("stoOM_FCSBranch")
+                //    .PageSize(50)
+                //    .Model(Util.GenerateModel(typeof(), "mdlOM23101_pgOM_FCS", "SlsperId"))
+                //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_FCS"))).AutoLoad(false)
+                //    .Parameters(ps =>
+                //    {
+                //        ps.Add(new StoreParameter("BranchID", "App.cboDist.value", ParameterMode.Raw));
+                //        ps.Add(new StoreParameter("FCSDate", "App.dateFcs.value", ParameterMode.Raw));
+                //    })
+                //    .Listeners(l =>
+                //    {
+                //        l.BeforeLoad.Fn = "stoBeforeLoad";
+                //        l.Load.Fn = "stoLoad";
+                //        l.Update.Fn = "stoChanged";
+                //    })
+                //)
+                //.Listeners(p =>
+                //{
+                //    p.BoxReady.Handler = "firstLoad();";
+                //})
+                .SortableColumns(false)
+                .ColumnModel(
+                    X.RowNumbererColumn().Width(40)
+
+                    , X.Column().DataIndex("BranchID").Text(Util.GetLang("OM23101_BranchID")).Width(80).Locked(true)
+                    .Editor(
+                        HQ.Combo().ID("cboBranchID")
+                        .Name("cboSlsperId").HQProcedure("OM23101_pcCompany")
+                        .HQColumnShow("CpnyID,CpnyName,Territory").DisplayField("CpnyName").ValueField("CpnyID")
+                        .Width(300).HQHeightWidth(500, 400).ForceSelection(true)
+                    
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue()", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@State", Value = "App.cboState.getValue()", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                    )
+                    , X.Column().Text(Util.GetLang("OM23101_BranchName")).DataIndex("CpnyName").Width(150).Locked(true)
+       
+                //    , X.CommandColumn().Width(150)
+                //    .Commands(
+                //        X.GridCommand()
+                //        .Text(Util.GetLang("Reject"))
+                //        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                //        .CommandName("reject")
+                //        .Icon(Icon.ArrowUndo)
+                //    )
+                //    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                //    .Listeners(l => l.Command.Handler = "grdOM_FCSBranch_Reject(record);")
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmOM_FCSBranch").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdOM_FCSBranch_BeforeEdit";
+                        ls.Edit.Fn = "grdOM_FCSBranch_Edit";
+                        ls.ValidateEdit.Fn = "grdOM_FCSBranch_ValidateEdit";
+
+                    })
+                )
+
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("BranchID"),
+                            X.StringFilter().DataIndex("CpnyName")
+                        )
+                )
+            )// pnl Grid
+
+    )//frm Main
+)//View port
+)
