@@ -1,0 +1,175 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN22001;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Border)
+        .ID("frmMain")
+        .TrackResetOnLoad(true)
+        //.DefaultAnchor("100%")
+        .BodyPadding(10)
+        .BodyBorder(0).AutoScroll(true)
+        .TopBar(Util.SetupToolbar("close,print", true, "Event.Form.menuClick"))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .Items(
+            X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.West)
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
+            .Items(
+
+                // First Column
+                X.FieldSet().Title(Util.GetLang("POSM"))
+                .Layout(LayoutType.VBox).MarginSpec("0 5 0 5")
+                .MinWidth(200)//.Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboPosmID")
+                    .HQLangCode("POSMID").HQProcedure("IN22001_pcPOSM")
+                    .HQColumnShow("POSMId,FromDate,ToDate").HQHeightWidth(400, 300)
+                    .ValueField("POSMId").DisplayField("POSMId").AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Fn = "Event.Form.cboPosmID_change";
+                    })
+                    
+                    ,HQ.DateField().ID("dtpFromDate")
+                    .HQLangCode("FromDate").DataIndex("FromDate")
+                    .AllowBlank(false)
+                    .Listeners(l=>l.Change.Fn="Event.Form.dtpFromDate_change")
+                    
+                    ,HQ.DateField().ID("dtpToDate")
+                    .AllowBlank(false)
+                    .HQLangCode("ToDate").DataIndex("ToDate")
+                    
+                    ,HQ.Checkbox().ID("chkActive")
+                    .MarginSpec("0 0 0 105")
+                    .HQLangCode("Active").DataIndex("Active")
+                ) // First Column
+            )
+            .Listeners(x => { 
+                x.Render.Handler = "HQ.common.control_render(this,'posm')"; 
+            })// pnlHeader
+
+            , X.GridPanel().ID("grdDet")
+            .Region(Region.Center)
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .SortableColumns(false)
+            .StoreID("stoDet")
+            .ColumnModel(
+                X.RowNumbererColumn()
+                , X.Column().Text(Util.GetLang("Zone")).DataIndex("Zone")
+                .Editor(
+                    HQ.Combo().ID("cboColZone")
+                    .HQProcedure("IN22001_pcZone")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Code")
+                    .HQHeightWidth(400, 300).ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                )
+                
+                , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory")
+                .Editor(
+                    HQ.Combo().ID("cboColTerritory")
+                    .HQProcedure("IN22001_pcTerritory")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Code")
+                    .HQHeightWidth(400, 300).ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        , new StoreParameter("@Zone", 
+                            "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.Zone : Ext.String.empty", 
+                            ParameterMode.Raw)
+                    })
+                    .LoadData()
+                )
+                
+                , X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID")
+                .Editor(
+                    HQ.Combo().ID("cboColCpny")
+                    .HQProcedure("IN22001_pcBranchID")
+                    .HQColumnShow("BranchID,BranchName").ValueField("BranchID").DisplayField("BranchID")
+                    .HQHeightWidth(400, 300).ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        , new StoreParameter("@Territory", 
+                            "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.Territory : Ext.String.empty", 
+                            ParameterMode.Raw)
+                    })
+                    .LoadData()
+                )
+
+                , X.CommandColumn()
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "Event.Grid.grdDet_beforeEdit";
+                    ls.Edit.Fn = "Event.Grid.grdDet_edit";
+                    ls.ValidateEdit.Fn = "Event.Grid.grdDet_validateEdit";
+                })
+            )
+            .Features(
+                X.GridFilters().Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("Zone")
+                    , X.StringFilter().DataIndex("Territory")
+                    , X.StringFilter().DataIndex("BranchID")
+                )
+            )
+            .Listeners(x => { 
+                x.Render.Handler = "HQ.common.control_render(this,'branch')"; 
+            })
+            //.BottomBar(
+            //    X.PagingToolbar().ID("pag")
+            //    .Items(
+            //        X.Label(Util.GetLang("PageSize")),
+            //        X.ToolbarSpacer(10),
+            //        X.ComboBox()
+            //        .Width(80)
+            //        .Items("1", "2", "10", "20", "30", "50")
+            //        .SelectedItems("50")
+            //        .Listeners(l =>
+            //            {
+            //                l.Select.Fn = "HQ.grid.onPageSelect";
+            //            })
+            //    )
+            //    .Plugins(X.ProgressBarPager())
+            //)// grdDet
+        )
+        .Listeners(lst =>
+        {
+            lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
+            lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
+        })// Form: frmMain
+    )
+)
