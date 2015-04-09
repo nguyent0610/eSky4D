@@ -1,9 +1,8 @@
-//// Declare //////////////////////////////////////////////////////////
-
+//// Declare ///////////////////////////////////////////////////////////
 var keys = ['BranchID'];
 var fieldsCheckRequire = ["BranchID"];
 var fieldsLangCheckRequire = ["BranchID"];
-///////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
@@ -30,12 +29,17 @@ var menuClick = function (command) {
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
                 App.stoSYS_CloseDateHistDetail.reload();
+                App.cboHistID.store.reload();
             }
             break;
         case "new":
-            if (HQ.isInsert) {
-                HQ.grid.insert(App.grdSYS_CloseDateHistDetail, keys);
-            }
+            App.pnlLeft.show();
+            App.cboTask.setDisabled(false);
+            App.lblDate.setDisabled(false);
+            App.btnProcess.setDisabled(false);
+            App.pnlDetail.hide();
+            App.cboHistID.setValue('');
+            App.lblDate.setValue(_dateServer);
             break;
         case "delete":
             if (App.slmSYS_CloseDateHistDetail.selected.items[0] != undefined) {
@@ -46,7 +50,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoSYS_CloseDateHistDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoSYS_CloseDateHistDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -59,15 +63,55 @@ var menuClick = function (command) {
     }
 
 };
+var loadData = function () {
+    if (App.stoSYS_CloseDateHistHeader.getCount() == 0) {
+        // If has no record then create a new
+        App.stoSYS_CloseDateHistHeader.insert(0, Ext.data.Record());
+    }
+    var record = App.stoSYS_CloseDateHistHeader.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+};
 
-var btnUpdate_Click = function (sender, e) {
-    App.grdSYS_CloseDateHistDetail.getStore().each(function (item) {
-        item.set("WrkDateChk", App.chkWrkDateChk.checked);
-        item.set("WrkUpperDays", App.lblWrkUpperDays.getValue());
-        item.set("WrkLowerDays", App.lblWrkLowerDays.getValue());
-        item.set("WrkOpenDate", App.lblWrkOpenDate.getValue());
-        item.set("WrkAdjDate", App.lblWrkAdjDate.getValue());
-    });
+var slmSYS_CloseDateHistDetail_SelectionChange = function (mdl, selected, eOpts) {
+    if (selected.length) {
+        App.tplDetail.overwrite(App.pnlDetail.body, selected[0].data);
+    }
+};
+
+var cboHistID_Select = function (sender, e) {
+    if ((!HQ.isNew || sender.valueModels != null) && !App.stoSYS_CloseDateHistDetail.loading) {
+        if (e) {
+            App.pnlLeft.hide();
+            App.cboTask.setDisabled(true);
+            App.lblDate.setDisabled(true);
+            App.btnProcess.setDisabled(true);
+            App.pnlDetail.show();
+            App.tplDetail.overwrite(App.pnlDetail.body, '');
+            App.grdSYS_CloseDateHistDetail.getSelectionModel().clearSelections();
+            App.stoSYS_CloseDateHistDetail.reload();
+        }
+
+    }
+}
+var cboHistID_Change = function (sender, e) {
+    if (!e) {
+        App.pnlLeft.show();
+        App.cboTask.setDisabled(false);
+        App.lblDate.setDisabled(false);
+        App.btnProcess.setDisabled(false);
+        App.pnlDetail.hide();
+        App.tplDetail.overwrite(App.pnlDetail.body, '');
+        App.grdSYS_CloseDateHistDetail.getSelectionModel().clearSelections();
+        App.stoSYS_CloseDateHistDetail.reload();
+    }
+
+};
+var btnProcess_Click = function (sender, e) {
+    if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+        if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoSYS_CloseDateHistDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+            save();
+        }
+    }
 };
 
 var beforenodedrop = function (node, data, overModel, dropPosition, dropFn) {
@@ -104,18 +148,22 @@ var btnAddAll_click = function (btn, e, eOpts) {
                     var record = HQ.store.findInStore(App.grdSYS_CloseDateHistDetail.store,
                         ['BranchID'],
                         [node.data.RecID]);
+                    var oldDate = HQ.store.findInStore(App.stoGetDayCloseDateSetUp, ['BranchID'], [node.data.RecID]);
+
                     if (!record) {
                         record = App.stoSYS_CloseDateHistDetail.getAt(App.grdSYS_CloseDateHistDetail.store.getCount() - 1);
                         record.set('BranchID', node.data.RecID);
-                        record.set('WrkAdjDate', new Date(_dateServer));
-                        record.set('WrkOpenDate', new Date(_dateServer));
+                        record.set('WrkDateChk', oldDate.WrkDateChk);
+                        record.set('WrkAdjDateBefore', oldDate.WrkAdjDate);
+                        record.set('WrkOpenDateBefore', oldDate.WrkOpenDate);
+                        record.set('WrkAdjDateAfter', new Date(App.lblDate.getValue()));
+                        record.set('WrkOpenDateAfter', new Date(App.lblDate.getValue()));
+                        record.set('WrkLowerDays', oldDate.WrkLowerDays);
+                        record.set('WrkUpperDays', oldDate.WrkUpperDays);
+
                     }
                 }
             });
-            HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
-            var record = App.stoSYS_CloseDateHistDetail.getAt(App.stoSYS_CloseDateHistDetail.getCount() - 1);
-            record.set('WrkAdjDate', new Date(_dateServer));
-            record.set('WrkOpenDate', new Date(_dateServer));
             App.treePanelBranch.clearChecked();
         }
 
@@ -124,29 +172,37 @@ var btnAddAll_click = function (btn, e, eOpts) {
         HQ.message.show(4, '', '');
     }
 };
+
 var addNode = function (node) {
     if (node.data.Type == "Company") {
         var record = HQ.store.findInStore(App.grdSYS_CloseDateHistDetail.store,
             ['BranchID'],
             [node.data.RecID]);
+        //Lay date dung xu ly rieng
+        var oldDate = HQ.store.findInStore(App.stoGetDayCloseDateSetUp, ['BranchID'], [node.data.RecID]);
         if (!record) {
+
+            HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
+
             record = App.stoSYS_CloseDateHistDetail.getAt(App.grdSYS_CloseDateHistDetail.store.getCount() - 1);
             record.set('BranchID', node.data.RecID);
-            record.set('WrkAdjDate', new Date(_dateServer));
-            record.set('WrkOpenDate', new Date(_dateServer));
-
+            record.set('WrkDateChk', oldDate.WrkDateChk);
+            record.set('WrkAdjDateBefore', oldDate.WrkAdjDate);
+            record.set('WrkOpenDateBefore', oldDate.WrkOpenDate);
+            record.set('WrkAdjDateAfter', new Date(App.lblDate.getValue()));
+            record.set('WrkOpenDateAfter', new Date(App.lblDate.getValue()));
+            record.set('WrkLowerDays', oldDate.WrkLowerDays);
+            record.set('WrkUpperDays', oldDate.WrkUpperDays);
         }
-        HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
-        var record = App.stoSYS_CloseDateHistDetail.getAt(App.stoSYS_CloseDateHistDetail.getCount() - 1);
-        record.set('WrkAdjDate', new Date(_dateServer));
-        record.set('WrkOpenDate', new Date(_dateServer));
+
     }
     else if (node.childNodes) {
         node.childNodes.forEach(function (itm) {
             addNode(itm);
         });
     }
-}
+};
+
 var btnAdd_click = function (btn, e, eOpts) {
     if (HQ.isUpdate) {
         var allNodes = App.treePanelBranch.getCheckedNodes();
@@ -157,18 +213,21 @@ var btnAdd_click = function (btn, e, eOpts) {
                     var record = HQ.store.findInStore(App.grdSYS_CloseDateHistDetail.store,
                         ['BranchID'],
                         [node.attributes.RecID]);
+                    var oldDate = HQ.store.findInStore(App.stoGetDayCloseDateSetUp, ['BranchID'], [node.attributes.RecID]);
+
                     if (!record) {
                         record = App.stoSYS_CloseDateHistDetail.getAt(App.grdSYS_CloseDateHistDetail.store.getCount() - 1);
                         record.set('BranchID', node.attributes.RecID);
-                        record.set('WrkAdjDate', new Date(_dateServer));
-                        record.set('WrkOpenDate', new Date(_dateServer));
+                        record.set('WrkDateChk', oldDate.WrkDateChk);
+                        record.set('WrkAdjDateBefore', oldDate.WrkAdjDate);
+                        record.set('WrkOpenDateBefore', oldDate.WrkOpenDate);
+                        record.set('WrkAdjDateAfter', new Date(App.lblDate.getValue()));
+                        record.set('WrkOpenDateAfter', new Date(App.lblDate.getValue()));
+                        record.set('WrkLowerDays', oldDate.WrkLowerDays);
+                        record.set('WrkUpperDays', oldDate.WrkUpperDays);
                     }
                 }
             });
-            HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
-            var record = App.stoSYS_CloseDateHistDetail.getAt(App.stoSYS_CloseDateHistDetail.getCount() - 1);
-            record.set('WrkAdjDate', new Date(_dateServer));
-            record.set('WrkOpenDate', new Date(_dateServer));
             App.treePanelBranch.clearChecked();
         }
 
@@ -235,7 +294,7 @@ var deleteAllCompanies = function (item) {
 };
 
 var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
-    var record = App.cboBranchIDSA40000_pcCompany.findRecord("CpnyID", rec.data.BranchID);
+    var record = App.cboBranchIDSA40100_pcCompany.findRecord("CpnyID", rec.data.BranchID);
     if (record) {
         return record.data.CpnyName;
     }
@@ -244,48 +303,27 @@ var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store
     }
 };
 
-var renderTerritory = function (value, metaData, rec, rowIndex, colIndex, store) {
-    var record = App.cboBranchIDSA40000_pcCompany.findRecord("CpnyID", rec.data.BranchID);
-    if (record) {
-        return record.data.Territory;
-    }
-    else {
-        return value;
-    }
-};
-
-var renderAddress = function (value, metaData, rec, rowIndex, colIndex, store) {
-    var record = App.cboBranchIDSA40000_pcCompany.findRecord("CpnyID", rec.data.BranchID);
-    if (record) {
-        return record.data.Address;
-    }
-    else {
-        return value;
-    }
-};
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
     App.cboBranchID.store.load(function () {
         App.stoSYS_CloseDateHistDetail.reload();
     });
-
-
-}
+};
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SA40000');
+    HQ.common.changeData(HQ.isChange, 'SA40100');
 };
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
     HQ.isFirstLoad = true;
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SA40000');
+    HQ.common.changeData(HQ.isChange, 'SA40100');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            HQ.store.insertRecord(sto, keys, { WrkAdjDate: new Date(_dateServer), WrkOpenDate: new Date(_dateServer) });
+            //HQ.store.insertRecord(sto, keys, { WrkAdjDate: new Date(_dateServer), WrkOpenDate: new Date(_dateServer) });
         }
         HQ.isFirstLoad = false;
     }
@@ -295,27 +333,11 @@ var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 var grdSYS_CloseDateHistDetail_BeforeEdit = function (editor, e) {
-    return HQ.grid.checkBeforeEdit(e, keys);
+    //return HQ.grid.checkBeforeEdit(e, keys);
+    return false;
 };
 var grdSYS_CloseDateHistDetail_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdSYS_CloseDateHistDetail, e, keys);
-    var record = App.stoSYS_CloseDateHistDetail.getAt(App.stoSYS_CloseDateHistDetail.getCount() - 1);
-    record.set('WrkAdjDate', new Date(_dateServer));
-    record.set('WrkOpenDate', new Date(_dateServer));
-
-    //if (e.field == "BranchID") {
-    //    var selectedRecord = App.cboBranchID.store.findRecord('CpnyID', e.value);
-    //    if (selectedRecord) {
-    //        e.record.set("Territory", selectedRecord.data.Territory);
-    //        e.record.set("BranchName", selectedRecord.data.CpnyName);
-    //        e.record.set("Address", selectedRecord.data.Address);
-    //    }
-    //    else {
-    //        e.record.set("Territory", "");
-    //        e.record.set("BranchName", "");
-    //        e.record.set("Address", "");
-    //    }
-    //}
 };
 var grdSYS_CloseDateHistDetail_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdSYS_CloseDateHistDetail, e, keys);
@@ -330,12 +352,14 @@ var grdSYS_CloseDateHistDetail_Reject = function (record) {
 //// Process Data ///////////////////////////////////////////////////////
 var save = function () {
     if (App.frmMain.isValid()) {
+        App.frmMain.updateRecord();
         App.frmMain.submit({
             timeout: 1800000,
             waitMsg: HQ.common.getLang("SavingData"),
-            url: 'SA40000/Save',
+            url: 'SA40100/Save',
             params: {
-                lstSYS_CloseDateSetUp: HQ.store.getData(App.stoSYS_CloseDateHistDetail)
+                lstSYS_CloseDateHistHeader: HQ.store.getData(App.frmMain.getRecord().store),
+                lstSYS_CloseDateHistDetail: HQ.store.getData(App.stoSYS_CloseDateHistDetail)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
@@ -356,7 +380,6 @@ var deleteData = function (item) {
     }
 };
 
-
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 function refresh(item) {
@@ -364,6 +387,7 @@ function refresh(item) {
         HQ.isChange = false;
         HQ.isFirstLoad = true;
         App.stoSYS_CloseDateHistDetail.reload();
+        App.cboHistID.store.reload();
     }
 };
 
@@ -381,5 +405,15 @@ var myValidateRecord = function (filter, record, columnName) {
         }
     }
     return false;
+};
+
+var getRowClass = function (record, index) {
+    if (record.data.Status == 'H') {
+        return "row-red";// + record.data.color;
+    }
+    else if (record.data.tstamp == "") {
+        return "row-yellow";// + record.data.color;
+    }
+    else return "row-none";
 };
 /////////////////////////////////////////////////////////////////////////
