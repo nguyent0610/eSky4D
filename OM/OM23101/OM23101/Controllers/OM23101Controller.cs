@@ -95,15 +95,15 @@ namespace OM23101.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetOM_FCSBranch(string State, DateTime FCSDate)
+        public ActionResult GetOM_FCSBranch(string UserID,string Territory, string State, DateTime FCSDate)
         {
-            return this.Store(_db.OM23101_pgLoadGrid(State, FCSDate));
+            return this.Store(_db.OM23101_pgLoadGrid(UserID, Territory, State, FCSDate));
         }
 
         [HttpPost]
