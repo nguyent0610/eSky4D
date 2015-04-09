@@ -77,62 +77,6 @@ namespace IN22001.Controllers
                             if (posm.tstamp.ToHex() == posmInput.tstamp.ToHex())
                             {
                                 updatePosm(ref posm, posmInput, false);
-
-                                var custHandler = new StoreDataHandler(data["lstDetChange"]);
-                                var lstDetChange = custHandler.BatchObjectData<IN22001_pgBranch_Result>();
-
-                                foreach (var created in lstDetChange.Created)
-                                {
-                                    if (!string.IsNullOrWhiteSpace(created.BranchID))
-                                    {
-                                        created.PosmID = posmInput.PosmID;
-
-                                        var createdCpny = _db.IN_POSMBranch.FirstOrDefault(
-                                            x => x.BranchID == created.BranchID
-                                                && x.PosmID == created.PosmID);
-                                        if (createdCpny == null)
-                                        {
-                                            createdCpny = new IN_POSMBranch();
-                                            updateBranch(ref createdCpny, created, true);
-                                            _db.IN_POSMBranch.AddObject(createdCpny);
-                                        }
-                                    }
-                                }
-
-                                foreach (var updated in lstDetChange.Updated)
-                                {
-                                    if (!string.IsNullOrWhiteSpace(updated.BranchID))
-                                    {
-                                        updated.PosmID = posmInput.PosmID;
-
-                                        var updatedCpny = _db.IN_POSMBranch.FirstOrDefault(
-                                            x => x.BranchID == updated.BranchID
-                                                && x.PosmID == updated.PosmID);
-                                        if (updatedCpny != null)
-                                        {
-                                            updateBranch(ref updatedCpny, updated, true);
-                                        }
-                                    }
-                                }
-
-                                foreach (var deleted in lstDetChange.Deleted)
-                                {
-                                    if (!string.IsNullOrWhiteSpace(deleted.BranchID))
-                                    {
-                                        deleted.PosmID = posmInput.PosmID;
-
-                                        var deletedCpny = _db.IN_POSMBranch.FirstOrDefault(
-                                            x => x.BranchID == deleted.BranchID
-                                                && x.PosmID == deleted.PosmID);
-                                        if (deletedCpny != null)
-                                        {
-                                            _db.IN_POSMBranch.DeleteObject(deletedCpny);
-                                        }
-                                    }
-                                }
-
-                                _db.SaveChanges();
-                                return Json(new { success = true, msgCode = 201405071 });
                             }
                             else
                             {
@@ -145,10 +89,65 @@ namespace IN22001.Controllers
                         posm = new IN_POSMHeader();
                         updatePosm(ref posm, posmInput, true);
                         _db.IN_POSMHeader.AddObject(posm);
-                        _db.SaveChanges();
-
-                        return Json(new { success = true, msgCode = 201405071 });
                     }
+
+                    #region Branch
+                    var custHandler = new StoreDataHandler(data["lstDetChange"]);
+                    var lstDetChange = custHandler.BatchObjectData<IN22001_pgBranch_Result>();
+
+                    foreach (var created in lstDetChange.Created)
+                    {
+                        if (!string.IsNullOrWhiteSpace(created.BranchID))
+                        {
+                            created.PosmID = posmInput.PosmID;
+
+                            var createdCpny = _db.IN_POSMBranch.FirstOrDefault(
+                                x => x.BranchID == created.BranchID
+                                    && x.PosmID == created.PosmID);
+                            if (createdCpny == null)
+                            {
+                                createdCpny = new IN_POSMBranch();
+                                updateBranch(ref createdCpny, created, true);
+                                _db.IN_POSMBranch.AddObject(createdCpny);
+                            }
+                        }
+                    }
+
+                    foreach (var updated in lstDetChange.Updated)
+                    {
+                        if (!string.IsNullOrWhiteSpace(updated.BranchID))
+                        {
+                            updated.PosmID = posmInput.PosmID;
+
+                            var updatedCpny = _db.IN_POSMBranch.FirstOrDefault(
+                                x => x.BranchID == updated.BranchID
+                                    && x.PosmID == updated.PosmID);
+                            if (updatedCpny != null)
+                            {
+                                updateBranch(ref updatedCpny, updated, true);
+                            }
+                        }
+                    }
+
+                    foreach (var deleted in lstDetChange.Deleted)
+                    {
+                        if (!string.IsNullOrWhiteSpace(deleted.BranchID))
+                        {
+                            deleted.PosmID = posmInput.PosmID;
+
+                            var deletedCpny = _db.IN_POSMBranch.FirstOrDefault(
+                                x => x.BranchID == deleted.BranchID
+                                    && x.PosmID == deleted.PosmID);
+                            if (deletedCpny != null)
+                            {
+                                _db.IN_POSMBranch.DeleteObject(deletedCpny);
+                            }
+                        }
+                    }
+                    #endregion
+
+                    _db.SaveChanges();
+                    return Json(new { success = true, msgCode = 201405071 });
                 }
                 else
                 {
