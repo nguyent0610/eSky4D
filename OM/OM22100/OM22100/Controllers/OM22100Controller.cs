@@ -235,7 +235,6 @@ namespace OM22100.Controllers
                                     c.LUpd_DateTime = DateTime.Now.ToDateShort();
                                     c.LUpd_Prog = screenNbr;
                                     c.LUpd_User = Current.UserName;
-                                    c.tstamp = new byte[0];
                                     _db.OM_KPI.AddObject(c);
                                 }
                                 else
@@ -300,11 +299,11 @@ namespace OM22100.Controllers
             try
             {
        
-                string BranchID = data["BranchID"].PassNull();
-                string BranchName=data["BranchName"].PassNull();
-                string CycleNbr = data["CycleNbr"].PassNull();
-                string StartDate = data["StartDate"].PassNull();
-                string EndDate = data["EndDate"].PassNull();
+                string BranchID = data["BranchID"].PassNull().Trim();
+                string BranchName = data["BranchName"].PassNull().Trim();
+                string CycleNbr = data["CycleNbr"].PassNull().Trim();
+                string StartDate = data["StartDate"].PassNull().Trim();
+                string EndDate = data["EndDate"].PassNull().Trim();
                 var headerRowIdx = 5;
 
                 Stream stream = new MemoryStream();
