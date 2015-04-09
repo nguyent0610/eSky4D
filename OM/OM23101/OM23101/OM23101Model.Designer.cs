@@ -108,10 +108,32 @@ namespace OM23101
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="territory">No Metadata Documentation available.</param>
         /// <param name="state">No Metadata Documentation available.</param>
         /// <param name="fCSDate">No Metadata Documentation available.</param>
-        public int OM23101_pgLoadGrid(global::System.String state, Nullable<global::System.DateTime> fCSDate)
+        public int OM23101_pgLoadGrid(global::System.String userID, global::System.String territory, global::System.String state, Nullable<global::System.DateTime> fCSDate)
         {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter territoryParameter;
+            if (territory != null)
+            {
+                territoryParameter = new ObjectParameter("Territory", territory);
+            }
+            else
+            {
+                territoryParameter = new ObjectParameter("Territory", typeof(global::System.String));
+            }
+    
             ObjectParameter stateParameter;
             if (state != null)
             {
@@ -132,7 +154,7 @@ namespace OM23101
                 fCSDateParameter = new ObjectParameter("FCSDate", typeof(global::System.DateTime));
             }
     
-            return base.ExecuteFunction("OM23101_pgLoadGrid", stateParameter, fCSDateParameter);
+            return base.ExecuteFunction("OM23101_pgLoadGrid", userIDParameter, territoryParameter, stateParameter, fCSDateParameter);
         }
 
         #endregion

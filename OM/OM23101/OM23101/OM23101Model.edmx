@@ -28,6 +28,8 @@
         </EntityType>
         <Function Name="OM23101_getIN_ProductClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="OM23101_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="Territory" Type="varchar" Mode="In" />
           <Parameter Name="State" Type="varchar" Mode="In" />
           <Parameter Name="FCSDate" Type="datetime" Mode="In" />
         </Function>
@@ -39,6 +41,8 @@
           <EntitySet Name="OM_FCSBranch" EntityType="OM23101Model.OM_FCSBranch" />
           <FunctionImport Name="OM23101_getIN_ProductClass" ReturnType="Collection(OM23101Model.OM23101_getIN_ProductClass_Result)" />
           <FunctionImport Name="OM23101_pgLoadGrid">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="Territory" Mode="In" Type="String" />
             <Parameter Name="State" Mode="In" Type="String" />
             <Parameter Name="FCSDate" Mode="In" Type="DateTime" />
           </FunctionImport>

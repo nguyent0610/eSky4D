@@ -72,7 +72,7 @@
                     .Name("cboState").HQLangCode("OM23100_State").HQProcedure("OM23101_pcState")
                     .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State")
                     .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
-                    .ForceSelection(true).EnforceMaxLength(true).AllowBlank(false)
+                    .ForceSelection(true).EnforceMaxLength(true).AllowBlank(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() 
                     { 

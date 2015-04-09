@@ -43,7 +43,9 @@
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
 
         @HQ.Builder.Store().ID("stoOM_FCSBranch").HQDBSys(false).HQProcedure("OM23101_pgLoadGrid").HQParam(new StoreParameterCollection()
-        {      
+        {   
+            new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw),
+            new StoreParameter("@Territory", "App.cboTerritory.value", ParameterMode.Raw),
             new StoreParameter("@State", "App.cboState.value", ParameterMode.Raw),
             new StoreParameter("@FCSDate", "App.dateFcs.value", ParameterMode.Raw)           
         }).LoadData().Listeners(l=>{l.BeforeLoad.Fn = "stoBeforeLoad";
