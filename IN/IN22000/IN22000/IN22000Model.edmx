@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="IN_POSMCust" EntityType="eBiz4DWebAppModel.Store.IN_POSMCust" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="IN_POSMHeader" EntityType="eBiz4DWebAppModel.Store.IN_POSMHeader" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="IN_POSMCust">
+          <Key>
+            <PropertyRef Name="PosmID" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="PosmCode" />
+          </Key>
+          <Property Name="PosmID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="PosmCode" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SlsperID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Qty" Type="int" Nullable="false" />
+          <Property Name="AppQty" Type="int" Nullable="false" />
+          <Property Name="IsAgree" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="IN_POSMHeader">
+          <Key>
+            <PropertyRef Name="PosmID" />
+          </Key>
+          <Property Name="PosmID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="FromDate" Type="datetime" Nullable="false" />
+          <Property Name="ToDate" Type="datetime" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="IN22000_pgBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="PosmID" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IN22000Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="IN22000Entities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="IN_POSMHeader" EntityType="IN22000Model.IN_POSMHeader" />
+          <FunctionImport Name="IN22000_pgBranch" ReturnType="Collection(IN22000Model.IN22000_pgBranch_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="PosmID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="IN_POSMCust" EntityType="IN22000Model.IN_POSMCust" />
+        </EntityContainer>
+        <EntityType Name="IN_POSMHeader">
+          <Key>
+            <PropertyRef Name="PosmID" />
+          </Key>
+          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="FromDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="ToDate" Nullable="false" Precision="3" />
+          <Property Type="Boolean" Name="Active" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="IN22000_pgBranch_Result">
+          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="PosmCode" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="PosmName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SlsName" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="Qty" Nullable="false" />
+          <Property Type="Int32" Name="AppQty" Nullable="false" />
+          <Property Type="Boolean" Name="IsAgree" Nullable="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="2" />
+        </ComplexType>
+        <EntityType Name="IN_POSMCust">
+          <Key>
+            <PropertyRef Name="PosmID" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="PosmCode" />
+          </Key>
+          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PosmCode" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Qty" Nullable="false" />
+          <Property Type="Int32" Name="AppQty" Nullable="false" />
+          <Property Type="Boolean" Name="IsAgree" Nullable="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="IN22000Entities">
+          <EntitySetMapping Name="IN_POSMHeader">
+            <EntityTypeMapping TypeName="IN22000Model.IN_POSMHeader">
+              <MappingFragment StoreEntitySet="IN_POSMHeader">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN22000_pgBranch" FunctionName="eBiz4DWebAppModel.Store.IN22000_pgBranch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN22000Model.IN22000_pgBranch_Result">
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="PosmCode" ColumnName="PosmCode" />
+                <ScalarProperty Name="PosmName" ColumnName="PosmName" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="SlsName" ColumnName="SlsName" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="AppQty" ColumnName="AppQty" />
+                <ScalarProperty Name="IsAgree" ColumnName="IsAgree" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="IN_POSMCust">
+            <EntityTypeMapping TypeName="IN22000Model.IN_POSMCust">
+              <MappingFragment StoreEntitySet="IN_POSMCust">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="IsAgree" ColumnName="IsAgree" />
+                <ScalarProperty Name="AppQty" ColumnName="AppQty" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="PosmCode" ColumnName="PosmCode" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
+        <EntityTypeShape EntityType="IN22000Model.IN_POSMHeader" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN22000Model.IN_POSMCust" Width="1.5" PointX="2.75" PointY="0.75" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
