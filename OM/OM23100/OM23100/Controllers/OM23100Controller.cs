@@ -292,6 +292,33 @@ namespace OM23100.Controllers
                 grid.AddColumn(clm);
             }
 
+            //Column ForcusedSKU
+            clm = new Column
+            {
+                Text = Util.GetLang("OM23100_ForcusedSKU"),
+                ID = "txt_ForcusedSKU"
+            };
+
+            for (int i = 0; i < lstIN_ProductClass.Count; i++)
+            {
+                NumberColumn nbcl = new NumberColumn
+                {
+                    Text = lstIN_ProductClass[i].Descr,
+                    DataIndex = "ForcusedSKU_" + lstIN_ProductClass[i].ClassID,
+                    Align = Alignment.Right,
+                    Editor =
+                    {
+                        new NumberField
+                        {
+                            DecimalPrecision=2,
+                            MinValue=0
+                        }
+                    }
+                };
+                clm.Columns.Add(nbcl);
+                grid.AddColumn(clm);
+            }
+
             //Column Visit
             nbc = new NumberColumn
             {
@@ -329,38 +356,12 @@ namespace OM23100.Controllers
             };
             grid.AddColumn(nbc);
 
-            //Column ForcusedSKU
-            clm = new Column
-            {
-                Text = Util.GetLang("OM23100_ForcusedSKU"),
-                ID = "txt_ForcusedSKU"
-            };
-
-            for (int i = 0; i < lstIN_ProductClass.Count; i++)
-            {
-                NumberColumn nbcl = new NumberColumn
-                {
-                    Text = lstIN_ProductClass[i].Descr,
-                    DataIndex = "ForcusedSKU_" + lstIN_ProductClass[i].ClassID,
-                    Align = Alignment.Right,
-                    Editor =
-                    {
-                        new NumberField
-                        {
-                            DecimalPrecision=2,
-                            MinValue=0
-                        }
-                    }
-                };
-                clm.Columns.Add(nbcl);
-                grid.AddColumn(clm);
-            }
-
             //Column VisitTime
             nbc = new NumberColumn
             {
                 Text = Util.GetLang("OM23100_VisitTime"),
                 ID = "txt_VisitTime",
+                Hidden = true,
                 Width = 120,
                 Align = Alignment.Right,
                 DataIndex = "VisitTime",
