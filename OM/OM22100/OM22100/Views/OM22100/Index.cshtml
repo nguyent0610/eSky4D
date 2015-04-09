@@ -41,7 +41,7 @@
     </head>
     <body> 
         @Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme))
-        @{ Html.RenderAction("Body", new { lang =@Current.LangID}); }
+        @{ Html.RenderAction("Body", new { lang =Current.LangID}); }
         
     </body>
 </html>
