@@ -452,7 +452,8 @@ var stoIN_Inventory_Loaded = function (store) {
         record = store.getAt(0);     
         record.data.ApproveStatus = 'H';
         record.data.Public = true;
-        record.Status = 'AC';
+        record.data.Status = 'AC';
+       
         store.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
         App.cboInvtID.forceSelection = false;
@@ -670,23 +671,50 @@ var NextShowNextLotSerial_AfterRender = function (value) {
 
 var NodeSelected_Change = function (store, operation, options) {
     //if (click == 0) {
-    parentRecordIDAll = operation.data.id.split("-");   
-    if (operation.childNodes.length == 0) {
-        var invtall = operation.data.id.split("-")
-        var invt1 = invtall[1];
-        App.cboInvtID.setValue(invt1);
-        parentRecordIDAll = operation.parentNode.data.id.split("-");
-        _nodeID = parentRecordIDAll[0];
-        _nodeLevel = parentRecordIDAll[1];
-        _parentRecordID = parentRecordIDAll[2];
+    if (HQ.isChange != true && HQ.isNew != true) {
+        parentRecordIDAll = operation.data.id.split("-");
+        if (operation.childNodes.length == 0) {
+            var invtall = operation.data.id.split("-")
+            var invt1 = invtall[1];
+            App.cboInvtID.setValue(invt1);
+            parentRecordIDAll = operation.parentNode.data.id.split("-");
+            _nodeID = parentRecordIDAll[0];
+            _nodeLevel = parentRecordIDAll[1];
+            _parentRecordID = parentRecordIDAll[2];
 
+        }
+        else if (parentRecordIDAll.length == 3) {
+            _nodeID = parentRecordIDAll[0];
+            _nodeLevel = parentRecordIDAll[1];
+            _parentRecordID = parentRecordIDAll[2];
+        }
+    } else {
+        if (operation.parentNode) {
+            if (operation.parentNode.data.id == "root") {
+                parentRecordIDAll = operation.data.id.split("-");
+                if (operation.childNodes.length == 0) {
+                    var invtall = operation.data.id.split("-")
+                    var invt1 = invtall[1];
+                    App.cboInvtID.setValue(invt1);
+                    parentRecordIDAll = operation.parentNode.data.id.split("-");
+                    _nodeID = parentRecordIDAll[0];
+                    _nodeLevel = parentRecordIDAll[1];
+                    _parentRecordID = parentRecordIDAll[2];
+
+                }
+                else if (parentRecordIDAll.length == 3) {
+                    _nodeID = parentRecordIDAll[0];
+                    _nodeLevel = parentRecordIDAll[1];
+                    _parentRecordID = parentRecordIDAll[2];
+                }
+            } else {
+                
+            }
+        } else {
+            HQ.message.show(2015040901, '', '');
+            App.slmTree.selectNext();
+        }
     }
-    else if (parentRecordIDAll.length == 3) {
-        _nodeID = parentRecordIDAll[0];
-        _nodeLevel = parentRecordIDAll[1];
-        _parentRecordID = parentRecordIDAll[2];
-    }
-     
 
 }
 

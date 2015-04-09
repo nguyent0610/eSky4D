@@ -45,7 +45,11 @@
                 .Layout(LayoutType.Border).Border(false)
                 .Split(true)                                           
                 .Items(
-                    X.Panel().ID("pnlHeader").Layout(LayoutType.VBox).Border(false).MarginSpec("3 5 0 0").AutoScroll(true).Region(Region.North)             
+                    X.Panel().ID("pnlHeader").Layout(LayoutType.VBox)
+                    .Border(false)
+                    .MarginSpec("3 5 0 0")
+                    .AutoScroll(true)
+                    .Region(Region.North)             
                     .Listeners(l =>
                         {
                             //l.Render.Handler = "HQ.common.control_render(this,'header')";
@@ -421,7 +425,7 @@
                                                                             //lst.Change.Fn = "chkPublic_Change";
 
                                                                         })
-        //Image
+                                                                         //Image
 
                                                                         , X.Hidden().ID("hdnPPCStorePicReq").DataIndex("Picture")
                                                                         , X.Image().ID("imgPPCStorePicReq").Width(200).Height(200)
@@ -446,7 +450,7 @@
                                                                            )
 
                                                                        )
-        //Media
+                                                                         //Media
                                                                         , X.Container().Layout(LayoutType.VBox).MarginSpec("25 0 0 -190")
                                                                         .Items(
 
