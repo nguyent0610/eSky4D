@@ -1,0 +1,112 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM22101;
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Anchor)
+        .ID("dataForm")
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(10)
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar(tools:new AbstractComponent[]{
+                X.FileUploadField()
+                .ID("ImportTemplate")
+                .ButtonText("Import")            
+                .ButtonOnly(true)
+                .Icon(Icon.ImageAdd)
+                .Listeners(p=>{
+                    p.Change.Fn = "ImportTemplate_Change";
+                })
+                    
+                ,X.Button()
+                .ID("ExportTemplate")                
+                .Text(Util.GetLang("ExportTemplate"))
+                .Icon(Icon.ImageAdd)
+                .Listeners(p=>{
+                    p.Click.Fn = "ExportExel";
+                })
+            }))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .Items(
+           X.Panel().ID("pnlHeader")
+            .Region(Region.North)
+            .Items(
+            
+                HQ.DateField().ID("dateKPI").HQLangCode("OM22101_Year")
+                .MarginSpec("5 0 0 0").Width(300).Format("yyyy").Value(DateTime.Now.ToString("yyyy"))
+                .Type(DatePickerType.Month).AllowBlank(false)
+                .Listeners(l=>{
+                    l.Expand.Fn = "dateKPI_expand";
+                    l.Select.Fn = "dateKPI_Select";
+                })
+
+                , HQ.Combo().ID("cboCycle")
+                    .Name("cboCycle").HQLangCode("OM22101_Cycle").HQProcedure("OM22101_pcCycle")
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@YearNbr", Value = "App.dateKPI.getRawValue()", Mode = ParameterMode.Raw }
+                    })
+                    .HQColumnShow("CycleNbr,StartDate,EndDate").DisplayField("CycleNbr").ValueField("CycleNbr")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboCycle_Change";
+                        lst.Select.Fn = "cboCycle_Select";
+                    })
+
+                , HQ.Combo().ID("cboBranchID")
+                    .Name("cboBranchID").HQLangCode("OM22101_BranchID").HQProcedure("OM22101_pcLoadBranchAllByUser")
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                    })
+                    .HQColumnShow("BranchID,BranchName,Addr").DisplayField("BranchID").ValueField("BranchID")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn ="cboBranchID_Change";
+                        lst.Select.Fn = "cboBranchID_Select";
+                    })
+
+                    , HQ.TextBox().ID("txtBranchName").Name("").HQLangCode("OM22101_BranchName")
+                    .MarginSpec("5 0 0 0").Width(300).ReadOnly(true)
+
+                    , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
+                    .Items(
+                    HQ.TextBox().ID("txtStartDate").Name("").HQLangCode("OM22101_StartDate")
+                    .MarginSpec("5 0 0 0").Width(300).ReadOnly(true)
+                    , HQ.TextBox().ID("txtEndDate").Name("").HQLangCode("OM22101_EndDate")
+                    .MarginSpec("5 0 0 0").Width(300).ReadOnly(true)
+                    )
+                  
+                    
+            )
+
+            , X.Panel().ID("pnlGrid")
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .Items(
+                
+            )    
+        )//FrmMain
+    )
+)
