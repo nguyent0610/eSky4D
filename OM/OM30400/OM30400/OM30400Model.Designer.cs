@@ -4697,7 +4697,8 @@ namespace OM30400
         /// <param name="slsPerID">Initial value of the SlsPerID property.</param>
         /// <param name="lat">Initial value of the Lat property.</param>
         /// <param name="lng">Initial value of the Lng property.</param>
-        public static OM30400_pgVisitCustomerPlan_Result CreateOM30400_pgVisitCustomerPlan_Result(global::System.String custId, global::System.String custName, global::System.String slsPerID, global::System.Double lat, global::System.Double lng)
+        /// <param name="visitSort">Initial value of the VisitSort property.</param>
+        public static OM30400_pgVisitCustomerPlan_Result CreateOM30400_pgVisitCustomerPlan_Result(global::System.String custId, global::System.String custName, global::System.String slsPerID, global::System.Double lat, global::System.Double lng, global::System.Int32 visitSort)
         {
             OM30400_pgVisitCustomerPlan_Result oM30400_pgVisitCustomerPlan_Result = new OM30400_pgVisitCustomerPlan_Result();
             oM30400_pgVisitCustomerPlan_Result.CustId = custId;
@@ -4705,6 +4706,7 @@ namespace OM30400
             oM30400_pgVisitCustomerPlan_Result.SlsPerID = slsPerID;
             oM30400_pgVisitCustomerPlan_Result.Lat = lat;
             oM30400_pgVisitCustomerPlan_Result.Lng = lng;
+            oM30400_pgVisitCustomerPlan_Result.VisitSort = visitSort;
             return oM30400_pgVisitCustomerPlan_Result;
         }
 
@@ -4855,6 +4857,30 @@ namespace OM30400
         private global::System.Double _Lng;
         partial void OnLngChanging(global::System.Double value);
         partial void OnLngChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 VisitSort
+        {
+            get
+            {
+                return _VisitSort;
+            }
+            set
+            {
+                OnVisitSortChanging(value);
+                ReportPropertyChanging("VisitSort");
+                _VisitSort = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("VisitSort");
+                OnVisitSortChanged();
+            }
+        }
+        private global::System.Int32 _VisitSort;
+        partial void OnVisitSortChanging(global::System.Int32 value);
+        partial void OnVisitSortChanged();
 
         #endregion
 

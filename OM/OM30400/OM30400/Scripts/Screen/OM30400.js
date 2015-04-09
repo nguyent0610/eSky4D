@@ -83,6 +83,24 @@ var Index = {
         }
     },
 
+    removeStoreData: function () {
+        var stores = [
+                App.grdVisitCustomerPlan.store,
+                App.grdMCL.store,
+                App.grdAllCurrentSalesman.store,
+                App.grdVisitCustomerActual.store,
+                App.storeVisitCustomerActual,
+                App.grdCustHistory.store
+        ]
+
+        for (var i = 0; i < stores.length; i++) {
+            var store = stores[i];
+            if (store.getCount()) {
+                store.removeAll();
+            }
+        }
+    },
+
     btnHideTrigger_click: function (sender) {
         sender.clearValue();
     },
@@ -110,7 +128,20 @@ var Index = {
     },
 
     btnLoadDataPlan_click: function (btn, e, eOpts) {
-        Index.menuClick("refresh");
+        if (App.pnlMCP.isValid()) {
+            Index.removeStoreData();
+            App.grdVisitCustomerPlan.store.reload();
+        }
+        else {
+            App.pnlMCP.getForm().getFields().each(
+                function (item) {
+                    if (!item.isValid()) {
+                        item.focus();
+                        return false;
+                    }
+                }
+            );
+        }
     },
 
     storeVisitCustomerPlan_load: function (store, records, successful, eOpts) {
@@ -121,6 +152,7 @@ var Index = {
                     "title": record.data.CustId + ": " + record.data.CustName,
                     "lat": record.data.Lat,
                     "lng": record.data.Lng,
+                    "visitSort": record.data.VisitSort,
                     "description":
                         '<div id="content">' +
                             '<div id="siteNotice">' +
@@ -173,7 +205,20 @@ var Index = {
     },
 
     btnLoadDataMCL_click: function (btn, e, eOpts) {
-        Index.menuClick("refresh");
+        if (App.pnlMCL.isValid()) {
+            Index.removeStoreData();
+            App.grdMCL.store.reload();
+        }
+        else {
+            App.pnlMCL.getForm().getFields().each(
+                function (item) {
+                    if (!item.isValid()) {
+                        item.focus();
+                        return false;
+                    }
+                }
+            );
+        }
     },
 
     pnlGridMCL_viewGetRowClass: function (record, rowIndex, rowParams, store) {
@@ -322,7 +367,26 @@ var Index = {
     },
 
     btnLoadDataActual_click: function (btn, e, eOpts) {
-        Index.menuClick("refresh");
+        if (App.pnlActualVisit.isValid()) {
+            Index.removeStoreData();
+            if (App.radSalesmanAll.value) {
+                App.grdAllCurrentSalesman.store.reload();
+            }
+            else {
+                App.grdVisitCustomerActual.store.reload();
+                App.storeVisitCustomerActual.reload();
+            }
+        }
+        else {
+            App.pnlActualVisit.getForm().getFields().each(
+                function (item) {
+                    if (!item.isValid()) {
+                        item.focus();
+                        return false;
+                    }
+                }
+            );
+        }
     },
 
     grdVisitCustomerActual_viewGetRowClass: function (record) {
@@ -444,7 +508,20 @@ var Index = {
     },
 
     btnLoadDataHistory_click: function (btn, e, eOpts) {
-        Index.menuClick("refresh");
+        if (App.pnlCustHistory.isValid()) {
+            Index.removeStoreData();
+            App.grdCustHistory.store.reload();
+        }
+        else {
+            App.pnlCustHistory.getForm().getFields().each(
+                function (item) {
+                    if (!item.isValid()) {
+                        item.focus();
+                        return false;
+                    }
+                }
+            );
+        }
     },
 
     storeCustHistory_load: function (store, records, successful, eOpts) {
@@ -521,7 +598,7 @@ var Index = {
 
 var McpInfo = {
     editFromMap: function (custId, slsperId, branchId) {
-        var record = findRecord(App.grdMCL.store,
+        var record = HQ.store.findRecord(App.grdMCL.store,
                         ["CustId", "SlsperId", "BranchID"],
                         [custId, slsperId, branchId]);
         if (record) {
@@ -594,7 +671,7 @@ var McpInfo = {
                     }
                     App.winMcpInfo.close();
 
-                    var record = findRecord(App.grdMCL.store,
+                    var record = HQ.store.findRecord(App.grdMCL.store,
                         ["CustId", "SlsperId", "BranchID"],
                         [data.result.CustID, data.result.SlsPerID, data.result.BranchID]);
                     if (record) {
@@ -809,11 +886,15 @@ var PosGmap = {
                     });
                 }
                 else {
+                    var markerLabel = i + 1;
+                    if (data.visitSort != undefined) {
+                        markerLabel = data.visitSort;
+                    }
                     var marker = new google.maps.Marker({
                         position: myLatlng,
                         map: map,
                         title: data.title,
-                        icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i + 1, pinColor)
+                        icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor)
                         //animation: google.maps.Animation.DROP
                     });
                 }

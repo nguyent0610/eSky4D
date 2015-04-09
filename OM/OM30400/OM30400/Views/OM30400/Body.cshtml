@@ -14,7 +14,7 @@
 .Items(
     X.FormPanel()
     .Layout("border")
-        //.Layout(LayoutType.Anchor)
+    .Layout(LayoutType.Border)
     .ID("dataForm")
     .TrackResetOnLoad(true)
     .DefaultAnchor("100%")
@@ -23,39 +23,41 @@
         //.TopBar(Util.SetupToolbar("new,save,delete,print",true,"Index.menuClick"))
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
     .Items(
-        X.Panel()
+        X.TabPanel()
         .ID("pnlInfo")
         .Border(true).Split(true)
         .Width(350).MinWidth(300).CollapseMode(CollapseMode.Default)
         .Collapsible(true).Header(false)
         .Region(Region.East).Layout(LayoutType.Border)
-        .TopBar(
-            X.Toolbar()
-            .StyleSpec("padding-bottom:0px;")
-            .Items(
-                X.Button().ToolTip(Util.GetLang("Refresh")).Icon(Icon.ArrowRefresh)
-                .Handler("Index.menuClick('refresh')")
+        //.TopBar(
+        //    X.Toolbar()
+        //    .Region(Region.North)
+        //    .StyleSpec("padding-bottom:0px;")
+        //    .Items(
+        //        X.Button().ToolTip(Util.GetLang("Refresh")).Icon(Icon.ArrowRefresh)
+        //        .Handler("Index.menuClick('refresh')")
 
-                , X.ToolbarSeparator()
-                , X.ToolbarFill()
+        //        , X.ToolbarSeparator()
+        //        , X.ToolbarFill()
 
-                , X.TabStrip()
-                .Items(t =>
-                {
-                    t.Add(X.Tab().ActionItemID("pnlMCP").Text(Util.GetLang("MCP")));
-                    t.Add(X.Tab().ActionItemID("pnlMCL").Text(Util.GetLang("MCL")));
-                    t.Add(X.Tab().ActionItemID("pnlActualVisit").Text(Util.GetLang("ActualVisit")));
-                    t.Add(X.Tab().ActionItemID("pnlCustHistory").Text(Util.GetLang("History")));
-                })
+        //        , X.TabStrip()
+        //        .Items(t =>
+        //        {
+        //            t.Add(X.Tab().ActionItemID("pnlMCP").Text(Util.GetLang("MCP")));
+        //            t.Add(X.Tab().ActionItemID("pnlMCL").Text(Util.GetLang("MCL")));
+        //            t.Add(X.Tab().ActionItemID("pnlActualVisit").Text(Util.GetLang("ActualVisit")));
+        //            t.Add(X.Tab().ActionItemID("pnlCustHistory").Text(Util.GetLang("History")));
+        //        })
 
-                //, X.Button().ToolTip(Util.GetLang("CloseScreen")).Icon(Icon.HouseGo)
-        //.Listeners(l => {
-        //    l.Click.Handler = "Index.menuClick('close')";
-        //})
-            )
-        )
+        //        //, X.Button().ToolTip(Util.GetLang("CloseScreen")).Icon(Icon.HouseGo)
+        ////.Listeners(l => {
+        ////    l.Click.Handler = "Index.menuClick('close')";
+        ////})
+        //    )
+        //)
         .Items(
             X.FormPanel()
+            .Title(Util.GetLang("MCP"))
             .ID("pnlMCP")
             .Border(false).Width(350)
             .Region(Region.Center).Layout(LayoutType.Border)
@@ -187,7 +189,8 @@
                     .StoreID("storeVisitCustomerPlan")
                     .SortableColumns(false)
                     .ColumnModel(
-                        X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+                        //X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+                        X.Column().DataIndex("VisitSort").Width(30).Resizable(true)
                         , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustId")
                         , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").MinWidth(100).Flex(1)
                         , X.Column().Text(Util.GetLang("Lat")).DataIndex("Lat").Align(Alignment.Right).Width(80)
@@ -207,6 +210,7 @@
 
             , X.FormPanel()
             .ID("pnlMCL")
+            .Title(Util.GetLang("MCL"))
             .Border(false).Width(350)
             .Region(Region.Center).Layout(LayoutType.Border)
             .Items(
@@ -426,6 +430,7 @@
 
             , X.FormPanel()
             .ID("pnlActualVisit")
+            .Title(Util.GetLang("ActualVisit"))
             .Border(false).Width(350)
             .Region(Region.Center).Layout(LayoutType.Border)
             .Items(
@@ -581,6 +586,7 @@
 
             , X.FormPanel()
             .ID("pnlCustHistory")
+            .Title(Util.GetLang("History"))
             .Border(false).Width(350)
             .Region(Region.Center).Layout(LayoutType.Border)
             .Items(

@@ -30,13 +30,13 @@ namespace OM30400
         {
             Current.Authorize = false;
             Current.Server = "MARSSVR\\SQL2012";
-            Current.DBSys = "eSky4DSys";
+            Current.DBSys = "eBiz4DCloudSysJFV";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM30400"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppJFV";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004";
             Session["Language"] = Current.Language = "en";

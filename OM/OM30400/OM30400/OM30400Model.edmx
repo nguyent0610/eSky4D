@@ -422,6 +422,7 @@
           <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="10" />
           <Property Type="Double" Name="Lat" Nullable="false" />
           <Property Type="Double" Name="Lng" Nullable="false" />
+          <Property Type="Int32" Name="VisitSort" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -635,6 +636,7 @@
                 <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
                 <ScalarProperty Name="Lat" ColumnName="Lat" />
                 <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -660,8 +662,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
-        <EntityTypeShape EntityType="OM30400Model.AR_Customer" Width="1.5" PointX="3.4870271829362158" PointY="8.1105903722860813" />
-        <EntityTypeShape EntityType="OM30400Model.OM_SalesRouteMaster" Width="1.5" PointX="3.5132986379383593" PointY="14.142301357417507" />
+        <EntityTypeShape EntityType="OM30400Model.AR_Customer" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM30400Model.OM_SalesRouteMaster" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
