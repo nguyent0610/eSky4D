@@ -5,20 +5,20 @@ var _curSlsperid = "";
 var _focusrecord = 0;
 var beforeedit = '';
 var tmpAreaChange = 0;
-   
+
 var menuClick = function (command) {
     switch (command) {
-        case "first":       
+        case "first":
 
             break;
         case "prev":
-    
+
             break;
         case "next":
-  
+
             break;
         case "last":
-    
+
             break;
         case "refresh":
 
@@ -33,13 +33,13 @@ var menuClick = function (command) {
 
             break;
         case "print":
-            
+
             break;
         case "close":
             HQ.common.close(this);
             break;
     }
-       
+
 };
 
 var dateKPI_expand = function (dte, eOpts) {
@@ -93,7 +93,7 @@ var ImportExel = function () {
     App.dataForm.submit({
         waitMsg: "Importing....",
         url: 'OM22101/OM22101Import',
-        timeout:18000000,
+        timeout: 18000000,
         clientValidation: false,
         method: 'POST',
         params: {
@@ -107,8 +107,8 @@ var ImportExel = function () {
                 HQ.message.process(msg, data, true);
             }
         },
-        failure: function (msg, data) {           
-           HQ.message.process(msg, data, true);
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
         }
     });
 }
@@ -141,7 +141,7 @@ var ExportExel = function () {
         success: function (msg, data) {
             var filePath = data.result.filePath;
             if (filePath) {
-               // window.location = "OM22101/Download?filePath=" + filePath + "&fileName=MCP_" + App.cboBranchID.getValue();
+                // window.location = "OM22101/Download?filePath=" + filePath + "&fileName=MCP_" + App.cboBranchID.getValue();
             }
         },
         failure: function (msg, data) {

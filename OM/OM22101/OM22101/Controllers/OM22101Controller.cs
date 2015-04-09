@@ -331,7 +331,7 @@ namespace OM22101.Controllers
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
                 Worksheet SheetKPI = workbook.Worksheets[0];
-                SheetKPI.Name = Util.GetLang("OM22101_KPI");
+                SheetKPI.Name = Util.GetLang("OM22101_KPI_SKU");
                 DataAccess dal = Util.Dal();
                 Style style = workbook.GetStyleInPool(0);
                 StyleFlag flag = new StyleFlag();
