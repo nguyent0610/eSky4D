@@ -152,14 +152,12 @@ namespace IN22000.Controllers
                 var posm = _db.IN_POSMHeader.FirstOrDefault(p => p.PosmID == posmID);
                 if (posm != null)
                 {
-                    //_db.IN_POSMHeader.DeleteObject(posm);
-
-                    //var cpnies = _db.IN_POSMBranch.Where(c => c.PosmID == posmID).ToList();
-                    //foreach (var cpny in cpnies)
-                    //{
-                    //    _db.IN_POSMBranch.DeleteObject(cpny);
-                    //}
-                    //_db.SaveChanges();
+                    var cpnies = _db.IN_POSMCust.Where(c => c.PosmID == posmID).ToList();
+                    foreach (var cpny in cpnies)
+                    {
+                        _db.IN_POSMCust.DeleteObject(cpny);
+                    }
+                    _db.SaveChanges();
                     return Json(new { success = true });
                 }
                 else

@@ -44,8 +44,7 @@ var Process = {
                     if (data.result.msgCode) {
                         HQ.message.show(data.result.msgCode);
                     }
-                    App.cboPosmID.store.load();
-                    App.cboPosmID.clearValue();
+                    App.grdDet.store.reload();
                 },
                 failure: function (msg, data) {
                     if (data.result.msgCode) {
