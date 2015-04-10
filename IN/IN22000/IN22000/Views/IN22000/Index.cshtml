@@ -11,7 +11,6 @@
     var X = Html.X();
     ViewBag.Title = "IN22000";
     var acc = Session["IN22000"] as AccessRight;
-    
 }
 <!DOCTYPE html>
 <html>
@@ -76,6 +75,16 @@
                 p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
             })
             // Store: stoDet
+        )
+
+        @(
+            Html.HQ().Store().ID("stoStatus")
+            .HQProcedure("IN22000_pcStatus").AutoLoad(true)
+            .HQParam(new StoreParameterCollection() { 
+                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+            })
+            .LoadData()
         )
 
         @X.GridFilters() <!--Khi cache cho grid-->

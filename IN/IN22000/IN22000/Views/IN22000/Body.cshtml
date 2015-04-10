@@ -143,6 +143,9 @@
                     HQ.NumberField().SelectOnFocus(true).DecimalPrecision(0).MinValue(0)
                 )
                 
+                , X.Column().Text(Util.GetLang("Status")).DataIndex("Status")
+                .Renderer("Process.renderDescrByCode")
+                
                 , X.CommandColumn()
                 .Commands(
                     X.GridCommand()

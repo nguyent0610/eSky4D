@@ -1,3 +1,4 @@
+var _beginStatus = "H";
 
 var Process = {
     saveData: function () {
@@ -117,6 +118,12 @@ var Process = {
                 value = record.data.Descr;
             }
         }
+        else if (metaData.column.dataIndex == "Status"){
+            var record = App.stoStatus.findRecord("Code", rec.data.Status);
+            if (record) {
+                value = record.data.Descr;
+            }
+        }
 
         return value;
     }
@@ -149,7 +156,7 @@ var Store = {
 
             if (frmRec && frmRec.data.Active) {
                 if (successful) {
-                    HQ.store.insertBlank(sto, keys);
+                    HQ.store.insertRecord(sto, keys, Ext.create("App.mdlDet", { Status: _beginStatus }));
                 }
             }
         }
@@ -297,8 +304,7 @@ var Event = {
         grdDet_beforeEdit: function (editor, e) {
             if (HQ.isUpdate) {
                 if (App.frmMain.isValid()) {
-                    var frmRec = App.frmMain.getRecord();
-                    if (frmRec && frmRec.data.Active) {
+                    if (e.record.data.Status == _beginStatus) {
                         var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
 
                         if (keys.indexOf(e.field) != -1) {
@@ -350,7 +356,7 @@ var Event = {
                 if (e.value != ''
                     && Process.isAllValidKey(e.store.getChangedData().Created, keys)
                     && Process.isAllValidKey(e.store.getChangedData().Updated, keys)) {
-                    HQ.store.insertBlank(e.store, keys);
+                    HQ.store.insertRecord(e.store, keys, Ext.create("App.mdlDet", { Status: _beginStatus }));
                 }
             }
 

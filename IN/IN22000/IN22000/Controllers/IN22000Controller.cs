@@ -22,6 +22,7 @@ namespace IN22000.Controllers
     public class IN22000Controller : Controller
     {
         private string _screenNbr = "IN22000";
+        private string _beginStatus = "H";
         IN22000Entities _db = Util.CreateObjectContext<IN22000Entities>(false);
         //
         // GET: /IN22000/
@@ -188,7 +189,7 @@ namespace IN22000.Controllers
                 createdCpny.CustID = created.CustID;
                 createdCpny.SlsperID = created.SlsperID;
                 createdCpny.PosmCode = created.PosmCode;
-                createdCpny.Status = "H";
+                createdCpny.Status = _beginStatus;
                 createdCpny.IsAgree = false;
 
                 createdCpny.Crtd_DateTime = DateTime.Now;
