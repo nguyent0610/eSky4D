@@ -39,26 +39,27 @@ var loadDataHeader = function (sto) {
         record.data.BlktExprDate = HQ.bussinessDate;
         record.data.BranchID = App.cboBranchID.getValue();
         record.data.PODate = HQ.bussinessDate;
-        App.cboDistAddr.setValue(HQ.util.passNull(App.cboBranchID.value));// danh cho truong hop new gan lai App.cboDistAddr=ma nha phan phoi
-        // lay du lieu ban dau cua address
-        if(App.cboDistAddr.displayTplData.length > 0)
-        {
-            var item = App.cboDistAddr.displayTplData[0];
-            record.data.ShipDistAddrID = App.cboBranchID.getValue();//neu co addressID = BranchID dang chon thi gan lai cho no de bindsource khong thay doi du lieu
-            record.data.ShipName = item.Name;
-            record.data.ShipAttn = item.Attn;
-            record.data.ShipAddr1 = item.Addr1;
-            record.data.ShipAddr2 = item.Addr2;
-            record.data.ShipCity = item.City;
-            record.data.ShipState = item.State;
-            record.data.ShipZip = item.Zip;
-            record.data.ShipCountry = item.Country;
-            
-            record.data.ShipPhone = item.Phone;
-            record.data.ShipFax = item.Fax;
-            
-        }
+       
+        if (App.cboDistAddr.store.getCount() > 0) {
+            App.cboDistAddr.setValue(HQ.util.passNull(App.cboBranchID.getValue()));// danh cho truong hop new gan lai App.cboDistAddr=ma nha phan phoi
+            // lay du lieu ban dau cua address
+            if (App.cboDistAddr.displayTplData.length > 0) {
+                var item = App.cboDistAddr.displayTplData[0];
+                record.data.ShipDistAddrID = App.cboBranchID.getValue();//neu co addressID = BranchID dang chon thi gan lai cho no de bindsource khong thay doi du lieu
+                record.data.ShipName = item.Name;
+                record.data.ShipAttn = item.Attn;
+                record.data.ShipAddr1 = item.Addr1;
+                record.data.ShipAddr2 = item.Addr2;
+                record.data.ShipCity = item.City;
+                record.data.ShipState = item.State;
+                record.data.ShipZip = item.Zip;
+                record.data.ShipCountry = item.Country;
 
+                record.data.ShipPhone = item.Phone;
+                record.data.ShipFax = item.Fax;
+
+            }
+        }
         HQ.isNew = true;//record la new    
         HQ.common.setRequire(App.frmMain);  //to do cac o la require   
         if (App.cboBranchID.valueModels != undefined && App.cboBranchID.value != null && !App.cboPONbr.hasFocus)
@@ -329,7 +330,7 @@ var grdPO_Detail_BeforeEdit = function (editor, e) {
 
     }
     else if (App.cboDistAddr.getValue() == "") {
-        HQ.message.show(15, HQLangCode("DISTADDR"), '');
+        HQ.message.show(15, HQ.common.getLang('ShipDistAddrID'), '');
         return false;
     }
     var det = e.record.data;
@@ -381,7 +382,7 @@ var grdPO_Detail_ValidateEdit = function (item, e) {
     }
     if (e.field == "InvtID") {
         var r = HQ.store.findInStore(App.cboInvtID.getStore(), ["InvtID"], [e.value]);
-        var objdet = App.slmPO_Detail.getSelection()[0];
+        var objdet = e.record;
 
         if (r == undefined) {
             objdet.set('TranDesc', "");
@@ -393,7 +394,7 @@ var grdPO_Detail_ValidateEdit = function (item, e) {
             _invtID = objIN_Inventory.InvtID;
             _classID = objIN_Inventory.ClassID;
             _stkUnit = objIN_Inventory.StkUnit;
-
+            objdet.set('TranDesc', r.Descr);
             App.cboPurchUnit.getStore().reload();
            
             if (objdet.get("SiteID") == "") {
@@ -569,8 +570,25 @@ var grdPO_Detail_Reject = function (record) {
     }
 };
 var cboGInvtID_Change = function (item, newValue, oldValue) {
-    
+    //var objItem = HQ.store.findInStore(App.cboGInvtID.getStore(), ['InvtID'], [item.value]);
+    //if (!Ext.isEmpty(objLot)) {
+    //    var obj = App.slmPO_Detail.selected.items[0];
+    //    var r = HQ.store.findInStore(App.cboInvtID.getStore(), ["InvtID"], [e.value]);
+    //    var objdet = App.slmPO_Detail.getSelection()[0];
 
+    //    if (r == undefined) {
+    //        obj.set('TranDesc', "");
+    //        obj.set('PurchUnit', "");
+    //        //objdet.set('TranDesc', "");
+    //    }
+    //    else {
+    //        obj.set('TranDesc', r);
+    //        obj.set('PurchUnit', "");
+    //    }
+    //}
+    //else {
+    //    App.lblLotQtyAvail.setText(_invtID + " - " + HQ.common.getLang('qtyavail') + ":" + 0);
+    //}
 };
 
 //cac store co param la branchID thi load lai sau khi cboBranchID thay doi

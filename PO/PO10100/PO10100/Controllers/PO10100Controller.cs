@@ -399,7 +399,7 @@ namespace PO10100.Controllers
                         objPO_Detail = new PO_Detail();
                         objPO_Detail.ResetET();
 
-                        UpdatingPO_Detail(objDetail, ref objPO_Detail);
+                        UpdatingPO_Detail(objDetail, ref objPO_Detail,true);
                         objPO_Detail.Crtd_DateTime = DateTime.Now;
                         objPO_Detail.Crtd_Prog = ScreenNbr;
                         objPO_Detail.Crtd_User = Current.UserName;
@@ -413,7 +413,7 @@ namespace PO10100.Controllers
                         {
                             throw new MessageException(MessageType.Message, "19");
                         }
-                        UpdatingPO_Detail(objDetail, ref objPO_Detail);
+                        UpdatingPO_Detail(objDetail, ref objPO_Detail,false);
                     }
                 }
                 _db.SaveChanges();
@@ -498,7 +498,7 @@ namespace PO10100.Controllers
             }
 
         }
-        private void UpdatingPO_Detail(PO10100_pgDetail_Result objDetail, ref PO_Detail objrPO_Detail)
+        private void UpdatingPO_Detail(PO10100_pgDetail_Result objDetail, ref PO_Detail objrPO_Detail,bool isnew)
         {
             double OldQty = 0;
             double NewQty = 0;
@@ -535,7 +535,7 @@ namespace PO10100.Controllers
                 if (objDetail.PurchaseType == "GI" || objDetail.PurchaseType == "PR" || objDetail.PurchaseType == "GP" || objDetail.PurchaseType == "GS")
                 {
                     NewQty = Math.Round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
-                    if (objrPO_Detail == null) OldQty = 0;
+                    if (isnew) OldQty = 0;
                     else
                         OldQty = Math.Round((objrPO_Detail.UnitMultDiv == "D" ? (objrPO_Detail.QtyOrd / objrPO_Detail.CnvFact) : objrPO_Detail.QtyOrd * objrPO_Detail.CnvFact));
                     UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, NewQty, 2);
@@ -664,7 +664,7 @@ namespace PO10100.Controllers
 
 
             }
-            if (_lstPODetailLoad.Where(p => string.IsNullOrEmpty(p.PurchUnit.PassNull())).Count() > 0)
+            if (_lstPODetailLoad.Where(p => string.IsNullOrEmpty(p.PurchUnit.PassNull()) && !string.IsNullOrEmpty(p.InvtID.PassNull())).Count() > 0)
             {
 
                 throw new MessageException(MessageType.Message, "25");
@@ -1546,12 +1546,12 @@ namespace PO10100.Controllers
         }
         public void UpdateOnPOQty(string InvtID, string SiteID, double OldQty, double NewQty, int DecQty)
         {
-            IN_ItemSite objItemSite = new IN_ItemSite();
+         
             try
             {             
                 try
                 {
-                    objItemSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == InvtID && p.SiteID == SiteID);
+                    var objItemSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == InvtID && p.SiteID == SiteID);
                     if (objItemSite != null)
                     {
                         objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + NewQty - OldQty, DecQty);

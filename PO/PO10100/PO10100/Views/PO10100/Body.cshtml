@@ -1,4 +1,4 @@
-﻿@{
+﻿  @{
     Layout = null;
     var X = Html.X();
     var HQ = Html.HQ();
@@ -111,7 +111,7 @@
                                                 .HQColumnShow("PONbr,VendID,PODate,Status,POAmt")
                                                 .DisplayField("PONbr")
                                                 .ValueField("PONbr")
-                                                .HQHeightWidth(400, 500)
+                                                .HQHeightWidth(400, 700)
                                                 .HQParam(new StoreParameterCollection() {
                                                                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
                                                                     ,new StoreParameter() { Name = "@UserID",  Value ="HQ.userName", Mode = ParameterMode.Raw}
@@ -486,7 +486,7 @@
                                                                         lst.Focus.Handler = "this.forceSelection = true;";
                                                                     })
                                                                 .LoadData()
-                                , HQ.Combo().ID("cboDistAddr").AllowBlank(false).Name("ShipDistAddrID").MarginSpec("3 0 0 5").HideLabel(true).Width(110).ForceSelection(true).HQAutoLoad(false)
+                                , HQ.Combo().ID("cboDistAddr").AllowBlank(false).Name("ShipDistAddrID").MarginSpec("3 0 0 5").HideLabel(true).Width(110).ForceSelection(false).HQAutoLoad(false)
                                                                 .HQLangCode("ShipDistAddrID").HQDBSys(false).HQProcedure("PO10100_pcDistAddr")
                                                                 .HQColumnShow("AddrID,Name,Addr1,Addr2")
                                                                 .DisplayField("AddrID")
