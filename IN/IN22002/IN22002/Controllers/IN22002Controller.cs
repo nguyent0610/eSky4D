@@ -91,7 +91,7 @@ namespace IN22002.Controllers
                                     record.InvtID = item.InvtID;
                                     record.Status = "H";
                                     record.StkQty = item.ApproveQty;
-
+                                    record.Price = 1000;
                                     record.Crtd_DateTime = DateTime.Now;
                                     record.Crtd_Prog = _screenNbr;
                                     record.Crtd_User = _userName;
