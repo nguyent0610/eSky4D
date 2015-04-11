@@ -6,8 +6,32 @@
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="IN_StockRecoveryDet" EntityType="eBiz4DWebSysModel.Store.IN_StockRecoveryDet" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="PPC_StockRecoveryDet" EntityType="eBiz4DWebSysModel.Store.PPC_StockRecoveryDet" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
+        <EntityType Name="IN_StockRecoveryDet">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="StkRecNbr" />
+            <PropertyRef Name="ExpDate" />
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="StkRecNbr" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ExpDate" Type="datetime" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="StkQty" Type="float" />
+          <Property Name="Price" Type="float" />
+          <Property Name="ApproveStkQty" Type="float" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="PPC_StockRecoveryDet">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -49,6 +73,7 @@
             <Parameter Name="DateFrom" Mode="In" Type="DateTime" />
             <Parameter Name="DateTo" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="IN_StockRecoveryDet" EntityType="IN22002Model.IN_StockRecoveryDet" />
         </EntityContainer>
         <EntityType Name="PPC_StockRecoveryDet">
           <Key>
@@ -94,6 +119,29 @@
           <Property Type="String" Name="Status" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="ApproveQty" Nullable="false" />
         </ComplexType>
+        <EntityType Name="IN_StockRecoveryDet">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="StkRecNbr" />
+            <PropertyRef Name="ExpDate" />
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StkRecNbr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="3" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="StkQty" />
+          <Property Type="Double" Name="Price" />
+          <Property Type="Double" Name="ApproveStkQty" />
+          <Property Type="String" Name="Status" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -145,6 +193,27 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="IN_StockRecoveryDet">
+            <EntityTypeMapping TypeName="IN22002Model.IN_StockRecoveryDet">
+              <MappingFragment StoreEntitySet="IN_StockRecoveryDet">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ApproveStkQty" ColumnName="ApproveStkQty" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="StkQty" ColumnName="StkQty" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="StkRecNbr" ColumnName="StkRecNbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -166,7 +235,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="73" >
-        <EntityTypeShape EntityType="IN22002Model.PPC_StockRecoveryDet" Width="1.5" PointX="8.532568119714302" PointY="2.513460473396564" />
+        <EntityTypeShape EntityType="IN22002Model.PPC_StockRecoveryDet" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN22002Model.IN_StockRecoveryDet" Width="1.5" PointX="10.67819319790145" PointY="12.718472173772041" />
       </Diagram>
     </Diagrams>
   </Designer>
