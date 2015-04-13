@@ -1020,15 +1020,17 @@
                         .Editor(
                             HQ.Combo().ID("cboDetInvtID")
                             .ListConfig(Util.HQBoundList("InvtID,Descr,Descr1,Color", 400, 300))
-                            .DisplayField("InvtID").ValueField("InvtID")
+                            .DisplayField("InvtID").ValueField("InvtID")                           
                             .MatchFieldWidth(false)
                             .StoreID("stoInvt")
                             .ForceSelection(true)
                             .SubmitValue(false)
+                            .QueryMode(DataLoadMode.Local)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                lst.BeforeQuery.Handler = "FilterCombo(App.cboDetInvtID,'InvtID')";
                             })
                         )
                                         

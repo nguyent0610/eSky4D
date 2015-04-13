@@ -621,7 +621,7 @@ namespace OM10100.Controllers
                 Delete_Det(data["LineRef"]);
                 for (int i = 0; i < _lstOrdDet.Count; i++)
                 {
-                    if (_lstOrdDet.FirstOrDefault(p => p.LineRef == lineRef) != null)
+                    if (_lstOrdDet[i].LineRef == lineRef)
                     {
                         indexDet = i;
                         break;
@@ -756,10 +756,10 @@ namespace OM10100.Controllers
             {
                 throw new MessageException("1000", new[] { Util.GetLang("slsperid") });
             }
-            if (_objOrder.DeliveryID.PassNull() == string.Empty)
-            {
-                throw new MessageException("1000", new[] { Util.GetLang("DeliveryID") });
-            }
+            //if (_objOrder.DeliveryID.PassNull() == string.Empty)
+            //{
+            //    throw new MessageException("1000", new[] { Util.GetLang("DeliveryID") });
+            //}
             if (_objOrder.Terms.PassNull() == string.Empty)
             {
                 throw new MessageException("1000", new[] { Util.GetLang("terms") });
@@ -5379,7 +5379,7 @@ namespace OM10100.Controllers
 
                     objDisc =
                         _app.OM_Discount.FirstOrDefault(
-                            p => p.DiscID == setup.DiscID02 && Util.PassNull(discID1) != string.Empty);
+                            p => p.DiscID == setup.DiscID02 && discID1 != string.Empty);
                     if (objDisc == null) objDisc = new OM_Discount();
                     if (objDisc.DiscType == "D")
                     {

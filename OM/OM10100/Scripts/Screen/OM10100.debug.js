@@ -259,7 +259,7 @@ var frmMain_BoxReady = function () {
     HQ.common.showBusy(true, HQ.waitMsg);
 }
 var frmMain_FieldChange = function (item, field, newValue, oldValue) {
-    if (field.key != undefined) {
+    if (field.key != undefined || !App.cboDetInvtID.submitValue) {
         return;
     }
     if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
@@ -861,6 +861,9 @@ var grdOrdDet_BeforeEdit = function (item, e) {
     }
     if (key == "SlsUnit") {
         App.stoUnit.clearFilter();
+        if (e.record.invt == undefined) {
+            e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
+        }
         App.stoUnit.filterBy(function (item) {
             if (item.data.ToUnit == record.invt.StkUnit && (item.data.InvtID == "*" || item.data.InvtID == record.invt.InvtID) && (item.data.ClassID == "*" || item.data.ClassID == record.invt.ClassID)) {
                 return item;
@@ -1156,6 +1159,7 @@ var bindDetail = function () {
     setChange(false);
 
     HQ.common.showBusy(false);
+    App.grdOrdDet.view.loadMask.setDisabled(false);
 }
 var bindCust = function () {
 
