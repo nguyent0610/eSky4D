@@ -6,6 +6,7 @@
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="AP_Vendor" EntityType="eBiz4DWebAppModel.Store.AP_Vendor" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="HO_EmailConfig" EntityType="eBiz4DWebAppModel.Store.HO_EmailConfig" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="HO_TaskHistory" EntityType="eBiz4DWebAppModel.Store.HO_TaskHistory" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="IN_Inventory" EntityType="eBiz4DWebAppModel.Store.IN_Inventory" store:Type="Tables" Schema="dbo" />
@@ -15,6 +16,59 @@
           <EntitySet Name="PO_Setup" EntityType="eBiz4DWebAppModel.Store.PO_Setup" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="eBiz4DWebAppModel.Store.SI_ApprovalFlowHandle" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
+        <EntityType Name="AP_Vendor">
+          <Key>
+            <PropertyRef Name="VendID" />
+          </Key>
+          <Property Name="VendID" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="Addr1" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="Addr2" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="Attn" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="City" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Country" Type="varchar" Nullable="false" MaxLength="3" />
+          <Property Name="DfltOrdFromId" Type="varchar" MaxLength="10" />
+          <Property Name="EMailAddr" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ExpAcct" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="ExpSub" Type="varchar" Nullable="false" MaxLength="24" />
+          <Property Name="Fax" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="RemitAddr1" Type="nvarchar" MaxLength="200" />
+          <Property Name="RemitAddr2" Type="nvarchar" MaxLength="200" />
+          <Property Name="RemitAttn" Type="nvarchar" MaxLength="200" />
+          <Property Name="RemitCity" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="RemitCountry" Type="varchar" Nullable="false" MaxLength="3" />
+          <Property Name="RemitFax" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="RemitName" Type="nvarchar" MaxLength="200" />
+          <Property Name="RemitPhone" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="RemitSalut" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="RemitState" Type="varchar" MaxLength="10" />
+          <Property Name="RemitZip" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Salut" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="State" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Status" Type="nvarchar" Nullable="false" MaxLength="1" />
+          <Property Name="TaxDflt" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="TaxId00" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="TaxId01" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="TaxId02" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="TaxId03" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="TaxLocId" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="TaxRegNbr" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="Terms" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Zip" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="CrLmt" Type="float" Nullable="false" />
+          <Property Name="PmtMethod" Type="nvarchar" MaxLength="200" />
+          <Property Name="MOQVal" Type="float" Nullable="false" />
+          <Property Name="MOQType" Type="varchar" Nullable="false" MaxLength="1" />
+        </EntityType>
         <EntityType Name="HO_EmailConfig">
           <Key>
             <PropertyRef Name="EmailID" />
@@ -123,6 +177,7 @@
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="ApproveStatus" Type="varchar" Nullable="false" MaxLength="5" />
           <Property Name="Media" Type="varchar" MaxLength="100" />
+          <Property Name="LotSerRcptAuto" Type="bit" />
         </EntityType>
         <EntityType Name="IN_ItemSite">
           <Key>
@@ -488,6 +543,7 @@
             <Parameter Name="UOM" Mode="In" Type="String" />
             <Parameter Name="EffDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="AP_Vendor" EntityType="PO10400Model.AP_Vendor" />
         </EntityContainer>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -751,6 +807,7 @@
           <Property Type="Boolean" Name="IsWarningStock" Nullable="true" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="23" />
           <Property Type="Boolean" Name="IsEditOrder" Nullable="false" />
+          <Property Type="DateTime" Name="ShipmentPlan" Nullable="false" />
         </ComplexType>
         <ComplexType Name="PO10400_pdAP_VenDorTaxes_Result">
           <Property Type="Boolean" Name="Sel" Nullable="true" />
@@ -1022,6 +1079,60 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="ApproveStatus" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Media" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="LotSerRcptAuto" />
+        </EntityType>
+        <EntityType Name="AP_Vendor">
+          <Key>
+            <PropertyRef Name="VendID" />
+          </Key>
+          <Property Type="String" Name="VendID" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Addr1" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Attn" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="City" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Country" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltOrdFromId" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="EMailAddr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ExpAcct" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ExpSub" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Fax" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Name" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RemitAddr1" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RemitAddr2" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RemitAttn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RemitCity" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RemitCountry" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RemitFax" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RemitName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RemitPhone" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RemitSalut" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RemitState" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RemitZip" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Salut" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="State" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="TaxDflt" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId00" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId01" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId02" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId03" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxLocId" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxRegNbr" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Terms" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Zip" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="Double" Name="CrLmt" Nullable="false" />
+          <Property Type="String" Name="PmtMethod" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="MOQVal" Nullable="false" />
+          <Property Type="String" Name="MOQType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1530,6 +1641,7 @@
           <EntitySetMapping Name="IN_Inventory">
             <EntityTypeMapping TypeName="PO10400Model.IN_Inventory">
               <MappingFragment StoreEntitySet="IN_Inventory">
+                <ScalarProperty Name="LotSerRcptAuto" ColumnName="LotSerRcptAuto" />
                 <ScalarProperty Name="Media" ColumnName="Media" />
                 <ScalarProperty Name="ApproveStatus" ColumnName="ApproveStatus" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
@@ -1600,6 +1712,60 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PO10400_ppUpdateSapStock" FunctionName="eBiz4DWebAppModel.Store.PO10400_ppUpdateSapStock" />
           <FunctionImportMapping FunctionImportName="PO10400_ppGetPrice" FunctionName="eBiz4DWebAppModel.Store.PO10400_ppGetPrice" />
+          <EntitySetMapping Name="AP_Vendor">
+            <EntityTypeMapping TypeName="PO10400Model.AP_Vendor">
+              <MappingFragment StoreEntitySet="AP_Vendor">
+                <ScalarProperty Name="MOQType" ColumnName="MOQType" />
+                <ScalarProperty Name="MOQVal" ColumnName="MOQVal" />
+                <ScalarProperty Name="PmtMethod" ColumnName="PmtMethod" />
+                <ScalarProperty Name="CrLmt" ColumnName="CrLmt" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="TaxLocId" ColumnName="TaxLocId" />
+                <ScalarProperty Name="TaxId03" ColumnName="TaxId03" />
+                <ScalarProperty Name="TaxId02" ColumnName="TaxId02" />
+                <ScalarProperty Name="TaxId01" ColumnName="TaxId01" />
+                <ScalarProperty Name="TaxId00" ColumnName="TaxId00" />
+                <ScalarProperty Name="TaxDflt" ColumnName="TaxDflt" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Salut" ColumnName="Salut" />
+                <ScalarProperty Name="RemitZip" ColumnName="RemitZip" />
+                <ScalarProperty Name="RemitState" ColumnName="RemitState" />
+                <ScalarProperty Name="RemitSalut" ColumnName="RemitSalut" />
+                <ScalarProperty Name="RemitPhone" ColumnName="RemitPhone" />
+                <ScalarProperty Name="RemitName" ColumnName="RemitName" />
+                <ScalarProperty Name="RemitFax" ColumnName="RemitFax" />
+                <ScalarProperty Name="RemitCountry" ColumnName="RemitCountry" />
+                <ScalarProperty Name="RemitCity" ColumnName="RemitCity" />
+                <ScalarProperty Name="RemitAttn" ColumnName="RemitAttn" />
+                <ScalarProperty Name="RemitAddr2" ColumnName="RemitAddr2" />
+                <ScalarProperty Name="RemitAddr1" ColumnName="RemitAddr1" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="ExpSub" ColumnName="ExpSub" />
+                <ScalarProperty Name="ExpAcct" ColumnName="ExpAcct" />
+                <ScalarProperty Name="EMailAddr" ColumnName="EMailAddr" />
+                <ScalarProperty Name="DfltOrdFromId" ColumnName="DfltOrdFromId" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Attn" ColumnName="Attn" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1630,6 +1796,7 @@
         <EntityTypeShape EntityType="PO10400Model.HO_TaskHistory" Width="1.5" PointX="8.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10400Model.IN_ItemSite" Width="1.5" PointX="8.75" PointY="5.75" />
         <EntityTypeShape EntityType="PO10400Model.IN_Inventory" Width="1.5" PointX="3.9899783600075072" PointY="4.8010267190639988" />
+        <EntityTypeShape EntityType="PO10400Model.AP_Vendor" Width="1.5" PointX="2.19492653859543" PointY="7.0849375161737846" />
       </Diagram>
     </Diagrams>
   </Designer>

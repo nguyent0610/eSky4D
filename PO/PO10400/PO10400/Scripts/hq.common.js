@@ -31,6 +31,10 @@ if (!('forEach' in Array.prototype)) {
                 action.call(that, this[i], i, this);
     };
 }
+Date.prototype.addDays = function (days) {
+    this.setDate(this.getDate() + days);
+    return this;
+};
 var HQ = {
     store: {
         isChange: function (store) {
@@ -291,6 +295,12 @@ var HQ = {
             cbo.setValue(value);
         }
     },
+    date: {
+        expand: function (dte, eOpts) {
+            //dte.picker.setHeight(300);
+            //dte.picker.monthEl.setHeight(300);
+        }
+    },
     grid: {
         showBusy: function (grd, isBusy) {
             if (isBusy)
@@ -401,7 +411,7 @@ var HQ = {
         onPageSelect: function (combo) {
             var store = combo.up("gridpanel").getStore();
             store.pageSize = parseInt(combo.getValue(), 10);
-            store.reload();
+            store.loadPage(1);
         },
         indexSelect: function (grd) {
             var index = '';

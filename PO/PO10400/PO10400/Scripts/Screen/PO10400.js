@@ -21,6 +21,10 @@ var Process = {
         }
     },
     saveData: function () {
+        if (HQ.store.getAllData(App.grdDet.store, ["Selected"], [true]).length == 2) {
+            HQ.message.show(704, '', '');
+            return;
+        }
         if(HQ.form.checkRequirePass(App.frmMain) && App.cboHandleApprove.getValue()!='N')
         App.frmMain.submit({
             url: 'PO10400/SaveData',
@@ -101,25 +105,28 @@ var Event = {
                     HQ.common.showBusy(true);
                     App.chkTerritory.disable();
                     HQ.combo.selectAll(App.cboZone);                   
-                    App.cboTerritory.setValue('');
-                    App.cboTerritory.getStore().events['load'].suspend();
+                    App.cboTerritory.setValue('');                  
+                 
                     App.cboTerritory.getStore().load({
                         scope: this,
                         callback: function (records, operation, success) {
                             Event.Form.chk_Click(App.chkTerritory);
-                            
+                            //App.cboTerritory.getStore().events['load'].resume();
                         }
                     });
+                    //App.cboTerritory.getStore().events['load'].suspend();
                 }
                 else if (ctr.id == "chkTerritory") {
                     App.chkBranchID.disable();
                     HQ.combo.selectAll(App.cboTerritory);
                     App.cboBranchID.setValue('');
-                    App.cboBranchID.getStore().events['load'].suspend();
+                    //App.cboBranchID.getStore().events['load'].suspend();
+                    //App.cboBranchID.getStore().events['load'].resume();
                     App.cboBranchID.getStore().load({
                         scope: this,
                         callback: function (records, operation, success) {
-                            Event.Form.chk_Click(App.chkBranchID);                           
+                            Event.Form.chk_Click(App.chkBranchID);
+                            
                         }
                     });
                 }
@@ -137,7 +144,9 @@ var Event = {
                     HQ.common.showBusy(true);
                     App.chkTerritory.disable();
                     App.cboZone.setValue('');
-                    App.cboTerritory.setValue('');       
+                    App.cboTerritory.setValue('');
+                    //App.cboTerritory.getStore().events['load'].suspend();
+                    //App.cboTerritory.getStore().events['load'].resume();
                     App.cboTerritory.getStore().load({
                         scope: this,
                         callback: function (records, operation, success) {
@@ -147,7 +156,9 @@ var Event = {
                 }
                 else if (ctr.id == "chkTerritory") {
                     App.chkBranchID.disable();
-                    App.cboTerritory.setValue('');               
+                    App.cboTerritory.setValue('');
+                    //App.cboBranchID.getStore().events['load'].suspend();
+                    //App.cboBranchID.getStore().events['load'].resume();
                     App.cboBranchID.getStore().load({
                         scope: this,
                         callback: function (records, operation, success) {
@@ -168,25 +179,33 @@ var Event = {
         },
         cbo_Change: function (ctr)
         {
-            if (ctr.id == "cboZone" ) {
-                App.cboTerritory.getStore().events['load'].suspend();
+            if (ctr.id == "cboZone" && ctr.hasFocus) {
+                //App.cboTerritory.getStore().events['load'].suspend();
+                //App.cboTerritory.getStore().events['load'].resume();
                 App.cboTerritory.getStore().load({
                     scope   : this,
-                    callback: function(records, operation, success) {
-                        Event.Form.chk_Click(App.chkTerritory);     
+                    callback: function (records, operation, success) {
+                        if (App.chkTerritory) {
+                            Event.Form.chk_Click(App.chkTerritory);
+                           
+                        }
                     }                                                                   
                 });
-            } else if (ctr.id == "cboTerritory") {
-                App.cboBranchID.getStore().events['load'].suspend();
+            } else if (ctr.id == "cboTerritory" && ctr.hasFocus) {
+                //App.cboBranchID.getStore().events['load'].suspend();
+                //App.cboBranchID.getStore().events['load'].resume();
                 App.cboBranchID.getStore().load({
                     scope   : this,
-                    callback: function(records, operation, success) {
-                        Event.Form.chk_Click(App.chkBranchID);
-                        HQ.common.showBusy(false);
+                    callback: function (records, operation, success) {
+                        if (App.chkBranchID) {
+                            Event.Form.chk_Click(App.chkBranchID);
+                            HQ.common.showBusy(false);
+                          
+                        }
                     }                                                                   
                 });
                
-            } else if (ctr.id == "cboStatusApprove") {
+            } else if (ctr.id == "cboStatusApprove" && ctr.hasFocus) {
                 App.chkSelectHeader.setValue(false);                
                 App.grdDet.store.each(function (record) {
                     record.set("Selected", false);
@@ -214,6 +233,7 @@ var Event = {
                     break;
                 case "save":
                     if (HQ.isUpdate) {
+
                         Process.saveData();
                     }
                     else {
@@ -277,6 +297,9 @@ var Other = {
         }
     }
    , loadPopup: function (record) {
+       App.stoPO10400_pgDetail.pageSize = 50;
+       App.cboPageSize.setValue('50');
+      
        _recordEdit = record.data;
        ////App.cboPOSM.setValue('');
        ////App.dataPopup.reset(true);
@@ -303,6 +326,7 @@ var _fieldsLangCheckRequire = ["InvtID", "PurchaseType", "SiteID", "PurchUnit"];
 var _objUserDflt = null;
 var _objPO_Setup = null;
 var _objIN_ItemSite = null;
+var _firstLoad = true;
 
 var _invtID = "";//dung cho boby combo load store cboPurchUnit
 var _classID = "";//dung cho boby combo load store cboPurchUnit
@@ -336,7 +360,8 @@ var Popup = {
         App.txtTotAmt.setValue(0);
         App.txtTotQty.setValue(0);
     },
-    loadSourcePopup: function () {     
+    loadSourcePopup: function () {
+      
         HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));       
         App.stoPO10400_pdOM_UserDefault.load(function () {
             App.stoPO10400_pdPO_Setup.load(function () {
@@ -362,6 +387,7 @@ var Popup = {
         });
     },
     loadDataHeader: function (sto) {
+        _firstLoad = true;
         HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));     
         HQ.common.setForceSelection(App.frmDetail, false, "");
         HQ.isFirstLoad = true;
@@ -387,7 +413,10 @@ var Popup = {
         else {
             App.txtVendID.setReadOnly(false);
         }
-        HQ.store.insertBlank(sto, _keys);
+        if (_firstLoad) {
+            HQ.store.insertBlank(sto, _keys);
+            _firstLoad = false;
+        }
         Popup.calcDet();
         Popup.frmChange();
         HQ.common.showBusy(false);
@@ -408,6 +437,7 @@ var Popup = {
     //// Event ///////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////
     menufrmDetail_Click: function (command) {
+        if (App.frmDetail.body.isMasked()) return;
         switch (command) {
             case "first":
                 if (HQ.focus == 'grdDetail') {
@@ -477,6 +507,7 @@ var Popup = {
         Popup.frmChange();
     },
     grdPO_Detail_BeforeEdit: function (editor, e) {
+        
         if (!_recordEdit.IsEditOrder) return false;
        
         var det = e.record.data;
@@ -520,7 +551,7 @@ var Popup = {
 
 
     },
-    grdPO_Detail_ValidateEdit: function (item, e) {
+    grdPO_Detail_ValidateEdit: function (item, e) {      
         if (_keys.indexOf(e.field) != -1) {
             if (HQ.grid.checkDuplicate(App.grdDetail, e, _keys)) {
                 HQ.message.show(1112, e.value, '');
@@ -562,6 +593,7 @@ var Popup = {
         }
     },
     grdPO_Detail_Edit: function (item, e) {
+        HQ.common.showBusy(true,'',App.frmDetail);
         var objDetail = e.record.data;
         var objIN_Inventory = HQ.store.findInStore(App.stoPO10400_pdIN_Inventory, ["InvtID"], [objDetail.InvtID]);
         objIN_Inventory = objIN_Inventory == null ? "" : objIN_Inventory;
@@ -577,7 +609,7 @@ var Popup = {
                 e.record.set('UnitMultDiv', unitMultDiv);
             } else {
                 e.record.set('PurchUnit', "");
-                return;
+                //return;
             }
             HQ.grid.checkInsertKey(App.grdDetail, e, _keys);
         }
@@ -586,6 +618,7 @@ var Popup = {
                 if (objDetail.QtyOrd > 1) {
 
                     HQ.message.show(58, '', '');
+                    HQ.common.showBusy(false, '', App.frmDetail);
                     return false;
 
                 }
@@ -625,7 +658,7 @@ var Popup = {
         }
         else if (e.field == "PurchUnit" || e.field == "InvtID" || e.field == "SiteID") {
             if (_objPO_Setup.DfltLstUnitCost == "A" || _objPO_Setup.DfltLstUnitCost == "L") {
-                HQ.common.showBusy(true);
+                //HQ.common.showBusy(true);
                 App.direct.PO10400ItemSitePrice(
                     App.txtBranchID.getValue(), objDetail.InvtID, objDetail.SiteID,
                    {
@@ -636,19 +669,19 @@ var Popup = {
                            e.record.set("UnitCost", UnitCost);
                            e.record.set("ExtCost", UnitCost * objDetail.QtyOrd - objDetail.DiscAmt);
 
-                           HQ.common.showBusy(false);
+                           HQ.common.showBusy(false, '', App.frmDetail);
                            Popup.delTax(e.rowIdx);
                            Popup.calcTax(e.rowIdx);
                            Popup.calcTaxTotal();
                        },
                        failure: function (result) {
-                           HQ.common.showBusy(false);
+                           HQ.common.showBusy(false, '', App.frmDetail);
                        }
 
                    });
             }
             else if (_objPO_Setup.DfltLstUnitCost == "P") {
-                HQ.common.showBusy(true);
+               // HQ.common.showBusy(true);
                 App.direct.PO10400POPrice(
                    App.txtBranchID.getValue(), objDetail.InvtID, objDetail.PurchUnit, Ext.Date.format(App.dtPODate.getValue(), 'Y-m-d'),
                     {
@@ -656,13 +689,13 @@ var Popup = {
                             UnitCost = result;
                             e.record.set("UnitCost", result);
                             e.record.set("ExtCost", result * objDetail.QtyOrd - objDetail.DiscAmt);
-                            HQ.common.showBusy(false);
+                            HQ.common.showBusy(false, '', App.frmDetail);
                             Popup.delTax(e.rowIdx);
                             Popup.calcTax(e.rowIdx);
                             Popup.calcTaxTotal();
                         },
                         failure: function (result) {
-                            HQ.common.showBusy(false);
+                            HQ.common.showBusy(false, '', App.frmDetail);
                         }
                     });
 
@@ -675,7 +708,7 @@ var Popup = {
                 Popup.delTax(e.rowIdx);
                 Popup.calcTax(e.rowIdx);
                 Popup.calcTaxTotal();
-
+                HQ.common.showBusy(false, '', App.frmDetail);
             }
         }
         if (objDetail.PurchaseType == "PR") {
@@ -685,7 +718,9 @@ var Popup = {
             Popup.delTax(e.rowIdx);
             Popup.calcTax(e.rowIdx);
             Popup.calcTaxTotal();
+            HQ.common.showBusy(false, '', App.frmDetail);
         }
+       
         //calcDet();
 
     },
@@ -833,8 +868,8 @@ var Popup = {
         var CTN = 0;
         var PCS = 0;
 
-        for (var j = 0; j < App.stoPO10400_pgDetail.data.length; j++) {
-            var det = App.stoPO10400_pgDetail.data.items[j];
+        for (var j = 0; j < App.stoPO10400_pgDetail.allData.length; j++) {
+            var det = App.stoPO10400_pgDetail.allData.items[j];
             taxAmt00 += det.data.TaxAmt00;
             taxAmt01 += det.data.TaxAmt01;
             taxAmt02 += det.data.TaxAmt02;

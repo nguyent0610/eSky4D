@@ -49,7 +49,7 @@ namespace PO10400.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -157,6 +157,10 @@ namespace PO10400.Controllers
                                         throw new MessageException(MessageType.Message, "19");
                                     }
                                     header.Status = objHandle.ToStatus;
+
+                                    header.LUpd_DateTime = DateTime.Now;
+                                    header.LUpd_Prog = _screenNbr;
+                                    header.LUpd_User = Current.UserName;
                                 }
                                 else throw new MessageException(MessageType.Message, "19");
                             }
@@ -187,6 +191,10 @@ namespace PO10400.Controllers
                                             throw new MessageException(MessageType.Message, "19");
                                         }
                                         header.Status = objHandle.ToStatus;
+
+                                        header.LUpd_DateTime = DateTime.Now;
+                                        header.LUpd_Prog = _screenNbr;
+                                        header.LUpd_User = Current.UserName;
                                     }
                                     else throw new MessageException(MessageType.Message, "19");
                                     //cap nhat lai sapstock
@@ -221,6 +229,10 @@ namespace PO10400.Controllers
                                 throw new MessageException(MessageType.Message, "19");
                             }
                             header.Status = objHandle.ToStatus;
+
+                            header.LUpd_DateTime = DateTime.Now;
+                            header.LUpd_Prog = _screenNbr;
+                            header.LUpd_User = Current.UserName;
                         }
                         else throw new MessageException(MessageType.Message, "19");
                     }
@@ -438,6 +450,9 @@ namespace PO10400.Controllers
                             {
                                 var header = _db.PO_Header.Where(p => p.BranchID == _poHead.BranchID && p.PONbr == _poHead.PONbr).FirstOrDefault();
                                 header.Status = objHandle.ToStatus;
+                                header.LUpd_DateTime = DateTime.Now;
+                                header.LUpd_Prog = _screenNbr;
+                                header.LUpd_User = Current.UserName;
                                 _db.PO10400_ppUpdateSapStock(_poHead.BranchID, _poHead.PONbr, DateTime.Now.ToDateShort(), objHandle.ToStatus);
                                 _db.SaveChanges();
                             }
@@ -452,6 +467,9 @@ namespace PO10400.Controllers
                     {
                         var header = _db.PO_Header.Where(p => p.BranchID == _poHead.BranchID && p.PONbr == _poHead.PONbr).FirstOrDefault();
                         header.Status = objHandle.ToStatus;
+                        header.LUpd_DateTime = DateTime.Now;
+                        header.LUpd_Prog = _screenNbr;
+                        header.LUpd_User = Current.UserName;
                         //cap nhat lai sapstock
                         _db.PO10400_ppUpdateSapStock(_poHead.BranchID, _poHead.PONbr, DateTime.Now.ToDateShort(), objHandle.ToStatus);
                         _db.SaveChanges();
@@ -805,53 +823,53 @@ namespace PO10400.Controllers
             }
 
 
-            //    //Check MOQ
-            //    AP_Vendor objVendor = new AP_Vendor();
-            //    objVendor = _db.AP_Vendor.ToList().FirstOrDefault(p => p.VendID == _poHead.VendID.PassNull());
-            //    if (objVendor.MOQVal > 0)
-            //    {
-            //        switch (objVendor.MOQType)
-            //        {
-            //            case "Q":
-            //                if (_lstPODetailLoad.Sum(p => p.QtyOrd * p.CnvFact) < objVendor.MOQVal)
-            //                {
-            //                    throw new MessageException(MessageType.Message, "747",
-            //                        parm: new[] { Util.GetLang("Quantity"), objVendor.MOQVal.ToString() });
+            //Check MOQ
+            AP_Vendor objVendor = new AP_Vendor();
+            objVendor = _db.AP_Vendor.ToList().FirstOrDefault(p => p.VendID == _poHead.VendID.PassNull());
+            if (objVendor.MOQVal > 0)
+            {
+                switch (objVendor.MOQType)
+                {
+                    case "Q":
+                        if (_lstPODetailLoad.Sum(p => p.QtyOrd * p.CnvFact) < objVendor.MOQVal)
+                        {
+                            throw new MessageException(MessageType.Message, "747",
+                                parm: new[] { Util.GetLang("Quantity"), objVendor.MOQVal.ToString() });
 
 
 
-            //                }
-            //                break;
-            //            case "V":
-            //                if (_lstPODetailLoad.Sum(p => p.ExtVolume) < objVendor.MOQVal)
-            //                {
-            //                    throw new MessageException(MessageType.Message, "747",
-            //                          parm: new[] { Util.GetLang("TotVol"), objVendor.MOQVal.ToString() + "L" });
+                        }
+                        break;
+                    case "V":
+                        if (_lstPODetailLoad.Sum(p => p.ExtVolume) < objVendor.MOQVal)
+                        {
+                            throw new MessageException(MessageType.Message, "747",
+                                  parm: new[] { Util.GetLang("TotVol"), objVendor.MOQVal.ToString() + "L" });
 
-            //                }
-            //                break;
-            //            case "A":
-            //                if (_poHead.POAmt < objVendor.MOQVal)
-            //                {
-            //                    throw new MessageException(MessageType.Message, "747",
-            //                          parm: new[] { Util.GetLang("POAmt"), objVendor.MOQVal.ToString() });
-
-
-            //                }
-            //                break;
-            //            case "W":
-            //                if (_lstPODetailLoad.Sum(p => p.ExtWeight) < objVendor.MOQVal)
-            //                {
-            //                    throw new MessageException(MessageType.Message, "747",
-            //                          parm: new[] { Util.GetLang("TotWeight"), objVendor.MOQVal.ToString() + "KG" });
+                        }
+                        break;
+                    case "A":
+                        if (_poHead.POAmt < objVendor.MOQVal)
+                        {
+                            throw new MessageException(MessageType.Message, "747",
+                                  parm: new[] { Util.GetLang("POAmt"), objVendor.MOQVal.ToString() });
 
 
+                        }
+                        break;
+                    case "W":
+                        if (_lstPODetailLoad.Sum(p => p.ExtWeight) < objVendor.MOQVal)
+                        {
+                            throw new MessageException(MessageType.Message, "747",
+                                  parm: new[] { Util.GetLang("TotWeight"), objVendor.MOQVal.ToString() + "KG" });
 
 
-            //                }
-            //                break;
-            //        }
-            //    }
+
+
+                        }
+                        break;
+                }
+            }
 
 
 
