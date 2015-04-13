@@ -35,103 +35,96 @@ namespace IN22004.Controllers
             return PartialView();
         }
 
-        //public ActionResult GetData(DateTime DateFrom,DateTime DateTo)
-        //{
-        //    return this.Store(_db.IN22004_pgLoadGrid(DateFrom, DateTo).ToList());
-        //}
+        public ActionResult GetData(string BranchID, DateTime Date)
+        {
+            return this.Store(_db.IN22004_pgLoadGrid(BranchID,Date).ToList());
+        }
 
-        //[HttpPost]
-        //public ActionResult Process(FormCollection data)
-        //{
-        //    try
-        //    {
-        //        mForm = data;
-        //        StoreDataHandler custHandler = new StoreDataHandler(data["lstPPC_StockRecovery"]);
+        [HttpPost]
+        public ActionResult Process(FormCollection data)
+        {
+            try
+            {
+                mForm = data;
+                StoreDataHandler custHandler = new StoreDataHandler(data["lstIN_StockRecoveryCust"]);
 
-        //        var lstPPC_StockRecovery = custHandler.ObjectData<IN22004_pgLoadGrid_Result>();
+                var lstIN_StockRecoveryCust = custHandler.ObjectData<IN22004_pgLoadGrid_Result>();
 
-        //        var access = Session["IN22004"] as AccessRight;
+                var access = Session["IN22004"] as AccessRight;
 
-        //        if (!access.Update && !access.Insert)
-        //            throw new MessageException(MessageType.Message, "728");
-        //        string handle = data["cboHandle"];
-        //        if (handle != "N" && handle != string.Empty)
-        //        {
-        //            foreach (var item in lstPPC_StockRecovery)
-        //            {
-        //                if (item.ColCheck == true)
-        //                {
-        //                    var obj = _db.PPC_StockRecoveryDet.FirstOrDefault(p => p.BranchID == item.BranchID
-        //                                                                        && p.SlsPerID == item.SlsPerID
-        //                                                                        && p.StkRecNbr == item.StkRecNbr
-        //                                                                        && p.InvtID == item.InvtID
-        //                                                                        && p.ExpDate == item.ExpDate);
-        //                    if (obj != null)
-        //                    {
-        //                        obj.Status = handle;
-        //                        obj.ApproveQty = item.ApproveQty;
+                if (!access.Update && !access.Insert)
+                    throw new MessageException(MessageType.Message, "728");
+                string handle = data["cboHandle"];
+                if (handle != "N" && handle != string.Empty)
+                {
+                    foreach (var item in lstIN_StockRecoveryCust)
+                    {
+                        if (item.ColCheck == true)
+                        {
+                            var obj = _db.IN_StockRecoveryCust.FirstOrDefault(p => p.BranchID == item.BranchID
+                                                                                && p.StkRecNbr == item.StkRecNbr
+                                                                                && p.InvtID == item.InvtID
+                                                                                && p.NewExpDate == item.NewExpDate
+                                                                                && p.SlsPerID==item.SlsPerID);
+                            if (obj != null)
+                            {
+                                obj.Status = handle;
 
-        //                        obj.LUpd_DateTime = DateTime.Now;
-        //                        obj.LUpd_Prog = _screenNbr;
-        //                        obj.LUpd_User = _userName;
-        //                    }
-                            
-        //                    if(handle=="A")
-        //                    {
-        //                        var obj1 = _db.IN_StockRecoveryDet.FirstOrDefault(p => p.BranchID == item.BranchID
-        //                                                                        && p.StkRecNbr == item.StkRecNbr
-        //                                                                        && p.ExpDate == item.ExpDate
-        //                                                                        && p.InvtID == item.InvtID);
-        //                        if (obj1 == null)
-        //                        {
-        //                            var record = new IN_StockRecoveryDet();
-        //                            record.BranchID = item.BranchID;
-        //                            record.StkRecNbr = item.StkRecNbr;
-        //                            record.ExpDate = item.ExpDate;
-        //                            record.InvtID = item.InvtID;
-        //                            record.Status = "H";
-        //                            record.StkQty = item.ApproveQty;
-        //                            record.Price = 1000;
-        //                            record.Crtd_DateTime = DateTime.Now;
-        //                            record.Crtd_Prog = _screenNbr;
-        //                            record.Crtd_User = _userName;
-        //                            record.LUpd_DateTime = DateTime.Now;
-        //                            record.LUpd_Prog = _screenNbr;
-        //                            record.LUpd_User = _userName;
-        //                            _db.IN_StockRecoveryDet.AddObject(record);
-        //                        }
-        //                        else
-        //                        {
-        //                            obj1.StkQty = obj1.StkQty + item.ApproveQty;
-        //                            obj1.LUpd_DateTime = DateTime.Now;
-        //                            obj1.LUpd_Prog = _screenNbr;
-        //                            obj1.LUpd_User = _userName;
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            _db.SaveChanges();
+                                obj.LUpd_DateTime = DateTime.Now;
+                                obj.LUpd_Prog = _screenNbr;
+                                obj.LUpd_User = _userName;
 
-        //        }
-        //        if (mLogMessage != null)
-        //        {
-        //            return mLogMessage;
-        //        }
-        //        else
-        //            return Json(new { success = true, type = "message", code = "8009" });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is MessageException)
-        //        {
-        //            return (ex as MessageException).ToMessage();
-        //        }
-        //        else
-        //        {
-        //            return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-        //        }
-        //    }
-        //}
+                                if (handle == "A")
+                                {
+                                    obj.QtyGiveBack = item.QtyGiveBack;
+                                }
+                            }
+                            else
+                            {
+                                var record = new IN_StockRecoveryCust();
+                                record.BranchID = item.BranchID;
+                                record.SlsPerID = item.SlsPerID;
+                                record.StkRecNbr = item.StkRecNbr;
+                                record.InvtID = item.InvtID;
+                                record.NewExpDate = (DateTime)item.NewExpDate;
+                                record.Status = handle;
+                                if (handle == "A")
+                                {
+                                    record.QtyGiveBack = item.QtyGiveBack;
+                                }
+
+                                record.Crtd_DateTime = DateTime.Now;
+                                record.Crtd_Prog = _screenNbr;
+                                record.Crtd_User = _userName;
+                                record.LUpd_DateTime = DateTime.Now;
+                                record.LUpd_Prog = _screenNbr;
+                                record.LUpd_User = _userName;
+                                _db.IN_StockRecoveryCust.AddObject(record);
+                            }
+                        }
+                    }
+                    _db.SaveChanges();
+
+                }
+                if (mLogMessage != null)
+                {
+                    return mLogMessage;
+                }
+                else
+                    return Json(new { success = true, type = "message", code = "8009" });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
 
     }
 }
