@@ -70,11 +70,16 @@ namespace IN22003.Controllers
                             if (obj != null)
                             {
                                 obj.Status = handle;
-                                obj.ApproveStkQty = item.ApproveStkQty;
-                                obj.NewExpDate = date;
+                               
                                 obj.LUpd_DateTime = DateTime.Now;
                                 obj.LUpd_Prog = _screenNbr;
                                 obj.LUpd_User = _userName;
+
+                                if (handle == "A")
+                                {
+                                    obj.ApproveStkQty = item.ApproveStkQty;
+                                    obj.NewExpDate = date;
+                                }
                             }
 
                         }

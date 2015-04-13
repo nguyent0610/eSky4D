@@ -218,10 +218,7 @@
                         
                         , X.NumberColumn().Text(Util.GetLang("IN22003_ApproveStkQty"))
                         .DataIndex("ApproveStkQty").Format("0,000").Width(100).Align(Alignment.Right)
-                        .Editor(
-                        X.NumberField().DecimalPrecision(0).MinValue(0)
-                        
-                        )
+                        .Editor( X.NumberField().DecimalPrecision(0).MinValue(0))
                         
                         , X.NumberColumn().Text(Util.GetLang("IN22003_ApprovePriceStkQty")).DataIndex("ApprovePriceStkQty").Width(100).Align(Alignment.Right).Format("0,000")
                         
@@ -255,12 +252,17 @@
                             .Local(true)
                             .Filters(
                                 X.BooleanFilter().DataIndex("ColCheck"),
-                                X.StringFilter().DataIndex("CustID"),
-                                X.StringFilter().DataIndex("OutletName"),
-                                X.StringFilter().DataIndex("SlsperID"),
-                                X.StringFilter().DataIndex("Name"),
-                                X.StringFilter().DataIndex("Addr1"),
-                                X.StringFilter().DataIndex("NewCustID")
+                                X.StringFilter().DataIndex("StateName"),
+                                X.StringFilter().DataIndex("BranchName"),
+                                X.DateFilter().DataIndex("ExpDate"),
+                                X.StringFilter().DataIndex("InvtID"),
+                                X.StringFilter().DataIndex("InvtName"),
+                                X.NumericFilter().DataIndex("StkQty"),
+                                X.NumericFilter().DataIndex("PriceStkQty"),
+                                X.StringFilter().DataIndex("Status"),
+                                X.NumericFilter().DataIndex("ApproveStkQty"),
+                                X.NumericFilter().DataIndex("ApprovePriceStkQty")
+
                             )
                     )
             )//pnl Grid
