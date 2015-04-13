@@ -31,6 +31,10 @@ if (!('forEach' in Array.prototype)) {
                 action.call(that, this[i], i, this);
     };
 }
+Date.prototype.addDays = function (days) {
+    this.setDate(this.getDate() + days);
+    return this;
+};
 var HQ = {
     store: {
         isChange: function (store) {
@@ -45,6 +49,7 @@ var HQ = {
         insertBlank: function (store, keys) {
             if (keys == undefined) {
                 store.insert(store.getCount(), Ext.data.Record());
+              
             } else {
                 var flat = store.findBy(function (record, id) {
                     if (keys.constructor === Array) {
@@ -62,6 +67,7 @@ var HQ = {
 
                 if (flat == -1) {
                     store.insert(store.getCount(), Ext.data.Record());
+                 
                 }
             }
         },
@@ -282,6 +288,20 @@ var HQ = {
             if (cbo.getValue())
                 cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
         },
+        selectAll: function (cbo) {
+            var value = [];
+            cbo.setValue('');
+            cbo.store.data.each(function (item) {
+                value.push(item.data[cbo.valueField]);
+            })
+            cbo.setValue(value);
+        }
+    },
+    date: {
+        expand: function (dte, eOpts) {
+            //dte.picker.setHeight(300);
+            //dte.picker.monthEl.setHeight(300);
+        }
     },
     grid: {
         showBusy: function (grd, isBusy) {
@@ -293,38 +313,90 @@ var HQ = {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
-                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                    callback: function () {
-                        //HQ.grid.last(grd);
-                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                if (store.currentPage != Math.ceil(store.totalCount / store.pageSize) && store.totalCount != 0) {
+                    store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                        callback: function () {
+                            HQ.grid.last(grd);
+                            setTimeout(function () {
+                                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                                if (grd.editingPlugin) {
+                                    grd.editingPlugin.startEditByPosition({
+                                        row: store.getCount() - 1,
+                                        column: 1
+                                    });
+                                }
+                                else {
+                                    grd.lockedGrid.editingPlugin.startEditByPosition({
+                                        row: store.getCount() - 1,
+                                        column: 1
+                                    });
+                                }
+                            }, 300);
+                        }
+                    });
+                }
+                else {
+                    HQ.grid.last(grd);
+                    if (grd.editingPlugin) {
+                        grd.editingPlugin.startEditByPosition({
+                            row: store.getCount() - 1,
+                            column: 1
+                        });
                     }
-                });
-                //}
-                //else {
-                //    HQ.grid.last(grd);
-                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-                //}
+                    else {
+                        grd.lockedGrid.editingPlugin.startEditByPosition({
+                            row: store.getCount() - 1,
+                            column: 1
+                        });
+                    }
+                }
                 return;
             }
-            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-            store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                callback: function () {
-                    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-                        HQ.store.insertBlank(store, keys);
+            if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                    callback: function () {
+                        if (HQ.grid.checkRequirePass(store.allData.items, keys)) {
+                            HQ.store.insertBlank(store, keys);
+                        }
+                        HQ.grid.last(grd);
+                        setTimeout(function () {
+                            // grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                            if (grd.editingPlugin) {
+                                grd.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                            else {
+                                grd.lockedGrid.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                        }, 300);
                     }
-                    //HQ.grid.last(grd);
-                    setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                });
+            }
+            else {
+                if (HQ.grid.checkRequirePass(store.allData.items, keys)) {
+                    HQ.store.insertBlank(store, keys);
                 }
-            });
-            //}
-            //else {
-            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-            //        HQ.store.insertBlank(store, keys);
-            //    }
-            //    HQ.grid.last(grd);
-            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-            //}
+                HQ.grid.last(grd);
+                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+
+                if (grd.editingPlugin) {
+                    grd.editingPlugin.startEditByPosition({
+                        row: store.getCount() - 1,
+                        column: 1
+                    });
+                }
+                else {
+                    grd.lockedGrid.editingPlugin.startEditByPosition({
+                        row: store.getCount() - 1,
+                        column: 1
+                    });
+                }
+            }
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
@@ -433,7 +505,7 @@ var HQ = {
         checkBeforeEdit: function (e, keys) {
             if (!HQ.isUpdate) return false;
             if (keys.indexOf(e.field) != -1) {
-                if (e.record.data.tstamp != "")
+                if (e.record.data.tstamp)
                     return false;
             }
             return HQ.grid.checkInput(e, keys);
@@ -746,7 +818,7 @@ var HQ = {
     },
     form: {
         checkRequirePass: function (frm) {
-            frm.updateRecord();
+            //frm.updateRecord();
             var isValid = true;
             frm.getForm().getFields().each(
                             function (item) {
@@ -1045,7 +1117,7 @@ Ext.define("Ext.locale.vn.toolbar.Paging", {
     lastText: HQ.common.getLang("PageLast"),
     refreshText: HQ.common.getLang("PageRefresh"),
     displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
-    emptyMsg: HQ.common.getLang("DataEmty")
+    emptyMsg: HQ.common.getLang("DataEmpty")
 });
 //window.onresize = function () {
 //    if ((window.outerHeight - window.innerHeight) > 100) {
