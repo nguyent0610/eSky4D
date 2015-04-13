@@ -59,7 +59,8 @@
       <HintPath>..\..\APProcess\APProcess\bin\Release\APProcess.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\eBiz4DApp\eBiz4DApp\eBiz4DApp\bin\Release\eBiz4DApp.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\DLL\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DSys">
       <HintPath>..\..\eBiz4DSys\eBiz4DSys\bin\Debug\eBiz4DSys.dll</HintPath>
@@ -130,7 +131,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

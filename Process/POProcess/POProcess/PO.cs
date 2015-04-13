@@ -199,7 +199,7 @@ namespace POProcess
                         {
 
                             DataTable dtAP_Trans = objAP_Trans.GetAll(BranchID, strAPBatNbr, "%", "%");
-                            objBatch1.TotAmt = DataTableHelper.ConvertTo<clsAP_Trans>(dtAP_Trans).Sum(p => p.TranAmt);//                 
+                            objBatch1.TotAmt = DataTableHelper.ConvertTo<clsAP_Trans>(dtAP_Trans).Where(p=>p.TranClass!="N").Sum(p => p.TranAmt);//                 
                             objBatch1.Update();
                         }
 
@@ -281,7 +281,7 @@ namespace POProcess
             m_objAP_Trans.TaxId01 = rowPO_Trans.TaxID01;
             m_objAP_Trans.TaxId02 = rowPO_Trans.TaxID02;
             m_objAP_Trans.TaxId03 = rowPO_Trans.TaxID03;
-            m_objAP_Trans.TranAmt = rowPO_Trans.TranAmt;
+          
             m_objAP_Trans.TranDate = m_objPO_Invoice.DocDate.Short();
             m_objAP_Trans.TranDesc = rowPO_Trans.TranDesc;
             m_objAP_Trans.TranType = (rowPO_Trans.TranType == "R" ? "VO" : "AD");
@@ -291,6 +291,8 @@ namespace POProcess
             m_objAP_Trans.TxblAmt03 = rowPO_Trans.TxblAmt03;
             m_objAP_Trans.UnitPrice = rowPO_Trans.UnitCost;
             m_objAP_Trans.VendID = rowPO_Trans.VendID;
+
+            m_objAP_Trans.TranAmt = rowPO_Trans.TxblAmt00 + rowPO_Trans.TxblAmt01 + rowPO_Trans.TxblAmt02 + rowPO_Trans.TxblAmt03 + rowPO_Trans.TaxAmt00 + rowPO_Trans.TaxAmt01 + rowPO_Trans.TaxAmt02 + rowPO_Trans.TaxAmt03;
 
             m_objAP_Trans.Crtd_DateTime = DateTime.Now;
             m_objAP_Trans.Crtd_Prog = rowReceipt.Crtd_Prog;
@@ -423,89 +425,89 @@ namespace POProcess
               
             }
             #region Insert IN_LotTran
-            ////Insert IN_LotTran
-            //DataTable dtLotSer = new DataTable();
-            //clsPO_LotTrans objPO_LotTrans = new clsPO_LotTrans(Dal);
-            //clsIN_LotTrans objIN_LotTrans = new clsIN_LotTrans(Dal);
-            //dtLotSer = objPO_LotTrans.GetAll(rowReceipt.BranchID, batNbr, rowReceipt.RcptNbr, "%", rowPO_Trans.LineRef);
-            //IList<clsPO_LotTrans> _listclsobjPO_LotTrans = DataTableHelper.ConvertTo<clsPO_LotTrans>(dtLotSer);
-            //if ((dtLotSer != null) && dtLotSer.Rows.Count > 0)
-            //{
-            //    foreach (var row in _listclsobjPO_LotTrans)
-            //    {
-            //        if (objIN_LotTrans.GetByKey(rowReceipt.BranchID, batNbr, rowReceipt.RcptNbr, row.LotSerNbr, rowPO_Trans.LineRef, rowPO_Trans.RcptUnitDescr))
-            //        {
+            //Insert IN_LotTran
+            DataTable dtLotSer = new DataTable();
+            clsPO_LotTrans objPO_LotTrans = new clsPO_LotTrans(Dal);
+            clsIN_LotTrans objIN_LotTrans = new clsIN_LotTrans(Dal);
+            dtLotSer = objPO_LotTrans.GetAll(rowReceipt.BranchID, batNbr, rowReceipt.RcptNbr, "%", rowPO_Trans.LineRef);
+            IList<clsPO_LotTrans> _listclsobjPO_LotTrans = DataTableHelper.ConvertTo<clsPO_LotTrans>(dtLotSer);
+            if ((dtLotSer != null) && dtLotSer.Rows.Count > 0)
+            {
+                foreach (var row in _listclsobjPO_LotTrans)
+                {
+                    if (objIN_LotTrans.GetByKey(row.BranchID, batNbr, row.RefNbr, row.LotSerNbr, rowPO_Trans.LineRef))
+                    {
 
-            //            objIN_LotTrans.BranchID = rowReceipt.BranchID;
-            //            objIN_LotTrans.BatNbr = batNbr;
-            //            objIN_LotTrans.RefNbr = rowReceipt.RcptNbr;
-            //            objIN_LotTrans.LotSerNbr = row.LotSerNbr;
-            //            objIN_LotTrans.ExpDate = row.ExpDate;
-            //            objIN_LotTrans.INTranLineRef = row.POTranLineRef;
-            //            objIN_LotTrans.InvtID = row.InvtID;
-            //            objIN_LotTrans.InvtMult = rowReceipt.RcptType == "R" ? (short)1 : (short)-1;
-            //            objIN_LotTrans.KitID = row.KitID;
-            //            objIN_LotTrans.MfgrLotSerNbr = row.MfgrLotSerNbr;
-            //            objIN_LotTrans.Qty = row.Qty;
-            //            objIN_LotTrans.SiteID = row.SiteID;
-            //            objIN_LotTrans.ToSiteID = row.ToSiteID;
-            //            objIN_LotTrans.ToWhseLoc = row.ToWhseLoc;
-            //            objIN_LotTrans.TranDate = row.TranDate;
-            //            objIN_LotTrans.TranType = rowReceipt.RcptType == "R" ? "RC" : "II";
-            //            objIN_LotTrans.TranScr = "PO";
-            //            objIN_LotTrans.UnitCost = row.UnitCost;
-            //            objIN_LotTrans.UnitPrice = row.UnitPrice;
-            //            objIN_LotTrans.UnitDesc = row.UnitDesc;
-            //            objIN_LotTrans.UnitMultDiv = row.UnitMultDiv;
-            //            objIN_LotTrans.CnvFact = row.CnvFact;
-            //            objIN_LotTrans.WarrantyDate = row.WarrantyDate;
-            //            objIN_LotTrans.ToWhseLoc = row.WhseLoc;
-            //            objIN_LotTrans.Crtd_Prog = Prog;
-            //            objIN_LotTrans.Crtd_User = User;
-            //            objIN_LotTrans.Crtd_DateTime = DateTime.Now;
-            //            objIN_LotTrans.LUpd_Prog = Prog;
-            //            objIN_LotTrans.LUpd_User = User;
-            //            objIN_LotTrans.LUpd_DateTime = DateTime.Now;
-            //            m_objIN_Trans.Update();
-            //        }
-            //        else
-            //        {
-            //            objIN_LotTrans.BranchID = rowReceipt.BranchID;
-            //            objIN_LotTrans.BatNbr = batNbr;
-            //            objIN_LotTrans.RefNbr = rowReceipt.RcptNbr;
-            //            objIN_LotTrans.LotSerNbr = row.LotSerNbr;
-            //            objIN_LotTrans.ExpDate = row.ExpDate;
-            //            objIN_LotTrans.INTranLineRef = row.POTranLineRef;
-            //            objIN_LotTrans.InvtID = row.InvtID;
-            //            objIN_LotTrans.InvtMult = rowReceipt.RcptType == "R" ? (short)1 : (short)-1;
-            //            objIN_LotTrans.KitID = row.KitID;
-            //            objIN_LotTrans.MfgrLotSerNbr = row.MfgrLotSerNbr;
-            //            objIN_LotTrans.Qty = row.Qty;
-            //            objIN_LotTrans.SiteID = row.SiteID;
-            //            objIN_LotTrans.ToSiteID = row.ToSiteID;
-            //            objIN_LotTrans.ToWhseLoc = row.ToWhseLoc;
-            //            objIN_LotTrans.TranDate = row.TranDate;
-            //            objIN_LotTrans.TranType = rowReceipt.RcptType == "R" ? "RC" : "II";
-            //            objIN_LotTrans.TranScr = "PO";
-            //            objIN_LotTrans.UnitCost = row.UnitCost;
-            //            objIN_LotTrans.UnitPrice = row.UnitPrice;
-            //            objIN_LotTrans.UnitDesc = row.UnitDesc;
-            //            objIN_LotTrans.UnitMultDiv = row.UnitMultDiv;
-            //            objIN_LotTrans.CnvFact = row.CnvFact;
-            //            objIN_LotTrans.WarrantyDate = row.WarrantyDate;
-            //            objIN_LotTrans.ToWhseLoc = row.WhseLoc;
-            //            objIN_LotTrans.Crtd_Prog = Prog;
-            //            objIN_LotTrans.Crtd_User = User;
-            //            objIN_LotTrans.Crtd_DateTime = DateTime.Now;
-            //            objIN_LotTrans.LUpd_Prog = Prog;
-            //            objIN_LotTrans.LUpd_User = User;
-            //            objIN_LotTrans.LUpd_DateTime = DateTime.Now;
-            //            objIN_LotTrans.Add();
-            //        }
+                        objIN_LotTrans.BranchID = rowReceipt.BranchID;
+                        objIN_LotTrans.BatNbr = batNbr;
+                        objIN_LotTrans.RefNbr = rowReceipt.RcptNbr;
+                        objIN_LotTrans.LotSerNbr = row.LotSerNbr;
+                        objIN_LotTrans.ExpDate = row.ExpDate;
+                        objIN_LotTrans.INTranLineRef = row.POTranLineRef;
+                        objIN_LotTrans.InvtID = row.InvtID;
+                        objIN_LotTrans.InvtMult = rowReceipt.RcptType == "R" ? (short)1 : (short)-1;
+                        objIN_LotTrans.KitID = row.KitID;
+                        objIN_LotTrans.MfgrLotSerNbr = row.MfgrLotSerNbr;
+                        objIN_LotTrans.Qty = row.Qty;
+                        objIN_LotTrans.SiteID = row.SiteID;
+                        objIN_LotTrans.ToSiteID = row.ToSiteID;
+                        //objIN_LotTrans.ToWhseLoc = row.ToWhseLoc;
+                        objIN_LotTrans.TranDate = row.TranDate;
+                        objIN_LotTrans.TranType = rowReceipt.RcptType == "R" ? "RC" : "II";
+                        //objIN_LotTrans.TranScr = "PO";
+                        objIN_LotTrans.UnitCost = row.UnitCost;
+                        objIN_LotTrans.UnitPrice = row.UnitPrice;
+                        objIN_LotTrans.UnitDesc = row.UnitDesc;
+                        objIN_LotTrans.UnitMultDiv = row.UnitMultDiv;
+                        objIN_LotTrans.CnvFact = row.CnvFact;
+                        objIN_LotTrans.WarrantyDate = row.WarrantyDate;
+                        //objIN_LotTrans.ToWhseLoc = row.WhseLoc;
+                        objIN_LotTrans.Crtd_Prog = Prog;
+                        objIN_LotTrans.Crtd_User = User;
+                        objIN_LotTrans.Crtd_DateTime = DateTime.Now;
+                        objIN_LotTrans.LUpd_Prog = Prog;
+                        objIN_LotTrans.LUpd_User = User;
+                        objIN_LotTrans.LUpd_DateTime = DateTime.Now;
+                        m_objIN_Trans.Update();
+                    }
+                    else
+                    {
+                        objIN_LotTrans.BranchID = rowReceipt.BranchID;
+                        objIN_LotTrans.BatNbr = batNbr;
+                        objIN_LotTrans.RefNbr = rowReceipt.RcptNbr;
+                        objIN_LotTrans.LotSerNbr = row.LotSerNbr;
+                        objIN_LotTrans.ExpDate = row.ExpDate;
+                        objIN_LotTrans.INTranLineRef = row.POTranLineRef;
+                        objIN_LotTrans.InvtID = row.InvtID;
+                        objIN_LotTrans.InvtMult = rowReceipt.RcptType == "R" ? (short)1 : (short)-1;
+                        objIN_LotTrans.KitID = row.KitID;
+                        objIN_LotTrans.MfgrLotSerNbr = row.MfgrLotSerNbr;
+                        objIN_LotTrans.Qty = row.Qty;
+                        objIN_LotTrans.SiteID = row.SiteID;
+                        objIN_LotTrans.ToSiteID = row.ToSiteID;
+                        //objIN_LotTrans.ToWhseLoc = row.ToWhseLoc;
+                        objIN_LotTrans.TranDate = row.TranDate;
+                        objIN_LotTrans.TranType = rowReceipt.RcptType == "R" ? "RC" : "II";
+                        //objIN_LotTrans.TranScr = "PO";
+                        objIN_LotTrans.UnitCost = row.UnitCost;
+                        objIN_LotTrans.UnitPrice = row.UnitPrice;
+                        objIN_LotTrans.UnitDesc = row.UnitDesc;
+                        objIN_LotTrans.UnitMultDiv = row.UnitMultDiv;
+                        objIN_LotTrans.CnvFact = row.CnvFact;
+                        objIN_LotTrans.WarrantyDate = row.WarrantyDate;
+                        //objIN_LotTrans.ToWhseLoc = row.WhseLoc;
+                        objIN_LotTrans.Crtd_Prog = Prog;
+                        objIN_LotTrans.Crtd_User = User;
+                        objIN_LotTrans.Crtd_DateTime = DateTime.Now;
+                        objIN_LotTrans.LUpd_Prog = Prog;
+                        objIN_LotTrans.LUpd_User = User;
+                        objIN_LotTrans.LUpd_DateTime = DateTime.Now;
+                        objIN_LotTrans.Add();
+                    }
 
-            //    }
+                }
 
-            //}
+            }
         #endregion
         }
        
@@ -606,14 +608,18 @@ namespace POProcess
             //PO_Receipt objPO_Receipt = new PO_Receipt();
             try
             {
-                double QtyRcpt = (row.RcptMultDiv == "D" ? row.RcptQty / row.RcptConvFact : row.RcptQty * row.RcptConvFact);//quy ve don vi luu kho 20150326
+                double qtyTrans = (row.RcptMultDiv == "D" ? row.RcptQty / row.RcptConvFact : row.RcptQty * row.RcptConvFact);//quy ve don vi luu kho 20150326
                 //objPO_Receipt = app.PO_Receipt.Where(p => p.BranchID == row.BranchID && p.BatNbr == row.BatNbr && p.RcptNbr == row.RcptNbr).FirstOrDefault();
                 if (objPO_Detail.GetByKey(row.BranchID, row.PONbr, row.POLineRef))
                 {
+                    var qtyOrd = objPO_Detail.UnitMultDiv == "M" ? objPO_Detail.QtyOrd * objPO_Detail.CnvFact : objPO_Detail.QtyOrd / objPO_Detail.CnvFact;
+                    var qtyRcvd = objPO_Detail.UnitMultDiv == "M" ? objPO_Detail.QtyRcvd * objPO_Detail.CnvFact : objPO_Detail.QtyRcvd / objPO_Detail.CnvFact;
+
                     // = app.PO_Detail.Where(p => p.BranchID == row.BranchID") && p.PONbr == row.PONbr") && p.LineRef == row.POLineRef")).FirstOrDefault();
                     if (row.TranType == "R")
-                    {
-                        if (row.Qty >= (objPO_Detail.QtyOrd - objPO_Detail.QtyRcvd))
+                    {                       
+                       
+                        if (qtyTrans >= (qtyOrd - qtyRcvd))
                         {
                             objPO_Detail.RcptStage = "F";
                             double OldQty = 0;
@@ -624,12 +630,12 @@ namespace POProcess
                                 clsIN_ItemSite objItemSite = new clsIN_ItemSite(Dal);
                                 if (objItemSite.GetByKey(row.InvtID, row.SiteID))
                                 {
-                                    objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + 0 - OldQty, 0);
+                                    objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + 0 - qtyTrans, 0);
                                     objItemSite.Update();
                                 }
                             }
                         }
-                        else if (row.Qty < (objPO_Detail.QtyOrd - objPO_Detail.QtyRcvd))
+                        else 
                         {
                             objPO_Detail.RcptStage = "P";
                             double OldQty = 0;
@@ -648,17 +654,20 @@ namespace POProcess
                             }
                         }
                         //QUY doi ve don vi theo PODetail  20150326
-                        double qty = (objPO_Detail.UnitMultDiv == "M" ? QtyRcpt / objPO_Detail.CnvFact : QtyRcpt * objPO_Detail.CnvFact);
+                        double qty = (objPO_Detail.UnitMultDiv == "M" ? qtyTrans / objPO_Detail.CnvFact : qtyTrans * objPO_Detail.CnvFact);
                         objPO_Detail.QtyRcvd = objPO_Detail.QtyRcvd + qty; 
                         objPO_Detail.CostReceived = objPO_Detail.CostReceived + row.TranAmt;
                     }
                     else if (row.TranType == "X")
-                    {
-                        objPO_Detail.QtyRcvd = objPO_Detail.QtyRcvd - row.Qty;
+                    { 
+                        //QUY doi ve don vi theo PODetail  20150326
+                        double qty = (objPO_Detail.UnitMultDiv == "M" ? qtyTrans / objPO_Detail.CnvFact : qtyTrans * objPO_Detail.CnvFact);
+                        objPO_Detail.QtyRcvd = objPO_Detail.QtyRcvd - qty;
                         objPO_Detail.CostReceived = objPO_Detail.CostReceived - row.TranAmt;
-                        double qty = (objPO_Detail.UnitMultDiv == "M" ? QtyRcpt / objPO_Detail.CnvFact : QtyRcpt * objPO_Detail.CnvFact);
+
+                        //double qty = (objPO_Detail.UnitMultDiv == "M" ? qtyTrans / objPO_Detail.CnvFact : qtyTrans * objPO_Detail.CnvFact);
                         objPO_Detail.QtyReturned = objPO_Detail.QtyReturned + qty;
-                        objPO_Detail.CostReturned = objPO_Detail.QtyReturned + row.TranAmt;
+                        objPO_Detail.CostReturned = objPO_Detail.CostReturned + row.TranAmt;
                         double OldQty = 0;
                         if ((row.PurchaseType == "GN" || row.PurchaseType == "GI" | row.PurchaseType == "PR") & objPO_Detail.RcptStage != "N")
                         {
@@ -766,7 +775,7 @@ namespace POProcess
             DataTable dtBatch ;
             DataTable dtLotSer = new DataTable();
             clsIN_Trans objIN_Trans = new clsIN_Trans(Dal);
-            //clsIN_LotTrans objIN_LotTrans = new clsIN_LotTrans(Dal);
+            clsIN_LotTrans objIN_LotTrans = new clsIN_LotTrans(Dal);
             //IN_Setup objIN_Setup = new IN_Setup();
             clsIN_ItemSite objIN_ItemSite = new clsIN_ItemSite(Dal);
             clsIN_ItemCost objIN_ItemCost = new clsIN_ItemCost(Dal);
@@ -851,39 +860,39 @@ namespace POProcess
                         }
 
                         #region//Lot/Serial Processing
-                        //if (objIN_Inventory.StkItem == 1 && objIN_Inventory.LotSerTrack != "N" && objIN_Inventory.LotSerTrack.PassNull() != string.Empty)
-                        //{
-                        //    DataTable dtInLotTrans = objIN_LotTrans.GetAll(row.BranchID, row.BatNbr, objrowIN_Tran.RefNbr, "%", objrowIN_Tran.LineRef,"%");
-                        //    IList<clsIN_LotTrans> ListdtInLotTrans = DataTableHelper.ConvertTo<clsIN_LotTrans>(dtInLotTrans);
-                          
-                        //    foreach (var r1 in ListdtInLotTrans)
-                        //    {
-                        //        clsIN_ItemLot objIN_ItemLot = new clsIN_ItemLot(Dal);
-                        //        Qty = Math.Round(r1.Qty * r1.InvtMult * (r1.UnitMultDiv == "D" ? 1.0 / r1.CnvFact : r1.CnvFact), 0, MidpointRounding.AwayFromZero);
-                        //        if (!objIN_ItemLot.GetByKey(objrowIN_Tran.SiteID, objrowIN_Tran.InvtID, r1.LotSerNbr))
-                        //        {
-                        //            Insert_IN_ItemLot(ref objIN_ItemLot, objrowIN_Tran.InvtID, objrowIN_Tran.SiteID, r1.LotSerNbr, r1.ExpDate, "", 0, 0);
-                        //            objIN_ItemLot.Crtd_Prog = r1.Crtd_Prog;
-                        //            objIN_ItemLot.Crtd_User = r1.Crtd_User;
-                        //            objIN_ItemLot.LUpd_DateTime = DateTime.Now;
-                        //            objIN_ItemLot.LUpd_Prog = r1.Crtd_Prog;
-                        //            objIN_ItemLot.LUpd_User = r1.LUpd_User;
-                        //        }
-                        //        if (objIN_Inventory.LotSerTrack == "L")
-                        //            objIN_ItemLot.WarrantyDate = row.RcptDate.AddDays(objIN_Inventory.WarrantyDays);
-                        //        else objIN_ItemLot.WarrantyDate = row.RcptDate;
-                        //        objIN_ItemLot.ExpDate = r1.ExpDate;
-                        //        objIN_ItemLot.MfgrLotSerNbr = r1.MfgrLotSerNbr;
-                        //        objIN_ItemLot.Cost = objIN_ItemLot.Cost + objrowIN_Tran.ExtCost / objrowIN_Tran.Qty * r1.Qty;
-                        //        objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + Qty, 10);
-                        //        objIN_ItemLot.AvgCost = Math.Round(objIN_ItemLot.QtyOnHand != 0 ? (objIN_ItemLot.Cost / objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost,0);
-                        //        objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + Qty, 10);
-                        //        objIN_ItemLot.LUpd_DateTime = DateTime.Now;
-                        //        objIN_ItemLot.LUpd_Prog = Prog;
-                        //        objIN_ItemLot.LUpd_User = User;
-                        //        objIN_ItemLot.Update();
-                        //    }
-                        //}
+                        if (objIN_Inventory.StkItem == 1 && objIN_Inventory.LotSerTrack != "N" && objIN_Inventory.LotSerTrack.PassNull() != string.Empty)
+                        {
+                            DataTable dtInLotTrans = objIN_LotTrans.GetAll(row.BranchID, row.BatNbr, objrowIN_Tran.RefNbr, "%", objrowIN_Tran.LineRef);
+                            IList<clsIN_LotTrans> ListdtInLotTrans = DataTableHelper.ConvertTo<clsIN_LotTrans>(dtInLotTrans);
+
+                            foreach (var r1 in ListdtInLotTrans)
+                            {
+                                clsIN_ItemLot objIN_ItemLot = new clsIN_ItemLot(Dal);
+                                Qty = Math.Round(r1.Qty * r1.InvtMult * (r1.UnitMultDiv == "D" ? 1.0 / r1.CnvFact : r1.CnvFact), 0, MidpointRounding.AwayFromZero);
+                                if (!objIN_ItemLot.GetByKey(objrowIN_Tran.SiteID, objrowIN_Tran.InvtID, r1.LotSerNbr))
+                                {
+                                    Insert_IN_ItemLot(ref objIN_ItemLot, objrowIN_Tran.InvtID, objrowIN_Tran.SiteID, r1.LotSerNbr, r1.ExpDate, "", 0, 0);
+                                    objIN_ItemLot.Crtd_Prog = r1.Crtd_Prog;
+                                    objIN_ItemLot.Crtd_User = r1.Crtd_User;
+                                    objIN_ItemLot.LUpd_DateTime = DateTime.Now;
+                                    objIN_ItemLot.LUpd_Prog = r1.Crtd_Prog;
+                                    objIN_ItemLot.LUpd_User = r1.LUpd_User;
+                                }
+                                if (objIN_Inventory.LotSerTrack == "L")
+                                    objIN_ItemLot.WarrantyDate = row.RcptDate.AddDays(objIN_Inventory.WarrantyDays);
+                                else objIN_ItemLot.WarrantyDate = row.RcptDate;
+                                objIN_ItemLot.ExpDate = r1.ExpDate;
+                                objIN_ItemLot.MfgrLotSerNbr = r1.MfgrLotSerNbr;
+                                objIN_ItemLot.Cost = objIN_ItemLot.Cost + objrowIN_Tran.ExtCost / objrowIN_Tran.Qty * r1.Qty;
+                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + Qty, 10);
+                                //objIN_ItemLot.AvgCost = Math.Round(objIN_ItemLot.QtyOnHand != 0 ? (objIN_ItemLot.Cost / objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
+                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + Qty, 10);
+                                objIN_ItemLot.LUpd_DateTime = DateTime.Now;
+                                objIN_ItemLot.LUpd_Prog = Prog;
+                                objIN_ItemLot.LUpd_User = User;
+                                objIN_ItemLot.Update();
+                            }
+                        }
                         #endregion
                     }
 
@@ -966,48 +975,48 @@ namespace POProcess
                         }
 
                         #region //Lot/Serial Processing
-                        //if (objIN_Inventory.StkItem == 1 && objIN_Inventory.LotSerTrack != "N" && objIN_Inventory.LotSerTrack.PassNull() != string.Empty)                        
-                        //{
-                        //    objIN_LotTrans = new clsIN_LotTrans(Dal);
-                        //    var dtInLotTrans = DataTableHelper.ConvertTo<clsIN_LotTrans>(objIN_LotTrans.GetAll(row.BranchID, row.BatNbr, "%", "%", dtInTrans.LineRef,"%"));
-                        //    foreach (var r1 in dtInLotTrans)
-                        //    {
-                        //        var objIN_ItemLot = new clsIN_ItemLot(Dal);
-                        //        Qty = Math.Round(r1.Qty * r1.InvtMult * (r1.UnitMultDiv == "D" ? 1.0 / r1.CnvFact : r1.CnvFact), 0, MidpointRounding.AwayFromZero);
-                        //        if (!objIN_ItemLot.GetByKey(dtInTrans.SiteID, dtInTrans.InvtID, r1.LotSerNbr))
-                        //        {
-                        //            //chua xu li
-                        //            Insert_IN_ItemLot(ref objIN_ItemLot, dtInTrans.InvtID, dtInTrans.SiteID,r1.LotSerNbr, r1.ExpDate,"", 0, 0);
-                        //            objIN_ItemLot.Crtd_Prog = r1.Crtd_Prog;
-                        //            objIN_ItemLot.Crtd_User = r1.Crtd_User;
-                        //            objIN_ItemLot.LUpd_DateTime = DateTime.Now;
-                        //            objIN_ItemLot.LUpd_Prog = r1.Crtd_Prog;
-                        //            objIN_ItemLot.LUpd_User = r1.LUpd_User;
-                        //        }
+                        if (objIN_Inventory.StkItem == 1 && objIN_Inventory.LotSerTrack != "N" && objIN_Inventory.LotSerTrack.PassNull() != string.Empty)
+                        {
+                            objIN_LotTrans = new clsIN_LotTrans(Dal);
+                            var dtInLotTrans = DataTableHelper.ConvertTo<clsIN_LotTrans>(objIN_LotTrans.GetAll(row.BranchID, row.BatNbr, "%", "%", dtInTrans.LineRef));
+                            foreach (var r1 in dtInLotTrans)
+                            {
+                                var objIN_ItemLot = new clsIN_ItemLot(Dal);
+                                Qty = Math.Round(r1.Qty * r1.InvtMult * (r1.UnitMultDiv == "D" ? 1.0 / r1.CnvFact : r1.CnvFact), 0, MidpointRounding.AwayFromZero);
+                                if (!objIN_ItemLot.GetByKey(dtInTrans.SiteID, dtInTrans.InvtID, r1.LotSerNbr))
+                                {
+                                    //chua xu li
+                                    Insert_IN_ItemLot(ref objIN_ItemLot, dtInTrans.InvtID, dtInTrans.SiteID, r1.LotSerNbr, r1.ExpDate, "", 0, 0);
+                                    objIN_ItemLot.Crtd_Prog = r1.Crtd_Prog;
+                                    objIN_ItemLot.Crtd_User = r1.Crtd_User;
+                                    objIN_ItemLot.LUpd_DateTime = DateTime.Now;
+                                    objIN_ItemLot.LUpd_Prog = r1.Crtd_Prog;
+                                    objIN_ItemLot.LUpd_User = r1.LUpd_User;
+                                }
 
 
-                        //        if (objIN_Inventory.LotSerTrack == "L")
-                        //            objIN_ItemLot.WarrantyDate = row.RcptDate.AddDays(objIN_Inventory.WarrantyDays);
-                        //        else objIN_ItemLot.WarrantyDate = row.RcptDate;
+                                if (objIN_Inventory.LotSerTrack == "L")
+                                    objIN_ItemLot.WarrantyDate = row.RcptDate.AddDays(objIN_Inventory.WarrantyDays);
+                                else objIN_ItemLot.WarrantyDate = row.RcptDate;
 
-                        //        objIN_ItemLot.ExpDate = r1.ExpDate;
-                        //        objIN_ItemLot.MfgrLotSerNbr = r1.MfgrLotSerNbr;
-                        //        objIN_ItemLot.Cost = objIN_ItemLot.Cost + (dtInTrans.ExtCost / dtInTrans.Qty) * r1.Qty;
-                        //        //objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + Qty, 0);
-                        //        objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + Qty, 10);
-                        //        objIN_ItemLot.QtyAllocPORet = Math.Round(objIN_ItemLot.QtyAllocPORet + Qty,0, MidpointRounding.AwayFromZero);
-                        //        objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost,0);
-                        //        objIN_ItemLot.LUpd_DateTime =DateTime.Now;
-                        //        objIN_ItemLot.LUpd_Prog = row.LUpd_Prog;
-                        //        objIN_ItemLot.LUpd_User = row.LUpd_User;
-                        //        objIN_ItemLot.Update();
-                        //        //Checking Qty
-                        //        if (objIN_Inventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objIN_ItemLot.QtyOnHand, 0, MidpointRounding.AwayFromZero) < 0)
-                        //        {
-                        //             throw new MessageException("608", new[] { objIN_ItemSite.InvtID, objIN_ItemSite.SiteID });                                  
-                        //        }
-                        //    }
-                        //}
+                                objIN_ItemLot.ExpDate = r1.ExpDate;
+                                objIN_ItemLot.MfgrLotSerNbr = r1.MfgrLotSerNbr;
+                                objIN_ItemLot.Cost = objIN_ItemLot.Cost + (dtInTrans.ExtCost / dtInTrans.Qty) * r1.Qty;
+                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + Qty, 0);
+                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + Qty, 10);
+                                objIN_ItemLot.QtyAllocPORet = Math.Round(objIN_ItemLot.QtyAllocPORet + Qty, 0, MidpointRounding.AwayFromZero);
+                                //objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
+                                objIN_ItemLot.LUpd_DateTime = DateTime.Now;
+                                objIN_ItemLot.LUpd_Prog = row.LUpd_Prog;
+                                objIN_ItemLot.LUpd_User = row.LUpd_User;
+                                objIN_ItemLot.Update();
+                                //Checking Qty
+                                if (objIN_Inventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objIN_ItemLot.QtyOnHand, 0, MidpointRounding.AwayFromZero) < 0)
+                                {
+                                    throw new MessageException("608", new[] { objIN_ItemSite.InvtID, objIN_ItemSite.SiteID });
+                                }
+                            }
+                        }
                         #endregion
 
                     }
@@ -1277,7 +1286,7 @@ namespace POProcess
               
                 clsIN_Setup objIN_Setup = new clsIN_Setup(Dal);
                 clsIN_Trans objIN_Trans = new clsIN_Trans(Dal);
-                //clsIN_LotTrans objIN_LotTrans = new clsIN_LotTrans(Dal);
+                clsIN_LotTrans objIN_LotTrans = new clsIN_LotTrans(Dal);
                 clsIN_Inventory objInventory = new clsIN_Inventory(Dal);
                 clsIN_ItemSite objItemSite = new clsIN_ItemSite(Dal);
                 clsSQL objSql = new clsSQL(Dal);
@@ -1372,44 +1381,44 @@ namespace POProcess
                         objItemCost.Add();
                     }
                     #region lot
-                    //if (objInventory.StkItem == 1 && objInventory.LotSerTrack != "N" && objInventory.LotSerTrack.PassNull() != string.Empty)
-                    //{
-                    //    #region // Them release IN_LotTran 20140908
-                    //    DataTable dtInLotTrans = objIN_LotTrans.GetAll(inTran.BranchID, inTran.BatNbr, inTran.RefNbr, "%", inTran.LineRef, "%");
-                    //    IList<clsIN_LotTrans> ListdtInLotTrans = DataTableHelper.ConvertTo<clsIN_LotTrans>(dtInLotTrans);
-                     
-                    //    foreach (var r1 in ListdtInLotTrans)
-                    //    {
-                    //        clsIN_ItemLot objIN_ItemLot = new clsIN_ItemLot(Dal);
-                    //        if (!objIN_ItemLot.GetByKey(inTran.SiteID, inTran.InvtID, r1.LotSerNbr))
-                    //        {
-                    //            objIN_ItemLot.Reset();
+                    if (objInventory.StkItem == 1 && objInventory.LotSerTrack != "N" && objInventory.LotSerTrack.PassNull() != string.Empty)
+                    {
+                        #region // Them release IN_LotTran 20140908
+                        DataTable dtInLotTrans = objIN_LotTrans.GetAll(inTran.BranchID, inTran.BatNbr, inTran.RefNbr, "%", inTran.LineRef);
+                        IList<clsIN_LotTrans> ListdtInLotTrans = DataTableHelper.ConvertTo<clsIN_LotTrans>(dtInLotTrans);
 
-                    //            Insert_IN_ItemLot(ref objIN_ItemLot, inTran.InvtID, inTran.SiteID, r1.LotSerNbr, r1.ExpDate, "", 0, 0);
-                    //            objIN_ItemLot.Crtd_Prog = r1.Crtd_Prog;
-                    //            objIN_ItemLot.Crtd_User = r1.Crtd_User;
-                    //            objIN_ItemLot.LUpd_DateTime = DateTime.Now;
-                    //            objIN_ItemLot.LUpd_Prog = r1.Crtd_Prog;
-                    //            objIN_ItemLot.LUpd_User = r1.LUpd_User;
+                        foreach (var r1 in ListdtInLotTrans)
+                        {
+                            clsIN_ItemLot objIN_ItemLot = new clsIN_ItemLot(Dal);
+                            if (!objIN_ItemLot.GetByKey(inTran.SiteID, inTran.InvtID, r1.LotSerNbr))
+                            {
+                                objIN_ItemLot.Reset();
 
-                    //        }
-                    //        if (objInventory.StkItem == 1)
-                    //        {
-                    //            if (inTran.UnitMultDiv == "M" || inTran.UnitMultDiv == string.Empty)
-                    //                qty = -1 * r1.Qty * r1.InvtMult * r1.CnvFact;
-                    //            else
-                    //                qty = -1 * (r1.Qty * r1.InvtMult) / r1.CnvFact;
-                    //            //if (isTransfer && r1.TranType == "TR")
-                    //            //    objIN_ItemLot.QtyInTransit -= qty;
-                    //            objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + qty, 10);
-                    //            objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + qty, 10);
-                    //            objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
-                    //            objIN_ItemLot.Update();
-                    //        }
-                    //    }
-                    //    #endregion
+                                Insert_IN_ItemLot(ref objIN_ItemLot, inTran.InvtID, inTran.SiteID, r1.LotSerNbr, r1.ExpDate, "", 0, 0);
+                                objIN_ItemLot.Crtd_Prog = r1.Crtd_Prog;
+                                objIN_ItemLot.Crtd_User = r1.Crtd_User;
+                                objIN_ItemLot.LUpd_DateTime = DateTime.Now;
+                                objIN_ItemLot.LUpd_Prog = r1.Crtd_Prog;
+                                objIN_ItemLot.LUpd_User = r1.LUpd_User;
 
-                    //}
+                            }
+                            if (objInventory.StkItem == 1)
+                            {
+                                if (inTran.UnitMultDiv == "M" || inTran.UnitMultDiv == string.Empty)
+                                    qty = -1 * r1.Qty * r1.InvtMult * r1.CnvFact;
+                                else
+                                    qty = -1 * (r1.Qty * r1.InvtMult) / r1.CnvFact;
+                                //if (isTransfer && r1.TranType == "TR")
+                                //    objIN_ItemLot.QtyInTransit -= qty;
+                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + qty, 10);
+                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + qty, 10);
+                                //objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
+                                objIN_ItemLot.Update();
+                            }
+                        }
+                        #endregion
+
+                    }
                     #endregion
                 }
                 if (Listtrans.Count > 0)
@@ -1430,8 +1439,8 @@ namespace POProcess
             try
             {
                 double qty = 0;
-          
-                //clsIN_LotTrans objIN_LotTrans = new clsIN_LotTrans(Dal);
+
+                clsIN_LotTrans objIN_LotTrans = new clsIN_LotTrans(Dal);
                 clsSQL objSQL = new clsSQL(Dal);
                 clsIN_Setup objIN_Setup = new clsIN_Setup(Dal);
                 clsIN_Trans objIN_Trans = new clsIN_Trans(Dal);
@@ -1513,43 +1522,43 @@ namespace POProcess
                         //app.IN_ItemCost.AddObject(newItemCost);
                     }
                     #region Lot
-                    //if (objInventory.StkItem == 1 && objInventory.LotSerTrack != "N" && objInventory.LotSerTrack.PassNull() != string.Empty)
-                    //{
-                    //    #region // Them release IN_LotTran 20140908
-                    //    DataTable dtInLotTrans = objIN_LotTrans.GetAll(inTran.BranchID, inTran.BatNbr, inTran.RefNbr, "%", inTran.LineRef,"%");
-                    //    IList<clsIN_LotTrans> ListdtInLotTrans = DataTableHelper.ConvertTo<clsIN_LotTrans>(dtInLotTrans);
-                    
-                    //    foreach (var r1 in ListdtInLotTrans)
-                    //    {
-                    //        clsIN_ItemLot objIN_ItemLot = new clsIN_ItemLot(Dal);
-                    //        if (!objIN_ItemLot.GetByKey(inTran.SiteID, inTran.InvtID, r1.LotSerNbr))
-                    //        {
-                    //            objIN_ItemLot.Reset();
+                    if (objInventory.StkItem == 1 && objInventory.LotSerTrack != "N" && objInventory.LotSerTrack.PassNull() != string.Empty)
+                    {
+                        #region // Them release IN_LotTran 20140908
+                        DataTable dtInLotTrans = objIN_LotTrans.GetAll(inTran.BranchID, inTran.BatNbr, inTran.RefNbr, "%", inTran.LineRef);
+                        IList<clsIN_LotTrans> ListdtInLotTrans = DataTableHelper.ConvertTo<clsIN_LotTrans>(dtInLotTrans);
 
-                    //            Insert_IN_ItemLot(ref objIN_ItemLot, inTran.InvtID, inTran.SiteID, r1.LotSerNbr, r1.ExpDate, "", 0, 0);
-                    //            objIN_ItemLot.Crtd_Prog = r1.Crtd_Prog;
-                    //            objIN_ItemLot.Crtd_User = r1.Crtd_User;
-                    //            objIN_ItemLot.LUpd_DateTime = DateTime.Now;
-                    //            objIN_ItemLot.LUpd_Prog = r1.Crtd_Prog;
-                    //            objIN_ItemLot.LUpd_User = r1.LUpd_User;
-                    //        }
-                    //        if (objInventory.StkItem == 1)
-                    //        {
-                    //            if (inTran.UnitMultDiv == "M" || inTran.UnitMultDiv == string.Empty)
-                    //                qty = -1 * r1.Qty * r1.InvtMult * r1.CnvFact;
-                    //            else
-                    //                qty = -1 * (r1.Qty * r1.InvtMult) / r1.CnvFact;
-                    //            //if (isTransfer && r1.TranType == "TR")
-                    //            //    objIN_ItemLot.QtyInTransit -= qty;
-                    //            objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + qty, 10);
-                    //            objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + qty, 10);
-                    //            objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
-                    //            objIN_ItemLot.Update();
-                    //        }
-                    //    }
-                    //    #endregion
+                        foreach (var r1 in ListdtInLotTrans)
+                        {
+                            clsIN_ItemLot objIN_ItemLot = new clsIN_ItemLot(Dal);
+                            if (!objIN_ItemLot.GetByKey(inTran.SiteID, inTran.InvtID, r1.LotSerNbr))
+                            {
+                                objIN_ItemLot.Reset();
 
-                    //}
+                                Insert_IN_ItemLot(ref objIN_ItemLot, inTran.InvtID, inTran.SiteID, r1.LotSerNbr, r1.ExpDate, "", 0, 0);
+                                objIN_ItemLot.Crtd_Prog = r1.Crtd_Prog;
+                                objIN_ItemLot.Crtd_User = r1.Crtd_User;
+                                objIN_ItemLot.LUpd_DateTime = DateTime.Now;
+                                objIN_ItemLot.LUpd_Prog = r1.Crtd_Prog;
+                                objIN_ItemLot.LUpd_User = r1.LUpd_User;
+                            }
+                            if (objInventory.StkItem == 1)
+                            {
+                                if (inTran.UnitMultDiv == "M" || inTran.UnitMultDiv == string.Empty)
+                                    qty = -1 * r1.Qty * r1.InvtMult * r1.CnvFact;
+                                else
+                                    qty = -1 * (r1.Qty * r1.InvtMult) / r1.CnvFact;
+                                //if (isTransfer && r1.TranType == "TR")
+                                //    objIN_ItemLot.QtyInTransit -= qty;
+                                objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + qty, 10);
+                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + qty, 10);
+                                //objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
+                                objIN_ItemLot.Update();
+                            }
+                        }
+                        #endregion
+
+                    }
                     #endregion
                 }
 
@@ -1585,7 +1594,7 @@ namespace POProcess
                     {
                         dt1 = objPO_Trans.GetAll(BranchID, BatNbr, row.RcptNbr,"%");// app.PO_Trans.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.RcptNbr == row.RcptNbr).ToList();
                         IList<clsPO_Trans> Listdt1 = DataTableHelper.ConvertTo<clsPO_Trans>(dt1);
-                        foreach (clsPO_Trans row1 in dt1.Rows.OfType<clsPO_Trans>())
+                        foreach (clsPO_Trans row1 in Listdt1)
                         {
                             if (row1.PONbr != "")
                                 UpdateCancelPODetail( row1);
@@ -1618,20 +1627,27 @@ namespace POProcess
               
                 if (objPO_Detail.GetByKey(row.BranchID, row.PONbr, row.POLineRef))
                 {
+                    double qtyTrans = (row.RcptMultDiv == "D" ? row.RcptQty / row.RcptConvFact : row.RcptQty * row.RcptConvFact);//quy ve don vi luu kho 20150326
+                    var qtyOrd = objPO_Detail.UnitMultDiv == "M" ? objPO_Detail.QtyOrd * objPO_Detail.CnvFact : objPO_Detail.QtyOrd / objPO_Detail.CnvFact;
+                    var qtyRcvd = objPO_Detail.UnitMultDiv == "M" ? objPO_Detail.QtyRcvd * objPO_Detail.CnvFact : objPO_Detail.QtyRcvd / objPO_Detail.CnvFact;
+                     //QUY doi ve don vi theo PODetail  20150326
+                     double qty = (objPO_Detail.UnitMultDiv == "M" ? qtyTrans / objPO_Detail.CnvFact : qtyTrans * objPO_Detail.CnvFact);
+
                     if (row.TranType == "R")
                     {
-                        objPO_Detail.QtyRcvd = objPO_Detail.QtyRcvd - row.Qty;
+                       
+                        objPO_Detail.QtyRcvd = objPO_Detail.QtyRcvd - qty;
                         objPO_Detail.CostReceived = objPO_Detail.CostReceived - row.TranAmt;
                         if ((row.PurchaseType == "GN" | row.PurchaseType == "GI" | row.PurchaseType == "PR"))
                         {
                             double OldQty = 0;
-                            OldQty = (row.RcptMultDiv == "D" ? row.RcptQty / row.RcptConvFact : row.RcptQty * row.RcptConvFact);
+                            //OldQty = (row.RcptMultDiv == "D" ? row.RcptQty / row.RcptConvFact : row.RcptQty * row.RcptConvFact);
                           
                             //var objItemSite = app.IN_ItemSite.Where(p => p.InvtID == row.InvtID && p.SiteID == row.SiteID).FirstOrDefault();
 
                             if (objItemSite.GetByKey(row.InvtID,row.SiteID))
                             {
-                                objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + OldQty, 0);
+                                objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + qtyTrans, 0);
                                 objItemSite.Update();
                             }
                             //POCommon.UpdateOnPOQty(row.InvtID, row.SiteID, 0, OldQty, m_HQSys.DecplQty, m_Dal);
@@ -1651,18 +1667,19 @@ namespace POProcess
                     }
                     else if (row.TranType == "X")
                     {
-                        objPO_Detail.QtyRcvd = objPO_Detail.QtyRcvd + row.Qty;
+                        objPO_Detail.QtyRcvd = objPO_Detail.QtyRcvd + qty;
                         objPO_Detail.CostReceived = objPO_Detail.CostReceived + row.TranAmt;
-                        objPO_Detail.QtyReturned = objPO_Detail.QtyReturned - row.Qty;
+
+                        objPO_Detail.QtyReturned = objPO_Detail.QtyReturned - qty;
                         objPO_Detail.CostReturned = objPO_Detail.QtyReturned - row.TranAmt;
                         double OldQty = 0;
                         if ((row.PurchaseType == "GN" | row.PurchaseType == "GI" | row.PurchaseType == "PR") & objPO_Detail.RcptStage != "N")
                         {
-                            OldQty = (row.RcptMultDiv == "D" ? row.RcptQty / row.RcptConvFact : row.RcptQty * row.RcptConvFact);
+                            //OldQty = (row.RcptMultDiv == "D" ? row.RcptQty / row.RcptConvFact : row.RcptQty * row.RcptConvFact);
                             
                             if (objItemSite.GetByKey(row.InvtID,row.SiteID))                            
                             {
-                                objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + 0 - OldQty, 0);
+                                objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + 0 - qtyTrans, 0);
                                 objItemSite.Update();
                             }
                             //POCommon.UpdateOnPOQty(row.InvtID, row.SiteID, OldQty, 0, m_HQSys.DecplQty, m_Dal);
