@@ -13,13 +13,14 @@ var _invtID = "";//dung cho boby combo load store cboPurchUnit
 var _classID = "";//dung cho boby combo load store cboPurchUnit
 var _stkUnit = "";//dung cho boby combo load store cboPurchUnit
 var _purUnit = "";//dung cho boby combo load store cboPurchUnit
-
+var _firstLoad = true;
 
 
 //////////////////////////////////////////////////////////////////
 //// Store ///////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 var loadDataHeader = function (sto) {
+    _firstLoad = true;
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
     //App.cboVendID.forceSelection=false;
     //App.cboVendAddrID.forceSelection = false;
@@ -34,7 +35,7 @@ var loadDataHeader = function (sto) {
         //gan du lieu mac dinh ban dau
         record.data.ShiptoType = "D";
         record.data.Status = "H";
-        record.data.POType = "RO";
+        record.data.POType = "O";
         record.data.PODate = HQ.bussinessDate;
         record.data.BlktExprDate = HQ.bussinessDate;
         record.data.BranchID = App.cboBranchID.getValue();
@@ -99,7 +100,10 @@ var loadDataDetail = function (sto) {
     else {     
         App.cboVendID.setReadOnly(false);
     }
-    HQ.store.insertBlank(sto, _keys);
+    if (_firstLoad) {
+        HQ.store.insertBlank(sto, _keys);
+        _firstLoad = false;
+    }
     calcDet();
     frmChange();
     HQ.common.showBusy(false);
@@ -1178,8 +1182,8 @@ function calcDet() {
     var CTN = 0;
     var PCS = 0;
 
-    for (var j = 0; j < App.stoPO10100_pgDetail.data.length; j++) {
-        var det = App.stoPO10100_pgDetail.data.items[j];
+    for (var j = 0; j < App.stoPO10100_pgDetail.allData.length; j++) {
+        var det = App.stoPO10100_pgDetail.allData.items[j];
         taxAmt00 += det.data.TaxAmt00;
         taxAmt01 += det.data.TaxAmt01;
         taxAmt02 += det.data.TaxAmt02;

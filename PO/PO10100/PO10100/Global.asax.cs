@@ -28,7 +28,7 @@ namespace PO10100
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "EARTHSVR\\SQL2012";//ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server ="MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();// "EARTHSVR\\SQL2012";//
             Current.DBSys = "eSky4DSys";// "eBiz4DWebSys";// ConfigurationManager.AppSettings["DBSys"].ToString();
             Current.Theme = "Default";
             AccessRight acc = new AccessRight();

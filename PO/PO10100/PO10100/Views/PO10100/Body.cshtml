@@ -187,7 +187,7 @@
                                 })
                             , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("POAmt").Name("POAmt").HQLangCode("TOTAMT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
 
-                            , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("EXTWEIGHT").Name("EXTWEIGHT").HQLangCode("EXTWEIGHT").LabelWidth(130).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0")
+                            , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("EXTWEIGHT").Name("EXTWEIGHT").HQLangCode("EXTWEIGHT").LabelWidth(130).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
                         )
                     )//Header
                     , X.Container().MarginSpec("5 0 0 0")
@@ -684,7 +684,7 @@
                                                                 })
                                                                 .LoadData()
                                          , HQ.Combo().ID("cboTerms").Name("Terms").MarginSpec("3 0 0 0").ForceSelection(true)
-                                                                .HQLangCode("Terms").HQDBSys(false).HQProcedure("PO10100_pcterms")
+                                                                .HQLangCode("Term").HQDBSys(false).HQProcedure("PO10100_pcterms")
                                                                 .HQColumnShow("TermsID,Descr")
                                                                 .DisplayField("TermsID")
                                                                 .ValueField("TermsID")

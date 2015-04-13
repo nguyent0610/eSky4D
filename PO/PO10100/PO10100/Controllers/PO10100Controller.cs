@@ -197,7 +197,10 @@ namespace PO10100.Controllers
                     if (objrPO_Detail.PurchaseType == "GI" || objrPO_Detail.PurchaseType == "PR" || objrPO_Detail.PurchaseType == "GP" || objrPO_Detail.PurchaseType == "GS")
                     {
                         double OldQty = Math.Round((objDetail.UnitMultDiv == "D" ? ((objDetail.QtyOrd - objDetail.QtyRcvd) / objDetail.CnvFact) : (objDetail.QtyOrd - objDetail.QtyRcvd) * objDetail.CnvFact));
-                        UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, 0, 2);                     
+                        var objIN_ItemSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == objDetail.InvtID && p.SiteID == objDetail.SiteID);
+                        objIN_ItemSite.QtyOnPO = Math.Round(objIN_ItemSite.QtyOnPO - OldQty, 2);
+                     
+                        //UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, 0, 2);                     
                     }
                 }
                 _db.SaveChanges();
@@ -247,7 +250,9 @@ namespace PO10100.Controllers
                             {
 
                                 double OldQty = Math.Round((objDetail.UnitMultDiv == "D" ? ((objDetail.QtyOrd - objDetail.QtyRcvd) / objDetail.CnvFact) : (objDetail.QtyOrd - objDetail.QtyRcvd) * objDetail.CnvFact));
-                                UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, 0, 2);
+                                //UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, 0, 2);
+                                var objIN_ItemSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == objDetail.InvtID && p.SiteID == objDetail.SiteID);
+                                objIN_ItemSite.QtyOnPO = Math.Round(objIN_ItemSite.QtyOnPO  - OldQty, 2);
                             }
                         }
                       
@@ -307,7 +312,9 @@ namespace PO10100.Controllers
                             if (deleted.PurchaseType == "GI" || deleted.PurchaseType == "PR" || deleted.PurchaseType == "GP" || deleted.PurchaseType == "GS")
                             {
                                 double OldQty = Math.Round((obj1.UnitMultDiv == "D" ? ((obj1.QtyOrd - obj1.QtyRcvd) / obj1.CnvFact) : (obj1.QtyOrd - obj1.QtyRcvd) * obj1.CnvFact));
-                                UpdateOnPOQty(obj1.InvtID, obj1.SiteID, OldQty, 0, 2);
+                                var objIN_ItemSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == obj1.InvtID && p.SiteID == obj1.SiteID);
+                                objIN_ItemSite.QtyOnPO = Math.Round(objIN_ItemSite.QtyOnPO  - OldQty, 2);
+                               // UpdateOnPOQty(obj1.InvtID, obj1.SiteID, OldQty, 0, 2);
                             }
                             _db.PO_Detail.DeleteObject(obj1);
                         }
@@ -524,6 +531,14 @@ namespace PO10100.Controllers
                             objIN_ItemSite = new IN_ItemSite();
                             Insert_IN_ItemSite(ref objIN_ItemSite, ref objIN_Inventory, objDetail.SiteID);
                         }
+                        NewQty = Math.Round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
+                        if (isnew) OldQty = 0;
+                        else
+                            OldQty = Math.Round((objrPO_Detail.UnitMultDiv == "D" ? (objrPO_Detail.QtyOrd / objrPO_Detail.CnvFact) : objrPO_Detail.QtyOrd * objrPO_Detail.CnvFact));
+
+                        objIN_ItemSite.QtyOnPO = Math.Round(objIN_ItemSite.QtyOnPO + NewQty - OldQty, 2);
+
+                   
                     }
                     catch (Exception ex)
                     {
@@ -532,15 +547,7 @@ namespace PO10100.Controllers
 
 
                 }
-                if (objDetail.PurchaseType == "GI" || objDetail.PurchaseType == "PR" || objDetail.PurchaseType == "GP" || objDetail.PurchaseType == "GS")
-                {
-                    NewQty = Math.Round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
-                    if (isnew) OldQty = 0;
-                    else
-                        OldQty = Math.Round((objrPO_Detail.UnitMultDiv == "D" ? (objrPO_Detail.QtyOrd / objrPO_Detail.CnvFact) : objrPO_Detail.QtyOrd * objrPO_Detail.CnvFact));
-                    UpdateOnPOQty(objDetail.InvtID, objDetail.SiteID, OldQty, NewQty, 2);
-                  
-                }
+               
                 objrPO_Detail.BranchID = _branchID;
                 objrPO_Detail.PONbr = _ponbr;
                 objrPO_Detail.LineRef = objDetail.LineRef;
@@ -677,6 +684,7 @@ namespace PO10100.Controllers
             //Check MOQ
             AP_Vendor objVendor = new AP_Vendor();
             objVendor = _db.AP_Vendor.ToList().FirstOrDefault(p => p.VendID == _poHead.VendID.PassNull());
+         
             if (objVendor.MOQVal > 0)
             {
                 switch (objVendor.MOQType)
@@ -1544,29 +1552,7 @@ namespace PO10100.Controllers
                 throw (ex);
             }
         }
-        public void UpdateOnPOQty(string InvtID, string SiteID, double OldQty, double NewQty, int DecQty)
-        {
-         
-            try
-            {             
-                try
-                {
-                    var objItemSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == InvtID && p.SiteID == SiteID);
-                    if (objItemSite != null)
-                    {
-                        objItemSite.QtyOnPO = Math.Round(objItemSite.QtyOnPO + NewQty - OldQty, DecQty);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw (ex);
-                }                
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
+      
         private string LastLineRef(List<PO10100_pgDetail_Result> lst)
         {
             string strlineRef = "";
