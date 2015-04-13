@@ -39,9 +39,9 @@
         @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
 
         @(
- X.Store().ID("stoDiscSeqInfo")
+            X.Store().ID("stoDiscSeqInfo")
             .AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(OM_DiscSeq), "mdlDiscSeqInfo", "DiscSeq"))
+            .Model(Util.GenerateModel(typeof(OM_DiscSeq), "mdlDiscSeqInfo", "DiscSeq",true,"Active,Promo"))
             .Proxy(
                 X.AjaxProxy()
                 .Url(Url.Action("GetDiscSeqInfo", "OM21100"))
@@ -64,7 +64,7 @@
         )
 
         @(
- X.Store().ID("stoDiscBreak")
+            X.Store().ID("stoDiscBreak")
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM21100_pgDiscBreak_Result), "mdlDiscBreak", "DiscID,DiscSeq,LineRef"))
             .Proxy(
@@ -85,6 +85,8 @@
             {
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'LineRef'];";
                 l.Load.Fn = "Main.Event.sto_load";
+                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
                 // Store: stoDiscBreak
         )
@@ -111,6 +113,8 @@
             {
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];";
                 //l.Load.Fn = "Main.Event.sto_load";
+                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
                 // Store: stoFreeItem
         )
@@ -137,6 +141,8 @@
             {
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'CpnyID'];";
                 //l.Load.Fn = "Main.Event.sto_load"; 
+                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
                 // Store: stoCompany
         )
@@ -163,6 +169,8 @@
             {
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
                 l.Load.Fn = "Main.Event.sto_load";
+                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
                 // Store: stoDiscItem
         )
@@ -189,6 +197,8 @@
             {
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'InvtID'];";
                 l.Load.Fn = "Main.Event.sto_load";
+                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
                 // Store: stoBundle
         )
@@ -215,6 +225,8 @@
             {
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'ClassID'];";
                 l.Load.Fn = "Main.Event.sto_load";
+                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
                  // Store: stoDiscCustClass
         )
@@ -241,6 +253,8 @@
             {
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'CustID'];";
                 l.Load.Fn = "Main.Event.sto_load";
+                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
                 // Store: stoDiscCust
         )
@@ -267,6 +281,8 @@
             {
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'ClassID'];";
                 l.Load.Fn = "Main.Event.sto_load";
+                l.Update.Handler = "Main.Event.frmMain_fieldChange()";
+                l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
                 // Store: stoDiscItemClass
         )

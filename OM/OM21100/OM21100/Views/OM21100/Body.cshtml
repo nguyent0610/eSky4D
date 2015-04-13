@@ -92,7 +92,10 @@
 
                             , X.Hidden().ID("tstamp").DataIndex("tstamp")
                         ) // Container
-                    ) // frmDiscDefintionTop
+                    )
+                    .Listeners(ls =>{
+                        ls.Render.Handler = "HQ.common.control_render(this,'frmDiscDefintionTop');";
+                    })// frmDiscDefintionTop
 
                     , X.TabPanel().ID("tabDiscDefintionCenter")
                     .Region(Region.Center)
@@ -253,7 +256,10 @@
                                     .MarginSpec("5 5 0 10")
                                     .BoxLabel(Util.GetLang("AllowEditDisc")).DataIndex("AllowEditDisc")
                                 ) // Container
-                            ) // Panel
+                            )
+                            .Listeners(ls =>{
+                                ls.Render.Handler = "HQ.common.control_render(this,'frmDiscSeqInfo');";
+                            }) // frmDiscSeqInfo
 
                             , X.Panel()
                             .Region(Region.Center)
@@ -302,8 +308,9 @@
                                 )
                                 .SelectionModel(
                                     X.RowSelectionModel().ID("slmDiscBreak").Mode(SelectionMode.Single)
-                                    .Listeners(x => {
-                                        x.SelectionChange.Fn = "DiscDefintion.Event.slmDiscBreak_selectChange"; 
+                                    .Listeners(x =>
+                                    {
+                                        x.SelectionChange.Fn = "DiscDefintion.Event.slmDiscBreak_selectChange";
                                     })
                                 )
                                 .Plugins(
@@ -318,7 +325,7 @@
                                 )
                                 .Listeners(ls =>
                                 {
-                                    ls.Render.Fn = "Main.Event.control_render";
+                                    ls.Render.Handler = "HQ.common.control_render(this,'grdDiscBreak');";
                                 }) // grdDiscBreak
 
                                 , X.GridPanel().ID("grdFreeItem")
@@ -418,14 +425,10 @@
                                 )
                                 .Listeners(ls =>
                                 {
-                                    ls.Render.Fn = "Main.Event.control_render";
+                                    ls.Render.Handler = "HQ.common.control_render(this,'grdFreeItem')";
                                 }) // grdFreeItem
                             ) // Panel
-                        )
-                        .Listeners(ls =>
-                        {
-                            //ls.Render.Fn = "Main.Event.control_render"; 
-                        })// pnlDiscSeq
+                        )// pnlDiscSeq
 
                         , X.Panel().ID("pnlAppComp")
                         .Title(Util.GetLang("AppComp"))
@@ -564,7 +567,7 @@
                         )
                         .Listeners(ls =>
                         {
-                            ls.Render.Fn = "Main.Event.control_render";
+                            ls.Render.Handler = "HQ.common.control_render(this,'pnlAppComp')";
                         })// pnlAppComp
                     ) // tabDiscDefintionCenter
                 ) // pnlDiscDefintion
@@ -641,7 +644,7 @@
                 )
                 .Listeners(ls =>
                 {
-                    ls.Render.Fn = "Main.Event.control_render";
+                    ls.Render.Handler = "HQ.common.control_render(this,'pnlDPII')";
                 })// pnlDPII
 
                 , X.Panel().ID("pnlDPBB")
@@ -712,7 +715,7 @@
                 )
                 .Listeners(ls =>
                 {
-                    ls.Render.Fn = "Main.Event.control_render";
+                    ls.Render.Handler = "HQ.common.control_render(this,'pnlDPBB')";
                 })// pnlDPBB
 
                 , X.Panel().ID("pnlDPTT")
@@ -767,7 +770,7 @@
                 )
                 .Listeners(ls =>
                 {
-                    ls.Render.Fn = "Main.Event.control_render";
+                    ls.Render.Handler = "HQ.common.control_render(this,'pnlDPTT')";
                 }) // pnlDPTT
 
                 , X.Panel().ID("pnlDPCC")
@@ -824,7 +827,7 @@
                 )
                 .Listeners(ls =>
                 {
-                    ls.Render.Fn = "Main.Event.control_render";
+                    ls.Render.Handler = "HQ.common.control_render(this,'pnlDPCC')";
                 }) // pnlDPCC
 
                 , X.Panel().ID("pnlDPPP")
@@ -892,7 +895,7 @@
                 )
                 .Listeners(ls =>
                 {
-                    ls.Render.Fn = "Main.Event.control_render";
+                    ls.Render.Handler = "HQ.common.control_render(this,'pnlDPPP')";
                 }) // pnlDPPP
 
             ) // tabMain
@@ -900,6 +903,7 @@
         .Listeners(l =>
         {
             l.BoxReady.Fn = "Main.Event.frmMain_boxReady";
+            l.FieldChange.Fn = "Main.Event.frmMain_fieldChange";
         })// frmMain
     ) // Viewport
 )

@@ -1,5 +1,4 @@
 var _holdStatus = "H";
-var _focusID = "";
 var _gridForDel;
 var _isNewDisc = false;
 var _isNewSeq = false;
@@ -214,18 +213,81 @@ var Main = {
                 values.push(record.data);
             });
             return values;
+        },
+
+        refresh: function (item) {
+            if (item == 'yes') {
+                HQ.isChange = false;
+                Main.Event.menuClick("refresh");
+            }
         }
     },
 
     Event: {
-        control_render: function (cmd) {
-            cmd.getEl().on('mousedown', function () {
-                _focusID = cmd.id;
-            });
-        },
-
         frmMain_boxReady: function (frm, width, height, eOpts) {
             DiscDefintion.Event.cboDiscID_change(App.cboDiscID, "", "");
+        },
+
+        frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {
+            var disc = App.frmDiscDefintionTop.getRecord();
+            if (disc) {
+                App.frmDiscDefintionTop.updateRecord();
+                HQ.isChange0 = disc.dirty;
+
+                App.frmDiscSeqInfo.updateRecord();
+                if (!HQ.store.isChange(App.stoDiscSeqInfo)) {
+                    if (!HQ.store.isChange(App.grdDiscBreak.store)) {
+                        if (!HQ.store.isChange(App.grdFreeItem.store)) {
+                            if (!HQ.store.isChange(App.grdCompany.store)) {
+                                if (!HQ.store.isChange(App.grdDiscItem.store)) {
+                                    if (!HQ.store.isChange(App.grdBundle.store)) {
+                                        if (!HQ.store.isChange(App.grdDiscCustClass.store)) {
+                                            if (!HQ.store.isChange(App.grdDiscCust.store)) {
+                                                HQ.isChange = HQ.store.isChange(App.grdDiscItemClass.store);
+                                            }
+                                            else {
+                                                HQ.isChange = true;
+                                            }
+                                        }
+                                        else {
+                                            HQ.isChange = true;
+                                        }
+                                    }
+                                    else {
+                                        HQ.isChange = true;
+                                    }
+                                }
+                                else {
+                                    HQ.isChange = true;
+                                }
+                            }
+                            else {
+                                HQ.isChange = true;
+                            }
+                        }
+                        else {
+                            HQ.isChange = true;
+                        }
+                    }
+                    else {
+                        HQ.isChange = true;
+                    }
+                }
+                else {
+                    HQ.isChange = true;
+                }
+
+                if (HQ.isChange || HQ.isChange0) {
+                    HQ.common.changeData(true, 'OM21100');//co thay doi du lieu gan * tren tab title header
+                    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+                }
+                else {
+                    HQ.common.changeData(false, 'OM21100');
+                }
+                App.cboDiscID.setReadOnly(HQ.isChange0);
+                App.cboDiscSeq.setReadOnly(HQ.isChange);
+                //App.btnSearch.setReadOnly(HQ.isChange);
+            }
         },
 
         sto_load: function (sto, records, successful, eOpts) {
@@ -347,17 +409,17 @@ var Main = {
             var focusGrid;
             var title = "Data";
 
-            if (App[_focusID]) {
-                if (App[_focusID].xtype == "grid") {
-                    focusGrid = App[_focusID];
+            if (App[HQ.focus]) {
+                if (App[HQ.focus].xtype == "grid") {
+                    focusGrid = App[HQ.focus];
                     title = focusGrid.title;
                 }
                 else {
-                    var tmpGrds = App[_focusID].down("gridpanel");
+                    var tmpGrds = App[HQ.focus].down("gridpanel");
                     if (tmpGrds) {
                         if (!tmpGrds.length) {
                             focusGrid = tmpGrds;
-                            title = App[_focusID].title;
+                            title = App[HQ.focus].title;
                         }
                     }
                 }
@@ -365,30 +427,69 @@ var Main = {
 
             switch (command) {
                 case "first":
-                    if (focusGrid) {
+                    if (HQ.focus == 'frmDiscDefintionTop')
+                    {
+                        HQ.combo.first(App.cboDiscID, HQ.isChange);
+                    }
+                    else if (HQ.focus == 'frmDiscSeqInfo') {
+                        HQ.combo.first(App.cboDiscSeq, HQ.isChange);
+                    }
+                    else if (focusGrid) {
                         HQ.grid.first(focusGrid);
                     }
                     break;
                 case "prev":
-                    if (focusGrid) {
+                    if (HQ.focus == 'frmDiscDefintionTop') {
+                        HQ.combo.prev(App.cboDiscID, HQ.isChange);
+                    }
+                    else if (HQ.focus == 'frmDiscSeqInfo') {
+                        HQ.combo.prev(App.cboDiscSeq, HQ.isChange);
+                    }
+                    else if (focusGrid) {
                         HQ.grid.prev(focusGrid);
                     }
                     break;
                 case "next":
-                    if (focusGrid) {
+                    if (HQ.focus == 'frmDiscDefintionTop') {
+                        HQ.combo.next(App.cboDiscID, HQ.isChange);
+                    }
+                    else if (HQ.focus == 'frmDiscSeqInfo') {
+                        HQ.combo.next(App.cboDiscSeq, HQ.isChange);
+                    }
+                    else if (focusGrid) {
                         HQ.grid.next(focusGrid);
                     }
                     break;
                 case "last":
-                    if (focusGrid) {
+                    if (HQ.focus == 'frmDiscDefintionTop') {
+                        HQ.combo.last(App.cboDiscID, HQ.isChange);
+                    }
+                    else if (HQ.focus == 'frmDiscSeqInfo') {
+                        HQ.combo.last(App.cboDiscSeq, HQ.isChange);
+                    }
+                    else if (focusGrid) {
                         HQ.grid.last(focusGrid);
                     }
                     break;
                 case "refresh":
-                    if (focusGrid) {
-                        focusGrid.store.reload();
-                        HQ.grid.first(focusGrid);
+                    if (HQ.isChange) {
+                        HQ.message.show(20150303, '', 'Main.Process.refresh');
                     }
+                    else {
+                        if (HQ.focus == 'frmDiscDefintionTop') {
+                            App.cboDiscID.store.reload();
+                        }
+                        else if (HQ.focus == 'frmDiscSeqInfo') {
+                            App.cboDiscSeq.store.load(function (records, operation, success) {
+                                App.stoDiscSeqInfo.reload();
+                            });
+                        }
+                        else if (focusGrid) {
+                            focusGrid.store.reload();
+                            HQ.grid.first(focusGrid);
+                        }
+                    }
+                    
                     break;
                 case "new":
                     if (HQ.isInsert) {
@@ -396,8 +497,15 @@ var Main = {
                     }
                     break;
                 case "delete":
-                    if (focusGrid) {
-                        if (HQ.isUpdate) {
+                    
+                    if (HQ.isUpdate) {
+                        if (HQ.focus == 'frmDiscDefintionTop') {
+                            // Xoa discount
+                        }
+                        else if (HQ.focus == 'frmDiscSeqInfo') {
+                            // Xoa disc seq
+                        }
+                        else if (focusGrid) {
                             var selected = focusGrid.getSelectionModel().selected.items;
                             if (selected.length > 0) {
                                 _gridForDel = focusGrid;
@@ -410,9 +518,9 @@ var Main = {
                                 }
                             }
                         }
-                        else {
-                            HQ.message.show(4, '', '');
-                        }
+                    }
+                    else {
+                        HQ.message.show(4, '', '');
                     }
                     break;
                 case "save":

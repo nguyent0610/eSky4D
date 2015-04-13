@@ -244,6 +244,69 @@ namespace OM21100.Controllers
             }
         }
 
+        public ActionResult DeleteDisc(string discID)
+        {
+            // Not apply
+            try
+            {
+                var disc = _db.OM_Discount.FirstOrDefault(p => p.DiscID == discID);
+                if (disc != null)
+                {
+                    _db.OM_Discount.DeleteObject(disc);
+
+                    var lstSeq = (from p in _db.OM_DiscSeq where p.DiscID.ToUpper() == discID select p).ToList();
+                    foreach (var omDiscSeq in lstSeq)
+                        _db.OM_DiscSeq.DeleteObject(omDiscSeq);
+
+                    var lstBreak = (from p in _db.OM_DiscBreak where p.DiscID.ToUpper() == discID select p).ToList();
+                    foreach (var omDiscBreak in lstBreak)
+                        _db.OM_DiscBreak.DeleteObject(omDiscBreak);
+
+                    var lstFreeItem = (from p in _db.OM_DiscFreeItem where p.DiscID.ToUpper() == discID select p).ToList();
+                    foreach (var omDiscFreeItem in lstFreeItem)
+                        _db.OM_DiscFreeItem.DeleteObject(omDiscFreeItem);
+
+                    var lstDiscItem = (from p in _db.OM_DiscItem where p.DiscID.ToUpper() == discID select p).ToList();
+                    foreach (var omDiscItem in lstDiscItem)
+                        _db.OM_DiscItem.DeleteObject(omDiscItem);
+
+                    var lstDiscItemClass = (from p in _db.OM_DiscItemClass where p.DiscID.ToUpper() == discID select p).ToList();
+                    foreach (var omDiscItemClass in lstDiscItemClass)
+                        _db.OM_DiscItemClass.DeleteObject(omDiscItemClass);
+
+                    var lstDiscCust = (from p in _db.OM_DiscCust where p.DiscID.ToUpper() == discID select p).ToList();
+                    foreach (var omDiscCust in lstDiscCust)
+                        _db.OM_DiscCust.DeleteObject(omDiscCust);
+
+                    var lstDiscCustClass = (from p in _db.OM_DiscCustClass where p.DiscID.ToUpper() == discID select p).ToList();
+                    foreach (var omDiscCustClass in lstDiscCustClass)
+                        _db.OM_DiscCustClass.DeleteObject(omDiscCustClass);
+
+                    var lstCompany = (from p in _db.OM_DiscCpny where p.DiscID.ToUpper() == discID select p).ToList();
+                    foreach (var item in lstCompany)
+                        _db.OM_DiscCpny.DeleteObject(item);
+
+                    Submit_Data(null, "", null);
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    throw new MessageException(MessageType.Message, "89", "", new string[] { Util.GetLang("DiscID") });
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+
         private void saveDiscSeq(FormCollection data, OM_Discount inputDisc, OM_DiscSeq inputDiscSeq, bool isNewDiscSeq)
         {
             var handle = data["cboHandle"];

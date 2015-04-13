@@ -37,11 +37,10 @@ namespace OM21100
             acc.Update = true;
             Session["OM21100"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";
-            Session["UserName"] = Current.UserName = "tinhhv";
+            Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "0201";
             Session["Language"] = Current.Language = "en";
             Session["LangID"] = 0;
-
         }
     }
 }
