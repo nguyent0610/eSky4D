@@ -69,43 +69,43 @@ namespace IN22002.Controllers
                             if (obj != null)
                             {
                                 obj.Status = handle;
-                                obj.ApproveQty = item.ApproveQty;
 
                                 obj.LUpd_DateTime = DateTime.Now;
                                 obj.LUpd_Prog = _screenNbr;
                                 obj.LUpd_User = _userName;
-                            }
-                            
-                            if(handle=="A")
-                            {
-                                var obj1 = _db.IN_StockRecoveryDet.FirstOrDefault(p => p.BranchID == item.BranchID
-                                                                                && p.StkRecNbr == item.StkRecNbr
-                                                                                && p.ExpDate == item.ExpDate
-                                                                                && p.InvtID == item.InvtID);
-                                if (obj1 == null)
+
+                                if (handle == "A")
                                 {
-                                    var record = new IN_StockRecoveryDet();
-                                    record.BranchID = item.BranchID;
-                                    record.StkRecNbr = item.StkRecNbr;
-                                    record.ExpDate = item.ExpDate;
-                                    record.InvtID = item.InvtID;
-                                    record.Status = "H";
-                                    record.StkQty = item.ApproveQty;
-                                    record.Price = 1000;
-                                    record.Crtd_DateTime = DateTime.Now;
-                                    record.Crtd_Prog = _screenNbr;
-                                    record.Crtd_User = _userName;
-                                    record.LUpd_DateTime = DateTime.Now;
-                                    record.LUpd_Prog = _screenNbr;
-                                    record.LUpd_User = _userName;
-                                    _db.IN_StockRecoveryDet.AddObject(record);
-                                }
-                                else
-                                {
-                                    obj1.StkQty = obj1.StkQty + item.ApproveQty;
-                                    obj1.LUpd_DateTime = DateTime.Now;
-                                    obj1.LUpd_Prog = _screenNbr;
-                                    obj1.LUpd_User = _userName;
+                                    obj.ApproveQty = item.ApproveQty;
+                                    var obj1 = _db.IN_StockRecoveryDet.FirstOrDefault(p => p.BranchID == item.BranchID
+                                                                                    && p.StkRecNbr == item.StkRecNbr
+                                                                                    && p.ExpDate == item.ExpDate
+                                                                                    && p.InvtID == item.InvtID);
+                                    if (obj1 == null)
+                                    {
+                                        var record = new IN_StockRecoveryDet();
+                                        record.BranchID = item.BranchID;
+                                        record.StkRecNbr = item.StkRecNbr;
+                                        record.ExpDate = item.ExpDate;
+                                        record.InvtID = item.InvtID;
+                                        record.Status = "H";
+                                        record.StkQty = item.ApproveQty;
+                                        record.Price = 1000;
+                                        record.Crtd_DateTime = DateTime.Now;
+                                        record.Crtd_Prog = _screenNbr;
+                                        record.Crtd_User = _userName;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = _userName;
+                                        _db.IN_StockRecoveryDet.AddObject(record);
+                                    }
+                                    else
+                                    {
+                                        obj1.StkQty = obj1.StkQty + item.ApproveQty;
+                                        obj1.LUpd_DateTime = DateTime.Now;
+                                        obj1.LUpd_Prog = _screenNbr;
+                                        obj1.LUpd_User = _userName;
+                                    }
                                 }
                             }
                         }

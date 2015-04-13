@@ -162,18 +162,6 @@
                         , X.NumberColumn().Text(Util.GetLang("IN22002_Qty")).DataIndex("StkQty").Width(100).Align(Alignment.Right).Format("0,000")
                         , X.DateColumn().Text(Util.GetLang("IN22002_StkRecDate")).DataIndex("StkRecDate").Width(100).Format("dd/MM/yyyy")
                         , X.Column().Text(Util.GetLang("IN22002_Status")).DataIndex("Status").Width(100).Renderer("renderStatus")
-                        //, X.Column().DataIndex("Status").Text(Util.GetLang("IN22002_Status")).Width(100)
-                        //.Editor(
-                        //    HQ.Combo().ID("cboStatus_Grid").HQProcedure("IN22002_pcStatus")
-                        //    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                        //    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
-                        //    .HQParam(new StoreParameterCollection() 
-                        //    { 
-                        //        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                        //    })
-                        //    .LoadData()
-                        //)
-                        
                         , X.NumberColumn().Text(Util.GetLang("IN22002_ApproveQty"))
                         .DataIndex("ApproveQty").Format("0,000").Width(100).Align(Alignment.Right)
                         .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
@@ -208,12 +196,18 @@
                             .Local(true)
                             .Filters(
                                 X.BooleanFilter().DataIndex("ColCheck"),
+                                X.StringFilter().DataIndex("BranchName"),
+                                X.StringFilter().DataIndex("SlsPerID"),
+                                X.StringFilter().DataIndex("SlsPerName"),
                                 X.StringFilter().DataIndex("CustID"),
-                                X.StringFilter().DataIndex("OutletName"),
-                                X.StringFilter().DataIndex("SlsperID"),
-                                X.StringFilter().DataIndex("Name"),
-                                X.StringFilter().DataIndex("Addr1"),
-                                X.StringFilter().DataIndex("NewCustID")
+                                X.StringFilter().DataIndex("CustName"),
+                                X.DateFilter().DataIndex("ExpDate"),
+                                X.StringFilter().DataIndex("InvtID"),
+                                X.StringFilter().DataIndex("InvtName"),
+                                X.NumericFilter().DataIndex("StkQty"),
+                                X.DateFilter().DataIndex("StkRecDate"),
+                                X.StringFilter().DataIndex("Status"),
+                                X.NumericFilter().DataIndex("ApproveQty")
                             )
                     )
             )//pnl Grid
