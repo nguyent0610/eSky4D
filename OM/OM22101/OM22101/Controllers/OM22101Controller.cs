@@ -249,10 +249,10 @@ namespace OM22101.Controllers
                                     c.CnvFact = double.Parse(strCnvFact);
                                     c.Qty = double.Parse(strQty);
 
-                                    c.Crtd_DateTime = DateTime.Now.ToDateShort();
+                                    c.Crtd_DateTime = DateTime.Now;
                                     c.Crtd_Prog = screenNbr;
                                     c.Crtd_User = Current.UserName;
-                                    c.LUpd_DateTime = DateTime.Now.ToDateShort();
+                                    c.LUpd_DateTime = DateTime.Now;
                                     c.LUpd_Prog = screenNbr;
                                     c.LUpd_User = Current.UserName;
                                     _db.OM_KPI_SKU.AddObject(c);
@@ -262,7 +262,7 @@ namespace OM22101.Controllers
                                     c.CnvFact = double.Parse(strCnvFact);
                                     c.Qty = double.Parse(strQty);
 
-                                    c.LUpd_DateTime = DateTime.Now.ToDateShort();
+                                    c.LUpd_DateTime = DateTime.Now;
                                     c.LUpd_Prog = screenNbr;
                                     c.LUpd_User = Current.UserName;
                                 }
@@ -381,6 +381,7 @@ namespace OM22101.Controllers
      
                 for (int i = 0; i < dtDataExport.Rows.Count; i++)
                 {
+                    SheetKPI.Cells[7 + i, 0].PutValue(i + 1);
                     for (int j = 0; j < allColumns.Count; j++)
                     {
                         if (dtDataExport.Columns.Contains(allColumns[j]))
