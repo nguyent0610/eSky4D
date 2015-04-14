@@ -76,7 +76,7 @@
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                     })
                     .HQColumnShow("BranchID,BranchName,Addr").DisplayField("BranchID").ValueField("BranchID")
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()

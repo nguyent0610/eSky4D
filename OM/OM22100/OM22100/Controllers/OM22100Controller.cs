@@ -58,7 +58,7 @@ namespace OM22100.Controllers
             return View();
         }
         private JsonResult _logMessage;
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -229,10 +229,10 @@ namespace OM22100.Controllers
                                     c.LPPC = double.Parse(strLPPC);
                                     c.ASO = double.Parse(strASO);
 
-                                    c.Crtd_DateTime = DateTime.Now.ToDateShort();
+                                    c.Crtd_DateTime = DateTime.Now;
                                     c.Crtd_Prog = screenNbr;
                                     c.Crtd_User = Current.UserName;
-                                    c.LUpd_DateTime = DateTime.Now.ToDateShort();
+                                    c.LUpd_DateTime = DateTime.Now;
                                     c.LUpd_Prog = screenNbr;
                                     c.LUpd_User = Current.UserName;
                                     _db.OM_KPI.AddObject(c);
@@ -243,7 +243,7 @@ namespace OM22100.Controllers
                                     c.LPPC = double.Parse(strLPPC);
                                     c.ASO = double.Parse(strASO);
 
-                                    c.LUpd_DateTime = DateTime.Now.ToDateShort();
+                                    c.LUpd_DateTime = DateTime.Now;
                                     c.LUpd_Prog = screenNbr;
                                     c.LUpd_User = Current.UserName;
                                 }
@@ -298,7 +298,6 @@ namespace OM22100.Controllers
         {
             try
             {
-       
                 string BranchID = data["BranchID"].PassNull().Trim();
                 string BranchName = data["BranchName"].PassNull().Trim();
                 string CycleNbr = data["CycleNbr"].PassNull().Trim();
@@ -359,6 +358,7 @@ namespace OM22100.Controllers
      
                 for (int i = 0; i < dtDataExport.Rows.Count; i++)
                 {
+                    SheetKPI.Cells[7 + i, 0].PutValue(i + 1);
                     for (int j = 0; j < allColumns.Count; j++)
                     {
                         if (dtDataExport.Columns.Contains(allColumns[j]))
