@@ -690,7 +690,7 @@ var NodeSelected_Change = function (store, operation, options) {
         }
     } else {
         if (operation.parentNode) {
-            if (operation.parentNode.data.id == "root") {
+            if (operation.parentNode.data.root == false) {
                 parentRecordIDAll = operation.data.id.split("-");
                 if (operation.childNodes.length == 0) {
                     var invtall = operation.data.id.split("-")
