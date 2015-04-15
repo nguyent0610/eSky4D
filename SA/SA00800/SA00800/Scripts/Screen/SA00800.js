@@ -8,6 +8,7 @@ var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboReportNbr.getStore().load(function () {
         HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+        App.stoSYS_ReportControl.reload();
     });
 };
 
@@ -29,7 +30,7 @@ var menuClick = function (command) {
                 HQ.combo.first(App.cboReportNbr, HQ.isChange);
             }
             else {
-                HQ.grid.first(App.grdOM_DocNumbering);
+                HQ.grid.first(App.grdSYS_ReportParm);
             }
             break;
         case "prev":
@@ -37,7 +38,7 @@ var menuClick = function (command) {
                 HQ.combo.prev(App.cboReportNbr, HQ.isChange);
             }
             else {
-                HQ.grid.prev(App.grdOM_DocNumbering);
+                HQ.grid.prev(App.grdSYS_ReportParm);
             }
             break;
         case "next":
@@ -45,7 +46,7 @@ var menuClick = function (command) {
                 HQ.combo.next(App.cboReportNbr, HQ.isChange);
             }
             else {
-                HQ.grid.next(App.grdOM_DocNumbering);
+                HQ.grid.next(App.grdSYS_ReportParm);
             }
             break;
         case "last":
@@ -53,7 +54,7 @@ var menuClick = function (command) {
                 HQ.combo.last(App.cboReportNbr, HQ.isChange);
             }
             else {
-                HQ.grid.last(App.grdOM_DocNumbering);
+                HQ.grid.last(App.grdSYS_ReportParm);
             }
             break;
         case "refresh":
@@ -79,7 +80,7 @@ var menuClick = function (command) {
                     }
                 }
                 else {
-                    HQ.grid.insert(App.grdOM_DocNumbering, keys);
+                    HQ.grid.insert(App.grdSYS_ReportParm, keys);
                 }
             }
             break;
@@ -92,10 +93,10 @@ var menuClick = function (command) {
                     }
                 }
                 else {
-                    if (App.slmOM_DocNumbering.selected.items[0] != undefined) {
-                        var rowindex = HQ.grid.indexSelect(App.grdOM_DocNumbering);
+                    if (App.slmSYS_ReportParm.selected.items[0] != undefined) {
+                        var rowindex = HQ.grid.indexSelect(App.grdSYS_ReportParm);
                         if (rowindex != '')
-                            HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdOM_DocNumbering), ''], 'deleteData', true)
+                            HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdSYS_ReportParm), ''], 'deleteData', true)
                     }
                 }
 
@@ -126,7 +127,7 @@ var firstLoad = function () {
 //khi co su thay doi du lieu cua cac conttol tren form
 var frmChange = function () {
     App.frmMain.getForm().updateRecord();
-    HQ.isChange = (HQ.store.isChange(App.stoSYS_ReportControl) == false ? HQ.store.isChange(App.stoOM_DocNumbering) : true);
+    HQ.isChange = (HQ.store.isChange(App.stoSYS_ReportControl) == false ? HQ.store.isChange(App.stoSYS_ReportParm) : true);
     HQ.common.changeData(HQ.isChange, 'SA00800');//co thay doi du lieu gan * tren tab title header
     //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
     if (App.cboReportNbr.valueModels == null || HQ.isNew == true)
@@ -136,18 +137,18 @@ var frmChange = function () {
 
 
 //xu li su kiem tren luoi giong nhu luoi binh thuong
-var grdOM_DocNumbering_BeforeEdit = function (editor, e) {
+var grdSYS_ReportParm_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
-var grdOM_DocNumbering_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdOM_DocNumbering, e, keys);
+var grdSYS_ReportParm_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSYS_ReportParm, e, keys);
     frmChange();
 };
-var grdOM_DocNumbering_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdOM_DocNumbering, e, keys);
+var grdSYS_ReportParm_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_ReportParm, e, keys);
 };
-var grdOM_DocNumbering_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdOM_DocNumbering);
+var grdSYS_ReportParm_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_ReportParm);
     //stoChanged(App.stoSys_CompanyAddr);
     frmChange();
 };
@@ -164,8 +165,8 @@ var stoLoad = function (sto) {
     App.cboReportNbr.forceSelection = true;
     //App.cboARDOCTYPE.forceSelection = false;
     if (sto.data.length == 0) {
-        HQ.store.insertBlank(sto, "ReportNbr");
-        record = sto.getAt(0);
+        HQ.store.insertBlank(sto,keys);
+        //record = sto.getAt(0);
 
         HQ.isNew = true;//record la new    
         App.cboReportNbr.forceSelection = false;
@@ -175,10 +176,10 @@ var stoLoad = function (sto) {
     }
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
-    App.stoSYS_ReportControl.reload();
+    App.stoSYS_ReportParm.reload();
 };
 
-var stoLoadOM_DocNumbering = function (sto) {
+var stoLoadSYS_ReportParm = function (sto) {
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keys);
@@ -190,7 +191,7 @@ var stoLoadOM_DocNumbering = function (sto) {
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 
 // Event when cboReportNbr is changed or selected item 
@@ -198,9 +199,10 @@ var cboReportNbr_Change = function (sender, value) {
     HQ.isFirstLoad = true;
     if (sender.valueModels != null) {
         App.stoSYS_ReportControl.reload();
+        App.cboReportFormat.store.reload();
     }
     
-    App.cboReportNbr.setValue("");
+    //App.cboReportNbr.setValue("");
 };
 
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
@@ -228,7 +230,7 @@ function save() {
             url: 'SA00800/Save',
             params: {
                 lstOM_OrderType: Ext.encode(App.stoSYS_ReportControl.getChangedData({ skipIdForPhantomRecords: false })),
-                lstOM_DocNumbering: Ext.encode(App.stoOM_DocNumbering.getChangedData({ skipIdForPhantomRecords: false })),
+                lstSYS_ReportParm: Ext.encode(App.stoSYS_ReportParm.getChangedData({ skipIdForPhantomRecords: false })),
                 isNew: HQ.isNew
             },
             success: function (result, data) {
@@ -265,7 +267,7 @@ function deleteData(item) {
             });
         }
         else {
-            App.grdOM_DocNumbering.deleteSelected();
+            App.grdSYS_ReportParm.deleteSelected();
         }
     }
 };

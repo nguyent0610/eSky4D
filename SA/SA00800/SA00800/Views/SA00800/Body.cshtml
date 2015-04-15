@@ -31,8 +31,8 @@
             X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
             .Items(
                
-                HQ.Combo().ID("cboReportNbr").Name("cboReportNbr").HQLangCode("Report").HQProcedure("SA00800_getReportNbr")
-                .HQColumnShow("ReportNbr,Descr").DisplayField("Descr").ValueField("ReportNbr")
+                HQ.Combo().ID("cboReportNbr").Name("cboReportNbr").HQLangCode("Report").HQProcedure("SA00800_pcGetReportNbr")
+                .HQColumnShow("ReportNbr,Descr").DisplayField("ReportNbr").ValueField("ReportNbr")
                 .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                 .HQDBSys(true).ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -72,96 +72,47 @@
                 X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                 .Items(
                 
-                    //HQ.Combo().ID("cboARDOCTYPE").Name("cboARDOCTYPE").HQLangCode("ARDOCTYPE").HQProcedure("SA00800_pcARDocType")
-                    //.HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Width(400).DataIndex("ARDocType")
-                    //.HQHeightWidth(400, 400).LabelAlign(LabelAlign.Left).ForceSelection(true).HQAutoLoad(false)
-                    //.HQParam(new StoreParameterCollection() 
-                    //{ 
-                    //    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                    //})
-                    //.LoadData()
-                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    //.Listeners(lst =>
-                    //{
-                    //    lst.TriggerClick.Handler = "if (index == 0) {this.focus(true); this.clearValue();}";
-                    //    lst.Focus.Handler = "this.forceSelection=true;";
-                    //})
-                    
-                    //, HQ.Combo().ID("cboINDocType").Name("cboINDocType").HQLangCode("INDOCTYPE").HQProcedure("SA00800_pcINDocType")
-                    //.HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Width(400).DataIndex("INDocType")
-                    //.HQHeightWidth(400, 400).LabelAlign(LabelAlign.Left).HQAutoLoad(false)
-                    //.HQParam(new StoreParameterCollection() 
-                    //{ 
-                    //    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                    //})
-                    //.LoadData()
-                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    //.Listeners(lst =>
-                    //{
-                    //    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                    //})
-                    
-                    //, HQ.TextBox().ID("DaysToKeep").Name("DaysToKeep").HQLangCode("DAYSTOKEEP").Width(400).AllowBlank(true).MaxLength(2)
-                    //.DataIndex("DaysToKeep").EnforceMaxLength(true)
-                    
-                    //, HQ.Combo().ID("cboDfltCustID").Name("cboDfltCustID").HQLangCode("DFLTCUSTID").HQProcedure("SA00800_pcCustomer")
-                    //.HQColumnShow("CustId,CustName,Addr1,Addr2").DisplayField("CustId").ValueField("CustId").Width(400).DataIndex("DfltCustID")
-                    //.HQHeightWidth(400, 400).LabelAlign(LabelAlign.Left).HQAutoLoad(false)
-                    //.HQParam(new StoreParameterCollection() 
-                    //{ 
-                    //    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
-                    //})
-                    //.LoadData()
-                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    //.Listeners(lst =>
-                    //{
-                    //    lst.TriggerClick.Handler = "if (index == 0) {this.focus(true); this.clearValue();}";
-                    //    lst.Focus.Handler = "this.forceSelection=true;";
-                    //})
-                    
-                    //, HQ.Combo().ID("cboSalesType").Name("cboSalesType").HQLangCode("SALESTYPE").HQProcedure("SA00800_pcSalesType")
-                    //.HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Width(400).DataIndex("SalesType")
-                    //.HQHeightWidth(400, 400).LabelAlign(LabelAlign.Left).HQAutoLoad(false)
-                    //.HQParam(new StoreParameterCollection() 
-                    //{ 
-                    //    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                    //})
-                    //.LoadData()
-                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    //.Listeners(lst =>
-                    //{
-                    //    lst.TriggerClick.Handler = "if (index == 0) {this.focus(true); this.clearValue();}";
-                    //    lst.Focus.Handler = "this.forceSelection=true;";
-                    //})
-                    
-                    //, HQ.Combo().ID("cboDiscType").Name("cboDiscType").HQLangCode("DISCTYPE").HQProcedure("SA00800_pcDiscType")
-                    //.HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Width(400).DataIndex("DiscType")
-                    //.HQHeightWidth(400, 400).LabelAlign(LabelAlign.Left).HQAutoLoad(false)
-                    //.HQParam(new StoreParameterCollection() 
-                    //{ 
-                    //    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                    //})
-                    //.LoadData()
-                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    //.Listeners(lst =>
-                    //{
-                    //    lst.TriggerClick.Handler = "if (index == 0) {this.focus(true); this.clearValue();}";
-                    //    lst.Focus.Handler = "this.forceSelection=true;";
-                    //})
-                    
-                    //, HQ.TextBox().ID("ShippingReport").Name("ShippingReport").HQLangCode("SHIPPINGREPORT").Width(400).MaxLength(20)
-                    //.DataIndex("ShippingReport").EnforceMaxLength(true)
-                    
+                    HQ.TextBox().ID("txtReportCap00").Name("txtReportCap00").HQLangCode("ReportName00").DataIndex("ReportCap00")
+                        .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportCap01").Name("txtReportCap01").HQLangCode("ReportName01").DataIndex("ReportCap01")
+                        .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportCap02").Name("txtReportCap02").HQLangCode("ReportName02").DataIndex("ReportCap02")
+                        .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportCap03").Name("txtReportCap03").HQLangCode("ReportName03").DataIndex("ReportCap03")
+                        .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportCap04").Name("txtReportCap04").HQLangCode("ReportName04").DataIndex("ReportCap04")
+                        .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportCap05").Name("txtReportCap05").HQLangCode("ReportName05").DataIndex("ReportCap05")
+                        .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportCap06").Name("txtReportCap06").HQLangCode("ReportName06").DataIndex("ReportCap06")
+                        .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportCap07").Name("txtReportCap07").HQLangCode("ReportName07").DataIndex("ReportCap07")
+                        .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtRunBefore").Name("txtRunBefore").HQLangCode("RunBefore").DataIndex("RunBefore")
+                        .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
                 )//Column 1
                 
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 10")
                 .Items(
-                    //HQ.Checkbox().ID("Active").Name("Active").HQLangCode("ACTIVE"),
-                    //HQ.Checkbox().ID("AutoPromotion").Name("AutoPromotion").HQLangCode("AUTOPROMOTION"),
-                    //HQ.Checkbox().ID("RequiredVATInvcNbr").Name("RequiredVATInvcNbr").HQLangCode("REQUIREDVATINVCNBR"),
-                    //HQ.Checkbox().ID("ApplShift").Name("ApplShift").HQLangCode("APPLSHIFT"),
-                    //HQ.Checkbox().ID("BO").Name("BO").HQLangCode("BO"),
-                    //HQ.Checkbox().ID("TaxFee").Name("TaxFee").HQLangCode("TAXFEE")
+                
+                    HQ.TextBox().ID("txtReportName00").Name("txtReportName00").HQLangCode("RptName00").DataIndex("ReportName00")
+                            .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportName01").Name("txtReportName01").HQLangCode("RptName01").DataIndex("ReportName01")
+                            .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportName02").Name("txtReportName02").HQLangCode("RptName02").DataIndex("ReportName02")
+                            .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)   
+                    , HQ.TextBox().ID("txtReportName03").Name("txtReportName03").HQLangCode("RptName03").DataIndex("ReportName03")
+                            .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportName04").Name("txtReportName04").HQLangCode("RptName04").DataIndex("ReportName04")
+                            .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportName05").Name("txtReportName05").HQLangCode("RptName05").DataIndex("ReportName05")
+                            .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportName06").Name("txtReportName06").HQLangCode("RptName06").DataIndex("ReportName06")
+                            .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
+                    , HQ.TextBox().ID("txtReportName07").Name("txtReportName07").HQLangCode("RptName07").DataIndex("ReportName07")
+                            .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)  
+                    , HQ.TextBox().ID("txtRunAfter").Name("txtRunAfter").HQLangCode("RunAfter").DataIndex("RunAfter")
+                        .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
                 )//Column 2        
             )//pnlUser
             .Listeners(lss =>
@@ -181,57 +132,109 @@
                         X.Store()
                         .ID("stoSYS_ReportParm")
                         .PageSize(50).AutoLoad(false)
-                        .Model(Util.GenerateModel(typeof(SA00800_pgOM_DocNumbering_Result), "mdlOM_DocNumbering", "BrandID"))
+                        .Model(Util.GenerateModel(typeof(SA00800_pgSYS_ReportParm_Result), "mdlSYS_ReportParm", "ReportFormat"))
                             .Parameters(ps =>
                             {
-                                ps.Add(new StoreParameter("OrderType", "App.cboOrderType_Main.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("ReportNbr", "App.cboReportNbr.getValue()", ParameterMode.Raw));
                             })
-                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_DocNumbering")))
-                        .Listeners(p => p.Load.Fn = "stoLoadOM_DocNumbering")
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetReportParm")))
+                        .Listeners(p => p.Load.Fn = "stoLoadSYS_ReportParm")
                     )
-                    .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdOM_DocNumbering');")
+                    .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_ReportParm');")
                     .SortableColumns(false)
                     .ColumnModel(
                         X.RowNumbererColumn()
+                        
+                        
+                        , X.Column().Text(Util.GetLang("ReportFormat")).Width(150).DataIndex("ReportFormat")
+                        .Editor(
+                         HQ.Combo().ID("cboReportFormat").Name("cboReportFormat").HQProcedure("SA00800_pcGetReportFormat")
+                        .HQColumnShow("Code").DisplayField("Code").ValueField("Code")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .HQDBSys(true).AllowBlank(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) {this.focus(true); this.clearValue();}";
+                            lst.Focus.Handler = "this.forceSelection=true;";
+                        })
+                        .HQParam(new StoreParameterCollection() { 
+                            new StoreParameter("@ReportNbr", "App.txtReportNbr.getValue()", ParameterMode.Raw)
+                         })
+                        .LoadData()
+                        )
 
-                        , X.Column().Text(Util.GetLang("BranchID")).Width(100).DataIndex("BranchID")
-                            .Editor(
-                                HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQProcedure("SA00800_pcSYS_Company")
-                                .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyID").ValueField("CpnyID")
-                                .Width(300).HQHeightWidth(300, 300).MarginSpec("5 0 0 0")
-                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                .Listeners(lst =>
-                                {
-                                    lst.TriggerClick.Handler = "if (index == 0) {this.focus(true); this.clearValue();}";
-                                    lst.Focus.Handler = "this.forceSelection=true;";
-                                })
-                                .LoadData()
-                            )
+                          , X.Column().Text(Util.GetLang("StringParm00")).DataIndex("StringCap00").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
-                        , X.Column().Text(Util.GetLang("LastOrderNbr")).DataIndex("LastOrderNbr").Width(150).Align(Alignment.Right)
-                        .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true))
+                          , X.Column().Text(Util.GetLang("StringParm01")).DataIndex("StringCap01").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
-                        , X.Column().Text(Util.GetLang("LastShipperNbr")).DataIndex("LastShipperNbr").Width(150).Align(Alignment.Right)
-                        .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true))
+                          , X.Column().Text(Util.GetLang("StringParm02")).DataIndex("StringCap02").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
-                        , X.Column().Text(Util.GetLang("LastARRefNbr")).DataIndex("LastARRefNbr").Width(150).Align(Alignment.Right)
-                        .Editor(X.TextField().MaxLength(8).EnforceMaxLength(true))
+                          , X.Column().Text(Util.GetLang("StringParm03")).DataIndex("StringCap03").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
-                        , X.Column().Text(Util.GetLang("LastInvcNbr")).DataIndex("LastInvcNbr").Width(150).Align(Alignment.Right)
-                        .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true))
+                          , X.Column().Text(Util.GetLang("DateParm00")).DataIndex("DateCap00").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
-                        , X.Column().Text(Util.GetLang("LastInvcNote")).DataIndex("LastInvcNote").Width(150).Align(Alignment.Right)
-                        .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true))
+                          , X.Column().Text(Util.GetLang("DateParm01")).DataIndex("DateCap01").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
-                        , X.Column().Text(Util.GetLang("PreFixIN")).DataIndex("PreFixIN").Width(150)
-                        .Editor(X.TextField().MaxLength(5).EnforceMaxLength(true))
+                          , X.Column().Text(Util.GetLang("DateParm02")).DataIndex("DateCap02").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
-                        , X.Column().Text(Util.GetLang("PreFixShip")).DataIndex("PreFixShip").Width(150)
-                        .Editor(X.TextField().MaxLength(5).EnforceMaxLength(true))
+                          , X.Column().Text(Util.GetLang("DateParm03")).DataIndex("DateCap03").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
-                        , X.Column().Text(Util.GetLang("PreFixSO")).DataIndex("PreFixSO").Width(150)
-                        .Editor(X.TextField().MaxLength(2).EnforceMaxLength(true))
+                          , X.Column().Text(Util.GetLang("BooleanParm00")).DataIndex("BooleanCap00").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
+                          , X.Column().Text(Util.GetLang("BooleanParm01")).DataIndex("BooleanCap01").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+
+                          , X.Column().Text(Util.GetLang("BooleanParm02")).DataIndex("BooleanCap02").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+
+                           , X.Column().Text(Util.GetLang("BooleanParm03")).DataIndex("BooleanCap03").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+
+                          , X.Column().Text(Util.GetLang("PPVProc00")).DataIndex("PPV_Proc00").Width(150)
+                          .Editor(X.TextField())
+
+                          , X.Column().Text(Util.GetLang("PPVProc01")).DataIndex("PPV_Proc01").Width(150)
+                          .Editor(X.TextField())
+
+                          , X.Column().Text(Util.GetLang("PPVProc02")).DataIndex("PPV_Proc02").Width(150)
+                          .Editor(X.TextField())
+
+                          , X.Column().Text(Util.GetLang("PPVProc03")).DataIndex("PPV_Proc03").Width(150)
+                          .Editor(X.TextField())
+
+                          , X.Column().Text(Util.GetLang("ListParmCap00")).DataIndex("ListCap00").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+
+                          , X.Column().Text(Util.GetLang("ListParmCap01")).DataIndex("ListCap01").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+
+                          , X.Column().Text(Util.GetLang("ListParmCap02")).DataIndex("ListCap02").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+
+                          , X.Column().Text(Util.GetLang("ListParmCap03")).DataIndex("ListCap03").Width(150)
+                          .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+
+                          , X.Column().Text(Util.GetLang("ListParmProc00")).DataIndex("ListProc00").Width(150)
+                          .Editor(X.TextField())
+
+                          , X.Column().Text(Util.GetLang("ListParmProc01")).DataIndex("ListProc01").Width(150)
+                          .Editor(X.TextField())
+
+                          , X.Column().Text(Util.GetLang("ListParmProc02")).DataIndex("ListProc02").Width(150)
+                          .Editor(X.TextField())
+
+                          , X.Column().Text(Util.GetLang("ListParmProc03")).DataIndex("ListProc03").Width(150)
+                          .Editor(X.TextField())
 
                         , X.CommandColumn().Width(150)
                         .Commands(
@@ -250,10 +253,10 @@
                         })
                         .Listeners(l =>
                         {
-                            l.Command.Handler = "grdOM_DocNumbering_Reject(record);";
+                            l.Command.Handler = "grdSYS_ReportParm_Reject(record);";
                         })
                 )
-                .SelectionModel(X.RowSelectionModel().ID("slmOM_DocNumbering")
+                .SelectionModel(X.RowSelectionModel().ID("slmSYS_ReportParm")
                 .Mode(SelectionMode.Multi))
                 .BottomBar(
                     X.PagingToolbar()
@@ -273,9 +276,9 @@
                     .ClicksToEdit(1)
                     .Listeners(ls =>
                     {
-                        ls.BeforeEdit.Fn = "grdOM_DocNumbering_BeforeEdit";
-                        ls.Edit.Fn = "grdOM_DocNumbering_Edit";
-                        ls.ValidateEdit.Fn = "grdOM_DocNumbering_ValidateEdit";
+                        ls.BeforeEdit.Fn = "grdSYS_ReportParm_BeforeEdit";
+                        ls.Edit.Fn = "grdSYS_ReportParm_Edit";
+                        ls.ValidateEdit.Fn = "grdSYS_ReportParm_ValidateEdit";
                     })
                 )
                 .Features(

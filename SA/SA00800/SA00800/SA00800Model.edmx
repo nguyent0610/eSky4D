@@ -116,6 +116,9 @@
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="SA00800_pgSYS_ReportParm" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ReportNbr" Type="varchar" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -123,6 +126,9 @@
         <EntityContainer Name="SA00800Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SYS_ReportControl" EntityType="SA00800Model.SYS_ReportControl" />
           <EntitySet Name="SYS_ReportParm" EntityType="SA00800Model.SYS_ReportParm" />
+          <FunctionImport Name="SA00800_pgSYS_ReportParm" ReturnType="Collection(SA00800Model.SA00800_pgSYS_ReportParm_Result)">
+            <Parameter Name="ReportNbr" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="SYS_ReportControl">
           <Key>
@@ -231,6 +237,34 @@
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="SA00800_pgSYS_ReportParm_Result">
+          <Property Type="String" Name="ReportFormat" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="StringCap00" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StringCap01" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StringCap02" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StringCap03" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DateCap00" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DateCap01" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DateCap02" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DateCap03" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BooleanCap00" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BooleanCap01" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BooleanCap02" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BooleanCap03" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PPV_Proc00" Nullable="true" />
+          <Property Type="String" Name="PPV_Proc01" Nullable="true" />
+          <Property Type="String" Name="PPV_Proc02" Nullable="true" />
+          <Property Type="String" Name="PPV_Proc03" Nullable="true" />
+          <Property Type="String" Name="ListCap00" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ListCap01" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ListCap02" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ListCap03" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ListProc00" Nullable="true" />
+          <Property Type="String" Name="ListProc01" Nullable="true" />
+          <Property Type="String" Name="ListProc02" Nullable="true" />
+          <Property Type="String" Name="ListProc03" Nullable="true" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -345,6 +379,38 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SA00800_pgSYS_ReportParm" FunctionName="eBiz4DWebSysModel.Store.SA00800_pgSYS_ReportParm">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA00800Model.SA00800_pgSYS_ReportParm_Result">
+                <ScalarProperty Name="ReportFormat" ColumnName="ReportFormat" />
+                <ScalarProperty Name="StringCap00" ColumnName="StringCap00" />
+                <ScalarProperty Name="StringCap01" ColumnName="StringCap01" />
+                <ScalarProperty Name="StringCap02" ColumnName="StringCap02" />
+                <ScalarProperty Name="StringCap03" ColumnName="StringCap03" />
+                <ScalarProperty Name="DateCap00" ColumnName="DateCap00" />
+                <ScalarProperty Name="DateCap01" ColumnName="DateCap01" />
+                <ScalarProperty Name="DateCap02" ColumnName="DateCap02" />
+                <ScalarProperty Name="DateCap03" ColumnName="DateCap03" />
+                <ScalarProperty Name="BooleanCap00" ColumnName="BooleanCap00" />
+                <ScalarProperty Name="BooleanCap01" ColumnName="BooleanCap01" />
+                <ScalarProperty Name="BooleanCap02" ColumnName="BooleanCap02" />
+                <ScalarProperty Name="BooleanCap03" ColumnName="BooleanCap03" />
+                <ScalarProperty Name="PPV_Proc00" ColumnName="PPV_Proc00" />
+                <ScalarProperty Name="PPV_Proc01" ColumnName="PPV_Proc01" />
+                <ScalarProperty Name="PPV_Proc02" ColumnName="PPV_Proc02" />
+                <ScalarProperty Name="PPV_Proc03" ColumnName="PPV_Proc03" />
+                <ScalarProperty Name="ListCap00" ColumnName="ListCap00" />
+                <ScalarProperty Name="ListCap01" ColumnName="ListCap01" />
+                <ScalarProperty Name="ListCap02" ColumnName="ListCap02" />
+                <ScalarProperty Name="ListCap03" ColumnName="ListCap03" />
+                <ScalarProperty Name="ListProc00" ColumnName="ListProc00" />
+                <ScalarProperty Name="ListProc01" ColumnName="ListProc01" />
+                <ScalarProperty Name="ListProc02" ColumnName="ListProc02" />
+                <ScalarProperty Name="ListProc03" ColumnName="ListProc03" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -365,9 +431,9 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="81" >
-        <EntityTypeShape EntityType="SA00800Model.SYS_ReportControl" Width="1.5" PointX="0.38687188755109525" PointY="11.358267476483373" />
-        <EntityTypeShape EntityType="SA00800Model.SYS_ReportParm" Width="1.5" PointX="2.3894691087256508" PointY="29.410411520586539" />
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="33" >
+        <EntityTypeShape EntityType="SA00800Model.SYS_ReportControl" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SA00800Model.SYS_ReportParm" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
