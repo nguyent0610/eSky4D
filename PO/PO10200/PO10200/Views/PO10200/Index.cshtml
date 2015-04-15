@@ -43,7 +43,7 @@
         @Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme))
 
         <!-- Begin Cac store phu thuoc vao cboBatNbr-->
-        @(Html.X().Store().ID("stoHeader").AutoLoad(false)   
+        @(X.Store().ID("stoHeader").AutoLoad(false)   
             .Model(Util.GenerateModel(typeof(PO10200_pdHeader_Result), "PO10200_pdHeaderModel", "BatNbr,RcptNbr"))          
             .Proxy(
                     X.AjaxProxy()                
@@ -61,8 +61,29 @@
                             })  
             .Listeners(p=>p.Load.Fn="loadDataHeader" )            
         )
+        @(
+            X.Store()
+            .ID("stoLotTrans")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof (PO10200_pgLotTrans_Result),"mdlLotTrans","",true))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetLotTrans", "PO10200"))
+                .ActionMethods(action => action.Read = HttpMethod.POST)
+                .Reader(X.JsonReader().Root("data"))
+            )            
+            .Parameters(ps => {
+                ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("rcptNbr", "App.txtRcptNbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("poNbr", "App.cboPONbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("type", "App.cboRcptType.getValue()", ParameterMode.Raw));
+            })
+        )
 
-        @(Html.X().Store().ID("stoPO10200_pgLoadTaxTrans").AutoLoad(false)   
+
+
+        @(X.Store().ID("stoPO10200_pgLoadTaxTrans").AutoLoad(false)   
                                 .Model(Util.GenerateModel(typeof(PO10200_pgLoadTaxTrans_Result), "ModelPO10200_pgLoadTaxTrans_Result", ""))                                 
                                 .Proxy(
                                         X.AjaxProxy()                
@@ -98,7 +119,7 @@
 
         <!-- End Cac store phu thuoc vao cboBranchID-->
         
-        @(Html.X().Store().ID("stoPO10200_pdAP_VenDorTaxes").AutoLoad(false)   
+        @(HQ.Store().ID("stoPO10200_pdAP_VenDorTaxes").AutoLoad(false)   
             .Model(Util.GenerateModel(typeof(PO10200_pdAP_VenDorTaxes_Result), "PO10200_pdAP_VenDorTaxes_ResultModel", "taxid"))          
             .Proxy(
                     X.AjaxProxy()                
@@ -129,7 +150,7 @@
         @HQ.Store().ID("stoPO10200_pdIN_UnitConversion").HQProcedure("PO10200_pdIN_UnitConversion").HQDBSys(false).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10200_pdIN_UnitConversion()"; }).AutoLoad(true)
 
 
-        @(Html.X().Store().ID("stoPO10200_ppCheckingPONbr").AutoLoad(false)   
+        @(X.Store().ID("stoPO10200_ppCheckingPONbr").AutoLoad(false)   
             .Model(Util.GenerateModel(typeof(PO10200_ppCheckingPONbr_Result), "PO10200_ppCheckingPONbrModel", "PONbr"))          
             .Proxy(
                     X.AjaxProxy()                
@@ -148,7 +169,7 @@
               
         )
 
-         @(Html.X().Store().ID("stoPO10200_pdPODetailReceipt").AutoLoad(false)   
+         @(X.Store().ID("stoPO10200_pdPODetailReceipt").AutoLoad(false)   
             .Model(Util.GenerateModel(typeof(PO10200_pdPODetailReceipt_Result), "PO10200_pdPODetailReceiptModel", "PONbr,LineRef"))          
             .Proxy(
                     X.AjaxProxy()                
@@ -167,7 +188,7 @@
               
         )
 
-         @(Html.X().Store().ID("stoPO10200_pdPODetailReturn").AutoLoad(false)   
+         @(X.Store().ID("stoPO10200_pdPODetailReturn").AutoLoad(false)   
             .Model(Util.GenerateModel(typeof(PO10200_pdPODetailReturn_Result), "PO10200_pdPODetailReturnModel", "PONbr,LineRef"))          
             .Proxy(
                     X.AjaxProxy()                
@@ -185,6 +206,10 @@
                             })  
               
         )
+
+        
+
+
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid --> 
         @{ Html.RenderAction("Body", new { lang =@Current.LangID}); }
