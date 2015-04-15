@@ -71,7 +71,7 @@
                     HQ.Combo().ID("cboCpny")
                      .HQLangCode("Branch").HQProcedure("OM22002_pcBranchAllByUser")
                     .HQColumnShow("BranchID,BranchName").ValueField("BranchID").DisplayField("BranchID")
-                    .HQHeightWidth(400, 300).MultiSelect(true).AllowBlank(false)
+                    .HQHeightWidth(400, 300).AllowBlank(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
@@ -90,7 +90,7 @@
                     .HQHeightWidth(400, 300).AllowBlank(false).ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@CpnyID", "App.cboCpny.getValue().join(',')", ParameterMode.Raw) 
+                        new StoreParameter("@CpnyID", "App.cboCpny.getValue()", ParameterMode.Raw) 
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -123,7 +123,8 @@
                      .HQLangCode("LoadData").Icon(Icon.ArrowRefresh)
                      .Handler("Event.Form.btnLoad_click")
                      
-                     ,HQ.Button().ID("btnImport").MarginSpec("5 0 0 0")
+                     ,HQ.Button().ID("btnImport")
+                     .MarginSpec("5 0 0 0").Hidden(true)
                      .HQLangCode("ImportExcel").Icon(Icon.DiskDownload)
                      .Handler("Event.Form.btnImport_click")
                 ) // Third Column
@@ -151,7 +152,7 @@
                 {
                     //ps.Add(new StoreParameter("zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
                     //ps.Add(new StoreParameter("territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
-                    ps.Add(new StoreParameter("cpnyID", "App.cboCpny.getValue().join(',')", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("cpnyID", "App.cboCpny.getValue()", ParameterMode.Raw));
                     ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
                     //ps.Add(new StoreParameter("levelID", "App.cboLevelID.getValue()", ParameterMode.Raw));
                 })      

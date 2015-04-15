@@ -11,6 +11,33 @@ var Process = {
             }
         });
         return flag;
+    },
+
+    saveData: function (item) {
+        if (item == "yes") {
+            App.frmMain.submit({
+                url: 'OM22002/SaveData',
+                waitMsg: HQ.common.getLang('Submiting') + "...",
+                timeout: 1800000,
+                params: {
+                    lstCustChange: HQ.store.getData(App.grdDet.store),
+                },
+                success: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode);
+                    }
+                    App.grdDet.store.reload();
+                },
+                failure: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode);
+                    }
+                    else {
+                        HQ.message.process(msg, data, true);
+                    }
+                }
+            });
+        }
     }
 };
 
@@ -65,28 +92,7 @@ var Event = {
                     if (HQ.isUpdate) {
                         if (App.frmMain.isValid()) {
                             if (Process.checkAllValid(App.grdDet.store)) {
-                                App.frmMain.submit({
-                                    url: 'OM22002/SaveData',
-                                    waitMsg: HQ.common.getLang('Submiting') + "...",
-                                    timeout: 1800000,
-                                    params: {
-                                        lstCustChange: HQ.store.getData(App.grdDet.store),
-                                    },
-                                    success: function (msg, data) {
-                                        if (data.result.msgCode) {
-                                            HQ.message.show(data.result.msgCode);
-                                        }
-                                        App.grdDet.store.reload();
-                                    },
-                                    failure: function (msg, data) {
-                                        if (data.result.msgCode) {
-                                            HQ.message.show(data.result.msgCode);
-                                        }
-                                        else {
-                                            HQ.message.process(msg, data, true);
-                                        }
-                                    }
-                                });
+                                HQ.message.show(20150407, '', 'Process.saveData');
                             }
                         }
                     }
