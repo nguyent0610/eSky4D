@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SYS_ReportControl" EntityType="eBiz4DWebSysModel.Store.SYS_ReportControl" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SYS_ReportParm" EntityType="eBiz4DWebSysModel.Store.SYS_ReportParm" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="SYS_ReportControl">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="Descr" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ReportCap00" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportName00" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportCap01" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportName01" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportCap02" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportName02" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportCap03" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportName03" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportCap04" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportName04" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportCap05" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportName05" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportCap06" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportName06" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportCap07" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportName07" Type="nvarchar" MaxLength="50" />
+          <Property Name="RunBefore" Type="varchar" MaxLength="50" />
+          <Property Name="RunAfter" Type="varchar" MaxLength="50" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="OLapReport" Type="bit" Nullable="false" />
+          <Property Name="OLapStringCap00" Type="nvarchar" MaxLength="100" />
+          <Property Name="OLapStringCap01" Type="nvarchar" MaxLength="100" />
+          <Property Name="OLapYNCap00" Type="nvarchar" MaxLength="100" />
+          <Property Name="OLapYNCap01" Type="nvarchar" MaxLength="100" />
+          <Property Name="OLapDim" Type="varchar" MaxLength="100" />
+          <Property Name="OLapDimCap" Type="nvarchar" MaxLength="200" />
+          <Property Name="OLapMeasure" Type="varchar" MaxLength="50" />
+          <Property Name="OLapMeasureCap" Type="nvarchar" MaxLength="100" />
+          <Property Name="OLapTime" Type="varchar" MaxLength="50" />
+          <Property Name="OLapTimeCap" Type="nvarchar" MaxLength="100" />
+          <Property Name="OLapTimeDayofMonth" Type="bit" />
+          <Property Name="OLapTimeDayofWeek" Type="bit" />
+          <Property Name="OLapTimeDayofYear" Type="bit" />
+          <Property Name="OLapTimeMonthNum" Type="bit" />
+          <Property Name="OLapTimeMonthCap" Type="bit" />
+          <Property Name="OLapTimeWeekofYear" Type="bit" />
+          <Property Name="OLapTimeYear" Type="bit" />
+          <Property Name="OLapPVProc00" Type="varchar" MaxLength="20" />
+          <Property Name="OLapPVProc01" Type="varchar" MaxLength="20" />
+          <Property Name="OLapTimeQuarter" Type="bit" />
+          <Property Name="OLapProc" Type="varchar" MaxLength="30" />
+          <Property Name="Rows" Type="int" />
+          <Property Name="Columns" Type="int" />
+          <Property Name="RowHeight" Type="varchar" MaxLength="100" />
+          <Property Name="ColumnWidth" Type="varchar" MaxLength="100" />
+          <Property Name="RowMinHeight" Type="varchar" MaxLength="100" />
+          <Property Name="ColumnMinHeight" Type="varchar" MaxLength="100" />
+          <Property Name="HeaderHide" Type="bit" Nullable="false" />
+          <Property Name="HeaderSize" Type="smallint" Nullable="false" />
+          <Property Name="HeaderHorizontal" Type="varchar" MaxLength="2" />
+          <Property Name="HeaderVertical" Type="varchar" MaxLength="2" />
+          <Property Name="HeaderColor" Type="varchar" MaxLength="10" />
+          <Property Name="HeaderMargin" Type="varchar" MaxLength="100" />
+          <Property Name="HeaderText" Type="nvarchar(max)" />
+          <Property Name="MultiLanguage" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SYS_ReportParm">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportFormat" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="ReportFormat" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="StringCap00" Type="nvarchar" MaxLength="50" />
+          <Property Name="StringCap01" Type="nvarchar" MaxLength="50" />
+          <Property Name="StringCap02" Type="nvarchar" MaxLength="50" />
+          <Property Name="StringCap03" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateCap00" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateCap01" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateCap02" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateCap03" Type="nvarchar" MaxLength="50" />
+          <Property Name="BooleanCap00" Type="nvarchar" MaxLength="50" />
+          <Property Name="BooleanCap01" Type="nvarchar" MaxLength="50" />
+          <Property Name="BooleanCap02" Type="nvarchar" MaxLength="50" />
+          <Property Name="BooleanCap03" Type="nvarchar" MaxLength="50" />
+          <Property Name="PPV_Proc00" Type="varchar(max)" />
+          <Property Name="PPV_Proc01" Type="varchar(max)" />
+          <Property Name="PPV_Proc02" Type="varchar(max)" />
+          <Property Name="PPV_Proc03" Type="varchar(max)" />
+          <Property Name="ListCap00" Type="nvarchar" MaxLength="50" />
+          <Property Name="ListCap01" Type="nvarchar" MaxLength="50" />
+          <Property Name="ListCap02" Type="nvarchar" MaxLength="50" />
+          <Property Name="ListCap03" Type="nvarchar" MaxLength="50" />
+          <Property Name="ListProc00" Type="varchar(max)" />
+          <Property Name="ListProc01" Type="varchar(max)" />
+          <Property Name="ListProc02" Type="varchar(max)" />
+          <Property Name="ListProc03" Type="varchar(max)" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SA00800Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SA00800Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="SYS_ReportControl" EntityType="SA00800Model.SYS_ReportControl" />
+          <EntitySet Name="SYS_ReportParm" EntityType="SA00800Model.SYS_ReportParm" />
+        </EntityContainer>
+        <EntityType Name="SYS_ReportControl">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap00" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName00" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap01" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName01" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap02" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName02" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap03" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName03" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap04" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName04" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap05" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName05" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap06" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName06" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportCap07" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ReportName07" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RunBefore" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RunAfter" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="Boolean" Name="OLapReport" Nullable="false" />
+          <Property Type="String" Name="OLapStringCap00" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="OLapStringCap01" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="OLapYNCap00" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="OLapYNCap01" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="OLapDim" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OLapDimCap" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="OLapMeasure" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OLapMeasureCap" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="OLapTime" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OLapTimeCap" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="OLapTimeDayofMonth" />
+          <Property Type="Boolean" Name="OLapTimeDayofWeek" />
+          <Property Type="Boolean" Name="OLapTimeDayofYear" />
+          <Property Type="Boolean" Name="OLapTimeMonthNum" />
+          <Property Type="Boolean" Name="OLapTimeMonthCap" />
+          <Property Type="Boolean" Name="OLapTimeWeekofYear" />
+          <Property Type="Boolean" Name="OLapTimeYear" />
+          <Property Type="String" Name="OLapPVProc00" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OLapPVProc01" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="OLapTimeQuarter" />
+          <Property Type="String" Name="OLapProc" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="Rows" />
+          <Property Type="Int32" Name="Columns" />
+          <Property Type="String" Name="RowHeight" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ColumnWidth" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RowMinHeight" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ColumnMinHeight" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="HeaderHide" Nullable="false" />
+          <Property Type="Int16" Name="HeaderSize" Nullable="false" />
+          <Property Type="String" Name="HeaderHorizontal" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="HeaderVertical" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="HeaderColor" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="HeaderMargin" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="HeaderText" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="MultiLanguage" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SYS_ReportParm">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ReportFormat" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ReportFormat" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringCap00" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringCap01" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringCap02" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StringCap03" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DateCap00" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DateCap01" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DateCap02" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DateCap03" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BooleanCap00" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BooleanCap01" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BooleanCap02" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BooleanCap03" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PPV_Proc00" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PPV_Proc01" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PPV_Proc02" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PPV_Proc03" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ListCap00" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListCap01" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListCap02" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListCap03" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ListProc00" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ListProc01" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ListProc02" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ListProc03" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SA00800Entities" >
+          <EntitySetMapping Name="SYS_ReportControl">
+            <EntityTypeMapping TypeName="SA00800Model.SYS_ReportControl">
+              <MappingFragment StoreEntitySet="SYS_ReportControl">
+                <ScalarProperty Name="MultiLanguage" ColumnName="MultiLanguage" />
+                <ScalarProperty Name="HeaderText" ColumnName="HeaderText" />
+                <ScalarProperty Name="HeaderMargin" ColumnName="HeaderMargin" />
+                <ScalarProperty Name="HeaderColor" ColumnName="HeaderColor" />
+                <ScalarProperty Name="HeaderVertical" ColumnName="HeaderVertical" />
+                <ScalarProperty Name="HeaderHorizontal" ColumnName="HeaderHorizontal" />
+                <ScalarProperty Name="HeaderSize" ColumnName="HeaderSize" />
+                <ScalarProperty Name="HeaderHide" ColumnName="HeaderHide" />
+                <ScalarProperty Name="ColumnMinHeight" ColumnName="ColumnMinHeight" />
+                <ScalarProperty Name="RowMinHeight" ColumnName="RowMinHeight" />
+                <ScalarProperty Name="ColumnWidth" ColumnName="ColumnWidth" />
+                <ScalarProperty Name="RowHeight" ColumnName="RowHeight" />
+                <ScalarProperty Name="Columns" ColumnName="Columns" />
+                <ScalarProperty Name="Rows" ColumnName="Rows" />
+                <ScalarProperty Name="OLapProc" ColumnName="OLapProc" />
+                <ScalarProperty Name="OLapTimeQuarter" ColumnName="OLapTimeQuarter" />
+                <ScalarProperty Name="OLapPVProc01" ColumnName="OLapPVProc01" />
+                <ScalarProperty Name="OLapPVProc00" ColumnName="OLapPVProc00" />
+                <ScalarProperty Name="OLapTimeYear" ColumnName="OLapTimeYear" />
+                <ScalarProperty Name="OLapTimeWeekofYear" ColumnName="OLapTimeWeekofYear" />
+                <ScalarProperty Name="OLapTimeMonthCap" ColumnName="OLapTimeMonthCap" />
+                <ScalarProperty Name="OLapTimeMonthNum" ColumnName="OLapTimeMonthNum" />
+                <ScalarProperty Name="OLapTimeDayofYear" ColumnName="OLapTimeDayofYear" />
+                <ScalarProperty Name="OLapTimeDayofWeek" ColumnName="OLapTimeDayofWeek" />
+                <ScalarProperty Name="OLapTimeDayofMonth" ColumnName="OLapTimeDayofMonth" />
+                <ScalarProperty Name="OLapTimeCap" ColumnName="OLapTimeCap" />
+                <ScalarProperty Name="OLapTime" ColumnName="OLapTime" />
+                <ScalarProperty Name="OLapMeasureCap" ColumnName="OLapMeasureCap" />
+                <ScalarProperty Name="OLapMeasure" ColumnName="OLapMeasure" />
+                <ScalarProperty Name="OLapDimCap" ColumnName="OLapDimCap" />
+                <ScalarProperty Name="OLapDim" ColumnName="OLapDim" />
+                <ScalarProperty Name="OLapYNCap01" ColumnName="OLapYNCap01" />
+                <ScalarProperty Name="OLapYNCap00" ColumnName="OLapYNCap00" />
+                <ScalarProperty Name="OLapStringCap01" ColumnName="OLapStringCap01" />
+                <ScalarProperty Name="OLapStringCap00" ColumnName="OLapStringCap00" />
+                <ScalarProperty Name="OLapReport" ColumnName="OLapReport" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="RunAfter" ColumnName="RunAfter" />
+                <ScalarProperty Name="RunBefore" ColumnName="RunBefore" />
+                <ScalarProperty Name="ReportName07" ColumnName="ReportName07" />
+                <ScalarProperty Name="ReportCap07" ColumnName="ReportCap07" />
+                <ScalarProperty Name="ReportName06" ColumnName="ReportName06" />
+                <ScalarProperty Name="ReportCap06" ColumnName="ReportCap06" />
+                <ScalarProperty Name="ReportName05" ColumnName="ReportName05" />
+                <ScalarProperty Name="ReportCap05" ColumnName="ReportCap05" />
+                <ScalarProperty Name="ReportName04" ColumnName="ReportName04" />
+                <ScalarProperty Name="ReportCap04" ColumnName="ReportCap04" />
+                <ScalarProperty Name="ReportName03" ColumnName="ReportName03" />
+                <ScalarProperty Name="ReportCap03" ColumnName="ReportCap03" />
+                <ScalarProperty Name="ReportName02" ColumnName="ReportName02" />
+                <ScalarProperty Name="ReportCap02" ColumnName="ReportCap02" />
+                <ScalarProperty Name="ReportName01" ColumnName="ReportName01" />
+                <ScalarProperty Name="ReportCap01" ColumnName="ReportCap01" />
+                <ScalarProperty Name="ReportName00" ColumnName="ReportName00" />
+                <ScalarProperty Name="ReportCap00" ColumnName="ReportCap00" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ReportParm">
+            <EntityTypeMapping TypeName="SA00800Model.SYS_ReportParm">
+              <MappingFragment StoreEntitySet="SYS_ReportParm">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="ListProc03" ColumnName="ListProc03" />
+                <ScalarProperty Name="ListProc02" ColumnName="ListProc02" />
+                <ScalarProperty Name="ListProc01" ColumnName="ListProc01" />
+                <ScalarProperty Name="ListProc00" ColumnName="ListProc00" />
+                <ScalarProperty Name="ListCap03" ColumnName="ListCap03" />
+                <ScalarProperty Name="ListCap02" ColumnName="ListCap02" />
+                <ScalarProperty Name="ListCap01" ColumnName="ListCap01" />
+                <ScalarProperty Name="ListCap00" ColumnName="ListCap00" />
+                <ScalarProperty Name="PPV_Proc03" ColumnName="PPV_Proc03" />
+                <ScalarProperty Name="PPV_Proc02" ColumnName="PPV_Proc02" />
+                <ScalarProperty Name="PPV_Proc01" ColumnName="PPV_Proc01" />
+                <ScalarProperty Name="PPV_Proc00" ColumnName="PPV_Proc00" />
+                <ScalarProperty Name="BooleanCap03" ColumnName="BooleanCap03" />
+                <ScalarProperty Name="BooleanCap02" ColumnName="BooleanCap02" />
+                <ScalarProperty Name="BooleanCap01" ColumnName="BooleanCap01" />
+                <ScalarProperty Name="BooleanCap00" ColumnName="BooleanCap00" />
+                <ScalarProperty Name="DateCap03" ColumnName="DateCap03" />
+                <ScalarProperty Name="DateCap02" ColumnName="DateCap02" />
+                <ScalarProperty Name="DateCap01" ColumnName="DateCap01" />
+                <ScalarProperty Name="DateCap00" ColumnName="DateCap00" />
+                <ScalarProperty Name="StringCap03" ColumnName="StringCap03" />
+                <ScalarProperty Name="StringCap02" ColumnName="StringCap02" />
+                <ScalarProperty Name="StringCap01" ColumnName="StringCap01" />
+                <ScalarProperty Name="StringCap00" ColumnName="StringCap00" />
+                <ScalarProperty Name="ReportFormat" ColumnName="ReportFormat" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="81" >
+        <EntityTypeShape EntityType="SA00800Model.SYS_ReportControl" Width="1.5" PointX="0.38687188755109525" PointY="11.358267476483373" />
+        <EntityTypeShape EntityType="SA00800Model.SYS_ReportParm" Width="1.5" PointX="2.3894691087256508" PointY="29.410411520586539" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
