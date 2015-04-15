@@ -378,6 +378,135 @@ namespace OM41200
     
             return base.ExecuteFunction<global::System.String>("OM41200_ApproveContent", screenNbrParameter, custIDParameter, slsPerIDParameter, branchIDParameter, displayIDParameter, levelIDParameter, fromStatusParameter, toStatusParameter, actionParameter, handleParameter, roleIDParameter, langIDParameter, userParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="slsPerID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="displayID">No Metadata Documentation available.</param>
+        /// <param name="levelID">No Metadata Documentation available.</param>
+        /// <param name="screenNbr">No Metadata Documentation available.</param>
+        /// <param name="status">No Metadata Documentation available.</param>
+        /// <param name="toStatus">No Metadata Documentation available.</param>
+        /// <param name="action">No Metadata Documentation available.</param>
+        /// <param name="handle">No Metadata Documentation available.</param>
+        /// <param name="user">No Metadata Documentation available.</param>
+        public int OM41200_Approve(global::System.String custID, global::System.String slsPerID, global::System.String branchID, global::System.String displayID, global::System.String levelID, global::System.String screenNbr, global::System.String status, global::System.String toStatus, Nullable<global::System.Int32> action, global::System.String handle, global::System.String user)
+        {
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter slsPerIDParameter;
+            if (slsPerID != null)
+            {
+                slsPerIDParameter = new ObjectParameter("SlsPerID", slsPerID);
+            }
+            else
+            {
+                slsPerIDParameter = new ObjectParameter("SlsPerID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter displayIDParameter;
+            if (displayID != null)
+            {
+                displayIDParameter = new ObjectParameter("DisplayID", displayID);
+            }
+            else
+            {
+                displayIDParameter = new ObjectParameter("DisplayID", typeof(global::System.String));
+            }
+    
+            ObjectParameter levelIDParameter;
+            if (levelID != null)
+            {
+                levelIDParameter = new ObjectParameter("LevelID", levelID);
+            }
+            else
+            {
+                levelIDParameter = new ObjectParameter("LevelID", typeof(global::System.String));
+            }
+    
+            ObjectParameter screenNbrParameter;
+            if (screenNbr != null)
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", screenNbr);
+            }
+            else
+            {
+                screenNbrParameter = new ObjectParameter("ScreenNbr", typeof(global::System.String));
+            }
+    
+            ObjectParameter statusParameter;
+            if (status != null)
+            {
+                statusParameter = new ObjectParameter("Status", status);
+            }
+            else
+            {
+                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
+            }
+    
+            ObjectParameter toStatusParameter;
+            if (toStatus != null)
+            {
+                toStatusParameter = new ObjectParameter("ToStatus", toStatus);
+            }
+            else
+            {
+                toStatusParameter = new ObjectParameter("ToStatus", typeof(global::System.String));
+            }
+    
+            ObjectParameter actionParameter;
+            if (action.HasValue)
+            {
+                actionParameter = new ObjectParameter("Action", action);
+            }
+            else
+            {
+                actionParameter = new ObjectParameter("Action", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter handleParameter;
+            if (handle != null)
+            {
+                handleParameter = new ObjectParameter("Handle", handle);
+            }
+            else
+            {
+                handleParameter = new ObjectParameter("Handle", typeof(global::System.String));
+            }
+    
+            ObjectParameter userParameter;
+            if (user != null)
+            {
+                userParameter = new ObjectParameter("User", user);
+            }
+            else
+            {
+                userParameter = new ObjectParameter("User", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("OM41200_Approve", custIDParameter, slsPerIDParameter, branchIDParameter, displayIDParameter, levelIDParameter, screenNbrParameter, statusParameter, toStatusParameter, actionParameter, handleParameter, userParameter);
+        }
 
         #endregion
 

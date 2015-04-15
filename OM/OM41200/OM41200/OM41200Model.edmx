@@ -63,6 +63,19 @@
           <Property Name="MailApprove" Type="varchar" MaxLength="100" />
           <Property Name="ProcContent" Type="varchar" MaxLength="100" />
         </EntityType>
+        <Function Name="OM41200_Approve" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustID" Type="nvarchar" Mode="In" />
+          <Parameter Name="SlsPerID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DisplayID" Type="varchar" Mode="In" />
+          <Parameter Name="LevelID" Type="varchar" Mode="In" />
+          <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+          <Parameter Name="ToStatus" Type="varchar" Mode="In" />
+          <Parameter Name="Action" Type="int" Mode="In" />
+          <Parameter Name="Handle" Type="varchar" Mode="In" />
+          <Parameter Name="User" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="OM41200_ApproveContent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
           <Parameter Name="CustID" Type="nvarchar" Mode="In" />
@@ -122,6 +135,19 @@
             <Parameter Name="User" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="HO_EmailConfig" EntityType="OM41200Model.HO_EmailConfig" />
+          <FunctionImport Name="OM41200_Approve">
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="SlsPerID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="DisplayID" Mode="In" Type="String" />
+            <Parameter Name="LevelID" Mode="In" Type="String" />
+            <Parameter Name="ScreenNbr" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="ToStatus" Mode="In" Type="String" />
+            <Parameter Name="Action" Mode="In" Type="Int32" />
+            <Parameter Name="Handle" Mode="In" Type="String" />
+            <Parameter Name="User" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM41200_pgLoadGrid_Result">
           <Property Type="Boolean" Name="Selected" Nullable="true" />
@@ -289,6 +315,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM41200_Approve" FunctionName="eBiz4DWebAppModel.Store.OM41200_Approve" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -312,7 +339,7 @@
     <Diagrams>
       <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
         <EntityTypeShape EntityType="OM41200Model.SI_ApprovalFlowHandle" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="OM41200Model.HO_EmailConfig" Width="1.5" PointX="7.9026377424144361" PointY="3.2067590519817357" />
+        <EntityTypeShape EntityType="OM41200Model.HO_EmailConfig" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

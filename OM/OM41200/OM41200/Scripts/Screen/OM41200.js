@@ -17,7 +17,7 @@ var Process = {
             waitMsg: HQ.common.getLang('Submiting') + "...",
             timeout: 1800000,
             params: {
-                lstDetChange: HQ.store.getData(App.grdDet.store),
+                lstDet: Ext.encode(App.grdDet.store.getRecordsValues())
             },
             success: function (msg, data) {
                 if (data.result.msgCode) {
@@ -51,6 +51,18 @@ var Event = {
         dtpFromDate_change: function (dtp, newValue, oldValue, eOpts) {
             App.dtpToDate.setMinValue(newValue);
             App.dtpToDate.validate();
+        },
+
+        cboStatus_change: function (cbo, newValue, oldValue, eOpts) {
+            App.cboHandle.store.reload()
+
+            if (App.grdDet.store.getCount()) {
+                App.grdDet.store.each(function (record) {
+                    if (record.data.Selected && record.data.Status != newValue) {
+                        record.set("Selected", false);
+                    }
+                });
+            }
         },
 
         btnLoad_click: function (btn, e) {
@@ -109,7 +121,11 @@ var Event = {
         },
 
         grdDet_beforeEdit: function (editor, e) {
-
+            if (e.field == "Selected") {
+                if (e.record.data.Status != App.cboStatus.getValue()) {
+                    return false;
+                }
+            }
         },
 
         chkSelectHeader_click: function (chk, newValue, oldValue, eOpts) {

@@ -29,7 +29,7 @@ namespace OM41200
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";
+            Current.Server = "EARTHSVR\\SQL2012";//MARSSVR\\SQL2012
             Current.DBSys = "eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;

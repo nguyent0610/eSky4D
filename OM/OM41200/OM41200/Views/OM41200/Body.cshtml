@@ -19,7 +19,7 @@
         //.DefaultAnchor("100%")
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
-        .TopBar(Util.SetupToolbar("save,new,delete,close,print", true, "Event.Form.menuClick"))
+        .TopBar(Util.SetupToolbar("new,delete,close,print", true, "Event.Form.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
         .Items(
             X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.North)
@@ -44,7 +44,7 @@
                     .Listeners(l =>
                     {
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                        l.Change.Handler = "App.cboCpny.store.reload();";
+                        l.Change.Handler = "App.cboTerritory.store.reload();";
                     })
 
                     , HQ.Combo().ID("cboTerritory")
@@ -55,6 +55,7 @@
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
                         ,new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw) 
+                        ,new StoreParameter("@Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw) 
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -111,7 +112,7 @@
                     , HQ.Combo().ID("cboStatusFilter")
                     .HQLangCode("Status").HQProcedure("OM41200_pcStatus")
                     .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
-                    .HQHeightWidth(400, 300).MultiSelect(true)
+                    .HQHeightWidth(400, 300)//.MultiSelect(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
@@ -147,7 +148,7 @@
                     .Listeners(l =>
                     {
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                        l.Change.Handler = "App.cboHandle.store.reload()";
+                        l.Change.Fn = "Event.Form.cboStatus_change";
                     })
 
                     , HQ.Combo().ID("cboHandle")
@@ -166,9 +167,10 @@
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                     })
 
-                    , HQ.Button().ID("btnImport").MarginSpec("0 0 5 105")
+                    , HQ.Button().ID("btnImport")
+                    .MarginSpec("0 0 5 105").Hidden(true)
                     .HQLangCode("ImportExcel").Icon(Icon.DiskDownload)
-                    .Handler("Event.Form.btnImport_click")
+                    .Handler("Event.Form.btnImport_click").Hidden(true)
                 ) // Third Column
             ) // pnlHeader
 
@@ -181,8 +183,8 @@
             .ColumnModel(
                 X.RowNumbererColumn()
 
-                , X.CheckColumn().HideTitleEl(true)
-                .Align(Alignment.Center).Width(25).Editable(true)
+                , X.CheckColumn().HideTitleEl(true).DataIndex("Selected")
+                .Align(Alignment.Center).Width(30).Editable(true)
                 .HeaderItems(
                     HQ.Checkbox().ID("chkSelectHeader")
                     .Handler("Event.Grid.chkSelectHeader_click")
@@ -193,13 +195,12 @@
                 , X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID")
                 , X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchName")
                 , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID")
-                , X.Column().Text(Util.GetLang("SlsName")).DataIndex("SlsName")
+                , X.Column().Text(Util.GetLang("SlsName")).DataIndex("Name")
                 , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
                 , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")
                 , X.Column().Text(Util.GetLang("DisplayID")).DataIndex("DisplayID")
-                , X.Column().Text(Util.GetLang("TDisplayName")).DataIndex("Descr").Flex(1).MinWidth(100)
                 , X.Column().Text(Util.GetLang("LevelID")).DataIndex("LevelID")
-                , X.Column().Text(Util.GetLang("Rate")).DataIndex("Rate")
+                , X.Column().Text(Util.GetLang("Rate")).DataIndex("Rate").Align(Alignment.Right)
                 , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Renderer("Process.renderStatus")
             )
             .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))
@@ -209,7 +210,21 @@
                 .Listeners(ls => {
                     ls.BeforeEdit.Fn = "Event.Grid.grdDet_beforeEdit";
                 })
-            ) // grdDet
+            )
+            .Features(
+                X.GridFilters().Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("Zone")
+                    , X.StringFilter().DataIndex("Territory")
+                    , X.StringFilter().DataIndex("BranchID")
+                    , X.StringFilter().DataIndex("BranchName")
+                    , X.StringFilter().DataIndex("SlsperID")
+                    , X.StringFilter().DataIndex("Name")
+                    , X.StringFilter().DataIndex("CustID")
+                    , X.StringFilter().DataIndex("CustName")
+                    , X.StringFilter().DataIndex("DisplayID")
+                )
+            )// grdDet
         )
         .Listeners(lst =>
         {

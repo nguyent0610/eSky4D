@@ -93,7 +93,7 @@ namespace OM41200.Controllers
                         dic.Add("@DisplayID", pending.DisplayID);
                         dic.Add("@LevelID", pending.LevelID);
                         dic.Add("@ScreenNbr", _screenNbr);
-                        //dic.Add("@Content", "");
+                        dic.Add("@ToStatus", step.ToStatus);
                         dic.Add("@Status", pending.Status);
                         dic.Add("@Action", (handle == "A" || handle == "I") ? "0" : "1");
                         dic.Add("@User", Current.UserName);
@@ -114,7 +114,7 @@ namespace OM41200.Controllers
                     }
                 }
 
-                return Json(new { success = true });
+                return Json(new { success = true, msgCode = 201405071 });
             }
             catch (Exception ex)
             {
@@ -173,27 +173,30 @@ namespace OM41200.Controllers
 
         public void SubmitApprove(string proc, Dictionary<string, string> parameter, string to, string cc, string subject, string note)
         {
-            var lstParams = new List<SqlParameter>();
+            //var lstParams = new Dictionary<string, string>();
 
-            string[] except = new string[] { "@Content", "@LangID", "@Roles", "@UserName", "@FromStatus" };
-            foreach (var parm in parameter)
-            {
-                if (!except.Any(p => p.ToUpper() == parm.Key.ToUpper()))
-                {
-                    lstParams.Add(new SqlParameter(parm.Key, parm.Value));
-                }
-            }
+            //string[] except = new string[] { "@Content", "@LangID", "@Roles", "@UserName", "@FromStatus" };
+            //foreach (var parm in parameter)
+            //{
+            //    if (!except.Any(p => p.ToUpper() == parm.Key.ToUpper()))
+            //    {
+            //        lstParams.Add(parm.Key, parm.Value);
+            //    }
+            //}
 
             // stored procedure OM41200_Approve
-            var toStatus = _db.ExecuteStoreQuery<string>(proc, lstParams).FirstOrDefault();
+            _db.OM41200_Approve(parameter["@CustID"], parameter["@SlsPerID"],
+                parameter["@BranchID"], parameter["@DisplayID"], parameter["@LevelID"],
+                parameter["@ScreenNbr"], parameter["@Status"], parameter["@ToStatus"], parameter["@Action"].ToShort(),
+                parameter["@Handle"], parameter["@User"]);
 
             var contentProc = _db.OM41200_ApproveContent(parameter["@ScreenNbr"],
                 parameter["@CustID"], parameter["@SlsPerID"],
                 parameter["@BranchID"], parameter["@DisplayID"],
                 parameter["@LevelID"], parameter["@Status"],
-                toStatus, parameter["@Action"].ToShort(),
+                parameter["@ToStatus"], parameter["@Action"].ToShort(),
                 parameter["@Handle"], parameter["@Roles"],
-                parameter["@LangID"].ToShort(), parameter["@User"]);
+                parameter["@LangID"].ToShort(), parameter["@User"]).FirstOrDefault().ToString();
             string content = string.Format("<html><body><p>{0}</p><p>{1}</p></body></html>", contentProc, note);
             SendMailApprove(to, cc, subject, content);
         }
