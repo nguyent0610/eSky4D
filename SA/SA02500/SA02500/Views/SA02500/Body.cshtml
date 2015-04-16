@@ -1,0 +1,82 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA02500;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .DefaultAnchor("100%")
+    .Config("trackResetOnLoad","true")
+    .BodyPadding(10)
+    .BodyBorder(0)
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print,New,Save,Delete", false, ""))
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
+    .Listeners(l =>
+    {
+        l.AfterRender.Fn = "frmMain_afterRender";
+    })
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("Header").Layout(LayoutType.HBox)
+        .Items(
+            X.Container().Layout(LayoutType.VBox)
+            .Items(
+                 HQ.TextBox().ID("txtOldPassword").Name("txtOldPassword").HQLangCode("OldPassword")
+                    .Width(400).MarginSpec("5 0 0 0").MaxLength(100).EnforceMaxLength(true).InputType(Ext.Net.InputType.Password)
+                    .Listeners(lst =>
+                    {
+                        lst.Blur.Fn = "txtOldPassword_Change";
+                    })
+                            
+                    ,HQ.TextBox().ID("txtNewPassword").Name("txtNewPassword").HQLangCode("NewPassword")
+                    .Width(400).MarginSpec("5 0 0 0").MaxLength(100).EnforceMaxLength(true).InputType(Ext.Net.InputType.Password)
+                    .Listeners(lst =>
+                    {
+                        lst.Blur.Fn = "txtNewPassword_Change";
+                    })
+                                               
+                    ,HQ.TextBox().ID("txtReNewPassword").Name("txtReNewPassword").HQLangCode("ReNewPassword").DataIndex("Password")
+                    .Width(400).MarginSpec("5 0 0 0").InputType(Ext.Net.InputType.Password)
+                    .MaxLength(100).EnforceMaxLength(true)
+                    .Listeners(lst =>
+                    {
+                        lst.Blur.Fn = "txtReNewPassword_Change";
+                    })
+                   
+                    , X.Container().Layout(LayoutType.HBox)
+                        .Items(
+                                HQ.Button().MarginSpec("10 0 10 170")
+                                .HQLangCode("ChangePassword").Listeners(p =>
+                                    {
+                                       p.Click.Fn = "save";
+                                    })
+                                , HQ.Button().MarginSpec("10 0 10 10").HQLangCode("LoginPage")
+                                .Listeners(p =>
+                                {
+                                    p.Click.Fn = "LoginPage_Click";
+                                })     
+                        )
+                )
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 20")
+                .Items(
+                    HQ.Label().HQLangCode("PassRuleDMS")
+                    , X.TextArea().Width(400).Height(100).ID("txtPassRule")
+                )
+            
+            
+            
+        )
+    )//giao dien
+))
