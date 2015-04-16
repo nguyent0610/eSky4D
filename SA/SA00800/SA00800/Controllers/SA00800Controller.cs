@@ -35,14 +35,14 @@ namespace SA00800.Controllers
 
         
         //#region Get information Company
-        public ActionResult GetReportControl(String ReportNbr)
+        public ActionResult GetSYS_ReportControl(String ReportNbr)
         {
             var rpt = _db.SYS_ReportControl.FirstOrDefault(p => p.ReportNbr == ReportNbr);
             return this.Store(rpt);
            
         }
 
-        public ActionResult GetOM_DocNumbering(String ReportNbr)
+        public ActionResult GetSYS_ReportParm(String ReportNbr)
         {
             return this.Store(_db.SA00800_pgSYS_ReportParm(ReportNbr).ToList());
         }
@@ -56,22 +56,22 @@ namespace SA00800.Controllers
         {
             try
             {
-                string OrderType = data["cboOrderType_Main"];
+                string ReportNbr = data["cboReportNbr"];
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_OrderType"]);
-                ChangeRecords<OM_OrderType> lstOM_OrderType = dataHandler.BatchObjectData<OM_OrderType>();
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_ReportControl"]);
+                ChangeRecords<SYS_ReportControl> lstSYS_ReportControl = dataHandler.BatchObjectData<SYS_ReportControl>();
 
-                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstOM_DocNumbering"]);
-                ChangeRecords<SA00800_pgOM_DocNumbering_Result> lstOM_DocNumbering = dataHandler1.BatchObjectData<SA00800_pgOM_DocNumbering_Result>();
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSYS_ReportParm"]);
+                ChangeRecords<SA00800_pgSYS_ReportParm_Result> lstSYS_ReportParm = dataHandler1.BatchObjectData<SA00800_pgSYS_ReportParm_Result>();
 
 
-                #region Save Header OM_OrderType
-                lstOM_OrderType.Created.AddRange(lstOM_OrderType.Updated);
-                foreach (OM_OrderType curHeader in lstOM_OrderType.Created)
+                #region Save Header SYS_ReportControl
+                lstSYS_ReportControl.Created.AddRange(lstSYS_ReportControl.Updated);
+                foreach (SYS_ReportControl curHeader in lstSYS_ReportControl.Created)
                 {
-                    if (OrderType.PassNull() == "") continue;
+                    if (ReportNbr.PassNull() == "") continue;
 
-                    var header = _db.OM_OrderType.FirstOrDefault(p => p.OrderType == OrderType);
+                    var header = _db.SYS_ReportControl.FirstOrDefault(p => p.ReportNbr == ReportNbr);
                     if (header != null)
                     {
                         if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
@@ -85,42 +85,41 @@ namespace SA00800.Controllers
                     }
                     else
                     {
-                        //string images = getPathThenUploadImage(curHeader, UserID);
-                        header = new OM_OrderType();
-                        header.OrderType = OrderType;
-                        header.Crtd_DateTime = DateTime.Now;
+                        header = new SYS_ReportControl();
+                        header.ReportNbr = ReportNbr;
+                        header.Crtd_Datetime = DateTime.Now;
                         header.Crtd_Prog = _screenNbr;
                         header.Crtd_User = Current.UserName;
-                        header.tstamp = new byte[0];
+             
                         UpdatingHeader(ref header, curHeader);
-                        _db.OM_OrderType.AddObject(header);
+                        _db.SYS_ReportControl.AddObject(header);
                     }
                 }
                 #endregion
 
-                #region Save OM_DocNumbering
-                foreach (SA00800_pgOM_DocNumbering_Result deleted in lstOM_DocNumbering.Deleted)
+                #region Save SYS_ReportParm
+                foreach (SA00800_pgSYS_ReportParm_Result deleted in lstSYS_ReportParm.Deleted)
                 {
-                    var objDelete = _db.OM_DocNumbering.FirstOrDefault(p => p.OrderType == OrderType && p.BranchID == deleted.BranchID);
+                    var objDelete = _db.SYS_ReportParm.FirstOrDefault(p => p.ReportNbr == ReportNbr && p.ReportFormat == deleted.ReportFormat);
                     if (objDelete != null)
                     {
-                        _db.OM_DocNumbering.DeleteObject(objDelete);
+                        _db.SYS_ReportParm.DeleteObject(objDelete);
                     }
                 }
 
-                lstOM_DocNumbering.Created.AddRange(lstOM_DocNumbering.Updated);
+                lstSYS_ReportParm.Created.AddRange(lstSYS_ReportParm.Updated);
 
-                foreach (SA00800_pgOM_DocNumbering_Result curLang in lstOM_DocNumbering.Created)
+                foreach (SA00800_pgSYS_ReportParm_Result curLang in lstSYS_ReportParm.Created)
                 {
-                    if (curLang.BranchID.PassNull() == "") continue;
+                    if (curLang.ReportFormat.PassNull() == "" || ReportNbr.PassNull()=="") continue;
 
-                    var lang = _db.OM_DocNumbering.FirstOrDefault(p => p.OrderType.ToLower() == OrderType.ToLower() && p.BranchID.ToLower() == curLang.BranchID.ToLower());
+                    var lang = _db.SYS_ReportParm.FirstOrDefault(p => p.ReportNbr.ToLower() == ReportNbr.ToLower() && p.ReportFormat.ToLower() == curLang.ReportFormat.ToLower());
 
                     if (lang != null)
                     {
                         if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
                         {
-                            UpdatingOM_DocNumbering(lang, curLang, false);
+                            UpdatingSYS_ReportParm(lang, curLang, false);
                         }
                         else
                         {
@@ -129,16 +128,17 @@ namespace SA00800.Controllers
                     }
                     else
                     {
-                        lang = new OM_DocNumbering();
-                        lang.OrderType = OrderType;
-                        UpdatingOM_DocNumbering(lang, curLang, true);
-                        _db.OM_DocNumbering.AddObject(lang);
+                        lang = new SYS_ReportParm();
+                        lang.ReportNbr = ReportNbr;
+
+                        UpdatingSYS_ReportParm(lang, curLang, true);
+                        _db.SYS_ReportParm.AddObject(lang);
                     }
                 }
                 #endregion
 
                 _db.SaveChanges();
-                return Json(new { success = true, OrderType = OrderType });
+                return Json(new { success = true, ReportNbr = ReportNbr });
             }
             catch (Exception ex)
             {
@@ -148,50 +148,70 @@ namespace SA00800.Controllers
         }
         #endregion
 
-        //Update OM_OrderType
-        #region Update OM_OrderType
-        private void UpdatingHeader(ref OM_OrderType t, OM_OrderType s)
+        //Update SYS_ReportControl
+        #region Update SYS_ReportControl
+        private void UpdatingHeader(ref SYS_ReportControl t, SYS_ReportControl s)
         {
-            t.Active = s.Active;
-            t.ApplShift = s.ApplShift;
-            t.ARDocType = s.ARDocType;
-            t.AutoPromotion = s.AutoPromotion;
-            t.BO = s.BO;
-            t.DaysToKeep = s.DaysToKeep;
             t.Descr = s.Descr;
-            t.DfltCustID = s.DfltCustID;
-            t.DiscType = s.DiscType;
-            t.INDocType = s.INDocType;
-            t.SalesType = s.SalesType;
-            t.RequiredVATInvcNbr = s.RequiredVATInvcNbr;
-            t.ShippingReport = s.ShippingReport;
-            t.TaxFee = s.TaxFee;
-            t.ManualDisc = s.ManualDisc;
+            t.ReportCap00 = s.ReportCap00;
+            t.ReportName00 = s.ReportName00;
+            t.ReportCap01 = s.ReportCap01;
+            t.ReportName01 = s.ReportName01;
+            t.ReportCap02 = s.ReportCap02;
+            t.ReportName02 = s.ReportName02;
+            t.ReportCap03 = s.ReportCap03;
+            t.ReportName03 = s.ReportName03;
+            t.ReportCap04 = s.ReportCap04;
+            t.ReportName04 = s.ReportName04;
+            t.ReportCap05 = s.ReportCap05;
+            t.ReportName05 = s.ReportName05;
+            t.ReportCap06 = s.ReportCap06;
+            t.ReportName06 = s.ReportName06;
+            t.ReportCap07 = s.ReportCap07;
+            t.ReportName07 = s.ReportName07;
+            t.RunBefore = s.RunBefore;
+            t.RunAfter = s.RunAfter;
 
-            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
         #endregion
-        //Update OM_DocNumbering
-        #region Update OM_DocNumbering
-        private void UpdatingOM_DocNumbering(OM_DocNumbering t, SA00800_pgOM_DocNumbering_Result s, bool isNew)
+        //Update SYS_ReportParm
+        #region Update SYS_ReportParm
+        private void UpdatingSYS_ReportParm(SYS_ReportParm t, SA00800_pgSYS_ReportParm_Result s, bool isNew)
         {
             if (isNew)
             {
-                t.BranchID = s.BranchID;
+                t.ReportFormat = s.ReportFormat;
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
             }
-            t.LastOrderNbr = s.LastOrderNbr;
-            t.LastShipperNbr = s.LastShipperNbr;
-            t.LastARRefNbr = s.LastARRefNbr;
-            t.LastInvcNbr = s.LastInvcNbr;
-            t.LastInvcNote = s.LastInvcNote;
-            t.PreFixIN = s.PreFixIN;
-            t.PreFixShip = s.PreFixShip;
-            t.PreFixSO = s.PreFixSO;
+            t.StringCap00 = s.StringCap00;
+            t.StringCap01 = s.StringCap01;
+            t.StringCap02 = s.StringCap02;
+            t.StringCap03 = s.StringCap03;
+            t.DateCap00 = s.DateCap00;
+            t.DateCap01 = s.DateCap01;
+            t.DateCap02 = s.DateCap02;
+            t.DateCap03 = s.DateCap03;
+            t.BooleanCap00 = s.BooleanCap00;
+            t.BooleanCap01 = s.BooleanCap01;
+            t.BooleanCap02 = s.BooleanCap02;
+            t.BooleanCap03 = s.BooleanCap03;
+            t.PPV_Proc00 = s.PPV_Proc00;
+            t.PPV_Proc01 = s.PPV_Proc01;
+            t.PPV_Proc02 = s.PPV_Proc02;
+            t.PPV_Proc03 = s.PPV_Proc03;
+            t.ListCap00 = s.ListCap00;
+            t.ListCap01 = s.ListCap01;
+            t.ListCap02 = s.ListCap02;
+            t.ListCap03 = s.ListCap03;
+            t.ListProc00 = s.ListProc00;
+            t.ListProc01 = s.ListProc01;
+            t.ListProc02 = s.ListProc02;
+            t.ListProc03 = s.ListProc03;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
@@ -200,35 +220,34 @@ namespace SA00800.Controllers
         }
         #endregion
 
-        //#region Delete information Company
-        ////Delete information Company
-        //[HttpPost]
-        //public ActionResult DeleteAll(FormCollection data)
-        //{
-        //    try
-        //    {
-        //        string OrderType = data["cboOrderType_Main"];
-        //        var cpny = _db.OM_OrderType.FirstOrDefault(p => p.OrderType == OrderType);
-        //        if (cpny != null)
-        //        {
-        //            _db.OM_OrderType.DeleteObject(cpny);
-        //        }
+        #region Delete All
+        [HttpPost]
+        public ActionResult DeleteAll(FormCollection data)
+        {
+            try
+            {
+                string ReportNbr = data["cboReportNbr"];
+                var cpny = _db.SYS_ReportControl.FirstOrDefault(p => p.ReportNbr == ReportNbr);
+                if (cpny != null)
+                {
+                    _db.SYS_ReportControl.DeleteObject(cpny);
+                }
 
-        //        var lstAddr = _db.OM_DocNumbering.Where(p => p.OrderType == OrderType).ToList();
-        //        foreach (var item in lstAddr)
-        //        {
-        //            _db.OM_DocNumbering.DeleteObject(item);
-        //        }
+                var lstAddr = _db.SYS_ReportParm.Where(p => p.ReportNbr == ReportNbr).ToList();
+                foreach (var item in lstAddr)
+                {
+                    _db.SYS_ReportParm.DeleteObject(item);
+                }
 
-        //        _db.SaveChanges();
-        //        return Json(new { success = true });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is MessageException) return (ex as MessageException).ToMessage();
-        //        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-        //    }
-        //}
-        //#endregion
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+        #endregion
     }
 }

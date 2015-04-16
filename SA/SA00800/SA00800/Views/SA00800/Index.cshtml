@@ -43,7 +43,7 @@
         .Model(Util.GenerateModel(typeof(SYS_ReportControl), "mdlSYS_ReportControl", "ReportNbr"))
         .Proxy(
             X.AjaxProxy()
-            .Url(Url.Action("GetReportControl", "SA00800"))
+            .Url(Url.Action("GetSYS_ReportControl", "SA00800"))
             .ActionMethods(action =>
             {
                 action.Read = HttpMethod.POST;

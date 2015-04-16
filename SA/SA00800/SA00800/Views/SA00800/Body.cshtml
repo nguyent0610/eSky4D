@@ -137,7 +137,7 @@
                             {
                                 ps.Add(new StoreParameter("ReportNbr", "App.cboReportNbr.getValue()", ParameterMode.Raw));
                             })
-                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetReportParm")))
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_ReportParm")))
                         .Listeners(p => p.Load.Fn = "stoLoadSYS_ReportParm")
                     )
                     .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_ReportParm');")
@@ -159,7 +159,7 @@
                             lst.Focus.Handler = "this.forceSelection=true;";
                         })
                         .HQParam(new StoreParameterCollection() { 
-                            new StoreParameter("@ReportNbr", "App.txtReportNbr.getValue()", ParameterMode.Raw)
+                            new StoreParameter("@ReportNbr", "App.cboReportNbr.getValue()", ParameterMode.Raw)
                          })
                         .LoadData()
                         )
@@ -197,7 +197,7 @@
                           , X.Column().Text(Util.GetLang("BooleanParm02")).DataIndex("BooleanCap02").Width(150)
                           .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
-                           , X.Column().Text(Util.GetLang("BooleanParm03")).DataIndex("BooleanCap03").Width(150)
+                          , X.Column().Text(Util.GetLang("BooleanParm03")).DataIndex("BooleanCap03").Width(150)
                           .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
                           , X.Column().Text(Util.GetLang("PPVProc00")).DataIndex("PPV_Proc00").Width(150)
@@ -285,15 +285,33 @@
                     X.GridFilters()
                         .Local(true)
                         .Filters(
-                            X.StringFilter().DataIndex("BranchID"),
-                            X.StringFilter().DataIndex("LastOrderNbr"),
-                            X.StringFilter().DataIndex("LastShipperNbr"),
-                            X.StringFilter().DataIndex("LastARRefNbr"),
-                            X.StringFilter().DataIndex("LastInvcNbr"),
-                            X.StringFilter().DataIndex("LastInvcNote"),
-                            X.StringFilter().DataIndex("PreFixIN"),
-                            X.StringFilter().DataIndex("PreFixShip"),
-                            X.StringFilter().DataIndex("PreFixSO")
+                            X.StringFilter().DataIndex("ReportFormat"),
+                            X.StringFilter().DataIndex("StringCap00"),
+                            X.StringFilter().DataIndex("StringCap01"),
+                            X.StringFilter().DataIndex("StringCap02"),
+                            X.StringFilter().DataIndex("StringCap03"),
+                            X.StringFilter().DataIndex("DateCap00"),
+                            X.StringFilter().DataIndex("DateCap01"),
+                            X.StringFilter().DataIndex("DateCap02"),
+                            X.StringFilter().DataIndex("DateCap03"),
+                            X.StringFilter().DataIndex("BooleanCap00"),
+                            X.StringFilter().DataIndex("BooleanCap01"),
+                            X.StringFilter().DataIndex("BooleanCap02"),
+                            X.StringFilter().DataIndex("BooleanCap03"),
+                            X.StringFilter().DataIndex("PPV_Proc00"),
+                            X.StringFilter().DataIndex("PPV_Proc01"),
+                            X.StringFilter().DataIndex("PPV_Proc02"),
+                            X.StringFilter().DataIndex("PPV_Proc03"),
+                            X.StringFilter().DataIndex("ListCap00"),
+                            X.StringFilter().DataIndex("ListCap01"),
+                            X.StringFilter().DataIndex("ListCap02"),
+                            X.StringFilter().DataIndex("ListCap03"),
+                            X.StringFilter().DataIndex("ListProc00"),
+                            X.StringFilter().DataIndex("ListProc01"),
+                            X.StringFilter().DataIndex("ListProc02"),
+                            X.StringFilter().DataIndex("ListProc03")
+                            
+                     
                         )
                 )
         )

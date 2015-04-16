@@ -1,42 +1,20 @@
-var keys = ['BranchID'];
-var fieldsCheckRequire = ["BranchID"];
-var fieldsLangCheckRequire = ["BranchID"];
+var keys = ['ReportFormat'];
+var fieldsCheckRequire = ["ReportFormat"];
+var fieldsLangCheckRequire = ["ReportFormat"];
 
 var _focusNo = 0;
 
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.cboOrderType_Main.getStore().load(function () {
-        App.cboOrderType_Sub.getStore().load(function () {
-            App.cboARDOCTYPE.getStore().load(function () {
-                App.cboINDocType.getStore().load(function () {
-                    App.cboDfltCustID.getStore().load(function () {
-                        App.cboSalesType.getStore().load(function () {
-                            App.cboDiscType.getStore().load(function () {
-                                HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
-                                App.btnCopyFrom.setDisabled(true);
-                                App.stoOM_OrderType.load({
-                                    params: {
-                                        OrderType: App.cboOrderType_Main.getValue()
-                                    }
-                                });
-                                App.stoOM_DocNumbering.reload({
-                                    params: {
-                                        OrderType: App.cboOrderType_Main.getValue()
-                                    }
-                                });
-                            })
-                        })
-                    })
-                })
-            })
-        })
+    App.cboReportNbr.getStore().load(function () {
+        HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+        App.stoSYS_ReportControl.reload();
     });
 };
 
 var pnl_render = function (cmd) {
     cmd.getEl().on('mousedown', function () {
-        if (cmd.id == 'pnlOM_Numbering') {
+        if (cmd.id == 'pnlSYS_ReportParm') {
             _focusNo = 1;
         }
         else {
@@ -49,34 +27,34 @@ var menuClick = function (command) {
     switch (command) {
         case "first":
             if (_focusNo == 0) {
-                HQ.combo.first(App.cboOrderType_Main, HQ.isChange);
+                HQ.combo.first(App.cboReportNbr, HQ.isChange);
             }
             else {
-                HQ.grid.first(App.grdOM_DocNumbering);
+                HQ.grid.first(App.grdSYS_ReportParm);
             }
             break;
         case "prev":
             if (_focusNo == 0) {
-                HQ.combo.prev(App.cboOrderType_Main, HQ.isChange);
+                HQ.combo.prev(App.cboReportNbr, HQ.isChange);
             }
             else {
-                HQ.grid.prev(App.grdOM_DocNumbering);
+                HQ.grid.prev(App.grdSYS_ReportParm);
             }
             break;
         case "next":
             if (_focusNo == 0) {
-                HQ.combo.next(App.cboOrderType_Main, HQ.isChange);
+                HQ.combo.next(App.cboReportNbr, HQ.isChange);
             }
             else {
-                HQ.grid.next(App.grdOM_DocNumbering);
+                HQ.grid.next(App.grdSYS_ReportParm);
             }
             break;
         case "last":
             if (_focusNo == 0) {
-                HQ.combo.last(App.cboOrderType_Main, HQ.isChange);
+                HQ.combo.last(App.cboReportNbr, HQ.isChange);
             }
             else {
-                HQ.grid.last(App.grdOM_DocNumbering);
+                HQ.grid.last(App.grdSYS_ReportParm);
             }
             break;
         case "refresh":
@@ -85,13 +63,9 @@ var menuClick = function (command) {
             }
             else {
                 HQ.isChange = false;
-                if (App.cboOrderType_Main.valueModels == null) App.cboOrderType_Main.setValue('');
-                App.cboOrderType_Main.getStore().load(function () {
-                    App.stoOM_OrderType.reload({
-                        params: {
-                            OrderType: App.cboOrderType_Main.getValue()
-                        }
-                    });
+                if (App.cboReportNbr.valueModels == null) App.cboReportNbr.setValue('');
+                App.cboReportNbr.getStore().load(function () {
+                    App.stoSYS_ReportControl.reload();
                 });
             }
             break;
@@ -102,11 +76,11 @@ var menuClick = function (command) {
                         HQ.message.show(150, '', '');
                     }
                     else {
-                        App.cboOrderType_Main.setValue('');
+                        App.cboReportNbr.setValue('');
                     }
                 }
                 else {
-                    HQ.grid.insert(App.grdOM_DocNumbering, keys);
+                    HQ.grid.insert(App.grdSYS_ReportParm, keys);
                 }
             }
             break;
@@ -119,10 +93,10 @@ var menuClick = function (command) {
                     }
                 }
                 else {
-                    if (App.slmOM_DocNumbering.selected.items[0] != undefined) {
-                        var rowindex = HQ.grid.indexSelect(App.grdOM_DocNumbering);
+                    if (App.slmSYS_ReportParm.selected.items[0] != undefined) {
+                        var rowindex = HQ.grid.indexSelect(App.grdSYS_ReportParm);
                         if (rowindex != '')
-                            HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdOM_DocNumbering), ''], 'deleteData', true)
+                            HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdSYS_ReportParm), ''], 'deleteData', true)
                     }
                 }
 
@@ -131,7 +105,7 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain)
-                    && HQ.store.checkRequirePass(App.stoOM_OrderType, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    && HQ.store.checkRequirePass(App.stoSYS_ReportControl, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -144,37 +118,59 @@ var menuClick = function (command) {
     }
 };
 
-//load lần đầu khi mở
-var firstLoad = function () {
+// Event when cboReportNbr is changed or selected item 
+var cboReportNbr_Change = function (sender, value) {
     HQ.isFirstLoad = true;
-    loadSourceCombo();
+    if (sender.valueModels != null) {
+        App.stoSYS_ReportControl.reload();
+    }
+
+    //App.cboReportNbr.setValue("");
 };
+
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboReportNbr_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboReportNbr.collapse();
+    }
+};
+//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
+var cboReportNbr_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
+    }
+};
+
+
 ////////////Kiem tra combo chinh CpnyID
 //khi co su thay doi du lieu cua cac conttol tren form
 var frmChange = function () {
     App.frmMain.getForm().updateRecord();
-    HQ.isChange = (HQ.store.isChange(App.stoOM_OrderType) == false ? HQ.store.isChange(App.stoOM_DocNumbering) : true);
+    HQ.isChange = (HQ.store.isChange(App.stoSYS_ReportControl) == false ? HQ.store.isChange(App.stoSYS_ReportParm) : true);
     HQ.common.changeData(HQ.isChange, 'SA00800');//co thay doi du lieu gan * tren tab title header
     //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
-    if (App.cboOrderType_Main.valueModels == null || HQ.isNew == true)
-        App.cboOrderType_Main.setReadOnly(false);
-    else App.cboOrderType_Main.setReadOnly(HQ.isChange);
+    if (App.cboReportNbr.valueModels == null || HQ.isNew == true)
+        App.cboReportNbr.setReadOnly(false);
+    else App.cboReportNbr.setReadOnly(HQ.isChange);
 };
 
 
 //xu li su kiem tren luoi giong nhu luoi binh thuong
-var grdOM_DocNumbering_BeforeEdit = function (editor, e) {
+var grdSYS_ReportParm_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
-var grdOM_DocNumbering_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdOM_DocNumbering, e, keys);
+var grdSYS_ReportParm_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSYS_ReportParm, e, keys);
     frmChange();
 };
-var grdOM_DocNumbering_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdOM_DocNumbering, e, keys);
+var grdSYS_ReportParm_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_ReportParm, e, keys);
 };
-var grdOM_DocNumbering_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdOM_DocNumbering);
+var grdSYS_ReportParm_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_ReportParm);
     //stoChanged(App.stoSys_CompanyAddr);
     frmChange();
 };
@@ -183,33 +179,36 @@ var stoChanged = function (sto) {
     HQ.common.changeData(HQ.isChange, 'SA00800');
 };
 
+//load lần đầu khi mở
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    loadSourceCombo();
+};
+
 //load store khi co su thay doi CpnyID
 var stoLoad = function (sto) {
     HQ.isFirstLoad = true;
-    HQ.common.showBusy(false);
+
     HQ.isNew = false;
-    App.cboOrderType_Main.forceSelection = true;
+    App.cboReportNbr.forceSelection = true;
+    //App.cboARDOCTYPE.forceSelection = false;
     if (sto.data.length == 0) {
-        HQ.store.insertBlank(sto, "OrderType");
-        record = sto.getAt(0);
+        HQ.store.insertBlank(sto, keys);
+        //record = sto.getAt(0);
 
         HQ.isNew = true;//record la new    
-        App.cboOrderType_Main.forceSelection = false;
+        App.cboReportNbr.forceSelection = false;
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
-        App.cboOrderType_Main.focus(true);//focus ma khi tao moi
+        App.cboReportNbr.focus(true);//focus ma khi tao moi
         sto.commitChanges();
     }
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
-
-    //App.stoOM_DocNumbering.reload({
-    //    params: {
-    //        OrderType: App.cboOrderType_Main.getValue()
-    //    }
-    //});
+    App.stoSYS_ReportParm.reload();
+    App.cboReportFormat.store.reload(); // cho combo tren grid load lai theo ma khi thay doi combo tren header 
 };
 
-var stoLoadOM_DocNumbering = function (sto) {
+var stoLoadSYS_ReportParm = function (sto) {
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keys);
@@ -217,122 +216,14 @@ var stoLoadOM_DocNumbering = function (sto) {
         HQ.isFirstLoad = false;
     }
     frmChange();
+    HQ.common.showBusy(false);
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 
-var btnCopyFrom_Click = function (sender, e) {
 
-    App.frmMain.submit({
-        waitMsg: HQ.waitMsg,
-        clientValidation: false,
-        method: 'POST',
-        url: 'SA00800/CopyFrom',
-        timeout: 1000000,
-        params: {
-            OrderType: App.cboOrderType_Sub.getValue()
-        },
-        success: function (msg, data) {
-            var objHeader = this.result.header;
-            if (objHeader != undefined) {
-
-                App.cboARDOCTYPE.setValue(objHeader.ARDocType);
-                App.Descr.setValue(objHeader.Descr);
-                App.cboINDocType.setValue(objHeader.INDocType);
-                App.DaysToKeep.setValue(objHeader.DaysToKeep);
-                App.cboDfltCustID.setValue(objHeader.DfltCustID);
-                App.cboSalesType.setValue(objHeader.SalesType);
-                App.cboDiscType.setValue(objHeader.DiscType);
-                App.ShippingReport.setValue(objHeader.ShippingReport);
-                App.Active.setValue(objHeader.Active);
-                App.AutoPromotion.setValue(objHeader.AutoPromotion);
-                App.RequiredVATInvcNbr.setValue(objHeader.RequiredVATInvcNbr);
-                App.ApplShift.setValue(objHeader.ApplShift);
-                App.BO.setValue(objHeader.BO);
-                App.TaxFee.setValue(objHeader.TaxFee);
-
-                this.result.lstgrd.forEach(function (item) {
-                    insertItemGrid(App.grdOM_DocNumbering, item);
-                });
-            }
-        },
-        failure: function (msg, data) {
-            HQ.message.process(msg, data, true);
-        }
-    });
-
-};
-var insertItemGrid = function (grd, item) {
-    var objDetail = App.stoOM_DocNumbering.data.items[App.stoOM_DocNumbering.getCount() - 1];
-
-    objDetail.set('BranchID', item.BranchID);
-    objDetail.set('LastARRefNbr', item.LastARRefNbr);
-    objDetail.set('LastInvcNbr', item.LastInvcNbr);
-    objDetail.set('LastInvcNote', item.LastInvcNote);
-    objDetail.set('LastOrderNbr', item.LastOrderNbr);
-    objDetail.set('LastShipperNbr', item.LastShipperNbr);
-    //objDetail.set('OrderType', item.OrderType);
-    objDetail.set('PreFixIN', item.PreFixIN);
-    objDetail.set('PreFixSO', item.PreFixSO);
-    objDetail.set('PreFixShip', item.PreFixShip);
-
-    HQ.store.insertBlank(App.stoOM_DocNumbering, keys);
-};
-// Event when cboOrderType_Main is changed or selected item 
-var cboOrderType_Sub_Change = function (sender, value) {
-    if (value != "" && App.cboOrderType_Main.getValue() != null) {
-        App.btnCopyFrom.setDisabled(false);
-    }
-    else {
-        App.btnCopyFrom.setDisabled(true);
-    }
-};
-
-// Event when cboOrderType_Main is changed or selected item 
-var cboOrderType_Main_Change = function (sender, value) {
-    HQ.isFirstLoad = true;
-    if (sender.valueModels != null) {
-        App.stoOM_OrderType.load({
-            params: {
-                OrderType: App.cboOrderType_Main.getValue()
-            }
-        });
-        App.stoOM_DocNumbering.reload({
-            params: {
-                OrderType: App.cboOrderType_Main.getValue()
-            }
-        });
-        //App.stoOM_DocNumbering.reload();
-    }
-    App.btnCopyFrom.setDisabled(true);
-    App.cboOrderType_Sub.setValue("");
-};
-
-//khi nhan combo xo ra, neu da thay doi thi ko xo ra
-var cboOrderType_Main_Expand = function (sender, value) {
-    if (HQ.isChange) {
-        App.cboOrderType_Main.collapse();
-    }
-};
-//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
-var cboOrderType_Main_TriggerClick = function (sender, value) {
-    if (HQ.isChange) {
-        HQ.message.show(150, '', '');
-    }
-    else {
-        menuClick('new');
-    }
-};
-var cboOrderType_Sub_TriggerClick = function (sender, value) {
-    if (HQ.isChange) {
-        HQ.message.show(150, '', '');
-    }
-    else {
-        menuClick('new');
-    }
-};
 function save() {
     //dòng này để bắt các thay đổi của form 
     App.frmMain.getForm().updateRecord();
@@ -341,20 +232,16 @@ function save() {
             waitMsg: 'Submiting...',
             url: 'SA00800/Save',
             params: {
-                lstOM_OrderType: Ext.encode(App.stoOM_OrderType.getChangedData({ skipIdForPhantomRecords: false })),
-                lstOM_DocNumbering: Ext.encode(App.stoOM_DocNumbering.getChangedData({ skipIdForPhantomRecords: false })),
+                lstSYS_ReportControl: Ext.encode(App.stoSYS_ReportControl.getChangedData({ skipIdForPhantomRecords: false })),
+                lstSYS_ReportParm: Ext.encode(App.stoSYS_ReportParm.getChangedData({ skipIdForPhantomRecords: false })),
                 isNew: HQ.isNew
             },
             success: function (result, data) {
                 HQ.message.show(201405071, '', '');
-                var OrderType = data.result.OrderType;
-                App.cboOrderType_Main.getStore().load(function () {
-                    App.cboOrderType_Main.setValue(OrderType);
-                    App.stoOM_OrderType.reload({
-                        params: {
-                            OrderType: App.cboOrderType_Main.getValue()
-                        }
-                    });
+                var ReportNbr = data.result.ReportNbr;
+                App.cboReportNbr.getStore().load(function () {
+                    App.cboReportNbr.setValue(ReportNbr);
+                    App.stoSYS_ReportControl.reload();
                 });
             },
             failure: function (msg, data) {
@@ -372,8 +259,8 @@ function deleteData(item) {
                 waitMsg: HQ.common.getLang('DeletingData'),
                 url: 'SA00800/DeleteAll',
                 success: function (action, data) {
-                    App.cboOrderType_Main.setValue("");
-                    App.cboOrderType_Main.getStore().load(function () { cboOrderType_Main_Change(App.cboOrderType_Main); });
+                    App.cboReportNbr.setValue("");
+                    App.cboReportNbr.getStore().load(function () { cboReportNbr_Change(App.cboReportNbr); });
                 },
                 failure: function (action, data) {
                     if (data.result.msgCode) {
@@ -383,7 +270,7 @@ function deleteData(item) {
             });
         }
         else {
-            App.grdOM_DocNumbering.deleteSelected();
+            App.grdSYS_ReportParm.deleteSelected();
         }
     }
 };
@@ -394,15 +281,11 @@ function deleteData(item) {
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
-        var OrderType = '';
-        if (App.cboOrderType_Main.valueModels != null) OrderType = App.cboOrderType_Main.getValue();
-        App.cboOrderType_Main.getStore().load(function () {
-            App.cboOrderType_Main.setValue(OrderType);
-            App.stoOM_OrderType.reload({
-                params: {
-                    OrderType: App.cboOrderType_Main.getValue()
-                }
-            });
+        var ReportNbr = '';
+        if (App.cboReportNbr.valueModels != null) ReportNbr = App.cboReportNbr.getValue();
+        App.cboReportNbr.getStore().load(function () {
+            App.cboReportNbr.setValue(ReportNbr);
+            App.stoSYS_ReportControl.reload();
         });
     }
 };
