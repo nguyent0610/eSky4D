@@ -1,0 +1,50 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA02600;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .DefaultAnchor("100%")
+    .Config("trackResetOnLoad","true")
+    .BodyPadding(10)
+    .BodyBorder(0)
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    //.TopBar(Util.SetupToolbar("Print,New,Save,Delete", false, ""))
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
+    .Layout(LayoutType.Fit)
+    .Items(
+        X.TabPanel()
+        .Layout(LayoutType.VBox)
+        .ID("tabSA02600")
+        .Items(
+            X.Panel()
+            .ID("tabUser")
+            .Title(Util.GetLang("INPUTUSER"))
+            .Items(
+                HQ.TextBox().ID("UserName").Name("UserName").HQLangCode("USERNAME")
+                    .MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true).Height(23)                                                                                           
+                , HQ.Button().ID("btnNext").HQLangCode("RESTOREPASSWORD").MarginSpec("5 0 0 170").Listeners(p =>
+                {
+                    p.Click.Fn = "Restore_Click";                                        
+                })
+                , HQ.Button().MarginSpec("5 0 0 10").HQLangCode("LoginPage").Listeners(p =>
+                {
+                    p.Click.Fn = "LoginPage_Click";
+                })                                         
+            )           
+        )
+    )
+        
+)//giao dien
+))

@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SA02600Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="SA02600ModelStoreContainer">
+          <EntitySet Name="SYS_Company" EntityType="SA02600Model.Store.SYS_Company" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Users" EntityType="SA02600Model.Store.Users" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="SYS_Company">
+          <Key>
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Name="CpnyID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="CpnyName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="400" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="400" />
+          <Property Name="Tel" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="Fax" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="TaxRegNbr" Type="varchar" MaxLength="20" />
+          <Property Name="Channel" Type="varchar" MaxLength="10" />
+          <Property Name="Territory" Type="varchar" MaxLength="10" />
+          <Property Name="Country" Type="varchar" MaxLength="3" />
+          <Property Name="City" Type="varchar" MaxLength="10" />
+          <Property Name="District" Type="varchar(max)" />
+          <Property Name="CpnyType" Type="varchar" MaxLength="15" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Owner" Type="nvarchar" MaxLength="100" />
+          <Property Name="Plant" Type="varchar" MaxLength="4" />
+          <Property Name="DatabaseName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Deposit" Type="float" Nullable="false" />
+          <Property Name="CreditLimit" Type="float" Nullable="false" />
+          <Property Name="MaxValue" Type="float" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="UserName" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="CpnyID" Type="varchar(max)" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Email" Type="nvarchar" MaxLength="250" />
+          <Property Name="HomeScreenNbr" Type="varchar" MaxLength="10" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" />
+          <Property Name="PasswordQuestion" Type="nvarchar" MaxLength="200" />
+          <Property Name="PasswordAnswer" Type="nvarchar" MaxLength="100" />
+          <Property Name="UserTypes" Type="nvarchar" MaxLength="200" />
+          <Property Name="Tel" Type="varchar" MaxLength="15" />
+          <Property Name="ComputerID" Type="varchar" MaxLength="100" />
+          <Property Name="Blocked" Type="bit" Nullable="false" />
+          <Property Name="BlockedTime" Type="datetime" />
+          <Property Name="LoggedIn" Type="bit" Nullable="false" />
+          <Property Name="LastLoggedIn" Type="datetime" />
+          <Property Name="JobTitle" Type="nvarchar" MaxLength="200" />
+          <Property Name="Manager" Type="varchar" MaxLength="30" />
+          <Property Name="Department" Type="nvarchar" MaxLength="200" />
+          <Property Name="Channel" Type="varchar" MaxLength="200" />
+          <Property Name="AutoID" Type="varchar" MaxLength="50" />
+          <Property Name="ExpireDay" Type="int" Nullable="false" />
+          <Property Name="FailedLoginCount" Type="int" Nullable="false" />
+          <Property Name="BeginDay" Type="datetime" Nullable="false" />
+          <Property Name="CheckFirstLogin" Type="bit" Nullable="false" />
+          <Property Name="Images" Type="nvarchar" MaxLength="100" />
+          <Property Name="CpnyIDHand" Type="varchar(max)" />
+          <Property Name="Crtd_Datetime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
+          <Property Name="LUpd_Datetime" Type="datetime" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
+          <Property Name="MultiLogin" Type="bit" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SA02600Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SA02600Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SYS_Company" EntityType="SA02600Model.SYS_Company" />
+          <EntitySet Name="Users" EntityType="SA02600Model.User" />
+        </EntityContainer>
+        <EntityType Name="SYS_Company">
+          <Key>
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CpnyName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Address" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Address1" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Address2" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Tel" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Fax" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxRegNbr" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Channel" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Territory" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="City" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="District" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CpnyType" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Email" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Owner" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Plant" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DatabaseName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="Double" Name="Deposit" Nullable="false" />
+          <Property Type="Double" Name="CreditLimit" Nullable="false" />
+          <Property Type="Double" Name="MaxValue" Nullable="false" />
+          <Property Type="String" Name="Type" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CpnyID" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Address" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FirstName" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Email" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HomeScreenNbr" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastName" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Password" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PasswordQuestion" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PasswordAnswer" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UserTypes" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Tel" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ComputerID" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Blocked" Nullable="false" />
+          <Property Type="DateTime" Name="BlockedTime" Precision="3" />
+          <Property Type="Boolean" Name="LoggedIn" Nullable="false" />
+          <Property Type="DateTime" Name="LastLoggedIn" Precision="3" />
+          <Property Type="String" Name="JobTitle" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Manager" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Department" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Channel" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AutoID" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ExpireDay" Nullable="false" />
+          <Property Type="Int32" Name="FailedLoginCount" Nullable="false" />
+          <Property Type="DateTime" Name="BeginDay" Nullable="false" Precision="3" />
+          <Property Type="Boolean" Name="CheckFirstLogin" Nullable="false" />
+          <Property Type="String" Name="Images" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CpnyIDHand" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="MultiLogin" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SA02600ModelStoreContainer" CdmEntityContainer="SA02600Entities">
+          <EntitySetMapping Name="SYS_Company">
+            <EntityTypeMapping TypeName="SA02600Model.SYS_Company">
+              <MappingFragment StoreEntitySet="SYS_Company">
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="MaxValue" ColumnName="MaxValue" />
+                <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
+                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="Plant" ColumnName="Plant" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="SA02600Model.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="MultiLogin" ColumnName="MultiLogin" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="CpnyIDHand" ColumnName="CpnyIDHand" />
+                <ScalarProperty Name="Images" ColumnName="Images" />
+                <ScalarProperty Name="CheckFirstLogin" ColumnName="CheckFirstLogin" />
+                <ScalarProperty Name="BeginDay" ColumnName="BeginDay" />
+                <ScalarProperty Name="FailedLoginCount" ColumnName="FailedLoginCount" />
+                <ScalarProperty Name="ExpireDay" ColumnName="ExpireDay" />
+                <ScalarProperty Name="AutoID" ColumnName="AutoID" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Manager" ColumnName="Manager" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="LastLoggedIn" ColumnName="LastLoggedIn" />
+                <ScalarProperty Name="LoggedIn" ColumnName="LoggedIn" />
+                <ScalarProperty Name="BlockedTime" ColumnName="BlockedTime" />
+                <ScalarProperty Name="Blocked" ColumnName="Blocked" />
+                <ScalarProperty Name="ComputerID" ColumnName="ComputerID" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="UserTypes" ColumnName="UserTypes" />
+                <ScalarProperty Name="PasswordAnswer" ColumnName="PasswordAnswer" />
+                <ScalarProperty Name="PasswordQuestion" ColumnName="PasswordQuestion" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="HomeScreenNbr" ColumnName="HomeScreenNbr" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="524c08638f4b4aba82525e08c6d0c477" Name="Diagram1" ZoomLevel="84">
+        <EntityTypeShape EntityType="SA02600Model.SYS_Company" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SA02600Model.User" Width="1.5" PointX="2.75" PointY="0.75" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
