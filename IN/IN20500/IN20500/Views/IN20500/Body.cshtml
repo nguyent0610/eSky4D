@@ -678,25 +678,32 @@
 
                                                     })
                                                 .Items(
-
-                                                        HQ.Combo().ID("cboSerAssign").Name("cboSerAssign").HQLangCode("Assignment").HQProcedure("IN20500_pcSerAssign")
-                                                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("SerAssign")
-                                                        .Width(400).HQHeightWidth(400, 300)
-                                                        .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true).AllowBlank(true)
-                                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                        .HQParam(new StoreParameterCollection() 
-                                                        { 
-                                                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
-                                                        })
-                                                        .LoadData()
-                                                        .Listeners(lst =>
-                                                            {
-                                                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                                                lst.Focus.Handler = "this.forceSelection = true;";
-                                                                //lst.Focus.Fn = "Focus1_Change";
+                                                        
+                                                        X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 5 0")
+                                                        .Items(
+                                                            HQ.Combo().ID("cboSerAssign").Name("cboSerAssign").HQLangCode("Assignment").HQProcedure("IN20500_pcSerAssign")
+                                                            .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("SerAssign")
+                                                            .Width(400).HQHeightWidth(400, 300)
+                                                            .HQDBSys(false).ForceSelection(false)//.MaxLength(30).EnforceMaxLength(true).AllowBlank(true)
+                                                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                                            .HQParam(new StoreParameterCollection() 
+                                                            { 
+                                                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                                             })
+                                                            .LoadData()
+                                                            .Listeners(lst =>
+                                                                {
+                                                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                                                    lst.Focus.Handler = "this.forceSelection = true;";
+                                                                    //lst.Focus.Fn = "Focus1_Change";
+                                                                })
 
-
+                                                              ,HQ.Checkbox().ID("chkLotSerRcptAuto").Name("chkLotSerRcptAuto").HQLangCode("LotSerRcptAuto").DataIndex("LotSerRcptAuto")
+                                                              .Width(400).MarginSpec("0 0 0 10")
+                              
+                                                                
+                                                                
+                                                        )
 
                                                         , HQ.Combo().ID("cboLotSerIssMthd").Name("cboLotSerIssMthd").HQLangCode("IssMthd").HQProcedure("IN20500_pcLotSerIssMthd")
                                                         .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("LotSerIssMthd")
@@ -770,9 +777,7 @@
                                                              .Width(400).MaxLength(25).EnforceMaxLength(true)
                                                              .Listeners(lst =>
                                                             {
-
                                                                 lst.Blur.Fn = "LastFixValue_Change";
-                                                                //lst.Focus.Fn = "Focus1_Change";
                                                             })
 
 
@@ -782,9 +787,7 @@
                                                             , HQ.Label().ID("lblShowNextLotSerial").Hidden(true).MarginSpec("0 0 0 50")
                                                            .Listeners(lst =>
                                                             {
-
                                                                 lst.AfterRender.Fn = "NextShowNextLotSerial_AfterRender";
-
                                                             })
         // ngoac ket thuc tab 3             
                                                 )

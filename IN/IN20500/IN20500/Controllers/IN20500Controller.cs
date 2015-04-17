@@ -12,6 +12,7 @@ using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Web.Hosting;
+using Ionic.Zip;
 namespace IN20500.Controllers
 {
     [DirectController]
@@ -362,6 +363,8 @@ namespace IN20500.Controllers
                                 string newFileName = string.Format("{0}{1}", invtID, Path.GetExtension(files[i].FileName));
                                 files[i].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
                                 _objHeader.Picture = newFileName;
+
+                                ZipFiles(FilePath, newFileName);
                             }
                             else if (Path.GetExtension(files[i].FileName).ToLower().Contains("mp4") || Path.GetExtension(files[i].FileName).ToLower().Contains("wmv"))
                             {
@@ -389,7 +392,9 @@ namespace IN20500.Controllers
                     {
                         System.IO.File.Delete(oldPath);
                     }
+                    DeleteFileInZip(_objHeader.Picture, FilePath);
                     _objHeader.Picture = string.Empty;
+                    
                 }
                 if (!string.IsNullOrWhiteSpace(_objHeader.Media) && string.IsNullOrWhiteSpace(obj.Media))
                 {
@@ -568,8 +573,10 @@ namespace IN20500.Controllers
                 t.VendID2 = data["cboVendor2"];
                 t.VendID1 = data["cboVendor1"];
                 t.ApproveStatus = s.ApproveStatus;
+                t.LotSerRcptAuto = s.LotSerRcptAuto;
         }
 
+        
 
         [HttpPost]
         public ActionResult Delete(FormCollection data, string invtID)
@@ -690,6 +697,79 @@ namespace IN20500.Controllers
                 }
             }
         }
- 
+
+
+        public void DeleteFileInZip(string fileName, string path)
+        {
+            try
+            {
+                string zipFolder = path;
+                path += "\\";
+
+                if (System.IO.File.Exists(zipFolder + "/ABC.zip"))
+                {
+                    using (ZipFile zip = ZipFile.Read(zipFolder + "/ABC.zip"))
+                    {
+                        string filePath = path + fileName;
+                        Delete(filePath);
+                        string zipFile = fileName;
+                        if (zip.ContainsEntry(zipFile))
+                        {
+                            zip.RemoveEntry(zipFile);
+                            zip.Save();
+                        }
+                    }
+                }
+                else
+                {
+                    string filePath = path + fileName;
+                    Delete(filePath);
+                }
+            }
+            catch
+            {
+            }
+        }
+        private void Delete(string filePath)
+        {
+            FileInfo file = new FileInfo(filePath);
+            if (file.Exists)
+            {
+                file.Delete();
+            }
+        }
+
+        public void ZipFiles(string serverPath, string fileName)
+        {
+            try
+            {
+                string[] fileNames = fileName.Split(';');
+                for (int i = 0; i < fileNames.Count(); i++)
+                {
+                    fileNames[i] = serverPath + "\\" + fileNames[i];
+                }
+                string zipFilePath = serverPath + "/ABC.zip";
+                FileInfo file = new FileInfo(zipFilePath);
+                if (file.Exists)
+                {
+                    using (ZipFile zip = ZipFile.Read(zipFilePath))
+                    {
+                        zip.AddFiles(fileNames, "");
+                        zip.Save();
+                    }
+                }
+                else
+                {
+                    using (ZipFile zip = new ZipFile())
+                    {
+                        zip.UseUnicodeAsNecessary = true;  // utf-8
+                        zip.AddFiles(fileNames, "");
+                        zip.Save(zipFilePath);
+                    }
+                }
+            }
+            catch
+            { }
+        }
     }
 }

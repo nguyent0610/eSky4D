@@ -129,6 +129,7 @@
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="ApproveStatus" Type="varchar" Nullable="false" MaxLength="5" />
           <Property Name="Media" Type="varchar" MaxLength="100" />
+          <Property Name="LotSerRcptAuto" Type="bit" />
         </EntityType>
         <EntityType Name="IN_InvtCpny">
           <Key>
@@ -160,6 +161,8 @@
           <Property Name="QtyShipNotInv" Type="float" Nullable="false" />
           <Property Name="StkItem" Type="smallint" Nullable="false" />
           <Property Name="TotCost" Type="float" Nullable="false" />
+          <Property Name="LastPurchaseDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="LastPurchasePrice" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
@@ -167,7 +170,6 @@
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="QtyUncosted" Type="float" Nullable="false" />
-          <Property Name="LastPurchaseDate" Type="smalldatetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="IN_ProdClassCpny">
@@ -334,7 +336,6 @@
           <EntitySet Name="IN_UnitConversion" EntityType="IN20500Model.IN_UnitConversion" />
           <EntitySet Name="HO_EmailConfig" EntityType="IN20500Model.HO_EmailConfig" />
           <EntitySet Name="HO_PendingTasks" EntityType="IN20500Model.HO_PendingTasks" />
-          <EntitySet Name="IN_Inventory" EntityType="IN20500Model.IN_Inventory" />
           <EntitySet Name="IN_InvtCpny" EntityType="IN20500Model.IN_InvtCpny" />
           <EntitySet Name="IN_ItemSite" EntityType="IN20500Model.IN_ItemSite" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="IN20500Model.SI_ApprovalFlowHandle" />
@@ -344,11 +345,12 @@
           <Parameter Name="Type" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="IN20500_pgGetCompany" ReturnType="Collection(IN20500Model.IN20500_pgGetCompany_Result)">
-            <Parameter Name="ClassID" Mode="In" Type="String" />
+          <Parameter Name="ClassID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="IN20500_pgGetCompanyInvt" ReturnType="Collection(IN20500Model.IN20500_pgGetCompanyInvt_Result)">
-            <Parameter Name="InvtID" Mode="In" Type="String" />
+          <Parameter Name="InvtID" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="IN_Inventory" EntityType="IN20500Model.IN_Inventory" />
         </EntityContainer>
         <EntityType Name="IN_ProdClassCpny">
           <Key>
@@ -466,76 +468,6 @@
           <Property Type="String" Name="Parm02" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Parm01" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="IN_Inventory">
-          <Key>
-            <PropertyRef Name="InvtID" />
-          </Key>
-          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BarCode" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Buyer" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ClassID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Color" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Descr" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Descr1" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="DfltPOUnit" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="DfltSite" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltSOUnit" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Type="Int16" Name="Exported" Nullable="false" />
-          <Property Type="String" Name="InvtType" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="IRSftyStkDays" Nullable="false" />
-          <Property Type="Double" Name="IRSftyStkPct" Nullable="false" />
-          <Property Type="Double" Name="IRSftyStkQty" Nullable="false" />
-          <Property Type="Double" Name="IROverStkQty" Nullable="false" />
-          <Property Type="Double" Name="LastCost" Nullable="false" />
-          <Property Type="Double" Name="LossRate00" Nullable="false" />
-          <Property Type="Double" Name="LossRate01" Nullable="false" />
-          <Property Type="Double" Name="LossRate02" Nullable="false" />
-          <Property Type="Double" Name="LossRate03" Nullable="false" />
-          <Property Type="Int16" Name="LotSerFxdLen" Nullable="false" />
-          <Property Type="String" Name="LotSerFxdTyp" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LotSerFxdVal" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LotSerIssMthd" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="LotSerNumLen" Nullable="false" />
-          <Property Type="String" Name="LotSerNumVal" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LotSerTrack" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="MaterialType" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="NodeID" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
-          <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
-          <Property Type="String" Name="Picture" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="POFee" Nullable="false" />
-          <Property Type="Double" Name="POPrice" Nullable="false" />
-          <Property Type="Double" Name="PrePayPct" Nullable="false" />
-          <Property Type="String" Name="PriceClassID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SerAssign" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="ShelfLife" Nullable="false" />
-          <Property Type="String" Name="Size" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="Double" Name="SOFee" Nullable="false" />
-          <Property Type="Double" Name="SOPrice" Nullable="false" />
-          <Property Type="String" Name="Source" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="StkItem" Nullable="false" />
-          <Property Type="String" Name="StkUnit" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Type="Double" Name="StkVol" Nullable="false" />
-          <Property Type="Double" Name="StkWt" Nullable="false" />
-          <Property Type="String" Name="StkWtUnit" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Style" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="TaxCat" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ValMthd" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendID1" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="VendID2" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="WarrantyDays" Nullable="false" />
-          <Property Type="Boolean" Name="Public" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="String" Name="ApproveStatus" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Media" MaxLength="100" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="IN_InvtCpny">
           <Key>
             <PropertyRef Name="InvtID" />
@@ -575,6 +507,7 @@
           <Property Type="Double" Name="QtyUncosted" Nullable="false" />
           <Property Type="DateTime" Name="LastPurchaseDate" Nullable="false" Precision="0" />
           <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="Double" Name="LastPurchasePrice" Nullable="false" />
         </EntityType>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -660,6 +593,77 @@
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
         </ComplexType>
+        <EntityType Name="IN_Inventory">
+          <Key>
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BarCode" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Buyer" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClassID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Color" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Descr" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Descr1" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DfltPOUnit" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DfltSite" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltSOUnit" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="Int16" Name="Exported" Nullable="false" />
+          <Property Type="String" Name="InvtType" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="IRSftyStkDays" Nullable="false" />
+          <Property Type="Double" Name="IRSftyStkPct" Nullable="false" />
+          <Property Type="Double" Name="IRSftyStkQty" Nullable="false" />
+          <Property Type="Double" Name="IROverStkQty" Nullable="false" />
+          <Property Type="Double" Name="LastCost" Nullable="false" />
+          <Property Type="Double" Name="LossRate00" Nullable="false" />
+          <Property Type="Double" Name="LossRate01" Nullable="false" />
+          <Property Type="Double" Name="LossRate02" Nullable="false" />
+          <Property Type="Double" Name="LossRate03" Nullable="false" />
+          <Property Type="Int16" Name="LotSerFxdLen" Nullable="false" />
+          <Property Type="String" Name="LotSerFxdTyp" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LotSerFxdVal" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LotSerIssMthd" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="LotSerNumLen" Nullable="false" />
+          <Property Type="String" Name="LotSerNumVal" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LotSerTrack" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="MaterialType" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="NodeID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
+          <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
+          <Property Type="String" Name="Picture" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="POFee" Nullable="false" />
+          <Property Type="Double" Name="POPrice" Nullable="false" />
+          <Property Type="Double" Name="PrePayPct" Nullable="false" />
+          <Property Type="String" Name="PriceClassID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SerAssign" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="ShelfLife" Nullable="false" />
+          <Property Type="String" Name="Size" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="SOFee" Nullable="false" />
+          <Property Type="Double" Name="SOPrice" Nullable="false" />
+          <Property Type="String" Name="Source" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="StkItem" Nullable="false" />
+          <Property Type="String" Name="StkUnit" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="StkVol" Nullable="false" />
+          <Property Type="Double" Name="StkWt" Nullable="false" />
+          <Property Type="String" Name="StkWtUnit" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Style" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="TaxCat" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ValMthd" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendID1" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="VendID2" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="WarrantyDays" Nullable="false" />
+          <Property Type="Boolean" Name="Public" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="ApproveStatus" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Media" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="LotSerRcptAuto" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -782,77 +786,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="IN_Inventory">
-            <EntityTypeMapping TypeName="IN20500Model.IN_Inventory">
-              <MappingFragment StoreEntitySet="IN_Inventory">
-                <ScalarProperty Name="Media" ColumnName="Media" />
-                <ScalarProperty Name="ApproveStatus" ColumnName="ApproveStatus" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Public" ColumnName="Public" />
-                <ScalarProperty Name="WarrantyDays" ColumnName="WarrantyDays" />
-                <ScalarProperty Name="VendID2" ColumnName="VendID2" />
-                <ScalarProperty Name="VendID1" ColumnName="VendID1" />
-                <ScalarProperty Name="ValMthd" ColumnName="ValMthd" />
-                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
-                <ScalarProperty Name="Style" ColumnName="Style" />
-                <ScalarProperty Name="StkWtUnit" ColumnName="StkWtUnit" />
-                <ScalarProperty Name="StkWt" ColumnName="StkWt" />
-                <ScalarProperty Name="StkVol" ColumnName="StkVol" />
-                <ScalarProperty Name="StkUnit" ColumnName="StkUnit" />
-                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Source" ColumnName="Source" />
-                <ScalarProperty Name="SOPrice" ColumnName="SOPrice" />
-                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
-                <ScalarProperty Name="Size" ColumnName="Size" />
-                <ScalarProperty Name="ShelfLife" ColumnName="ShelfLife" />
-                <ScalarProperty Name="SerAssign" ColumnName="SerAssign" />
-                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
-                <ScalarProperty Name="PrePayPct" ColumnName="PrePayPct" />
-                <ScalarProperty Name="POPrice" ColumnName="POPrice" />
-                <ScalarProperty Name="POFee" ColumnName="POFee" />
-                <ScalarProperty Name="Picture" ColumnName="Picture" />
-                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
-                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
-                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
-                <ScalarProperty Name="MaterialType" ColumnName="MaterialType" />
-                <ScalarProperty Name="LotSerTrack" ColumnName="LotSerTrack" />
-                <ScalarProperty Name="LotSerNumVal" ColumnName="LotSerNumVal" />
-                <ScalarProperty Name="LotSerNumLen" ColumnName="LotSerNumLen" />
-                <ScalarProperty Name="LotSerIssMthd" ColumnName="LotSerIssMthd" />
-                <ScalarProperty Name="LotSerFxdVal" ColumnName="LotSerFxdVal" />
-                <ScalarProperty Name="LotSerFxdTyp" ColumnName="LotSerFxdTyp" />
-                <ScalarProperty Name="LotSerFxdLen" ColumnName="LotSerFxdLen" />
-                <ScalarProperty Name="LossRate03" ColumnName="LossRate03" />
-                <ScalarProperty Name="LossRate02" ColumnName="LossRate02" />
-                <ScalarProperty Name="LossRate01" ColumnName="LossRate01" />
-                <ScalarProperty Name="LossRate00" ColumnName="LossRate00" />
-                <ScalarProperty Name="LastCost" ColumnName="LastCost" />
-                <ScalarProperty Name="IROverStkQty" ColumnName="IROverStkQty" />
-                <ScalarProperty Name="IRSftyStkQty" ColumnName="IRSftyStkQty" />
-                <ScalarProperty Name="IRSftyStkPct" ColumnName="IRSftyStkPct" />
-                <ScalarProperty Name="IRSftyStkDays" ColumnName="IRSftyStkDays" />
-                <ScalarProperty Name="InvtType" ColumnName="InvtType" />
-                <ScalarProperty Name="Exported" ColumnName="Exported" />
-                <ScalarProperty Name="DfltSOUnit" ColumnName="DfltSOUnit" />
-                <ScalarProperty Name="DfltSite" ColumnName="DfltSite" />
-                <ScalarProperty Name="DfltPOUnit" ColumnName="DfltPOUnit" />
-                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="Color" ColumnName="Color" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
-                <ScalarProperty Name="Buyer" ColumnName="Buyer" />
-                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="IN_InvtCpny">
             <EntityTypeMapping TypeName="IN20500Model.IN_InvtCpny">
               <MappingFragment StoreEntitySet="IN_InvtCpny">
@@ -864,6 +797,7 @@
           <EntitySetMapping Name="IN_ItemSite">
             <EntityTypeMapping TypeName="IN20500Model.IN_ItemSite">
               <MappingFragment StoreEntitySet="IN_ItemSite">
+                <ScalarProperty Name="LastPurchasePrice" ColumnName="LastPurchasePrice" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LastPurchaseDate" ColumnName="LastPurchaseDate" />
                 <ScalarProperty Name="QtyUncosted" ColumnName="QtyUncosted" />
@@ -980,6 +914,78 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="IN_Inventory">
+            <EntityTypeMapping TypeName="IN20500Model.IN_Inventory">
+              <MappingFragment StoreEntitySet="IN_Inventory">
+                <ScalarProperty Name="LotSerRcptAuto" ColumnName="LotSerRcptAuto" />
+                <ScalarProperty Name="Media" ColumnName="Media" />
+                <ScalarProperty Name="ApproveStatus" ColumnName="ApproveStatus" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Public" ColumnName="Public" />
+                <ScalarProperty Name="WarrantyDays" ColumnName="WarrantyDays" />
+                <ScalarProperty Name="VendID2" ColumnName="VendID2" />
+                <ScalarProperty Name="VendID1" ColumnName="VendID1" />
+                <ScalarProperty Name="ValMthd" ColumnName="ValMthd" />
+                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
+                <ScalarProperty Name="Style" ColumnName="Style" />
+                <ScalarProperty Name="StkWtUnit" ColumnName="StkWtUnit" />
+                <ScalarProperty Name="StkWt" ColumnName="StkWt" />
+                <ScalarProperty Name="StkVol" ColumnName="StkVol" />
+                <ScalarProperty Name="StkUnit" ColumnName="StkUnit" />
+                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="SOPrice" ColumnName="SOPrice" />
+                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="ShelfLife" ColumnName="ShelfLife" />
+                <ScalarProperty Name="SerAssign" ColumnName="SerAssign" />
+                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
+                <ScalarProperty Name="PrePayPct" ColumnName="PrePayPct" />
+                <ScalarProperty Name="POPrice" ColumnName="POPrice" />
+                <ScalarProperty Name="POFee" ColumnName="POFee" />
+                <ScalarProperty Name="Picture" ColumnName="Picture" />
+                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
+                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
+                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
+                <ScalarProperty Name="MaterialType" ColumnName="MaterialType" />
+                <ScalarProperty Name="LotSerTrack" ColumnName="LotSerTrack" />
+                <ScalarProperty Name="LotSerNumVal" ColumnName="LotSerNumVal" />
+                <ScalarProperty Name="LotSerNumLen" ColumnName="LotSerNumLen" />
+                <ScalarProperty Name="LotSerIssMthd" ColumnName="LotSerIssMthd" />
+                <ScalarProperty Name="LotSerFxdVal" ColumnName="LotSerFxdVal" />
+                <ScalarProperty Name="LotSerFxdTyp" ColumnName="LotSerFxdTyp" />
+                <ScalarProperty Name="LotSerFxdLen" ColumnName="LotSerFxdLen" />
+                <ScalarProperty Name="LossRate03" ColumnName="LossRate03" />
+                <ScalarProperty Name="LossRate02" ColumnName="LossRate02" />
+                <ScalarProperty Name="LossRate01" ColumnName="LossRate01" />
+                <ScalarProperty Name="LossRate00" ColumnName="LossRate00" />
+                <ScalarProperty Name="LastCost" ColumnName="LastCost" />
+                <ScalarProperty Name="IROverStkQty" ColumnName="IROverStkQty" />
+                <ScalarProperty Name="IRSftyStkQty" ColumnName="IRSftyStkQty" />
+                <ScalarProperty Name="IRSftyStkPct" ColumnName="IRSftyStkPct" />
+                <ScalarProperty Name="IRSftyStkDays" ColumnName="IRSftyStkDays" />
+                <ScalarProperty Name="InvtType" ColumnName="InvtType" />
+                <ScalarProperty Name="Exported" ColumnName="Exported" />
+                <ScalarProperty Name="DfltSOUnit" ColumnName="DfltSOUnit" />
+                <ScalarProperty Name="DfltSite" ColumnName="DfltSite" />
+                <ScalarProperty Name="DfltPOUnit" ColumnName="DfltPOUnit" />
+                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="Buyer" ColumnName="Buyer" />
+                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1004,14 +1010,14 @@
         <EntityTypeShape EntityType="IN20500Model.IN_ProdClassCpny" Width="2" PointX="6.25" PointY="4.125" />
         <EntityTypeShape EntityType="IN20500Model.IN_ProductClass" Width="1.875" PointX="4.375" PointY="0.5" />
         <EntityTypeShape EntityType="IN20500Model.IN_UnitConversion" Width="2" PointX="6.25" PointY="0.5" />
-        <EntityTypeShape EntityType="IN20500Model.HO_EmailConfig" Width="1.5" PointX="8.25" PointY="0.5" />
-        <EntityTypeShape EntityType="IN20500Model.HO_PendingTasks" Width="1.5" PointX="9.75" PointY="0.5" />
-        <EntityTypeShape EntityType="IN20500Model.IN_Inventory" Width="1.5" PointX="12.75" PointY="0.5" />
+        <EntityTypeShape EntityType="IN20500Model.HO_EmailConfig" Width="1.5" PointX="8.375" PointY="0.5" />
+        <EntityTypeShape EntityType="IN20500Model.HO_PendingTasks" Width="1.5" PointX="10" PointY="0.5" />
         <EntityTypeShape EntityType="IN20500Model.IN_InvtCpny" Width="1.5" PointX="6.25" PointY="5.5" />
         <EntityTypeShape EntityType="IN20500Model.IN_ItemSite" Width="1.5" PointX="2.875" PointY="0.625" />
         <EntityTypeShape EntityType="IN20500Model.SI_ApprovalFlowHandle" Width="2" PointX="0.75" PointY="0.625" />
-        <EntityTypeShape EntityType="IN20500Model.SI_ApprovalFlowStatus" Width="2.25" PointX="8.25" PointY="4.5" />
-        <EntityTypeShape EntityType="IN20500Model.SI_Hierarchy" Width="1.5" PointX="11.25" PointY="0.5" />
+        <EntityTypeShape EntityType="IN20500Model.SI_ApprovalFlowStatus" Width="2.25" PointX="8.375" PointY="5" />
+        <EntityTypeShape EntityType="IN20500Model.SI_Hierarchy" Width="1.5" PointX="11.625" PointY="0.5" />
+        <EntityTypeShape EntityType="IN20500Model.IN_Inventory" Width="1.5" PointX="13.25" PointY="0.5" />
       </Diagram>
     </Diagrams>
   </Designer>

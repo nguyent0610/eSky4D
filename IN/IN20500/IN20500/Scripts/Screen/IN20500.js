@@ -151,6 +151,7 @@ function refresh(item) {
 function Save() {  
     var curRecord = App.frmMain.getRecord();
     curRecord.data.Picture = App.imgPPCStorePicReq.imageUrl;
+    App.stoIN_Inventory.data.items[0].set('Picture', curRecord.data.Picture);
     App.frmMain.getForm().updateRecord();
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
@@ -671,7 +672,7 @@ var NextShowNextLotSerial_AfterRender = function (value) {
 
 var NodeSelected_Change = function (store, operation, options) {
     //if (click == 0) {
-    if (HQ.isChange != true && HQ.isNew != true) {
+    if (HQ.isChange != true && HQ.isNew != true) { // nếu đang chọn 1 node có sẵn
         parentRecordIDAll = operation.data.id.split("-");
         if (operation.childNodes.length == 0) {
             var invtall = operation.data.id.split("-")
@@ -688,9 +689,11 @@ var NodeSelected_Change = function (store, operation, options) {
             _nodeLevel = parentRecordIDAll[1];
             _parentRecordID = parentRecordIDAll[2];
         }
-    } else {
-        if (operation.parentNode) {
-            if (operation.parentNode.data.root == false) {
+    } else { // nếu đang tạo mới
+        if (operation.parentNode) {// nếu node đang chọn ko phải node root
+            if (operation.data.children) {//nếu node đang chọn có con
+                
+            } else { // nếu node đang chọn là leaf rồi
                 parentRecordIDAll = operation.data.id.split("-");
                 if (operation.childNodes.length == 0) {
                     var invtall = operation.data.id.split("-")
@@ -707,10 +710,8 @@ var NodeSelected_Change = function (store, operation, options) {
                     _nodeLevel = parentRecordIDAll[1];
                     _parentRecordID = parentRecordIDAll[2];
                 }
-            } else {
-                
             }
-        } else {
+        } else { //nếu node đang chọn là node root
             HQ.message.show(2015040901, '', '');
             App.slmTree.selectNext();
         }
