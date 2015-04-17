@@ -233,7 +233,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="95" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="81" >
         <EntityTypeShape EntityType="OM20400Model.OM_OrderType" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM20400Model.OM_DocNumbering" Width="1.5" PointX="4.7096634584989694" PointY="28.829058526469886" />
       </Diagram>
