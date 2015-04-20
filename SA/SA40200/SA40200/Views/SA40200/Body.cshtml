@@ -1,0 +1,266 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA40200;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Region(Region.Center)
+    .Layout(LayoutType.Border)
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.Panel().ID("treeBranch")
+        .Region(Region.West).Flex(2)
+        .MinWidth(150).Split(true).AutoScroll(true)
+            .DirectEvents(de =>
+            {
+                de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
+                de.AfterRender.Url = Url.Action("SA40200GetTreeBranch");
+                de.AfterRender.CleanRequest = true;
+                de.AfterRender.Method = HttpMethod.POST;
+                de.AfterRender.Success = "";
+                de.AfterRender.Timeout = 60000;
+                de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                de.AfterRender.EventMask.ShowMask = true;
+                de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                de.AfterRender.EventMask.MinDelay = 500;
+                
+                de.Expand.ExtraParams.Add(new Parameter("panelID", "treeBranch"));
+                de.Expand.Url = Url.Action("SA40200GetTreeBranch");
+                de.Expand.CleanRequest = true;
+                de.Expand.Method = HttpMethod.POST;
+                de.Expand.Success = "";
+                de.Expand.Timeout = 60000;
+                de.Expand.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                de.Expand.EventMask.ShowMask = true;
+                de.Expand.EventMask.Msg = Util.GetLang("LoadingData");
+                de.Expand.EventMask.MinDelay = 500;
+                
+            })
+        .BottomBar(
+            X.Toolbar()
+            .Items(
+                X.ToolbarFill()
+
+                , HQ.Button().ID("btnExpand")
+                .HQLangCode("Expand")
+                .Icon(Icon.BulletTogglePlus)
+                .Handler("btnExpand_click")
+
+                , X.ToolbarSpacer()
+                , X.ToolbarSeparator()
+                , X.ToolbarSpacer()
+
+                , HQ.Button().ID("btnCollapse")
+                .HQLangCode("Collapse")
+                .Icon(Icon.BulletToggleMinus)
+                .Handler("btnCollapse_click")
+
+                , X.ToolbarFill()
+            )
+        ) // treeBranch
+
+        // Second Column
+        , X.Panel()
+        .Region(Region.Center).Flex(1)
+        .Layout(LayoutType.VBox)
+        .MinWidth(50)
+        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+        .Items(
+            HQ.Button().ID("btnAddAll")
+            .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+            .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+            .Handler("btnAddAll_click")
+
+            , HQ.Button().ID("btnAdd")
+            .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+            .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+            .Handler("btnAdd_click")
+
+            , HQ.Button().ID("btnDel")
+            .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+            .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+            .Handler("btnDel_click")
+
+            , HQ.Button().ID("btnDelAll")
+            .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+            .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+            .Handler("btnDelAll_click")
+        ) // Container
+
+
+        //Third Column
+        , X.Panel()
+        .Region(Region.East).Flex(6)
+        .Layout(LayoutType.Border)
+        .Split(true).AutoScroll(true)
+        .Items(
+                X.Panel().Region(Region.North)
+                .Items(
+                    //X.Panel().ID("pnlheader")
+                    //.Layout(LayoutType.HBox)
+                    //.AutoScroll(true)
+                    //.Items(
+                    //    X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
+                    //    .Items(
+                    //        HQ.DateField().ID("lblWrkAdjDate").MarginSpec("5 0 0 0").HQLangCode("WRKADJDATE").Width(250)
+                    //        .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
+                    //        , HQ.DateField().ID("lblWrkOpenDate").MarginSpec("5 0 10 0").HQLangCode("WRKOPENDATE").Width(250)
+                    //        .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
+                    //    )
+                    //    , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
+                    //    .Items(
+                    //        HQ.NumberField().ID("lblWrkLowerDays").Name("WRKLOWERDAYS").HQLangCode("WRKLOWERDAYS").MarginSpec("5 0 0 0").Width(250).MinValue(0)
+                    //        , HQ.NumberField().ID("lblWrkUpperDays").Name("WRKUPPERDAYS").HQLangCode("WRKUPPERDAYS").MarginSpec("5 0 10 0").Width(250).MinValue(0)
+                    //    )
+                    //    , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
+                    //    .Items(
+                    //        HQ.Checkbox().ID("chkWrkDateChk").Name("WRKDATECHK").HQLangCode("WRKDATECHK").MarginSpec("5 0 0 10")
+                    //        , HQ.Button().ID("btnUpdate").HQLangCode("SA40200_Update").MarginSpec("5 0 0 10").Width(150)
+                    //        .Listeners(p =>
+                    //            {
+                    //                p.Click.Fn = "btnUpdate_Click";
+                    //            })
+                    //        )
+
+                    //)
+                )//header
+
+            , X.Panel().ID("pnlgrid")
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .Items(
+                //X.GridPanel()
+                //.Scroll(ScrollMode.Both)
+                //.View(X.GridView().TrackOver(false))
+                //.ID("grdSYS_CloseDateSetUp")
+                //.SelectionMemory(false)
+                //.Region(Region.Center).Flex(1)
+                //.Store(
+                //    X.Store()
+                //    .ID("stoSYS_CloseDateSetUp").AutoLoad(false)
+                //    .PageSize(50)
+                //    .Model(Util.GenerateModel(typeof(SA40200_pgSYS_CloseDateSetUp_Result), "mdlSA40200_pgSYS_CloseDateSetUp", "BranchID"))
+                //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_CloseDateSetUp")))
+                //    .Listeners(l =>
+                //    {
+                //        l.BeforeLoad.Fn = "stoBeforeLoad";
+                //        l.Load.Fn = "stoLoad";
+                //        l.Update.Fn = "stoChanged";
+                //    })
+                //)
+                //.Listeners(p =>
+                //{
+                //    p.BoxReady.Handler = "firstLoad();";
+                //})
+                //.ViewConfig(X.GridView().Plugins(X.GridDragDrop().EnableDrag(true).DDGroup("BranchID")).Listeners(l=>l.BeforeDrop.Fn="beforenodedrop"))
+                
+                //.SortableColumns(false)
+                //.ColumnModel(
+                //    X.RowNumbererColumn().Width(40)
+
+                //    , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(90).Renderer("renderTerritory")
+
+                //    , X.Column().DataIndex("BranchID").Text(Util.GetLang("BranchID")).Width(100)
+                //    .Editor(
+                //        HQ.Combo().ID("cboBranchID")
+                //        .Name("cboBranchID").HQProcedure("SA40200_pcCompany").HQDBSys(true)
+                //        .HQColumnShow("CpnyID,CpnyName,Territory,Address").DisplayField("CpnyID").ValueField("CpnyID")
+                //        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
+                //        .HQParam(new StoreParameterCollection() 
+                //        { 
+                //            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                //        })
+                //        .LoadData()
+                //    )
+
+                //    , X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchName").Width(150).Renderer("renderBranchName")
+
+                //    , X.Column().Text(Util.GetLang("Address")).DataIndex("Address").Width(150).Renderer("renderAddress")
+
+                //    , X.CheckColumn().ID("WrkDateChk").Text(Util.GetLang("WrkDateChk")).DataIndex("WrkDateChk").Width(150).Editable(true)
+
+                //    , X.DateColumn().Text(Util.GetLang("WrkAdjDate")).DataIndex("WrkAdjDate")
+                //    .Width(150).ID("txtWrkAdjDate").Editor(X.DateField().Format("MM/dd/yyyy"))
+
+                //    , X.DateColumn().Text(Util.GetLang("WrkOpenDate")).DataIndex("WrkOpenDate")
+                //    .Width(150).ID("txtWrkOpenDate").Editor(X.DateField().Format("MM/dd/yyyy"))
+
+                //    , X.NumberColumn().ID("WrkLowerDays").Text(Util.GetLang("WrkLowerDays")).DataIndex("WrkLowerDays").Format("0,000").Width(150).Align(Alignment.Right)
+                //    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
+
+                //    , X.NumberColumn().ID("WrkUpperDays").Text(Util.GetLang("WrkUpperDays")).DataIndex("WrkUpperDays").Format("0,000").Width(150).Align(Alignment.Right)
+                //    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
+
+                //    , X.CommandColumn().Width(150)
+                //    .Commands(
+                //        X.GridCommand()
+                //        .Text(Util.GetLang("Reject"))
+                //        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                //        .CommandName("reject")
+                //        .Icon(Icon.ArrowUndo)
+                //    )
+                //    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                //    .Listeners(l => l.Command.Handler = "grdSYS_CloseDateSetUp_Reject(record);")
+                //)
+                //.SelectionModel(X.RowSelectionModel().ID("slmSYS_CloseDateSetUp").Mode(SelectionMode.Multi))
+                //.BottomBar(
+                //    X.PagingToolbar()
+                //    .Items(
+                //        X.Label("Page size:"),
+                //        X.ToolbarSpacer(10),
+                //        X.ComboBox()
+                //        .Width(80)
+                //        .Items("1", "2", "10", "20", "30", "50")
+                //        .SelectedItems("50")
+                //        .Listeners(l =>
+                //            {
+                //                l.Select.Fn = "HQ.grid.onPageSelect";
+                //            })
+                //    )
+                //    .Plugins(X.ProgressBarPager())
+                //)
+                //.Plugins(
+                //    X.CellEditing()
+                //    .ClicksToEdit(1)
+                //    .Listeners(ls =>
+                //    {
+                //        ls.BeforeEdit.Fn = "grdSYS_CloseDateSetUp_BeforeEdit";
+                //        ls.Edit.Fn = "grdSYS_CloseDateSetUp_Edit";
+                //        ls.ValidateEdit.Fn = "grdSYS_CloseDateSetUp_ValidateEdit";
+                //    })
+                //)
+
+                //.Features(
+                //    X.GridFilters()
+                //        .Local(true)
+                //        .Filters(
+                //            X.StringFilter().DataIndex("Territory"),
+                //            X.StringFilter().DataIndex("BranchID"),
+                //            X.StringFilter().DataIndex("BranchName"),
+                //            X.StringFilter().DataIndex("Address"),
+                //            X.BooleanFilter().DataIndex("WrkDateChk"),
+                //            X.DateFilter().DataIndex("WrkAdjDate"),
+                //            X.DateFilter().DataIndex("WrkOpenDate"),
+                //            X.NumericFilter().DataIndex("WrkLowerDays"),
+                //            X.NumericFilter().DataIndex("WrkUpperDays")
+                //        )
+                )
+            )//Grid
+        )//Panel
+    )//frmMain
+
+))
