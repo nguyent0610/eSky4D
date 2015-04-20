@@ -42,8 +42,8 @@
                             lst.Expand.Fn = "cboUserID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
 
                         })
-                        , HQ.Checkbox().ID("chkAuto")
-                        .Name("chkAuto").HQLangCode("CHECKAUTOUSERID").MarginSpec("5 0 0 5")
+                        , HQ.Checkbox().ID("chkAuto").LabelWidth(500)
+                        .Name("chkAuto").HQLangCode("CHECKAUTOUSERID").MarginSpec("5 0 0 0")
                         .Listeners(lst => 
                             { 
                                 lst.Change.Handler = "chkAutoChange()"; 
@@ -55,9 +55,9 @@
             lss.Render.Fn = "pnl_render";
         })
 
-        , X.TabPanel().ID("tabSA00300")
+        , X.TabPanel().ID("tabDetail")
         .Region(Region.Center)
-        //.Listeners(p => p.AfterRender.Fn = "tabSA00300_AfterRender")
+        //.Listeners(p => p.AfterRender.Fn = "tabDetail_AfterRender")
         .Items(
         
             X.Panel().ID("pnlUser")

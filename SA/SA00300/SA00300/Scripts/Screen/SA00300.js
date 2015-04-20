@@ -1,9 +1,4 @@
 
-var keysHeader = ['UserName'];
-
-var fieldsCheckRequireHeader = ["FirstName"];//, "LastName", "Address", "Name", "Email", "Tel", "Password", "PasswordQuestion", "PasswordAnswer", "CpnyID", "UserTypes", "Channel", "ExpireDay"];
-var fieldsLangCheckRequireHeader = ["FirstName"];//, "LastName", "Address", "Name", "Email", "Tel", "Password", "PasswordQuestion", "PasswordAnswer", "CpnyID", "UserTypes", "Channel", "ExpireDay"];
-
 var keys = ['GroupID'];
 var fieldsCheckRequireUserGroup = ["GroupID"];
 var fieldsLangCheckRequireUserGroup = ["GroupID"];
@@ -99,9 +94,7 @@ var menuClick = function (command) {
                 HQ.message.show(20150303, '', 'refresh');
             }
             else {
-                HQ.isChange = false;
-                if (App.cboUserID.valueModels == null) App.cboUserID.setValue('');
-                App.cboUserID.getStore().load(function () { App.stoUser.reload(); });
+                refresh("yes");
             }
             break;
         case "new":
@@ -168,7 +161,7 @@ var focusChecking = function (item) {
     }
 };
 
-var tabSA00300_AfterRender = function (obj) {
+var tabDetail_AfterRender = function (obj) {
     if (this.parentAutoLoadControl != null)
         obj.setHeight(this.parentAutoLoadControl.getHeight() - 100);
     else {
@@ -266,10 +259,10 @@ var stoLoad = function (sto) {
 
 var chkPublic_Change = function (checkbox, checked) {
     if (checked) {
-        App.tabSA00300.closeTab(App.pnlPO_PriceCpny);
+        App.tabDetail.closeTab(App.pnlPO_PriceCpny);
     }
     else {
-        App.tabSA00300.addTab(App.pnlPO_PriceCpny);
+        App.tabDetail.addTab(App.pnlPO_PriceCpny);
     }
 };
 
@@ -382,7 +375,7 @@ var save = function () {
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 App.cboUserID.getStore().reload();
-                menuClick("refresh");
+                refresh("yes");
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);

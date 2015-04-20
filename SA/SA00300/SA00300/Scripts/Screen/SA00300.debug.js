@@ -162,7 +162,7 @@ var focusChecking = function (item) {
     }
 };
 
-var tabSA00300_AfterRender = function (obj) {
+var tabDetail_AfterRender = function (obj) {
     if (this.parentAutoLoadControl != null)
         obj.setHeight(this.parentAutoLoadControl.getHeight() - 100);
     else {
@@ -225,10 +225,10 @@ var loadData = function () {
 
 var chkPublic_Change = function (checkbox, checked) {
     if (checked) {
-        App.tabSA00300.closeTab(App.pnlPO_PriceCpny);
+        App.tabDetail.closeTab(App.pnlPO_PriceCpny);
     }
     else {
-        App.tabSA00300.addTab(App.pnlPO_PriceCpny);
+        App.tabDetail.addTab(App.pnlPO_PriceCpny);
     }
 };
 
