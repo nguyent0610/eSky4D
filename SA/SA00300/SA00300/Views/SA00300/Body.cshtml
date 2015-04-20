@@ -18,7 +18,10 @@
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Border)
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
-    .Listeners(itm=>itm.AfterRender.Fn="frmloadAfterRender")
+    .Listeners(l=>{
+        l.BoxReady.Handler = "firstLoad";
+        l.FieldChange.Fn = "frmChange";
+    })
     .Items(
         ////Thiet ke giao dien o day
         X.Panel().ID("pnlHeader")
@@ -32,9 +35,12 @@
                     .HQProcedure("SA00300_pcUser").HQColumnShow("UserName,FirstName,LastName").DisplayField("UserName").ValueField("UserName")
                     .HQHeightWidth(400, 300)
                     .LoadData()
-                    .Listeners(lst =>
-                        {
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => {
+                            lst.TriggerClick.Fn = "cboUserID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
                             lst.Change.Fn = "cboUserID_Change";
+                            lst.Expand.Fn = "cboUserID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
+
                         })
                         , HQ.Checkbox().ID("chkAuto")
                         .Name("chkAuto").HQLangCode("CHECKAUTOUSERID").MarginSpec("5 0 0 5")
@@ -78,7 +84,7 @@
                                                     .MultiSelect(true)
                                                     .HQHeightWidth(400, 300)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; })
+                                                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; })
                                                     .LoadData().Width(500)
                             ,HQ.Combo().ID("UserTypes").Name("UserTypes").MarginSpec("3 0 0 0").AllowBlank(false)
                                                     .HQLangCode("UserTypes").HQDBSys(true).HQProcedure("SA00300_pcSYS_Role")
@@ -88,7 +94,7 @@
                                                     .MultiSelect(true)
                                                     .HQHeightWidth(400, 300)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; })
+                                                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; })
                                                     .LoadData().Width(500)      
                             ,HQ.Combo().ID("Channel").Name("Channel").MarginSpec("3 0 0 0").AllowBlank(false)
                                                     .HQLangCode("Channel").HQDBSys(false).HQProcedure("SA00300_pcSalesChannel")
@@ -177,7 +183,7 @@
                     .Store(
                          X.Store()
                         .ID("stoSYS_UserGroup")
-                        .PageSize(50)//.AutoLoad(true)
+                        .PageSize(50).AutoLoad(false)
                         .Model(Util.GenerateModel(typeof(SA00300_pgLoadSYS_UserGroup_Result), "mdlSYS_UserGroup", "GroupID"))
                         .Parameters(ps =>
                         {
@@ -186,11 +192,10 @@
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_UserGroup")))
                         .Listeners(l =>
                         {
-                            l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                            l.Load.Handler = ";HQ.common.showBusy(false);";
+                            l.Load.Fn = "stoSYS_UserGroup_Load";
                         })
                     )
-                    .Listeners(p => p.BoxReady.Handler = "App.stoSYS_UserGroup.reload();")
+                    .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_UserGroup');")
                     .SortableColumns(false)
                     .ColumnModel(
                         X.RowNumbererColumn()
@@ -199,7 +204,7 @@
                         .Editor(
                             HQ.Combo().ID("cboGroupIDGroup").Name("cboGroupIDGroup")
                             .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
-                            .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA00300_pcUserGroup")
+                            .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA00300_pcUserGroup").HQAutoLoad(false)
                             .HQColumnShow("GroupID,Descr")
                             .DisplayField("GroupID")
                             .ValueField("GroupID")
@@ -286,7 +291,7 @@
                     .Store(
                          X.Store()
                         .ID("stoSYS_UserCompany")
-                        .PageSize(50)//.AutoLoad(true)
+                        .PageSize(50).AutoLoad(false)
                         .Model(Util.GenerateModel(typeof(SA00300_pgLoadSYS_UserCompany_Result), "mdlSYS_UserCompany", "GroupID"))
                         .Parameters(ps =>
                         {
@@ -295,16 +300,15 @@
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_UserCompany")))
                         .Listeners(l =>
                         {
-                            l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                            l.Load.Handler = "HQ.common.showBusy(false);";
+                            l.Load.Fn = "stoSYS_UserCompany_Load";
                         })
                     )
-                    .Listeners(p => p.BoxReady.Handler = "App.stoSYS_UserCompany.reload();")
+                    .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_UserCompany');")
                     .SortableColumns(false)
                     .ColumnModel(
                      X.RowNumbererColumn()
                         
-                        , Html.X().Column().Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(120)
+                        , X.Column().Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(120)
                             .Editor(
                                 HQ.Combo().ID("cboGroupIDCompany").Name("cboGroupIDCompany")
                                 .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
@@ -320,8 +324,8 @@
                                 })
                                 .LoadData()
                                 )
-                                                , Html.X().Column().Text(Util.GetLang("ListCpny")).DataIndex("ListCpny").Width(120)
-                                                , Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(120)
+                                                , X.Column().Text(Util.GetLang("ListCpny")).DataIndex("ListCpny").Width(120)
+                                                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(120)
                      
                         , X.CommandColumn().Width(150)
                         .Commands(

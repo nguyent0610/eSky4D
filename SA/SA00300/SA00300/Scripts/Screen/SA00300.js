@@ -1,1 +1,487 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('j a=["\\R\\h\\f\\x\\r\\G\\E","\\B\\e\\b\\h\\2n\\g\\t\\b","\\1j\\k\\h\\e\\d\\2n\\g\\t\\b","\\t\\f\\x\\e\\b\\n\\f\\1d\\o","\\k\\n","\\r\\o\\m\\B\\e\\b\\h\\R\\h\\f\\x\\r","\\r\\o\\m\\B\\e\\b\\h\\F\\f\\t\\r\\g\\o\\H","\\f\\o","\\p\\b\\d\\W\\m","\\p\\b\\d","\\C\\k\\h\\e\\d","\\p\\b\\d\\y\\d\\f\\h\\b","\\q\\P\\f\\B\\e\\b\\h\\G\\E","\\e\\b\\d\\1f\\g\\m\\x\\b","\\p\\h\\n\\y\\X\\y\\V\\B\\e\\b\\h\\R\\h\\f\\x\\r","\\p\\h\\k\\n","\\p\\h\\n\\y\\X\\y\\V\\B\\e\\b\\h\\F\\f\\t\\r\\g\\o\\H","\\p\\b\\d\\1f\\g\\m\\x\\b","\\1h\\g\\m\\x\\b\\1j\\k\\b\\m\\n","\\n\\k\\e\\r\\m\\g\\H\\1j\\k\\b\\m\\n","\\C\\k\\o\\n\\U\\b\\q\\f\\h\\n","\\k\\o\\n\\b\\1i\\1W\\C","\\e\\d\\f\\h\\b","\\n\\g\\d\\g","\\p\\b\\d\\K\\d","\\r\\h\\b\\1h","\\o\\b\\1i\\d","\\m\\g\\e\\d","\\m\\f\\g\\n","\\e\\d\\f\\B\\e\\b\\h","\\h\\b\\m\\f\\g\\n","\\e\\d\\f\\y\\X\\y\\V\\B\\e\\b\\h\\R\\h\\f\\x\\r","\\e\\d\\f\\y\\X\\y\\V\\B\\e\\b\\h\\F\\f\\t\\r\\g\\o\\H","\\h\\b\\C\\h\\b\\e\\A","","\\k\\e\\G\\o\\e\\b\\h\\d","\\k\\o\\e\\b\\h\\d","\\o\\b\\1d","\\1h\\g\\m\\x\\b","\\k\\e\\E\\b\\m\\b\\d\\b","\\n\\b\\m\\b\\d\\b\\E\\g\\d\\g","\\e\\A\\f\\1d","\\t\\b\\e\\e\\g\\p\\b","\\k\\d\\b\\t\\e","\\e\\b\\m\\b\\q\\d\\b\\n","\\e\\m\\t\\y\\X\\y\\V\\B\\e\\b\\h\\R\\h\\f\\x\\r","\\e\\m\\t\\y\\X\\y\\V\\B\\e\\b\\h\\F\\f\\t\\r\\g\\o\\H","\\n\\b\\m\\b\\d\\b","\\k\\e\\B\\r\\n\\g\\d\\b","\\C\\h\\t\\2m\\g\\k\\o","\\q\\A\\b\\q\\L\\U\\b\\2j\\x\\k\\h\\b\\1k\\g\\e\\e","\\C\\f\\h\\t","\\W\\t\\g\\k\\m","\\q\\A\\b\\q\\L\\W\\t\\g\\k\\m","\\x\\d\\k\\m","\\e\\g\\1h\\b","\\r\\h\\k\\o\\d","\\p\\b\\d\\U\\b\\q\\f\\h\\n","\\x\\r\\n\\g\\d\\b\\U\\b\\q\\f\\h\\n","\\k\\e\\F\\A\\g\\o\\p\\b","\\g\\e\\L\\F\\m\\f\\e\\b","\\q\\m\\f\\e\\b","\\q\\f\\t\\t\\f\\o","\\C\\f\\q\\x\\e","\\r\\g\\h\\b\\o\\d\\K\\x\\d\\f\\1e\\f\\g\\n\\F\\f\\o\\d\\h\\f\\m","\\p\\b\\d\\2o\\b\\k\\p\\A\\d","\\e\\b\\d\\2o\\b\\k\\p\\A\\d","\\A\\b\\k\\p\\A\\d","\\p\\b\\d\\1f\\k\\b\\1d\\y\\k\\3u\\b","\\p\\b\\d\\1R\\f\\n\\H","\\q\\A\\b\\q\\L\\b\\n","\\q\\A\\L\\K\\x\\d\\f","\\e\\b\\d\\E\\k\\e\\g\\P\\m\\b\\n","\\p\\b\\d\\F\\f\\x\\o\\d","\\m\\f\\g\\n\\U\\b\\q\\f\\h\\n","\\p\\b\\d\\1j\\f\\h\\t","\\G\\t\\g\\p\\b\\e","\\k\\t\\p\\G\\t\\g\\p\\b\\e","\\e\\b\\d\\G\\t\\g\\p\\b\\B\\h\\m","\\r\\o\\m\\1k\\1W\\V\\1k\\h\\k\\q\\b\\F\\r\\o\\H","\\q\\m\\f\\e\\b\\1b\\g\\P","\\d\\g\\P\\y\\K\\z\\z\\1o\\z\\z","\\g\\n\\n\\1b\\g\\P","\\q\\A\\b\\q\\L\\1R\\b\\C\\f\\h\\b\\W\\n\\k\\d","\\q\\A\\b\\q\\L\\G\\o\\e\\b\\h\\d\\3r\\b\\H","\\C\\k\\b\\m\\n","\\q\\P\\f\\R\\h\\f\\x\\r\\G\\E\\R\\h\\f\\x\\r","\\E\\b\\e\\q\\h","\\e\\b\\d","\\h\\b\\q\\f\\h\\n","\\q\\A\\b\\q\\L\\1f\\g\\m\\k\\n\\g\\d\\b\\W\\n\\k\\d","\\q\\A\\b\\q\\L\\U\\b\\1p\\b\\q\\d","\\q\\P\\f\\R\\h\\f\\x\\r\\G\\E\\F\\f\\t\\r\\g\\o\\H","\\1e\\k\\e\\d\\F\\r\\o\\H","\\k\\e\\1f\\g\\m\\k\\n","\\3k\\g\\k\\d\\2m\\e\\p","\\p\\b\\d\\1e\\g\\o\\p","\\y\\K\\z\\z\\1o\\z\\z\\1l\\y\\g\\1h\\b","\\p\\b\\d\\E\\g\\d\\g","\\r\\h\\f\\q\\b\\e\\e","\\e\\x\\P\\t\\k\\d","\\H\\b\\e","\\E\\b\\m\\b\\d\\k\\o\\p\\E\\g\\d\\g","\\y\\K\\z\\z\\1o\\z\\z\\1l\\E\\b\\m\\b\\d\\b\\K\\m\\m","\\n\\b\\m\\b\\d\\b\\y\\b\\m\\b\\q\\d\\b\\n","\\y\\K\\z\\z\\1o\\z\\z\\1l\\G\\t\\g\\p\\b\\1b\\f\\1R\\k\\o","\\1k\\1W\\y\\1b","\\g\\r\\r\\m\\k\\q\\g\\d\\k\\f\\o\\1l\\1p\\e\\f\\o","\\e\\d\\h\\k\\o\\p\\k\\C\\H","\\h\\b\\e\\r\\f\\o\\e\\b\\1b\\b\\1i\\d","\\n\\b\\q\\f\\n\\b","\\k\\t\\p\\y\\h\\q","\\h\\b\\2j\\x\\b\\e\\d","\\K\\1p\\g\\1i","\\C\\k\\m\\b\\e","\\n\\f\\t","\\C\\k\\m\\b\\G\\o\\r\\x\\d\\W\\m","\\f\\o\\m\\f\\g\\n","\\h\\b\\e\\x\\m\\d","\\d\\g\\h\\p\\b\\d","\\h\\b\\g\\n\\K\\e\\E\\g\\d\\g\\B\\U\\1e","\\d\\f\\1e\\f\\1d\\b\\h\\F\\g\\e\\b","\\r\\f\\r","\\3A","\\e\\r\\m\\k\\d","\\1p\\r\\p","\\r\\o\\p","\\p\\k\\C","\\A\\n\\o\\G\\t\\g\\p\\b\\e","\\h\\b\\e\\b\\d","\\C\\x\\r\\G\\t\\g\\p\\b\\e","\\o\\f","\\f\\L"];j O=[a[0]];j 2T=[a[1]];j 2U=[a[2]];j 2P=[a[2]];j 2w=[a[0]];j 2x=[a[0]];j 2h=[a[0]];j 2v=[a[0]];j w=0;j 2L=s(1n){1n[a[8]]()[a[7]](a[3],s(){i(1n[a[4]]==a[5]){w=1}u{i(1n[a[4]]==a[6]){w=2}u{w=0}}})};j 1v=s(2p){2M(2p){M a[10]:i(w==0){c[a[12]][a[13]](c[a[12]][a[11]]()[a[10]]()[a[9]](a[1]))}u{i(w==1){l[a[15]][a[10]](c[a[14]])}u{i(w==2){l[a[15]][a[10]](c[a[16]])}}};N;M a[25]:i(w==0){j D=c[a[12]];j 1q=D[a[17]]();j I=D[a[20]](D[a[18]]||D[a[19]],1q);j 1r=D[a[22]][a[21]](I);c[a[12]][a[13]](D[a[22]][a[24]](1r-1)[a[23]].2q)}u{i(w==1){l[a[15]][a[25]](c[a[14]])}u{i(w==2){l[a[15]][a[25]](c[a[16]])}}};N;M a[26]:i(w==0){j D=c[a[12]];j 1q=D[a[17]]();j I=D[a[20]](D[a[18]]||D[a[19]],1q);j 1r=D[a[22]][a[21]](I);c[a[12]][a[13]](D[a[22]][a[24]](1r+1)[a[23]].2q)}u{i(w==1){l[a[15]][a[26]](c[a[14]])}u{i(w==2){l[a[15]][a[26]](c[a[16]])}}};N;M a[27]:i(w==0){c[a[12]][a[13]](c[a[12]][a[11]]()[a[27]]()[a[9]](a[1]))}u{i(w==1){l[a[15]][a[27]](c[a[14]])}u{i(w==2){l[a[15]][a[27]](c[a[16]])}}};N;M a[33]:c[a[29]][a[28]]();c[a[31]][a[30]]();c[a[32]][a[30]]();N;M a[37]:i(w==0){c[a[12]][a[13]](a[34]);c[a[31]][a[30]]();c[a[32]][a[30]]()}u{i(w==1){i(l[a[35]]){l[a[15]][a[36]](c[a[14]])}}u{i(w==2){i(l[a[35]]){l[a[15]][a[36]](c[a[16]])}}}};N;M a[47]:i(w==0){i(c[a[12]][a[38]]){i(l[a[39]]){l[a[42]][a[41]](11,a[34],a[40])}}u{1v(a[37])}}u{i(w==1){i(c[a[45]][a[44]][a[43]][0]!=1J){i(l[a[39]]){l[a[42]][a[41]](11,a[34],a[40])}}}u{i(w==2){i(c[a[46]][a[44]][a[43]][0]!=1J){i(l[a[39]]){l[a[42]][a[41]](11,a[34],a[40])}}}}};N;M a[3e]:i(l[a[48]]||l[a[35]]||l[a[39]]){i(l[a[3f]][a[1I]](c[a[49]])&&l[a[3M]][a[2W]](c[a[3h]][a[38]])&&l[a[22]][a[1I]](c[a[31]],O,2w,2x)&&l[a[22]][a[1I]](c[a[32]],O,2h,2v)){2H()}};N;M a[2Y]:N;M a[1E]:i(c[a[49]][a[2B]]()!=1J){c[a[49]][a[1O]]()};i(l[a[22]][a[1M]](c[a[29]])||l[a[22]][a[1M]](c[a[32]])||l[a[22]][a[1M]](c[a[31]])){l[a[42]][a[41]](7,a[34],a[3b])}u{l[a[1C]][a[1E]](1u)};N}};j 3Y=s(J){i(c[2u]){c[2u][a[4D]]()}};j 4F=s(1m){i(1u[a[2r]]!=2z){1m[a[2s]](1u[a[2r]][a[4E]]()-1s)}u{1m[a[2s]](1y[a[4A]]()[a[4z]]()[a[4C]]-1s)}};j 4w=s(J,1N,1T){c[a[29]][a[28]]();c[a[14]][a[22]][a[30]]();c[a[16]][a[22]][a[30]]();2t()};s 2t(){i(c[a[2y]][a[2d]]){i(c[a[12]][a[17]]()==2z||c[a[12]][a[17]]()==a[34]){c[a[12]][a[1S]](1z)}u{c[a[12]][a[1S]](1K);c[a[2y]][a[2d]]}}u{c[a[12]][a[1S]](1K)}}j 4v=s(1m){c[a[29]][a[28]]();c[a[31]][a[28]]();c[a[32]][a[28]]()};j 3X=s(){i(c[a[29]][a[3W]]()==0){c[a[29]][a[36]](0,1y[a[23]].4u())};j I=c[a[29]][a[24]](0);c[a[49]][a[3Z]]()[a[4b]](I);i(I[a[23]][a[4a]]){2A(c[a[1A]],I[a[23]].3V)}u{c[a[1A]][a[1g]](a[34])}};j 3U=s(3P,1Z){i(1Z){c[a[1Y]][a[3N]](c[a[1X]])}u{c[a[1Y]][a[3Q]](c[a[1X]])}};j 3R=s(J,1N,1T){};j 3T=s(2g,v){i(!l[a[15]][a[3S]](v,O)){1U 1K}};j 4d=s(J,v){l[a[15]][a[1D]](c[a[14]],v,O);i(v[a[1w]]==a[0]){j S=c[a[4o]][a[22]][a[20]](v[a[1w]],v[a[38]]);i(S){v[a[Z]][a[Y]](a[1t],S[a[23]].2b)}u{v[a[Z]][a[Y]](a[1t],a[34])}}};j 4n=s(J,v){1U l[a[15]][a[2f]](c[a[14]],v,O)};j 4p=s(I){l[a[15]][a[2K]](I,c[a[14]])};j 4q=s(2g,v){l[a[15]][a[1D]](c[a[16]],v,O)};j 4s=s(J,v){l[a[15]][a[1D]](c[a[16]],v,O);i(v[a[1w]]==a[0]){j S=c[a[4r]][a[22]][a[20]](v[a[1w]],v[a[38]]);i(S){v[a[Z]][a[Y]](a[2c],S[a[23]].4l);v[a[Z]][a[Y]](a[1t],S[a[23]].2b)}u{v[a[Z]][a[Y]](a[2c],a[34]);v[a[Z]][a[Y]](a[1t],a[34])}}};j 4i=s(J,v){1U l[a[15]][a[2f]](c[a[16]],v,O)};j 4j=s(I){l[a[15]][a[2K]](I,c[a[16]])};j 2H=s(){i(c[a[49]][a[2E]]()){c[a[49]][a[1O]]();c[a[49]][a[1s]]({2G:l[a[1C]][a[2F]](a[4h]),1P:a[4e],2J:{4f:l[a[22]][a[1G]](c[a[49]][a[2B]]()[a[22]]),4g:l[a[22]][a[1G]](c[a[32]]),4m:l[a[22]][a[1G]](c[a[31]])},1H:s(1a,Q){l[a[42]][a[41]](4c);c[a[12]][a[11]]()[a[30]]();1v(a[33])},1V:s(1a,Q){l[a[42]][a[1Q]](1a,Q,1z)}})}};j 3O=s(J){i(J==a[4y]){i(w==0){i(c[a[49]][a[2E]]()){c[a[49]][a[1O]]();c[a[49]][a[1s]]({2G:l[a[1C]][a[2F]](a[4B]),1P:a[3a],2Z:3c,1H:s(1a,Q){c[a[12]][a[11]]()[a[28]]();1v(a[37])},1V:s(1a,Q){l[a[42]][a[1Q]](1a,Q,1z)}})}}u{i(w==1){c[a[14]][a[2I]]()}u{i(w==2){c[a[16]][a[2I]]()}}}}};j 2A=s(1c,2C){1y[a[3F]][a[3I]]({1P:a[3H],3x:a[3p],3n:{"\\F\\f\\o\\d\\b\\o\\d\\3t\\1b\\H\\r\\b":a[4x]},2J:3s[a[3v]]({3m:2C}),1H:s(2D){j 1L=1y[a[3d]](2D[a[4k]]);i(1L[a[2e]]){1c[a[1g]](1L[a[2e]])}u{1c[a[1g]](a[34])}},1V:s(2a,Q){l[a[42]][a[1Q]](2a,Q,1z)}})};j 2k=s(T,1c){j 1B=T[a[4t]][a[3B]][a[2X]];i(1B&&1B[0]){j 1F=3i 2S();1F[a[2N]]=s(v){1c[a[1g]](v[a[2O]][a[2R]])};1F[a[2V]](1B[0])}};j 2Q=s(T,1N,1T,2i){i(T[a[38]]){j 1x=T[a[38]][a[3g]](a[3L])[a[3D]]()[a[3C]]();i(1x==a[3j]||1x==a[3z]||1x==a[3E]){c[a[2l]][a[13]](T[a[38]]);2k(T,c[a[1A]])}u{l[a[42]][a[41]](3K,a[34],a[34])}}};j 3J=s(3G,2i){c[a[3y]][a[3o]]();c[a[1A]][a[1g]](a[34]);c[a[2l]][a[13]](a[34])};j 3l=s(J){i(J==a[3q]||J==a[3w]){l[a[1C]][a[1E]](1u)}};', 62, 290, '||||||||||_0x25a5|x65|App|x74|x73|x6F|x61|x72|if|var|x69|HQ|x6C|x64|x6E|x67|x63|x70|function|x6D|else|_0x3129x22|_focusNo|x75|x53|x30|x68|x55|x66|_0x3129xe|x44|x43|x49|x79|_0x3129x10|_0x3129x13|x41|x6B|case|break|keys|x62|_0x3129x2d|x47|_0x3129x24|_0x3129x36|x52|x5F|x45|x59|88|89|||||||||||_0x3129x2c|x54|_0x3129x30|x77|x4C|x56|78|x76|x78|x46|x50|x2F|_0x3129x15|_0x3129xb|x33|x6A|_0x3129xf|_0x3129x11|100|87|this|menuClick|85|_0x3129x3b|Ext|true|77|_0x3129x37|62|84|61|_0x3129x38|98|success|50|undefined|false|_0x3129x33|59|_0x3129x17|58|url|99|x42|72|_0x3129x18|return|failure|x4F|79|81|_0x3129x1e|||||||||||_0x3129x34|Descr|93|70|111|90|_0x3129x21|fieldsCheckRequireUserCompany|_0x3129x3a|x71|readImage|128|x4D|x4E|x48|_0x3129xd|UserName|64|66|chkAutoChange|invalidField|fieldsLangCheckRequireUserCompany|fieldsCheckRequireUserGroup|fieldsLangCheckRequireUserGroup|71|null|displayImage|57|_0x3129x31|_0x3129x32|94|96|waitMsg|save|104|params|91|pnl_render|switch|117|119|fieldsLangCheckRequireHeader|fupImages_change|118|FileReader|keysHeader|fieldsCheckRequireHeader|120|53|114|56|timeout|||||||||||103|60|7200|110|55|51|124|52|new|125|x57|askClose|fileName|headers|129|106|131|x4B|JSON|x2D|x7A|108|132|method|130|126|x2E|115|121|122|127|113|_0x3129x3d|105|112|btnClearImage_click|148|123|54|80|deleteData|_0x3129x1d|82|cboInvtID_Change|83|grdSYS_UserGroup_BeforeEdit|chkPublic_Change|Images|73|loadData|focusChecking|75|||||||||||76|74|201405071|grdSYS_UserGroup_Edit|97|lstUser|lstSYS_UserCompany|95|grdSYS_UserCompany_ValidateEdit|grdSYS_UserCompany_Reject|109|ListCpny|lstSYS_UserGroup|grdSYS_UserGroup_ValidateEdit|86|grdSYS_UserGroup_Reject|grdSYS_UserCompany_BeforeEdit|92|grdSYS_UserCompany_Edit|116|Record|frmloadAfterRender|cboUserID_Change|107|101|68|69|102|67|63|65|tabSA00300_AfterRender'.split('|'), 0, {}))
+
+var keysHeader = ['UserName'];
+
+var fieldsCheckRequireHeader = ["FirstName"];//, "LastName", "Address", "Name", "Email", "Tel", "Password", "PasswordQuestion", "PasswordAnswer", "CpnyID", "UserTypes", "Channel", "ExpireDay"];
+var fieldsLangCheckRequireHeader = ["FirstName"];//, "LastName", "Address", "Name", "Email", "Tel", "Password", "PasswordQuestion", "PasswordAnswer", "CpnyID", "UserTypes", "Channel", "ExpireDay"];
+
+var keys = ['GroupID'];
+var fieldsCheckRequireUserGroup = ["GroupID"];
+var fieldsLangCheckRequireUserGroup = ["GroupID"];
+
+
+var keys1 = ['GroupID'];
+var fieldsCheckRequireUserCompany = ["GroupID"];
+var fieldsLangCheckRequireUserCompany = ["GroupID"];
+
+var _focusNo = 0;
+
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboUserID.getStore().load(function () {
+        App.stoUser.reload();
+        
+    });
+};
+
+var loadComboGrid = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboGroupIDGroup.getStore().load(function () {
+        App.cboGroupIDCompany.getStore().load(function () {
+            App.stoSYS_UserGroup.reload();
+            App.stoSYS_UserCompany.reload();
+            HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+        })
+    });
+};
+
+var pnl_render = function (cmd) {
+    cmd.getEl().on('mousedown', function () {
+        if (cmd.id == 'pnlUserGroup') {
+            _focusNo = 1;
+        }
+        else if (cmd.id == 'pnlUserCompany') {
+            _focusNo = 2;
+        }
+        else {//pnlHeader
+            _focusNo = 0;
+        }
+    });
+};
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            if (_focusNo == 0) {
+                HQ.combo.first(App.cboUserID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.first(App.grdSYS_UserGroup);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.first(App.grdSYS_UserCompany);
+            }
+            break;
+        case "prev":
+            if (_focusNo == 0) {
+                HQ.combo.prev(App.cboUserID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.prev(App.grdSYS_UserGroup);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.prev(App.grdSYS_UserCompany);
+            }
+            break;
+        case "next":
+            if (_focusNo == 0) {
+                HQ.combo.next(App.cboUserID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.next(App.grdSYS_UserGroup);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.next(App.grdSYS_UserCompany);
+            }
+            break;
+        case "last":
+            if (_focusNo == 0) {
+                HQ.combo.last(App.cboUserID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.last(App.grdSYS_UserGroup);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.last(App.grdSYS_UserCompany);
+            }
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                if (App.cboUserID.valueModels == null) App.cboUserID.setValue('');
+                App.cboUserID.getStore().load(function () { App.stoUser.reload(); });
+            }
+            break;
+        case "new":
+            if (_focusNo == 0) {
+                App.cboUserID.setValue("");
+                App.stoSYS_UserGroup.reload();
+                App.stoSYS_UserCompany.reload();
+            }
+            else if (_focusNo == 1) {
+                if (HQ.isInsert) {
+                    HQ.grid.insert(App.grdSYS_UserGroup);
+                }
+            }
+            else if (_focusNo == 2) {
+                if (HQ.isInsert) {
+                    HQ.grid.insert(App.grdSYS_UserCompany);
+                }
+            }
+            break;
+        case "delete":
+            if (_focusNo == 0) {
+                if (App.cboUserID.value) {
+                    if (HQ.isDelete) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
+                } else {
+                    menuClick('new');
+                }
+            }
+            else if (_focusNo == 1) {
+                if (App.slmSYS_UserGroup.selected.items[0] != undefined) {
+                    if (HQ.isDelete) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
+                }
+            }
+            else if (_focusNo == 2) {
+                if (App.slmSYS_UserCompany.selected.items[0] != undefined) {
+                    if (HQ.isDelete) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain) && HQ.util.checkEmail(App.Email.value) && HQ.store.checkRequirePass(App.stoSYS_UserGroup, keys, fieldsCheckRequireUserGroup, fieldsLangCheckRequireUserGroup)
+                        && HQ.store.checkRequirePass(App.stoSYS_UserCompany, keys, fieldsCheckRequireUserCompany, fieldsLangCheckRequireUserCompany)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+};
+
+var focusChecking = function (item) {
+    if (App[invalidField]) {
+        App[invalidField].focus();
+    }
+};
+
+var tabSA00300_AfterRender = function (obj) {
+    if (this.parentAutoLoadControl != null)
+        obj.setHeight(this.parentAutoLoadControl.getHeight() - 100);
+    else {
+        obj.setHeight(Ext.getBody().getViewSize().height - 100);
+    }
+};
+
+var cboUserID_Change = function (sender,value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null) {
+        App.stoUser.reload();
+        chkAutoChange();
+    }
+};
+
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboUserID_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboUserID.collapse();
+    }
+};
+
+//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
+var cboUserID_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
+    }
+
+};
+
+function chkAutoChange() {
+    if (App.chkAuto.checked) {
+        if (App.cboUserID.getValue() == null || App.cboUserID.getValue() == '') {
+            App.cboUserID.setDisabled(true);
+        }
+        else {
+            App.cboUserID.setDisabled(false);
+            App.chkAuto.checked;
+        }
+    }
+    else {
+        App.cboUserID.setDisabled(false);
+    }
+};
+
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    loadSourceCombo();
+};
+
+////////////Kiem tra combo chinh CpnyID
+//khi co su thay doi du lieu cua cac conttol tren form
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = (HQ.store.isChange(App.stoUser) == false ? HQ.store.isChange(App.stoSYS_UserGroup) : true) || (HQ.store.isChange(App.stoUser) == false ? HQ.store.isChange(App.stoSYS_UserCompany) : true);
+    HQ.common.changeData(HQ.isChange, 'SA00300');
+    if (App.cboUserID.valueModels == null || HQ.isNew == true)
+        App.cboUserID.setReadOnly(false);
+    else App.cboUserID.setReadOnly(HQ.isChange);
+};
+
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var stoLoad = function (sto) {
+    HQ.isFirstLoad = true;
+    HQ.isNew = false;
+    HQ.common.showBusy(false);
+    App.cboUserID.forceSelection = true;
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "UserID");
+        record = sto.getAt(0);
+
+        HQ.isNew = true;//record la new    
+        App.cboUserID.forceSelection = false;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboUserID.focus(true);//focus ma khi tao moi
+        sto.commitChanges();
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    loadComboGrid();
+    // display image
+    if (record.data.Images) {
+        displayImage(App.imgImages, record.data.Images);
+    }
+    else {
+        App.imgImages.setImageUrl("");
+    }
+};
+
+var chkPublic_Change = function (checkbox, checked) {
+    if (checked) {
+        App.tabSA00300.closeTab(App.pnlPO_PriceCpny);
+    }
+    else {
+        App.tabSA00300.addTab(App.pnlPO_PriceCpny);
+    }
+};
+
+var cboInvtID_Change = function (item, newValue, oldValue) {
+
+};
+
+//grd SYS_UserGroup
+var stoSYS_UserGroup_Load = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        //HQ.isFirstLoad = false;
+    }
+    frmChange();
+    HQ.common.showBusy(false);
+};
+
+var grdSYS_UserGroup_BeforeEdit = function (editor, e) {
+    if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
+};
+
+var grdSYS_UserGroup_Edit = function (item, e) {
+    //Kiem tra cac key da duoc nhap se insert them dong moi
+    HQ.grid.checkInsertKey(App.grdSYS_UserGroup, e, keys);
+    frmChange();
+    if (e.field == "GroupID") {
+        var selectedRecord = App.cboGroupIDGroup.store.findRecord(e.field, e.value);
+        if (selectedRecord) {
+            e.record.set("Descr", selectedRecord.data.Descr);
+        }
+        else {
+            e.record.set("Descr", "");
+        }
+    }
+
+};
+
+var grdSYS_UserGroup_ValidateEdit = function (item, e) {
+    //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
+    return HQ.grid.checkValidateEdit(App.grdSYS_UserGroup, e, keys);
+};
+
+var grdSYS_UserGroup_Reject = function (record) {
+    //reject dong thay doi du lieu ve ban dau
+    HQ.grid.checkReject(record, App.grdSYS_UserGroup);
+    frmChange();
+};
+
+
+//grd SYS_UserCompany
+var stoSYS_UserCompany_Load = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys1);
+        }
+       //HQ.isFirstLoad = false;
+    }
+    frmChange();
+    HQ.common.showBusy(false);
+};
+
+var grdSYS_UserCompany_BeforeEdit = function (editor, e) {
+    //Kiem tra cac key da duoc nhap se insert them dong moi
+    HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys1);
+    
+};
+
+var grdSYS_UserCompany_Edit = function (item, e) {
+    //Kiem tra cac key da duoc nhap se insert them dong moi
+    HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys1);
+    frmChange();
+    if (e.field == "GroupID") {
+        var selectedRecord = App.cboGroupIDCompany.store.findRecord(e.field, e.value);
+        if (selectedRecord) {
+            e.record.set("ListCpny", selectedRecord.data.ListCpny);
+            e.record.set("Descr", selectedRecord.data.Descr);
+        }
+        else {
+            e.record.set("ListCpny", "");
+            e.record.set("Descr", "");
+        }
+    }
+
+};
+
+var grdSYS_UserCompany_ValidateEdit = function (item, e) {
+    //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
+    return HQ.grid.checkValidateEdit(App.grdSYS_UserCompany, e, keys1);
+};
+
+var grdSYS_UserCompany_Reject = function (record) {
+    //reject dong thay doi du lieu ve ban dau
+    HQ.grid.checkReject(record, App.grdSYS_UserCompany);
+    frmChange();
+};
+
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.updateRecord();
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'SA00300/Save',
+            params: {
+                lstUser: HQ.store.getData(App.frmMain.getRecord().store),
+                lstSYS_UserCompany: HQ.store.getData(App.stoSYS_UserCompany),
+                lstSYS_UserGroup: HQ.store.getData(App.stoSYS_UserGroup)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                App.cboUserID.getStore().reload();
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        if (_focusNo == 0) {
+            if (App.frmMain.isValid()) {
+                App.frmMain.updateRecord();
+                App.frmMain.submit({
+                    waitMsg: HQ.common.getLang("DeletingData"),
+                    url: 'SA00300/DeleteAll',
+                    timeout: 7200,
+                    success: function (msg, data) {
+                        App.cboUserID.getStore().load();
+                        menuClick("new");
+                    },
+                    failure: function (msg, data) {
+                        HQ.message.process(msg, data, true);
+                    }
+                });
+            }
+
+        }
+        else if (_focusNo == 1) {
+            App.grdSYS_UserGroup.deleteSelected();
+        }
+        else if (_focusNo == 2) {
+            App.grdSYS_UserCompany.deleteSelected();
+        }
+    }
+};
+
+var displayImage = function (imgControl, fileName) {
+    Ext.Ajax.request({
+        url: 'SA00300/ImageToBin',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        params: JSON.stringify({
+            fileName: fileName
+        }),
+        success: function (result) {
+            var jsonData = Ext.decode(result.responseText);
+            if (jsonData.imgSrc) {
+                imgControl.setImageUrl(jsonData.imgSrc);
+            }
+            else {
+                imgControl.setImageUrl("");
+            }
+        },
+        failure: function (errorMsg, data) {
+            HQ.message.process(errorMsg, data, true);
+        }
+    });
+};
+
+var readImage = function (fup, imgControl) {
+    var files = fup.fileInputEl.dom.files;
+    if (files && files[0]) {
+        var FR = new FileReader();
+        FR.onload = function (e) {
+            imgControl.setImageUrl(e.target.result);
+        };
+        FR.readAsDataURL(files[0]);
+    }
+};
+
+var fupImages_change = function (fup, newValue, oldValue, eOpts) {
+    if (fup.value) {
+        var ext = fup.value.split(".").pop().toLowerCase();
+        if (ext == "jpg" || ext == "png" || ext == "gif") {
+            App.hdnImages.setValue(fup.value);
+            readImage(fup, App.imgImages);
+        }
+        else {
+            HQ.message.show(148, '', '');
+        }
+    }
+};
+
+var btnClearImage_click = function (btn, eOpts) {
+    App.fupImages.reset();
+    App.imgImages.setImageUrl("");
+    App.hdnImages.setValue("");
+};
+
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        var userid = '';
+        if (App.cboUserID.valueModels != null) userid = App.cboUserID.getValue();
+        App.cboUserID.getStore().load(function () {
+            App.cboUserID.setValue(userid);
+            App.stoUser.reload();
+        });
+
+    }
+};

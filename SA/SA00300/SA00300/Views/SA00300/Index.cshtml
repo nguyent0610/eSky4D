@@ -53,7 +53,12 @@
             {
                 ps.Add(new StoreParameter("UserID", "App.cboUserID.getValue()", ParameterMode.Raw));
             })      
-            .Listeners(p=>p.Load.Handler="loadData()" )
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";                   
+                }
+            )
         )
         <!-- Gọi hàm Body trong SA00300Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
         @{Html.RenderAction("Body", new {lang=Current.LangID});}

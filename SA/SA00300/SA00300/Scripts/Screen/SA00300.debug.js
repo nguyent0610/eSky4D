@@ -89,7 +89,7 @@ var menuClick = function (command) {
             if (_focusNo == 0) {
                 App.cboUserID.setValue("");
                 App.stoSYS_UserGroup.reload();
-                App.stoSYS_UserCompany.reload()
+                App.stoSYS_UserCompany.reload();
             }
             else if (_focusNo == 1) {
                 if (HQ.isInsert) {
@@ -128,7 +128,6 @@ var menuClick = function (command) {
             }
             break;
         case "save":
-
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 //if (checkRequire(App.stoSYS_UserGroup.getChangedData().Created) && checkRequire(App.stoSYS_UserGroup.getChangedData().Updated)
                 //    || checkRequire(App.stoSYS_UserCompany.getChangedData().Created) && checkRequire(App.stoSYS_UserCompany.getChangedData().Updated)
@@ -142,6 +141,8 @@ var menuClick = function (command) {
                 }
             }
             break;
+
+
         case "print":
             break;
         case "close":
@@ -404,6 +405,8 @@ var btnClearImage_click = function (btn, eOpts) {
     App.imgImages.setImageUrl("");
     App.hdnImages.setValue("");
 };
+
+
 //// Other Functions ////////////////////////////////////////////////////
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
