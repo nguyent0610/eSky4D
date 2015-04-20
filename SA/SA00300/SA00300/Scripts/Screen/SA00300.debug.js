@@ -1,16 +1,33 @@
+
 var keys = ['GroupID'];
-var keysHeader = ['UserName'];
-
-var fieldsCheckRequireHeader = ["FirstName"];//, "LastName", "Address", "Name", "Email", "Tel", "Password", "PasswordQuestion", "PasswordAnswer", "CpnyID", "UserTypes", "Channel", "ExpireDay"];
-var fieldsLangCheckRequireHeader = ["FirstName"];//, "LastName", "Address", "Name", "Email", "Tel", "Password", "PasswordQuestion", "PasswordAnswer", "CpnyID", "UserTypes", "Channel", "ExpireDay"];
-
 var fieldsCheckRequireUserGroup = ["GroupID"];
 var fieldsLangCheckRequireUserGroup = ["GroupID"];
 
+
+var keys1 = ['GroupID'];
 var fieldsCheckRequireUserCompany = ["GroupID"];
 var fieldsLangCheckRequireUserCompany = ["GroupID"];
 
 var _focusNo = 0;
+
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboUserID.getStore().load(function () {
+        App.stoUser.reload();
+
+    });
+};
+
+var loadComboGrid = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboGroupIDGroup.getStore().load(function () {
+        App.cboGroupIDCompany.getStore().load(function () {
+            App.stoSYS_UserGroup.reload();
+            App.stoSYS_UserCompany.reload();
+            HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+        })
+    });
+};
 
 var pnl_render = function (cmd) {
     cmd.getEl().on('mousedown', function () {
@@ -30,7 +47,7 @@ var menuClick = function (command) {
     switch (command) {
         case "first":
             if (_focusNo == 0) {
-                App.cboUserID.setValue(App.cboUserID.getStore().first().get('UserName'));
+                HQ.combo.first(App.cboUserID, HQ.isChange);
             }
             else if (_focusNo == 1) {
                 HQ.grid.first(App.grdSYS_UserGroup);
@@ -41,11 +58,7 @@ var menuClick = function (command) {
             break;
         case "prev":
             if (_focusNo == 0) {
-                var combobox = App.cboUserID;
-                var v = combobox.getValue();
-                var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
-                var index = combobox.store.indexOf(record);
-                App.cboUserID.setValue(combobox.store.getAt(index - 1).data.UserName);
+                HQ.combo.prev(App.cboUserID, HQ.isChange);
             }
             else if (_focusNo == 1) {
                 HQ.grid.prev(App.grdSYS_UserGroup);
@@ -56,11 +69,7 @@ var menuClick = function (command) {
             break;
         case "next":
             if (_focusNo == 0) {
-                var combobox = App.cboUserID;
-                var v = combobox.getValue();
-                var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
-                var index = combobox.store.indexOf(record);
-                App.cboUserID.setValue(combobox.store.getAt(index + 1).data.UserName);
+                HQ.combo.next(App.cboUserID, HQ.isChange);
             }
             else if (_focusNo == 1) {
                 HQ.grid.next(App.grdSYS_UserGroup);
@@ -71,7 +80,7 @@ var menuClick = function (command) {
             break;
         case "last":
             if (_focusNo == 0) {
-                App.cboUserID.setValue(App.cboUserID.getStore().last().get('UserName'));
+                HQ.combo.last(App.cboUserID, HQ.isChange);
             }
             else if (_focusNo == 1) {
                 HQ.grid.last(App.grdSYS_UserGroup);
@@ -81,9 +90,12 @@ var menuClick = function (command) {
             }
             break;
         case "refresh":
-            App.stoUser.load();
-            App.stoSYS_UserGroup.reload();
-            App.stoSYS_UserCompany.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh("yes");
+            }
             break;
         case "new":
             if (_focusNo == 0) {
@@ -129,29 +141,16 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                //if (checkRequire(App.stoSYS_UserGroup.getChangedData().Created) && checkRequire(App.stoSYS_UserGroup.getChangedData().Updated)
-                //    || checkRequire(App.stoSYS_UserCompany.getChangedData().Created) && checkRequire(App.stoSYS_UserCompany.getChangedData().Updated)
-                //    ) {
-                //if (App.frmMain.isValid()) {
-                //App.frmMain.updateRecord();
-
                 if (HQ.form.checkRequirePass(App.frmMain) && HQ.util.checkEmail(App.Email.value) && HQ.store.checkRequirePass(App.stoSYS_UserGroup, keys, fieldsCheckRequireUserGroup, fieldsLangCheckRequireUserGroup)
                         && HQ.store.checkRequirePass(App.stoSYS_UserCompany, keys, fieldsCheckRequireUserCompany, fieldsLangCheckRequireUserCompany)) {
                     save();
                 }
             }
             break;
-
-
         case "print":
             break;
         case "close":
-            if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
-            if (HQ.store.isChange(App.stoUser) || HQ.store.isChange(App.stoSYS_UserCompany) || HQ.store.isChange(App.stoSYS_UserGroup)) {
-                HQ.message.show(7, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
 };
@@ -170,11 +169,30 @@ var tabDetail_AfterRender = function (obj) {
     }
 };
 
-var cboUserID_Change = function (item, newValue, oldValue) {
-    App.stoUser.load();
-    App.grdSYS_UserGroup.store.reload();
-    App.grdSYS_UserCompany.store.reload();
-    chkAutoChange();
+var cboUserID_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null) {
+        App.stoUser.reload();
+        chkAutoChange();
+    }
+};
+
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboUserID_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboUserID.collapse();
+    }
+};
+
+//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
+var cboUserID_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
+    }
+
 };
 
 function chkAutoChange() {
@@ -192,20 +210,44 @@ function chkAutoChange() {
     }
 };
 
-var frmloadAfterRender = function (obj) {
-    App.stoUser.load();
-    App.stoSYS_UserGroup.load();
-    App.stoSYS_UserCompany.load();
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    loadSourceCombo();
 };
 
-var loadData = function () {
-    if (App.stoUser.getCount() == 0) {
-        // If has no record then create a new
-        App.stoUser.insert(0, Ext.data.Record());
-    }
-    var record = App.stoUser.getAt(0);
-    App.frmMain.getForm().loadRecord(record);
+////////////Kiem tra combo chinh CpnyID
+//khi co su thay doi du lieu cua cac conttol tren form
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = (HQ.store.isChange(App.stoUser) == false ? HQ.store.isChange(App.stoSYS_UserGroup) : true) || (HQ.store.isChange(App.stoUser) == false ? HQ.store.isChange(App.stoSYS_UserCompany) : true);
+    HQ.common.changeData(HQ.isChange, 'SA00300');
+    if (App.cboUserID.valueModels == null || HQ.isNew == true)
+        App.cboUserID.setReadOnly(false);
+    else App.cboUserID.setReadOnly(HQ.isChange);
+};
 
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var stoLoad = function (sto) {
+    HQ.isFirstLoad = true;
+    HQ.isNew = false;
+    HQ.common.showBusy(false);
+    App.cboUserID.forceSelection = true;
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "UserID");
+        record = sto.getAt(0);
+
+        HQ.isNew = true;//record la new    
+        App.cboUserID.forceSelection = false;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboUserID.focus(true);//focus ma khi tao moi
+        sto.commitChanges();
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    loadComboGrid();
     // display image
     if (record.data.Images) {
         displayImage(App.imgImages, record.data.Images);
@@ -213,15 +255,7 @@ var loadData = function () {
     else {
         App.imgImages.setImageUrl("");
     }
-
-    //if (App.stoUser.getCount() == 0) {
-    //    App.stoUser.insert(0, Ext.data.Record());
-    //}
-    //App.frmMain.getForm().loadRecord(App.stoUser.getAt(0));
-    //App.direct.SA00300GetImages(App.stoUser.getAt(0).data.Images);
 };
-
-
 
 var chkPublic_Change = function (checkbox, checked) {
     if (checked) {
@@ -237,6 +271,17 @@ var cboInvtID_Change = function (item, newValue, oldValue) {
 };
 
 //grd SYS_UserGroup
+var stoSYS_UserGroup_Load = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        //HQ.isFirstLoad = false;
+    }
+    frmChange();
+    HQ.common.showBusy(false);
+};
+
 var grdSYS_UserGroup_BeforeEdit = function (editor, e) {
     if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
 };
@@ -244,7 +289,7 @@ var grdSYS_UserGroup_BeforeEdit = function (editor, e) {
 var grdSYS_UserGroup_Edit = function (item, e) {
     //Kiem tra cac key da duoc nhap se insert them dong moi
     HQ.grid.checkInsertKey(App.grdSYS_UserGroup, e, keys);
-
+    frmChange();
     if (e.field == "GroupID") {
         var selectedRecord = App.cboGroupIDGroup.store.findRecord(e.field, e.value);
         if (selectedRecord) {
@@ -265,18 +310,32 @@ var grdSYS_UserGroup_ValidateEdit = function (item, e) {
 var grdSYS_UserGroup_Reject = function (record) {
     //reject dong thay doi du lieu ve ban dau
     HQ.grid.checkReject(record, App.grdSYS_UserGroup);
+    frmChange();
 };
 
+
 //grd SYS_UserCompany
+var stoSYS_UserCompany_Load = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys1);
+        }
+        //HQ.isFirstLoad = false;
+    }
+    frmChange();
+    HQ.common.showBusy(false);
+};
+
 var grdSYS_UserCompany_BeforeEdit = function (editor, e) {
     //Kiem tra cac key da duoc nhap se insert them dong moi
-    HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys);
+    HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys1);
+
 };
 
 var grdSYS_UserCompany_Edit = function (item, e) {
     //Kiem tra cac key da duoc nhap se insert them dong moi
-    HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys);
-
+    HQ.grid.checkInsertKey(App.grdSYS_UserCompany, e, keys1);
+    frmChange();
     if (e.field == "GroupID") {
         var selectedRecord = App.cboGroupIDCompany.store.findRecord(e.field, e.value);
         if (selectedRecord) {
@@ -293,12 +352,13 @@ var grdSYS_UserCompany_Edit = function (item, e) {
 
 var grdSYS_UserCompany_ValidateEdit = function (item, e) {
     //ko cho nhap key co ki tu dac biet, va kiem tra trung du lieu
-    return HQ.grid.checkValidateEdit(App.grdSYS_UserCompany, e, keys);
+    return HQ.grid.checkValidateEdit(App.grdSYS_UserCompany, e, keys1);
 };
 
 var grdSYS_UserCompany_Reject = function (record) {
     //reject dong thay doi du lieu ve ban dau
     HQ.grid.checkReject(record, App.grdSYS_UserCompany);
+    frmChange();
 };
 
 var save = function () {
@@ -315,7 +375,7 @@ var save = function () {
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 App.cboUserID.getStore().reload();
-                menuClick("refresh");
+                refresh("yes");
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -406,10 +466,15 @@ var btnClearImage_click = function (btn, eOpts) {
     App.hdnImages.setValue("");
 };
 
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        var userid = '';
+        if (App.cboUserID.valueModels != null) userid = App.cboUserID.getValue();
+        App.cboUserID.getStore().load(function () {
+            App.cboUserID.setValue(userid);
+            App.stoUser.reload();
+        });
 
-//// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.close(this);
     }
 };
