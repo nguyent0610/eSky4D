@@ -39,7 +39,29 @@
     @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
-        
+        @(
+            X.Store().ID("stoSYS_CloseDateAuto").AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(SYS_CloseDateAuto), "mdlSYS_CloseDateAuto", "ID"))  
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetSYS_CloseDateAuto", "SA40200"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("ID", "App.cboID.getValue()", ParameterMode.Raw));
+                    })      
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoadHeader";                   
+                }
+            )
+        )
         <!-- Gọi hàm Body trong SA40200Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
         @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>

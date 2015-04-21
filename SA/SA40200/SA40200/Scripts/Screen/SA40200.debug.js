@@ -244,30 +244,12 @@ var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store
     }
 };
 
-var renderTerritory = function (value, metaData, rec, rowIndex, colIndex, store) {
-    var record = App.cboBranchIDSA40200_pcCompany.findRecord("CpnyID", rec.data.BranchID);
-    if (record) {
-        return record.data.Territory;
-    }
-    else {
-        return value;
-    }
-};
 
-var renderAddress = function (value, metaData, rec, rowIndex, colIndex, store) {
-    var record = App.cboBranchIDSA40200_pcCompany.findRecord("CpnyID", rec.data.BranchID);
-    if (record) {
-        return record.data.Address;
-    }
-    else {
-        return value;
-    }
-};
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
     App.cboBranchID.store.load(function () {
-        App.stoSYS_CloseDateSetUp.reload();
+       // App.stoSYS_CloseDateSetUp.reload();
     });
 
 

@@ -147,6 +147,33 @@ namespace SA40200
         {
             return base.ExecuteFunction<SA40200_ptTerritory_Result>("SA40200_ptTerritory");
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="iD">No Metadata Documentation available.</param>
+        public ObjectResult<SA40200_pgSYS_CloseDateBranchAuto_Result> SA40200_pgSYS_CloseDateBranchAuto(Nullable<global::System.Int32> iD)
+        {
+            ObjectParameter iDParameter;
+            if (iD.HasValue)
+            {
+                iDParameter = new ObjectParameter("ID", iD);
+            }
+            else
+            {
+                iDParameter = new ObjectParameter("ID", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction<SA40200_pgSYS_CloseDateBranchAuto_Result>("SA40200_pgSYS_CloseDateBranchAuto", iDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<Nullable<global::System.Int32>> SA40200_GetAutoNumber()
+        {
+            return base.ExecuteFunction<Nullable<global::System.Int32>>("SA40200_GetAutoNumber");
+        }
 
         #endregion
 
@@ -588,6 +615,85 @@ namespace SA40200
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA40200Model", Name="SA40200_pgSYS_CloseDateBranchAuto_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA40200_pgSYS_CloseDateBranchAuto_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA40200_pgSYS_CloseDateBranchAuto_Result object.
+        /// </summary>
+        /// <param name="id">Initial value of the ID property.</param>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static SA40200_pgSYS_CloseDateBranchAuto_Result CreateSA40200_pgSYS_CloseDateBranchAuto_Result(global::System.Int32 id, global::System.String branchID)
+        {
+            SA40200_pgSYS_CloseDateBranchAuto_Result sA40200_pgSYS_CloseDateBranchAuto_Result = new SA40200_pgSYS_CloseDateBranchAuto_Result();
+            sA40200_pgSYS_CloseDateBranchAuto_Result.ID = id;
+            sA40200_pgSYS_CloseDateBranchAuto_Result.BranchID = branchID;
+            return sA40200_pgSYS_CloseDateBranchAuto_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                OnIDChanging(value);
+                ReportPropertyChanging("ID");
+                _ID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ID");
+                OnIDChanged();
+            }
+        }
+        private global::System.Int32 _ID;
+        partial void OnIDChanging(global::System.Int32 value);
+        partial void OnIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

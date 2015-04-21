@@ -1,1 +1,458 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('i a=["\\X\\g\\d\\p\\m\\t\\V\\u","\\x\\g\\n\\y\\1P\\y\\1p\\z\\j\\l\\h\\b\\u\\d\\c\\b\\y\\b\\c\\1e\\s","\\R\\q\\g\\h\\c","\\x\\g\\q\\n","\\s\\g\\b\\1i","\\p\\b\\1y\\c","\\j\\d\\h\\c","\\q\\h\\z\\t\\d\\p\\x\\b","","\\g\\b\\R\\g\\b\\h\\t","\\h\\t\\l\\1l","\\E\\b\\h\\h\\d\\x\\b","\\q\\h\\2H\\q\\g\\h\\c\\1m\\l\\d\\n","\\g\\b\\j\\l\\d\\n","\\h\\c\\l\\y\\1P\\y\\1p\\z\\j\\l\\h\\b\\u\\d\\c\\b\\y\\b\\c\\1e\\s","\\q\\h\\V\\p\\h\\b\\g\\c","\\q\\p\\h\\b\\g\\c","\\p\\b\\1l","\\q\\c\\b\\E\\h","\\h\\b\\j\\b\\m\\c\\b\\n","\\h\\j\\E\\y\\1P\\y\\1p\\z\\j\\l\\h\\b\\u\\d\\c\\b\\y\\b\\c\\1e\\s","\\q\\h\\u\\b\\j\\b\\c\\b","\\n\\b\\j\\b\\c\\b\\u\\d\\c\\d","\\n\\b\\j\\b\\c\\b","\\q\\h\\1e\\s\\n\\d\\c\\b","\\m\\t\\b\\m\\w\\1j\\b\\2L\\U\\q\\g\\b\\2a\\d\\h\\h","\\h\\c\\l\\g\\b","\\h\\d\\1i\\b","\\s\\g\\q\\p\\c","\\m\\j\\l\\h\\b","\\m\\l\\E\\E\\l\\p","\\P\\g\\w\\u\\d\\c\\b\\z\\t\\w","\\m\\t\\b\\m\\w\\b\\n","\\m\\t\\w\\P\\g\\w\\u\\d\\c\\b\\z\\t\\w","\\h\\b\\c","\\P\\g\\w\\1e\\s\\s\\b\\g\\u\\d\\F\\h","\\x\\b\\c\\1N\\d\\j\\U\\b","\\j\\T\\j\\P\\g\\w\\1e\\s\\s\\b\\g\\u\\d\\F\\h","\\P\\g\\w\\1m\\l\\1l\\b\\g\\u\\d\\F\\h","\\j\\T\\j\\P\\g\\w\\1m\\l\\1l\\b\\g\\u\\d\\F\\h","\\P\\g\\w\\1x\\s\\b\\p\\u\\d\\c\\b","\\j\\T\\j\\P\\g\\w\\1x\\s\\b\\p\\u\\d\\c\\b","\\P\\g\\w\\H\\n\\1o\\u\\d\\c\\b","\\j\\T\\j\\P\\g\\w\\H\\n\\1o\\u\\d\\c\\b","\\b\\d\\m\\t","\\x\\b\\c\\y\\c\\l\\g\\b","\\g\\b\\m\\l\\g\\n\\h","\\q\\h\\H\\g\\g\\d\\F","\\q\\p\\h\\b\\g\\c\\X\\j\\d\\p\\w","\\R\\l\\g\\1F\\d\\m\\t","\\m\\t\\q\\j\\n\\1r\\l\\n\\b\\h","\\b\\1y\\s\\d\\p\\n\\H\\j\\j","\\c\\g\\b\\b\\2a\\d\\p\\b\\j\\X\\g\\d\\p\\m\\t","\\m\\l\\j\\j\\d\\s\\h\\b\\H\\j\\j","\\x\\b\\c\\1j\\l\\l\\c\\1r\\l\\n\\b","\\j\\b\\p\\x\\c\\t","\\1Y\\F\\s\\b","\\n\\d\\c\\d","\\z\\l\\E\\s\\d\\p\\F","\\1j\\b\\m\\V\\u","\\R\\q\\p\\n\\V\\p\\y\\c\\l\\g\\b","\\x\\b\\c\\z\\l\\U\\p\\c","\\x\\b\\c\\H\\c","\\m\\j\\b\\d\\g\\z\\t\\b\\m\\w\\b\\n","\\x\\b\\c\\z\\t\\b\\m\\w\\b\\n\\1r\\l\\n\\b\\h","\\d\\c\\c\\g\\q\\T\\U\\c\\b\\h","\\h\\b\\j\\2g\\l\\n\\b\\j","\\s\\U\\h\\t","\\2h\\2S\\2h","\\1o\\l\\q\\p","\\2X","\\H\\s\\s\\z\\l\\E\\s","\\x\\b\\c\\1m\\d\\p\\x","\\n\\b\\j\\b\\c\\b\\y\\b\\j\\b\\m\\c\\b\\n\\z\\l\\E\\s\\d\\p\\q\\b\\h","\\n\\b\\j\\b\\c\\b\\H\\j\\j\\z\\l\\E\\s\\d\\p\\q\\b\\h","\\1i\\d\\j\\U\\b","\\q\\h\\1m\\b\\d\\R","\\m\\l\\p\\m\\d\\c","\\b\\d\\m\\t\\z\\t\\q\\j\\n","\\F\\b\\h","\\n\\b\\j\\b\\c\\b\\y\\b\\j\\b\\m\\c\\b\\n","\\g\\b\\E\\l\\1i\\b\\H\\j\\j","\\z\\s\\p\\F\\V\\u","\\R\\q\\p\\n\\1j\\b\\m\\l\\g\\n","\\m\\T\\l\\X\\g\\d\\p\\m\\t\\V\\u\\y\\H\\1v\\L\\L\\L\\L\\1p\\s\\m\\z\\l\\E\\s\\d\\p\\F","\\z\\s\\p\\F\\1r\\d\\E\\b","\\1Y\\b\\g\\g\\q\\c\\l\\g\\F","\\H\\n\\n\\g\\b\\h\\h","\\j\\l\\d\\n","\\m\\T\\l\\X\\g\\d\\p\\m\\t\\V\\u","\\y\\H\\1v\\L\\L\\L\\L","\\m\\t\\d\\p\\x\\b\\u\\d\\c\\d","\\h\\t\\l\\1l\\X\\U\\h\\F","\\q\\p\\h\\b\\g\\c\\1j\\b\\m\\l\\g\\n","\\j\\l\\d\\n\\q\\p\\x\\n\\d\\c\\d","\\m\\t\\b\\m\\w\\X\\b\\R\\l\\g\\b\\1F\\n\\q\\c","\\m\\t\\b\\m\\w\\V\\p\\h\\b\\g\\c\\3Z\\b\\F","\\m\\t\\b\\m\\w\\1N\\d\\j\\q\\n\\d\\c\\b\\1F\\n\\q\\c","\\m\\t\\b\\m\\w\\1j\\b\\1o\\b\\m\\c","\\q\\h\\1N\\d\\j\\q\\n","\\R\\g\\E\\2g\\d\\q\\p","\\y\\d\\1i\\q\\p\\x\\u\\d\\c\\d","\\y\\H\\1v\\L\\L\\L\\L\\2V\\y\\d\\1i\\b","\\x\\b\\c\\u\\d\\c\\d","\\s\\g\\l\\m\\b\\h\\h","\\h\\U\\T\\E\\q\\c","\\h\\s\\j\\q\\c","\\c\\g\\q\\E","\\q\\p\\n\\b\\1y\\1x\\R","\\x\\b\\c"];i J=[a[0]];i 2s=[a[0]];i 2k=[a[0]];i 2f=o(2p){2K(2p){Q a[2]:e[a[3]][a[2]](f[a[1]]);N;Q a[4]:e[a[3]][a[4]](f[a[1]]);N;Q a[5]:e[a[3]][a[5]](f[a[1]]);N;Q a[6]:e[a[3]][a[6]](f[a[1]]);N;Q a[9]:r(e[a[7]]){e[a[11]][a[10]](2Q,a[8],a[9])}O{e[a[7]]=1a;e[a[12]]=S;f[a[14]][a[13]]()};N;Q a[17]:r(e[a[15]]){e[a[3]][a[16]](f[a[1]],J)};N;Q a[23]:r(f[a[20]][a[19]][a[18]][0]!=2N){r(e[a[21]]){e[a[11]][a[10]](11,a[8],a[22])}};N;Q a[27]:r(e[a[24]]||e[a[15]]||e[a[21]]){r(e[a[26]][a[25]](f[a[14]],J,2s,2k)){2e()}};N;Q a[28]:N;Q a[29]:e[a[30]][a[29]](2T);N}};i 3b=o(3c,I){f[a[1]][a[45]]()[a[44]](o(B){B[a[34]](a[31],f[a[33]][a[32]]);B[a[34]](a[35],f[a[37]][a[36]]());B[a[34]](a[38],f[a[39]][a[36]]());B[a[34]](a[40],f[a[41]][a[36]]());B[a[34]](a[42],f[a[43]][a[36]]())})};i 3d=o(v,W,2w,2x,2z){r(1W[a[47]](W[a[46]])){i 2j=W[a[46]];W[a[46]]=[];e[a[26]][a[48]](f[a[14]],J);1J(2j[0])}};i 2B=o(v,1Z,Z){v[a[1n]][a[49]](o(1V){1V[a[34]](a[32],1Z)})};i 2E=o(1d,I,Z){f[a[1f]][a[2y]]()};i 2C=o(1d,I,Z){f[a[1f]][a[2D]]()};i 2G=o(1d,I,Z){r(e[a[24]]){i M=2d(f[a[1f]][a[2A]](),S);r(M&&M[a[1k]]>0){M[a[49]](o(v){e[a[26]][a[48]](f[a[14]],J);r(v[a[K]][a[1K]]==a[1L]){i k=e[a[26]][a[1M]](f[a[1]][a[26]],[a[0]],[v[a[K]][a[1I]]]);r(!k){k=f[a[14]][a[1b]](f[a[1]][a[26]][a[Y]]()-1);k[a[34]](a[0],v[a[K]].1D);k[a[34]](a[42],A C(D));k[a[34]](a[40],A C(D))}}});e[a[26]][a[48]](f[a[14]],J);i k=f[a[14]][a[1b]](f[a[14]][a[Y]]()-1);k[a[34]](a[42],A C(D));k[a[34]](a[40],A C(D));f[a[1f]][a[2l]]()}}O{e[a[11]][a[10]](4,a[8],a[8])}};i 1J=o(v){r(v[a[K]][a[1K]]==a[1L]){i k=e[a[26]][a[1M]](f[a[1]][a[26]],[a[0]],[v[a[K]][a[1I]]]);r(!k){k=f[a[14]][a[1b]](f[a[1]][a[26]][a[Y]]()-1);k[a[34]](a[0],v[a[K]].1D);k[a[34]](a[42],A C(D));k[a[34]](a[40],A C(D))};e[a[26]][a[48]](f[a[14]],J);i k=f[a[14]][a[1b]](f[a[14]][a[Y]]()-1);k[a[34]](a[42],A C(D));k[a[34]](a[40],A C(D))}O{r(v[a[1n]]){v[a[1n]][a[49]](o(2o){1J(2o)})}}};i 2Z=o(1d,I,Z){r(e[a[24]]){i M=f[a[1f]][a[4h]]();r(M&&M[a[1k]]>0){M[a[49]](o(v){e[a[26]][a[48]](f[a[14]],J);r(v[a[1H]][a[1K]]==a[1L]){i k=e[a[26]][a[1M]](f[a[1]][a[26]],[a[0]],[v[a[1H]][a[1I]]]);r(!k){k=f[a[14]][a[1b]](f[a[1]][a[26]][a[Y]]()-1);k[a[34]](a[0],v[a[1H]].1D);k[a[34]](a[42],A C(D));k[a[34]](a[40],A C(D))}}});e[a[26]][a[48]](f[a[14]],J);i k=f[a[14]][a[1b]](f[a[14]][a[Y]]()-1);k[a[34]](a[42],A C(D));k[a[34]](a[40],A C(D));f[a[1f]][a[2l]]()}}O{e[a[11]][a[10]](4,a[8],a[8])}};i 3I=o(1d,I,Z){r(e[a[24]]){i 1E=f[a[1]][a[3H]][a[19]][a[18]];r(1E[a[1k]]>0){i 1G=[];1E[a[49]](o(k){1G[a[3T]](k[a[K]].3U)});e[a[11]][a[10]](4d,1G[a[4c]](a[4e])+a[2r]+e[a[30]][a[1S]](a[4f]),a[4g])}}O{e[a[11]][a[10]](4,a[8],a[8])}};i 4b=o(1d,I,Z){r(e[a[24]]){e[a[11]][a[10]](11,a[8],a[3X])}O{e[a[11]][a[10]](4,a[8],a[8])}};i 2d=o(v,3G){i M=A 3F();r(!1W[a[3n]](v,1a)){G[]};r(v[a[3m]]()){G v}O{v[a[3o]](o(2b){M=M[a[3p]](2b[a[1n]])})};G M};i 3k=o(B){r(B==a[1q]){f[a[1]][a[2c]]()}};i 3g=o(B){r(B==a[1q]){f[a[1]][a[26]][a[3f]]()}};i 3h=o(1g,1C,1h,1O,1A,1u){i k=f[a[1t]][a[1B]](a[1w],1h[a[K]].1z);r(k){G k[a[K]][a[3i]]}O{G 1g}};i 3j=o(1g,1C,1h,1O,1A,1u){i k=f[a[1t]][a[1B]](a[1w],1h[a[K]].1z);r(k){G k[a[K]][a[3r]]}O{G 1g}};i 3s=o(1g,1C,1h,1O,1A,1u){i k=f[a[1t]][a[1B]](a[1w],1h[a[K]].1z);r(k){G k[a[K]][a[3t]]}O{G 1g}};i 3w=o(){e[a[12]]=S;f[a[3x]][a[26]][a[3S]](o(){f[a[14]][a[13]]()})};i 1U=o(1c){e[a[7]]=e[a[26]][a[7]](1c);e[a[30]][a[2q]](e[a[7]],a[2i])};i 3v=o(1c){e[a[12]]=S;e[a[30]][a[2m]](1a);e[a[7]]=e[a[26]][a[7]](1c);e[a[30]][a[2q]](e[a[7]],a[2i]);r(e[a[12]]){r(e[a[15]]){e[a[26]][a[3u]](1c,J,{3y:A C(D),3z:A C(D)})};e[a[12]]=1a}};i 3E=o(1c){e[a[30]][a[2m]](S,e[a[30]][a[1S]](a[3D]))};i 3C=o(3A,I){G e[a[3]][a[3B]](I,J)};i 3l=o(B,I){e[a[3]][a[3q]](f[a[1]],I,J);i k=f[a[14]][a[1b]](f[a[14]][a[Y]]()-1);k[a[34]](a[42],A C(D));k[a[34]](a[40],A C(D))};i 3Y=o(B,I){G e[a[3]][a[3V]](f[a[1]],I,J)};i 3W=o(k){e[a[3]][a[4a]](k,f[a[1]]);1U(f[a[14]])};i 2e=o(){r(f[a[1X]][a[3L]]()){f[a[1X]][a[3K]]({3J:3M,3N:e[a[30]][a[1S]](a[3e]),3R:a[3Q],3O:{3P:e[a[26]][a[2u]](f[a[14]])},2F:o(1R,W){e[a[11]][a[10]](2v);e[a[7]]=1a;2f(a[9])},2W:o(1R,W){e[a[11]][a[2U]](1R,W,S)}})}};i 2I=o(B){r(B==a[1q]){f[a[1]][a[2c]]();1U(f[a[14]])}};o 3a(B){r(B==a[1q]){e[a[7]]=1a;e[a[12]]=S;f[a[14]][a[13]]()}}i 2M=o(2t,k,2n){i 1Q=2t[a[36]]();r(1Q[a[1k]]==0){G S};i 1T=1Q[a[2J]](a[2r]);2O(i 1s=0;1s<1T[a[1k]];1s++){r(k[a[2R]](2n)[a[2P]](1T[1s][a[2Y]]())>-1){G S}};G 1a};', 62, 266, '||||||||||_0x12e9|x65|x74|x61|HQ|App|x72|x73|var|x6C|_0xa790x1a|x6F|x63|x64|function|x6E|x69|if|x70|x68|x44|_0xa790xb|x6B|x67|x53|x43|new|_0xa790x9|Date|_dateServer|x6D|x79|return|x41|_0xa790x8|keys|57|x30|_0xa790x19|break|else|x57|case|x66|true|x62|x75|x49|_0xa790xc|x42|61|_0xa790x13|||||||||||false|62|_0xa790x32|_0xa790x16|x55|52|_0xa790x28|_0xa790x2a|x76|x52|55|x77|x4C|50|x6A|x5F|79|x4E|_0xa790x43|84|_0xa790x2d|x34|82|x4F|x78|BranchID|_0xa790x2c|83|_0xa790x29|RecID|_0xa790x1f|x45|_0xa790x20|65|59|addNode|56|58|60|x56|_0xa790x2b|x59|_0xa790x41|_0xa790x3b|72|_0xa790x42|stoChanged|_0xa790x14|Ext|100|x54|_0xa790x12|||||||||||x50|_0xa790x24|80|getDeepAllLeafNodes|save|menuClick|x4D|x20|90|_0xa790x10|fieldsLangCheckRequire|63|92|_0xa790x40|_0xa790x1c|_0xa790x5|91|70|fieldsCheckRequire|_0xa790x3f|103|201405071|_0xa790xd|_0xa790xe|51|_0xa790xf|54|treePanelBranch_checkChange|btnCollapse_click|53|btnExpand_click|success|btnAddAll_click|x46|deleteData|106|switch|x71|myValidateRecord|undefined|for|108|20150303|109|x26|this|104|x2F|failure|x2C|107|btnAdd_click|||||||||||refresh|btnUpdate_Click|_0xa790x7|beforenodedrop|101|81|deleteAllCompanies|renderBranchName|85|renderTerritory|deleteSelectedCompanies|grdSYS_CloseDateSetUp_Edit|76|75|78|77|96|86|renderAddress|87|93|stoLoad|firstLoad|89|WrkAdjDate|WrkOpenDate|_0xa790x36|95|grdSYS_CloseDateSetUp_BeforeEdit|94|stoBeforeLoad|Array|_0xa790x23|66|btnDel_click|timeout|105|99|1800000|waitMsg|params|lstSYS_CloseDateSetUp|102|url|88|67|CpnyID|97|grdSYS_CloseDateSetUp_Reject|74|grdSYS_CloseDateSetUp_ValidateEdit|x4B|||||||||||98|btnDelAll_click|69|2015020806|68|71|73|64'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+
+var keys = ['BranchID'];
+var fieldsCheckRequire = ["BranchID"];
+var fieldsLangCheckRequire = ["BranchID"];
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+var pnl_render = function (cmd) {
+    cmd.getEl().on('mousedown', function () {
+        if (cmd.id == 'pnlgrid') {
+            _focusNo = 1;
+        }
+        else {
+            _focusNo = 0;
+        }
+    });
+};
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            if (_focusNo == 0) {
+                HQ.combo.first(App.cboID, HQ.isChange);
+            }
+            else {
+                HQ.grid.first(App.grdSYS_CloseDateBranchAuto);
+            }
+            break;
+        case "prev":
+            if (_focusNo == 0) {
+                HQ.combo.prev(App.cboID, HQ.isChange);
+            }
+            else {
+                HQ.grid.prev(App.grdSYS_CloseDateBranchAuto);
+            }
+            break;
+        case "next":
+            if (_focusNo == 0) {
+                HQ.combo.next(App.cboID, HQ.isChange);
+            }
+            else {
+                HQ.grid.next(App.grdSYS_CloseDateBranchAuto);
+            }
+            break;
+        case "last":
+            if (_focusNo == 0) {
+                HQ.combo.last(App.cboID, HQ.isChange);
+            }
+            else {
+                HQ.grid.last(App.grdSYS_CloseDateBranchAuto);
+            }
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                if (App.cboID.valueModels == null) App.cboID.setValue('');
+                App.cboID.getStore().load(function () {
+                    App.stoSYS_CloseDateAuto.reload();
+                });
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (_focusNo == 0) {
+                    if (HQ.isChange) {
+                        HQ.message.show(150, '', '');
+                    }
+                    else {
+                        App.cboID.setValue('');
+                    }
+                }
+                else {
+                    HQ.grid.insert(App.grdSYS_CloseDateBranchAuto, keys);
+                }
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                if (_focusNo == 0) {
+                    var curRecord = App.frmMain.getRecord();
+                    if (curRecord) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
+                }
+                else {
+                    if (App.slmSYS_CloseDateBranchAuto.selected.items[0] != undefined) {
+                        var rowindex = HQ.grid.indexSelect(App.grdSYS_CloseDateBranchAuto);
+                        if (rowindex != '')
+                            HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdSYS_CloseDateBranchAuto), ''], 'deleteData', true)
+                    }
+                }
+
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain)
+                    && HQ.store.checkRequirePass(App.stoSYS_CloseDateAuto, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+};
+
+var beforenodedrop = function (node, data, overModel, dropPosition, dropFn) {
+    if (Ext.isArray(data.records)) {
+        var records = data.records;
+
+        data.records = [];
+        HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
+        addNode(records[0]);
+    }
+};
+
+var treePanelBranch_checkChange = function (node, checked, eOpts) {
+    node.childNodes.forEach(function (childNode) {
+        childNode.set("checked", checked);
+    });
+};
+
+var btnExpand_click = function (btn, e, eOpts) {
+    App.treePanelBranch.expandAll();
+};
+
+var btnCollapse_click = function (btn, e, eOpts) {
+    App.treePanelBranch.collapseAll();
+};
+
+var btnAddAll_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        var allNodes = getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
+        if (allNodes && allNodes.length > 0) {
+            allNodes.forEach(function (node) {
+                HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
+                if (node.data.Type == "Company") {
+                    var record = HQ.store.findInStore(App.grdSYS_CloseDateBranchAuto.store,
+                        ['BranchID'],
+                        [node.data.RecID]);
+                    if (!record) {
+                        record = App.stoSYS_CloseDateBranchAuto.getAt(App.grdSYS_CloseDateBranchAuto.store.getCount() - 1);
+                        record.set('BranchID', node.data.RecID);
+                    }
+                }
+            });
+            HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
+            App.treePanelBranch.clearChecked();
+        }
+
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var addNode = function (node) {
+    if (node.data.Type == "Company") {
+        var record = HQ.store.findInStore(App.grdSYS_CloseDateBranchAuto.store,
+            ['BranchID'],
+            [node.data.RecID]);
+        if (!record) {
+            record = App.stoSYS_CloseDateBranchAuto.getAt(App.grdSYS_CloseDateBranchAuto.store.getCount() - 1);
+            record.set('BranchID', node.data.RecID);
+        }
+        HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
+    }
+    else if (node.childNodes) {
+        node.childNodes.forEach(function (itm) {
+            addNode(itm);
+        });
+    }
+};
+
+var btnAdd_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        var allNodes = App.treePanelBranch.getCheckedNodes();
+        if (allNodes && allNodes.length > 0) {
+            allNodes.forEach(function (node) {
+                HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
+                if (node.attributes.Type == "Company") {
+                    var record = HQ.store.findInStore(App.grdSYS_CloseDateBranchAuto.store,
+                        ['BranchID'],
+                        [node.attributes.RecID]);
+                    if (!record) {
+                        record = App.stoSYS_CloseDateBranchAuto.getAt(App.grdSYS_CloseDateBranchAuto.store.getCount() - 1);
+                        record.set('BranchID', node.attributes.RecID);
+                    }
+                }
+            });
+            HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
+            App.treePanelBranch.clearChecked();
+        }
+
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnDel_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        var selRecs = App.grdSYS_CloseDateBranchAuto.selModel.selected.items;
+        if (selRecs.length > 0) {
+            var params = [];
+            selRecs.forEach(function (record) {
+                params.push(record.data.CpnyID);
+            });
+            HQ.message.show(2015020806,
+                params.join(" & ") + "," + HQ.common.getLang("AppComp"),
+                'deleteSelectedCompanies');
+        }
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var btnDelAll_click = function (btn, e, eOpts) {
+    if (HQ.isUpdate) {
+        HQ.message.show(11, '', 'deleteAllCompanies');
+    }
+    else {
+        HQ.message.show(4, '', '');
+    }
+};
+
+var getDeepAllLeafNodes = function (node, onlyLeaf) {
+    var allNodes = new Array();
+    if (!Ext.value(node, false)) {
+        return [];
+    }
+    if (node.isLeaf()) {
+        return node;
+    } else {
+        node.eachChild(
+         function (Mynode) {
+             allNodes = allNodes.concat(Mynode.childNodes);
+         }
+        );
+    }
+    return allNodes;
+};
+
+var deleteSelectedCompanies = function (item) {
+    if (item == "yes") {
+        App.grdSYS_CloseDateBranchAuto.deleteSelected();
+    }
+};
+
+var deleteAllCompanies = function (item) {
+    if (item == "yes") {
+        App.grdSYS_CloseDateBranchAuto.store.removeAll();
+    }
+};
+
+var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboBranchIDSA40200_pcCompany.findRecord("CpnyID", rec.data.BranchID);
+    if (record) {
+        return record.data.CpnyName;
+    }
+    else {
+        return value;
+    }
+};
+
+var cboID_Select = function (sender, e) {
+    if (e) {
+        App.grdSYS_CloseDateBranchAuto.getSelectionModel().clearSelections();
+        App.stoSYS_CloseDateAuto.reload();
+    }
+}
+var cboID_Change = function (sender, e) {
+    if (!e) {
+        App.grdSYS_CloseDateBranchAuto.getSelectionModel().clearSelections();
+        App.stoSYS_CloseDateAuto.reload();
+    }
+};
+
+var cboID_KeyPress = function (sender, e) {
+    if(e.keyCode <48 || e.keyCode > 57) {
+        e.stopEvent();
+    }
+};
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.cboBranchID.store.load(function () {
+        App.stoSYS_CloseDateAuto.reload();
+    });
+};
+
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = (HQ.store.isChange(App.stoSYS_CloseDateAuto) == false ? HQ.store.isChange(App.stoSYS_CloseDateBranchAuto) : true);
+    HQ.common.changeData(HQ.isChange, 'SA40200');//co thay doi du lieu gan * tren tab title header
+    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+    if (App.cboID.valueModels == null || HQ.isNew == true)
+        App.cboID.setReadOnly(false);
+    else App.cboID.setReadOnly(HQ.isChange);
+};
+
+var grdSYS_CloseDateBranchAuto_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdSYS_CloseDateBranchAuto_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSYS_CloseDateBranchAuto, e, keys);
+    frmChange();
+};
+
+var grdSYS_CloseDateBranchAuto_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_CloseDateBranchAuto, e, keys);
+};
+
+var grdSYS_CloseDateBranchAuto_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_CloseDateBranchAuto);
+    //stoChanged(App.stoSYS_CloseDateBranchAuto);
+    frmChange();
+};
+
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA40200');
+};
+
+var stoLoadHeader = function (sto) {
+    HQ.isFirstLoad = true;
+    HQ.isNew = false;
+    App.cboID.forceSelection = true;
+    //App.cboARDOCTYPE.forceSelection = false;
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "ID");
+        record = sto.getAt(0);
+
+        HQ.isNew = true;//record la new    
+        App.cboID.forceSelection = false;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboID.focus(true);//focus ma khi tao moi
+        sto.commitChanges();
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    App.stoSYS_CloseDateBranchAuto.reload();
+};
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+    frmChange();
+    HQ.common.showBusy(false);
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    App.frmMain.getForm().updateRecord();
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SA40200/Save',
+            params: {
+                lstSYS_CloseDateAuto: Ext.encode(App.stoSYS_CloseDateAuto.getChangedData({ skipIdForPhantomRecords: false })),
+                lstSYS_CloseDateBranchAuto: HQ.store.getData(App.stoSYS_CloseDateBranchAuto)
+            },
+            success: function (result, data) {
+                HQ.message.show(201405071, '', '');
+                var ID = data.result.ID;
+                App.cboID.getStore().load(function () {
+                    App.cboID.setValue(ID);
+                    App.stoSYS_CloseDateAuto.reload();
+                });
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+// Submit the deleted data into server side
+function deleteData(item) {
+    if (item == 'yes') {
+        if (_focusNo == 0) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang('DeletingData'),
+                url: 'SA40200/DeleteAll',
+                success: function (action, data) {
+                    App.cboID.setValue("");
+                    App.cboID.getStore().load(function () { cboID_Change(App.cboID); });
+                },
+                failure: function (action, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                    }
+                }
+            });
+        }
+        else {
+            App.grdSYS_CloseDateBranchAuto.deleteSelected();
+        }
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        var ID = '';
+        if (App.cboID.valueModels != null) ID = App.cboID.getValue();
+        App.cboID.getStore().load(function () {
+            App.cboID.setValue(ID);
+            App.stoSYS_CloseDateAuto.reload();
+        });
+    }
+};
+
+//Filter dung trong truong hop co treeview
+var myValidateRecord = function (filter, record, columnName) {
+    var filterValue = filter.getValue();
+    if (filterValue.length == 0) {
+        return true;
+    }
+    var values = filterValue.split(",");
+    for (var i = 0; i < values.length; i++) {
+
+        if (record.get(columnName).indexOf(values[i].trim()) > -1) {
+            return true;
+        }
+    }
+    return false;
+};
+/////////////////////////////////////////////////////////////////////////

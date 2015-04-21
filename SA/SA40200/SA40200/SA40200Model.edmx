@@ -34,6 +34,10 @@
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="20" />
         </EntityType>
+        <Function Name="SA40200_GetAutoNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SA40200_pgSYS_CloseDateBranchAuto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+        </Function>
         <Function Name="SA40200_ptCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
@@ -46,9 +50,13 @@
           <EntitySet Name="SYS_CloseDateAuto" EntityType="SA40200Model.SYS_CloseDateAuto" />
           <EntitySet Name="SYS_CloseDateBranchAuto" EntityType="SA40200Model.SYS_CloseDateBranchAuto" />
           <FunctionImport Name="SA40200_ptCompany" ReturnType="Collection(SA40200Model.SA40200_ptCompany_Result)">
-            <Parameter Name="UserID" Mode="In" Type="String" />
+          <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SA40200_ptTerritory" ReturnType="Collection(SA40200Model.SA40200_ptTerritory_Result)" />
+          <FunctionImport Name="SA40200_pgSYS_CloseDateBranchAuto" ReturnType="Collection(SA40200Model.SA40200_pgSYS_CloseDateBranchAuto_Result)">
+          <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SA40200_GetAutoNumber" ReturnType="Collection(Int32)" />
         </EntityContainer>
         <EntityType Name="SYS_CloseDateAuto">
           <Key>
@@ -83,6 +91,10 @@
         <ComplexType Name="SA40200_ptTerritory_Result">
           <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="SA40200_pgSYS_CloseDateBranchAuto_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="20" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -133,6 +145,15 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA40200_pgSYS_CloseDateBranchAuto" FunctionName="eBiz4DWebSysModel.Store.SA40200_pgSYS_CloseDateBranchAuto">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA40200Model.SA40200_pgSYS_CloseDateBranchAuto_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA40200_GetAutoNumber" FunctionName="eBiz4DWebSysModel.Store.SA40200_GetAutoNumber" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

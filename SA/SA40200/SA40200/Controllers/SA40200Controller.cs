@@ -33,11 +33,18 @@ namespace SA40200.Controllers
             return PartialView();
         }
 
-        //public ActionResult GetSYS_CloseDateSetUp()
-        //{
-        //    return this.Store(_sys.SA40200_pgSYS_CloseDateSetUp().ToList());
-        //}
+        public ActionResult GetSYS_CloseDateBranchAuto(string ID)
+        {
+            int value = ID.PassNull()==""?0:int.Parse(ID);
+            return this.Store(_sys.SA40200_pgSYS_CloseDateBranchAuto(value).ToList());
+        }
 
+        public ActionResult GetSYS_CloseDateAuto(string ID)
+        {
+            int value = ID.PassNull() == "" ? 0 : int.Parse(ID);
+            return this.Store(_sys.SYS_CloseDateAuto.FirstOrDefault(p => p.ID == value));
+        }
+        
         [DirectMethod]
         public ActionResult SA40200GetTreeBranch(string panelID)
         {
@@ -115,88 +122,177 @@ namespace SA40200.Controllers
             return this.Direct();
         }
 
-        //#region Save & Update 
-        ////Save information Company
-        //[HttpPost]
-        //public ActionResult Save(FormCollection data)
-        //{
-        //    try
-        //    {
-        //        StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSYS_CloseDateSetUp"]);
-        //        ChangeRecords<SA40200_pgSYS_CloseDateSetUp_Result> lstSYS_CloseDateSetUp = dataHandler1.BatchObjectData<SA40200_pgSYS_CloseDateSetUp_Result>();
+        #region Save & Update
+        //Save information Company
+        [HttpPost]
+        public ActionResult Save(FormCollection data)
+        {
+            try
+            {
+                string ID_temp = data["cboID"].PassNull();
+                int ID = ID_temp == "" ? 0 : int.Parse(ID_temp);
+                string Time = "";
+                string time_temp = data["txtTime"].PassNull();
+                string time_cut = time_temp.Substring(time_temp.Length-2,2);
+                if(time_cut=="pm")
+                {
+                    int index= time_temp.IndexOf(":");
+                    int plus = int.Parse(time_temp.Substring(0, index))+12;
+                    if (plus == 24)
+                    {
+                        plus = 0;
 
-        //        #region Save SYS_CloseDateSetUp
-        //        foreach (SA40200_pgSYS_CloseDateSetUp_Result deleted in lstSYS_CloseDateSetUp.Deleted)
-        //        {
-        //            var objDelete = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == deleted.BranchID);
-        //            if (objDelete != null)
-        //            {
-        //                _sys.SYS_CloseDateSetUp.DeleteObject(objDelete);
-                       
-        //            }
-        //        }
+                    }
+                    Time += plus + time_temp.Substring(index,3);
+                  
+                }
+                else
+                {
+                    int index = time_temp.IndexOf(":");
+                    int plus = int.Parse(time_temp.Substring(0, index));
+                    if (index == 1)
+                    {
+                        Time = "0";
+                    }
+                    if (plus == 12)
+                    {
+                        plus = 0;
 
-        //        lstSYS_CloseDateSetUp.Created.AddRange(lstSYS_CloseDateSetUp.Updated);
+                    }
+                    Time += plus + time_temp.Substring(index, 3);
+                }
+                
+                
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_CloseDateAuto"]);
+                ChangeRecords<SYS_CloseDateAuto> lstSYS_CloseDateAuto = dataHandler.BatchObjectData<SYS_CloseDateAuto>();
 
-        //        foreach (SA40200_pgSYS_CloseDateSetUp_Result curLang in lstSYS_CloseDateSetUp.Created)
-        //        {
-        //            if (curLang.BranchID.PassNull() == "") continue;
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSYS_CloseDateBranchAuto"]);
+                ChangeRecords<SA40200_pgSYS_CloseDateBranchAuto_Result> lstSYS_CloseDateBranchAuto = dataHandler1.BatchObjectData<SA40200_pgSYS_CloseDateBranchAuto_Result>();
 
-        //            var lang = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID.ToLower() == curLang.BranchID.ToLower());
 
-        //            if (lang != null && lstSYS_CloseDateSetUp.Deleted.Where(p => p.BranchID.ToLower() == curLang.BranchID.ToLower()).Count()==0)
-        //            {
-        //                if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
-        //                {
-        //                    UpdatingSYS_CloseDateSetUp(lang, curLang, false);
-        //                }
-        //                else
-        //                {
-        //                    throw new MessageException(MessageType.Message, "19");
-        //                }
-        //            }
-        //            else
-        //            {
-        //                lang = new SYS_CloseDateSetUp();
-        //                UpdatingSYS_CloseDateSetUp(lang, curLang, true);
-        //                _sys.SYS_CloseDateSetUp.AddObject(lang);
-        //            }
-        //        }
-        //        #endregion
+                #region Save Header SYS_CloseDateAuto
+                lstSYS_CloseDateAuto.Created.AddRange(lstSYS_CloseDateAuto.Updated);
+                foreach (SYS_CloseDateAuto curHeader in lstSYS_CloseDateAuto.Created)
+                {
+                    if (ID.PassNull() == "") continue;
 
-        //        _sys.SaveChanges();
-        //        return Json(new { success = true });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is MessageException) return (ex as MessageException).ToMessage();
-        //        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-        //    }
-        //}
-        //#endregion
+                    var header = _sys.SYS_CloseDateAuto.FirstOrDefault(p => p.ID == ID);
+                    if (header != null)
+                    {
+                        if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
+                        {
+                            header.Time = Time;
+                            UpdatingHeader(ref header, curHeader);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                    else
+                    {
+                        var iID = _sys.SA40200_GetAutoNumber().FirstOrDefault() ;
 
-        ////Update SYS_CloseDateSetUp
-        //#region Update SYS_CloseDateSetUp
-        //private void UpdatingSYS_CloseDateSetUp(SYS_CloseDateSetUp t, SA40200_pgSYS_CloseDateSetUp_Result s, bool isNew)
-        //{
-        //    if (isNew)
-        //    {
-        //        t.BranchID = s.BranchID;
-        //        t.Crtd_DateTime = DateTime.Now;
-        //        t.Crtd_Prog = _screenNbr;
-        //        t.Crtd_User = _userName;
-        //    }
-        //    t.WrkAdjDate = s.WrkAdjDate;
-        //    t.WrkDateChk = s.WrkDateChk;
-        //    t.WrkLowerDays = s.WrkLowerDays;
-        //    t.WrkOpenDate = s.WrkOpenDate;
-        //    t.WrkUpperDays = s.WrkUpperDays;
+                        header = new SYS_CloseDateAuto();
+                        header.ID = iID.Value;
+                        header.Time = Time;
+                        header.Crtd_DateTime = DateTime.Now;
+                        header.Crtd_Prog = _screenNbr;
+                        header.Crtd_User = Current.UserName;
+                        UpdatingHeader(ref header, curHeader);
+                        _sys.SYS_CloseDateAuto.AddObject(header);
+                    }
+                }
+                #endregion
 
-        //    t.LUpd_DateTime = DateTime.Now;
-        //    t.LUpd_Prog = _screenNbr;
-        //    t.LUpd_User = _userName;
+                #region Save SYS_CloseDateBranchAuto
+                foreach (SA40200_pgSYS_CloseDateBranchAuto_Result deleted in lstSYS_CloseDateBranchAuto.Deleted)
+                {
+                    var objDelete = _sys.SYS_CloseDateBranchAuto.FirstOrDefault(p => p.ID == ID && p.BranchID == deleted.BranchID);
+                    if (objDelete != null)
+                    {
+                        _sys.SYS_CloseDateBranchAuto.DeleteObject(objDelete);
+                    }
+                }
 
-        //}
-        //#endregion
+                lstSYS_CloseDateBranchAuto.Created.AddRange(lstSYS_CloseDateBranchAuto.Updated);
+
+                foreach (SA40200_pgSYS_CloseDateBranchAuto_Result curLang in lstSYS_CloseDateBranchAuto.Created)
+                {
+                    if (curLang.BranchID.PassNull() == "") continue;
+
+                    var lang = _sys.SYS_CloseDateBranchAuto.FirstOrDefault(p => p.ID== ID && p.BranchID.ToLower() == curLang.BranchID.ToLower());
+
+                    if (lang != null)
+                    {
+
+                            throw new MessageException(MessageType.Message, "19");
+                    }
+                    else
+                    {
+                        lang = new SYS_CloseDateBranchAuto();
+                        lang.ID = ID;
+                        lang.BranchID = curLang.BranchID;
+                        _sys.SYS_CloseDateBranchAuto.AddObject(lang);
+                    }
+                }
+                #endregion
+
+                _sys.SaveChanges();
+                return Json(new { success = true, ID = ID });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+        #endregion
+
+        //Update SYS_CloseDateAuto
+        #region Update SYS_CloseDateAuto
+        private void UpdatingHeader(ref SYS_CloseDateAuto t, SYS_CloseDateAuto s)
+        {
+            t.Active = s.Active;
+            t.Descr = s.Descr;
+            t.UpDates = s.UpDates;
+      
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
+        #endregion
+
+        #region Delete information Company
+        //Delete information Company
+        [HttpPost]
+        public ActionResult DeleteAll(FormCollection data)
+        {
+            try
+            {
+                string ID_temp = data["cboID"].PassNull();
+                int ID = ID_temp == "" ? 0 : int.Parse(ID_temp);
+                var cpny = _sys.SYS_CloseDateAuto.FirstOrDefault(p => p.ID == ID);
+                if (cpny != null)
+                {
+                    _sys.SYS_CloseDateAuto.DeleteObject(cpny);
+                }
+
+                var lstAddr = _sys.SYS_CloseDateBranchAuto.Where(p => p.ID == ID).ToList();
+                foreach (var item in lstAddr)
+                {
+                    _sys.SYS_CloseDateBranchAuto.DeleteObject(item);
+                }
+
+                _sys.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+        #endregion
     }
 }

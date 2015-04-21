@@ -31,6 +31,10 @@ if (!('forEach' in Array.prototype)) {
                 action.call(that, this[i], i, this);
     };
 }
+Date.prototype.addDays = function (days) {
+    this.setDate(this.getDate() + days);
+    return this;
+};
 var HQ = {
     store: {
         isChange: function (store) {
@@ -282,6 +286,20 @@ var HQ = {
             if (cbo.getValue())
                 cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
         },
+        selectAll: function (cbo) {
+            var value = [];
+            cbo.setValue('');
+            cbo.store.data.each(function (item) {
+                value.push(item.data[cbo.valueField]);
+            })
+            cbo.setValue(value);
+        }
+    },
+    date: {
+        expand: function (dte, eOpts) {
+            //dte.picker.setHeight(300);
+            //dte.picker.monthEl.setHeight(300);
+        }
     },
     grid: {
         showBusy: function (grd, isBusy) {
@@ -393,7 +411,7 @@ var HQ = {
         onPageSelect: function (combo) {
             var store = combo.up("gridpanel").getStore();
             store.pageSize = parseInt(combo.getValue(), 10);
-            store.reload();
+            store.loadPage(1);
         },
         indexSelect: function (grd) {
             var index = '';
@@ -1097,7 +1115,7 @@ Ext.define("Ext.locale.vn.toolbar.Paging", {
     lastText: HQ.common.getLang("PageLast"),
     refreshText: HQ.common.getLang("PageRefresh"),
     displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
-    emptyMsg: HQ.common.getLang("DataEmty")
+    emptyMsg: HQ.common.getLang("DataEmpty")
 });
 //window.onresize = function () {
 //    if ((window.outerHeight - window.innerHeight) > 100) {

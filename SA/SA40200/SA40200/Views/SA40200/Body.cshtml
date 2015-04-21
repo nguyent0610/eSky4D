@@ -19,6 +19,11 @@
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Region(Region.Center)
     .Layout(LayoutType.Border)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        l.FieldChange.Fn = "frmChange";
+    })
     .Items(
         ////Thiet ke giao dien o day
 
@@ -110,156 +115,146 @@
         .Items(
                 X.Panel().Region(Region.North)
                 .Items(
-                    //X.Panel().ID("pnlheader")
-                    //.Layout(LayoutType.HBox)
-                    //.AutoScroll(true)
-                    //.Items(
-                    //    X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
-                    //    .Items(
-                    //        HQ.DateField().ID("lblWrkAdjDate").MarginSpec("5 0 0 0").HQLangCode("WRKADJDATE").Width(250)
-                    //        .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
-                    //        , HQ.DateField().ID("lblWrkOpenDate").MarginSpec("5 0 10 0").HQLangCode("WRKOPENDATE").Width(250)
-                    //        .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
-                    //    )
-                    //    , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
-                    //    .Items(
-                    //        HQ.NumberField().ID("lblWrkLowerDays").Name("WRKLOWERDAYS").HQLangCode("WRKLOWERDAYS").MarginSpec("5 0 0 0").Width(250).MinValue(0)
-                    //        , HQ.NumberField().ID("lblWrkUpperDays").Name("WRKUPPERDAYS").HQLangCode("WRKUPPERDAYS").MarginSpec("5 0 10 0").Width(250).MinValue(0)
-                    //    )
-                    //    , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
-                    //    .Items(
-                    //        HQ.Checkbox().ID("chkWrkDateChk").Name("WRKDATECHK").HQLangCode("WRKDATECHK").MarginSpec("5 0 0 10")
-                    //        , HQ.Button().ID("btnUpdate").HQLangCode("SA40200_Update").MarginSpec("5 0 0 10").Width(150)
-                    //        .Listeners(p =>
-                    //            {
-                    //                p.Click.Fn = "btnUpdate_Click";
-                    //            })
-                    //        )
-
-                    //)
+                    X.Panel().ID("pnlheader")
+                    .Layout(LayoutType.HBox)
+                    .AutoScroll(true)
+                    .Items(
+                        X.Container().Layout(LayoutType.VBox).MarginSpec("5 20 0 0")
+                        .Items(
+                            HQ.Combo().ID("cboID").Name("cboID")
+                                .HQLangCode("ID").HQProcedure("SA40200_pcSYS_CloaseDateAuto").HQDBSys(true)
+                                .HQColumnShow("ID,Descr").DisplayField("ID") .ValueField("ID").HQHeightWidth(400, 300)
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.Change.Fn = "cboID_Change";
+                                    lst.Select.Fn = "cboID_Select";
+                                    lst.KeyPress.Fn = "cboID_KeyPress";
+                                })
+                                .EnableKeyEvents(true)
+                                .LoadData().Width(250)
+                            
+                            , HQ.NumberField().ID("txtUpDates").Name("UpDates").HQLangCode("UpDates").MarginSpec("0 0 10 0").Width(250).MinValue(0).DecimalPrecision(0)
+                        )
+                        , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
+                        .Items(
+                            HQ.TextBox().ID("txtDescr").Name("Descr").HQLangCode("Descr").DataIndex("Descr")
+                            .Width(400).MaxLength(200).EnforceMaxLength(true).LabelAlign(LabelAlign.Right).AllowBlank(false)
+                            
+                            , X.Container().Layout(LayoutType.HBox)
+                            .Items(
+                                X.TimeField().ID("txtTime").FieldLabel(Util.GetLang("RunTime")).Name("txtTime").LabelAlign(LabelAlign.Right).AllowBlank(false)
+                                , HQ.Checkbox().ID("chkActive").Name("Active").HQLangCode("Active").MarginSpec("0 0 5 10").DataIndex("Active")
+                            )
+                        )
+                    )
                 )//header
+                .Listeners(lss =>
+                {
+                    lss.Render.Fn = "pnl_render";
+                })
 
             , X.Panel().ID("pnlgrid")
             .Region(Region.Center)
             .Layout(LayoutType.Border)
             .Items(
-                //X.GridPanel()
-                //.Scroll(ScrollMode.Both)
-                //.View(X.GridView().TrackOver(false))
-                //.ID("grdSYS_CloseDateSetUp")
+                X.GridPanel()
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false))
+                .ID("grdSYS_CloseDateBranchAuto")
                 //.SelectionMemory(false)
-                //.Region(Region.Center).Flex(1)
-                //.Store(
-                //    X.Store()
-                //    .ID("stoSYS_CloseDateSetUp").AutoLoad(false)
-                //    .PageSize(50)
-                //    .Model(Util.GenerateModel(typeof(SA40200_pgSYS_CloseDateSetUp_Result), "mdlSA40200_pgSYS_CloseDateSetUp", "BranchID"))
-                //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_CloseDateSetUp")))
-                //    .Listeners(l =>
-                //    {
-                //        l.BeforeLoad.Fn = "stoBeforeLoad";
-                //        l.Load.Fn = "stoLoad";
-                //        l.Update.Fn = "stoChanged";
-                //    })
-                //)
-                //.Listeners(p =>
-                //{
-                //    p.BoxReady.Handler = "firstLoad();";
-                //})
-                //.ViewConfig(X.GridView().Plugins(X.GridDragDrop().EnableDrag(true).DDGroup("BranchID")).Listeners(l=>l.BeforeDrop.Fn="beforenodedrop"))
+                .Region(Region.Center).Flex(1)
+                .Store(
+                    X.Store()
+                    .ID("stoSYS_CloseDateBranchAuto").AutoLoad(false)
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(SA40200_pgSYS_CloseDateBranchAuto_Result), "mdlSA40200_pgSYS_CloseDateBranchAuto", "ID,BranchID"))
+                    .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("ID", "App.cboID.getValue()", ParameterMode.Raw));
+                            })
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_CloseDateBranchAuto")))
+                    .Listeners(l =>
+                    {
+                        l.Load.Fn = "stoLoad";
+                   
+                    })
+                )
+                .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_CloseDateBranchAuto');")
+                .ViewConfig(X.GridView().Plugins(X.GridDragDrop().EnableDrag(true).DDGroup("BranchID")).Listeners(l=>l.BeforeDrop.Fn="beforenodedrop"))
                 
-                //.SortableColumns(false)
-                //.ColumnModel(
-                //    X.RowNumbererColumn().Width(40)
+                .SortableColumns(false)
+                .ColumnModel(
+                    X.RowNumbererColumn().Width(40)
+                    
+                    , X.Column().DataIndex("BranchID").Text(Util.GetLang("BranchID")).Width(100)
+                    .Editor(
+                        HQ.Combo().ID("cboBranchID")
+                        .Name("cboBranchID").HQProcedure("SA40200_pcCompany").HQDBSys(true)
+                        .HQColumnShow("CpnyID,CpnyName,Territory,Address").DisplayField("CpnyID").ValueField("CpnyID")
+                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                    )
 
-                //    , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(90).Renderer("renderTerritory")
+                    , X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchName").Width(150).Renderer("renderBranchName")
 
-                //    , X.Column().DataIndex("BranchID").Text(Util.GetLang("BranchID")).Width(100)
-                //    .Editor(
-                //        HQ.Combo().ID("cboBranchID")
-                //        .Name("cboBranchID").HQProcedure("SA40200_pcCompany").HQDBSys(true)
-                //        .HQColumnShow("CpnyID,CpnyName,Territory,Address").DisplayField("CpnyID").ValueField("CpnyID")
-                //        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
-                //        .HQParam(new StoreParameterCollection() 
-                //        { 
-                //            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
-                //        })
-                //        .LoadData()
-                //    )
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "grdSYS_CloseDateBranchAuto_Reject(record);")
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmSYS_CloseDateBranchAuto").Mode(SelectionMode.Multi))
+                .BottomBar(
+                    X.PagingToolbar()
+                    .Items(
+                        X.Label("Page size:"),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("50")
+                        .Listeners(l =>
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
+                    )
+                    .Plugins(X.ProgressBarPager())
+                )
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdSYS_CloseDateBranchAuto_BeforeEdit";
+                        ls.Edit.Fn = "grdSYS_CloseDateBranchAuto_Edit";
+                        ls.ValidateEdit.Fn = "grdSYS_CloseDateBranchAuto_ValidateEdit";
+                    })
+                )
 
-                //    , X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchName").Width(150).Renderer("renderBranchName")
-
-                //    , X.Column().Text(Util.GetLang("Address")).DataIndex("Address").Width(150).Renderer("renderAddress")
-
-                //    , X.CheckColumn().ID("WrkDateChk").Text(Util.GetLang("WrkDateChk")).DataIndex("WrkDateChk").Width(150).Editable(true)
-
-                //    , X.DateColumn().Text(Util.GetLang("WrkAdjDate")).DataIndex("WrkAdjDate")
-                //    .Width(150).ID("txtWrkAdjDate").Editor(X.DateField().Format("MM/dd/yyyy"))
-
-                //    , X.DateColumn().Text(Util.GetLang("WrkOpenDate")).DataIndex("WrkOpenDate")
-                //    .Width(150).ID("txtWrkOpenDate").Editor(X.DateField().Format("MM/dd/yyyy"))
-
-                //    , X.NumberColumn().ID("WrkLowerDays").Text(Util.GetLang("WrkLowerDays")).DataIndex("WrkLowerDays").Format("0,000").Width(150).Align(Alignment.Right)
-                //    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
-
-                //    , X.NumberColumn().ID("WrkUpperDays").Text(Util.GetLang("WrkUpperDays")).DataIndex("WrkUpperDays").Format("0,000").Width(150).Align(Alignment.Right)
-                //    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
-
-                //    , X.CommandColumn().Width(150)
-                //    .Commands(
-                //        X.GridCommand()
-                //        .Text(Util.GetLang("Reject"))
-                //        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                //        .CommandName("reject")
-                //        .Icon(Icon.ArrowUndo)
-                //    )
-                //    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                //    .Listeners(l => l.Command.Handler = "grdSYS_CloseDateSetUp_Reject(record);")
-                //)
-                //.SelectionModel(X.RowSelectionModel().ID("slmSYS_CloseDateSetUp").Mode(SelectionMode.Multi))
-                //.BottomBar(
-                //    X.PagingToolbar()
-                //    .Items(
-                //        X.Label("Page size:"),
-                //        X.ToolbarSpacer(10),
-                //        X.ComboBox()
-                //        .Width(80)
-                //        .Items("1", "2", "10", "20", "30", "50")
-                //        .SelectedItems("50")
-                //        .Listeners(l =>
-                //            {
-                //                l.Select.Fn = "HQ.grid.onPageSelect";
-                //            })
-                //    )
-                //    .Plugins(X.ProgressBarPager())
-                //)
-                //.Plugins(
-                //    X.CellEditing()
-                //    .ClicksToEdit(1)
-                //    .Listeners(ls =>
-                //    {
-                //        ls.BeforeEdit.Fn = "grdSYS_CloseDateSetUp_BeforeEdit";
-                //        ls.Edit.Fn = "grdSYS_CloseDateSetUp_Edit";
-                //        ls.ValidateEdit.Fn = "grdSYS_CloseDateSetUp_ValidateEdit";
-                //    })
-                //)
-
-                //.Features(
-                //    X.GridFilters()
-                //        .Local(true)
-                //        .Filters(
-                //            X.StringFilter().DataIndex("Territory"),
-                //            X.StringFilter().DataIndex("BranchID"),
-                //            X.StringFilter().DataIndex("BranchName"),
-                //            X.StringFilter().DataIndex("Address"),
-                //            X.BooleanFilter().DataIndex("WrkDateChk"),
-                //            X.DateFilter().DataIndex("WrkAdjDate"),
-                //            X.DateFilter().DataIndex("WrkOpenDate"),
-                //            X.NumericFilter().DataIndex("WrkLowerDays"),
-                //            X.NumericFilter().DataIndex("WrkUpperDays")
-                //        )
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("BranchID"),
+                            X.StringFilter().DataIndex("BranchName")
+                        )
                 )
             )//Grid
+            .Listeners(lss =>
+            {
+                lss.Render.Fn = "pnl_render";
+            })
         )//Panel
     )//frmMain
 
