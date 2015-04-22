@@ -148,18 +148,18 @@ namespace SA40100.Controllers
                     string _dateServer = DateTime.Now.ToString("yyyyMMdd");
                     var ID = _sys.SA40100_pcCreateHistID(_dateServer).FirstOrDefault();
 
-                    var header = new SYS_CloseDateHistHeader();
-                    header.HistID = ID;
-                    header.Task = Task;
-                    header.WrkDate = WrkDate;
-                    header.Crtd_DateTime = DateTime.Now;
-                    header.Crtd_Prog = _screenNbr;
-                    header.Crtd_User = _userName;
-                    header.LUpd_DateTime = DateTime.Now;
-                    header.LUpd_Prog = _screenNbr;
-                    header.LUpd_User = _userName;
+                    objHeader = new SYS_CloseDateHistHeader();
+                    objHeader.HistID = ID;
+                    objHeader.Task = Task;
+                    objHeader.WrkDate = WrkDate;
+                    objHeader.Crtd_DateTime = DateTime.Now;
+                    objHeader.Crtd_Prog = _screenNbr;
+                    objHeader.Crtd_User = _userName;
+                    objHeader.LUpd_DateTime = DateTime.Now;
+                    objHeader.LUpd_Prog = _screenNbr;
+                    objHeader.LUpd_User = _userName;
 
-                    _sys.SYS_CloseDateHistHeader.AddObject(header);
+                    _sys.SYS_CloseDateHistHeader.AddObject(objHeader);
 
                     #region Save CD
                     if (Task.Trim() == "CD")
@@ -282,7 +282,7 @@ namespace SA40100.Controllers
                 {
                     foreach (SA40100_pgSYS_CloseDateHistDetail_Result deleted in lstSYS_CloseDateHistDetail.Deleted)
                     {
-                        var del = _sys.SYS_CloseDateHistDetail.FirstOrDefault(p => p.BranchID == deleted.BranchID && p.HistID == HistID);
+                        var del = _sys.SYS_CloseDateHistDetail.FirstOrDefault(p => p.BranchID == deleted.BranchID && p.HistID == objHeader.HistID);
                         if (del != null)
                         {
                             _sys.SYS_CloseDateHistDetail.DeleteObject(del);
@@ -291,7 +291,7 @@ namespace SA40100.Controllers
                 }
 
                 _sys.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true, HistID = objHeader.HistID });
             }
             catch (Exception ex)
             {

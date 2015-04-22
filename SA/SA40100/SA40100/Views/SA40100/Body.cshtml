@@ -222,14 +222,29 @@
                             .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
 
                             .HQParam(new StoreParameterCollection() 
-                        { 
+                            { 
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
-                        })
+                            })
                             .LoadData()
                     )
                     , X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchName").Width(150).Renderer("renderBranchName")
-                    , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(150)
+              
+                    , X.Column().Text(Util.GetLang("Status")).Width(150).DataIndex("Status").Hidden(true)
+                        .Editor(
+                            HQ.Combo().ID("cboStatus")
+                            .Name("cboStatus").HQProcedure("SA40100_pcStatus").HQDBSys(true)
+                            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                            .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
 
+                            .HQParam(new StoreParameterCollection() 
+                            { 
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@ScreenNumber", Value = "SA40100", Mode = ParameterMode.Value },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                            })
+                            .LoadData()
+                    )
+                    , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(150).Renderer("renderStatus")
                     , X.CheckColumn().ID("WrkDateChk").Text(Util.GetLang("WrkDateChk")).DataIndex("WrkDateChk").Width(150).Editable(true)
 
                     , X.DateColumn().Text(Util.GetLang("WrkAdjDateBefore")).DataIndex("WrkAdjDateBefore")
