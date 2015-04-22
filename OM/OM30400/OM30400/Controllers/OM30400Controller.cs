@@ -11,6 +11,12 @@ using System.Security.Cryptography;
 using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using HQ.eSkyFramework;
+using System.IO;
+using Aspose.Cells;
+using HQFramework.DAL;
+using System.Drawing;
+using System.Data;
+using HQFramework.Common;
 
 namespace OM30400.Controllers
 {
@@ -301,6 +307,143 @@ namespace OM30400.Controllers
             }
         }
 
+        [DirectMethod]
+        public ActionResult ExportCustomer(string custIDs)
+        {
+            try
+            {
+                string[] paraStringsD = JSON.Deserialize<string[]>(custIDs);
+
+                if (custIDs.Length > 0)
+                {
+                    var headerRowIdx = 3;
+
+                    Stream stream = new MemoryStream();
+                    Workbook workbook = new Workbook();
+                    Worksheet SheetMCP = workbook.Worksheets[0];
+                    SheetMCP.Name = Util.GetLang("MCL");
+                    DataAccess dal = Util.Dal();
+                    Style style = workbook.GetStyleInPool(0);
+                    StyleFlag flag = new StyleFlag();
+
+                    #region header info
+                    // Title header
+                    SetCellValue(SheetMCP.Cells["A2"],
+                        string.Format("{0} ({1})", Util.GetLang("OM30400EHeader"), Util.GetLang("DrawingArea")),
+                        TextAlignmentType.Center, TextAlignmentType.Center, true, 16, true);
+                    SheetMCP.Cells.Merge(1, 0, 1, 10);
+
+                    // Header text columns
+                    var beforeColTexts = new string[] { "N0", "BranchID", "CpnyName", "SlsperID", "SlsName", "CustID", "CustName", "Address","WeekofVisit", "DayOfWeek" };
+                    for (int i = 0; i < beforeColTexts.Length; i++)
+                    {
+                        var cell = SheetMCP.Cells[3, i];
+                        SetCellValue(cell, Util.GetLang(beforeColTexts[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10);
+                        //SheetMCP.Cells.Merge(headerRowIdx, colIdx, 1, 1);
+
+                        //Apply the border styles to the cell
+                        setCellStyle(cell);
+                    }
+                    var allColumns = new List<string>();
+                    allColumns.AddRange(beforeColTexts);
+
+                    #endregion
+
+                    #region export data
+                    ParamCollection pc = new ParamCollection();
+                    pc.Add(new ParamStruct("@CustID", DbType.String, clsCommon.GetValueDBNull(string.Join(",", paraStringsD)), ParameterDirection.Input, int.MaxValue));
+                    pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+
+                    DataTable dtDataExport = dal.ExecDataTable("OM30400_peExportData", CommandType.StoredProcedure, ref pc);
+                    //SheetMCP.Cells.ImportDataTable(dtDataExport, false, "B6");// du lieu data export
+
+                    for (int i = 0; i < dtDataExport.Rows.Count; i++)
+                    {
+                        for (int j = 0; j < allColumns.Count; j++)
+                        {
+                            var cell = SheetMCP.Cells[4 + i, j];
+                            if (allColumns[j] == "N0")
+                            {
+                                cell.PutValue(i + 1);
+                            }
+                            else if (dtDataExport.Columns.Contains(allColumns[j]))
+                            {
+                                cell.PutValue(dtDataExport.Rows[i][allColumns[j]]);
+                            }
+
+                            //Apply the border styles to the cell
+                            setCellStyle(cell);
+                        }
+                    }
+                    #endregion
+                    SheetMCP.AutoFitColumns();
+
+                    //SheetPOSuggest.Protect(ProtectionType.Objects);
+                    workbook.Save(stream, SaveFormat.Xlsx);
+                    stream.Flush();
+                    stream.Position = 0;
+
+                    //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = Util.GetLang("OM30400") + ".xlsx" };
+                    return File(stream, "application/vnd.ms-excel", Util.GetLang("OM30400") + ".xlsx");
+                }
+                else {
+                    throw new MessageException(MessageType.Message, "14091901");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+
+        }
+
+        public ActionResult Download(string filePath, string fileName)
+        {
+            var dlFileName = string.Format("{0}.xlsx", fileName);
+
+            return File(filePath, "application/xls", dlFileName);
+        }
+
+        private void setCellStyle(Cell cell)
+        {
+            //Create a style object
+            Style style = cell.GetStyle();
+
+            //Setting the line style of the top border
+            style.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Thin;
+
+            //Setting the color of the top border
+            style.Borders[BorderType.TopBorder].Color = Color.Black;
+
+            //Setting the line style of the bottom border
+            style.Borders[BorderType.BottomBorder].LineStyle = CellBorderType.Thin;
+
+            //Setting the color of the bottom border
+            style.Borders[BorderType.BottomBorder].Color = Color.Black;
+
+            //Setting the line style of the left border
+            style.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Thin;
+
+            //Setting the color of the left border
+            style.Borders[BorderType.LeftBorder].Color = Color.Black;
+
+            //Setting the line style of the right border
+            style.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Thin;
+
+            //Setting the color of the right border
+            style.Borders[BorderType.RightBorder].Color = Color.Black;
+
+            cell.SetStyle(style);
+        }
+
         private void updateSaleRoutesMaster(ref OM_SalesRouteMaster updated, OM_SalesRouteMaster inputted)
         {
             updated.SlsFreq = inputted.SlsFreq;
@@ -325,6 +468,19 @@ namespace OM30400.Controllers
 
             updated.StartDate = DateTime.Now.Date;
             updated.EndDate = new DateTime(DateTime.Now.Year, 12, 31);
+        }
+
+        private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size, bool isTitle = false)
+        {
+            c.PutValue(" " + lang);
+            var style = c.GetStyle();
+            style.Font.IsBold = isBold;
+            style.Font.Size = size;
+            style.HorizontalAlignment = alignH;
+            style.VerticalAlignment = alignV;
+            if (isTitle)
+                style.Font.Color = Color.Red;
+            c.SetStyle(style);
         }
     }
 }

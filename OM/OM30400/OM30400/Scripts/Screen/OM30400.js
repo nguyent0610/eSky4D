@@ -290,19 +290,19 @@ var Index = {
             var markers = [];
 
             store.each(function (record) {
-
-
                 var marker = {
                     "title": record.data.CustId + ": " + record.data.CustName,
                     "lat": record.data.Lat,
                     "lng": record.data.Lng,
                     "stop": true,
                     "color": record.data.Color,
-                    "description": Index.createMarkerDescription(record)
+                    "description": Index.createMarkerDescription(record),
+                    "custId": record.data.CustId
                 }
                 markers.push(marker);
             });
             PosGmap.drawRoutes(markers, false);
+            PosGmap.prepairDrawing();
         }
         App.dataForm.getEl().unmask();
 
@@ -591,6 +591,22 @@ var Index = {
         else {
             toolTip.hide();
         }
+    },
+
+    exportExcel: function (custIDs) {
+        Ext.net.DirectMethod.request({
+            url: "OM30400/ExportCustomer",
+            isUpload: true,
+            formProxyArg: "dataForm",
+            cleanRequest: true,
+            timeout: 1000000,
+            params: {
+                custIDs: custIDs
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
     }
 };
 
@@ -749,10 +765,13 @@ var PosGmap = {
         //    title: "HQ Soft"
         //});
         stopMarkers: [];
+    },
+
+    prepairDrawing: function () {
 
         drawingManager = new google.maps.drawing.DrawingManager({
             //drawingMode: google.maps.drawing.OverlayType.MARKER,
-            drawingControl: false,
+            drawingControl: true,
             drawingControlOptions: {
                 position: google.maps.ControlPosition.TOP_CENTER,
                 drawingModes: [
@@ -765,14 +784,157 @@ var PosGmap = {
             },
             circleOptions: {
                 fillColor: '#ffff00',
-                fillOpacity: 1,
+                fillOpacity: 0,
                 strokeWeight: 5,
-                clickable: false,
+                clickable: true,
                 editable: true,
                 zIndex: 1
             }
         });
         drawingManager.setMap(map);
+
+        if (!google.maps.Polygon.prototype.getBounds) {
+            google.maps.Polygon.prototype.getBounds = function () {
+                var bounds = new google.maps.LatLngBounds();
+                this.getPath().forEach(function (element, index) {
+                    bounds.extend(element);
+                });
+                return bounds;
+            }
+        }
+
+        // Polygon containsLatLng - method to determine if a latLng is within a polygon
+        google.maps.Polygon.prototype.containsLatLng = function (latLng) {
+            // Exclude points outside of bounds as there is no way they are in the poly
+            var lat, lng;
+            //arguments are a pair of lat, lng variables
+            if (arguments.length == 2) {
+                if (typeof arguments[0] == "number" && typeof arguments[1] == "number") {
+                    lat = arguments[0];
+                    lng = arguments[1];
+                }
+            } else if (arguments.length == 1) {
+                var bounds = this.getBounds();
+
+                if (bounds !== null && !bounds.contains(latLng)) {
+                    return false;
+                }
+                lat = latLng.lat();
+                lng = latLng.lng();
+            } else {
+                console.log("Wrong number of inputs in google.maps.Polygon.prototype.contains.LatLng");
+            }
+
+            // Raycast point in polygon method
+            var inPoly = false;
+
+            var numPaths = this.getPaths().getLength();
+            for (var p = 0; p < numPaths; p++) {
+                var path = this.getPaths().getAt(p);
+                var numPoints = path.getLength();
+                var j = numPoints - 1;
+
+                for (var i = 0; i < numPoints; i++) {
+                    var vertex1 = path.getAt(i);
+                    var vertex2 = path.getAt(j);
+
+                    if (vertex1.lng() < lng && vertex2.lng() >= lng || vertex2.lng() < lng && vertex1.lng() >= lng) {
+                        if (vertex1.lat() + (lng - vertex1.lng()) / (vertex2.lng() - vertex1.lng()) * (vertex2.lat() - vertex1.lat()) < lat) {
+                            inPoly = !inPoly;
+                        }
+                    }
+
+                    j = i;
+                }
+            }
+
+            return inPoly;
+        }
+
+        google.maps.event.addListener(drawingManager, 'overlaycomplete', function (event) {
+            if (event.type == google.maps.drawing.OverlayType.POLYGON) {
+                var custIDs = [];
+                for (var i = 0; i < PosGmap.stopMarkers.length; i++) {
+                    if (event.overlay.containsLatLng(PosGmap.stopMarkers[i].position)) {
+                        custIDs.push(PosGmap.stopMarkers[i].custId);
+                    }
+                }
+                if (custIDs.length) {
+                    var labelPoint = event.overlay.getPath().getAt(0);
+                    var label = new MarkerWithLabel({
+                        icon: " ",
+                        position: labelPoint,
+                        draggable: false,
+                        map: map,
+                        labelContent: custIDs.length.toString(),
+                        labelAnchor: new google.maps.Point(22, 0),
+                        labelClass: "labels", // the CSS class for the label
+                        labelStyle: { opacity: 0.75 }
+                    });
+                }
+                PosGmap.showContextMenu(map, event.overlay, label, custIDs);
+            }
+        });
+    },
+
+    showContextMenu: function (objMap, polygon, label, custIDs) {
+        //	create the ContextMenuOptions object
+        var contextMenuOptions = {};
+        contextMenuOptions.classNames = { menu: 'context_menu', menuSeparator: 'context_menu_separator' };
+
+        //	create an array of ContextMenuItem objects
+        var menuItems = [];
+        menuItems.push({ className: 'context_menu_item', eventName: 'export_excel', label: 'Export excel' });
+        menuItems.push({ className: 'context_menu_item', eventName: 'clear_zone', label: 'Clear zone' });
+        //	a menuItem with no properties will be rendered as a separator
+        menuItems.push({});
+        menuItems.push({ className: 'context_menu_item', eventName: 'zoom_in_click', label: 'Zoom in' });
+        menuItems.push({ className: 'context_menu_item', eventName: 'zoom_out_click', label: 'Zoom out' });
+        //	a menuItem with no properties will be rendered as a separator
+        menuItems.push({});
+        menuItems.push({ className: 'context_menu_item', eventName: 'center_map_click', label: 'Center map here' });
+        contextMenuOptions.menuItems = menuItems;
+
+        //	create the ContextMenu object
+        var contextMenu = new ContextMenu(objMap, contextMenuOptions);
+
+        //	display the ContextMenu on a Map right click
+        google.maps.event.addListener(polygon, 'rightclick', function (mouseEvent) {
+            //if (polygon.containsLatLng(mouseEvent.latLng)) {
+                contextMenu.show(mouseEvent.latLng);
+            //}
+        });
+
+        //	listen for the ContextMenu 'menu_item_selected' event
+        google.maps.event.addListener(contextMenu, 'menu_item_selected', function (latLng, eventName) {
+            //	latLng is the position of the ContextMenu
+            //	eventName is the eventName defined for the clicked ContextMenuItem in the ContextMenuOptions
+            switch (eventName) {
+                case 'export_excel':
+                    if (custIDs.length) {
+                        Index.exportExcel(custIDs);
+                    }
+                    contextMenu.hide();
+                    break;
+                case 'clear_zone':
+                    polygon.setMap(null);
+                    label.setMap(null);
+                    contextMenu.hide();
+                    break;
+                case 'zoom_in_click':
+                    map.setZoom(objMap.getZoom() + 1);
+                    contextMenu.hide();
+                    break;
+                case 'zoom_out_click':
+                    map.setZoom(objMap.getZoom() - 1);
+                    contextMenu.hide();
+                    break;
+                case 'center_map_click':
+                    map.panTo(latLng);
+                    contextMenu.hide();
+                    break;
+            }
+        });
     },
 
     navMapCenterByLocation: function (lat, lng) {
@@ -881,8 +1043,9 @@ var PosGmap = {
                         position: myLatlng,
                         map: map,
                         title: data.title,
-                        icon: Ext.String.format('Images/OM30400/circle_{0}.png', data.color ? data.color : "white")
-                        //animation: google.maps.Animation.DROP
+                        icon: Ext.String.format('Images/OM30400/circle_{0}.png', data.color ? data.color : "white"),
+                        //animation: google.maps.Animation.DROP,
+                        custId: data.custId
                     });
                 }
                 else {
