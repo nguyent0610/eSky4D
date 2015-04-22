@@ -1,5 +1,4 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
-
 var keys = ['BranchID'];
 var fieldsCheckRequire = ["BranchID"];
 var fieldsLangCheckRequire = ["BranchID"];
@@ -273,16 +272,29 @@ var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store
     }
 };
 
-var cboID_Select = function (sender, e) {
-    if (e) {
+// Event when cboOrderType_Main is changed or selected item 
+var cboID_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null) {
         App.grdSYS_CloseDateBranchAuto.getSelectionModel().clearSelections();
         App.stoSYS_CloseDateAuto.reload();
     }
-}
-var cboID_Change = function (sender, e) {
-    if (!e) {
-        App.grdSYS_CloseDateBranchAuto.getSelectionModel().clearSelections();
-        App.stoSYS_CloseDateAuto.reload();
+};
+
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboID_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboID.collapse();
+    }
+};
+
+//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
+var cboID_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
     }
 };
 
@@ -338,14 +350,14 @@ var stoChanged = function (sto) {
 var stoLoadHeader = function (sto) {
     HQ.isFirstLoad = true;
     HQ.isNew = false;
-    App.cboID.forceSelection = true;
+    //App.cboID.forceSelection = true;
     //App.cboARDOCTYPE.forceSelection = false;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "ID");
         record = sto.getAt(0);
 
         HQ.isNew = true;//record la new    
-        App.cboID.forceSelection = false;
+        //App.cboID.forceSelection = false;
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboID.focus(true);//focus ma khi tao moi
         sto.commitChanges();
@@ -371,7 +383,6 @@ var stoLoad = function (sto) {
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
-
 
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////

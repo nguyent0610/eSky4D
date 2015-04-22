@@ -35,6 +35,7 @@
           <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="20" />
         </EntityType>
         <Function Name="SA40200_GetAutoNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SA40200_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SA40200_pgSYS_CloseDateBranchAuto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
         </Function>
@@ -57,6 +58,7 @@
           <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SA40200_GetAutoNumber" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="SA40200_pdHeader" ReturnType="Collection(SA40200Model.SA40200_pdHeader_Result)" />
         </EntityContainer>
         <EntityType Name="SYS_CloseDateAuto">
           <Key>
@@ -95,6 +97,14 @@
         <ComplexType Name="SA40200_pgSYS_CloseDateBranchAuto_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="SA40200_pdHeader_Result">
+          <Property Type="Boolean" Name="Active" Nullable="false" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="200" />
+          <Property Type="DateTime" Name="Time" Nullable="true" Precision="23" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="UpDates" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -154,6 +164,18 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SA40200_GetAutoNumber" FunctionName="eBiz4DWebSysModel.Store.SA40200_GetAutoNumber" />
+          <FunctionImportMapping FunctionImportName="SA40200_pdHeader" FunctionName="eBiz4DWebSysModel.Store.SA40200_pdHeader">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA40200Model.SA40200_pdHeader_Result">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UpDates" ColumnName="UpDates" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

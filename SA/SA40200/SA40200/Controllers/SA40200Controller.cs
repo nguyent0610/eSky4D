@@ -42,7 +42,7 @@ namespace SA40200.Controllers
         public ActionResult GetSYS_CloseDateAuto(string ID)
         {
             int value = ID.PassNull() == "" ? 0 : int.Parse(ID);
-            return this.Store(_sys.SYS_CloseDateAuto.FirstOrDefault(p => p.ID == value));
+            return this.Store(_sys.SA40200_pdHeader().FirstOrDefault(p => p.ID == value));
         }
         
         [DirectMethod]
@@ -156,15 +156,15 @@ namespace SA40200.Controllers
                     }
                     if (plus == 12)
                     {
+                        Time += "0";
                         plus = 0;
-
                     }
-                    Time += plus + time_temp.Substring(index, 3);
+                    Time +=plus +time_temp.Substring(index, 3);
                 }
                 
                 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_CloseDateAuto"]);
-                ChangeRecords<SYS_CloseDateAuto> lstSYS_CloseDateAuto = dataHandler.BatchObjectData<SYS_CloseDateAuto>();
+                ChangeRecords<SA40200_pdHeader_Result> lstSYS_CloseDateAuto = dataHandler.BatchObjectData<SA40200_pdHeader_Result>();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSYS_CloseDateBranchAuto"]);
                 ChangeRecords<SA40200_pgSYS_CloseDateBranchAuto_Result> lstSYS_CloseDateBranchAuto = dataHandler1.BatchObjectData<SA40200_pgSYS_CloseDateBranchAuto_Result>();
@@ -172,7 +172,7 @@ namespace SA40200.Controllers
 
                 #region Save Header SYS_CloseDateAuto
                 lstSYS_CloseDateAuto.Created.AddRange(lstSYS_CloseDateAuto.Updated);
-                foreach (SYS_CloseDateAuto curHeader in lstSYS_CloseDateAuto.Created)
+                foreach (SA40200_pdHeader_Result curHeader in lstSYS_CloseDateAuto.Created)
                 {
                     if (ID.PassNull() == "") continue;
 
@@ -251,7 +251,7 @@ namespace SA40200.Controllers
 
         //Update SYS_CloseDateAuto
         #region Update SYS_CloseDateAuto
-        private void UpdatingHeader(ref SYS_CloseDateAuto t, SYS_CloseDateAuto s)
+        private void UpdatingHeader(ref SYS_CloseDateAuto t, SA40200_pdHeader_Result s)
         {
             t.Active = s.Active;
             t.Descr = s.Descr;

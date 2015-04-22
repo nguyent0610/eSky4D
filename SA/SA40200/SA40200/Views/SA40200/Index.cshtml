@@ -41,7 +41,7 @@
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         @(
             X.Store().ID("stoSYS_CloseDateAuto").AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(SYS_CloseDateAuto), "mdlSYS_CloseDateAuto", "ID"))  
+            .Model(Util.GenerateModel(typeof(SA40200_pdHeader_Result), "mdlSYS_CloseDateAuto", "ID"))  
             .Proxy(
                 X.AjaxProxy()                
                 .Url(Url.Action("GetSYS_CloseDateAuto", "SA40200"))                

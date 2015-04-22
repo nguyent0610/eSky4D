@@ -174,6 +174,14 @@ namespace SA40200
         {
             return base.ExecuteFunction<Nullable<global::System.Int32>>("SA40200_GetAutoNumber");
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SA40200_pdHeader_Result> SA40200_pdHeader()
+        {
+            return base.ExecuteFunction<SA40200_pdHeader_Result>("SA40200_pdHeader");
+        }
 
         #endregion
 
@@ -615,6 +623,187 @@ namespace SA40200
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA40200Model", Name="SA40200_pdHeader_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA40200_pdHeader_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA40200_pdHeader_Result object.
+        /// </summary>
+        /// <param name="active">Initial value of the Active property.</param>
+        /// <param name="descr">Initial value of the Descr property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        /// <param name="id">Initial value of the ID property.</param>
+        /// <param name="upDates">Initial value of the UpDates property.</param>
+        public static SA40200_pdHeader_Result CreateSA40200_pdHeader_Result(global::System.Boolean active, global::System.String descr, global::System.Byte[] tstamp, global::System.Int32 id, global::System.Int32 upDates)
+        {
+            SA40200_pdHeader_Result sA40200_pdHeader_Result = new SA40200_pdHeader_Result();
+            sA40200_pdHeader_Result.Active = active;
+            sA40200_pdHeader_Result.Descr = descr;
+            sA40200_pdHeader_Result.tstamp = tstamp;
+            sA40200_pdHeader_Result.ID = id;
+            sA40200_pdHeader_Result.UpDates = upDates;
+            return sA40200_pdHeader_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Active
+        {
+            get
+            {
+                return _Active;
+            }
+            set
+            {
+                OnActiveChanging(value);
+                ReportPropertyChanging("Active");
+                _Active = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Active");
+                OnActiveChanged();
+            }
+        }
+        private global::System.Boolean _Active;
+        partial void OnActiveChanging(global::System.Boolean value);
+        partial void OnActiveChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> Time
+        {
+            get
+            {
+                return _Time;
+            }
+            set
+            {
+                OnTimeChanging(value);
+                ReportPropertyChanging("Time");
+                _Time = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Time");
+                OnTimeChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _Time;
+        partial void OnTimeChanging(Nullable<global::System.DateTime> value);
+        partial void OnTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                OnIDChanging(value);
+                ReportPropertyChanging("ID");
+                _ID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ID");
+                OnIDChanged();
+            }
+        }
+        private global::System.Int32 _ID;
+        partial void OnIDChanging(global::System.Int32 value);
+        partial void OnIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 UpDates
+        {
+            get
+            {
+                return _UpDates;
+            }
+            set
+            {
+                OnUpDatesChanging(value);
+                ReportPropertyChanging("UpDates");
+                _UpDates = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UpDates");
+                OnUpDatesChanged();
+            }
+        }
+        private global::System.Int32 _UpDates;
+        partial void OnUpDatesChanging(global::System.Int32 value);
+        partial void OnUpDatesChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
