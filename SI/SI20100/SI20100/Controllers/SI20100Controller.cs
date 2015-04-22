@@ -19,7 +19,6 @@ namespace SI20100.Controllers
     {
         private string _screenNbr = "SI20100";
         private string _userName = Current.UserName;
-
         SI20100Entities _db = Util.CreateObjectContext<SI20100Entities>(false);
 
         public ActionResult Index()
@@ -28,13 +27,13 @@ namespace SI20100.Controllers
             return View();
         }
 
-       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+       //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetData()
+        public ActionResult GetIN_Buyer()
         {
             return this.Store(_db.SI20100_pgLoadGrid().ToList());
         }
@@ -44,10 +43,9 @@ namespace SI20100.Controllers
         {
             try
             {
-
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
-                ChangeRecords<SI_Buyer> lstLang = dataHandler.BatchObjectData<SI_Buyer>();
-                foreach (SI_Buyer deleted in lstLang.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstIN_Buyer"]);
+                ChangeRecords<SI_Buyer> lstIN_Buyer = dataHandler.BatchObjectData<SI_Buyer>();
+                foreach (SI_Buyer deleted in lstIN_Buyer.Deleted)
                 {
                     var del = _db.SI_Buyer.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault();
                     if (del != null)
@@ -56,9 +54,9 @@ namespace SI20100.Controllers
                     }
                 }
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                lstIN_Buyer.Created.AddRange(lstIN_Buyer.Updated);
 
-                foreach (SI_Buyer curLang in lstLang.Created)
+                foreach (SI_Buyer curLang in lstIN_Buyer.Created)
                 {
                     if (curLang.Buyer.PassNull() == "") continue;
 

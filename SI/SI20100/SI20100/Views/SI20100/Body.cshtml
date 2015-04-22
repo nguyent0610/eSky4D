@@ -27,16 +27,21 @@
         .ID("grdIN_Buyer")
         .Store(
              X.Store()
-            .ID("stoData")
+            .ID("stoIN_Buyer")
             .PageSize(50)//.AutoLoad(true)
             .Model(Util.GenerateModel(typeof(SI20100_pgLoadGrid_Result), "mdlIN_Buyer", "Buyer"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData")))
-            .Listeners(l => { 
-                l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; 
-                l.Load.Handler = "HQ.common.showBusy(false);"; 
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetIN_Buyer")))
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";                 
             })
         )
-        .Listeners(p => p.BoxReady.Handler = "App.stoData.reload();")
+        .Listeners(p =>
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
         .SortableColumns(false)
         .ColumnModel(
         
@@ -46,14 +51,11 @@
                     
                     , X.CommandColumn().Width(150)
                     .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t =>
-                            {
-                                t.Text = Util.GetLang("Rejectrowchanges");
-                            })
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
                     )
                     .PrepareToolbar(t =>
                     {
@@ -65,7 +67,7 @@
                     })
         
         )
-        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+        .SelectionModel(X.RowSelectionModel().ID("slmIN_Buyer").Mode(SelectionMode.Multi))
         .BottomBar(
             X.PagingToolbar()
             .Items(
