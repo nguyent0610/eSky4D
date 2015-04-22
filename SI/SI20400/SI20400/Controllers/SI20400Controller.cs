@@ -28,13 +28,13 @@ namespace SI20400.Controllers
             return View();
         }
 
-       [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetData()
+        public ActionResult GetSI_MaterialType()
         {
             return this.Store(_db.SI20400_pgLoadGrid().ToList());
         }
@@ -45,9 +45,9 @@ namespace SI20400.Controllers
             try
             {
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
-                ChangeRecords<SI_MaterialType> lstLang = dataHandler.BatchObjectData<SI_MaterialType>();
-                foreach (SI_MaterialType deleted in lstLang.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_MaterialType"]);
+                ChangeRecords<SI_MaterialType> lstSI_MaterialType = dataHandler.BatchObjectData<SI_MaterialType>();
+                foreach (SI_MaterialType deleted in lstSI_MaterialType.Deleted)
                 {
                     var del = _db.SI_MaterialType.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault();
                     if (del != null)
@@ -56,9 +56,9 @@ namespace SI20400.Controllers
                     }
                 }
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                lstSI_MaterialType.Created.AddRange(lstSI_MaterialType.Updated);
 
-                foreach (SI_MaterialType curLang in lstLang.Created)
+                foreach (SI_MaterialType curLang in lstSI_MaterialType.Created)
                 {
                     if (curLang.MaterialType.PassNull() == "") continue;
 
