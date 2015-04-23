@@ -23,8 +23,14 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSI_ShipVia);
             break;
         case "refresh":
-            HQ.isFirstLoad = true;
-            App.stoSI_ShipVia.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSI_ShipVia.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
@@ -33,9 +39,9 @@ var menuClick = function (command) {
             break;
         case "delete":
             if (App.slmSI_ShipVia.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
-                }
+                var rowindex = HQ.grid.indexSelect(App.grdSI_ShipVia);
+                if (rowindex != '')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdSI_ShipVia), ''], 'deleteData', true)
             }
             break;
         case "save":
@@ -48,11 +54,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.isChange) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
 
@@ -70,6 +72,7 @@ var grdSI_ShipVia_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSI_ShipVia);
     stoChanged(App.stoSI_ShipVia);
 };
+
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
 var save = function () {
@@ -82,6 +85,7 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                HQ.isChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
@@ -98,15 +102,6 @@ var deleteData = function (item) {
     }
 };
 
-
-/////////////////////////////////////////////////////////////////////////
-//// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.changeData(false, 'SI21200');//khi dong roi gan lai cho change la false
-        HQ.common.close(this);
-    }
-};
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
@@ -135,11 +130,13 @@ var stoBeforeLoad = function (sto) {
 };
 
 /////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSI_ShipVia.reload();
+    }
+};
+///////////////////////////////////
