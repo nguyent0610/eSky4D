@@ -29,7 +29,7 @@
             .ID("stoSI_City")
             .PageSize(50)
             .Model(Util.GenerateModel(typeof(SI20500_pgLoadGrid_Result), "mdlSI_City", "City"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_City"))).AutoLoad(false)
             .Listeners(l =>
             {
                 l.BeforeLoad.Fn = "stoBeforeLoad";

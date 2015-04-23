@@ -34,7 +34,7 @@ namespace SI20500.Controllers
             return PartialView();
         }
 
-        public ActionResult GetData()
+        public ActionResult GetSI_City()
         {
             return this.Store(_db.SI20500_pgLoadGrid().ToList());
         }
