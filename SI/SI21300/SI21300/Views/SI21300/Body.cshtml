@@ -25,20 +25,24 @@
             X.GridPanel()
             .Scroll(ScrollMode.Both)
             .View(X.GridView().TrackOver(false))
-            .ID("grdCarrier")
+            .ID("grdSI_Carrier")
             .Store(
                 X.Store()
-                .ID("stoCarrier")
+                .ID("stoSI_Carrier")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(SI21300_pgLoadCarrier_Result), "mdSI_Carrier", "CarrierID"))
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCarrier")))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_Carrier")))
                 .Listeners(l =>
                 {
-                    l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                    l.Load.Handler = "HQ.common.showBusy(false);"; 
-                }) // stoCarrier
-            )
-            .Listeners(p => p.BoxReady.Handler = "App.stoCarrier.reload();")
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";
+                    l.Update.Fn = "stoChanged";                 
+                })
+        )
+        .Listeners(p =>
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
             .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn().Width(40)
@@ -118,10 +122,10 @@
                 })
                 .Listeners(l =>
                 {
-                    l.Command.Handler = "grd_Reject(record);";
+                    l.Command.Handler = "grdSI_Carrier_Reject(record);";
                 })
             )
-            .SelectionModel(X.RowSelectionModel().ID("slmCarrier").Mode(SelectionMode.Multi))
+            .SelectionModel(X.RowSelectionModel().ID("slmSI_Carrier").Mode(SelectionMode.Multi))
             .BottomBar(
                 X.PagingToolbar()
                 .Items(
@@ -140,10 +144,9 @@
                 .ClicksToEdit(1)
                 .Listeners(ls =>
                 {
-                    ls.BeforeEdit.Fn = "grdCarrier_BeforeEdit";
-                    ls.Edit.Fn = "grdCarrier_Edit";
-                    ls.ValidateEdit.Fn = "grdCarrier_ValidateEdit";
-                    ls.CancelEdit.Fn = "grdCarrier_CancelEdit";
+                    ls.BeforeEdit.Fn = "grdSI_Carrier_BeforeEdit";
+                    ls.Edit.Fn = "grdSI_Carrier_Edit";
+                    ls.ValidateEdit.Fn = "grdSI_Carrier_ValidateEdit";
                 })
             )
             .Features(
@@ -153,7 +156,7 @@
                     X.StringFilter().DataIndex("CarrierID"),
                     X.StringFilter().DataIndex("Descr"),
                     X.StringFilter().DataIndex("CarrierType"),
-                    X.StringFilter().DataIndex("CheckZones"),
+                    X.BooleanFilter().DataIndex("CheckZones"),
                     X.StringFilter().DataIndex("ShipAccount"),
                     X.StringFilter().DataIndex("UOM")
                 )

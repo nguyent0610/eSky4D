@@ -35,7 +35,7 @@ namespace SI21300.Controllers
             return PartialView();
         }
 
-        public ActionResult GetCarrier()
+        public ActionResult GetSI_Carrier()
         {
             var Carriers = _db.SI21300_pgLoadCarrier().ToList();
             return this.Store(Carriers);
@@ -46,9 +46,9 @@ namespace SI21300.Controllers
         {
             try
             {
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstCarrier"]);
-                ChangeRecords<SI_Carrier> lstCarrier = dataHandler.BatchObjectData<SI_Carrier>();
-                foreach (SI_Carrier deleted in lstCarrier.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_Carrier"]);
+                ChangeRecords<SI_Carrier> lstSI_Carrier = dataHandler.BatchObjectData<SI_Carrier>();
+                foreach (SI_Carrier deleted in lstSI_Carrier.Deleted)
                 {
                     var del = _db.SI_Carrier.Where(p => p.CarrierID == deleted.CarrierID).FirstOrDefault();
                     if (del != null)
@@ -57,9 +57,9 @@ namespace SI21300.Controllers
                     }
                 }
 
-                lstCarrier.Created.AddRange(lstCarrier.Updated);
+                lstSI_Carrier.Created.AddRange(lstSI_Carrier.Updated);
 
-                foreach (SI_Carrier curCarrier in lstCarrier.Created)
+                foreach (SI_Carrier curCarrier in lstSI_Carrier.Created)
                 {
                     if (curCarrier.CarrierID.PassNull() == "") continue;
 
