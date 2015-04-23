@@ -1,0 +1,176 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SI21200;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdSI_ShipVia")
+        .Store(
+            X.Store()
+            .ID("stoSI_ShipVia")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(SI21200_pgSI_ShipVia_Result), "mdlSI21200_pgSI_ShipVia", "ShipViaID"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_ShipVia"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";                 
+            })
+        )
+        .Listeners(p =>
+                 {
+                     p.BoxReady.Handler = "firstLoad();";
+                 })
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40),
+            X.Column().Text(Util.GetLang("ShipViaID")).DataIndex("ShipViaID").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(20).EnforceMaxLength(true)),
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
+            
+            X.Column().Text(Util.GetLang("CarrierID")).Width(100).DataIndex("CarrierID")
+            .Editor(
+                HQ.Combo().ID("cboCarrierID").Name("cboCarrierID").HQProcedure("SI21200_pcSI_Carrier")
+                .HQColumnShow("CarrierID,Descr").DisplayField("CarrierID").ValueField("CarrierID")
+                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+                .LoadData()
+            ),
+            
+            X.Column().Text(Util.GetLang("TransitTime")).DataIndex("TransitTime").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
+            
+            X.CheckColumn().Text(Util.GetLang("SaturdayPickup")).DataIndex("S4Future11").Width(85).Editable(true),
+            X.CheckColumn().Text(Util.GetLang("SundayPickup")).DataIndex("S4Future12").Width(85).Editable(true),
+            X.CheckColumn().Text(Util.GetLang("MoveOnDeliveryDays")).DataIndex("MoveOnDeliveryDays").Width(85).Editable(true),
+            X.CheckColumn().Text(Util.GetLang("ProductMoveSun")).DataIndex("S4Future10").Width(85).Editable(true),
+            X.CheckColumn().Text(Util.GetLang("WeekendDelivery")).DataIndex("WeekendDelivery").Width(85).Editable(true),
+            X.CheckColumn().Text(Util.GetLang("SundayDelivery")).DataIndex("S4Future09").Width(85).Editable(true),
+            
+            X.Column().Text(Util.GetLang("DfltFrtMthd")).Width(100).DataIndex("DfltFrtMthd")
+            .Editor(
+                HQ.Combo().ID("cboDfltFrtMthd").Name("cboDfltFrtMthd").HQDBSys(true).HQProcedure("SI21200_pcDfltFrtMthd")
+                .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                .HQParam(new StoreParameterCollection() {                                
+                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+                .LoadData()
+            ),
+          
+            X.Column().Text(Util.GetLang("DfltFrtAmt")).DataIndex("DfltFrtAmt").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
+            
+            X.Column().Text(Util.GetLang("FrtAcct")).Width(100).DataIndex("FrtAcct")
+            .Editor(
+                HQ.Combo().ID("cboFrtAcct").Name("cboFrtAcct").HQProcedure("SI21200_pcAcct_Active")
+                .HQColumnShow("BankAcct,AcctName,AddrID").DisplayField("BankAcct").ValueField("BankAcct")
+                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+                .LoadData()
+            ),
+            
+            X.Column().Text(Util.GetLang("FrtSub")).DataIndex("FrtSub").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
+            
+            X.Column().Text(Util.GetLang("TaxCat")).Width(100).DataIndex("TaxCat")
+            .Editor(
+                HQ.Combo().ID("cboTaxCat").Name("cboTaxCat").HQProcedure("SI21200_pcSI_Tax")
+                .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID")
+                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => { 
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+                .LoadData()
+            ),
+            
+            X.Column().Text(Util.GetLang("SCAC")).DataIndex("SCAC").Width(150).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true)),
+            
+            X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdSI_ShipVia_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmSI_ShipVia").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdSI_ShipVia_BeforeEdit";
+                ls.Edit.Fn = "grdSI_ShipVia_Edit";
+                ls.ValidateEdit.Fn = "grdSI_ShipVia_ValidateEdit";
+
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("ShipViaID"),
+                    X.StringFilter().DataIndex("Descr"),
+                    X.StringFilter().DataIndex("CarrierID"),
+                    X.StringFilter().DataIndex("TransitTime"),
+                    X.StringFilter().DataIndex("DfltFrtMthd"),
+                    X.StringFilter().DataIndex("DfltFrtAmt"),
+                    X.StringFilter().DataIndex("FrtAcct"),
+                    X.StringFilter().DataIndex("FrtSub"),
+                    X.StringFilter().DataIndex("TaxCat"),
+                    X.StringFilter().DataIndex("SCAC")
+                    
+                )
+        )
+    )
+))

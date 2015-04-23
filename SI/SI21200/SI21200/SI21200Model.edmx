@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="SI_ShipVia" EntityType="eBiz4DWebSysModel.Store.SI_ShipVia" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="SI_ShipVia">
+          <Key>
+            <PropertyRef Name="ShipViaID" />
+          </Key>
+          <Property Name="ShipViaID" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="30" />
+          <Property Name="CarrierID" Type="varchar" MaxLength="10" />
+          <Property Name="TransitTime" Type="smallint" Nullable="false" />
+          <Property Name="S4Future11" Type="bit" Nullable="false" />
+          <Property Name="S4Future12" Type="bit" Nullable="false" />
+          <Property Name="MoveOnDeliveryDays" Type="bit" Nullable="false" />
+          <Property Name="S4Future10" Type="bit" Nullable="false" />
+          <Property Name="WeekendDelivery" Type="bit" Nullable="false" />
+          <Property Name="S4Future09" Type="bit" Nullable="false" />
+          <Property Name="DfltFrtMthd" Type="char" MaxLength="1" />
+          <Property Name="DfltFrtAmt" Type="float" Nullable="false" />
+          <Property Name="FrtAcct" Type="varchar" MaxLength="10" />
+          <Property Name="FrtSub" Type="varchar" MaxLength="24" />
+          <Property Name="TaxCat" Type="varchar" MaxLength="10" />
+          <Property Name="SCAC" Type="varchar" MaxLength="5" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="SI21200_pgSI_ShipVia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SI21200Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SI21200Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="SI_ShipVia" EntityType="SI21200Model.SI_ShipVia" />
+          <FunctionImport Name="SI21200_pgSI_ShipVia" ReturnType="Collection(SI21200Model.SI21200_pgSI_ShipVia_Result)" />
+        </EntityContainer>
+        <EntityType Name="SI_ShipVia">
+          <Key>
+            <PropertyRef Name="ShipViaID" />
+          </Key>
+          <Property Type="String" Name="ShipViaID" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descr" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CarrierID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="TransitTime" Nullable="false" />
+          <Property Type="Boolean" Name="S4Future11" Nullable="false" />
+          <Property Type="Boolean" Name="S4Future12" Nullable="false" />
+          <Property Type="Boolean" Name="MoveOnDeliveryDays" Nullable="false" />
+          <Property Type="Boolean" Name="S4Future10" Nullable="false" />
+          <Property Type="Boolean" Name="WeekendDelivery" Nullable="false" />
+          <Property Type="Boolean" Name="S4Future09" Nullable="false" />
+          <Property Type="String" Name="DfltFrtMthd" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Type="Double" Name="DfltFrtAmt" Nullable="false" />
+          <Property Type="String" Name="FrtAcct" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="FrtSub" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxCat" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SCAC" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="SI21200_pgSI_ShipVia_Result">
+          <Property Type="String" Name="ShipViaID" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="CarrierID" Nullable="true" MaxLength="10" />
+          <Property Type="Int16" Name="TransitTime" Nullable="false" />
+          <Property Type="Boolean" Name="S4Future11" Nullable="false" />
+          <Property Type="Boolean" Name="S4Future12" Nullable="false" />
+          <Property Type="Boolean" Name="MoveOnDeliveryDays" Nullable="false" />
+          <Property Type="Boolean" Name="S4Future10" Nullable="false" />
+          <Property Type="Boolean" Name="WeekendDelivery" Nullable="false" />
+          <Property Type="Boolean" Name="S4Future09" Nullable="false" />
+          <Property Type="String" Name="DfltFrtMthd" Nullable="true" MaxLength="1" />
+          <Property Type="Double" Name="DfltFrtAmt" Nullable="false" />
+          <Property Type="String" Name="FrtAcct" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="FrtSub" Nullable="true" MaxLength="24" />
+          <Property Type="String" Name="TaxCat" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SCAC" Nullable="true" MaxLength="5" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="SI21200Entities" >
+          <EntitySetMapping Name="SI_ShipVia">
+            <EntityTypeMapping TypeName="SI21200Model.SI_ShipVia">
+              <MappingFragment StoreEntitySet="SI_ShipVia">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="SCAC" ColumnName="SCAC" />
+                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
+                <ScalarProperty Name="FrtSub" ColumnName="FrtSub" />
+                <ScalarProperty Name="FrtAcct" ColumnName="FrtAcct" />
+                <ScalarProperty Name="DfltFrtAmt" ColumnName="DfltFrtAmt" />
+                <ScalarProperty Name="DfltFrtMthd" ColumnName="DfltFrtMthd" />
+                <ScalarProperty Name="S4Future09" ColumnName="S4Future09" />
+                <ScalarProperty Name="WeekendDelivery" ColumnName="WeekendDelivery" />
+                <ScalarProperty Name="S4Future10" ColumnName="S4Future10" />
+                <ScalarProperty Name="MoveOnDeliveryDays" ColumnName="MoveOnDeliveryDays" />
+                <ScalarProperty Name="S4Future12" ColumnName="S4Future12" />
+                <ScalarProperty Name="S4Future11" ColumnName="S4Future11" />
+                <ScalarProperty Name="TransitTime" ColumnName="TransitTime" />
+                <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="ShipViaID" ColumnName="ShipViaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SI21200_pgSI_ShipVia" FunctionName="eBiz4DWebSysModel.Store.SI21200_pgSI_ShipVia">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SI21200Model.SI21200_pgSI_ShipVia_Result">
+                <ScalarProperty Name="ShipViaID" ColumnName="ShipViaID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
+                <ScalarProperty Name="TransitTime" ColumnName="TransitTime" />
+                <ScalarProperty Name="S4Future11" ColumnName="S4Future11" />
+                <ScalarProperty Name="S4Future12" ColumnName="S4Future12" />
+                <ScalarProperty Name="MoveOnDeliveryDays" ColumnName="MoveOnDeliveryDays" />
+                <ScalarProperty Name="S4Future10" ColumnName="S4Future10" />
+                <ScalarProperty Name="WeekendDelivery" ColumnName="WeekendDelivery" />
+                <ScalarProperty Name="S4Future09" ColumnName="S4Future09" />
+                <ScalarProperty Name="DfltFrtMthd" ColumnName="DfltFrtMthd" />
+                <ScalarProperty Name="DfltFrtAmt" ColumnName="DfltFrtAmt" />
+                <ScalarProperty Name="FrtAcct" ColumnName="FrtAcct" />
+                <ScalarProperty Name="FrtSub" ColumnName="FrtSub" />
+                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
+                <ScalarProperty Name="SCAC" ColumnName="SCAC" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" >
+        <EntityTypeShape EntityType="SI21200Model.SI_ShipVia" Width="1.5" PointX="9.0539850821038641" PointY="13.639851352963527" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
