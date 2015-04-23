@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("AR10100")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Purchase Order")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AR10100")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCompany("Han Quang Software Solution")]
+[assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]
+[assembly: AssemblyCopyright("Han Quang Software Solution. All rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
