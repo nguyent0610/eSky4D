@@ -1,0 +1,180 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM22200;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM22200";
+    var acc = Session["OM22200"] as AccessRight;
+    var HQ = Html.HQ();
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/OM22200.js")' type="text/javascript"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("stoSaleRouteMaster")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM22200_pgSaleRouteMaster_Result), "mdlSaleRouteMaster", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetSaleRouteMaster", "OM22200"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperid", "App.cboSlsperId.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("routeID", "App.cboSalesRouteID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("pjpID", "App.cboPJPID.getValue()", ParameterMode.Raw)); 
+            })
+            .Listeners(p => { 
+                p.Load.Handler = "Event.frmMain_fieldChange();";
+                p.Update.Handler = "Event.frmMain_fieldChange();";
+            }) //Store.stoSaleRouteMaster_load
+            // Store: stoSaleRouteMaster
+        )
+
+        @(
+            X.Store().ID("stoPJP")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM_PJP), "mdlPJP", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetPJP", "OM22200"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("pjpID", "App.cboPJPID.getValue()", ParameterMode.Raw)); 
+            })      
+            .Listeners(p=>p.Load.Fn="Store.stoPJP_load" )
+            // Store: stoPJP
+        )
+
+        @(
+            X.Store().ID("stoCustomer")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM22200_pcCustomer_Result), "mdlCustomer", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetCustomer", "OM22200"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperid", "App.cboSlsperId.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("routeID", "App.cboSalesRouteID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("pjpID", "App.cboPJPID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("lstCust", "Process.getExistCustID(App.grdSalesRouteMaster)", ParameterMode.Raw)); 
+            })      
+            //.Listeners(p=>p.Load.Handler="Event.frmMain_fieldChange();" ) //Store.stoSaleRouteMaster_load
+            // Store: stoCustomer
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong OM22200Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+
+        @(X.Window().ID("winCustomer")
+            .Title(Util.GetLang("Customer"))
+            .Icon(Icon.UserAdd).Layout(LayoutType.Fit)
+            .Hidden(true).Maximizable(true)
+            .Height(350)
+            .Width(700)
+            .Modal(true)
+            .Items(
+                X.FormPanel().ID("frmCustomer")
+                .Layout(LayoutType.Border)
+                .TrackResetOnLoad(true)
+                .DefaultAnchor("100%")
+                .BodyPadding(5)
+                .BodyBorder(0)
+                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+                .Items(
+                    X.Panel().Region(Region.Center)
+                    .Layout(LayoutType.Border)
+                    .Items(
+                        X.GridPanel().ID("grdCustomer")
+                        .Region(Region.Center).Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false))
+                        .SortableColumns(false).AutoScroll(true)
+                        .StoreID("stoCustomer")
+                        .ColumnModel(
+                            X.CheckColumn()
+                            .HideTitleEl(true).DataIndex("Selected")
+                            .Align(Alignment.Center).ToolTip(Util.GetLang("Selected"))
+                            .Width(50).Editable(true)
+                            .HeaderItems(
+                                HQ.Checkbox().ID("chkSelectHeaderCust")
+                                .Handler("Event.chkSelectHeaderCust_change")
+                            )
+                            
+                            , X.Column().Text(Util.GetLang("CustId")).DataIndex("CustId")
+                            , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")
+                            , X.Column().Text(Util.GetLang("SlsperId")).DataIndex("SlsperId")
+                            , X.Column().Text(Util.GetLang("Status")).DataIndex("Status")
+                            , X.Column().Text(Util.GetLang("Addr1")).DataIndex("Addr1")
+                            , X.Column().Text(Util.GetLang("Addr2")).DataIndex("Addr2")
+                            , X.Column().Text(Util.GetLang("Phone")).DataIndex("Phone")
+                            , X.Column().Text(Util.GetLang("PriceClassID")).DataIndex("PriceClassID")
+                        )
+                    )
+
+                    , X.Panel().Region(Region.South)
+                    .Layout(LayoutType.HBox)
+                    .LayoutConfig(new HBoxLayoutConfig() { Align=HBoxAlign.Middle, Pack=BoxPack.Center })
+                    .Items(
+                        HQ.Button().ID("btnCustOK")
+                        .HQLangCode("OK").MarginSpec("5 5 5 5")
+                        .Icon(Icon.Tick).Handler("Event.btnCustOK_click")
+                        
+                        ,HQ.Button().HQLangCode("Cancel").MarginSpec("5 5 5 5")
+                        .Icon(Icon.Decline).Handler("this.up('window').close()")
+                    )
+                )// FormPanel: frmCustomer
+            )// Window: winCustomer
+        )
+    </body>
+</html>
