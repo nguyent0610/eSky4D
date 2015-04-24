@@ -1,0 +1,209 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SI22000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "SI22000";
+   
+}
+
+@(
+X.Viewport().Layout(LayoutType.Fit)
+.Items(
+        X.FormPanel()
+        .Layout(LayoutType.Anchor)
+        .ID("frmMain")
+        .Border(false)
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(2)
+        .TopBar(Util.SetupToolbar("Print", true))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .Listeners(l =>
+                    {
+                        l.BoxReady.Handler = "firstLoad();";
+                        l.FieldChange.Fn = "frmChange";
+                    })
+        .Items(
+            X.Panel().ID("pnlHeader").Layout(LayoutType.VBox).Width(1035).Border(false).AutoScroll(true)
+            //.Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'header')")//focus header        
+            .Items(
+                X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
+                    .Items(
+                    //HQ.Combo().ID("cboYearNbr").Width(300).HQHeightWidth(400, 300).MarginSpec("5 5 0 0")
+                    //.Items(
+                    //    new ListItem("nam 2011", "2011")
+                    //    ,new ListItem("nam 2012", "2012")
+                    //    ,new ListItem("nam 2013", "2013")
+                    //    ,new ListItem("nam 2014", "2014")
+                    //    ,new ListItem("nam 2015", "2015")
+                    //).Listeners(p=>p.Change.Fn="cboYearNbr_click") 
+                    HQ.DateField().ID("dateKPI").HQLangCode("SI22000_Year").Name("dateKPI")
+                    .MarginSpec("5 10 0 0").Width(300).Format("yyyy").Value(DateTime.Now.ToString("yyyy"))
+                    .Type(DatePickerType.Month).AllowBlank(false)
+                    .Listeners(l=>{
+                        l.Expand.Fn = "dateKPI_expand";
+                        l.Select.Fn = "dateKPI_Select";
+                    })
+                    
+                    ,HQ.Button().ID("btnCalendar").Width(100).Height(20).MarginSpec("5 0 0 0").Text(Util.GetLang("SI22000_CreateCycle"))
+                        .Handler("btnCalendar_click")
+                            
+                    ,HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("Status").HQProcedure("SI22000_pcLoadStatus")
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")//.ReadOnly(true)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 5 0 0")
+                    .HQDBSys(false).ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() { 
+                         new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw)
+                      })
+                    .LoadData()
+                    .Listeners(p=>p.Change.Handler="App.cboHandle.getStore().reload();") 
+
+
+                    , HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").HQProcedure("SI22000_pcLoadHandle")
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")//.ReadOnly(true)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .HQDBSys(false).ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw),
+                        new StoreParameter("@Status", "App.cboStatus.value", ParameterMode.Raw),
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                    })
+                    .LoadData()
+                   
+
+                )
+            )//end header
+            
+            , X.GridPanel()
+            .Layout(LayoutType.Fit)
+            .MarginSpec("10 0 0 0")
+            .Anchor("100% -25")// WIDTH HEIGHT                 
+            .RenderTo("contentCenter")
+            .View(X.GridView().TrackOver(false))
+            .ID("grdCycle").SetAutoScroll(true)
+            .Store(
+                X.Store().ID("stoCycle")
+                .Model(Util.GenerateModel(typeof(SI22000_pgLoadCycle_Result), "MdlSI_Cycle", "CycleNbr"))
+                .PageSize(50)
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCycle", "SI22000"))).AutoLoad(false)
+                .Parameters(ps =>
+                                {
+                                    ps.Add(new StoreParameter("yearNbr", "App.dateKPI.getRawValue()", ParameterMode.Raw));
+                                })
+               .Listeners(p => p.Load.Fn = "loadDataAutoDetail")
+              )
+            .SortableColumns(false)
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdCycle');")//focus grid          
+            .ColumnModel(
+                X.RowNumbererColumn()
+                ,X.Column().Text(Util.GetLang("CycleNbr")).DataIndex("CycleNbr").Width(150)
+                    .Editor(X.TextField().MaxLength(6).EnforceMaxLength(true))
+
+                ,X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDate").Width(150).Format("dd/MM/yyyy")
+                    .Editor(X.DateField().EnforceMaxLength(true))
+
+                ,X.DateColumn().Text(Util.GetLang("EndDate")).DataIndex("EndDate").Width(150).Format("dd/MM/yyyy")
+                    .Editor(X.DateField().EnforceMaxLength(true))
+                ,X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(0)
+                , X.CommandColumn().Width(150)
+                    .Commands(
+                        Html.X().GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t =>
+                            {
+                                t.Text = Util.GetLang("Rejectrowchanges");
+                            })
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t =>
+                    {
+                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Command.Handler = "grdCycle_Reject(record);";
+                    })
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmCycle").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdCycle_BeforeEdit";
+                    ls.Edit.Fn = "grdCycle_Edit";
+                    ls.ValidateEdit.Fn = "grdCycle_ValidateEdit";
+                })
+            )
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        Html.X().StringFilter().DataIndex("CycleNbr"),
+                        Html.X().StringFilter().DataIndex("StartDate"),
+                        Html.X().StringFilter().DataIndex("EndDate")
+                    )
+            )
+        )
+        
+    )
+)
+
+@(
+    X.Window()
+    .ID("DialogCycle")
+    .Title(Util.GetLang("ChoiceCycleType"))
+    .Height(185)
+    .Width(350).Hidden(true).Modal(true)
+    .Items(
+         X.FormPanel()
+        .Layout(LayoutType.Anchor)
+        .Border(false)
+        .TrackResetOnLoad(true)
+            
+        .BodyPadding(2)
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .Items(
+                        
+            HQ.DateField().ID("df_STARTDATE").HQLangCode("STARTDATE"),
+            X.RadioGroup().ID("CycleGroup")
+            .Items(
+                    X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0").Width(1235)
+                    .Items(
+                              
+                        X.Radio().ID("rad1").BoxLabel("4 - 4 - 5")
+                        ,X.Radio().ID("rad2").BoxLabel("4 - 5 - 4")
+                        ,X.Radio().ID("rad3").BoxLabel("5 - 4 - 4")
+                    )
+            ),
+            X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
+            .Items(
+                    HQ.Button().ID("btn_OK").Text("OK").HQLangCode("OK").Handler("btn_OK_click")
+                    ,HQ.Button().ID("btn_Cancel").Text("Cancel").HQLangCode("Cancel").Handler("App.DialogCycle.close();")
+            )
+        )
+            
+    )
+)

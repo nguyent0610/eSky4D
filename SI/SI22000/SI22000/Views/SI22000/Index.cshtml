@@ -1,0 +1,70 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SI22000;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "SI22000";
+    
+    var acc = Session["SI22000"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+    <script src='@Url.Content("Scripts/hq.language"+ Current.LangID + ".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/SI22000.js")' type="text/javascript"></script>
+<style type="text/css"> @*Thuoc tinh hover tren grid *@
+    .x-grid-row-over .x-grid-cell-inner {
+        font-weight : bold;
+    }
+</style>
+<script>
+
+
+</script>
+<script>
+    HQ.cpnyID = '@Current.CpnyID';
+    HQ.langID = '@Current.LangID';
+    HQ.userName = '@Current.UserName';
+    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+    HQ.bussinessDate = new Date('@ViewBag.BussinessDate');//lay ngay server trong controller
+    HQ.bussinessTime = new Date('@ViewBag.BussinessTime');//lay ngay co gio cua server trong controller
+    HQ.config = '@ViewBag.SI22000SetUp';
+</script>
+  <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
+        @(X.Store().ID("storeCon").AutoLoad(false)   
+        .Model(Util.GenerateModel(typeof(SI22000_ppCon_Result), "vs_conModel", "TextVal"))
+        .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetCon", "SI22000"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )         
+        )  
+
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        @{Html.RenderAction("Body", new { lang=@Current.LangID});}
+        
+    
+    </body>
+</html>
+
+
+
