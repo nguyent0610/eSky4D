@@ -11,7 +11,6 @@ var fieldsLangCheckRequire = ["CatID", "Descr"];
 var menuClick = function (command) {
     switch (command) {
         case "first":
-
             HQ.grid.first(App.grdTaxCat);
             break;
         case "prev":
@@ -24,8 +23,14 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdTaxCat);
             break;
         case "refresh":
-            HQ.isFirstLoad = true;
-            App.stoTaxCat.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoTaxCat.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
@@ -34,9 +39,9 @@ var menuClick = function (command) {
             break;
         case "delete":
             if (App.slmTaxCat.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
-                }
+                var rowindex = HQ.grid.indexSelect(App.grdTaxCat);
+                if (rowindex != '')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdTaxCat), ''], 'deleteData', true)
             }
             break;
         case "save":
@@ -49,11 +54,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.isChange) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
 
@@ -83,6 +84,7 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                HQ.isChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
@@ -100,14 +102,6 @@ var deleteData = function (item) {
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-//// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.changeData(false, 'SI20900');//khi dong roi gan lai cho change la false
-        HQ.common.close(this);
-    }
-};
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
@@ -136,8 +130,15 @@ var stoBeforeLoad = function (sto) {
 };
 
 /////////////////////////////////////////////////////////////////////////
-
-
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoTaxCat.reload();
+    }
+};
+///////////////////////////////////
 
 
 
