@@ -18,7 +18,11 @@
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Border)
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
-    .Listeners(itm=>itm.AfterRender.Fn="frmloadAfterRender")
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        l.FieldChange.Fn = "frmChange";
+    })
     .Items(
         ////Thiet ke giao dien o day
         X.Panel().ID("pnlHeader")

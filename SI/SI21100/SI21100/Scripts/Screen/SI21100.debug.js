@@ -1,27 +1,25 @@
-var menuClick = function (command) {
+﻿var menuClick = function (command) {
     switch (command) {
         case "first":
-            App.cboTermsID.setValue(App.cboTermsID.getStore().first().get('UserName'));
+            HQ.combo.first(App.cboTermsID, HQ.isChange);
             break;
         case "prev":
-            var combobox = App.cboTermsID;
-            var v = combobox.getValue();
-            var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
-            var index = combobox.store.indexOf(record);
-            App.cboTermsID.setValue(combobox.store.getAt(index - 1).data.UserName);
+            HQ.combo.prev(App.cboTermsID, HQ.isChange);
             break;
         case "next":
-            var combobox = App.cboTermsID;
-            var v = combobox.getValue();
-            var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
-            var index = combobox.store.indexOf(record);
-            App.cboTermsID.setValue(combobox.store.getAt(index + 1).data.UserName);
+            HQ.combo.next(App.cboTermsID, HQ.isChange);
             break;
         case "last":
-            App.cboTermsID.setValue(App.cboTermsID.getStore().last().get('UserName'));
+            HQ.combo.last(App.cboTermsID, HQ.isChange);
             break;
         case "refresh":
-            App.stoSI_Terms.load();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                App.stoSI_Terms.reload();
+            }
             break;
         case "new":
             App.cboTermsID.setValue("");
@@ -74,19 +72,38 @@ var cboTermsID_Change = function (item, newValue, oldValue) {
     App.stoSI_Terms.load();
 };
 
-
-
-var frmloadAfterRender = function (obj) {
-    App.stoSI_Terms.load();
+var firstLoad = function () {
+    //loadSourceCombo();
 };
-
-var loadData = function () {
-    if (App.stoSI_Terms.getCount() == 0) {
-        App.stoSI_Terms.insert(0, Ext.data.Record());
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isNew = false;
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "BranchID");
+        record = sto.getAt(0);
+        sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
+        HQ.isNew = true;//record la new
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
     }
     App.frmMain.getForm().loadRecord(App.stoSI_Terms.getAt(0));
+    frmChange();
 };
 
+//khi co su thay doi du lieu cua cac conttol tren form
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = HQ.store.isChange(App.stoSI_Terms);
+    HQ.common.changeData(HQ.isChange, 'SI21100');//co thay doi du lieu gan * tren tab title header
+    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+    if (App.cboTermsID.valueModels == null || HQ.isNew == true)
+        App.cboTermsID.setReadOnly(false);
+    else App.cboTermsID.setReadOnly(HQ.isChange);
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
 
 var save = function () {
     if (App.frmMain.isValid()) {
@@ -100,7 +117,7 @@ var save = function () {
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 App.cboTermsID.getStore().reload();
-                menuClick("refresh");
+
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -130,8 +147,10 @@ var deleteData = function (item) {
 };
 
 //// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.close(this);
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        App.stoSI_Terms.reload();
     }
 };
+////////////////////////////////////////////////////////////////////////

@@ -53,10 +53,14 @@
             {
                 ps.Add(new StoreParameter("TermsID", "App.cboTermsID.getValue()", ParameterMode.Raw));
             })      
-            .Listeners(p=>p.Load.Handler="loadData()" )
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";                   
+            })
         )
         <!-- Gọi hàm Body trong SI21100Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
-        @{Html.RenderAction("Body", new {lang=@Current.LangID});}
+        @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>
 </html>
  
