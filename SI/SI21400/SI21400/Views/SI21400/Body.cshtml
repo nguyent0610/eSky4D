@@ -1,0 +1,127 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SI21400;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")  
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Anchor)
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        l.FieldChange.Fn = "frmChange";
+    })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+        .Region(Region.Center)
+        .AutoScroll(true)
+        .Items(
+            X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
+            .Items(
+            
+                HQ.Combo().ID("cboAddrID")
+                .Name("cboAddrID").HQLangCode("AddrID").AllowBlank(false).MarginSpec("5 0 0 0").ForceSelection(true)
+                .HQProcedure("SI21400_pcAddress").HQColumnShow("AddrID,Name,Addr1,Addr2").DisplayField("AddrID").ValueField("AddrID")
+                .HQHeightWidth(400, 400).Width(600)
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => {
+                    lst.TriggerClick.Fn = "cboAddrID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
+                    lst.Change.Fn = "cboAddrID_Change";//khi thay doi du lieu
+                    lst.Expand.Fn = "cboAddrID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
+                })
+               
+                , HQ.TextBox().ID("Name").Name("Name").HQLangCode("Name").MarginSpec("5 0 0 0").Width(600).EnforceMaxLength(true).MaxLength(30)
+                , HQ.TextBox().ID("Attn").Name("Attn").HQLangCode("Attn").MarginSpec("5 0 0 0").Width(600).EnforceMaxLength(true).MaxLength(30)
+                , HQ.TextBox().ID("Salut").Name("Salut").HQLangCode("Salut").MarginSpec("5 0 0 0").Width(600).EnforceMaxLength(true).MaxLength(30)
+                , HQ.TextBox().ID("Address1").Name("Addr1").HQLangCode("Address1").MarginSpec("5 0 0 0").Width(600).EnforceMaxLength(true).MaxLength(30)
+                , HQ.TextBox().ID("Address2").Name("Addr2").HQLangCode("Address2").MarginSpec("5 0 0 0").Width(600).EnforceMaxLength(true).MaxLength(30)
+                                                                
+                , HQ.Combo().ID("cboCountry").Name("cboCountry").HQProcedure("SI21400_pcCountryID").HQLangCode("COUNTRY")
+                .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").DataIndex("Country")
+                .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").HQAutoLoad(false)
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    lst.Change.Fn = "cboCountry_Change";
+                })
+
+                , HQ.Combo().ID("cboState").Name("cboState").HQProcedure("SI21400_pcStateByCountry").HQLangCode("State")
+                .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").DataIndex("State")
+                .HQHeightWidth(300, 400).Width(600).MarginSpec("5 0 0 0").HQAutoLoad(false)
+                .HQParam(new StoreParameterCollection() 
+                { 
+                    new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw }
+                })
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+                    
+                , HQ.TextBox().ID("Zip").Name("Zip").HQLangCode("Zip").MarginSpec("5 0 0 0").Width(600).EnforceMaxLength(true).MaxLength(10)
+                , HQ.TextBox().ID("Phone").Name("Phone").HQLangCode("Phone").MarginSpec("5 0 0 0").Width(600).EnforceMaxLength(true).MaxLength(30)
+                , HQ.TextBox().ID("Fax").Name("Fax").HQLangCode("Fax").MarginSpec("5 0 0 0").Width(600).EnforceMaxLength(true).MaxLength(30)
+                , HQ.TextBox().ID("TaxRegNbr").Name("TaxRegNbr").HQLangCode("TaxRegNbr").MarginSpec("5 0 0 0").Width(600).EnforceMaxLength(true).MaxLength(15)
+                , HQ.TextBox().ID("TaxLocId").Name("TaxLocId").HQLangCode("LocID").MarginSpec("5 0 0 0").Width(600).EnforceMaxLength(true).MaxLength(15)
+                            
+                , HQ.Combo().ID("cboTaxID00").Name("TaxId00").HQProcedure("SI21400_pcTaxAll").HQLangCode("TaxId01")
+                .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID").DataIndex("TaxId00")
+                .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+                    
+                , HQ.Combo().ID("cboTaxID02").Name("TaxId01").HQProcedure("SI21400_pcTaxAll").HQLangCode("TaxId02")
+                .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID").DataIndex("TaxId01")
+                .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+                    
+                , HQ.Combo().ID("cboTaxID03").Name("TaxId02").HQProcedure("SI21400_pcTaxAll").HQLangCode("TaxId03")
+                .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID").DataIndex("TaxId02")
+                .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+                    
+                , HQ.Combo().ID("cboTaxID04").Name("TaxId03").HQProcedure("SI21400_pcTaxAll").HQLangCode("TaxId04")
+                .HQColumnShow("TaxID,Descr,TaxRate").DisplayField("TaxID").ValueField("TaxID").DataIndex("TaxId03")
+                .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0")
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+            )//Container 
+        )// frmMain
+    )
+)
+)
