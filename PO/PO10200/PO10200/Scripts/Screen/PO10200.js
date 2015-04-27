@@ -1880,6 +1880,7 @@ var PopupWinLot = {
         App.winLot.show();
     },
     btnLotOK_Click: function () {
+        HQ.common.showBusy(false);
         var recordTran = App.winLot.record.data;
 
         var flat = null;
@@ -1916,7 +1917,10 @@ var PopupWinLot = {
                             App.smlLot.select(App.stoLotTrans.indexOf(item));
                             App.grdLot.deleteSelected();
                         }
-                    }
+                }
+                else if (item.data.Qty > 0) {
+                    return false;
+                }
             }
         });
         if (!Ext.isEmpty(flat)) {
@@ -2089,7 +2093,7 @@ var PopupWinLot = {
         //}
     },
     grdLot_Edit: function (item, e) {
-      
+        HQ.common.showBusy(true);
         var objDetail = e.record.data;
         
         var recordTran = App.winLot.record.data;
