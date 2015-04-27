@@ -51,7 +51,7 @@ namespace PO10201.Controllers
             ViewBag.BussinessTime = DateTime.Now;
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -571,7 +571,7 @@ namespace PO10201.Controllers
                 objR.RcptFrom = _poHead.RcptFrom;
                 objR.RcptQtyTot = _poHead.RcptQtyTot;
                 objR.VendID = _poHead.VendID;
-                objR.Status = _poHead.Status;
+                objR.Status = (_handle != "N" && _handle != "") ? _handle : _poHead.Status;
 
 
                 objR.LUpd_DateTime = DateTime.Now;
@@ -952,11 +952,11 @@ namespace PO10201.Controllers
                     throw new MessageException(MessageType.Message, "301");
 
 
-                var obj = _db.PO10201_ppCheckingRelease(_branchID, _batNbr).FirstOrDefault();
-                if (obj != null)
-                {
-                    throw new MessageException(MessageType.Message, "60");
-                }
+                //var obj = _db.PO10201_ppCheckingRelease(_branchID, _batNbr).FirstOrDefault();
+                //if (obj != null)
+                //{
+                //    throw new MessageException(MessageType.Message, "60");
+                //}
 
                 //var obj1 = _db.PO10201_ppCheckExistingInvcNbr(_branchID, _batNbr, _poHead.VendID, _poHead.InvcNote, _poHead.InvcNbr).FirstOrDefault();
                 //if (obj1 != null)
