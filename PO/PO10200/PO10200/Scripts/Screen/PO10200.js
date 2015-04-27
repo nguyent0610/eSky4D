@@ -1864,7 +1864,7 @@ var PopupWinLot = {
                 });
                 if (!flat) {
                     App.cboLotSerNbr.getStore().load(function () {
-                        PopupWinLot.addNewLot(record.data, App.cboLotSerNbr.getStore().getAt(0).data.LotSerNbr);
+                        PopupWinLot.addNewLot(record.data, App.cboLotSerNbr.getStore().getCount()>0?App.cboLotSerNbr.getStore().getAt(0).data.LotSerNbr:"");
                     })
                 } else {
 
