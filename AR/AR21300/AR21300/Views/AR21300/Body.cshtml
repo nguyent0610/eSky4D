@@ -49,13 +49,19 @@
                                 .ServerProxy(
                                             X.AjaxProxy()
                                             .Url(Url.Action("GetData"))
-                                            )                                            
-                                )
+                                            )
+                                .Listeners(l =>
+                                {
+                                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                                    l.Load.Fn = "stoLoad";
+                                    l.Update.Fn = "stoChanged";                 
+                                })
+                            )
+                        .Listeners(p =>
+                        {
+                            p.BoxReady.Handler = "firstLoad();";
+                        })
                         .SortableColumns(false)
-                        .Listeners(l =>
-                            {
-                                l.AfterRender.Fn = "AutoLoadGrid";
-                            })
                         .ColumnModel(
                                     X.RowNumbererColumn(),
                                     X.Column().Text(Util.GetLang("Area")).DataIndex("Area").Width(150).Editor(X.TextField().MaxLength(10)),
@@ -105,7 +111,6 @@
                                                 ls.BeforeEdit.Fn = "grdArea_BeforeEdit";
                                                 ls.Edit.Fn = "grdArea_Edit";
                                                 ls.ValidateEdit.Fn = "grdArea_ValidateEdit";
-                                                ls.CancelEdit.Fn = "grdArea_CancelEdit";
                                             })        
                                 )
                         .Features(

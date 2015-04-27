@@ -41,9 +41,9 @@ namespace AR21300.Controllers
         {
             try
             {
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AR_Area> lstMsg = dataHandler.BatchObjectData<AR_Area>();
-            foreach (AR_Area deleted in lstMsg.Deleted)
+            StoreDataHandler dataHandler = new StoreDataHandler(data["lstAR_Area"]);
+            ChangeRecords<AR_Area> lstAR_Area = dataHandler.BatchObjectData<AR_Area>();
+            foreach (AR_Area deleted in lstAR_Area.Deleted)
             {
                 var del = _db.AR_Area.Where(p => p.Area == deleted.Area).FirstOrDefault();
                 if (del != null)
@@ -52,7 +52,7 @@ namespace AR21300.Controllers
                 }
               
             }
-            foreach (AR_Area created in lstMsg.Created)
+            foreach (AR_Area created in lstAR_Area.Created)
             {
                 if (created.Area == "") continue;
                 var record = _db.AR_Area.Where(p => p.Area == created.Area).FirstOrDefault();
@@ -88,7 +88,7 @@ namespace AR21300.Controllers
 
             
 
-            foreach (AR_Area updated in lstMsg.Updated)
+            foreach (AR_Area updated in lstAR_Area.Updated)
             {
                 var record = _db.AR_Area.Where(p => p.Area == updated.Area).FirstOrDefault();
                                 
