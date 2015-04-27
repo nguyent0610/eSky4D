@@ -54,7 +54,7 @@ X.Viewport().Layout(LayoutType.Fit)
                         .Handler("btnCalendar_click")
                             
                     ,HQ.Combo().ID("cboStatus").Name("cboStatus").HQLangCode("Status").HQProcedure("SI22000_pcLoadStatus")
-                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")//.ReadOnly(true)
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").ReadOnly(true)
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 5 0 0")
                     .HQDBSys(false).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() { 
@@ -66,7 +66,7 @@ X.Viewport().Layout(LayoutType.Fit)
 
                     , HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").HQProcedure("SI22000_pcLoadHandle")
                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")//.ReadOnly(true)
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQValue("N",false)
                     .HQDBSys(false).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw),

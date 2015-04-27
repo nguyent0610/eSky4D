@@ -32,7 +32,7 @@ namespace SI22000.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
           
@@ -64,7 +64,10 @@ namespace SI22000.Controllers
         {
             try
             {
-                string yearNbr = data["cboYearNbr"];
+                string year_temp = data["dateKPI"];
+                DateTime year = DateTime.Parse(year_temp);
+                string yearNbr = year.Year.PassNull().ToString();
+
                 string status = data["cboStatus"];
                 string handle = data["cboHandle"];
                  
@@ -144,9 +147,6 @@ namespace SI22000.Controllers
                     }
                 
                 }
-                
-                
-
                 _db.SaveChanges();
 
                 if (handle != "N" && handle != null)
@@ -179,7 +179,6 @@ namespace SI22000.Controllers
                                 newTask.Crtd_Prog = newTask.LUpd_Prog = screenNbr;
                                 newTask.Crtd_User = newTask.LUpd_User = Current.UserName;
                                 newTask.Status = handle1.ToStatus;
-                                newTask.tstamp = new byte[1];
                                 _db.HO_PendingTasks.AddObject(newTask);
 
                             }

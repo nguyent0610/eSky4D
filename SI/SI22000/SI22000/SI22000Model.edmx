@@ -466,11 +466,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="59" >
-        <EntityTypeShape EntityType="SI22000Model.HO_EmailConfig" Width="1.5" PointX="10.925576542935136" PointY="23.384161870639847" />
-        <EntityTypeShape EntityType="SI22000Model.HO_PendingTasks" Width="1.5" PointX="8.396657755783135" PointY="10.746036489841545" />
-        <EntityTypeShape EntityType="SI22000Model.SI_ApprovalFlowHandle" Width="1.5" PointX="2.2071093331124212" PointY="22.731437604283652" />
-        <EntityTypeShape EntityType="SI22000Model.SI_ApprovalFlowStatus" Width="1.5" PointX="10.625" PointY="11.125" />
-        <EntityTypeShape EntityType="SI22000Model.SI_Cycle" Width="1.5" PointX="1.7398109611774846" PointY="12.183263978074894" />
+        <EntityTypeShape EntityType="SI22000Model.HO_EmailConfig" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SI22000Model.HO_PendingTasks" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SI22000Model.SI_ApprovalFlowHandle" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SI22000Model.SI_ApprovalFlowStatus" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SI22000Model.SI_Cycle" Width="1.5" PointX="0.75" PointY="5" />
       </Diagram>
     </Diagrams>
   </Designer>

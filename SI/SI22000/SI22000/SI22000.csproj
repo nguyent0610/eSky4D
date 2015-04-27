@@ -232,6 +232,7 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\Screen\SI22000.debug.js" />
     <Content Include="Scripts\Screen\SI22000.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
@@ -289,7 +290,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
