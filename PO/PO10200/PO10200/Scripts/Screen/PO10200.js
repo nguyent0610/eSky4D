@@ -74,6 +74,14 @@ var loadDataHeader = function (sto) {
     if (record.data.RcptFrom == "PO") {
         HQ.grid.show(App.grdDetail, ["POLineRef", "OrigRcptDate", "OrigRcptNbr", "Qty", "UnitDescr"]);
     }
+    if (record.data.RcptFrom == "DR") {
+        App.cboPONbr.allowBlank = true;
+        App.cboPONbr.validate();
+    }
+    else {
+        App.cboPONbr.allowBlank = false;
+        App.cboPONbr.validate();
+    }
 };
 var loadDataDetail = function (sto) {
     //neu sto da co du lieu thi ko duoc sua cac combo ben duoi
@@ -1846,27 +1854,28 @@ var PopupWinLot = {
        
         App.winLot.setTitle(record.data.InvtID + ' - ' + record.data.SiteID + ' - ' + record.data.RcptUnitDescr);
         var flat = false;
-        if (App.cboRcptType.getValue() == "X") {
-            App.stoLotTrans.data.each(function (item) {
-                if (item.data.POTranLineRef == App.winLot.record.LineRef && !Ext.isEmpty(item.data.LotSerNbr)) {
-                    flat = true;
-                }
-            });
-            if (!flat) {
-                App.cboLotSerNbr.getStore().load(function () {
-                    PopupWinLot.addNewLot(record.data, App.cboLotSerNbr.getStore().getAt(0).data.LotSerNbr);
-                })
-            } else {
+        if (App.cboStatus.getValue() == "H") {
+            if (App.cboRcptType.getValue() == "X") {
+                App.stoLotTrans.data.each(function (item) {
+                    if (item.data.POTranLineRef == App.winLot.record.LineRef && !Ext.isEmpty(item.data.LotSerNbr)) {
+                        flat = true;
+                    }
+                });
+                if (!flat) {
+                    App.cboLotSerNbr.getStore().load(function () {
+                        PopupWinLot.addNewLot(record.data, App.cboLotSerNbr.getStore().getAt(0).data.LotSerNbr);
+                    })
+                } else {
 
+                    App.cboLotSerNbr.getStore().reload();
+                    PopupWinLot.addNewLot(record.data);
+                }
+            }
+            else {
                 App.cboLotSerNbr.getStore().reload();
                 PopupWinLot.addNewLot(record.data);
             }
         }
-        else {
-            App.cboLotSerNbr.getStore().reload();
-            PopupWinLot.addNewLot(record.data);
-        }
-
         App.winLot.show();
     },
     btnLotOK_Click: function () {
@@ -1874,23 +1883,31 @@ var PopupWinLot = {
 
         var flat = null;
         App.stoLotTrans.data.each(function (item) {
-            if (!Ext.isEmpty(item.data.LotSerNbr)) {
-                if (item.data.Qty == 0) {
-                    HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
-                    flat = item;
-                    return false;
-                }
+            if (App.cboStatus.getValue() == "H") {
+                if (!Ext.isEmpty(item.data.LotSerNbr)) {
+                    if (item.data.Qty == 0) {
+                        if (App.cboRcptType.getValue() == "X") {
+                            App.smlLot.select(App.stoLotTrans.indexOf(item));
+                            App.grdLot.deleteSelected();
+                        }
+                        else {
+                            HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
+                            flat = item;
+                            return false;
+                        } 
+                    }
 
-                if (Ext.isEmpty(item.data.UnitDesc)) {
-                    HQ.message.show(1000, [HQ.common.getLang('unitDesc')], '', true);
-                    flat = item;
-                    return false;
-                }
+                    if (Ext.isEmpty(item.data.UnitDesc)) {
+                        HQ.message.show(1000, [HQ.common.getLang('unitDesc')], '', true);
+                        flat = item;
+                        return false;
+                    }
 
-                if (Ext.isEmpty(item.data.UnitMultDiv)) {
-                    HQ.message.show(2525, [item.data.InvtID], '', true);
-                    flat = item;
-                    return false;
+                    if (Ext.isEmpty(item.data.UnitMultDiv)) {
+                        HQ.message.show(2525, [item.data.InvtID], '', true);
+                        flat = item;
+                        return false;
+                    }
                 }
             }
         });
