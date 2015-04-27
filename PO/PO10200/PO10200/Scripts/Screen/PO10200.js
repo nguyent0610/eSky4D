@@ -1857,9 +1857,10 @@ var PopupWinLot = {
         if (App.cboStatus.getValue() == "H") {
             if (App.cboRcptType.getValue() == "X") {
                 App.stoLotTrans.data.each(function (item) {
-                    if (item.data.POTranLineRef == App.winLot.record.LineRef && !Ext.isEmpty(item.data.LotSerNbr)) {
-                        flat = true;
-                    }
+                    flat = true;
+                    //if (item.data.POTranLineRef == App.winLot.record.LineRef && !Ext.isEmpty(item.data.LotSerNbr)) {
+                    //    flat = true;
+                    //}
                 });
                 if (!flat) {
                     App.cboLotSerNbr.getStore().load(function () {
@@ -1884,6 +1885,7 @@ var PopupWinLot = {
         var flat = null;
         App.stoLotTrans.data.each(function (item) {
             if (App.cboStatus.getValue() == "H") {
+                
                 if (!Ext.isEmpty(item.data.LotSerNbr)) {
                     if (item.data.Qty == 0) {
                         if (App.cboRcptType.getValue() == "X") {
@@ -1909,6 +1911,12 @@ var PopupWinLot = {
                         return false;
                     }
                 }
+                else if (item.data.Qty == 0) {
+                        if (App.cboRcptType.getValue() == "X") {
+                            App.smlLot.select(App.stoLotTrans.indexOf(item));
+                            App.grdLot.deleteSelected();
+                        }
+                    }
             }
         });
         if (!Ext.isEmpty(flat)) {
