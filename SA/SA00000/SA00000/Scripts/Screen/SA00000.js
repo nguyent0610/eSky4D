@@ -21,7 +21,6 @@ var loadSourceCombo = function () {
     });
 };
 
-
 var loadComboGrid = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboCountry_grd.getStore().load(function () {
@@ -34,6 +33,7 @@ var loadComboGrid = function () {
         })
     });
 };
+
 var pnl_render = function (cmd) {
     cmd.getEl().on('mousedown', function () {
         if (cmd.id == 'pnlSys_CompanyAddr') {
@@ -178,6 +178,7 @@ var cboCountry_Change = function (sender, e) {
         }
     });
 };
+
 var cboState_Change = function (sender, e) {
     App.cboCity.getStore().load(function () {
         var curRecord = App.frmMain.getRecord();
@@ -190,20 +191,23 @@ var cboState_Change = function (sender, e) {
             curRecord.data.City = '';
             App.cboCity.setValue("");
         }
+
+        App.cboDistrict.getStore().load(function () {
+            var curRecord = App.frmMain.getRecord();
+            if (curRecord && curRecord.data.District) {
+                App.cboDistrict.setValue(curRecord.data.District);
+                HQ.combo.expand(App.cboDistrict, ',');
+            }
+            var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], [App.cboDistrict.getValue()]);
+            if (!dt) {
+                curRecord.data.District = '';
+                App.cboDistrict.setValue("");
+            }
+        });
+
     });
 
-    App.cboDistrict.getStore().load(function () {
-        var curRecord = App.frmMain.getRecord();
-        if (curRecord && curRecord.data.District) {
-            App.cboDistrict.setValue(curRecord.data.District);
-            HQ.combo.expand(App.cboDistrict, ',');
-        }
-        var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], [App.cboDistrict.getValue()]);
-        if (!dt) {
-            curRecord.data.District = '';
-            App.cboDistrict.setValue("");
-        }
-    });
+    
 
 };
 
@@ -221,6 +225,7 @@ var cboCountry_grd_Change = function (sender, e) {
         }
     });
 };
+
 var cboState_grd_Change = function (sender, e) {
     App.cboCity_grd.getStore().load(function () {
         var curRecord = App.frmMain.getRecord();
@@ -241,6 +246,7 @@ var firstLoad = function () {
     HQ.isFirstLoad = true;
     loadSourceCombo();
 };
+
 ////////////Kiem tra combo chinh CpnyID
 //khi co su thay doi du lieu cua cac conttol tren form
 var frmChange = function () {
@@ -251,15 +257,17 @@ var frmChange = function () {
     if (App.cboCpnyID.valueModels == null || HQ.isNew == true)
         App.cboCpnyID.setReadOnly(false);
     else App.cboCpnyID.setReadOnly(HQ.isChange);
-
 };
+
 var grdSYS_SubCompany_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys1);
 };
+
 var grdSYS_SubCompany_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdSYS_SubCompany, e, keys1);
     frmChange();
 };
+
 var grdSYS_SubCompany_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdSYS_SubCompany, e, keys1);
 };
@@ -269,23 +277,26 @@ var grdSYS_SubCompany_Reject = function (record) {
     frmChange();
 };
 
-
 //xu li su kiem tren luoi giong nhu luoi binh thuong
 var grdSys_CompanyAddr_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
+
 var grdSys_CompanyAddr_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdSys_CompanyAddr, e, keys);
     frmChange();
 };
+
 var grdSys_CompanyAddr_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdSys_CompanyAddr, e, keys);
 };
+
 var grdSys_CompanyAddr_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSys_CompanyAddr);
     //stoChanged(App.stoSys_CompanyAddr);
     frmChange();
 };
+
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'SA00000');
@@ -306,13 +317,12 @@ var stoLoad = function (sto) {
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboCpnyID.focus(true);//focus ma khi tao moi
         sto.commitChanges();
-    }
+    }   
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
     //App.stoSys_CompanyAddr.reload();
     loadComboGrid();
 };
-
 
 var stoLoadSys_CompanyAddr = function (sto) {
     if (HQ.isFirstLoad) {
@@ -324,6 +334,7 @@ var stoLoadSys_CompanyAddr = function (sto) {
     }
     frmChange();
 };
+
 var stoLoadSYS_SubCompany = function (sto) {
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
@@ -333,12 +344,11 @@ var stoLoadSYS_SubCompany = function (sto) {
     }
     frmChange();
 };
+
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
-
-
 
 // Event when cboVendID is changed or selected item 
 var cboCpnyID_Change = function (sender, value) {
@@ -348,13 +358,13 @@ var cboCpnyID_Change = function (sender, value) {
     }
 };
 
-
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
 var cboCpnyID_Expand = function (sender, value) {
     if (HQ.isChange) {
         App.cboCpnyID.collapse();
     }
 };
+
 //khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
 var cboCpnyID_TriggerClick = function (sender, value) {
     if (HQ.isChange) {

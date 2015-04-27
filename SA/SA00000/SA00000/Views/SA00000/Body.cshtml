@@ -51,13 +51,13 @@
             lss.Render.Fn = "pnl_render";
         })
 
-        , X.TabPanel()
+        , X.TabPanel()  
         .Anchor("100% -60").Layout(LayoutType.Anchor)// WIDTH HEIGHT      
         .Items(
         
             X.Panel().ID("pnlCompany")
             .Title(Util.GetLang("COMPANY"))
-            .Layout(LayoutType.Column)               
+            .Layout(LayoutType.Column)
             .AutoScroll(true)
             .Items(
                 
@@ -137,7 +137,7 @@
                     
                     HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQProcedure("SA00000_pcDistrictByCountryState").HQLangCode("DISTRICT")
                     .HQColumnShow("District,Name").DisplayField("District").ValueField("District").DataIndex("District")
-                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").AllowBlank(false).HQAutoLoad(false).MultiSelect(true)
+                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").AllowBlank(false).MultiSelect(true)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw },
