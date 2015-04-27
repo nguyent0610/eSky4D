@@ -1,0 +1,219 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using PO10201;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;    
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "PO10201";
+    var acc = Session["PO10201"] as AccessRight;
+    DateTime bussinessDate = DateTime.Now.ToDateShort();
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình PO10201.js tùy theo màn hình đổi lại-->
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/PO10201.js")' type="text/javascript"></script>
+        <style>
+            .x-grid-row-over .x-grid-cell-inner {
+                font-weight : bold;
+            }
+        </style>
+        <script>
+            HQ.bussinessDate = new Date('@ViewBag.BussinessDate');//lay ngay server trong controller
+            HQ.bussinessTime = new Date('@ViewBag.BussinessTime');//lay ngay co gio cua server trong controller
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+
+        </script>  
+        <title>@ViewBag.Title</title>
+    </head>
+    <body> 
+        @Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme))
+
+        <!-- Begin Cac store phu thuoc vao cboBatNbr-->
+        @(X.Store().ID("stoHeader").AutoLoad(false)   
+            .Model(Util.GenerateModel(typeof(PO10201_pdHeader_Result), "PO10201_pdHeaderModel", "BatNbr,RcptNbr"))          
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetHeader", "PO10201"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+                            })  
+            .Listeners(p=>p.Load.Fn="loadDataHeader" )            
+        )
+        @(
+            X.Store()
+            .ID("stoLotTrans")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof (PO10201_pgLotTrans_Result),"mdlLotTrans","",true))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetLotTrans", "PO10201"))
+                .ActionMethods(action => action.Read = HttpMethod.POST)
+                .Reader(X.JsonReader().Root("data"))
+            )            
+            .Parameters(ps => {
+                ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("rcptNbr", "App.txtRcptNbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("poNbr", "App.cboPONbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("type", "App.cboRcptType.getValue()", ParameterMode.Raw));
+            })
+        )
+
+
+
+        @(X.Store().ID("stoPO10201_pgLoadTaxTrans").AutoLoad(false)   
+                                .Model(Util.GenerateModel(typeof(PO10201_pgLoadTaxTrans_Result), "ModelPO10201_pgLoadTaxTrans_Result", ""))                                 
+                                .Proxy(
+                                        X.AjaxProxy()                
+                                        .Url(Url.Action("GetPO10201_pgLoadTaxTrans", "PO10201"))                
+                                        .ActionMethods(action =>
+                                        {
+                                            action.Read = HttpMethod.POST;
+                                        })
+                                        .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                                    ) 
+                                .Parameters(ps =>
+                                                {
+                                                    ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                                                    ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+                                                    ps.Add(new StoreParameter("rcptNbr", "App.txtRcptNbr.getValue()", ParameterMode.Raw));
+                                                })
+                            .Listeners(p => p.Load.Handler = "loadstoPO10201_pgLoadTaxTrans();")       
+   
+        )
+         <!-- End Cac store phu thuoc vao cboBatNbr-->
+         <!-- Begin Cac store phu thuoc vao cboBranchID-->
+        @HQ.Store().ID("stoPO10201_pdOM_UserDefault").HQProcedure("PO10201_pdOM_UserDefault").HQDBSys(false).AutoLoad(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                                                                        ,new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
+						                            }).LoadData()
+
+        @HQ.Store().ID("stoPO10201_pdPO_Setup").HQProcedure("PO10201_pdPO_Setup").AutoLoad(false).HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                                                                        ,new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
+						                            }).LoadData()
+
+        
+
+        <!-- End Cac store phu thuoc vao cboBranchID-->
+        
+        @(HQ.Store().ID("stoPO10201_pdAP_VenDorTaxes").AutoLoad(false)   
+            .Model(Util.GenerateModel(typeof(PO10201_pdAP_VenDorTaxes_Result), "PO10201_pdAP_VenDorTaxes_ResultModel", "taxid"))          
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetAP_VendorTax", "PO10201"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("vendID", "App.cboVendID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("ordFromId", "", ParameterMode.Value));
+                            })          
+        )
+
+        @HQ.Store().ID("stoPO10201_pdSI_Tax").HQProcedure("PO10201_pdSI_Tax").HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                                                                
+						                            }).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10201_pdSI_Tax()"; }).AutoLoad(true)
+
+        @HQ.Store().ID("stoPO10201_pdIN_Inventory").HQProcedure("PO10201_pdIN_Inventory").HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                                                                
+						                            }).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10201_pdIN_Inventory()"; }).AutoLoad(true)
+
+        @HQ.Store().ID("stoPO10201_pdIN_UnitConversion").HQProcedure("PO10201_pdIN_UnitConversion").HQDBSys(false).LoadData().Listeners(lst => { lst.Load.Handler = "loadPO10201_pdIN_UnitConversion()"; }).AutoLoad(true)
+
+
+        @(X.Store().ID("stoPO10201_ppCheckingPONbr").AutoLoad(false)   
+            .Model(Util.GenerateModel(typeof(PO10201_ppCheckingPONbr_Result), "PO10201_ppCheckingPONbrModel", "PONbr"))          
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetPO10201_ppCheckingPONbr", "PO10201"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("poNbr", "App.cboPONbr.getValue()", ParameterMode.Raw));
+                            })  
+              
+        )
+
+         @(X.Store().ID("stoPO10201_pdPODetailReceipt").AutoLoad(false)   
+            .Model(Util.GenerateModel(typeof(PO10201_pdPODetailReceipt_Result), "PO10201_pdPODetailReceiptModel", "PONbr,LineRef"))          
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetPO10201_pdPODetailReceipt", "PO10201"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("poNbr", "App.cboPONbr.getValue()", ParameterMode.Raw));
+                            })  
+              
+        )
+
+         @(X.Store().ID("stoPO10201_pdPODetailReturn").AutoLoad(false)   
+            .Model(Util.GenerateModel(typeof(PO10201_pdPODetailReturn_Result), "PO10201_pdPODetailReturnModel", "PONbr,LineRef"))          
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetPO10201_pdPODetailReturn", "PO10201"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("poNbr", "App.cboPONbr.getValue()", ParameterMode.Raw));
+                            })  
+              
+        )
+
+        
+
+
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid --> 
+        @{ Html.RenderAction("Body", new { lang =@Current.LangID}); }
+        
+    </body>
+</html>
+ 
