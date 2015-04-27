@@ -427,10 +427,10 @@ namespace PO10200.Controllers
                 objPO_Invoice.BatNbr = objPO_Receipt.BatNbr;
                 objPO_Invoice.RcptNbr = objPO_Receipt.RcptNbr;
                 objPO_Invoice.BranchID = objPO_Receipt.BranchID;
-                objPO_Receipt.Crtd_DateTime = DateTime.Now;
-                objPO_Receipt.Crtd_Prog = ScreenNbr;
-                objPO_Receipt.Crtd_User = Current.UserName;
-                objPO_Receipt.tstamp = new byte[0];
+                objPO_Invoice.Crtd_Datetime = DateTime.Now;
+                objPO_Invoice.Crtd_Prog = ScreenNbr;
+                objPO_Invoice.Crtd_User = Current.UserName;
+                objPO_Invoice.tstamp = new byte[0];
                 _db.PO_Invoice.AddObject(objPO_Invoice);
                 SavePO_Trans(objPO_Receipt);
 
