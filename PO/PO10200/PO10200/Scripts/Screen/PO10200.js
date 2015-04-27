@@ -24,6 +24,8 @@ var _objIN_ItemSite = null;
 //////////////////////////////////////////////////////////////////
 
 var loadDataHeader = function (sto) {
+    App.cboPONbr.allowBlank = true;
+    App.cboPONbr.validate();
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));   
     HQ.common.setForceSelection(App.frmMain, false, "cboBranchID,cboBatNbr,cboHandle");
     HQ.isFirstLoad = true;
@@ -1000,7 +1002,7 @@ var cboStatus_Change = function (item, newValue, oldValue) {
 var txtcRcptQty_Change = function (sender) {
     var record = App.slmPO_Trans.selected.items[0];
     var objIN_Inventory = HQ.store.findInStore(App.stoPO10200_pdIN_Inventory, ["InvtID"], [record.data.InvtID]);
-    if (objIN_Inventory.LotSerTrack != 'N') {
+    if (objIN_Inventory.LotSerTrack != 'N' && !Ext.isEmpty(objIN_Inventory.LotSerTrack)) {
         showLot(record);
 
     }
@@ -1011,7 +1013,7 @@ var btnLot_Click = function (record) {
 }
 var showLot = function (record) {
     App.winLot.invt = HQ.store.findInStore(App.stoPO10200_pdIN_Inventory, ['InvtID'], [record.data.InvtID]);
-    if (!Ext.isEmpty(record.data.InvtID) && !Ext.isEmpty(record.data.RcptUnitDescr) && App.winLot.invt.LotSerTrack != 'N') {
+    if (!Ext.isEmpty(record.data.InvtID) && !Ext.isEmpty(record.data.RcptUnitDescr) && App.winLot.invt.LotSerTrack != 'N' && !Ext.isEmpty(App.winLot.invt.LotSerTrack)) {
 
         _classID = App.winLot.invt.ClassID;
         _stkUnit = App.winLot.invt.StkUnit;
