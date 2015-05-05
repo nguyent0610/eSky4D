@@ -8,6 +8,7 @@
         <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
           <EntitySet Name="OM_PJP" EntityType="eBiz4DWebAppModel.Store.OM_PJP" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_SalesRouteMaster" EntityType="eBiz4DWebAppModel.Store.OM_SalesRouteMaster" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_SalesRouteMasterImport" EntityType="eBiz4DWebAppModel.Store.OM_SalesRouteMasterImport" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="OM_PJP">
           <Key>
@@ -61,6 +62,43 @@
           <Property Name="StartDate" Type="date" />
           <Property Name="EndDate" Type="date" />
         </EntityType>
+        <EntityType Name="OM_SalesRouteMasterImport">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="PJPID" />
+            <PropertyRef Name="SalesRouteID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="SlsPerID" />
+          </Key>
+          <Property Name="ID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="PJPID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SalesRouteID" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="SlsFreq" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="SlsFreqType" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="VisitSort" Type="int" Nullable="false" />
+          <Property Name="WeekofVisit" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Mon" Type="bit" Nullable="false" />
+          <Property Name="Tue" Type="bit" Nullable="false" />
+          <Property Name="Wed" Type="bit" Nullable="false" />
+          <Property Name="Thu" Type="bit" Nullable="false" />
+          <Property Name="Fri" Type="bit" Nullable="false" />
+          <Property Name="Sat" Type="bit" Nullable="false" />
+          <Property Name="Sun" Type="bit" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="Del" Type="bit" Nullable="false" />
+        </EntityType>
         <Function Name="OM22200_pcCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="PJP" Type="nvarchar" Mode="In" />
@@ -98,6 +136,7 @@
             <Parameter Name="LstCustID" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="OM_SalesRouteMaster" EntityType="OM22200Model.OM_SalesRouteMaster" />
+          <EntitySet Name="OM_SalesRouteMasterImport" EntityType="OM22200Model.OM_SalesRouteMasterImport" />
         </EntityContainer>
         <ComplexType Name="OM22200_pgSaleRouteMaster_Result">
           <Property Type="Boolean" Name="Selected" Nullable="true" />
@@ -185,6 +224,43 @@
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="StartDate" Precision="0" />
           <Property Type="DateTime" Name="EndDate" Precision="0" />
+        </EntityType>
+        <EntityType Name="OM_SalesRouteMasterImport">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="PJPID" />
+            <PropertyRef Name="SalesRouteID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="SlsPerID" />
+          </Key>
+          <Property Type="String" Name="ID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PJPID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SalesRouteID" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsFreq" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsFreqType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="VisitSort" Nullable="false" />
+          <Property Type="String" Name="WeekofVisit" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Mon" Nullable="false" />
+          <Property Type="Boolean" Name="Tue" Nullable="false" />
+          <Property Type="Boolean" Name="Wed" Nullable="false" />
+          <Property Type="Boolean" Name="Thu" Nullable="false" />
+          <Property Type="Boolean" Name="Fri" Nullable="false" />
+          <Property Type="Boolean" Name="Sat" Nullable="false" />
+          <Property Type="Boolean" Name="Sun" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="EndDate" Nullable="false" Precision="3" />
+          <Property Type="Boolean" Name="Del" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -284,6 +360,39 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OM_SalesRouteMasterImport">
+            <EntityTypeMapping TypeName="OM22200Model.OM_SalesRouteMasterImport">
+              <MappingFragment StoreEntitySet="OM_SalesRouteMasterImport">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Sun" ColumnName="Sun" />
+                <ScalarProperty Name="Sat" ColumnName="Sat" />
+                <ScalarProperty Name="Fri" ColumnName="Fri" />
+                <ScalarProperty Name="Thu" ColumnName="Thu" />
+                <ScalarProperty Name="Wed" ColumnName="Wed" />
+                <ScalarProperty Name="Tue" ColumnName="Tue" />
+                <ScalarProperty Name="Mon" ColumnName="Mon" />
+                <ScalarProperty Name="WeekofVisit" ColumnName="WeekofVisit" />
+                <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
+                <ScalarProperty Name="SlsFreqType" ColumnName="SlsFreqType" />
+                <ScalarProperty Name="SlsFreq" ColumnName="SlsFreq" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="SalesRouteID" ColumnName="SalesRouteID" />
+                <ScalarProperty Name="PJPID" ColumnName="PJPID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -306,8 +415,9 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
-        <EntityTypeShape EntityType="OM22200Model.OM_PJP" Width="1.5" PointX="0.5" PointY="0.5" />
-        <EntityTypeShape EntityType="OM22200Model.OM_SalesRouteMaster" Width="1.5" PointX="4.4315946867836615" PointY="10.494414483427264" />
+        <EntityTypeShape EntityType="OM22200Model.OM_PJP" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM22200Model.OM_SalesRouteMaster" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM22200Model.OM_SalesRouteMasterImport" Width="1.5" PointX="4.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

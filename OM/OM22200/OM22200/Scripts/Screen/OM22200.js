@@ -184,6 +184,59 @@ var Process = {
         if (item == "yes") {
             App.grdSalesRouteMaster.deleteSelected();
         }
+    },
+
+    importExcel: function () {
+        App.frmMain.submit({
+            waitMsg: "Importing....",
+            url: 'OM22200/OM22200Import',
+            timeout:1800,
+            clientValidation: false,
+            method: 'POST',
+            params: {
+                BranchID: App.cboBranchID.getValue(),
+                PJPID: App.cboPJPID.getValue()
+            },
+            success: function (msg, data) {
+                if (!Ext.isEmpty(this.result.data.message)) {
+                    HQ.message.show('2013103001', [this.result.data.message], '', true);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+
+            },
+            failure: function (msg, data) {           
+                HQ.message.process(msg, data, true);
+            }
+        });
+    },
+
+    exportExcel: function () {
+        App.frmMain.submit({
+            //waitMsg: HQ.common.getLang("Exporting")+"...",
+            url: 'OM22200/Export',
+            type: 'POST',
+            timeout: 1000000,
+            params: {
+                BranchID: App.cboBranchID.getValue(),
+                PJPID: App.cboPJPID.getValue(),
+                BranchName: App.cboBranchID.getDisplayValue(),
+                SlsPerID: App.cboSlsperId.getValue(),
+                RouteID: App.cboSalesRouteID.getValue()
+            },
+            success: function (msg, data) {
+                //processMessage(msg, data, true);
+                //menuClick('refresh');
+                var filePath = data.result.filePath;
+                if (filePath) {
+                    window.location = "OM22200/Download?filePath=" + filePath + "&fileName=MCP_" + App.cboBranchID.getValue();
+                }
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
     }
 };
 
@@ -293,6 +346,24 @@ var Event = {
         else {
             chk.setValue(false);
         }
+    },
+
+    fupImport_change: function (fup, newValue, oldValue, eOpts) {
+        if (App.frmMain.isValid()) {
+            var fileName = fup.getValue();
+            var ext = fileName.split(".").pop().toLowerCase();
+            if (ext == "xls" || ext == "xlsx") {
+                Process.importExcel();
+
+            } else {
+                alert("Please choose a Media! (.xls, .xlsx)");
+                sender.reset();
+            }
+        }
+    },
+
+    btnExport_click: function (btn, e, eOpts) {
+        Process.exportExcel();
     },
 
     btnAddCust_click: function (btn, e, eOpts) {

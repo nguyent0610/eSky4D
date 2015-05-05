@@ -230,12 +230,17 @@
                     , X.Container().Layout(LayoutType.HBox)
                     .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
                     .Items(
-                        HQ.Button().ID("btnImort")
-                        .HQLangCode("ImportExcel").Flex(1).MarginSpec("5 0 0 105")
+                        X.FileUploadField().ID("fupImport")
+                        .ButtonText(Util.GetLang("ImportExcel")).Flex(1).MarginSpec("5 0 0 105")
+                        .ButtonOnly(true)
+                        .Listeners(p=>{
+                            p.Change.Fn = "Event.fupImport_change";
+                        })
 
                         , HQ.Button().ID("btnExport")
                         .HQLangCode("ExportExcel").Flex(1).MarginSpec("5 0 0 5")
-
+                        .Handler("Event.btnExport_click")
+                        
                         , HQ.Button().ID("btnAddCust")
                         .HQLangCode("ADDCUSTTOPJP").Flex(1).MarginSpec("5 0 0 5")
                         .Handler("Event.btnAddCust_click")

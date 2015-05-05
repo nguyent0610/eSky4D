@@ -43,6 +43,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.3.2.1, Culture=neutral, PublicKeyToken=00725b1ceb58d0a9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\DlleSky4D\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="eBiz4DApp_PJP, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\DlleSky4D\eBiz4DApp_PJP.dll</HintPath>
+    </Reference>
     <Reference Include="Ext.Net, Version=2.4.0.28524, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Ext.NET.MVC.Pro.2.5.1.MVC.Examples.Explorer\MVC Examples Explorer\Ext.Net.Examples.MVC\bin\Ext.Net.dll</HintPath>
@@ -58,6 +66,14 @@
     <Reference Include="HQ.eSkySys, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\DlleSky4D\HQ.eSkySys.dll</HintPath>
+    </Reference>
+    <Reference Include="HQFramework.Common, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\DlleSky4D\HQFramework.Common.DLL</HintPath>
+    </Reference>
+    <Reference Include="HQFramework.DAL, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\DlleSky4D\HQFramework.DAL.DLL</HintPath>
     </Reference>
     <Reference Include="HQSendMailApprove, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -157,6 +173,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="clsSQL.cs" />
     <Compile Include="Controllers\OM22200Controller.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -167,6 +184,7 @@
       <DependentUpon>OM22200Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Readme\Transformer.NET\LICENSE.txt" />
@@ -307,7 +325,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
