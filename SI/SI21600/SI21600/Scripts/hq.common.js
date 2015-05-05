@@ -97,36 +97,68 @@ var HQ = {
             }
             return Ext.encode(store.getChangedData({ skipIdForPhantomRecords: skip }));
         },
-        getAllData: function (store, fields, values) {
+        getAllData: function (store, fields, values, isEqual) {
             var lstData = [];
-            if (store.snapshot != undefined) {
-                store.snapshot.each(function (item) {
-                    var isb = true;
-                    if (fields != null) {
-                        for (var i = 0; i < fields.length; i++) {
-                            if (item.data[fields[i]] != values[i]) {
-                                isb = false;
-                                break;
+            if (isEqual == undefined || isEqual == true) {
+                if (store.snapshot != undefined) {
+                    store.snapshot.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] != values[i]) {
+                                    isb = false;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (isb) lstData.push(item.data);
-                });
-                return Ext.encode(lstData);
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                } else {
+                    store.data.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] != values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                }
             } else {
-                store.data.each(function (item) {
-                    var isb = true;
-                    if (fields != null) {
-                        for (var i = 0; i < fields.length; i++) {
-                            if (item.data[fields[i]] != values[i]) {
-                                isb = false;
-                                break;
+                if (store.snapshot != undefined) {
+                    store.snapshot.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] == values[i]) {
+                                    isb = false;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (isb) lstData.push(item.data);
-                });
-                return Ext.encode(lstData);
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                } else {
+                    store.data.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] == values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                }
             }
         },
         findInStore: function (store, fields, values) {

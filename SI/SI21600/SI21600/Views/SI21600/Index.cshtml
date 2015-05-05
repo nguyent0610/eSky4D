@@ -39,29 +39,30 @@
     @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
-        @(
-            X.Store().ID("stoSYS_CloseDateAuto").AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(SI21600_pdHeader_Result), "mdlSYS_CloseDateAuto", "ID"))  
-            .Proxy(
-                X.AjaxProxy()                
-                .Url(Url.Action("GetSYS_CloseDateAuto", "SI21600"))                
-                .ActionMethods(action =>
-                {
-                    action.Read = HttpMethod.POST;
-                })
-                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-            )
-                    .Parameters(ps =>
-                    {
-                        ps.Add(new StoreParameter("ID", "App.cboID.getValue()", ParameterMode.Raw));
-                    })      
-            .Listeners(l =>
-                {
-                    //l.BeforeLoad.Fn = "stoBeforeLoad";
-                    //l.Load.Fn = "stoLoadHeader";                   
-                }
-            )
+        @(Html.X().Store().ID("stoSI_Hierarchy").AutoLoad(false)
+        .Model(Util.GenerateModel(typeof(SI_Hierarchy), "mdlSI_Hierarchy", "NodeID"))
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetSI_Hierarchy", "SI21600"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
         )
+        .Parameters(ps =>
+        {
+            ps.Add(new StoreParameter("Type", "App.cboType.getValue()", ParameterMode.Raw));
+            ps.Add(new StoreParameter("NodeID", "App.cboNodeID.getValue()", ParameterMode.Raw));
+            ps.Add(new StoreParameter("NodeLevel", "_nodeLevel", ParameterMode.Raw));
+            ps.Add(new StoreParameter("ParentRecordID", "_parentRecordID", ParameterMode.Raw));
+        })
+        .Listeners(p => 
+            {
+                p.BeforeLoad.Fn = "storeBeforeLoad";
+                p.Load.Fn = "stoLoadHeader";
+            })
+          )
         <!-- Gọi hàm Body trong SI21600Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
         @{Html.RenderAction("Body", new {lang=Current.LangID});}
 </body>

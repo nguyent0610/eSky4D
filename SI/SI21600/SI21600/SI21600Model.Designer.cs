@@ -158,6 +158,25 @@ namespace SI21600
         {
             return base.ExecuteFunction<SI21600_pdHeader_Result>("SI21600_pdHeader");
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="type">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Int32>> SI21600_ppMaxRC(global::System.String type)
+        {
+            ObjectParameter typeParameter;
+            if (type != null)
+            {
+                typeParameter = new ObjectParameter("Type", type);
+            }
+            else
+            {
+                typeParameter = new ObjectParameter("Type", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Int32>>("SI21600_ppMaxRC", typeParameter);
+        }
 
         #endregion
 

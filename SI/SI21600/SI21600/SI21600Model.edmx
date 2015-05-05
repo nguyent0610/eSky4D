@@ -29,6 +29,9 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="SI21600_ppMaxRC" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Type" Type="varchar" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -44,6 +47,9 @@
           <FunctionImport Name="SI21600_GetAutoNumber" ReturnType="Collection(Int32)" />
           <FunctionImport Name="SI21600_pdHeader" ReturnType="Collection(SI21600Model.SI21600_pdHeader_Result)" />
           <EntitySet Name="SI_Hierarchy" EntityType="SI21600Model.SI_Hierarchy" />
+          <FunctionImport Name="SI21600_ppMaxRC" ReturnType="Collection(Int32)">
+            <Parameter Name="Type" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="SI21600_ptCompany_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
@@ -112,6 +118,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SI21600_ppMaxRC" FunctionName="eBiz4DWebSysModel.Store.SI21600_ppMaxRC" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
