@@ -1,15 +1,8 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
-
 var keys = ['Code'];
-///////////////////////////////////////////////////////////////////////
+var fieldsCheckRequire = ["Code"];
+var fieldsLangCheckRequire = ["Code"];
 
-//// Store /////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////
-
-
-//// Event /////////////////////////////////////////////////////////////
-   
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -25,91 +18,105 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSellingProducts);
             break;
         case "refresh":
-            App.stoSellingProducts.reload();
-            HQ.grid.first(App.grdSellingProducts);
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSellingProducts.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdSellingProducts);
+                HQ.grid.insert(App.grdSellingProducts, keys);
             }
             break;
         case "delete":
             if (App.slmSellingProducts.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
-                }
+                var rowindex = HQ.grid.indexSelect(App.grdSellingProducts);
+                if (rowindex != '')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdSellingProducts), ''], 'deleteData', true)
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (checkRequire(App.stoSellingProducts.getChangedData().Created) && checkRequire(App.stoSellingProducts.getChangedData().Updated)) {
+                if (HQ.store.checkRequirePass(App.stoSellingProducts, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
             break;
         case "print":
-            alert(command);
             break;
         case "close":
-            if (HQ.store.isChange(App.stoSellingProducts)) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
-};
-// Danh cho grid ///////////////////////////////////////////////////////
-var grdSellingProducts_BeforeEdit = function (editor, e) {
-    if (!HQ.isUpdate) return false;  
-    if (keys.indexOf(e.field) != -1) {
-        if (e.record.data.tstamp != "")
-            return false;
-    }
-    return HQ.grid.checkInput(e, keys);
-};
-var grdSellingProducts_Edit = function (item, e) {
 
-    if (keys.indexOf(e.field) != -1) {
-        if (e.value != '' && isAllValidKey(App.stoSellingProducts.getChangedData().Created) && isAllValidKey(App.stoSellingProducts.getChangedData().Updated))
-            HQ.store.insertBlank(App.stoSellingProducts);
-    }
 };
-var grdSellingProducts_ValidateEdit = function (item, e) {
-    if (keys.indexOf(e.field) != -1) {
-        if (HQ.grid.checkDuplicate(App.grdSellingProducts, e, keys)) {
-            HQ.message.show(1112, e.value);
-            return false;
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSellingProducts.reload();
+};
+
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'AR21400');
+};
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'AR21400');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
         }
-        else
-            return true;
+        HQ.isFirstLoad = false;
     }
 };
-var grdSellingProducts_CancelEdit = function (editor, e) {
-    if (e.record.phantom) {
-        e.store.remove(e.record);
-    }
-};
-var grdSellingProducts_Reject = function (record) {
-    if (record.data.tstamp == '') {
-        App.stoSellingProducts.remove(record);
-        App.grdSellingProducts.getView().focusRow(App.stoSellingProducts.getCount() - 1);
-        App.grdSellingProducts.getSelectionModel().select(App.stoSellingProducts.getCount() - 1);
-    } else record.reject();
-};
-/////////////////////////////////////////////////////////////////////////
 
-// Process Data ////////////////////////////////////////////////////////
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var grdSellingProducts_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdSellingProducts_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSellingProducts, e, keys);
+};
+
+var grdSellingProducts_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSellingProducts, e, keys);
+};
+
+var grdSellingProducts_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSellingProducts);
+    stoChanged(App.stoSellingProducts);
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
-            waitMsg: HQ.common.getLang("WaitMsg"),
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
             url: 'AR21400/Save',
             params: {
-                lstgrd: HQ.store.getData(App.stoSellingProducts)
+                lstAR_SellingProducts: HQ.store.getData(App.stoSellingProducts)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                HQ.isChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
@@ -118,62 +125,21 @@ var save = function () {
         });
     }
 };
+
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdSellingProducts.deleteSelected();
+        stoChanged(App.stoSellingProducts);
     }
 };
+
 /////////////////////////////////////////////////////////////////////////
-
-// Kiem tra nhung field yeu cau bat buoc nhap //////////////////////////
-var checkRequire = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
-            if (items[i]["Code"].trim() == "") {
-                callMessage(15, HQ.common.getLang("Code"));
-                return false;
-            }
-            if (items[i]["Descr"].trim() == "") {
-                callMessage(15, HQ.common.getLang("Descr"));
-                return false;
-            }
-
-        }
-        return true;
-    } else {
-        return true;
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSellingProducts.reload();
     }
 };
-///////////////////////////////////////////////////////////////////////
-
-//kiem tra key da nhap du chua /////////////////////////////////////////
-var isAllValidKey = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            for (var j = 0; j < keys.length; j++) {
-                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
-                    return false;
-            }
-        }
-        return true;
-    } else {
-        return true;
-    }
-};
-///////////////////////////////////////////////////////////////////////
-
-// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.close(this);
-    }
-};
-///////////////////////////////////////////////////////////////////////
-
-var AutoLoadGrid = function () {
-    menuClick("refresh");
-};
-
-
-
+///////////////////////////////////

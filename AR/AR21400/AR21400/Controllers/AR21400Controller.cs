@@ -26,7 +26,7 @@ namespace AR21400.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -41,7 +41,7 @@ namespace AR21400.Controllers
         {
             try
             {
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstgrd"]);
+            StoreDataHandler dataHandler = new StoreDataHandler(data["lstAR_SellingProducts"]);
             ChangeRecords<AR_SellingProducts> lstMsg = dataHandler.BatchObjectData<AR_SellingProducts>();
             foreach (AR_SellingProducts deleted in lstMsg.Deleted)
             {
@@ -82,11 +82,7 @@ namespace AR21400.Controllers
                     return this.Direct();
                     //tra ve loi da ton tai ma ngon ngu nay ko the them
                 }
-
-
             }
-
-            
 
             foreach (AR_SellingProducts updated in lstMsg.Updated)
             {
