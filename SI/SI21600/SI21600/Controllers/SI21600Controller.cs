@@ -27,21 +27,20 @@ namespace SI21600.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetSI_Hierarchy(string Type, string NodeID, string NodeLevel, string ParentRecordID)
+        public ActionResult GetSI_Hierarchy(string Type, string RecordID)
         {
-            int nodelv = NodeLevel.PassNull() == "" ? 0 : int.Parse(NodeLevel);
-            int parentrecord =ParentRecordID.PassNull() == "" ? 0 : int.Parse(ParentRecordID);
-            var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type == Type && p.NodeLevel == nodelv && p.ParentRecordID == parentrecord);
+            int ID = RecordID.PassNull() == "" ? 0 : int.Parse(RecordID);
+            var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.RecordID == ID && p.Type == Type);
             return this.Store(obj);
         }
 
-        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z)
+        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, string nodeType)
         {
             var node = new Node();
             var k = -1;
@@ -58,14 +57,14 @@ namespace SI21600.Controllers
 
             var childrenInactiveHierachies = _sys.SI_Hierarchy
                 .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
-                    && p.Type == inactiveHierachy.Type
+                    && p.Type == nodeType
                     && p.NodeLevel == level).ToList();
 
             if (childrenInactiveHierachies != null && childrenInactiveHierachies.Count > 0)
             {
                 foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
                 {
-                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, z++));
+                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, nodeType));
                 }
             }
             else
@@ -99,7 +98,7 @@ namespace SI21600.Controllers
                 Type = nodeType
             };
             var z = 0;
-            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z);
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, nodeType);
 
             //quan trong dung de refresh slmTree
             this.GetCmp<TreePanel>("IDTree").SetRootNode(node);
@@ -110,52 +109,65 @@ namespace SI21600.Controllers
     
       
         [HttpPost]
-        public ActionResult Save(FormCollection data, string NodeID,short NodeLevel,int ParentRecordID)
+        public ActionResult Save(FormCollection data, string NodeID,short NodeLevel,int ParentRecordID,bool isNew)
         {
             try
             {
                 string Type = data["cboType"];
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_Hierarchy"]);
                 ChangeRecords<SI_Hierarchy> lstSI_Hierarchy = dataHandler.BatchObjectData<SI_Hierarchy>();
-
+                var header = new SI_Hierarchy();
               
                 lstSI_Hierarchy.Created.AddRange(lstSI_Hierarchy.Updated);
                 foreach (SI_Hierarchy curHeader in lstSI_Hierarchy.Created)
                 {
                     if (NodeID.PassNull() == "") continue;
 
-                    var header = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.NodeLevel==NodeLevel && p.ParentRecordID==ParentRecordID && p.Type==Type );
+                    header = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.NodeLevel==NodeLevel && p.ParentRecordID==ParentRecordID && p.Type==Type );
+                    if (header != null && isNew == true) throw new MessageException(MessageType.Message, "19");
+
                     if (header != null)
                     {
-                        if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
-                        {
-                            UpdatingHeader(ref header, curHeader);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
+                        
+                            if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
+                            {
+                                UpdatingHeader(ref header, curHeader);
+                            }
+                            else
+                            {
+                                throw new MessageException(MessageType.Message, "19");
+                            }
+                        
                     }
                     else
                     {
-                        header = new SI_Hierarchy();
-                        header.NodeID = NodeID;
-                        header.NodeLevel = NodeLevel;
-                        header.ParentRecordID = ParentRecordID;
-                        header.Type = Type;
-                        header.RecordID = _sys.SI21600_ppMaxRC(Type).FirstOrDefault().Value;
-                        header.Crtd_Datetime = DateTime.Now;
-                        header.Crtd_Prog = _screenNbr;
-                        header.Crtd_User = Current.UserName;
+                        var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type == Type);
+
+                        if (obj==null)
+                        {
+                            header = new SI_Hierarchy();
+                            header.NodeID = NodeID;
+                            header.NodeLevel = NodeLevel;
+                            header.ParentRecordID = ParentRecordID;
+                            header.Type = Type;
+                            header.RecordID = _sys.SI21600_ppMaxRC(Type).FirstOrDefault().Value;
+                            header.Crtd_Datetime = DateTime.Now;
+                            header.Crtd_Prog = _screenNbr;
+                            header.Crtd_User = Current.UserName;
                     
-                        UpdatingHeader(ref header, curHeader);
-                        _sys.SI_Hierarchy.AddObject(header);
+                            UpdatingHeader(ref header, curHeader);
+                            _sys.SI_Hierarchy.AddObject(header);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "1112", parm: new[] { NodeID });
+                        }
                     }
                 }
              
 
                 _sys.SaveChanges();
-                return Json(new { success = true, NodeID = NodeID });
+                return Json(new { success = true, NodeID = NodeID, RecordID = header.RecordID});
             }
             catch (Exception ex)
             {
@@ -176,36 +188,29 @@ namespace SI21600.Controllers
         }
 
 
-        //#region Delete information Company
-        ////Delete information Company
-        //[HttpPost]
-        //public ActionResult DeleteAll(FormCollection data)
-        //{
-        //    try
-        //    {
-        //        string ID_temp = data["cboID"].PassNull();
-        //        int ID = ID_temp == "" ? 0 : int.Parse(ID_temp);
-        //        var cpny = _sys.SYS_CloseDateAuto.FirstOrDefault(p => p.ID == ID);
-        //        if (cpny != null)
-        //        {
-        //            _sys.SYS_CloseDateAuto.DeleteObject(cpny);
-        //        }
 
-        //        var lstAddr = _sys.SYS_CloseDateBranchAuto.Where(p => p.ID == ID).ToList();
-        //        foreach (var item in lstAddr)
-        //        {
-        //            _sys.SYS_CloseDateBranchAuto.DeleteObject(item);
-        //        }
+        [HttpPost]
+        public ActionResult DeleteAll(FormCollection data)
+        {
+            try
+            {
+                string Type = data["cboType"];
+                string NodeID = data["cboNodeID"];
 
-        //        _sys.SaveChanges();
-        //        return Json(new { success = true });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is MessageException) return (ex as MessageException).ToMessage();
-        //        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-        //    }
-        //}
-        //#endregion
+                var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type==Type);
+                if (obj != null)
+                {
+                    _sys.SI_Hierarchy.DeleteObject(obj);
+                }
+
+                _sys.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
     }
 }

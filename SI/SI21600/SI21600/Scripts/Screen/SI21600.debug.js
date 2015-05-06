@@ -1,8 +1,15 @@
 //// Declare //////////////////////////////////////////////////////////
-
 var keys = ['BranchID'];
 var fieldsCheckRequire = ["BranchID"];
 var fieldsLangCheckRequire = ["BranchID"];
+
+var _nodeID;
+var _nodeLevel;
+var _parentRecordID;
+var parentRecordIDAll = "";
+var parentRecordID = "";
+var _recordID = "";
+var selectNode;
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -11,16 +18,12 @@ var fieldsLangCheckRequire = ["BranchID"];
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            HQ.grid.first(App.grdSYS_CloseDateSetUp);
             break;
         case "prev":
-            HQ.grid.prev(App.grdSYS_CloseDateSetUp);
             break;
         case "next":
-            HQ.grid.next(App.grdSYS_CloseDateSetUp);
             break;
         case "last":
-            HQ.grid.last(App.grdSYS_CloseDateSetUp);
             break;
         case "refresh":
             if (HQ.isChange) {
@@ -28,25 +31,43 @@ var menuClick = function (command) {
             }
             else {
                 HQ.isChange = false;
-                HQ.isFirstLoad = true;
-                App.stoSYS_CloseDateSetUp.reload();
+                if (App.cboNodeID.valueModels == null) App.cboNodeID.setValue('');
+                App.cboNodeID.getStore().load(function () {
+                    App.stoSI_Hierarchy.reload();
+                });
             }
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdSYS_CloseDateSetUp, keys);
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', '');
+                }
+                else {
+                    App.cboNodeID.setValue('');
+                    App.txtDescr.setValue('');
+                    if (_nodeID != 'root') {
+                        var obj = App.IDTree.getSelectedNodes().length > 0 ? App.IDTree.getSelectedNodes()[0].nodeID.split('-') : ['', 0, 0, 0];
+                        App.txtNodeLevel.setValue(parseInt(obj[1], "10") + 1);
+                        App.txtParentRecordID.setValue(obj[3]);
+                    }
+                    else {
+                        App.txtNodeLevel.setValue(1);
+                        App.txtParentRecordID.setValue(0);
+                    }
+                }
             }
             break;
         case "delete":
-            if (App.slmSYS_CloseDateSetUp.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
+            if (HQ.isDelete) {
+                var curRecord = App.frmMain.getRecord();
+                if (curRecord) {
                     HQ.message.show(11, '', 'deleteData');
                 }
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoSYS_CloseDateSetUp, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.form.checkRequirePass(App.frmMain)) {
                     save();
                 }
             }
@@ -57,272 +78,175 @@ var menuClick = function (command) {
             HQ.common.close(this);
             break;
     }
-
 };
 
-var btnUpdate_Click = function (sender, e) {
-    App.grdSYS_CloseDateSetUp.getStore().each(function (item) {
-        item.set("WrkDateChk", App.chkWrkDateChk.checked);
-        item.set("WrkUpperDays", App.lblWrkUpperDays.getValue());
-        item.set("WrkLowerDays", App.lblWrkLowerDays.getValue());
-        item.set("WrkOpenDate", App.lblWrkOpenDate.getValue());
-        item.set("WrkAdjDate", App.lblWrkAdjDate.getValue());
-    });
-};
-
-var beforenodedrop = function (node, data, overModel, dropPosition, dropFn) {
-    if (Ext.isArray(data.records)) {
-        var records = data.records;
-
-        data.records = [];
-        HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
-        addNode(records[0]);
-    }
-};
-
-var treePanelBranch_checkChange = function (node, checked, eOpts) {
-    node.childNodes.forEach(function (childNode) {
-        childNode.set("checked", checked);
-    });
-};
-
-var btnExpand_click = function (btn, e, eOpts) {
-    App.treePanelBranch.expandAll();
-};
-
-var btnCollapse_click = function (btn, e, eOpts) {
-    App.treePanelBranch.collapseAll();
-};
-
-var btnAddAll_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
-        var allNodes = getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
-        if (allNodes && allNodes.length > 0) {
-            allNodes.forEach(function (node) {
-                HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
-                if (node.data.Type == "Company") {
-                    var record = HQ.store.findInStore(App.grdSYS_CloseDateSetUp.store,
-                        ['BranchID'],
-                        [node.data.RecID]);
-                    if (!record) {
-                        record = App.stoSYS_CloseDateSetUp.getAt(App.grdSYS_CloseDateSetUp.store.getCount() - 1);
-                        record.set('BranchID', node.data.RecID);
-                        record.set('WrkAdjDate', new Date(_dateServer));
-                        record.set('WrkOpenDate', new Date(_dateServer));
-                    }
-                }
-            });
-            HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
-            var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount() - 1);
-            record.set('WrkAdjDate', new Date(_dateServer));
-            record.set('WrkOpenDate', new Date(_dateServer));
-            App.treePanelBranch.clearChecked();
-        }
-
-    }
-    else {
-        HQ.message.show(4, '', '');
-    }
-};
-var addNode = function (node) {
-    if (node.data.Type == "Company") {
-        var record = HQ.store.findInStore(App.grdSYS_CloseDateSetUp.store,
-            ['BranchID'],
-            [node.data.RecID]);
-        if (!record) {
-            record = App.stoSYS_CloseDateSetUp.getAt(App.grdSYS_CloseDateSetUp.store.getCount() - 1);
-            record.set('BranchID', node.data.RecID);
-            record.set('WrkAdjDate', new Date(_dateServer));
-            record.set('WrkOpenDate', new Date(_dateServer));
-
-        }
-        HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
-        var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount() - 1);
-        record.set('WrkAdjDate', new Date(_dateServer));
-        record.set('WrkOpenDate', new Date(_dateServer));
-    }
-    else if (node.childNodes) {
-        node.childNodes.forEach(function (itm) {
-            addNode(itm);
+function ReloadTree() {
+    try {
+        App.direct.ReloadTreeSI21600(App.cboType.getValue(), {
+            success: function (data) {
+                App.cboNodeID.getStore().load(function () {
+                    //App.cboNodeID.setValue(NodeID);
+                    App.stoSI_Hierarchy.reload();
+                });
+                // App.stoSI_Hierarchy.reload();
+            },
+            failure: function () {
+                alert("fail");
+            },
+            eventMask: { msg: 'Loading Tree', showMask: true }
         });
-    }
-}
-var btnAdd_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
-        var allNodes = App.treePanelBranch.getCheckedNodes();
-        if (allNodes && allNodes.length > 0) {
-            allNodes.forEach(function (node) {
-                HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
-                if (node.attributes.Type == "Company") {
-                    var record = HQ.store.findInStore(App.grdSYS_CloseDateSetUp.store,
-                        ['BranchID'],
-                        [node.attributes.RecID]);
-                    if (!record) {
-                        record = App.stoSYS_CloseDateSetUp.getAt(App.grdSYS_CloseDateSetUp.store.getCount() - 1);
-                        record.set('BranchID', node.attributes.RecID);
-                        record.set('WrkAdjDate', new Date(_dateServer));
-                        record.set('WrkOpenDate', new Date(_dateServer));
-                    }
-                }
-            });
-            HQ.store.insertBlank(App.stoSYS_CloseDateSetUp, keys);
-            var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount() - 1);
-            record.set('WrkAdjDate', new Date(_dateServer));
-            record.set('WrkOpenDate', new Date(_dateServer));
-            App.treePanelBranch.clearChecked();
-        }
-
-    }
-    else {
-        HQ.message.show(4, '', '');
+    } catch (ex) {
+        alert(ex.message);
     }
 };
 
-var btnDel_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
-        var selRecs = App.grdSYS_CloseDateSetUp.selModel.selected.items;
-        if (selRecs.length > 0) {
-            var params = [];
-            selRecs.forEach(function (record) {
-                params.push(record.data.CpnyID);
-            });
-            HQ.message.show(2015020806,
-                params.join(" & ") + "," + HQ.common.getLang("AppComp"),
-                'deleteSelectedCompanies');
+
+var cboType_Change = function (sender, value) {
+    App.cboNodeID.setValue('');
+    App.txtDescr.setValue('');
+    App.txtNodeLevel.setValue(0);
+    App.txtParentRecordID.setValue(0);
+
+    ReloadTree();
+};
+
+var NodeSelected_Change = function (store, operation, options) {
+    if (HQ.isNew == false || Ext.isEmpty(App.cboNodeID.getValue())) {
+        parentRecordIDAll = operation.data.id.split("-");
+        _nodeID = parentRecordIDAll[0];
+        _nodeLevel = parentRecordIDAll[1];
+        _parentRecordID = parentRecordIDAll[2];
+        _recordID = parentRecordIDAll[3];
+
+        App.cboNodeID.setValue(_nodeID);
+        if (_nodeID == 'root') {
+            App.cboNodeID.setValue('');
+            App.txtNodeLevel.setValue(0);
+            App.txtParentRecordID.setValue(0);
+        }
+        else {
+            App.txtNodeLevel.setValue(_nodeLevel);
+            App.txtParentRecordID.setValue(_parentRecordID);
         }
     }
     else {
-        HQ.message.show(4, '', '');
+        App.cboNodeID.setValue("");
+        App.txtDescr.setValue("");
+        parentRecordIDAll = operation.data.id.split("-");
+        App.txtNodeLevel.setValue(parentRecordIDAll[1]);
+        App.txtParentRecordID.setValue(parentRecordIDAll[2]);
+    }
+
+};
+
+var cboNodeID_Change = function (sender, value) {
+    if ((!HQ.isNew || sender.valueModels != null) && !App.stoSI_Hierarchy.loading) {
+        _recordID = Ext.isEmpty(sender.valueModels[0]) ? '' : sender.valueModels[0].data.RecordID;
+        App.stoSI_Hierarchy.reload();
     }
 };
 
-var btnDelAll_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
-        HQ.message.show(11, '', 'deleteAllCompanies');
+var cboNodeID_Select = function (sender, value) {
+    if (sender.valueModels != null && !App.stoSI_Hierarchy.loading) {
+        _recordID = Ext.isEmpty(sender.valueModels[0]) ? '' : sender.valueModels[0].data.RecordID;
+
+
+        App.stoSI_Hierarchy.reload();
+    }
+
+};
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboType_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboType.collapse();
+    }
+};
+
+//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
+var cboType_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
     }
     else {
-        HQ.message.show(4, '', '');
+        menuClick('new');
     }
 };
-
-var getDeepAllLeafNodes = function (node, onlyLeaf) {
-    var allNodes = new Array();
-    if (!Ext.value(node, false)) {
-        return [];
-    }
-    if (node.isLeaf()) {
-        return node;
-    } else {
-        node.eachChild(
-         function (Mynode) {
-             allNodes = allNodes.concat(Mynode.childNodes);
-         }
-        );
-    }
-    return allNodes;
-};
-
-var deleteSelectedCompanies = function (item) {
-    if (item == "yes") {
-        App.grdSYS_CloseDateSetUp.deleteSelected();
-    }
-};
-
-var deleteAllCompanies = function (item) {
-    if (item == "yes") {
-        App.grdSYS_CloseDateSetUp.store.removeAll();
-    }
-};
-
-var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
-    var record = App.cboBranchIDSI21600_pcCompany.findRecord("CpnyID", rec.data.BranchID);
-    if (record) {
-        return record.data.CpnyName;
-    }
-    else {
-        return value;
-    }
-};
-
 
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
-    HQ.isFirstLoad = true;
-    App.cboBranchID.store.load(function () {
-       // App.stoSYS_CloseDateSetUp.reload();
+    App.cboType.getStore().load(function () {
+        App.cboType.setValue('I');
+        HQ.isFirstLoad = true;
+        HQ.isNew = true;
+
     });
 
-
-}
-//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
-var stoChanged = function (sto) {
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SI21600');
 };
-//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
-var stoLoad = function (sto) {
-    HQ.isFirstLoad = true;
-    HQ.common.showBusy(false);
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SI21600');
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            HQ.store.insertRecord(sto, keys, { WrkAdjDate: new Date(_dateServer), WrkOpenDate: new Date(_dateServer) });
-        }
-        HQ.isFirstLoad = false;
+
+var frmChange = function () {
+    if (App.stoSI_Hierarchy.getCount() > 0) {
+        App.frmMain.getForm().updateRecord();
+        HQ.isChange = HQ.store.isChange(App.stoSI_Hierarchy);
+        HQ.common.changeData(HQ.isChange, 'SI21600');
     }
 };
+
+var stoLoadHeader = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isFirstLoad = true;
+    HQ.isNew = false;
+    App.cboNodeID.forceSelection = true;
+    if (sto.data.length == 0) {
+        App.cboNodeID.forceSelection = false;
+        HQ.store.insertBlank(sto, "NodeID");
+        record = sto.getAt(0);
+        HQ.isNew = true;//record la new    
+        App.cboNodeID.focus(true);//focus ma khi tao moi
+        sto.commitChanges();
+    }
+    record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    HQ.common.setRequire(App.frmMain);  //to do cac o la require  
+    frmChange();
+    if (!HQ.isNew) searchNode();
+};
+
 //trước khi load trang busy la dang load data
-var stoBeforeLoad = function (sto) {
+var storeBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
-var grdSYS_CloseDateSetUp_BeforeEdit = function (editor, e) {
-    return HQ.grid.checkBeforeEdit(e, keys);
-};
-var grdSYS_CloseDateSetUp_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdSYS_CloseDateSetUp, e, keys);
-    var record = App.stoSYS_CloseDateSetUp.getAt(App.stoSYS_CloseDateSetUp.getCount() - 1);
-    record.set('WrkAdjDate', new Date(_dateServer));
-    record.set('WrkOpenDate', new Date(_dateServer));
-
-    //if (e.field == "BranchID") {
-    //    var selectedRecord = App.cboBranchID.store.findRecord('CpnyID', e.value);
-    //    if (selectedRecord) {
-    //        e.record.set("Territory", selectedRecord.data.Territory);
-    //        e.record.set("BranchName", selectedRecord.data.CpnyName);
-    //        e.record.set("Address", selectedRecord.data.Address);
-    //    }
-    //    else {
-    //        e.record.set("Territory", "");
-    //        e.record.set("BranchName", "");
-    //        e.record.set("Address", "");
-    //    }
-    //}
-};
-var grdSYS_CloseDateSetUp_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdSYS_CloseDateSetUp, e, keys);
-};
-var grdSYS_CloseDateSetUp_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdSYS_CloseDateSetUp);
-    stoChanged(App.stoSYS_CloseDateSetUp);
-};
-
 
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
 var save = function () {
+    App.frmMain.getForm().updateRecord();
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             timeout: 1800000,
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'SI21600/Save',
             params: {
-                lstSYS_CloseDateSetUp: HQ.store.getData(App.stoSYS_CloseDateSetUp)
+                lstSI_Hierarchy: Ext.encode(App.stoSI_Hierarchy.getChangedData({ skipIdForPhantomRecords: false })),
+                NodeID: App.cboNodeID.getValue(),
+                NodeLevel: App.txtNodeLevel.getValue(),
+                ParentRecordID: App.txtParentRecordID.getValue(),
+                isNew: HQ.isNew
+
             },
-            success: function (msg, data) {
-                HQ.message.show(201405071);
-                HQ.isChange = false;
-                menuClick("refresh");
+            success: function (result, data) {
+                HQ.isNew = false;
+                HQ.message.show(201405071, '', '');
+
+                var NodeID = data.result.NodeID;
+                _recordID = data.result.RecordID;
+                ReloadTree();
+                App.cboNodeID.setValue(NodeID);
+                //App.cboNodeID.getStore().load(function () {
+
+
+                //    //App.stoSI_Hierarchy.reload();
+                //});
+
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -331,37 +255,73 @@ var save = function () {
     }
 };
 
-var deleteData = function (item) {
-    if (item == "yes") {
-        App.grdSYS_CloseDateSetUp.deleteSelected();
-        stoChanged(App.stoSYS_CloseDateSetUp);
+// Submit the deleted data into server side
+function deleteData(item) {
+    if (item == 'yes') {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang('DeletingData'),
+            url: 'SI21600/DeleteAll',
+            success: function (action, data) {
+                App.cboNodeID.setValue("");
+                App.cboNodeID.getStore().load(function () { cboNodeID_Change(App.cboNodeID); });
+                ReloadTree();
+            },
+            failure: function (action, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                }
+            }
+        });
+
     }
 };
-
 
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
-        HQ.isFirstLoad = true;
-        App.stoSYS_CloseDateSetUp.reload();
+        App.stoSI_Hierarchy.reload();
     }
 };
 
-//Filter dung trong truong hop co treeview
-var myValidateRecord = function (filter, record, columnName) {
-    var filterValue = filter.getValue();
-    if (filterValue.length == 0) {
-        return true;
-    }
-    var values = filterValue.split(",");
-    for (var i = 0; i < values.length; i++) {
+var searchNode = function () {
+    HQ.common.showBusy(true, HQ.common.getLang('searching node....'), App.frmMain);
+    //tu dong bat node tree khi chon 1 cai tu cboInvtID
+    var inactiveHierachy = App.stoSI_Hierarchy.getAt(0).data;
 
-        if (record.get(columnName).indexOf(values[i].trim()) > -1) {
-            return true;
+    var invtIDDescr = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID + "-" + inactiveHierachy.RecordID;
+    var record = App.IDTree.getStore().getNodeById(invtIDDescr);
+    if (App.IDTree.getStore().getNodeById(invtIDDescr)) {
+        var depth = App.IDTree.getStore().getNodeById(invtIDDescr).data.depth;
+
+        expandTree(depth, App.IDTree.getStore().getNodeById(invtIDDescr));
+        var findNode = App.IDTree.items.items[0].store.data.items;
+        for (var i = 0; i < findNode.length; i++) {
+            if (findNode[i].data.id == invtIDDescr) {
+                App.slmTree.select(i);
+                tmpSelectedNode = App.slmTree.selected.items[0].data.id;
+
+                if (tmpSelectedNode.split('-').length == 4) {
+                    _nodeID = tmpSelectedNode.split('-')[0];
+                    _nodeLevel = tmpSelectedNode.split('-')[1];
+                    _parentRecordID = tmpSelectedNode.split('-')[2];
+                    _recordID = tmpSelectedNode.split('-')[3];
+
+                    App.txtNodeLevel.setValue(_nodeLevel);
+                    App.txtParentRecordID.setValue(_parentRecordID);
+                }
+                break;
+            }
         }
     }
-    return false;
+    HQ.common.showBusy(false);
 };
-/////////////////////////////////////////////////////////////////////////
+
+var expandTree = function (depth, tree) {
+    if (depth > 0) {
+        var treechil = tree.parentNode;
+        expandTree(depth - 1, treechil);
+        tree.parentNode.expand();
+    }
+};

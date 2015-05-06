@@ -53,9 +53,8 @@
         .Parameters(ps =>
         {
             ps.Add(new StoreParameter("Type", "App.cboType.getValue()", ParameterMode.Raw));
-            ps.Add(new StoreParameter("NodeID", "App.cboNodeID.getValue()", ParameterMode.Raw));
-            ps.Add(new StoreParameter("NodeLevel", "_nodeLevel", ParameterMode.Raw));
-            ps.Add(new StoreParameter("ParentRecordID", "_parentRecordID", ParameterMode.Raw));
+            ps.Add(new StoreParameter("RecordID", "_recordID", ParameterMode.Raw));
+           
         })
         .Listeners(p => 
             {
