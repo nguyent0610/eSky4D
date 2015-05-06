@@ -64,7 +64,7 @@ var firstLoad = function () {
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SI20100');
+    HQ.common.changeData(HQ.isChange, 'AR21300');
 };
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
@@ -72,7 +72,7 @@ var stoLoad = function (sto) {
     HQ.isFirstLoad = true;
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SI20100');
+    HQ.common.changeData(HQ.isChange, 'AR21300');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             HQ.store.insertBlank(sto, keys);
