@@ -85,7 +85,7 @@
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\PCHQ\Desktop\SA_Grid\DLL MVC NEW\System.Web.Mvc.dll</HintPath>
+      <HintPath>bin\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Optimization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -298,7 +298,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
