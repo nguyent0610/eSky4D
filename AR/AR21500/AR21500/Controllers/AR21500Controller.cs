@@ -41,9 +41,9 @@ namespace AR21500.Controllers
         {
             try
             {
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<AR_DisplayMethod> lstMsg = dataHandler.BatchObjectData<AR_DisplayMethod>();
-            foreach (AR_DisplayMethod deleted in lstMsg.Deleted)
+            StoreDataHandler dataHandler = new StoreDataHandler(data["lstAR_DisplayMethod"]);
+            ChangeRecords<AR_DisplayMethod> lstAR_DisplayMethod = dataHandler.BatchObjectData<AR_DisplayMethod>();
+            foreach (AR_DisplayMethod deleted in lstAR_DisplayMethod.Deleted)
             {
                 var del = _db.AR_DisplayMethod.Where(p => p.DispMethod == deleted.DispMethod).FirstOrDefault();
                 if (del != null)
@@ -52,7 +52,7 @@ namespace AR21500.Controllers
                 }
               
             }
-            foreach (AR_DisplayMethod created in lstMsg.Created)
+            foreach (AR_DisplayMethod created in lstAR_DisplayMethod.Created)
             {
                 if (created.DispMethod == "") continue;
                 var record = _db.AR_DisplayMethod.Where(p => p.DispMethod == created.DispMethod).FirstOrDefault();
@@ -88,7 +88,7 @@ namespace AR21500.Controllers
 
             
 
-            foreach (AR_DisplayMethod updated in lstMsg.Updated)
+            foreach (AR_DisplayMethod updated in lstAR_DisplayMethod.Updated)
             {
                 var record = _db.AR_DisplayMethod.Where(p => p.DispMethod == updated.DispMethod).FirstOrDefault();
                                 

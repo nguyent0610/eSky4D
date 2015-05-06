@@ -1,13 +1,8 @@
+﻿//// Declare //////////////////////////////////////////////////////////
 var keys = ['DispMethod'];
-///////////////////////////////////////////////////////////////////////
+var fieldsCheckRequire = ["DispMethod"];
+var fieldsLangCheckRequire = ["DispMethod"];
 
-//// Store /////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////
-
-
-//// Event /////////////////////////////////////////////////////////////
-   
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -23,99 +18,112 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdDisplayMethod);
             break;
         case "refresh":
-            App.stoDisplayMethod.reload();
-            HQ.grid.first(App.grdDisplayMethod);
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoDisplayMethod.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdDisplayMethod);
+                HQ.grid.insert(App.grdDisplayMethod, keys);
             }
             break;
         case "delete":
             if (App.slmDisplayMethod.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
-                }
+                var rowindex = HQ.grid.indexSelect(App.grdDisplayMethod);
+                if (rowindex != '')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdDisplayMethod), ''], 'deleteData', true)
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (checkRequire(App.stoDisplayMethod.getChangedData().Created)
-                    && checkRequire(App.stoDisplayMethod.getChangedData().Updated))
-                {
+                if (HQ.store.checkRequirePass(App.stoDisplayMethod, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
             break;
         case "print":
-            alert(command);
             break;
         case "close":
-            if (HQ.store.isChange(App.stoDisplayMethod)) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
+
 };
-// Danh cho grid ///////////////////////////////////////////////////////
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.cboType.store.load(function () {
+        App.cboStyle.store.load(function () {
+            App.cboShelf.store.load(function () {
+                App.stoDisplayMethod.reload();
+            })
+        })
+    });
+
+};
+
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'AR21500');
+};
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'AR21500');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
 var grdDisplayMethod_BeforeEdit = function (editor, e) {
-    if (!HQ.isUpdate) return false;
-    //keys = e.record.idProperty.split(',');
-
-    if (keys.indexOf(e.field) != -1) {
-        if (e.record.data.tstamp != "")
-            return false;
-    }
-    return HQ.grid.checkInput(e, keys);
+    return HQ.grid.checkBeforeEdit(e, keys);
 };
+
 var grdDisplayMethod_Edit = function (item, e) {
-
-    if (keys.indexOf(e.field) != -1) {
-        if (e.value != '' && isAllValidKey(App.stoDisplayMethod.getChangedData().Created) && isAllValidKey(App.stoDisplayMethod.getChangedData().Updated))
-            HQ.store.insertBlank(App.stoDisplayMethod);
-    }
+    HQ.grid.checkInsertKey(App.grdDisplayMethod, e, keys);
 };
+
 var grdDisplayMethod_ValidateEdit = function (item, e) {
-    if (keys.indexOf(e.field) != -1) {
-        if (HQ.grid.checkDuplicate(App.grdDisplayMethod, e, keys)) {
-            HQ.message.show(1112, e.value);
-            return false;
-        }
-        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+    return HQ.grid.checkValidateEdit(App.grdDisplayMethod, e, keys);
+};
 
-        if (!e.value.match(regex)) {
-            HQ.message.show(20140811, e.column.text);
-            return false;
-        }
-    }
-};
-var grdDisplayMethod_CancelEdit = function (editor, e) {
-    if (e.record.phantom) {
-        e.store.remove(e.record);
-    }
-};
 var grdDisplayMethod_Reject = function (record) {
-    if (record.data.tstamp == '') {
-        App.stoDisplayMethod.remove(record);
-        App.grdDisplayMethod.getView().focusRow(App.stoDisplayMethod.getCount() - 1);
-        App.grdDisplayMethod.getSelectionModel().select(App.stoDisplayMethod.getCount() - 1);
-    } else record.reject();
+    HQ.grid.checkReject(record, App.grdDisplayMethod);
+    stoChanged(App.stoDisplayMethod);
 };
-/////////////////////////////////////////////////////////////////////////
 
-// Process Data ////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
-            waitMsg: HQ.common.getLang("WaitMsg"),
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
             url: 'AR21500/Save',
             params: {
-                lstgrd: HQ.store.getData(App.stoDisplayMethod)
+                lstAR_DisplayMethod: HQ.store.getData(App.stoDisplayMethod)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                HQ.isChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
@@ -124,71 +132,27 @@ var save = function () {
         });
     }
 };
+
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdDisplayMethod.deleteSelected();
+        stoChanged(App.stoDisplayMethod);
     }
 };
+
 /////////////////////////////////////////////////////////////////////////
-
-// Kiem tra nhung field yeu cau bat buoc nhap //////////////////////////
-var checkRequire = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            if (HQ.grid.checkRequirePass(items[i], keys)) continue;
-            if (items[i]["DispMethod"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("EntryID"));
-                return false;
-            }
-
-            if (items[i]["Descr"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("descr"));
-                return false;
-            }
-        }
-        return true;
-    } else {
-        return true;
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoDisplayMethod.reload();
     }
 };
-///////////////////////////////////////////////////////////////////////
+///////////////////////////////////
 
-//kiem tra key da nhap du chua /////////////////////////////////////////
-var isAllValidKey = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            for (var j = 0; j < keys.length; j++) {
-                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
-                    return false;
-            }
-        }
-        return true;
-    } else {
-        return true;
-    }
-};
-///////////////////////////////////////////////////////////////////////
-
-// Other Functions ////////////////////////////////////////////////////
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.close(this);
-    }
-};
-///////////////////////////////////////////////////////////////////////
-
-var AutoLoadGrid = function () {
-    menuClick("refresh");
-};
-
-var stoDisplayMethod_load = function () {
-    App.stoMasterType.load();
-    App.stoMasterStyle.load();
-    App.stoMasterShelf.load();
-};
-
-var rdType = function (value) {
-    var record = App.stoMasterType.findRecord("Code", value);
+var rdType = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboTypeAR21500_pcLoadType.findRecord("Code", rec.data.Type);
     if (record) {
         return record.data.Descr;
     }
@@ -196,8 +160,8 @@ var rdType = function (value) {
         return value;
     }
 };
-var rdStyle = function (value) {
-    var record = App.stoMasterStyle.findRecord("Code", value);
+var rdStyle = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboStyleAR21500_pcLoadStyle.findRecord("Code", rec.data.Style);
     if (record) {
         return record.data.Descr;
     }
@@ -205,8 +169,8 @@ var rdStyle = function (value) {
         return value;
     }
 };
-var rdShelf = function (value) {
-    var record = App.stoMasterShelf.findRecord("Code", value);
+var rdShelf = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboShelfAR21500_pcLoadShelf.findRecord("Code", rec.data.Shelf);
     if (record) {
         return record.data.Descr;
     }

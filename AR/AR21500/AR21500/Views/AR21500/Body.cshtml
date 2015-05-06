@@ -46,16 +46,21 @@
                             .PageSize(50)
                             .Model(Util.GenerateModel(typeof(AR21500_pgLoadDisplayMethod_Result), "mdAR_DisplayMethod", "DispMethod"))
                             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData")))
-                            .Listeners(x=>x.BeforeLoad.Fn="stoDisplayMethod_load")
-                          )
+                            .Listeners(l =>
+                                {
+                                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                                    l.Load.Fn = "stoLoad";
+                                    l.Update.Fn = "stoChanged";                 
+                                })
+                )
+                .Listeners(p =>
+                {
+                    p.BoxReady.Handler = "firstLoad();";
+                })
                     .SortableColumns(false)
-                    .Listeners(l => {
-                        //l.Render.Fn = "stoDisplayMethod_load";
-                        l.BoxReady.Fn = "AutoLoadGrid"; 
-                    })
+                 
                     .ColumnModel(
                                     X.RowNumbererColumn().Width(40),
-
                                     X.CheckColumn().DataIndex("Active").Align(Alignment.Center).Width(150)
                                     .Editable(true).HideTitleEl(true)
                                     .HeaderItems(
@@ -75,7 +80,7 @@
                                     .Editor(X.TextField().MaxLength(200)),
 
                                     X.Column().Text(Util.GetLang("Type")).DataIndex("Type").Width(150).Renderer("rdType")
-                                    .Editor(HQ.Combo().ID("cboType").Name("cboType").HQProcedure("AR21500_pcLoadType")
+                                    .Editor(HQ.Combo().ID("cboType").Name("cboType").HQProcedure("AR21500_pcLoadType").HQAutoLoad(false)
                                                 .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
                                                 .Width(150).HQHeightWidth(150, 400).MarginSpec("5 0 0 0")
                                                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
@@ -84,11 +89,11 @@
                                                         })
                                                 .LoadData()),
 
-                                    X.Column().Text(Util.GetLang("Level")).DataIndex("Level").Width(150)
-                                    .Editor(X.TextField().MaxLength(200)),
+                                    X.NumberColumn().Text(Util.GetLang("Level")).DataIndex("Level").Width(100).Align(Alignment.Right).Format("0,000")
+                                    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0)),
 
                                     X.Column().ID("Style").Text(Util.GetLang("Style")).DataIndex("Style").Width(100).Renderer("rdStyle")
-                                    .Editor(HQ.Combo().ID("cboStyle").Name("cboStyle").HQProcedure("AR21500_pcLoadStyle")
+                                    .Editor(HQ.Combo().ID("cboStyle").Name("cboStyle").HQProcedure("AR21500_pcLoadStyle").HQAutoLoad(false)
                                                 .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
                                                 .Width(150).HQHeightWidth(150, 400).MarginSpec("5 0 0 0")
                                                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
@@ -98,7 +103,7 @@
                                                 .LoadData()),
 
                                     X.Column().ID("Shelf").Text(Util.GetLang("Shelf")).DataIndex("Shelf").Width(100).Renderer("rdShelf")
-                                    .Editor(HQ.Combo().ID("cboShelf").Name("cboShelf").HQProcedure("AR21500_pcLoadShelf")
+                                    .Editor(HQ.Combo().ID("cboShelf").Name("cboShelf").HQProcedure("AR21500_pcLoadShelf").HQAutoLoad(false)
                                                 .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
                                                 .Width(150).HQHeightWidth(150, 400).MarginSpec("5 0 0 0")
                                                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
@@ -107,11 +112,11 @@
                                                         })
                                                 .LoadData()),
 
-                                    X.Column().ID("Seq").Text(Util.GetLang("Seq")).DataIndex("Seq").Width(100)
-                                    .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
+                                    X.NumberColumn().ID("Seq").Text(Util.GetLang("Seq")).DataIndex("Seq").Width(100).Align(Alignment.Right).Format("0,000")
+                                    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0)),
 
-                                    X.Column().ID("Target").Text(Util.GetLang("Target")).DataIndex("Target").Width(100)
-                                    .Editor(X.TextField().MaxLength(10).EnforceMaxLength(true)),
+                                    X.NumberColumn().ID("Target").Text(Util.GetLang("Target")).DataIndex("Target").Width(100).Align(Alignment.Right).Format("0,000")
+                                    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0)),
 
                                  X.CommandColumn().Width(150)
                                                   .Commands(
@@ -140,34 +145,34 @@
                                                     })
                                          )
                                 .Plugins(X.ProgressBarPager())
-                              )
-                       .Plugins( //Cho phep edit
-                                X.CellEditing()
-                                .ClicksToEdit(1)
-                                .Listeners(ls =>
-                                            {
-                                                ls.BeforeEdit.Fn = "grdDisplayMethod_BeforeEdit";
-                                                ls.Edit.Fn = "grdDisplayMethod_Edit";
-                                                ls.ValidateEdit.Fn = "grdDisplayMethod_ValidateEdit";
-                                                ls.CancelEdit.Fn = "grdDisplayMethod_CancelEdit";
-                                            })
-                               )
-                       .Features(
-                                X.GridFilters()//Filter
-                                 .Local(true)
-                                 .Filters(
-                                         X.StringFilter().DataIndex("Active"),
-                                         X.StringFilter().DataIndex("DispMethod"),
-                                         X.StringFilter().DataIndex("Descr"),
-                                         X.StringFilter().DataIndex("Type"),
-                                         X.StringFilter().DataIndex("Style"),
-                                         X.StringFilter().DataIndex("Shelf"),
-                                         X.StringFilter().DataIndex("Seq"),
-                                         X.StringFilter().DataIndex("Target")
-                                         )
-                                )
+                    )
+                    .Plugins( //Cho phep edit
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.BeforeEdit.Fn = "grdDisplayMethod_BeforeEdit";
+                            ls.Edit.Fn = "grdDisplayMethod_Edit";
+                            ls.ValidateEdit.Fn = "grdDisplayMethod_ValidateEdit";
+                        })
+                    )
+                    .Features(
+                        X.GridFilters()//Filter
+                            .Local(true)
+                            .Filters(
+                                    X.BooleanFilter().DataIndex("Active"),
+                                    X.StringFilter().DataIndex("DispMethod"),
+                                    X.StringFilter().DataIndex("Descr"),
+                                    X.StringFilter().DataIndex("Type"),
+                                    X.NumericFilter().DataIndex("Level"),
+                                    X.StringFilter().DataIndex("Style"),
+                                    X.StringFilter().DataIndex("Shelf"),
+                                    X.NumericFilter().DataIndex("Seq"),
+                                    X.NumericFilter().DataIndex("Target")
+                        )
+                    )
 
 
                     )
-                      )
+            )
     )

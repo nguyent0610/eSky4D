@@ -78,9 +78,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\@Master\DLL\System.Web.Mvc.dll</HintPath>
+      <HintPath>bin\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Optimization">
       <HintPath>..\..\Master\DLL\System.Web.Optimization.dll</HintPath>
@@ -220,7 +220,6 @@
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\common.js" />
-    <Content Include="Scripts\hq.common.debug.js" />
     <Content Include="Scripts\hq.common.js" />
     <Content Include="Scripts\hq.language0.js" />
     <Content Include="Scripts\hq.language1.js" />
@@ -297,7 +296,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
