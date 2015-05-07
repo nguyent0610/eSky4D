@@ -22,10 +22,10 @@ namespace SI20900.Controllers
         SI20900Entities _db = Util.CreateObjectContext<SI20900Entities>(false);
         public ActionResult Index()
         {
-
             Util.InitRight(_screenNbr);
             return View();
         }
+
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
@@ -42,8 +42,8 @@ namespace SI20900.Controllers
             {
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstTaxCat"]);
-                ChangeRecords<SI_TaxCat> lstTaxCat = dataHandler.BatchObjectData<SI_TaxCat>();
-                foreach (SI_TaxCat deleted in lstTaxCat.Deleted)
+                ChangeRecords<SI20900_pgLoadTaxCat_Result> lstTaxCat = dataHandler.BatchObjectData<SI20900_pgLoadTaxCat_Result>();
+                foreach (SI20900_pgLoadTaxCat_Result deleted in lstTaxCat.Deleted)
                 {
                     var del = _db.SI_TaxCat.Where(p => p.CatID == deleted.CatID).FirstOrDefault();
                     if (del != null)
@@ -54,7 +54,7 @@ namespace SI20900.Controllers
 
                 lstTaxCat.Created.AddRange(lstTaxCat.Updated);
 
-                foreach (SI_TaxCat curTaxCat in lstTaxCat.Created)
+                foreach (SI20900_pgLoadTaxCat_Result curTaxCat in lstTaxCat.Created)
                 {
                     if (curTaxCat.CatID.PassNull() == "") continue;
 
@@ -90,7 +90,7 @@ namespace SI20900.Controllers
             }
         }
 
-        private void Update_SI_TaxCat(SI_TaxCat t, SI_TaxCat s, bool isNew)
+        private void Update_SI_TaxCat(SI_TaxCat t, SI20900_pgLoadTaxCat_Result s, bool isNew)
         {
             if (isNew)
             {
