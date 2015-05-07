@@ -20,20 +20,21 @@ namespace OM21600.Controllers
         private string _screenNbr = "OM21600";
         private string _userName = Current.UserName;
         OM21600Entities _db = Util.CreateObjectContext<OM21600Entities>(false);
+
         public ActionResult Index()
         {
-
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
+
         public ActionResult GetSalesRoute(string CpnyID)
         {
-
             return this.Store(_db.OM21600_pgLoadSalesRoute(CpnyID).ToList());
         }
 
@@ -42,32 +43,32 @@ namespace OM21600.Controllers
         {
             try
             {
-                var branch = data["cboCpnyID"];
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstSalesRoute"]);
-                ChangeRecords<OM_SalesRoute> lstSalesRoute = dataHandler.BatchObjectData<OM_SalesRoute>();
-                foreach (OM_SalesRoute deleted in lstSalesRoute.Deleted)
+                string BranchID = data["cboCnpyID"];
+                 
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_SalesRoute"]);
+                ChangeRecords<OM21600_pgLoadSalesRoute_Result> lstOM_SalesRoute = dataHandler.BatchObjectData<OM21600_pgLoadSalesRoute_Result>();
+                foreach (OM21600_pgLoadSalesRoute_Result deleted in lstOM_SalesRoute.Deleted)
                 {
-                    var del = _db.OM_SalesRoute.Where(p => p.SalesRouteID == deleted.SalesRouteID && p.BranchID == deleted.BranchID).FirstOrDefault();
+                    var del = _db.OM_SalesRoute.Where(p => p.SalesRouteID == deleted.SalesRouteID && p.BranchID == BranchID).FirstOrDefault();
                     if (del != null)
                     {
                         _db.OM_SalesRoute.DeleteObject(del);
                     }
                 }
 
-                lstSalesRoute.Created.AddRange(lstSalesRoute.Updated);
+                lstOM_SalesRoute.Created.AddRange(lstOM_SalesRoute.Updated);
 
-                foreach (OM_SalesRoute curSalesRoute in lstSalesRoute.Created)
+                foreach (OM21600_pgLoadSalesRoute_Result curLang in lstOM_SalesRoute.Created)
                 {
-                    if (curSalesRoute.SalesRouteID.PassNull() == "" && curSalesRoute.BranchID.PassNull() == "") continue;
+                    if (curLang.SalesRouteID.PassNull() == "" || BranchID.PassNull()=="") continue;
 
-                    var SalesRoute = _db.OM_SalesRoute.Where(p => p.SalesRouteID.ToLower() == curSalesRoute.SalesRouteID.ToLower() && p.BranchID.ToLower() == curSalesRoute.BranchID.ToLower()).FirstOrDefault();
+                    var lang = _db.OM_SalesRoute.Where(p => p.SalesRouteID.ToLower() == curLang.SalesRouteID.ToLower() && p.BranchID.ToLower()==BranchID.ToLower()).FirstOrDefault();
 
-                    if (SalesRoute != null)
+                    if (lang != null)
                     {
-                        if (SalesRoute.tstamp.ToHex() == curSalesRoute.tstamp.ToHex())
+                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
                         {
-                            SalesRoute.BranchID = branch;
-                            Update_OM_SalesRoute(SalesRoute, curSalesRoute, false);
+                            Update_Language(lang, curLang, false);
                         }
                         else
                         {
@@ -76,15 +77,14 @@ namespace OM21600.Controllers
                     }
                     else
                     {
-                        SalesRoute = new OM_SalesRoute();
-                        SalesRoute.BranchID = branch;
-                        Update_OM_SalesRoute(SalesRoute, curSalesRoute, true);
-                        _db.OM_SalesRoute.AddObject(SalesRoute);
+                        lang = new OM_SalesRoute();
+                        lang.BranchID = BranchID;
+                        Update_Language(lang, curLang, true);
+                        _db.OM_SalesRoute.AddObject(lang);
                     }
                 }
 
                 _db.SaveChanges();
-
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -94,7 +94,7 @@ namespace OM21600.Controllers
             }
         }
 
-        private void Update_OM_SalesRoute(OM_SalesRoute t, OM_SalesRoute s, bool isNew)
+        private void Update_Language(OM_SalesRoute t, OM21600_pgLoadSalesRoute_Result s, bool isNew)
         {
             if (isNew)
             {

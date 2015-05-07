@@ -17,119 +17,124 @@
     .BodyPadding(0)
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
-    .Layout(LayoutType.Fit)
+    .Layout(LayoutType.Border)
     .Items(
         ////Thiet ke giao dien o day
-        X.Panel()
-                    .Layout(LayoutType.Anchor)
-                    .AnchorVertical("100%")
-                    .Padding(5)
-                    .Items(
-                          HQ.Combo().ID("cboCpnyID").DataIndex("CpnyID").HQLangCode("CpnyID").HQProcedure("OM21600_pcLoadBranchAllByUser").AllowBlank(false)
-                            .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID").Width(400).HQHeightWidth(400, 300)
-                                .HQControlFocus("grdSalesRoute")
-                                .HQParam(new StoreParameterCollection() { 
-                                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName ", Mode = ParameterMode.Raw }
-                                })
-                                .Listeners(l=>l.Change.Handler="App.stoSalesRoute.reload();")
-                                .LoadData(),
-                         
-                         X.GridPanel()
-                                .Layout(LayoutType.Anchor)
-                                .Anchor("100% -20")
-                                .Scroll(ScrollMode.Both)
-                                .View(X.GridView().TrackOver(false))
-                                .ID("grdSalesRoute")
-                                .Store(
-                                    X.Store()
-                                    .ID("stoSalesRoute")
-                                    .PageSize(50)
-                                    .Model(Util.GenerateModel(typeof(OM21600_pgLoadSalesRoute_Result), "mdlOM21600_pgLoadSalesRoute", "Code"))
-                                    .ServerProxy(
+     
+            X.Panel().Region(Region.North)
+            .Items(
+                HQ.Combo().ID("cboCpnyID").Name("cboCnpyID").DataIndex("CpnyID").HQLangCode("CpnyID").HQProcedure("OM21600_pcLoadBranchAllByUser").AllowBlank(false)
+                .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID").Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
+                    .HQControlFocus("grdSalesRoute").ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName ", Mode = ParameterMode.Raw }
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(l=>{
+                        l.Change.Fn = "cboCpnyID_Change";
+                        l.TriggerClick.Fn = "cboCpnyID_TriggerClick";
+                        l.Expand.Fn = "cboCpnyID_Expand";
+                    })
+                    .LoadData()
+                    )
+            , X.Panel()
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .Items(
+                X.GridPanel()
+                .Scroll(ScrollMode.Both).Region(Region.Center).Flex(1)
+                .View(X.GridView().TrackOver(false).LoadMask(true))
+                .ID("grdSalesRoute")
+                .Store(
+                    X.Store()
+                    .ID("stoSalesRoute")
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(OM21600_pgLoadSalesRoute_Result), "mdlOM21600_pgLoadSalesRoute", "Code"))
+                    .ServerProxy(
                  
-                                        X.AjaxProxy()                
-                                        .Url(Url.Action("GetSalesRoute", "OM21600"))                
-                                        .ActionMethods(action =>
-                                        {
-                                            action.Read = HttpMethod.POST;
-                                        })
-                                        .Reader(X.JsonReader().Root("data").TotalProperty("totaldata")) 
-                                    )
-                                    .Parameters(ps =>
-                                                {
-                                                    ps.Add(new StoreParameter("CpnyID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                        X.AjaxProxy()                
+                        .Url(Url.Action("GetSalesRoute", "OM21600"))                
+                        .ActionMethods(action =>
+                        {
+                            action.Read = HttpMethod.POST;
+                        })
+                        .Reader(X.JsonReader().Root("data").TotalProperty("totaldata")) 
+                    )
+                    .Parameters(ps =>
+                                {
+                                    ps.Add(new StoreParameter("CpnyID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
                    
-                                                })
-                                    .Listeners(l =>
-                                    {
-                                        l.BeforeLoad.Fn = "stoBeforeLoad";
-                                        l.Load.Fn = "stoLoad";
-                                        l.Update.Fn = "stoChanged";                 
-                                    })
-                                )
-                                .Listeners(p =>
-                                         {
-                                             p.BoxReady.Handler = "firstLoad();";
-                                         })
-                                .SortableColumns(false)
-                                .ColumnModel(
-                                    X.RowNumbererColumn().Width(40),
-                                    X.Column().ID("SalesRouteID").Text(Util.GetLang("SalesRouteID")).DataIndex("SalesRouteID").Width(150)
-                                            .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
-                                    X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
-                                            .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),
-                                    X.CommandColumn()
-                                    .Width(150)
-                                    .Commands(
-                                        X.GridCommand()
-                                        .Text(Util.GetLang("Reject"))
-                                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                                        .CommandName("reject")
-                                        .Icon(Icon.ArrowUndo)
-                                    )
-                                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                                    .Listeners(l => l.Command.Handler = "grdSalesRoute_Reject(record);")
-                                )
-                                .SelectionModel(X.RowSelectionModel().ID("slmSalesRoute").Mode(SelectionMode.Multi))
-                                .BottomBar(
-                                    X.PagingToolbar()
-                                    .Items(
-                                        X.Label("Page size:"),
-                                        X.ToolbarSpacer(10),
-                                        X.ComboBox()
-                                        .Width(80)
-                                        .Items("1", "2", "10", "20", "30", "50")
-                                        .SelectedItems("50")
-                                        .Listeners(l =>
-                                            {
-                                                l.Select.Fn = "HQ.grid.onPageSelect";                   
-                                            })
-                                    )
-                                    .Plugins(X.ProgressBarPager())
-                                )
-                                .Plugins(
-                                    X.CellEditing()
-                                    .ClicksToEdit(1)
-                                    .Listeners(ls =>
-                                    {
-                                        ls.BeforeEdit.Fn = "grdSalesRoute_BeforeEdit";
-                                        ls.Edit.Fn = "grdSalesRoute_Edit";
-                                        ls.ValidateEdit.Fn = "grdSalesRoute_ValidateEdit";
+                                })
+                    .Listeners(l =>
+                    {
+                        l.BeforeLoad.Fn = "stoBeforeLoad";
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "stoChanged";                 
+                    })
+                )
+                .Listeners(p =>
+                            {
+                                p.BoxReady.Handler = "firstLoad();";
+                            })
+                .SortableColumns(false)
+                .ColumnModel(
+                    X.RowNumbererColumn().Width(40),
+                    X.Column().ID("SalesRouteID").Text(Util.GetLang("SalesRouteID")).DataIndex("SalesRouteID").Width(150)
+                            .Editor(Html.X().TextField().MaxLength(10).EnforceMaxLength(true)),
+                    X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150)
+                            .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true)),
+                    X.CommandColumn()
+                    .Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "grdSalesRoute_Reject(record);")
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmSalesRoute").Mode(SelectionMode.Multi))
+                .BottomBar(
+                    X.PagingToolbar()
+                    .Items(
+                        X.Label("Page size:"),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("50")
+                        .Listeners(l =>
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";                   
+                            })
+                    )
+                    .Plugins(X.ProgressBarPager())
+                )
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdSalesRoute_BeforeEdit";
+                        ls.Edit.Fn = "grdSalesRoute_Edit";
+                        ls.ValidateEdit.Fn = "grdSalesRoute_ValidateEdit";
 
-                                    })
-                                )
+                    })
+                )
 
-                                .Features(
-                                    X.GridFilters()
-                                        .Local(true)
-                                        .Filters(
-                                           X.StringFilter().DataIndex("SalesRouteID"),
-                                           X.StringFilter().DataIndex("Descr")
-                                        )
-                                )
-                        
-                       )
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("SalesRouteID"),
+                            X.StringFilter().DataIndex("Descr")
+                        )
+                )
+            )
         
+     
     )
 )
 )
