@@ -22,7 +22,6 @@ namespace AR21400.Controllers
 
         public ActionResult Index()
         {
-
             Util.InitRight(_screenNbr);
             return View();
         }
