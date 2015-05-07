@@ -27,7 +27,7 @@ namespace SI20100.Controllers
             return View();
         }
 
-       //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -44,8 +44,8 @@ namespace SI20100.Controllers
             try
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstIN_Buyer"]);
-                ChangeRecords<SI_Buyer> lstIN_Buyer = dataHandler.BatchObjectData<SI_Buyer>();
-                foreach (SI_Buyer deleted in lstIN_Buyer.Deleted)
+                ChangeRecords<SI20100_pgLoadGrid_Result> lstIN_Buyer = dataHandler.BatchObjectData<SI20100_pgLoadGrid_Result>();
+                foreach (SI20100_pgLoadGrid_Result deleted in lstIN_Buyer.Deleted)
                 {
                     var del = _db.SI_Buyer.Where(p => p.Buyer == deleted.Buyer).FirstOrDefault();
                     if (del != null)
@@ -56,7 +56,7 @@ namespace SI20100.Controllers
 
                 lstIN_Buyer.Created.AddRange(lstIN_Buyer.Updated);
 
-                foreach (SI_Buyer curLang in lstIN_Buyer.Created)
+                foreach (SI20100_pgLoadGrid_Result curLang in lstIN_Buyer.Created)
                 {
                     if (curLang.Buyer.PassNull() == "") continue;
 
@@ -91,7 +91,7 @@ namespace SI20100.Controllers
             }
         }
 
-        private void Update_Language(SI_Buyer t, SI_Buyer s, bool isNew)
+        private void Update_Language(SI_Buyer t, SI20100_pgLoadGrid_Result s, bool isNew)
         {
             if (isNew)
             {
