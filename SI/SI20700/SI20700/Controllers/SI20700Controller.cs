@@ -20,12 +20,13 @@ namespace SI20700.Controllers
         private string _screenNbr = "SI20700";
         private string _userName = Current.UserName;
         SI20700Entities _db = Util.CreateObjectContext<SI20700Entities>(false);
+
         public ActionResult Index()
         {
-            
             Util.InitRight(_screenNbr);
             return View();
         }
+
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
@@ -39,10 +40,9 @@ namespace SI20700.Controllers
         {
             try
             {
-
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstState"]);
-                ChangeRecords<SI_State> lstState = dataHandler.BatchObjectData<SI_State>();
-                foreach (SI_State deleted in lstState.Deleted)
+                ChangeRecords<SI20700_pgLoadState_Result> lstState = dataHandler.BatchObjectData<SI20700_pgLoadState_Result>();
+                foreach (SI20700_pgLoadState_Result deleted in lstState.Deleted)
                 {
                     var del = _db.SI_State.Where(p => p.Country == deleted.Country && p.State == deleted.State).FirstOrDefault();
                     if (del != null)
@@ -53,7 +53,7 @@ namespace SI20700.Controllers
 
                 lstState.Created.AddRange(lstState.Updated);
 
-                foreach (SI_State curState in lstState.Created)
+                foreach (SI20700_pgLoadState_Result curState in lstState.Created)
                 {
                     if (curState.Country.PassNull() == "" && curState.State.PassNull() == "") continue;
 
@@ -89,7 +89,7 @@ namespace SI20700.Controllers
             }
         }
 
-        private void Update_SI_State(SI_State t, SI_State s, bool isNew)
+        private void Update_SI_State(SI_State t, SI20700_pgLoadState_Result s, bool isNew)
         {
             if (isNew)
             {

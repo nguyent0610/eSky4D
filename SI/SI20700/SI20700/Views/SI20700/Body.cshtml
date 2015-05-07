@@ -39,9 +39,9 @@
             })
         )
         .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
