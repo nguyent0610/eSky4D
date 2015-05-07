@@ -41,8 +41,8 @@ namespace SI21900.Controllers
             {
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstTerritory"]);
-                ChangeRecords<SI_Territory> lstTerritory = dataHandler.BatchObjectData<SI_Territory>();
-                foreach (SI_Territory deleted in lstTerritory.Deleted)
+                ChangeRecords<SI21900_pgLoadTerritory_Result> lstTerritory = dataHandler.BatchObjectData<SI21900_pgLoadTerritory_Result>();
+                foreach (SI21900_pgLoadTerritory_Result deleted in lstTerritory.Deleted)
                 {
                     var del = _db.SI_Territory.Where(p => p.Territory == deleted.Territory).FirstOrDefault();
                     if (del != null)
@@ -53,7 +53,7 @@ namespace SI21900.Controllers
 
                 lstTerritory.Created.AddRange(lstTerritory.Updated);
 
-                foreach (SI_Territory curTerritory in lstTerritory.Created)
+                foreach (SI21900_pgLoadTerritory_Result curTerritory in lstTerritory.Created)
                 {
                     if (curTerritory.Territory.PassNull() == "") continue;
 
@@ -89,7 +89,7 @@ namespace SI21900.Controllers
             }
         }
 
-        private void Update_SI_Territory(SI_Territory t, SI_Territory s, bool isNew)
+        private void Update_SI_Territory(SI_Territory t, SI21900_pgLoadTerritory_Result s, bool isNew)
         {
             if (isNew)
             {
