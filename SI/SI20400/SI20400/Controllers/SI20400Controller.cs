@@ -46,8 +46,8 @@ namespace SI20400.Controllers
             {
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_MaterialType"]);
-                ChangeRecords<SI_MaterialType> lstSI_MaterialType = dataHandler.BatchObjectData<SI_MaterialType>();
-                foreach (SI_MaterialType deleted in lstSI_MaterialType.Deleted)
+                ChangeRecords<SI20400_pgLoadGrid_Result> lstSI_MaterialType = dataHandler.BatchObjectData<SI20400_pgLoadGrid_Result>();
+                foreach (SI20400_pgLoadGrid_Result deleted in lstSI_MaterialType.Deleted)
                 {
                     var del = _db.SI_MaterialType.Where(p => p.MaterialType == deleted.MaterialType).FirstOrDefault();
                     if (del != null)
@@ -58,7 +58,7 @@ namespace SI20400.Controllers
 
                 lstSI_MaterialType.Created.AddRange(lstSI_MaterialType.Updated);
 
-                foreach (SI_MaterialType curLang in lstSI_MaterialType.Created)
+                foreach (SI20400_pgLoadGrid_Result curLang in lstSI_MaterialType.Created)
                 {
                     if (curLang.MaterialType.PassNull() == "") continue;
 
@@ -93,7 +93,7 @@ namespace SI20400.Controllers
             }
         }
 
-        private void Update_Language(SI_MaterialType t, SI_MaterialType s, bool isNew)
+        private void Update_Language(SI_MaterialType t, SI20400_pgLoadGrid_Result s, bool isNew)
         {
             if (isNew)
             {
