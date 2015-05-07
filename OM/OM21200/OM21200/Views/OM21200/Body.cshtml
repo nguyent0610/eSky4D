@@ -39,9 +39,9 @@
             })
         )
         .Listeners(p =>
-                 {
-                     p.BoxReady.Handler = "firstLoad();";
-                 })
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
@@ -153,8 +153,8 @@
             X.Column().Text(Util.GetLang("InvcNote")).DataIndex("InvcNote").Width(150)
             .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true)),
                 
-            X.DateColumn().Text(Util.GetLang("WorkingDate")).DataIndex("WorkingDate").Width(150)
-            .Editor(X.DateField().MaxLength(30).EnforceMaxLength(true).Format("dd-MM-yyyy")),
+            X.DateColumn().Text(Util.GetLang("WorkingDate")).DataIndex("WorkingDate").Width(150).Format("dd/MM/yyyy")
+            .Editor(X.DateField().MaxLength(30).EnforceMaxLength(true).Format("dd/MM/yyyy")),
             
             X.CommandColumn()
             .Width(150)

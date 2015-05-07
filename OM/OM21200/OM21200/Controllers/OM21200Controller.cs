@@ -43,8 +43,8 @@ namespace OM21200.Controllers
             try
             {
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstUserDefault"]);
-                ChangeRecords<OM_UserDefault> lstUserDefault = dataHandler.BatchObjectData<OM_UserDefault>();
-                foreach (OM_UserDefault deleted in lstUserDefault.Deleted)
+                ChangeRecords<OM21200_pgLoadUserDefault_Result> lstUserDefault = dataHandler.BatchObjectData<OM21200_pgLoadUserDefault_Result>();
+                foreach (OM21200_pgLoadUserDefault_Result deleted in lstUserDefault.Deleted)
                 {
                     var del = _db.OM_UserDefault.Where(p => p.UserID == deleted.UserID && p.DfltBranchID == deleted.DfltBranchID).FirstOrDefault();
                     if (del != null)
@@ -55,7 +55,7 @@ namespace OM21200.Controllers
 
                 lstUserDefault.Created.AddRange(lstUserDefault.Updated);
 
-                foreach (OM_UserDefault curUserDefault in lstUserDefault.Created)
+                foreach (OM21200_pgLoadUserDefault_Result curUserDefault in lstUserDefault.Created)
                 {
                     if (curUserDefault.UserID.PassNull() == "" && curUserDefault.DfltBranchID.PassNull() == "") continue;
 
@@ -91,7 +91,7 @@ namespace OM21200.Controllers
             }
         }
 
-        private void Update_OM_UserDefault(OM_UserDefault t, OM_UserDefault s, bool isNew)
+        private void Update_OM_UserDefault(OM_UserDefault t, OM21200_pgLoadUserDefault_Result s, bool isNew)
         {
             if (isNew)
             {
