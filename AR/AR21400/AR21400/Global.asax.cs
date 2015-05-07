@@ -44,7 +44,7 @@ namespace AR21400
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
-            Session["SI21600"] = acc;
+            Session["AR21400"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";

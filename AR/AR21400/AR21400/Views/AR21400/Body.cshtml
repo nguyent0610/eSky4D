@@ -46,15 +46,15 @@
                         .PageSize(50)
                         .Model(Util.GenerateModel(typeof(AR21400_pgLoadSellingProducts_Result), "mdlAR_SellingProducts", "Code"))                                                                                                                                  
                         .ServerProxy(
-                                    X.AjaxProxy()
-                                    .Url(Url.Action("GetData"))
-                                    )                                            
+                            X.AjaxProxy()
+                            .Url(Url.Action("GetData"))
+                        )                                            
                         .Listeners(l =>
-                                {
-                                    l.BeforeLoad.Fn = "stoBeforeLoad";
-                                    l.Load.Fn = "stoLoad";
-                                    l.Update.Fn = "stoChanged";                 
-                                })
+                        {
+                            l.BeforeLoad.Fn = "stoBeforeLoad";
+                            l.Load.Fn = "stoLoad";
+                            l.Update.Fn = "stoChanged";                 
+                        })
                 )
                 .Listeners(p =>
                 {
