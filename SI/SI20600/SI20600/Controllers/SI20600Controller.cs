@@ -41,8 +41,8 @@ namespace SI20600.Controllers
             {
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstCountry"]);
-                ChangeRecords<SI_Country> lstCountry = dataHandler.BatchObjectData<SI_Country>();
-                foreach (SI_Country deleted in lstCountry.Deleted)
+                ChangeRecords<SI20600_pgLoadCountry_Result> lstCountry = dataHandler.BatchObjectData<SI20600_pgLoadCountry_Result>();
+                foreach (SI20600_pgLoadCountry_Result deleted in lstCountry.Deleted)
                 {
                     var del = _db.SI_Country.Where(p => p.CountryID == deleted.CountryID).FirstOrDefault();
                     if (del != null)
@@ -53,7 +53,7 @@ namespace SI20600.Controllers
 
                 lstCountry.Created.AddRange(lstCountry.Updated);
 
-                foreach (SI_Country curCountry in lstCountry.Created)
+                foreach (SI20600_pgLoadCountry_Result curCountry in lstCountry.Created)
                 {
                     if (curCountry.CountryID.PassNull() == "") continue;
 
@@ -89,7 +89,7 @@ namespace SI20600.Controllers
             }
         }
 
-        private void Update_SI_Country(SI_Country t, SI_Country s, bool isNew)
+        private void Update_SI_Country(SI_Country t, SI20600_pgLoadCountry_Result s, bool isNew)
         {
             if (isNew)
             {
