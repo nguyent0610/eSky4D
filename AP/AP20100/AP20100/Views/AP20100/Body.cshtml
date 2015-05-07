@@ -19,25 +19,39 @@
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Fit)
     .Items(
-        ////Thiet ke giao dien o day
-
         X.GridPanel()
-        .Scroll(ScrollMode.Both)
-        .View(X.GridView().TrackOver(false))
-        .ID("grdLanguage")
-        .Store(
-            X.Store()
-            .ID("stoLanguage")
-            .PageSize(50)
-            .Model(Util.GenerateModel(typeof(AP_VendClass), "mdlAP_VendClass", "Code"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetLanguage"))).Listeners(l => { l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; l.Load.Handler = "HQ.common.showBusy(false);"; })
-        )
-        .Listeners(p => p.AfterRender.Handler = "App.stoLanguage.reload();")
+                .Frame(true)
+                .AnchorHorizontal("100%")
+                .AnchorVertical("100%")
+                .RenderTo("contentCenter")
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false))
+                .ID("grdAP_VendClass")
+                .Store(
+                        X.Store().ID("stoAP_VendClass")    
+                        .RemotePaging(true)
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(AP20100_pgAP_VendClass_Result), "mdlAP_VendClass", "ClassID"))                                                                                                                                  
+                        .ServerProxy(
+                            X.AjaxProxy()
+                            .Url(Url.Action("GetAP_VendClass"))
+                        )                                            
+                        .Listeners(l =>
+                        {
+                            l.BeforeLoad.Fn = "stoBeforeLoad";
+                            l.Load.Fn = "stoLoad";
+                            l.Update.Fn = "stoChanged";                 
+                        })
+                )
+                .Listeners(p =>
+                {
+                    p.BoxReady.Handler = "firstLoad();";
+                })
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
            
-                X.Column().ID("ClassID").Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(20).EnforceMaxLength(true)),
+            X.Column().ID("ClassID").Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(20).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(100).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Terms")).DataIndex("Terms").Width(150).Editor(
                                                  HQ.Combo().ID("cboTerms").Name("cboTerms").HQProcedure("AP20100_pcTerms")
@@ -56,9 +70,9 @@
                 .Icon(Icon.ArrowUndo)
             )
             .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-            .Listeners(l => l.Command.Handler = "grdLanguage_Reject(record);")
+            .Listeners(l => l.Command.Handler = "grdAP_VendClass_Reject(record);")
         )
-        .SelectionModel(X.RowSelectionModel().ID("slmLanguage").Mode(SelectionMode.Multi))
+        .SelectionModel(X.RowSelectionModel().ID("slmAP_VendClass").Mode(SelectionMode.Multi))
         .BottomBar(
             X.PagingToolbar()
             .Items(
@@ -77,9 +91,9 @@
             .ClicksToEdit(1)
             .Listeners(ls =>
             {
-                ls.BeforeEdit.Fn = "grdLanguage_BeforeEdit";
-                ls.Edit.Fn = "grdLanguage_Edit";
-                ls.ValidateEdit.Fn = "grdLanguage_ValidateEdit";
+                ls.BeforeEdit.Fn = "grdAP_VendClass_BeforeEdit";
+                ls.Edit.Fn = "grdAP_VendClass_Edit";
+                ls.ValidateEdit.Fn = "grdAP_VendClass_ValidateEdit";
             })
         )
 

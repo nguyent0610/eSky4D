@@ -100,17 +100,9 @@ namespace AP20100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<AP20100_pgGetVendClass_Result> AP20100_pgGetVendClass()
+        public ObjectResult<AP20100_pgAP_VendClass_Result> AP20100_pgAP_VendClass()
         {
-            return base.ExecuteFunction<AP20100_pgGetVendClass_Result>("AP20100_pgGetVendClass");
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectResult<AP20100_pcTerms_Result> AP20100_pcTerms()
-        {
-            return base.ExecuteFunction<AP20100_pcTerms_Result>("AP20100_pcTerms");
+            return base.ExecuteFunction<AP20100_pgAP_VendClass_Result>("AP20100_pgAP_VendClass");
         }
 
         #endregion
@@ -419,105 +411,28 @@ namespace AP20100
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AP20100Model", Name="AP20100_pcTerms_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="AP20100Model", Name="AP20100_pgAP_VendClass_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class AP20100_pcTerms_Result : ComplexObject
+    public partial class AP20100_pgAP_VendClass_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new AP20100_pcTerms_Result object.
-        /// </summary>
-        /// <param name="termsID">Initial value of the TermsID property.</param>
-        public static AP20100_pcTerms_Result CreateAP20100_pcTerms_Result(global::System.String termsID)
-        {
-            AP20100_pcTerms_Result aP20100_pcTerms_Result = new AP20100_pcTerms_Result();
-            aP20100_pcTerms_Result.TermsID = termsID;
-            return aP20100_pcTerms_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String TermsID
-        {
-            get
-            {
-                return _TermsID;
-            }
-            set
-            {
-                OnTermsIDChanging(value);
-                ReportPropertyChanging("TermsID");
-                _TermsID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("TermsID");
-                OnTermsIDChanged();
-            }
-        }
-        private global::System.String _TermsID;
-        partial void OnTermsIDChanging(global::System.String value);
-        partial void OnTermsIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Descr
-        {
-            get
-            {
-                return _Descr;
-            }
-            set
-            {
-                OnDescrChanging(value);
-                ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Descr");
-                OnDescrChanged();
-            }
-        }
-        private global::System.String _Descr;
-        partial void OnDescrChanging(global::System.String value);
-        partial void OnDescrChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AP20100Model", Name="AP20100_pgGetVendClass_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class AP20100_pgGetVendClass_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new AP20100_pgGetVendClass_Result object.
+        /// Create a new AP20100_pgAP_VendClass_Result object.
         /// </summary>
         /// <param name="classID">Initial value of the ClassID property.</param>
         /// <param name="descr">Initial value of the Descr property.</param>
         /// <param name="terms">Initial value of the Terms property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static AP20100_pgGetVendClass_Result CreateAP20100_pgGetVendClass_Result(global::System.String classID, global::System.String descr, global::System.String terms, global::System.Byte[] tstamp)
+        public static AP20100_pgAP_VendClass_Result CreateAP20100_pgAP_VendClass_Result(global::System.String classID, global::System.String descr, global::System.String terms, global::System.Byte[] tstamp)
         {
-            AP20100_pgGetVendClass_Result aP20100_pgGetVendClass_Result = new AP20100_pgGetVendClass_Result();
-            aP20100_pgGetVendClass_Result.ClassID = classID;
-            aP20100_pgGetVendClass_Result.Descr = descr;
-            aP20100_pgGetVendClass_Result.Terms = terms;
-            aP20100_pgGetVendClass_Result.tstamp = tstamp;
-            return aP20100_pgGetVendClass_Result;
+            AP20100_pgAP_VendClass_Result aP20100_pgAP_VendClass_Result = new AP20100_pgAP_VendClass_Result();
+            aP20100_pgAP_VendClass_Result.ClassID = classID;
+            aP20100_pgAP_VendClass_Result.Descr = descr;
+            aP20100_pgAP_VendClass_Result.Terms = terms;
+            aP20100_pgAP_VendClass_Result.tstamp = tstamp;
+            return aP20100_pgAP_VendClass_Result;
         }
 
         #endregion

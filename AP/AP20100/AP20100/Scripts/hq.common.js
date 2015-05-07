@@ -1,1 +1,1169 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('x c=["\\1h\\N\\p\\A\\q\\k\\s\\t\\Y\\h\\D\\k\\l\\k\\j\\p\\l\\1s\\A\\C\\1e\\h\\l\\1E\\o\\h\\m\\t","\\1k\\M\\j\\2j\\K\\p\\l\\C\\2j\\K\\o\\h\\m\\t\\2j\\1s\\A\\C\\1e\\h\\l","\\j\\h\\M\\j\\2k\\k\\m\\o\\w\\s\\3z\\4j\\l\\o\\w\\N\\j","\\j\\h\\M\\j\\2k\\k\\m\\o\\w\\s\\3z\\l\\o\\w\\N\\j\\4f","\\j\\N\\p\\A\\q\\k\\s\\t\\Y\\h\\D\\k\\l\\k\\j\\p\\l","\\1E\\p\\l\\C\\k\\j","\\A\\j\\o\\m","\\w","","\\l\\h\\D\\m\\k\\E\\h","\\t\\h\\E\\o\\C\\k\\m\\Y\\h\\D\\k\\l\\k\\j\\p\\l","\\2j","\\A\\q\\h\\1h\\N\\p\\A\\q\\k\\s\\t\\Y\\h\\D\\k\\l\\k\\j\\p\\l","\\E\\k\\m\\m\\1n\\k\\l\\h\\s\\j","\\k\\D\\D\\m\\R","\\w\\h\\j\\1k\\l\\l\\p\\l\\q","\\D\\l\\p\\j\\p\\j\\R\\D\\h","\\1h\\h\\M\\j","\\K\\o\\h\\m\\t","\\K\\p\\l\\C","\\K\\p\\l\\C\\k\\j","\\Y\\j\\l\\o\\s\\w","\\o\\q\\1N\\h\\K\\o\\s\\h\\t","\\w\\h\\j\\1o\\k\\1j\\1q\\k\\m\\A\\h","\\D\\l\\p\\E\\h\\q\\q\\1o\\k\\1j\\1q\\k\\m\\A\\h","\\m\\h\\s\\w\\j\\N","\\j\\p\\1o\\k\\1j\\1s\\A\\C\\1e\\h\\l","\\s\\k\\s\\1h\\h\\M\\j","\\D\\A\\q\\N","\\D\\k\\l\\q\\h\\1q\\k\\m\\A\\h","\\C\\o\\s\\1q\\k\\m\\A\\h","\\s\\h\\w\\k\\j\\o\\1Q\\h\\1h\\h\\M\\j","\\C\\o\\s\\1h\\h\\M\\j","\\C\\k\\M\\1q\\k\\m\\A\\h","\\C\\k\\M\\1h\\h\\M\\j","\\1p\\1p\\1p\\3v\\1p\\1p\\1p","\\t\\h\\E\\o\\C\\k\\m\\1n\\l\\h\\E\\o\\q\\o\\p\\s","\\1p","\\s\\A\\C\\1e\\h\\l","\\K\\o\\M\\1n\\l\\h\\E\\o\\q\\o\\p\\s","\\o\\q\\1s\\A\\C\\1e\\h\\l","\\q\\A\\1e\\C\\o\\j\\2a\\p\\E\\k\\m\\h\\Y\\h\\D\\k\\l\\k\\j\\p\\l","\\K\\l\\p\\C","\\1s\\A\\C\\1e\\h\\l","\\j\\p\\w\\w\\m\\h\\Y\\D\\o\\s\\s\\h\\l\\q","\\t\\o\\q\\k\\1e\\m\\h\\4e\\h\\R\\1E\\o\\m\\j\\h\\l","\\1e\\k\\q\\h\\1a\\N\\k\\l\\q","\\k\\m\\m\\p\\1j\\1k\\M\\D\\p\\s\\h\\s\\j\\o\\k\\m","\\h\\4d\\2k","\\k\\m\\m\\p\\1j\\1N\\h\\E\\o\\C\\k\\m\\q","\\2k","\\h\\q\\E\\k\\D\\h\\1o\\h\\w\\h\\M","\\C\\k\\q\\2h\\1o\\h","\\3C","\\3Y","\\k\\A\\j\\p\\Y\\j\\l\\o\\D\\1a\\N\\k\\l\\q","\\q\\j\\l\\o\\D\\1a\\N\\k\\l\\q\\1o\\h","\\3C\\4l","\\w\\o","\\t\\h\\K\\o\\s\\h","\\1a\\l\\h\\k\\j\\h\\t","\\w\\h\\j\\1a\\N\\k\\s\\w\\h\\t\\1N\\k\\j\\k","\\4x\\D\\t\\k\\j\\h\\t","\\1N\\h\\m\\h\\j\\h\\t","\\w\\h\\j\\1a\\p\\A\\s\\j","\\t\\k\\j\\k","\\o\\s\\q\\h\\l\\j","\\w\\h\\j","\\K\\o\\s\\t\\1M\\R","\\o\\q\\1k\\C\\D\\j\\R","\\h\\s\\E\\p\\t\\h","\\h\\k\\E\\N","\\w\\h\\j\\Y\\j\\p\\l\\h","\\j\\p\\j\\k\\m\\1a\\p\\A\\s\\j","\\D\\k\\w\\h\\Y\\o\\4y\\h","\\E\\h\\o\\m","\\m\\k\\q\\j","\\w\\l\\o\\t","\\q\\j\\k\\l\\j\\1k\\t\\o\\j\\1M\\R\\1n\\p\\q\\o\\j\\o\\p\\s","\\h\\t\\o\\j\\o\\s\\w\\1n\\m\\A\\w\\o\\s","\\m\\p\\k\\t\\1n\\k\\w\\h","\\o\\s\\q\\h\\l\\j\\1M\\m\\k\\s\\2h","\\q\\j\\p\\l\\h","\\q\\h\\m\\h\\E\\j","\\w\\h\\j\\Y\\h\\m\\h\\E\\j\\o\\p\\s\\1u\\p\\t\\h\\m","\\q\\h\\m\\h\\E\\j\\1n\\l\\h\\1Q\\o\\p\\A\\q","\\q\\h\\m\\h\\E\\j\\1s\\h\\M\\j","\\w\\l\\o\\t\\D\\k\\s\\h\\m","\\A\\D","\\w\\h\\j\\1q\\k\\m\\A\\h","\\l\\h\\m\\p\\k\\t","\\3v","\\q\\D\\m\\o\\j","\\o\\t\\1n\\l\\p\\D\\h\\l\\j\\R","\\l\\h\\E\\p\\l\\t","\\o\\j\\h\\C\\q","\\j\\p\\2a\\p\\1j\\h\\l\\1a\\k\\q\\h","\\1Q\\k\\m\\A\\h","\\o\\t","\\k\\m\\m\\1N\\k\\j\\k","\\t\\o\\l\\h\\E\\j","\\l\\h\\q\\A\\m\\j","\\j\\R\\D\\h","\\C\\h\\q\\q\\k\\w\\h","\\E\\p\\t\\h","\\D\\k\\l\\C","\\K\\s","\\q\\N\\p\\1j","\\h\\l\\l\\p\\l","\\1k\\l\\l\\p\\l","\\h\\l\\l\\p\\l\\1u\\q\\w","\\k\\m\\h\\l\\j","\\1u\\q\\w","\\l\\h\\q\\D\\p\\s\\q\\h\\1h\\h\\M\\j","\\t\\h\\E\\p\\t\\h","\\l\\h\\q\\D\\p\\s\\q\\h","\\K\\k\\o\\m\\A\\l\\h\\1h\\R\\D\\h","\\1E\\k\\o\\m\\h\\t\\1a\\p\\s\\s\\h\\E\\j\\Y\\h\\l\\1Q\\h\\l","\\w\\h\\j\\2a\\k\\s\\w","\\E\\p\\C\\C\\p\\s","\\D\\k\\l\\h\\s\\j\\4n\\A\\j\\p\\2a\\p\\k\\t\\1a\\p\\s\\j\\l\\p\\m","\\E\\m\\p\\q\\h","\\A\\s\\t\\h\\K\\o\\s\\h\\t","\\q\\h\\j\\1o\\h\\k\\t\\3u\\s\\m\\R","\\C\\k\\q\\2h","\\1e\\p\\t\\R","\\K\\l\\C\\1u\\k\\o\\s","\\A\\s\\C\\k\\q\\2h","\\K\\k\\m\\q\\h","\\j\\l\\A\\h","\\C\\2u\\t\\2u\\R","\\w\\h\\j\\1u\\p\\s\\j\\N","\\2u","\\w\\h\\j\\1N\\k\\j\\h","\\w\\h\\j\\1E\\A\\m\\m\\4m\\h\\k\\l","\\h\\M\\h\\E","\\w\\h\\j\\1q\\o\\h\\1j","\\j\\l\\o\\w\\w\\h\\l\\1k\\m\\h\\C\\h\\s\\j","\\K\\o\\s\\t\\3m\\j\\h\\C\\1M\\R\\1a\\N\\o\\m\\t","\\w\\h\\j\\1o\\h\\E\\p\\l\\t","\\w\\h\\j\\4o\\h\\k\\t\\h\\l\\1M\\R\\1a\\h\\m\\m","\\t\\k\\j\\k\\3m\\s\\t\\h\\M","\\N\\j\\C\\m\\1k\\s\\E\\p\\t\\h","\\A\\D\\t\\k\\j\\h","\\N\\o\\t\\h","\\1j\\k\\o\\j\\1u\\q\\w","\\D\\k\\q\\q\\1s\\A\\m\\m","\\E\\m\\h\\k\\l\\1E\\o\\m\\j\\h\\l","\\1Q\\k\\m\\A\\h\\1u\\p\\t\\h\\m\\q","\\q\\j\\l\\o\\s\\w","\\o\\s\\t\\h\\M\\3u\\K","\\K\\p\\l\\1k\\k\\E\\N","\\K\\o\\m\\j\\h\\l\\1M\\R"];x Z={3Z:{4g:u(){F[c[59]](c[0],{4k:c[1],4q:1c,4z:c[2],4s:c[3],4p:u(y){z 2Z(y)[c[9]](J[c[10]],c[11])[c[9]](2x 2w(F[c[6]][c[5]][c[4]],c[7]),c[8])},4r:u(y){n(!J[c[12]]){z J[c[13]](1L)};x B=J,1v=F[c[19]][c[18]][c[17]][c[16]][c[15]][c[14]](B,1L),1d=F[c[21]][c[20]],1P;y=F[c[22]](y)?y:J[c[24]](J[c[23]]());n(y[c[25]]<1){z 1v};y=B[c[26]](y);n(2C(y[c[9]](F[c[6]][c[5]][c[4]],c[8]))){1v[c[28]](1d(B[c[27]],y))};1P=B[c[29]](y);n(B[c[30]]===0&&1P<0){1v[c[28]](J[c[31]])}G{n(1P<B[c[30]]){1v[c[28]](1d(B[c[32]],B[c[30]]))}};n(1P>B[c[33]]){1v[c[28]](1d(B[c[34]],B[c[33]]))};z 1v},4a:u(y){n(!J[c[12]]){z J[c[13]](1L)};x B=J;x 1d=c[35];1K(x O=0;O<B[c[36]];O++){n(O==0){1d+=c[11]};1d+=c[37]};y=B[c[29]](F[c[6]][c[5]][c[38]](y,1d));y=B[c[39]](y);y=F[c[40]](y)?y:2P(B[c[26]](y));y=2C(y)?c[8]:2Z(F[c[6]][c[5]][c[38]](y,1d))[c[9]](c[11],B[c[10]]);z y},4c:u(){n(!J[c[12]]){z J[c[13]](1L)};x B=J,y=B[c[13]]();n(!B[c[41]]){y=B[c[26]](y)};z y},4i:u(y){n(!J[c[12]]){z J[c[13]](1L)};x B=J,1g;B[c[30]]=F[c[43]][c[42]](y,4v.4w);B[c[44]]();n(B[c[45]]!==1c){1g=B[c[46]]+c[8];n(B[c[47]]){1g+=B[c[10]]+c[48]}G{1g+=F[c[6]][c[5]][c[4]];n(B[c[49]]){1g+=B[c[10]]};n(B[c[30]]<0){1g+=c[50]}};1g=F[c[21]][c[51]](1g);B[c[52]]=2x 2w(c[53]+1g+c[54]);n(B[c[55]]){B[c[56]]=2x 2w(c[57]+1g+c[54],c[58])}}},4u:u(y){n(!J[c[12]]){z J[c[13]](1L)};y=2P(J[c[26]](y));z 2C(y)?1m:y}})}},4h:{4b:u(v){n((v[c[1G]]()[c[2E]]!=P&&v[c[1G]]()[c[2E]][c[25]]>1)||v[c[1G]]()[c[4t]]!=P||v[c[1G]]()[c[5d]]!=P){z 1c}G{z X}},5r:u(v,W){n(W==P){v[c[2z]](v[c[1J]](),F[c[V]].2T())}G{x 2l=v[c[2R]](u(I,2Q){n(!I[c[2b]](W)){z 1c};z X});n(2l==-1){v[c[2z]](v[c[1J]](),F[c[V]].2T())}}},5q:u(v,W,2S){x 2l=v[c[2R]](u(I,2Q){n(!I[c[2b]](W)){z 1c};z X});n(2l==-1){v[c[2z]](v[c[1J]](),2S)}},5s:u(v,2d){n(F[c[5v]](2d)){2d=X};z F[c[2m]](v[c[1G]]({5u:2d}))},5p:u(v,2e,2N){x H;v[c[V]][c[3W]](u(2A){x 2B=0;1K(x O=0;O<2e[c[25]];O++){n(2A[c[2b]](2e[O])==2N[O]){2B++}};n(2B==2e[c[25]]){H=2A[c[V]];z X}});z H}},5i:{5n:u(L){x v=L[c[1r]]();x 3j=v[c[1G]]()[c[2E]];n(3j!=P){v[c[3e]](3g[c[2U]](v[c[3h]]/v[c[2n]]),{3c:u (){Z[c[3b]][c[2W]](L);L[c[2V]][c[2X]]({2Y:v[c[1J]]()-1,3a:1});} });z ;} ;v[c[3e]](3g[c[2U]](v[c[3h]]/v[c[2n]]),{3c:u(){Z[c[5w]][c[5x]](v);Z[c[3b]][c[2W]](L);L[c[2V]][c[2X]]({2Y:v[c[1J]]()-1,3a:1})}})},5G:u(L){L[c[1S]]()[c[3i]](0)},4L:u(L){L[c[1S]]()[c[4K]]()},4P:u(L){L[c[1S]]()[c[4J]]()},4C:u(L){L[c[1S]]()[c[3i]](L[c[1r]]()[c[1J]]()-1)},4R:u(2p){x v=2p[c[5b]](c[4A])[c[1r]]();v[c[2n]]=2i(2p[c[3B]](),10);v[c[5a]]()},4G:u(L,T,Q){x 1y=X;x v=L[c[1r]]();n(Q==P){Q=T[c[1z]][c[3f]][c[2v]](c[1i])};1K(x O=0;O<v[c[V]][c[1F]][c[25]];O++){x I=v[c[V]][c[1F]][O];x H=c[8];x 1l=c[8];1K(x S=0;S<Q[c[25]];S++){n(I[c[V]][Q[S]]!=P){H+=I[c[V]][Q[S]].1b()[c[1f]]()+c[1i];n(T[c[18]]==Q[S]){1l+=(T[c[2f]]==1m?c[8]:T[c[2f]].1b()[c[1f]]())+c[1i]}G{1l+=T[c[1z]][c[V]][Q[S]].1b()[c[1f]]()+c[1i]}}};n(1y=(H==1l&&I[c[1U]]!=T[c[1z]][c[1U]])?1c:X){2O}};z 1y},4H:u(L,T,Q){x 1y=X;x v=L[c[1r]]();n(Q==P){Q=T[c[1z]][c[3f]][c[2v]](c[1i])};1K(x O=0;O<v[c[3d]][c[1F]][c[25]];O++){x I=v[c[3d]][c[1F]][O];x H=c[8];x 1l=c[8];1K(x S=0;S<Q[c[25]];S++){n(I[c[V]][Q[S]]!=P){H+=I[c[V]][Q[S]].1b()[c[1f]]()+c[1i];n(T[c[18]]==Q[S]){1l+=(T[c[2f]]==1m?c[8]:T[c[2f]].1b()[c[1f]]())+c[1i]}G{1l+=T[c[1z]][c[V]][Q[S]].1b()[c[1f]]()+c[1i]}}};n(1y=(H==1l&&I[c[1U]]!=T[c[1z]][c[1U]])?1c:X){2O}};z 1y}},4B:{4D:u(2s,1A,2o,1t){n(1t==1c){1R[c[3P]].4O(2s,F[c[2m]](1A),2o,{3Q:u(1x){},3R:u(3O,H){}})}G{1R[c[3P]].4N(2s,F[c[2m]](1A),2o,{3Q:u(1x){},3R:u(3O,H){}})}},5g:u(3V,U,1t){5E{n(1t==1m){1t=X};n(U[c[1w]]!=P){n(U[c[1w]][c[1Y]]==c[2c]){Z[c[2c]][c[3N]](U[c[1w]][c[3J]],U[c[1w]][c[3T]],U[c[1w]][c[3K]],1t)}G{n(U[c[1w]][c[1Y]]==c[3L]){F[c[1D]][c[1H]](c[1B],U[c[1w]][c[3M]])}}}G{n(U[c[2g]]!=P){x H=F[c[5I]](U[c[2g]]);n(H[c[1Y]]==c[2c]){Z[c[2c]][c[3N]](H[c[3J]],H[c[3T]],H[c[3K]],1t)}G{n(H[c[1Y]]==c[3L]){F[c[1D]][c[1H]](c[1B],U[c[3M]])}G{F[c[1D]][c[1H]](c[1B],H)}}}G{n(U[c[3S]][c[2g]]!=P){F[c[1D]][c[1H]](c[1B],U[c[3S]][c[2g]])}G{n(U[c[5H]]!=P){F[c[1D]][c[1H]](c[1B],Z[c[3E]][c[3F]](c[5o]))}}}}}5t(e){F[c[1D]][c[1H]](c[1B],3V)}}},4I:{4E:u(2q){n(2q[c[3X]]!=P){2q[c[3X]][c[4Q]]()}},5M:u(W){n(3U[W]!=P){z 3U[W]}G{z W}},3r:u(2r,2I){n(2L(2r[c[1F]])!=c[3k]){2r[c[1F]][c[3W]](u(1T){n(2L(1T[c[3H]])!=c[3k]){1T[c[3H]](2I)};3r(1T,2I)})}},4W:u(2H,2K,1V){n(1V==P){n(2H){1R[c[3s]][c[1W]][c[3t]](2K)}G{1R[c[3s]][c[1W]][c[3I]]()}}G{n(2H){1V[c[1W]][c[3t]](2K)}G{1V[c[1W]][c[3I]]()}}}},4X:{4V:u(1A){n(1A[c[1f]]()==c[4U]){z X}G{n(1A[c[1f]]()==c[4S]){z 1c}G{z X}}},3q:u 3q(1O,1d){n(1O==1m){z c[8]};n(1d==c[4T]){z(1O[c[4Y]]()+1).1b()+c[3p]+1O[c[4Z]]().1b()+c[3p]+1O[c[5e]]().1b()};z c[8]},5f:u(1X){x 3l=/^#?([a-f\\d])([a-f\\d])([a-f\\d])$/i;1X=1X[c[9]](3l,u(5c,2J,2F,2t){z 2J+2J+2F+2F+2t+2t});x 1x=/^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i[c[4F]](1X);z 1x?{r:2i(1x[1],16),g:2i(1x[2],16),b:2i(1x[3],16)}:1m},4M:u(2y){n(2y==1m){z c[8]}G{z 2y}}},5h:{5C:u(1I,2D,3w){x 1Z=2D[c[5D]](),v=2D[c[1r]](),I=1Z[c[5B]](1Z[c[5A]](1I[c[3n]])),3o=1Z[c[5y]](1I[c[3n]]),H=I[c[2b]](3o[c[5z]]);n(H){n(3w){1I[c[3D]](F[c[6]][c[5]][c[5F]](H))}G{1I[c[3D]](H)}}G{1I[c[5K]]()}}}};Z[c[3G]]=Z[c[3E]][c[3F]](c[3G]);x 5L=u(1C,3y){n(1C){x v=1C[c[1r]]();x y=Z[c[6]][c[2M]](1C[c[3B]]()).1b();n(v){v[c[5J]]();n(1C[c[3x]]==1m||1C[c[3x]][c[25]]==0){v[c[5m]](u(I){n(I){x 2G=X;3y[c[2v]](c[1i])[c[5l]](u(W){n(W){n((2L Z[c[6]][c[2M]](y))==c[5k]){n(I[c[V]][W]){x 3A=I[c[V]][W].1b()[c[1f]]()[c[5j]](Z[c[6]][c[2M]](y)[c[1f]]());n(3A>-1){2G=1c;z I}}}}});n(2G==1c){z I}}})}}}};', 62, 359, '||||||||||||_0x5f6e|||||x65||x74|x61|x72|x6C|if|x69|x6F|x73||x6E|x64|function|_0x1c9fx9|x67|var|_0x1c9fx2|return|x75|_0x1c9fx3|x6D|x70|x63|Ext|else|_0x1c9fx12|_0x1c9fxc|this|x66|_0x1c9fx15|x78|x68|_0x1c9fx7|undefined|_0x1c9fx19|x79|_0x1c9fx1c|_0x1c9fx18|_0x1c9fx24|65|_0x1c9fxa|false|x53|HQ|||||||||||x43|toString|true|_0x1c9fx5|x62|96|_0x1c9fx8|x54|91|x77|x45|_0x1c9fx1b|null|x50|x52|x30|x56|72|x4E|_0x1c9fx20|x4D|_0x1c9fx4|101|_0x1c9fx21|_0x1c9fx1a|94|_0x1c9fx1e|109|_0x1c9fx3b|112|x46|95|61|111|_0x1c9fx35|64|for|arguments|x42|x44|_0x1c9fx2d|_0x1c9fx6|x76|App|84|_0x1c9fx28|98|_0x1c9fx2b|125|_0x1c9fx2e|102|_0x1c9fx38|||||||||||x4C|67|103|_0x1c9fxf|_0x1c9fx10|97|113|x6B|parseInt|x2E|x2D|_0x1c9fxb|70|74|_0x1c9fx1f|_0x1c9fx17|_0x1c9fx25|_0x1c9fx26|_0x1c9fx1d|_0x1c9fx33|x2F|92|RegExp|new|_0x1c9fx34|66|_0x1c9fx13|_0x1c9fx14|isNaN|_0x1c9fx36|60|_0x1c9fx32|_0x1c9fx3d|_0x1c9fx29|_0x1c9fx27|_0x1c9fx31|_0x1c9fx2a|typeof|146|_0x1c9fx11|break|parseFloat|_0x1c9fxd|68|_0x1c9fxe|Record|75|79|76|78|row|String|||||||||||column|77|callback|99|80|93|Math|73|83|_0x1c9fx16|122|_0x1c9fx2f|x49|137|_0x1c9fx39|132|dateToString|lockItem|126|124|x4F|x2C|_0x1c9fx37|148|_0x1c9fx3c|x3A|_0x1c9fx3e|89|x5B|143|119|118|145|123|127|104|106|108|110|107|_0x1c9fx22|100|success|failure|115|105|HQLang|_0x1c9fx23|71|120|x5D|control|||||||||||valueToRaw|isChange|getSubmitValue|x2B|x4B|x3B|useThousand|store|setMinValue|x20|override|x5E|x59|x41|x48|toRawNumber|useThousandSeparator|getErrors|fieldStyle|62|parseValue|Number|NEGATIVE_INFINITY|x55|x7A|style|87|message|last|show|close|135|checkDuplicate|checkDuplicateAll|common|86|85|prev|passNull|CallMessage|CallMessageArray|next|121|onPageSelect|129|130|128|toBool|showBusy|util|131|133|||||||||||90|88|_0x1c9fx30|63|134|hexToRGB|process|tooltip|grid|150|149|151|152|insert|117|findInStore|insertRecord|insertBlank|getData|catch|skipIdForPhantomRecords|69|82|81|140|141|138|139|showOnGrid|136|try|142|first|116|114|147|144|FilterCombo|getLang'.split('|'), 0, {}))
+﻿if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (elt /*, from*/) {
+        var len = this.length >>> 0;
+
+        var from = Number(arguments[1]) || 0;
+        from = (from < 0)
+             ? Math.ceil(from)
+             : Math.floor(from);
+        if (from < 0)
+            from += len;
+
+        for (; from < len; from++) {
+            if (from in this &&
+                this[from] === elt)
+                return from;
+        }
+        return -1;
+    };
+}
+
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
+}
+
+if (!('forEach' in Array.prototype)) {
+    Array.prototype.forEach = function (action, that /*opt*/) {
+        for (var i = 0, n = this.length; i < n; i++)
+            if (i in this)
+                action.call(that, this[i], i, this);
+    };
+}
+Date.prototype.addDays = function (days) {
+    this.setDate(this.getDate() + days);
+    return this;
+};
+var HQ = {
+    store: {
+        isChange: function (store) {
+            if ((store.getChangedData().Created != undefined && store.getChangedData().Created.length > 1)
+                || store.getChangedData().Updated != undefined
+                || store.getChangedData().Deleted != undefined) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        insertBlank: function (store, keys) {
+            if (keys == undefined) {
+                store.insert(store.getCount(), Ext.data.Record());
+            } else {
+                var flat = store.findBy(function (record, id) {
+                    if (keys.constructor === Array) {
+                        for (var i = 0; i < keys.length; i++) {
+                            if (!record.get(keys[i])) {
+                                return true;
+                            }
+                        }
+                    }
+                    else if (!record.get(keys)) {
+                        return true;
+                    }
+                    return false;
+                });
+
+                if (flat == -1) {
+                    store.insert(store.getCount(), Ext.data.Record());
+                }
+            }
+        },
+        insertRecord: function (store, keys, newRecord, commit) {
+            var flat = store.findBy(function (record, id) {
+                if (keys.constructor === Array) {
+                    for (var i = 0; i < keys.length; i++) {
+                        if (!record.get(keys[i])) {
+                            return true;
+                        }
+                    }
+                }
+                else if (!record.get(keys)) {
+                    return true;
+                }
+                return false;
+            });
+
+            if (flat == -1) {
+                store.insert(store.getCount(), newRecord);
+            }
+            if (commit != undefined && commit == true) {
+                store.commitChanges();
+            }
+        },
+        getData: function (store, skip) {
+            if (Ext.isEmpty(skip)) {
+                skip = false;
+            }
+            return Ext.encode(store.getChangedData({ skipIdForPhantomRecords: skip }));
+        },
+        getAllData: function (store, fields, values, isEqual) {
+            var lstData = [];
+            if (isEqual == undefined || isEqual == true) {
+                if (store.snapshot != undefined) {
+                    store.snapshot.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] != values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                } else {
+                    store.data.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] != values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                }
+            } else {
+                if (store.snapshot != undefined) {
+                    store.snapshot.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] == values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                } else {
+                    store.data.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] == values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                }
+            }
+        },
+        findInStore: function (store, fields, values) {
+            var data;
+            store.data.each(function (item) {
+                var intT = 0;
+                for (var i = 0; i < fields.length; i++) {
+                    if (item.get(fields[i]) == values[i]) {
+                        intT++;
+                    }
+                }
+                if (intT == fields.length) {
+                    data = item.data;
+                    return false;
+                }
+            });
+            return data;
+        },
+        findRecord: function (store, fields, values) {
+            var data;
+            store.data.each(function (item) {
+                var intT = 0;
+                for (var i = 0; i < fields.length; i++) {
+                    if (item.get(fields[i]) == values[i]) {
+                        intT++;
+                    }
+                }
+                if (intT == fields.length) {
+                    data = item;
+                    return false;
+                }
+            });
+            return data;
+        },
+        // TinhHV using for auto gen the LineRef
+        lastLineRef: function (store) {
+            var num = 0;
+            for (var j = 0; j < store.data.length; j++) {
+                var item = store.data.items[j];
+
+                if (!Ext.isEmpty(item.data.LineRef) && parseInt(item.data.LineRef) > num) {
+                    num = parseInt(item.data.LineRef);
+                }
+            };
+            num++;
+            var lineRef = num.toString();
+            var len = lineRef.length;
+            for (var i = 0; i < 5 - len; i++) {
+                lineRef = "0" + lineRef;
+            }
+            return lineRef;
+        },
+        //kiem tra key da nhap du chua
+        isAllValidKey: function (items, keys) {
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var j = 0; j < keys.length; j++) {
+                        if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
+                            return false;
+                    }
+                }
+                return true;
+            } else {
+                return true;
+            }
+        },
+        checkRequirePass: function (store, keys, fieldsCheck, fieldsLang) {
+            items = store.getChangedData().Created;
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (items[i][keys[jkey]]) {
+                            for (var k = 0; k < fieldsCheck.length; k++) {
+                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
+                                    HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            items = store.getChangedData().Updated;
+            if (items != undefined) {
+                for (var i = 0; i < items.length; i++) {
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (items[i][keys[jkey]]) {
+                            for (var k = 0; k < fieldsCheck.length; k++) {
+                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
+                                    HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    },
+    combo: {
+        first: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var value = cbo.store.getAt(0);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+            }
+        },
+        prev: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var v = cbo.getValue();
+                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
+                var index = cbo.store.indexOf(record);
+                var value = cbo.store.getAt(index - 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+                else HQ.combo.first(cbo);
+            }
+        },
+        next: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var v = cbo.getValue();
+                var record = cbo.findRecord(cbo.valueField || cbo.displayField, v);
+                var index = cbo.store.indexOf(record);
+                var value = cbo.store.getAt(index + 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+                else HQ.combo.last(cbo);
+            }
+        },
+        last: function (cbo, isChange) {
+            if (isChange) {
+                HQ.message.show(150, '', '');
+            }
+            else {
+                var value = cbo.store.getAt(cbo.store.getCount() - 1);
+                if (value) {
+                    cbo.setValue(value.data[cbo.valueField]);
+                }
+            }
+
+        },
+        expand: function (cbo, delimiter) {
+            if (cbo.getValue())
+                cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
+        },
+        selectAll: function (cbo) {
+            var value = [];
+            cbo.setValue('');
+            cbo.store.data.each(function (item) {
+                value.push(item.data[cbo.valueField]);
+            })
+            cbo.setValue(value);
+        }
+    },
+    date: {
+        expand: function (dte, eOpts) {
+            //dte.picker.setHeight(300);
+            //dte.picker.monthEl.setHeight(300);
+        }
+    },
+    grid: {
+        showBusy: function (grd, isBusy) {
+            if (isBusy)
+                grd.view.loadMask.show();
+            else grd.view.loadMask.hide();
+        },
+        insert: function (grd, keys) {
+            var store = grd.getStore();
+            var createdItems = store.getChangedData().Created;
+            if (createdItems != undefined) {
+                if (store.currentPage != Math.ceil(store.totalCount / store.pageSize) && store.totalCount != 0) {
+                    store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                        callback: function () {
+                            HQ.grid.last(grd);
+                            setTimeout(function () {
+                                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                                if (grd.editingPlugin) {
+                                    grd.editingPlugin.startEditByPosition({
+                                        row: store.getCount() - 1,
+                                        column: 1
+                                    });
+                                }
+                                else {
+                                    grd.lockedGrid.editingPlugin.startEditByPosition({
+                                        row: store.getCount() - 1,
+                                        column: 1
+                                    });
+                                }
+                            }, 300);
+                        }
+                    });
+                }
+                else {
+                    HQ.grid.last(grd);
+                    if (grd.editingPlugin) {
+                        grd.editingPlugin.startEditByPosition({
+                            row: store.getCount() - 1,
+                            column: 1
+                        });
+                    }
+                    else {
+                        grd.lockedGrid.editingPlugin.startEditByPosition({
+                            row: store.getCount() - 1,
+                            column: 1
+                        });
+                    }
+                }
+                return;
+            }
+            if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                    callback: function () {
+                        if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                            HQ.store.insertBlank(store, keys);
+                        }
+                        HQ.grid.last(grd);
+                        setTimeout(function () {
+                            // grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                            if (grd.editingPlugin) {
+                                grd.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                            else {
+                                grd.lockedGrid.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                        }, 300);
+                    }
+                });
+            }
+            else {
+                if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                    HQ.store.insertBlank(store, keys);
+                }
+                HQ.grid.last(grd);
+                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+
+                if (grd.editingPlugin) {
+                    grd.editingPlugin.startEditByPosition({
+                        row: store.getCount() - 1,
+                        column: 1
+                    });
+                }
+                else {
+                    grd.lockedGrid.editingPlugin.startEditByPosition({
+                        row: store.getCount() - 1,
+                        column: 1
+                    });
+                }
+            }
+        },
+        first: function (grd) {
+            grd.getSelectionModel().select(0);
+        },
+        prev: function (grd) {
+            grd.getSelectionModel().selectPrevious();
+        },
+        next: function (grd) {
+            grd.getSelectionModel().selectNext();
+        },
+        last: function (grd) {
+            grd.getSelectionModel().select(grd.getStore().getCount() - 1);
+        },
+        onPageSelect: function (combo) {
+            var store = combo.up("gridpanel").getStore();
+            store.pageSize = parseInt(combo.getValue(), 10);
+            store.loadPage(1);
+        },
+        indexSelect: function (grd) {
+            var index = '';
+            var arr = grd.getSelectionModel().getSelection();
+            arr.forEach(function (itm) {
+                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+            });
+
+            return index.substring(0, index.length - 1);
+        },
+        checkDuplicate: function (grd, row, keys) {
+            var found = false;
+            var store = grd.getStore();
+            if (keys == undefined) keys = row.record.idProperty.split(',');
+            if (store.data) {
+                for (var i = 0; i < store.data.items.length; i++) {
+                    var record = store.data.items[i];
+                    var data = '';
+                    var rowdata = '';
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (record.data[keys[jkey]] != undefined) {
+                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                            if (row.field == keys[jkey])
+                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                            else
+                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        }
+                    }
+                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                        break;
+                    };
+                }
+            }
+            else {
+                for (var i = 0; i < store.allData.items.length; i++) {
+                    var record = store.allData.items[i];
+                    var data = '';
+                    var rowdata = '';
+                    for (var jkey = 0; jkey < keys.length; jkey++) {
+                        if (record.data[keys[jkey]] != undefined) {
+                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                            if (row.field == keys[jkey])
+                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                            else
+                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        }
+                    }
+                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                        break;
+                    };
+                }
+            }
+            return found;
+        },
+        //TrungHT d�ng cho ph�n trang
+        checkDuplicateAll: function (grd, row, keys) {
+            return HQ.grid.checkDuplicate(grd, row, keys);
+        },
+        //D�ng trong ham before edit cua grid
+        //Neu cac key da duoc nhap roi thi moi nhap cac field khac duoc
+        //Cot nao la key thi khoa lai khi da co du lieu
+        checkInput: function (row, keys) {
+            if (keys.indexOf(row.field) == -1) {
+
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") {
+                        return false;
+                    }
+                }
+            }
+            if (keys.indexOf(row.field) != -1) {
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (row.record.data[keys[jkey]] == "") return true;
+                }
+                return false;
+            }
+            return true;
+        },
+        //Kiem tra khi check require bo qua cac dong la new 
+        checkRequirePass: function (items, keys) {
+            if (items != undefined && keys != undefined)
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (items[keys[jkey]]) {
+                        return false;
+                    }
+                }
+            return true;
+        },
+        checkBeforeEdit: function (e, keys) {
+            if (!HQ.isUpdate) return false;
+            if (keys.indexOf(e.field) != -1) {
+                if (e.record.data.tstamp)
+                    return false;
+            }
+            return HQ.grid.checkInput(e, keys);
+        },
+        checkReject: function (record, grd) {
+            if (record.data.tstamp == '') {
+                grd.getStore().remove(record, grd);
+                grd.getView().focusRow(grd.getStore().getCount() - 1);
+                grd.getSelectionModel().select(grd.getStore().getCount() - 1);
+            } else {
+                record.reject();
+            }
+        },
+        checkValidateEdit: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value).match(regex)) {
+                    HQ.message.show(20140811, e.column.text);
+                    return false;
+                }
+                if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                    HQ.message.show(1112, e.value);
+                    return false;
+                }
+
+            }
+        },
+        checkInsertKey: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                if (e.value != '')
+                    HQ.store.insertBlank(grd.getStore(), keys);
+            }
+        },
+        hide: function (grd, arrcolumnName) {
+            var columns = grd.columns;
+            arrcolumnName.forEach(function (itm) {
+                var index = HQ.grid.findColumnIndex(columns, itm);
+                grd.columns[index].hide();
+
+            });
+        },
+        show: function (grd, arrcolumnName) {
+            var columns = grd.columns;
+            arrcolumnName.forEach(function (itm) {
+                var index = HQ.grid.findColumnIndex(columns, itm);
+                grd.columns[index].show();
+            });
+        },
+        findColumnIndex: function (columns, dataIndex) {
+            var index;
+            for (index = 0; index < columns.length; ++index) {
+                if (columns[index].dataIndex == dataIndex) { break; }
+            }
+            return index == columns.length ? -1 : index;
+        }
+    },
+    message: {
+        show: function (code, parm, fn, array) {
+            parm = parm != null ? parm : '';
+            if (array == true) {
+                App.direct.CallMessageArray(code, parm, fn, {
+                    success: function (result) {
+                    },
+                    failure: function (msg, data) {
+                    }
+                });
+            } else {
+                App.direct.CallMessage(code, parm, fn, {
+                    success: function (result) {
+                    },
+                    failure: function (msg, data) {
+                    }
+                });
+            }
+        },
+        process: function (errorMsg, obj, array) {
+            try {
+                if (array == null) array = false;
+                if (obj.result != undefined) {
+
+                    if (obj.result.type == 'message') {
+                        HQ.message.show(obj.result.code, obj.result.parm, obj.result.fn, array);
+                    }
+                    else if (obj.result.type == "error") {
+                        Ext.Msg.alert('Error', obj.result.errorMsg);
+                    }
+                } else if (obj.responseText != undefined) {
+                    var data = Ext.decode(obj.responseText);
+                    if (data.type == 'message') {
+                        HQ.message.show(data.code, data.parm, data.fn, array);
+                    }
+                    else if (data.type == "error") {
+                        Ext.Msg.alert('Error', obj.errorMsg);
+                    }
+                    else {
+                        Ext.Msg.alert('Error', data);
+                    }
+
+                } else if (obj.response.responseText != undefined) {
+                    Ext.Msg.alert('Error', obj.response.responseText);
+                } else {
+                    if (obj.failureType != undefined) {
+                        Ext.Msg.alert('Error', HQ.common.getLang("FailedConnectServer"));
+                    }
+                }
+            }
+            catch (e) {
+                Ext.Msg.alert('Error', errorMsg);
+            }
+
+        }
+    },
+    common: {
+        close: function (app) {
+            if (app["parentAutoLoadControl"] != undefined) {
+                app["parentAutoLoadControl"].close();
+            }
+        },
+        getLang: function (key) {
+            if (HQLang[key.toUpperCase()]) {
+                return HQLang[key.toUpperCase()];
+            } else {
+                return key;
+            }
+        },
+        setLang: function (ctr) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (itm.getXType() == "grid") {
+                        for (var i = 0; i < itm.columns.length; i++) {
+                            if (itm.columns[i].getXType() == "commandcolumn") {
+                                itm.columns[i].commands[0].text = HQ.common.getLang(itm.columns[i].commands[0].text);
+                            } else {
+                                itm.columns[i].setText(HQ.common.getLang(itm.columns[i].text));
+                            }
+                        }
+                    }
+                    else if (itm.getXType() == "combobox") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "textfield") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "checkbox") {
+                        itm.setBoxLabel(HQ.common.getLang(itm.boxLabel));
+                    }
+                    else if (itm.getXType() == "numberfield") {
+                        itm.setFieldLabel(HQ.common.getLang(itm.fieldLabel));
+                    }
+                    else if (itm.getXType() == "panel") {
+                        itm.setTitle(HQ.common.getLang(itm.title));
+                    }
+                    HQ.common.setLang(itm);
+                });
+            }
+
+        },
+        lockItem: function (ctr, lock) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.setReadOnly) != "undefined") {
+                        if (itm.getTag() != "X")
+                            itm.setReadOnly(lock)
+
+                    }
+                    HQ.common.lockItem(itm, lock);
+                });
+            }
+        },
+        changeData: function (isChange, screenNbr) {
+            if (parent.App['tab' + screenNbr] != undefined)
+                if (isChange)
+                    parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')*');
+                else parent.App['tab' + screenNbr].setTitle(HQ.common.getLang(screenNbr) + '(' + screenNbr + ')');
+        },
+        showBusy: function (busy, waitMsg, form) {
+            if (form == undefined) {
+                if (busy) {
+                    App.frmMain.body.mask(waitMsg);
+                } else {
+                    App.frmMain.body.unmask();
+                }
+            } else {
+                if (busy) {
+                    form.body.mask(waitMsg);
+                } else {
+                    form.body.unmask();
+                }
+            }
+
+        },
+        setRequire: function (ctr) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.allowBlank) != "undefined") {
+                        itm.validate();
+                    }
+                    HQ.common.setRequire(itm);
+                });
+            }
+        },
+        control_render: function (control, itemfocus) {
+            control.getEl().on("click", function () {
+                HQ.focus = itemfocus;
+            });
+        },
+        setForceSelection: function (ctr, isForceSelection, cboex) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.forceSelection) != "undefined") {
+                        itm.store.clearFilter();
+                        if (cboex != undefined) {
+                            if (!HQ.common.contains(cboex.split(','), itm.id)) itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
+                        } else itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
+                    }
+
+                    HQ.common.setForceSelection(itm, isForceSelection, cboex);
+                });
+            }
+        },
+        contains: function (a, obj) {
+            for (var i = 0; i < a.length; i++) {
+                if (a[i] === obj) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    },
+    util: {
+        toBool: function (parm) {
+            if (parm.toLowerCase() == 'false') {
+                return false;
+            } else if (parm.toLowerCase() == 'true') {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        dateToString: function dateToString(date, format) {
+            if (date == null) return '';
+            if (format == 'm/d/y') {
+                return (date.getMonth() + 1).toString() + '/' + date.getDate().toString() + '/' + date.getFullYear().toString();
+            }
+            return ''
+
+        },
+        hexToRGB: function (hex) {
+            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        },
+        passNull: function (str) {
+            if (str == null) {
+                return "";
+            } else return str;
+        },
+        focusControl: function () {
+            if (App[invalidField] && !App[invalidField].hasFocus) {
+                var tab = App[invalidField].findParentByType('tabpanel');
+                if (tab == undefined) {
+                    App[invalidField].focus();
+                }
+                else {
+                    HQ.util.focusControlInTab(tab, invalidField);
+                }
+            }
+        },
+        focusControlInTab: function (ctr, field) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (ctr.setActiveTab) != "undefined" && !App[field].hasFocus) {
+                        ctr.setActiveTab(App[itm.id]);
+                    }
+                    if (itm.id == field) {
+                        App[field].focus();
+                        return true;
+                    }
+                    HQ.util.focusControlInTab(itm, field);
+                });
+            }
+        },
+        checkEmail: function (value) {
+            var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            if ((HQ.util.passNull(value)).match(regex)) {
+                return true;
+            } else {
+                HQ.message.show(09112014, '', null);
+                return false;
+            }
+        },
+        mathRound: function (value, exp) {
+            return decimalAdjust('round', value, exp);
+        },
+        mathFloor: function (value, exp) {
+            return decimalAdjust('floor', value, exp);
+        },
+        mathCeil: function (value, exp) {
+            return decimalAdjust('ceil', value, exp);
+        }
+
+    },
+    form: {
+        checkRequirePass: function (frm) {
+            //frm.updateRecord();
+            var isValid = true;
+            frm.getForm().getFields().each(
+                            function (item) {
+                                if (!item.isValid()) {
+                                    invalidField = item.id;
+                                    HQ.message.show(1000, item.fieldLabel, 'HQ.util.focusControl');
+                                    isValid = false;
+                                    return false;
+                                }
+                            })
+            return isValid;
+        },
+        lockButtonChange: function (isChange, frmMain) {
+            frmMain.menuClickbtnFirst.setDisabled(isChange);
+            frmMain.menuClickbtnNext.setDisabled(isChange);
+            frmMain.menuClickbtnLast.setDisabled(isChange);
+            frmMain.menuClickbtnPrev.setDisabled(isChange);
+            frmMain.menuClickbtnNew.setDisabled(isChange);
+            frmMain.menuClickbtnDelete.setDisabled(isChange);
+        }
+    },
+    tooltip: {
+        // TinhHV: show the tootip in grid
+        showOnGrid: function (toolTip, grid, isHtmlEncode) {
+            var view = grid.getView(),
+            store = grid.getStore(),
+            record = view.getRecord(view.findItemByChild(toolTip.triggerElement)),
+            column = view.getHeaderByCell(toolTip.triggerElement),
+            data = record.get(column.dataIndex);
+
+            if (data) {
+                if (isHtmlEncode) {
+                    toolTip.update(Ext.util.Format.htmlEncode(data));
+                }
+                else {
+                    toolTip.update(data);
+                }
+            }
+            else {
+                toolTip.hide();
+            }
+        }
+    }
+};
+
+HQ.waitMsg = HQ.common.getLang('waitMsg');
+var FilterCombo = function (control, stkeyFilter) {
+    if (control) {
+        var store = control.getStore();
+        var value = HQ.util.passNull(control.getValue()).toString();
+        if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
+        if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
+        if (store) {
+            var filtersAux = [];
+            // get filter
+            store.filters.items.forEach(function (item) {
+                if (item.id != control.id + '-query-filter') {
+                    filtersAux.push(item);
+                }
+            });
+            store.clearFilter();
+            if (control.valueModels == null || control.valueModels.length == 0) {
+                store.filterBy(function (record) {
+                    if (record) {
+                        var isMap = false;
+                        stkeyFilter.split(',').forEach(function (key) {
+                            if (key) {
+                                if ((typeof HQ.util.passNull(value)) == "string") {
+                                    if (record.data[key]) {
+                                        var fieldData = record.data[key].toString().toLowerCase().indexOf(HQ.util.passNull(value).toLowerCase());
+                                        if (fieldData > -1) {
+                                            isMap = true;
+                                            return record;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        if (isMap == true) return record
+                    }
+                });
+            }
+            filtersAux.forEach(function (item) {
+                store.filter(item.property, item.value);
+            });
+        }
+    }
+};
+var loadDefault = function (fileNameStore, cbo) {
+    if (fileNameStore.data.items.length > 0) {
+        cbo.setValue(fileNameStore.getAt(0).get(cbo.valueField));
+
+    }
+};
+//MathRound 2015-03-24
+// Closure
+function decimalAdjust(type, value, exp) {
+    exp = exp * -1;
+    // If the exp is undefined or zero...
+    if (typeof exp === 'undefined' || +exp === 0) {
+        return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    // If the value is not a number or the exp is not an integer...
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+        return NaN;
+    }
+    // Shift
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    // Shift back
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+}
+
+
+
+//////Example Round
+////Math.round10(55.55, -1);   // 55.6
+////Math.round10(55.549, -1);  // 55.5
+////Math.round10(55, 1);       // 60
+////Math.round10(54.9, 1);     // 50
+////Math.round10(-55.55, -1);  // -55.5
+////Math.round10(-55.551, -1); // -55.6
+////Math.round10(-55, 1);      // -50
+////Math.round10(-55.1, 1);    // -60
+////Math.round10(1.005, -2);   // 1.01 -- compare this with Math.round(1.005*100)/100 above
+////// Floor
+////Math.floor10(55.59, -1);   // 55.5
+////Math.floor10(59, 1);       // 50
+////Math.floor10(-55.51, -1);  // -55.6
+////Math.floor10(-51, 1);      // -60
+////// Ceil
+////Math.ceil10(55.51, -1);    // 55.6
+////Math.ceil10(51, 1);        // 60
+////Math.ceil10(-55.59, -1);   // -55.5
+////Math.ceil10(-59, 1);       // -50
+
+//TrungHT override control ext
+Ext.define("NumbercurrencyPrecision", {
+    override: "Ext.util.Format.Number",
+    currencyPrecision: 0
+});
+Ext.define("ThousandSeparatorNumberField", {
+    override: "Ext.form.field.Number",
+
+    /**
+    * @cfg {Boolean} useThousandSeparator
+    */
+    useThousandSeparator: true,
+    selectOnFocus: true,
+    style: 'text-align: right',
+    fieldStyle: "text-align:right;",
+    /**
+     * @inheritdoc
+     */
+    //dung cho page
+
+    toRawNumber: function (value) {
+        this.decimalPrecision = this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
+        return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
+    },
+
+    /**
+     * @inheritdoc
+     */
+    getErrors: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            errors = Ext.form.field.Text.prototype.getErrors.apply(me, arguments),
+            format = Ext.String.format,
+            num;
+
+        value = Ext.isDefined(value) ? value : this.processRawValue(this.getRawValue());
+
+        if (value.length < 1) { // if it's blank and textfield didn't flag it then it's valid
+            return errors;
+        }
+
+        value = me.toRawNumber(value);
+
+        if (isNaN(value.replace(Ext.util.Format.thousandSeparator, ''))) {
+            errors.push(format(me.nanText, value));
+        }
+
+        num = me.parseValue(value);
+
+        if (me.minValue === 0 && num < 0) {
+            errors.push(this.negativeText);
+        }
+        else if (num < me.minValue) {
+            errors.push(format(me.minText, me.minValue));
+        }
+
+        if (num > me.maxValue) {
+            errors.push(format(me.maxText, me.maxValue));
+        }
+
+        return errors;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    valueToRaw: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this;
+
+        var format = "000,000";
+        for (var i = 0; i < me.decimalPrecision; i++) {
+            if (i == 0)
+                format += ".";
+            format += "0";
+        }
+        value = me.parseValue(Ext.util.Format.number(value, format));
+        value = me.fixPrecision(value);
+        value = Ext.isNumber(value) ? value : parseFloat(me.toRawNumber(value));
+        value = isNaN(value) ? '' : String(Ext.util.Format.number(value, format)).replace('.', me.decimalSeparator);
+        return value;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    getSubmitValue: function () {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            value = me.callParent();
+
+        if (!me.submitLocaleSeparator) {
+            value = me.toRawNumber(value);
+        }
+        return value;
+    },
+
+    /**
+     * @inheritdoc
+     */
+    setMinValue: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        var me = this,
+            allowed;
+
+        me.minValue = Ext.Number.from(value, Number.NEGATIVE_INFINITY);
+        me.toggleSpinners();
+
+        // Build regexes for masking and stripping based on the configured options
+        if (me.disableKeyFilter !== true) {
+            allowed = me.baseChars + '';
+
+            if (me.allowExponential) {
+                allowed += me.decimalSeparator + 'e+-';
+            }
+            else {
+                allowed += Ext.util.Format.thousandSeparator;
+                if (me.allowDecimals) {
+                    allowed += me.decimalSeparator;
+                }
+                if (me.minValue < 0) {
+                    allowed += '-';
+                }
+            }
+
+            allowed = Ext.String.escapeRegex(allowed);
+            me.maskRe = new RegExp('[' + allowed + ']');
+            if (me.autoStripChars) {
+                me.stripCharsRe = new RegExp('[^' + allowed + ']', 'gi');
+            }
+        }
+    },
+
+    /**
+     * @private
+     */
+    parseValue: function (value) {
+        if (!this.useThousandSeparator)
+            return this.callParent(arguments);
+        value = parseFloat(this.toRawNumber(value));
+        return isNaN(value) ? null : value;
+    }
+});
+
+Ext.define("Ext.locale.vn.toolbar.Paging", {
+    override: "Ext.PagingToolbar",
+    lable: HQ.common.getLang("PageSize"),
+    beforePageText: HQ.common.getLang("Page"),
+    afterPageText: HQ.common.getLang("of") + " {0}",
+    firstText: HQ.common.getLang("PageFirst"),
+    prevText: HQ.common.getLang("PagePrev"),
+    nextText: HQ.common.getLang("PageNext"),
+    lastText: HQ.common.getLang("PageLast"),
+    refreshText: HQ.common.getLang("PageRefresh"),
+    displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
+    emptyMsg: HQ.common.getLang("DataEmpty")
+});
+//window.onresize = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};
+//window.onload = function () {
+//    if ((window.outerHeight - window.innerHeight) > 100) {
+//        alert('Docked inspector was opened');
+//        if (parent != undefined)
+//            parent.location = 'Login';
+//        else window.location = 'Login';
+
+//    }
+//};

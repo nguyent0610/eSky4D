@@ -1,48 +1,47 @@
 ﻿//// Declare //////////////////////////////////////////////////////////
-
 var keys = ['ClassID'];
-///////////////////////////////////////////////////////////////////////
-
-//// Store /////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////
-
-
-//// Event /////////////////////////////////////////////////////////////
+var fieldsCheckRequire = ["ClassID"];
+var fieldsLangCheckRequire = ["ClassID"];
 
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            HQ.grid.first(App.grdLanguage);
+            HQ.grid.first(App.grdAP_VendClass);
             break;
         case "prev":
-            HQ.grid.prev(App.grdLanguage);
+            HQ.grid.prev(App.grdAP_VendClass);
             break;
         case "next":
-            HQ.grid.next(App.grdLanguage);
+            HQ.grid.next(App.grdAP_VendClass);
             break;
         case "last":
-            HQ.grid.last(App.grdLanguage);
+            HQ.grid.last(App.grdAP_VendClass);
             break;
         case "refresh":
-            App.stoLanguage.reload();
-            HQ.grid.first(App.grdLanguage);
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoAP_VendClass.reload();
+            }
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdLanguage);
+                HQ.grid.insert(App.grdAP_VendClass, keys);
             }
             break;
         case "delete":
-            if (App.slmLanguage.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
-                }
+            if (App.slmAP_VendClass.selected.items[0] != undefined) {
+                var rowindex = HQ.grid.indexSelect(App.grdAP_VendClass);
+                if (rowindex != '')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdAP_VendClass), ''], 'deleteData', true)
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (checkRequire(App.stoLanguage.getChangedData().Created) && checkRequire(App.stoLanguage.getChangedData().Updated)) {
+                if (HQ.store.checkRequirePass(App.stoAP_VendClass, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -50,74 +49,74 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            if (HQ.store.isChange(App.stoLanguage)) {
-                HQ.message.show(5, '', 'askClose');
-            } else {
-                HQ.common.close(this);
-            }
+            HQ.common.close(this);
             break;
     }
 
 };
-var grdLanguage_BeforeEdit = function (editor, e) {
-    if (!HQ.isUpdate) return false;
-    //keys = e.record.idProperty.split(',');
 
-    if (keys.indexOf(e.field) != -1) {
-        if (e.record.data.tstamp != "")
-            return false;
-    }
-
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoAP_VendClass.reload();
 };
-var grdLanguage_Edit = function (item, e) {
 
-    if (keys.indexOf(e.field) != -1) {
-        if (e.value != '' && isAllValidKey(App.stoLanguage.getChangedData().Created) && isAllValidKey(App.stoLanguage.getChangedData().Updated))
-            HQ.store.insertBlank(App.stoLanguage);
-    }
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'AP20100');
 };
-var grdLanguage_ValidateEdit = function (item, e) {
-    if (keys.indexOf(e.field) != -1) {
-        if (HQ.grid.checkDuplicate(App.grdLanguage, e, keys)) {
-            HQ.message.show(1112, e.value);
-            return false;
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'AP20100');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
         }
-        var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-        if (e.value.match(regex)) {
-            return true;
-
-        } else {
-            HQ.message.show(20140811, e.column.text);
-            return false;
-        }
+        HQ.isFirstLoad = false;
     }
 };
-var grdLanguage_Reject = function (record) {
-    if (record.data.tstamp == '') {
-        App.stoLanguage.remove(record);
-        App.grdLanguage.getView().focusRow(App.stoLanguage.getCount() - 1);
-        App.grdLanguage.getSelectionModel().select(App.stoLanguage.getCount() - 1);
-    } else {
-        record.reject();
-    }
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var grdAP_VendClass_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdAP_VendClass_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdAP_VendClass, e, keys);
+};
+
+var grdAP_VendClass_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdAP_VendClass, e, keys);
+};
+
+var grdAP_VendClass_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdAP_VendClass);
+    stoChanged(App.stoAP_VendClass);
 };
 
 /////////////////////////////////////////////////////////////////////////
-
-
-
 //// Process Data ///////////////////////////////////////////////////////
-
 var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
-            waitMsg: HQ.common.getLang("WaitMsg"),
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
             url: 'AP20100/Save',
             params: {
-                lstLanguage: HQ.store.getData(App.stoLanguage)
+                lstAP_VendClass: HQ.store.getData(App.stoAP_VendClass)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
+                HQ.isChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
@@ -129,64 +128,18 @@ var save = function () {
 
 var deleteData = function (item) {
     if (item == "yes") {
-        App.grdLanguage.deleteSelected();
+        App.grdAP_VendClass.deleteSelected();
+        stoChanged(App.stoAP_VendClass);
     }
 };
-//kiem tra key da nhap du chua
-var isAllValidKey = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            for (var j = 0; j < keys.length; j++) {
-                if (items[i][keys[j]] == '' || items[i][keys[j]] == undefined)
-                    return false;
-            }
-        }
-        return true;
-    } else {
-        return true;
-    }
-};
-//kiem tra nhung field yeu cau bat buoc nhap
-var checkRequire = function (items) {
-    if (items != undefined) {
-        for (var i = 0; i < items.length; i++) {
-            if (items[i]["Code"] == undefined) continue;
-            if (items[i]["Code"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("Code"));
-                return false;
-            }
-            if (items[i]["Lang00"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("Lang00"));
-                return false;
-            }
-            if (items[i]["Lang01"].trim() == "") {
-                HQ.message.show(15, HQ.common.getLang("Lang01"));
-                return false;
-            }
-        }
-        return true;
-    } else {
-        return true;
-    }
-};
+
 /////////////////////////////////////////////////////////////////////////
-
-
-
 //// Other Functions ////////////////////////////////////////////////////
-
-var askClose = function (item) {
-    if (item == "no" || item == "ok") {
-        HQ.common.close(this);
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoAP_VendClass.reload();
     }
 };
-
-/////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
+///////////////////////////////////

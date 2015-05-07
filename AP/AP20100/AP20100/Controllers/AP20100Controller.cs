@@ -35,10 +35,9 @@ namespace AP20100.Controllers
             return PartialView();
         }
 
-        public ActionResult GetLanguage()
+        public ActionResult GetAP_VendClass()
         {
-          //  var lang = _db.AP20100_pgGetVendClass.ToList();
-            return this.Store(_db.AP20100_pgGetVendClass().ToList());
+            return this.Store(_db.AP20100_pgAP_VendClass().ToList());
         }
 
         [HttpPost]
@@ -46,10 +45,9 @@ namespace AP20100.Controllers
         {
             try
             {
-
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstLanguage"]);
-                ChangeRecords<AP20100_pgGetVendClass_Result> lstLang = dataHandler.BatchObjectData<AP20100_pgGetVendClass_Result>();
-                foreach (AP20100_pgGetVendClass_Result deleted in lstLang.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstAP_VendClass"]);
+                ChangeRecords<AP20100_pgAP_VendClass_Result> lstAP_VendClass = dataHandler.BatchObjectData<AP20100_pgAP_VendClass_Result>();
+                foreach (AP20100_pgAP_VendClass_Result deleted in lstAP_VendClass.Deleted)
                 {
                     var del = _db.AP_VendClass.Where(p => p.ClassID == deleted.ClassID).FirstOrDefault();
                     if (del != null)
@@ -58,9 +56,9 @@ namespace AP20100.Controllers
                     }
                 }
 
-                lstLang.Created.AddRange(lstLang.Updated);
+                lstAP_VendClass.Created.AddRange(lstAP_VendClass.Updated);
 
-                foreach (AP20100_pgGetVendClass_Result curLang in lstLang.Created)
+                foreach (AP20100_pgAP_VendClass_Result curLang in lstAP_VendClass.Created)
                 {
                     if (curLang.ClassID.PassNull() == "") continue;
 
@@ -86,11 +84,6 @@ namespace AP20100.Controllers
                 }
 
                 _db.SaveChanges();
-                ExportLangJS(0);
-                ExportLangJS(1);
-                ExportLangJS(2);
-                ExportLangJS(3);
-
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -100,7 +93,7 @@ namespace AP20100.Controllers
             }
         }
 
-        private void Update_Language(AP_VendClass t, AP20100_pgGetVendClass_Result s, bool isNew)
+        private void Update_Language(AP_VendClass t, AP20100_pgAP_VendClass_Result s, bool isNew)
         {
             if (isNew)
             {
@@ -112,49 +105,10 @@ namespace AP20100.Controllers
             t.Descr = s.Descr;
             t.Terms = s.Terms;
 
-
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
         }
-        private void ExportLangJS(short LangID)
-        {
-            //System.IO.TextWriter writeFile = new StreamWriter(Server.MapPath("~\\Scripts\\hq.language" + LangID + ".js"));
-            //try
-            //{
-
-            //    StringBuilder sb = new StringBuilder();
-            //    var lst = _db.AP20100_GetLangJs(LangID).ToList();
-            //    sb.Append("var HQLang = {");
-
-            //    for (int i = 0; i < lst.Count() - 1; i++)
-            //    {
-
-            //        sb.Append("\""+lst[i].Code + "\":\"" + lst[i].Lang + "\",");
-
-            //    }
-            //    sb.Append("\"" + lst[lst.Count() - 1].Code + "\":\"" + lst[lst.Count() - 1].Lang + "\"};");
-
-            //    writeFile.Write(sb.ToString());
-
-            //    //writeFile.Close();
-            //    //writeFile = null;
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    writeFile.Close();
-            //    writeFile = null;
-
-            //}
-            //finally
-            //{
-            //    writeFile.Close();
-            //    writeFile = null;
-            //}
-
-
-
-        }
+        
     }
 }
