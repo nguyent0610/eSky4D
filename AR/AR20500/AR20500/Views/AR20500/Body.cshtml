@@ -155,6 +155,7 @@
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCustList"))).AutoLoad(false)
                         .Parameters(ps =>
                         {
+                            ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("slsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("fromDate", "App.FromDate.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("toDate", "App.ToDate.getValue()", ParameterMode.Raw));

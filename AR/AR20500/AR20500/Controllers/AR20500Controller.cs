@@ -29,12 +29,12 @@ namespace AR20500.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-        public ActionResult GetCustList(DateTime fromDate, DateTime toDate, List<string> slsperID, string status)
+        public ActionResult GetCustList(string BranchID,DateTime fromDate, DateTime toDate, List<string> slsperID, string status)
         {
             string sls = string.Empty;
             if (slsperID != null)
@@ -44,7 +44,7 @@ namespace AR20500.Controllers
                     sls += item + ",";
                 }
             }
-            return this.Store(_db.AR20500_pgDetail(Current.CpnyID, fromDate.PassMin(), toDate.PassMin(), sls, status).ToList());
+            return this.Store(_db.AR20500_pgDetail(BranchID, fromDate.PassMin(), toDate.PassMin(), sls, status).ToList());
         }
 
         [HttpPost]
