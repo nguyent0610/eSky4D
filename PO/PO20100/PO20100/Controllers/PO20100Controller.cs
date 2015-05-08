@@ -29,7 +29,7 @@ namespace PO20100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
+        [OutputCache(Duration = 1000000, VaryByParam = "none")]
         public PartialViewResult Body()
         {
             return PartialView();
@@ -66,6 +66,7 @@ namespace PO20100.Controllers
 
                 StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstPO_PriceCpny"]);
                 ChangeRecords<PO20100_pgGetPOPriceCpny_Result> lstPO_PriceCpny = dataHandler2.BatchObjectData<PO20100_pgGetPOPriceCpny_Result>();
+                
                 #region Save header
                 lstPOPriceHeader.Created.AddRange(lstPOPriceHeader.Updated);
 
@@ -100,7 +101,7 @@ namespace PO20100.Controllers
                 #region Save PO_Price
                 foreach (PO20100_pgGetPOPrice_Result deleted in lstPO_Price.Deleted)
                 {
-                    var del = _db.PO_Price.Where(p => p.PriceID == PriceID && p.InvtID == deleted.InvtID ).FirstOrDefault();
+                    var del = _db.PO_Price.Where(p => p.PriceID == PriceID && p.InvtID == deleted.InvtID && p.UOM==deleted.UOM).FirstOrDefault();
                     if (del != null)
                     {
                         _db.PO_Price.DeleteObject(del);
@@ -111,9 +112,9 @@ namespace PO20100.Controllers
 
                 foreach (PO20100_pgGetPOPrice_Result curLang in lstPO_Price.Created)
                 {
-                    if (curLang.InvtID.PassNull() == "") continue;
+                    if (curLang.InvtID.PassNull() == "" || PriceID.PassNull()=="" || curLang.UOM.PassNull()=="") continue;
 
-                    var lang = _db.PO_Price.FirstOrDefault(p => p.PriceID.ToLower() == PriceID.ToLower() && p.InvtID.ToLower() == curLang.InvtID.ToLower());
+                    var lang = _db.PO_Price.FirstOrDefault(p => p.PriceID.ToLower() == PriceID.ToLower() && p.InvtID.ToLower() == curLang.InvtID.ToLower() && p.UOM.ToLower()== curLang.UOM.ToLower());
 
                     if (lang != null)
                     {
