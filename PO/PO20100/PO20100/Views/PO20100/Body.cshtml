@@ -18,26 +18,34 @@
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Border)
+    .Listeners(l=>{
+        l.BoxReady.Handler = "firstLoad()";
+        l.FieldChange.Fn = "frmChange";
+    })
     .Items(
         ////Thiet ke giao dien o day
         X.Panel().ID("pnlHeader")
         .Region(Region.North)
         .Items(
-            X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
+            X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 5 0")
             .Items(
-                HQ.Combo().ID("cboPriceID").Name("cboPriceID").HQLangCode("PriceID").HQProcedure("PO20100_pcPriceID").HQColumnShow("PriceID,Descr").DisplayField("PriceID").ValueField("PriceID").Width(300).HQHeightWidth(400, 300)
+                HQ.Combo().ID("cboPriceID").Name("cboPriceID").HQLangCode("PriceID").HQProcedure("PO20100_pcPriceID").AllowBlank(false)
+                .HQColumnShow("PriceID,Descr").DisplayField("PriceID").ValueField("PriceID").Width(300).HQHeightWidth(400, 300)
                 .HQParam(new StoreParameterCollection() { 
                     new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                     , new StoreParameter() { Name = "@ScreenNbr", Value = "PO20100", Mode = ParameterMode.Value }
                     , new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw }                                                                                    
-                }).LoadData()
-                .Listeners(lst =>
-                {                                   
+                })
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => {
+                    lst.TriggerClick.Fn = "cboPriceID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
                     lst.Change.Fn = "cboPriceID_Change";
+                    lst.Expand.Fn = "cboPriceID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
                 })
 
                 , HQ.TextBox().ID("Descr").Name("Descr").HQLangCode("Descr").Width(300).AllowBlank(false).MarginSpec("0 0 0 20").HQControlFocus("LastPONbr").HideLabel(true).Listeners(lst => {  })
-                , HQ.Checkbox().ID("Status").Name("Status").HQLangCode("ACTIVE").MarginSpec("0 0 0 5").Listeners(lst => { lst.Focus.Handler = "focus='POPriceHeader'"; })
+                , HQ.Checkbox().ID("Status").Name("Status").HQLangCode("ACTIVE").MarginSpec("0 0 0 5")
             ),
             X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
             .Items(
@@ -47,8 +55,9 @@
                 {
                     lst.Click.Handler = "btnFill_Click()";
                 })
-                , HQ.DateField().ID("EffDate").Name("EffDate").HQLangCode("EffDate").Width(320).AllowBlank(false).LabelWidth(120).Value("2014-03-19").Listeners(lst => { lst.Focus.Handler = "focus='POPriceHeader'"; })
-                , HQ.Checkbox().ID("Public").Name("Public").HQLangCode("Public").MarginSpec("0 0 0 5").HQControlFocus("DfltRcptUnitFromIN")
+                , HQ.DateField().ID("EffDate").Name("EffDate").HQLangCode("EffDate").Width(320).AllowBlank(false).LabelWidth(120)
+                .Format("dd/MM/yyyy")
+                , HQ.Checkbox().ID("Public").Name("Public").HQLangCode("Public").MarginSpec("0 0 0 5")
                 .Listeners(lst =>
                 {
                     lst.Change.Fn = "chkPublic_Change"; 
@@ -60,7 +69,7 @@
             lss.Render.Fn = "pnl_render";
         })
 
-        , X.TabPanel().ID("tabPO20100")
+        , X.TabPanel().ID("tabBot")
         .Region(Region.Center)
         .Items(
             X.Panel().ID("pnlPO_Price")
@@ -72,9 +81,9 @@
                 .View(X.GridView().TrackOver(false))
                 .Region(Region.Center).Flex(1)
                 .Store(
-                     X.Store()
+                     X.Store().AutoLoad(false)
                     .ID("stoPO_Price")
-                    .PageSize(50)//.AutoLoad(true)
+                    .PageSize(50)
                     .Model(Util.GenerateModel(typeof(PO20100_pgGetPOPrice_Result), "mdlPO_Price", "PriceID,InvtID"))
                     .Parameters(ps =>
                     {
@@ -83,8 +92,7 @@
                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetPO_Price")))
                     .Listeners(l =>
                     {
-                        //l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));";
-                        //l.Load.Handler = ";HQ.common.showBusy(false);";
+                        l.Load.Fn = "stoPO_Price_Load";
                     })
                 )
                 .Listeners(p => p.BoxReady.Handler = "App.stoPO_Price.reload();")
@@ -97,8 +105,8 @@
                         HQ.Combo().ID("cboInvtID")
                         .Name("cboInvtID").HQProcedure("PO20100_pcInventoryActive")
                         .HQColumnShow("InvtID,Descr").DisplayField("InvtID").ValueField("InvtID")
-                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        .Width(300).HQHeightWidth(500, 400)
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).HQAutoLoad(false)
                         .HQParam(new StoreParameterCollection()
                         {//Param
                         })
@@ -114,11 +122,11 @@
                         HQ.Combo().ID("cboUOM").Name("cboUOM").HQProcedure("PO20100_pcUOM_InvtID")
                         .HQParam(new StoreParameterCollection()
                         { 
-                            new StoreParameter() { Name = "@InvtID", Value = "paramInvtID" , Mode = ParameterMode.Raw }
+                            new StoreParameter() { Name = "@InvtID", Value = "App.cboInvtID.getValue()" , Mode = ParameterMode.Raw }
                         })
                         .HQColumnShow("FromUnit").DisplayField("FromUnit").ValueField("FromUnit")
-                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                        .HQDBSys(false).AllowBlank(true).ForceSelection(true)
+                        .Width(300).HQHeightWidth(500, 400)
+                        .HQDBSys(false).AllowBlank(true).ForceSelection(true).HQAutoLoad(false)
                         .LoadData()
                     )
                     , X.NumberColumn().Text(Util.GetLang("QtyBreak")).DataIndex("QtyBreak").Width(150).Format("0,000,000").Editor(X.NumberField().MaskRe(@"/[\d]/"))
@@ -200,20 +208,19 @@
                 .ID("grdPO_PriceCpny")
                 .Region(Region.Center).Flex(1)
                 .Store(
-                     X.Store()
+                     X.Store().AutoLoad(false)
                     .ID("stoPO_PriceCpny")
-                    .PageSize(50)//.AutoLoad(true)
+                    .PageSize(50)
                     .Model(Util.GenerateModel(typeof(PO20100_pgGetPOPriceCpny_Result), "mdlPO_PriceCpny","PriceID,CpnyID"))
                     .Parameters(ps =>
                     {
                         ps.Add(new StoreParameter("PriceID", "App.cboPriceID.getValue()", ParameterMode.Raw));
                     })
                     .ServerProxy(X.AjaxProxy().Url(Url.Action("GetPO_PriceCpny")))
-                    .Listeners(l => 
-                    { 
-                        l.BeforeLoad.Handler = "HQ.common.showBusy(true,HQ.common.getLang(\"loadingdata\"));"; 
-                        l.Load.Handler = "HQ.common.showBusy(false);"; 
-                    })
+                    .Listeners(l =>
+                        {
+                            l.Load.Fn = "stoPO_PriceCpny_Load";
+                        })
                 )
                 .Listeners(p => p.BoxReady.Handler = "App.stoPO_PriceCpny.reload();")
                 .SortableColumns(false)
@@ -224,14 +231,14 @@
                     .Editor(
                         HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQProcedure("PO20100_pcBranchAllByUser")
                         .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
-                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        .Width(300).HQHeightWidth(500, 400)
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).HQAutoLoad(false)
                         .HQParam(new StoreParameterCollection() { 
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName" , Mode = ParameterMode.Raw }
                         })
                         .LoadData()
                     )
-                    , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(150).Flex(1)
+                    , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(150)
                     , X.CommandColumn().Width(150)
                     .Commands(
                         X.GridCommand()

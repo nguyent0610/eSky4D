@@ -29,7 +29,7 @@ namespace PO20100.Controllers
             return View();
         }
 
-       [OutputCache(Duration = 1000000, VaryByParam = "none")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "none")]
         public PartialViewResult Body()
         {
             return PartialView();
@@ -39,14 +39,17 @@ namespace PO20100.Controllers
         {
             return this.Store(_db.PO20100_pgGetPOPrice(PriceID).ToList());
         }
+
         public ActionResult GetPO_PriceCpny(string PriceID)
         {
             return this.Store(_db.PO20100_pgGetPOPriceCpny(PriceID).ToList());
         }
+
         public ActionResult GetPOPriceHeader(string PriceID)
         {
             return this.Store(_db.PO_PriceHeader.Where(p => p.PriceID == PriceID));
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
@@ -174,6 +177,7 @@ namespace PO20100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
+
         private void UpdatingHeader(PO_PriceHeader t, PO_PriceHeader s,bool isNew)
         {
             if (isNew)
@@ -218,29 +222,38 @@ namespace PO20100.Controllers
 
         }
 
-        [DirectMethod]
-        public ActionResult DeleteAll(string PriceID)
+        [HttpPost]
+        public ActionResult DeleteAll(FormCollection data)
         {
-            var cpny = _db.PO_PriceHeader.FirstOrDefault(p => p.PriceID == PriceID);
-            if (cpny != null)
+            try
             {
-                _db.PO_PriceHeader.DeleteObject(cpny);
-            }
+                string PriceID = data["cboPriceID"];
+                var obj = _db.PO_PriceHeader.FirstOrDefault(p => p.PriceID == PriceID);
+                if (obj != null)
+                {
+                    _db.PO_PriceHeader.DeleteObject(obj);
+                }
 
-            var lstAddr = _db.PO_Price.Where(p => p.PriceID == PriceID).ToList();
-            foreach (var item in lstAddr)
+                var lstPO_Price = _db.PO_Price.Where(p => p.PriceID == PriceID).ToList();
+                foreach (var item in lstPO_Price)
+                {
+                    _db.PO_Price.DeleteObject(item);
+                }
+
+                var lstPO_PriceCpny = _db.PO_PriceCpny.Where(p => p.PriceID == PriceID).ToList();
+                foreach (var item in lstPO_PriceCpny)
+                {
+                    _db.PO_PriceCpny.DeleteObject(item);
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
             {
-                _db.PO_Price.DeleteObject(item);
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
-
-            var lstSub = _db.PO_PriceCpny.Where(p => p.PriceID == PriceID).ToList();
-            foreach (var item in lstSub)
-            {
-                _db.PO_PriceCpny.DeleteObject(item);
-            }
-
-            _db.SaveChanges();
-            return this.Direct();
         }
     }
 }

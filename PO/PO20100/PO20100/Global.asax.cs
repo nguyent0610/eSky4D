@@ -38,16 +38,16 @@ namespace PO20100
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "PCHQ-PC";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eBiz4DCloudSysMVC";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "MARSSVR\\SQL2012";
+            Current.DBSys = "eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["PO20100"] = acc;
-            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppMVC";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004";
+            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "en";
             Session["LangID"] = 0;
         }

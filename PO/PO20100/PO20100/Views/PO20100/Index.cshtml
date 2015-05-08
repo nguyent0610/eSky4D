@@ -44,7 +44,8 @@
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         <!-- Gọi hàm Body trong SA00900Controller để dựng view Body.cshtml, mục đích tạo cache. -->      
-       @(Html.X().Store().ID("stoPOPriceHeader")   
+       @(
+            X.Store().ID("stoPOPriceHeader")
             .Model(Util.GenerateModel(typeof(PO_PriceHeader), "mdlPOPriceHeader", "PriceID"))       
             .Proxy(
                     X.AjaxProxy()                
@@ -59,10 +60,15 @@
                             {
                                 ps.Add(new StoreParameter("PriceID", "App.cboPriceID.getValue()", ParameterMode.Raw));
                             })      
-            .Listeners(p=>p.Load.Handler="loadData()" ) 
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";                   
+                }
+            ) 
       )
           
-        @{Html.RenderAction("Body");}   
+        @{Html.RenderAction("Body", new {lang=Current.LangID});}
     
 </body>
 </html>
