@@ -35,8 +35,8 @@ namespace OM30400.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "name")]
-        public PartialViewResult Body()
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
@@ -61,15 +61,15 @@ namespace OM30400.Controllers
             return this.Store(mcl);
         }
 
-        public ActionResult LoadGridActualVisit(string distributor, string slsperId, DateTime visitDate)
+        public ActionResult LoadGridActualVisit(string distributor, string slsperId, DateTime visitDate, bool realTime)
         {
-            var actualVisit = _db.OM30400_pgGridActualVisit(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate).ToList();
+            var actualVisit = _db.OM30400_pgGridActualVisit(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, realTime).ToList();
             return this.Store(actualVisit);
         }
 
-        public ActionResult LoadVisitCustomerActual(string distributor, string slsperId, DateTime visitDate)
+        public ActionResult LoadVisitCustomerActual(string distributor, string slsperId, DateTime visitDate, bool realTime)
         {
-            var actualVisit = _db.OM30400_pgVisitCustomerActual(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate).ToList();
+            var actualVisit = _db.OM30400_pgVisitCustomerActual(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, realTime).ToList();
             return this.Store(actualVisit);
         }
 
@@ -85,14 +85,14 @@ namespace OM30400.Controllers
             return this.Store(cusHistory);
         }
 
-        public ActionResult LoadSalesRouteMaster(string brachID, string custID, string slsPerID)
+        public ActionResult LoadSalesRouteMaster(string branchID, string custID, string slsPerID)
         {
             var slsRouteMster = _db.OM_SalesRouteMaster.FirstOrDefault(
-                                    x => x.BranchID == brachID
+                                    x => x.BranchID == branchID
                                     && x.CustID == custID
                                     && x.SlsPerID == slsPerID
-                                    && x.SalesRouteID == brachID
-                                    && x.PJPID == brachID);
+                                    && x.SalesRouteID == branchID
+                                    && x.PJPID == branchID);
             return this.Store(slsRouteMster);
         }
 

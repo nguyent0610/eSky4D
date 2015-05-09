@@ -89,7 +89,7 @@
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaPlan.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "Index.joinParams(App.cboAreaPlan)", Mode = ParameterMode.Raw }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
@@ -106,9 +106,9 @@
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaPlan.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "Index.joinParams(App.cboAreaPlan)", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@Channel", Value = "", Mode = ParameterMode.Value }
-                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvincePlan.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Province", Value = "Index.joinParams(App.cboProvincePlan)", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@SlsperId", Value = "App.cboSalesManPlan.value", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@ShopType", Value = "", Mode = ParameterMode.Value }
                     })
@@ -128,9 +128,9 @@
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@Channel", Value = "", Mode = ParameterMode.Value }
-                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaPlan.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvincePlan.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorPlan.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "Index.joinParams(App.cboAreaPlan)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Province", Value = "Index.joinParams(App.cboProvincePlan)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Distributor", Value = "Index.joinParams(App.cboDistributorPlan)", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@ShopType", Value = "", Mode = ParameterMode.Value }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -241,7 +241,7 @@
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "Index.joinParams(App.cboAreaMCL)", Mode = ParameterMode.Raw }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
@@ -258,11 +258,11 @@
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaMCL.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Channel", Value = "App.cboChannelMCL.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvinceMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "Index.joinParams(App.cboAreaMCL)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Channel", Value = "Index.joinParams(App.cboChannelMCL)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Province", Value = "Index.joinParams(App.cboProvinceMCL)", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@SlsperId", Value = "", Mode = ParameterMode.Value }
-                        , new StoreParameter() { Name = "@ShopType", Value = "App.cboShopTypeMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@ShopType", Value = "Index.joinParams(App.cboShopTypeMCL)", Mode = ParameterMode.Raw }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
@@ -279,11 +279,11 @@
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaMCL.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvinceMCL.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "Index.joinParams(App.cboAreaMCL)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Province", Value = "Index.joinParams(App.cboProvinceMCL)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Distributor", Value = "Index.joinParams(App.cboDistributorMCL)", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@SlsperId", Value = "", Mode = ParameterMode.Value }
-                        , new StoreParameter() { Name = "@ShopType", Value = "App.cboShopTypeMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@ShopType", Value = "Index.joinParams(App.cboShopTypeMCL)", Mode = ParameterMode.Raw }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
@@ -300,11 +300,11 @@
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Channel", Value = "App.cboChannelMCL.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaMCL.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvinceMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Channel", Value = "Index.joinParams(App.cboChannelMCL)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "Index.joinParams(App.cboAreaMCL)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Province", Value = "Index.joinParams(App.cboProvinceMCL)", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@SlsperId", Value = "", Mode = ParameterMode.Value }
-                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Distributor", Value = "Index.joinParams(App.cboDistributorMCL)", Mode = ParameterMode.Raw }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
@@ -321,11 +321,11 @@
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Channel", Value = "App.cboChannelMCL.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Territory", Value = "App.cboAreaMCL.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Province", Value = "App.cboProvinceMCL.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorMCL.value.join()", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@ShopType", Value = "App.cboShopTypeMCL.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Channel", Value = "Index.joinParams(App.cboChannelMCL)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Territory", Value = "Index.joinParams(App.cboAreaMCL)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Province", Value = "Index.joinParams(App.cboProvinceMCL)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Distributor", Value = "Index.joinParams(App.cboDistributorMCL)", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@ShopType", Value = "Index.joinParams(App.cboShopTypeMCL)", Mode = ParameterMode.Raw }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
@@ -481,7 +481,7 @@
                         , new StoreParameter() { Name = "@Channel", Value = "", Mode = ParameterMode.Value }
                         , new StoreParameter() { Name = "@Territory", Value = "", Mode = ParameterMode.Value }
                         , new StoreParameter() { Name = "@Province", Value = "", Mode = ParameterMode.Value }
-                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorActual.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Distributor", Value = "Index.joinParams(App.cboDistributorActual)", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@ShopType", Value = "", Mode = ParameterMode.Value }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -626,7 +626,7 @@
                         , new StoreParameter() { Name = "@Channel", Value = "", Mode = ParameterMode.Value }
                         , new StoreParameter() { Name = "@Territory", Value = "", Mode = ParameterMode.Value }
                         , new StoreParameter() { Name = "@Province", Value = "", Mode = ParameterMode.Value }
-                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorHistory.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Distributor", Value = "Index.joinParams(App.cboDistributorHistory)", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@ShopType", Value = "", Mode = ParameterMode.Value }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -644,7 +644,7 @@
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                        , new StoreParameter() { Name = "@Distributor", Value = "App.cboDistributorHistory.value.join()", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@Distributor", Value = "Index.joinParams(App.cboDistributorHistory)", Mode = ParameterMode.Raw }
                         , new StoreParameter() { Name = "@SlsperId", Value = "App.cboSalesManHistory.value", Mode = ParameterMode.Raw }
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })

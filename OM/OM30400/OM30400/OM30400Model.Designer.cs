@@ -179,69 +179,6 @@ namespace OM30400
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="distributor">No Metadata Documentation available.</param>
-        /// <param name="slsperId">No Metadata Documentation available.</param>
-        /// <param name="visitDate">No Metadata Documentation available.</param>
-        public ObjectResult<OM30400_pgGridActualVisit_Result> OM30400_pgGridActualVisit(global::System.String branchID, global::System.String userID, global::System.String distributor, global::System.String slsperId, Nullable<global::System.DateTime> visitDate)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter distributorParameter;
-            if (distributor != null)
-            {
-                distributorParameter = new ObjectParameter("Distributor", distributor);
-            }
-            else
-            {
-                distributorParameter = new ObjectParameter("Distributor", typeof(global::System.String));
-            }
-    
-            ObjectParameter slsperIdParameter;
-            if (slsperId != null)
-            {
-                slsperIdParameter = new ObjectParameter("SlsperId", slsperId);
-            }
-            else
-            {
-                slsperIdParameter = new ObjectParameter("SlsperId", typeof(global::System.String));
-            }
-    
-            ObjectParameter visitDateParameter;
-            if (visitDate.HasValue)
-            {
-                visitDateParameter = new ObjectParameter("VisitDate", visitDate);
-            }
-            else
-            {
-                visitDateParameter = new ObjectParameter("VisitDate", typeof(global::System.DateTime));
-            }
-    
-            return base.ExecuteFunction<OM30400_pgGridActualVisit_Result>("OM30400_pgGridActualVisit", branchIDParameter, userIDParameter, distributorParameter, slsperIdParameter, visitDateParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="distributor">No Metadata Documentation available.</param>
         /// <param name="slsPerID">No Metadata Documentation available.</param>
         /// <param name="custID">No Metadata Documentation available.</param>
         /// <param name="startDate">No Metadata Documentation available.</param>
@@ -444,69 +381,6 @@ namespace OM30400
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="distributor">No Metadata Documentation available.</param>
-        /// <param name="slsperId">No Metadata Documentation available.</param>
-        /// <param name="visitDate">No Metadata Documentation available.</param>
-        public ObjectResult<OM30400_pgVisitCustomerActual_Result> OM30400_pgVisitCustomerActual(global::System.String branchID, global::System.String userID, global::System.String distributor, global::System.String slsperId, Nullable<global::System.DateTime> visitDate)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter distributorParameter;
-            if (distributor != null)
-            {
-                distributorParameter = new ObjectParameter("Distributor", distributor);
-            }
-            else
-            {
-                distributorParameter = new ObjectParameter("Distributor", typeof(global::System.String));
-            }
-    
-            ObjectParameter slsperIdParameter;
-            if (slsperId != null)
-            {
-                slsperIdParameter = new ObjectParameter("SlsperId", slsperId);
-            }
-            else
-            {
-                slsperIdParameter = new ObjectParameter("SlsperId", typeof(global::System.String));
-            }
-    
-            ObjectParameter visitDateParameter;
-            if (visitDate.HasValue)
-            {
-                visitDateParameter = new ObjectParameter("VisitDate", visitDate);
-            }
-            else
-            {
-                visitDateParameter = new ObjectParameter("VisitDate", typeof(global::System.DateTime));
-            }
-    
-            return base.ExecuteFunction<OM30400_pgVisitCustomerActual_Result>("OM30400_pgVisitCustomerActual", branchIDParameter, userIDParameter, distributorParameter, slsperIdParameter, visitDateParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="channel">No Metadata Documentation available.</param>
         /// <param name="territory">No Metadata Documentation available.</param>
         /// <param name="province">No Metadata Documentation available.</param>
@@ -618,6 +492,154 @@ namespace OM30400
             }
     
             return base.ExecuteFunction<OM30400_pgVisitCustomerPlan_Result>("OM30400_pgVisitCustomerPlan", branchIDParameter, userIDParameter, channelParameter, territoryParameter, provinceParameter, distributorParameter, shopTypeParameter, slsperIdParameter, daysOfWeekParameter, weekEOParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="distributor">No Metadata Documentation available.</param>
+        /// <param name="slsperId">No Metadata Documentation available.</param>
+        /// <param name="visitDate">No Metadata Documentation available.</param>
+        /// <param name="realTime">No Metadata Documentation available.</param>
+        public ObjectResult<OM30400_pgGridActualVisit_Result> OM30400_pgGridActualVisit(global::System.String branchID, global::System.String userID, global::System.String distributor, global::System.String slsperId, Nullable<global::System.DateTime> visitDate, Nullable<global::System.Boolean> realTime)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter distributorParameter;
+            if (distributor != null)
+            {
+                distributorParameter = new ObjectParameter("Distributor", distributor);
+            }
+            else
+            {
+                distributorParameter = new ObjectParameter("Distributor", typeof(global::System.String));
+            }
+    
+            ObjectParameter slsperIdParameter;
+            if (slsperId != null)
+            {
+                slsperIdParameter = new ObjectParameter("SlsperId", slsperId);
+            }
+            else
+            {
+                slsperIdParameter = new ObjectParameter("SlsperId", typeof(global::System.String));
+            }
+    
+            ObjectParameter visitDateParameter;
+            if (visitDate.HasValue)
+            {
+                visitDateParameter = new ObjectParameter("VisitDate", visitDate);
+            }
+            else
+            {
+                visitDateParameter = new ObjectParameter("VisitDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter realTimeParameter;
+            if (realTime.HasValue)
+            {
+                realTimeParameter = new ObjectParameter("RealTime", realTime);
+            }
+            else
+            {
+                realTimeParameter = new ObjectParameter("RealTime", typeof(global::System.Boolean));
+            }
+    
+            return base.ExecuteFunction<OM30400_pgGridActualVisit_Result>("OM30400_pgGridActualVisit", branchIDParameter, userIDParameter, distributorParameter, slsperIdParameter, visitDateParameter, realTimeParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="distributor">No Metadata Documentation available.</param>
+        /// <param name="slsperId">No Metadata Documentation available.</param>
+        /// <param name="visitDate">No Metadata Documentation available.</param>
+        /// <param name="realTime">No Metadata Documentation available.</param>
+        public ObjectResult<OM30400_pgVisitCustomerActual_Result> OM30400_pgVisitCustomerActual(global::System.String branchID, global::System.String userID, global::System.String distributor, global::System.String slsperId, Nullable<global::System.DateTime> visitDate, Nullable<global::System.Boolean> realTime)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter distributorParameter;
+            if (distributor != null)
+            {
+                distributorParameter = new ObjectParameter("Distributor", distributor);
+            }
+            else
+            {
+                distributorParameter = new ObjectParameter("Distributor", typeof(global::System.String));
+            }
+    
+            ObjectParameter slsperIdParameter;
+            if (slsperId != null)
+            {
+                slsperIdParameter = new ObjectParameter("SlsperId", slsperId);
+            }
+            else
+            {
+                slsperIdParameter = new ObjectParameter("SlsperId", typeof(global::System.String));
+            }
+    
+            ObjectParameter visitDateParameter;
+            if (visitDate.HasValue)
+            {
+                visitDateParameter = new ObjectParameter("VisitDate", visitDate);
+            }
+            else
+            {
+                visitDateParameter = new ObjectParameter("VisitDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter realTimeParameter;
+            if (realTime.HasValue)
+            {
+                realTimeParameter = new ObjectParameter("RealTime", realTime);
+            }
+            else
+            {
+                realTimeParameter = new ObjectParameter("RealTime", typeof(global::System.Boolean));
+            }
+    
+            return base.ExecuteFunction<OM30400_pgVisitCustomerActual_Result>("OM30400_pgVisitCustomerActual", branchIDParameter, userIDParameter, distributorParameter, slsperIdParameter, visitDateParameter, realTimeParameter);
         }
 
         #endregion

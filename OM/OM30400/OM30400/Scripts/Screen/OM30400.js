@@ -1,6 +1,21 @@
 var pointsArray = [];
+
 // JS Code for Index View
 var Index = {
+    joinParams: function (multiCombo) {
+        var returnValue = "";
+        if (multiCombo.value && multiCombo.value.length) {
+            returnValue = multiCombo.value.join();
+        }
+        else {
+            if (multiCombo.getValue()) {
+                returnValue = multiCombo.rawValue;
+            }
+        }
+
+        return returnValue;
+    },
+
     menuClick: function (cmd) {
         switch (cmd) {
 
@@ -43,7 +58,7 @@ var Index = {
                             }
                             else {
                                 App.grdVisitCustomerActual.store.reload();
-                                App.storeVisitCustomerActual.reload();
+                                //App.storeVisitCustomerActual.reload();
                             }
                         }
                         else {
@@ -89,7 +104,7 @@ var Index = {
                 App.grdMCL.store,
                 App.grdAllCurrentSalesman.store,
                 App.grdVisitCustomerActual.store,
-                App.storeVisitCustomerActual,
+                //App.storeVisitCustomerActual,
                 App.grdCustHistory.store
         ]
 
@@ -149,6 +164,7 @@ var Index = {
             var markers = [];
             records.forEach(function (record) {
                 var marker = {
+                    "id": record.index + 1,
                     "title": record.data.CustId + ": " + record.data.CustName,
                     "lat": record.data.Lat,
                     "lng": record.data.Lng,
@@ -169,13 +185,14 @@ var Index = {
                 }
                 markers.push(marker);
             });
-            PosGmap.drawRoutes(markers, false);
+            PosGmap.drawMCP(markers, false);
         }
+        App.dataForm.getEl().unmask();
     },
 
     selectionModelVisitCustomerPlan_Select: function (rowModel, record, index, eOpts) {
         if (record) {
-            PosGmap.navMapCenterByLocation(record.data.Lat, record.data.Lng);
+            PosGmap.navMapCenterByLocation(record.data.Lat, record.data.Lng, record.index + 1);
         }
     },
 
@@ -183,13 +200,16 @@ var Index = {
         var clickCol = gridview.up('grid').columns[cellIndex];
         if (clickCol) {
             if (clickCol.dataIndex === "Checkout") {
-                PosGmap.navMapCenterByLocation(record.data.CoLat, record.data.CoLng);
+                var id = record.data.Checkout + "_" + record.data.CoLat + "_" + record.data.CoLng;
+                PosGmap.navMapCenterByLocation(record.data.CoLat, record.data.CoLng, id);
             }
             else if (clickCol.dataIndex === "Checkin") {
-                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng);
+                var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
+                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
             }
             else if (!record.data.CustId) {
-                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng);
+                var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
+                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
             }
         }
     },
@@ -291,18 +311,20 @@ var Index = {
 
             store.each(function (record) {
                 var marker = {
+                    "id": record.index + 1,
                     "title": record.data.CustId + ": " + record.data.CustName,
                     "lat": record.data.Lat,
                     "lng": record.data.Lng,
-                    "stop": true,
                     "color": record.data.Color,
                     "description": Index.createMarkerDescription(record),
                     "custId": record.data.CustId
                 }
                 markers.push(marker);
             });
-            PosGmap.drawRoutes(markers, false);
-            PosGmap.prepairDrawing();
+            PosGmap.drawMCL(markers, false);
+            if (markers.length) {
+                PosGmap.prepairDrawing();
+            }
         }
         App.dataForm.getEl().unmask();
 
@@ -330,14 +352,14 @@ var Index = {
             App.chkCustStatusMcpInfo.setValue(record.data.Status == "A" ? true : false);
 
             App.storeMcpInfo.serverProxy.url =
-                Ext.String.format("OM30400/LoadSalesRouteMaster?brachID={0}&custID={1}&slsPerID={2}", record.data.BranchID, record.data.CustId, record.data.SlsperId);
+                Ext.String.format("OM30400/LoadSalesRouteMaster?branchID={0}&custID={1}&slsPerID={2}", record.data.BranchID, record.data.CustId, record.data.SlsperId);
             App.storeMcpInfo.reload();
         }
     },
 
     selectionModelMCL_Select: function (rowModel, record, index, eOpts) {
         if (record) {
-            PosGmap.navMapCenterByLocation(record.data.Lat, record.data.Lng);
+            PosGmap.navMapCenterByLocation(record.data.Lat, record.data.Lng, record.index + 1);
         }
     },
 
@@ -374,7 +396,7 @@ var Index = {
             }
             else {
                 App.grdVisitCustomerActual.store.reload();
-                App.storeVisitCustomerActual.reload();
+                //App.storeVisitCustomerActual.reload();
             }
         }
         else {
@@ -417,30 +439,81 @@ var Index = {
         var store = App.storeGridActualVisit;
         if (store.getCount() > 0) {
             var lastRecord = store.getAt(store.getCount() - 1);
-            PosGmap.navMapCenterByLocation(lastRecord.data.CoLat, lastRecord.data.CoLng);
+            PosGmap.navMapCenterByLocation(lastRecord.data.CoLat, lastRecord.data.CoLng, lastRecord.index + 1);
 
             App.SelectionModelVisitCustomerActual.select(store.getCount() - 1);
         }
     },
 
     chkRealTime_change: function (chk, newValue, oldValue, eOpts) {
-        if (chk.value) {
-            App.grdVisitCustomerActual.store.clearFilter();
-        }
-        else {
-            App.grdVisitCustomerActual.store.filterBy(function (record) {
-                if (record.data.CustId) {
-                    return record;
-                }
-            });
-        }
+        App.grdVisitCustomerActual.store.reload();
+        //App.storeVisitCustomerActual.reload();
     },
 
+    storeGridActualVisit_load: function (store, records, successful, eOpts) {
+        if (successful) {
+            var markers = [];
+            records.forEach(function (record) {
+                var markeri = {
+                    "id": record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng,
+                    "title": record.data.CustId?record.data.CustId + ": " + record.data.CustName : "",
+                    "lat": record.data.CiLat,
+                    "lng": record.data.CiLng,
+                    "label": record.index + 1,
+                    "type": record.data.CustId ? "IO": "",
+                    "description":
+                        '<div id="content">' +
+                            '<div id="siteNotice">' +
+                            '</div>' +
+                            '<h1 id="firstHeading" class="firstHeading">' +
+                                record.data.CustName +
+                            '</h1>' +
+                            '<div id="bodyContent">' +
+                                '<p>' +
+                                    record.data.Addr +
+                                '</p>' +
+                            '</div>' +
+                        '</div>'
+                }
+                markers.push(markeri);
+
+                if (record.data.CustId) {
+                    var markero = {
+                        "id": record.data.Checkout + "_" + record.data.CoLat + "_" + record.data.CoLng,
+                        "title": record.data.CustId + ": " + record.data.CustName,
+                        "lat": record.data.CoLat,
+                        "lng": record.data.CoLng,
+                        "label": record.index + 1,
+                        "type": "OO",
+                        "description":
+                            '<div id="content">' +
+                                '<div id="siteNotice">' +
+                                '</div>' +
+                                '<h1 id="firstHeading" class="firstHeading">' +
+                                    record.data.CustName +
+                                '</h1>' +
+                                '<div id="bodyContent">' +
+                                    '<p>' +
+                                        record.data.Addr +
+                                    '</p>' +
+                                '</div>' +
+                            '</div>'
+                    }
+                    markers.push(markero);
+                }
+            });
+            PosGmap.drawAVC1(markers, true);
+        }
+        App.dataForm.getEl().unmask();
+    },
+
+    // Store nay tam thoi ko dung toi nua
     storeVisitCustomerActual_load: function (store, records, successful, eOpts) {
         if (successful) {
             var markers = [];
             records.forEach(function (record) {
                 var marker = {
+                    "id": Ext.Date.format(record.data.VisitDate, "H:i:s") + "_" + record.data.Lat + "_" + record.data.Lng, // lay gio
                     "title": record.data.CustId + ": " + record.data.CustName,
                     "lat": record.data.Lat,
                     "lng": record.data.Lng,
@@ -461,11 +534,12 @@ var Index = {
                 }
                 markers.push(marker);
             });
-            PosGmap.drawRoutes(markers, true);
+            PosGmap.drawAVC(markers, true);
         }
 
         // pretend to change chkRealTime check
-        Index.chkRealTime_change(App.chkRealTime);
+        // Index.chkRealTime_change(App.chkRealTime);
+        App.dataForm.getEl().unmask();
     },
 
     storeAllCurrentSalesman_load: function (store, records, successful, eOpts) {
@@ -473,6 +547,7 @@ var Index = {
             var markers = [];
             records.forEach(function (record) {
                 var marker = {
+                    "id": record.index + 1,
                     "title": record.data.SlsperID + ": " + record.data.Name,
                     "lat": record.data.Lat,
                     "lng": record.data.Lng,
@@ -495,6 +570,7 @@ var Index = {
             });
             PosGmap.drawRoutes(markers, false);
         }
+        App.dataForm.getEl().unmask();
     },
 
     // tab history
@@ -529,6 +605,7 @@ var Index = {
             var markers = [];
             records.forEach(function (record) {
                 var marker = {
+                    "id": record.index + 1,
                     "title": record.data.CustID + ": " + record.data.CustName,
                     "lat": record.data.Lat,
                     "lng": record.data.Lng,
@@ -550,13 +627,15 @@ var Index = {
             });
             PosGmap.drawRoutes(markers, false);
         }
+        App.dataForm.getEl().unmask();
     },
 
     //
 
     selectionModelPOS_ActualVisit_Select: function (rowModel, record, index, eOpts) {
         if (record) {
-            PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng);
+            var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
+            PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
         }
     },
 
@@ -564,10 +643,12 @@ var Index = {
         var clickCol = App.grdActualVisit.columns[cellIndex];
         if (clickCol) {
             if (clickCol.dataIndex === "CheckOut") {
-                PosGmap.navMapCenterByLocation(record.data.CoLat, record.data.CoLng);
+                var id = record.data.Checkout + "_" + record.data.CoLat + "_" + record.data.CoLng;
+                PosGmap.navMapCenterByLocation(record.data.CoLat, record.data.CoLng, id);
             }
             else if (clickCol.dataIndex === "CheckIn") {
-                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng);
+                var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
+                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
             }
         }
     },
@@ -937,23 +1018,49 @@ var PosGmap = {
         });
     },
 
-    navMapCenterByLocation: function (lat, lng) {
+    navMapCenterByLocation: function (lat, lng, id) {
+        var selectedMarker;
         var myLatlng = new google.maps.LatLng(lat, lng);
         map.setCenter(myLatlng);
         map.setZoom(map.getZoom());
 
-        var selectedMarker = PosGmap.find_closest_marker(lat, lng);
+        if (id) {
+            selectedMarker = PosGmap.find_marker_id(id);
+            if (!selectedMarker) {
+                selectedMarker = PosGmap.find_closest_marker(lat, lng);
+            }
+        }
+        else {
+            selectedMarker = PosGmap.find_closest_marker(lat, lng);
+        }
 
         if (selectedMarker) {
+            var visible = selectedMarker.visible;
+
             if (selectedMarker.getAnimation() != null) {
                 selectedMarker.setAnimation(null);
             } else {
+                if (!visible) {
+                    selectedMarker.visible = true;
+                }
                 selectedMarker.setAnimation(google.maps.Animation.BOUNCE);
                 setTimeout(function () {
                     selectedMarker.setAnimation(null);
+                    if (!visible) {
+                        selectedMarker.visible = false;
+                    }
                 }, 1400);
             }
         }
+    },
+
+    find_marker_id: function (id) {
+        for (i = 0; i < PosGmap.stopMarkers.length; i++) {
+            if (PosGmap.stopMarkers[i].id == id) {
+                return PosGmap.stopMarkers[i];
+            }
+        }
+        return null;
     },
 
     find_closest_marker: function (lat1, lon1) {
@@ -990,7 +1097,7 @@ var PosGmap = {
         return PosGmap.stopMarkers[closest];
     },
 
-    drawRoutes: function (markers, showDirections) {
+    prepairMap: function () {
         if (directionsDisplay) {
             directionsDisplay.setMap(null);
             if (PosGmap.directionsDisplays && PosGmap.directionsDisplays.length > 0) {
@@ -1002,27 +1109,34 @@ var PosGmap = {
         }
         directionsService = new google.maps.DirectionsService();
         directionsDisplay = new google.maps.DirectionsRenderer();
+    },
+
+    clearMap: function (stopMarkers) {
+        for (i = 0; i < stopMarkers.length; i++) {
+            PosGmap.stopMarkers[i].setMap(null);
+
+            if (i == stopMarkers.length - 1) {
+                PosGmap.stopMarkers = [];
+            }
+        }
+        directionsDisplay.setMap(map);
+    },
+
+    drawMCP: function (markers, showDirections) {
+        PosGmap.prepairMap();
 
         if (markers.length > 0) {
             PosGmap.stopMarkers = [];
             // List of locations
             var lat_lng = new Array();
 
-            // For each marker in lisr
+            // For each marker in list
             for (i = 0; i < markers.length; i++) {
                 var data = markers[i];
                 var myLatlng = new google.maps.LatLng(data.lat, data.lng);
 
-                // Change color for Checkin and checkout point (for Actual Visit)
-                var pinColor = "BDBDBD";//FE6256
-                if (data.type) {
-                    if (data.type == "IO") { // Check in
-                        pinColor = "CCFF33";
-                    }
-                    else if (data.type == "OO") { // Check out
-                        pinColor = "FF0000";
-                    }
-                }
+                // pin color
+                var pinColor = "FE6256";//"BDBDBD";//FE6256
 
                 // Push the location to list
                 lat_lng.push(myLatlng);
@@ -1038,29 +1152,81 @@ var PosGmap = {
                 }
 
                 // Make the marker at each location
-                if (data.stop) {
-                    var marker = new google.maps.Marker({
-                        position: myLatlng,
-                        map: map,
-                        title: data.title,
-                        icon: Ext.String.format('Images/OM30400/circle_{0}.png', data.color ? data.color : "white"),
-                        //animation: google.maps.Animation.DROP,
-                        custId: data.custId
+                var markerLabel = data.visitSort;
+                var marker = new google.maps.Marker({
+                    id: data.id,
+                    position: myLatlng,
+                    map: map,
+                    title: data.title,
+                    icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor)
+                });
+
+                // Set info display of the marker
+                (function (marker, data) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent(data.description);
+                        infoWindow.open(map, marker);
+
+                        // Set animation of marker
+                        if (marker.getAnimation() != null) {
+                            marker.setAnimation(null);
+                        } else {
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                            setTimeout(function () {
+                                marker.setAnimation(null);
+                            }, 1400);
+                        }
                     });
+                })(marker, data);
+
+                PosGmap.stopMarkers.push(marker);
+            }
+
+            directionsDisplay.setMap(map);
+            //directionsDisplay.setOptions({ suppressMarkers: true });
+
+            if (showDirections) {
+                PosGmap.calcRoute(lat_lng);
+            }
+        }
+        else {
+            PosGmap.clearMap(PosGmap.stopMarkers);
+        }
+    },
+
+    drawMCL: function (markers, showDirections) {
+        PosGmap.prepairMap();
+
+        if (markers.length > 0) {
+            PosGmap.stopMarkers = [];
+            // List of locations
+            var lat_lng = new Array();
+
+            // For each marker in list
+            for (i = 0; i < markers.length; i++) {
+                var data = markers[i];
+                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+                // Maps center at the first location
+                if (i == 0) {
+                    var myOptions = {
+                        center: myLatlng,
+                        zoom: 16,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    map = new google.maps.Map(map_canvas, myOptions);
                 }
-                else {
-                    var markerLabel = i + 1;
-                    if (data.visitSort != undefined) {
-                        markerLabel = data.visitSort;
-                    }
-                    var marker = new google.maps.Marker({
-                        position: myLatlng,
-                        map: map,
-                        title: data.title,
-                        icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor)
-                        //animation: google.maps.Animation.DROP
-                    });
-                }
+
+                // Make the marker at each location
+                var marker = new google.maps.Marker({
+                    id: data.id,
+                    position: myLatlng,
+                    map: map,
+                    title: data.title,
+                    icon: Ext.String.format('Images/OM30400/circle_{0}.png', data.color ? data.color : "white"),
+                    //animation: google.maps.Animation.DROP,
+                    custId: data.custId
+                });
 
                 // Set info display of the marker
                 (function (marker, data) {
@@ -1092,15 +1258,248 @@ var PosGmap = {
 
         }
         else {
-            //PosGmap.initialize();
-            for (i = 0; i < PosGmap.stopMarkers.length; i++) {
-                PosGmap.stopMarkers[i].setMap(null);
+            PosGmap.clearMap(PosGmap.stopMarkers);
+        }
+    },
 
-                if (i == PosGmap.stopMarkers.length - 1) {
-                    PosGmap.stopMarkers = [];
+    drawAVC1: function (markers, showDirections) {
+        PosGmap.prepairMap();
+
+        if (markers.length > 0) {
+            PosGmap.stopMarkers = [];
+            // List of locations
+            var lat_lng = new Array();
+
+            // For each marker in lisr
+            for (i = 0; i < markers.length; i++) {
+                var data = markers[i];
+                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+                // Change color for Checkin and checkout point (for Actual Visit)
+                var pinColor = "BDBDBD";//FE6256
+                var visible = true;
+                if (data.type) {
+                    if (data.type == "IO") { // Check in
+                        pinColor = "CCFF33";
+                        // Push the location to list
+                        lat_lng.push(myLatlng);
+                    }
+                    else if (data.type == "OO") { // Check out
+                        pinColor = "FF0000";
+                        visible = false;
+                    }
                 }
+                else {
+                    // Push the location to list
+                    lat_lng.push(myLatlng);
+                }
+
+                // Maps center at the first location
+                if (i == 0) {
+                    var myOptions = {
+                        center: myLatlng,
+                        zoom: 16,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    map = new google.maps.Map(map_canvas, myOptions);
+                }
+
+                var markerLabel = data.label;
+                var marker = new google.maps.Marker({
+                    id: data.id,
+                    position: myLatlng,
+                    map: map,
+                    title: data.title,
+                    icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor),
+                    //animation: google.maps.Animation.DROP,
+                    visible: visible
+                });
+
+                // Set info display of the marker
+                (function (marker, data) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent(data.description);
+                        infoWindow.open(map, marker);
+
+                        // Set animation of marker
+                        if (marker.getAnimation() != null) {
+                            marker.setAnimation(null);
+                        } else {
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                            setTimeout(function () {
+                                marker.setAnimation(null);
+                            }, 1400);
+                        }
+                    });
+                })(marker, data);
+
+                PosGmap.stopMarkers.push(marker);
             }
+
             directionsDisplay.setMap(map);
+
+            if (showDirections) {
+                PosGmap.calcRoute(lat_lng);
+            }
+
+        }
+        else {
+            PosGmap.clearMap(PosGmap.stopMarkers);
+        }
+    },
+
+    drawAVC: function (markers, showDirections) {
+        PosGmap.prepairMap();
+
+        if (markers.length > 0) {
+            PosGmap.stopMarkers = [];
+            // List of locations
+            var lat_lng = new Array();
+
+            // For each marker in lisr
+            for (i = 0; i < markers.length; i++) {
+                var data = markers[i];
+                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+                // Change color for Checkin and checkout point (for Actual Visit)
+                var pinColor = "BDBDBD";//FE6256
+                if (data.type) {
+                    if (data.type == "IO") { // Check in
+                        pinColor = "CCFF33";
+                        // Push the location to list
+                        lat_lng.push(myLatlng);
+                    }
+                    else if (data.type == "OO") { // Check out
+                        pinColor = "FF0000";
+                    }
+                }
+                else {
+                    // Push the location to list
+                    lat_lng.push(myLatlng);
+                }
+
+                // Maps center at the first location
+                if (i == 0) {
+                    var myOptions = {
+                        center: myLatlng,
+                        zoom: 16,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    map = new google.maps.Map(map_canvas, myOptions);
+                }
+
+                var markerLabel = i + 1;
+                var marker = new google.maps.Marker({
+                    id: data.id,
+                    position: myLatlng,
+                    map: map,
+                    title: data.title,
+                    icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor),
+                    //animation: google.maps.Animation.DROP,
+                    visible: data.type == "OO" ? false : true
+                });
+
+                // Set info display of the marker
+                (function (marker, data) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent(data.description);
+                        infoWindow.open(map, marker);
+
+                        // Set animation of marker
+                        if (marker.getAnimation() != null) {
+                            marker.setAnimation(null);
+                        } else {
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                            setTimeout(function () {
+                                marker.setAnimation(null);
+                            }, 1400);
+                        }
+                    });
+                })(marker, data);
+
+                PosGmap.stopMarkers.push(marker);
+            }
+
+            directionsDisplay.setMap(map);
+
+            if (showDirections) {
+                PosGmap.calcRoute(lat_lng);
+            }
+
+        }
+        else {
+            PosGmap.clearMap(PosGmap.stopMarkers);
+        }
+    },
+
+    drawRoutes: function (markers, showDirections) {
+        PosGmap.prepairMap();
+
+        if (markers.length > 0) {
+            PosGmap.stopMarkers = [];
+            // List of locations
+            var lat_lng = new Array();
+
+            // For each marker in list
+            for (i = 0; i < markers.length; i++) {
+                var data = markers[i];
+                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+                // Pin color
+                var pinColor = "FE6256";
+
+                // Push the location to list
+                lat_lng.push(myLatlng);
+
+                // Maps center at the first location
+                if (i == 0) {
+                    var myOptions = {
+                        center: myLatlng,
+                        zoom: 16,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    map = new google.maps.Map(map_canvas, myOptions);
+                }
+
+                // Make the marker at each location
+                var markerLabel = i + 1;
+                var marker = new google.maps.Marker({
+                    id: data.id,
+                    position: myLatlng,
+                    map: map,
+                    title: data.title,
+                    icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor),
+                });
+
+                // Set info display of the marker
+                (function (marker, data) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent(data.description);
+                        infoWindow.open(map, marker);
+
+                        // Set animation of marker
+                        if (marker.getAnimation() != null) {
+                            marker.setAnimation(null);
+                        } else {
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                            setTimeout(function () {
+                                marker.setAnimation(null);
+                            }, 1400);
+                        }
+                    });
+                })(marker, data);
+
+                PosGmap.stopMarkers.push(marker);
+            }
+
+            directionsDisplay.setMap(map);
+
+            if (showDirections) {
+                PosGmap.calcRoute(lat_lng);
+            }
+        }
+        else {
+            PosGmap.clearMap(PosGmap.stopMarkers);
         }
     },
 
