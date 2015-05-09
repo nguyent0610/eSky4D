@@ -1,0 +1,196 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM23400;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM23400";
+    var acc = Session["OM23400"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/OM23400.js")' type="text/javascript"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.dateNow = new Date('@DateTime.Now.Date');
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+        @(
+            X.Store().ID("stoBonus")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM_TBonus), "mdlBonus", ""))
+            .ServerProxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetBonusInfo", "OM23400"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("bonusID", "App.cboBonusID.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Fn="Store.stoBonus_load" )
+            // Store: stoBonus
+        )
+
+        @(
+            X.Store().ID("stoBonusRS")
+            .AutoLoad(false).PageSize(50)//.RemotePaging(true)
+            .Model(Util.GenerateModel(typeof(OM23400_pgBonusRS_Result), "mdlBonusRS", ""))       
+            .ServerProxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetBonusRS", "OM23400"))                
+                //.ActionMethods(action =>
+                //{
+                //    action.Read = HttpMethod.POST;
+                //})
+                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("bonusID", "App.cboBonusID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(p => {
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr','AmtBegin','AmtEnd','AmtBonus'];";
+                p.Load.Fn = "Store.stoBonusRS_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+            // Store: stoBonusRS
+        )
+
+        @(
+            X.Store().ID("stoProduct")
+            .AutoLoad(false).PageSize(50)//.RemotePaging(true)
+            .Model(Util.GenerateModel(typeof(OM23400_pgProduct_Result), "mdlProduct", ""))       
+            .ServerProxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetProduct", "OM23400"))                
+                //.ActionMethods(action =>
+                //{
+                //    action.Read = HttpMethod.POST;
+                //})
+                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("bonusID", "App.cboBonusID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("productType", "App.cboRSApplyType.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(p => {
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['ProductID'];";
+                p.Load.Fn = "Store.stoBonusRS_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+            // Store: stoProduct
+        )
+
+        @(
+            X.Store().ID("stoMonth")
+            .AutoLoad(false).PageSize(50)//.RemotePaging(true)
+            .Model(Util.GenerateModel(typeof(OM23400_pgBonusKA_Result), "mdlMonth", ""))       
+            .ServerProxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetBonusKA", "OM23400"))                
+                //.ActionMethods(action =>
+                //{
+                //    action.Read = HttpMethod.POST;
+                //})
+                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("bonusID", "App.cboBonusID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("kaType", "M", ParameterMode.Value));
+            })
+            .Listeners(p => {
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr','ClassID'];";//,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
+                p.Load.Fn = "Store.stoBonusRS_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+            // Store: stoMonth
+        )
+
+        @(
+            X.Store().ID("stoQuarter")
+            .AutoLoad(false).PageSize(50)//.RemotePaging(true)
+            .Model(Util.GenerateModel(typeof(OM23400_pgBonusKA_Result), "mdlQuarter", ""))       
+            .ServerProxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetBonusKA", "OM23400"))                
+                //.ActionMethods(action =>
+                //{
+                //    action.Read = HttpMethod.POST;
+                //})
+                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("bonusID", "App.cboBonusID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("kaType", "Q", ParameterMode.Value));
+            })
+            .Listeners(p => {
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr','ClassID'];"; //,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
+                //p.Load.Fn = "Store.stoBonusRS_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+            // Store: stoQuarter
+        )
+
+        @(
+            X.Store().ID("stoYear")
+            .AutoLoad(false).PageSize(50)//.RemotePaging(true)
+            .Model(Util.GenerateModel(typeof(OM23400_pgBonusKA_Result), "mdlYear", ""))       
+            .ServerProxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetBonusKA", "OM23400"))                
+                //.ActionMethods(action =>
+                //{
+                //    action.Read = HttpMethod.POST;
+                //})
+                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("bonusID", "App.cboBonusID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("kaType", "Y", ParameterMode.Value));
+            })
+            .Listeners(p => {
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr','ClassID'];";//,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
+                //p.Load.Fn = "Store.stoBonusRS_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+            // Store: stoQuarter
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong OM23400Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>
