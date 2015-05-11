@@ -521,9 +521,17 @@
                         .Listeners(l => l.Click.Fn = "Index.btnGetCurrentLocation_click")
                     )
                     
-                    , HQ.Checkbox().ID("chkRealTime").HQLangCode("RealTime")
-                    .MarginSpec("5 5 0 105").Disabled(true)
-                    .Handler("Index.chkRealTime_change")
+                    , X.Container().Layout(LayoutType.HBox).Flex(1)
+                    .Items(
+                        HQ.Checkbox().ID("chkRealTime").HQLangCode("RealTime")
+                        .MarginSpec("5 5 0 105").Disabled(true).Flex(1)
+                        .Handler("Index.chkRealTime_change")
+                        
+                        ,HQ.Button().ID("btnExportExcelActual")
+                        .Icon(Icon.PageExcel).ToolTip(Util.GetLang("ExportExcel"))
+                        .MarginSpec("5 5 0 5").Disabled(true)
+                        .Handler("Index.btnExportExcelActual_click")
+                    )
                 )
         // Container
 
@@ -541,7 +549,8 @@
                     .StoreID("storeGridActualVisit")
                     .SortableColumns(false)
                     .ColumnModel(
-                        X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
+                        X.RowNumbererColumn().Width(30)
+                        .Listeners(x => x.AfterRender.Handler = "this.resizable = true")
                         , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustId")
                         , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").MinWidth(100).Flex(1)
                         , X.Column().Text(Util.GetLang("Checkin")).DataIndex("Checkin").Width(70).Renderer("Index.renderColorInOut")

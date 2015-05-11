@@ -325,16 +325,17 @@ namespace OM30400.Controllers
                     DataAccess dal = Util.Dal();
                     Style style = workbook.GetStyleInPool(0);
                     StyleFlag flag = new StyleFlag();
+                    var beforeColTexts = new string[] { "N0", "BranchID", "CpnyName", "SlsperID", "SlsName", "CustID", "CustName", "Address", "WeekofVisit", "DayOfWeek" };
 
                     #region header info
                     // Title header
                     SetCellValue(SheetMCP.Cells["A2"],
                         string.Format("{0} ({1})", Util.GetLang("OM30400EHeader"), Util.GetLang("DrawingArea")),
                         TextAlignmentType.Center, TextAlignmentType.Center, true, 16, true);
-                    SheetMCP.Cells.Merge(1, 0, 1, 10);
+                    SheetMCP.Cells.Merge(1, 0, 1, beforeColTexts.Length);
 
                     // Header text columns
-                    var beforeColTexts = new string[] { "N0", "BranchID", "CpnyName", "SlsperID", "SlsName", "CustID", "CustName", "Address","WeekofVisit", "DayOfWeek" };
+                    
                     for (int i = 0; i < beforeColTexts.Length; i++)
                     {
                         var cell = SheetMCP.Cells[3, i];
@@ -403,6 +404,99 @@ namespace OM30400.Controllers
                 }
             }
 
+        }
+
+        [DirectMethod]
+        public ActionResult ExportExcelActual(string distributor, string slsperId, string visitDate, bool realTime)
+        {
+            try
+            {
+                var headerRowIdx = 3;
+
+                Stream stream = new MemoryStream();
+                Workbook workbook = new Workbook();
+                Worksheet SheetMCP = workbook.Worksheets[0];
+                SheetMCP.Name = Util.GetLang("MCL");
+                DataAccess dal = Util.Dal();
+                Style style = workbook.GetStyleInPool(0);
+                StyleFlag flag = new StyleFlag();
+                var beforeColTexts = new string[] { "N0", "CustId", "CustName", "Checkin", "Checkout", "TGCICO", "Amt", "GPSCheckin", "GPSCheckout" };
+
+                #region header info
+                // Title header
+                SetCellValue(SheetMCP.Cells["A2"],
+                    string.Format("{0} ({1})", Util.GetLang("OM30400EHeader"), Util.GetLang("AVC")),
+                    TextAlignmentType.Center, TextAlignmentType.Center, true, 16, true);
+                SheetMCP.Cells.Merge(1, 0, 1, beforeColTexts.Length);
+
+                // Header text columns
+                for (int i = 0; i < beforeColTexts.Length; i++)
+                {
+                    var cell = SheetMCP.Cells[3, i];
+                    SetCellValue(cell, Util.GetLang(beforeColTexts[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10);
+                    //SheetMCP.Cells.Merge(headerRowIdx, colIdx, 1, 1);
+
+                    //Apply the border styles to the cell
+                    setCellStyle(cell);
+                }
+                var allColumns = new List<string>();
+                allColumns.AddRange(beforeColTexts);
+
+                #endregion
+
+                #region export data
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(Current.CpnyID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@Distributor", DbType.String, clsCommon.GetValueDBNull(distributor), ParameterDirection.Input, int.MaxValue));
+                pc.Add(new ParamStruct("@SlsperId", DbType.String, clsCommon.GetValueDBNull(slsperId), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@VisitDate", DbType.DateTime, clsCommon.GetValueDBNull(DateTime.Parse(visitDate)), ParameterDirection.Input, int.MaxValue));
+                pc.Add(new ParamStruct("@RealTime", DbType.Boolean, clsCommon.GetValueDBNull(realTime), ParameterDirection.Input, int.MaxValue));
+                
+
+                DataTable dtDataExport = dal.ExecDataTable("OM30400_pgGridActualVisit", CommandType.StoredProcedure, ref pc);
+                //SheetMCP.Cells.ImportDataTable(dtDataExport, false, "B6");// du lieu data export
+
+                for (int i = 0; i < dtDataExport.Rows.Count; i++)
+                {
+                    for (int j = 0; j < allColumns.Count; j++)
+                    {
+                        var cell = SheetMCP.Cells[4 + i, j];
+                        if (allColumns[j] == "N0")
+                        {
+                            cell.PutValue(i + 1);
+                        }
+                        else if (dtDataExport.Columns.Contains(allColumns[j]))
+                        {
+                            cell.PutValue(dtDataExport.Rows[i][allColumns[j]]);
+                        }
+
+                        //Apply the border styles to the cell
+                        setCellStyle(cell);
+                    }
+                }
+                #endregion
+                SheetMCP.AutoFitColumns();
+
+                //SheetPOSuggest.Protect(ProtectionType.Objects);
+                workbook.Save(stream, SaveFormat.Xlsx);
+                stream.Flush();
+                stream.Position = 0;
+
+                //return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = Util.GetLang("OM30400") + ".xlsx" };
+                return File(stream, "application/vnd.ms-excel", string.Format("{0}_{1}.xlsx", Util.GetLang("OM30400"), Util.GetLang("AVC")));
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
         }
 
         public ActionResult Download(string filePath, string fileName)

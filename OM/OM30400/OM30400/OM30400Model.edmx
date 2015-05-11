@@ -665,7 +665,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="56">
         <EntityTypeShape EntityType="OM30400Model.AR_Customer" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM30400Model.OM_SalesRouteMaster" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>

@@ -374,6 +374,7 @@ var Index = {
             App.cboSalesManActual.disable();
             App.btnGetCurrentLocation.disable();
             App.chkRealTime.disable();
+            App.btnExportExcelActual.disable();
 
             App.grdVisitCustomerActual.hide();
             App.grdAllCurrentSalesman.show();
@@ -382,6 +383,7 @@ var Index = {
             App.cboSalesManActual.enable();
             App.btnGetCurrentLocation.enable();
             App.chkRealTime.enable();
+            App.btnExportExcelActual.enable();
 
             App.grdVisitCustomerActual.show();
             App.grdAllCurrentSalesman.hide();
@@ -448,6 +450,27 @@ var Index = {
     chkRealTime_change: function (chk, newValue, oldValue, eOpts) {
         App.grdVisitCustomerActual.store.reload();
         //App.storeVisitCustomerActual.reload();
+    },
+
+    btnExportExcelActual_click: function (btn, eOpts) {
+        if (App.pnlActualVisit.isValid()) {
+            Ext.net.DirectMethod.request({
+                url: "OM30400/ExportExcelActual",
+                isUpload: true,
+                formProxyArg: "pnlActualVisit",
+                cleanRequest: true,
+                timeout: 1000000,
+                params: {
+                    distributor: Index.joinParams(App.cboDistributorActual),
+                    slsperId: App.cboSalesManActual.value,
+                    visitDate: App.dateVisit.value.toLocaleDateString(),
+                    realTime: App.chkRealTime.value
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
     },
 
     storeGridActualVisit_load: function (store, records, successful, eOpts) {
@@ -674,7 +697,7 @@ var Index = {
         }
     },
 
-    exportExcel: function (custIDs) {
+    exportCustomer: function (custIDs) {
         Ext.net.DirectMethod.request({
             url: "OM30400/ExportCustomer",
             isUpload: true,
@@ -993,7 +1016,7 @@ var PosGmap = {
             switch (eventName) {
                 case 'export_excel':
                     if (custIDs.length) {
-                        Index.exportExcel(custIDs);
+                        Index.exportCustomer(custIDs);
                     }
                     contextMenu.hide();
                     break;
