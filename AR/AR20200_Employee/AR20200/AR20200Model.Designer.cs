@@ -84,22 +84,6 @@ namespace AR20200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_Salesperson> AR_Salesperson
-        {
-            get
-            {
-                if ((_AR_Salesperson == null))
-                {
-                    _AR_Salesperson = base.CreateObjectSet<AR_Salesperson>("AR_Salesperson");
-                }
-                return _AR_Salesperson;
-            }
-        }
-        private ObjectSet<AR_Salesperson> _AR_Salesperson;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<HO_PendingTasks> HO_PendingTasks
         {
             get
@@ -144,6 +128,22 @@ namespace AR20200
             }
         }
         private ObjectSet<SI_ApprovalFlowStatus> _SI_ApprovalFlowStatus;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_Salesperson> AR_Salesperson
+        {
+            get
+            {
+                if ((_AR_Salesperson == null))
+                {
+                    _AR_Salesperson = base.CreateObjectSet<AR_Salesperson>("AR_Salesperson");
+                }
+                return _AR_Salesperson;
+            }
+        }
+        private ObjectSet<AR_Salesperson> _AR_Salesperson;
 
         #endregion
 
@@ -155,14 +155,6 @@ namespace AR20200
         public void AddToAR_SalesPerHist(AR_SalesPerHist aR_SalesPerHist)
         {
             base.AddObject("AR_SalesPerHist", aR_SalesPerHist);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Salesperson EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Salesperson(AR_Salesperson aR_Salesperson)
-        {
-            base.AddObject("AR_Salesperson", aR_Salesperson);
         }
     
         /// <summary>
@@ -187,6 +179,14 @@ namespace AR20200
         public void AddToSI_ApprovalFlowStatus(SI_ApprovalFlowStatus sI_ApprovalFlowStatus)
         {
             base.AddObject("SI_ApprovalFlowStatus", sI_ApprovalFlowStatus);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Salesperson EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Salesperson(AR_Salesperson aR_Salesperson)
+        {
+            base.AddObject("AR_Salesperson", aR_Salesperson);
         }
 
         #endregion

@@ -49,7 +49,7 @@
           <Property Name="ProductGroup" Type="varchar" MaxLength="20" />
           <Property Name="State" Type="varchar" MaxLength="10" />
           <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="DeliveryMan" Type="varchar" MaxLength="10" />
+          <Property Name="DeliveryMan" Type="varchar" MaxLength="30" />
           <Property Name="Position" Type="varchar" MaxLength="2" />
           <Property Name="LUpd_DateTime" Type="datetime" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
@@ -150,10 +150,10 @@
       <Schema Namespace="AR20200Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
         <EntityContainer Name="AR20200Entities" p1:LazyLoadingEnabled="true">
           <EntitySet Name="AR_SalesPerHist" EntityType="AR20200Model.AR_SalesPerHist" />
-          <EntitySet Name="AR_Salesperson" EntityType="AR20200Model.AR_Salesperson" />
           <EntitySet Name="HO_PendingTasks" EntityType="AR20200Model.HO_PendingTasks" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="AR20200Model.SI_ApprovalFlowHandle" />
           <EntitySet Name="SI_ApprovalFlowStatus" EntityType="AR20200Model.SI_ApprovalFlowStatus" />
+          <EntitySet Name="AR_Salesperson" EntityType="AR20200Model.AR_Salesperson" />
         </EntityContainer>
         <EntityType Name="AR_SalesPerHist">
           <Key>
@@ -174,43 +174,6 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-        </EntityType>
-        <EntityType Name="AR_Salesperson">
-          <Key>
-            <PropertyRef Name="SlsperId" />
-            <PropertyRef Name="BranchID" />
-          </Key>
-          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Addr1" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Double" Name="CmmnPct" />
-          <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="EMailAddr" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Fax" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Name" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ProductGroup" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="DeliveryMan" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Position" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Type="String" Name="District" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="SupID" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="CrLmt" />
-          <Property Type="Boolean" Name="Active" />
-          <Property Type="String" Name="PPCPassword" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="Boolean" Name="PPCStorePicReq" />
-          <Property Type="String" Name="VendID" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Status" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="Boolean" Name="PPCAdmin" Nullable="false" />
-          <Property Type="String" Name="Images" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="HO_PendingTasks">
           <Key>
@@ -287,6 +250,43 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="AR_Salesperson">
+          <Key>
+            <PropertyRef Name="SlsperId" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Addr1" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="CmmnPct" />
+          <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="EMailAddr" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Fax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Name" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ProductGroup" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DeliveryMan" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Position" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="District" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SupID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="CrLmt" />
+          <Property Type="Boolean" Name="Active" />
+          <Property Type="String" Name="PPCPassword" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="PPCStorePicReq" />
+          <Property Type="String" Name="VendID" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="PPCAdmin" Nullable="false" />
+          <Property Type="String" Name="Images" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -309,43 +309,6 @@
                 <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="Seq" ColumnName="Seq" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AR_Salesperson">
-            <EntityTypeMapping TypeName="AR20200Model.AR_Salesperson">
-              <MappingFragment StoreEntitySet="AR_Salesperson">
-                <ScalarProperty Name="Images" ColumnName="Images" />
-                <ScalarProperty Name="PPCAdmin" ColumnName="PPCAdmin" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="VendID" ColumnName="VendID" />
-                <ScalarProperty Name="PPCStorePicReq" ColumnName="PPCStorePicReq" />
-                <ScalarProperty Name="PPCPassword" ColumnName="PPCPassword" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="CrLmt" ColumnName="CrLmt" />
-                <ScalarProperty Name="SupID" ColumnName="SupID" />
-                <ScalarProperty Name="District" ColumnName="District" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="DeliveryMan" ColumnName="DeliveryMan" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="ProductGroup" ColumnName="ProductGroup" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="EMailAddr" ColumnName="EMailAddr" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="CmmnPct" ColumnName="CmmnPct" />
-                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
-                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
-                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -422,6 +385,43 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AR_Salesperson">
+            <EntityTypeMapping TypeName="AR20200Model.AR_Salesperson">
+              <MappingFragment StoreEntitySet="AR_Salesperson">
+                <ScalarProperty Name="Images" ColumnName="Images" />
+                <ScalarProperty Name="PPCAdmin" ColumnName="PPCAdmin" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+                <ScalarProperty Name="PPCStorePicReq" ColumnName="PPCStorePicReq" />
+                <ScalarProperty Name="PPCPassword" ColumnName="PPCPassword" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CrLmt" ColumnName="CrLmt" />
+                <ScalarProperty Name="SupID" ColumnName="SupID" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="DeliveryMan" ColumnName="DeliveryMan" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="ProductGroup" ColumnName="ProductGroup" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="EMailAddr" ColumnName="EMailAddr" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="CmmnPct" ColumnName="CmmnPct" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -445,10 +445,10 @@
     <Diagrams>
       <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
         <EntityTypeShape EntityType="AR20200Model.AR_SalesPerHist" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AR20200Model.AR_Salesperson" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AR20200Model.HO_PendingTasks" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AR20200Model.SI_ApprovalFlowHandle" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AR20200Model.SI_ApprovalFlowStatus" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AR20200Model.HO_PendingTasks" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AR20200Model.SI_ApprovalFlowHandle" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AR20200Model.SI_ApprovalFlowStatus" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AR20200Model.AR_Salesperson" Width="1.5" PointX="0.75" PointY="6.75" />
       </Diagram>
     </Diagrams>
   </Designer>
