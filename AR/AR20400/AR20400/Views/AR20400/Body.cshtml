@@ -18,41 +18,26 @@
  Html.X().Viewport().Layout(LayoutType.Fit)
 .Items(
         X.FormPanel()
-        .Layout(LayoutType.Column)
+        .Layout(LayoutType.Border)
         .ID("treeForm")
-        //.TrackResetOnLoad(true)
         .DefaultAnchor("100%")
-        //.AutoScroll(true)
         .AutoScroll(true)
         .BodyPadding(5)
         .TopBar(Util.SetupToolbar("Print",true))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
-        
-        //.Listeners(itm => itm.AfterRender.Fn = "frmloadAfterRender")
-        //.LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch })
+         .Listeners(l =>
+                    {
+                        l.BoxReady.Handler = "firstLoad();";
+                        l.FieldChange.Fn = "frmChange";
+                    })
         .Items(
-                X.FormPanel()
-                .AutoScroll(true)
-                .Layout(LayoutType.Fit)
-                .ColumnWidth(0.20)
-                .ID("frmTree")
-                
-                .TrackResetOnLoad(true)
-          
-                .BodyPadding(0)
-                //.TopBar(Util.SetupToolbar("Print",true))
-             
-                .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
-                .Items(
+ 
                 
                 
                     Html.X().TreePanel().ID("IDTree")
                     .Title("Tree")
-                    .Layout(LayoutType.Fit)
-                    //.AutoScroll(true)
-                    //.ColumnWidth(0.20)
-                    .Height(550)
-                    //.Width(250)
+                    .Region(Region.West).Flex(2)    
+                    .Split(true)  
                     .Border(false)
                     .SelectionModel(Html.X().TreeSelectionModel().ID("slmTree").Mode(SelectionMode.Multi))
                         //.Root(
@@ -63,31 +48,24 @@
                     {
                         lst.ItemClick.Fn = "NodeSelected_Change";
                     })
-                )
+
                 ,X.FormPanel()
-                .AutoScroll(true)
-                .Layout(LayoutType.Fit)
-                .ColumnWidth(0.80)
+                .Region(Region.Center).Flex(8)
+                .Layout(LayoutType.Border).Border(false)
+                .Split(true) 
                 .ID("frmMain")
-                
                 .TrackResetOnLoad(true)
-                //.DefaultAnchor("100%")
-                //.AnchorVertical("100%")
-                //.AnchorHorizontal("100%")
-                //.MarginSpec("0 50 0 50")
                 .BodyPadding(0)
-                //.TopBar(Util.SetupToolbar("Print",true))
-                 .Listeners(l =>
-                    {
-                        //l.Render.Handler = "HQ.common.control_render(this,'header')";
-                        l.BoxReady.Handler = "firstLoad();";
-                        l.FieldChange.Fn = "frmChange";
-                    })
                 .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
                 .Items(
-                    X.Panel().ID("Header").Layout(LayoutType.Fit)//.AutoScroll(true)
+                    X.Panel().ID("Header")
+                    .Layout(LayoutType.VBox)//.AutoScroll(true)
+                    .Border(false)
+                    .MarginSpec("3 5 0 0")
+                    .AutoScroll(true)
+                    .Region(Region.North) 
                     .Items(
-                        X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
+                        X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")//.Width(1235)
                         .Listeners(l =>
                         {
                             l.Render.Handler = "HQ.common.control_render(this,'header')";
@@ -212,17 +190,13 @@
                                         }) 
 
                                 )
-
-                                     , X.TabPanel()
-                                    .Layout(LayoutType.Anchor)
-                                    .ID("tabAtAR20400")
-                                    .Width(700)
-                                    .Height(800)
-                                    //.AnchorVertical("100%")
-                                    //.AnchorHorizontal("60%")
-                                    //.Width(800)
+                                    , X.Container().MarginSpec("5 0 0 0")
                                     
-                                    //.DefaultAnchor("100%")
+                                     , X.TabPanel()
+                                    .Region(Region.Center)   
+                                    .Border(false)
+                                    .AnchorVertical("100%")
+                                    .ID("tabAtAR20400")
                                     .Listeners(p =>
                                     {
                                         //p.AfterRender.Handler = "tabSA_Setup_AfterRender(this, 100)";
@@ -231,8 +205,8 @@
                                     .Items(
                                             X.Panel()
                                             .ID("tabCustInfo")
-                                            .Layout(LayoutType.Column)
-                  
+                                            .Layout(LayoutType.Anchor)
+                                            .Border(false) 
                                             .Title(Util.GetLang("CustInfo"))
                                             .Padding(5)
                                             .Listeners(l =>
@@ -257,7 +231,7 @@
                                                 .Items(
                                                 
                                                 X.FormPanel()
-                                                .Layout(LayoutType.Anchor)
+                                                .Layout(LayoutType.VBox)
                                                 .ID("frmTopLeftTab1")
                                                 .Title(Util.GetLang("Dktg"))
                                                 //.AutoScroll(true)
@@ -316,7 +290,7 @@
                                                 )
                                                 
                                                 ,X.FormPanel()
-                                                .Layout(LayoutType.Anchor)
+                                                .Layout(LayoutType.VBox)
                                                 .ID("frmTopRightTab1")
                                                 .Title(Util.GetLang("cdhm"))
                                                 //.AutoScroll(true)
@@ -369,19 +343,15 @@
                                                 
                                                 
                                                     X.FormPanel()
-                                                    .Layout(LayoutType.Anchor)
+                                                    .Layout(LayoutType.VBox)
                                                     .ID("frmBotLeftTab1")
                                                     .Title(Util.GetLang("CustClassify"))
-                                                    //.AutoScroll(true)
                                                     .TrackResetOnLoad(true)
-                                                    //.DefaultAnchor("100%")
                                                     .AnchorVertical("100%")
                                                     .AnchorHorizontal("100%")
                                                     .BodyPadding(5)
-                                                    //.TopBar(Util.SetupToolbar("Print",true))
                                                     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
                                                     .MarginSpec("0 5 0 0")
-                                                    //.MarginSpec("0 0 0 20")
                                                     .Items( 
                                                         
                                                     //vung ban hang
@@ -494,22 +464,13 @@
                                                     //ngoac ket thuc panel botleft
                                                     )
                                                     ,X.FormPanel()
-                                                    .Layout(LayoutType.Anchor)
+                                                    .Layout(LayoutType.VBox)
                                                     .ID("frmBotRightTab1")
-                                                    //.Title("Cai Dat Khac")
                                                     .Title(Util.GetLang("cdk"))
-                                                    //.AutoScroll(true)
                                                     .TrackResetOnLoad(true)
-                                                    //.DefaultAnchor("100%")
-                                                    //.AnchorVertical("100%")
-                                                    //.AnchorHorizontal("100%")
-                                                    .Weight(315)
-                                                    .Height(370)
                                                     .BodyPadding(5)
-                                                    //.TopBar(Util.SetupToolbar("Print",true))
                                                     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
                                                     .MarginSpec("0 5 0 0")
-                                                    //.MarginSpec("0 0 0 20")
                                                     .Items( 
                                                         //Nhan vien ban hang
                                                         HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQLangCode("SALESPERSON").HQProcedure("AR20400_pcSalesPerson")
@@ -648,8 +609,6 @@
                                                             {
                                                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                                                 lst.Focus.Handler = "this.forceSelection = true;";
-                                                                
-                                                                //lst.Focus.Fn = "Focus1_Change";
                                                             })  
                                                             
                                                          //So NV
@@ -689,20 +648,22 @@
                                            , X.Panel()
                                             .ID("tabAddress")
                                             .Layout(LayoutType.Anchor)
-                                            .AnchorHorizontal("100%")
-                                            .AnchorVertical("100%")
+                                            .Border(false)  
+                                            .BodyPadding(5)
+                                            //.AnchorHorizontal("100%")
+                                            //.AnchorVertical("100%")
                                             .Title(Util.GetLang("Address"))
-                                            .Padding(5)
+                                          
                                             .Listeners(l =>
                                             {
                                                 l.Render.Handler = "HQ.common.control_render(this,'header')";
                    
                                             })
                                             .Items(
-                                                X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1235)
+                                                X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0").Width(1250)
                                                 .Items(
                                             
-                                                        X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0").Width(140)
+                                                        X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0")
                                                         .Items(
                                                             
                                                             HQ.Label().HQLangCode("CUSTNAME").MarginSpec("45 0 0 50")
@@ -723,11 +684,11 @@
                                                         //ngoac dan hang doc label
                                                         )
                                                         
-                                                        ,X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0").Width(220)
+                                                        ,X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0")
                                                         .Items(
                                                             
                                                             X.FormPanel()
-                                                            .Layout(LayoutType.Anchor)
+                                                            .Layout(LayoutType.VBox)
                                                             .ID("frmLeftTab2")
                                                             //.Title("Cai Dat Khac")
                                                             .Title(Util.GetLang("MAINADDRESS"))
@@ -850,11 +811,11 @@
                                                             )
                                                         //ngoac dan hang doc panel 1 tab 2
                                                         )
-                                                        ,X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0").Width(350)
+                                                        ,X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0")//.Width(350)
                                                         .Items(
                                                             
                                                             X.FormPanel()
-                                                            .Layout(LayoutType.Anchor)
+                                                            .Layout(LayoutType.VBox)
                                                             .ID("frmRightTab2")
                                                             //.Title("Cai Dat Khac")
                                                             .Title(Util.GetLang("ADDRBILL"))
@@ -958,9 +919,9 @@
                                            )
                                            , X.Panel()
                                                 .ID("tabTax")
-                                                .Layout(LayoutType.Anchor)
-                                                .AnchorHorizontal("100%")
-                                                .AnchorVertical("100%")
+                                                .Layout(LayoutType.VBox)
+                                                //.AnchorHorizontal("100%")
+                                                //.AnchorVertical("100%")
                                                 .Padding(5)
                                                 .Title(Util.GetLang("Tax"))
                                                 .CloseAction(CloseAction.Hide)
@@ -971,7 +932,7 @@
                                                 })
                                                 .Items(
                                                     
-                                                    X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0").Width(550)
+                                                    X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 0 0").Width(2250)
                                                     .Items(
                                                     
                                                         X.FormPanel()
@@ -1051,8 +1012,6 @@
                                                             {
                                                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearVal0ue();}";
                                                                 lst.Focus.Handler = "this.forceSelection = true;";
-                                                                //lst.Change.Fn = "cboCustID_Change";
-                                           
                                                             })
                                                             
                                                             //Muc thue 3
@@ -1106,11 +1065,11 @@
                                                 , X.Panel()
                                                 .ID("tabLTT")
                                                 .Layout(LayoutType.Border)
-                                                .AnchorHorizontal("100%")
-                                                .AnchorVertical("100%")
+                                                //.AnchorHorizontal("100%")
+                                                //.AnchorVertical("100%")
                                                 .Padding(0)
                                                 .Title(Util.GetLang("LTTCONT"))
-                                                .CloseAction(CloseAction.Hide)
+                                                //.CloseAction(CloseAction.Hide)
                                                 .AutoScroll(true)
                                                 //.Collapsed(true)
                                                 //.Disabled(true)
@@ -1127,10 +1086,8 @@
                                                         .View(X.GridView().TrackOver(false))
                                                         .ID("grdTop")
                                                         .StoreID("storeGridLTTTop")
-                                                                
                                                         .Listeners(p =>
                                                         {
-                                                            // p.BoxReady.Handler = "firstLoadTop();";
                                                             p.Render.Handler = "HQ.common.control_render(this,'grdLTTContract');";    
                                                             p.Select.Fn = "GridTop_Change";
                                                         })

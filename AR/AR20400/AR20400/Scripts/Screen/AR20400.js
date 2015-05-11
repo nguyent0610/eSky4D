@@ -617,8 +617,8 @@ var deleteRecordForm = function (item) {
             url: 'AR20400/AR20400DeleteHeader',
             params: {
                 custID: App.cboCustId.getValue(),
-                cpnyID: App.cboCpnyID.getValue(),
-                status: App.cboStatus.value
+                branchID: App.cboCpnyID.getValue(),
+                status: App.cboStatus.getValue()
             },
             //App.direct.AR20400Delete(App.cboCustId.getValue(),App.cboCpnyID.value,App.cboStatus.value, {
             success: function (data) {
@@ -864,7 +864,7 @@ var cboCpnyID_Change = function (sender, newValue, oldValue) {
         },
         failure: function (action, data) {
             tmpHiddenTree = true;
-            App.frmTree.hide();
+            App.IDTree.hide();
             //set bien tam va an hay hien tabLTT
             if (data.result.tmpHiddenTabContract == false) {
                 tmpHiddenTabLTT = false;
@@ -1044,11 +1044,11 @@ var storeLoad = function (store) {
 
         store.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
         HQ.isNew = true;//record la new
-        if (tmpAutoCustID == false) {
-            App.cboCustId.forceSelection = false;
-        } else {
-            App.cboCustId.forceSelection = true;
-        }
+        //if (tmpAutoCustID == false) {
+        //    App.cboCustId.forceSelection = false;
+        //} else {
+        //    App.cboCustId.forceSelection = true;
+        //}
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboCustId.focus(true);//focus ma khi tao moi
 

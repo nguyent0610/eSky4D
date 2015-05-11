@@ -260,22 +260,6 @@ namespace AR20400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_Customer> AR_Customer
-        {
-            get
-            {
-                if ((_AR_Customer == null))
-                {
-                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
-                }
-                return _AR_Customer;
-            }
-        }
-        private ObjectSet<AR_Customer> _AR_Customer;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SI_ApprovalFlowHandle> SI_ApprovalFlowHandle
         {
             get
@@ -288,6 +272,22 @@ namespace AR20400
             }
         }
         private ObjectSet<SI_ApprovalFlowHandle> _SI_ApprovalFlowHandle;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_Customer> AR_Customer
+        {
+            get
+            {
+                if ((_AR_Customer == null))
+                {
+                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
+                }
+                return _AR_Customer;
+            }
+        }
+        private ObjectSet<AR_Customer> _AR_Customer;
 
         #endregion
 
@@ -390,122 +390,24 @@ namespace AR20400
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Customer(AR_Customer aR_Customer)
-        {
-            base.AddObject("AR_Customer", aR_Customer);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the SI_ApprovalFlowHandle EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToSI_ApprovalFlowHandle(SI_ApprovalFlowHandle sI_ApprovalFlowHandle)
         {
             base.AddObject("SI_ApprovalFlowHandle", sI_ApprovalFlowHandle);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Customer(AR_Customer aR_Customer)
+        {
+            base.AddObject("AR_Customer", aR_Customer);
+        }
 
         #endregion
 
         #region Function Imports
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="classID">No Metadata Documentation available.</param>
-        public ObjectResult<ppv_AR20400_getCompany_Result> ppv_AR20400_getCompany(global::System.String classID)
-        {
-            ObjectParameter classIDParameter;
-            if (classID != null)
-            {
-                classIDParameter = new ObjectParameter("ClassID", classID);
-            }
-            else
-            {
-                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<ppv_AR20400_getCompany_Result>("ppv_AR20400_getCompany", classIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="type">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Int16>> SI_GetMaxHierarchyLevel(global::System.String type)
-        {
-            ObjectParameter typeParameter;
-            if (type != null)
-            {
-                typeParameter = new ObjectParameter("Type", type);
-            }
-            else
-            {
-                typeParameter = new ObjectParameter("Type", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<Nullable<global::System.Int16>>("SI_GetMaxHierarchyLevel", typeParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="invtID">No Metadata Documentation available.</param>
-        public ObjectResult<ppv_AR20400_getCompanyInvt_Result> ppv_AR20400_getCompanyInvt(global::System.String invtID)
-        {
-            ObjectParameter invtIDParameter;
-            if (invtID != null)
-            {
-                invtIDParameter = new ObjectParameter("InvtID", invtID);
-            }
-            else
-            {
-                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<ppv_AR20400_getCompanyInvt_Result>("ppv_AR20400_getCompanyInvt", invtIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        /// <param name="status">No Metadata Documentation available.</param>
-        /// <param name="roles">No Metadata Documentation available.</param>
-        public ObjectResult<PPV_AR20400Handle_Result> PPV_AR20400Handle(Nullable<global::System.Int16> langID, global::System.String status, global::System.String roles)
-        {
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            ObjectParameter statusParameter;
-            if (status != null)
-            {
-                statusParameter = new ObjectParameter("Status", status);
-            }
-            else
-            {
-                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
-            }
-    
-            ObjectParameter rolesParameter;
-            if (roles != null)
-            {
-                rolesParameter = new ObjectParameter("Roles", roles);
-            }
-            else
-            {
-                rolesParameter = new ObjectParameter("Roles", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<PPV_AR20400Handle_Result>("PPV_AR20400Handle", langIDParameter, statusParameter, rolesParameter);
-        }
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -8745,313 +8647,6 @@ namespace AR20400
         private global::System.Int32 _ParentRecordID;
         partial void OnParentRecordIDChanging(global::System.Int32 value);
         partial void OnParentRecordIDChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="ppv_AR20400_getCompany_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class ppv_AR20400_getCompany_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new ppv_AR20400_getCompany_Result object.
-        /// </summary>
-        /// <param name="classID">Initial value of the ClassID property.</param>
-        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
-        public static ppv_AR20400_getCompany_Result Createppv_AR20400_getCompany_Result(global::System.String classID, global::System.String cpnyID)
-        {
-            ppv_AR20400_getCompany_Result ppv_AR20400_getCompany_Result = new ppv_AR20400_getCompany_Result();
-            ppv_AR20400_getCompany_Result.ClassID = classID;
-            ppv_AR20400_getCompany_Result.CpnyID = cpnyID;
-            return ppv_AR20400_getCompany_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String ClassID
-        {
-            get
-            {
-                return _ClassID;
-            }
-            set
-            {
-                OnClassIDChanging(value);
-                ReportPropertyChanging("ClassID");
-                _ClassID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ClassID");
-                OnClassIDChanged();
-            }
-        }
-        private global::System.String _ClassID;
-        partial void OnClassIDChanging(global::System.String value);
-        partial void OnClassIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyID
-        {
-            get
-            {
-                return _CpnyID;
-            }
-            set
-            {
-                OnCpnyIDChanging(value);
-                ReportPropertyChanging("CpnyID");
-                _CpnyID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CpnyID");
-                OnCpnyIDChanged();
-            }
-        }
-        private global::System.String _CpnyID;
-        partial void OnCpnyIDChanging(global::System.String value);
-        partial void OnCpnyIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="ppv_AR20400_getCompanyInvt_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class ppv_AR20400_getCompanyInvt_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new ppv_AR20400_getCompanyInvt_Result object.
-        /// </summary>
-        /// <param name="invtID">Initial value of the InvtID property.</param>
-        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
-        public static ppv_AR20400_getCompanyInvt_Result Createppv_AR20400_getCompanyInvt_Result(global::System.String invtID, global::System.String cpnyID)
-        {
-            ppv_AR20400_getCompanyInvt_Result ppv_AR20400_getCompanyInvt_Result = new ppv_AR20400_getCompanyInvt_Result();
-            ppv_AR20400_getCompanyInvt_Result.InvtID = invtID;
-            ppv_AR20400_getCompanyInvt_Result.CpnyID = cpnyID;
-            return ppv_AR20400_getCompanyInvt_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String InvtID
-        {
-            get
-            {
-                return _InvtID;
-            }
-            set
-            {
-                OnInvtIDChanging(value);
-                ReportPropertyChanging("InvtID");
-                _InvtID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("InvtID");
-                OnInvtIDChanged();
-            }
-        }
-        private global::System.String _InvtID;
-        partial void OnInvtIDChanging(global::System.String value);
-        partial void OnInvtIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyID
-        {
-            get
-            {
-                return _CpnyID;
-            }
-            set
-            {
-                OnCpnyIDChanging(value);
-                ReportPropertyChanging("CpnyID");
-                _CpnyID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CpnyID");
-                OnCpnyIDChanged();
-            }
-        }
-        private global::System.String _CpnyID;
-        partial void OnCpnyIDChanging(global::System.String value);
-        partial void OnCpnyIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="AR20400Model", Name="PPV_AR20400Handle_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class PPV_AR20400Handle_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new PPV_AR20400Handle_Result object.
-        /// </summary>
-        /// <param name="code">Initial value of the Code property.</param>
-        public static PPV_AR20400Handle_Result CreatePPV_AR20400Handle_Result(global::System.String code)
-        {
-            PPV_AR20400Handle_Result pPV_AR20400Handle_Result = new PPV_AR20400Handle_Result();
-            pPV_AR20400Handle_Result.Code = code;
-            return pPV_AR20400Handle_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String ToStatus
-        {
-            get
-            {
-                return _ToStatus;
-            }
-            set
-            {
-                OnToStatusChanging(value);
-                ReportPropertyChanging("ToStatus");
-                _ToStatus = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("ToStatus");
-                OnToStatusChanged();
-            }
-        }
-        private global::System.String _ToStatus;
-        partial void OnToStatusChanging(global::System.String value);
-        partial void OnToStatusChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Code
-        {
-            get
-            {
-                return _Code;
-            }
-            set
-            {
-                OnCodeChanging(value);
-                ReportPropertyChanging("Code");
-                _Code = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Code");
-                OnCodeChanged();
-            }
-        }
-        private global::System.String _Code;
-        partial void OnCodeChanging(global::System.String value);
-        partial void OnCodeChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Descr
-        {
-            get
-            {
-                return _Descr;
-            }
-            set
-            {
-                OnDescrChanging(value);
-                ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Descr");
-                OnDescrChanged();
-            }
-        }
-        private global::System.String _Descr;
-        partial void OnDescrChanging(global::System.String value);
-        partial void OnDescrChanged();
 
         #endregion
 

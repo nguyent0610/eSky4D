@@ -22,7 +22,6 @@ namespace AR20400.Controllers
         string screenNbr = "AR20400";
         AR20400Entities _db = Util.CreateObjectContext<AR20400Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-        string b = "";
         string tmpChangeTreeDic = "0";
         string brandID = Current.CpnyID;
         string lang = Current.LangID.ToString();
@@ -362,7 +361,7 @@ namespace AR20400.Controllers
                                     if (objAR_Customer.CustId != "" && objAR_Customer.BranchID != "")
                                     {
                                         _db.AR_Customer.AddObject(objAR_Customer);
-                                        _db.SaveChanges();
+                                        //_db.SaveChanges();
                                     }
 
                                     //save may bang khac
@@ -389,9 +388,9 @@ namespace AR20400.Controllers
                                         objCustHist.ToDate = DateTime.Now.ToDateShort().AddYears(100);
                                         _db.AR_CustHist.AddObject(objCustHist);
                                         // SubmitchangeAR_Customer();
-                                        _db.SaveChanges();
+                                        //_db.SaveChanges();
                                         SaveAR_SOAddress(data, isNew);
-                                        _db.SaveChanges();
+                                        //_db.SaveChanges();
                                     }
                                     else
                                     {
@@ -415,9 +414,9 @@ namespace AR20400.Controllers
                                         objCustHist.ToDate = DateTime.Now.ToDateShort().AddYears(100);
                                         _db.AR_CustHist.AddObject(objCustHist);
                                         // SubmitchangeAR_Customer();
-                                        _db.SaveChanges();
+                                       // _db.SaveChanges();
                                         SaveAR_SOAddress(data, isNew);
-                                        _db.SaveChanges();
+                                        //_db.SaveChanges();
                                     }
                                 }
                             }
@@ -430,6 +429,7 @@ namespace AR20400.Controllers
                                 {
                                     if (objAR_Customer.tstamp.ToHex() == updated.tstamp.ToHex())
                                     {
+                                        tmpCustID = objAR_Customer.CustId;
                                         if (handle == "N" || handle == "")
                                         {
                                             objAR_Customer.Status = status;
@@ -460,7 +460,7 @@ namespace AR20400.Controllers
                                     {
                                         throw new MessageException(MessageType.Message, "19");
                                     }
-                                    _db.SaveChanges();
+                                   // _db.SaveChanges();
 
 
                                 }
@@ -508,7 +508,7 @@ namespace AR20400.Controllers
                                     {
                                         throw new MessageException(MessageType.Message, "19");
                                     }
-                                    _db.SaveChanges();
+                                    //_db.SaveChanges();
                                 }
 
                             }
@@ -562,7 +562,7 @@ namespace AR20400.Controllers
                                 //tmpChangeTreeDic = "1";
                             }
 
-                            _db.SaveChanges();
+                            //_db.SaveChanges();
                         }
 
 
@@ -794,7 +794,7 @@ namespace AR20400.Controllers
                             if (cpny.AutoCustID == false)
                             {
                                 objAR_Customer.CustId = custID;
-                                tmpCustID = objAR_Customer.CustId ;
+                                tmpCustID = objAR_Customer.CustId;
                             }
                             else
                             {
@@ -915,6 +915,7 @@ namespace AR20400.Controllers
 
                             if (objAR_Customer.tstamp.ToHex() == updated.tstamp.ToHex())
                             {
+                                tmpCustID = objAR_Customer.CustId;
                                 if (handle == "N" || handle == "")
                                 {
                                     objAR_Customer.Status = status;
@@ -1052,7 +1053,7 @@ namespace AR20400.Controllers
                         foreach (var del in delAR_SOAddress)
                         {
                             _db.AR_SOAddress.DeleteObject(del);
-                            _db.SaveChanges();
+                            //_db.SaveChanges();
                         }
 
                     }
@@ -1068,12 +1069,12 @@ namespace AR20400.Controllers
                                 foreach (var delDetail in delLTTContractDetail)
                                 {
                                     _db.AR_LTTContractDetail.DeleteObject(delDetail);
-                                    _db.SaveChanges();
+                                    //_db.SaveChanges();
                                 }
                             }
 
                             _db.AR_LTTContract.DeleteObject(delContract);
-                            _db.SaveChanges();
+                            //_db.SaveChanges();
                         }
                       
                     }
@@ -1084,7 +1085,7 @@ namespace AR20400.Controllers
                         foreach (var delAdv in delAR_CustAdvTool)
                         {
                             _db.AR_CustAdvTool.DeleteObject(delAdv);
-                            _db.SaveChanges();
+                            //_db.SaveChanges();
                         }
                     }
 
@@ -1094,7 +1095,7 @@ namespace AR20400.Controllers
                         foreach (var delSellingProd in delCustSellingProducts)
                         {
                             _db.AR_CustSellingProducts.DeleteObject(delSellingProd);
-                            _db.SaveChanges();
+                            //_db.SaveChanges();
                         }
                     }
 
@@ -1104,7 +1105,7 @@ namespace AR20400.Controllers
                         foreach (var delDispMethod in delCustDisplayMethod)
                         {
                             _db.AR_CustDisplayMethod.DeleteObject(delDispMethod);
-                            _db.SaveChanges();
+                            //_db.SaveChanges();
                         }
                     }
 
