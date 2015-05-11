@@ -55,7 +55,7 @@
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
                         ,new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw) 
-                        ,new StoreParameter("@Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw) 
+                        ,new StoreParameter("@Zone", "Process.joinParams(App.cboZone)", ParameterMode.Raw) 
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -72,8 +72,8 @@
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
                         ,new StoreParameter("@BranchID", "HQ.cpnyID", ParameterMode.Raw)
-                        ,new StoreParameter("@Zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw) 
-                        ,new StoreParameter("@Territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw) 
+                        ,new StoreParameter("@Zone", "Process.joinParams(App.cboZone)", ParameterMode.Raw) 
+                        ,new StoreParameter("@Territory", "Process.joinParams(App.cboTerritory)", ParameterMode.Raw) 
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -88,7 +88,7 @@
                     .HQHeightWidth(400, 300)//.MultiSelect(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@CpnyID", "App.cboCpny.getValue().join(',')", ParameterMode.Raw) 
+                        new StoreParameter("@CpnyID", "Process.joinParams(App.cboCpny)", ParameterMode.Raw) 
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -200,7 +200,7 @@
                 , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")
                 , X.Column().Text(Util.GetLang("DisplayID")).DataIndex("DisplayID")
                 , X.Column().Text(Util.GetLang("LevelID")).DataIndex("LevelID")
-                , X.Column().Text(Util.GetLang("Rate")).DataIndex("Rate").Align(Alignment.Right)
+                //, X.Column().Text(Util.GetLang("Rate")).DataIndex("Rate").Align(Alignment.Right)
                 , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Renderer("Process.renderStatus")
             )
             .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))

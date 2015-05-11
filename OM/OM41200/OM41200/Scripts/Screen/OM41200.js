@@ -1,6 +1,20 @@
 var _beginStatus = "H";
 
 var Process = {
+    joinParams: function (multiCombo) {
+        var returnValue = "";
+        if (multiCombo.value && multiCombo.value.length) {
+            returnValue = multiCombo.value.join();
+        }
+        else {
+            if (multiCombo.getValue()) {
+                returnValue = multiCombo.rawValue;
+            }
+        }
+
+        return returnValue;
+    },
+
     renderStatus: function (value) {
         var record = App.cboStatus.store.findRecord("Code",value);
         if (record) {
