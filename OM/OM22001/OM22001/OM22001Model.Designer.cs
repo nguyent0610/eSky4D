@@ -68,70 +68,6 @@ namespace OM22001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_TDisplay> OM_TDisplay
-        {
-            get
-            {
-                if ((_OM_TDisplay == null))
-                {
-                    _OM_TDisplay = base.CreateObjectSet<OM_TDisplay>("OM_TDisplay");
-                }
-                return _OM_TDisplay;
-            }
-        }
-        private ObjectSet<OM_TDisplay> _OM_TDisplay;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<OM_TDisplayCpny> OM_TDisplayCpny
-        {
-            get
-            {
-                if ((_OM_TDisplayCpny == null))
-                {
-                    _OM_TDisplayCpny = base.CreateObjectSet<OM_TDisplayCpny>("OM_TDisplayCpny");
-                }
-                return _OM_TDisplayCpny;
-            }
-        }
-        private ObjectSet<OM_TDisplayCpny> _OM_TDisplayCpny;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<OM_TDisplayInventory> OM_TDisplayInventory
-        {
-            get
-            {
-                if ((_OM_TDisplayInventory == null))
-                {
-                    _OM_TDisplayInventory = base.CreateObjectSet<OM_TDisplayInventory>("OM_TDisplayInventory");
-                }
-                return _OM_TDisplayInventory;
-            }
-        }
-        private ObjectSet<OM_TDisplayInventory> _OM_TDisplayInventory;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<OM_TDisplayLevel> OM_TDisplayLevel
-        {
-            get
-            {
-                if ((_OM_TDisplayLevel == null))
-                {
-                    _OM_TDisplayLevel = base.CreateObjectSet<OM_TDisplayLevel>("OM_TDisplayLevel");
-                }
-                return _OM_TDisplayLevel;
-            }
-        }
-        private ObjectSet<OM_TDisplayLevel> _OM_TDisplayLevel;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<HO_PendingTasks> HO_PendingTasks
         {
             get
@@ -164,54 +100,54 @@ namespace OM22001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_TDisplayLocation> OM_TDisplayLocation
+        public ObjectSet<OM_TDisplay> OM_TDisplay
         {
             get
             {
-                if ((_OM_TDisplayLocation == null))
+                if ((_OM_TDisplay == null))
                 {
-                    _OM_TDisplayLocation = base.CreateObjectSet<OM_TDisplayLocation>("OM_TDisplayLocation");
+                    _OM_TDisplay = base.CreateObjectSet<OM_TDisplay>("OM_TDisplay");
                 }
-                return _OM_TDisplayLocation;
+                return _OM_TDisplay;
             }
         }
-        private ObjectSet<OM_TDisplayLocation> _OM_TDisplayLocation;
+        private ObjectSet<OM_TDisplay> _OM_TDisplay;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_TDisplayCpny> OM_TDisplayCpny
+        {
+            get
+            {
+                if ((_OM_TDisplayCpny == null))
+                {
+                    _OM_TDisplayCpny = base.CreateObjectSet<OM_TDisplayCpny>("OM_TDisplayCpny");
+                }
+                return _OM_TDisplayCpny;
+            }
+        }
+        private ObjectSet<OM_TDisplayCpny> _OM_TDisplayCpny;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_TDisplayLevel> OM_TDisplayLevel
+        {
+            get
+            {
+                if ((_OM_TDisplayLevel == null))
+                {
+                    _OM_TDisplayLevel = base.CreateObjectSet<OM_TDisplayLevel>("OM_TDisplayLevel");
+                }
+                return _OM_TDisplayLevel;
+            }
+        }
+        private ObjectSet<OM_TDisplayLevel> _OM_TDisplayLevel;
 
         #endregion
 
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_TDisplay EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_TDisplay(OM_TDisplay oM_TDisplay)
-        {
-            base.AddObject("OM_TDisplay", oM_TDisplay);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_TDisplayCpny EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_TDisplayCpny(OM_TDisplayCpny oM_TDisplayCpny)
-        {
-            base.AddObject("OM_TDisplayCpny", oM_TDisplayCpny);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_TDisplayInventory EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_TDisplayInventory(OM_TDisplayInventory oM_TDisplayInventory)
-        {
-            base.AddObject("OM_TDisplayInventory", oM_TDisplayInventory);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_TDisplayLevel EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_TDisplayLevel(OM_TDisplayLevel oM_TDisplayLevel)
-        {
-            base.AddObject("OM_TDisplayLevel", oM_TDisplayLevel);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the HO_PendingTasks EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -230,11 +166,27 @@ namespace OM22001
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_TDisplayLocation EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the OM_TDisplay EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToOM_TDisplayLocation(OM_TDisplayLocation oM_TDisplayLocation)
+        public void AddToOM_TDisplay(OM_TDisplay oM_TDisplay)
         {
-            base.AddObject("OM_TDisplayLocation", oM_TDisplayLocation);
+            base.AddObject("OM_TDisplay", oM_TDisplay);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_TDisplayCpny EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_TDisplayCpny(OM_TDisplayCpny oM_TDisplayCpny)
+        {
+            base.AddObject("OM_TDisplayCpny", oM_TDisplayCpny);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_TDisplayLevel EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_TDisplayLevel(OM_TDisplayLevel oM_TDisplayLevel)
+        {
+            base.AddObject("OM_TDisplayLevel", oM_TDisplayLevel);
         }
 
         #endregion
@@ -313,7 +265,8 @@ namespace OM22001
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="displayID">No Metadata Documentation available.</param>
-        public ObjectResult<OM22001_pgLevel_Result> OM22001_pgLevel(global::System.String displayID)
+        /// <param name="displayType">No Metadata Documentation available.</param>
+        public ObjectResult<OM22001_pgLevel_Result> OM22001_pgLevel(global::System.String displayID, global::System.String displayType)
         {
             ObjectParameter displayIDParameter;
             if (displayID != null)
@@ -325,45 +278,17 @@ namespace OM22001
                 displayIDParameter = new ObjectParameter("DisplayID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM22001_pgLevel_Result>("OM22001_pgLevel", displayIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="displayID">No Metadata Documentation available.</param>
-        public ObjectResult<OM22001_pgInventory_Result> OM22001_pgInventory(global::System.String displayID)
-        {
-            ObjectParameter displayIDParameter;
-            if (displayID != null)
+            ObjectParameter displayTypeParameter;
+            if (displayType != null)
             {
-                displayIDParameter = new ObjectParameter("DisplayID", displayID);
+                displayTypeParameter = new ObjectParameter("DisplayType", displayType);
             }
             else
             {
-                displayIDParameter = new ObjectParameter("DisplayID", typeof(global::System.String));
+                displayTypeParameter = new ObjectParameter("DisplayType", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM22001_pgInventory_Result>("OM22001_pgInventory", displayIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="displayID">No Metadata Documentation available.</param>
-        public ObjectResult<OM22001_pgLocation_Result> OM22001_pgLocation(global::System.String displayID)
-        {
-            ObjectParameter displayIDParameter;
-            if (displayID != null)
-            {
-                displayIDParameter = new ObjectParameter("DisplayID", displayID);
-            }
-            else
-            {
-                displayIDParameter = new ObjectParameter("DisplayID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<OM22001_pgLocation_Result>("OM22001_pgLocation", displayIDParameter);
+            return base.ExecuteFunction<OM22001_pgLevel_Result>("OM22001_pgLevel", displayIDParameter, displayTypeParameter);
         }
 
         #endregion
@@ -1266,6 +1191,30 @@ namespace OM22001
         private global::System.String _Specification;
         partial void OnSpecificationChanging(global::System.String value);
         partial void OnSpecificationChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayType
+        {
+            get
+            {
+                return _DisplayType;
+            }
+            set
+            {
+                OnDisplayTypeChanging(value);
+                ReportPropertyChanging("DisplayType");
+                _DisplayType = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DisplayType");
+                OnDisplayTypeChanged();
+            }
+        }
+        private global::System.String _DisplayType;
+        partial void OnDisplayTypeChanging(global::System.String value);
+        partial void OnDisplayTypeChanged();
 
         #endregion
 
@@ -1287,11 +1236,25 @@ namespace OM22001
         /// </summary>
         /// <param name="displayID">Initial value of the DisplayID property.</param>
         /// <param name="cpnyID">Initial value of the CpnyID property.</param>
-        public static OM_TDisplayCpny CreateOM_TDisplayCpny(global::System.String displayID, global::System.String cpnyID)
+        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
+        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
+        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static OM_TDisplayCpny CreateOM_TDisplayCpny(global::System.String displayID, global::System.String cpnyID, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_TDisplayCpny oM_TDisplayCpny = new OM_TDisplayCpny();
             oM_TDisplayCpny.DisplayID = displayID;
             oM_TDisplayCpny.CpnyID = cpnyID;
+            oM_TDisplayCpny.Crtd_DateTime = crtd_DateTime;
+            oM_TDisplayCpny.Crtd_Prog = crtd_Prog;
+            oM_TDisplayCpny.Crtd_User = crtd_User;
+            oM_TDisplayCpny.LUpd_DateTime = lUpd_DateTime;
+            oM_TDisplayCpny.LUpd_Prog = lUpd_Prog;
+            oM_TDisplayCpny.LUpd_User = lUpd_User;
+            oM_TDisplayCpny.tstamp = tstamp;
             return oM_TDisplayCpny;
         }
 
@@ -1352,158 +1315,6 @@ namespace OM22001
         private global::System.String _CpnyID;
         partial void OnCpnyIDChanging(global::System.String value);
         partial void OnCpnyIDChanged();
-
-        #endregion
-
-    
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="OM22001Model", Name="OM_TDisplayInventory")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class OM_TDisplayInventory : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new OM_TDisplayInventory object.
-        /// </summary>
-        /// <param name="displayID">Initial value of the DisplayID property.</param>
-        /// <param name="invtID">Initial value of the InvtID property.</param>
-        /// <param name="pPTB">Initial value of the PPTB property.</param>
-        /// <param name="qty">Initial value of the Qty property.</param>
-        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
-        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
-        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
-        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
-        /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_TDisplayInventory CreateOM_TDisplayInventory(global::System.String displayID, global::System.String invtID, global::System.String pPTB, global::System.Double qty, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
-        {
-            OM_TDisplayInventory oM_TDisplayInventory = new OM_TDisplayInventory();
-            oM_TDisplayInventory.DisplayID = displayID;
-            oM_TDisplayInventory.InvtID = invtID;
-            oM_TDisplayInventory.PPTB = pPTB;
-            oM_TDisplayInventory.Qty = qty;
-            oM_TDisplayInventory.Crtd_DateTime = crtd_DateTime;
-            oM_TDisplayInventory.Crtd_Prog = crtd_Prog;
-            oM_TDisplayInventory.Crtd_User = crtd_User;
-            oM_TDisplayInventory.LUpd_DateTime = lUpd_DateTime;
-            oM_TDisplayInventory.LUpd_Prog = lUpd_Prog;
-            oM_TDisplayInventory.LUpd_User = lUpd_User;
-            oM_TDisplayInventory.tstamp = tstamp;
-            return oM_TDisplayInventory;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String DisplayID
-        {
-            get
-            {
-                return _DisplayID;
-            }
-            set
-            {
-                if (_DisplayID != value)
-                {
-                    OnDisplayIDChanging(value);
-                    ReportPropertyChanging("DisplayID");
-                    _DisplayID = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("DisplayID");
-                    OnDisplayIDChanged();
-                }
-            }
-        }
-        private global::System.String _DisplayID;
-        partial void OnDisplayIDChanging(global::System.String value);
-        partial void OnDisplayIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String InvtID
-        {
-            get
-            {
-                return _InvtID;
-            }
-            set
-            {
-                if (_InvtID != value)
-                {
-                    OnInvtIDChanging(value);
-                    ReportPropertyChanging("InvtID");
-                    _InvtID = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("InvtID");
-                    OnInvtIDChanged();
-                }
-            }
-        }
-        private global::System.String _InvtID;
-        partial void OnInvtIDChanging(global::System.String value);
-        partial void OnInvtIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String PPTB
-        {
-            get
-            {
-                return _PPTB;
-            }
-            set
-            {
-                OnPPTBChanging(value);
-                ReportPropertyChanging("PPTB");
-                _PPTB = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("PPTB");
-                OnPPTBChanged();
-            }
-        }
-        private global::System.String _PPTB;
-        partial void OnPPTBChanging(global::System.String value);
-        partial void OnPPTBChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Double Qty
-        {
-            get
-            {
-                return _Qty;
-            }
-            set
-            {
-                OnQtyChanging(value);
-                ReportPropertyChanging("Qty");
-                _Qty = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Qty");
-                OnQtyChanged();
-            }
-        }
-        private global::System.Double _Qty;
-        partial void OnQtyChanging(global::System.Double value);
-        partial void OnQtyChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1693,11 +1504,31 @@ namespace OM22001
         /// </summary>
         /// <param name="displayID">Initial value of the DisplayID property.</param>
         /// <param name="levelID">Initial value of the LevelID property.</param>
-        public static OM_TDisplayLevel CreateOM_TDisplayLevel(global::System.String displayID, global::System.String levelID)
+        /// <param name="displayType">Initial value of the DisplayType property.</param>
+        /// <param name="bonus">Initial value of the Bonus property.</param>
+        /// <param name="locID">Initial value of the LocID property.</param>
+        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
+        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
+        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static OM_TDisplayLevel CreateOM_TDisplayLevel(global::System.String displayID, global::System.String levelID, global::System.String displayType, global::System.Double bonus, global::System.String locID, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_TDisplayLevel oM_TDisplayLevel = new OM_TDisplayLevel();
             oM_TDisplayLevel.DisplayID = displayID;
             oM_TDisplayLevel.LevelID = levelID;
+            oM_TDisplayLevel.DisplayType = displayType;
+            oM_TDisplayLevel.Bonus = bonus;
+            oM_TDisplayLevel.LocID = locID;
+            oM_TDisplayLevel.Crtd_DateTime = crtd_DateTime;
+            oM_TDisplayLevel.Crtd_Prog = crtd_Prog;
+            oM_TDisplayLevel.Crtd_User = crtd_User;
+            oM_TDisplayLevel.LUpd_DateTime = lUpd_DateTime;
+            oM_TDisplayLevel.LUpd_Prog = lUpd_Prog;
+            oM_TDisplayLevel.LUpd_User = lUpd_User;
+            oM_TDisplayLevel.tstamp = tstamp;
             return oM_TDisplayLevel;
         }
 
@@ -1762,81 +1593,36 @@ namespace OM22001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String Nhan
+        public global::System.String DisplayType
         {
             get
             {
-                return _Nhan;
+                return _DisplayType;
             }
             set
             {
-                OnNhanChanging(value);
-                ReportPropertyChanging("Nhan");
-                _Nhan = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Nhan");
-                OnNhanChanged();
+                if (_DisplayType != value)
+                {
+                    OnDisplayTypeChanging(value);
+                    ReportPropertyChanging("DisplayType");
+                    _DisplayType = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("DisplayType");
+                    OnDisplayTypeChanged();
+                }
             }
         }
-        private global::System.String _Nhan;
-        partial void OnNhanChanging(global::System.String value);
-        partial void OnNhanChanged();
+        private global::System.String _DisplayType;
+        partial void OnDisplayTypeChanging(global::System.String value);
+        partial void OnDisplayTypeChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String Descr
-        {
-            get
-            {
-                return _Descr;
-            }
-            set
-            {
-                OnDescrChanging(value);
-                ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Descr");
-                OnDescrChanged();
-            }
-        }
-        private global::System.String _Descr;
-        partial void OnDescrChanging(global::System.String value);
-        partial void OnDescrChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> Target
-        {
-            get
-            {
-                return _Target;
-            }
-            set
-            {
-                OnTargetChanging(value);
-                ReportPropertyChanging("Target");
-                _Target = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Target");
-                OnTargetChanged();
-            }
-        }
-        private Nullable<global::System.Double> _Target;
-        partial void OnTargetChanging(Nullable<global::System.Double> value);
-        partial void OnTargetChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> Bonus
+        public global::System.Double Bonus
         {
             get
             {
@@ -1851,89 +1637,14 @@ namespace OM22001
                 OnBonusChanged();
             }
         }
-        private Nullable<global::System.Double> _Bonus;
-        partial void OnBonusChanging(Nullable<global::System.Double> value);
+        private global::System.Double _Bonus;
+        partial void OnBonusChanging(global::System.Double value);
         partial void OnBonusChanged();
-
-        #endregion
-
-    
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="OM22001Model", Name="OM_TDisplayLocation")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class OM_TDisplayLocation : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new OM_TDisplayLocation object.
-        /// </summary>
-        /// <param name="displayID">Initial value of the DisplayID property.</param>
-        /// <param name="locID">Initial value of the LocID property.</param>
-        /// <param name="pPTB">Initial value of the PPTB property.</param>
-        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
-        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
-        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
-        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
-        /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_TDisplayLocation CreateOM_TDisplayLocation(global::System.String displayID, global::System.String locID, global::System.String pPTB, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
-        {
-            OM_TDisplayLocation oM_TDisplayLocation = new OM_TDisplayLocation();
-            oM_TDisplayLocation.DisplayID = displayID;
-            oM_TDisplayLocation.LocID = locID;
-            oM_TDisplayLocation.PPTB = pPTB;
-            oM_TDisplayLocation.Crtd_DateTime = crtd_DateTime;
-            oM_TDisplayLocation.Crtd_Prog = crtd_Prog;
-            oM_TDisplayLocation.Crtd_User = crtd_User;
-            oM_TDisplayLocation.LUpd_DateTime = lUpd_DateTime;
-            oM_TDisplayLocation.LUpd_Prog = lUpd_Prog;
-            oM_TDisplayLocation.LUpd_User = lUpd_User;
-            oM_TDisplayLocation.tstamp = tstamp;
-            return oM_TDisplayLocation;
-        }
-
-        #endregion
-
-        #region Primitive Properties
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String DisplayID
-        {
-            get
-            {
-                return _DisplayID;
-            }
-            set
-            {
-                if (_DisplayID != value)
-                {
-                    OnDisplayIDChanging(value);
-                    ReportPropertyChanging("DisplayID");
-                    _DisplayID = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("DisplayID");
-                    OnDisplayIDChanged();
-                }
-            }
-        }
-        private global::System.String _DisplayID;
-        partial void OnDisplayIDChanging(global::System.String value);
-        partial void OnDisplayIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String LocID
         {
@@ -1943,14 +1654,11 @@ namespace OM22001
             }
             set
             {
-                if (_LocID != value)
-                {
-                    OnLocIDChanging(value);
-                    ReportPropertyChanging("LocID");
-                    _LocID = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("LocID");
-                    OnLocIDChanged();
-                }
+                OnLocIDChanging(value);
+                ReportPropertyChanging("LocID");
+                _LocID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LocID");
+                OnLocIDChanged();
             }
         }
         private global::System.String _LocID;
@@ -1960,26 +1668,50 @@ namespace OM22001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String PPTB
+        public global::System.String SoMatTB
         {
             get
             {
-                return _PPTB;
+                return _SoMatTB;
             }
             set
             {
-                OnPPTBChanging(value);
-                ReportPropertyChanging("PPTB");
-                _PPTB = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("PPTB");
-                OnPPTBChanged();
+                OnSoMatTBChanging(value);
+                ReportPropertyChanging("SoMatTB");
+                _SoMatTB = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SoMatTB");
+                OnSoMatTBChanged();
             }
         }
-        private global::System.String _PPTB;
-        partial void OnPPTBChanging(global::System.String value);
-        partial void OnPPTBChanged();
+        private global::System.String _SoMatTB;
+        partial void OnSoMatTBChanging(global::System.String value);
+        partial void OnSoMatTBChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> ChiPhiDauLon
+        {
+            get
+            {
+                return _ChiPhiDauLon;
+            }
+            set
+            {
+                OnChiPhiDauLonChanging(value);
+                ReportPropertyChanging("ChiPhiDauLon");
+                _ChiPhiDauLon = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ChiPhiDauLon");
+                OnChiPhiDauLonChanged();
+            }
+        }
+        private Nullable<global::System.Double> _ChiPhiDauLon;
+        partial void OnChiPhiDauLonChanging(Nullable<global::System.Double> value);
+        partial void OnChiPhiDauLonChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2926,211 +2658,6 @@ namespace OM22001
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="OM22001Model", Name="OM22001_pgInventory_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class OM22001_pgInventory_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new OM22001_pgInventory_Result object.
-        /// </summary>
-        /// <param name="pPTB">Initial value of the PPTB property.</param>
-        /// <param name="invtID">Initial value of the InvtID property.</param>
-        /// <param name="qty">Initial value of the Qty property.</param>
-        /// <param name="tstamp">Initial value of the tstamp property.</param>
-        /// <param name="category">Initial value of the Category property.</param>
-        public static OM22001_pgInventory_Result CreateOM22001_pgInventory_Result(global::System.String pPTB, global::System.String invtID, global::System.Double qty, global::System.Byte[] tstamp, global::System.String category)
-        {
-            OM22001_pgInventory_Result oM22001_pgInventory_Result = new OM22001_pgInventory_Result();
-            oM22001_pgInventory_Result.PPTB = pPTB;
-            oM22001_pgInventory_Result.InvtID = invtID;
-            oM22001_pgInventory_Result.Qty = qty;
-            oM22001_pgInventory_Result.tstamp = tstamp;
-            oM22001_pgInventory_Result.Category = category;
-            return oM22001_pgInventory_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String PPTB
-        {
-            get
-            {
-                return _PPTB;
-            }
-            set
-            {
-                OnPPTBChanging(value);
-                ReportPropertyChanging("PPTB");
-                _PPTB = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("PPTB");
-                OnPPTBChanged();
-            }
-        }
-        private global::System.String _PPTB;
-        partial void OnPPTBChanging(global::System.String value);
-        partial void OnPPTBChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String InvtID
-        {
-            get
-            {
-                return _InvtID;
-            }
-            set
-            {
-                OnInvtIDChanging(value);
-                ReportPropertyChanging("InvtID");
-                _InvtID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("InvtID");
-                OnInvtIDChanged();
-            }
-        }
-        private global::System.String _InvtID;
-        partial void OnInvtIDChanging(global::System.String value);
-        partial void OnInvtIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Double Qty
-        {
-            get
-            {
-                return _Qty;
-            }
-            set
-            {
-                OnQtyChanging(value);
-                ReportPropertyChanging("Qty");
-                _Qty = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Qty");
-                OnQtyChanged();
-            }
-        }
-        private global::System.Double _Qty;
-        partial void OnQtyChanging(global::System.Double value);
-        partial void OnQtyChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Byte[] tstamp
-        {
-            get
-            {
-                return StructuralObject.GetValidValue(_tstamp);
-            }
-            set
-            {
-                OntstampChanging(value);
-                ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("tstamp");
-                OntstampChanged();
-            }
-        }
-        private global::System.Byte[] _tstamp;
-        partial void OntstampChanging(global::System.Byte[] value);
-        partial void OntstampChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Category
-        {
-            get
-            {
-                return _Category;
-            }
-            set
-            {
-                OnCategoryChanging(value);
-                ReportPropertyChanging("Category");
-                _Category = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Category");
-                OnCategoryChanged();
-            }
-        }
-        private global::System.String _Category;
-        partial void OnCategoryChanging(global::System.String value);
-        partial void OnCategoryChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Descr
-        {
-            get
-            {
-                return _Descr;
-            }
-            set
-            {
-                OnDescrChanging(value);
-                ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Descr");
-                OnDescrChanged();
-            }
-        }
-        private global::System.String _Descr;
-        partial void OnDescrChanging(global::System.String value);
-        partial void OnDescrChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> Ischange
-        {
-            get
-            {
-                return _Ischange;
-            }
-            set
-            {
-                OnIschangeChanging(value);
-                ReportPropertyChanging("Ischange");
-                _Ischange = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Ischange");
-                OnIschangeChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _Ischange;
-        partial void OnIschangeChanging(Nullable<global::System.Boolean> value);
-        partial void OnIschangeChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="OM22001Model", Name="OM22001_pgLevel_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -3143,11 +2670,17 @@ namespace OM22001
         /// </summary>
         /// <param name="displayID">Initial value of the DisplayID property.</param>
         /// <param name="levelID">Initial value of the LevelID property.</param>
-        public static OM22001_pgLevel_Result CreateOM22001_pgLevel_Result(global::System.String displayID, global::System.String levelID)
+        /// <param name="displayType">Initial value of the DisplayType property.</param>
+        /// <param name="bonus">Initial value of the Bonus property.</param>
+        /// <param name="locID">Initial value of the LocID property.</param>
+        public static OM22001_pgLevel_Result CreateOM22001_pgLevel_Result(global::System.String displayID, global::System.String levelID, global::System.String displayType, global::System.Double bonus, global::System.String locID)
         {
             OM22001_pgLevel_Result oM22001_pgLevel_Result = new OM22001_pgLevel_Result();
             oM22001_pgLevel_Result.DisplayID = displayID;
             oM22001_pgLevel_Result.LevelID = levelID;
+            oM22001_pgLevel_Result.DisplayType = displayType;
+            oM22001_pgLevel_Result.Bonus = bonus;
+            oM22001_pgLevel_Result.LocID = locID;
             return oM22001_pgLevel_Result;
         }
 
@@ -3206,81 +2739,33 @@ namespace OM22001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String Nhan
+        public global::System.String DisplayType
         {
             get
             {
-                return _Nhan;
+                return _DisplayType;
             }
             set
             {
-                OnNhanChanging(value);
-                ReportPropertyChanging("Nhan");
-                _Nhan = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Nhan");
-                OnNhanChanged();
+                OnDisplayTypeChanging(value);
+                ReportPropertyChanging("DisplayType");
+                _DisplayType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DisplayType");
+                OnDisplayTypeChanged();
             }
         }
-        private global::System.String _Nhan;
-        partial void OnNhanChanging(global::System.String value);
-        partial void OnNhanChanged();
+        private global::System.String _DisplayType;
+        partial void OnDisplayTypeChanging(global::System.String value);
+        partial void OnDisplayTypeChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String Descr
-        {
-            get
-            {
-                return _Descr;
-            }
-            set
-            {
-                OnDescrChanging(value);
-                ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Descr");
-                OnDescrChanged();
-            }
-        }
-        private global::System.String _Descr;
-        partial void OnDescrChanging(global::System.String value);
-        partial void OnDescrChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> Target
-        {
-            get
-            {
-                return _Target;
-            }
-            set
-            {
-                OnTargetChanging(value);
-                ReportPropertyChanging("Target");
-                _Target = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Target");
-                OnTargetChanged();
-            }
-        }
-        private Nullable<global::System.Double> _Target;
-        partial void OnTargetChanging(Nullable<global::System.Double> value);
-        partial void OnTargetChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> Bonus
+        public global::System.Double Bonus
         {
             get
             {
@@ -3295,42 +2780,9 @@ namespace OM22001
                 OnBonusChanged();
             }
         }
-        private Nullable<global::System.Double> _Bonus;
-        partial void OnBonusChanging(Nullable<global::System.Double> value);
+        private global::System.Double _Bonus;
+        partial void OnBonusChanging(global::System.Double value);
         partial void OnBonusChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="OM22001Model", Name="OM22001_pgLocation_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class OM22001_pgLocation_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new OM22001_pgLocation_Result object.
-        /// </summary>
-        /// <param name="locID">Initial value of the LocID property.</param>
-        /// <param name="pPTB">Initial value of the PPTB property.</param>
-        /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM22001_pgLocation_Result CreateOM22001_pgLocation_Result(global::System.String locID, global::System.String pPTB, global::System.Byte[] tstamp)
-        {
-            OM22001_pgLocation_Result oM22001_pgLocation_Result = new OM22001_pgLocation_Result();
-            oM22001_pgLocation_Result.LocID = locID;
-            oM22001_pgLocation_Result.PPTB = pPTB;
-            oM22001_pgLocation_Result.tstamp = tstamp;
-            return oM22001_pgLocation_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -3359,50 +2811,50 @@ namespace OM22001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String PPTB
+        public global::System.String SoMatTB
         {
             get
             {
-                return _PPTB;
+                return _SoMatTB;
             }
             set
             {
-                OnPPTBChanging(value);
-                ReportPropertyChanging("PPTB");
-                _PPTB = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("PPTB");
-                OnPPTBChanged();
+                OnSoMatTBChanging(value);
+                ReportPropertyChanging("SoMatTB");
+                _SoMatTB = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SoMatTB");
+                OnSoMatTBChanged();
             }
         }
-        private global::System.String _PPTB;
-        partial void OnPPTBChanging(global::System.String value);
-        partial void OnPPTBChanged();
+        private global::System.String _SoMatTB;
+        partial void OnSoMatTBChanging(global::System.String value);
+        partial void OnSoMatTBChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Byte[] tstamp
+        public Nullable<global::System.Double> ChiPhiDauLon
         {
             get
             {
-                return StructuralObject.GetValidValue(_tstamp);
+                return _ChiPhiDauLon;
             }
             set
             {
-                OntstampChanging(value);
-                ReportPropertyChanging("tstamp");
-                _tstamp = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("tstamp");
-                OntstampChanged();
+                OnChiPhiDauLonChanging(value);
+                ReportPropertyChanging("ChiPhiDauLon");
+                _ChiPhiDauLon = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ChiPhiDauLon");
+                OnChiPhiDauLonChanged();
             }
         }
-        private global::System.Byte[] _tstamp;
-        partial void OntstampChanging(global::System.Byte[] value);
-        partial void OntstampChanged();
+        private Nullable<global::System.Double> _ChiPhiDauLon;
+        partial void OnChiPhiDauLonChanging(Nullable<global::System.Double> value);
+        partial void OnChiPhiDauLonChanged();
 
         #endregion
 

@@ -118,22 +118,10 @@ namespace OM22001.Controllers
             return this.Store(companies);
         }
 
-        public ActionResult GetLevel(string displayID)
+        public ActionResult GetLevel(string displayID, string displayType)
         {
-            var displayLevels = _db.OM22001_pgLevel(displayID).ToList();
+            var displayLevels = _db.OM22001_pgLevel(displayID, displayType).ToList();
             return this.Store(displayLevels);
-        }
-
-        public ActionResult GetInventory(string displayID)
-        {
-            var invts = _db.OM22001_pgInventory(displayID).ToList();
-            return this.Store(invts);
-        }
-
-        public ActionResult GetLocation(string displayID)
-        {
-            var locs = _db.OM22001_pgLocation(displayID).ToList();
-            return this.Store(locs);
         }
 
         public ActionResult SaveData(FormCollection data, bool isNew)
@@ -166,8 +154,6 @@ namespace OM22001.Controllers
 
                             Save_Cpny(data, display);
                             Save_Level(data, display);
-                            //Save_Invt(data, display);
-                            Save_Loc(data, display);
 
                             // handle here
                             if (handle != _noneStatus && handle != null)
@@ -189,8 +175,6 @@ namespace OM22001.Controllers
 
                         Save_Cpny(data, display);
                         Save_Level(data, display);
-                        //Save_Invt(data, display);
-                        Save_Loc(data, display);
 
                         // handle here
                         if (handle != _noneStatus && handle != null)
@@ -238,18 +222,6 @@ namespace OM22001.Controllers
                     foreach (var level in levels)
                     {
                         _db.OM_TDisplayLevel.DeleteObject(level);
-                    }
-
-                    //var invts = _db.OM_TDisplayInventory.Where(i => i.DisplayID == displayID).ToList();
-                    //foreach (var invt in invts)
-                    //{
-                    //    _db.OM_TDisplayInventory.DeleteObject(invt);
-                    //}
-
-                    var locs = _db.OM_TDisplayLocation.Where(loc => loc.DisplayID == displayID).ToList();
-                    foreach (var loc in locs)
-                    {
-                        _db.OM_TDisplayLocation.DeleteObject(loc);
                     }
 
                     _db.SaveChanges();
@@ -339,83 +311,6 @@ namespace OM22001.Controllers
             }
         }
 
-        private void Save_Invt(FormCollection data, OM_TDisplay display)
-        {
-            var invtChangeHandler = new StoreDataHandler(data["lstInvtChange"]);
-            var lstInvtChange = invtChangeHandler.BatchObjectData<OM22001_pgInventory_Result>();
-
-            foreach (var created in lstInvtChange.Created)
-            {
-                var createdInvt = _db.OM_TDisplayInventory.FirstOrDefault(x => x.DisplayID == display.DisplayID && x.InvtID == created.InvtID);
-                if (!string.IsNullOrWhiteSpace(created.InvtID) && createdInvt == null)
-                {
-                    createdInvt = new OM_TDisplayInventory();
-                    createdInvt.DisplayID = display.DisplayID;
-                    createdInvt.InvtID = created.InvtID;
-                    update_Invt(ref createdInvt, created, true);
-                    _db.OM_TDisplayInventory.AddObject(createdInvt);
-                }
-            }
-
-            foreach (var updated in lstInvtChange.Updated)
-            {
-                var createdInvt = _db.OM_TDisplayInventory.FirstOrDefault(x => x.DisplayID == display.DisplayID && x.InvtID == updated.InvtID);
-                if (!string.IsNullOrWhiteSpace(updated.InvtID) && createdInvt != null)
-                {
-                    update_Invt(ref createdInvt, updated, false);
-                }
-            }
-
-            foreach (var deleted in lstInvtChange.Deleted)
-            {
-                var createdInvt = _db.OM_TDisplayInventory.FirstOrDefault(x => x.DisplayID == display.DisplayID && x.InvtID == deleted.InvtID);
-                if (!string.IsNullOrWhiteSpace(deleted.InvtID) && createdInvt != null)
-                {
-                    _db.OM_TDisplayInventory.DeleteObject(createdInvt);
-                }
-            }
-        }
-
-        private void Save_Loc(FormCollection data, OM_TDisplay display)
-        {
-            var locChangeHandler = new StoreDataHandler(data["lstLocChange"]);
-            var lstLocChange = locChangeHandler.BatchObjectData<OM22001_pgLocation_Result>();
-
-            foreach (var created in lstLocChange.Created)
-            {
-                var createdLoc = _db.OM_TDisplayLocation.FirstOrDefault(x => x.DisplayID == display.DisplayID 
-                    && x.LocID == created.LocID);
-                if (!string.IsNullOrWhiteSpace(created.LocID) && createdLoc == null)
-                {
-                    createdLoc = new OM_TDisplayLocation();
-                    createdLoc.DisplayID = display.DisplayID;
-                    createdLoc.LocID = created.LocID;
-                    update_Loc(ref createdLoc, created, true);
-                    _db.OM_TDisplayLocation.AddObject(createdLoc);
-                }
-            }
-
-            foreach (var updated in lstLocChange.Updated)
-            {
-                var updatedLoc = _db.OM_TDisplayLocation.FirstOrDefault(x => x.DisplayID == display.DisplayID
-                    && x.LocID == updated.LocID);
-                if (!string.IsNullOrWhiteSpace(updated.LocID) && updatedLoc != null)
-                {
-                    update_Loc(ref updatedLoc, updated, false);
-                }
-            }
-
-            foreach (var deleted in lstLocChange.Deleted)
-            {
-                var deletedLoc = _db.OM_TDisplayLocation.FirstOrDefault(x => x.DisplayID == display.DisplayID
-                    && x.LocID == deleted.LocID);
-                if (!string.IsNullOrWhiteSpace(deleted.LocID) && deletedLoc != null)
-                {
-                    _db.OM_TDisplayLocation.DeleteObject(deletedLoc);
-                }
-            }
-        }
-
         private void Save_Cpny(FormCollection data, OM_TDisplay display)
         {
             var cpnyChangeHandler = new StoreDataHandler(data["lstCpnyChange"]);
@@ -429,7 +324,7 @@ namespace OM22001.Controllers
                     createdCpny = new OM_TDisplayCpny();
                     createdCpny.DisplayID = display.DisplayID;
                     createdCpny.CpnyID = created.CpnyID;
-                    //update_Cpny(ref createdCpny, created, true);
+                    update_Cpny(ref createdCpny, created, true);
                     _db.OM_TDisplayCpny.AddObject(createdCpny);
                 }
             }
@@ -453,6 +348,18 @@ namespace OM22001.Controllers
             }
         }
 
+        private void update_Cpny(ref OM_TDisplayCpny createdCpny, OM22001_pgCompany_Result created, bool isNew)
+        {
+            if (isNew) {
+                createdCpny.Crtd_DateTime = DateTime.Now;
+                createdCpny.Crtd_Prog = _screenNbr;
+                createdCpny.Crtd_User = Current.UserName;
+            }
+            createdCpny.LUpd_DateTime = DateTime.Now;
+            createdCpny.LUpd_Prog = _screenNbr;
+            createdCpny.LUpd_User = Current.UserName;
+        }
+
         private void Save_Level(FormCollection data, OM_TDisplay display)
         {
             var levelChangeHandler = new StoreDataHandler(data["lstLevelChange"]);
@@ -460,12 +367,16 @@ namespace OM22001.Controllers
 
             foreach (var created in lstLevelChange.Created)
             {
-                var createdLevel = _db.OM_TDisplayLevel.FirstOrDefault(x => x.DisplayID == display.DisplayID && x.LevelID == created.LevelID);
-                if (!string.IsNullOrWhiteSpace(created.LevelID) && createdLevel == null)
+                var createdLevel = _db.OM_TDisplayLevel.FirstOrDefault(x => x.DisplayID == display.DisplayID 
+                    && x.LevelID == created.LevelID && x.DisplayType == display.DisplayType);
+                if (!string.IsNullOrWhiteSpace(created.LevelID) && createdLevel == null
+                    && !string.IsNullOrWhiteSpace(created.LocID))
                 {
                     createdLevel = new OM_TDisplayLevel();
                     createdLevel.DisplayID = display.DisplayID;
                     createdLevel.LevelID = created.LevelID;
+                    createdLevel.DisplayType = display.DisplayType;
+
                     update_Level(ref createdLevel, created, true);
                     _db.OM_TDisplayLevel.AddObject(createdLevel);
                 }
@@ -473,8 +384,10 @@ namespace OM22001.Controllers
 
             foreach (var updated in lstLevelChange.Updated)
             {
-                var createdLevel = _db.OM_TDisplayLevel.FirstOrDefault(x => x.DisplayID == display.DisplayID && x.LevelID == updated.LevelID);
-                if (!string.IsNullOrWhiteSpace(updated.LevelID) && createdLevel != null)
+                var createdLevel = _db.OM_TDisplayLevel.FirstOrDefault(x => x.DisplayID == display.DisplayID
+                    && x.LevelID == updated.LevelID && x.DisplayType == display.DisplayType);
+                if (!string.IsNullOrWhiteSpace(updated.LevelID) && createdLevel != null
+                    && !string.IsNullOrWhiteSpace(updated.LocID))
                 {
                     update_Level(ref createdLevel, updated, false);
                 }
@@ -482,8 +395,10 @@ namespace OM22001.Controllers
 
             foreach (var deleted in lstLevelChange.Deleted)
             {
-                var createdLevel = _db.OM_TDisplayLevel.FirstOrDefault(x => x.DisplayID == display.DisplayID && x.LevelID == deleted.LevelID);
-                if (!string.IsNullOrWhiteSpace(deleted.LevelID) && createdLevel != null)
+                var createdLevel = _db.OM_TDisplayLevel.FirstOrDefault(x => x.DisplayID == display.DisplayID
+                    && x.LevelID == deleted.LevelID && x.DisplayType == display.DisplayType);
+                if (!string.IsNullOrWhiteSpace(deleted.LevelID) && createdLevel != null
+                    && !string.IsNullOrWhiteSpace(deleted.LocID))
                 {
                     _db.OM_TDisplayLevel.DeleteObject(createdLevel);
                 }
@@ -509,6 +424,7 @@ namespace OM22001.Controllers
             display.FromDate = inputDisplay.FromDate;
             display.ToDate = inputDisplay.ToDate;
 
+            display.DisplayType = inputDisplay.DisplayType;
             //if (cboHandle.ToValue() == "N" || cboHandle.ToValue() == null)
             //    display.Status = cboStatus.ToValue().PassNull();
 
@@ -517,44 +433,22 @@ namespace OM22001.Controllers
             display.LUpd_User = Current.UserName;
         }
 
-        private void update_Loc(ref OM_TDisplayLocation createdInvt, OM22001_pgLocation_Result created, bool isNew)
-        {
-            if (isNew)
-            {
-                createdInvt.Crtd_DateTime = DateTime.Now;
-                createdInvt.Crtd_Prog = _screenNbr;
-                createdInvt.Crtd_User = Current.UserName;
-            }
-            createdInvt.PPTB = created.PPTB;
-            createdInvt.LUpd_DateTime = DateTime.Now;
-            createdInvt.LUpd_Prog = _screenNbr;
-            createdInvt.LUpd_User = Current.UserName;
-        }
-
-        private void update_Invt(ref OM_TDisplayInventory createdInvt, OM22001_pgInventory_Result created, bool isNew)
-        {
-            if (isNew)
-            {
-                createdInvt.Crtd_DateTime = DateTime.Now;
-                createdInvt.Crtd_Prog = _screenNbr;
-                createdInvt.Crtd_User = Current.UserName;
-            }
-            createdInvt.Qty = created.Qty;
-            createdInvt.PPTB = created.PPTB;
-            createdInvt.LUpd_DateTime = DateTime.Now;
-            createdInvt.LUpd_Prog = _screenNbr;
-            createdInvt.LUpd_User = Current.UserName;
-        }
-
         private void update_Level(ref OM_TDisplayLevel createdLevel, OM22001_pgLevel_Result created, bool isNew)
         {
             if (isNew)
             {
-                createdLevel.Nhan = created.Nhan;
-                createdLevel.Descr = created.Descr;
-                createdLevel.Target = created.Target;
-                createdLevel.Bonus = created.Bonus;
+                createdLevel.Crtd_DateTime = DateTime.Now;
+                createdLevel.Crtd_Prog = _screenNbr;
+                createdLevel.Crtd_User = Current.UserName;
             }
+
+            createdLevel.Bonus = created.Bonus;
+            createdLevel.LocID = created.LocID;
+            createdLevel.SoMatTB = created.SoMatTB;
+            createdLevel.ChiPhiDauLon = created.ChiPhiDauLon;
+            createdLevel.LUpd_DateTime = DateTime.Now;
+            createdLevel.LUpd_Prog = _screenNbr;
+            createdLevel.LUpd_User = Current.UserName;
         }
     }
 }
