@@ -39,10 +39,9 @@ namespace IN20100.Controllers
         {
             try
             {
-
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstUnitConversion"]);
-                ChangeRecords<IN_UnitConversion> lstUnitConversion = dataHandler.BatchObjectData<IN_UnitConversion>();
-                foreach (IN_UnitConversion deleted in lstUnitConversion.Deleted)
+                ChangeRecords<IN20100_pgLoadUnitConversion_Result> lstUnitConversion = dataHandler.BatchObjectData<IN20100_pgLoadUnitConversion_Result>();
+                foreach (IN20100_pgLoadUnitConversion_Result deleted in lstUnitConversion.Deleted)
                 {
                     var del = _db.IN_UnitConversion.Where(p => p.UnitType == deleted.UnitType && p.ClassID == deleted.ClassID && p.InvtID == deleted.InvtID && p.FromUnit == deleted.FromUnit && p.ToUnit == deleted.ToUnit).FirstOrDefault();
                     if (del != null)
@@ -53,7 +52,7 @@ namespace IN20100.Controllers
 
                 lstUnitConversion.Created.AddRange(lstUnitConversion.Updated);
 
-                foreach (IN_UnitConversion curUnitConversion in lstUnitConversion.Created)
+                foreach (IN20100_pgLoadUnitConversion_Result curUnitConversion in lstUnitConversion.Created)
                 {
                     if (curUnitConversion.UnitType.PassNull() == "" && curUnitConversion.ClassID.PassNull() == "" && curUnitConversion.InvtID.PassNull() == "" && curUnitConversion.FromUnit.PassNull()== "" && curUnitConversion.ToUnit.PassNull() == "") continue;
 
@@ -89,7 +88,7 @@ namespace IN20100.Controllers
             }
         }
 
-        private void Update_IN_UnitConversion(IN_UnitConversion t, IN_UnitConversion s, bool isNew)
+        private void Update_IN_UnitConversion(IN_UnitConversion t, IN20100_pgLoadUnitConversion_Result s, bool isNew)
         {
             if (isNew)
             {
