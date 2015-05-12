@@ -1,1 +1,271 @@
-var _0xf335 = ["\x30", "\x63\x62\x6F\x43\x75\x73\x74\x49\x64", "\x67\x65\x74\x56\x61\x6C\x75\x65", "\x76\x61\x6C\x75\x65\x46\x69\x65\x6C\x64", "\x64\x69\x73\x70\x6C\x61\x79\x46\x69\x65\x6C\x64", "\x66\x69\x6E\x64\x52\x65\x63\x6F\x72\x64", "\x69\x6E\x64\x65\x78\x4F\x66", "\x73\x74\x6F\x72\x65", "\x64\x61\x74\x61", "\x67\x65\x74\x41\x74", "\x73\x65\x74\x56\x61\x6C\x75\x65", "\x66\x69\x72\x73\x74", "\x70\x72\x65\x76", "\x6E\x65\x78\x74", "\x67\x65\x74\x54\x6F\x74\x61\x6C\x43\x6F\x75\x6E\x74", "\x6C\x61\x73\x74", "\x31", "\x72\x65\x6C\x6F\x61\x64", "\x73\x74\x6F\x72\x65\x46\x6F\x72\x6D", "\x72\x65\x66\x72\x65\x73\x68", "\x69\x73\x49\x6E\x73\x65\x72\x74", "", "\x63\x62\x6F\x53\x68\x69\x70\x54\x6F\x49\x64", "\x6E\x65\x77", "\x67\x65\x74\x52\x65\x63\x6F\x72\x64", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x76\x61\x6C\x75\x65", "\x64\x65\x6C\x65\x74\x65\x52\x65\x63\x6F\x72\x64\x46\x6F\x72\x6D", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x64\x65\x6C\x65\x74\x65", "\x73\x61\x76\x65", "\x70\x72\x69\x6E\x74", "\x63\x6C\x6F\x73\x65", "\x73\x65\x6C\x65\x63\x74", "\x54\x72\x65\x65", "\x63\x62\x6F\x49\x6E\x76\x74\x49\x44", "\x69\x74\x65\x6D\x73", "\x49\x44\x54\x72\x65\x65", "\x6C\x65\x6E\x67\x74\x68", "\x69\x64", "\x53\x68\x69\x70\x54\x6F\x49\x64", "\x75\x70\x64\x61\x74\x65\x52\x65\x63\x6F\x72\x64", "\x67\x65\x74\x46\x6F\x72\x6D", "\x69\x73\x56\x61\x6C\x69\x64", "\x53\x75\x62\x6D\x69\x74\x69\x6E\x67\x2E\x2E\x2E", "\x41\x52\x32\x30\x36\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x43\x68\x61\x6E\x67\x65\x64\x44\x61\x74\x61", "\x65\x6E\x63\x6F\x64\x65", "\x72\x65\x73\x75\x6C\x74", "\x67\x65\x74\x53\x74\x6F\x72\x65", "\x63\x6F\x64\x65", "\x73\x75\x62\x6D\x69\x74", "\x65\x61\x63\x68", "\x67\x65\x74\x46\x69\x65\x6C\x64\x73", "\x63\x6C\x6F\x73\x65\x53\x63\x72\x65\x65\x6E", "\x74\x61\x62\x41\x52\x32\x30\x36\x30\x30", "\x41\x70\x70", "\x43\x72\x65\x61\x74\x65\x64", "\x55\x70\x64\x61\x74\x65\x64", "\x44\x65\x6C\x65\x74\x65\x64", "\x79\x65\x73", "\x44\x65\x6C\x65\x74\x69\x6E\x67\x44\x61\x74\x61", "\x67\x65\x74\x4C\x61\x6E\x67", "\x63\x6F\x6D\x6D\x6F\x6E", "\x64\x69\x72\x65\x63\x74", "\x64\x65\x6C\x65\x74\x65\x53\x65\x6C\x65\x63\x74\x65\x64", "\x67\x72\x64", "\x67\x65\x74\x42\x79\x49\x64", "\x66\x69\x6E\x64\x50\x61\x67\x65", "\x67\x65\x74\x53\x65\x6C\x65\x63\x74\x69\x6F\x6E\x4D\x6F\x64\x65\x6C", "\x6C\x6F\x61\x64\x50\x61\x67\x65", "\x67\x65\x74\x43\x6F\x75\x6E\x74", "\x69\x6E\x73\x65\x72\x74", "\x6C\x6F\x61\x64\x52\x65\x63\x6F\x72\x64", "\x63\x62\x6F\x53\x74\x61\x74\x65", "\x6C\x6F\x61\x64", "\x63\x62\x6F\x43\x69\x74\x79", "\x63\x62\x6F\x44\x69\x73\x74\x72\x69\x63\x74"]; var tmpShipToIdloadStoreOrForm = _0xf335[0]; var menuClick = function (_0xf46dx3) { switch (_0xf46dx3) { case _0xf335[11]: var _0xf46dx4 = App[_0xf335[1]]; var _0xf46dx5 = _0xf46dx4[_0xf335[2]](); var _0xf46dx6 = _0xf46dx4[_0xf335[5]](_0xf46dx4[_0xf335[3]] || _0xf46dx4[_0xf335[4]], _0xf46dx5); var _0xf46dx7 = _0xf46dx4[_0xf335[7]][_0xf335[6]](_0xf46dx6); App[_0xf335[1]][_0xf335[10]](_0xf46dx4[_0xf335[7]][_0xf335[9]](0)[_0xf335[8]].CustId); break;; case _0xf335[12]: var _0xf46dx4 = App[_0xf335[1]]; var _0xf46dx5 = _0xf46dx4[_0xf335[2]](); var _0xf46dx6 = _0xf46dx4[_0xf335[5]](_0xf46dx4[_0xf335[3]] || _0xf46dx4[_0xf335[4]], _0xf46dx5); var _0xf46dx7 = _0xf46dx4[_0xf335[7]][_0xf335[6]](_0xf46dx6); App[_0xf335[1]][_0xf335[10]](_0xf46dx4[_0xf335[7]][_0xf335[9]](_0xf46dx7 - 1)[_0xf335[8]].CustId); break;; case _0xf335[13]: var _0xf46dx4 = App[_0xf335[1]]; var _0xf46dx5 = _0xf46dx4[_0xf335[2]](); var _0xf46dx6 = _0xf46dx4[_0xf335[5]](_0xf46dx4[_0xf335[3]] || _0xf46dx4[_0xf335[4]], _0xf46dx5); var _0xf46dx7 = _0xf46dx4[_0xf335[7]][_0xf335[6]](_0xf46dx6); App[_0xf335[1]][_0xf335[10]](_0xf46dx4[_0xf335[7]][_0xf335[9]](_0xf46dx7 + 1)[_0xf335[8]].CustId); break;; case _0xf335[15]: var _0xf46dx4 = App[_0xf335[1]]; var _0xf46dx5 = _0xf46dx4[_0xf335[2]](); var _0xf46dx6 = _0xf46dx4[_0xf335[5]](_0xf46dx4[_0xf335[3]] || _0xf46dx4[_0xf335[4]], _0xf46dx5); var _0xf46dx7 = _0xf46dx4[_0xf335[7]][_0xf335[6]](_0xf46dx6); App[_0xf335[1]][_0xf335[10]](App[_0xf335[1]][_0xf335[7]][_0xf335[9]](App[_0xf335[1]][_0xf335[7]][_0xf335[14]]() - 1)[_0xf335[8]].CustId); break;; case _0xf335[19]: tmpShipToIdloadStoreOrForm = _0xf335[16]; App[_0xf335[18]][_0xf335[17]](); break;; case _0xf335[23]: if (HQ[_0xf335[20]]) { App[_0xf335[22]][_0xf335[10]](_0xf335[21]); App[_0xf335[18]][_0xf335[17]](); }; break;; case _0xf335[31]: var _0xf46dx8 = App[_0xf335[25]][_0xf335[24]](); if (HQ[_0xf335[26]]) { if (App[_0xf335[22]][_0xf335[27]] != _0xf335[21]) { HQ[_0xf335[30]][_0xf335[29]](11, _0xf335[21], _0xf335[28]); }; }; break;; case _0xf335[32]: Save(); break;; case _0xf335[33]: alert(_0xf46dx3); break;; case _0xf335[34]: Close(); break;; }; }; var refreshTree = function (_0xf46dxa) { App[_0xf335[36]][_0xf335[35]](_0xf46dxa); }; var refreshTree2 = function (_0xf46dxc) { App[_0xf335[37]][_0xf335[10]](_0xf46dxc); var _0xf46dxd = App[_0xf335[39]][_0xf335[38]][_0xf335[38]][0][_0xf335[7]][_0xf335[8]][_0xf335[38]]; for (var _0xf46dxa = 0; _0xf46dxa < _0xf46dxd[_0xf335[40]]; _0xf46dxa++) { if (_0xf46dxd[_0xf46dxa][_0xf335[8]][_0xf335[41]] == node) { App[_0xf335[36]][_0xf335[35]](_0xf46dxa); break; }; }; }; var waitFormReload = function (_0xf46dxf, _0xf46dx10) { tmpShipToIdloadStoreOrForm = _0xf335[16]; App[_0xf335[22]][_0xf335[10]](_0xf46dxf); App[_0xf335[18]][_0xf335[17]](); }; function Save() { var _0xf46dx8 = App[_0xf335[25]][_0xf335[24]](); _0xf46dx8[_0xf335[8]][_0xf335[42]] = App[_0xf335[22]][_0xf335[2]](); App[_0xf335[25]][_0xf335[44]]()[_0xf335[43]](); if (App[_0xf335[25]][_0xf335[45]]()) { App[_0xf335[25]][_0xf335[53]]({ waitMsg: _0xf335[46], url: _0xf335[47], params: { lstheader: Ext[_0xf335[49]](App[_0xf335[18]][_0xf335[48]]({ skipIdForPhantomRecords: false })), custId: App[_0xf335[1]][_0xf335[27]] }, success: function (_0xf46dx12, _0xf46dx13) { if (_0xf46dx13[_0xf335[50]][_0xf335[42]] != _0xf335[21]) { App[_0xf335[22]][_0xf335[51]]()[_0xf335[17]](); HQ[_0xf335[30]][_0xf335[29]](201405071, _0xf335[21], null); menuClick(_0xf335[19]); setTimeout(function () { waitFormReload(_0xf46dx13[_0xf335[50]].ShipToId); }, 2500); } else { }; }, failure: function (_0xf46dx14, _0xf46dx13) { if (_0xf46dx13[_0xf335[50]][_0xf335[52]]) { HQ[_0xf335[30]][_0xf335[29]](_0xf46dx13[_0xf335[50]][_0xf335[52]], _0xf335[21], _0xf335[21]); } else { processMessage(_0xf46dx14, _0xf46dx13); }; } }); } else { var _0xf46dx15 = App[_0xf335[25]][_0xf335[44]]()[_0xf335[55]]()[_0xf335[54]](function (_0xf46dx16) { if (!_0xf46dx16[_0xf335[45]]()) { alert(_0xf46dx16); }; }); }; }; function Close() { if (App[_0xf335[25]][_0xf335[24]]() != undefined) { App[_0xf335[25]][_0xf335[43]](); }; if (storeIsChange(App[_0xf335[18]], false)) { HQ[_0xf335[30]][_0xf335[29]](5, _0xf335[21], _0xf335[56]); } else { parent[_0xf335[58]][_0xf335[57]][_0xf335[34]](); }; }; function storeIsChange(_0xf46dx19, _0xf46dx1a) { if (_0xf46dx1a == undefined) { _0xf46dx1a = true; }; if ((_0xf46dx1a == true ? _0xf46dx19[_0xf335[48]]()[_0xf335[59]][_0xf335[40]] > 1 : false) || _0xf46dx19[_0xf335[48]]()[_0xf335[60]] != undefined || _0xf46dx19[_0xf335[48]]()[_0xf335[61]] != undefined) { return true; }; return false; }; var closeScreen = function (_0xf46dx16) { if (_0xf46dx16 == _0xf335[62]) { Save(); } else { if (parent[_0xf335[58]][_0xf335[57]] != null) { parent[_0xf335[58]][_0xf335[57]][_0xf335[34]](); }; }; }; var deleteRecordForm = function (_0xf46dx16) { if (_0xf46dx16 == _0xf335[62]) { try { App[_0xf335[66]].AR20600Delete(App[_0xf335[1]][_0xf335[2]](), App[_0xf335[22]][_0xf335[2]](), { success: function (_0xf46dx13) { App[_0xf335[22]][_0xf335[51]]()[_0xf335[17]](); menuClick(_0xf335[19]); App[_0xf335[22]][_0xf335[10]](_0xf335[21]); }, failure: function () { }, eventMask: { msg: HQ[_0xf335[65]][_0xf335[64]](_0xf335[63]), showMask: true } }); } catch (ex) { alert(ex[_0xf335[30]]); }; }; }; var deleteRecordGrid = function (_0xf46dx16) { if (_0xf46dx16 == _0xf335[62]) { App[_0xf335[68]][_0xf335[67]](); }; }; function selectRecord(_0xf46dx1f, _0xf46dx6) { var _0xf46dx6 = _0xf46dx1f[_0xf335[7]][_0xf335[69]](id); _0xf46dx1f[_0xf335[7]][_0xf335[72]](_0xf46dx1f[_0xf335[7]][_0xf335[70]](_0xf46dx6), { callback: function () { _0xf46dx1f[_0xf335[71]]()[_0xf335[35]](_0xf46dx6); } }); }; var loadDataAutoHeader = function () { if (App[_0xf335[18]][_0xf335[73]]() == 0) { App[_0xf335[18]][_0xf335[74]](0, Ext[_0xf335[8]].Record()); }; var _0xf46dx6 = App[_0xf335[18]][_0xf335[9]](0); if (_0xf46dx6) { App[_0xf335[25]][_0xf335[44]]()[_0xf335[75]](_0xf46dx6); }; }; var waitCopyShipToIdLoad = function () { if (App[_0xf335[22]][_0xf335[51]]()[_0xf335[8]][_0xf335[38]][0] == undefined) { App[_0xf335[22]][_0xf335[10]](_0xf335[21]); } else { App[_0xf335[22]][_0xf335[10]](App[_0xf335[22]][_0xf335[51]]()[_0xf335[8]][_0xf335[38]][0][_0xf335[8]].ShipToId); }; }; var cboCustID_Change = function (_0xf46dxf, _0xf46dx10) { App[_0xf335[22]][_0xf335[10]](_0xf335[21]); App[_0xf335[22]][_0xf335[51]]()[_0xf335[17]](); setTimeout(function () { waitCopyShipToIdLoad(); }, 1500); }; var cboShipToId_Change = function (_0xf46dxf, _0xf46dx10) { tmpShipToIdloadStoreOrForm = _0xf335[16]; App[_0xf335[18]][_0xf335[17]](); }; var cboCountry_Change = function (_0xf46dxf, _0xf46dx25, _0xf46dx26) { setTimeout(function () { if (tmpShipToIdloadStoreOrForm == 1) { App[_0xf335[76]][_0xf335[51]]()[_0xf335[77]]({ scope: this, callback: function () { var _0xf46dx6 = App[_0xf335[25]][_0xf335[24]](); App[_0xf335[76]][_0xf335[10]](_0xf46dx6[_0xf335[8]].State); } }); } else { App[_0xf335[76]][_0xf335[51]]()[_0xf335[77]](); }; }, 1500); }; var cboState_Change = function (_0xf46dxf, _0xf46dx25, _0xf46dx26) { setTimeout(function () { waitCityDistrictLoad(); }, 1500); }; var waitCityDistrictLoad = function () { if (tmpShipToIdloadStoreOrForm == 1) { var _0xf46dx6 = App[_0xf335[25]][_0xf335[24]](); App[_0xf335[78]][_0xf335[51]]()[_0xf335[77]]({ scope: this, callback: function () { App[_0xf335[78]][_0xf335[10]](_0xf46dx6[_0xf335[8]].City); } }); App[_0xf335[79]][_0xf335[51]]()[_0xf335[77]]({ scope: this, callback: function () { App[_0xf335[79]][_0xf335[10]](_0xf46dx6[_0xf335[8]].District); } }); tmpShipToIdloadStoreOrForm = 0; } else { App[_0xf335[78]][_0xf335[51]]()[_0xf335[77]](); App[_0xf335[79]][_0xf335[51]]()[_0xf335[77]](); }; };
+var tmpShipToIdloadStoreOrForm = "0";
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            var combobox = App.cboCustId;
+            var v = combobox.getValue();
+            var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
+            var index = combobox.store.indexOf(record);
+            App.cboCustId.setValue(combobox.store.getAt(0).data.CustId);
+            break;
+        case "prev":
+            var combobox = App.cboCustId;
+            var v = combobox.getValue();
+            var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
+            var index = combobox.store.indexOf(record);
+            App.cboCustId.setValue(combobox.store.getAt(index - 1).data.CustId);
+            break;
+        case "next":
+            var combobox = App.cboCustId;
+            var v = combobox.getValue();
+            var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
+            var index = combobox.store.indexOf(record);
+            App.cboCustId.setValue(combobox.store.getAt(index + 1).data.CustId);
+            break;
+        case "last":
+            var combobox = App.cboCustId;
+            var v = combobox.getValue();
+            var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
+            var index = combobox.store.indexOf(record);
+            App.cboCustId.setValue(App.cboCustId.store.getAt(App.cboCustId.store.getTotalCount() - 1).data.CustId);
+            break;
+        case "refresh":
+            tmpShipToIdloadStoreOrForm = "1";
+            App.storeForm.reload();
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                App.cboShipToId.setValue('');
+                App.storeForm.reload();                 
+            }
+            break;
+        case "delete":
+            var curRecord = App.frmMain.getRecord();
+            if (HQ.isDelete) {
+                if (App.cboShipToId.value != "") {
+                    HQ.message.show(11, '', 'deleteRecordForm');
+                }
+            }
+            break;
+        case "save":
+            Save();
+            break;
+        case "print":
+            alert(command);
+            break;
+        case "close":
+            Close();
+            break;
+    }
+};
+
+var refreshTree = function (i) {
+    App.Tree.select(i);
+};
+
+var refreshTree2 = function (dt) {
+    App.cboInvtID.setValue(dt);
+    var findNode = App.IDTree.items.items[0].store.data.items;
+    for (var i = 0; i < findNode.length; i++) {
+        if (findNode[i].data.id == node) {
+            App.Tree.select(i);
+            break;
+        }
+    }
+};
+
+var waitFormReload = function (sender, e) {
+    tmpShipToIdloadStoreOrForm = "1";
+    App.cboShipToId.setValue(sender);
+    App.storeForm.reload();
+};
+
+function Save() {
+    var curRecord = App.frmMain.getRecord();
+    curRecord.data.ShipToId = App.cboShipToId.getValue();
+
+    App.frmMain.getForm().updateRecord();
+    //App.frmMain.updateRecord(curRecord);
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: 'Submiting...',
+            url: 'AR20600/Save',
+            params: {
+                lstheader: Ext.encode(App.storeForm.getChangedData({ skipIdForPhantomRecords: false })),
+                custId: App.cboCustId.value
+            },
+            success: function (result, data) {
+                if (data.result.ShipToId != "") {
+                    App.cboShipToId.getStore().reload();
+                    HQ.message.show(201405071, '', null);
+                    menuClick("refresh");
+                    setTimeout(function () { waitFormReload(data.result.ShipToId); }, 2500);
+                } else {
+                }
+            }
+            , failure: function (errorMsg, data) {
+                if (data.result.code) {
+                    HQ.message.show(data.result.code, '', '');
+                }
+                else {
+                    processMessage(errorMsg, data);
+                }
+            }
+        });
+    }
+    else {
+        var fields = App.frmMain.getForm().getFields().each(
+                function (item) {
+                    if (!item.isValid()) {
+                        alert(item);
+                    }
+                }
+            );
+    }
+};
+
+// Xem lai
+function Close() {
+    if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
+    if (storeIsChange(App.storeForm, false)) {
+        HQ.message.show(5, '', 'closeScreen');
+
+    } else {
+        parent.App.tabAR20600.close();
+    }
+};
+
+// Xem lai
+function storeIsChange(store, isCreate) {
+    if (isCreate == undefined) isCreate = true;
+    if ((isCreate == true ? store.getChangedData().Created.length > 1 : false)
+        || store.getChangedData().Updated != undefined
+        || store.getChangedData().Deleted != undefined) {
+        return true;
+    }
+    return false;
+};
+
+var closeScreen = function (item) {
+    if (item == "yes") {
+
+        Save();
+    }
+    else {
+        if (parent.App.tabAR20600 != null)
+            parent.App.tabAR20600.close();
+    }
+};
+
+// Xac nhan xoa record tren grid
+var deleteRecordForm = function (item) {
+    if (item == "yes") {
+
+        try {
+            App.direct.AR20600Delete(App.cboCustId.getValue(), App.cboShipToId.getValue(), {
+                success: function (data) {
+
+                    App.cboShipToId.getStore().reload();
+                    menuClick('refresh');
+                    App.cboShipToId.setValue('');
+                },
+                failure: function () {
+                    //
+                },
+                eventMask: { msg: HQ.common.getLang("DeletingData"), showMask: true }
+            });
+        } catch (ex) {
+            alert(ex.message);
+        }
+    }
+};
+
+var deleteRecordGrid = function (item) {
+    if (item == "yes") {
+        App.grd.deleteSelected();
+    }
+};
+
+function selectRecord(grid, record) {
+    var record = grid.store.getById(id);
+    grid.store.loadPage(grid.store.findPage(record), {
+        callback: function () {
+            grid.getSelectionModel().select(record);
+        }
+    });
+};
+
+var loadDataAutoHeader = function () {
+
+    if (App.storeForm.getCount() == 0) {
+        App.storeForm.insert(0, Ext.data.Record());
+    }
+    var record = App.storeForm.getAt(0);
+    if (record) {
+        App.frmMain.getForm().loadRecord(record);
+    }
+};
+
+var waitCopyShipToIdLoad = function () {
+
+    if (App.cboShipToId.getStore().data.items[0] == undefined) {
+        App.cboShipToId.setValue("");
+    } else {
+        App.cboShipToId.setValue(App.cboShipToId.getStore().data.items[0].data.ShipToId);
+    }
+};
+
+var cboCustID_Change = function (sender, e) {
+    App.cboShipToId.setValue("");
+    App.cboShipToId.getStore().reload();
+    setTimeout(function () { waitCopyShipToIdLoad(); }, 1500);
+};
+
+var cboShipToId_Change = function (sender, e) {
+    tmpShipToIdloadStoreOrForm = "1";
+    App.storeForm.reload();
+};
+
+var cboCountry_Change = function (sender, newValue, oldValue) {
+    setTimeout(function () {
+        if (tmpShipToIdloadStoreOrForm == 1) {
+            App.cboState.getStore().load({
+                scope: this,
+                callback: function () {
+                    var record = App.frmMain.getRecord();
+                    App.cboState.setValue(record.data.State);
+                }
+            });
+        } else {
+            App.cboState.getStore().load();
+        }
+    }, 1500);
+};
+
+var cboState_Change = function (sender, newValue, oldValue) {
+    setTimeout(function () { waitCityDistrictLoad(); }, 1500);
+};
+
+var waitCityDistrictLoad = function () {
+    if (tmpShipToIdloadStoreOrForm == 1) {
+        var record = App.frmMain.getRecord();
+        App.cboCity.getStore().load({
+            scope: this,
+            callback: function () {
+                App.cboCity.setValue(record.data.City);
+            }
+        });
+
+        App.cboDistrict.getStore().load({
+            scope: this,
+            callback: function () {
+                App.cboDistrict.setValue(record.data.District);
+            }
+        });
+        //App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
+        tmpShipToIdloadStoreOrForm = 0;
+    } else {
+        App.cboCity.getStore().load();
+        App.cboDistrict.getStore().load();
+    }
+};
