@@ -1,0 +1,88 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN23000;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "IN23000";
+    var acc = Session["IN23000"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/IN23000.js")' type="text/javascript"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.dateNow = new Date('@DateTime.Now.Date');
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+        @(
+            X.Store().ID("stoPOSM")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(IN_POSMHeader), "mdlPOSM", ""))       
+            .ServerProxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetPosmInfo", "IN23000"))                
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("posmID", "App.cboPosmID.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Fn="Store.stoPOSM_load" )
+            // Store: stoPOSM
+        )
+
+        @(
+            X.Store().ID("stoDet")
+            .AutoLoad(false).PageSize(50)//.RemotePaging(true)
+            .Model(Util.GenerateModel(typeof(IN23000_pgBranch_Result), "mdlDet", ""))       
+            .ServerProxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetBranch", "IN23000"))                
+                //.ActionMethods(action =>
+                //{
+                //    action.Read = HttpMethod.POST;
+                //})
+                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("posmID", "App.cboPosmID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(p => {
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['BranchID','CustID','PosmCode','SlsperID'];";
+                p.Load.Fn = "Store.stoDet_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange();";
+            })
+            // Store: stoDet
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong IN23000Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>

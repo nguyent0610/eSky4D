@@ -1,0 +1,217 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN23000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Border)
+        .ID("frmMain")
+        .TrackResetOnLoad(true)
+        //.DefaultAnchor("100%")
+        .BodyPadding(10)
+        .BodyBorder(0).AutoScroll(true)
+        .TopBar(Util.SetupToolbar("close,print,delete,new", true, "Event.Form.menuClick"))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .Items(
+            X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.North)
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch }).Border(false)
+            .Items(
+
+                // First Column
+                X.FieldSet().Title(Util.GetLang("POSM"))
+                .Layout(LayoutType.VBox).MarginSpec("0 5 5 5")
+                .MinWidth(200)//.Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboPosmID")
+                    .HQLangCode("POSMID").HQProcedure("IN23000_pcPOSM")
+                    .HQColumnShow("POSMId,FromDate,ToDate").HQHeightWidth(400, 300)
+                    .ValueField("POSMId").DisplayField("POSMId")
+                    .AllowBlank(false).ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Fn = "Event.Form.cboPosmID_change";
+                    })
+                    
+                    ,HQ.DateField().ID("dtpFromDate")
+                    .HQLangCode("FromDate").DataIndex("FromDate")
+                    .AllowBlank(false).ReadOnly(true)
+                    .Listeners(l=>l.Change.Fn="Event.Form.dtpFromDate_change")
+                    
+                    ,HQ.DateField().ID("dtpToDate")
+                    .AllowBlank(false).ReadOnly(true)
+                    .HQLangCode("ToDate").DataIndex("ToDate")
+                ) // First Column
+                
+                , X.FieldSet().Title(Util.GetLang("Handle"))
+                .Layout(LayoutType.VBox).MarginSpec("0 5 5 5")
+                .MinWidth(200)//.Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboStatus")
+                    .HQLangCode("Status").HQProcedure("IN23000_pcStatus")
+                    .HQColumnShow("Code,Descr").HQHeightWidth(400,300)
+                    .ValueField("Code").DisplayField("Descr")
+                    .ForceSelection(true).AllowBlank(false)
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                    .Listeners(l=>l.Change.Fn="Event.Form.cboStatus_change")
+                    
+                    , HQ.Combo().ID("cboHandle")
+                    .HQLangCode("Handle").HQProcedure("IN23000_pcHandle")
+                    .HQColumnShow("Code,Descr").HQHeightWidth(400,300)
+                    .ValueField("Code").DisplayField("Descr")
+                    .ForceSelection(true).AllowBlank(false)
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                        ,new StoreParameter("@Status", "App.cboStatus.getValue()", ParameterMode.Raw) 
+                    })
+                    .LoadData()
+                )
+                
+                , X.Container()
+                .Layout(LayoutType.VBox).MarginSpec("20 0 0 10")
+                .MinWidth(200)//.Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    X.DisplayField().ID("lblPOSMRegister")
+                    .FieldLabel(Util.GetLang("POSMRegister")).Value(0)
+                    
+                    , X.DisplayField().ID("lblPOSMAgree")
+                    .FieldLabel(Util.GetLang("POSMAgree")).Value(0)
+                    
+                    , X.DisplayField().ID("lblPOSMRefuse")
+                    .FieldLabel(Util.GetLang("POSMRefuse")).Value(0)
+                )
+            )
+            .Listeners(x => { 
+                x.Render.Handler = "HQ.common.control_render(this,'posm')"; 
+            })// pnlHeader
+
+            , X.GridPanel().ID("grdDet")
+            .Region(Region.Center)
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .SortableColumns(false)
+            .StoreID("stoDet")
+            .ColumnModel(
+                X.RowNumbererColumn()
+                
+                , X.CheckColumn().HideTitleEl(true).DataIndex("Selected")
+                .Align(Alignment.Center).Width(30).Editable(true)
+                .HeaderItems(
+                    HQ.Checkbox().ID("chkSelectHeader")
+                    .Handler("Event.Grid.chkSelectHeader_click")
+                )
+                
+                , X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID")
+                
+                , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID")
+                
+                , X.Column().Text(Util.GetLang("SalesPerson")).DataIndex("SlsName")
+                //.Renderer("Process.renderDescrByCode")
+                
+                , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
+                
+                , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")
+                //.Renderer("Process.renderDescrByCode")
+
+                , X.Column().Text(Util.GetLang("PosmCode")).DataIndex("PosmCode")
+                
+                , X.Column().Text(Util.GetLang("PosmName")).DataIndex("PosmName")
+                //.Renderer("Process.renderDescrByCode")
+                
+                , X.Column().Text(Util.GetLang("OrderQty")).DataIndex("Qty").Align(Alignment.Right)
+                
+                , X.Column().Text(Util.GetLang("AppQty")).DataIndex("AppQty").Align(Alignment.Right)
+                .Editor(
+                    HQ.NumberField().ID("numColAppQty")
+                    .SelectOnFocus(true).DecimalPrecision(0).MinValue(0)
+                )
+                
+                , X.Column().Text(Util.GetLang("Status")).DataIndex("Status")
+                .Renderer("Process.renderDescrByCode")
+                
+                , X.CommandColumn()
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "Event.Grid.grdDet_beforeEdit";
+                    ls.Edit.Fn = "Event.Grid.grdDet_edit";
+                    ls.ValidateEdit.Fn = "Event.Grid.grdDet_validateEdit";
+                })
+            )
+            .Features(
+                X.GridFilters().Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("BranchID")
+                    , X.StringFilter().DataIndex("SlsperID")
+                    , X.StringFilter().DataIndex("SlsName")
+                    , X.StringFilter().DataIndex("CustID")
+                    , X.StringFilter().DataIndex("CustName")
+                    , X.StringFilter().DataIndex("PosmCode")
+                    , X.StringFilter().DataIndex("PosmName")
+                    , X.NumericFilter().DataIndex("Qty")
+                    , X.NumericFilter().DataIndex("AppQty")
+                )
+            )
+            .Listeners(x => { 
+                x.Render.Handler = "HQ.common.control_render(this,'branch')"; 
+            })
+            //.BottomBar(
+            //    X.PagingToolbar().ID("pag")
+            //    .Items(
+            //        X.Label(Util.GetLang("PageSize")),
+            //        X.ToolbarSpacer(10),
+            //        X.ComboBox()
+            //        .Width(80)
+            //        .Items("1", "2", "10", "20", "30", "50")
+            //        .SelectedItems("50")
+            //        .Listeners(l =>
+            //            {
+            //                l.Select.Fn = "HQ.grid.onPageSelect";
+            //            })
+            //    )
+            //    .Plugins(X.ProgressBarPager())
+            //)// grdDet
+        )
+        .Listeners(lst =>
+        {
+            lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
+            lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
+        })// Form: frmMain
+    )
+)
