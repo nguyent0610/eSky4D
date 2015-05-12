@@ -22,6 +22,10 @@ namespace OM22002.Controllers
     public class OM22002Controller : Controller
     {
         private string _screenNbr = "OM22002";
+
+        private string _displayTradeType = "D";
+        private string _bonusTradeType = "B";
+
         OM22002Entities _db = Util.CreateObjectContext<OM22002Entities>(false);
         //
         // GET: /OM22002/
@@ -37,9 +41,9 @@ namespace OM22002.Controllers
             return PartialView();
         }
 
-        public ActionResult GetDet(string cpnyID, string displayID)
+        public ActionResult GetDet(string cpnyID, string objectID, string tradeType)
         {
-            var dets = _db.OM22002_pgCust(cpnyID, displayID).ToList();
+            var dets = _db.OM22002_pgCust(cpnyID, objectID, tradeType).ToList();
             return this.Store(dets);
         }
 
@@ -52,49 +56,97 @@ namespace OM22002.Controllers
 
                 foreach (var updated in lstCustChange.Updated)
                 {
-                    if (!string.IsNullOrWhiteSpace(updated.DisplayID))
+                    if (!string.IsNullOrWhiteSpace(updated.ObjectID))
                     {
-                        var regisObj = _db.OM_TDisplayCustomer.FirstOrDefault(p => p.BranchID == updated.BranchID
-                            && p.SlsperID == updated.SlsperID && p.CustID == updated.CustID
-                            && p.DisplayID == updated.DisplayID);// && p.LevelID != updated.LevelID);
-                        if (regisObj != null)
+                        if (updated.TradeType == _displayTradeType)
                         {
-                            throw new MessageException("1003","");
-                        }
-                        else
-                        {
-                            //regisObj = _db.OM_TDisplayCustomer.FirstOrDefault(p => p.BranchID == updated.BranchID
-                            //     && p.SlsperID == updated.SlsperID && p.CustID == updated.CustID
-                            //    && p.DisplayID == updated.DisplayID && p.LevelID == updated.LevelID);
-                            if (regisObj == null)
+                            #region DisplayTradeType
+                            var regisObj = _db.OM_TDisplayCustomer.FirstOrDefault(p => p.BranchID == updated.BranchID
+                                && p.SlsperID == updated.SlsperID && p.CustID == updated.CustID
+                                && p.DisplayID == updated.ObjectID);// && p.LevelID != updated.LevelID);
+                            if (regisObj != null)
                             {
-                                regisObj = new OM_TDisplayCustomer()
-                                {
-                                    BranchID = updated.BranchID,
-                                    CustID = updated.CustID,
-                                    DisplayID = updated.DisplayID,
-                                    LevelID = updated.LevelID,
-                                    Rate = (double)updated.Rate,
-                                    SlsperID = updated.SlsperID,
-                                    Crtd_DateTime = DateTime.Now,
-                                    Crtd_Prog = _screenNbr,
-                                    Crtd_User = Current.UserName,
-
-                                };
-                                _db.OM_TDisplayCustomer.AddObject(regisObj);
-
+                                throw new MessageException("1003", "");
                             }
-                            regisObj.LUpd_DateTime = DateTime.Now;
-                            regisObj.LUpd_Prog = _screenNbr;
-                            regisObj.LUpd_User = Current.UserName;
-                            regisObj.Rate = (double)updated.Rate;
-                            regisObj.Territory = updated.Territory.PassNull();
-                            regisObj.Zone = updated.Zone;
-                            regisObj.Status = "H";
-                            regisObj.PercentImage = 0;
-                            regisObj.PercentSales = 0;
+                            else
+                            {
+                                //regisObj = _db.OM_TDisplayCustomer.FirstOrDefault(p => p.BranchID == updated.BranchID
+                                //     && p.SlsperID == updated.SlsperID && p.CustID == updated.CustID
+                                //    && p.ObjectID == updated.ObjectID && p.LevelID == updated.LevelID);
+                                if (regisObj == null)
+                                {
+                                    regisObj = new OM_TDisplayCustomer()
+                                    {
+                                        BranchID = updated.BranchID,
+                                        CustID = updated.CustID,
+                                        DisplayID = updated.ObjectID,
+                                        LevelID = updated.LevelID,
+                                        Rate = (double)updated.Rate,
+                                        SlsperID = updated.SlsperID,
+                                        Crtd_DateTime = DateTime.Now,
+                                        Crtd_Prog = _screenNbr,
+                                        Crtd_User = Current.UserName,
 
-                            _db.SaveChanges();
+                                    };
+                                    _db.OM_TDisplayCustomer.AddObject(regisObj);
+
+                                }
+                                regisObj.LUpd_DateTime = DateTime.Now;
+                                regisObj.LUpd_Prog = _screenNbr;
+                                regisObj.LUpd_User = Current.UserName;
+                                regisObj.Rate = (double)updated.Rate;
+                                regisObj.Territory = updated.Territory.PassNull();
+                                regisObj.Zone = updated.Zone;
+                                regisObj.Status = "H";
+                                regisObj.PercentImage = 0;
+                                regisObj.PercentSales = 0;
+
+                                _db.SaveChanges();
+                            }
+                            #endregion
+                        }
+                        else if(updated.TradeType == _bonusTradeType){
+                            #region BonusTradeType
+                            var regisObj = _db.OM_TBonusCustomer.FirstOrDefault(p => p.BranchID == updated.BranchID
+                                && p.SlsperID == updated.SlsperID && p.CustID == updated.CustID
+                                && p.BonusID == updated.ObjectID);// && p.LevelID != updated.LevelID);
+                            if (regisObj != null)
+                            {
+                                throw new MessageException("1003", "");
+                            }
+                            else
+                            {
+                                if (regisObj == null)
+                                {
+                                    regisObj = new OM_TBonusCustomer()
+                                    {
+                                        BranchID = updated.BranchID,
+                                        CustID = updated.CustID,
+                                        BonusID = updated.ObjectID,
+                                        LevelID = updated.LevelID,
+                                        //Rate = (double)updated.Rate,
+                                        SlsperID = updated.SlsperID,
+                                        Crtd_DateTime = DateTime.Now,
+                                        Crtd_Prog = _screenNbr,
+                                        Crtd_User = Current.UserName,
+
+                                    };
+                                    _db.OM_TBonusCustomer.AddObject(regisObj);
+
+                                }
+                                regisObj.LUpd_DateTime = DateTime.Now;
+                                regisObj.LUpd_Prog = _screenNbr;
+                                regisObj.LUpd_User = Current.UserName;
+                                //regisObj.Rate = (double)updated.Rate;
+                                regisObj.Territory = updated.Territory.PassNull();
+                                regisObj.Zone = updated.Zone;
+                                //regisObj.Status = "H";
+                                //regisObj.PercentImage = 0;
+                                //regisObj.PercentSales = 0;
+
+                                _db.SaveChanges();
+                            }
+                            #endregion
                         }
                     }
                     else

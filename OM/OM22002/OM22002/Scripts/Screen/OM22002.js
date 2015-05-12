@@ -62,10 +62,14 @@ var Event = {
         },
 
         cboCpny_change: function (cbo, newValue, oldValue, eOpts) {
-            App.cboDisplayID.store.reload();
+            App.cboObjectID.store.reload();
         },
 
-        cboDisplayID_change: function (cbo, newValue, oldValue, eOpts) {
+        cboTradeType_change: function (cbo, newValue, oldValue, eOpts) {
+            App.cboObjectID.store.reload();
+        },
+
+        cboObjectID_change: function (cbo, newValue, oldValue, eOpts) {
             //App.cboLevelID.store.reload();
         },
 

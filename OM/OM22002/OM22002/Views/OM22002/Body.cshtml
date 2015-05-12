@@ -83,36 +83,46 @@
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                         l.Change.Fn = "Event.Form.cboCpny_change";
                     })
-                    
-                    , HQ.Combo().ID("cboDisplayID")
-                    .HQLangCode("DisplayID").HQProcedure("OM22002_pcDisplayID")
-                    .HQColumnShow("DisplayID,Descr").ValueField("DisplayID").DisplayField("Descr")
+
+                    , HQ.Combo().ID("cboTradeType")
+                    .HQLangCode("TradeType").HQProcedure("OM22002_pcTradeType")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
                     .HQHeightWidth(400, 300).AllowBlank(false).ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@CpnyID", "App.cboCpny.getValue()", ParameterMode.Raw) 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                     })
                     .LoadData()
                     .Listeners(l =>
                     {
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                        l.Change.Fn = "Event.Form.cboDisplayID_change";
+                        l.Change.Fn = "Event.Form.cboTradeType_change";
                     })
-                    
-                    //, HQ.Combo().ID("cboLevelID")
-                    //.HQLangCode("Level").HQProcedure("OM22002_pcLevel")
-                    //.HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
-                    //.HQHeightWidth(400, 300).AllowBlank(false).ForceSelection(true)
-                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    //.HQParam(new StoreParameterCollection() { 
-                    //    new StoreParameter("@DisplayID", "App.cboDisplayID.getValue()", ParameterMode.Raw) 
-                    //})
-                    //.LoadData()
-                    //.Listeners(l =>
-                    //{
-                    //    l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                    //})
                 ) // Second Column
+                
+                // Second Column
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                .MinWidth(250).Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboObjectID")
+                    .HQLangCode("Display/Bonus").HQProcedure("OM22002_pcObjectID")
+                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
+                    .HQHeightWidth(400, 300).AllowBlank(false).ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        , new StoreParameter("@CpnyID", "App.cboCpny.getValue()", ParameterMode.Raw) 
+                        , new StoreParameter("@TradeType", "App.cboTradeType.getValue()", ParameterMode.Raw)
+                    })
+                    .LoadData()
+                    .Listeners(l =>
+                    {
+                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                        l.Change.Fn = "Event.Form.cboObjectID_change";
+                    })
+                )
                 
                 // Third Column
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 105")
@@ -141,20 +151,13 @@
                 .Model(Util.GenerateModel(typeof(OM22002_pgCust_Result), "mdlDet", ""))       
                 .ServerProxy(
                     X.AjaxProxy()                
-                    .Url(Url.Action("GetDet", "OM22002"))                
-                    //.ActionMethods(action =>
-                    //{
-                    //    action.Read = HttpMethod.POST;
-                    //})
-                    //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                    .Url(Url.Action("GetDet", "OM22002"))
                 ) 
                 .Parameters(ps =>
                 {
-                    //ps.Add(new StoreParameter("zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
-                    //ps.Add(new StoreParameter("territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
                     ps.Add(new StoreParameter("cpnyID", "App.cboCpny.getValue()", ParameterMode.Raw));
-                    ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
-                    //ps.Add(new StoreParameter("levelID", "App.cboLevelID.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("objectID", "App.cboObjectID.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("tradeType", "App.cboTradeType.getValue()", ParameterMode.Raw));
                 })      
                 //.Listeners(p=>p.Load.Fn="Store.stoDet_load" )
                 // Store: stoDet
@@ -171,23 +174,26 @@
                 , X.Column().Text(Util.GetLang("SlsName")).DataIndex("SlsName")      
                 , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
                 , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")      
-                , X.Column().Text(Util.GetLang("DisplayID")).DataIndex("DisplayID")
+                , X.Column().Text(Util.GetLang("ObjectID")).DataIndex("ObjectID")
                 , X.Column().Text(Util.GetLang("LevelID")).DataIndex("LevelID")
                 .Editor(
                     HQ.Combo().ID("cboColLevelID")
                     .HQProcedure("OM22002_pcLevel")
-                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
+                    .HQColumnShow("Code").ValueField("Code").DisplayField("Code")
                     .HQHeightWidth(400, 300)
                     .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@DisplayID", "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.DisplayID : Ext.String.empty", ParameterMode.Raw) 
+                        new StoreParameter("@ObjectID", 
+                            "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.ObjectID : Ext.String.empty", 
+                            ParameterMode.Raw) 
+                        , new StoreParameter("@TradeType", "App.cboTradeType.getValue()", ParameterMode.Raw) 
                     })
                     .LoadData()
                 )
-                , X.NumberColumn().Text(Util.GetLang("Rate2")).DataIndex("Rate")
-                .Align(Alignment.Right)
-                .Editor(
-                    HQ.NumberField().SelectOnFocus(true)
-                )
+                //, X.NumberColumn().Text(Util.GetLang("Rate2")).DataIndex("Rate")
+                //.Align(Alignment.Right)
+                //.Editor(
+                //    HQ.NumberField().SelectOnFocus(true)
+                //)
 
                 , X.CommandColumn()
                 .Commands(
@@ -221,7 +227,7 @@
                     , X.StringFilter().DataIndex("SlsName")
                     , X.StringFilter().DataIndex("CustID")
                     , X.StringFilter().DataIndex("CustName")
-                    , X.StringFilter().DataIndex("DisplayID")
+                    , X.StringFilter().DataIndex("ObjectID")
                 )
             )
             .BottomBar(

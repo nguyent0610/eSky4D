@@ -6,8 +6,31 @@
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="OM_TBonusCustomer" EntityType="eBiz4DWebAppModel.Store.OM_TBonusCustomer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_TDisplayCustomer" EntityType="eBiz4DWebAppModel.Store.OM_TDisplayCustomer" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
+        <EntityType Name="OM_TBonusCustomer">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="BonusID" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="SlsperID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="BonusID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="LevelID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Territory" Type="varchar" MaxLength="50" />
+          <Property Name="Zone" Type="varchar" MaxLength="50" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="OM_TDisplayCustomer">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -23,10 +46,10 @@
           <Property Name="Rate" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
           <Property Name="Territory" Type="varchar" MaxLength="50" />
           <Property Name="Zone" Type="varchar" MaxLength="50" />
@@ -37,7 +60,8 @@
         </EntityType>
         <Function Name="OM22002_pgCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="DisplayID" Type="varchar" Mode="In" />
+          <Parameter Name="ObjectID" Type="varchar" Mode="In" />
+          <Parameter Name="TradeType" Type="varchar" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -47,8 +71,10 @@
           <EntitySet Name="OM_TDisplayCustomer" EntityType="OM22002Model.OM_TDisplayCustomer" />
           <FunctionImport Name="OM22002_pgCust" ReturnType="Collection(OM22002Model.OM22002_pgCust_Result)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="DisplayID" Mode="In" Type="String" />
+            <Parameter Name="ObjectID" Mode="In" Type="String" />
+            <Parameter Name="TradeType" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="OM_TBonusCustomer" EntityType="OM22002Model.OM_TBonusCustomer" />
         </EntityContainer>
         <EntityType Name="OM_TDisplayCustomer">
           <Key>
@@ -65,10 +91,10 @@
           <Property Type="Double" Name="Rate" Nullable="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="Territory" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Zone" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -79,17 +105,40 @@
         </EntityType>
         <ComplexType Name="OM22002_pgCust_Result">
           <Property Type="Boolean" Name="Selected" Nullable="true" />
-          <Property Type="String" Name="DisplayID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="LevelID" Nullable="false" MaxLength="50" />
-          <Property Type="Double" Name="Rate" Nullable="false" />
-          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
-          <Property Type="String" Name="Zone" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="SlsName" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ObjectID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LevelID" Nullable="true" MaxLength="50" />
+          <Property Type="Double" Name="Rate" Nullable="true" />
+          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Zone" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Territory" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BranchID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="5" />
+          <Property Type="String" Name="SlsName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TradeType" Nullable="true" MaxLength="2" />
         </ComplexType>
+        <EntityType Name="OM_TBonusCustomer">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsperID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="BonusID" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BonusID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LevelID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Territory" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Zone" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -125,7 +174,7 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM22002Model.OM22002_pgCust_Result">
                 <ScalarProperty Name="Selected" ColumnName="Selected" />
-                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+                <ScalarProperty Name="ObjectID" ColumnName="ObjectID" />
                 <ScalarProperty Name="LevelID" ColumnName="LevelID" />
                 <ScalarProperty Name="Rate" ColumnName="Rate" />
                 <ScalarProperty Name="CustID" ColumnName="CustID" />
@@ -135,9 +184,30 @@
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
                 <ScalarProperty Name="SlsName" ColumnName="SlsName" />
+                <ScalarProperty Name="TradeType" ColumnName="TradeType" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="OM_TBonusCustomer">
+            <EntityTypeMapping TypeName="OM22002Model.OM_TBonusCustomer">
+              <MappingFragment StoreEntitySet="OM_TBonusCustomer">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="BonusID" ColumnName="BonusID" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -161,6 +231,7 @@
     <Diagrams>
       <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
         <EntityTypeShape EntityType="OM22002Model.OM_TDisplayCustomer" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM22002Model.OM_TBonusCustomer" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
