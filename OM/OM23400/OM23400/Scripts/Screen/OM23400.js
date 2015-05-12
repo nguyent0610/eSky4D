@@ -288,6 +288,7 @@ var Event = {
                 HQ.common.changeData(HQ.isChange, 'OM23400');//co thay doi du lieu gan * tren tab title header
                 //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
                 App.cboBonusID.setReadOnly(HQ.isChange);
+
                 var frmRecord = App.frmMain.getRecord();
                 if (!frmRecord.data.tstamp) {
                     App.cboChannel.setReadOnly(HQ.isChange && App.cboChannel.value);
