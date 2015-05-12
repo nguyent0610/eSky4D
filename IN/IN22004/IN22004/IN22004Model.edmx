@@ -55,7 +55,7 @@
             <PropertyRef Name="NewExpDate" />
           </Key>
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="StkRecNbr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="NewExpDate" Nullable="false" Precision="3" />
@@ -74,7 +74,7 @@
           <Property Type="String" Name="StkRecNbr" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="SlsPerName" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="CustID" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
