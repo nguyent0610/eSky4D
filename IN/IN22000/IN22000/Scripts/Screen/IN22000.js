@@ -286,9 +286,14 @@ var Event = {
                         }
                         else if (HQ.focus == 'branch') {
                             if (App.cboPosmID.getValue() && App.slmDet.getCount()) {
-                                HQ.message.show(2015020806,
-                                    HQ.common.getLang('CustID') + " " + App.slmDet.selected.items[0].data.CustID,
-                                    'Process.deleteBranch');
+                                if (App.slmDet.selected.items[0].data.Status == _beginStatus) {
+                                    HQ.message.show(2015020806,
+                                        HQ.common.getLang('CustID') + " " + App.slmDet.selected.items[0].data.CustID,
+                                        'Process.deleteBranch');
+                                }
+                                else {
+                                    HQ.message.show(20140306,'','');
+                                }
                             }
                         }
                     }
@@ -357,6 +362,18 @@ var Event = {
                     && Process.isAllValidKey(e.store.getChangedData().Created, keys)
                     && Process.isAllValidKey(e.store.getChangedData().Updated, keys)) {
                     HQ.store.insertRecord(e.store, keys, Ext.create("App.mdlDet", { Status: _beginStatus }));
+                }
+            }
+
+            if (e.field == "BranchID") {
+                if (e.value != e.originalValue) {
+                    e.record.set("SlsperID", "");
+                    e.record.set("CustID", "");
+                }
+            }
+            else if (e.field == "SlsperID") {
+                if (e.value != e.originalValue) {
+                    e.record.set("CustID", "");
                 }
             }
 

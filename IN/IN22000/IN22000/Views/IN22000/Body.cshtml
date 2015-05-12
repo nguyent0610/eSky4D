@@ -171,9 +171,12 @@
             .Features(
                 X.GridFilters().Local(true)
                 .Filters(
-                    X.StringFilter().DataIndex("Zone")
-                    , X.StringFilter().DataIndex("Territory")
-                    , X.StringFilter().DataIndex("BranchID")
+                    X.StringFilter().DataIndex("BranchID")
+                    , X.StringFilter().DataIndex("SlsperID")
+                    , X.StringFilter().DataIndex("SlsName")
+                    , X.StringFilter().DataIndex("CustName")
+                    , X.StringFilter().DataIndex("PosmName")
+                    , X.NumericFilter().DataIndex("Qty")
                 )
             )
             .Listeners(x => { 

@@ -73,6 +73,7 @@
                 p.BeforeLoad.Handler = "this.HQFieldKeys=['BranchID','CustID','PosmCode','SlsperID'];";
                 p.Load.Fn = "Store.stoDet_load";
                 p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange();";
             })
             // Store: stoDet
         )

@@ -156,7 +156,14 @@ namespace IN22000.Controllers
                     var cpnies = _db.IN_POSMCust.Where(c => c.PosmID == posmID).ToList();
                     foreach (var cpny in cpnies)
                     {
-                        _db.IN_POSMCust.DeleteObject(cpny);
+                        if (cpny.Status == _beginStatus)
+                        {
+                            _db.IN_POSMCust.DeleteObject(cpny);
+                        }
+                        else 
+                        {
+                            throw new MessageException(MessageType.Message, "20140306");
+                        }
                     }
                     _db.SaveChanges();
                     return Json(new { success = true });
