@@ -17,7 +17,7 @@ namespace AR20600.Controllers
     [CheckSessionOut]
     public class AR20600Controller : Controller
     {
-        private string _branchID = Current.CpnyID.ToString();
+        private string BranchID = Current.CpnyID;
         private string _screenNbr = "AR20600";
         AR20600Entities _db = Util.CreateObjectContext<AR20600Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
@@ -28,96 +28,69 @@ namespace AR20600.Controllers
             return View();
         }
         
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetSOAddressClass(string branchID,string custId,string shipToId)
+        public ActionResult GetAR_SOAddress(string branchID, string custId, string shipToId)
         {
-            var rptSOAddress = _db.AR20600_ppAR_SOAddress().FirstOrDefault(p => p.BranchID == branchID && p.CustId == custId && p.ShipToId == shipToId);
+            var rptSOAddress = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == branchID && p.CustId == custId && p.ShipToId == shipToId);
             return this.Store(rptSOAddress);
         }
 
-
-        [DirectMethod]
-        [HttpPost]
-       
-        public ActionResult Save(FormCollection data,string custId)
+         [HttpPost]
+        public ActionResult Save(FormCollection data)
         {
-            var shipToId = "";
-            StoreDataHandler dataHandler = new StoreDataHandler(data["lstheader"]);
-            ChangeRecords<AR20600_ppAR_SOAddress_Result> lstheader = dataHandler.BatchObjectData<AR20600_ppAR_SOAddress_Result>();
-
-            foreach (AR20600_ppAR_SOAddress_Result updated in lstheader.Updated)
+            try
             {
-                // Get the image path
-                shipToId = updated.ShipToId;
-                var objHeader = _db.AR_SOAddress.Where(p => p.BranchID == _branchID && p.CustId == custId && p.ShipToId == updated.ShipToId).FirstOrDefault();
-                if (objHeader != null)
+                string CustId = data["cboCustId"].PassNull();
+                string ShipToId = data["cboShipToId"].PassNull();
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstAR_SOAddress"]);
+                ChangeRecords<AR_SOAddress> lstAR_SOAddress = dataHandler.BatchObjectData<AR_SOAddress>();
+                lstAR_SOAddress.Created.AddRange(lstAR_SOAddress.Updated);
+                foreach (AR_SOAddress curHeader in lstAR_SOAddress.Created)
                 {
-                    if (updated.tstamp.ToHex() != objHeader.tstamp.ToHex())
+                    if (CustId.PassNull() == "" || ShipToId.PassNull()=="") continue;
+
+                    var objHeader = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == BranchID && p.CustId == CustId && p.ShipToId == ShipToId);
+                    if (objHeader != null)
                     {
-                        throw new MessageException(MessageType.Message, "19");
-                        //return Json(new { success = false });
+                        if (objHeader.tstamp.ToHex() == curHeader.tstamp.ToHex())
+                        {
+                            UpdatingHeader(curHeader, ref objHeader);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
                     }
-                    UpdatingHeader(updated, ref objHeader);
+                    else
+                    {
+                        //string images = getPathThenUploadImage(curHeader, UserID);
+                        objHeader = new AR_SOAddress();
+                        objHeader.BranchID = BranchID;
+                        objHeader.CustId = CustId;
+                        objHeader.ShipToId = ShipToId;
+                        objHeader.Crtd_DateTime = DateTime.Now;
+                        objHeader.Crtd_Prog = _screenNbr;
+                        objHeader.Crtd_User = Current.UserName;
+                        UpdatingHeader(curHeader, ref objHeader);
+                        _db.AR_SOAddress.AddObject(objHeader);
+                    }
                 }
-                else
-                {
-                    objHeader = new AR_SOAddress();
-                    objHeader.BranchID = Current.CpnyID.ToString();
-                    objHeader.CustId = custId;
-                    objHeader.ShipToId = updated.ShipToId;
-                    UpdatingHeader(updated, ref objHeader);
-                    
-                    objHeader.Crtd_DateTime = DateTime.Now;
-                    objHeader.Crtd_Prog = _screenNbr;
-                    objHeader.Crtd_User = Current.UserName;
-                    _db.AR_SOAddress.AddObject(objHeader);
-                }
+                _db.SaveChanges();
+                return Json(new { success = true, ShipToId = ShipToId });
             }
-
-            foreach (AR20600_ppAR_SOAddress_Result created in lstheader.Created)
+            catch (Exception ex)
             {
-                // Get the image path
-                shipToId = created.ShipToId;
-                var objHeader = _db.AR_SOAddress.Where(p => p.BranchID == _branchID && p.CustId == custId && p.ShipToId == created.ShipToId).FirstOrDefault();
-                if (objHeader != null)
-                {
-                    return Json(new { success = false });
-                }
-                else
-                {
-                    objHeader = new AR_SOAddress();
-                    objHeader.BranchID = _branchID;
-                    objHeader.CustId = custId;
-                    objHeader.ShipToId = created.ShipToId;
-                    UpdatingHeader(created, ref objHeader);
-
-                    objHeader.Crtd_DateTime = DateTime.Now;
-                    objHeader.Crtd_Prog = _screenNbr;
-                    objHeader.Crtd_User = Current.UserName;
-                    _db.AR_SOAddress.AddObject(objHeader);
-                    _db.SaveChanges();
-                }
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
-            _db.SaveChanges();
-            //this.Direct();
-            return Json(new { success = true, ShipToId = shipToId }, JsonRequestBehavior.AllowGet);
         }
 
-        [DirectMethod]
-        public ActionResult AR20600Delete(string custId ,string shipToId)
-        {
-            var soAddress = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == _branchID && p.CustId == custId && p.ShipToId == shipToId);
-            _db.AR_SOAddress.DeleteObject(soAddress);
-            _db.SaveChanges();
-            return this.Direct();
-        }
-
-        private void UpdatingHeader(AR20600_ppAR_SOAddress_Result s, ref AR_SOAddress d)
+        private void UpdatingHeader(AR_SOAddress s, ref AR_SOAddress d)
         {
             d.Descr = s.Descr;
             d.SOName = s.SOName;
@@ -139,9 +112,34 @@ namespace AR20600.Controllers
             d.TaxId01 = s.TaxId01;
             d.TaxId02 = s.TaxId02;
             d.TaxId03 = s.TaxId03;
+
             d.LUpd_DateTime = DateTime.Now;
             d.LUpd_Prog = _screenNbr;
             d.LUpd_User = Current.UserName;
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAll(FormCollection data)
+        {
+            try
+            {
+                string CustId = data["cboCustId"].PassNull();
+                string ShipToId = data["cboShipToId"].PassNull();
+
+                var obj = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == BranchID && p.CustId == CustId && p.ShipToId == ShipToId);
+                if (obj != null)
+                {
+                    _db.AR_SOAddress.DeleteObject(obj);
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
         }
 
     }

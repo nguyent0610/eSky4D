@@ -15,10 +15,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width" />
-@*<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />*@
+    <meta name="viewport" content="width=device-width" />
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
-    <script src="~/Scripts/hq.common.js"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/Screen/AR20600.js")' type="text/javascript"></script>
 
 <style type="text/css"> @*Thuoc tinh hover tren grid *@
@@ -48,26 +47,29 @@
     <body>
 @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
           
-@(X.Store().ID("storeForm").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR20600_ppAR_SOAddress_Result), "mdlAR20600_ppAR_SOAddress", "BranchID,CustId,ShipToId"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetSOAddressClass", "AR20600"))
-            .ActionMethods(action =>
+        @(X.Store().ID("stoSOAddress")  
+            .Model(Util.GenerateModel(typeof(AR_SOAddress), "mdlAR_SOAddress", "BranchID,CustId,ShipToId"))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetAR_SOAddress", "AR20600"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
             {
-                action.Read = HttpMethod.POST;
+                ps.Add(new StoreParameter("BranchID", Current.CpnyID.ToString(), ParameterMode.Value));
+                ps.Add(new StoreParameter("CustId", "App.cboCustId.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("ShipToId", "App.cboShipToId.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";                   
             })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-        .Parameters(ps =>
-        {
-            ps.Add(new StoreParameter("BranchID", Current.CpnyID.ToString(), ParameterMode.Value));
-            ps.Add(new StoreParameter("CustId", "App.cboCustId.value", ParameterMode.Raw));
-            ps.Add(new StoreParameter("ShipToId", "App.cboShipToId.value", ParameterMode.Raw));
-        })
-        .Listeners(p => p.Load.Handler = "loadDataAutoHeader()")
-  )
-
+      )
 
 @*@(HQ.Store().ID("ApproveStatusAll").HQProcedure("ppv_AR20600ApproveStatus").HQDBSys(false).LoadData())*@
      @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
