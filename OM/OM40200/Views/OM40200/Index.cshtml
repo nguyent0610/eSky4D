@@ -55,7 +55,7 @@
     )
     .Parameters(ps =>
     {
-        ps.Add(new StoreParameter("BranchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
         ps.Add(new StoreParameter("CustID", "App.cboCustomer.getValue()", ParameterMode.Raw));
         ps.Add(new StoreParameter("SlsperID", "App.cboSlsperID.getValue()", ParameterMode.Raw));
         ps.Add(new StoreParameter("DeliveryID", "App.cboDeliveryID.getValue()", ParameterMode.Raw));

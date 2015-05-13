@@ -57,16 +57,21 @@
                     .Listeners(lst =>
                     {
                         lst.Change.Fn = "cboProcessType_Change";
-                    }),
+                    }),   
                     
-                    HQ.TextBox().ID("txtBranchID")
-                    .HQLangCode("BranchID")
-                    .AllowBlank(false)
-                    .BlankText(Util.GetLangPrefix("Input", "BranchID"))
-                    .MaxLength(30)
-                    .EnforceMaxLength(true)
-                    .Width(230)
-                    .LabelWidth(120)
+                    HQ.Combo().ID("cboBranchID").Name("BranchID").HQLangCode("BranchName")
+                    .HQProcedure("OM40200_pcBranch").HQColumnShow("BranchID,BranchName,Addr")
+                    .DisplayField("BranchID").ValueField("BranchID")
+                    .Width(230).LabelWidth(120).HQHeightWidth(400, 300)
+                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "BranchID"))
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                    })
+                    .Listeners(p => {
+                        p.Change.Fn = "cboBranchID_Change";
+                    })
+                    .ForceSelection(true)
+                    .LoadData()
                     .HQControlFocus("cboCustomer"),
                     
                     HQ.Combo().ID("cboDeliveryID")
@@ -81,7 +86,7 @@
                     .ForceSelection(true)   
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
                     .HQParam(new StoreParameterCollection(){
-                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
                     })
                     .HQControlFocus("txtInvcDate")
                     .LoadData()
@@ -114,7 +119,7 @@
                     .ForceSelection(true)   
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
                     .HQParam(new StoreParameterCollection(){
-                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
                     })
                     .HQControlFocus("cboSlsperID")
                     .LoadData()
@@ -140,7 +145,7 @@
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "ToDate"))
                     .Width(250)
-                    .HQControlFocus("cboCustomer")
+                    .HQControlFocus("cboBranchID")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
                     
                     HQ.Combo().ID("cboSlsperID")
@@ -155,7 +160,7 @@
                     .ForceSelection(true)   
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
                     .HQParam(new StoreParameterCollection(){
-                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
                     })
                     .HQControlFocus("cboDeliveryID")
                     .LoadData()
@@ -218,6 +223,11 @@
                 .DataIndex("OrderDate")
                 .Width(100)
                 .Text(Util.GetLang("OrderDate")),
+                
+                X.Column()
+                .DataIndex("OrigOrderNbr")
+                .Width(100)
+                .Text(Util.GetLang("OrderPDA")),
                 
                 X.DateColumn()
                 .DataIndex("ShipDate")

@@ -1,1 +1,201 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('o a=["\\p\\s\\q\\E\\h\\s\\e\\j\\b","\\q\\f\\B\\E\\h\\s\\e\\j\\b","\\j\\C\\p\\G\\I\\u","\\c\\b\\d\\1f\\f\\m\\s\\b","\\d\\B\\d\\1a\\e\\f\\p\\j\\r\\I\\u","\\m\\h\\f\\l","\\f\\l\\l\\1t\\k\\c\\d\\b\\p\\b\\e","\\H\\b\\d\\E\\d\\h\\e\\b","\\j\\x\\h\\1e\\e\\h\\j\\b\\c\\c\\W\\G\\C\\b","\\j\\x\\h\\1s\\s\\c\\d\\h\\q\\b\\e","\\j\\x\\h\\u\\b\\m\\k\\D\\b\\e\\G\\I\\u","\\j\\x\\h\\E\\m\\c\\C\\b\\e\\I\\u","\\j\\r\\K\\1v\\b\\f\\l\\b\\e","\\M\\f\\k\\d\\1c\\c\\H","\\c\\r\\h\\M\\1a\\s\\c\\G","\\j\\h\\q\\q\\h\\p","\\H\\e\\l\\Q\\e\\l\\b\\e","\\J\\k\\e\\c\\d","\\H\\e\\k\\l","\\p\\b\\B\\d","\\C\\e\\b\\D","\\m\\f\\c\\d","\\c\\f\\D\\b","\\l\\b\\m\\b\\d\\b","\\j\\m\\h\\c\\b","\\p\\b\\M","\\e\\b\\J\\e\\b\\c\\r","\\C\\e\\k\\p\\d","\\E\\b\\m","\\l\\f\\d\\f","\\C\\s\\c\\r","\\b\\f\\j\\r","\\c\\d\\h\\Q\\e\\l\\b\\e","\\k\\c\\1u\\b\\m\\b\\f\\c\\b","","\\c\\r\\h\\M","\\q\\b\\c\\c\\f\\H\\b","\\k\\c\\1f\\f\\m\\k\\l","\\J\\e\\q\\1c\\f\\k\\p","\\1e\\Q\\E\\W","\\Q\\1c\\1D\\z\\1C\\z\\z\\1y\\1e\\e\\h\\j\\b\\c\\c","\\b\\p\\j\\h\\l\\b","\\C\\e\\h\\j\\b\\c\\c","\\j\\m\\k\\j\\K","\\J\\k\\e\\b\\1z\\D\\b\\p\\d","\\x\\d\\p\\1t\\h\\f\\l","\\c\\s\\x\\q\\k\\d","\\j\\r\\b\\j\\K\\b\\l","\\e\\b\\m\\h\\f\\l","\\j\\m\\b\\f\\e\\u\\f\\d\\f","\\D\\k\\b\\M","\\q\\G\\1r\\r\\b\\f\\l\\b\\e\\1r\\j\\r\\b\\j\\K\\x\\h\\B","\\r\\f\\c\\1s\\m\\c","\\J\\m\\G","\\1a","\\x\\s\\c\\k\\p\\b\\c\\c\\u\\f\\d\\b","\\d\\B\\d\\1o\\e\\h\\q\\u\\f\\d\\b","\\d\\B\\d\\W\\h\\u\\f\\d\\b","\\d\\B\\d\\I\\p\\D\\j\\u\\f\\d\\b","\\D\\f\\m\\k\\l\\f\\d\\b","\\z\\1A\\z\\z\\z","\\p\\s\\q\\x\\b\\e","\\1o\\h\\e\\q\\f\\d","\\s\\d\\k\\m","\\p\\h","\\h\\K"];o 1F=n(){1k()};o L=n(){i[a[0]]++;1h()};o 1h=n(){w(i[a[0]]==i[a[1]]){1p()}};o 1E=n(){i[a[0]]=0;i[a[1]]=4;g[a[4]][a[3]](i[a[2]]);g[a[8]][a[7]]()[a[6]](a[5],L);g[a[9]][a[7]]()[a[6]](a[5],L);g[a[10]][a[7]]()[a[6]](a[5],L);g[a[11]][a[7]]()[a[6]](a[5],L);g[a[12]]=V;i[a[15]][a[14]](A,i[a[13]])};o 1G=n(1m){1x(1m){t a[17]:i[a[18]][a[17]](g[a[16]]);v;t a[19]:i[a[18]][a[19]](g[a[16]]);v;t a[20]:i[a[18]][a[20]](g[a[16]]);v;t a[21]:i[a[18]][a[21]](g[a[16]]);v;t a[22]:v;t a[23]:v;t a[24]:i[a[15]][a[24]](1q);v;t a[25]:v;t a[26]:v;t a[27]:v;1w:}};o 1B=n(){o S=F;o T=[];g[a[N]][a[29]][a[1i]](n(y){w(y[a[29]][a[28]]==A){S=A;T[a[1T]](y[a[29]])}});w(!S){Z};w(!i[a[2u]]){i[a[U]][a[2v]](2p,a[1g],a[1g],A);Z};w(g[a[X]][a[1H]]()){g[a[X]][a[2o]]({2s:i[a[13]],2t:a[2r],2x:a[2w],2y:2z,2q:{2m:Y[a[1R]](T)},1Q:n(P,O){i[a[U]][a[1j]](P,O,A);g[a[1S]][a[2n]](a[1V])},1U:n(P,O){i[a[U]][a[1j]](P,O,A)}})}};o 1P=n(){w(g[a[12]]!=V){g[a[12]][a[1b]]=F};g[a[N]][a[1O]]()};o 1J=n(){w(g[a[12]]!=V){g[a[12]][a[1b]]=F};g[a[N]][a[1I]]();g[a[16]][a[1l]][a[26]]()};o 1K=n(1L,1N,1M,R){w(Y[a[1W]](R)[a[1X]](a[2h])){g[a[12]]=R;g[a[N]][a[29]][a[1i]](n(y){y[a[29]][a[28]]=R[a[1b]]?A:F});g[a[16]][a[1l]][a[26]]()}};o 1k=n(){i[a[15]][a[14]](F,i[a[13]])};o 1p=n(){g[a[8]][a[3]](a[2g]);g[a[2i]][a[3]](i[a[1d]]);g[a[2j]][a[3]](i[a[1d]]);g[a[2l]][a[3]](i[a[1d]]);g[a[X]][a[2k]]();i[a[15]][a[14]](F)};o 2f=n(1n){Z Y[a[2e]][a[1Z]][a[1Y]](1n,a[2a])};o 2b=n(y){w(y==a[2d]||y==a[2c]){i[a[15]][a[24]](1q)}};', 62, 160, '||||||||||_0xa20f|x65|x73|x74|x72|x61|App|x6F|HQ|x63|x69|x64|x6C|function|var|x6E|x6D|x68|x75|case|x44|break|if|x62|_0x46c7xa|x30|true|x78|x70|x76|x53|false|x79|x67|x49|x66|x6B|store_Load|x77|32|_0x46c7xc|_0x46c7xb|x4F|_0x46c7x13|_0x46c7x8|_0x46c7x9|36|null|x54|38|Ext|return|||||||||||x42|47|x4D|55|x50|x56|34|checkSetDefault|31|42|bindOrder|50|_0x46c7x6|_0x46c7x17|x46|defaultOnNew|this|x2D|x43|x4C|x52|x48|default|switch|x2F|x45|x2C|btnProcess_Click|x32|x34|frmMain_BoxReady|stoOrder_Load|menuClick|37|49|cboProcessType_Change|grdOrder_HeaderClick|_0x46c7x10|_0x46c7x12|_0x46c7x11|48|btnLoad_Click|success|41|45|30|failure|43|53|52|61|62|||||||||||60|askClose|65|64|63|rdrTrans_QtyAmt|54|51|56|57|59|58|lstOrder|44|46|728|params|39|waitMsg|method|33|35|40|url|timeout|180000'.split('|'), 0, {}))
+
+//// Store ///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+var stoOrder_Load = function () {
+    bindOrder();
+}
+
+var store_Load = function () {
+    HQ.numSource++;
+    checkSetDefault();
+}
+
+var checkSetDefault = function () {
+    if (HQ.numSource == HQ.maxSource) {
+        defaultOnNew();
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+
+//// Event ///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+var frmMain_BoxReady = function () {
+    HQ.numSource = 0;
+    HQ.maxSource = 5;
+
+  
+    App.cboBranchID.getStore().addListener('load', store_Load);
+    App.cboProcessType.getStore().addListener('load', store_Load);
+    App.cboCustomer.getStore().addListener('load', store_Load);
+    App.cboDeliveryID.getStore().addListener('load', store_Load);
+    App.cboSlsperID.getStore().addListener('load', store_Load);
+
+    App.chkHeader = null;
+    HQ.common.showBusy(true, HQ.waitMsg);
+}
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdOrder);
+            break;
+        case "next":
+            HQ.grid.next(App.grdOrder);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdOrder);
+            break;
+        case "last":
+            HQ.grid.last(App.grdOrder);
+            break;
+        case "save":
+            break;
+        case "delete":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+        case "new":
+            break;
+        case "refresh":
+            break;
+        case "print":
+            break;
+        default:
+    }
+}
+
+var btnProcess_Click = function () {
+    var flat = false;
+    var lstOrd = [];
+    App.stoOrder.data.each(function (item) {
+        if (item.data.Sel == true) {
+            flat = true;
+            lstOrd.push(item.data);
+        }
+    });
+
+    if (!flat) {
+        return;
+    }
+
+    if (!HQ.isRelease) {
+        HQ.message.show(728, '', '', true);
+        return;
+    }
+
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.waitMsg,
+            method: 'POST',
+            url: 'OM40200/Process',
+            timeout: 180000,
+            params: {
+                lstOrder: Ext.encode(lstOrd),
+            },
+            success: function (msg, data) {
+
+                HQ.message.process(msg, data, true);
+
+                App.btnLoad.fireEvent('click');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+}
+var btnLoad_Click = function () {
+    if (App.chkHeader != null) App.chkHeader.checked = false;
+
+    App.stoOrder.reload();
+}
+
+var cboProcessType_Change = function () {
+    if (App.chkHeader != null) App.chkHeader.checked = false;
+    App.stoOrder.clearData();
+    App.grdOrder.view.refresh();
+}
+
+var cboBranchID_Change = function () {
+    cboProcessType_Change();
+    App.cboCustomer.setValue('');
+    App.cboDeliveryID.setValue('');
+    App.cboSlsperID.setValue('');
+    App.cboCustomer.store.reload();
+    App.cboDeliveryID.store.reload();
+    App.cboSlsperID.store.reload();
+}
+
+var grdOrder_HeaderClick = function (ct, column, e, t) {
+    if (Ext.fly(t).hasCls("my-header-checkbox")) {
+        App.chkHeader = t;
+        App.stoOrder.data.each(function (item) {
+            item.data.Sel = t.checked ? true : false;
+        });
+        App.grdOrder.view.refresh();
+    }
+};
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+//// Function ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+///// data ///////////////////////
+
+var bindOrder = function () {
+    HQ.common.showBusy(false, HQ.waitMsg);
+}
+
+//////////////////////////////////
+
+
+var defaultOnNew = function () {
+    App.cboBranchID.setValue(HQ.cpnyID);
+    App.cboProcessType.setValue('B');
+    App.txtFromDate.setValue(HQ.businessDate);
+    App.txtToDate.setValue(HQ.businessDate);
+    App.txtInvcDate.setValue(HQ.businessDate);
+    App.cboCustomer.getStore().reload();
+    App.cboDeliveryID.getStore().reload();
+    App.cboSlsperID.getStore().reload();
+    App.frmMain.validate();
+
+    HQ.common.showBusy(false);
+}
+
+var rdrTrans_QtyAmt = function (value) {
+    return Ext.util.Format.number(value, '0,000');
+}
+
+var askClose = function (item) {
+    if (item == "no" || item == "ok") {
+        HQ.common.close(this);
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+
+
+
