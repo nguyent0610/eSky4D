@@ -47,7 +47,7 @@ namespace AP10100
             Session["AP10100"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
+            Session["CpnyID"] = Current.CpnyID = "HQHD1120";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }

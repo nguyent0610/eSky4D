@@ -43,9 +43,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Encryption">
-      <HintPath>..\..\..\eBiz4DWebFrame\bin\Encryption.dll</HintPath>
-    </Reference>
     <Reference Include="Ext.Net">
       <HintPath>..\..\EbizWebMvc\AP10100_Language\AP10100\bin\Ext.Net.dll</HintPath>
     </Reference>
@@ -57,9 +54,6 @@
     </Reference>
     <Reference Include="HQ.eSkySys">
       <HintPath>..\..\..\..\..\..\DLL MVC moi\HQ.eSkySys.dll</HintPath>
-    </Reference>
-    <Reference Include="HQWebCommon">
-      <HintPath>..\..\EbizWebMvc\SI20500_City\SI20500\bin\HQWebCommon.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -239,6 +233,7 @@
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\Screen\AP10100.debug.js" />
     <Content Include="Scripts\Screen\AP10100.js" />
+    <Content Include="Scripts\Screen\Copy of AP10100.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
