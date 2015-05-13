@@ -25,14 +25,12 @@
         }
     </style>
     <script>
-       
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-
     </script>  
     <title>@ViewBag.Title</title>
 </head>
@@ -42,7 +40,7 @@
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         <!-- Gọi hàm Body trong SA01900Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
-        @{Html.RenderAction("Body", new { lang=@Current.LangID});}   
+        @{Html.RenderAction("Body", new { lang=Current.LangID});}   
     
 </body>
 </html>
