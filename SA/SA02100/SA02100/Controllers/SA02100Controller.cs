@@ -35,6 +35,7 @@ namespace SA02100.Controllers
         {
             return this.Store(_db.SA02100_pgSYS_RibbonScreen().ToList());
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
@@ -44,7 +45,7 @@ namespace SA02100.Controllers
                 ChangeRecords<SA02100_pgSYS_RibbonScreen_Result> lstSYS_RibbonScreen = dataHandler.BatchObjectData<SA02100_pgSYS_RibbonScreen_Result>();
                 foreach (SA02100_pgSYS_RibbonScreen_Result deleted in lstSYS_RibbonScreen.Deleted)
                 {
-                    var del = _db.SYS_RibbonScreen.Where(p => p.ScreenNumber == deleted.ScreenNumber).FirstOrDefault();
+                    var del = _db.SYS_RibbonScreen.FirstOrDefault(p => p.ScreenNumber == deleted.ScreenNumber && p.TabID == deleted.TabID && p.GroupID == deleted.GroupID);
                     if (del != null)
                     {
                         _db.SYS_RibbonScreen.DeleteObject(del);
@@ -55,9 +56,9 @@ namespace SA02100.Controllers
 
                 foreach (SA02100_pgSYS_RibbonScreen_Result curLang in lstSYS_RibbonScreen.Created)
                 {
-                    if (curLang.ScreenNumber.PassNull() == "") continue;
+                    if (curLang.ScreenNumber.PassNull() == "" || curLang.GroupID.PassNull()=="" || curLang.TabID.PassNull()=="") continue;
 
-                    var lang = _db.SYS_RibbonScreen.Where(p => p.ScreenNumber.ToLower() == curLang.ScreenNumber.ToLower()).FirstOrDefault();
+                    var lang = _db.SYS_RibbonScreen.Where(p => p.ScreenNumber.ToLower() == curLang.ScreenNumber.ToLower() && p.TabID.ToLower() == curLang.TabID.ToLower() && p.GroupID.ToLower()==curLang.GroupID.ToLower()).FirstOrDefault();
 
                     if (lang != null)
                     {
@@ -79,8 +80,6 @@ namespace SA02100.Controllers
                 }
 
                 _db.SaveChanges();
-            
-
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -89,6 +88,8 @@ namespace SA02100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
+
+
         private void Update_Language(SYS_RibbonScreen t, SA02100_pgSYS_RibbonScreen_Result s, bool isNew)
         {
             if (isNew)
