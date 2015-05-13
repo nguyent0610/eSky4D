@@ -14,12 +14,13 @@
 .Items(
     X.FormPanel()
     .ID("frmMain")  
+    .TrackResetOnLoad(true)
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Border)
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
     .Listeners(l=>{
-        l.BoxReady.Handler = "firstLoad";
+        l.BoxReady.Handler = "firstLoad()";
         l.FieldChange.Fn = "frmChange";
     })
     .Items(

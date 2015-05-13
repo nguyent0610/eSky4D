@@ -11,8 +11,6 @@ using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
 
-
-
 namespace SA00300.Controllers
 {
     [DirectController]
@@ -89,12 +87,12 @@ namespace SA00300.Controllers
         }
         
         [HttpPost]
-        public ActionResult Save(FormCollection data)
+        public ActionResult Save(FormCollection data,string Auto)
         {
             try
             {
                 string UserID = data["cboUserID"];
-                if (data["isAuto"].PassNull().ToUpper() == "true".ToUpper())
+                if (Auto.PassNull().ToUpper() == "true".ToUpper())
                 {
                     bool b = true;
                     string strID = "";
@@ -123,35 +121,6 @@ namespace SA00300.Controllers
                    if (UserID.PassNull() == "") continue;
                    var header = _db.Users.FirstOrDefault(p => p.UserName == UserID);
                    
-                   var files = Request.Files;
-                   if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
-                   {
-                       // Xoa file cu di
-                       var oldPath = string.Format("{0}\\{1}", FilePath, header.Images);
-                       if (System.IO.File.Exists(oldPath))
-                       {
-                           System.IO.File.Delete(oldPath);
-                       }
-
-                       // Upload file moi
-                       string newFileName = string.Format("{0}_{1}{2}", UserID, header.CpnyID, Path.GetExtension(files[0].FileName));
-                       files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
-                       header.Images = newFileName;
-                   }
-                   else
-                   {
-                       if (!string.IsNullOrWhiteSpace(header.Images) && string.IsNullOrWhiteSpace(curHeader.Images))
-                       {
-                           // Xoa file cu di
-                           var oldPath = string.Format("{0}\\{1}", FilePath, header.Images);
-                           if (System.IO.File.Exists(oldPath))
-                           {
-                               System.IO.File.Delete(oldPath);
-                           }
-                           header.Images = string.Empty;
-                       }
-                   }
-
                     if (header != null)
                     {
                         if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
@@ -170,6 +139,42 @@ namespace SA00300.Controllers
                         UpdatingHeader(header, curHeader, true);
                         _db.Users.AddObject(header);
                     }
+
+                    var files = Request.Files;
+                    if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
+                    {
+                        // Xoa file cu di
+                        
+                            var oldPath = string.Format("{0}\\{1}", FilePath, header.Images);
+                            if (System.IO.File.Exists(oldPath))
+                            {
+                                System.IO.File.Delete(oldPath);
+                            }
+                        // Upload file moi
+                        //string newFileName = string.Format("{0}_{1}{2}", UserID, header.CpnyID, Path.GetExtension(files[0].FileName));
+                        string newFileName = string.Format("{0}_{1}", UserID, Path.GetExtension(files[0].FileName));
+                        files[0].SaveAs(string.Format("{0}\\{1}", FilePath, newFileName));
+                        header.Images = newFileName;
+                    }
+
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(header.Images) && string.IsNullOrWhiteSpace(curHeader.Images))
+                        {
+                            // Xoa file cu di
+                            var oldPath = string.Format("{0}\\{1}", FilePath, header.Images);
+                            if (header.Images != "")
+                            {
+                                if (System.IO.File.Exists(oldPath))
+                                {
+                                    System.IO.File.Delete(oldPath);
+                                }
+                                header.Images = string.Empty;
+                            }
+                        }
+                    }
+
+
                 }
                 #endregion
 
@@ -254,7 +259,7 @@ namespace SA00300.Controllers
                 #endregion
 
                 _db.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true, UserID=UserID });
             }
             catch (Exception ex)
             {
@@ -262,6 +267,7 @@ namespace SA00300.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
+
         private void UpdatingHeader(User t, User s, bool isNew)
         {
             if (isNew)
@@ -312,7 +318,7 @@ namespace SA00300.Controllers
             t.AutoID = s.AutoID;
             t.ExpireDay = s.ExpireDay;
             t.FailedLoginCount = s.FailedLoginCount;
-            t.BeginDay = s.BeginDay == null ? DateTime.Now : (s.BeginDay.Year == 1 ? DateTime.Now : s.BeginDay);
+            t.BeginDay = s.BeginDay == null ? DateTime.Now.ToDateShort() : (s.BeginDay.Year == 1 ? DateTime.Now.ToDateShort() : s.BeginDay.ToDateShort());
             t.CheckFirstLogin = s.CheckFirstLogin;
             t.CpnyIDHand = s.CpnyIDHand;
 
