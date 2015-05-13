@@ -2664,6 +2664,30 @@ namespace OM40100
         private global::System.String _ImpExp;
         partial void OnImpExpChanging(global::System.String value);
         partial void OnImpExpChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String OrigOrderNbr
+        {
+            get
+            {
+                return _OrigOrderNbr;
+            }
+            set
+            {
+                OnOrigOrderNbrChanging(value);
+                ReportPropertyChanging("OrigOrderNbr");
+                _OrigOrderNbr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("OrigOrderNbr");
+                OnOrigOrderNbrChanged();
+            }
+        }
+        private global::System.String _OrigOrderNbr;
+        partial void OnOrigOrderNbrChanging(global::System.String value);
+        partial void OnOrigOrderNbrChanged();
 
         #endregion
 

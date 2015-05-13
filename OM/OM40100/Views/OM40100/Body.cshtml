@@ -20,9 +20,10 @@
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{ }))
+        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[] { }))
         .FieldDefaults(a => { a.LabelAlign = LabelAlign.Right; a.LabelWidth = 120; })
-        .Listeners(p => {
+        .Listeners(p =>
+        {
             p.BoxReady.Fn = "frmMain_BoxReady";
         })
         .Items(
@@ -46,9 +47,9 @@
                     .ValueField("Code")
                     .Width(250)
                     .HQHeightWidth(400, 300)
-                    .BlankText(Util.GetLangPrefix("Input","Type"))
+                    .BlankText(Util.GetLangPrefix("Input", "Type"))
                     .AllowBlank(false)
-                    .ForceSelection(true)               
+                    .ForceSelection(true)
                     .HQParam(new StoreParameterCollection(){
                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                     })
@@ -58,17 +59,22 @@
                     {
                         lst.Change.Fn = "cboProcessType_Change";
                     }),
-                    
-                    HQ.TextBox().ID("txtBranchID")
-                    .HQLangCode("BranchID")
-                    .AllowBlank(false)
-                    .BlankText(Util.GetLangPrefix("Input", "BranchID"))
-                    .MaxLength(30)
-                    .EnforceMaxLength(true)
-                    .Width(230)
-                    .LabelWidth(120)
+
+                    HQ.Combo().ID("cboBranchID").Name("BranchID").HQLangCode("BranchName")
+                    .HQProcedure("OM40100_pcBranch").HQColumnShow("BranchID,BranchName,Addr")
+                    .DisplayField("BranchID").ValueField("BranchID")
+                    .Width(230).LabelWidth(120).HQHeightWidth(400, 300)
+                    .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "BranchID"))
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                    })
+                    .Listeners(p => {
+                        p.Change.Fn = "cboBranchID_Change";
+                    })
+                    .ForceSelection(true)
+                    .LoadData()
                     .HQControlFocus("cboCustomer"),
-                    
+
                     HQ.Combo().ID("cboDeliveryID")
                     .HQLangCode("DeliveryID")
                     .HQProcedure("OM40100_pcDeliveryID")
@@ -78,10 +84,10 @@
                     .Width(200)
                     .LabelWidth(90)
                     .HQHeightWidth(400, 300)
-                    .ForceSelection(true)   
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection(){
-                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
                     })
                     .HQControlFocus("cboProcessType")
                     .LoadData()
@@ -101,7 +107,7 @@
                     .BlankText(Util.GetLangPrefix("Input", "FromDate"))
                     .Width(250)
                     .HQControlFocus("txtToDate"),
-                    
+
                     HQ.Combo().ID("cboCustomer")
                     .HQLangCode("CustID")
                     .HQProcedure("OM40100_pcCustomer")
@@ -111,10 +117,10 @@
                     .Width(230)
                     .LabelWidth(120)
                     .HQHeightWidth(400, 300)
-                    .ForceSelection(true)   
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection(){
-                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
                     })
                     .HQControlFocus("cboSlsperID")
                     .LoadData()
@@ -122,13 +128,13 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     }),
-                    
+
                     X.Button()
                     .ID("btnLoad")
                     .Text(Util.GetLang("LoadData"))
                     .Width(105)
                     .MarginSpec("0 0 0 95")
-                    .Listeners(l=> l.Click.Fn = "btnLoad_Click")
+                    .Listeners(l => l.Click.Fn = "btnLoad_Click")
                 ),
 
                 X.FieldContainer()
@@ -139,9 +145,9 @@
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "ToDate"))
                     .Width(250)
-                    .HQControlFocus("cboCustomer")
+                    .HQControlFocus("cboBranchID")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
-                    
+
                     HQ.Combo().ID("cboSlsperID")
                     .HQLangCode("SlsperID")
                     .HQProcedure("OM40100_pcSalesPerson")
@@ -151,10 +157,10 @@
                     .Width(230)
                     .LabelWidth(120)
                     .HQHeightWidth(400, 300)
-                    .ForceSelection(true)   
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })            
+                    .ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection(){
-                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
                     })
                     .HQControlFocus("cboDeliveryID")
                     .LoadData()
@@ -162,13 +168,13 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     }),
-                    
+
                     X.Button()
                     .ID("btnProcess")
                     .Text(Util.GetLang("Handle"))
                     .Width(105)
                     .MarginSpec("0 0 10 95")
-                    .Listeners(l=> l.Click.Fn = "btnProcess_Click")
+                    .Listeners(l => l.Click.Fn = "btnProcess_Click")
                 )
             ),
 
@@ -200,67 +206,72 @@
                 .DataIndex("Sel")
                 .Editable(true)
                 .Width(45),
-                                                
+
                 X.Column()
                 .DataIndex("OrderNbr")
                 .Width(100)
                 .Text(Util.GetLang("OrderNbr")),
-                
+
                 X.DateColumn()
                 .DataIndex("OrderDate")
                 .Width(100)
                 .Text(Util.GetLang("OrderDate")),
-                
+
+                X.Column()
+                .DataIndex("OrigOrderNbr")
+                .Width(100)
+                .Text(Util.GetLang("OrderPDA")),
+
                 X.DateColumn()
                 .DataIndex("ShipDate")
                 .Width(100)
                 .Text(Util.GetLang("ShipDate")),
-                
+
                 X.Column()
                 .DataIndex("CustID")
                 .Text(Util.GetLang("CustID")),
-               
+
                 X.Column()
                 .DataIndex("CustName")
                 .Text(Util.GetLang("CustName")),
-              
+
                 X.Column()
                 .DataIndex("SlsPerID")
                 .Text(Util.GetLang("SlsPerID")),
-                
+
                 X.Column()
                 .DataIndex("DeliveryID")
                 .Text(Util.GetLang("DeliveryID")),
-                
+
                 X.Column()
                 .Align(Alignment.Right)
                 .DataIndex("DocAmt")
                 .Text(Util.GetLang("InvcAmt"))
                 .Renderer("rdrTrans_QtyAmt"),
-                
+
                 X.DateColumn()
                 .DataIndex("DocDate")
                 .Width(100)
                 .Text(Util.GetLang("DocDate")),
-                
+
                 X.Column()
                 .DataIndex("RefNbr")
                 .Text(Util.GetLang("RefNbr")),
-                
+
                 X.Column()
                 .DataIndex("Terms")
                 .Text(Util.GetLang("Term"))
-                               
-                
+
+
             )
             .ColumnModel(act => { act.Listeners.HeaderClick.Fn = "grdOrder_HeaderClick"; })
-            //.Listeners(lst =>
-            //{
-            //    lst.SelectionChange.Fn = "grdTrans_SelectionChange";
-            //    lst.Edit.Fn = "grdTrans_Edit";
-            //    lst.ValidateEdit.Fn = "grdTrans_ValidateEdit";
-            //    lst.BeforeEdit.Fn = "grdTrans_BeforeEdit";
-            //})
+        //.Listeners(lst =>
+        //{
+        //    lst.SelectionChange.Fn = "grdTrans_SelectionChange";
+        //    lst.Edit.Fn = "grdTrans_Edit";
+        //    lst.ValidateEdit.Fn = "grdTrans_ValidateEdit";
+        //    lst.BeforeEdit.Fn = "grdTrans_BeforeEdit";
+        //})
             .SelectionModel(X.RowSelectionModel().ID("smlOrder").Mode(SelectionMode.Single))
             .View(X.GridView().TrackOver(false))
             .Plugins(X.CellEditing().ClicksToEdit(1))

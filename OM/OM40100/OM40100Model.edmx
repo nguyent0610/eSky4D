@@ -72,7 +72,7 @@
           <Property Name="AppPath" Type="varchar" Nullable="false" MaxLength="400" />
           <Property Name="ClientName" Type="varchar" Nullable="false" MaxLength="40" />
           <Property Name="LoggedCpnyID" Type="varchar" MaxLength="30" />
-          <Property Name="CpnyID" Type="varchar" MaxLength="400" />
+          <Property Name="CpnyID" Type="varchar(max)" />
           <Property Name="LangID" Type="smallint" />
           <Property Name="ListParm00" Type="nvarchar(max)" />
           <Property Name="ListParm01" Type="nvarchar(max)" />
@@ -168,7 +168,7 @@
           <Property Type="String" Name="AppPath" Nullable="false" MaxLength="400" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ClientName" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LoggedCpnyID" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="CpnyID" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CpnyID" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="Int16" Name="LangID" />
           <Property Type="String" Name="ListParm00" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ListParm01" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -188,8 +188,8 @@
           <Property Type="String" Name="OrigINBatNbr" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="INBatNbr" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="INDocType" Nullable="true" MaxLength="2" />
-          <Property Type="String" Name="SlsPerID" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="DeliveryID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SlsPerID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="DeliveryID" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="Terms" Nullable="true" MaxLength="10" />
           <Property Type="DateTime" Name="DocDate" Nullable="false" Precision="16" />
           <Property Type="DateTime" Name="DueDate" Nullable="false" Precision="16" />
@@ -213,6 +213,7 @@
           <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
           <Property Type="DateTime" Name="ShipDate" Nullable="false" Precision="16" />
           <Property Type="String" Name="ImpExp" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="OrigOrderNbr" Nullable="true" MaxLength="10" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -328,6 +329,7 @@
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
                 <ScalarProperty Name="ShipDate" ColumnName="ShipDate" />
                 <ScalarProperty Name="ImpExp" ColumnName="ImpExp" />
+                <ScalarProperty Name="OrigOrderNbr" ColumnName="OrigOrderNbr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
