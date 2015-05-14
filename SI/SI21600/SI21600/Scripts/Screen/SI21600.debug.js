@@ -18,12 +18,16 @@ var selectNode;
 var menuClick = function (command) {
     switch (command) {
         case "first":
+            HQ.combo.first(App.cboNodeID, HQ.isChange);
             break;
         case "prev":
+            HQ.combo.prev(App.cboNodeID, HQ.isChange);
             break;
         case "next":
+            HQ.combo.next(App.cboNodeID, HQ.isChange);
             break;
         case "last":
+            HQ.combo.last(App.cboNodeID, HQ.isChange);
             break;
         case "refresh":
             if (HQ.isChange) {
