@@ -38,7 +38,7 @@
     @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
-        @(Html.X().Store().ID("stoUser")
+        @(X.Store().ID("stoUser").AutoLoad(false)
             .Model(Util.GenerateModel(typeof(User), "mdlUser", "UserName"))       
             .Proxy(
                     X.AjaxProxy()                
