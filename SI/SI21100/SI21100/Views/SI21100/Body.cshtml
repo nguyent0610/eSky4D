@@ -66,6 +66,10 @@
                                     .ValueField("Code")
                                     .MultiSelect(false)
                                     .HQHeightWidth(400, 300)
+                                    .HQParam(new StoreParameterCollection()
+                                    {
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    })
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
                                     .LoadData().Width(600)   
@@ -80,6 +84,10 @@
                                     .ValueField("Code")
                                     .MultiSelect(false)
                                     .HQHeightWidth(400, 300)
+                                    .HQParam(new StoreParameterCollection()
+                                    {
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    })
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
                                     .LoadData().Width(600)
@@ -99,6 +107,10 @@
                                     .ValueField("Code")
                                     .MultiSelect(false)
                                     .HQHeightWidth(400, 300)
+                                    .HQParam(new StoreParameterCollection()
+                                    {
+                                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                    })
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
                                     .LoadData().Width(600)

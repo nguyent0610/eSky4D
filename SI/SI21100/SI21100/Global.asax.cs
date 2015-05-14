@@ -48,8 +48,8 @@ namespace SI21100
             Session["DBApp"] = Current.DBApp = "eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "18510580";
-            Session["Language"] = Current.Language = "en";
-            Session["LangID"] = 0;
+            Session["Language"] = Current.Language = "vi";
+            Session["LangID"] = 1;
         }
     }
 }
