@@ -28,7 +28,7 @@ namespace SA40300.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
           
@@ -165,7 +165,7 @@ namespace SA40300.Controllers
                 var lstDetail = _db.Server_MailAutoDetail.Where(p => p.MailID == mailId).ToList();
                 for (int i = 0; i < lstDetail.Count(); i++)
                 {
-                    _db.Server_MailAutoDetail.DeleteObject(lstDetail[0]);                    
+                    _db.Server_MailAutoDetail.DeleteObject(lstDetail[i]);                    
                 }
                 //xoa header
                 var cpny = _db.Server_MailAutoHeader.FirstOrDefault(p => p.MailID == mailId);

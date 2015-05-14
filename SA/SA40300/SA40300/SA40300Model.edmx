@@ -354,7 +354,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="73" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="64" >
         <EntityTypeShape EntityType="SA40300Model.Server_MailAutoDetail" Width="1.875" PointX="3" PointY="1.5" />
         <EntityTypeShape EntityType="SA40300Model.Server_MailAutoHeader" Width="2" PointX="5.125" PointY="1.625" />
         <EntityTypeShape EntityType="SA40300Model.SYS_ReportParm" Width="1.875" PointX="7.375" PointY="0.625" />
