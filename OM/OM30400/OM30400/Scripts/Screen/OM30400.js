@@ -463,7 +463,7 @@ var Index = {
                 params: {
                     distributor: Index.joinParams(App.cboDistributorActual),
                     slsperId: App.cboSalesManActual.value,
-                    visitDate: App.dateVisit.value.toLocaleDateString(),
+                    visitDate: App.dateVisit.value.toDateString(),
                     realTime: App.chkRealTime.value
                 },
                 failure: function (msg, data) {
