@@ -29,7 +29,7 @@
             .Store(
                 X.Store()
                 .ID("stoSI_Carrier")
-                .PageSize(50)
+                .PageSize(50).AutoLoad(false)
                 .Model(Util.GenerateModel(typeof(SI21300_pgLoadCarrier_Result), "mdSI_Carrier", "CarrierID"))
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_Carrier")))
                 .Listeners(l =>
