@@ -366,7 +366,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="95" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="70" >
         <EntityTypeShape EntityType="SA00000Model.Sys_CompanyAddr" Width="1.75" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SA00000Model.SYS_Company" Width="1.5" PointX="4.625" PointY="0.75" />
         <EntityTypeShape EntityType="SA00000Model.SYS_SubCompany" Width="1.5" PointX="2.875" PointY="0.75" />

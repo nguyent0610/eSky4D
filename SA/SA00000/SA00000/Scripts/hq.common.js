@@ -1,4 +1,4 @@
-if (!Array.prototype.indexOf) {
+﻿if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
 
@@ -97,36 +97,68 @@ var HQ = {
             }
             return Ext.encode(store.getChangedData({ skipIdForPhantomRecords: skip }));
         },
-        getAllData: function (store, fields, values) {
+        getAllData: function (store, fields, values, isEqual) {
             var lstData = [];
-            if (store.snapshot != undefined) {
-                store.snapshot.each(function (item) {
-                    var isb = true;
-                    if (fields != null) {
-                        for (var i = 0; i < fields.length; i++) {
-                            if (item.data[fields[i]] != values[i]) {
-                                isb = false;
-                                break;
+            if (isEqual == undefined || isEqual == true) {
+                if (store.snapshot != undefined) {
+                    store.snapshot.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] != values[i]) {
+                                    isb = false;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (isb) lstData.push(item.data);
-                });
-                return Ext.encode(lstData);
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                } else {
+                    store.data.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] != values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                }
             } else {
-                store.data.each(function (item) {
-                    var isb = true;
-                    if (fields != null) {
-                        for (var i = 0; i < fields.length; i++) {
-                            if (item.data[fields[i]] != values[i]) {
-                                isb = false;
-                                break;
+                if (store.snapshot != undefined) {
+                    store.snapshot.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] == values[i]) {
+                                    isb = false;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (isb) lstData.push(item.data);
-                });
-                return Ext.encode(lstData);
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                } else {
+                    store.data.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] == values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                }
             }
         },
         findInStore: function (store, fields, values) {
@@ -286,7 +318,7 @@ var HQ = {
             if (cbo.getValue())
                 cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
         },
-        selectAll: function (cbo) {
+		selectAll: function (cbo) {
             var value = [];
             cbo.setValue('');
             cbo.store.data.each(function (item) {
@@ -295,8 +327,8 @@ var HQ = {
             cbo.setValue(value);
         }
     },
-    date: {
-        expand: function (dte, eOpts) {
+	date: {
+        expand:  function (dte, eOpts) {
             //dte.picker.setHeight(300);
             //dte.picker.monthEl.setHeight(300);
         }
@@ -307,31 +339,31 @@ var HQ = {
                 grd.view.loadMask.show();
             else grd.view.loadMask.hide();
         },
-        insert: function (grd, keys) {
+         insert: function (grd, keys) {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
-                if (store.currentPage != Math.ceil(store.totalCount / store.pageSize) && store.totalCount != 0) {
-                    store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                        callback: function () {
-                            HQ.grid.last(grd);
-                            setTimeout(function () {
-                                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-                                if (grd.editingPlugin) {
-                                    grd.editingPlugin.startEditByPosition({
-                                        row: store.getCount() - 1,
-                                        column: 1
-                                    });
-                                }
-                                else {
-                                    grd.lockedGrid.editingPlugin.startEditByPosition({
-                                        row: store.getCount() - 1,
-                                        column: 1
-                                    });
-                                }
-                            }, 300);
-                        }
-                    });
+                if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)&&store.totalCount!=0) {
+                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                    callback: function () {
+                        HQ.grid.last(grd);
+                        setTimeout(function () {
+                            //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                            if (grd.editingPlugin) {
+                                grd.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                            else {
+                                grd.lockedGrid.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                        }, 300);
+                    }
+                });
                 }
                 else {
                     HQ.grid.last(grd);
@@ -351,29 +383,29 @@ var HQ = {
                 return;
             }
             if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                    callback: function () {
-                        if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-                            HQ.store.insertBlank(store, keys);
-                        }
-                        HQ.grid.last(grd);
-                        setTimeout(function () {
-                            // grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-                            if (grd.editingPlugin) {
-                                grd.editingPlugin.startEditByPosition({
-                                    row: store.getCount() - 1,
-                                    column: 1
-                                });
-                            }
-                            else {
-                                grd.lockedGrid.editingPlugin.startEditByPosition({
-                                    row: store.getCount() - 1,
-                                    column: 1
-                                });
-                            }
-                        }, 300);
+            store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                callback: function () {
+                    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                        HQ.store.insertBlank(store, keys);
                     }
-                });
+                    HQ.grid.last(grd);
+                    setTimeout(function () {
+                        // grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                        if (grd.editingPlugin) {
+                            grd.editingPlugin.startEditByPosition({
+                                row: store.getCount() - 1,
+                                column: 1
+                            });
+                        }
+                        else {
+                            grd.lockedGrid.editingPlugin.startEditByPosition({
+                                row: store.getCount() - 1,
+                                column: 1
+                            });
+                        }
+                    }, 300);
+                }
+            });
             }
             else {
                 if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
@@ -381,7 +413,7 @@ var HQ = {
                 }
                 HQ.grid.last(grd);
                 //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-
+               
                 if (grd.editingPlugin) {
                     grd.editingPlugin.startEditByPosition({
                         row: store.getCount() - 1,
@@ -411,7 +443,7 @@ var HQ = {
         onPageSelect: function (combo) {
             var store = combo.up("gridpanel").getStore();
             store.pageSize = parseInt(combo.getValue(), 10);
-            store.loadPage(1);
+           store.loadPage(1);
         },
         indexSelect: function (grd) {
             var index = '';
@@ -967,20 +999,20 @@ Ext.define("ThousandSeparatorNumberField", {
     /**
     * @cfg {Boolean} useThousandSeparator
     */
-    useThousandSeparator: true,
+    useThousandSeparator: true,  
     selectOnFocus: true,
     style: 'text-align: right',
-    fieldStyle: "text-align:right;",
+    fieldStyle: "text-align:right;",    
     /**
      * @inheritdoc
      */
     //dung cho page
-
+   
     toRawNumber: function (value) {
-        this.decimalPrecision = this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
+        this.decimalPrecision= this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
         return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
     },
-
+   
     /**
      * @inheritdoc
      */
@@ -1107,8 +1139,8 @@ Ext.define("ThousandSeparatorNumberField", {
 Ext.define("Ext.locale.vn.toolbar.Paging", {
     override: "Ext.PagingToolbar",
     lable: HQ.common.getLang("PageSize"),
-    beforePageText: HQ.common.getLang("Page"),
-    afterPageText: HQ.common.getLang("of") + " {0}",
+    beforePageText:  HQ.common.getLang("Page"),
+    afterPageText: HQ.common.getLang("of")+" {0}",
     firstText: HQ.common.getLang("PageFirst"),
     prevText: HQ.common.getLang("PagePrev"),
     nextText: HQ.common.getLang("PageNext"),

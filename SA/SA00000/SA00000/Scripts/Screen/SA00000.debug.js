@@ -52,6 +52,7 @@ var menuClick = function (command) {
     switch (command) {
         case "first":
             if (_focusNo == 0) {
+                HQ.isFirstLoad = true;
                 HQ.combo.first(App.cboCpnyID, HQ.isChange);
             }
             else if (_focusNo == 1) {
@@ -63,6 +64,7 @@ var menuClick = function (command) {
             break;
         case "prev":
             if (_focusNo == 0) {
+                HQ.isFirstLoad = true;
                 HQ.combo.prev(App.cboCpnyID, HQ.isChange);
             }
             else if (_focusNo == 1) {
@@ -74,6 +76,7 @@ var menuClick = function (command) {
             break;
         case "next":
             if (_focusNo == 0) {
+                HQ.isFirstLoad = true;
                 HQ.combo.next(App.cboCpnyID, HQ.isChange);
             }
             else if (_focusNo == 1) {
@@ -85,6 +88,7 @@ var menuClick = function (command) {
             break;
         case "last":
             if (_focusNo == 0) {
+                HQ.isFirstLoad = true;
                 HQ.combo.last(App.cboCpnyID, HQ.isChange);
             }
             else if (_focusNo == 1) {
@@ -164,6 +168,16 @@ var menuClick = function (command) {
     }
 };
 
+var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboSubCpnyIDSA00000_pcCompanyAll.findRecord("CpnyID", rec.data.SubCpnyID);
+    if (record) {
+        return record.data.CpnyName;
+    }
+    else {
+        return value;
+    }
+};
+
 var cboCountry_Change = function (sender, e) {
     App.cboState.getStore().load(function () {
         var curRecord = App.frmMain.getRecord();
@@ -175,6 +189,9 @@ var cboCountry_Change = function (sender, e) {
         if (!dt) {
             curRecord.data.State = '';
             App.cboState.setValue("");
+        }
+        if (App.cboState.value == curRecord.data.State) {
+            cboState_Change(App.cboState, curRecord.data.State);
         }
     });
 };
@@ -202,6 +219,9 @@ var cboState_Change = function (sender, e) {
             if (!dt) {
                 curRecord.data.District = '';
                 App.cboDistrict.setValue("");
+            }
+            else {
+                HQ.combo.expand(App.cboDistrict, ',');
             }
         });
 
@@ -304,11 +324,14 @@ var stoChanged = function (sto) {
 
 //load store khi co su thay doi CpnyID
 var stoLoad = function (sto) {
+
     HQ.isFirstLoad = true;
     HQ.common.showBusy(false);
     HQ.isNew = false;
     App.cboCpnyID.forceSelection = true;
     App.cboDistrict.forceSelection = false;
+    App.cboCountry.store.clearFilter();
+    App.cboState.store.clearFilter();
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "CpnyID");
         record = sto.getAt(0);
@@ -321,6 +344,12 @@ var stoLoad = function (sto) {
     }
     var record = sto.getAt(0);
     App.frmMain.getForm().loadRecord(record);
+    if (App.cboCountry.value == record.data.Country) {
+        cboCountry_Change(App.cboCountry, record.data.Country);
+    }
+    else if (App.cboState.value == record.data.State) {
+        cboState_Change(App.cboState, record.data.State);
+    }
     //App.stoSys_CompanyAddr.reload();
     loadComboGrid();
 };
@@ -358,7 +387,21 @@ var cboCpnyID_Change = function (sender, value) {
         App.stoSYS_Company.reload();
     }
 };
-
+var cboDistrict_Change = function (sender, value) {
+    //var curRecord = App.frmMain.getRecord();
+    //if (curRecord && curRecord.data.District) {
+    //    App.cboDistrict.setValue(curRecord.data.District);
+    //    HQ.combo.expand(App.cboDistrict, ',');
+    //}
+    //var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], App.cboDistrict.getValue());
+    //if (!dt) {
+    //    curRecord.data.District = '';
+    //    App.cboDistrict.setValue("");
+    //}
+    //else {
+    //    HQ.combo.expand(App.cboDistrict, ',');
+    //}
+};
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
 var cboCpnyID_Expand = function (sender, value) {
     if (HQ.isChange) {
