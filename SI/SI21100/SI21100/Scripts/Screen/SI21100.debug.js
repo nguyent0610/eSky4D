@@ -112,12 +112,17 @@ var save = function () {
             waitMsg: HQ.common.getLang("WaitMsg"),
             url: 'SI21100/Save',
             params: {
-                lstSI_Terms: HQ.store.getData(App.frmMain.getRecord().store)
+                lstSI_Terms: HQ.store.getData(App.frmMain.getRecord().store),
+                isNew: HQ.isNew
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 App.cboTermsID.getStore().reload();
-
+                var TermsID = data.result.TermsID;
+                App.cboTermsID.getStore().load(function () {
+                    App.cboTermsID.setValue(TermsID);
+                    App.stoSI_Terms.reload();
+                });
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);

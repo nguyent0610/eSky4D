@@ -27,6 +27,7 @@ namespace SI21100.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
+
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
@@ -39,8 +40,9 @@ namespace SI21100.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(FormCollection data)
+        public ActionResult Save(FormCollection data, bool isNew)
         {
+
             try
             {
                 string TermsID = data["cboTermsID"];
@@ -48,35 +50,45 @@ namespace SI21100.Controllers
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSI_Terms"]);
                 ChangeRecords<SI_Terms> lstSI_Terms = dataHandler.BatchObjectData<SI_Terms>();
 
-                #region Save Header SI_Terms
-                lstSI_Terms.Created.AddRange(lstSI_Terms.Updated);
-                foreach (SI_Terms curHeader in lstSI_Terms.Created)
+                foreach (SI_Terms setup in lstSI_Terms.Updated)
                 {
-                   if (TermsID.PassNull() == "") continue;
-                   var header = _db.SI_Terms.FirstOrDefault(p => p.TermsID == TermsID);
-                    if (header != null)
+                    var objHeader = _db.SI_Terms.FirstOrDefault(p => p.TermsID == TermsID);
+                    if (isNew)//new record
                     {
-                        if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
+                        if (objHeader != null)
+                            return Json(new { success = false, msgCode = 2000, msgParam = TermsID });//quang message ma nha cung cap da ton tai ko the them
+                        else
                         {
-                            UpdatingHeader(header, curHeader, false);
+                            objHeader = new SI_Terms();
+                            objHeader.TermsID = TermsID;
+                            objHeader.Crtd_DateTime = DateTime.Now;
+                            objHeader.Crtd_Prog = _screenNbr;
+                            objHeader.Crtd_User = Current.UserName;
+                            UpdatingHeader(setup, ref objHeader);
+                            // Add data to SI_Terms
+                            _db.SI_Terms.AddObject(objHeader);
+                            _db.SaveChanges();
+                        }
+                    }
+                    else if (objHeader != null)//update record
+                    {
+                        if (objHeader.tstamp.ToHex() == setup.tstamp.ToHex())
+                        {
+                            UpdatingHeader(setup, ref objHeader);
                         }
                         else
                         {
                             throw new MessageException(MessageType.Message, "19");
                         }
+                        _db.SaveChanges();
+
                     }
                     else
                     {
-                        header = new SI_Terms();
-                        header.TermsID = TermsID;
-                        UpdatingHeader(header, curHeader, true);
-                        _db.SI_Terms.AddObject(header);
+                        throw new MessageException(MessageType.Message, "19");
                     }
                 }
-                #endregion
-
-                _db.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true, TermsID=TermsID });
             }
             catch (Exception ex)
             {
@@ -84,26 +96,19 @@ namespace SI21100.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        private void UpdatingHeader(SI_Terms t, SI_Terms s, bool isNew)
+        private void UpdatingHeader(SI_Terms t,ref SI_Terms s)
         {
-            if (isNew)
-            {
-                t.Crtd_DateTime = DateTime.Now;
-                t.Crtd_Prog = _screenNbr;
-                t.Crtd_User = _userName;
-            }
-
-            t.Descr = s.Descr;
-            t.ApplyTo = s.ApplyTo;
-            t.DiscType = s.DiscType;
-            t.DiscIntrv = s.DiscIntrv;
-            t.DiscPct = s.DiscPct;
-            t.DueType = s.DueType;
-            t.DueIntrv = s.DueIntrv;
+            s.Descr = t.Descr;
+            s.ApplyTo = t.ApplyTo;
+            s.DiscType = t.DiscType;
+            s.DiscIntrv = t.DiscIntrv;
+            s.DiscPct = t.DiscPct;
+            s.DueType = t.DueType;
+            s.DueIntrv = t.DueIntrv;
           
-            t.LUpd_DateTime = DateTime.Now;
-            t.LUpd_Prog = _screenNbr;
-            t.LUpd_User = _userName;
+            s.LUpd_DateTime = DateTime.Now;
+            s.LUpd_Prog = _screenNbr;
+            s.LUpd_User = _userName;
         }
 
         [HttpPost]

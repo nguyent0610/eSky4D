@@ -36,20 +36,20 @@
                     .HQProcedure("SI21100_pcSI_Terms").HQColumnShow("TermsID,Descr").DisplayField("TermsID").ValueField("TermsID")
                     .HQHeightWidth(400, 300)
                     .MultiSelect(false)
-                    .MarginSpec("3 0 0 0")
+                    .MarginSpec("5 0 5 0")
                     .LoadData()
                     .Listeners(lst =>
                     {
                         lst.Change.Fn = "cboTermsID_Change";
                     }),
                     
-                    HQ.TextBox().Name("Descr").HQLangCode("Descr").MarginSpec("3 0 0 0").HQControlFocus("").Width(600).AllowBlank(false).MaxLength(30).EnforceMaxLength(true)
+                    HQ.TextBox().Name("Descr").HQLangCode("Descr").MarginSpec("0 0 5 0").HQControlFocus("").Width(600).AllowBlank(false).MaxLength(30).EnforceMaxLength(true)
                     
                 )
         )
-        , X.TabPanel().ID("tabSI21100")
+        , X.TabPanel().ID("tab_SI21100_Detail")
         .Region(Region.Center)
-        //.Listeners(p => p.AfterRender.Fn = "tabSI21100_AfterRender")
+       
         .Items(
         
             X.Panel().ID("pnlSI_Terms")
@@ -59,7 +59,7 @@
             .Items(
                 X.Container().Width(600)
                             .Items(
-                                HQ.Combo().ID("ApplyTo").Name("ApplyTo").MarginSpec("3 0 0 0").AllowBlank(false).ForceSelection(true)
+                                HQ.Combo().ID("ApplyTo").Name("ApplyTo").MarginSpec("5 0 5 0").AllowBlank(false).ForceSelection(true)
                                     .HQLangCode("AppTo").HQDBSys(true).HQProcedure("SI21100_pcApplyTo").EnforceMaxLength(true)
                                     .HQColumnShow("Code,Descr")
                                     .DisplayField("Descr")
@@ -77,7 +77,7 @@
                                 ,X.Panel().Title(Util.GetLang("Discount")).Items(
                                 //HQ.Label().ID("lblDiscount").HQLangCode("Discount").MarginSpec("0 0 0 100")
                                 
-                                HQ.Combo().ID("DiscType").Name("DiscType").MarginSpec("3 0 0 0").AllowBlank(false).ForceSelection(true)
+                                HQ.Combo().ID("DiscType").Name("DiscType").MarginSpec("5 0 5 0").AllowBlank(false).ForceSelection(true)
                                     .HQLangCode("Type").HQDBSys(true).HQProcedure("SI21100_pcDiscType").EnforceMaxLength(true)
                                     .HQColumnShow("Code,Descr")
                                     .DisplayField("Descr")
@@ -92,15 +92,15 @@
                                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
                                     .LoadData().Width(600)
                                     
-                                ,HQ.NumberField().ID("DiscIntrv").Name("DiscIntrv").HQLangCode("LotDay").MarginSpec("3 0 0 0").HQControlFocus("").Width(600).MinValue(0)
+                                ,HQ.NumberField().ID("DiscIntrv").Name("DiscIntrv").HQLangCode("LotDay").MarginSpec("5 0 5 0").HQControlFocus("").Width(600).MinValue(0)
                                 
-                                ,HQ.NumberField().ID("DiscPct").Name("DiscPct").HQLangCode("Percent").MarginSpec("3 0 0 0").HQControlFocus("").Width(600).MinValue(0)
+                                ,HQ.NumberField().ID("DiscPct").Name("DiscPct").HQLangCode("Percent").MarginSpec("5 0 5 0").HQControlFocus("").Width(600).MinValue(0)
                                 )//Panel Discount
                                 
                                 ,X.Panel().Title(Util.GetLang("UntilDue")).Items(
                                 //HQ.Label().ID("lblUntilDue").HQLangCode("UntilDue").MarginSpec("0 0 0 100")
                                 
-                                HQ.Combo().ID("DueType").Name("DueType").MarginSpec("3 0 0 0").AllowBlank(false).ForceSelection(true)
+                                HQ.Combo().ID("DueType").Name("DueType").MarginSpec("5 0 5 0").AllowBlank(false).ForceSelection(true)
                                     .HQLangCode("Type").HQDBSys(true).HQProcedure("SI21100_pcDiscType")
                                     .HQColumnShow("Code,Descr")
                                     .DisplayField("Descr")
@@ -114,7 +114,7 @@
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
                                     .LoadData().Width(600)
-                                ,HQ.NumberField().ID("DueIntrv").Name("DueIntrv").HQLangCode("LotDay").MarginSpec("3 0 0 0").HQControlFocus("").Width(600).MinValue(0)          
+                                ,HQ.NumberField().ID("DueIntrv").Name("DueIntrv").HQLangCode("LotDay").MarginSpec("5 0 5 0").HQControlFocus("").Width(600).MinValue(0)          
                             )
                         )
             )//pnlUser
