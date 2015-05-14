@@ -27,7 +27,7 @@
         .ID("grdIN_Buyer")
         .Store(
              X.Store()
-            .ID("stoIN_Buyer")
+            .ID("stoIN_Buyer").AutoLoad(false)
             .PageSize(50)//.AutoLoad(true)
             .Model(Util.GenerateModel(typeof(SI20100_pgLoadGrid_Result), "mdlIN_Buyer", "Buyer"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetIN_Buyer")))
