@@ -28,7 +28,7 @@
         .Store(
              X.Store()
             .ID("stoSI_MaterialType")
-            .PageSize(50)//.AutoLoad(true)
+            .PageSize(50).AutoLoad(false)
             .Model(Util.GenerateModel(typeof(SI20400_pgLoadGrid_Result), "mdlSI_MaterialType", "MaterialType"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_MaterialType")))
             .Listeners(l =>
