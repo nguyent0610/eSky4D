@@ -67,11 +67,12 @@
                   
             X.Column().Text(Util.GetLang("SlsperId")).Width(100).DataIndex("SlsperId")
                 .Editor(
-                    HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQProcedure("SA03200_pcSalesperson").HQDBSys(true)
-                    .HQColumnShow("UserName,FirstName,CpnyID").DisplayField("UserName").ValueField("UserName").HQAutoLoad(false)
+                    HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQProcedure("SA03200_pcSalesperson").HQDBSys(false)
+                    .HQColumnShow("Slsperid,Name,BranchID").DisplayField("Name").ValueField("Slsperid").HQAutoLoad(false)
                     .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
-                    .HQParam(new StoreParameterCollection() {                                
-                     new StoreParameter() { Name = "@CpnyID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
+                    .HQParam(new StoreParameterCollection() {
+                     new StoreParameter() { Name = "@CpnyID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw},
+                     new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst => { 

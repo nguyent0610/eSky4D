@@ -41,9 +41,9 @@ var menuClick = function (command) {
             break;
         case "delete":
             if (App.slmPPC_License.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
-                }
+                var rowindex = HQ.grid.indexSelect(App.grdPPC_License);
+                if (rowindex != '')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdPPC_License), ''], 'deleteData', true)
             }
             break;
         case "save":
@@ -69,7 +69,7 @@ var StatusCheckAll_Change = function (value) {
     }
 }
 var cboBranchID_Change = function (sender, e) {
-    App.cboSlsperId.getStore().reload();
+    App.cboSlsperId.store.reload();
 };
 var grdPPC_License_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);

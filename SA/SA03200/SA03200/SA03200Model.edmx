@@ -50,7 +50,7 @@
           </Key>
           <Property Type="String" Name="PDAID" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Password" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LicenseKey" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="ActivitionDay" Nullable="false" />
@@ -70,7 +70,7 @@
         <ComplexType Name="SA03200_pgPPC_License_Result">
           <Property Type="String" Name="PDAID" Nullable="false" MaxLength="100" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Password" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="LicenseKey" Nullable="false" MaxLength="100" />
           <Property Type="Int32" Name="ActivitionDay" Nullable="false" />
@@ -149,8 +149,8 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="SA03200Model.PPC_License" Width="1.5" PointX="11.256716815408653" PointY="27.453907472758512" />
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="95" >
+        <EntityTypeShape EntityType="SA03200Model.PPC_License" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
