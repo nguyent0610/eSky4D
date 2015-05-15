@@ -45,8 +45,8 @@
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
-            X.NumberColumn().Text(Util.GetLang("Code")).DataIndex("Code").Format("###").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true)),
-            X.NumberColumn().Text(Util.GetLang("Type")).DataIndex("Type").Format("###").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(5).EnforceMaxLength(true)),
+            X.NumberColumn().Text(Util.GetLang("Code")).DataIndex("Code").Format("###").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxValue(2147483647).MinValue(1)),
+            X.NumberColumn().Text(Util.GetLang("Type")).DataIndex("Type").Format("###").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxValue(32767).MinValue(0)),
             X.Column().Text(Util.GetLang("Title00")).DataIndex("Title00").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Msg00")).DataIndex("Msg00").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),
             X.Column().Text(Util.GetLang("Title01")).DataIndex("Title01").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true)),

@@ -57,16 +57,19 @@ var menuClick = function (command) {
     }
 
 };
+
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
     App.stoSYS_Message.reload();
-}
+};
+
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'SA01100');
 };
+
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
     HQ.common.showBusy(false);
@@ -79,24 +82,28 @@ var stoLoad = function (sto) {
         HQ.isFirstLoad = false;
     }
 };
+
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
+
 var grdSYS_Message_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
+
 var grdSYS_Message_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdSYS_Message, e, keys);
 };
+
 var grdSYS_Message_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdSYS_Message, e, keys);
 };
+
 var grdSYS_Message_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdSYS_Message);
     stoChanged(App.stoSYS_Message);
 };
-
 
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
@@ -128,7 +135,6 @@ var deleteData = function (item) {
     }
 };
 
-
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 function refresh(item) {
@@ -138,5 +144,4 @@ function refresh(item) {
         App.stoSYS_Message.reload();
     }
 };
-///////////////////////////////////
-
+////////////////////////////////////////////////////////////////////////
