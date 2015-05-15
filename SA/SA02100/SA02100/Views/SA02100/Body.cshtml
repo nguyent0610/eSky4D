@@ -28,7 +28,7 @@
         .Store(
             X.Store()
             .ID("stoSYS_RibbonScreen")
-            .PageSize(50)
+            .PageSize(50).AutoLoad(false)
             .Model(Util.GenerateModel(typeof(SA02100_pgSYS_RibbonScreen_Result), "mdlSA02100_pgSYS_RibbonScreen", "ScreenNumber,TabID,GroupID"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_RibbonScreen")))
             .Listeners(l =>

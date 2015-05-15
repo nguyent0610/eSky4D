@@ -74,7 +74,6 @@ var stoChanged = function (sto) {
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
-    HQ.isFirstLoad = true;
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'SA02100');
@@ -121,7 +120,6 @@ var save = function () {
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
-                HQ.isChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
