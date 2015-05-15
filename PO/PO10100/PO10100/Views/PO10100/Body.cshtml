@@ -74,7 +74,7 @@
                         , HQ.NumberField().DecimalPrecision(0).AllowDecimals(true).ReadOnly(true).ID("txtCA").Name("txtCA").HQLangCode("CAEA").LabelWidth(110).InputWidth(50).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
                         , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("txtEA").Name("txtEA").HQLangCode("/").LabelSeparator("").LabelWidth(5).HideLabel(false).InputWidth(50).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
                         , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("POFeeTot").Name("POFeeTot").HQLangCode("POFEETOT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X").Hidden(true)
-                        ,HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").MarginSpec("3 0 0 0").LabelWidth(110).InputWidth(110).DataIndex("SlsperId").AllowBlank(false)
+                        ,HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").MarginSpec("3 0 0 0").LabelWidth(110).InputWidth(110).DataIndex("SlsperID").AllowBlank(false)
                                         .HQLangCode("slsperID").HQDBSys(false).HQProcedure("PO10100_pcSlsperIdByBranch")
                                         .HQColumnShow("SlsperId,Name").ForceSelection(true)                                        
                                         .DisplayField("Name")
