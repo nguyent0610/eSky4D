@@ -26,15 +26,18 @@ namespace SA01900.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string selectRow)
         {
             return PartialView();
         }
+
         public ActionResult GetSYS_RibbonTab()
         {
             return this.Store(_db.SA01900_pgSYS_RibbonTab().ToList());
         }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {

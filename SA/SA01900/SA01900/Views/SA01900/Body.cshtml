@@ -30,7 +30,7 @@
             .ID("stoSYS_RibbonTab")
             .PageSize(50)
             .Model(Util.GenerateModel(typeof(SA01900_pgSYS_RibbonTab_Result), "mdlSA01900_pgSYS_RibbonTab", "TabID"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_RibbonTab")))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_RibbonTab"))).AutoLoad(false)
             .Listeners(l =>
             {
                 l.BeforeLoad.Fn = "stoBeforeLoad";
