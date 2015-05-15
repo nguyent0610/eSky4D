@@ -84,22 +84,6 @@ namespace SA00000
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<SYS_Company> SYS_Company
-        {
-            get
-            {
-                if ((_SYS_Company == null))
-                {
-                    _SYS_Company = base.CreateObjectSet<SYS_Company>("SYS_Company");
-                }
-                return _SYS_Company;
-            }
-        }
-        private ObjectSet<SYS_Company> _SYS_Company;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SYS_SubCompany> SYS_SubCompany
         {
             get
@@ -112,6 +96,22 @@ namespace SA00000
             }
         }
         private ObjectSet<SYS_SubCompany> _SYS_SubCompany;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SYS_Company> SYS_Company
+        {
+            get
+            {
+                if ((_SYS_Company == null))
+                {
+                    _SYS_Company = base.CreateObjectSet<SYS_Company>("SYS_Company");
+                }
+                return _SYS_Company;
+            }
+        }
+        private ObjectSet<SYS_Company> _SYS_Company;
 
         #endregion
 
@@ -126,19 +126,19 @@ namespace SA00000
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the SYS_Company EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSYS_Company(SYS_Company sYS_Company)
-        {
-            base.AddObject("SYS_Company", sYS_Company);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the SYS_SubCompany EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToSYS_SubCompany(SYS_SubCompany sYS_SubCompany)
         {
             base.AddObject("SYS_SubCompany", sYS_SubCompany);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SYS_Company EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSYS_Company(SYS_Company sYS_Company)
+        {
+            base.AddObject("SYS_Company", sYS_Company);
         }
 
         #endregion
