@@ -1,0 +1,67 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using AR20100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "AR20100";
+    var acc = Session["AR20100"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+@*<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />*@
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src="~/Scripts/hq.common.js"></script>
+    <script src='@Url.Content("Scripts/Screen/AR20100.js")' type="text/javascript"></script>
+
+<style type="text/css"> @*Thuoc tinh hover tren grid *@
+    .x-grid-row-over .x-grid-cell-inner {
+        font-weight : bold;
+    }
+</style>
+
+<script>
+    HQ.cpnyID = '@Current.CpnyID';
+    HQ.langID = '@Current.LangID';
+    HQ.userName = '@Current.UserName';
+    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+
+</script>
+  <title>@ViewBag.Title</title>
+    </head>
+    <body>
+@(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
+          
+@(X.Store().ID("stoForm").AutoLoad(false)
+        .Model(Util.GenerateModel(typeof(AR20100_ppAR_CustClass_Result), "mdlAR20100_ppAR_CustClass", "classId"))
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetARCustClass", "AR20100"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+        )
+        .Parameters(ps =>
+        {
+            ps.Add(new StoreParameter("classId", "App.cboClassId.value", ParameterMode.Raw));
+        })
+        .Listeners(p => p.Load.Handler = "loadDataAutoHeader()")
+  )
+
+
+@*@(HQ.Store().ID("ApproveStatusAll").HQProcedure("ppv_AR20100ApproveStatus").HQDBSys(false).LoadData())*@
+     @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>
+
