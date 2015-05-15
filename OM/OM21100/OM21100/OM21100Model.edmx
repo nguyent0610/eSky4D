@@ -16,6 +16,7 @@
           <EntitySet Name="OM_DiscItemClass" EntityType="eBiz4DWebAppModel.Store.OM_DiscItemClass" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_Discount" EntityType="eBiz4DWebAppModel.Store.OM_Discount" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_DiscSeq" EntityType="eBiz4DWebAppModel.Store.OM_DiscSeq" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_OrdDisc" EntityType="eBiz4DWebAppModel.Store.OM_OrdDisc" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="eBiz4DWebAppModel.Store.SI_ApprovalFlowHandle" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="HO_PendingTasks">
@@ -186,6 +187,7 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="Crtd_Role" Type="varchar" MaxLength="30" />
+          <Property Name="Accumulate" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscSeq">
           <Key>
@@ -218,6 +220,43 @@
           <Property Name="POEndDate" Type="smalldatetime" Nullable="false" />
           <Property Name="POUse" Type="bit" Nullable="false" />
           <Property Name="Crtd_Role" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="OM_OrdDisc">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="DiscID" />
+            <PropertyRef Name="DiscSeq" />
+            <PropertyRef Name="OrderNbr" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="DiscID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="DiscSeq" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="OrderNbr" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="BreakBy" Type="varchar" MaxLength="1" />
+          <Property Name="BudgetID" Type="varchar" MaxLength="10" />
+          <Property Name="DiscAmt" Type="float" Nullable="false" />
+          <Property Name="DiscFor" Type="varchar" MaxLength="1" />
+          <Property Name="DisctblAmt" Type="float" Nullable="false" />
+          <Property Name="DisctblQty" Type="float" Nullable="false" />
+          <Property Name="DiscType" Type="varchar" MaxLength="1" />
+          <Property Name="DiscUOM" Type="nvarchar" MaxLength="15" />
+          <Property Name="FreeItemBudgetID" Type="varchar" MaxLength="10" />
+          <Property Name="FreeItemID" Type="varchar" MaxLength="30" />
+          <Property Name="FreeItemQty" Type="float" Nullable="false" />
+          <Property Name="OrigFreeItemQty" Type="float" Nullable="false" />
+          <Property Name="SlsPerID" Type="varchar" MaxLength="30" />
+          <Property Name="SOLineRef" Type="varchar" MaxLength="5" />
+          <Property Name="UserOperationLog" Type="nvarchar" MaxLength="100" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="DiscBreakLineRef" Type="varchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="SI_ApprovalFlowHandle">
           <Key>
@@ -351,6 +390,7 @@
           <EntitySet Name="OM_DiscItemClass" EntityType="OM21100Model.OM_DiscItemClass" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="OM21100Model.SI_ApprovalFlowHandle" />
           <EntitySet Name="HO_PendingTasks" EntityType="OM21100Model.HO_PendingTasks" />
+          <EntitySet Name="OM_OrdDisc" EntityType="OM21100Model.OM_OrdDisc" />
         </EntityContainer>
         <ComplexType Name="OM21100_pgDiscItemClass_Result">
           <Property Type="String" Name="DiscID" Nullable="false" MaxLength="10" />
@@ -481,6 +521,7 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="Crtd_Role" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Accumulate" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscSeq">
           <Key>
@@ -709,6 +750,43 @@
           <Property Type="String" Name="Parm02" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Parm01" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="OM_OrdDisc">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="DiscID" />
+            <PropertyRef Name="DiscSeq" />
+            <PropertyRef Name="OrderNbr" />
+            <PropertyRef Name="LineRef" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DiscID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DiscSeq" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BreakBy" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BudgetID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="DiscAmt" Nullable="false" />
+          <Property Type="String" Name="DiscFor" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="DisctblAmt" Nullable="false" />
+          <Property Type="Double" Name="DisctblQty" Nullable="false" />
+          <Property Type="String" Name="DiscType" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DiscUOM" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FreeItemBudgetID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="FreeItemID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="FreeItemQty" Nullable="false" />
+          <Property Type="Double" Name="OrigFreeItemQty" Nullable="false" />
+          <Property Type="String" Name="SlsPerID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SOLineRef" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UserOperationLog" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="DiscBreakLineRef" MaxLength="5" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -863,6 +941,7 @@
           <EntitySetMapping Name="OM_Discount">
             <EntityTypeMapping TypeName="OM21100Model.OM_Discount">
               <MappingFragment StoreEntitySet="OM_Discount">
+                <ScalarProperty Name="Accumulate" ColumnName="Accumulate" />
                 <ScalarProperty Name="Crtd_Role" ColumnName="Crtd_Role" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
@@ -1104,6 +1183,40 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OM_OrdDisc">
+            <EntityTypeMapping TypeName="OM21100Model.OM_OrdDisc">
+              <MappingFragment StoreEntitySet="OM_OrdDisc">
+                <ScalarProperty Name="DiscBreakLineRef" ColumnName="DiscBreakLineRef" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="UserOperationLog" ColumnName="UserOperationLog" />
+                <ScalarProperty Name="SOLineRef" ColumnName="SOLineRef" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="OrigFreeItemQty" ColumnName="OrigFreeItemQty" />
+                <ScalarProperty Name="FreeItemQty" ColumnName="FreeItemQty" />
+                <ScalarProperty Name="FreeItemID" ColumnName="FreeItemID" />
+                <ScalarProperty Name="FreeItemBudgetID" ColumnName="FreeItemBudgetID" />
+                <ScalarProperty Name="DiscUOM" ColumnName="DiscUOM" />
+                <ScalarProperty Name="DiscType" ColumnName="DiscType" />
+                <ScalarProperty Name="DisctblQty" ColumnName="DisctblQty" />
+                <ScalarProperty Name="DisctblAmt" ColumnName="DisctblAmt" />
+                <ScalarProperty Name="DiscFor" ColumnName="DiscFor" />
+                <ScalarProperty Name="DiscAmt" ColumnName="DiscAmt" />
+                <ScalarProperty Name="BudgetID" ColumnName="BudgetID" />
+                <ScalarProperty Name="BreakBy" ColumnName="BreakBy" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
+                <ScalarProperty Name="DiscSeq" ColumnName="DiscSeq" />
+                <ScalarProperty Name="DiscID" ColumnName="DiscID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1136,7 +1249,8 @@
         <EntityTypeShape EntityType="OM21100Model.OM_DiscItem" Width="1.5" PointX="8.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM21100Model.OM_DiscItemClass" Width="1.5" PointX="2.75" PointY="8.75" />
         <EntityTypeShape EntityType="OM21100Model.SI_ApprovalFlowHandle" Width="1.5" PointX="4.75" PointY="8.75" />
-        <EntityTypeShape EntityType="OM21100Model.HO_PendingTasks" Width="1.5" PointX="4.39937879163743" PointY="24.797371235116092" />
+        <EntityTypeShape EntityType="OM21100Model.HO_PendingTasks" Width="1.5" PointX="8.75" PointY="6.75" />
+        <EntityTypeShape EntityType="OM21100Model.OM_OrdDisc" Width="1.5" PointX="10.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

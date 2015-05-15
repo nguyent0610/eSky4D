@@ -23,19 +23,14 @@ var Main = {
 
         isSomeValidKey: function (items, keys) {
             if (items && items.length > 0) {
-                var flag = 0;
                 for (var i = 0; i < items.length; i++) {
                     for (var j = 0; j < keys.length; j++) {
-                        if (items[i][keys[j]])
-                            flag = i;
+                        if (items[i][keys[j]]) {
+                            return true;
+                        }
                     }
                 }
-                if (flag == items.length - 1) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
+                return false;
             } else {
                 return true;
             }
@@ -93,29 +88,12 @@ var Main = {
         reloadAllData: function () {
             App.cboDiscID.store.reload();
             App.cboDiscSeq.store.reload();
+            App.stoDiscInfo.reload();
             App.stoDiscSeqInfo.reload();
-            App.grdDiscBreak.store.load(function () {
-                App.grdFreeItem.store.load(function () {
-                    App.slmDiscBreak.select(0);
-                });
-            });
-            App.grdCompany.store.reload();
-            App.grdDiscItem.store.reload();
-            App.grdBundle.store.reload();
-            App.grdDiscCustClass.store.reload();
-            App.grdDiscCust.store.reload();
-            App.grdDiscItemClass.store.reload();
         },
 
-        saveData: function () {
-            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (App.frmMain.isValid()) { //if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
-                    //var discId = App.cboDiscID.getValue();
-                    //var discSeq = App.cboDiscSeq.getValue();
-                    var status = App.cboStatus.value;
-
-                    if (status == _holdStatus) {
-                        if (Main.Process.checkRequire(App.grdDiscBreak.title, App.grdDiscBreak.store.getChangedData().Created, [], [])
+        checkEntireRequire: function () {
+            if (Main.Process.checkRequire(App.grdDiscBreak.title, App.grdDiscBreak.store.getChangedData().Created, [], [])
                     && Main.Process.checkRequire(App.grdDiscBreak.title, App.grdDiscBreak.store.getChangedData().Updated, [], [])
 
                     && Main.Process.checkRequire(App.grdFreeItem.title, App.grdFreeItem.store.getChangedData().Updated, ["FreeItemID"], ["FreeItemID"])
@@ -138,7 +116,133 @@ var Main = {
 
                     && Main.Process.checkRequire(App.pnlDPPP.title, App.grdDiscItemClass.store.getChangedData().Updated, ["ClassID"], ["ClassID"])
                     && Main.Process.checkRequire(App.pnlDPPP.title, App.grdDiscItemClass.store.getChangedData().Updated, ["ClassID"], ["ClassID"])) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        },
 
+        checkHasData: function () {
+            var hasData = false;
+            if (App.cboStatus.getValue() == _holdStatus) {
+                if (App.grdDiscBreak.store.getCount() > 1 && App.grdCompany.store.getCount() > 0) {
+                        // 0: {Code: "BB", Descr: "Item Bundle"}
+                        if (App.cboDiscClass.value == "BB") {
+                            if (App.grdBundle.store.getCount() > 1) {
+                                hasData = true;
+                            }
+                            else {
+                                hasData = false;
+                            }
+                        }
+                        // 1: {Code: "CB", Descr: "Customer and Item Bundle"}
+                        else if (App.cboDiscClass.value == "CB") {
+                            if (App.grdBundle.store.getCount() > 1 && App.grdDiscCust.store.getCount() > 1) {
+                                hasData = true;
+                            }
+                            else {
+                                hasData = false;
+                            }
+                        }
+                        // 2: {Code: "CC", Descr: "Customer"}
+                        else if (App.cboDiscClass.value == "CC") {
+                            if (App.grdDiscCust.store.getCount() > 1) {
+                                hasData = true;
+                            }
+                            else {
+                                hasData = false;
+                            }
+                        }
+                        // 3: {Code: "CI", Descr: "Customer and Invt. Item"}
+                        else if (App.cboDiscClass.value == "CI") {
+                            if (App.grdDiscCust.store.getCount() > 1 && App.grdDiscItem.store.getCount() > 1) {
+                                hasData = true;
+                            }
+                            else {
+                                hasData = false;
+                            }
+                        }
+                        // 4: {Code: "II", Descr: "Inventory Item"}
+                        else if (App.cboDiscClass.value == "II") {
+                            if (App.grdDiscItem.store.getCount() > 1) {
+                                hasData = true;
+                            }
+                            else {
+                                hasData = false;
+                            }
+                        }
+                        // 5: {Code: "PP", Descr: "Product Group"}
+                        else if (App.cboDiscClass.value == "PP") {
+                            if (App.grdDiscItemClass.store.getCount() > 1) {
+                                hasData = true;
+                            }
+                            else {
+                                hasData = false;
+                            }
+                        }
+                        // 6: {Code: "TB", Descr: "Shop Type and Item Bundle"}
+                        else if (App.cboDiscClass.value == "TB") {
+                            if (App.grdDiscCustClass.store.getCount() > 1 && App.grdBundle.store.getCount() > 1) {
+                                hasData = true;
+                            }
+                            else {
+                                hasData = false;
+                            }
+                        }
+                        // 7: {Code: "TI", Descr: "Shop Type and Invt. Item"}
+                        else if (App.cboDiscClass.value == "TI") {
+                            if (App.grdDiscCustClass.store.getCount() > 1 && App.grdDiscItem.store.getCount() > 1) {
+                                hasData = true;
+                            }
+                            else {
+                                hasData = false;
+                            }
+                        }
+                        // 8: {Code: "TP", Descr: "Prod. Group and Shop Type"}
+                        else if (App.cboDiscClass.value == "TP") {
+                            if (App.grdDiscCustClass.store.getCount() > 1 && App.grdDiscItemClass.store.getCount() > 1) {
+                                hasData = true;
+                            }
+                            else {
+                                hasData = false;
+                            }
+                        }
+                        // 9: {Code: "TT", Descr: "Shop Type"}
+                        else if (App.cboDiscClass.value == "TT") {
+                            if (App.grdDiscCustClass.store.getCount() > 1) {
+                                hasData = true;
+                            }
+                            else {
+                                hasData = false;
+                            }
+                        }
+                        else {
+                            hasData = false;
+                        }
+                }
+                else {
+                    hasData = false;
+                }
+            }
+            else {
+                hasData = true;
+            }
+
+            return hasData;
+        },
+
+        saveData: function () {
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (App.frmMain.isValid()) { //if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    //var discId = App.cboDiscID.getValue();
+                    //var discSeq = App.cboDiscSeq.getValue();
+                    //var status = App.cboStatus.value;
+
+                    //if (status == _holdStatus) {
+                    if (Main.Process.checkHasData()) {
+                        if (Main.Process.checkEntireRequire()) {
+                            App.frmDiscDefintionTop.updateRecord();
                             App.frmDiscSeqInfo.updateRecord();
 
                             App.frmMain.submit({
@@ -149,15 +253,15 @@ var Main = {
                                     isNewDiscID: _isNewDisc,
                                     isNewDiscSeq: _isNewSeq,
 
-                                    //lstDiscSeqInfoChange: HQ.store.getData(App.stoDiscSeqInfo),
-                                    //lstDiscBreakChange: HQ.store.getData(App.grdDiscBreak.store),
+                                    lstDiscInfo: Ext.encode([App.frmDiscDefintionTop.getRecord().data]),
+                                    lstDiscBreakChange: HQ.store.getData(App.grdDiscBreak.store),
                                     lstFreeItemChange: HQ.store.getData(App.grdFreeItem.store),
-                                    //lstCompanyChange: HQ.store.getData(App.grdCompany.store),
-                                    //lstDiscItemChange: HQ.store.getData(App.grdDiscItem.store),
-                                    //lstBundleChange: HQ.store.getData(App.grdBundle.store),
-                                    //lstDiscCustClassChange: HQ.store.getData(App.grdDiscCustClass.store),
-                                    //lstDiscCustChange: HQ.store.getData(App.grdDiscCust.store),
-                                    //lstDiscItemClassChange: HQ.store.getData(App.grdDiscItemClass.store),
+                                    lstCompanyChange: HQ.store.getData(App.grdCompany.store),
+                                    lstDiscItemChange: HQ.store.getData(App.grdDiscItem.store),
+                                    lstBundleChange: HQ.store.getData(App.grdBundle.store),
+                                    lstDiscCustClassChange: HQ.store.getData(App.grdDiscCustClass.store),
+                                    lstDiscCustChange: HQ.store.getData(App.grdDiscCust.store),
+                                    lstDiscItemClassChange: HQ.store.getData(App.grdDiscItemClass.store),
 
                                     lstDiscSeqInfo: (function () {
                                         App.stoDiscSeqInfo.each(function (item) {
@@ -182,9 +286,6 @@ var Main = {
                                     else {
                                         HQ.message.show(201405071);
                                     }
-                                    if (data.result.tstamp) {
-                                        App.tstamp.setValue(data.result.tstamp);
-                                    }
                                     Main.Process.reloadAllData();
                                 },
                                 failure: function (msg, data) {
@@ -198,6 +299,10 @@ var Main = {
                             });
                         }
                     }
+                    else {
+                        HQ.message.show(744, '', '');
+                    }
+                    //}
                 }
                 else {
                     if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
@@ -218,14 +323,88 @@ var Main = {
         refresh: function (item) {
             if (item == 'yes') {
                 HQ.isChange = false;
+                HQ.isChange0 = false;
                 Main.Event.menuClick("refresh");
+            }
+        },
+
+        deleteDisc: function () {
+            if (HQ.isDelete) {
+                App.frmMain.submit({
+                    waitMsg: HQ.common.getLang("DeletingData"),
+                    url: 'OM21100/DeleteDisc',
+                    clientValidation: false,
+                    timeout: 10000000,
+                    params: {
+                        discID: App.cboDiscID.getValue()
+                    },
+                    success: function (msg, data) {
+                        if (data.result.msgCode) {
+                            HQ.message.show(data.result.msgCode);
+                        }
+                        else {
+                            HQ.message.show(201405071);
+                        }
+                        Main.Process.reloadAllData();
+                    },
+                    failure: function (msg, data) {
+                        if (data.result.msgCode) {
+                            HQ.message.show(data.result.msgCode);
+                        }
+                        else {
+                            HQ.message.process(msg, data, true);
+                        }
+                    }
+                });
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
+        },
+
+        deleteDiscSeq: function () {
+            if (HQ.isDelete) {
+                App.frmMain.submit({
+                    waitMsg: HQ.common.getLang("DeletingData"),
+                    url: 'OM21100/DeleteDiscSeq',
+                    clientValidation: false,
+                    timeout: 10000000,
+                    params: {
+                        discID: App.cboDiscID.getValue(),
+                        discSeq: App.cboDiscSeq.getValue()
+                    },
+                    success: function (msg, data) {
+                        if (data.result.msgCode) {
+                            HQ.message.show(data.result.msgCode);
+                        }
+                        else {
+                            HQ.message.show(201405071);
+                        }
+                        App.cboDiscSeq.store.reload();
+                        App.stoDiscSeqInfo.reload();
+                    },
+                    failure: function (msg, data) {
+                        if (data.result.msgCode) {
+                            HQ.message.show(data.result.msgCode);
+                        }
+                        else {
+                            HQ.message.process(msg, data, true);
+                        }
+                    }
+                });
+            }
+            else {
+                HQ.message.show(4, '', '');
             }
         }
     },
 
     Event: {
         frmMain_boxReady: function (frm, width, height, eOpts) {
-            DiscDefintion.Event.cboDiscID_change(App.cboDiscID, "", "");
+            App.stoDiscInfo.reload();
+            App.stoDiscSeqInfo.reload();
+
+            HQ.common.setRequire(App.frmMain);
         },
 
         frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {
@@ -233,17 +412,23 @@ var Main = {
             if (disc) {
                 App.frmDiscDefintionTop.updateRecord();
                 HQ.isChange0 = disc.dirty;
-
-                App.frmDiscSeqInfo.updateRecord();
-                if (!HQ.store.isChange(App.stoDiscSeqInfo)) {
-                    if (!HQ.store.isChange(App.grdDiscBreak.store)) {
-                        if (!HQ.store.isChange(App.grdFreeItem.store)) {
-                            if (!HQ.store.isChange(App.grdCompany.store)) {
-                                if (!HQ.store.isChange(App.grdDiscItem.store)) {
-                                    if (!HQ.store.isChange(App.grdBundle.store)) {
-                                        if (!HQ.store.isChange(App.grdDiscCustClass.store)) {
-                                            if (!HQ.store.isChange(App.grdDiscCust.store)) {
-                                                HQ.isChange = HQ.store.isChange(App.grdDiscItemClass.store);
+                
+                var discSeq = App.frmDiscSeqInfo.getRecord();
+                if (discSeq) {
+                    App.frmDiscSeqInfo.updateRecord();
+                    if (!HQ.store.isChange(App.stoDiscSeqInfo)) {
+                        if (!HQ.store.isChange(App.grdDiscBreak.store)) {
+                            if (!HQ.store.isChange(App.grdFreeItem.store)) {
+                                if (!HQ.store.isChange(App.grdCompany.store)) {
+                                    if (!HQ.store.isChange(App.grdDiscItem.store)) {
+                                        if (!HQ.store.isChange(App.grdBundle.store)) {
+                                            if (!HQ.store.isChange(App.grdDiscCustClass.store)) {
+                                                if (!HQ.store.isChange(App.grdDiscCust.store)) {
+                                                    HQ.isChange = HQ.store.isChange(App.grdDiscItemClass.store);
+                                                }
+                                                else {
+                                                    HQ.isChange = true;
+                                                }
                                             }
                                             else {
                                                 HQ.isChange = true;
@@ -273,10 +458,6 @@ var Main = {
                         HQ.isChange = true;
                     }
                 }
-                else {
-                    HQ.isChange = true;
-                }
-
                 if (HQ.isChange || HQ.isChange0) {
                     HQ.common.changeData(true, 'OM21100');//co thay doi du lieu gan * tren tab title header
                     //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
@@ -310,14 +491,14 @@ var Main = {
                             keys.splice(idxLref, 1);
                         }
 
-                        HQ.store.insertRecord(sto, keys, newData, false);
+                        var newRec = Ext.create(sto.model.modelName, newData);
+                        HQ.store.insertRecord(sto, keys, newRec, false);
                     }
                 }
             }
         },
 
         grd_beforeEdit: function (editor, e) {
-
             if (HQ.isUpdate) {
                 if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
                     var status = App.cboStatus.value;
@@ -367,10 +548,12 @@ var Main = {
                         keys.splice(idxLref, 1);
                     }
 
-                    HQ.store.insertRecord(e.store, keys, newData, false);
+                    var newRec = Ext.create(e.store.model.modelName, newData);
+                    HQ.store.insertRecord(e.store, keys, newRec, false);
 
                     if (!App.cboDiscClass.readOnly) {
                         App.cboDiscClass.setReadOnly(true);
+                        App.cboDiscType.setReadOnly(true);
                     }
                 }
             }
@@ -429,7 +612,7 @@ var Main = {
                 case "first":
                     if (HQ.focus == 'frmDiscDefintionTop')
                     {
-                        HQ.combo.first(App.cboDiscID, HQ.isChange);
+                        HQ.combo.first(App.cboDiscID, HQ.isChange || HQ.isChange0);
                     }
                     else if (HQ.focus == 'frmDiscSeqInfo') {
                         HQ.combo.first(App.cboDiscSeq, HQ.isChange);
@@ -440,7 +623,7 @@ var Main = {
                     break;
                 case "prev":
                     if (HQ.focus == 'frmDiscDefintionTop') {
-                        HQ.combo.prev(App.cboDiscID, HQ.isChange);
+                        HQ.combo.prev(App.cboDiscID, HQ.isChange || HQ.isChange0);
                     }
                     else if (HQ.focus == 'frmDiscSeqInfo') {
                         HQ.combo.prev(App.cboDiscSeq, HQ.isChange);
@@ -451,7 +634,7 @@ var Main = {
                     break;
                 case "next":
                     if (HQ.focus == 'frmDiscDefintionTop') {
-                        HQ.combo.next(App.cboDiscID, HQ.isChange);
+                        HQ.combo.next(App.cboDiscID, HQ.isChange || HQ.isChange0);
                     }
                     else if (HQ.focus == 'frmDiscSeqInfo') {
                         HQ.combo.next(App.cboDiscSeq, HQ.isChange);
@@ -462,7 +645,7 @@ var Main = {
                     break;
                 case "last":
                     if (HQ.focus == 'frmDiscDefintionTop') {
-                        HQ.combo.last(App.cboDiscID, HQ.isChange);
+                        HQ.combo.last(App.cboDiscID, HQ.isChange || HQ.isChange0);
                     }
                     else if (HQ.focus == 'frmDiscSeqInfo') {
                         HQ.combo.last(App.cboDiscSeq, HQ.isChange);
@@ -472,12 +655,14 @@ var Main = {
                     }
                     break;
                 case "refresh":
-                    if (HQ.isChange) {
+                    if (HQ.isChange || HQ.isChange0) {
                         HQ.message.show(20150303, '', 'Main.Process.refresh');
                     }
                     else {
                         if (HQ.focus == 'frmDiscDefintionTop') {
-                            App.cboDiscID.store.reload();
+                            App.cboDiscID.store.load(function (records, operation, success) {
+                                App.stoDiscInfo.reload();
+                            });
                         }
                         else if (HQ.focus == 'frmDiscSeqInfo') {
                             App.cboDiscSeq.store.load(function (records, operation, success) {
@@ -493,7 +678,17 @@ var Main = {
                     break;
                 case "new":
                     if (HQ.isInsert) {
-                        App.cboDiscID.setValue("");
+                        if (HQ.isChange || HQ.isChange0) {
+                            HQ.message.show(20150303, '', 'Main.Process.refresh');
+                        }
+                        else {
+                            if (HQ.focus == 'frmDiscDefintionTop') {
+                                App.cboDiscID.clearValue();
+                            }
+                            else if (HQ.focus == 'frmDiscSeqInfo') {
+                                App.cboDiscSeq.clearValue();
+                            }
+                        }
                     }
                     break;
                 case "delete":
@@ -501,9 +696,11 @@ var Main = {
                     if (HQ.isUpdate) {
                         if (HQ.focus == 'frmDiscDefintionTop') {
                             // Xoa discount
+                            Main.Process.deleteDisc();
                         }
                         else if (HQ.focus == 'frmDiscSeqInfo') {
                             // Xoa disc seq
+                            Main.Process.deleteDiscSeq();
                         }
                         else if (focusGrid) {
                             var selected = focusGrid.getSelectionModel().selected.items;
@@ -582,24 +779,34 @@ var DiscDefintion = {
             }
         },
 
-        renderFreeItemName: function (value) {
-            var record = App.cboFreeItemID.store.findRecord("InvtID", value);
-            if (record) {
-                return record.data.Descr;
+        renderFreeItemName: function (value, metaData, record, rowIndex, colIndex, store) {
+            var rec = App.cboFreeItemID.store.findRecord("InvtID", record.data.FreeItemID);
+            var returnValue = value;
+            if (rec) {
+                if (metaData.column.dataIndex == "Descr" && !record.data.Descr) {
+                    returnValue = rec.data.Descr;
+                }
+                else if(metaData.column.dataIndex == "UnitDescr" && !record.data.UnitDescr){
+                    returnValue = rec.data.StkUnit;
+                }
             }
-            else {
-                return value;
-            }
+
+            return returnValue;
         },
 
-        renderDpiiInvtName: function (value) {
-            var record = App.cboDpiiInvtID.store.findRecord("InvtID", value);
-            if (record) {
-                return record.data.Descr;
+        renderDpiiInvtName: function (value, metaData, record, rowIndex, colIndex, store) {
+            var rec = App.cboDpiiInvtID.store.findRecord("InvtID", record.data.InvtID);
+            var returnValue = value;
+            if (rec) {
+                if (metaData.column.dataIndex == "Descr" && !record.data.Descr) {
+                    returnValue = rec.data.Descr;
+                }
+                else if (metaData.column.dataIndex == "UnitDesc" && !record.data.UnitDesc) {
+                    returnValue = rec.data.StkUnit;
+                }
             }
-            else {
-                return value;
-            }
+
+            return returnValue;
         },
 
         renderGInvtName: function (value) {
@@ -626,6 +833,33 @@ var DiscDefintion = {
     },
 
     Event: {
+        stoDiscInfo_load: function (sto, records, successful, eOpts) {
+            if (sto.getCount() > 0) {
+                _isNewDisc = false;
+            }
+            else {
+                _isNewDisc = true;
+                App.cboDiscSeq.setValue("");
+                var discRec = Ext.create("App.mdlDiscInfo", {
+                    DiscID: App.cboDiscID.getValue()
+                });
+                sto.insert(0, discRec);
+            }
+            var frmRec = sto.getAt(0);
+            App.frmDiscDefintionTop.loadRecord(frmRec);
+
+            if (frmRec.data.tstamp) {
+                App.cboDiscClass.setReadOnly(true);
+                App.cboDiscType.setReadOnly(true);
+            }
+            else {
+                App.cboDiscClass.setReadOnly(false);
+                App.cboDiscType.setReadOnly(false);
+            }
+
+            Main.Event.frmMain_fieldChange();
+        },
+
         stoDiscSeqInfo_load: function (sto, records, successful, eOpts) {
             if (sto.getCount() > 0) {
                 _isNewSeq = false;
@@ -641,35 +875,94 @@ var DiscDefintion = {
                     EndDate: _dateNow,
                     Status: _holdStatus,
                     POUse: false,
-                    Active: 0,
-                    Promo: 0,
+                    Active: false,
+                    Promo: false,
                     AutoFreeItem: false,
                     AllowEditDisc: false
                 });
                 sto.insert(0, discSeqRec);
             }
-            App.frmDiscSeqInfo.loadRecord(sto.getAt(0));
+
+            var discSeqRec = sto.getAt(0);
+            App.frmDiscSeqInfo.loadRecord(discSeqRec);
+
+            if(discSeqRec.data.tstamp){
+                App.cboBreakBy.setReadOnly(true);
+                App.cboDiscFor.setReadOnly(true);
+            }
+            else{
+                App.cboBreakBy.setReadOnly(false);
+                App.cboDiscFor.setReadOnly(false);
+            }
+
+            App.grdDiscBreak.store.load(function () {
+                App.grdFreeItem.store.load(function () {
+                    App.grdFreeItem.store.filterBy(function (record) { });
+                });
+            });
+            App.grdCompany.store.reload();
+            App.grdDiscItem.store.reload();
+            App.grdBundle.store.reload();
+            App.grdDiscCustClass.store.reload();
+            App.grdDiscCust.store.reload();
+            App.grdDiscItemClass.store.reload();
+
+            Main.Event.frmMain_fieldChange();
         },
 
         cboDiscID_change: function (cbo, newValue, oldValue, eOpts) {
-            var discData = HQ.store.findInStore(cbo.store, ['DiscID'], [newValue]);
-            if (!discData) {
-                _isNewDisc = true;
-                App.cboDiscSeq.setValue("");
-                if (App.cboDiscClass.readOnly) {
-                    App.cboDiscClass.setReadOnly(false);
+            App.stoDiscInfo.reload();
+            App.cboDiscSeq.store.load(function () {
+                if (App.cboDiscSeq.store.getCount()) {
+                    App.cboDiscSeq.setValue(App.cboDiscSeq.store.getAt(0).data.DiscSeq);
                 }
-            }
-            else {
-                _isNewDisc = false;
-                if (!App.cboDiscClass.readOnly) {
-                    App.cboDiscClass.setReadOnly(true);
+                else {
+                    App.cboDiscSeq.clearValue();
                 }
-            }
+            });
+        },
 
-            var discRecord = Ext.create(App.cboDiscID.store.model.getName(), discData);
-            App.frmDiscDefintionTop.loadRecord(discRecord);
-            App.cboDiscSeq.getStore().load();
+        cboDiscType_change: function (cbo, newValue, oldValue, eOpts) {
+            var frmRec = App.frmDiscDefintionTop.getRecord();
+            if (!frmRec.data.tstamp) {
+                if (cbo.value) {
+                    if (oldValue) {
+                        if (cbo.value
+                            || App.grdDiscBreak.store.getCount() > 1
+                            || App.grdBundle.store.getCount() > 1
+                            || App.grdDiscCust.store.getCount() > 1
+                            || App.grdDiscCustClass.store.getCount() > 1
+                            || App.grdDiscItem.store.getCount() > 1
+                            || App.grdDiscItemClass.store.getCount() > 1) {
+                            HQ.message.show(43, "", "");
+
+                            cbo.suspendEvents(false);
+                            cbo.setValue(oldValue);
+                            cbo.resumeEvents();
+                            return;
+                        }
+
+                        if (App.cboDiscFor.value == "X" && cbo.value != "L") {
+                            HQ.message.show(53, "", "");
+
+                            cbo.suspendEvents(false);
+                            cbo.setValue(oldValue);
+                            cbo.resumeEvents();
+                            return;
+                        }
+                    }
+
+
+                    if (cbo.value == "L" || cbo.value == "G") {
+                        App.cboDiscClass.setValue("II");
+
+                    }
+                    else {
+                        App.cboDiscClass.setValue("CC");
+                        App.cboBreakBy.setValue("A");
+                    }
+                }
+            }
         },
 
         cboDiscClass_change: function (cbo, newValue, oldValue, eOpts) {
@@ -720,18 +1013,92 @@ var DiscDefintion = {
 
         cboDiscSeq_change: function (cbo, newValue, oldValue, eOpts) {
             App.stoDiscSeqInfo.reload();
-            App.grdDiscBreak.store.load(function () {
-                App.grdFreeItem.store.load(function () {
-                    App.slmDiscBreak.select(0);
-                    cbo.focus();
-                });
-            });
-            App.grdCompany.store.reload();
-            App.grdDiscItem.store.reload();
-            App.grdBundle.store.reload();
-            App.grdDiscCustClass.store.reload();
-            App.grdDiscCust.store.reload();
-            App.grdDiscItemClass.store.reload();
+        },
+
+        cboDiscFor_change: function (cbo, newValue, oldValue, eOpts) {
+            var frmRec = App.frmDiscSeqInfo.getRecord();
+            if (!frmRec.data.tstamp) {
+                if (cbo.value && oldValue &&
+                    (App.grdDiscBreak.store.getCount() > 1
+                    || App.grdBundle.store.getCount() > 1
+                    || App.grdDiscItem.store.getCount() > 1
+                    || App.grdDiscCustClass.store.getCount() > 1
+                    || App.grdDiscItemClass.store.getCount() > 1)) {
+                    HQ.message.show(43, "", "");
+
+                    cbo.suspendEvents(false);
+                    cbo.setValue(oldValue);
+                    cbo.resumeEvents();
+                    return;
+                }
+                if (cbo.value == "X" && App.cboDiscType.value != "L") {
+                    HQ.message.show(53, "","");
+
+                    cbo.suspendEvents(false);
+                    cbo.setValue(oldValue);
+                    cbo.resumeEvents();
+                    return;
+                }
+            }
+        },
+
+        cboBreakBy_change: function (cbo, newValue, oldValue, eOpts) {
+            var discSeqRec = App.frmDiscSeqInfo.getRecord();
+            if (!discSeqRec.data.tstamp) {
+                if (App.cboDiscSeq.getValue() && oldValue && cbo.value
+                    && (App.grdDiscBreak.store.getCount()>1 
+                    || App.grdBundle.store.getCount()>1 
+                    || App.grdDiscItem.store.getCount()>1 
+                    || App.grdDiscItemClass.store.getCount()>1 
+                    || App.grdDiscCust.store.getCount()>1 
+                    || App.grdDiscCustClass.store.getCount()>1))
+                {
+                    HQ.message.show(43,"","");
+
+                    cbo.suspendEvents(false);
+                    cbo.setValue(oldValue);
+                    cbo.resumeEvents();
+                }
+                else if((App.cboDiscClass.value=="CC" 
+                    || App.cboDiscClass.value=="TT" 
+                    || App.cboDiscType.value=="D") 
+                    && cbo.value=="Q")
+                {
+                    HQ.message.show(53,"","");
+
+                    cbo.suspendEvents(false);
+                    cbo.setValue(oldValue);
+                    cbo.resumeEvents();
+                }
+                else if(App.grdDiscBreak.store.getCount()>1 && 
+                    (App.grdDiscBreak.store.getAt(0).BreakAmt>0 || App.grdDiscBreak.store.getAt(0).BreakQty>0 ))
+                {
+                    HQ.message.show(53,"","");
+
+                    cbo.suspendEvents(false);
+                    cbo.setValue(oldValue);
+                    cbo.resumeEvents();
+                } 
+            }
+            if (cbo.value == "W") {
+                App.grdDiscBreak.down('[dataIndex=BreakQty]').setText(HQ.common.getLang("weight"));
+            }
+            else
+                App.grdDiscBreak.down('[dataIndex=BreakQty]').setText(HQ.common.getLang("breakqty"));
+        },
+
+        cboProAplForItem_change: function (cbo, newValue, oldValue, eOpts) {
+            var discSeqRec = App.frmDiscSeqInfo.getRecord();
+            if (!discSeqRec.data.tstamp) {
+                if (cbo.value == "M"
+                    && App.cboDiscClass.value
+                    && App.cboDiscClass.value.substring(1, 1) != "I") {
+
+                    cbo.suspendEvents(false);
+                    cbo.setValue("A");
+                    cbo.resumeEvents();
+                }
+            }
         },
 
         treePanelBranch_checkChange: function (node, checked, eOpts) {
@@ -773,6 +1140,7 @@ var DiscDefintion = {
                                     }
                                 }
                             });
+                            App.treePanelBranch.clearChecked();
                         }
                     }
                 }
@@ -812,6 +1180,7 @@ var DiscDefintion = {
                                     }
                                 }
                             });
+                            App.treePanelBranch.clearChecked();
                         }
                     }
                 }
@@ -900,7 +1269,8 @@ var DiscDefintion = {
                             LineRef: selected[0].data.LineRef
                         };
 
-                        HQ.store.insertRecord(store, keys, newData, false);
+                        var newRec = Ext.create(store.model.modelName, newData);
+                        HQ.store.insertRecord(store, keys, newRec, false);
                     }
                 }
             }
@@ -913,19 +1283,115 @@ var DiscDefintion = {
             }
         },
 
+        grdDiscBreak_beforeEdit: function (editor, e) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    var status = App.cboStatus.value;
+                    if (status == _holdStatus) {
+                        var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+
+                        if (keys.indexOf(e.field) != -1) {
+                            if (e.record.data.tstamp)
+                                return false;
+                        }
+
+                        if (App.cboBreakBy.value == "A" && e.field == "BreakQty") {
+                            return false;
+                        }
+                        else if (App.cboBreakBy.value == "Q" && App.cboDiscClass.value != "BB"
+                            && App.cboDiscClass.value != "CB" && App.cboDiscClass.value != "TB"
+                            && e.field == "BreakAmt") {
+                            return false;
+                        }
+                        else if ((App.cboDiscClass.value == "BB" || App.cboDiscClass.value == "CB"
+                            || App.cboDiscClass.value == "TB") && e.field == "BreakQty") {
+                            return false;
+                        }
+                        else if (App.grdFreeItem.store.getCount() > 1 && e.field == "DiscAmt") {
+                            return false
+                        }
+                        else if (e.rowIdx > 0 && e.store.getAt(e.rowIdx - 1).data.DiscAmt == 0 && e.field == "DiscAmt") {
+                            return false;
+                        }
+
+                        return HQ.grid.checkInput(e, keys);
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        },
+
+        grdFreeItem_beforeEdit: function (editor, e) {
+            if (HQ.isUpdate) {
+                if (App.frmDiscDefintionTop.isValid() && App.frmDiscSeqInfo.isValid()) {
+                    var status = App.cboStatus.value;
+                    if (status == _holdStatus) {
+                        var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+
+                        if (keys.indexOf(e.field) != -1) {
+                            if (e.record.data.tstamp)
+                                return false;
+                        }
+
+                        var selRec = App.slmDiscBreak.getSelection();
+                        if (selRec) {
+                            if (selRec[0].data.DiscAmt) {
+                                return false;
+                            }
+                        }
+                        else {
+                            return false;
+                        }
+
+                        return HQ.grid.checkInput(e, keys);
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    if (Main.Process.showFieldInvalid(App.frmDiscDefintionTop)) {
+                        Main.Process.showFieldInvalid(App.frmDiscSeqInfo);
+                    }
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        },
+
         grdDiscBreak_edit: function (editor, e) {
-            var keys = ["BreakQty", "BreakAmt", "DiscAmt"];
+            var totalKeys = ["BreakQty", "BreakAmt", "DiscAmt"];
+
+            var keys = [];
+            if (totalKeys.indexOf(e.field)) {
+                keys.push(e.field);
+            }
+
             if (Main.Process.isSomeValidKey(e.store.getRecordsValues(), keys)) {
                 var discId = App.cboDiscID.getValue();
                 var discSeq = App.cboDiscSeq.getValue();
 
                 var newData = {
                     DiscID: discId,
-                    DiscSeq: discSeq
+                    DiscSeq: discSeq,
+                    LineRef: HQ.store.lastLineRef(e.store)
                 };
-                newData.LineRef = HQ.store.lastLineRef(e.store);
 
-                HQ.store.insertRecord(e.store, keys, newData, false);
+                var newRec = Ext.create(e.store.model.modelName, newData);
+                HQ.store.insertRecord(e.store, (keys.length? keys : totalKeys), newRec, false);
 
                 if (!App.cboDiscClass.readOnly) {
                     App.cboDiscClass.setReadOnly(true);
@@ -950,7 +1416,8 @@ var DiscDefintion = {
                             LineRef: selRecs.items[0].data.LineRef
                         };
 
-                        HQ.store.insertRecord(e.store, keys, newData, false);
+                        var newRec = Ext.create(e.store.model.modelName, newData);
+                        HQ.store.insertRecord(e.store, keys, newRec, false);
 
                         if (!App.cboDiscClass.readOnly) {
                             App.cboDiscClass.setReadOnly(true);

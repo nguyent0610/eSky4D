@@ -30,13 +30,37 @@
             HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
             HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
 
-            var _dateNow = new Date('@DateTime.Now');
+            var _dateNow = new Date('@DateTime.Now.Date');
         </script>
 
         <title>@ViewBag.Title</title>
     </head>
     <body>
         @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
+
+        @(
+            X.Store().ID("stoDiscInfo")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM_Discount), "mdlDiscInfo", "DiscID"))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetDiscInfo", "OM21100"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("discID", "App.cboDiscID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(x =>
+            {
+                x.Load.Fn = "DiscDefintion.Event.stoDiscInfo_load";
+            })
+                // Store: stoDiscSeqInfo
+        )
 
         @(
             X.Store().ID("stoDiscSeqInfo")
@@ -112,7 +136,7 @@
             .Listeners(l =>
             {
                 l.BeforeLoad.Handler = "this.HQFieldKeys=['DiscID', 'DiscSeq', 'LineRef', 'FreeItemID'];";
-                //l.Load.Fn = "Main.Event.sto_load";
+                l.Load.Fn = "Main.Event.sto_load";
                 l.Update.Handler = "Main.Event.frmMain_fieldChange()";
                 l.DataChanged.Handler = "Main.Event.frmMain_fieldChange()";
             })
