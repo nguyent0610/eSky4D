@@ -14,7 +14,7 @@ var _classID = "";//dung cho boby combo load store cboPurchUnit
 var _stkUnit = "";//dung cho boby combo load store cboPurchUnit
 var _purUnit = "";//dung cho boby combo load store cboPurchUnit
 var _firstLoad = true;
-
+var _allowBlankSlsperID = false;
 
 //////////////////////////////////////////////////////////////////
 //// Store ///////////////////////////////////////////////////////
@@ -242,7 +242,7 @@ var menuClick = function (command) {
 };
 //load lần đầu khi mở
 var firstLoad = function () {
-    
+    _allowBlankSlsperID = App.cboSlsperID.allowBlank;
 };
 var frmChange = function (sender) {
     if (App.stoPO_Header.data.length > 0 && App.cboBranchID.getValue()!=null) {
@@ -607,28 +607,39 @@ var cboBranchID_Change = function (item, newValue, oldValue) {
                     App.cboShipSiteID.getStore().load(function () {
                         App.cboShipCustID.getStore().load(function () {
                             App.cboSiteID.getStore().load(function () {
-                                _objUserDflt = App.stoPO10100_pdOM_UserDefault.data.length > 0 ? App.stoPO10100_pdOM_UserDefault.getAt(0).data : { POSite: '', };;
-                                if (App.stoPO10100_pdPO_Setup.data.length == 0) {
-                                    if (item.hasFocus) {
-                                        App.cboPONbr.setValue('');
-                                        App.stoPO_Header.reload();
+                                
+                                    _objUserDflt = App.stoPO10100_pdOM_UserDefault.data.length > 0 ? App.stoPO10100_pdOM_UserDefault.getAt(0).data : { POSite: '', };;
+                                    if (App.stoPO10100_pdPO_Setup.data.length == 0) {
+                                        if (item.hasFocus) {
+                                            App.cboPONbr.setValue('');
+                                            App.stoPO_Header.reload();
+                                        }
+                                        HQ.message.show(20404, 'PO_Setup', '');
+                                        lockControl(true);
+                                        App.cboBranchID.setReadOnly(false);
                                     }
-                                    HQ.message.show(20404, 'PO_Setup', '');
-                                    lockControl(true);
-                                    App.cboBranchID.setReadOnly(false);
-                                }
-                                else {
-                                    lockControl(false);
-                                    _objPO_Setup = App.stoPO10100_pdPO_Setup.getAt(0).data;
-                                    if (_objPO_Setup.AutoRef == 1) App.cboPONbr.forceSelection = true;
-                                    else App.cboPONbr.forceSelection = false;
-                                    App.cboPONbr.getStore().load(function () {
-                                        App.cboPONbr.setValue('');
-                                        App.stoPO_Header.reload();
-                                        App.cboDistAddr.setValue(App.cboBranchID.getValue());
-                                    });
-                                }
-                               
+                                    else {
+                                        lockControl(false);
+                                        _objPO_Setup = App.stoPO10100_pdPO_Setup.getAt(0).data;
+                                        if (_objPO_Setup.AutoRef == 1) App.cboPONbr.forceSelection = true;
+                                        else App.cboPONbr.forceSelection = false;
+                                        App.cboPONbr.getStore().load(function () {
+                                            App.cboPONbr.setValue('');
+                                            App.stoPO_Header.reload();
+                                            App.cboDistAddr.setValue(App.cboBranchID.getValue());
+                                        });
+                                    }
+                                    if (App.cboBranchID.valueModels[0].data.Channel == 'MT')
+                                        App.cboSlsperID.getStore().load(function () {
+                                            App.cboSlsperID.setReadOnly(false);
+                                            App.cboSlsperID.allowBlank = _allowBlankSlsperID;
+                                            App.cboSlsperID.validate();
+                                        });
+                                    else {
+                                        App.cboSlsperID.setReadOnly(true);
+                                        App.cboSlsperID.allowBlank = true;
+                                        App.cboSlsperID.validate();
+                                    }
                             });
                         });
                     });
@@ -641,7 +652,11 @@ var cboBranchID_Change = function (item, newValue, oldValue) {
         _cpnyID = '';
         App.stoPO10100_pdPO_Setup.load(function () {
             App.cboPONbr.setValue('');
-            App.stoPO_Header.reload();          
+            App.stoPO_Header.reload();
+            App.cboSlsperID.setValue('');
+            App.cboSlsperID.setReadOnly(true);
+            App.cboSlsperID.allowBlank = true;
+            App.cboSlsperID.validate();
         });
     }
     

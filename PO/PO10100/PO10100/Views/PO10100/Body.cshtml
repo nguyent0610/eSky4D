@@ -73,7 +73,23 @@
                                         .LoadData()
                         , HQ.NumberField().DecimalPrecision(0).AllowDecimals(true).ReadOnly(true).ID("txtCA").Name("txtCA").HQLangCode("CAEA").LabelWidth(110).InputWidth(50).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
                         , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("txtEA").Name("txtEA").HQLangCode("/").LabelSeparator("").LabelWidth(5).HideLabel(false).InputWidth(50).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
-                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("POFeeTot").Name("POFeeTot").HQLangCode("POFEETOT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
+                        , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("POFeeTot").Name("POFeeTot").HQLangCode("POFEETOT").LabelWidth(110).InputWidth(110).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X").Hidden(true)
+                        ,HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").MarginSpec("3 0 0 0").LabelWidth(110).InputWidth(110).DataIndex("SlsperId").AllowBlank(false)
+                                        .HQLangCode("slsperID").HQDBSys(false).HQProcedure("PO10100_pcSlsperIdByBranch")
+                                        .HQColumnShow("SlsperId,Name").ForceSelection(true)                                        
+                                        .DisplayField("Name")
+                                        .ValueField("SlsperId")
+                                        .HQHeightWidth(400, 300)
+                                        .HQParam(new StoreParameterCollection() {
+                                                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                                         new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
+                                                })
+                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                        .Listeners(lst =>
+                                                {
+                                                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                                })
+                                        .LoadData()
                         , HQ.Combo().ID("POType").Name("POType").AllowBlank(false).MarginSpec("3 0 0 0").LabelWidth(130).InputWidth(110)
                                                 .HQLangCode("POType").HQDBSys(false).HQProcedure("PO10100_pcPOType")
                                                 .HQColumnShow("Descr").ForceSelection(true)
