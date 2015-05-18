@@ -116,22 +116,6 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_SalesRouteDet> OM_SalesRouteDet
-        {
-            get
-            {
-                if ((_OM_SalesRouteDet == null))
-                {
-                    _OM_SalesRouteDet = base.CreateObjectSet<OM_SalesRouteDet>("OM_SalesRouteDet");
-                }
-                return _OM_SalesRouteDet;
-            }
-        }
-        private ObjectSet<OM_SalesRouteDet> _OM_SalesRouteDet;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_SalesRouteMaster> OM_SalesRouteMaster
         {
             get
@@ -160,6 +144,22 @@ namespace AR20500
             }
         }
         private ObjectSet<SI_State> _SI_State;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_SalesRouteDet> OM_SalesRouteDet
+        {
+            get
+            {
+                if ((_OM_SalesRouteDet == null))
+                {
+                    _OM_SalesRouteDet = base.CreateObjectSet<OM_SalesRouteDet>("OM_SalesRouteDet");
+                }
+                return _OM_SalesRouteDet;
+            }
+        }
+        private ObjectSet<OM_SalesRouteDet> _OM_SalesRouteDet;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -206,14 +206,6 @@ namespace AR20500
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_SalesRouteDet EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_SalesRouteDet(OM_SalesRouteDet oM_SalesRouteDet)
-        {
-            base.AddObject("OM_SalesRouteDet", oM_SalesRouteDet);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the OM_SalesRouteMaster EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_SalesRouteMaster(OM_SalesRouteMaster oM_SalesRouteMaster)
@@ -227,6 +219,14 @@ namespace AR20500
         public void AddToSI_State(SI_State sI_State)
         {
             base.AddObject("SI_State", sI_State);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_SalesRouteDet EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_SalesRouteDet(OM_SalesRouteDet oM_SalesRouteDet)
+        {
+            base.AddObject("OM_SalesRouteDet", oM_SalesRouteDet);
         }
     
         /// <summary>
@@ -494,6 +494,58 @@ namespace AR20500
             }
     
             return base.ExecuteFunction("AR20500_DeleteSalesRouteDetByDate", fromDateParameter, toDateParameter, routeIDParameter, custIDParameter, branchIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="newcustID">No Metadata Documentation available.</param>
+        /// <param name="oldCustID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="handle">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20500_AfterApprove(global::System.String newcustID, global::System.String oldCustID, global::System.String branchID, global::System.String handle)
+        {
+            ObjectParameter newcustIDParameter;
+            if (newcustID != null)
+            {
+                newcustIDParameter = new ObjectParameter("NewcustID", newcustID);
+            }
+            else
+            {
+                newcustIDParameter = new ObjectParameter("NewcustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter oldCustIDParameter;
+            if (oldCustID != null)
+            {
+                oldCustIDParameter = new ObjectParameter("OldCustID", oldCustID);
+            }
+            else
+            {
+                oldCustIDParameter = new ObjectParameter("OldCustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter handleParameter;
+            if (handle != null)
+            {
+                handleParameter = new ObjectParameter("Handle", handle);
+            }
+            else
+            {
+                handleParameter = new ObjectParameter("Handle", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20500_AfterApprove", newcustIDParameter, oldCustIDParameter, branchIDParameter, handleParameter);
         }
 
         #endregion

@@ -196,7 +196,9 @@ namespace AR20500.Controllers
 
                                 }
                             }
+
                             _db.SaveChanges();
+                            _db.AR20500_AfterApprove(objNew.NewCustID, item.CustID, item.BranchID, handle);
                         }
                     }
                 }
