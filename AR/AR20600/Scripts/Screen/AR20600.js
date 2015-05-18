@@ -1,1 +1,234 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('q a=["\\p\\h\\e\\j\\i\\m\\o\\v\\e\\d\\e","\\o\\b\\d\\1z\\e\\m\\o","\\n\\h\\r\\r\\h\\m","\\f\\t\\h\\P\\1b\\u\\f\\T","\\p\\h\\e\\j","\\o\\b\\d\\D\\d\\h\\k\\b","\\n\\x\\h\\C\\h\\u\\m\\d\\k\\T","\\n\\x\\h\\D\\t\\i\\F\\X\\h\\G\\j","\\n\\x\\h\\C\\u\\f\\d\\G\\j","\\i\\f\\C\\t\\e\\m\\o\\b","\\S\\i\\k\\f\\d","\\n\\h\\r\\x\\h","\\m\\b\\1W\\d","\\F\\k\\b\\U","\\p\\e\\f\\d","\\i\\f\\1X\\F\\j\\e\\d\\b","\\i\\f\\G\\m\\f\\b\\k\\d","\\i\\f\\v\\b\\p\\b\\d\\b","\\S\\k\\r\\1Y\\e\\i\\m","\\n\\t\\b\\n\\1j\\E\\b\\1l\\u\\i\\k\\b\\1e\\e\\f\\f","\\S\\h\\k\\r","\\f\\e\\U\\b","","\\f\\t\\h\\P","\\r\\b\\f\\f\\e\\o\\b","\\f\\b\\d\\1o\\e\\p\\u\\b","\\m\\b\\P","\\o\\b\\d\\E\\b\\n\\h\\k\\j","\\j\\b\\p\\b\\d\\b\\v\\e\\d\\e","\\j\\b\\p\\b\\d\\b","\\k\\b\\S\\k\\b\\f\\t","\\k\\b\\p\\h\\e\\j","\\f\\d\\h\\D\\1S\\K\\j\\j\\k\\b\\f\\f","\\n\\p\\h\\f\\b","\\i\\f\\1u\\i\\k\\f\\d\\1z\\h\\e\\j","\\f\\d\\h\\k\\b","\\n\\x\\h\\D\\d\\e\\d\\b","\\n\\x\\h\\v\\i\\f\\d\\k\\i\\n\\d","\\n\\x\\h\\C\\i\\d\\T","\\u\\F\\j\\e\\d\\b\\E\\b\\n\\h\\k\\j","\\o\\b\\d\\1u\\h\\k\\r","\\i\\f\\1o\\e\\p\\i\\j","\\D\\u\\x\\r\\i\\d\\i\\m\\o\\Z\\Z\\Z","\\K\\E\\1d\\y\\Y\\y\\y\\1r\\D\\e\\U\\b","\\o\\b\\d\\C\\t\\e\\m\\o\\b\\j\\v\\e\\d\\e","\\b\\m\\n\\h\\j\\b","\\D\\t\\i\\F\\X\\h\\G\\j","\\k\\b\\f\\u\\p\\d","\\F\\k\\h\\n\\b\\f\\f","\\f\\u\\x\\r\\i\\d","\\T\\b\\f","\\v\\b\\p\\b\\d\\i\\m\\o\\v\\e\\d\\e","\\K\\E\\1d\\y\\Y\\y\\y\\1r\\v\\b\\p\\b\\d\\b\\K\\p\\p","\\r\\f\\o\\C\\h\\j\\b","\\r\\f\\o\\1e\\e\\k\\e\\r","\\i\\f\\2p\\b\\P","\\p\\b\\m\\o\\d\\t","\\j\\e\\d\\e","\\1b\\k\\e\\m\\n\\t\\G\\v\\1i\\C\\u\\f\\d\\G\\j\\1i\\D\\t\\i\\F\\X\\h\\G\\j","\\i\\m\\f\\b\\k\\d\\1b\\p\\e\\m\\1j","\\o\\b\\d\\K\\d","\\n\\h\\r\\r\\i\\d\\C\\t\\e\\m\\o\\b\\f","\\f\\b\\d\\E\\b\\1l\\u\\i\\k\\b","\\p\\h\\e\\j\\E\\b\\n\\h\\k\\j","\\K\\E\\1d\\y\\Y\\y\\y","\\n\\t\\e\\m\\o\\b\\v\\e\\d\\e","\\p\\h\\e\\j\\i\\m\\o\\j\\e\\d\\e"];q 1v=l(){c[a[2]][a[3]](B,c[a[2]][a[1]](a[0]));g[a[8]][a[5]]()[a[4]](l(){g[a[7]][a[5]]()[a[4]](l(){g[a[6]][a[5]]()[a[4]](l(){})})})};q 1L=l(1m){1P(1m){A a[10]:c[a[11]][a[10]](g[a[7]],c[a[9]]);w;A a[12]:c[a[11]][a[12]](g[a[7]],c[a[9]]);w;A a[13]:c[a[11]][a[13]](g[a[7]],c[a[9]]);w;A a[14]:c[a[11]][a[14]](g[a[7]],c[a[9]]);w;A a[21]:s(c[a[15]]||c[a[16]]||c[a[17]]){s(c[a[20]][a[19]](g[a[18]])){1f()}};w;A a[26]:s(c[a[16]]){s(c[a[9]]){c[a[24]][a[23]](2v,a[22],a[22])}1k{g[a[7]][a[25]](a[22])}};w;A a[29]:s(c[a[17]]){q V=g[a[18]][a[27]]();s(V){c[a[24]][a[23]](11,a[22],a[28])}};w;A a[1h]:s(c[a[9]]){c[a[24]][a[23]](2x,a[22],a[1h])}1k{c[a[9]]=L;g[a[H]][a[I]]()};w;A a[1g]:c[a[2]][a[1g]](2h);w;2f:}};q 2j=l(Q,O){c[a[R]]=B;g[a[7]][a[25]](a[22]);g[a[7]][a[5]]()[a[I]]();g[a[7]][a[1c]][a[I]]()};q 1q=l(Q,O){c[a[R]]=B;g[a[H]][a[I]]()};q 2k=l(Q,O){g[a[2o]][a[5]]()[a[4]](l(){})};q 2n=l(Q,O){g[a[2l]][a[5]]()[a[4]](l(){g[a[2u]][a[5]]()[a[4]](l(){})})};l 1f(){s(c[a[16]]||c[a[15]]){q V=g[a[18]][a[27]]();g[a[18]][a[1a]]()[a[1w]]();s(g[a[18]][a[2z]]()){g[a[18]][a[1E]]({1C:c[a[2]][a[1]](a[2A]),1s:a[2r],2t:{1J:1K[a[1I]](g[a[H]][a[1Q]]({1Z:L}))},1t:l(W,z){c[a[24]][a[23]](1V,a[22],a[22]);q 1n=z[a[N]][a[2y]];g[a[7]][a[5]]()[a[4]](l(){g[a[7]][a[25]](1n);g[a[H]][a[I]]()})},1D:l(1F,z){c[a[24]][a[2q]](1F,z,B)}})}}}l 2g(M){s(M==a[1x]){g[a[18]][a[1E]]({1C:c[a[2]][a[1]](a[2m]),1s:a[2i],1t:l(W,z){g[a[7]][a[25]](a[22]);g[a[7]][a[5]]()[a[4]](l(){1q(g[a[7]])})},1D:l(W,z){s(z[a[N]][a[1p]]){c[a[24]][a[23]](z[a[N]][a[1p]],z[a[N]][a[2w]],a[22])}}})}}q 2s=l(){c[a[R]]=B;1v()};q 2e=l(J){c[a[R]]=B;c[a[2]][a[3]](L);c[a[1A]]=L;s(J[a[2B]][a[2d]]==0){c[a[1c]][a[1N]](J,a[1M]);1O=J[a[1B]](0);J[a[1R]]();c[a[1A]]=B;c[a[2]][a[1G]](g[a[18]])};g[a[18]][a[1a]]()[a[1H]](g[a[H]][a[1B]](0));1y()};q 1y=l(){g[a[18]][a[1a]]()[a[1w]]();c[a[9]]=c[a[1c]][a[9]](g[a[H]]);c[a[2]][a[2a]](c[a[9]],a[2b])};q 2c=l(J){c[a[2]][a[3]](B,c[a[2]][a[1]](a[1T]))};l 1U(M){s(M==a[1x]){c[a[9]]=L;g[a[H]][a[I]]()}}', 62, 162, '||||||||||_0xcf84|x65|HQ|x74|x61|x73|App|x6F|x69|x64|x72|function|x6E|x63|x67|x6C|var|x6D|if|x68|x75|x44|break|x62|x30|_0xfcf7xd|case|true|x43|x53|x52|x70|x49|32|31|_0xfcf7x14|x41|false|_0xfcf7x11|47|_0xfcf7x7|x77|_0xfcf7x6|34|x66|x79|x76|_0xfcf7x4|_0xfcf7xc|x54|x36|x2E|||||||||||40|x42|35|x32|x50|save|33|30|x2C|x6B|else|x71|_0xfcf7x3|_0xfcf7xe|x56|53|cboShipToId_Change|x2F|url|success|x46|loadSourceCombo|39|50|frmChange|x4C|55|60|waitMsg|failure|49|_0xfcf7xf|62|63|45|lstAR_SOAddress|Ext|menuClick|58|59|record|switch|44|61|x4F|66|refresh|201405071|x78|x55|x4D|skipIdForPhantomRecords|||||||||||65|64|stoBeforeLoad|56|stoLoad|default|deleteData|this|52|cboCustID_Change|cboCountry_Change|38|51|cboState_Change|36|x4E|48|43|firstLoad|params|37|150|54|20150303|46|41|42|57'.split('|'), 0, {}))
+﻿var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboCustId.getStore().load(function () {
+        App.cboShipToId.getStore().load(function () {
+            App.cboCountry.getStore().load(function () {
+                HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                App.stoSOAddress.reload();
+                //App.cboState.getStore().load(function(){
+                //    App.cboCity.getStore().load(function(){
+                //        App.cboDistrict.getStore().load(function(){
+
+                //        })
+                //    })
+                //})
+            })
+        })
+    });
+};
+
+
+// Command of the topbar on screen
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.combo.first(App.cboShipToId, HQ.isChange);
+            break;
+        case "next":
+            HQ.combo.next(App.cboShipToId, HQ.isChange);
+            break;
+        case "prev":
+            HQ.combo.prev(App.cboShipToId, HQ.isChange);
+            break;
+        case "last":
+            HQ.combo.last(App.cboShipToId, HQ.isChange);
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain))//check require truoc khi save
+                    save();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', '');
+                }
+                else {
+                    App.cboShipToId.setValue('');
+                }
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                var curRecord = App.frmMain.getRecord();
+                if (curRecord) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                App.stoSOAddress.reload();
+            }
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+        default:
+    }
+};
+
+var cboCustID_Change = function (sender, e) {
+    App.cboShipToId.setValue("");
+    App.cboShipToId.getStore().load();
+
+};
+
+var cboShipToId_Change = function (sender, e) {
+    App.stoSOAddress.reload();
+};
+
+var cboCountry_Change = function (sender, e) {
+    App.cboState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.State) {
+                App.cboState.setValue(curRecord.data.State);
+            }
+        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+        if (!dt) {
+            curRecord.data.State = '';
+            App.cboState.setValue("");
+        }
+        if (App.cboState.value == curRecord.data.State) {
+            cboState_Change(App.cboState, curRecord.data.State);
+        }
+    });
+};
+
+var cboState_Change = function (sender, e) {
+    App.cboCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord && curRecord.data.City) {
+            App.cboCity.setValue(curRecord.data.City);
+        }
+        var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+        if (!dt) {
+            curRecord.data.City = '';
+            App.cboCity.setValue("");
+        }
+
+        App.cboDistrict.getStore().load(function () {
+            var curRecord = App.frmMain.getRecord();
+            if (curRecord && curRecord.data.District) {
+                App.cboDistrict.setValue(curRecord.data.District);
+               
+            }
+            var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], [App.cboDistrict.getValue()]);
+            if (!dt) {
+                curRecord.data.District = '';
+                App.cboDistrict.setValue("");
+            }
+           
+        });
+
+    });
+};
+
+// Submit the changed data (created, updated) into server side
+function save() {
+    if (HQ.isInsert || HQ.isUpdate) {
+        var curRecord = App.frmMain.getRecord();
+        //curRecord.data.Name = App.txtName.getValue();
+        App.frmMain.getForm().updateRecord();
+        if (App.frmMain.isValid()) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang('Submiting...'),
+                url: 'AR20600/Save',
+                params: {
+                    lstAR_SOAddress: Ext.encode(App.stoSOAddress.getChangedData({ skipIdForPhantomRecords: false }))
+                },
+                success: function (action, data) {
+                    HQ.message.show(201405071, '', '');
+
+                    var ShipToId = data.result.ShipToId;
+                    App.cboShipToId.getStore().load(function () {
+                        App.cboShipToId.setValue(ShipToId);
+                        App.stoSOAddress.reload();
+                    });
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+};
+
+function deleteData(item) {
+    if (item == 'yes') {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang('DeletingData'),
+            url: 'AR20600/DeleteAll',
+            success: function (action, data) {
+                App.cboShipToId.setValue("");
+                App.cboShipToId.getStore().load(function () { cboShipToId_Change(App.cboShipToId); });
+
+            },
+            failure: function (action, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                }
+            }
+        });
+    }
+};
+
+
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    loadSourceCombo();
+};
+
+//load store khi co su thay doi
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isNew = false;
+    App.cboCountry.store.clearFilter();
+    App.cboState.store.clearFilter();
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "BranchID,CustId,ShipToId");
+        record = sto.getAt(0);
+        sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
+        HQ.isNew = true;//record la new
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+    }
+    App.frmMain.getForm().loadRecord(App.stoSOAddress.getAt(0));
+ 
+    if (App.cboCountry.value == record.data.Country | (App.cboState.value == record.data.State)) {
+      
+        cboState_Change(App.cboState, record.data.State);
+    }
+};
+
+//khi co su thay doi du lieu cua cac conttol tren form
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = HQ.store.isChange(App.stoSOAddress);
+    HQ.common.changeData(HQ.isChange, 'AR20600');//co thay doi du lieu gan * tren tab title header
+    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        App.stoSOAddress.reload();
+    }
+};
+///////////////////////////////////
+
+

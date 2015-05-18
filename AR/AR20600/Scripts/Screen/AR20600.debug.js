@@ -85,16 +85,57 @@ var cboShipToId_Change = function (sender, e) {
 };
 
 var cboCountry_Change = function (sender, e) {
+    //App.cboState.getStore().load(function () {
+    //});
     App.cboState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.State) {
+                App.cboState.setValue(curRecord.data.State);
+            }
+        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+        if (!dt) {
+            curRecord.data.State = '';
+            App.cboState.setValue("");
+        }
+        if (App.cboState.value == curRecord.data.State) {
+            cboState_Change(App.cboState, curRecord.data.State);
+        }
     });
 };
 
 var cboState_Change = function (sender, e) {
+    //App.cboCity.getStore().load(function () {
+    //    App.cboDistrict.getStore().load(function () {
+    //    });
+    //});
     App.cboCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord && curRecord.data.City) {
+            App.cboCity.setValue(curRecord.data.City);
+        }
+        var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+        if (!dt) {
+            curRecord.data.City = '';
+            App.cboCity.setValue("");
+        }
 
         App.cboDistrict.getStore().load(function () {
-
+            var curRecord = App.frmMain.getRecord();
+            if (curRecord && curRecord.data.District) {
+                App.cboDistrict.setValue(curRecord.data.District);
+                HQ.combo.expand(App.cboDistrict, ',');
+            }
+            var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], App.cboDistrict.getValue());
+            if (!dt) {
+                curRecord.data.District = '';
+                App.cboDistrict.setValue("");
+            }
+            else {
+                HQ.combo.expand(App.cboDistrict, ',');
+            }
         });
+
     });
 };
 
@@ -156,7 +197,6 @@ var firstLoad = function () {
 
 //load store khi co su thay doi
 var stoLoad = function (sto) {
-    HQ.isFirstLoad = true;
     HQ.common.showBusy(false);
     HQ.isNew = false;
     if (sto.data.length == 0) {
@@ -168,6 +208,12 @@ var stoLoad = function (sto) {
     }
     App.frmMain.getForm().loadRecord(App.stoSOAddress.getAt(0));
     frmChange();
+    if (App.cboCountry.value == record.data.Country) {
+        cboCountry_Change(App.cboCountry, record.data.Country);
+    }
+    else if (App.cboState.value == record.data.State) {
+        cboState_Change(App.cboState, record.data.State);
+    }
 };
 
 //khi co su thay doi du lieu cua cac conttol tren form

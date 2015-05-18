@@ -47,7 +47,7 @@
     <body>
 @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
           
-        @(X.Store().ID("stoSOAddress")  
+        @(X.Store().ID("stoSOAddress").AutoLoad(false)
             .Model(Util.GenerateModel(typeof(AR_SOAddress), "mdlAR_SOAddress", "BranchID,CustId,ShipToId"))       
             .Proxy(
                 X.AjaxProxy()                
