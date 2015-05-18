@@ -68,22 +68,6 @@ namespace SA00000
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Sys_CompanyAddr> Sys_CompanyAddr
-        {
-            get
-            {
-                if ((_Sys_CompanyAddr == null))
-                {
-                    _Sys_CompanyAddr = base.CreateObjectSet<Sys_CompanyAddr>("Sys_CompanyAddr");
-                }
-                return _Sys_CompanyAddr;
-            }
-        }
-        private ObjectSet<Sys_CompanyAddr> _Sys_CompanyAddr;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SYS_SubCompany> SYS_SubCompany
         {
             get
@@ -112,18 +96,26 @@ namespace SA00000
             }
         }
         private ObjectSet<SYS_Company> _SYS_Company;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Sys_CompanyAddr> Sys_CompanyAddr
+        {
+            get
+            {
+                if ((_Sys_CompanyAddr == null))
+                {
+                    _Sys_CompanyAddr = base.CreateObjectSet<Sys_CompanyAddr>("Sys_CompanyAddr");
+                }
+                return _Sys_CompanyAddr;
+            }
+        }
+        private ObjectSet<Sys_CompanyAddr> _Sys_CompanyAddr;
 
         #endregion
 
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the Sys_CompanyAddr EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSys_CompanyAddr(Sys_CompanyAddr sys_CompanyAddr)
-        {
-            base.AddObject("Sys_CompanyAddr", sys_CompanyAddr);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the SYS_SubCompany EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -139,6 +131,14 @@ namespace SA00000
         public void AddToSYS_Company(SYS_Company sYS_Company)
         {
             base.AddObject("SYS_Company", sYS_Company);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Sys_CompanyAddr EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSys_CompanyAddr(Sys_CompanyAddr sys_CompanyAddr)
+        {
+            base.AddObject("Sys_CompanyAddr", sys_CompanyAddr);
         }
 
         #endregion

@@ -140,7 +140,7 @@
                     
                     HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQProcedure("SA00000_pcDistrictByCountryState").HQLangCode("DISTRICT")
                     .HQColumnShow("District,Name").DisplayField("Name").ValueField("District").DataIndex("District")
-                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").AllowBlank(false).MultiSelect(true)
+                    .HQHeightWidth(400, 400).Width(600).MarginSpec("5 0 0 0").AllowBlank(false).MultiSelect(true).HQAutoLoad(false)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@Country", Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw },

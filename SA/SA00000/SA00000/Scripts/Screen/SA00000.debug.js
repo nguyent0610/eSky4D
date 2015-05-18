@@ -176,7 +176,7 @@ var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store
     else {
         return value;
     }
-};
+};  
 
 var cboCountry_Change = function (sender, e) {
     App.cboState.getStore().load(function () {
@@ -204,7 +204,6 @@ var cboState_Change = function (sender, e) {
         }
         var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
         if (!dt) {
-            //App.cboCity.clearValue();
             curRecord.data.City = '';
             App.cboCity.setValue("");
         }
@@ -226,9 +225,6 @@ var cboState_Change = function (sender, e) {
         });
 
     });
-
-
-
 };
 
 var cboCountry_grd_Change = function (sender, e) {
@@ -328,7 +324,9 @@ var stoLoad = function (sto) {
     HQ.isFirstLoad = true;
     HQ.common.showBusy(false);
     HQ.isNew = false;
-    App.cboCpnyID.forceSelection = true;
+    App.cboCountry.forceSelection = false;
+    App.cboState.forceSelection = false;
+    App.cboCity.forceSelection = false;
     App.cboDistrict.forceSelection = false;
     App.cboCountry.store.clearFilter();
     App.cboState.store.clearFilter();
@@ -337,7 +335,7 @@ var stoLoad = function (sto) {
         record = sto.getAt(0);
 
         HQ.isNew = true;//record la new    
-        App.cboCpnyID.forceSelection = false;
+
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboCpnyID.focus(true);//focus ma khi tao moi
         sto.commitChanges();
