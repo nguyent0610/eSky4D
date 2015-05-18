@@ -100,7 +100,7 @@ namespace AR20500.Controllers
                                 objCust.DeliveryID = item.DeliveryID.PassNull(); ;
                                 objCust.Country = objCust.BillCountry = "VN";
                                 objCust.District = item.District.PassNull(); ;
-                                objCust.CustId = _db.AR20500_CustID(Current.CpnyID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId).FirstOrDefault();
+                                objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId).FirstOrDefault();
 
 
                                 objCust.LUpd_Datetime = DateTime.Now;
