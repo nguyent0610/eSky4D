@@ -3,18 +3,11 @@
     App.cboCustId.getStore().load(function () {
         App.cboShipToId.getStore().load(function () {
             App.cboCountry.getStore().load(function () {
-                //App.cboState.getStore().load(function(){
-                //    App.cboCity.getStore().load(function(){
-                //        App.cboDistrict.getStore().load(function(){
-
-                //        })
-                //    })
-                //})
+                App.stoSOAddress.reload();
             })
         })
     });
 };
-
 
 // Command of the topbar on screen
 var menuClick = function (command) {
@@ -71,80 +64,122 @@ var menuClick = function (command) {
     }
 };
 
-var cboCustID_Change = function (sender, e) {
-    HQ.isFirstLoad = true;
+var cboCustID_Changed = function (sender, e) {
     App.cboShipToId.setValue("");
-    App.cboShipToId.getStore().reload();
-    App.cboShipToId.store.reload();
-
+    App.cboShipToId.getStore().load();
 };
 
-var cboShipToId_Change = function (sender, e) {
-    HQ.isFirstLoad = true;
+var cboShipToId_Changed = function (sender, e) {
     App.stoSOAddress.reload();
 };
 
-var cboCountry_Change = function (sender, e) {
+var cboCountry_Changed = function (sender, e) {
+    App.cboState.getStore().load();
+
     //App.cboState.getStore().load(function () {
+    //    var curRecord = App.frmMain.getRecord();
+    //    if (curRecord != undefined)
+    //        if (curRecord.data.State) {
+    //            App.cboState.setValue(curRecord.data.State);
+    //        }
+    //    var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+    //    if (!dt) {
+    //        curRecord.data.State = '';
+    //        App.cboState.setValue("");
+    //    }
+    //    if (App.cboState.value == curRecord.data.State) {
+    //        cboState_Changed(App.cboState, curRecord.data.State);
+    //    }
     //});
-    App.cboState.getStore().load(function () {
-        var curRecord = App.frmMain.getRecord();
-        if (curRecord != undefined)
-            if (curRecord.data.State) {
-                App.cboState.setValue(curRecord.data.State);
-            }
-        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
-        if (!dt) {
-            curRecord.data.State = '';
-            App.cboState.setValue("");
-        }
-        if (App.cboState.value == curRecord.data.State) {
-            cboState_Change(App.cboState, curRecord.data.State);
-        }
-    });
 };
 
-var cboState_Change = function (sender, e) {
+var cboState_Changed = function (sender, e) {
+    App.cboCity.getStore().load();
+    App.cboDistrict.getStore().load();
+
     //App.cboCity.getStore().load(function () {
+    //    var curRecord = App.frmMain.getRecord();
+    //    if (curRecord && curRecord.data.City) {
+    //        App.cboCity.setValue(curRecord.data.City);
+    //    }
+    //    var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+    //    if (!dt) {
+    //        curRecord.data.City = '';
+    //        App.cboCity.setValue("");
+    //    }
+
     //    App.cboDistrict.getStore().load(function () {
+    //        var curRecord = App.frmMain.getRecord();
+    //        if (curRecord && curRecord.data.District) {
+    //            App.cboDistrict.setValue(curRecord.data.District);
+    //        }
+    //        var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], [App.cboDistrict.getValue()]);
+    //        if (!dt) {
+    //            curRecord.data.District = '';
+    //            App.cboDistrict.setValue("");
+    //        }
     //    });
     //});
-    App.cboCity.getStore().load(function () {
-        var curRecord = App.frmMain.getRecord();
-        if (curRecord && curRecord.data.City) {
-            App.cboCity.setValue(curRecord.data.City);
-        }
-        var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
-        if (!dt) {
-            curRecord.data.City = '';
-            App.cboCity.setValue("");
-        }
-
-        App.cboDistrict.getStore().load(function () {
-            var curRecord = App.frmMain.getRecord();
-            if (curRecord && curRecord.data.District) {
-                App.cboDistrict.setValue(curRecord.data.District);
-                HQ.combo.expand(App.cboDistrict, ',');
-            }
-            var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], App.cboDistrict.getValue());
-            if (!dt) {
-                curRecord.data.District = '';
-                App.cboDistrict.setValue("");
-            }
-            else {
-                HQ.combo.expand(App.cboDistrict, ',');
-            }
-        });
-
-    });
 };
 
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var firstLoad = function () {
+    loadSourceCombo();
+};
+
+//load store khi co su thay doi
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isNew = false;
+    App.cboShipToId.forceSelection = false;
+    App.cboCustId.forceSelection = false;
+    App.cboCountry.forceSelection = false;
+    App.cboState.forceSelection = false;
+    App.cboDistrict.forceSelection = false;
+    App.cboCity.forceSelection = false;
+    App.cboSiteId.forceSelection = false;
+    App.cboCountry.store.clearFilter();
+    App.cboState.store.clearFilter();
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "CustId,ShipToId");
+        record = sto.getAt(0);
+        sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
+        HQ.isNew = true;//record la new
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    if (App.cboCountry.value == record.data.Country) {
+        cboCountry_Changed(App.cboCountry, record.data.Country);
+    }
+    else if (App.cboState.value == record.data.State) {
+        cboState_Changed(App.cboState, record.data.State);
+    }
+    frmChange();
+};
+
+//khi co su thay doi du lieu cua cac conttol tren form
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = HQ.store.isChange(App.stoSOAddress);
+    HQ.common.changeData(HQ.isChange, 'AR20600');
+    if (App.cboCustId.valueModels == null || HQ.isNew == true)
+        App.cboCustId.setReadOnly(false);
+    else App.cboCustId.setReadOnly(HQ.isChange);
+
+    if (App.cboShipToId.valueModels == null || HQ.isNew == true)
+        App.cboShipToId.setReadOnly(false);
+    else App.cboShipToId.setReadOnly(HQ.isChange);
+};
 
 // Submit the changed data (created, updated) into server side
 function save() {
     if (HQ.isInsert || HQ.isUpdate) {
         var curRecord = App.frmMain.getRecord();
-        //curRecord.data.Name = App.txtName.getValue();
         App.frmMain.getForm().updateRecord();
         if (App.frmMain.isValid()) {
             App.frmMain.submit({
@@ -189,56 +224,13 @@ function deleteData(item) {
     }
 };
 
-
-var firstLoad = function () {
-    HQ.isFirstLoad = true;
-    loadSourceCombo();
-};
-
-//load store khi co su thay doi
-var stoLoad = function (sto) {
-    HQ.common.showBusy(false);
-    HQ.isNew = false;
-    if (sto.data.length == 0) {
-        HQ.store.insertBlank(sto, "BranchID,CustId,ShipToId");
-        record = sto.getAt(0);
-        sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
-        HQ.isNew = true;//record la new
-        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
-    }
-    App.frmMain.getForm().loadRecord(App.stoSOAddress.getAt(0));
-    frmChange();
-    if (App.cboCountry.value == record.data.Country) {
-        cboCountry_Change(App.cboCountry, record.data.Country);
-    }
-    else if (App.cboState.value == record.data.State) {
-        cboState_Change(App.cboState, record.data.State);
-    }
-};
-
-//khi co su thay doi du lieu cua cac conttol tren form
-var frmChange = function () {
-    App.frmMain.getForm().updateRecord();
-    HQ.isChange = HQ.store.isChange(App.stoSOAddress);
-    HQ.common.changeData(HQ.isChange, 'AR20600');//co thay doi du lieu gan * tren tab title header
-    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
-};
-
-//trước khi load trang busy la dang load data
-var stoBeforeLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
-};
-
-
-
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
+        HQ.isFirstLoad = true;
         App.stoSOAddress.reload();
     }
 };
 ///////////////////////////////////
-
-

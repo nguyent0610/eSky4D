@@ -17,7 +17,7 @@ namespace AR20600.Controllers
     [CheckSessionOut]
     public class AR20600Controller : Controller
     {
-        private string BranchID = Current.CpnyID;
+        private string _BranchID = Current.CpnyID;
         private string _screenNbr = "AR20600";
         AR20600Entities _db = Util.CreateObjectContext<AR20600Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
@@ -28,7 +28,7 @@ namespace AR20600.Controllers
             return View();
         }
         
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -40,7 +40,7 @@ namespace AR20600.Controllers
             return this.Store(rptSOAddress);
         }
 
-         [HttpPost]
+        [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
@@ -54,7 +54,7 @@ namespace AR20600.Controllers
                 {
                     if (CustId.PassNull() == "" || ShipToId.PassNull()=="") continue;
 
-                    var objHeader = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == BranchID && p.CustId == CustId && p.ShipToId == ShipToId);
+                    var objHeader = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == _BranchID && p.CustId == CustId && p.ShipToId == ShipToId);
                     if (objHeader != null)
                     {
                         if (objHeader.tstamp.ToHex() == curHeader.tstamp.ToHex())
@@ -70,7 +70,7 @@ namespace AR20600.Controllers
                     {
                         //string images = getPathThenUploadImage(curHeader, UserID);
                         objHeader = new AR_SOAddress();
-                        objHeader.BranchID = BranchID;
+                        objHeader.BranchID = _BranchID;
                         objHeader.CustId = CustId;
                         objHeader.ShipToId = ShipToId;
                         objHeader.Crtd_DateTime = DateTime.Now;
@@ -126,7 +126,7 @@ namespace AR20600.Controllers
                 string CustId = data["cboCustId"].PassNull();
                 string ShipToId = data["cboShipToId"].PassNull();
 
-                var obj = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == BranchID && p.CustId == CustId && p.ShipToId == ShipToId);
+                var obj = _db.AR_SOAddress.FirstOrDefault(p =>p.BranchID==_BranchID && p.CustId == CustId && p.ShipToId == ShipToId);
                 if (obj != null)
                 {
                     _db.AR_SOAddress.DeleteObject(obj);
