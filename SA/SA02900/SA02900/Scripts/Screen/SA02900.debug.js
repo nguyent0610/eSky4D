@@ -185,6 +185,7 @@ var save = function () {
             success: function (msg, data) {
                 HQ.message.show(201405071);
                 HQ.isChange = false;
+                _botChange = false;
                 menuClick("refresh");
             },
             failure: function (msg, data) {
@@ -314,6 +315,7 @@ function refresh(item) {
         _botChange = false;
         HQ.isFirstLoad = true;
         App.stoTop.reload();
+        App.stoBot.reload();
     }
 };
 ///////////////////////////////////
