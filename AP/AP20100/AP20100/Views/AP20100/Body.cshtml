@@ -29,7 +29,7 @@
                 .ID("grdAP_VendClass")
                 .Store(
                         X.Store().ID("stoAP_VendClass")    
-                        .RemotePaging(true)
+                        .RemotePaging(true).AutoLoad(false)
                         .PageSize(50)
                         .Model(Util.GenerateModel(typeof(AP20100_pgAP_VendClass_Result), "mdlAP_VendClass", "ClassID"))                                                                                                                                  
                         .ServerProxy(
