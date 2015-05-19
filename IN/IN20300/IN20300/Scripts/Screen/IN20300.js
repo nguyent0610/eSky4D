@@ -1,1 +1,240 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('t a=["\\k\\h\\f\\m\\i\\l\\p\\y\\f\\c\\f","\\p\\b\\c\\1t\\f\\l\\p","\\n\\h\\r\\r\\h\\l","\\g\\u\\h\\S\\1b\\s\\g\\H","\\j\\b\\k\\h\\f\\m","\\g\\c\\h\\E\\L\\1Q\\B\\i\\c\\b","\\k\\h\\f\\m","\\p\\b\\c\\B\\c\\h\\j\\b","\\n\\C\\h\\F\\h\\s\\l\\c\\j\\H","\\n\\C\\h\\B\\i\\c\\b\\E\\m","\\i\\g\\1u\\i\\j\\g\\c\\1t\\h\\f\\m","\\i\\g\\F\\u\\f\\l\\p\\b","\\P\\i\\j\\g\\c","\\n\\h\\r\\C\\h","\\M\\j\\b\\N","\\l\\b\\1D\\c","\\k\\f\\g\\c","","\\j\\b\\P\\j\\b\\g\\u","\\g\\u\\h\\S","\\r\\b\\g\\g\\f\\p\\b","\\N\\f\\k\\s\\b\\1z\\h\\m\\b\\k\\g","\\g\\b\\c\\1I\\f\\k\\s\\b","\\i\\g\\E\\l\\g\\b\\j\\c","\\l\\b\\S","\\i\\g\\y\\b\\k\\b\\c\\b","\\p\\b\\c\\I\\b\\n\\h\\j\\m","\\P\\j\\r\\1z\\f\\i\\l","\\m\\b\\k\\b\\c\\b\\y\\f\\c\\f","\\m\\b\\k\\b\\c\\b","\\i\\g\\2a\\M\\m\\f\\c\\b","\\n\\u\\b\\n\\1c\\I\\b\\1y\\s\\i\\j\\b\\1o\\f\\g\\g","\\P\\h\\j\\r","\\N\\f\\k\\s\\b","\\c\\1D\\c\\1A\\r\\f\\i\\k\\1e\\m\\m\\j","\\n\\u\\b\\n\\1c\\1A\\r\\f\\i\\k","\\s\\c\\i\\k","\\g\\f\\N\\b","\\M\\j\\i\\l\\c","\\n\\k\\h\\g\\b","\\n\\C\\h\\B\\c\\f\\c\\b","\\n\\C\\h\\F\\i\\c\\H","\\n\\C\\h\\y\\i\\g\\c\\j\\i\\n\\c","\\i\\g\\L\\b\\S","\\P\\h\\j\\n\\b\\B\\b\\k\\b\\n\\c\\i\\h\\l","\\k\\b\\l\\p\\c\\u","\\m\\f\\c\\f","\\1b\\j\\f\\l\\n\\u\\E\\y","\\i\\l\\g\\b\\j\\c\\1b\\k\\f\\l\\1c","\\g\\c\\h\\j\\b","\\p\\b\\c\\1e\\c","\\n\\h\\r\\r\\i\\c\\F\\u\\f\\l\\p\\b\\g","\\g\\b\\c\\I\\b\\1y\\s\\i\\j\\b","\\k\\h\\f\\m\\I\\b\\n\\h\\j\\m","\\p\\b\\c\\1u\\h\\j\\r","\\F\\h\\s\\l\\c\\j\\H","\\B\\c\\f\\c\\b","\\s\\M\\m\\f\\c\\b\\I\\b\\n\\h\\j\\m","\\E\\L\\1d\\A\\1f\\A\\A","\\n\\u\\f\\l\\p\\b\\y\\f\\c\\f","\\g\\b\\c\\I\\b\\f\\m\\1U\\l\\k\\H","\\k\\h\\f\\m\\i\\l\\p\\m\\f\\c\\f","\\i\\g\\1I\\f\\k\\i\\m","\\B\\s\\C\\r\\i\\c\\i\\l\\p\\X\\X\\X","\\E\\L\\1d\\A\\1f\\A\\A\\1s\\B\\f\\N\\b","\\p\\b\\c\\F\\u\\f\\l\\p\\b\\m\\y\\f\\c\\f","\\b\\l\\n\\h\\m\\b","\\M\\j\\h\\n\\b\\g\\g","\\g\\s\\C\\r\\i\\c","\\H\\b\\g","\\y\\b\\k\\b\\c\\i\\l\\p\\y\\f\\c\\f","\\E\\L\\1d\\A\\1f\\A\\A\\1s\\y\\b\\k\\b\\c\\b\\1e\\k\\k","\\r\\g\\p\\F\\h\\m\\b","\\j\\b\\g\\s\\k\\c","\\r\\g\\p\\1o\\f\\j\\f\\r"];t 1h=o(){d[a[2]][a[3]](z,d[a[2]][a[1]](a[0]));e[a[9]][a[7]]()[a[6]](o(){e[a[8]][a[7]]()[a[6]](o(){e[a[5]][a[4]]()})})};t 1W=o(1q){1T(1q){x a[12]:d[a[10]]=z;d[a[13]][a[12]](e[a[9]],d[a[11]]);w;x a[14]:d[a[10]]=z;d[a[13]][a[14]](e[a[9]],d[a[11]]);w;x a[15]:d[a[10]]=z;d[a[13]][a[15]](e[a[9]],d[a[11]]);w;x a[16]:d[a[10]]=z;d[a[13]][a[16]](e[a[9]],d[a[11]]);w;x a[18]:q(d[a[11]]){d[a[20]][a[19]](1X,a[17],a[18])}R{d[a[11]]=v;q(e[a[9]][a[21]]==1F){e[a[9]][a[22]](a[17])};e[a[9]][a[7]]()[a[6]](o(){e[a[5]][a[4]]()})};w;x a[24]:q(d[a[23]]){q(d[a[11]]){d[a[20]][a[19]](1Z,a[17],a[17])}R{e[a[9]][a[22]](a[17])}};w;x a[29]:q(d[a[25]]){t V=e[a[27]][a[26]]();q(V){d[a[20]][a[19]](11,a[17],a[28])}};w;x a[1Y]:q(d[a[1G]]||d[a[23]]||d[a[25]]){q(d[a[1O]][a[1P]](e[a[27]])&&d[a[1S]][a[1R]](e[a[1V]][a[U]])){1H()}};w;x a[2c]:w;x a[1k]:d[a[2]][a[1k]](2J);w}};t 2H=o(K,1j,1i){e[a[5]][a[4]]()};t 1g=o(2I,1j,1i){e[a[T]][a[7]]()[a[6]]()};t 1r=o(){e[a[1m]][a[7]]()[a[6]]();e[a[1l]][a[7]]()[a[6]]()};t 2z=o(){1h()};t 2D=o(G){d[a[2]][a[3]](v);d[a[Z]]=v;e[a[8]][a[O]]=v;e[a[T]][a[O]]=v;e[a[1l]][a[O]]=v;e[a[1m]][a[O]]=v;e[a[9]][a[O]]=v;q(G[a[J]][a[2C]]==0){d[a[1x]][a[2F]](G,a[2G]);Q=G[a[1p]](0);G[a[2K]]();d[a[Z]]=z;d[a[2]][a[2b]](e[a[27]])};e[a[27]][a[W]]()[a[2L]](e[a[5]][a[1p]](0));q(e[a[8]][a[U]]==Q[a[J]][a[2y]]){1g(e[a[8]],Q[a[J]].2x)}R{q(e[a[T]][a[U]]==Q[a[J]][a[2i]]){1r(e[a[T]],Q[a[J]].2j)}};1n()};t 1n=o(){e[a[27]][a[W]]()[a[1J]]();d[a[11]]=d[a[1x]][a[11]](e[a[5]]);d[a[2]][a[2k]](d[a[11]],a[2l]);q(e[a[9]][a[21]]==1F||d[a[Z]]==z){e[a[9]][a[1N]](v)}R{e[a[9]][a[1N]](d[a[11]])}};t 2g=o(G){d[a[2]][a[3]](z,d[a[2]][a[1]](a[2d]))};o 1H(){q(d[a[23]]||d[a[1G]]){t V=e[a[27]][a[26]]();e[a[27]][a[W]]()[a[1J]]();q(e[a[27]][a[2f]]()){e[a[27]][a[1L]]({1K:d[a[2]][a[1]](a[2m]),1E:a[2n],2u:{2v:2w[a[2t]](e[a[5]][a[2s]]({2o:v}))},1v:o(Y,D){d[a[20]][a[19]](2p,a[17],a[17]);e[a[5]][a[4]]()},1C:o(1M,D){d[a[20]][a[2q]](1M,D,z)}})}}}o 2r(K){q(K==a[1w]){e[a[27]][a[1L]]({1K:d[a[2]][a[1]](a[2e]),1E:a[2h],1v:o(Y,D){e[a[9]][a[22]](a[17]);e[a[9]][a[7]]()[a[6]](o(){2A(e[a[9]])})},1C:o(Y,D){q(D[a[1a]][a[1B]]){d[a[20]][a[19]](D[a[1a]][a[1B]],D[a[1a]][a[2B]],a[17])}}})}}o 2E(K){q(K==a[1w]){d[a[11]]=v;d[a[10]]=z;e[a[5]][a[4]]()}}', 62, 172, '||||||||||_0xbcc7|x65|x74|HQ|App|x61|x73|x6F|x69|x72|x6C|x6E|x64|x63|function|x67|if|x6D|x75|var|x68|false|break|case|x44|true|x30|x53|x62|_0xb7e2x13|x49|x43|_0xb7e2xe|x79|x52|46|_0xb7e2x6|x4E|x70|x76|44|x66|record|else|x77|40|33|_0xb7e2x4|54|x2E|_0xb7e2x12|43|||||||||||73|x42|x6B|x32|x41|x33|cboCountry_Changed|loadSourceCombo|_0xb7e2x8|_0xb7e2x7|39|42|41|frmChange|x50|50|_0xb7e2x3|cboState_Changed|x2F|x4C|x46|success|69|49|x71|x4D|x45|72|failure|x78|url|null|30|save|x56|57|waitMsg|68|_0xb7e2x14|60|32|31|x5F|35|36|switch|x4F|34|menuClick|20150303|37|150|||||||||||x55|52|38|61|70|62|stoBeforeLoad|71|56|State|59|58|63|64|skipIdForPhantomRecords|201405071|67|deleteData|65|66|params|lstheader|Ext|Country|55|firstLoad|cboSiteId_Change|74|45|stoLoad|refresh|48|47|cboSiteId_Changed|_0xb7e2xa|this|51|53'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboSiteId.getStore().load(function () {
+        App.cboCountry.getStore().load(function () {
+            App.stoIN_Site.reload();
+        })
+    });
+};
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.isFirstLoad = true;
+            HQ.combo.first(App.cboSiteId, HQ.isChange);
+            break;
+        case "prev":
+            HQ.isFirstLoad = true;
+            HQ.combo.prev(App.cboSiteId, HQ.isChange);
+            break;
+        case "next":
+            HQ.isFirstLoad = true;
+            HQ.combo.next(App.cboSiteId, HQ.isChange);
+            break;
+        case "last":
+            HQ.isFirstLoad = true;
+            HQ.combo.last(App.cboSiteId, HQ.isChange);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                if (App.cboSiteId.valueModels == null) App.cboSiteId.setValue('');
+                App.cboSiteId.getStore().load(function () { App.stoIN_Site.reload(); });
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', '');
+                }
+                else {
+                    App.cboSiteId.setValue('');
+                }
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                var curRecord = App.frmMain.getRecord();
+                if (curRecord) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain) && HQ.util.checkEmail(App.txtEmailAddr.value)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+};
+
+var cboSiteId_Changed = function (item, newValue, oldValue) {
+    App.stoIN_Site.reload();
+};
+
+var cboCountry_Changed = function (sender, newValue, oldValue) {
+    App.cboState.getStore().load();
+
+    //App.cboState.getStore().load(function () {
+    //    var curRecord = App.frmMain.getRecord();
+    //    if (curRecord != undefined)
+    //        if (curRecord.data.State) {
+    //            App.cboState.setValue(curRecord.data.State);
+    //        }
+    //    var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+    //    if (!dt) {
+    //        curRecord.data.State = '';
+    //        App.cboState.setValue("");
+    //    }
+    //    if (App.cboState.value == curRecord.data.State) {
+    //        cboState_Changed(App.cboState, curRecord.data.State);
+    //    }
+    //});
+};
+
+var cboState_Changed = function () {
+    App.cboCity.getStore().load();
+    App.cboDistrict.getStore().load();
+
+    //App.cboCity.getStore().load(function () {
+    //    var curRecord = App.frmMain.getRecord();
+    //    if (curRecord && curRecord.data.City) {
+    //        App.cboCity.setValue(curRecord.data.City);
+    //    }
+    //    var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+    //    if (!dt) {
+    //        curRecord.data.City = '';
+    //        App.cboCity.setValue("");
+    //    }
+
+    //    App.cboDistrict.getStore().load(function () {
+    //        var curRecord = App.frmMain.getRecord();
+    //        if (curRecord && curRecord.data.District) {
+    //            App.cboDistrict.setValue(curRecord.data.District);
+    //        }
+    //        var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], App.cboDistrict.getValue());
+    //        if (!dt) {
+    //            curRecord.data.District = '';
+    //            App.cboDistrict.setValue("");
+    //        }
+    //    });
+
+    //});
+};
+
+var firstLoad = function () {
+    loadSourceCombo();
+};
+
+//load store khi co su thay doi
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isNew = false;
+    App.cboCountry.forceSelection = false;
+    App.cboState.forceSelection = false;
+    App.cboDistrict.forceSelection = false;
+    App.cboCity.forceSelection = false;
+    App.cboSiteId.forceSelection = false;
+    App.cboCountry.store.clearFilter();
+    App.cboState.store.clearFilter();
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "BranchID");
+        record = sto.getAt(0);
+        sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
+        HQ.isNew = true;//record la new
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    if (App.cboCountry.value == record.data.Country) {
+        cboCountry_Changed(App.cboCountry, record.data.Country);
+    }
+    else if (App.cboState.value == record.data.State) {
+        cboState_Changed(App.cboState, record.data.State);
+    }
+    frmChange();
+};
+
+//khi co su thay doi du lieu cua cac conttol tren form
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = HQ.store.isChange(App.stoIN_Site);
+    HQ.common.changeData(HQ.isChange, 'IN20300');//co thay doi du lieu gan * tren tab title header
+    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+    if (App.cboSiteId.valueModels == null || HQ.isNew == true)
+        App.cboSiteId.setReadOnly(false);
+    else App.cboSiteId.setReadOnly(HQ.isChange);
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+function save() {
+    if (HQ.isInsert || HQ.isUpdate) {
+        var curRecord = App.frmMain.getRecord();
+        //curRecord.data.Name = App.txtName.getValue();
+        App.frmMain.getForm().updateRecord();
+        if (App.frmMain.isValid()) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang('Submiting...'),
+                url: 'IN20300/Save',
+                params: {
+                    lstheader: Ext.encode(App.stoIN_Site.getChangedData({ skipIdForPhantomRecords: false }))
+                },
+                success: function (action, data) {
+                    HQ.message.show(201405071, '', '');
+                    App.stoIN_Site.reload();
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+};
+
+function deleteData(item) {
+    if (item == 'yes') {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang('DeletingData'),
+            url: 'IN20300/DeleteAll',
+            success: function (action, data) {
+                App.cboSiteId.setValue("");
+                App.cboSiteId.getStore().load(function () { cboSiteId_Change(App.cboSiteId); });
+
+            },
+            failure: function (action, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                }
+            }
+        });
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoIN_Site.reload();
+    }
+};
+///////////////////////////////////
+
+
+
+
+
+
+
+
