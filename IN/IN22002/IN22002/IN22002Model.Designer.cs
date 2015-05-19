@@ -126,7 +126,8 @@ namespace IN22002
         /// </summary>
         /// <param name="dateFrom">No Metadata Documentation available.</param>
         /// <param name="dateTo">No Metadata Documentation available.</param>
-        public ObjectResult<IN22002_pgLoadGrid_Result> IN22002_pgLoadGrid(Nullable<global::System.DateTime> dateFrom, Nullable<global::System.DateTime> dateTo)
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<IN22002_pgLoadGrid_Result> IN22002_pgLoadGrid(Nullable<global::System.DateTime> dateFrom, Nullable<global::System.DateTime> dateTo, global::System.String branchID)
         {
             ObjectParameter dateFromParameter;
             if (dateFrom.HasValue)
@@ -148,7 +149,17 @@ namespace IN22002
                 dateToParameter = new ObjectParameter("DateTo", typeof(global::System.DateTime));
             }
     
-            return base.ExecuteFunction<IN22002_pgLoadGrid_Result>("IN22002_pgLoadGrid", dateFromParameter, dateToParameter);
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN22002_pgLoadGrid_Result>("IN22002_pgLoadGrid", dateFromParameter, dateToParameter, branchIDParameter);
         }
 
         #endregion
@@ -567,6 +578,30 @@ namespace IN22002
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> NewExpDate
+        {
+            get
+            {
+                return _NewExpDate;
+            }
+            set
+            {
+                OnNewExpDateChanging(value);
+                ReportPropertyChanging("NewExpDate");
+                _NewExpDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("NewExpDate");
+                OnNewExpDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _NewExpDate;
+        partial void OnNewExpDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnNewExpDateChanged();
 
         #endregion
 
@@ -595,8 +630,7 @@ namespace IN22002
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        /// <param name="approveQty">Initial value of the ApproveQty property.</param>
-        public static PPC_StockRecoveryDet CreatePPC_StockRecoveryDet(global::System.String branchID, global::System.String slsPerID, global::System.String stkRecNbr, global::System.String invtID, global::System.DateTime expDate, global::System.DateTime prodDate, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.Double approveQty)
+        public static PPC_StockRecoveryDet CreatePPC_StockRecoveryDet(global::System.String branchID, global::System.String slsPerID, global::System.String stkRecNbr, global::System.String invtID, global::System.DateTime expDate, global::System.DateTime prodDate, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp)
         {
             PPC_StockRecoveryDet pPC_StockRecoveryDet = new PPC_StockRecoveryDet();
             pPC_StockRecoveryDet.BranchID = branchID;
@@ -608,7 +642,6 @@ namespace IN22002
             pPC_StockRecoveryDet.Crtd_DateTime = crtd_DateTime;
             pPC_StockRecoveryDet.LUpd_DateTime = lUpd_DateTime;
             pPC_StockRecoveryDet.tstamp = tstamp;
-            pPC_StockRecoveryDet.ApproveQty = approveQty;
             return pPC_StockRecoveryDet;
         }
 
@@ -1042,9 +1075,9 @@ namespace IN22002
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Double ApproveQty
+        public Nullable<global::System.Double> ApproveQty
         {
             get
             {
@@ -1059,8 +1092,8 @@ namespace IN22002
                 OnApproveQtyChanged();
             }
         }
-        private global::System.Double _ApproveQty;
-        partial void OnApproveQtyChanging(global::System.Double value);
+        private Nullable<global::System.Double> _ApproveQty;
+        partial void OnApproveQtyChanging(Nullable<global::System.Double> value);
         partial void OnApproveQtyChanged();
 
         #endregion
@@ -1091,8 +1124,7 @@ namespace IN22002
         /// <param name="custName">Initial value of the CustName property.</param>
         /// <param name="expDate">Initial value of the ExpDate property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
-        /// <param name="approveQty">Initial value of the ApproveQty property.</param>
-        public static IN22002_pgLoadGrid_Result CreateIN22002_pgLoadGrid_Result(global::System.String stkRecNbr, global::System.String branchID, global::System.String slsPerID, global::System.String custName, global::System.DateTime expDate, global::System.String invtID, global::System.Double approveQty)
+        public static IN22002_pgLoadGrid_Result CreateIN22002_pgLoadGrid_Result(global::System.String stkRecNbr, global::System.String branchID, global::System.String slsPerID, global::System.String custName, global::System.DateTime expDate, global::System.String invtID)
         {
             IN22002_pgLoadGrid_Result iN22002_pgLoadGrid_Result = new IN22002_pgLoadGrid_Result();
             iN22002_pgLoadGrid_Result.StkRecNbr = stkRecNbr;
@@ -1101,7 +1133,6 @@ namespace IN22002
             iN22002_pgLoadGrid_Result.CustName = custName;
             iN22002_pgLoadGrid_Result.ExpDate = expDate;
             iN22002_pgLoadGrid_Result.InvtID = invtID;
-            iN22002_pgLoadGrid_Result.ApproveQty = approveQty;
             return iN22002_pgLoadGrid_Result;
         }
 
@@ -1448,9 +1479,9 @@ namespace IN22002
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Double ApproveQty
+        public Nullable<global::System.Double> ApproveQty
         {
             get
             {
@@ -1465,8 +1496,8 @@ namespace IN22002
                 OnApproveQtyChanged();
             }
         }
-        private global::System.Double _ApproveQty;
-        partial void OnApproveQtyChanging(global::System.Double value);
+        private Nullable<global::System.Double> _ApproveQty;
+        partial void OnApproveQtyChanging(Nullable<global::System.Double> value);
         partial void OnApproveQtyChanged();
 
         #endregion
