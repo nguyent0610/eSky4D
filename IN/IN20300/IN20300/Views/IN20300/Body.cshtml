@@ -93,7 +93,7 @@
                                 lst.Change.Fn = "cboCountry_Changed";
                                 lst.Focus.Handler = "this.forceSelection = true;";
                             })
-        // cboCountry                    
+                            // cboCountry                    
 
                             , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("STATE").HQProcedure("AR20100_pcStateByCountry")
                             .HQColumnShow("State,Descr").DisplayField("State").ValueField("State").DataIndex("State")
@@ -122,12 +122,12 @@
                                     new StoreParameter() { Name = "@Country",  Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw },
                                     new StoreParameter() { Name = "@State",  Value = "App.cboState.getValue()", Mode = ParameterMode.Raw },
                                 })
-                            .LoadData()
-                            .Listeners(lst =>
-                            {
-                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Focus.Handler = "this.forceSelection = true;";
-                            }) // cboCity
+                                .LoadData()
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.Focus.Handler = "this.forceSelection = true;";
+                                }) // cboCity
 
                             , HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQLangCode("DISTRICT").HQProcedure("AR20100_pcDistrictByCountryState")
                             .HQColumnShow("District,Name").DisplayField("District").ValueField("District").DataIndex("District")

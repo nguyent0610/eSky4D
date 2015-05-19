@@ -79,12 +79,47 @@ var cboSiteId_Changed = function (item, newValue, oldValue) {
 };
 
 var cboCountry_Changed = function (sender, newValue, oldValue) {
-    App.cboState.getStore().load();
+    App.cboState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.State) {
+                App.cboState.setValue(curRecord.data.State);
+            }
+        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+        if (!dt) {
+            curRecord.data.State = '';
+            App.cboState.setValue("");
+        }
+        if (App.cboState.value == curRecord.data.State) {
+            cboState_Changed(App.cboState, curRecord.data.State);
+        }
+    });
 };
 
 var cboState_Changed = function () {
-    App.cboCity.getStore().load();
-    App.cboDistrict.getStore().load();
+    App.cboCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord && curRecord.data.City) {
+            App.cboCity.setValue(curRecord.data.City);
+        }
+        var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+        if (!dt) {
+            curRecord.data.City = '';
+            App.cboCity.setValue("");
+        }
+
+        App.cboDistrict.getStore().load(function () {
+            var curRecord = App.frmMain.getRecord();
+            if (curRecord && curRecord.data.District) {
+                App.cboDistrict.setValue(curRecord.data.District);
+            }
+            var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], [App.cboDistrict.getValue()]);
+            if (!dt) {
+                curRecord.data.District = '';
+                App.cboDistrict.setValue("");
+            }
+        });
+    });
 };
 
 var firstLoad = function () {
@@ -100,6 +135,8 @@ var stoLoad = function (sto) {
     App.cboDistrict.forceSelection = false;
     App.cboCity.forceSelection = false;
     App.cboSiteId.forceSelection = false;
+    App.cboCountry.store.clearFilter();
+    App.cboState.store.clearFilter();
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "BranchID");
         record = sto.getAt(0);
@@ -107,7 +144,8 @@ var stoLoad = function (sto) {
         HQ.isNew = true;//record la new
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
     }
-    App.frmMain.getForm().loadRecord(App.stoIN_Site.getAt(0));
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
     if (App.cboCountry.value == record.data.Country) {
         cboCountry_Changed(App.cboCountry, record.data.Country);
     }

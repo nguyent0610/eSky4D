@@ -79,53 +79,47 @@ var cboSiteId_Changed = function (item, newValue, oldValue) {
 };
 
 var cboCountry_Changed = function (sender, newValue, oldValue) {
-    App.cboState.getStore().load();
-
-    //App.cboState.getStore().load(function () {
-    //    var curRecord = App.frmMain.getRecord();
-    //    if (curRecord != undefined)
-    //        if (curRecord.data.State) {
-    //            App.cboState.setValue(curRecord.data.State);
-    //        }
-    //    var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
-    //    if (!dt) {
-    //        curRecord.data.State = '';
-    //        App.cboState.setValue("");
-    //    }
-    //    if (App.cboState.value == curRecord.data.State) {
-    //        cboState_Changed(App.cboState, curRecord.data.State);
-    //    }
-    //});
+    App.cboState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.State) {
+                App.cboState.setValue(curRecord.data.State);
+            }
+        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+        if (!dt) {
+            curRecord.data.State = '';
+            App.cboState.setValue("");
+        }
+        if (App.cboState.value == curRecord.data.State) {
+            cboState_Changed(App.cboState, curRecord.data.State);
+        }
+    });
 };
 
 var cboState_Changed = function () {
-    App.cboCity.getStore().load();
-    App.cboDistrict.getStore().load();
+    App.cboCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord && curRecord.data.City) {
+            App.cboCity.setValue(curRecord.data.City);
+        }
+        var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+        if (!dt) {
+            curRecord.data.City = '';
+            App.cboCity.setValue("");
+        }
 
-    //App.cboCity.getStore().load(function () {
-    //    var curRecord = App.frmMain.getRecord();
-    //    if (curRecord && curRecord.data.City) {
-    //        App.cboCity.setValue(curRecord.data.City);
-    //    }
-    //    var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
-    //    if (!dt) {
-    //        curRecord.data.City = '';
-    //        App.cboCity.setValue("");
-    //    }
-
-    //    App.cboDistrict.getStore().load(function () {
-    //        var curRecord = App.frmMain.getRecord();
-    //        if (curRecord && curRecord.data.District) {
-    //            App.cboDistrict.setValue(curRecord.data.District);
-    //        }
-    //        var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], App.cboDistrict.getValue());
-    //        if (!dt) {
-    //            curRecord.data.District = '';
-    //            App.cboDistrict.setValue("");
-    //        }
-    //    });
-
-    //});
+        App.cboDistrict.getStore().load(function () {
+            var curRecord = App.frmMain.getRecord();
+            if (curRecord && curRecord.data.District) {
+                App.cboDistrict.setValue(curRecord.data.District);
+            }
+            var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], [App.cboDistrict.getValue()]);
+            if (!dt) {
+                curRecord.data.District = '';
+                App.cboDistrict.setValue("");
+            }
+        });
+    });
 };
 
 var firstLoad = function () {
@@ -230,11 +224,3 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
-
-
-
-
-
-
-
-
