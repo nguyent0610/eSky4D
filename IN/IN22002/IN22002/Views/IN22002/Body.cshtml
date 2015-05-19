@@ -35,7 +35,23 @@
                 //Column 1
                 X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                     .Items(
-                        HQ.DateField().ID("FromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(250)
+                        HQ.Combo().ID("cboBranchID").Name("cboBranchID").MarginSpec("5 0 0 0").Width(250)
+                        .HQLangCode("BranchID").HQDBSys(false).HQProcedure("PO10200_pcBranchAllByUser")
+                        .HQColumnShow("BranchID,BranchName").ForceSelection(true).AllowBlank(false)
+                        .DisplayField("BranchID")
+                        .ValueField("BranchID")
+                        .HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            lst.Focus.Handler = "this.forceSelection=true;";
+                        })
+                        .LoadData()
+                        , HQ.DateField().ID("FromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(250)
                             .Value(DateTime.Now.ToShortDateString()).Format("dd/MM/yyyy")
                         , HQ.DateField().ID("ToDate").MarginSpec("5 0 10 0").HQLangCode("ToDate").Width(250)
                             .Value(DateTime.Now.ToShortDateString()).Format("dd/MM/yyyy")
@@ -44,7 +60,7 @@
                 //Column 2
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                     .Items(
-                        HQ.Button().ID("btnLoad").HQLangCode("LoadData").MarginSpec("20 0 0 10").Width(150)
+                        HQ.Button().ID("btnLoad").HQLangCode("LoadData").MarginSpec("32 0 0 10").Width(150)
                             .Listeners(lst =>
                             {
                                 lst.Click.Fn = "btnLoad_Click";
@@ -121,6 +137,7 @@
                             {
                                 ps.Add(new StoreParameter("DateFrom", "App.FromDate.getValue()", ParameterMode.Raw));
                                 ps.Add(new StoreParameter("DateTo", "App.ToDate.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
                             })
                             .Listeners(l =>
                             {
@@ -156,15 +173,15 @@
                         , X.Column().Text(Util.GetLang("IN22002_SlsPerName")).DataIndex("SlsPerName").Width(150)
                         , X.Column().Text(Util.GetLang("IN22002_CustID")).DataIndex("CustID").Width(100)
                         , X.Column().Text(Util.GetLang("IN22002_CustName")).DataIndex("CustName").Width(150)
-                        , X.DateColumn().Text(Util.GetLang("IN22002_ExpDate")).DataIndex("ExpDate").Width(100).Format("dd/MM/yyyy")
                         , X.Column().Text(Util.GetLang("IN22002_InvtID")).DataIndex("InvtID").Width(100)
                         , X.Column().Text(Util.GetLang("IN22002_InvtName")).DataIndex("InvtName").Width(250)
                         , X.NumberColumn().Text(Util.GetLang("IN22002_Qty")).DataIndex("StkQty").Width(100).Align(Alignment.Right).Format("0,000")
                         , X.DateColumn().Text(Util.GetLang("IN22002_StkRecDate")).DataIndex("StkRecDate").Width(100).Format("dd/MM/yyyy")
-                        , X.Column().Text(Util.GetLang("IN22002_Status")).DataIndex("Status").Width(100).Renderer("renderStatus")
                         , X.NumberColumn().Text(Util.GetLang("IN22002_ApproveQty"))
                         .DataIndex("ApproveQty").Format("0,000").Width(100).Align(Alignment.Right)
                         .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
+                        , X.DateColumn().Text(Util.GetLang("IN22002_ExpDate")).DataIndex("ExpDate").Width(100).Format("dd/MM/yyyy")
+                        , X.Column().Text(Util.GetLang("IN22002_Status")).DataIndex("Status").Width(100).Renderer("renderStatus")
                         
                         , X.CommandColumn().Width(150)
                         .Commands(
