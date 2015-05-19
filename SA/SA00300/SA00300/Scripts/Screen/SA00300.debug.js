@@ -175,7 +175,11 @@ var cboUserID_Change = function (sender, value) {
         chkAutoChange();
     }
 };
-
+var cboUserID_Select = function (sender, value) {
+    if (sender.valueModels != null && !App.stoUser.loading) {
+        App.stoUser.reload();
+    }
+};
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
 var cboUserID_Expand = function (sender, value) {
     if (HQ.isChange) {
