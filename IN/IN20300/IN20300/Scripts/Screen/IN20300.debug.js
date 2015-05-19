@@ -185,7 +185,11 @@ function save() {
                 },
                 success: function (action, data) {
                     HQ.message.show(201405071, '', '');
-                    App.stoIN_Site.reload();
+                    var SiteId = data.result.SiteId;
+                    App.cboSiteId.getStore().load(function () {
+                        App.cboSiteId.setValue(SiteId);
+                        App.stoIN_Site.reload();
+                    });
                 },
                 failure: function (msg, data) {
                     HQ.message.process(msg, data, true);

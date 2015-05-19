@@ -93,9 +93,16 @@ namespace IN20300.Controllers
                         _db.IN_Site.AddObject(header);
                     }
                 }
-
                 #endregion
 
+                var objCpny = _db.IN_SiteCpny.FirstOrDefault(p => p.SiteId.ToLower() == SiteId.ToLower() && p.CpnyID.ToLower() == _BranchID.ToLower());
+                if (objCpny == null)
+                {
+                    objCpny = new IN_SiteCpny();
+                    objCpny.SiteId = SiteId;
+                    objCpny.CpnyID = _BranchID;
+                    _db.IN_SiteCpny.AddObject(objCpny);
+                }
                 //foreach (IN20300_pcCpnybySite_Result deleted in lstdetail.Deleted)
                 //{
                 //    var del = _db.IN_SiteCpny.Where(p => p.SiteId == deleted.SiteId && p.CpnyID == deleted.CpnyID).FirstOrDefault();
@@ -127,7 +134,7 @@ namespace IN20300.Controllers
                 //}
 
                 _db.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true ,SiteId=SiteId});
             }
             catch (Exception ex)
             {
