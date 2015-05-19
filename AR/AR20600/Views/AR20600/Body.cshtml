@@ -110,28 +110,28 @@
                         lst.Change.Fn = "cboState_Change";
                         lst.Focus.Handler = "this.forceSelection = true;";
                     }) // cboState
-                                    
-                    ,HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("CITY").HQProcedure("AR20600_pcCityByCountryState")
-                    .HQColumnShow("City,Name").DisplayField("City").ValueField("City").DataIndex("City")
-                    .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                    .HQDBSys(false).HQAutoLoad(false).ForceSelection(false)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection()
-                    {
-                        new StoreParameter() { Name = "@Country",  Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@State",  Value = "App.cboState.getValue()", Mode = ParameterMode.Raw },
-                    })
-                    .LoadData()
-                    .Listeners(lst =>
-                    {
-                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        lst.Focus.Handler = "this.forceSelection = true;";
-                    }) // cboCity
+
+                        , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("CITY").HQProcedure("AR20600_pcCityByCountryState")
+                        .HQColumnShow("City,Name").DisplayField("City").ValueField("City").DataIndex("City")
+                        .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
+                        .HQDBSys(false).ForceSelection(false).HQAutoLoad(false)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@Country",  Value = "App.cboCountry.getValue()", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@State",  Value = "App.cboState.getValue()", Mode = ParameterMode.Raw },
+                        })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Focus.Handler = "this.forceSelection = true;";
+                        }) // cboCity
                                     
                     ,HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQLangCode("DISTRICT").HQProcedure("AR20600_pcDistrictByCountryState")
                     .HQColumnShow("District,Name").DisplayField("District").ValueField("District").DataIndex("District")
                     .Width(300).HQHeightWidth(400, 500).MarginSpec("5 0 0 0").ForceSelection(false)
-                    .HQDBSys(false)
+                    .HQDBSys(false).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
                     {

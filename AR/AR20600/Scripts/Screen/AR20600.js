@@ -102,17 +102,17 @@ var cboCountry_Change = function (sender, e) {
 };
 
 var cboState_Change = function (sender, e) {
-    App.cboCity.getStore().load(function () {
-        var curRecord = App.frmMain.getRecord();
-        if (curRecord && curRecord.data.City) {
-            App.cboCity.setValue(curRecord.data.City);
-        }
-        var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
-        if (!dt) {
-            curRecord.data.City = '';
-            App.cboCity.setValue("");
-        }
-
+        App.cboCity.getStore().load(function () {
+            var curRecord = App.frmMain.getRecord();
+            if (curRecord && curRecord.data.City) {
+                App.cboCity.setValue(curRecord.data.City);
+            }
+            var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+            if (!dt) {
+                curRecord.data.City = '';
+                App.cboCity.setValue("");
+            }
+        });
         App.cboDistrict.getStore().load(function () {
             var curRecord = App.frmMain.getRecord();
             if (curRecord && curRecord.data.District) {
@@ -127,7 +127,7 @@ var cboState_Change = function (sender, e) {
            
         });
 
-    });
+ 
 };
 
 // Submit the changed data (created, updated) into server side
@@ -189,6 +189,10 @@ var firstLoad = function () {
 var stoLoad = function (sto) {
     HQ.common.showBusy(false);
     HQ.isNew = false;
+    App.cboCountry.forceSelection = false;
+    App.cboState.forceSelection = false;
+    App.cboCity.forceSelection = false;
+    App.cboDistrict.forceSelection = false;
     App.cboCountry.store.clearFilter();
     App.cboState.store.clearFilter();
     if (sto.data.length == 0) {
@@ -199,11 +203,13 @@ var stoLoad = function (sto) {
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
     }
     App.frmMain.getForm().loadRecord(App.stoSOAddress.getAt(0));
- 
-    if (App.cboCountry.value == record.data.Country | (App.cboState.value == record.data.State)) {
-      
+    if (App.cboCountry.value == record.data.Country) {
+        cboCountry_Change(App.cboCountry, record.data.Country);
+    }
+    else if (App.cboState.value == record.data.State) {
         cboState_Change(App.cboState, record.data.State);
     }
+    frmChange();
 };
 
 //khi co su thay doi du lieu cua cac conttol tren form
