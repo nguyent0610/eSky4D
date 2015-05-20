@@ -59,6 +59,33 @@
             // Store: stoSalesPerson
         )
 
+        @(
+            X.Store().ID("stoSlsperCpnyAddr")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR20200_pgSlsperCpnyAddr_Result), "mdlSlsperCpnyAddr", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetSlsperCpnyAddr", "AR20200"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperid", "App.cboSlsperid.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(p => {
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['CpnyAddrID'];";
+                p.Load.Fn = "Store.stoSlsperCpnyAddr_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+            // Store: stoSlsperCpnyAddr
+        )
+
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 

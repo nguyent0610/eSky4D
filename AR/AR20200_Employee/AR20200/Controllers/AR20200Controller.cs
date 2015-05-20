@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System;
-using System.Data.Metadata.Edm;
+//using System.Data.Metadata.Edm;
 using System.Security.Cryptography;
 using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
@@ -24,6 +24,7 @@ namespace AR20200.Controllers
         private string _screenNbr = "AR20200";
         private string _beginStatus = "H";
         private string _noneStatus = "N";
+        private string _mt = "MT";
         AR20200Entities _db = Util.CreateObjectContext<AR20200Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
 
@@ -53,7 +54,7 @@ namespace AR20200.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -65,11 +66,88 @@ namespace AR20200.Controllers
             return this.Store(slsper);
         }
 
+        public ActionResult GetSlsperCpnyAddr(string branchId, string slsperid) 
+        {
+            var slsperCpnyAddrs = _db.AR20200_pgSlsperCpnyAddr(Current.UserName, branchId, slsperid).ToList();
+            return this.Store(slsperCpnyAddrs);
+        }
+
+        [DirectMethod]
+        public ActionResult GetTreeCpnyAddr(string panelID)
+        {
+            TreePanel tree = new TreePanel();
+            tree.ID = "treePanelCpnyAddr";
+            tree.ItemID = "treePanelCpnyAddr";
+
+            tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+            tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+
+            tree.Border = false;
+            tree.RootVisible = true;
+            tree.Animate = true;
+
+            Node node = new Node();
+            node.NodeID = "Root";
+            tree.Root.Add(node);
+
+            var lstCpnyMT = _db.AR20200_ptCpnyByChannel(Current.UserName, _mt).ToList(); //danh sach tat ca cpny co MT
+
+            foreach (var item in lstCpnyMT)
+            {
+                var nodeCpny = new Node();
+                nodeCpny.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = item.CpnyID, Mode = ParameterMode.Value });
+                nodeCpny.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Cpny", Mode = ParameterMode.Value });
+                //nodeTerritory.Cls = "tree-node-parent";
+                nodeCpny.Text = item.CpnyName;
+                nodeCpny.Checked = false;
+                nodeCpny.NodeID = "cpny-" + item.CpnyID;
+                nodeCpny.Qtip = item.CpnyID;
+                //nodeCpny.IconCls = "tree-parent-icon";
+
+                var lstAddrsInCpny = _db.AR20200_ptCpnyAddr(Current.UserName, item.CpnyID).ToList();
+                foreach (var addr in lstAddrsInCpny)
+                {
+                    var nodeCpnyAddr = new Node();
+                    nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = addr.AddrID, Mode = ParameterMode.Value });
+                    nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Addr", Mode = ParameterMode.Value });
+                    nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "AddrName", Value = addr.Name, Mode = ParameterMode.Value });
+                    //nodeCompany.Cls = "tree-node-parent";
+                    nodeCpnyAddr.Text = addr.Addr1;
+                    nodeCpnyAddr.Checked = false;
+                    nodeCpnyAddr.Leaf = true;
+                    nodeCpnyAddr.NodeID = "cpny-addr-" + item.CpnyID + "-" + addr.AddrID;
+                    nodeCpnyAddr.Qtip = addr.AddrID;
+                    //nodeCompany.IconCls = "tree-parent-icon";
+
+                    nodeCpny.Children.Add(nodeCpnyAddr);
+
+                }
+                if (lstAddrsInCpny.Count() == 0)
+                {
+                    nodeCpny.Leaf = true;
+                    nodeCpny.Icon = Icon.Folder;
+                }
+                node.Children.Add(nodeCpny);
+            }
+
+            var treeCpnyAddr = X.GetCmp<Panel>(panelID);
+
+            //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
+            tree.Listeners.CheckChange.Fn = "Event.Tree.treePanelCpnyAddr_checkChange";
+
+            tree.AddTo(treeCpnyAddr);
+
+            return this.Direct();
+        }
+
         [ValidateInput(false)]
-        public ActionResult SaveData(FormCollection data, string branchID, string slsperID, bool isNew)
+        public ActionResult SaveData(FormCollection data, bool isNew, string channel)
         {
             try
             {
+                string slsperID = data["cboSlsperid"];
+                string branchID = data["cboBranchID"];
+
                 if (!string.IsNullOrWhiteSpace(branchID) && !string.IsNullOrWhiteSpace(slsperID))
                 {
                     string handle = data["cboHandle"];
@@ -79,6 +157,7 @@ namespace AR20200.Controllers
 
                     if (inputSlsper != null)
                     {
+                        #region Slsperson info
                         var slsper = _db.AR_Salesperson.FirstOrDefault(x => x.BranchID == branchID && x.SlsperId == slsperID);
                         if (slsper != null)
                         {
@@ -163,7 +242,72 @@ namespace AR20200.Controllers
                                 throw new MessageException(MessageType.Message, "19");
                             }
                         }
+                        #endregion
 
+                        #region Slsperson Cpny Addr
+                        if (channel == _mt)
+                        {
+                            var cpnyAddrHandler = new StoreDataHandler(data["lstSlsperCpnyAddr"]);
+                            var lstSlsperCpnyAddr = cpnyAddrHandler.BatchObjectData<AR20200_pgSlsperCpnyAddr_Result>();
+
+                            foreach (var created in lstSlsperCpnyAddr.Created)
+                            {
+                                if (!string.IsNullOrWhiteSpace(created.CpnyAddrID))
+                                {
+                                    created.BranchID = branchID;
+                                    created.SlsperID = slsperID;
+
+                                    var createdCpnyAddr = _db.AR_SalespersonCpnyAddr.FirstOrDefault(
+                                        x => x.CpnyAddrID == created.CpnyAddrID
+                                            && x.BranchID == created.BranchID
+                                            && x.SlsperID == created.SlsperID);
+                                    if (createdCpnyAddr == null)
+                                    {
+                                        updateSlsperCpnyAddr(ref createdCpnyAddr, created, true);
+                                        _db.AR_SalespersonCpnyAddr.AddObject(createdCpnyAddr);
+                                    }
+                                }
+                            }
+
+                            foreach (var updated in lstSlsperCpnyAddr.Updated)
+                            {
+                                if (!string.IsNullOrWhiteSpace(updated.CpnyAddrID))
+                                {
+                                    updated.BranchID = branchID;
+                                    updated.SlsperID = slsperID;
+
+                                    var updatedCpnyAddr = _db.AR_SalespersonCpnyAddr.FirstOrDefault(
+                                        x => x.CpnyAddrID == updated.CpnyAddrID
+                                            && x.BranchID == updated.BranchID
+                                            && x.SlsperID == updated.SlsperID);
+                                    if (updatedCpnyAddr != null)
+                                    {
+                                        updateSlsperCpnyAddr(ref updatedCpnyAddr, updated, false);
+                                    }
+                                }
+                            }
+
+                            foreach (var deleted in lstSlsperCpnyAddr.Deleted)
+                            {
+                                if (!string.IsNullOrWhiteSpace(deleted.CpnyAddrID))
+                                {
+                                    deleted.BranchID = branchID;
+                                    deleted.SlsperID = slsperID;
+
+                                    var deletedCpnyAddr = _db.AR_SalespersonCpnyAddr.FirstOrDefault(
+                                        x => x.CpnyAddrID == deleted.CpnyAddrID
+                                            && x.BranchID == deleted.BranchID
+                                            && x.SlsperID == deleted.SlsperID);
+                                    if (deletedCpnyAddr != null)
+                                    {
+                                        _db.AR_SalespersonCpnyAddr.DeleteObject(deletedCpnyAddr);
+                                    }
+                                }
+                            }
+                        }
+                        #endregion
+
+                        #region Upload files
                         var files = Request.Files;
                         if (files.Count > 0 && files[0].ContentLength > 0) // Co chon file de upload
                         {
@@ -192,6 +336,7 @@ namespace AR20200.Controllers
                                 slsper.Images = string.Empty;
                             }
                         }
+                        #endregion
 
                         _db.SaveChanges();
 
@@ -221,6 +366,24 @@ namespace AR20200.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
+        }
+
+        private void updateSlsperCpnyAddr(ref AR_SalespersonCpnyAddr createdCpnyAddr, AR20200_pgSlsperCpnyAddr_Result created, bool isNew)
+        {
+            if (isNew)
+            {
+                createdCpnyAddr = new AR_SalespersonCpnyAddr();
+                createdCpnyAddr.CpnyAddrID = created.CpnyAddrID;
+                createdCpnyAddr.BranchID = created.BranchID;
+                createdCpnyAddr.SlsperID = created.SlsperID;
+
+                createdCpnyAddr.Crtd_DateTime = DateTime.Now;
+                createdCpnyAddr.Crtd_Prog = _screenNbr;
+                createdCpnyAddr.Crtd_User = Current.UserName;
+            }
+            createdCpnyAddr.LUpd_DateTime = DateTime.Now;
+            createdCpnyAddr.LUpd_Prog = _screenNbr;
+            createdCpnyAddr.LUpd_User = Current.UserName;
         }
 
         public ActionResult Delete(string slsperID, string branchID, bool isNew)
