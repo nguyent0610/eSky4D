@@ -35,9 +35,9 @@ namespace IN22003.Controllers
             return PartialView();
         }
 
-        public ActionResult GetData(DateTime Date, string Territory, string State)
+        public ActionResult GetData(DateTime Date, string Territory, string State,string BranchID)
         {
-            return this.Store(_db.IN22003_pgLoadGrid(Date, Territory, State).ToList());
+            return this.Store(_db.IN22003_pgLoadGrid(Date, Territory, State, BranchID).ToList());
         }
 
         [HttpPost]
@@ -69,17 +69,42 @@ namespace IN22003.Controllers
                                                                                 && p.ExpDate == item.ExpDate);
                             if (obj != null)
                             {
-                                obj.Status = handle;
-                               
-                                obj.LUpd_DateTime = DateTime.Now;
-                                obj.LUpd_Prog = _screenNbr;
-                                obj.LUpd_User = _userName;
-
                                 if (handle == "A")
                                 {
                                     obj.ApproveStkQty = item.ApproveStkQty;
                                     obj.NewExpDate = date;
+
+                                    var obj1 = _db.IN_StockRecoveryCust.FirstOrDefault(p => p.BranchID == item.BranchID
+                                                                                        && p.StkRecNbr == item.StkRecNbr
+                                                                                        && p.InvtID == item.InvtID
+                                                                                        && p.SlsPerID == item.SlsperId
+                                                                                        && p.NewExpDate == obj.NewExpDate
+                                                                                        );
+                                    if (obj1 == null)
+                                    {
+                                        var record = new IN_StockRecoveryCust();
+                                        record.BranchID = item.BranchID;
+                                        record.SlsPerID = item.SlsperId;
+                                        record.StkRecNbr = item.StkRecNbr;
+                                        record.InvtID = item.InvtID;
+                                        record.NewExpDate = date;
+                                        record.Status = "H";
+                                        record.QtyGiveBack = 0;
+
+                                        record.Crtd_DateTime = DateTime.Now;
+                                        record.Crtd_Prog = _screenNbr;
+                                        record.Crtd_User = _userName;
+                                        record.LUpd_DateTime = DateTime.Now;
+                                        record.LUpd_Prog = _screenNbr;
+                                        record.LUpd_User = _userName;
+                                        _db.IN_StockRecoveryCust.AddObject(record);
+                                    }
                                 }
+                                obj.Status = handle;
+                               
+                                obj.LUpd_DateTime = DateTime.Now;
+                                obj.LUpd_Prog = _screenNbr;
+                                obj.LUpd_User = _userName; 
                             }
 
                         }

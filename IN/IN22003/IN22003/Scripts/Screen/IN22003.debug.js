@@ -65,7 +65,7 @@ var cboState_Change = function (sender, e) {
     else {
         //App.grdOM_FCSBranch.store.removeAll();
         //App.grdOM_FCSBranch.hide();
-        //App.cboBranchID.store.reload();
+        App.cboBranchID.store.reload();
     }
 };
 
@@ -84,7 +84,9 @@ var cboStatus_Change = function (value) {
 };
 
 var btnLoad_Click = function () {
-    App.stoIN_StockRecoveryDet.reload();
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        App.stoIN_StockRecoveryDet.reload();
+    }
 };
 
 var ColCheck_Header_Change = function (value, rowIndex, checked) {
@@ -98,7 +100,16 @@ var ColCheck_Header_Change = function (value, rowIndex, checked) {
 };
 
 var btnProcess_Click = function () {
-    if (App.cboHandle.getValue()) {
+    if (!App.cboHandle.getValue()) {
+        HQ.message.show(1000, App.cboHandle.fieldLabel);
+    }
+    else if (!App.NewDateExp.getValue()) {
+        HQ.message.show(1000, App.NewDateExp.fieldLabel);
+    }
+    else if (App.NewDateExp.validate() == false) {
+        HQ.message.show(1555);
+    }
+    else {
         var flat = false;
         App.stoIN_StockRecoveryDet.data.each(function (item) {
             if (item.data.ColCheck) {
@@ -176,8 +187,6 @@ var grdIN_StockRecoveryDet_BeforeEdit = function (editor, e) {
     }
 };
 var grdIN_StockRecoveryDet_Edit = function (item, e) {
-
-
     if (e.field == "ApproveStkQty") {
         if (e.record.data.StkQty < e.record.data.ApproveStkQty || e.record.data.ApproveStkQty < 0) {
             e.record.set("ApproveStkQty", 0);
@@ -209,6 +218,8 @@ var stoChanged = function (sto) {
     App.cboState.setReadOnly(_Change);
     App.cboTerritory.setReadOnly(_Change);
     App.cboZone.setReadOnly(_Change);
+    App.cboBranchID.setReadOnly(_Change);
+    App.dateKPI.setReadOnly(_Change);
 };
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao

@@ -80,6 +80,22 @@ namespace IN22003
             }
         }
         private ObjectSet<IN_StockRecoveryDet> _IN_StockRecoveryDet;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_StockRecoveryCust> IN_StockRecoveryCust
+        {
+            get
+            {
+                if ((_IN_StockRecoveryCust == null))
+                {
+                    _IN_StockRecoveryCust = base.CreateObjectSet<IN_StockRecoveryCust>("IN_StockRecoveryCust");
+                }
+                return _IN_StockRecoveryCust;
+            }
+        }
+        private ObjectSet<IN_StockRecoveryCust> _IN_StockRecoveryCust;
 
         #endregion
 
@@ -92,6 +108,14 @@ namespace IN22003
         {
             base.AddObject("IN_StockRecoveryDet", iN_StockRecoveryDet);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_StockRecoveryCust EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_StockRecoveryCust(IN_StockRecoveryCust iN_StockRecoveryCust)
+        {
+            base.AddObject("IN_StockRecoveryCust", iN_StockRecoveryCust);
+        }
 
         #endregion
 
@@ -103,7 +127,8 @@ namespace IN22003
         /// <param name="date">No Metadata Documentation available.</param>
         /// <param name="territory">No Metadata Documentation available.</param>
         /// <param name="state">No Metadata Documentation available.</param>
-        public ObjectResult<IN22003_pgLoadGrid_Result> IN22003_pgLoadGrid(Nullable<global::System.DateTime> date, global::System.String territory, global::System.String state)
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<IN22003_pgLoadGrid_Result> IN22003_pgLoadGrid(Nullable<global::System.DateTime> date, global::System.String territory, global::System.String state, global::System.String branchID)
         {
             ObjectParameter dateParameter;
             if (date.HasValue)
@@ -135,7 +160,17 @@ namespace IN22003
                 stateParameter = new ObjectParameter("State", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<IN22003_pgLoadGrid_Result>("IN22003_pgLoadGrid", dateParameter, territoryParameter, stateParameter);
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN22003_pgLoadGrid_Result>("IN22003_pgLoadGrid", dateParameter, territoryParameter, stateParameter, branchIDParameter);
         }
 
         #endregion
@@ -145,6 +180,411 @@ namespace IN22003
     #endregion
 
     #region Entities
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="IN22003Model", Name="IN_StockRecoveryCust")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class IN_StockRecoveryCust : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN_StockRecoveryCust object.
+        /// </summary>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="slsPerID">Initial value of the SlsPerID property.</param>
+        /// <param name="stkRecNbr">Initial value of the StkRecNbr property.</param>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        /// <param name="newExpDate">Initial value of the NewExpDate property.</param>
+        /// <param name="status">Initial value of the Status property.</param>
+        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
+        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
+        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static IN_StockRecoveryCust CreateIN_StockRecoveryCust(global::System.String branchID, global::System.String slsPerID, global::System.String stkRecNbr, global::System.String invtID, global::System.DateTime newExpDate, global::System.String status, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.Byte[] tstamp)
+        {
+            IN_StockRecoveryCust iN_StockRecoveryCust = new IN_StockRecoveryCust();
+            iN_StockRecoveryCust.BranchID = branchID;
+            iN_StockRecoveryCust.SlsPerID = slsPerID;
+            iN_StockRecoveryCust.StkRecNbr = stkRecNbr;
+            iN_StockRecoveryCust.InvtID = invtID;
+            iN_StockRecoveryCust.NewExpDate = newExpDate;
+            iN_StockRecoveryCust.Status = status;
+            iN_StockRecoveryCust.LUpd_DateTime = lUpd_DateTime;
+            iN_StockRecoveryCust.LUpd_Prog = lUpd_Prog;
+            iN_StockRecoveryCust.LUpd_User = lUpd_User;
+            iN_StockRecoveryCust.Crtd_DateTime = crtd_DateTime;
+            iN_StockRecoveryCust.Crtd_Prog = crtd_Prog;
+            iN_StockRecoveryCust.Crtd_User = crtd_User;
+            iN_StockRecoveryCust.tstamp = tstamp;
+            return iN_StockRecoveryCust;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                if (_BranchID != value)
+                {
+                    OnBranchIDChanging(value);
+                    ReportPropertyChanging("BranchID");
+                    _BranchID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("BranchID");
+                    OnBranchIDChanged();
+                }
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SlsPerID
+        {
+            get
+            {
+                return _SlsPerID;
+            }
+            set
+            {
+                if (_SlsPerID != value)
+                {
+                    OnSlsPerIDChanging(value);
+                    ReportPropertyChanging("SlsPerID");
+                    _SlsPerID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("SlsPerID");
+                    OnSlsPerIDChanged();
+                }
+            }
+        }
+        private global::System.String _SlsPerID;
+        partial void OnSlsPerIDChanging(global::System.String value);
+        partial void OnSlsPerIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String StkRecNbr
+        {
+            get
+            {
+                return _StkRecNbr;
+            }
+            set
+            {
+                if (_StkRecNbr != value)
+                {
+                    OnStkRecNbrChanging(value);
+                    ReportPropertyChanging("StkRecNbr");
+                    _StkRecNbr = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("StkRecNbr");
+                    OnStkRecNbrChanged();
+                }
+            }
+        }
+        private global::System.String _StkRecNbr;
+        partial void OnStkRecNbrChanging(global::System.String value);
+        partial void OnStkRecNbrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                if (_InvtID != value)
+                {
+                    OnInvtIDChanging(value);
+                    ReportPropertyChanging("InvtID");
+                    _InvtID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("InvtID");
+                    OnInvtIDChanged();
+                }
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime NewExpDate
+        {
+            get
+            {
+                return _NewExpDate;
+            }
+            set
+            {
+                if (_NewExpDate != value)
+                {
+                    OnNewExpDateChanging(value);
+                    ReportPropertyChanging("NewExpDate");
+                    _NewExpDate = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("NewExpDate");
+                    OnNewExpDateChanged();
+                }
+            }
+        }
+        private global::System.DateTime _NewExpDate;
+        partial void OnNewExpDateChanging(global::System.DateTime value);
+        partial void OnNewExpDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> QtyGiveBack
+        {
+            get
+            {
+                return _QtyGiveBack;
+            }
+            set
+            {
+                OnQtyGiveBackChanging(value);
+                ReportPropertyChanging("QtyGiveBack");
+                _QtyGiveBack = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("QtyGiveBack");
+                OnQtyGiveBackChanged();
+            }
+        }
+        private Nullable<global::System.Double> _QtyGiveBack;
+        partial void OnQtyGiveBackChanging(Nullable<global::System.Double> value);
+        partial void OnQtyGiveBackChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.String _Status;
+        partial void OnStatusChanging(global::System.String value);
+        partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime LUpd_DateTime
+        {
+            get
+            {
+                return _LUpd_DateTime;
+            }
+            set
+            {
+                OnLUpd_DateTimeChanging(value);
+                ReportPropertyChanging("LUpd_DateTime");
+                _LUpd_DateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LUpd_DateTime");
+                OnLUpd_DateTimeChanged();
+            }
+        }
+        private global::System.DateTime _LUpd_DateTime;
+        partial void OnLUpd_DateTimeChanging(global::System.DateTime value);
+        partial void OnLUpd_DateTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_Prog
+        {
+            get
+            {
+                return _LUpd_Prog;
+            }
+            set
+            {
+                OnLUpd_ProgChanging(value);
+                ReportPropertyChanging("LUpd_Prog");
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LUpd_Prog");
+                OnLUpd_ProgChanged();
+            }
+        }
+        private global::System.String _LUpd_Prog;
+        partial void OnLUpd_ProgChanging(global::System.String value);
+        partial void OnLUpd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_User
+        {
+            get
+            {
+                return _LUpd_User;
+            }
+            set
+            {
+                OnLUpd_UserChanging(value);
+                ReportPropertyChanging("LUpd_User");
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LUpd_User");
+                OnLUpd_UserChanged();
+            }
+        }
+        private global::System.String _LUpd_User;
+        partial void OnLUpd_UserChanging(global::System.String value);
+        partial void OnLUpd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime Crtd_DateTime
+        {
+            get
+            {
+                return _Crtd_DateTime;
+            }
+            set
+            {
+                OnCrtd_DateTimeChanging(value);
+                ReportPropertyChanging("Crtd_DateTime");
+                _Crtd_DateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Crtd_DateTime");
+                OnCrtd_DateTimeChanged();
+            }
+        }
+        private global::System.DateTime _Crtd_DateTime;
+        partial void OnCrtd_DateTimeChanging(global::System.DateTime value);
+        partial void OnCrtd_DateTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_Prog
+        {
+            get
+            {
+                return _Crtd_Prog;
+            }
+            set
+            {
+                OnCrtd_ProgChanging(value);
+                ReportPropertyChanging("Crtd_Prog");
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Crtd_Prog");
+                OnCrtd_ProgChanged();
+            }
+        }
+        private global::System.String _Crtd_Prog;
+        partial void OnCrtd_ProgChanging(global::System.String value);
+        partial void OnCrtd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_User
+        {
+            get
+            {
+                return _Crtd_User;
+            }
+            set
+            {
+                OnCrtd_UserChanging(value);
+                ReportPropertyChanging("Crtd_User");
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Crtd_User");
+                OnCrtd_UserChanged();
+            }
+        }
+        private global::System.String _Crtd_User;
+        partial void OnCrtd_UserChanging(global::System.String value);
+        partial void OnCrtd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -606,7 +1046,8 @@ namespace IN22003
         /// <param name="expDate">Initial value of the ExpDate property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="stkRecNbr">Initial value of the StkRecNbr property.</param>
-        public static IN22003_pgLoadGrid_Result CreateIN22003_pgLoadGrid_Result(global::System.String stateName, global::System.String branchID, global::System.DateTime expDate, global::System.String invtID, global::System.String stkRecNbr)
+        /// <param name="slsperId">Initial value of the SlsperId property.</param>
+        public static IN22003_pgLoadGrid_Result CreateIN22003_pgLoadGrid_Result(global::System.String stateName, global::System.String branchID, global::System.DateTime expDate, global::System.String invtID, global::System.String stkRecNbr, global::System.String slsperId)
         {
             IN22003_pgLoadGrid_Result iN22003_pgLoadGrid_Result = new IN22003_pgLoadGrid_Result();
             iN22003_pgLoadGrid_Result.StateName = stateName;
@@ -614,6 +1055,7 @@ namespace IN22003
             iN22003_pgLoadGrid_Result.ExpDate = expDate;
             iN22003_pgLoadGrid_Result.InvtID = invtID;
             iN22003_pgLoadGrid_Result.StkRecNbr = stkRecNbr;
+            iN22003_pgLoadGrid_Result.SlsperId = slsperId;
             return iN22003_pgLoadGrid_Result;
         }
 
@@ -794,6 +1236,30 @@ namespace IN22003
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public Nullable<global::System.Double> Price
+        {
+            get
+            {
+                return _Price;
+            }
+            set
+            {
+                OnPriceChanging(value);
+                ReportPropertyChanging("Price");
+                _Price = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Price");
+                OnPriceChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Price;
+        partial void OnPriceChanging(Nullable<global::System.Double> value);
+        partial void OnPriceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public Nullable<global::System.Double> StkQty
         {
             get
@@ -912,30 +1378,6 @@ namespace IN22003
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Double> Price
-        {
-            get
-            {
-                return _Price;
-            }
-            set
-            {
-                OnPriceChanging(value);
-                ReportPropertyChanging("Price");
-                _Price = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Price");
-                OnPriceChanged();
-            }
-        }
-        private Nullable<global::System.Double> _Price;
-        partial void OnPriceChanging(Nullable<global::System.Double> value);
-        partial void OnPriceChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String StkRecNbr
@@ -956,6 +1398,30 @@ namespace IN22003
         private global::System.String _StkRecNbr;
         partial void OnStkRecNbrChanging(global::System.String value);
         partial void OnStkRecNbrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SlsperId
+        {
+            get
+            {
+                return _SlsperId;
+            }
+            set
+            {
+                OnSlsperIdChanging(value);
+                ReportPropertyChanging("SlsperId");
+                _SlsperId = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SlsperId");
+                OnSlsperIdChanged();
+            }
+        }
+        private global::System.String _SlsperId;
+        partial void OnSlsperIdChanging(global::System.String value);
+        partial void OnSlsperIdChanged();
 
         #endregion
 
