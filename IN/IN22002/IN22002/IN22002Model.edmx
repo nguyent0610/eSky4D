@@ -131,6 +131,7 @@
         </EntityType>
         <ComplexType Name="IN22002_pgLoadGrid_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
+          <Property Type="Double" Name="Price" Nullable="true" />
           <Property Type="String" Name="StkRecNbr" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
@@ -145,6 +146,7 @@
           <Property Type="DateTime" Name="StkRecDate" Nullable="true" Precision="23" />
           <Property Type="String" Name="Status" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="ApproveQty" Nullable="true" />
+          <Property Type="String" Name="Unit" Nullable="false" MaxLength="15" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -202,6 +204,7 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN22002Model.IN22002_pgLoadGrid_Result">
                 <ScalarProperty Name="ColCheck" ColumnName="ColCheck" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="StkRecNbr" ColumnName="StkRecNbr" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="BranchName" ColumnName="BranchName" />
@@ -216,6 +219,7 @@
                 <ScalarProperty Name="StkRecDate" ColumnName="StkRecDate" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ApproveQty" ColumnName="ApproveQty" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

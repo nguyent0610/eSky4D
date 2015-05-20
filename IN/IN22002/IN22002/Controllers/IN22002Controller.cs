@@ -29,15 +29,15 @@ namespace IN22002.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetData(DateTime DateFrom,DateTime DateTo)
+        public ActionResult GetData(DateTime DateFrom, DateTime DateTo, string BranchID)
         {
-            return this.Store(_db.IN22002_pgLoadGrid(DateFrom, DateTo).ToList());
+            return this.Store(_db.IN22002_pgLoadGrid(DateFrom, DateTo, BranchID).ToList());
         }
 
         [HttpPost]
@@ -68,13 +68,7 @@ namespace IN22002.Controllers
                                                                                 && p.ExpDate == item.ExpDate);
                             if (obj != null)
                             {
-                                obj.Status = handle;
-
-                                obj.LUpd_DateTime = DateTime.Now;
-                                obj.LUpd_Prog = _screenNbr;
-                                obj.LUpd_User = _userName;
-
-                                if (handle == "A")
+                                if (handle=="A")
                                 {
                                     obj.ApproveQty = item.ApproveQty;
                                     var obj1 = _db.IN_StockRecoveryDet.FirstOrDefault(p => p.BranchID == item.BranchID
@@ -90,7 +84,7 @@ namespace IN22002.Controllers
                                         record.InvtID = item.InvtID;
                                         record.Status = "H";
                                         record.StkQty = item.ApproveQty;
-                                        record.Price = 1000;
+                                        record.Price = item.Price;
                                         record.Crtd_DateTime = DateTime.Now;
                                         record.Crtd_Prog = _screenNbr;
                                         record.Crtd_User = _userName;
@@ -107,6 +101,11 @@ namespace IN22002.Controllers
                                         obj1.LUpd_User = _userName;
                                     }
                                 }
+
+                                obj.Status = handle;
+                                obj.LUpd_DateTime = DateTime.Now;
+                                obj.LUpd_Prog = _screenNbr;
+                                obj.LUpd_User = _userName;
                             }
                         }
                     }

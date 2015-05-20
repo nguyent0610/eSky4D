@@ -35,7 +35,9 @@ var cboStatus_Change = function (value) {
 };
 
 var btnLoad_Click = function () {
-    App.stoPPC_StockRecovery.reload();
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        App.stoPPC_StockRecovery.reload();
+    }
 };
 
 var ColCheck_Header_Change = function (value, rowIndex, checked) {
@@ -49,7 +51,10 @@ var ColCheck_Header_Change = function (value, rowIndex, checked) {
 };
 
 var btnProcess_Click = function () {
-    if (App.cboHandle.getValue()) {
+    if (!App.cboHandle.getValue()) {
+        HQ.message.show(1000, App.cboHandle.fieldLabel);
+    }
+    else {
         var d = Ext.Date.parse("01/01/1990", "m/d/Y");
         if (App.FromDate.getValue() < d || App.ToDate.getValue() < d) return;
         var flat = false;
@@ -120,6 +125,7 @@ var menuClick = function (command) {
 var grdPPC_StockRecovery_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdPPC_StockRecovery, e, keys);
 };
+
 var grdPPC_StockRecovery_BeforeEdit = function (editor, e) {
     if (e.record.data.Status == 'H') {
         return true;
@@ -128,20 +134,26 @@ var grdPPC_StockRecovery_BeforeEdit = function (editor, e) {
         return false;
     }
 };
+
 var grdPPC_StockRecovery_Edit = function (item, e) {
     if (e.record.data.StkQty < e.record.data.ApproveQty || e.record.data.ApproveQty < 0) {
         e.record.set("ApproveQty", 0);
     }
 };
+
 var grdPPC_StockRecovery_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdPPC_StockRecovery);
     stoChanged(App.stoPPC_StockRecovery);
 };
+
 var stoChanged = function (sto) {
     _Change = HQ.store.isChange(sto);
     HQ.common.changeData(_Change, 'IN22002');
     App.cboStatus.setReadOnly(_Change);
     App.btnLoad.setDisabled(_Change);
+    App.cboBranchID.setDisabled(_Change);
+    App.FromDate.setDisabled(_Change);
+    App.ToDate.setDisabled(_Change);
 };
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
@@ -149,6 +161,10 @@ var stoLoad = function (sto) {
     _Change = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'IN22002');
     HQ.common.showBusy(false);
+    //record = sto.getAt(0)
+    //if (record.data.Status = 'H') {
+    //    record.data.ApproveQty = record.data.StkQty;
+    //}
     stoChanged(App.stoPPC_StockRecovery);
 };
 

@@ -1124,7 +1124,8 @@ namespace IN22002
         /// <param name="custName">Initial value of the CustName property.</param>
         /// <param name="expDate">Initial value of the ExpDate property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
-        public static IN22002_pgLoadGrid_Result CreateIN22002_pgLoadGrid_Result(global::System.String stkRecNbr, global::System.String branchID, global::System.String slsPerID, global::System.String custName, global::System.DateTime expDate, global::System.String invtID)
+        /// <param name="unit">Initial value of the Unit property.</param>
+        public static IN22002_pgLoadGrid_Result CreateIN22002_pgLoadGrid_Result(global::System.String stkRecNbr, global::System.String branchID, global::System.String slsPerID, global::System.String custName, global::System.DateTime expDate, global::System.String invtID, global::System.String unit)
         {
             IN22002_pgLoadGrid_Result iN22002_pgLoadGrid_Result = new IN22002_pgLoadGrid_Result();
             iN22002_pgLoadGrid_Result.StkRecNbr = stkRecNbr;
@@ -1133,6 +1134,7 @@ namespace IN22002
             iN22002_pgLoadGrid_Result.CustName = custName;
             iN22002_pgLoadGrid_Result.ExpDate = expDate;
             iN22002_pgLoadGrid_Result.InvtID = invtID;
+            iN22002_pgLoadGrid_Result.Unit = unit;
             return iN22002_pgLoadGrid_Result;
         }
 
@@ -1163,6 +1165,30 @@ namespace IN22002
         private Nullable<global::System.Boolean> _ColCheck;
         partial void OnColCheckChanging(Nullable<global::System.Boolean> value);
         partial void OnColCheckChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Price
+        {
+            get
+            {
+                return _Price;
+            }
+            set
+            {
+                OnPriceChanging(value);
+                ReportPropertyChanging("Price");
+                _Price = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Price");
+                OnPriceChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Price;
+        partial void OnPriceChanging(Nullable<global::System.Double> value);
+        partial void OnPriceChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1499,6 +1525,30 @@ namespace IN22002
         private Nullable<global::System.Double> _ApproveQty;
         partial void OnApproveQtyChanging(Nullable<global::System.Double> value);
         partial void OnApproveQtyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Unit
+        {
+            get
+            {
+                return _Unit;
+            }
+            set
+            {
+                OnUnitChanging(value);
+                ReportPropertyChanging("Unit");
+                _Unit = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Unit");
+                OnUnitChanged();
+            }
+        }
+        private global::System.String _Unit;
+        partial void OnUnitChanging(global::System.String value);
+        partial void OnUnitChanged();
 
         #endregion
 
