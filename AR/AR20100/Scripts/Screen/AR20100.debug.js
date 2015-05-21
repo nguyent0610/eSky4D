@@ -1,274 +1,219 @@
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboClassId.getStore().load(function () {
+        App.cboTerritory.getStore().load(function () {
+            App.cboCountry.getStore().load(function () {
+                App.stoAR_CustClass.reload();
+            })
+        })
+    });
+};
 
-var isChanged = 0;
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            var combobox = App.cboClassId;
-            var v = combobox.getValue();
-            var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
-            var index = combobox.store.indexOf(record);
-            App.cboClassId.setValue(combobox.store.getAt(0).data.ClassId);
+            HQ.isFirstLoad = true;
+            HQ.combo.first(App.cboClassId, HQ.isChange);
             break;
         case "prev":
-            var combobox = App.cboClassId;
-            var v = combobox.getValue();
-            var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
-            var index = combobox.store.indexOf(record);
-            App.cboClassId.setValue(combobox.store.getAt(index - 1).data.ClassId);
+            HQ.isFirstLoad = true;
+            HQ.combo.prev(App.cboClassId, HQ.isChange);
             break;
         case "next":
-            var combobox = App.cboClassId;
-            var v = combobox.getValue();
-            var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
-            var index = combobox.store.indexOf(record);
-            App.cboClassId.setValue(combobox.store.getAt(index + 1).data.ClassId);
+            HQ.isFirstLoad = true;
+            HQ.combo.next(App.cboClassId, HQ.isChange);
             break;
         case "last":
-            var combobox = App.cboClassId;
-            var v = combobox.getValue();
-            var record = combobox.findRecord(combobox.valueField || combobox.displayField, v);
-            var index = combobox.store.indexOf(record);
-            App.cboClassId.setValue(App.cboClassId.store.getAt(App.cboClassId.store.getTotalCount() - 1).data.ClassId);
+            HQ.isFirstLoad = true;
+            HQ.combo.last(App.cboClassId, HQ.isChange);
             break;
         case "refresh":
-            isChanged = 1;
-            App.stoForm.reload();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                if (App.cboClassId.valueModels == null) App.cboClassId.setValue('');
+                App.cboClassId.getStore().load(function () { App.stoAR_CustClass.reload(); });
+            }
             break;
         case "new":
             if (HQ.isInsert) {
-                App.cboClassId.setValue('');                
-                App.stoForm.reload();                
-                setTimeout(function () { setDfltTaxLoad(); }, 1200);
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', '');
+                }
+                else {
+                    App.cboClassId.setValue('');
+                }
             }
             break;
         case "delete":
-            var curRecord = App.frmMain.getRecord();
             if (HQ.isDelete) {
-                if (App.cboClassId.value != "") {
-                    HQ.message.show(11, '', 'deleteRecordForm');
+                var curRecord = App.frmMain.getRecord();
+                if (curRecord) {
+                    HQ.message.show(11, '', 'deleteData');
                 }
             }
             break;
         case "save":
-            Save();
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain)) {
+                    save();
+                }
+            }
             break;
         case "print":
-            alert(command);
             break;
         case "close":
-            Close();
+            HQ.common.close(this);
             break;
     }
-
 };
-var refreshTree = function (i) {
-    App.Tree.select(i);
-}
-var refreshTree2 = function (dt) {
-    App.cboInvtID.setValue(dt);
-    var findNode = App.IDTree.items.items[0].store.data.items;
-    for (var i = 0; i < findNode.length; i++) {
-        if (findNode[i].data.id == node) {
-            //click = 1;
-            App.Tree.select(i);
-            //setTimeout(function () { refreshTree(i); }, 7000);
-            break;
-        }
-    }
-}
 
-var waitFormReload = function (sender, e) {
-    isChanged = 1;
-    App.cboClassId.setValue(sender);
-    App.stoForm.load();
-}
+var cboClassId_Changed = function () {
+    App.stoAR_CustClass.reload();
+};
 
-function Save() {
-    var curRecord = App.frmMain.getRecord();
-    curRecord.data.classId = App.cboClassId.getValue();    
-    App.frmMain.getForm().updateRecord();
-    //App.frmMain.updateRecord(curRecord);
-    if (App.frmMain.isValid()) {
-        App.frmMain.submit({
-            waitMsg: 'Submiting...',
-            url: 'AR20100/Save',
-            params: {
-                lstheader: Ext.encode(App.stoForm.getChangedData({ skipIdForPhantomRecords: false })),
-                classId: App.cboClassId.value
-            },
-            success: function (result, data) {
-                if (data.result.ClassId != "") {
-                    App.cboClassId.getStore().reload();
-                    HQ.message.show(201405071, '', null);
-                    menuClick("refresh");
-                    setTimeout(function () { waitFormReload(data.result.ClassId); }, 2500);
-                }                
+var cboCountry_Changed = function (sender, newValue, oldValue) {
+    App.cboState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.State) {
+                App.cboState.setValue(curRecord.data.State);
             }
-            , failure: function (errorMsg, data) {
-                if (data.result.msgCode) {
-                    //callMessage(data.result.code, '', '');
-                    HQ.message.show(data.result.msgCode, '', '');
-                }
-                else {
-                    processMessage(errorMsg, data);
-                }
-            }            
-        });        
-    }
-    else {
-        var fields = App.frmMain.getForm().getFields().each(
-                function (item) {
-                    if (!item.isValid()) {
-                        alert(item);
-                    }
-                }
-            );
-    }
-}
-
-var setDfltTaxLoad = function () {
-    
-    if (App.cboTaxDflt.getStore().data.items[0] != undefined) {       
-        App.cboTaxDflt.setValue(App.cboTaxDflt.getStore().data.items[0].data.Code);
-    }
-}
-
-// Xem lai
-function Close() {
-    if (App.frmMain.getRecord() != undefined)
-        App.frmMain.updateRecord();
-    if (storeIsChange(App.stoForm, false)) {
-       // callMessage(5, '', 'closeScreen');
-        HQ.message.show(5, '', 'closeScreen');
-
-    } else {
-        parent.App.tabAR20100.close();
-    }
-}
-// Xem lai
-function storeIsChange(store, isCreate) {
-    if (isCreate == undefined) isCreate = true;
-    if ((isCreate == true ? store.getChangedData().Created.length > 1 : false)
-        || store.getChangedData().Updated != undefined
-        || store.getChangedData().Deleted != undefined) {
-        return true;
-    }
-    return false;
-
-    //if (isCreate === '') {//true, !='', != null, !=0, != underfide, 
-    //}
-};
-var closeScreen = function (item) {
-    if (item == "yes")
-    {
-        Save();
-    }
-    else {
-        if (parent.App.tabAR20100 != null)
-            parent.App.tabAR20100.close();
-    }
-};
-// Xac nhan xoa record tren grid
-var deleteRecordForm = function (item) {
-    if (item == "yes") {
-
-        try {
-            App.direct.AR20100Delete(App.cboClassId.getValue(), {
-                success: function (data) {
-
-                    App.cboClassId.getStore().reload();
-                    menuClick('refresh');
-                    App.cboClassId.setValue('');
-                },
-                failure: function () {
-                    //
-                },
-                eventMask: { msg: HQ.common.getLang("DeletingData"), showMask: true }
-            });
-        } catch (ex) {
-            alert(ex.message);
+        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+        if (!dt) {
+            curRecord.data.State = '';
+            App.cboState.setValue("");
         }
-    }
-};
-
-var deleteRecordGrid = function (item) {
-    if (item == "yes") {
-        App.grd.deleteSelected();
-    }
-};
-
-function selectRecord(grid, record) {
-    var record = grid.store.getById(id);
-    grid.store.loadPage(grid.store.findPage(record), {
-        callback: function () {
-            grid.getSelectionModel().select(record);
+        if (App.cboState.value == curRecord.data.State) {
+            cboState_Changed(App.cboState, curRecord.data.State);
         }
     });
 };
 
-var loadDataAutoHeader = function () {
+var cboState_Changed = function () {
+    App.cboCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord && curRecord.data.City) {
+            App.cboCity.setValue(curRecord.data.City);
+        }
+        var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+        if (!dt) {
+            curRecord.data.City = '';
+            App.cboCity.setValue("");
+        }
 
-    if (App.stoForm.getCount() == 0) {
-        App.stoForm.insert(0, Ext.data.Record());
+        App.cboDistrict.getStore().load(function () {
+            var curRecord = App.frmMain.getRecord();
+            if (curRecord && curRecord.data.District) {
+                App.cboDistrict.setValue(curRecord.data.District);
+            }
+            var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], [App.cboDistrict.getValue()]);
+            if (!dt) {
+                curRecord.data.District = '';
+                App.cboDistrict.setValue("");
+            }
+        });
+    });
+};
+
+var firstLoad = function () {
+    loadSourceCombo();
+};
+
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isNew = false;
+    App.cboCountry.forceSelection = false;
+    App.cboState.forceSelection = false;
+    App.cboDistrict.forceSelection = false;
+    App.cboCity.forceSelection = false;
+    App.cboClassId.forceSelection = false;
+    App.cboCountry.store.clearFilter();
+    App.cboState.store.clearFilter();
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "BranchID");
+        record = sto.getAt(0);
+        sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
+        HQ.isNew = true;//record la new
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
     }
-    var record = App.stoForm.getAt(0);
-    if (record) {
-        App.frmMain.getForm().loadRecord(record);
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    if (App.cboCountry.value == record.data.Country) {
+        cboCountry_Changed(App.cboCountry, record.data.Country);
+    }
+    else if (App.cboState.value == record.data.State) {
+        cboState_Changed(App.cboState, record.data.State);
+    }
+    frmChange();
+};
+
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = HQ.store.isChange(App.stoAR_CustClass);
+    HQ.common.changeData(HQ.isChange, 'AR20100');
+    if (App.cboClassId.valueModels == null || HQ.isNew == true)
+        App.cboClassId.setReadOnly(false);
+    else App.cboClassId.setReadOnly(HQ.isChange);
+};
+
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+function save() {
+    if (HQ.isInsert || HQ.isUpdate) {
+        var curRecord = App.frmMain.getRecord();
+        //curRecord.data.Name = App.txtName.getValue();
+        App.frmMain.getForm().updateRecord();
+        if (App.frmMain.isValid()) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang('Submiting...'),
+                url: 'AR20100/Save',
+                params: {
+                    lstAR_CustClass: Ext.encode(App.stoAR_CustClass.getChangedData({ skipIdForPhantomRecords: false }))
+                },
+                success: function (action, data) {
+                    HQ.message.show(201405071, '', '');
+                    var ClassId = data.result.ClassId;
+                    App.cboClassId.getStore().load(function () {
+                        App.cboClassId.setValue(ClassId);
+                        App.stoAR_CustClass.reload();
+                    });
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
     }
 };
 
-var cboClassId_Changed = function (sender, e) {
-    isChanged = 1;
-    App.cboTerritory.setValue("");
-    App.cboTerritory.getStore().reload();   
-    App.stoForm.reload();
-    var record = App.frmMain.getRecord();
-    if (record == undefined || record.data.ClassId == "")
-    {
-        setTimeout(function () { setDfltTaxLoad(); }, 1000);
-    }
-}
+function deleteData(item) {
+    if (item == 'yes') {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang('DeletingData'),
+            url: 'AR20100/DeleteAll',
+            success: function (action, data) {
+                App.cboClassId.setValue("");
+                App.cboClassId.getStore().load(function () { cboClassId_Changed(App.cboClassId); });
 
-var cboCountry_Changed = function (sender, newValue, oldValue) {
-    setTimeout(function () {
-        if (isChanged == 1) {
-            App.cboState.getStore().load({
-                scope: this,
-                callback: function () {
-                    var record = App.frmMain.getRecord();
-                    App.cboState.setValue(record.data.State);
+            },
+            failure: function (action, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode, data.result.msgParam, '');
                 }
-            });
-        } else {
-            App.cboState.getStore().load();
-        }
-    }, 1500);
-}
-
-var cboState_Changed = function (sender, newValue, oldValue) {
-    setTimeout(function () { waitCityDistrictLoad(); }, 1500);
-}
-
-var waitCityDistrictLoad = function () {
-    if (isChanged == 1) {
-        var record = App.frmMain.getRecord();
-        App.cboCity.getStore().load({
-            scope: this,
-            callback: function () {                
-                App.cboCity.setValue(record.data.City);
             }
         });
+    }
+};
 
-        App.cboDistrict.getStore().load({
-            scope: this,
-            callback: function () {
-                App.cboDistrict.setValue(record.data.District);
-            }
-        });
-        //App.frmMain.getForm().loadRecord(App.frmMain.getRecord());
-        isChanged = 0;
-    } else {
-        App.cboCity.getStore().load();
-        App.cboDistrict.getStore().load();
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoAR_CustClass.reload();
     }
 };

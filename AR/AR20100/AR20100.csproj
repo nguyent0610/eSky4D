@@ -74,9 +74,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\eBiz4DSky\AP\AP00000\AP00000\bin\System.Web.Mvc.dll</HintPath>
+      <HintPath>..\..\IN\IN22000\IN22000\bin\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
@@ -221,7 +221,6 @@
       <LastGenOutput>AR20100Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
-    <Content Include="Scripts\hq.common.debug.js" />
     <Content Include="Scripts\hq.common.js" />
     <Content Include="Scripts\hq.language0.js" />
     <Content Include="Scripts\hq.language1.js" />

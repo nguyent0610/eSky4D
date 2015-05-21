@@ -41,11 +41,11 @@
     <body>
 @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
           
-@(X.Store().ID("stoForm").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR20100_ppAR_CustClass_Result), "mdlAR20100_ppAR_CustClass", "classId"))
+@(X.Store().ID("stoAR_CustClass").AutoLoad(false)
+        .Model(Util.GenerateModel(typeof(AR_CustClass), "mdlAR_CustClass", "ClassId"))
         .Proxy(
             X.AjaxProxy()
-            .Url(Url.Action("GetARCustClass", "AR20100"))
+            .Url(Url.Action("GetAR_CustClass", "AR20100"))
             .ActionMethods(action =>
             {
                 action.Read = HttpMethod.POST;
@@ -54,9 +54,13 @@
         )
         .Parameters(ps =>
         {
-            ps.Add(new StoreParameter("classId", "App.cboClassId.value", ParameterMode.Raw));
+            ps.Add(new StoreParameter("classId", "App.cboClassId.getValue()", ParameterMode.Raw));
         })
-        .Listeners(p => p.Load.Handler = "loadDataAutoHeader()")
+        .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";                   
+            })
   )
 
 
