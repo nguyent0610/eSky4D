@@ -13095,7 +13095,11 @@ namespace PO10400
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
         /// <param name="isEditOrder">Initial value of the IsEditOrder property.</param>
         /// <param name="shipmentPlan">Initial value of the ShipmentPlan property.</param>
-        public static PO10400_pgLoadPOHeader_Result CreatePO10400_pgLoadPOHeader_Result(global::System.String branchID, global::System.String pONbr, global::System.DateTime pODate, global::System.Double pOAmt, global::System.Double pOFeeTot, global::System.Double rcptTotAmt, global::System.Byte[] tstamp, global::System.DateTime crtd_DateTime, global::System.Boolean isEditOrder, global::System.DateTime shipmentPlan)
+        /// <param name="slsPerID">Initial value of the SlsPerID property.</param>
+        /// <param name="name">Initial value of the Name property.</param>
+        /// <param name="shipDistAddrID">Initial value of the ShipDistAddrID property.</param>
+        /// <param name="shipDistAddrName">Initial value of the ShipDistAddrName property.</param>
+        public static PO10400_pgLoadPOHeader_Result CreatePO10400_pgLoadPOHeader_Result(global::System.String branchID, global::System.String pONbr, global::System.DateTime pODate, global::System.Double pOAmt, global::System.Double pOFeeTot, global::System.Double rcptTotAmt, global::System.Byte[] tstamp, global::System.DateTime crtd_DateTime, global::System.Boolean isEditOrder, global::System.DateTime shipmentPlan, global::System.String slsPerID, global::System.String name, global::System.String shipDistAddrID, global::System.String shipDistAddrName)
         {
             PO10400_pgLoadPOHeader_Result pO10400_pgLoadPOHeader_Result = new PO10400_pgLoadPOHeader_Result();
             pO10400_pgLoadPOHeader_Result.BranchID = branchID;
@@ -13108,6 +13112,10 @@ namespace PO10400
             pO10400_pgLoadPOHeader_Result.Crtd_DateTime = crtd_DateTime;
             pO10400_pgLoadPOHeader_Result.IsEditOrder = isEditOrder;
             pO10400_pgLoadPOHeader_Result.ShipmentPlan = shipmentPlan;
+            pO10400_pgLoadPOHeader_Result.SlsPerID = slsPerID;
+            pO10400_pgLoadPOHeader_Result.Name = name;
+            pO10400_pgLoadPOHeader_Result.ShipDistAddrID = shipDistAddrID;
+            pO10400_pgLoadPOHeader_Result.ShipDistAddrName = shipDistAddrName;
             return pO10400_pgLoadPOHeader_Result;
         }
 
@@ -13834,6 +13842,102 @@ namespace PO10400
         private global::System.DateTime _ShipmentPlan;
         partial void OnShipmentPlanChanging(global::System.DateTime value);
         partial void OnShipmentPlanChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SlsPerID
+        {
+            get
+            {
+                return _SlsPerID;
+            }
+            set
+            {
+                OnSlsPerIDChanging(value);
+                ReportPropertyChanging("SlsPerID");
+                _SlsPerID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SlsPerID");
+                OnSlsPerIDChanged();
+            }
+        }
+        private global::System.String _SlsPerID;
+        partial void OnSlsPerIDChanging(global::System.String value);
+        partial void OnSlsPerIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ShipDistAddrID
+        {
+            get
+            {
+                return _ShipDistAddrID;
+            }
+            set
+            {
+                OnShipDistAddrIDChanging(value);
+                ReportPropertyChanging("ShipDistAddrID");
+                _ShipDistAddrID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ShipDistAddrID");
+                OnShipDistAddrIDChanged();
+            }
+        }
+        private global::System.String _ShipDistAddrID;
+        partial void OnShipDistAddrIDChanging(global::System.String value);
+        partial void OnShipDistAddrIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ShipDistAddrName
+        {
+            get
+            {
+                return _ShipDistAddrName;
+            }
+            set
+            {
+                OnShipDistAddrNameChanging(value);
+                ReportPropertyChanging("ShipDistAddrName");
+                _ShipDistAddrName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ShipDistAddrName");
+                OnShipDistAddrNameChanged();
+            }
+        }
+        private global::System.String _ShipDistAddrName;
+        partial void OnShipDistAddrNameChanging(global::System.String value);
+        partial void OnShipDistAddrNameChanged();
 
         #endregion
 

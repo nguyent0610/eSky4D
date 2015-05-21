@@ -808,6 +808,10 @@
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="23" />
           <Property Type="Boolean" Name="IsEditOrder" Nullable="false" />
           <Property Type="DateTime" Name="ShipmentPlan" Nullable="false" />
+          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="false" Unicode="true" MaxLength="250" />
+          <Property Type="String" Name="ShipDistAddrID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ShipDistAddrName" Nullable="false" Unicode="true" MaxLength="400" />
         </ComplexType>
         <ComplexType Name="PO10400_pdAP_VenDorTaxes_Result">
           <Property Type="Boolean" Name="Sel" Nullable="true" />
@@ -1787,7 +1791,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="23">
         <EntityTypeShape EntityType="PO10400Model.SI_ApprovalFlowHandle" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10400Model.HO_EmailConfig" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="PO10400Model.PO_Detail" Width="1.5" PointX="4.75" PointY="0.75" />

@@ -262,7 +262,11 @@
                     , X.DateColumn().Text(Util.GetLang("PODate")).DataIndex("PODate")
                     , X.DateColumn().Text(Util.GetLang("ShipmentPlan")).DataIndex("ShipmentPlan")
                     , X.Column().Text(Util.GetLang("Shipping Address")).DataIndex("ShipAddr1")
-                    , X.Column().Text(Util.GetLang("POTypeDescr")).DataIndex("POType").Renderer("Process.renderPOType")
+                    , X.Column().Text(Util.GetLang("SlsPerID")).DataIndex("SlsPerID")
+                    , X.Column().Text(Util.GetLang("SlsperName")).DataIndex("Name") 
+                    , X.Column().Text(Util.GetLang("ShipDistAddrID")).DataIndex("ShipDistAddrID")
+                    , X.Column().Text(Util.GetLang("ShipDistAddrName")).DataIndex("ShipDistAddrName")                                            
+                    //, X.Column().Text(Util.GetLang("POTypeDescr")).DataIndex("POType").Renderer("Process.renderPOType")
                     , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Renderer("Process.renderStatus")
                     //, X.Column().Text(Util.GetLang("ReasonRSM")).DataIndex("ReasonRSM").Hidden(true)                               
                     , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TotQty")).DataIndex("TotalQty").Format("0,000,000")
@@ -306,7 +310,7 @@
                             X.DateFilter().DataIndex("PODate"),
                             X.StringFilter().DataIndex("ShipmentPlan"),
                             X.StringFilter().DataIndex("ShipAddr1"),
-                            X.StringFilter().DataIndex("POType"),
+                            //X.StringFilter().DataIndex("POType"),
                             X.StringFilter().DataIndex("Status"),
                             X.NumericFilter().DataIndex("TotalQty"),
                             X.NumericFilter().DataIndex("TxblAmt"),
