@@ -56,19 +56,15 @@
                             .LoadData()
                             , HQ.DateField().ID("FromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(250)
                                 .Value(DateTime.Now.ToShortDateString()).Format("dd/MM/yyyy")
-                            , HQ.DateField().ID("ToDate").MarginSpec("5 0 10 0").HQLangCode("ToDate").Width(250)
+                            , HQ.DateField().ID("ToDate").MarginSpec("5 0 0 0").HQLangCode("ToDate").Width(250)
                                 .Value(DateTime.Now.ToShortDateString()).Format("dd/MM/yyyy")
-                        )
-
-                    //Column 2
-                    , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
-                        .Items(
-                            HQ.Button().ID("btnLoad").HQLangCode("LoadData").MarginSpec("5 0 0 10").Width(150).Icon(Icon.ArrowRefresh)
+                            , HQ.Button().ID("btnLoad").HQLangCode("LoadData").MarginSpec("5 0 5 105").Width(145).Icon(Icon.ArrowRefresh)
                                 .Listeners(lst =>
                                 {
                                     lst.Click.Fn = "btnLoad_Click";
                                 })
                         )
+
                 )//Filter Data
                 
                 , X.FieldSet().Layout(LayoutType.HBox).MarginSpec("0 0 5 5")
@@ -99,7 +95,7 @@
                             , HQ.Combo().ID("cboHandle")
                             .Name("cboHandle").HQLangCode("Handle").HQProcedure("IN22002_pcHandle")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                            .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 10 0")
+                            .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                             .ForceSelection(true).HQAutoLoad(false)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection() 
@@ -113,16 +109,11 @@
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
-                    )
-
-                //Column 4
-                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
-                    .Items(
-                        HQ.Button().ID("btnProcess").HQLangCode("Handle").MarginSpec("5 0 0 10").Width(150)
-                        .Listeners(p =>
-                        {
-                            p.Click.Fn = "btnProcess_Click";
-                        })
+                            , HQ.Button().ID("btnProcess").HQLangCode("Handle").MarginSpec("5 0 5 105").Width(145)
+                            .Listeners(p =>
+                            {
+                                p.Click.Fn = "btnProcess_Click";
+                            })
                     )
                 )// Process
             )//pnl Header
@@ -205,19 +196,7 @@
                         .Listeners(l => l.Command.Handler = "grdPPC_StockRecovery_Reject(record);")
                     )
                     .SelectionModel(X.RowSelectionModel().ID("slmPPC_StockRecovery").Mode(SelectionMode.Multi))
-                    .BottomBar(
-                        X.PagingToolbar()
-                        .Items(
-                            X.Label("Page size:"),
-                            X.ToolbarSpacer(10),
-                            X.ComboBox()
-                            .Width(80)
-                            .Items("1", "2", "10", "20", "30", "50")
-                            .SelectedItems("50")
-                            .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
-                        )
-                        .Plugins(X.ProgressBarPager())
-                    )
+                   
                     .Plugins(
                         X.CellEditing()
                         .ClicksToEdit(1)
