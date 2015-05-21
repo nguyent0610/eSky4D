@@ -189,8 +189,8 @@ var grdIN_StockRecoveryDet_BeforeEdit = function (editor, e) {
 var grdIN_StockRecoveryDet_Edit = function (item, e) {
     if (e.field == "ApproveStkQty") {
         if (e.record.data.StkQty < e.record.data.ApproveStkQty || e.record.data.ApproveStkQty < 0) {
-            e.record.set("ApproveStkQty", 0);
-            e.record.set("ApprovePriceStkQty", 0)
+            e.record.set("ApproveStkQty", e.record.data.StkQty);
+            e.record.set("ApprovePriceStkQty", e.record.data.StkQty * e.record.data.Price)
         } else {
             e.record.set("ApprovePriceStkQty", e.record.data.ApproveStkQty * e.record.data.Price)
         }
