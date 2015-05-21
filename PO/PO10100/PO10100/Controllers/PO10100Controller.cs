@@ -40,6 +40,7 @@ namespace PO10100.Controllers
 
         List<PO10100_pdOM_DiscAllByBranchPO_Result> _lstPO10100_pdOM_DiscAllByBranchPO;      
         List<PO10100_pdIN_UnitConversion_Result> _PO10100_pdIN_UnitConversion_Result;
+       // List<IN_ItemSite> _lstIN_ItemSite;
         private List <PO10100_pgDetail_Result> _lstTmpPO10100_pgDetail;
         private bool _freeLineRunning = false;
         private string _lineRef = string.Empty;
@@ -51,7 +52,7 @@ namespace PO10100.Controllers
             ViewBag.BussinessTime = DateTime.Now;
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -351,6 +352,7 @@ namespace PO10100.Controllers
            
         private void Save_PO_Header(bool isDeleteGrd=false)
         {
+           // _lstIN_ItemSite = new List<IN_ItemSite>();
             _lstPO10100_pdOM_DiscAllByBranchPO = _db.PO10100_pdOM_DiscAllByBranchPO(_branchID).ToList();
             _PO10100_pdIN_UnitConversion_Result = _db.PO10100_pdIN_UnitConversion().ToList();
             objOM_UserDefault = _db.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID.Trim().ToUpper() == _branchID.Trim().ToUpper() && p.UserID.Trim().ToUpper() == Current.UserName.Trim().ToUpper());
@@ -525,19 +527,26 @@ namespace PO10100.Controllers
                  
                     try
                     {
-                        objIN_ItemSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == objDetail.InvtID && p.SiteID == objDetail.SiteID);
-                        if (objIN_ItemSite == null)
+                        objIN_ItemSite = _db.IN_ItemSite.Where(p => p.InvtID == objDetail.InvtID && p.SiteID == objDetail.SiteID).FirstOrDefault();
+                        if (objIN_ItemSite == null)// && _lstIN_ItemSite.Where(p => p.InvtID == objDetail.InvtID && p.SiteID == objDetail.SiteID).FirstOrDefault()==null)
                         {
                             objIN_ItemSite = new IN_ItemSite();
+                            objIN_ItemSite.ResetET();
+                            NewQty = Math.Round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
+
+                            objIN_ItemSite.QtyOnPO = Math.Round(NewQty, 2);
+
                             Insert_IN_ItemSite(ref objIN_ItemSite, ref objIN_Inventory, objDetail.SiteID);
                         }
-                        NewQty = Math.Round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
-                        if (isnew) OldQty = 0;
                         else
-                            OldQty = Math.Round((objrPO_Detail.UnitMultDiv == "D" ? (objrPO_Detail.QtyOrd / objrPO_Detail.CnvFact) : objrPO_Detail.QtyOrd * objrPO_Detail.CnvFact));
+                        {
+                            NewQty = Math.Round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
+                            if (isnew) OldQty = 0;
+                            else
+                                OldQty = Math.Round((objrPO_Detail.UnitMultDiv == "D" ? (objrPO_Detail.QtyOrd / objrPO_Detail.CnvFact) : objrPO_Detail.QtyOrd * objrPO_Detail.CnvFact));
 
-                        objIN_ItemSite.QtyOnPO = Math.Round(objIN_ItemSite.QtyOnPO + NewQty - OldQty, 2);
-
+                            objIN_ItemSite.QtyOnPO = Math.Round(objIN_ItemSite.QtyOnPO + NewQty - OldQty, 2);
+                        }
                    
                     }
                     catch (Exception ex)
@@ -1517,25 +1526,26 @@ namespace PO10100.Controllers
         {
             try
             {
-                objIN_ItemSite=new IN_ItemSite();
-                objIN_ItemSite.ResetET();
+                PO10100Entities _dbitem = Util.CreateObjectContext<PO10100Entities>(false);
+             
+                
                 objIN_ItemSite.InvtID = objIN_Inventory.InvtID;
                 objIN_ItemSite.SiteID = SiteID;
-                objIN_ItemSite.AvgCost = 0;
-                objIN_ItemSite.QtyAlloc = 0;
-                objIN_ItemSite.QtyAllocIN = 0;
-                objIN_ItemSite.QtyAllocPORet = 0;
-                objIN_ItemSite.QtyAllocSO = 0;
-                objIN_ItemSite.QtyAvail = 0;
-                objIN_ItemSite.QtyInTransit = 0;
-                objIN_ItemSite.QtyOnBO = 0;
-                objIN_ItemSite.QtyOnHand = 0;
-                objIN_ItemSite.QtyOnPO = 0;
-                objIN_ItemSite.QtyOnTransferOrders = 0;
-                objIN_ItemSite.QtyOnSO = 0;
-                objIN_ItemSite.QtyShipNotInv = 0;
+                //objIN_ItemSite.AvgCost = 0;
+                //objIN_ItemSite.QtyAlloc = 0;
+                //objIN_ItemSite.QtyAllocIN = 0;
+                //objIN_ItemSite.QtyAllocPORet = 0;
+                //objIN_ItemSite.QtyAllocSO = 0;
+                //objIN_ItemSite.QtyAvail = 0;
+                //objIN_ItemSite.QtyInTransit = 0;
+                //objIN_ItemSite.QtyOnBO = 0;
+                //objIN_ItemSite.QtyOnHand = 0;
+                ////objIN_ItemSite.QtyOnPO = 0;
+                //objIN_ItemSite.QtyOnTransferOrders = 0;
+                //objIN_ItemSite.QtyOnSO = 0;
+                //objIN_ItemSite.QtyShipNotInv = 0;
                 objIN_ItemSite.StkItem = objIN_Inventory.StkItem;
-                objIN_ItemSite.TotCost = 0;
+                //objIN_ItemSite.TotCost = 0;
                 objIN_ItemSite.Crtd_DateTime = DateTime.Now;
                 objIN_ItemSite.Crtd_Prog = ScreenNbr;
                 objIN_ItemSite.Crtd_User = Current.UserName;
@@ -1543,8 +1553,10 @@ namespace PO10100.Controllers
                 objIN_ItemSite.LUpd_Prog = ScreenNbr;
                 objIN_ItemSite.LUpd_User = Current.UserName;
                 objIN_ItemSite.tstamp = new byte[0];
-                _db.IN_ItemSite.AddObject(objIN_ItemSite);
-
+                
+                _dbitem.IN_ItemSite.AddObject(objIN_ItemSite);
+                _dbitem.SaveChanges();
+                //_lstIN_ItemSite.Add(objIN_ItemSite);
 
             }
             catch (Exception ex)

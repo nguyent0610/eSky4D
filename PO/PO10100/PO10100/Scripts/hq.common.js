@@ -31,6 +31,12 @@ if (!('forEach' in Array.prototype)) {
                 action.call(that, this[i], i, this);
     };
 }
+String.prototype.passNull = function () {
+    if (this.length === 0)
+        return "";
+    else return this;
+};
+
 Date.prototype.addDays = function (days) {
     this.setDate(this.getDate() + days);
     return this;
