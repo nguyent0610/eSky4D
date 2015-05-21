@@ -17,7 +17,7 @@
             <PropertyRef Name="NewExpDate" />
           </Key>
           <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="StkRecNbr" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="NewExpDate" Type="datetime" Nullable="false" />
@@ -76,7 +76,7 @@
           <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="SlsPerName" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="CustID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
           <Property Type="DateTime" Name="NewExpDate" Nullable="true" Precision="23" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />

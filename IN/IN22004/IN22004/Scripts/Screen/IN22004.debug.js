@@ -7,13 +7,11 @@ var loadSourceCombo = function () {
     App.cboStatus.getStore().load(function () {
         if (_firstLoad1) {
             App.cboStatus.setValue("H");
-            //App.cboHandle.setValue("N");
             _firstLoad1 = false;
         }
         App.cboHandle.getStore().load(function () {
             HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
             if (_firstLoad) {
-                //App.cboStatus.setValue("H");
                 App.cboHandle.setValue("N");
                 _firstLoad = false;
             }
@@ -29,7 +27,6 @@ var dateKPI_expand = function (dte, eOpts) {
 
 var dateKPI_Select = function (sender, e) {
 };
-
 
 var cboBranchID_Change = function (sender, e) {
     //if (!e) {
@@ -61,7 +58,9 @@ var cboStatus_Change = function (value) {
 };
 
 var btnLoad_Click = function () {
-    App.stoIN_StockRecoveryCust.reload()
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        App.stoIN_StockRecoveryCust.reload()
+    }
 };
 
 var ColCheck_Header_Change = function (value, rowIndex, checked) {
@@ -75,7 +74,10 @@ var ColCheck_Header_Change = function (value, rowIndex, checked) {
 };
 
 var btnProcess_Click = function () {
-    if (App.cboHandle.getValue()) {
+    if (!App.cboHandle.getValue()) {
+        HQ.message.show(1000, App.cboHandle.fieldLabel);
+    }
+    else {
         var flat = false;
         App.stoIN_StockRecoveryCust.data.each(function (item) {
             if (item.data.ColCheck) {
@@ -147,7 +149,8 @@ var ProcessQty = function () {
     App.SLND.setValue(SLND);
     App.SLPB.setValue(SLPB);
     App.SLCL.setValue(SLND - SLPB);
-}
+};
+
 var grdIN_StockRecoveryCust_Select = function (sender, e) {
     ProcessQty();
 };
@@ -155,6 +158,7 @@ var grdIN_StockRecoveryCust_Select = function (sender, e) {
 var grdIN_StockRecoveryCust_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdIN_StockRecoveryCust, e, keys);
 };
+
 var grdIN_StockRecoveryCust_BeforeEdit = function (editor, e) {
     if (e.record.data.Status == 'H') {
         return true;
@@ -163,6 +167,7 @@ var grdIN_StockRecoveryCust_BeforeEdit = function (editor, e) {
         return false;
     }
 };
+
 var grdIN_StockRecoveryCust_Edit = function (item, e) {
     if (e.field == "QtyGiveBack") {
         if (e.record.data.ApproveStkQty < e.record.data.QtyGiveBack || e.record.data.QtyGiveBack < 0) {
@@ -171,17 +176,20 @@ var grdIN_StockRecoveryCust_Edit = function (item, e) {
             ProcessQty();
         }
     }
-
 };
+
 var grdIN_StockRecoveryCust_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdIN_StockRecoveryCust);
     stoChanged(App.stoIN_StockRecoveryCust);
 };
+
 var stoChanged = function (sto) {
     _Change = HQ.store.isChange(sto);
     HQ.common.changeData(_Change, 'IN22004');
     App.cboStatus.setReadOnly(_Change);
     App.btnLoad.setDisabled(_Change);
+    App.dateKPI.setReadOnly(_Change);
+    App.cboBranchID.setReadOnly(_Change);
 };
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
