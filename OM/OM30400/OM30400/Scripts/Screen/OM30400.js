@@ -374,6 +374,7 @@ var Index = {
             App.cboSalesManActual.disable();
             App.btnGetCurrentLocation.disable();
             App.chkRealTime.disable();
+            App.chkShowAgent.disable();
             App.btnExportExcelActual.disable();
 
             App.grdVisitCustomerActual.hide();
@@ -383,6 +384,7 @@ var Index = {
             App.cboSalesManActual.enable();
             App.btnGetCurrentLocation.enable();
             App.chkRealTime.enable();
+            App.chkShowAgent.enable();
             App.btnExportExcelActual.enable();
 
             App.grdVisitCustomerActual.show();
@@ -452,6 +454,14 @@ var Index = {
         //App.storeVisitCustomerActual.reload();
     },
 
+    chkShowAgent_change: function (chk, newValue, oldValue, eOpts) {
+        PosGmap.stopMarkers.forEach(function (marker) {
+            if (marker.type && marker.type == "CC") {
+                marker.set("visible", chk.value);
+            }
+        });
+    },
+
     btnExportExcelActual_click: function (btn, eOpts) {
         if (App.pnlActualVisit.isValid()) {
             Ext.net.DirectMethod.request({
@@ -479,7 +489,7 @@ var Index = {
             records.forEach(function (record) {
                 var markeri = {
                     "id": record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng,
-                    "title": record.data.CustId?record.data.CustId + ": " + record.data.CustName : "",
+                    "title": record.data.CustId? (record.data.CustId + ": " + record.data.CustName) : "",
                     "lat": record.data.CiLat,
                     "lng": record.data.CiLng,
                     "label": record.index + 1,
@@ -523,6 +533,29 @@ var Index = {
                             '</div>'
                     }
                     markers.push(markero);
+
+                    var markerc = {
+                        "id": record.data.CustId + "_" + record.data.CoLat + "_" + record.data.CoLng,
+                        "title": record.data.CustId + ": " + record.data.CustName,
+                        "lat": record.data.CustLat,
+                        "lng": record.data.CustLng,
+                        "label": record.index + 1,
+                        "type": "CC",
+                        "description":
+                            '<div id="content">' +
+                                '<div id="siteNotice">' +
+                                '</div>' +
+                                '<h1 id="firstHeading" class="firstHeading">' +
+                                    record.data.CustName +
+                                '</h1>' +
+                                '<div id="bodyContent">' +
+                                    '<p>' +
+                                        record.data.Addr +
+                                    '</p>' +
+                                '</div>' +
+                            '</div>'
+                    }
+                    markers.push(markerc);
                 }
             });
             PosGmap.drawAVC1(markers, true);
@@ -1156,53 +1189,55 @@ var PosGmap = {
             // For each marker in list
             for (i = 0; i < markers.length; i++) {
                 var data = markers[i];
-                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+                if (data.lat && data.lng) {
+                    var myLatlng = new google.maps.LatLng(data.lat, data.lng);
 
-                // pin color
-                var pinColor = "FE6256";//"BDBDBD";//FE6256
+                    // pin color
+                    var pinColor = "FE6256";//"BDBDBD";//FE6256
 
-                // Push the location to list
-                lat_lng.push(myLatlng);
+                    // Push the location to list
+                    lat_lng.push(myLatlng);
 
-                // Maps center at the first location
-                if (i == 0) {
-                    var myOptions = {
-                        center: myLatlng,
-                        zoom: 16,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
-                    map = new google.maps.Map(map_canvas, myOptions);
-                }
+                    // Maps center at the first location
+                    if (i == 0) {
+                        var myOptions = {
+                            center: myLatlng,
+                            zoom: 16,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
+                        map = new google.maps.Map(map_canvas, myOptions);
+                    }
 
-                // Make the marker at each location
-                var markerLabel = data.visitSort;
-                var marker = new google.maps.Marker({
-                    id: data.id,
-                    position: myLatlng,
-                    map: map,
-                    title: data.title,
-                    icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor)
-                });
-
-                // Set info display of the marker
-                (function (marker, data) {
-                    google.maps.event.addListener(marker, "click", function (e) {
-                        infoWindow.setContent(data.description);
-                        infoWindow.open(map, marker);
-
-                        // Set animation of marker
-                        if (marker.getAnimation() != null) {
-                            marker.setAnimation(null);
-                        } else {
-                            marker.setAnimation(google.maps.Animation.BOUNCE);
-                            setTimeout(function () {
-                                marker.setAnimation(null);
-                            }, 1400);
-                        }
+                    // Make the marker at each location
+                    var markerLabel = data.visitSort;
+                    var marker = new google.maps.Marker({
+                        id: data.id,
+                        position: myLatlng,
+                        map: map,
+                        title: data.title,
+                        icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor)
                     });
-                })(marker, data);
 
-                PosGmap.stopMarkers.push(marker);
+                    // Set info display of the marker
+                    (function (marker, data) {
+                        google.maps.event.addListener(marker, "click", function (e) {
+                            infoWindow.setContent(data.description);
+                            infoWindow.open(map, marker);
+
+                            // Set animation of marker
+                            if (marker.getAnimation() != null) {
+                                marker.setAnimation(null);
+                            } else {
+                                marker.setAnimation(google.maps.Animation.BOUNCE);
+                                setTimeout(function () {
+                                    marker.setAnimation(null);
+                                }, 1400);
+                            }
+                        });
+                    })(marker, data);
+
+                    PosGmap.stopMarkers.push(marker);
+                }
             }
 
             directionsDisplay.setMap(map);
@@ -1228,48 +1263,50 @@ var PosGmap = {
             // For each marker in list
             for (i = 0; i < markers.length; i++) {
                 var data = markers[i];
-                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+                if (data.lat && data.lng) {
+                    var myLatlng = new google.maps.LatLng(data.lat, data.lng);
 
-                // Maps center at the first location
-                if (i == 0) {
-                    var myOptions = {
-                        center: myLatlng,
-                        zoom: 16,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
-                    map = new google.maps.Map(map_canvas, myOptions);
-                }
+                    // Maps center at the first location
+                    if (i == 0) {
+                        var myOptions = {
+                            center: myLatlng,
+                            zoom: 16,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
+                        map = new google.maps.Map(map_canvas, myOptions);
+                    }
 
-                // Make the marker at each location
-                var marker = new google.maps.Marker({
-                    id: data.id,
-                    position: myLatlng,
-                    map: map,
-                    title: data.title,
-                    icon: Ext.String.format('Images/OM30400/circle_{0}.png', data.color ? data.color : "white"),
-                    //animation: google.maps.Animation.DROP,
-                    custId: data.custId
-                });
-
-                // Set info display of the marker
-                (function (marker, data) {
-                    google.maps.event.addListener(marker, "click", function (e) {
-                        infoWindow.setContent(data.description);
-                        infoWindow.open(map, marker);
-
-                        // Set animation of marker
-                        if (marker.getAnimation() != null) {
-                            marker.setAnimation(null);
-                        } else {
-                            marker.setAnimation(google.maps.Animation.BOUNCE);
-                            setTimeout(function () {
-                                marker.setAnimation(null);
-                            }, 1400);
-                        }
+                    // Make the marker at each location
+                    var marker = new google.maps.Marker({
+                        id: data.id,
+                        position: myLatlng,
+                        map: map,
+                        title: data.title,
+                        icon: Ext.String.format('Images/OM30400/circle_{0}.png', data.color ? data.color : "white"),
+                        //animation: google.maps.Animation.DROP,
+                        custId: data.custId
                     });
-                })(marker, data);
 
-                PosGmap.stopMarkers.push(marker);
+                    // Set info display of the marker
+                    (function (marker, data) {
+                        google.maps.event.addListener(marker, "click", function (e) {
+                            infoWindow.setContent(data.description);
+                            infoWindow.open(map, marker);
+
+                            // Set animation of marker
+                            if (marker.getAnimation() != null) {
+                                marker.setAnimation(null);
+                            } else {
+                                marker.setAnimation(google.maps.Animation.BOUNCE);
+                                setTimeout(function () {
+                                    marker.setAnimation(null);
+                                }, 1400);
+                            }
+                        });
+                    })(marker, data);
+
+                    PosGmap.stopMarkers.push(marker);
+                }
             }
 
             directionsDisplay.setMap(map);
@@ -1296,67 +1333,77 @@ var PosGmap = {
             // For each marker in lisr
             for (i = 0; i < markers.length; i++) {
                 var data = markers[i];
-                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+                if (data.lat && data.lng) {
+                    var myLatlng = new google.maps.LatLng(data.lat, data.lng);
 
-                // Change color for Checkin and checkout point (for Actual Visit)
-                var pinColor = "BDBDBD";//FE6256
-                var visible = true;
-                if (data.type) {
-                    if (data.type == "IO") { // Check in
-                        pinColor = "CCFF33";
+                    // Change color for Checkin and checkout point (for Actual Visit)
+                    //var pinColor = "BDBDBD";//FE6256
+                    var icon = Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', data.label, "BDBDBD");
+                    var visible = true;
+                    if (data.type) {
+                        if (data.type == "IO") { // Check in
+                            //pinColor = "CCFF33";
+                            icon = Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', data.label, "CCFF33");
+                            // Push the location to list
+                            lat_lng.push(myLatlng);
+                        }
+                        else if (data.type == "OO") { // Check out
+                            //pinColor = "FF0000";
+                            icon = Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', data.label, "FF0000");
+                            visible = false;
+                        }
+                        else if (data.type == "CC") {
+                            icon = Ext.String.format('https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin_star|{0}|{1}|000000|FFFF00', data.label, "01DFD7");
+                            visible = App.chkShowAgent.value;
+                        }
+                    }
+                    else {
                         // Push the location to list
                         lat_lng.push(myLatlng);
                     }
-                    else if (data.type == "OO") { // Check out
-                        pinColor = "FF0000";
-                        visible = false;
+
+                    // Maps center at the first location
+                    if (i == 0) {
+                        var myOptions = {
+                            center: myLatlng,
+                            zoom: 16,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
+                        map = new google.maps.Map(map_canvas, myOptions);
                     }
-                }
-                else {
-                    // Push the location to list
-                    lat_lng.push(myLatlng);
-                }
 
-                // Maps center at the first location
-                if (i == 0) {
-                    var myOptions = {
-                        center: myLatlng,
-                        zoom: 16,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
-                    map = new google.maps.Map(map_canvas, myOptions);
-                }
-
-                var markerLabel = data.label;
-                var marker = new google.maps.Marker({
-                    id: data.id,
-                    position: myLatlng,
-                    map: map,
-                    title: data.title,
-                    icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor),
-                    //animation: google.maps.Animation.DROP,
-                    visible: visible
-                });
-
-                // Set info display of the marker
-                (function (marker, data) {
-                    google.maps.event.addListener(marker, "click", function (e) {
-                        infoWindow.setContent(data.description);
-                        infoWindow.open(map, marker);
-
-                        // Set animation of marker
-                        if (marker.getAnimation() != null) {
-                            marker.setAnimation(null);
-                        } else {
-                            marker.setAnimation(google.maps.Animation.BOUNCE);
-                            setTimeout(function () {
-                                marker.setAnimation(null);
-                            }, 1400);
-                        }
+                    var markerLabel = data.label;
+                    var marker = new google.maps.Marker({
+                        id: data.id,
+                        position: myLatlng,
+                        map: map,
+                        title: data.title,
+                        icon: icon,
+                        type: data.type,
+                        //animation: google.maps.Animation.DROP,
+                        visible: visible
                     });
-                })(marker, data);
 
-                PosGmap.stopMarkers.push(marker);
+                    // Set info display of the marker
+                    (function (marker, data) {
+                        google.maps.event.addListener(marker, "click", function (e) {
+                            infoWindow.setContent(data.description);
+                            infoWindow.open(map, marker);
+
+                            // Set animation of marker
+                            if (marker.getAnimation() != null) {
+                                marker.setAnimation(null);
+                            } else {
+                                marker.setAnimation(google.maps.Animation.BOUNCE);
+                                setTimeout(function () {
+                                    marker.setAnimation(null);
+                                }, 1400);
+                            }
+                        });
+                    })(marker, data);
+
+                    PosGmap.stopMarkers.push(marker);
+                }
             }
 
             directionsDisplay.setMap(map);
@@ -1382,65 +1429,67 @@ var PosGmap = {
             // For each marker in lisr
             for (i = 0; i < markers.length; i++) {
                 var data = markers[i];
-                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+                if (data.lat && data.lng) {
+                    var myLatlng = new google.maps.LatLng(data.lat, data.lng);
 
-                // Change color for Checkin and checkout point (for Actual Visit)
-                var pinColor = "BDBDBD";//FE6256
-                if (data.type) {
-                    if (data.type == "IO") { // Check in
-                        pinColor = "CCFF33";
+                    // Change color for Checkin and checkout point (for Actual Visit)
+                    var pinColor = "BDBDBD";//FE6256
+                    if (data.type) {
+                        if (data.type == "IO") { // Check in
+                            pinColor = "CCFF33";
+                            // Push the location to list
+                            lat_lng.push(myLatlng);
+                        }
+                        else if (data.type == "OO") { // Check out
+                            pinColor = "FF0000";
+                        }
+                    }
+                    else {
                         // Push the location to list
                         lat_lng.push(myLatlng);
                     }
-                    else if (data.type == "OO") { // Check out
-                        pinColor = "FF0000";
+
+                    // Maps center at the first location
+                    if (i == 0) {
+                        var myOptions = {
+                            center: myLatlng,
+                            zoom: 16,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
+                        map = new google.maps.Map(map_canvas, myOptions);
                     }
-                }
-                else {
-                    // Push the location to list
-                    lat_lng.push(myLatlng);
-                }
 
-                // Maps center at the first location
-                if (i == 0) {
-                    var myOptions = {
-                        center: myLatlng,
-                        zoom: 16,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
-                    map = new google.maps.Map(map_canvas, myOptions);
-                }
-
-                var markerLabel = i + 1;
-                var marker = new google.maps.Marker({
-                    id: data.id,
-                    position: myLatlng,
-                    map: map,
-                    title: data.title,
-                    icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor),
-                    //animation: google.maps.Animation.DROP,
-                    visible: data.type == "OO" ? false : true
-                });
-
-                // Set info display of the marker
-                (function (marker, data) {
-                    google.maps.event.addListener(marker, "click", function (e) {
-                        infoWindow.setContent(data.description);
-                        infoWindow.open(map, marker);
-
-                        // Set animation of marker
-                        if (marker.getAnimation() != null) {
-                            marker.setAnimation(null);
-                        } else {
-                            marker.setAnimation(google.maps.Animation.BOUNCE);
-                            setTimeout(function () {
-                                marker.setAnimation(null);
-                            }, 1400);
-                        }
+                    var markerLabel = i + 1;
+                    var marker = new google.maps.Marker({
+                        id: data.id,
+                        position: myLatlng,
+                        map: map,
+                        title: data.title,
+                        icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor),
+                        //animation: google.maps.Animation.DROP,
+                        visible: data.type == "OO" ? false : true
                     });
-                })(marker, data);
 
-                PosGmap.stopMarkers.push(marker);
+                    // Set info display of the marker
+                    (function (marker, data) {
+                        google.maps.event.addListener(marker, "click", function (e) {
+                            infoWindow.setContent(data.description);
+                            infoWindow.open(map, marker);
+
+                            // Set animation of marker
+                            if (marker.getAnimation() != null) {
+                                marker.setAnimation(null);
+                            } else {
+                                marker.setAnimation(google.maps.Animation.BOUNCE);
+                                setTimeout(function () {
+                                    marker.setAnimation(null);
+                                }, 1400);
+                            }
+                        });
+                    })(marker, data);
+
+                    PosGmap.stopMarkers.push(marker);
+                }
             }
 
             directionsDisplay.setMap(map);
@@ -1466,53 +1515,55 @@ var PosGmap = {
             // For each marker in list
             for (i = 0; i < markers.length; i++) {
                 var data = markers[i];
-                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+                if (data.lat && data.lng) {
+                    var myLatlng = new google.maps.LatLng(data.lat, data.lng);
 
-                // Pin color
-                var pinColor = "FE6256";
+                    // Pin color
+                    var pinColor = "FE6256";
 
-                // Push the location to list
-                lat_lng.push(myLatlng);
+                    // Push the location to list
+                    lat_lng.push(myLatlng);
 
-                // Maps center at the first location
-                if (i == 0) {
-                    var myOptions = {
-                        center: myLatlng,
-                        zoom: 16,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
-                    map = new google.maps.Map(map_canvas, myOptions);
-                }
+                    // Maps center at the first location
+                    if (i == 0) {
+                        var myOptions = {
+                            center: myLatlng,
+                            zoom: 16,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
+                        map = new google.maps.Map(map_canvas, myOptions);
+                    }
 
-                // Make the marker at each location
-                var markerLabel = i + 1;
-                var marker = new google.maps.Marker({
-                    id: data.id,
-                    position: myLatlng,
-                    map: map,
-                    title: data.title,
-                    icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor),
-                });
-
-                // Set info display of the marker
-                (function (marker, data) {
-                    google.maps.event.addListener(marker, "click", function (e) {
-                        infoWindow.setContent(data.description);
-                        infoWindow.open(map, marker);
-
-                        // Set animation of marker
-                        if (marker.getAnimation() != null) {
-                            marker.setAnimation(null);
-                        } else {
-                            marker.setAnimation(google.maps.Animation.BOUNCE);
-                            setTimeout(function () {
-                                marker.setAnimation(null);
-                            }, 1400);
-                        }
+                    // Make the marker at each location
+                    var markerLabel = i + 1;
+                    var marker = new google.maps.Marker({
+                        id: data.id,
+                        position: myLatlng,
+                        map: map,
+                        title: data.title,
+                        icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor),
                     });
-                })(marker, data);
 
-                PosGmap.stopMarkers.push(marker);
+                    // Set info display of the marker
+                    (function (marker, data) {
+                        google.maps.event.addListener(marker, "click", function (e) {
+                            infoWindow.setContent(data.description);
+                            infoWindow.open(map, marker);
+
+                            // Set animation of marker
+                            if (marker.getAnimation() != null) {
+                                marker.setAnimation(null);
+                            } else {
+                                marker.setAnimation(google.maps.Animation.BOUNCE);
+                                setTimeout(function () {
+                                    marker.setAnimation(null);
+                                }, 1400);
+                            }
+                        });
+                    })(marker, data);
+
+                    PosGmap.stopMarkers.push(marker);
+                }
             }
 
             directionsDisplay.setMap(map);
@@ -1583,7 +1634,7 @@ var PosGmap = {
             destination: end,
             waypoints: waypts,
             optimizeWaypoints: false,
-            travelMode: google.maps.TravelMode.DRIVING
+            travelMode: google.maps.TravelMode.WALKING
         };
         directionsService.route(request, function (response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
@@ -1597,7 +1648,7 @@ var PosGmap = {
                 if (lat_lngCol && lat_lngCol.length > 0) {
                     setTimeout(function () {
                         PosGmap.requestForWaysRoute(lat_lngCols, idx);
-                    }, 300);
+                    }, 500);
                 }
             }
             else if (status == google.maps.DirectionsStatus.NOT_FOUND) {

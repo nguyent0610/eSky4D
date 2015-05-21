@@ -3740,6 +3740,54 @@ namespace OM30400
         private Nullable<global::System.Double> _CoLng;
         partial void OnCoLngChanging(Nullable<global::System.Double> value);
         partial void OnCoLngChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> CustLat
+        {
+            get
+            {
+                return _CustLat;
+            }
+            set
+            {
+                OnCustLatChanging(value);
+                ReportPropertyChanging("CustLat");
+                _CustLat = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CustLat");
+                OnCustLatChanged();
+            }
+        }
+        private Nullable<global::System.Double> _CustLat;
+        partial void OnCustLatChanging(Nullable<global::System.Double> value);
+        partial void OnCustLatChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> CustLng
+        {
+            get
+            {
+                return _CustLng;
+            }
+            set
+            {
+                OnCustLngChanging(value);
+                ReportPropertyChanging("CustLng");
+                _CustLng = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CustLng");
+                OnCustLngChanged();
+            }
+        }
+        private Nullable<global::System.Double> _CustLng;
+        partial void OnCustLngChanging(Nullable<global::System.Double> value);
+        partial void OnCustLngChanged();
 
         #endregion
 

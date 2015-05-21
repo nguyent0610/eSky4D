@@ -418,6 +418,8 @@
           <Property Type="Double" Name="CiLng" Nullable="true" />
           <Property Type="Double" Name="CoLat" Nullable="true" />
           <Property Type="Double" Name="CoLng" Nullable="true" />
+          <Property Type="Double" Name="CustLat" Nullable="true" />
+          <Property Type="Double" Name="CustLng" Nullable="true" />
         </ComplexType>
         <ComplexType Name="OM30400_pgVisitCustomerActual_Result">
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
@@ -628,6 +630,8 @@
                 <ScalarProperty Name="CiLng" ColumnName="CiLng" />
                 <ScalarProperty Name="CoLat" ColumnName="CoLat" />
                 <ScalarProperty Name="CoLng" ColumnName="CoLng" />
+                <ScalarProperty Name="CustLat" ColumnName="CustLat" />
+                <ScalarProperty Name="CustLng" ColumnName="CustLng" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

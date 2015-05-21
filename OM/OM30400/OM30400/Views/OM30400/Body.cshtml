@@ -523,9 +523,17 @@
                     
                     , X.Container().Layout(LayoutType.HBox).Flex(1)
                     .Items(
-                        HQ.Checkbox().ID("chkRealTime").HQLangCode("RealTime")
-                        .MarginSpec("5 5 0 105").Disabled(true).Flex(1)
+                         X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
+                        .StyleSpec("background-color:#01DFD7;")
+                        , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("Profile")).Width(60)
+                        
+                        , HQ.Checkbox().ID("chkRealTime").HQLangCode("RealTime")
+                        .MarginSpec("5 5 0 5").Disabled(true).Flex(1)
                         .Handler("Index.chkRealTime_change")
+                        
+                        , HQ.Checkbox().ID("chkShowAgent").HQLangCode("ShowProfile")
+                        .MarginSpec("5 5 0 5").Disabled(true).Flex(1)
+                        .Handler("Index.chkShowAgent_change")
                         
                         ,HQ.Button().ID("btnExportExcelActual")
                         .Icon(Icon.PageExcel).ToolTip(Util.GetLang("ExportExcel"))
