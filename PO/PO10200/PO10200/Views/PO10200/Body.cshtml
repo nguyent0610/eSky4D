@@ -540,7 +540,7 @@
                                             .Items(
                                                  HQ.TextBox().ID("txtAPRefNbr").Name("APRefNbr").HQLangCode("REFNBR").LabelWidth(100).InputWidth(120).ReadOnly(true)
                                                 , HQ.Combo().ID("cboTerms").Name("Terms").HQLangCode("TERM").HQProcedure("PO10200_pcTerms").HQAutoLoad(true)
-                                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Descr").AllowBlank(false)
+                                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").AllowBlank(false)
                                                     .LabelWidth(100).InputWidth(120).HQHeightWidth(400, 300)
                                                     .HQDBSys(false)
                                                     .LoadData()

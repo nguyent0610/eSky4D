@@ -40,8 +40,8 @@ namespace PO10200.Controllers
         string _handle = "";
         string _status = "";
         private JsonResult _logMessage;
-
-
+        private List<IN_ItemSite> lstInItemsiteNew = new List<IN_ItemSite>();
+        bool b235 = false;//message235
 
 
         public ActionResult Index()
@@ -117,7 +117,7 @@ namespace PO10200.Controllers
                 _branchID = data["cboBranchID"];
                 _status = data["Status"].PassNull();
                 _handle = data["Handle"].PassNull() == "" ? _status : data["Handle"].PassNull();
-
+                b235 = _form["b235"].ToBool();
                 _objPO_Setup = _db.PO10200_pdPO_Setup(_branchID, "PO").FirstOrDefault();
 
                 var detHeader = new StoreDataHandler(data["lstHeader"]);
@@ -132,9 +132,9 @@ namespace PO10200.Controllers
                 _lstLot = detHandlerLot.ObjectData<PO10200_pgLotTrans_Result>()
                             .Where(p => Util.PassNull(p.LotSerNbr) != string.Empty)
                             .ToList();
-
+              
                 
-                if (Data_Checking())
+                if (Data_Checking(b235))
                 {
                     if ((_status == "U" || _status == "C" || _status == "H") && (_handle == "C" || _handle == "V" || _handle == "R"))
                     {
@@ -621,7 +621,7 @@ namespace PO10200.Controllers
                     var objIN_Inventory = _db.PO10200_pdIN_Inventory(Current.UserName).Where(p => p.InvtID == objr.InvtID).FirstOrDefault();
                     var objIN_ItemSite = _db.IN_ItemSite.Where(p => p.InvtID == objr.InvtID && p.SiteID == objr.SiteID).FirstOrDefault();
                     //Kiem tra itemsite neu chua co thi add vao
-                    if (objIN_ItemSite == null)
+                    if (objIN_ItemSite == null && lstInItemsiteNew.Where(p => p.InvtID == objr.InvtID && p.SiteID == objr.SiteID).Count()==0)
                     {
                         Insert_IN_ItemSite(ref objIN_ItemSite, ref objIN_Inventory, objr.SiteID);
                     }
@@ -823,7 +823,7 @@ namespace PO10200.Controllers
                 objIN_ItemSite.tstamp = new byte[0];
 
                 _db.IN_ItemSite.AddObject(objIN_ItemSite);
-
+                lstInItemsiteNew.Add(objIN_ItemSite);
 
             }
             catch (Exception ex)
@@ -842,7 +842,7 @@ namespace PO10200.Controllers
         //    {
         //    }
         //}
-        private bool Data_Checking(bool isDeleteGrd = false)
+        private bool Data_Checking(bool isCheckInvoicePass = false)
         {
             if (_poHead.Status == "H")
             {
@@ -921,7 +921,7 @@ namespace PO10200.Controllers
                         throw new MessageException(MessageType.Message, "222");
 
                     }
-                    if (objPO_Trans.RcptQty == 0 || objPO_Trans.TranAmt == 0)
+                    if ((objPO_Trans.RcptQty == 0 || objPO_Trans.TranAmt == 0) && objPO_Trans.PurchaseType!="PR")
                     {
                         throw new MessageException(MessageType.Message, "44");
 
@@ -959,9 +959,9 @@ namespace PO10200.Controllers
                 }
 
                 var obj1 = _db.PO10200_ppCheckExistingInvcNbr(_branchID, _batNbr, _poHead.VendID, _poHead.InvcNote, _poHead.InvcNbr).FirstOrDefault();
-                if (obj1 != null)
+                if (obj1 != null && !isCheckInvoicePass)
                 {
-                    throw new MessageException(MessageType.Message, "235");
+                    throw new MessageException(MessageType.Message, "235", fn: "process235");
                 }
 
 
