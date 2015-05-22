@@ -14,8 +14,120 @@
  X.Viewport()
     .Layout(LayoutType.Fit)
     .Items(
-
-        X.FormPanel().ID("frmMain")
+        X.Window()
+        .ID("winLot")
+        .Hidden(true)
+        .Layout(LayoutType.Fit)
+        .Height(300)
+        .Width(550)
+        .Modal(true)
+        .Closable(false)
+        .Buttons(
+            X.Button().ID("btnLotDel").Text(Util.GetLang("DeleteRights"))
+            .Listeners(p => p.Click.Fn = "btnLotDel_Click")
+            
+            , X.Button().ID("btnLotOK").Text(Util.GetLang("OK"))
+            .Listeners(p => p.Click.Fn = "btnLotOK_Click")
+        )
+        .BottomBar(
+            X.Toolbar()
+            .Border(false)
+            .Items(
+                X.Label().ID("lblLotQtyAvail").Width(200).MarginSpec("0 0 0 5")
+            )
+        )
+        .Items(
+            X.GridPanel().ID("grdLot")
+            .Border(true).BorderSpec("1 0 0 0")   
+            .StoreID("stoLotTrans")       
+            .ColumnModel(  
+                X.RowNumbererColumn().Renderer("renderRowNumber")
+                        
+                , X.Column().ID("colLotSerNbr").DataIndex("LotSerNbr").Text(Util.GetLang("LotSerNbr"))
+                .Editor(
+                    X.ComboBox().ID("cboLotSerNbr").DataIndex("LotSerNbr")
+                    .ValueField("LotSerNbr").DisplayField("LotSerNbr")
+                    .SubmitValue(false)
+                    .MinChars(1).TypeAhead(false).ForceSelection(true)
+                    .TriggerAction(TriggerAction.All)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(l =>
+                    {
+                        //l.Change.Fn = "cboLotSerNbr_Change";
+                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    .QueryMode(DataLoadMode.Local)
+                    .MatchFieldWidth(false)
+                    .ListConfig(                        X.BoundList()
+                        .Height(500).ItemSelector(".x-boundlist-item").LoadingText(Util.GetLang("Loading"))
+                        .Tpl(
+                            X.XTemplate()
+                            .Html(@"<tpl for='.'>   
+                                        <tpl if='[xindex] == 1'>
+                                            <table style='width:500px !important'>
+                                                <tr>
+                                                    <th>" + Util.GetLang("LotSerNbr") + @"</th>
+                                                    <th>" + Util.GetLang("ExpDate") + @"</th>
+                                                    <th>" + Util.GetLang("QtyAvail") + @"</th>
+                                                </tr>
+                                        </tpl>
+                                        <tr class='x-boundlist-item'>
+                                            <td style='width:100px;'>{LotSerNbr}</td>
+                                            <td>{ExpDate:date(""m-d-Y"")}</td>
+                                            <td>{QtyAvail}</td>
+                                        </tr>
+                                        <tpl if='[xcount-xindex] == 0'>
+                                            </table>
+                                        </tpl>
+                                    </tpl>"
+                            )
+                        )
+                    )
+                    .StoreID("stoCalcLot")
+                )
+                .Width(120)
+                                     
+               
+                , X.Column().ID("colLotUnitDesc").DataIndex("UnitDesc").Text(Util.GetLang("Unit"))
+                .Width(100)
+                .Editor(
+                    X.ComboBox().ID("cboLotUnitDesc")
+                    .DisplayField("FromUnit").ValueField("FromUnit")
+                    .StoreID("stoUnit")
+                    .QueryMode(DataLoadMode.Local)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                )
+                  
+                 , X.Column().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("Qty"))
+                .Width(75)
+                .Align(Alignment.Right)
+                .Renderer("renderQtyAmt") 
+                .Editor(Html.X().NumberField().MaxValue(10000).MinValue(0).DecimalPrecision(0))
+                
+                
+                , X.Column().ID("colLotPrice").DataIndex("UnitPrice").Text(Util.GetLang("Price"))
+                .Width(75)
+                .Align(Alignment.Right)
+                .Renderer("renderQtyAmt") 
+                
+                , X.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate"))
+            )
+            .Listeners(lst =>
+            {
+                lst.Edit.Fn = "grdLot_Edit";
+                lst.BeforeEdit.Fn = "grdLot_BeforeEdit";
+                lst.SelectionChange.Fn = "grdLot_SelectionChange";
+            })
+            .SelectionModel(Html.X().RowSelectionModel().ID("smlLot").Mode(SelectionMode.Single))
+            .View(X.GridView().TrackOver(false))
+            .Plugins(X.CellEditing().ClicksToEdit(1))
+        )
+        
+        , X.FormPanel().ID("frmMain")
         .Layout(LayoutType.Border)
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
@@ -431,14 +543,16 @@
                 .Align(Alignment.Right)
                 .Width(100)
                 .Editor(HQ.NumberField().MaxValue(100000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
-                .Renderer("rdrTrans_QtyAmt"),
+                .Renderer("rdrTrans_QtyAmt")
                 
-                X.ComponentColumn()
+                , X.ComponentColumn()
                 .Text("")
                 .Width(26)
-                .Component(X.Button().MarginSpec("1 4 1 3").Height(18).Text(""))
-                //.Listeners(p=>p.Click.Fn="btnLot_Click"))
-                ,
+                .Component(
+                    X.Button()
+                    .MarginSpec("1 4 1 3").Height(18).Text("")
+                    .Listeners(p=>p.Click.Fn="btnLot_Click")   
+                ),
                 
                 X.Column()
                 .DataIndex("UnitPrice")

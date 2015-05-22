@@ -87,6 +87,66 @@
         .Reader(X.JsonReader().Root("data")))
 )
 
+@(
+    X.Store()
+    .ID("stoCalcLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlCalcLot",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLot", "IN10200"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
+
+@(
+    X.Store()
+    .ID("stoLotTrans")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_LotTrans),"mdlLotTrans","",true))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLotTrans", "IN10200"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Listeners(p => {
+        p.Load.Fn = "stoDetail_Load";
+    })
+    .Parameters(ps => { 
+        ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw)); 
+    })
+)
+
+@(
+    X.Store()
+    .ID("stoItemLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlItemLot",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemLot", "IN10200"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
+@(
+    X.Store()
+    .ID("stoOldLotTrans")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_LotTrans),"mdlOldLotTrans","",true))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLotTrans", "IN10200"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
 @(X.Store().ID("stoTrans")
     .AutoLoad(false)
     .Model(Util.GenerateModel(typeof(IN10200_pgIssueLoad_Result), "mdlTrans", ""))
@@ -105,7 +165,7 @@
         ps.Add(new StoreParameter("BranchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
     })
     .Listeners(p => {
-        p.Load.Fn = "stoTrans_Load";
+        p.Load.Fn = "stoDetail_Load";
         p.BeforeLoad.Fn= "stoTrans_BeforeLoad";
     })
 )
@@ -162,29 +222,6 @@
         .Reader(X.JsonReader().Root("data")))
 )
 
-@*@(
-    X.Store()
-    .ID("stoPrice")
-    .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN10200_pdPrice_Result),"mdlPrice",""))
-    .Proxy(
-        X.AjaxProxy()
-        .Url(Url.Action("GetPrice", "IN10200"))
-        .ActionMethods(action => { action.Read = HttpMethod.POST; })
-        .Reader(X.JsonReader().Root("data")))
-)
-
-@(
-    X.Store()
-    .ID("stoTransfer")
-    .AutoLoad(false)
-    .Model(Util.GenerateModel(typeof (IN10200_pdTrnsfer_Result),"mdlTransfer",""))
-    .Proxy(
-        X.AjaxProxy()
-        .Url(Url.Action("GetTransfer", "IN10200"))
-        .ActionMethods(action => { action.Read = HttpMethod.POST; })
-        .Reader(X.JsonReader().Root("data")))
-)*@
 
 @{ Html.RenderAction("Body", new { lang = Current.LangID.ToString() }); }
 </body>
