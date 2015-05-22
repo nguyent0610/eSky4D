@@ -11,7 +11,7 @@
 
 @(
 
-X.Viewport()
+ X.Viewport()
 .Layout(LayoutType.Fit)
 .Items(
     X.FormPanel()
@@ -38,17 +38,17 @@ X.Viewport()
                 .ID("stoTop")
                 .PageSize(50)
                 .Model(Util.GenerateModel(typeof(SA02900_pgSI_ApprovalFlowStatus_Result), "mdlSA02900_pgSI_ApprovalFlowStatus", "AppFolID,RoleID,Status"))
-                //.Parameters(ps =>
-                //{
-                //    ps.Add(new StoreParameter("langid", "HQ.langID", ParameterMode.Raw));
-                //})
+        //.Parameters(ps =>
+        //{
+        //    ps.Add(new StoreParameter("langid", "HQ.langID", ParameterMode.Raw));
+        //})
                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetTopGrid"))).AutoLoad(false)
                 .Listeners(l =>
                 {
                     l.BeforeLoad.Fn = "stoBeforeLoadTop";
                     l.Load.Fn = "stoLoadTop";
                     l.Update.Fn = "stoChangedTop";
-                    
+
                 })
             )
             .Listeners(p =>
@@ -115,7 +115,8 @@ X.Viewport()
                 .Listeners(l => l.Command.Handler = "grdTop_Reject(record);")
             )
             .SelectionModel(X.RowSelectionModel().ID("slmTopGrid").Mode(SelectionMode.Multi))
-            .Listeners(lst => {
+            .Listeners(lst =>
+            {
                 lst.Select.Fn = "GridTop_Change";
             })
             .BottomBar(
@@ -147,6 +148,7 @@ X.Viewport()
             )
             .Features(
                 X.GridFilters()
+                
                 .Local(true)
                 .Filters(
                     X.StringFilter().DataIndex("AppFolID"),
@@ -161,7 +163,7 @@ X.Viewport()
         {
             lss.Render.Fn = "pnl_render";
         }) // pnlTop
-        
+
         , X.Panel().ID("pnlBot")
         .Region(Region.Center).Flex(1)
         .Layout(LayoutType.Border)
