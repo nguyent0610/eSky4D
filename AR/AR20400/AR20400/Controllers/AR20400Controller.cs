@@ -129,38 +129,7 @@ namespace AR20400.Controllers
             return node;
         }
 
-        //    dang submit ko load duoc lai cai not Root slmTree
-        //[DirectMethod]
-        //public ActionResult ReloadTree(string cpnyID)
-        //{
-        //    brandID = cpnyID;
-
-        //    var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
-        //    ViewBag.Roles = user.UserTypes;
-        //    var root = new Node() { };
-        //    var nodeType = "C";
-
-        //    var hierarchy = new SI_Hierarchy()
-        //    {
-        //        RecordID = 0,
-        //        NodeID = "",
-        //        ParentRecordID = 0,
-        //        NodeLevel = 1,
-        //        Descr = "root",
-        //        Type = nodeType
-        //    };
-        //    var z = 0;
-        //    Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z);
-        //    //var m = ViewData["resultRoot2"];
-
-
-        //    //return Json(new { success = true  , value = m}, JsonRequestBehavior.AllowGet);
-        //    //return PartialView();
-        //    //this.GetCmp<TreePanel>("IDTree").SetRootNode(node);
-        //    return Json(new { success = true});
-
-        //}
-
+      
         //dang method co the load duoc node root slmTree
         [DirectMethod]
         public ActionResult ReloadTreeAR20400(string cpnyID)
@@ -317,7 +286,7 @@ namespace AR20400.Controllers
                                     }
                                     else
                                     {
-                                        objAR_Customer.CustId = functionAutoCustID(branchID, nodeid[0]);
+                                        objAR_Customer.CustId = functionAutoCustID(branchID, nodeid[0],updated.ClassId);
                                         tmpCustID = objAR_Customer.CustId;
                                     }
                                     objAR_Customer.BranchID = branchID;
@@ -798,7 +767,7 @@ namespace AR20400.Controllers
                             }
                             else
                             {
-                                objAR_Customer.CustId = functionAutoCustID(branchID,"0");
+                                objAR_Customer.CustId = functionAutoCustID(branchID, "0", updated.ClassId);
                                 tmpCustID = objAR_Customer.CustId;
                             }
                             objAR_Customer.BranchID = branchID;
@@ -1857,9 +1826,9 @@ namespace AR20400.Controllers
         }
 
 
-        private string functionAutoCustID(string branchID,string nodeID)
+        private string functionAutoCustID(string branchID,string nodeID,string classID)
         {
-            var recordLastBatNbr = _db.AR20400_ppGetAutoCustID(branchID, nodeID,"","","","","","","","","").FirstOrDefault();
+            var recordLastBatNbr = _db.AR20400_ppGetAutoCustID(branchID, nodeID, "", "", "", "", "", "", "", "", classID).FirstOrDefault();
             return recordLastBatNbr;
         }
 

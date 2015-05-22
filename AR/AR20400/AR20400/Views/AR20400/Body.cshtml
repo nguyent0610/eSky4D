@@ -480,7 +480,7 @@
                                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                         .HQParam(new StoreParameterCollection()
                                                         {
-                                                            new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                            new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw },
                                                             new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                                             new StoreParameter() { Name = "@ScreenNbr", Value = @ViewBag.Title, Mode = ParameterMode.Value }
                                                         })
@@ -501,7 +501,7 @@
                                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                         .HQParam(new StoreParameterCollection()
                                                         {
-                                                            new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                                            new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw },
                                                             new StoreParameter() { Name = "@Username", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                                             new StoreParameter() { Name = "@ScreenNbr", Value = @ViewBag.Title, Mode = ParameterMode.Value }
                                                         })
@@ -522,7 +522,7 @@
                                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                         .HQParam(new StoreParameterCollection()
                                                         {
-                                                            new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                                                            new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
                                                         })
                                                         .LoadData()
                                                         .Listeners(lst =>
@@ -541,7 +541,7 @@
                                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                         .HQParam(new StoreParameterCollection()
                                                         {
-                                                            new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                                                            new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
                                                         })
                                                         .LoadData()
                                                         .Listeners(lst =>
@@ -602,7 +602,7 @@
                                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                                         .HQParam(new StoreParameterCollection()
                                                         {
-                                                             new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                                                             new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
                                                         })
                                                         .LoadData()
                                                         .Listeners(lst =>

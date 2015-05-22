@@ -822,6 +822,11 @@ var cboCpnyID_Change = function (sender, newValue, oldValue) {
             cpnyID: App.cboCpnyID.getValue(),
         },
         success: function (action, data) {
+            App.cboSlsperId.getStore().reload();
+            App.cboSiteId.getStore().reload();
+            App.cboDfltSalesRouteID.getStore().reload();
+            App.cboDeliveryID.getStore().reload();
+            App.cboSupID.getStore().reload();
             ReloadTree();
             //set bien tam va an hay hien tabLTT
             if (data.result.tmpHiddenTabContract == false) {
