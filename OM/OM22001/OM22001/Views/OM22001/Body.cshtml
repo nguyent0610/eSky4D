@@ -354,7 +354,7 @@
                             HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
                         )
                         
-                        , X.CommandColumn()
+                        , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))
@@ -375,7 +375,7 @@
                             ls.Edit.Fn = "Event.Grid.grd_edit";
                             ls.ValidateEdit.Fn = "Event.Grid.grd_validateEdit";
                         })
-                    ) // grdCompany
+                    ) // grdLevel
                 )
                 .Listeners(x => { 
                     x.Render.Handler = "HQ.common.control_render(this,'level')"; 

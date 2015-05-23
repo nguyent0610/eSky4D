@@ -47,12 +47,23 @@ var Process = {
         var done = 1;
         form.getForm().getFields().each(function (field) {
             if (!field.isValid()) {
-                HQ.message.show(15, field.fieldLabel, '');
+                HQ.message.show(15, field.fieldLabel, 'Process.focusOnInvalidField');
                 done = 0;
                 return false;
             }
         });
         return done;
+    },
+
+    focusOnInvalidField: function (item) {
+        if (item == "ok") {
+            App.frmMain.getForm().getFields().each(function (field) {
+                if (!field.isValid()) {
+                    field.focus();
+                    return false;
+                }
+            });
+        }
     },
 
     deleteSelectedCompanies: function (item) {
@@ -122,6 +133,9 @@ var Process = {
                     }
                 }
             });
+        }
+        else {
+            Process.showFieldInvalid(App.frmMain);
         }
     },
 
@@ -291,11 +305,17 @@ var Event = {
                 }
                 HQ.common.changeData(HQ.isChange, 'OM22001');//co thay doi du lieu gan * tren tab title header
                 //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
-                App.cboDisplayID.setReadOnly(HQ.isChange);
+                App.cboDisplayID.setReadOnly(HQ.isChange && App.cboDisplayID.getValue());
 
                 var frmRecord = App.frmMain.getRecord();
                 if (!frmRecord.data.tstamp) {
-                    App.cboDisplayType.setReadOnly(HQ.isChange && App.cboDisplayType.value);
+                    if (HQ.isChange && App.cboDisplayType.value
+                        && (App.grdCompany.store.getCount() > 0 || App.grdLevel.store.getCount() > 1)) {
+                        App.cboDisplayType.setReadOnly(true);
+                    }
+                    else {
+                        App.cboDisplayType.setReadOnly(false);
+                    }
                 }
             }
         },
@@ -434,9 +454,7 @@ var Event = {
                     break;
                 case "save":
                     if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                        if (App.frmMain.isValid()) {
-                            Process.saveData();
-                        }
+                        Process.saveData();
                     }
                     break;
                 case "print":
@@ -451,7 +469,7 @@ var Event = {
     Grid: {
         grd_reject: function (col, record) {
             var grd = col.up('grid');
-            if (!record.data.tstamp) {
+            if (!record.data.tstamp && !record.fields.containsKey('LevelID')) {
                 grd.getStore().remove(record, grd);
                 grd.getView().focusRow(grd.getStore().getCount() - 1);
                 grd.getSelectionModel().select(grd.getStore().getCount() - 1);
