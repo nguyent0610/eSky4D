@@ -71,7 +71,7 @@
                 ps.Add(new StoreParameter("bonusID", "App.cboBonusID.getValue()", ParameterMode.Raw));
             })
             .Listeners(p => {
-                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr','AmtBegin','AmtEnd','AmtBonus'];";
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr'];";
                 p.Load.Fn = "Store.stoBonusRS_load";
                 p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
                 p.Update.Handler = "Event.Form.frmMain_fieldChange()";
@@ -153,7 +153,7 @@
             })
             .Listeners(p => {
                 p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr','ClassID'];"; //,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
-                //p.Load.Fn = "Store.stoBonusRS_load";
+                p.Load.Fn = "Store.stoBonusRS_load";
                 p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
                 p.Update.Handler = "Event.Form.frmMain_fieldChange()";
             })
@@ -180,7 +180,7 @@
             })
             .Listeners(p => {
                 p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr','ClassID'];";//,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
-                //p.Load.Fn = "Store.stoBonusRS_load";
+                p.Load.Fn = "Store.stoBonusRS_load";
                 p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
                 p.Update.Handler = "Event.Form.frmMain_fieldChange()";
             })

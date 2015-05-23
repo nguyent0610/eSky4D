@@ -105,12 +105,23 @@ var Process = {
         var done = 1;
         form.getForm().getFields().each(function (field) {
             if (!field.isValid()) {
-                HQ.message.show(15, field.fieldLabel, '');
+                HQ.message.show(15, field.fieldLabel, 'Process.focusOnInvalidField');
                 done = 0;
                 return false;
             }
         });
         return done;
+    },
+
+    focusOnInvalidField: function(item){
+        if (item == "ok") {
+            App.frmMain.getForm().getFields().each(function (field) {
+                if (!field.isValid()) {
+                    field.focus();
+                    return false;
+                }
+            });
+        }
     },
 
     //kiem tra key da nhap du chua
@@ -169,14 +180,20 @@ var Process = {
                 App.grdQuarter.store.removeAll();
             }
 
+            var keys = App.grdQuarter.store.HQFieldKeys ? App.grdQuarter.store.HQFieldKeys : [];
             var monthCount = 3;
             App.grdMonth.store.each(function (record) {
                 if (record.data.ClassID) {
                     var rec = Ext.create(App.grdQuarter.store.model.modelName, record.data);
                     rec.set("SlsAmt", record.data.SlsAmt * monthCount);
-                    HQ.store.insertRecord(App.grdQuarter.store, [], rec);
+                    HQ.store.insertRecord(App.grdQuarter.store, keys, rec);
                 }
             });
+
+            var newRec = Ext.create(App.grdQuarter.store.model.modelName, {
+                LevelNbr: Process.lastNbr(App.grdQuarter.store)
+            });
+            HQ.store.insertRecord(App.grdQuarter.store, keys, newRec);
         }
     },
 
@@ -186,14 +203,21 @@ var Process = {
                 App.grdYear.store.removeAll();
             }
 
+            var keys = App.grdYear.store.HQFieldKeys ? App.grdYear.store.HQFieldKeys : [];
+
             var monthCount = Process.monthDiff(App.dtpFromDate.value, App.dtpToDate.value);
             App.grdMonth.store.each(function (record) {
                 if (record.data.ClassID) {
                     var rec = Ext.create(App.grdYear.store.model.modelName, record.data);
                     rec.set("SlsAmt", record.data.SlsAmt * monthCount);
-                    HQ.store.insertRecord(App.grdYear.store, [], rec);
+                    HQ.store.insertRecord(App.grdYear.store, keys, rec);
                 }
             });
+
+            var newRec = Ext.create(App.grdYear.store.model.modelName, {
+                LevelNbr: Process.lastNbr(App.grdYear.store)
+            });
+            HQ.store.insertRecord(App.grdYear.store, keys, newRec);
         }
     },
 };
@@ -229,7 +253,7 @@ var Store = {
 
     stoBonusRS_load: function (sto, records, successful, eOpts) {
         if (HQ.isUpdate) {
-            var keys = sto.HQFieldKeys ? sto.HQFieldKeys : "";
+            var keys = sto.HQFieldKeys ? sto.HQFieldKeys : [];
             if (successful) {
                 if (keys.indexOf('LevelNbr') > -1) {
                     var rec = Ext.create(sto.model.modelName, {
@@ -287,12 +311,21 @@ var Event = {
 
                 HQ.common.changeData(HQ.isChange, 'OM23400');//co thay doi du lieu gan * tren tab title header
                 //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
-                App.cboBonusID.setReadOnly(HQ.isChange);
+                App.cboBonusID.setReadOnly(HQ.isChange && App.cboBonusID.getValue());
 
                 var frmRecord = App.frmMain.getRecord();
                 if (!frmRecord.data.tstamp) {
-                    App.cboChannel.setReadOnly(HQ.isChange && App.cboChannel.value);
-                    App.cboRSApplyType.setReadOnly(HQ.isChange && App.cboRSApplyType.value);
+                    if (HQ.isChange && (App.grdBonusRS.store.getCount()
+                                        || App.grdProduct.store.getCount()
+                                        || App.grdMonth.store.getCount()
+                                        || App.grdYear.store.getCount())) {
+                        App.cboChannel.setReadOnly(true);
+                        App.cboRSApplyType.setReadOnly(true);
+                    }
+                    else {
+                        App.cboChannel.setReadOnly(false);
+                        App.cboRSApplyType.setReadOnly(false);
+                    }
                 }
             }
         },
@@ -341,6 +374,16 @@ var Event = {
 
         cboRSApplyType_change: function (cbo, newValue, oldValue, eOpts) {
             App.cboColProductID.store.reload();
+
+            var column = App.grdProduct.down('[dataIndex=ProductID]');
+            if (column) {
+                if (newValue == _pc) {
+                    column.setText(HQ.common.getLang("ProductClass"));
+                }
+                else {
+                    column.setText(HQ.common.getLang("ProductID"));
+                }
+            }
         },
 
         btnQuarterClone_click: function (btn, eOpts) {
@@ -354,6 +397,9 @@ var Event = {
                     }
                 }
             }
+            else {
+                Process.showFieldInvalid(App.frmMain);
+            }
         },
 
         btnYearClone_click: function (btn, eOpts) {
@@ -366,6 +412,9 @@ var Event = {
                         Process.cloneMonthToYear("yes");
                     }
                 }
+            }
+            else {
+                Process.showFieldInvalid(App.frmMain);
             }
         },
 
@@ -492,8 +541,8 @@ var Event = {
                     if (HQ.isUpdate || HQ.isCreate) {
                         if (App.frmMain.isValid()) {
                             if (App.cboChannel.value == _rs) {
-                                var keysBonusRS = App.grdBonusRS.store.HQFieldKeys ? App.grdBonusRS.store.HQFieldKeys : "";
-                                var keysProduct = App.grdProduct.store.HQFieldKeys ? App.grdBonusRS.store.HQFieldKeys : "";
+                                var keysBonusRS = App.grdBonusRS.store.HQFieldKeys ? App.grdBonusRS.store.HQFieldKeys : [];
+                                var keysProduct = App.grdProduct.store.HQFieldKeys ? App.grdBonusRS.store.HQFieldKeys : [];
 
                                 if (HQ.store.checkRequirePass(App.grdBonusRS.store, keysBonusRS, keysBonusRS,
                                     ["Level", "FromLevel", "ToLevel", "Bonus"])) {
@@ -520,6 +569,9 @@ var Event = {
                                 //}
                                 Process.saveData();
                             }
+                        }
+                        else {
+                            Process.showFieldInvalid(App.frmMain);
                         }
                     }
                     else {
@@ -574,18 +626,28 @@ var Event = {
         grdBonusRS_beforeEdit: function (editor, e) {
             if (HQ.isUpdate) {
                 if (App.frmMain.isValid()) {
-                    var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+                    var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : [];
 
                     if (keys.indexOf(e.field) != -1) {
-                        if (e.record.data.tstamp)
-                            return false;
+                        if (e.record.data.tstamp) {
+                            if (keys.indexOf('LevelNbr') > -1 && keys.length == 1) {
+                                return true;
+                            }
+                            else {
+                                return false;
+                            }
+                        }
                     }
 
                     //if (e.field == "ProductID") {
                     //    App.cboColProductID.store.reload();
                     //}
-
-                    return HQ.grid.checkInput(e, keys);
+                    if (keys.indexOf('LevelNbr') > -1 && keys.length == 1) {
+                        return true;
+                    }
+                    else {
+                        return HQ.grid.checkInput(e, keys);
+                    }
                 }
                 else {
                     Process.showFieldInvalid(App.frmMain);
@@ -599,7 +661,7 @@ var Event = {
 
         grd_reject: function (col, record) {
             var grd = col.up('grid');
-            if (!record.data.tstamp) {
+            if (!record.data.tstamp && !record.fields.containsKey('LevelNbr')) {
                 grd.getStore().remove(record, grd);
                 grd.getView().focusRow(grd.getStore().getCount() - 1);
                 grd.getSelectionModel().select(grd.getStore().getCount() - 1);
@@ -611,13 +673,18 @@ var Event = {
         },
 
         grdBonusRS_edit: function (item, e) {
-            var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+            var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : [];
+
+            if (keys.indexOf('LevelNbr') > -1 && keys.length == 1) {
+                keys = ['LevelNbr', e.field];
+            }
 
             if (keys.indexOf(e.field) != -1) {
                 if (e.value != ''
                     && Process.isAllValidKey(e.store.getChangedData().Created, keys)
                     && Process.isAllValidKey(e.store.getChangedData().Updated, keys)) {
-                    if (keys.indexOf('LevelNbr') > -1) {
+                    //if (keys.indexOf('LevelNbr') > -1) {
+                    if(e.record.fields.containsKey('LevelNbr')){
                         var BonusRSRec = Ext.create(e.store.model.modelName, {
                             LevelNbr: Process.lastNbr(e.store)
                         });
@@ -633,7 +700,7 @@ var Event = {
         },
 
         grdBonusRS_validateEdit: function (item, e) {
-            var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+            var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : [];
 
             if (keys.indexOf(e.field) != -1) {
                 var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
@@ -643,7 +710,11 @@ var Event = {
                         return false;
                     }
                 }
-                if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
+                if (keys.indexOf('LevelNbr') > -1 && keys.length == 1 && !e.value) {
+                    HQ.message.show(1235);
+                    return false;
+                }
+                else if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
                     HQ.message.show(1112, e.value);
                     return false;
                 }

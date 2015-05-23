@@ -118,7 +118,7 @@ namespace OM23400.Controllers
 
                         foreach (var created in lstBonusRSChange.Created)
                         {
-                            if (created.AmtEnd > 0)
+                            if (created.AmtBegin > 0 || created.AmtEnd > 0 || created.AmtBonus > 0)
                             {
                                 created.BonusID = bonusInput.BonusID;
 
@@ -136,7 +136,7 @@ namespace OM23400.Controllers
 
                         foreach (var updated in lstBonusRSChange.Updated)
                         {
-                            if (updated.AmtEnd > 0)
+                            if (updated.AmtBegin > 0 || updated.AmtEnd > 0 || updated.AmtEnd > 0)
                             {
                                 updated.BonusID = bonusInput.BonusID;
 
@@ -152,7 +152,7 @@ namespace OM23400.Controllers
 
                         foreach (var deleted in lstBonusRSChange.Deleted)
                         {
-                            if (deleted.AmtEnd > 0)
+                            if (deleted.AmtBegin > 0 || deleted.AmtEnd > 0 || deleted.AmtEnd > 0)
                             {
                                 deleted.BonusID = bonusInput.BonusID;
 
@@ -242,25 +242,7 @@ namespace OM23400.Controllers
                             var mqyHandler = new StoreDataHandler(data[mqy.Value]);
                             var lstMqyChange = mqyHandler.BatchObjectData<OM23400_pgBonusKA_Result>();
 
-                            foreach (var created in lstMqyChange.Created)
-                            {
-                                if (!string.IsNullOrWhiteSpace(created.ClassID))
-                                {
-                                    created.BonusID = bonusInput.BonusID;
-                                    created.KaType = mqy.Key;
-
-                                    var createdBonusRS = _db.OM_TBonusKA.FirstOrDefault(
-                                        x => x.LevelNbr == created.LevelNbr
-                                            && x.BonusID == created.BonusID
-                                            && x.KaType == created.KaType);
-                                    if (createdBonusRS == null)
-                                    {
-                                        createdBonusRS = new OM_TBonusKA();
-                                        updateBonusKA(ref createdBonusRS, created, true);
-                                        _db.OM_TBonusKA.AddObject(createdBonusRS);
-                                    }
-                                }
-                            }
+                            lstMqyChange.Updated.AddRange(lstMqyChange.Created);
 
                             foreach (var updated in lstMqyChange.Updated)
                             {
@@ -272,10 +254,17 @@ namespace OM23400.Controllers
                                     var updatedBonusKA = _db.OM_TBonusKA.FirstOrDefault(
                                         x => x.LevelNbr == updated.LevelNbr
                                             && x.BonusID == updated.BonusID
+                                            && x.ClassID == updated.ClassID
                                             && x.KaType == updated.KaType);
                                     if (updatedBonusKA != null)
                                     {
+                                        updateBonusKA(ref updatedBonusKA, updated, false);
+                                    }
+                                    else
+                                    {
+                                        updatedBonusKA = new OM_TBonusKA();
                                         updateBonusKA(ref updatedBonusKA, updated, true);
+                                        _db.OM_TBonusKA.AddObject(updatedBonusKA);
                                     }
                                 }
                             }
@@ -290,10 +279,15 @@ namespace OM23400.Controllers
                                     var deletedBonusKA = _db.OM_TBonusKA.FirstOrDefault(
                                         x => x.LevelNbr == deleted.LevelNbr
                                             && x.BonusID == deleted.BonusID
+                                            && x.ClassID == deleted.ClassID
                                             && x.KaType == deleted.KaType);
                                     if (deletedBonusKA != null)
                                     {
-                                        _db.OM_TBonusKA.DeleteObject(deletedBonusKA);
+                                        if (!lstMqyChange.Created.Exists(c => c.LevelNbr == deletedBonusKA.LevelNbr 
+                                            && c.ClassID == deletedBonusKA.ClassID))
+                                        {
+                                            _db.OM_TBonusKA.DeleteObject(deletedBonusKA);
+                                        }
                                     }
                                 }
                             }

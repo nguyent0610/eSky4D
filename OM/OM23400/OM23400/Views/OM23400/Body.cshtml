@@ -36,6 +36,7 @@
                     .HQLangCode("BonusID").HQProcedure("OM23400_pcBonusID")
                     .HQColumnShow("BonusID,BonusName").HQHeightWidth(400, 300)
                     .ValueField("BonusID").DisplayField("BonusID").AllowBlank(false)
+                    .MaxLength(30).EnforceMaxLength(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
@@ -50,7 +51,7 @@
                     
                     , HQ.TextBox().ID("txtBonusName")
                     .HQLangCode("ProgramName").DataIndex("BonusName")
-                    .MaxLength(150).AllowBlank(false).AllowOnlyWhitespace(false)
+                    .MaxLength(150).AllowBlank(false).AllowOnlyWhitespace(false).EnforceMaxLength(true)
                     
                     , HQ.Combo().ID("cboZone")
                     .HQLangCode("Zone").HQProcedure("OM23400_pcZone").DataIndex("Zone")
@@ -167,7 +168,7 @@
                             HQ.NumberField()
                         )
                         
-                        , X.CommandColumn()
+                        , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))
@@ -248,7 +249,7 @@
                         , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
                         .Renderer("Process.renderProductDescr")
                         
-                        , X.CommandColumn()
+                        , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))
@@ -305,7 +306,7 @@
                         
                         , X.Column().Text(Util.GetLang("ProductClass")).DataIndex("ClassID")
                         .Editor(
-                            HQ.Combo().ID("cboColClassID")
+                            HQ.Combo().ID("cboColClassIDMonth")
                             .HQProcedure("OM23400_pcInvtID")
                             .HQHeightWidth(400,300).HQColumnShow("Code,Descr")
                             .ValueField("Code").DisplayField("Code")
@@ -338,7 +339,7 @@
                             HQ.NumberField()
                         )
                         
-                        , X.CommandColumn()
+                        , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))
@@ -404,9 +405,23 @@
                         X.RowNumbererColumn()
                         , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
                         , X.Column().Text(Util.GetLang("ProductClass")).DataIndex("ClassID")
+                        .Editor(
+                            HQ.Combo().ID("cboColClassIDQuarter")
+                            .HQProcedure("OM23400_pcInvtID")
+                            .HQHeightWidth(400,300).HQColumnShow("Code,Descr")
+                            .ValueField("Code").DisplayField("Code")
+                            .HQParam(new StoreParameterCollection() { 
+                                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                , new StoreParameter("@ProductType", "PC", ParameterMode.Value)
+                            })
+                            .LoadData()
+                        )
                         
                         , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
                         .Format("0,000").Align(Alignment.Right)
+                        .Align(Alignment.Right).Editor(
+                            HQ.NumberField().DecimalPrecision(0)
+                        )
                         
                         , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
                         .Format("0,000")
@@ -425,7 +440,7 @@
                             HQ.NumberField()
                         )
                         
-                        , X.CommandColumn()
+                        , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))
@@ -490,9 +505,23 @@
                         X.RowNumbererColumn()
                         , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
                         , X.Column().Text(Util.GetLang("ProductClass")).DataIndex("ClassID")
+                        .Editor(
+                            HQ.Combo().ID("cboColClassIDYear")
+                            .HQProcedure("OM23400_pcInvtID")
+                            .HQHeightWidth(400,300).HQColumnShow("Code,Descr")
+                            .ValueField("Code").DisplayField("Code")
+                            .HQParam(new StoreParameterCollection() { 
+                                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                , new StoreParameter("@ProductType", "PC", ParameterMode.Value)
+                            })
+                            .LoadData()
+                        )
                         
                         , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
                         .Format("0,000").Align(Alignment.Right)
+                        .Align(Alignment.Right).Editor(
+                            HQ.NumberField().DecimalPrecision(0)
+                        )
                         
                         , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
                         .Format("0,000")
@@ -511,7 +540,7 @@
                             HQ.NumberField()
                         )
                         
-                        , X.CommandColumn()
+                        , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
                             .Text(Util.GetLang("Reject"))
