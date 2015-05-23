@@ -38,6 +38,13 @@ var Process = {
                 }
             });
         }
+    },
+
+    refresh: function (item) {
+        if (item == 'yes') {
+            HQ.isChange = false;
+            Event.Form.menuClick("refresh");
+        }
     }
 };
 
@@ -47,6 +54,15 @@ var Store = {
 
 var Event = {
     Form: {
+        frmMain_fieldChange: function (frm, field, newValue, oldValue, eOpts) {
+            if (App.grdDet.store.getCount() > 0) {
+
+                HQ.isChange = HQ.store.isChange(App.grdDet.store);
+
+                HQ.common.changeData(HQ.isChange, 'OM22002');//co thay doi du lieu gan * tren tab title header
+                //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+            }
+        },
         btnLoad_click: function (btn, e) {
             if (App.frmMain.isValid()) {
                 App.grdDet.store.reload();
@@ -76,20 +92,25 @@ var Event = {
         menuClick: function (command) {
             switch (command) {
                 case "first":
-                    HQ.grid.first(App.grdDet);
+                    HQ.grid.first(App.grdDet, HQ.isChange);
                     break;
                 case "next":
-                    HQ.grid.next(App.grdDet);
+                    HQ.grid.next(App.grdDet, HQ.isChange);
                     break;
                 case "prev":
-                    HQ.grid.prev(App.grdDet);
+                    HQ.grid.prev(App.grdDet, HQ.isChange);
                     break;
                 case "last":
-                    HQ.grid.last(App.grdDet);
+                    HQ.grid.last(App.grdDet, HQ.isChange);
                     break;
                 case "refresh":
                     if (App.frmMain.isValid()) {
-                        App.grdDet.store.reload();
+                        if (HQ.isChange) {
+                            HQ.message.show(20150303, '', 'Process.refresh');
+                        }
+                        else {
+                            App.grdDet.store.reload();
+                        }
                     }
                     break;
                 case "save":
