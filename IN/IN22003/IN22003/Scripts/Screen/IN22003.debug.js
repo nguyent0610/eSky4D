@@ -2,6 +2,7 @@ var _Change = false;
 var keys = [''];
 var _firstLoad = true;
 var _firstLoad1 = true;
+
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboZone.getStore().load(function () {
@@ -37,7 +38,6 @@ var dateKPI_Select = function (sender, e) {
     //App.cboCycle.store.reload();
 };
 
-
 var cboZone_Change = function (sender, e) {
     if (HQ.isChange) {
         HQ.message.show(20150303, '', 'refresh');
@@ -48,6 +48,7 @@ var cboZone_Change = function (sender, e) {
         App.cboTerritory.store.load();
     }
 };
+
 var cboTerritory_Change = function (sender, e) {
     if (HQ.isChange) {
         HQ.message.show(20150303, '', 'refresh');
@@ -58,6 +59,7 @@ var cboTerritory_Change = function (sender, e) {
         App.cboState.store.load();
     }
 };
+
 var cboState_Change = function (sender, e) {
     if (HQ.isChange) {
         HQ.message.show(20150303, '', 'refresh');
@@ -92,7 +94,7 @@ var btnLoad_Click = function () {
 var ColCheck_Header_Change = function (value, rowIndex, checked) {
     if (value) {
         App.stoIN_StockRecoveryDet.each(function (item) {
-            if (item.data.Status == App.cboStatus.getValue() && item.data.Status == 'H') {
+            if (item.data.Status == App.cboStatus.getValue()) {
                 item.set("ColCheck", value.checked);
             }
         });
@@ -178,14 +180,18 @@ var menuClick = function (command) {
 var grdIN_StockRecoveryDet_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdIN_StockRecoveryDet, e, keys);
 };
+
 var grdIN_StockRecoveryDet_BeforeEdit = function (editor, e) {
-    if (e.record.data.Status == 'H') {
+    if (e.field == 'ColCheck' && e.record.data.Status == App.cboStatus.getValue()) {
         return true;
     }
-    else {
-        return false;
+
+    if (e.record.data.isEdit == '1' && e.field != 'ColCheck') {
+        return true;
     }
+    return false;
 };
+
 var grdIN_StockRecoveryDet_Edit = function (item, e) {
     if (e.field == "ApproveStkQty") {
         if (e.record.data.StkQty < e.record.data.ApproveStkQty || e.record.data.ApproveStkQty < 0) {
@@ -206,10 +212,12 @@ var grdIN_StockRecoveryDet_Edit = function (item, e) {
 
 
 };
+
 var grdIN_StockRecoveryDet_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdIN_StockRecoveryDet);
     stoChanged(App.stoIN_StockRecoveryDet);
 };
+
 var stoChanged = function (sto) {
     _Change = HQ.store.isChange(sto);
     HQ.common.changeData(_Change, 'IN22003');
