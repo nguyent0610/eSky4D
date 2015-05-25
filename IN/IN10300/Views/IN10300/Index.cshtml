@@ -87,6 +87,65 @@
         .Reader(X.JsonReader().Root("data")))
 )
 
+@(
+    X.Store()
+    .ID("stoCalcLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlCalcLot",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLot", "IN10300"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
+
+@(
+    X.Store()
+    .ID("stoLotTrans")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_LotTrans),"mdlLotTrans","",true))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLotTrans", "IN10300"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+    .Listeners(p => {
+        p.Load.Fn = "stoDetail_Load";
+    })
+    .Parameters(ps => { 
+        ps.Add(new StoreParameter("batNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("branchID", "App.txtBranchID.getValue()", ParameterMode.Raw)); 
+    })
+)
+
+@(
+    X.Store()
+    .ID("stoItemLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlItemLot",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemLot", "IN10300"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
+@(
+    X.Store()
+    .ID("stoOldLotTrans")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_LotTrans),"mdlOldLotTrans","",true))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLotTrans", "IN10300"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
 @(X.Store().ID("stoTrans")
     .AutoLoad(false)
     .Model(Util.GenerateModel(typeof(IN10300_pgTransferLoad_Result), "mdlTrans", ""))
@@ -106,7 +165,7 @@
         ps.Add(new StoreParameter("RefNbr", "App.txtRefNbr.getValue()", ParameterMode.Raw));
     })
     .Listeners(p => {
-        p.Load.Fn = "stoTrans_Load";
+        p.Load.Fn = "stoDetail_Load";
         p.BeforeLoad.Fn= "stoTrans_BeforeLoad";
     })
 )
