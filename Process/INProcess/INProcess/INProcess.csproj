@@ -55,9 +55,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\eBiz4DApp\eBiz4DApp\eBiz4DApp\bin\Release\eBiz4DApp.dll</HintPath>
+    <Reference Include="eBiz4DApp">
+      <HintPath>..\..\eBiz4DApp\eBiz4DApp\bin\Release\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DSys">
       <HintPath>..\..\OMProcess\OMProcess\bin\Debug\eBiz4DSys.dll</HintPath>

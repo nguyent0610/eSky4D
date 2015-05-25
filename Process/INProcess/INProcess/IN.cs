@@ -121,7 +121,8 @@ namespace INProcess
                             objItemLot.InvtID = lotRow.String("InvtID");
                             objItemLot.SiteID = lotRow.String("SiteID");
                             objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
-                            objItemLot.LIFODate = lotRow.Date("LIFODate");
+                            objItemLot.LIFODate = lotRow.Date("ExpDate");
+                            objItemLot.ExpDate = lotRow.Date("ExpDate"); 
                             objItemLot.Crtd_DateTime = DateTime.Now;
                             objItemLot.Crtd_Prog = Prog;
                             objItemLot.Crtd_User = User;
@@ -133,10 +134,10 @@ namespace INProcess
                         }
 
                         objItemLot.ExpDate = lotRow.Date("ExpDate");
-                        objItemLot.Cost = itemSite.TotCost;
                         objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
                         objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
-                       
+                        objItemLot.Cost = itemSite.AvgCost * objItemLot.QtyOnHand;
+
                         objItemLot.LUpd_DateTime = DateTime.Now;
                         objItemLot.LUpd_Prog = Prog;
                         objItemLot.LUpd_User = User;
@@ -427,7 +428,7 @@ namespace INProcess
                                 objItemLot.SiteID = lotRow.String("SiteID");
                                 objItemLot.ExpDate = lotRow.Date("ExpDate");
                                 objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
-                                objItemLot.LIFODate = lotRow.Date("LIFODate");
+                                objItemLot.LIFODate = lotRow.Date("ExpDate");
 
                                 objItemLot.Crtd_DateTime = DateTime.Now;
                                 objItemLot.Crtd_Prog = Prog;
@@ -439,7 +440,7 @@ namespace INProcess
                                 objItemLot.Add();
                             }
 
-                            objItemLot.Cost = objSite.TotCost;
+                       
 
                             if (!objSetup.NegQty && objItemLot.QtyOnHand + qty < 0)
                             {
@@ -459,6 +460,7 @@ namespace INProcess
                                 objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + (lotRow.String("TranType") == "CM" ? qty : 0), 0);
                             }
 
+                            objItemLot.Cost = objSite.TotCost * objItemLot.QtyOnHand;
                             objItemLot.LUpd_DateTime = DateTime.Now;
                             objItemLot.LUpd_Prog = Prog;
                             objItemLot.LUpd_User = User;
@@ -633,6 +635,7 @@ namespace INProcess
 
                             objToItem.QtyOnHand = Math.Round(objToItem.QtyOnHand + Math.Abs(qty), 0);
                             objToItem.QtyAvail = Math.Round(objToItem.QtyAvail + Math.Abs(qty), 0);
+                     
                             objToItem.TotCost = Math.Round(objToItem.TotCost + tran.Double("ExtCost"), 0);
                             objToItem.AvgCost = Math.Round(objToItem.QtyOnHand != 0 ? objToItem.TotCost/objToItem.QtyOnHand: objToItem.AvgCost, 0);
                             objToItem.LUpd_DateTime = DateTime.Now;
@@ -646,14 +649,36 @@ namespace INProcess
                             DataTable dtLot = objLot.GetAll(branchID, batNbr, transfer.String("RefNbr"),"%", tran.String("LineRef"));
                             foreach (DataRow lotRow in dtLot.Rows)
                             {
-                                if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr")))
+                                if (objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr")))
+                                {
+                                    double lotQty = 0;
+                                    if (lotRow.String("UnitMultDiv") == "M" || lotRow.String("UnitMultDiv").PassNull() == string.Empty)
+                                        lotQty = lotRow.Double("Qty") * lotRow.Short("InvtMult") * lotRow.Double("CnvFact");
+                                    else
+                                        lotQty = (lotRow.Double("Qty") * lotRow.Short("InvtMult")) / lotRow.Double("CnvFact");
+
+                                    objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
+                                    objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
+
+                                    objItemLot.LUpd_DateTime = DateTime.Now;
+                                    objItemLot.LUpd_Prog = Prog;
+                                    objItemLot.LUpd_User = User;
+                                    objItemLot.Update();
+                                }
+                                else
+                                {
+                                    throw new MessageException(MessageType.Message, "606");
+                                }
+
+                                if (!objItemLot.GetByKey(lotRow.String("ToSiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr")))
                                 {
                                     objItemLot.Reset();
                                     objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
                                     objItemLot.InvtID = lotRow.String("InvtID");
-                                    objItemLot.SiteID = lotRow.String("SiteID");
+                                    objItemLot.SiteID = lotRow.String("ToSiteID");
                                     objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
-                                    objItemLot.LIFODate = lotRow.Date("LIFODate");
+                                    objItemLot.LIFODate = lotRow.Date("ExpDate");
+                                    objItemLot.ExpDate = lotRow.Date("ExpDate");
 
                                     objItemLot.Crtd_DateTime = DateTime.Now;
                                     objItemLot.Crtd_Prog = Prog;
@@ -677,12 +702,13 @@ namespace INProcess
                                     newLot.BatNbr = tran.String("BatNbr");
                                     newLot.BranchID = tran.String("BranchID");
                                     newLot.RefNbr = tran.String("RefNbr");
-                                    newLot.INTranLineRef = lotRow.String("InvtID");
+                                    newLot.INTranLineRef = lineRef;
+                                    newLot.LotSerNbr = lotRow.String("LotSerNbr");
                                     newLot.CnvFact = lotRow.Double("CnvFact");
                                     newLot.InvtID = lotRow.String("InvtID");
                                     newLot.InvtMult = 1;
                                     newLot.Qty = lotRow.Double("Qty");
-                                    newLot.SiteID = tran.String("ToSiteID");   
+                                    newLot.SiteID = lotRow.String("ToSiteID");   
                                     newLot.TranDate = tran.Date("TranDate");                                 
                                     newLot.TranType = tran["TranType"].ToString();
                                     newLot.UnitCost = Math.Round(lotRow.Double("UnitCost"), 0);
@@ -696,9 +722,10 @@ namespace INProcess
                                     newLot.Crtd_User = newLot.LUpd_User = User;
                                     newLot.Add();
 
-                                    objItemLot.QtyOnHand = Math.Round(objToItem.QtyOnHand + Math.Abs(qty), 0);
-                                    objItemLot.QtyAvail = Math.Round(objToItem.QtyAvail + Math.Abs(qty), 0);
-                                    objItemLot.Cost = objToItem.TotCost;
+                                    objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + Math.Abs(newLot.Qty), 0);
+                                    objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + Math.Abs(newLot.Qty), 0);
+
+                                    objItemLot.Cost = objToItem.AvgCost * objItemLot.QtyOnHand;
                                   
                                     objItemLot.LUpd_DateTime = DateTime.Now;
                                     objItemLot.LUpd_Prog = Prog;
@@ -795,10 +822,11 @@ namespace INProcess
                 objSetup.GetByKey(branchID, "IN");
 
                 clsIN_TagDetail objTagDetail = new clsIN_TagDetail(Dal);
-                DataTable lstTagDetail = objTagDetail.GetAll(tagID,branchID, siteID, "%");
+                DataTable lstTagDetail = objTagDetail.GetAll(tagID, siteID, "%"); //objTagDetail.GetAll(tagID, branchID, siteID, "%");
 
                 clsIN_TagHeader objTagHeader = new clsIN_TagHeader(Dal);
-                objTagHeader.GetByKey(tagID,branchID,siteID);
+               // objTagHeader.GetByKey(tagID,branchID,siteID);
+                objTagHeader.GetByKey(tagID);
                 objTagHeader.INBatNbr = batNbr;
                 objTagHeader.Status = "C";
           
@@ -1027,7 +1055,8 @@ namespace INProcess
                                 objItemLot.InvtID = lotRow.String("InvtID");
                                 objItemLot.SiteID = lotRow.String("SiteID");
                                 objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
-                                objItemLot.LIFODate = lotRow.Date("LIFODate"); 
+                                objItemLot.LIFODate = lotRow.Date("ExpDate");
+                                objItemLot.ExpDate = lotRow.Date("ExpDate"); 
                                 objItemLot.Crtd_DateTime = DateTime.Now;
                                 objItemLot.Crtd_Prog = Prog;
                                 objItemLot.Crtd_User = User;
@@ -1200,7 +1229,8 @@ namespace INProcess
                                 objItemLot.InvtID = lotRow.String("InvtID");
                                 objItemLot.SiteID = lotRow.String("SiteID");
                                 objItemLot.WarrantyDate =lotRow.Date("WarrantyDate");
-                                objItemLot.LIFODate = lotRow.Date("LIFODate");
+                                objItemLot.LIFODate = lotRow.Date("ExpDate");
+                                objItemLot.ExpDate = lotRow.Date("ExpDate"); 
                                 objItemLot.Crtd_DateTime = DateTime.Now;
                                 objItemLot.Crtd_Prog = Prog;
                                 objItemLot.Crtd_User = User;
