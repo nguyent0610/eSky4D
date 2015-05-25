@@ -126,9 +126,8 @@ namespace IN22003
         /// </summary>
         /// <param name="date">No Metadata Documentation available.</param>
         /// <param name="territory">No Metadata Documentation available.</param>
-        /// <param name="state">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
-        public ObjectResult<IN22003_pgLoadGrid_Result> IN22003_pgLoadGrid(Nullable<global::System.DateTime> date, global::System.String territory, global::System.String state, global::System.String branchID)
+        public ObjectResult<IN22003_pgLoadGrid_Result> IN22003_pgLoadGrid(Nullable<global::System.DateTime> date, global::System.String territory, global::System.String branchID)
         {
             ObjectParameter dateParameter;
             if (date.HasValue)
@@ -150,16 +149,6 @@ namespace IN22003
                 territoryParameter = new ObjectParameter("Territory", typeof(global::System.String));
             }
     
-            ObjectParameter stateParameter;
-            if (state != null)
-            {
-                stateParameter = new ObjectParameter("State", state);
-            }
-            else
-            {
-                stateParameter = new ObjectParameter("State", typeof(global::System.String));
-            }
-    
             ObjectParameter branchIDParameter;
             if (branchID != null)
             {
@@ -170,7 +159,7 @@ namespace IN22003
                 branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<IN22003_pgLoadGrid_Result>("IN22003_pgLoadGrid", dateParameter, territoryParameter, stateParameter, branchIDParameter);
+            return base.ExecuteFunction<IN22003_pgLoadGrid_Result>("IN22003_pgLoadGrid", dateParameter, territoryParameter, branchIDParameter);
         }
 
         #endregion
@@ -1047,7 +1036,8 @@ namespace IN22003
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="stkRecNbr">Initial value of the StkRecNbr property.</param>
         /// <param name="slsperId">Initial value of the SlsperId property.</param>
-        public static IN22003_pgLoadGrid_Result CreateIN22003_pgLoadGrid_Result(global::System.String stateName, global::System.String branchID, global::System.DateTime expDate, global::System.String invtID, global::System.String stkRecNbr, global::System.String slsperId)
+        /// <param name="isEdit">Initial value of the isEdit property.</param>
+        public static IN22003_pgLoadGrid_Result CreateIN22003_pgLoadGrid_Result(global::System.String stateName, global::System.String branchID, global::System.DateTime expDate, global::System.String invtID, global::System.String stkRecNbr, global::System.String slsperId, global::System.String isEdit)
         {
             IN22003_pgLoadGrid_Result iN22003_pgLoadGrid_Result = new IN22003_pgLoadGrid_Result();
             iN22003_pgLoadGrid_Result.StateName = stateName;
@@ -1056,6 +1046,7 @@ namespace IN22003
             iN22003_pgLoadGrid_Result.InvtID = invtID;
             iN22003_pgLoadGrid_Result.StkRecNbr = stkRecNbr;
             iN22003_pgLoadGrid_Result.SlsperId = slsperId;
+            iN22003_pgLoadGrid_Result.isEdit = isEdit;
             return iN22003_pgLoadGrid_Result;
         }
 
@@ -1422,6 +1413,30 @@ namespace IN22003
         private global::System.String _SlsperId;
         partial void OnSlsperIdChanging(global::System.String value);
         partial void OnSlsperIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String isEdit
+        {
+            get
+            {
+                return _isEdit;
+            }
+            set
+            {
+                OnisEditChanging(value);
+                ReportPropertyChanging("isEdit");
+                _isEdit = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("isEdit");
+                OnisEditChanged();
+            }
+        }
+        private global::System.String _isEdit;
+        partial void OnisEditChanging(global::System.String value);
+        partial void OnisEditChanged();
 
         #endregion
 

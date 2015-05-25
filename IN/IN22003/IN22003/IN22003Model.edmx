@@ -59,7 +59,6 @@
         <Function Name="IN22003_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="Territory" Type="varchar" Mode="In" />
-          <Parameter Name="State" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar(max)" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
@@ -72,7 +71,6 @@
           <FunctionImport Name="IN22003_pgLoadGrid" ReturnType="Collection(IN22003Model.IN22003_pgLoadGrid_Result)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="Territory" Mode="In" Type="String" />
-            <Parameter Name="State" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
@@ -139,6 +137,7 @@
           <Property Type="Double" Name="ApprovePriceStkQty" Nullable="true" />
           <Property Type="String" Name="StkRecNbr" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="isEdit" Nullable="false" MaxLength="1" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -206,6 +205,7 @@
                 <ScalarProperty Name="ApprovePriceStkQty" ColumnName="ApprovePriceStkQty" />
                 <ScalarProperty Name="StkRecNbr" ColumnName="StkRecNbr" />
                 <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="isEdit" ColumnName="isEdit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

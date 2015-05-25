@@ -35,9 +35,9 @@ namespace IN22003.Controllers
             return PartialView();
         }
 
-        public ActionResult GetData(DateTime Date, string Territory, string State,string BranchID)
+        public ActionResult GetData(DateTime Date, string Territory,string BranchID)
         {
-            return this.Store(_db.IN22003_pgLoadGrid(Date, Territory, State, BranchID).ToList());
+            return this.Store(_db.IN22003_pgLoadGrid(Date, Territory, BranchID).ToList());
         }
 
         [HttpPost]

@@ -75,23 +75,23 @@
                         lst.Change.Fn = "cboTerritory_Change";
                     })
 
-                , HQ.Combo().ID("cboState")
-                    .Name("cboState").HQLangCode("OM23100_State").HQProcedure("OM23101_pcState")
-                    .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State")
-                    .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
-                    .ForceSelection(true).EnforceMaxLength(true).AllowBlank(true)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection() 
-                    { 
-                        new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue()", Mode = ParameterMode.Raw },
-                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw } 
-                    })
-                    .LoadData()
-                    .Listeners(lst =>
-                    {
-                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                        lst.Change.Fn = "cboState_Change";
-                    })
+                //, HQ.Combo().ID("cboState")
+                //    .Name("cboState").HQLangCode("OM23100_State").HQProcedure("OM23101_pcState")
+                //    .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State")
+                //    .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
+                //    .ForceSelection(true).EnforceMaxLength(true).AllowBlank(true)
+                //    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                //    .HQParam(new StoreParameterCollection() 
+                //    { 
+                //        new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue()", Mode = ParameterMode.Raw },
+                //        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw } 
+                //    })
+                //    .LoadData()
+                //    .Listeners(lst =>
+                //    {
+                //        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                //        lst.Change.Fn = "cboState_Change";
+                //    })
                     
                 , HQ.Combo().ID("cboBranchID").Name("cboBranchID").MarginSpec("5 0 10 0").Width(250)
                         .HQLangCode("BranchID").HQDBSys(false).HQProcedure("IN22003_pcBranchAllByUser")
@@ -101,8 +101,7 @@
                         .HQHeightWidth(400, 300)
                         .HQParam(new StoreParameterCollection() {
                             new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw},
-                            new StoreParameter() { Name = "@Territory", Value ="App.cboTerritory.getValue()", Mode = ParameterMode.Raw},
-                            new StoreParameter() { Name = "@State", Value ="App.cboState.getValue()", Mode = ParameterMode.Raw}
+                            new StoreParameter() { Name = "@Territory", Value ="App.cboTerritory.getValue()", Mode = ParameterMode.Raw}
                         })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
@@ -204,7 +203,6 @@
                         {
                             ps.Add(new StoreParameter("Date", "App.dateKPI.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue()", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("State", "App.cboState.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue().join(',')", ParameterMode.Raw));
                         })
                         .Listeners(l =>
