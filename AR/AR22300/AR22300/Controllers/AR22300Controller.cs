@@ -49,7 +49,7 @@ namespace AR22300.Controllers
                     Session["CpnyID"] = Current.CpnyID = data.Split(';')[1];
                     Session["Language"] = Current.Language = short.Parse(data.Split(';')[2]) == 0 ? "en" : "vi";
                     Session["LangID"] = short.Parse(data.Split(';')[2]);
-                    //Util.InitRight(_screenName);
+                    Util.InitRight(_screenName);
                 }
                 catch
                 {
@@ -65,6 +65,11 @@ namespace AR22300.Controllers
             }
             if (Current.UserName.PassNull() == "")
             {
+                AccessRight acc = new AccessRight();
+                acc.Delete = false;
+                acc.Insert = false;
+                acc.Update = false;
+                Session["AR22300"] = acc;
                 Session["Server"] = Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
                 Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
                 Session["DBSys"] = Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
