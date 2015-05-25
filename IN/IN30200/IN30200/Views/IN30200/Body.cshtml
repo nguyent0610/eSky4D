@@ -1,0 +1,270 @@
+
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN30200;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+        X.FormPanel()
+        .ID("frmMain")
+        .BodyPadding(0)
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar("Print,Save,New,Delete", true, ""))
+        .Layout(LayoutType.Border)
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .Listeners(l =>
+        {
+            //l.BoxReady.Handler = "firstLoad();";
+            //l.FieldChange.Fn = "frmChange";
+        })
+        .Items(
+            X.Panel().ID("pnlHeader")
+            .Region(Region.North)
+            .Layout(LayoutType.VBox)
+            .AutoScroll(true)
+            .Items(
+                X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")
+                .Items(
+                    HQ.Combo().ID("cboBranchID").Name("cboBranchID").MarginSpec("5 0 0 15").Width(320)
+                        .HQLangCode("BranchID").HQDBSys(false).HQProcedure("IN30200_pcBranchAllByUser")
+                        .HQColumnShow("BranchID,BranchName").ForceSelection(true).MultiSelect(true)
+                        .DisplayField("BranchID").ValueField("BranchID").HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "cboBranchID_Change";
+                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            lst.Focus.Handler = "this.forceSelection=true;";
+                           
+                        })  
+                        .LoadData()
+                    , HQ.Checkbox().ID("chkBranchID").BoxLabel(Util.GetLang("BranchAll")).MarginSpec("5 0 5 10")
+                            .Listeners(l =>
+                                {
+                                    l.Change.Fn = "chkBranchID_Change";
+                                })
+                    , HQ.Combo().ID("cboInvtID").Name("cboInvtID").MarginSpec("5 0 0 0").Width(320)
+                        .HQLangCode("InvtID").HQDBSys(false).HQProcedure("IN30200_pcInventoryActive")
+                        .HQColumnShow("InvtID,Descr,CpnyID").ForceSelection(true)
+                        .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@Branch", Value ="App.cboBranchID.getValue().join(',')", Mode = ParameterMode.Raw}
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "cboInvtID_Change";
+                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            lst.Focus.Handler = "this.forceSelection=true;";
+                        })  
+                        .LoadData()
+                )
+           
+                , X.Container().Layout(LayoutType.HBox)
+                    .Items(
+                        X.FieldSet().Layout(LayoutType.VBox).MarginSpec("5 0 5 5")
+                        .Title(Util.GetLang("ItemInfo"))
+                        .LayoutConfig(new VBoxLayoutConfig { Align=VBoxAlign.Stretch, Pack = BoxPack.Center})
+                        .Items(
+                            HQ.TextBox().ID("txtClassID").Name("txtClassID").DataIndex("ClassID").HQLangCode("ClassID").ReadOnly(true)
+                            
+                            , HQ.Combo().ID("cboType").Name("InvtType").MarginSpec("0 0 0 0").Width(320).ReadOnly(true)
+                            .HQLangCode("Type").HQDBSys(false).HQProcedure("IN30200_pcIvntType")
+                            .HQColumnShow("Descr").ForceSelection(true)
+                            .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@langid", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                lst.Focus.Handler = "this.forceSelection=true;";
+                            })  
+                            .LoadData()
+                            
+                            , HQ.Combo().ID("cboSource").Name("Source").MarginSpec("5 0 0 0").Width(320).ReadOnly(true)
+                            .HQLangCode("Source").HQDBSys(false).HQProcedure("IN30200_pcSource")
+                            .HQColumnShow("Descr").ForceSelection(true)
+                            .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@langid", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                lst.Focus.Handler = "this.forceSelection=true;";
+                            })  
+                            .LoadData()
+                            
+                            , HQ.Combo().ID("cboValMthd").Name("ValMthd").MarginSpec("5 0 0 0").Width(320).ReadOnly(true)
+                            .HQLangCode("ValMthd").HQDBSys(false).HQProcedure("IN30200_pcValMthd")
+                            .HQColumnShow("Descr").ForceSelection(true)
+                            .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@langid", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                lst.Focus.Handler = "this.forceSelection=true;";
+                            })  
+                            .LoadData()
+                            
+                            , HQ.Combo().ID("cboLotSerTrack").Name("LotSerTrack").MarginSpec("5 0 5 0").Width(320).ReadOnly(true)
+                            .HQLangCode("LotSerTrack").HQDBSys(false).HQProcedure("IN30200_pcLotSerTrack")
+                            .HQColumnShow("Descr").ForceSelection(true)
+                            .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@langid", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                lst.Focus.Handler = "this.forceSelection=true;";
+                            })  
+                            .LoadData()
+                        )
+                        , X.FieldSet().Layout(LayoutType.VBox).MarginSpec("5 0 5 5")
+                            .Title(Util.GetLang("UOM"))
+                            .LayoutConfig(new VBoxLayoutConfig { Align=VBoxAlign.Stretch, Pack = BoxPack.Center })
+                            .Items(
+                                HQ.TextBox().ID("txtStkUnit").Name("StkUnit").DataIndex("StkUnit").HQLangCode("StkUnit").ReadOnly(true)
+                                , HQ.TextBox().ID("txtPOUnit").Name("DfltPOUnit").DataIndex("DfltPOUnit").HQLangCode("POUnit").ReadOnly(true)
+                                , HQ.TextBox().ID("txtSOUnit").Name("DfltSOUnit").DataIndex("DfltSOUnit").HQLangCode("SOUnit").ReadOnly(true)
+                                .MarginSpec("0 0 59 0")
+                            )
+                        
+                        , X.FieldSet().Layout(LayoutType.VBox).MarginSpec("5 0 5 5")
+                            .Title(Util.GetLang("SiteDefault"))
+                            .LayoutConfig(new VBoxLayoutConfig { Align=VBoxAlign.Stretch, Pack = BoxPack.Center })
+                            .Items(
+                                HQ.TextBox().ID("txtSiteId").Name("DfltSite").DataIndex("DfltSite").HQLangCode("SiteId").ReadOnly(true)
+                                .MarginSpec("0 0 113 0")
+                            )
+                    )
+                
+            )//pnl Header
+
+            , X.Panel().ID("pnlGrid")
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .Items(
+                X.GridPanel().ID("grdDetail")
+                    .Scroll(ScrollMode.Both)
+                    .View(X.GridView().TrackOver(false).LoadMask(true))
+                    .Region(Region.Center).Flex(1)
+                    .SelectionMemory(false)
+                    .Store(
+                        X.Store()
+                        .ID("stoDetail")
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(IN30200_pgDetail_Result), "mdlIN30200_pgDetail", ""))
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDetail"))).AutoLoad(false)
+                        .Parameters(ps =>
+                        {
+                            ps.Add(new StoreParameter("InvtID", "App.cboInvtID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue().join(',')", ParameterMode.Raw));
+                        })
+                            //.Listeners(p => p.Load.Fn = "stoDetail_Load")
+                        )
+                    .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdDetail');")
+                    .SortableColumns(false)
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40)
+
+                        , X.Column().Text(Util.GetLang("SiteID")).DataIndex("SiteID").Width(100)
+                        
+                        , X.NumberColumn().Text(Util.GetLang("TotCost")).DataIndex("TotCost").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyAvail")).DataIndex("QtyAvail").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyOnHand")).DataIndex("QtyOnHand").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyAllocSO")).DataIndex("QtyAllocSO").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyAlloc")).DataIndex("QtyAlloc").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyAllocIN")).DataIndex("QtyAllocIN").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyAllocPORet")).DataIndex("QtyAllocPORet").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyShipNotInv")).DataIndex("QtyShipNotInv").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyOnSO")).DataIndex("QtyOnSO").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyOnBO")).DataIndex("QtyOnBO").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyOnPO")).DataIndex("QtyOnPO").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyInTransit")).DataIndex("QtyInTransit").Width(200).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("QtyOnTransferOrders")).DataIndex("QtyOnTransferOrders").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("AvgCost")).DataIndex("AvgCost").Width(150).Align(Alignment.Right).Format("0,000")
+                    
+                        , X.CommandColumn().Width(150)
+                        .Commands(
+                            X.GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                        )
+                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                        .Listeners(l => l.Command.Handler = "grdDetail_Reject(record);")
+                    )
+                    .SelectionModel(X.RowSelectionModel().ID("slmgrdDetail").Mode(SelectionMode.Multi))
+                    .BottomBar(
+                            X.PagingToolbar()
+                            .Items(
+                                X.Label("Page size:"),
+                                X.ToolbarSpacer(10),
+                                X.ComboBox()
+                                .Width(80)
+                                .Items("1", "2", "10", "20", "30", "50")
+                                .SelectedItems("50")
+                                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                            )
+                            .Plugins(X.ProgressBarPager())
+                        )
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            //ls.BeforeEdit.Fn = "grdDetail_BeforeEdit";
+                            //ls.Edit.Fn = "grdDetail_Edit";
+                            //ls.ValidateEdit.Fn = "grdDetail_ValidateEdit";
+                        })
+                    )
+
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("SiteID"),
+                                X.NumericFilter().DataIndex("TotCost"),
+                                X.NumericFilter().DataIndex("QtyAvail"),
+                                X.NumericFilter().DataIndex("QtyOnHand"),
+                                X.NumericFilter().DataIndex("QtyAllocSO"),
+                                X.NumericFilter().DataIndex("QtyAlloc"),
+                                X.NumericFilter().DataIndex("QtyAllocIN"),
+                                X.NumericFilter().DataIndex("QtyAllocPORet"),
+                                X.NumericFilter().DataIndex("QtyShipNotInv"),
+                                X.NumericFilter().DataIndex("QtyOnSO"),
+                                X.NumericFilter().DataIndex("QtyOnBO"),
+                                X.NumericFilter().DataIndex("QtyOnPO"),
+                                X.NumericFilter().DataIndex("QtyInTransit"),
+                                X.NumericFilter().DataIndex("QtyOnTransferOrders"),
+                                X.NumericFilter().DataIndex("AvgCost")
+                            )
+                    )
+                    
+            )//pnl Grid
+
+        )//frm Main
+)//View port
+)
