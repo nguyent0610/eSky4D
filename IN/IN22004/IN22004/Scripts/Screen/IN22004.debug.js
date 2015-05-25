@@ -66,7 +66,7 @@ var btnLoad_Click = function () {
 var ColCheck_Header_Change = function (value, rowIndex, checked) {
     if (value) {
         App.stoIN_StockRecoveryCust.each(function (item) {
-            if (item.data.Status == App.cboStatus.getValue() && item.data.Status == 'H') {
+            if (item.data.Status == App.cboStatus.getValue()) {
                 item.set("ColCheck", value.checked);
             }
         });
@@ -160,12 +160,14 @@ var grdIN_StockRecoveryCust_ValidateEdit = function (item, e) {
 };
 
 var grdIN_StockRecoveryCust_BeforeEdit = function (editor, e) {
-    if (e.record.data.Status == 'H') {
+    if (e.field == 'ColCheck' && e.record.data.Status == App.cboStatus.getValue()) {
         return true;
     }
-    else {
-        return false;
+
+    if (e.record.data.isEdit == '1' && e.field != 'ColCheck') {
+        return true;
     }
+    return false;
 };
 
 var grdIN_StockRecoveryCust_Edit = function (item, e) {
@@ -199,7 +201,7 @@ var stoLoad = function (sto) {
     HQ.common.showBusy(false);
     stoChanged(App.stoIN_StockRecoveryCust);
     //var SLND = 0;
-    //App.stoIN_StockRecoveryCust.each(function (item) {
+    //App.stoIN_StockRecoveryCust.each(function     (item) {
     //    SLND += item.data.ApproveStkQty;
     //});
     //App.SLND.setValue(SLND);
