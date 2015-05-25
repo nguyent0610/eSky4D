@@ -151,6 +151,18 @@
 
 @(
     X.Store()
+    .ID("stoLotTransfer")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN10100_pdLotTrnsfer_Result),"mdlLotTransfer",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLotTransfer", "IN10100"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
+
+@(
+    X.Store()
     .ID("stoSetup")
     .AutoLoad(false)
     .Model(Util.GenerateModel(typeof (IN_Setup),"mdlSetup",""))
@@ -160,7 +172,47 @@
         .ActionMethods(action => { action.Read = HttpMethod.POST; })
         .Reader(X.JsonReader().Root("data")))
 )
+@(
+    X.Store()
+    .ID("stoLotTrans")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN10100_pgLotTrans_Result),"mdlLotTrans","",true))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLotTrans", "IN10100"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )            
+    .Parameters(ps => {
+        ps.Add(new StoreParameter("branchID", "App.BranchID.getValue()", ParameterMode.Raw));
+        ps.Add(new StoreParameter("batNbr", "App.BatNbr.getValue()", ParameterMode.Raw)); 
+    })
+)
 
+@(
+    X.Store()
+    .ID("stoItemLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlItemLot",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetItemLot", "IN10100"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+@(
+    X.Store()
+    .ID("stoCalcLot")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlCalcLot",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetLot", "IN10100"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
 @{ Html.RenderAction("Body", new { lang = Current.LangID.ToString() }); }
 </body>
 </html>
