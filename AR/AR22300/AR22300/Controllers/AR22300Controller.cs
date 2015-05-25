@@ -16,7 +16,8 @@ using Aspose.Cells;
 using HQFramework.DAL;
 using System.Drawing;
 using System.Data;
-using HQFramework.Common;
+using System.Configuration;
+
 
 namespace AR22300.Controllers
 {
@@ -30,8 +31,50 @@ namespace AR22300.Controllers
 
         //
         // GET: /AR22300/
-        public ActionResult Index()
+        public ActionResult Index(string data)
         {
+
+            if (data != null)//dung cho PVN lay du lieu tu silverlight goi len
+            {
+                // user;company;langid => ?data=admin;LCUS-HCM-0004;1
+                try
+                {
+                    //data = data.Replace(" ", "+");
+                    data = Encryption.Decrypt(data, DateTime.Now.ToString("yyyyMMdd"));
+                    Session["Server"] = Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
+
+                    Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
+                    Session["DBSys"] = Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
+                    Session["UserName"] = Current.UserName = data.Split(';')[0];
+                    Session["CpnyID"] = Current.CpnyID = data.Split(';')[1];
+                    Session["Language"] = Current.Language = short.Parse(data.Split(';')[2]) == 0 ? "en" : "vi";
+                    Session["LangID"] = short.Parse(data.Split(';')[2]);
+                    //Util.InitRight(_screenName);
+                }
+                catch
+                {
+                    Session["Server"] = Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
+                    Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
+                    Session["DBSys"] = Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
+                    Session["Language"] = Current.Language = ConfigurationManager.AppSettings["LangID"].ToString();
+                    Session["LangID"] = Current.Language == "vi" ? 1 : 0;
+                    ViewBag.Title = Util.GetLang("AR22300");
+                    ViewBag.Error = Message.GetString("225", null);
+                    return View("Error");
+                }
+            }
+            if (Current.UserName.PassNull() == "")
+            {
+                Session["Server"] = Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
+                Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
+                Session["DBSys"] = Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
+                Session["Language"] = Current.Language = ConfigurationManager.AppSettings["LangID"].ToString();
+                Session["LangID"] = Current.Language == "vi" ? 1 : 0;
+                ViewBag.Title = Util.GetLang("AR22300");
+                ViewBag.Error = Message.GetString("225", null);
+                return View("Error");
+            }
+            ViewBag.Title = Util.GetLang("AR22300");
             return View();
         }
 
