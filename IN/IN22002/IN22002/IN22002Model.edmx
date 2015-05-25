@@ -63,7 +63,7 @@
         <Function Name="IN22002_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DateFrom" Type="datetime" Mode="In" />
           <Parameter Name="DateTo" Type="datetime" Mode="In" />
-          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar(max)" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -147,6 +147,7 @@
           <Property Type="String" Name="Status" Nullable="true" MaxLength="10" />
           <Property Type="Double" Name="ApproveQty" Nullable="true" />
           <Property Type="String" Name="Unit" Nullable="false" MaxLength="15" />
+          <Property Type="Int32" Name="isEdit" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -220,6 +221,7 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ApproveQty" ColumnName="ApproveQty" />
                 <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="isEdit" ColumnName="isEdit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -1125,7 +1125,8 @@ namespace IN22002
         /// <param name="expDate">Initial value of the ExpDate property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="unit">Initial value of the Unit property.</param>
-        public static IN22002_pgLoadGrid_Result CreateIN22002_pgLoadGrid_Result(global::System.String stkRecNbr, global::System.String branchID, global::System.String slsPerID, global::System.String custName, global::System.DateTime expDate, global::System.String invtID, global::System.String unit)
+        /// <param name="isEdit">Initial value of the isEdit property.</param>
+        public static IN22002_pgLoadGrid_Result CreateIN22002_pgLoadGrid_Result(global::System.String stkRecNbr, global::System.String branchID, global::System.String slsPerID, global::System.String custName, global::System.DateTime expDate, global::System.String invtID, global::System.String unit, global::System.Int32 isEdit)
         {
             IN22002_pgLoadGrid_Result iN22002_pgLoadGrid_Result = new IN22002_pgLoadGrid_Result();
             iN22002_pgLoadGrid_Result.StkRecNbr = stkRecNbr;
@@ -1135,6 +1136,7 @@ namespace IN22002
             iN22002_pgLoadGrid_Result.ExpDate = expDate;
             iN22002_pgLoadGrid_Result.InvtID = invtID;
             iN22002_pgLoadGrid_Result.Unit = unit;
+            iN22002_pgLoadGrid_Result.isEdit = isEdit;
             return iN22002_pgLoadGrid_Result;
         }
 
@@ -1549,6 +1551,30 @@ namespace IN22002
         private global::System.String _Unit;
         partial void OnUnitChanging(global::System.String value);
         partial void OnUnitChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 isEdit
+        {
+            get
+            {
+                return _isEdit;
+            }
+            set
+            {
+                OnisEditChanging(value);
+                ReportPropertyChanging("isEdit");
+                _isEdit = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("isEdit");
+                OnisEditChanged();
+            }
+        }
+        private global::System.Int32 _isEdit;
+        partial void OnisEditChanging(global::System.Int32 value);
+        partial void OnisEditChanged();
 
         #endregion
 

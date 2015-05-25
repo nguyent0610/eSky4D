@@ -139,7 +139,7 @@ var grdPPC_StockRecovery_BeforeEdit = function (editor, e) {
 
 var grdPPC_StockRecovery_Edit = function (item, e) {
     if (e.record.data.StkQty < e.record.data.ApproveQty || e.record.data.ApproveQty < 0) {
-        e.record.set("ApproveQty", 0);
+        e.record.set("ApproveQty", e.record.data.StkQty);
     }
 };
 
