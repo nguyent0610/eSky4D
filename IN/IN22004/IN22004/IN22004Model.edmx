@@ -32,7 +32,7 @@
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <Function Name="IN22004_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar(max)" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
@@ -85,6 +85,7 @@
           <Property Type="Double" Name="ApproveStkQty" Nullable="true" />
           <Property Type="Double" Name="QtyGiveBack" Nullable="true" />
           <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="isEdit" Nullable="false" MaxLength="1" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -130,6 +131,7 @@
                 <ScalarProperty Name="ApproveStkQty" ColumnName="ApproveStkQty" />
                 <ScalarProperty Name="QtyGiveBack" ColumnName="QtyGiveBack" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="isEdit" ColumnName="isEdit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
