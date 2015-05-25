@@ -43,7 +43,7 @@ var btnLoad_Click = function () {
 var ColCheck_Header_Change = function (value, rowIndex, checked) {
     if (value) {
         App.stoPPC_StockRecovery.each(function (item) {
-            if (item.data.Status == App.cboStatus.getValue() && item.data.Status == 'H') {
+            if (item.data.Status == App.cboStatus.getValue()) {
                 item.set("ColCheck", value.checked);
             }
         });
@@ -127,12 +127,14 @@ var grdPPC_StockRecovery_ValidateEdit = function (item, e) {
 };
 
 var grdPPC_StockRecovery_BeforeEdit = function (editor, e) {
-    if (e.record.data.Status == 'H') {
+    if (e.field == 'ColCheck' && e.record.data.Status == App.cboStatus.getValue()) {
         return true;
     }
-    else {
-        return false;
+
+    if (e.record.data.isEdit == '1' && e.field != 'ColCheck') {
+        return true;
     }
+    return false;
 };
 
 var grdPPC_StockRecovery_Edit = function (item, e) {
