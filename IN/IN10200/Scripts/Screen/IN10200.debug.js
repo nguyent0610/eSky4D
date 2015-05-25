@@ -421,7 +421,7 @@ var btnLotOK_Click = function () {
         } else {
             App.winLot.record.data.Qty = Math.round(lineQty);
         }
-
+        App.winLot.record.data.TranAmt = App.winLot.record.data.Qty * App.winLot.record.data.UnitPrice;
         App.winLot.record.commit();
 
         App.grdTrans.view.refresh();

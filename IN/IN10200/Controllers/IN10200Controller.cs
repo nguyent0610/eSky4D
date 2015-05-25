@@ -751,7 +751,7 @@ namespace IN10200.Controllers
             double oldQty = 0;
             double newQty = 0;
 
-            if (s.TranType == "II")
+            if (tran.TranType == "II")
             {
                 if (!isNew)
                     oldQty = s.UnitMultDiv == "D" ? t.Qty / t.CnvFact : t.Qty * t.CnvFact;
