@@ -213,7 +213,7 @@ namespace APProcess
                                 newobjAP_Trans.TxblAmt01 = objAP_Trans.TxblAmt01;
                                 newobjAP_Trans.TxblAmt02 = objAP_Trans.TxblAmt02;
                                 newobjAP_Trans.TxblAmt03 = objAP_Trans.TxblAmt03;
-                                newobjAP_Trans.UnitPrice = newobjAP_Trans.UnitPrice;
+                                newobjAP_Trans.UnitPrice = objAP_Trans.UnitPrice;
                                 newobjAP_Trans.VendID = objAP_Trans.VendID;
                                 newobjAP_Trans.VendName = objAP_Trans.VendName;
                                 //newobjAP_Trans.tstamp = new byte[0];
