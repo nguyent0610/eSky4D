@@ -20,7 +20,7 @@
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar("Print,Save,New,Delete", true, ""))
         .Layout(LayoutType.Border)
-            .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 120; })
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 120; })
         .Listeners(lst =>
         {
             lst.BoxReady.Fn = "loadSourceCombo";
@@ -31,8 +31,7 @@
             .Layout(LayoutType.HBox)
             .AutoScroll(true)
             .Items(
-
-                X.FieldSet().Layout(LayoutType.HBox).MarginSpec("0 0 5 5")
+                 X.FieldSet().Layout(LayoutType.HBox).MarginSpec("0 0 5 5")
                 .Title(Util.GetLang("FilterData"))
                 .LayoutConfig(new HBoxLayoutConfig { Align=HBoxAlign.Stretch, Pack = BoxPack.Center })
                 .Items(
@@ -138,14 +137,14 @@
                         )
 
                 )
-            )//pnl Header
+               
+            )
 
             , X.Panel().ID("pnlGrid")
             .Region(Region.Center)
             .Layout(LayoutType.Border)
             .Items(
                 X.GridPanel().ID("grdIN_StockRecoveryCust")
-        //.Hidden(true)
                     .Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false).LoadMask(true))
                     .Region(Region.Center).Flex(1)
@@ -245,7 +244,6 @@
                                 X.StringFilter().DataIndex("SlsPerName"),
                                 X.StringFilter().DataIndex("CustID"),
                                 X.StringFilter().DataIndex("CustName"),
-                                
                                 X.StringFilter().DataIndex("InvtID"),
                                 X.StringFilter().DataIndex("InvtName"),
                                 X.DateFilter().DataIndex("NewExpDate"),
@@ -253,8 +251,10 @@
                                 X.DateFilter().DataIndex("StkRecDate"),
                                 X.StringFilter().DataIndex("Status")
                     )
-            )//pnl Grid
-
-        )//frm Main
-)//View port
+                )
+            
+            )
+        )
 )
+)
+        
