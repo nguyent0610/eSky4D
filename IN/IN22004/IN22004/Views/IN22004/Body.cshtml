@@ -197,14 +197,11 @@
                         , X.Column().Text(Util.GetLang("IN22004_CustName")).DataIndex("CustName").Width(150)
                         , X.Column().Text(Util.GetLang("IN22004_InvtID")).DataIndex("InvtID").Width(100)
                         , X.Column().Text(Util.GetLang("IN22004_InvtName")).DataIndex("InvtName").Width(250)
-                        //, X.DateColumn().Text(Util.GetLang("IN22003_ExpDate")).DataIndex("ExpDate").Width(150).Format("dd/MM/yyyy")
                         , X.DateColumn().Text(Util.GetLang("IN22004_NewExpDate")).DataIndex("NewExpDate").Width(100).Format("dd/MM/yyyy")
                         , X.NumberColumn().Text(Util.GetLang("IN22004_QtyGiveBack")).DataIndex("QtyGiveBack").Width(100).Align(Alignment.Right).Format("0,000")
-                                .Editor(
-                                    X.NumberField().DecimalPrecision(0).MinValue(0)
-                                    //.Listeners(a => { a.Change.Fn = "ProcessQty"; })
-                                )
-
+                        .Editor(
+                            X.NumberField().DecimalPrecision(0).MinValue(0)
+                        )
                         , X.DateColumn().Text(Util.GetLang("IN22004_StkRecDate")).DataIndex("StkRecDate").Width(100).Format("dd/MM/yyyy")
                         , X.Column().Text(Util.GetLang("IN22004_Status")).DataIndex("Status").Width(100).Renderer("renderStatus")
 
@@ -248,13 +245,13 @@
                                 X.StringFilter().DataIndex("SlsPerName"),
                                 X.StringFilter().DataIndex("CustID"),
                                 X.StringFilter().DataIndex("CustName"),
-                                X.DateFilter().DataIndex("NewExpDate"),
-                                X.BooleanFilter().DataIndex("InvtID"),
+                                
+                                X.StringFilter().DataIndex("InvtID"),
                                 X.StringFilter().DataIndex("InvtName"),
+                                X.DateFilter().DataIndex("NewExpDate"),
                                 X.NumericFilter().DataIndex("QtyGiveBack"),
                                 X.DateFilter().DataIndex("StkRecDate"),
-                                X.StringFilter().DataIndex("Status")               
-                            )
+                                X.StringFilter().DataIndex("Status")
                     )
             )//pnl Grid
 
