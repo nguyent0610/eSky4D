@@ -1,0 +1,74 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM30100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM30100";
+    var acc = Session["OM30100"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình OM30100.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.Language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/OM30100.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    
+    </style>
+    <script>
+       
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+    
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        <!-- Gọi hàm Body trong OM30100Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
+    
+        @*@(
+            X.Store().ID("stoHeader").AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM30100_LoadText_Result), "mdlOM30100_LoadText",""))       
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetHeader", "OM30100"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("InvtID", "App.cboInvtID.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(l =>
+                {
+                    //l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoHeader_Load";                   
+                }
+            )
+        )  *@        
+        @{Html.RenderAction("Body", new { lang=Current.LangID});}   
+    
+</body>
+</html>
+ 

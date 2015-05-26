@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer" />
+        <Function Name="OM30100_open_close_Detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+          <Parameter Name="InvenID" Type="varchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
+          <Parameter Name="CusPO" Type="varchar" Mode="In" />
+          <Parameter Name="invoice" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="FromDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="ToDate" Type="smalldatetime" Mode="In" />
+        </Function>
+        <Function Name="OM30100_open_close_Header" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+          <Parameter Name="InvenID" Type="varchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
+          <Parameter Name="CusPO" Type="varchar" Mode="In" />
+          <Parameter Name="invoice" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="FromDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="ToDate" Type="smalldatetime" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM30100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="OM30100Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="OM30100_open_close_Detail" ReturnType="Collection(OM30100Model.OM30100_open_close_Detail_Result)">
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="InvenID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="CusPO" Mode="In" Type="String" />
+            <Parameter Name="invoice" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="OM30100_open_close_Header" ReturnType="Collection(OM30100Model.OM30100_open_close_Header_Result)">
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="InvenID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="CusPO" Mode="In" Type="String" />
+            <Parameter Name="invoice" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="OM30100_open_close_Detail_Result">
+          <Property Type="String" Name="lineref" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="InvtID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="lineQty" Nullable="false" />
+          <Property Type="String" Name="slsUnit" Nullable="true" MaxLength="15" />
+          <Property Type="Double" Name="slsPrice" Nullable="false" />
+          <Property Type="DateTime" Name="PromiseDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="ShipViaID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="SiteID" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="Boolean" Name="FreeItem" Nullable="false" />
+          <Property Type="Double" Name="DiscPct" Nullable="false" />
+          <Property Type="Double" Name="DiscAmt" Nullable="false" />
+          <Property Type="Double" Name="LineAmt" Nullable="false" />
+          <Property Type="String" Name="OrdNbrBranch" Nullable="true" MaxLength="45" />
+        </ComplexType>
+        <ComplexType Name="OM30100_open_close_Header_Result">
+          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="OrderType" Nullable="true" MaxLength="2" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="Double" Name="OrdAmt" Nullable="false" />
+          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="custname" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CustOrderNbr" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="ShipName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="ShipPhone" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvcNbr" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="InvcNote" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="OrdNbrBranch" Nullable="true" MaxLength="45" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="OM30100Entities" >
+          <FunctionImportMapping FunctionImportName="OM30100_open_close_Detail" FunctionName="eBiz4DWebSysModel.Store.OM30100_open_close_Detail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM30100Model.OM30100_open_close_Detail_Result">
+                <ScalarProperty Name="lineref" ColumnName="lineref" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="lineQty" ColumnName="lineQty" />
+                <ScalarProperty Name="slsUnit" ColumnName="slsUnit" />
+                <ScalarProperty Name="slsPrice" ColumnName="slsPrice" />
+                <ScalarProperty Name="PromiseDate" ColumnName="PromiseDate" />
+                <ScalarProperty Name="ShipViaID" ColumnName="ShipViaID" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="FreeItem" ColumnName="FreeItem" />
+                <ScalarProperty Name="DiscPct" ColumnName="DiscPct" />
+                <ScalarProperty Name="DiscAmt" ColumnName="DiscAmt" />
+                <ScalarProperty Name="LineAmt" ColumnName="LineAmt" />
+                <ScalarProperty Name="OrdNbrBranch" ColumnName="OrdNbrBranch" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM30100_open_close_Header" FunctionName="eBiz4DWebSysModel.Store.OM30100_open_close_Header">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM30100Model.OM30100_open_close_Header_Result">
+                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
+                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="OrdAmt" ColumnName="OrdAmt" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="custname" ColumnName="custname" />
+                <ScalarProperty Name="CustOrderNbr" ColumnName="CustOrderNbr" />
+                <ScalarProperty Name="ShipName" ColumnName="ShipName" />
+                <ScalarProperty Name="ShipPhone" ColumnName="ShipPhone" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="InvcNbr" ColumnName="InvcNbr" />
+                <ScalarProperty Name="InvcNote" ColumnName="InvcNote" />
+                <ScalarProperty Name="OrdNbrBranch" ColumnName="OrdNbrBranch" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="73" >
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
