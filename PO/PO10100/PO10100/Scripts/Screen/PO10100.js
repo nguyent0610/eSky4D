@@ -323,6 +323,11 @@ var grdPO_Detail_BeforeEdit = function (editor, e) {
         HQ.message.show(15, App.cboPONbr.fieldLabel, '');
         return false;
     }
+    else if (HQ.util.passNull(App.cboBranchID.getValue()) == "") {
+        HQ.message.show(15, App.cboBranchID.fieldLabel, '');
+        return false;
+
+    }
     else if (HQ.util.passNull(App.cboVendID.getValue()) == "") {
         HQ.message.show(41, '', '');
         return false;
@@ -457,7 +462,7 @@ var grdPO_Detail_Edit = function (item, e) {
 
         StkQty = Math.round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
         e.record.set("ExtCost", objDetail.QtyOrd * objDetail.UnitCost - objDetail.DiscAmt);
-        objDetail.POFee = StkQty * objIN_Inventory.POFee;
+        objDetail.POFee = 0;// StkQty * objIN_Inventory.POFee;
 
         e.record.set("ExtWeight", objDetail.QtyOrd * objDetail.UnitWeight);
         e.record.set("ExtVolume", objDetail.QtyOrd * objDetail.UnitVolume);
@@ -607,7 +612,7 @@ var cboGInvtID_Change = function (item, newValue, oldValue) {
 
 //cac store co param la branchID thi load lai sau khi cboBranchID thay doi
 var cboBranchID_Change = function (item, newValue, oldValue) {
-    if (item.valueModels != null && App.cboBranchID.getValue() != null) {//truong hop co chon branchid
+    if (item.valueModels != null && App.cboBranchID.getValue() != null && !item.hasFocus) {//truong hop co chon branchid
         App.txtBranchName.setValue(App.cboBranchID.valueModels[0].data.BranchName);
         _cpnyID = App.cboBranchID.valueModels[0].data.BranchID;
         HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
@@ -657,21 +662,74 @@ var cboBranchID_Change = function (item, newValue, oldValue) {
             });
         });
     }
-    else { //truong hop khong chon
-        App.txtBranchName.setValue('');
-        _cpnyID = '';
-        App.stoPO10100_pdPO_Setup.load(function () {
-            App.cboPONbr.setValue('');
-            App.stoPO_Header.reload();
-            App.cboSlsperID.setValue('');
-            App.cboSlsperID.setReadOnly(true);
-            App.cboSlsperID.allowBlank = true;
-            App.cboSlsperID.validate();
-        });
+    else {
+        if (Ext.isEmpty(App.cboBranchID.getValue())) {
+            App.txtBranchName.setValue('');
+            _cpnyID = '';
+            App.stoPO10100_pdPO_Setup.load(function () {
+                App.cboPONbr.setValue('');
+                App.stoPO_Header.reload();
+                App.cboSlsperID.setValue('');
+                App.cboSlsperID.setReadOnly(true);
+                App.cboSlsperID.allowBlank = true;
+                App.cboSlsperID.validate();
+            });
+        }
     }
     
 };
+var cboBranchID_Select = function (item, newValue, oldValue) {
+    if (item.hasFocus) {
+        App.txtBranchName.setValue(App.cboBranchID.valueModels[0].data.BranchName);
+        _cpnyID = App.cboBranchID.valueModels[0].data.BranchID;
+        HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+        App.stoPO10100_pdOM_UserDefault.load(function () {
+            App.stoPO10100_pdPO_Setup.load(function () {
+                App.cboDistAddr.getStore().load(function () {
+                    App.cboShipSiteID.getStore().load(function () {
+                        App.cboShipCustID.getStore().load(function () {
+                            App.cboSiteID.getStore().load(function () {
 
+                                _objUserDflt = App.stoPO10100_pdOM_UserDefault.data.length > 0 ? App.stoPO10100_pdOM_UserDefault.getAt(0).data : { POSite: '', };;
+                                if (App.stoPO10100_pdPO_Setup.data.length == 0) {
+                                    if (item.hasFocus) {
+                                        App.cboPONbr.setValue('');
+                                        App.stoPO_Header.reload();
+                                    }
+                                    HQ.message.show(20404, 'PO_Setup', '');
+                                    lockControl(true);
+                                    App.cboBranchID.setReadOnly(false);
+                                }
+                                else {
+                                    lockControl(false);
+                                    _objPO_Setup = App.stoPO10100_pdPO_Setup.getAt(0).data;
+                                    if (_objPO_Setup.AutoRef == 1) App.cboPONbr.forceSelection = true;
+                                    else App.cboPONbr.forceSelection = false;
+                                    App.cboPONbr.getStore().load(function () {
+                                        App.cboPONbr.setValue('');
+                                        App.stoPO_Header.reload();
+                                        App.cboDistAddr.setValue(App.cboBranchID.getValue());
+                                    });
+                                }
+                                if (App.cboBranchID.valueModels[0].data.Channel == 'MT')
+                                    App.cboSlsperID.getStore().load(function () {
+                                        App.cboSlsperID.setReadOnly(false);
+                                        App.cboSlsperID.allowBlank = _allowBlankSlsperID;
+                                        App.cboSlsperID.validate();
+                                    });
+                                else {
+                                    App.cboSlsperID.setReadOnly(true);
+                                    App.cboSlsperID.allowBlank = true;
+                                    App.cboSlsperID.validate();
+                                }
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    }
+}
 var cboSlsperID_Change = function (item, newValue, oldValue) {
     if (item.valueModels != null && App.cboSlsperID.getValue() != null) {//truong hop co chon branchid             
         App.cboDistAddr.getStore().load(function () {
