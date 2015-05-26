@@ -57,6 +57,7 @@
                                         .Listeners(lst =>
                                                 {
                                                     lst.Change.Fn = "cboBranchID_Change";
+                                                    lst.Select.Fn = "cboBranchID_Select";
                                                     lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                                                     lst.Focus.Handler = "this.forceSelection=true;";
                                                 })
