@@ -138,6 +138,80 @@ namespace IN30500
     
             return base.ExecuteFunction<IN30500_QuickQueryInvt_Result>("IN30500_QuickQueryInvt", invtIDParameter, branchParameter, siteParameter, firstDateParameter, lastDateParameter, statusParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="invtID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
+        /// <param name="firstDate">No Metadata Documentation available.</param>
+        /// <param name="lastDate">No Metadata Documentation available.</param>
+        /// <param name="status">No Metadata Documentation available.</param>
+        public ObjectResult<IN30500_QuickQuerySite_Result> IN30500_QuickQuerySite(global::System.String invtID, global::System.String branchID, global::System.String siteID, Nullable<global::System.DateTime> firstDate, Nullable<global::System.DateTime> lastDate, global::System.String status)
+        {
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            ObjectParameter firstDateParameter;
+            if (firstDate.HasValue)
+            {
+                firstDateParameter = new ObjectParameter("FirstDate", firstDate);
+            }
+            else
+            {
+                firstDateParameter = new ObjectParameter("FirstDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter lastDateParameter;
+            if (lastDate.HasValue)
+            {
+                lastDateParameter = new ObjectParameter("LastDate", lastDate);
+            }
+            else
+            {
+                lastDateParameter = new ObjectParameter("LastDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter statusParameter;
+            if (status != null)
+            {
+                statusParameter = new ObjectParameter("Status", status);
+            }
+            else
+            {
+                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN30500_QuickQuerySite_Result>("IN30500_QuickQuerySite", invtIDParameter, branchIDParameter, siteIDParameter, firstDateParameter, lastDateParameter, statusParameter);
+        }
 
         #endregion
 
@@ -243,6 +317,251 @@ namespace IN30500
         private global::System.String _TenHang;
         partial void OnTenHangChanging(global::System.String value);
         partial void OnTenHangChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Tondau
+        {
+            get
+            {
+                return _Tondau;
+            }
+            set
+            {
+                OnTondauChanging(value);
+                ReportPropertyChanging("Tondau");
+                _Tondau = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Tondau");
+                OnTondauChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Tondau;
+        partial void OnTondauChanging(Nullable<global::System.Double> value);
+        partial void OnTondauChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Nhap
+        {
+            get
+            {
+                return _Nhap;
+            }
+            set
+            {
+                OnNhapChanging(value);
+                ReportPropertyChanging("Nhap");
+                _Nhap = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Nhap");
+                OnNhapChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Nhap;
+        partial void OnNhapChanging(Nullable<global::System.Double> value);
+        partial void OnNhapChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Xuat
+        {
+            get
+            {
+                return _Xuat;
+            }
+            set
+            {
+                OnXuatChanging(value);
+                ReportPropertyChanging("Xuat");
+                _Xuat = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Xuat");
+                OnXuatChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Xuat;
+        partial void OnXuatChanging(Nullable<global::System.Double> value);
+        partial void OnXuatChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> BanHang
+        {
+            get
+            {
+                return _BanHang;
+            }
+            set
+            {
+                OnBanHangChanging(value);
+                ReportPropertyChanging("BanHang");
+                _BanHang = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("BanHang");
+                OnBanHangChanged();
+            }
+        }
+        private Nullable<global::System.Double> _BanHang;
+        partial void OnBanHangChanging(Nullable<global::System.Double> value);
+        partial void OnBanHangChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Toncuoi
+        {
+            get
+            {
+                return _Toncuoi;
+            }
+            set
+            {
+                OnToncuoiChanging(value);
+                ReportPropertyChanging("Toncuoi");
+                _Toncuoi = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Toncuoi");
+                OnToncuoiChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Toncuoi;
+        partial void OnToncuoiChanging(Nullable<global::System.Double> value);
+        partial void OnToncuoiChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN30500Model", Name="IN30500_QuickQuerySite_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN30500_QuickQuerySite_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new IN30500_QuickQuerySite_Result object.
+        /// </summary>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        public static IN30500_QuickQuerySite_Result CreateIN30500_QuickQuerySite_Result(global::System.String branchID)
+        {
+            IN30500_QuickQuerySite_Result iN30500_QuickQuerySite_Result = new IN30500_QuickQuerySite_Result();
+            iN30500_QuickQuerySite_Result.BranchID = branchID;
+            return iN30500_QuickQuerySite_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Kho
+        {
+            get
+            {
+                return _Kho;
+            }
+            set
+            {
+                OnKhoChanging(value);
+                ReportPropertyChanging("Kho");
+                _Kho = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Kho");
+                OnKhoChanged();
+            }
+        }
+        private global::System.String _Kho;
+        partial void OnKhoChanging(global::System.String value);
+        partial void OnKhoChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TenKho
+        {
+            get
+            {
+                return _TenKho;
+            }
+            set
+            {
+                OnTenKhoChanging(value);
+                ReportPropertyChanging("TenKho");
+                _TenKho = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TenKho");
+                OnTenKhoChanged();
+            }
+        }
+        private global::System.String _TenKho;
+        partial void OnTenKhoChanging(global::System.String value);
+        partial void OnTenKhoChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String MaHang
+        {
+            get
+            {
+                return _MaHang;
+            }
+            set
+            {
+                OnMaHangChanging(value);
+                ReportPropertyChanging("MaHang");
+                _MaHang = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("MaHang");
+                OnMaHangChanged();
+            }
+        }
+        private global::System.String _MaHang;
+        partial void OnMaHangChanging(global::System.String value);
+        partial void OnMaHangChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

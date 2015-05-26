@@ -47,9 +47,9 @@
                         lst.Change.Fn = "cboBranchID_Change";
                         lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue();App.cboInvtID.setValue('');App.cboSite.setValue(''); }";
                         lst.Focus.Handler = "this.forceSelection=true;";
-                    })  
+                    })
                     .LoadData()
-                    
+
                     , HQ.Combo().ID("cboInvtID").Name("cboInvtID").MarginSpec("5 0 0 0").Width(300)
                     .HQLangCode("InvtID").HQDBSys(false).HQProcedure("IN30500_pcInventoryActive")
                     .HQColumnShow("InvtID,Descr,CpnyID").ForceSelection(true).MultiSelect(true)
@@ -62,9 +62,9 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                         lst.Focus.Handler = "this.forceSelection=true;";
-                    })  
+                    })
                     .LoadData()
-                    
+
                     , HQ.Combo().ID("cboSite").Name("cboSite").MarginSpec("5 0 5 0").Width(300)
                     .HQLangCode("Site").HQDBSys(false).HQProcedure("IN30500_pcSiteAll")
                     .HQColumnShow("SiteID,Name,CpnyID").ForceSelection(true).MultiSelect(true)
@@ -77,11 +77,11 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                         lst.Focus.Handler = "this.forceSelection=true;";
-                    })  
+                    })
                     .LoadData()
-              
+
                 )
-                
+
                 , X.Container().Layout(LayoutType.VBox)
                 .Items(
                     HQ.Checkbox().ID("chkBranchID").BoxLabel(Util.GetLang("BranchAll")).MarginSpec("5 0 0 10")
@@ -89,21 +89,21 @@
                     {
                         l.Change.Fn = "chkBranchID_Change";
                     })
-                    
+
                     , HQ.Checkbox().ID("chkInvtID").BoxLabel(Util.GetLang("InvtAll")).MarginSpec("5 0 0 10")
                     .Listeners(l =>
                     {
                         l.Change.Fn = "chkInvtID_Change";
                     })
-                    
+
                     , HQ.Checkbox().ID("chkSite").BoxLabel(Util.GetLang("SiteAll")).MarginSpec("5 0 5 10")
                     .Listeners(l =>
                     {
                         l.Change.Fn = "chkSite_Change";
-                    }) 
-                        
+                    })
+
                 )
-                    
+
                 , X.Container().Layout(LayoutType.VBox)
                     .Items(
                         HQ.Combo().ID("cboStatus").Name("cboStatus").MarginSpec("5 0 0 0").Width(300)
@@ -120,7 +120,7 @@
                             lst.Focus.Handler = "this.forceSelection=true;";
                         })
                         .LoadData()
-                        
+
                         , HQ.DateField().ID("lblFromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(220)
                         .Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy"))
 
@@ -128,14 +128,14 @@
                         .Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy"))
                     )//Column 3
                 )
-                
+
             //pnl Header
 
             , X.Panel().ID("pnlGrid")
             .Region(Region.Center)
             .Layout(LayoutType.Border)
             .Items(
-                X.GridPanel().ID("grdDetail")
+                X.GridPanel().ID("grdHeader")
         //.Hidden(true)
                     .Scroll(ScrollMode.Both)
                     .View(X.GridView().TrackOver(false).LoadMask(true))
@@ -143,10 +143,10 @@
                     .SelectionMemory(false)
                     .Store(
                         X.Store()
-                        .ID("stoDetail")
+                        .ID("stoHeader")
                         .PageSize(50)
                         .Model(Util.GenerateModel(typeof(IN30500_QuickQueryInvt_Result), "mdlIN30500_QuickQueryInvt", ""))
-                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDetail"))).AutoLoad(false)
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetHeader"))).AutoLoad(false)
                         .Parameters(ps =>
                         {
                             ps.Add(new StoreParameter("InvtID", "App.cboInvtID.getValue().join(',')", ParameterMode.Raw));
@@ -157,8 +157,8 @@
                             ps.Add(new StoreParameter("Status", "App.cboStatus.getValue()", ParameterMode.Raw));
                         })
                             .Listeners(p => p.Load.Fn = "stoLoad")
-                        )
-                    .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdDetail');")
+                    )
+                    .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdHeader');")
                     .SortableColumns(false)
                     .ColumnModel(
                         X.RowNumbererColumn().Width(40)
@@ -171,8 +171,8 @@
                         , X.NumberColumn().Text(Util.GetLang("Issue")).DataIndex("Xuat").Width(150).Align(Alignment.Right).Format("0,000")
                         , X.NumberColumn().Text(Util.GetLang("OnSO")).DataIndex("BanHang").Width(150).Align(Alignment.Right).Format("0,000")
                         , X.NumberColumn().Text(Util.GetLang("CloQty")).DataIndex("Toncuoi").Width(150).Align(Alignment.Right).Format("0,000")
- 
-                    
+
+
                         , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
@@ -182,9 +182,9 @@
                             .Icon(Icon.ArrowUndo)
                         )
                         .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        .Listeners(l => l.Command.Handler = "grdDetail_Reject(record);")
+                        .Listeners(l => l.Command.Handler = "grdHeader_Reject(record);")
                     )
-                    .SelectionModel(X.RowSelectionModel().ID("slmDetail").Mode(SelectionMode.Multi))
+                    .SelectionModel(X.RowSelectionModel().ID("slmHeader").Mode(SelectionMode.Multi))
                     .BottomBar(
                             X.PagingToolbar()
                             .Items(
@@ -199,16 +199,46 @@
                             .Plugins(X.ProgressBarPager())
                         )
                     .Plugins(
-                        X.CellEditing()
-                        .ClicksToEdit(1)
-                        .Listeners(ls =>
-                        {
-                            //ls.BeforeEdit.Fn = "grdDetail_BeforeEdit";
-                            //ls.Edit.Fn = "grdDetail_Edit";
-                            //ls.ValidateEdit.Fn = "grdDetail_ValidateEdit";
-                        })
+                        X.RowExpander().ID("Ctrl_Expand")
+                        .Listeners(l=>l.Expand.Fn="Ctrl_Expand")
+                        .Component(
+                            X.FormPanel()
+                            .Items(                           
+                                X.GridPanel().Height(300).ID("grdDetail")
+                                .Store(
+                                X.Store()
+                                .ID("stoDetail")
+                                .PageSize(50)
+                                .Model(Util.GenerateModel(typeof(IN30500_QuickQuerySite_Result), "mdlIN30500_QuickQuerySite", ""))
+                                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDetail"))).AutoLoad(false)
+                                .Parameters(ps =>
+                                {
+                                    ps.Add(new StoreParameter("InvtID", "HQ_MatHang", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("BranchID", "HQ_BranchID", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("Site", "App.cboSite.getValue().join(',')", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("FirstDate", "App.lblFromDate.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("LastDate", "App.lblToDate.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("Status", "App.cboStatus.getValue()", ParameterMode.Raw));
+                                })
+                                    .Listeners(p => p.Load.Fn = "stoLoad")
+                                )
+                                .ColumnModel(
+                                    X.Column().Text(Util.GetLang("SiteID")).DataIndex("Kho")
+                                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("TenKho")
+                                    , X.Column().Text(Util.GetLang("OpQty")).DataIndex("Tondau")
+                                    , X.Column().Text(Util.GetLang("InvtReceipt")).DataIndex("Nhap")
+                                    , X.Column().Text(Util.GetLang("Issue")).DataIndex("Xuat")
+                                    , X.Column().Text(Util.GetLang("OnSO")).DataIndex("BanHang")
+                                    , X.Column().Text(Util.GetLang("CloQty")).DataIndex("Toncuoi")
+                                )
+                                
+                            )
+                           // .Listeners(l=>l.AfterRender.Handler="this.getForm().loadRecord(this.record);")
+                                
+                        )
+                        
                     )
-
+                    
                     .Features(
                         X.GridFilters()
                             .Local(true)
@@ -221,10 +251,10 @@
                                 X.NumericFilter().DataIndex("Xuat"),
                                 X.NumericFilter().DataIndex("BanHang"),
                                 X.NumericFilter().DataIndex("Toncuoi")
- 
+
                             )
                     )
-                    
+
             )//pnl Grid
 
         )//frm Main

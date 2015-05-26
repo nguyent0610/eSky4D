@@ -1,19 +1,22 @@
+var HQ_MatHang = '';
+var HQ_BranchID = '';
+
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            HQ.grid.first(App.grdDetail);
+            HQ.grid.first(App.grdHeader);
             break;
         case "prev":
-            HQ.grid.prev(App.grdDetail);
+            HQ.grid.prev(App.grdHeader);
             break;
         case "next":
-            HQ.grid.next(App.grdDetail);
+            HQ.grid.next(App.grdHeader);
             break;
         case "last":
-            HQ.grid.last(App.grdDetail);
+            HQ.grid.last(App.grdHeader);
             break;
         case "refresh":
-            App.stoDetail.reload();
+            App.stoHeader.reload();
             break;
         case "new":
             break;
@@ -29,6 +32,15 @@ var menuClick = function (command) {
     }
 };
 
+var Ctrl_Expand = function (a, item) {
+    HQ_MatHang = item.data.MaHang;
+    HQ_BranchID = item.data.BranchID;
+    App.stoDetail.reload();
+};
+
+var grdHeader_Change = function () {
+    App.stoDetail.reload();
+};
 var cboBranchID_Change = function () {
     App.cboInvtID.getStore().load(function () {
         App.cboSite.store.reload();
@@ -70,7 +82,7 @@ var stoLoad = function (sto) {
 //// Other Functions ////////////////////////////////////////////////////
 function refresh(item) {
     if (item == 'yes') {
-        App.stoDetail.reload();
+        App.stoHeader.reload();
     }
 };
 

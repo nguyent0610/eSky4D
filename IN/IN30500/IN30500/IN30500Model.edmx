@@ -14,6 +14,14 @@
           <Parameter Name="LastDate" Type="smalldatetime" Mode="In" />
           <Parameter Name="Status" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="IN30500_QuickQuerySite" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FirstDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="LastDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -27,11 +35,30 @@
             <Parameter Name="LastDate" Mode="In" Type="DateTime" />
             <Parameter Name="Status" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="IN30500_QuickQuerySite" ReturnType="Collection(IN30500Model.IN30500_QuickQuerySite_Result)">
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="FirstDate" Mode="In" Type="DateTime" />
+            <Parameter Name="LastDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN30500_QuickQueryInvt_Result">
           <Property Type="String" Name="MaHang" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="TenHang" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="Tondau" Nullable="true" />
+          <Property Type="Double" Name="Nhap" Nullable="true" />
+          <Property Type="Double" Name="Xuat" Nullable="true" />
+          <Property Type="Double" Name="BanHang" Nullable="true" />
+          <Property Type="Double" Name="Toncuoi" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="IN30500_QuickQuerySite_Result">
+          <Property Type="String" Name="Kho" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TenKho" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="MaHang" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="Double" Name="Tondau" Nullable="true" />
           <Property Type="Double" Name="Nhap" Nullable="true" />
           <Property Type="Double" Name="Xuat" Nullable="true" />
@@ -50,6 +77,21 @@
                 <ScalarProperty Name="MaHang" ColumnName="MaHang" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="TenHang" ColumnName="TenHang" />
+                <ScalarProperty Name="Tondau" ColumnName="Tondau" />
+                <ScalarProperty Name="Nhap" ColumnName="Nhap" />
+                <ScalarProperty Name="Xuat" ColumnName="Xuat" />
+                <ScalarProperty Name="BanHang" ColumnName="BanHang" />
+                <ScalarProperty Name="Toncuoi" ColumnName="Toncuoi" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN30500_QuickQuerySite" FunctionName="eBiz4DWebSysModel.Store.IN30500_QuickQuerySite">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN30500Model.IN30500_QuickQuerySite_Result">
+                <ScalarProperty Name="Kho" ColumnName="Kho" />
+                <ScalarProperty Name="TenKho" ColumnName="TenKho" />
+                <ScalarProperty Name="MaHang" ColumnName="MaHang" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="Tondau" ColumnName="Tondau" />
                 <ScalarProperty Name="Nhap" ColumnName="Nhap" />
                 <ScalarProperty Name="Xuat" ColumnName="Xuat" />
