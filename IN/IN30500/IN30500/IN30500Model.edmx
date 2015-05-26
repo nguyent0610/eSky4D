@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer" />
+        <Function Name="IN30500_QuickQueryInvt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InvtID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Branch" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Site" Type="varchar(max)" Mode="In" />
+          <Parameter Name="FirstDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="LastDate" Type="smalldatetime" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IN30500Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="IN30500Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="IN30500_QuickQueryInvt" ReturnType="Collection(IN30500Model.IN30500_QuickQueryInvt_Result)">
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="Branch" Mode="In" Type="String" />
+            <Parameter Name="Site" Mode="In" Type="String" />
+            <Parameter Name="FirstDate" Mode="In" Type="DateTime" />
+            <Parameter Name="LastDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="IN30500_QuickQueryInvt_Result">
+          <Property Type="String" Name="MaHang" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="TenHang" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="Tondau" Nullable="true" />
+          <Property Type="Double" Name="Nhap" Nullable="true" />
+          <Property Type="Double" Name="Xuat" Nullable="true" />
+          <Property Type="Double" Name="BanHang" Nullable="true" />
+          <Property Type="Double" Name="Toncuoi" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="IN30500Entities" >
+          <FunctionImportMapping FunctionImportName="IN30500_QuickQueryInvt" FunctionName="eBiz4DWebSysModel.Store.IN30500_QuickQueryInvt">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN30500Model.IN30500_QuickQueryInvt_Result">
+                <ScalarProperty Name="MaHang" ColumnName="MaHang" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="TenHang" ColumnName="TenHang" />
+                <ScalarProperty Name="Tondau" ColumnName="Tondau" />
+                <ScalarProperty Name="Nhap" ColumnName="Nhap" />
+                <ScalarProperty Name="Xuat" ColumnName="Xuat" />
+                <ScalarProperty Name="BanHang" ColumnName="BanHang" />
+                <ScalarProperty Name="Toncuoi" ColumnName="Toncuoi" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="73" >
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
