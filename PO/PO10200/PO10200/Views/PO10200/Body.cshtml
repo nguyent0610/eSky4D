@@ -98,7 +98,7 @@
                                                         lst.Focus.Handler = "this.forceSelection=true;";
                                                     })
                                                 .LoadData()
-                                , HQ.TextBox().ID("txtIssueRcptNbr").Name("RefNbr").MaxLength(20).HQLangCode("ISSRCPTNBR").LabelWidth(100).InputWidth(110).MarginSpec("3 0 0 0")
+                                , HQ.TextBox().ID("txtIssueRcptNbr").Name("RefNbr").MaxLength(20).HQLangCode("ISSRCPTNBR").LabelWidth(100).InputWidth(110).MarginSpec("3 0 0 0").ReadOnly(true).Tag("X")
                                 , HQ.NumberField().DecimalPrecision(0).ReadOnly(true).ID("txtTotAmt").Name("TotAmt").HQLangCode("TotAmt").LabelWidth(100).InputWidth(105).AllowBlank(false).MarginSpec("3 0 0 0").Tag("X")
 
                                 , HQ.Combo().ID("cboHandle").Name("Handle").MarginSpec("3 0 0 0").LabelWidth(110).InputWidth(120).HQAutoLoad(false)

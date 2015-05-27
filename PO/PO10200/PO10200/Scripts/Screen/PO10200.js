@@ -225,6 +225,9 @@ var menuClick = function (command) {
                     method: 'POST',
                     url: 'PO10200/Report',
                     timeout: 180000,
+                    params: {
+                        lstHeader: Ext.encode(App.stoHeader.getRecordsValues())
+                    },
                     success: function (msg, data) {
                         if (this.result.reportID != null) {
 
@@ -572,6 +575,21 @@ var grdPO_Trans_Edit = function (item, e) {
     }
     else if (e.field == "UnitCost") {
         e.record.set("TranAmt", objDetail.RcptQty * objDetail.UnitCost - objDetail.DocDiscAmt);
+        //cap nhat lai don vi gia cho lot trans
+        App.stoLotTrans.clearFilter();
+        App.stoLotTrans.data.each(function (item) {
+            if (item.data.POTranLineRef == objDetail.LineRef) {
+                item.data.SiteID = objDetail.SiteID;
+                item.data.InvtID = objDetail.InvtID;
+                item.data.UnitDesc = objDetail.RcptUnitDescr;
+                item.data.UnitCost = objDetail.UnitCost;
+                item.data.UnitPrice = objDetail.UnitCost;
+                item.data.CnvFact = objDetail.RcptConvFact;
+                item.data.UnitMultDiv = objDetail.RcptMultDiv;
+
+            }
+
+        });
 
     }
     else if (e.field == "UnitVolume") {
