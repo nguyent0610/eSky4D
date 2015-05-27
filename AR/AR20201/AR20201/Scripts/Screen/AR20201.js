@@ -7,6 +7,8 @@ var Process = {
 
     saveData: function () {
         if (App.frmMain.isValid()) {
+            var selRec = HQ.store.findInStore(App.cboBranchID.store, ['BranchID'], [App.cboBranchID.getValue()]);
+
             App.frmMain.updateRecord();
 
             App.frmMain.submit({
@@ -16,7 +18,7 @@ var Process = {
                 params: {
                     lstPG: Ext.encode(App.stoPG.getRecordsValues()),
                     lstPGCpnyAddr: HQ.store.getData(App.grdPGCpnyAddr.store),
-                    channel: App.cboBranchID.valueModels.length > 0 ? App.cboBranchID.valueModels[0].data.Channel : "",
+                    channel: selRec ? selRec.Channel : "",
                     isNew: HQ.isNew
                 },
                 success: function (msg, data) {
@@ -161,10 +163,6 @@ var Process = {
 // Store Event
 var Store = {
     stoPG_load: function (sto, records, successful, eOpts) {
-        //App.cboState.forceSelection = false;
-        //App.cboDistrict.forceSelection = false;
-        HQ.common.setForceSelection(App.frmMain, false, "cboBranchID,cboPGID")
-
         HQ.isNew = false;
         if (sto.getCount() == 0) {
             var newSlsper = Ext.create("App.mdlAR_PG", {
@@ -177,16 +175,15 @@ var Store = {
         var frmRecord = sto.getAt(0);
         App.frmMain.loadRecord(frmRecord);
 
-        if (App.cboBranchID.valueModels.length > 0) {
-            var selRec = App.cboBranchID.valueModels[0];
-            if (selRec.data.Channel == "MT") {
-                App.pnlPGCpnyAddr.show();
-                App.grdPGCpnyAddr.store.reload();
-            }
-            else {
-                App.pnlPGCpnyAddr.hide();
-                App.grdPGCpnyAddr.store.removeAll();
-            }
+        var selRec = HQ.store.findInStore(App.cboBranchID.store,['BranchID'],[App.cboBranchID.getValue()]);
+
+        if (selRec && selRec.Channel == "MT") {
+            App.pnlPGCpnyAddr.show();
+            App.grdPGCpnyAddr.store.reload();
+        }
+        else {
+            App.pnlPGCpnyAddr.hide();
+            App.grdPGCpnyAddr.store.removeAll();
         }
 
         Event.Form.frmMain_fieldChange();

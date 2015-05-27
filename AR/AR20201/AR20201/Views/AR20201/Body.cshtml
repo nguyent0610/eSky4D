@@ -37,7 +37,7 @@
                     .HQColumnShow("BranchID,BranchName,Channel").DisplayField("BranchID").ValueField("BranchID")
                     .AllowBlank(false).ForceSelection(true)//.HQValue("HQ.cpnyID", true)
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                    .AllowBlank(false).Editable(false)
+                    .AllowBlank(false)//.Editable(false)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
