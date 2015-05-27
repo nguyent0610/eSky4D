@@ -207,9 +207,17 @@ var Index = {
                 var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
                 PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
             }
-            else if (!record.data.CustId) {
-                var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
-                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
+            else{
+                if (record.data.CustId) {
+                    if (App.chkShowAgent.value) {
+                        var id = record.data.CustId + "_" + record.data.CustLat + "_" + record.data.CustLng;
+                        PosGmap.navMapCenterByLocation(record.data.CustLat, record.data.CustLng, id);
+                    }
+                }
+                else {
+                    var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
+                    PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
+                }
             }
         }
     },
@@ -415,12 +423,9 @@ var Index = {
         }
     },
 
-    grdVisitCustomerActual_viewGetRowClass: function (record) {
-        if (record.data.Type == "IO") {
-            return "ci-row"
-        }
-        else if (record.data.Type == "OO") {
-            return "co-row";
+    grdVisitCustomerActual_viewGetRowClass: function (record, rowIndex, rowParams, store) {
+        if (record.data.CustId && !record.data.Amt) {
+            return "row-FF0000";
         }
     },
 
@@ -535,7 +540,7 @@ var Index = {
                     markers.push(markero);
 
                     var markerc = {
-                        "id": record.data.CustId + "_" + record.data.CoLat + "_" + record.data.CoLng,
+                        "id": record.data.CustId + "_" + record.data.CustLat + "_" + record.data.CustLng,
                         "title": record.data.CustId + ": " + record.data.CustName,
                         "lat": record.data.CustLat,
                         "lng": record.data.CustLng,
