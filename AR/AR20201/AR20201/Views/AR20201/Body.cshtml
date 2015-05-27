@@ -1,0 +1,223 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using AR20201;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Border)
+        .ID("frmMain")
+        .TrackResetOnLoad(true)
+        //.DefaultAnchor("100%")
+        .BodyPadding(10)
+        .BodyBorder(0).AutoScroll(true)
+        .TopBar(Util.SetupToolbar("print,close", true, "Event.Form.menuClick"))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 120; })
+        .Items(
+            X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.West)
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
+            .Listeners(ls=>ls.Render.Handler="HQ.common.control_render(this,'header')")
+            .Items(
+
+                // First Column
+                X.Container().Layout(LayoutType.VBox).MarginSpec("0 10 5 0")
+                .Flex(1).MinWidth(250)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQLangCode("BranchID")
+                    .HQProcedure("AR20201_pcBranchAllByUser")
+                    .HQColumnShow("BranchID,BranchName,Channel").DisplayField("BranchID").ValueField("BranchID")
+                    .AllowBlank(false).ForceSelection(true)//.HQValue("HQ.cpnyID", true)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .AllowBlank(false).Editable(false)
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "Event.Form.cboBranchID_change";
+                        })
+
+                    , HQ.Combo().ID("cboPGID").Name("cboPGID").HQLangCode("PGID")
+                    .HQProcedure("AR20201_pcPGID")
+                    .HQColumnShow("PGID,Name").DisplayField("PGID").ValueField("PGID")
+                    .MinWidth(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .AllowBlank(false).HQAutoLoad(false).MaxLength(30).EnforceMaxLength(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false }).Flex(4)
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
+                        })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "Event.Form.cboPGID_change";
+                        })
+                    
+                    , HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("Name").DataIndex("PGName")
+                    .Width(300).MarginSpec("5 0 0 0")
+                    .AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
+
+                    , HQ.Combo().ID("cboPosition").Name("cboPosition").HQLangCode("Position").HQProcedure("AR20201_pcPosition")
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("Position")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .AllowBlank(false).ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                    .LoadData()
+
+                    , HQ.TextBox().ID("txtAddr").Name("txtAddr").HQLangCode("Addr").DataIndex("Addr")
+                    .Width(300).MarginSpec("5 0 0 0")
+                    .AllowBlank(false).MaxLength(150).EnforceMaxLength(true)
+                )
+            ) // pnlHeader
+            
+            , X.Panel().ID("pnlPGCpnyAddr")
+            .Region(Region.Center).Border(false).Hidden(true)
+            .Layout(LayoutType.Border)
+            .Title(Util.GetLang("PGCpnyAddr"))
+            .Listeners(ls=>ls.Render.Handler="HQ.common.control_render(this,'grid')")
+            .Items(
+                X.Panel().ID("treeCpnyAddr")
+                .Region(Region.West).Flex(4)
+                .MinWidth(150).Split(true).AutoScroll(true)
+                .DirectEvents(de =>
+                {
+                    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCpnyAddr"));
+                    de.AfterRender.Url = Url.Action("GetTreeCpnyAddr", "AR20201");
+                    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                    de.AfterRender.CleanRequest = true;
+                    de.AfterRender.Method = HttpMethod.POST;
+                    de.AfterRender.Success = "";
+                    de.AfterRender.Timeout = 60000;
+                    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                    de.AfterRender.EventMask.ShowMask = true;
+                    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                    de.AfterRender.EventMask.MinDelay = 500;
+
+                    de.Expand.ExtraParams.Add(new Parameter("panelID", "treeCpnyAddr"));
+                    de.Expand.Url = Url.Action("GetTreeCpnyAddr", "AR20201");
+                    //de.Expand.FormID = "moduleCatTree"+cat.catID;
+                    de.Expand.CleanRequest = true;
+                    de.Expand.Method = HttpMethod.POST;
+                    de.Expand.Success = "";
+                    de.Expand.Timeout = 60000;
+                    de.Expand.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                    de.Expand.EventMask.ShowMask = true;
+                    de.Expand.EventMask.Msg = Util.GetLang("LoadingData");
+                    de.Expand.EventMask.MinDelay = 500;
+                })
+                .BottomBar(
+                    X.Toolbar()
+                    .Items(
+                        X.ToolbarFill()
+
+                        , HQ.Button().ID("btnExpand")
+                        .HQLangCode("Expand")
+                        .Icon(Icon.BulletTogglePlus)
+                        .Handler("Event.Tree.btnExpand_click")
+
+                        , X.ToolbarSpacer()
+                        , X.ToolbarSeparator()
+                        , X.ToolbarSpacer()
+
+                        , HQ.Button().ID("btnCollapse")
+                        .HQLangCode("Collapse")
+                        .Icon(Icon.BulletToggleMinus)
+                        .Handler("Event.Tree.btnCollapse_click")
+
+                        , X.ToolbarFill()
+                    )
+                ) // treeCpnyAddr
+
+                , X.Panel()
+                .Region(Region.Center).Flex(1)
+                .Layout(LayoutType.VBox)
+                .MinWidth(50)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    HQ.Button().ID("btnAddAll")
+                    .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                    .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                    .Handler("Event.Tree.btnAddAll_click")
+
+                    , HQ.Button().ID("btnAdd")
+                    .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                    .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                    .Handler("Event.Tree.btnAdd_click")
+
+                    , HQ.Button().ID("btnDel")
+                    .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                    .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                    .Handler("Event.Tree.btnDel_click")
+
+                    , HQ.Button().ID("btnDelAll")
+                    .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                    .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                    .Handler("Event.Tree.btnDelAll_click")
+                ) // Panel
+            
+                , X.GridPanel().ID("grdPGCpnyAddr")
+                .Region(Region.East).Flex(8)
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false))
+                .SortableColumns(false)
+                .StoreID("stoPGCpnyAddr")
+                .ColumnModel(
+                    X.RowNumbererColumn()
+
+                    , X.Column().Text(Util.GetLang("AddrID")).DataIndex("AddrID")
+                        
+                    , X.Column().Text(Util.GetLang("WorkTime")).DataIndex("WorkingTime").Width(150)
+                    .Editor(HQ.TextBox())
+                    
+                    , X.Column().Text(Util.GetLang("Addr1")).DataIndex("Addr1").Width(200)
+                    //.Renderer("Process.renderAddr")
+                    
+                    , X.Column().Text(Util.GetLang("Name")).DataIndex("Name")
+
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "Event.Grid.grdPGCpnyAddr_reject(this, record);")
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmPGCpnyAddr").Mode(SelectionMode.Multi))
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "Event.Grid.grdPGCpnyAddr_beforeEdit";
+                        //ls.Edit.Fn = "Event.Grid.grdPGCpnyAddr_edit";
+                        ls.ValidateEdit.Fn = "Event.Grid.grdPGCpnyAddr_validateEdit";
+                    })
+                ) // grdPGCpnyAddr
+            )// pnlPGCpnyAddr
+        )
+        .Listeners(lst => {
+            lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
+            lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
+        })// Form: frmMain
+    )
+)

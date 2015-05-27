@@ -1,0 +1,95 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using AR20201;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "AR20201";
+    var acc = Session["AR20201"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/AR20201.js")' type="text/javascript"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("stoPG")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR_PG), "mdlAR_PG", "PGID"))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetPGById", "AR20201"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("pgID", "App.cboPGID.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Fn="Store.stoPG_load" )
+            // Store: stoPG
+        )
+
+        @(
+            X.Store().ID("stoPGCpnyAddr")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR20201_pgPGCpnyAddr_Result), "mdlPGCpnyAddr", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetPGCpnyAddr", "AR20201"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("pgID", "App.cboPGID.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(p => {
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['AddrID','WorkingTime'];";
+                p.Load.Fn = "Store.stoPGCpnyAddr_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+            // Store: stoPGCpnyAddr
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong AR20201Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>
