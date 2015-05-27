@@ -6,7 +6,6 @@
 //        })
 //    });
 //};
-
 // Submit the changed data (created, updated) into server side
 function save() {
 
@@ -25,10 +24,8 @@ function save() {
                 success: function (action, data) {
                     HQ.message.show(201405071, '', '');
                     App.stoIN00000.reload();
-
                 },
                 failure: function (msg, data) {
-
                     HQ.message.process(msg, data, true);
                 }
             });
