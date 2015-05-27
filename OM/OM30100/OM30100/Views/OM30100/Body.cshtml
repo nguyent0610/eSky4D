@@ -229,6 +229,28 @@
                                     , X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID")
                                     , X.Column().Text(Util.GetLang("Promotion")).DataIndex("FreeItem")
                                 )
+                                .Features(
+                                X.GridFilters()
+                                    .Local(true)
+                                    .Filters(
+                                        X.StringFilter().DataIndex("lineref"),
+                                        X.StringFilter().DataIndex("InvtID"),
+                                        X.StringFilter().DataIndex("Descr"),
+                                        X.NumericFilter().DataIndex("lineQty"),
+                                        X.StringFilter().DataIndex("slsUnit"),
+                                        X.NumericFilter().DataIndex("slsPrice"),
+                                        X.NumericFilter().DataIndex("DiscPct"),
+                                        X.NumericFilter().DataIndex("DiscAmt"),
+                                        X.NumericFilter().DataIndex("LineAmt"),
+                                        X.DateFilter().DataIndex("PromiseDate"),
+                                        X.StringFilter().DataIndex("ShipViaID"),
+                                        X.StringFilter().DataIndex("SiteID"),
+                                        X.StringFilter().DataIndex("BranchID"),
+                                        X.StringFilter().DataIndex("FreeItem")
+               
+                                    )
+                    )
+                                
                             )
                         )
                     )
