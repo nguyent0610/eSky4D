@@ -77,113 +77,6 @@ namespace OM30100
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="fromDate">No Metadata Documentation available.</param>
         /// <param name="toDate">No Metadata Documentation available.</param>
-        public ObjectResult<OM30100_open_close_Detail_Result> OM30100_open_close_Detail(global::System.String custID, global::System.String invenID, global::System.String siteID, global::System.String cusPO, global::System.String invoice, global::System.String status, global::System.String branchID, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate)
-        {
-            ObjectParameter custIDParameter;
-            if (custID != null)
-            {
-                custIDParameter = new ObjectParameter("CustID", custID);
-            }
-            else
-            {
-                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
-            }
-    
-            ObjectParameter invenIDParameter;
-            if (invenID != null)
-            {
-                invenIDParameter = new ObjectParameter("InvenID", invenID);
-            }
-            else
-            {
-                invenIDParameter = new ObjectParameter("InvenID", typeof(global::System.String));
-            }
-    
-            ObjectParameter siteIDParameter;
-            if (siteID != null)
-            {
-                siteIDParameter = new ObjectParameter("SiteID", siteID);
-            }
-            else
-            {
-                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
-            }
-    
-            ObjectParameter cusPOParameter;
-            if (cusPO != null)
-            {
-                cusPOParameter = new ObjectParameter("CusPO", cusPO);
-            }
-            else
-            {
-                cusPOParameter = new ObjectParameter("CusPO", typeof(global::System.String));
-            }
-    
-            ObjectParameter invoiceParameter;
-            if (invoice != null)
-            {
-                invoiceParameter = new ObjectParameter("invoice", invoice);
-            }
-            else
-            {
-                invoiceParameter = new ObjectParameter("invoice", typeof(global::System.String));
-            }
-    
-            ObjectParameter statusParameter;
-            if (status != null)
-            {
-                statusParameter = new ObjectParameter("Status", status);
-            }
-            else
-            {
-                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
-            }
-    
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter fromDateParameter;
-            if (fromDate.HasValue)
-            {
-                fromDateParameter = new ObjectParameter("FromDate", fromDate);
-            }
-            else
-            {
-                fromDateParameter = new ObjectParameter("FromDate", typeof(global::System.DateTime));
-            }
-    
-            ObjectParameter toDateParameter;
-            if (toDate.HasValue)
-            {
-                toDateParameter = new ObjectParameter("ToDate", toDate);
-            }
-            else
-            {
-                toDateParameter = new ObjectParameter("ToDate", typeof(global::System.DateTime));
-            }
-    
-            return base.ExecuteFunction<OM30100_open_close_Detail_Result>("OM30100_open_close_Detail", custIDParameter, invenIDParameter, siteIDParameter, cusPOParameter, invoiceParameter, statusParameter, branchIDParameter, fromDateParameter, toDateParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="custID">No Metadata Documentation available.</param>
-        /// <param name="invenID">No Metadata Documentation available.</param>
-        /// <param name="siteID">No Metadata Documentation available.</param>
-        /// <param name="cusPO">No Metadata Documentation available.</param>
-        /// <param name="invoice">No Metadata Documentation available.</param>
-        /// <param name="status">No Metadata Documentation available.</param>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="fromDate">No Metadata Documentation available.</param>
-        /// <param name="toDate">No Metadata Documentation available.</param>
         public ObjectResult<OM30100_open_close_Header_Result> OM30100_open_close_Header(global::System.String custID, global::System.String invenID, global::System.String siteID, global::System.String cusPO, global::System.String invoice, global::System.String status, global::System.String branchID, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate)
         {
             ObjectParameter custIDParameter;
@@ -277,6 +170,124 @@ namespace OM30100
             }
     
             return base.ExecuteFunction<OM30100_open_close_Header_Result>("OM30100_open_close_Header", custIDParameter, invenIDParameter, siteIDParameter, cusPOParameter, invoiceParameter, statusParameter, branchIDParameter, fromDateParameter, toDateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="invenID">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
+        /// <param name="cusPO">No Metadata Documentation available.</param>
+        /// <param name="invoice">No Metadata Documentation available.</param>
+        /// <param name="status">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="fromDate">No Metadata Documentation available.</param>
+        /// <param name="toDate">No Metadata Documentation available.</param>
+        /// <param name="ordNbrBranch">No Metadata Documentation available.</param>
+        public ObjectResult<OM30100_open_close_Detail_Result> OM30100_open_close_Detail(global::System.String custID, global::System.String invenID, global::System.String siteID, global::System.String cusPO, global::System.String invoice, global::System.String status, global::System.String branchID, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate, global::System.String ordNbrBranch)
+        {
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter invenIDParameter;
+            if (invenID != null)
+            {
+                invenIDParameter = new ObjectParameter("InvenID", invenID);
+            }
+            else
+            {
+                invenIDParameter = new ObjectParameter("InvenID", typeof(global::System.String));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cusPOParameter;
+            if (cusPO != null)
+            {
+                cusPOParameter = new ObjectParameter("CusPO", cusPO);
+            }
+            else
+            {
+                cusPOParameter = new ObjectParameter("CusPO", typeof(global::System.String));
+            }
+    
+            ObjectParameter invoiceParameter;
+            if (invoice != null)
+            {
+                invoiceParameter = new ObjectParameter("invoice", invoice);
+            }
+            else
+            {
+                invoiceParameter = new ObjectParameter("invoice", typeof(global::System.String));
+            }
+    
+            ObjectParameter statusParameter;
+            if (status != null)
+            {
+                statusParameter = new ObjectParameter("Status", status);
+            }
+            else
+            {
+                statusParameter = new ObjectParameter("Status", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter fromDateParameter;
+            if (fromDate.HasValue)
+            {
+                fromDateParameter = new ObjectParameter("FromDate", fromDate);
+            }
+            else
+            {
+                fromDateParameter = new ObjectParameter("FromDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter toDateParameter;
+            if (toDate.HasValue)
+            {
+                toDateParameter = new ObjectParameter("ToDate", toDate);
+            }
+            else
+            {
+                toDateParameter = new ObjectParameter("ToDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter ordNbrBranchParameter;
+            if (ordNbrBranch != null)
+            {
+                ordNbrBranchParameter = new ObjectParameter("OrdNbrBranch", ordNbrBranch);
+            }
+            else
+            {
+                ordNbrBranchParameter = new ObjectParameter("OrdNbrBranch", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM30100_open_close_Detail_Result>("OM30100_open_close_Detail", custIDParameter, invenIDParameter, siteIDParameter, cusPOParameter, invoiceParameter, statusParameter, branchIDParameter, fromDateParameter, toDateParameter, ordNbrBranchParameter);
         }
 
         #endregion

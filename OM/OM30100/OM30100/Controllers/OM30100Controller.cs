@@ -28,21 +28,29 @@ namespace OM30100.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        //public ActionResult GetDetail(string InvtID, string BranchID)
-        //{
-        //    return this.Store(_db.OM30100_open_close_Detail(InvtID, BranchID).ToList());
-        //}
+        public ActionResult GetDetail(string CustID, string InvenID, string SiteID, string CusPO, string invoice
+            , string Status, string BranchID, string FromDate, string ToDate, string OrdNbrBranch)
+        {
+            DateTime FromDate_tmp = DateTime.Parse(FromDate.PassNull());
+            DateTime ToDate_tmp = DateTime.Parse(ToDate.PassNull());
+            return this.Store(_db.OM30100_open_close_Detail(CustID, InvenID, SiteID, CusPO, invoice, Status
+                , BranchID, FromDate_tmp, ToDate_tmp,OrdNbrBranch).ToList());
+        }
 
-        //public ActionResult GetHeader(string InvtID)
-        //{
-        //    return this.Store(_db.OM30100_open_close_Header(InvtID).ToList());
-        //}
+        public ActionResult GetHeader(string CustID, string InvenID, string SiteID, string CusPO, string invoice
+            , string Status, string BranchID, string FromDate, string ToDate)
+        {
+            DateTime FromDate_tmp = DateTime.Parse(FromDate.PassNull());
+            DateTime ToDate_tmp = DateTime.Parse(ToDate.PassNull());
+            return this.Store(_db.OM30100_open_close_Header(CustID, InvenID, SiteID, CusPO, invoice, Status
+                , BranchID, FromDate_tmp, ToDate_tmp).ToList());
+        }
 
     }
 }

@@ -1,3 +1,4 @@
+var HQ_OrdNbrBranch = '';
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -29,24 +30,7 @@ var menuClick = function (command) {
     }
 };
 
-var cboInvtID_Change = function () {
-    App.stoHeader.reload();
-};
-
-var cboBranchID_Change = function () {
-    App.cboInvtID.store.reload();
-};
-
-var chkBranchID_Change = function (ctr) {
-    if (App.chkBranchID.checked) {
-        HQ.combo.selectAll(App.cboBranchID);
-    }
-    else {
-        App.cboBranchID.setValue('');
-    }
-};
-
-var stoHeader_Load = function (sto) {
-    var record = sto.getAt(0);
-    App.frmMain.getForm().loadRecord(record);
+var Ctrl_Expand = function (a, item) {
+    HQ_OrdNbrBranch = item.data.OrdNbrBranch;
+    App.stoDetail.reload();
 };

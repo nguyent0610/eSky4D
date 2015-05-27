@@ -125,19 +125,26 @@
                     .View(X.GridView().TrackOver(false).LoadMask(true))
                     .Region(Region.Center).Flex(1)
                     .SelectionMemory(false)
-                    //.Store(
-                    //    X.Store()
-                    //    .ID("stoHeader")
-                    //    .PageSize(50)
-                    //    .Model(Util.GenerateModel(typeof(OM30100_pgDetail_Result), "mdlOM30100_pgDetail", ""))
-                    //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDetail"))).AutoLoad(false)
-                    //    .Parameters(ps =>
-                    //    {
-                    //        ps.Add(new StoreParameter("InvtID", "App.cboInvtID.getValue()", ParameterMode.Raw));
-                    //        ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue().join(',')", ParameterMode.Raw));
-                    //    })
-                    //        //.Listeners(p => p.Load.Fn = "stoHeader_Load")
-                    //    )
+                    .Store(
+                        X.Store()
+                        .ID("stoHeader")
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(OM30100_open_close_Header_Result), "mdlOM30100_open_close_Header", ""))
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetHeader"))).AutoLoad(false)
+                        .Parameters(ps =>
+                        {
+                            ps.Add(new StoreParameter("CustID", "App.cboCustID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("InvenID", "App.cboInvtID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("SiteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("CusPO", "App.txtCusPO.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("invoice", "App.txtInvoiceNbr.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("Status", "App.cboStatus.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("BranchID", "HQ.cpnyID", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("FromDate", "App.lblOrderDate.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("ToDate", "App.lblTo.getValue()", ParameterMode.Raw));
+                        })
+    //.Listeners(p => p.Load.Fn = "stoHeader_Load")
+                    )
                     .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdHeader');")
                     .SortableColumns(false)
                     .ColumnModel(
@@ -164,7 +171,7 @@
                         .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
                         .Listeners(l => l.Command.Handler = "grdHeader_Reject(record);")
                     )
-                    .SelectionModel(X.RowSelectionModel().ID("slmgrdHeader").Mode(SelectionMode.Multi))
+                    .SelectionModel(X.RowSelectionModel().ID("slmHeader").Mode(SelectionMode.Multi))
                     .BottomBar(
                             X.PagingToolbar()
                             .Items(
@@ -179,35 +186,67 @@
                             .Plugins(X.ProgressBarPager())
                         )
                     .Plugins(
-                        X.CellEditing()
-                        .ClicksToEdit(1)
-                        .Listeners(ls =>
-                        {
-                            //ls.BeforeEdit.Fn = "grdHeader_BeforeEdit";
-                            //ls.Edit.Fn = "grdHeader_Edit";
-                            //ls.ValidateEdit.Fn = "grdHeader_ValidateEdit";
-                        })
+                        X.RowExpander().ID("Ctrl_Expand")
+                        .Listeners(l=>l.Expand.Fn="Ctrl_Expand")
+                        .Component(
+                            X.FormPanel()
+                            .Items(                           
+                                X.GridPanel().Height(300).ID("grdDetail")
+                                .Store(
+                                X.Store()
+                                .ID("stoDetail")
+                                .PageSize(50)
+                                .Model(Util.GenerateModel(typeof(OM30100_open_close_Detail_Result), "mdlOM30100_open_close_Detail", ""))
+                                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDetail"))).AutoLoad(false)
+                                .Parameters(ps =>
+                                {
+                                    ps.Add(new StoreParameter("CustID", "App.cboCustID.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("InvenID", "App.cboInvtID.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("SiteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("CusPO", "App.txtCusPO.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("invoice", "App.txtInvoiceNbr.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("Status", "App.cboStatus.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("BranchID", "HQ.cpnyID", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("FromDate", "App.lblOrderDate.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("ToDate", "App.lblTo.getValue()", ParameterMode.Raw));
+                                    ps.Add(new StoreParameter("OrdNbrBranch", "HQ_OrdNbrBranch", ParameterMode.Raw));
+                                })
+                                    //.Listeners(p => p.Load.Fn = "stoLoad")
+                                )
+                                .ColumnModel(
+                                    X.Column().Text(Util.GetLang("lineref")).DataIndex("lineref")
+                                    , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID")
+                                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
+                                    , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("lineQty").Align(Alignment.Right).Format("0,000")
+                                    , X.Column().Text(Util.GetLang("PurUnit")).DataIndex("slsUnit")
+                                    , X.NumberColumn().Text(Util.GetLang("UnitPrice")).DataIndex("slsPrice").Align(Alignment.Right).Format("0,000")
+                                    , X.NumberColumn().Text(Util.GetLang("DiscPct")).DataIndex("DiscPct").Align(Alignment.Right).Format("0,000")
+                                    , X.NumberColumn().Text(Util.GetLang("DiscAmt")).DataIndex("DiscAmt").Align(Alignment.Right).Format("0,000")
+                                    , X.NumberColumn().Text(Util.GetLang("Total")).DataIndex("LineAmt").Align(Alignment.Right).Format("0,000")
+                                    , X.DateColumn().Text(Util.GetLang("PromDate")).DataIndex("PromiseDate").Format("dd/MM/yyyy")
+                                    , X.Column().Text(Util.GetLang("ShipViaID")).DataIndex("ShipViaID")
+                                    , X.Column().Text(Util.GetLang("SiteID")).DataIndex("SiteID")
+                                    , X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID")
+                                    , X.Column().Text(Util.GetLang("Promotion")).DataIndex("FreeItem")
+                                )
+                            )
+                        )
                     )
 
                     .Features(
                         X.GridFilters()
                             .Local(true)
                             .Filters(
-                                X.StringFilter().DataIndex("SiteID"),
-                                X.NumericFilter().DataIndex("TotCost"),
-                                X.NumericFilter().DataIndex("QtyAvail"),
-                                X.NumericFilter().DataIndex("QtyOnHand"),
-                                X.NumericFilter().DataIndex("QtyAllocSO"),
-                                X.NumericFilter().DataIndex("QtyAlloc"),
-                                X.NumericFilter().DataIndex("QtyAllocIN"),
-                                X.NumericFilter().DataIndex("QtyAllocPORet"),
-                                X.NumericFilter().DataIndex("QtyShipNotInv"),
-                                X.NumericFilter().DataIndex("QtyOnSO"),
-                                X.NumericFilter().DataIndex("QtyOnBO"),
-                                X.NumericFilter().DataIndex("QtyOnPO"),
-                                X.NumericFilter().DataIndex("QtyInTransit"),
-                                X.NumericFilter().DataIndex("QtyOnTransferOrders"),
-                                X.NumericFilter().DataIndex("AvgCost")
+                                X.StringFilter().DataIndex("OrderNbr"),
+                                X.StringFilter().DataIndex("OrderType"),
+                                X.DateFilter().DataIndex("OrderDate"),
+                                X.StringFilter().DataIndex("Status"),
+                                X.NumericFilter().DataIndex("OrdAmt"),
+                                X.StringFilter().DataIndex("CustID"),
+                                X.StringFilter().DataIndex("CustOrderNbr"),
+                                X.StringFilter().DataIndex("ShipName"),
+                                X.StringFilter().DataIndex("ShipPhone")
+               
                             )
                     )
                     
