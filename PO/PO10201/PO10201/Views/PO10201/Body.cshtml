@@ -57,6 +57,7 @@
                                         .Listeners(lst =>
                                                 {
                                                     lst.Change.Fn = "cboBranchID_Change";
+                                                    lst.Select.Fn = "cboBranchID_Select";                                                    
                                                     lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
                                                     lst.Focus.Handler = "this.forceSelection=true;";
                                                 })
@@ -541,7 +542,7 @@
                                             .Items(
                                                  HQ.TextBox().ID("txtAPRefNbr").Name("APRefNbr").HQLangCode("REFNBR").LabelWidth(100).InputWidth(120).ReadOnly(true)
                                                 , HQ.Combo().ID("cboTerms").Name("Terms").HQLangCode("TERM").HQProcedure("PO10201_pcTerms").HQAutoLoad(true)
-                                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Descr").AllowBlank(false)
+                                                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").AllowBlank(false)
                                                     .LabelWidth(100).InputWidth(120).HQHeightWidth(400, 300)
                                                     .HQDBSys(false)
                                                     .LoadData()

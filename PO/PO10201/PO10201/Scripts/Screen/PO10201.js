@@ -559,10 +559,25 @@ var grdPO_Trans_Edit = function (item, e) {
     }
     else if (e.field == "UnitWeight") {
         e.record.set("ExtWeight", objDetail.RcptQty * objDetail.UnitWeight);
+        //cap nhat lai don vi gia cho lot trans
+        App.stoLotTrans.clearFilter();
+        App.stoLotTrans.data.each(function (item) {
+            if (item.data.POTranLineRef == objDetail.LineRef) {
+                item.data.SiteID = objDetail.SiteID;
+                item.data.InvtID = objDetail.InvtID;
+                item.data.UnitDesc = objDetail.RcptUnitDescr;
+                item.data.UnitCost = objDetail.UnitCost;
+                item.data.UnitPrice = objDetail.UnitCost;
+                item.data.CnvFact = objDetail.RcptConvFact;
+                item.data.UnitMultDiv = objDetail.RcptMultDiv;
 
+            }
+
+        });
     }
     else if (e.field == "UnitCost") {
         e.record.set("TranAmt", objDetail.RcptQty * objDetail.UnitCost - objDetail.DocDiscAmt);
+
 
     }
     else if (e.field == "UnitVolume") {
@@ -730,7 +745,7 @@ var cboGInvtID_Change = function (item, newValue, oldValue) {
 
 //cac store co param la branchID thi load lai sau khi cboBranchID thay doi
 var cboBranchID_Change = function (item, newValue, oldValue) {
-    if (item.valueModels != null && App.cboBranchID.getValue() != null) {//truong hop co chon branchid
+    if (item.valueModels != null && App.cboBranchID.getValue() != null && !item.hasFocus) {//truong hop co chon branchid
         App.txtBranchName.setValue(App.cboBranchID.valueModels[0].data.BranchName);
         _cpnyID = App.cboBranchID.valueModels[0].data.BranchID;
         HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
@@ -771,7 +786,7 @@ var cboBranchID_Change = function (item, newValue, oldValue) {
         });
     }
     else { //truong hop khong chon
-        if (!HQ.isNew) {
+        if (Ext.isEmpty(App.cboBranchID.getValue())) {
             App.txtBranchName.setValue('');
             _cpnyID = '';
             App.stoPO10201_pdPO_Setup.load(function () {
@@ -782,6 +797,48 @@ var cboBranchID_Change = function (item, newValue, oldValue) {
     }
     
 };
+var cboBranchID_Select = function (item, newValue, oldValue) {
+    if (item.hasFocus) {
+        App.txtBranchName.setValue(App.cboBranchID.valueModels[0].data.BranchName);
+        _cpnyID = App.cboBranchID.valueModels[0].data.BranchID;
+        HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+        App.stoPO10201_pdOM_UserDefault.load(function () {
+            App.stoPO10201_pdPO_Setup.load(function () {
+                App.cboVendID.getStore().load(function () {
+                    //    App.cboShipSiteID.getStore().load(function () {
+                    //        App.cboShipCustID.getStore().load(function () {
+                    App.cboSiteID.getStore().load(function () {
+                        _objUserDflt = App.stoPO10201_pdOM_UserDefault.data.length > 0 ? App.stoPO10201_pdOM_UserDefault.getAt(0).data : { POSite: '', };;
+                        if (App.stoPO10201_pdPO_Setup.data.length == 0) {
+                            if (item.hasFocus) {
+                                App.cboBatNbr.setValue('');
+                                App.stoHeader.reload();
+                            }
+                            HQ.message.show(20404, 'PO_Setup', '');
+                            lockControl(true);
+                            App.cboBranchID.setReadOnly(false);
+                            HQ.common.showBusy(false);
+                        }
+                        else {
+                            lockControl(false);
+                            _objPO_Setup = App.stoPO10201_pdPO_Setup.getAt(0).data;
+                            if (_objPO_Setup.AutoRef == 1) App.cboBatNbr.forceSelection = true;
+                            else App.cboBatNbr.forceSelection = false;
+                            App.cboBatNbr.getStore().load(function () {
+                                App.cboBatNbr.setValue('');
+                                App.stoHeader.reload();
+                                //App.cboDistAddr.setValue(App.cboBranchID.getValue());
+                            });
+                        }
+
+                    });
+                    //        });
+                    //    });
+                });
+            });
+        });
+    }
+}
 var cboBatNbr_Change = function (item, newValue, oldValue) {   
     if ((!HQ.isNew || item.valueModels != null) && !App.stoHeader.loading) {
         App.stoHeader.reload();
@@ -1368,7 +1425,7 @@ function calcDet() {
 
     };
     var record = App.stoHeader.getAt(0).data;
-    for (var j = 0; j < App.stoPO10201_LoadTaxDoc.data.items.length; j++) {
+    for (var i = 0; i < App.stoPO10201_LoadTaxDoc.data.items.length; i++) {
         var det = App.stoPO10201_LoadTaxDoc.data.items[j];
         if (i == 0) {
             record.TaxAmtTot00 = det.data.TaxAmt;
