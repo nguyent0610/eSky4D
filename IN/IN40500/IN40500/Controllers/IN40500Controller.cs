@@ -27,17 +27,11 @@ namespace IN40500.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
-        //public ActionResult GetIN40500(string BranchID, string SetupID)
-        //{
-        //    var setupData = _db.IN_Setup.FirstOrDefault(p => p.BranchID == BranchID && p.SetupID == SetupID);
-        //    return this.Store(setupData);
-        //}
 
         [HttpPost]
         public ActionResult Save(FormCollection data)
