@@ -234,17 +234,17 @@
                             {
                                 //lst.BeforeCheckChange.Fn = "ColCheck_BeforeCheckChange";
                             })
-                        , X.Column().Text(Util.GetLang("IN22003_StateName")).DataIndex("StateName").Width(150)
+             
                         , X.Column().Text(Util.GetLang("IN22003_BranchName")).DataIndex("BranchName").Width(100)
                         , X.DateColumn().Text(Util.GetLang("IN22003_ExpDate")).DataIndex("ExpDate").Width(150).Format("dd/MM/yyyy")
                         , X.Column().Text(Util.GetLang("IN22003_InvtID")).DataIndex("InvtID").Width(100)
                         , X.Column().Text(Util.GetLang("IN22003_InvtName")).DataIndex("InvtName").Width(200)
                         , X.NumberColumn().Text(Util.GetLang("IN22003_StkQty")).DataIndex("StkQty").Width(100).Width(100).Align(Alignment.Right).Format("0,000")
-                        , X.NumberColumn().Text(Util.GetLang("IN22003_PriceStkQty")).DataIndex("PriceStkQty").Width(100).Align(Alignment.Right).Format("0,000")
-                        , X.NumberColumn().Text(Util.GetLang("IN22003_ApproveStkQty"))
+                        , X.NumberColumn().Text(Util.GetLang("IN22003PriceStkQty")).DataIndex("PriceStkQty").Width(100).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("IN22003ApprStkQty"))
                         .DataIndex("ApproveStkQty").Format("0,000").Width(100).Align(Alignment.Right)
                         .Editor( X.NumberField().DecimalPrecision(0).MinValue(0))
-                        , X.NumberColumn().Text(Util.GetLang("IN22003_ApprovePriceStkQty")).DataIndex("ApprovePriceStkQty").Width(100).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("ApprPriceStkQty")).DataIndex("ApprovePriceStkQty").Width(100).Align(Alignment.Right).Format("0,000")
                         , X.Column().Text(Util.GetLang("IN22003_Status")).DataIndex("Status").Width(100).Renderer("renderStatus")
                         , X.CommandColumn().Width(150)
                         .Commands(

@@ -123,7 +123,6 @@
         </EntityType>
         <ComplexType Name="IN22003_pgLoadGrid_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
-          <Property Type="String" Name="StateName" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
           <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="23" />
@@ -191,7 +190,6 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN22003Model.IN22003_pgLoadGrid_Result">
                 <ScalarProperty Name="ColCheck" ColumnName="ColCheck" />
-                <ScalarProperty Name="StateName" ColumnName="StateName" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="BranchName" ColumnName="BranchName" />
                 <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />

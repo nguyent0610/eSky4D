@@ -1030,17 +1030,15 @@ namespace IN22003
         /// <summary>
         /// Create a new IN22003_pgLoadGrid_Result object.
         /// </summary>
-        /// <param name="stateName">Initial value of the StateName property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="expDate">Initial value of the ExpDate property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="stkRecNbr">Initial value of the StkRecNbr property.</param>
         /// <param name="slsperId">Initial value of the SlsperId property.</param>
         /// <param name="isEdit">Initial value of the isEdit property.</param>
-        public static IN22003_pgLoadGrid_Result CreateIN22003_pgLoadGrid_Result(global::System.String stateName, global::System.String branchID, global::System.DateTime expDate, global::System.String invtID, global::System.String stkRecNbr, global::System.String slsperId, global::System.String isEdit)
+        public static IN22003_pgLoadGrid_Result CreateIN22003_pgLoadGrid_Result(global::System.String branchID, global::System.DateTime expDate, global::System.String invtID, global::System.String stkRecNbr, global::System.String slsperId, global::System.String isEdit)
         {
             IN22003_pgLoadGrid_Result iN22003_pgLoadGrid_Result = new IN22003_pgLoadGrid_Result();
-            iN22003_pgLoadGrid_Result.StateName = stateName;
             iN22003_pgLoadGrid_Result.BranchID = branchID;
             iN22003_pgLoadGrid_Result.ExpDate = expDate;
             iN22003_pgLoadGrid_Result.InvtID = invtID;
@@ -1077,30 +1075,6 @@ namespace IN22003
         private Nullable<global::System.Boolean> _ColCheck;
         partial void OnColCheckChanging(Nullable<global::System.Boolean> value);
         partial void OnColCheckChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String StateName
-        {
-            get
-            {
-                return _StateName;
-            }
-            set
-            {
-                OnStateNameChanging(value);
-                ReportPropertyChanging("StateName");
-                _StateName = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("StateName");
-                OnStateNameChanged();
-            }
-        }
-        private global::System.String _StateName;
-        partial void OnStateNameChanging(global::System.String value);
-        partial void OnStateNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
