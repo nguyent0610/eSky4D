@@ -1,0 +1,82 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN40500;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .DefaultAnchor("100%")
+    .Config("trackResetOnLoad","true")
+    
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", false, ""))
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+      
+    })
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("Header").Layout(LayoutType.VBox).AutoScroll(true)
+        .Items(
+                      
+                HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BRANCHID").ReadOnly(true).Width(400).MarginSpec("5 0 5 0")
+                
+                , HQ.DateField().ID("dtpTranDate").HQLangCode("TRANDATE").Width(400).Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy"))
+                
+                , HQ.TextBox().ID("txtDescr").Name("txtDescr").HQLangCode("DESCR").Width(400).MaxLength(250).EnforceMaxLength(true).AllowBlank(false)
+                
+                , HQ.Combo().ID("cboProductClass").Name("cboProductClass").Width(400)
+                        .HQLangCode("ProductClass").HQDBSys(false).HQProcedure("IN40500_pcProductClass")
+                        .HQColumnShow("Descr").ForceSelection(true).AllowBlank(false)
+                        .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            //lst.Change.Fn = "cboInvtID_Change";
+                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            lst.Focus.Handler = "this.forceSelection=true;";
+                        })  
+                        .LoadData()
+                
+                , HQ.Combo().ID("cboSiteID").Name("cboSiteID").Width(400)
+                        .HQLangCode("SiteID").HQDBSys(false).HQProcedure("IN40500_pcSiteAll")
+                        .HQColumnShow("SiteID,Name").ForceSelection(true).AllowBlank(false)
+                        .DisplayField("SiteID").ValueField("SiteID").HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@ScreenNbr", Value ="IN40500", Mode = ParameterMode.Value},
+                            new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            //lst.Change.Fn = "cboInvtID_Change";
+                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            lst.Focus.Handler = "this.forceSelection=true;";
+                        })  
+                        .LoadData()
+                
+                , HQ.Button().ID("btnCreat").HQLangCode("CREATETAG").Width(195).MarginSpec("0 0 0 205")
+                    .Listeners(l=>l.Click.Fn="btnCreat_Click")
+    
+            )
+        )
+    )//giao dien
+)
