@@ -1,4 +1,4 @@
-var HQ_OrdNbrBranch = '';
+var HQ_InvtID = '';
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -31,6 +31,6 @@ var menuClick = function (command) {
 };
 
 var Ctrl_Expand = function (a, item) {
-    HQ_OrdNbrBranch = item.data.OrdNbrBranch;
+    HQ_InvtID = item.data.InvtID;
     App.stoDetail.reload();
 };
