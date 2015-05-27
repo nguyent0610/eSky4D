@@ -39,7 +39,7 @@ namespace AR22300.Controllers
                 // user;company;langid => ?data=admin;LCUS-HCM-0004;1
                 try
                 {
-                    //data = data.Replace(" ", "+");
+                    data = data.Replace(" ", "+");
                     data = Encryption.Decrypt(data, DateTime.Now.ToString("yyyyMMdd"));
                     Session["Server"] = Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
 
