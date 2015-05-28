@@ -201,7 +201,7 @@ var grdCust_BeforeEdit = function (item, e) {
         }
     }
 }
-var grdCust_Edit = function (item, e) {
+var grdCust_Edit = function (item, e,oldvalue,newvalue) {
     var det=e.record.data;
     if (e.field == 'WeekofVisit' ) {
         var record = HQ.store.findRecord(App.cboColWeekofVisit.getStore(), ["Code"], [e.value]);
@@ -214,6 +214,16 @@ var grdCust_Edit = function (item, e) {
             e.record.set("Sat", record.data.Sat);
             e.record.set("Sun", record.data.Sun);
         }
+    }
+    if (e.field == 'SlsFreq' && e.value != e.originalValue) {
+        e.record.set('WeekofVisit', '');
+        e.record.set("Mon", false);
+        e.record.set("Tue", false);
+        e.record.set("Wed", false);
+        e.record.set("Thu", false);
+        e.record.set("Fri", false);
+        e.record.set("Sat", false);
+        e.record.set("Sun", false);
     }
     //HQ.grid.checkInsertKey(App.grdCust, e, keys);
 };
