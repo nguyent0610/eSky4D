@@ -32,6 +32,87 @@
             HQ.dateNow = new Date('@DateTime.Now.Date');
         </script>
 
+        <style type="text/css">
+            .images-view .x-panel-body {
+                background: white;
+                font: 11px Arial, Helvetica, sans-serif;
+            }
+            .images-view .thumb {
+                background: #dddddd;
+                padding: 3px;
+                padding-bottom: 0;
+            }
+
+            .x-quirks .images-view .thumb {
+                padding-bottom: 3px;
+            }
+
+            /*.images-view .thumb img {
+                height: 60px;
+                width: 80px;
+            }*/
+
+            .images-view .thumb-wrap {
+                float: left;
+                margin: 4px;
+                margin-right: 0;
+                padding: 5px;
+            }
+
+            .images-view .thumb-wrap span {  
+                display: block;
+                overflow: hidden;
+                text-align: center;
+                /*width: 86px;*/
+            }
+
+            .images-view .x-item-over{
+                border: 1px solid #dddddd;
+                /*background: #efefef url(images/row-over.gif) repeat-x left top;*/
+                background: #efefef repeat-x left top;
+                padding: 4px;
+            }
+
+            .images-view .x-item-selected{
+                /*background: #eff5fb url(images/selected.gif) no-repeat right bottom;*/
+                background: #eff5fb no-repeat right bottom;
+                border: 1px solid #99bbe8;
+                padding: 4px;
+            }
+
+            .images-view .x-item-selected .thumb{
+                background: transparent;
+            }
+
+            .images-view .loading-indicator {
+                font-size: 11px;
+                /*background-image : url('images/loading.gif');*/
+                background-repeat: no-repeat;
+                background-position: left;
+                padding-left: 20px;
+                margin: 10px;
+            }
+
+            .x-view-selector {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 0;
+                border: 1px dotted;
+                opacity: .5;
+                -moz-opacity: .5;
+                filter: alpha(opacity=50);
+                zoom: 1;
+                background-color: #c3daf9;
+                border-color: #3399bb;
+            }
+
+            .ext-strict .ext-ie .x-tree .x-panel-bwrap {
+                position: relative;
+                overflow: hidden;
+            }
+        </style>
+
         <title>@ViewBag.Title</title>
     </head>
     <body>
@@ -56,11 +137,7 @@
                 ps.Add(new StoreParameter("zone", "App.cboZone.getValue().join(',')", ParameterMode.Raw));
                 ps.Add(new StoreParameter("territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
                 ps.Add(new StoreParameter("cpnyID", "App.cboCpny.getValue().join(',')", ParameterMode.Raw));
-
                 ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
-                ps.Add(new StoreParameter("fromDate", "App.dtpFromDate.getValue()", ParameterMode.Raw));
-                ps.Add(new StoreParameter("todate", "App.dtpToDate.getValue()", ParameterMode.Raw));
-                ps.Add(new StoreParameter("status", "App.cboStatus.getValue()", ParameterMode.Raw));
             })      
             //.Listeners(p=>p.Load.Fn="Store.stoDet_load" )
             // Store: stoDet
@@ -69,7 +146,7 @@
         @(
             X.Store().ID("stoImage")
             .AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(OM22003_pgImage_Result), "mdlImage", ""))       
+            .Model(Util.GenerateModel(typeof(OM22003_pgImage_Result), "mdlImage", "CreateDate"))       
             .Proxy(
                 X.AjaxProxy()                
                 .Url(Url.Action("GetImage", "OM22003"))                
@@ -81,15 +158,15 @@
             )
             .Parameters(ps =>
             {
-                ps.Add(new StoreParameter("branchID", "App.frmImage.record.data.BranchID", ParameterMode.Raw));
-                ps.Add(new StoreParameter("custID", "App.frmImage.record.data.CustID", ParameterMode.Raw));
-                ps.Add(new StoreParameter("displayID", "App.frmImage.record.data.DisplayID", ParameterMode.Raw));
-
-                ps.Add(new StoreParameter("slsperID", "App.frmImage.record.data.SlsperID", ParameterMode.Raw));
-                ps.Add(new StoreParameter("levelID", "App.frmImage.record.data.LevelID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("branchID", "App.frmImage.getRecord().data.BranchID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custID", "App.frmImage.getRecord().data.CustID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("displayID", "App.frmImage.getRecord().data.DisplayID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperID", "App.frmImage.getRecord().data.SlsperID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("width", "App.cboImageSize.valueModels.length?App.cboImageSize.valueModels[0].data.Width:150", ParameterMode.Raw));
+                ps.Add(new StoreParameter("height", "App.cboImageSize.valueModels.length?App.cboImageSize.valueModels[0].data.Height:100", ParameterMode.Raw));
             })      
-            //.Listeners(p=>p.Load.Fn="Store.stoDet_load" )
-            // Store: stoDet
+            .Listeners(p=>p.Load.Fn="Store.stoImage_load" )
+            // Store: stoImage
         )
 
         @X.GridFilters() <!--Khi cache cho grid-->

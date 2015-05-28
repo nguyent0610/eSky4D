@@ -58,36 +58,37 @@ namespace OM22003.Controllers
         }
 
         public ActionResult GetDet(string zone, string territory, string cpnyID,
-            string displayID, DateTime? fromDate, DateTime? todate, string status)
+            string displayID)
         {
-            var dets = _db.OM22003_pgAppraise(zone, territory, cpnyID, displayID, fromDate, todate, status).ToList();
+            var dets = _db.OM22003_pgAppraise(zone, territory, cpnyID, displayID).ToList();
             return this.Store(dets);
         }
 
         public ActionResult GetImage(string branchID, string custID, 
-            string displayID, string slsperID, string levelID)
+            string displayID, string slsperID, int width = 150, int height = 100)
         {
-            var imgs = _db.OM22003_pgImage(branchID, custID, displayID, slsperID, levelID).ToList();
+            var imgs = _db.OM22003_pgImage(branchID, custID, displayID, slsperID).ToList();
             //var imgs = new List<OM22003_pgImage_Result>();
-            //imgs.Add(new OM22003_pgImage_Result() {
-            //    ASM = branchID + custID + displayID + slsperID + levelID,
-            //    LineRef = "1",
-            //    Pass = false,
-            //    AuditImage = "" 
+            //imgs.Add(new OM22003_pgImage_Result()
+            //{
+            //    CreateDate = DateTime.Now,
+            //    ImageName = "Penguins.jpg",
+            //    //ImageSrc = (FilePath + "\\" + "Penguins.jpg").ToBase64Thumbnails(200, 100, true)
             //});
             for (int i = 0; i < imgs.Count; i++)
             {
-                //imgs[i].ImageFileSrc = (FilePath +"\\"+ "Penguins.jpg").ToBase64Thumbnails(200,100, true);
-                //imgs[i].AuditImageSrc = (FilePath + "\\" + "Koala.jpg").ToBase64Thumbnails(200, 100, true);
-
-                imgs[i].ImageFileSrc = (FilePath + "\\" + imgs[i].ImageFile).ToBase64Thumbnails(200, 100, true);
-                imgs[i].AuditImageSrc = (FilePath + "\\" + imgs[i].AuditImage).ToBase64Thumbnails(200, 100, true);
+                try
+                {
+                    imgs[i].ImageSrc = (FilePath + "\\" + imgs[i].ImageName).ToBase64Thumbnails(width, height, true);
+                }
+                catch
+                { }
             }
             return this.Store(imgs);
         }
 
         [ValidateInput(false)]
-        public ActionResult SaveAppraise(FormCollection data)
+        public ActionResult SaveAppraise(FormCollection data, bool pass)
         {
             try
             {
@@ -95,59 +96,29 @@ namespace OM22003.Controllers
                 var Appraise = recHandler.ObjectData<OM22003_pgAppraise_Result>()
                             .FirstOrDefault();
 
-                var imgHandler = new StoreDataHandler(data["lstImage"]);
-                var lstImage = imgHandler.ObjectData<OM22003_pgImage_Result>()
-                            .ToList();
-
-                foreach (var item in lstImage)
+                var recAppraise = _db.OM_TDisplayCustomer.FirstOrDefault(
+                    p => p.BranchID == Appraise.BranchID && p.SlsperID == Appraise.SlsperID
+                        && p.CustID == Appraise.CustID && p.DisplayID == Appraise.DisplayID);
+                if (recAppraise != null)
                 {
-                    if (item.LineRef == string.Empty)
+                    if (recAppraise.tstamp.ToHex() == Appraise.tstamp.ToHex())
                     {
-                        item.LineRef = LastLineRef(lstImage);
+                        // Chua tuong bao gio cham diem moi dc cap nhat
+                        if (string.IsNullOrWhiteSpace(Appraise.Pass))
+                        {
+                            recAppraise.Pass = pass;
+                            recAppraise.Remark = Appraise.Remark;
+                            _db.SaveChanges();
+                        }
+                        return Json(new { success = true });
                     }
-                    var image = _db.OM_TDisplayImage.FirstOrDefault(p => p.LineRef == item.LineRef 
-                        && p.BranchID == Appraise.BranchID 
-                        && p.SlsperID == Appraise.SlsperID 
-                        && p.DisplayID == Appraise.DisplayID
-                        && p.CustID == Appraise.CustID 
-                        && p.LevelID == Appraise.LevelID);
-                    if (image == null)
-                    {
-                        image = new OM_TDisplayImage();
-                        image.BranchID = Appraise.BranchID;
-                        image.SlsperID = Appraise.SlsperID;
-                        image.CustID = Appraise.CustID;
-                        image.DisplayID = Appraise.DisplayID;
-                        image.LevelID = Appraise.LevelID;
-                        image.LineRef = item.LineRef;
-                        image.LUpd_DateTime = DateTime.Now;
-                        image.LUpd_Prog = _screenNbr;
-                        image.LUpd_User = Current.UserName;
-                        _db.OM_TDisplayImage.AddObject(image);
+                    else {
+                        throw new MessageException("19");
                     }
-                    image.ImageFile = item.ImageFile;
-                    image.ASM = item.ASM;
-                    image.Pass = item.Pass.ToBool();
-                    image.Crtd_DateTime = DateTime.Now;
-                    image.Crtd_Prog = _screenNbr;
-                    image.Crtd_User = Current.UserName;
-
                 }
-                Appraise.PercentImage = Math.Round(((double)lstImage.Count(p => p.Pass == true) / lstImage.Count * 100), 2);
-                var cust = _db.OM_TDisplayCustomer.FirstOrDefault(p => p.BranchID == Appraise.BranchID 
-                    && p.CustID == Appraise.CustID 
-                    && p.DisplayID == Appraise.DisplayID 
-                    && p.LevelID == Appraise.LevelID);
-                if (cust != null)
-                {
-                    cust.PercentImage = Appraise.PercentImage.Value;
-                    cust.LUpd_DateTime = DateTime.Now;
-                    cust.LUpd_Prog = _screenNbr;
-                    cust.LUpd_User = Current.UserName;
+                else {
+                    throw new MessageException("8");
                 }
-                _db.SaveChanges();
-
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
@@ -166,11 +137,11 @@ namespace OM22003.Controllers
         {
             int num = 0;
 
-            foreach (var item in mImageList)
-            {
-                if (item.LineRef.PassNull() != string.Empty && item.LineRef.ToInt() > num)
-                    num = item.LineRef.ToInt();
-            }
+            //foreach (var item in mImageList)
+            //{
+            //    if (item.LineRef.PassNull() != string.Empty && item.LineRef.ToInt() > num)
+            //        num = item.LineRef.ToInt();
+            //}
             num++;
             string lineRef = num.ToString();
             int len = lineRef.Length;

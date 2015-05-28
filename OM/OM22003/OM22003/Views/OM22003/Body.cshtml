@@ -20,15 +20,16 @@
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
         .TopBar(Util.SetupToolbar("save,new,delete,close,print", true, "Event.Form.menuClick"))
-        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Items(
-            X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.North)
+            X.Panel().ID("pnlHeader")
+            .Layout(LayoutType.HBox).Region(Region.North).MinWidth(1005)
             .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
             .Items(
 
                 // First Column
                 X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
-                .MinWidth(250).Flex(1)
+                .MinWidth(200).Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
                     HQ.Combo().ID("cboZone")
@@ -62,7 +63,7 @@
 
                 // Second Column
                 , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
-                .MinWidth(250).Flex(1)
+                .MinWidth(200).Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
                      HQ.Combo().ID("cboCpny")
@@ -79,30 +80,6 @@
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                     })
                     
-                    , HQ.Combo().ID("cboStatus")
-                    .HQLangCode("Status").HQProcedure("OM22003_pcStatus")
-                    .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Code")
-                    .HQHeightWidth(400, 300)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection() { 
-                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
-                    })
-                    .LoadData()
-                    .Listeners(l =>
-                    {
-                        l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                    })
-                ) // Second Column
-                
-                // Third Column
-                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
-                .MinWidth(250).Flex(1)
-                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
-                .Items(
-                    HQ.DateField().ID("dtpFromDate")
-                    .HQLangCode("FromDate")
-                    .Listeners(l=>l.Change.Fn="Event.Form.dtpFromDate_change")
-                    
                     , HQ.Combo().ID("cboDisplayID")
                     .HQLangCode("DisplayID").HQProcedure("OM22003_pcDisplayID")
                     .HQColumnShow("DisplayID,Descr").ValueField("DisplayID").DisplayField("DisplayID")
@@ -117,25 +94,53 @@
                     {
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                     })
+                    
+                    //, HQ.Combo().ID("cboStatus")
+                    //.HQLangCode("Status").HQProcedure("OM22003_pcStatus")
+                    //.HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Code")
+                    //.HQHeightWidth(400, 300)
+                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    //.HQParam(new StoreParameterCollection() { 
+                    //    new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
+                    //})
+                    //.LoadData()
+                    //.Listeners(l =>
+                    //{
+                    //    l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                    //})
+                ) // Second Column
+                
+                // Third Column
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 0")
+                .MinWidth(250)//.Flex(1)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    HQ.Button().ID("btnLoad").MarginSpec("0 0 0 105")
+                    .HQLangCode("LoadData").Icon(Icon.ArrowRefresh)
+                    .Handler("Event.Form.btnLoad_click")
+                     
+                    //HQ.DateField().ID("dtpFromDate")
+                    //.HQLangCode("FromDate")
+                    //.Listeners(l=>l.Change.Fn="Event.Form.dtpFromDate_change")
+                    
+                    
                 ) // Third Column
                 
                  // Forth Column
-                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 0")
-                .MinWidth(250).Flex(1)
-                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
-                .Items(
-                    HQ.DateField().ID("dtpToDate")
-                    .HQLangCode("ToDate")
+                //, X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 0")
+                //.MinWidth(250).Flex(1)
+                //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                //.Items(
+                //    HQ.DateField().ID("dtpToDate")
+                //    .HQLangCode("ToDate")
 
-                     ,HQ.Button().ID("btnLoad").MarginSpec("0 0 0 105")
-                     .HQLangCode("LoadData").Icon(Icon.ArrowRefresh)
-                     .Handler("Event.Form.btnLoad_click")
-                ) // Forth Column
+                     
+                //) // Forth Column
             ) // pnlHeader
 
             , X.GridPanel().ID("grdDet")
             .Region(Region.Center)
-            .Scroll(ScrollMode.Both)
+            .Scroll(ScrollMode.Both).MinWidth(1005)
             .View(X.GridView().TrackOver(false))
             .SortableColumns(false)
             .StoreID("stoDet")
@@ -145,11 +150,12 @@
                 .Commands(
                     X.GridCommand()
                     .CommandName("View")
-                    .Icon(Icon.Eye)
+                    .Icon(Icon.ImageEdit)
                     .ToolTip(tt => tt.Text = Util.GetLang("View"))
                 )
                 .Listeners(ls => ls.Command.Handler = "Event.Grid.colBtnView_click(command, record);")
-                
+                , X.Column().Text(Util.GetLang("Result")).DataIndex("Pass")
+                .Renderer("Process.renderAppraise").Width(75)
                 , X.Column().Text(Util.GetLang("Zone")).DataIndex("Zone")      
                 , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory")      
                 , X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID")
@@ -159,16 +165,10 @@
                 , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")      
                 , X.Column().Text(Util.GetLang("DisplayID")).DataIndex("DisplayID")      
                 , X.Column().Text(Util.GetLang("TDisplayName")).DataIndex("Descr").Flex(1).MinWidth(100)
-                , X.Column().Text(Util.GetLang("LevelID")).DataIndex("LevelID")      
-                , X.Column().Text(Util.GetLang("Rate2")).DataIndex("Rate")
-                
-                , X.Column().Text(Util.GetLang("OM22003SalesLevel")).DataIndex("SalesLevel")
-                , X.Column().Text(Util.GetLang("OM22003Type")).DataIndex("Type")
-                , X.Column().Text(Util.GetLang("OM22003Sales")).DataIndex("Sales")
-                , X.Column().Text(Util.GetLang("OM22003PercentSales")).DataIndex("PercentSales")
-                , X.Column().Text(Util.GetLang("OM22003PercentImage")).DataIndex("PercentImage")
-                , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Renderer("Process.renderStatus")
-                , X.Column().Text(Util.GetLang("Handle")).DataIndex("Handle").Renderer("Process.renderStatus")
+                , X.Column().Text(Util.GetLang("LevelNbr")).DataIndex("LevelID")
+                , X.Column().Text(Util.GetLang("SoMatTB")).DataIndex("SoMatTB").Renderer("Process.renderAppraise")
+                , X.Column().Text(Util.GetLang("Position")).DataIndex("LocID").Renderer("Process.renderAppraise")
+                , X.Column().Text(Util.GetLang("Type")).DataIndex("DisplayType").Renderer("Process.renderAppraise")
             )
             .SelectionModel(X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single))
             .Plugins(
@@ -203,50 +203,135 @@
         .Items(
             X.Panel().Region(Region.Center)
             .Layout(LayoutType.Border)
-            .Items(
-                X.GridPanel().ID("grdImage")
-                .Region(Region.Center).Scroll(ScrollMode.Both)
-                .View(X.GridView().TrackOver(false))
-                .SortableColumns(false).AutoScroll(true)
-                .StoreID("stoImage")
-                .ColumnModel(
-                    X.Column().Text(Util.GetLang("OM22003LineRef")).DataIndex("LineRef")
-
-                    , X.TemplateColumn().Text(Util.GetLang("Picture")).DataIndex("ImageFile")
-                    .TemplateString("{ImageFileSrc}").MinWidth(150).Flex(1)
-
-                     , X.TemplateColumn().Text(Util.GetLang("OM22003AuditImage")).DataIndex("AuditImage")
-                    .TemplateString("{AuditImageSrc}").MinWidth(150).Flex(1)
-
-                    , X.Column().Text(Util.GetLang("OM22003ASM")).DataIndex("ASM")
-                    .MinWidth(100).Flex(1).Wrap(true)
-                    .Editor(
-                        HQ.TextBox().MaxLength(200).EnforceMaxLength(true)
-                    )
-
-                    , X.CheckColumn().Text(Util.GetLang("OM22003Pass")).DataIndex("Pass").Editable(true)
-                )
-                .Plugins(
-                    X.CellEditing()
-                    .ClicksToEdit(1)
+            .Cls("images-view")
+            .TopBar(
+                X.Toolbar().Items(
+                    HQ.Combo().ID("cboImageSize")
+                    .HQLangCode("ImageSize").HQProcedure("OM22003_pcImageSize")
+                    .HQColumnShow("Code,Descr,Width,Height").HQHeightWidth(400,300)
+                    .ValueField("Code").DisplayField("Descr").Editable(false)
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                    })
+                    .LoadData()
+                    .Listeners(ls=>ls.Change.Fn="Event.Form.cboImageSize_change")
                 )
             )
-
-            , X.Panel().Region(Region.South)
-            .Layout(LayoutType.HBox)
-            .LayoutConfig(new HBoxLayoutConfig() { Align = HBoxAlign.Middle, Pack = BoxPack.Center })
             .Items(
-                HQ.Button().ID("btnConfirm")
-                .HQLangCode("Confirm").MarginSpec("5 5 5 5")
-                .Icon(Icon.Tick).Handler("Event.Form.btnConfirm_click")
+                Html.X().DataView()
+                .ID("grdImage")
+                .StoreID("stoImage")
+                .MultiSelect(true)
+                .OverItemCls("x-item-over")
+                .ItemSelector("div.thumb-wrap")
+                .EmptyText("No images to display")
+                .TrackOver(true).AutoScroll(true)
+                .Tpl(
+                    Html.X().XTemplate()
+                        .Html(
+                            @<text>
+                                <tpl for=".">
+								    <div class="thumb-wrap" id="{ImageName}">
+									    <div class="thumb">{ImageSrc}</div>
+									    <span class="x-editable">{CreateDate}</span>
+								    </div>
+							    </tpl>
+							    <div class="x-clear"></div>
+                            </text>
+                        )
+                )
+                .PrepareData("Process.prepareData")
+            )
 
-                , HQ.Button().ID("btnCancel")
-                .HQLangCode("Cancel").MarginSpec("5 5 5 5")
-                .Icon(Icon.Decline).Handler("Event.Form.btnCancel_click")
+            , X.Panel().Region(Region.West).Width(300)
+            .Layout(LayoutType.VBox).Split(true).AutoScroll(true)
+            .LayoutConfig(new VBoxLayoutConfig() { Align = VBoxAlign.Stretch, Pack = BoxPack.Start })
+            .Items(
+                X.Container().Layout(LayoutType.VBox)
+                .LayoutConfig(new VBoxLayoutConfig() { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    X.DisplayField().ID("dspPicAmt")
+                    .MarginSpec("5 5 0 0")
+                    .FieldLabel(Util.GetLang("PicAmt"))
+                    .Value(0)
+
+                    , X.DisplayField()
+                    .MarginSpec("5 5 0 0")
+                    .FieldLabel(Util.GetLang("LevelNbr"))
+                    .DataIndex("LevelID")
+
+                    , HQ.Combo().ID("cboSoMatTB")
+                    .MarginSpec("5 5 0 0").ReadOnly(true)
+                    .HQLangCode("SoMatTB").DataIndex("SoMatTB")
+                    .HQProcedure("OM22003_pcPPTB").HQColumnShow("Code,Descr")
+                    .ValueField("Code").DisplayField("Descr")
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                    })
+                    .LoadData()
+
+                    , HQ.Combo().ID("cboLocID")
+                    .MarginSpec("5 5 0 0").ReadOnly(true)
+                    .HQLangCode("Position").DataIndex("LocID")
+                    .HQProcedure("OM22003_pcLocID").HQColumnShow("Code,Descr")
+                    .ValueField("Code").DisplayField("Descr")
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                    })
+                    .LoadData()
+
+                    , HQ.Combo().ID("cboDisplayType")
+                    .MarginSpec("5 5 0 0").ReadOnly(true)
+                    .HQLangCode("DisplayType").DataIndex("DisplayType")
+                    .HQProcedure("OM22003_pcDisplayType").HQColumnShow("Code,Descr")
+                    .ValueField("Code").DisplayField("Descr")
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                    })
+                    .LoadData()
+                )
+
+                , X.Container().Layout(LayoutType.VBox)
+                .LayoutConfig(new VBoxLayoutConfig() { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    X.RadioGroup().ID("rdgPass")
+                    .FieldLabel(Util.GetLang("Result"))
+                    .MarginSpec("15 5 0 0").AllowBlank(false)
+                    .Items(
+                        X.Radio().ID("radDat")
+                        .BoxLabel(Util.GetLang("Dat"))
+
+                        , X.Radio().ID("radKhongDat")
+                        .BoxLabel(Util.GetLang("KhongDat"))
+                        .Handler("Event.Form.radKhongDat_change")
+                    )
+
+                    , X.TextArea().ID("txtRemark")
+                    .MarginSpec("5 5 0 0")
+                    .FieldLabel(Util.GetLang("Note")).DataIndex("Remark")
+                    .MaxLength(200).EnforceMaxLength(true).AllowOnlyWhitespace(false)
+                )
+
+                , X.Container().Layout(LayoutType.VBox)
+                .LayoutConfig(new VBoxLayoutConfig() { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    HQ.Button().ID("btnConfirm")
+                    .HQLangCode("Confirm").MarginSpec("15 5 0 105")
+                    .Icon(Icon.Tick).Handler("Event.Form.btnConfirm_click")
+
+                    , HQ.Button().ID("btnCancel")
+                    .HQLangCode("Cancel").MarginSpec("5 5 0 105")
+                    .Icon(Icon.Decline).Handler("Event.Form.btnCancel_click")
+                )
             )
         )// FormPanel: frmChoose
     )
-    .Listeners(ls => {
+    .Listeners(ls =>
+    {
         ls.BoxReady.Handler = "this.maximize();";
         ls.Close.Handler = "App.grdImage.store.removeAll();";
     })// Window: winRef
