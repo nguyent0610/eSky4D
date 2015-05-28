@@ -547,6 +547,66 @@ namespace AR20500
     
             return base.ExecuteFunction<global::System.String>("AR20500_AfterApprove", newcustIDParameter, oldCustIDParameter, branchIDParameter, handleParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20500_ppCheckCustomerReject(global::System.String branchID, global::System.String custID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20500_ppCheckCustomerReject", branchIDParameter, custIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20500_ppCheckCustomerApprove(global::System.String branchID, global::System.String custID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20500_ppCheckCustomerApprove", branchIDParameter, custIDParameter);
+        }
 
         #endregion
 
@@ -6476,7 +6536,7 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> Mon
+        public Nullable<global::System.Boolean> Mon
         {
             get
             {
@@ -6491,8 +6551,8 @@ namespace AR20500
                 OnMonChanged();
             }
         }
-        private Nullable<global::System.Int32> _Mon;
-        partial void OnMonChanging(Nullable<global::System.Int32> value);
+        private Nullable<global::System.Boolean> _Mon;
+        partial void OnMonChanging(Nullable<global::System.Boolean> value);
         partial void OnMonChanged();
     
         /// <summary>
@@ -6500,7 +6560,7 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> Tue
+        public Nullable<global::System.Boolean> Tue
         {
             get
             {
@@ -6515,8 +6575,8 @@ namespace AR20500
                 OnTueChanged();
             }
         }
-        private Nullable<global::System.Int32> _Tue;
-        partial void OnTueChanging(Nullable<global::System.Int32> value);
+        private Nullable<global::System.Boolean> _Tue;
+        partial void OnTueChanging(Nullable<global::System.Boolean> value);
         partial void OnTueChanged();
     
         /// <summary>
@@ -6524,7 +6584,7 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> Wed
+        public Nullable<global::System.Boolean> Wed
         {
             get
             {
@@ -6539,8 +6599,8 @@ namespace AR20500
                 OnWedChanged();
             }
         }
-        private Nullable<global::System.Int32> _Wed;
-        partial void OnWedChanging(Nullable<global::System.Int32> value);
+        private Nullable<global::System.Boolean> _Wed;
+        partial void OnWedChanging(Nullable<global::System.Boolean> value);
         partial void OnWedChanged();
     
         /// <summary>
@@ -6548,7 +6608,7 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> Thu
+        public Nullable<global::System.Boolean> Thu
         {
             get
             {
@@ -6563,8 +6623,8 @@ namespace AR20500
                 OnThuChanged();
             }
         }
-        private Nullable<global::System.Int32> _Thu;
-        partial void OnThuChanging(Nullable<global::System.Int32> value);
+        private Nullable<global::System.Boolean> _Thu;
+        partial void OnThuChanging(Nullable<global::System.Boolean> value);
         partial void OnThuChanged();
     
         /// <summary>
@@ -6572,7 +6632,7 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> Fri
+        public Nullable<global::System.Boolean> Fri
         {
             get
             {
@@ -6587,8 +6647,8 @@ namespace AR20500
                 OnFriChanged();
             }
         }
-        private Nullable<global::System.Int32> _Fri;
-        partial void OnFriChanging(Nullable<global::System.Int32> value);
+        private Nullable<global::System.Boolean> _Fri;
+        partial void OnFriChanging(Nullable<global::System.Boolean> value);
         partial void OnFriChanged();
     
         /// <summary>
@@ -6596,7 +6656,7 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> Sat
+        public Nullable<global::System.Boolean> Sat
         {
             get
             {
@@ -6611,8 +6671,8 @@ namespace AR20500
                 OnSatChanged();
             }
         }
-        private Nullable<global::System.Int32> _Sat;
-        partial void OnSatChanging(Nullable<global::System.Int32> value);
+        private Nullable<global::System.Boolean> _Sat;
+        partial void OnSatChanging(Nullable<global::System.Boolean> value);
         partial void OnSatChanged();
     
         /// <summary>
@@ -6620,7 +6680,7 @@ namespace AR20500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> Sun
+        public Nullable<global::System.Boolean> Sun
         {
             get
             {
@@ -6635,8 +6695,8 @@ namespace AR20500
                 OnSunChanged();
             }
         }
-        private Nullable<global::System.Int32> _Sun;
-        partial void OnSunChanging(Nullable<global::System.Int32> value);
+        private Nullable<global::System.Boolean> _Sun;
+        partial void OnSunChanging(Nullable<global::System.Boolean> value);
         partial void OnSunChanged();
     
         /// <summary>

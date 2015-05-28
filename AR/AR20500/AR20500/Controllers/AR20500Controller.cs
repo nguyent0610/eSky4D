@@ -29,7 +29,7 @@ namespace AR20500.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -48,7 +48,7 @@ namespace AR20500.Controllers
         }
 
         [HttpPost]
-        public ActionResult Process(FormCollection data)
+        public ActionResult Process(FormCollection data, DateTime fromDate, DateTime toDate)
         {
             try
             {
@@ -56,28 +56,56 @@ namespace AR20500.Controllers
                 StoreDataHandler custHandler = new StoreDataHandler(data["lstCust"]);
 
                 var lstCust = custHandler.ObjectData<AR20500_pgDetail_Result>();
-
+               
+              
                 var access = Session["AR20500"] as AccessRight;
 
                 if (!access.Update && !access.Insert)
                     throw new MessageException(MessageType.Message, "728");
                 string handle = data["cboHandle"];
+                string custlist = "";
+
                 if (handle != "N" && handle != string.Empty)
-                {
+                {                                     
                     foreach (var item in lstCust)
                     {
                         if (item.ColCheck == true)
                         {
+                            _db = Util.CreateObjectContext<AR20500Entities>(false);
                             if (item.NewCustID.PassNull() != string.Empty) continue;
+                           
                             AR_NewCustomerInfor objNew = _db.AR_NewCustomerInfor.FirstOrDefault(p => p.ID == item.ID && p.BranchID == item.BranchID);
                             if (objNew == null || objNew.Status == "A" || objNew.Status == "D") continue;
                             if (handle == "A")
                             {
+                                string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID).FirstOrDefault();
+                                if (cust.PassNull() != "")
+                                {
+                                    custlist += cust.TrimEnd(',') + ",";
+                                    _db.Dispose();
+                                    continue;
+                                    //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
+                                }
+                                objNew.WeekofVisit = item.WeekofVisit;
+                                objNew.Mon = item.Mon.Value ? int.Parse("1") : int.Parse("0");
+                                objNew.Tue = item.Tue.Value ? int.Parse("1") : int.Parse("0");
+                                objNew.Wed = item.Wed.Value ? int.Parse("1") : int.Parse("0");
+                                objNew.Thu = item.Thu.Value ? int.Parse("1") : int.Parse("0");
+                                objNew.Fri = item.Fri.Value ? int.Parse("1") : int.Parse("0");
+                                objNew.Sat = item.Sat.Value ? int.Parse("1") : int.Parse("0");
+                                objNew.Sun = item.Sun.Value ? int.Parse("1") : int.Parse("0");
+                                objNew.SalesRouteID = item.BranchID;
+                                objNew.SlsFreq = item.SlsFreq;                             
+                                objNew.Startday =fromDate;
+                                objNew.Endday = toDate;
+                                objNew.VisitSort = item.VisitSort.Value;
+                               
+
                                 var objCust = new AR_Customer();
                                 objCust.ResetET();
 
-                                objCust.Addr1 = item.Addr2.PassNull() + (item.Addr1.PassNull() != "" ? "," + item.Addr1.PassNull() : "");
-                                //objCust.Addr2 = 
+                                objCust.Addr1 = item.Addr1.PassNull();// item.Addr2.PassNull() + (item.Addr1.PassNull() != "" ? "," + item.Addr1.PassNull() : "");
+                                objCust.Addr2 = item.Addr2.PassNull();//
                                 objCust.BranchID = item.BranchID.PassNull();
                                 objCust.City = item.City.PassNull();
                                 objCust.State = item.State.PassNull();
@@ -144,8 +172,8 @@ namespace AR20500.Controllers
                                 master.SalesRouteID = item.BranchID;
                                 master.SlsFreq = item.SlsFreq;
                                 master.SlsPerID = item.SlsperID;
-                                master.StartDate = new DateTime(DateTime.Now.Year, 1, 1);
-                                master.EndDate = new DateTime(DateTime.Now.Year, 12, 31);
+                                master.StartDate = fromDate;
+                                master.EndDate = toDate;
                                 master.VisitSort = item.VisitSort.Value;
                                 master.SlsFreqType = "R";
                                 master.Crtd_DateTime = DateTime.Now;
@@ -165,18 +193,12 @@ namespace AR20500.Controllers
                                 master.Sat = item.Sat.ToBool();
                                 master.Sun = item.Sun.ToBool();
 
-
                                 _db.OM_SalesRouteMaster.AddObject(master);
                                 CreateRoute(master);
-
-
                                 var custID = item.CustID.PassNull().ToLower();
                                 if (objNew != null)
                                 {
-
                                     objNew.LUpd_Datetime = DateTime.Now;
-
-
                                     objNew.NewCustID = objCust.CustId;
                                     objNew.Status = "A";
                                 }
@@ -184,25 +206,19 @@ namespace AR20500.Controllers
                             else if (handle == "D")
                             {
                                 var custID = item.CustID.PassNull().ToLower();
-
                                 if (objNew != null)
                                 {
-
                                     objNew.LUpd_Datetime = DateTime.Now;
-
-
                                     objNew.Status = "D";
-
-
                                 }
                             }
-
                             _db.SaveChanges();
                             _db.AR20500_AfterApprove(objNew.NewCustID, item.CustID, item.BranchID, handle);
+                            _db.Dispose();
                         }
                     }
                 }
-
+                if (custlist != "") throw new MessageException(MessageType.Message, "201405281", "", new string[] { custlist.TrimEnd(',') });
                 if (mLogMessage != null)
                 {
                     return mLogMessage;
@@ -222,8 +238,6 @@ namespace AR20500.Controllers
                 }
             }
         }
-
-
         public void CreateRoute(OM_SalesRouteMaster master)//(clsOM_SalesRouteMaster objSaleMaster)
         {
 
@@ -643,7 +657,7 @@ namespace AR20500.Controllers
                             }
                         }
                     }
-                    else if (master.SlsFreq == "F4" || master.SlsFreq == "F8" || master.SlsFreq == "F12" || master.SlsFreq == "A")
+                    else if (master.SlsFreq == "F4" || master.SlsFreq == "F4A" || master.SlsFreq == "F8" || master.SlsFreq == "F8A" || master.SlsFreq == "F12" || master.SlsFreq == "F16" || master.SlsFreq == "F20" || master.SlsFreq == "F24" || master.SlsFreq == "A")
                     {
                         if (master.Mon && dMon <= todate && dMon >= fromdate)
                         {
@@ -777,7 +791,40 @@ namespace AR20500.Controllers
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             _db.OM_SalesRouteDet.AddObject(det1);
                         }
-                        if (master.Sat && dSat <= todate && dSat >= fromdate)
+                        // xet cho ngay thu 7, neu la F8A thi tuan di tuan nghi
+                        if (master.SlsFreq == "F8A" || master.SlsFreq == "F4A")
+                        {
+                            if ((master.WeekofVisit == "OW" && (i % 2) != 0) || (master.WeekofVisit == "EW" && (i % 2) == 0) || (master.WeekofVisit == "NA" && (i % 2) == (weekStart % 2)))
+                            {
+                                if (master.Sat && dSat <= todate && dSat >= fromdate)
+                                {
+                                    OM_SalesRouteDet det1 = new OM_SalesRouteDet();
+                                    det1.ResetET();
+                                    det1.BranchID = master.BranchID;
+                                    det1.SalesRouteID = master.SalesRouteID;
+                                    det1.CustID = master.CustID;
+                                    det1.SlsPerID = master.SlsPerID;
+                                    det1.PJPID = master.PJPID;
+                                    det1.SlsFreq = master.SlsFreq;
+                                    det1.SlsFreqType = master.SlsFreqType;
+                                    det1.WeekofVisit = master.WeekofVisit;
+                                    det1.VisitSort = master.VisitSort;
+                                    det1.Crtd_Datetime = DateTime.Now;
+                                    det1.Crtd_Prog = _screenNbr;
+                                    det1.Crtd_User = _userName;
+                                    det1.LUpd_Datetime = DateTime.Now;
+                                    det1.LUpd_Prog = _screenNbr;
+                                    det1.LUpd_User = _userName;
+
+                                    det1.VisitDate = dSat;
+                                    det1.DayofWeek = "Sat";
+                                    det1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    _db.OM_SalesRouteDet.AddObject(det1);
+                                }
+                            }
+                        }
+                        else if (master.Sat && dSat <= todate && dSat >= fromdate)
                         {
                             OM_SalesRouteDet det1 = new OM_SalesRouteDet();
                             det1.ResetET();
@@ -1051,8 +1098,6 @@ namespace AR20500.Controllers
             }
             //_daapp.CommitTrans();
         }
-
-
         public DateTime GetDateFromDayofWeek(int year, int week, string strDayofWeek)
         {
             System.DateTime firstOfYear = new System.DateTime(year, 1, 1);

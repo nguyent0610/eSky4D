@@ -298,6 +298,14 @@
           <Parameter Name="SlsperID" Type="varchar(max)" Mode="In" />
           <Parameter Name="Status" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="AR20500_ppCheckCustomerApprove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="AR20500_ppCheckCustomerReject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar(max)" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -343,6 +351,14 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="Handle" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="AR20500_ppCheckCustomerReject" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20500_ppCheckCustomerApprove" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="AR20500_pgDetail_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
@@ -368,13 +384,13 @@
           <Property Type="DateTime" Name="Crtd_Datetime" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="LUpd_Datetime" Nullable="true" Precision="23" />
           <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="30" />
-          <Property Type="Int32" Name="Mon" Nullable="true" />
-          <Property Type="Int32" Name="Tue" Nullable="true" />
-          <Property Type="Int32" Name="Wed" Nullable="true" />
-          <Property Type="Int32" Name="Thu" Nullable="true" />
-          <Property Type="Int32" Name="Fri" Nullable="true" />
-          <Property Type="Int32" Name="Sat" Nullable="true" />
-          <Property Type="Int32" Name="Sun" Nullable="true" />
+          <Property Type="Boolean" Name="Mon" Nullable="true" />
+          <Property Type="Boolean" Name="Tue" Nullable="true" />
+          <Property Type="Boolean" Name="Wed" Nullable="true" />
+          <Property Type="Boolean" Name="Thu" Nullable="true" />
+          <Property Type="Boolean" Name="Fri" Nullable="true" />
+          <Property Type="Boolean" Name="Sat" Nullable="true" />
+          <Property Type="Boolean" Name="Sun" Nullable="true" />
           <Property Type="String" Name="WeekofVisit" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="ClassId" Nullable="true" MaxLength="6" />
           <Property Type="String" Name="ShopType" Nullable="true" MaxLength="10" />
@@ -388,7 +404,7 @@
           <Property Type="String" Name="SlsFreq" Nullable="true" MaxLength="10" />
           <Property Type="Int32" Name="VisitSort" Nullable="true" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="30" />
-          <Property Type="String" Name="CustID" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Addr3" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="Area" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="TradeType" Nullable="true" MaxLength="10" />
@@ -967,6 +983,8 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AR20500_AfterApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_AfterApprove" />
+          <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerReject" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerReject" />
+          <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerApprove" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -987,7 +1005,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="28" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="48" >
         <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_CustomerLocation" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.OM_PJP" Width="1.5" PointX="4.75" PointY="0.75" />

@@ -8,6 +8,7 @@
 @{
     Layout = null;
     var X = Html.X();
+    var HQ = Html.HQ();
     ViewBag.Title = "AR20500";
     var acc = Session["AR20500"] as AccessRight;
 }
@@ -32,13 +33,15 @@
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');
     </script>  
     <title>@ViewBag.Title</title>
 </head>
 <body>   
     @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
-    
+     @HQ.Store().ID("stoAR20500_WeekofVisitAll").HQProcedure("AR20500_WeekofVisitAll").AutoLoad(false).HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}                                                                        
+						                            }).LoadData()
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
         <!-- Gọi hàm Body trong AR20500Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
