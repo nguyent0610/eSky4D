@@ -1,0 +1,235 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM21900;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")  
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad();";
+        l.FieldChange.Fn = "frmChange";
+    })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+        .Region(Region.North)
+        .Layout(LayoutType.HBox)
+        .AutoScroll(true)
+        .Items(
+            X.Container().Layout(LayoutType.VBox)
+            .Items(
+                HQ.Combo().ID("cboID")
+                .Name("cboID").HQLangCode("ID").HQDBSys(false).AllowBlank(false).MarginSpec("5 0 0 0").ForceSelection(true)
+                .HQProcedure("OM21900_pcHOKPI").HQColumnShow("ID,Descr").DisplayField("ID").ValueField("ID")
+                .HQHeightWidth(400, 400).Width(300).MaxLength(20).EnforceMaxLength(true)
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst => {
+                    lst.TriggerClick.Fn = "cboID_TriggerClick";
+                    lst.Change.Fn = "cboID_Change";
+                    lst.Expand.Fn = "cboID_Expand";
+                })
+                , HQ.TextBox().ID("txtDescr").DataIndex("Descr").Name("Descr").HQLangCode("Descr").MarginSpec("5 0 5 0").Width(300).AllowBlank(false).MaxLength(200).EnforceMaxLength(true)     
+
+            )
+                
+            , X.Container().Layout(LayoutType.VBox)
+            .Items(
+                HQ.DateField().ID("lblStartDate").MarginSpec("5 0 0 0").HQLangCode("StartDate").Width(300)
+                .Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy")).DataIndex("FromDate")
+                , HQ.DateField().ID("lblEndDate").MarginSpec("5 0 5 0").HQLangCode("EndDate").Width(300)
+                .Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy")).DataIndex("EndDate")
+            )
+            , X.Container().Layout(LayoutType.VBox)
+            .Items(
+                HQ.Combo().ID("cboStatus").Name("cboStatus").MarginSpec("5 0 0 0").Width(300).DataIndex("Status").ReadOnly(true).Tag("X")
+                .HQLangCode("STATUS").HQDBSys(false).HQProcedure("OM21900_pcStatus")
+                .HQColumnShow("Descr").ForceSelection(true)
+                .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                .HQParam(new StoreParameterCollection() {
+                    new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.Change.Handler = "App.cboHandle.store.reload();App.cboHandle.setValue('N');";
+                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                    lst.Focus.Handler = "this.forceSelection=true;";
+                })  
+                .LoadData()
+                    
+                , HQ.Combo().ID("cboHandle").Name("cboHandle").MarginSpec("5 0 0 0").Width(300)
+                .HQLangCode("Handle").HQDBSys(false).HQProcedure("OM21900_pcHandle")//.HQValue("N",false)
+                .HQColumnShow("Descr").ForceSelection(true)
+                .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                .HQParam(new StoreParameterCollection() {
+                    new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw},
+                    new StoreParameter() { Name = "@Status", Value ="App.cboStatus.getValue()", Mode = ParameterMode.Raw}
+                })
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                    lst.Focus.Handler = "this.forceSelection=true;";
+                })  
+                .LoadData()
+                    
+            )
+           
+        )
+        
+        .Listeners(lss =>
+        {
+            lss.Render.Fn = "pnl_render";
+        })
+  
+        , X.Panel().ID("pnlGrid")
+        .Region(Region.Center)
+        .Layout(LayoutType.Border)
+        .Items(
+            X.GridPanel().ID("grdOM_HOKPIDetail")
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false).LoadMask(true))
+            .Region(Region.Center).Flex(1)
+            .SelectionMemory(false)
+            .Store(
+                X.Store()
+                .ID("stoOM_HOKPIDetail")
+                .PageSize(50).AutoLoad(false)
+                .Model(Util.GenerateModel(typeof(OM21900_pgHOKPIDetails_Result), "mdlOM21900_pgHOKPIDetails", ""))
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("kpiId", "App.cboID.getValue()", ParameterMode.Raw));
+                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_HOKPIDetail")))
+                .Listeners(p => p.Load.Fn = "stoLoadOM_HOKPIDetail")
+            )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdOM_HOKPIDetail');")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn()
+                
+                , X.Column().Text(Util.GetLang("Branch")).Width(100).DataIndex("Branch")
+                .Editor(
+                    HQ.Combo().ID("cboBranch").Name("cboBranch").HQProcedure("OM21900_pcBranch")
+                    .HQColumnShow("Plant").DisplayField("Plant").ValueField("Plant").HQAutoLoad(false)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        
+                    })
+                    .LoadData()
+                )
+                
+                , X.Column().Text(Util.GetLang("Territory")).Width(100).DataIndex("Area")
+                .Editor(
+                    HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQProcedure("OM21900_pcTerritory")
+                    .HQColumnShow("Territory,Descr").DisplayField("Territory").ValueField("Territory").HQAutoLoad(false)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        
+                    })
+                    .LoadData()
+                )
+                
+                , X.Column().Text(Util.GetLang("SKU")).Width(100).DataIndex("SKU")
+                .Editor(
+                    HQ.Combo().ID("cboInvt").Name("cboInvt").HQProcedure("OM21900_pcInventoryActiveByBranch")
+                    .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID").HQAutoLoad(false)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@BranchID", Value ="HQ.cnpyID", Mode = ParameterMode.Raw}
+                    })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        
+                    })
+                    .LoadData()
+                )
+                , X.NumberColumn().Format("0,000").Text(Util.GetLang("AmtMil")).DataIndex("Target").Width(150).Align(Alignment.Right)
+                .Editor(X.NumberField().MinValue(0).DecimalPrecision(0))
+               
+                , X.CommandColumn().Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(("Reject"))
+                    .ToolTip(t =>
+                    {
+                        t.Text = ("Rejectrowchanges");
+                    })
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t =>
+                {
+                    t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                })
+                .Listeners(l =>
+                {
+                    l.Command.Handler = "grdOM_HOKPIDetail_Reject(record);";
+                })
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmOM_HOKPIDetail")
+        .Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdOM_HOKPIDetail_BeforeEdit";
+                ls.Edit.Fn = "grdOM_HOKPIDetail_Edit";
+                ls.ValidateEdit.Fn = "grdOM_HOKPIDetail_ValidateEdit";
+            })
+        )
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("Branch"),
+                    X.StringFilter().DataIndex("Area"),
+                    X.StringFilter().DataIndex("SKU"),
+                    X.NumericFilter().DataIndex("Target")
+                )
+        )
+        )
+        .Listeners(lss =>
+        {
+            lss.Render.Fn = "pnl_render";
+        })
+    )// frmMain
+)
+)
