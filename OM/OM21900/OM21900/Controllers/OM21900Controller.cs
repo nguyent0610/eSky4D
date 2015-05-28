@@ -27,7 +27,7 @@ namespace OM21900.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -88,36 +88,6 @@ namespace OM21900.Controllers
                     _db.OM_HOKPI.AddObject(header);
                 }
 
-
-                //lstOM_HOKPI.Created.AddRange(lstOM_HOKPI.Updated);
-                //foreach (OM_HOKPI curHeader in lstOM_HOKPI.Created)
-                //{
-                //    if (ID.PassNull() == "") continue;
-
-                //    var header = _db.OM_HOKPI.FirstOrDefault(p => p.ID == ID);
-                //    if (header != null)
-                //    {
-                //        if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
-                //        {
-                //            UpdatingHeader(ref header, curHeader, Status, Handle);
-                //        }
-                //        else
-                //        {
-                //            throw new MessageException(MessageType.Message, "19");
-                //        }
-                //    }
-                //    else
-                //    {
-                //        //string images = getPathThenUploadImage(curHeader, UserID);
-                //        header = new OM_HOKPI();
-                //        header.ID = ID;
-                //        header.Crtd_DateTime = DateTime.Now;
-                //        header.Crtd_Prog = _screenNbr;
-                //        header.Crtd_User = Current.UserName;
-                //        UpdatingHeader(ref header, curHeader, Status, Handle);
-                //        _db.OM_HOKPI.AddObject(header);
-                //    }
-                //}
                 #endregion
 
                 #region Save OM_HOKPIDetail
