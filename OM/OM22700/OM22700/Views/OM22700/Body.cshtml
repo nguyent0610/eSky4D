@@ -1,0 +1,137 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM22700;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdOM_WeekOfVisit")
+        .SelectionMemory(false)
+        .Store(
+            X.Store()
+            .ID("stoOM_WeekOfVisit")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(OM22700_pgOM_WeekOfVisit_Result), "mdlOM22700_pgOM_WeekOfVisit", "Code"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_WeekOfVisit"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";                 
+            })
+        )
+        .Listeners(p =>
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40),
+            
+            X.Column().DataIndex("SlsFreqID").Text(Util.GetLang("SlsFreqID")).Width(150)
+                .Editor(
+                    HQ.Combo().ID("cboFreq")
+                    .Name("cboFreq").HQProcedure("OM22700_pcGetFrequence")
+                    .HQColumnShow("SlsFreqID,Descr").DisplayField("SlsFreqID").ValueField("SlsFreqID")
+                    .Width(300).HQHeightWidth(400, 300).ForceSelection(true)
+                    .HQDBSys(false).AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                        //lst.Change.Fn = "cboScreenNumber_Change";
+                    })
+                    .LoadData()
+                )
+            
+            , X.Column().Text(Util.GetLang("WeekofVisit")).DataIndex("WeekofVisit").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(10).EnforceMaxLength(true))
+            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(250).EnforceMaxLength(true))
+            
+            , X.CheckColumn().Text(Util.GetLang("Mon")).DataIndex("Mon").Width(150).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Tue")).DataIndex("Tue").Width(150).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Wed")).DataIndex("Wed").Width(150).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Thu")).DataIndex("Thu").Width(150).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Fri")).DataIndex("Fri").Width(150).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Sat")).DataIndex("Sat").Width(150).Editable(true)
+            , X.CheckColumn().Text(Util.GetLang("Sun")).DataIndex("Sun").Width(150).Editable(true)
+            
+            , X.CommandColumn().Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdOM_WeekOfVisit_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmOM_WeekOfVisit").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdOM_WeekOfVisit_BeforeEdit";
+                ls.Edit.Fn = "grdOM_WeekOfVisit_Edit";
+                ls.ValidateEdit.Fn = "grdOM_WeekOfVisit_ValidateEdit";
+
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("SlsFreqID"),
+                    X.StringFilter().DataIndex("WeekofVisit"),
+                    X.StringFilter().DataIndex("Descr"),
+
+                    X.BooleanFilter().DataIndex("Mon"),
+                    X.BooleanFilter().DataIndex("Tue"),
+                    X.BooleanFilter().DataIndex("Wed"),
+                    X.BooleanFilter().DataIndex("Thu"),
+                    X.BooleanFilter().DataIndex("Fri"),
+                    X.BooleanFilter().DataIndex("Sat"),
+                    X.BooleanFilter().DataIndex("Sun")
+                    
+    
+                )
+        )
+    )
+))
