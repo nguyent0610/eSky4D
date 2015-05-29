@@ -48,11 +48,11 @@
                         l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                         l.Change.Fn = "Event.Form.cboBonusID_change";
                     })
-                    
+
                     , HQ.TextBox().ID("txtBonusName")
                     .HQLangCode("ProgramName").DataIndex("BonusName")
                     .MaxLength(150).AllowBlank(false).AllowOnlyWhitespace(false).EnforceMaxLength(true)
-                    
+
                     , HQ.Combo().ID("cboZone")
                     .HQLangCode("Zone").HQProcedure("OM23400_pcZone").DataIndex("Zone")
                     .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Code")
@@ -62,7 +62,7 @@
                     })
                     .LoadData()
                 ) // First Column
-                
+
                 // Second Column
                 , X.Container()
                 .Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
@@ -78,7 +78,7 @@
                         ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                     })
                     .LoadData()
-                    
+
                     , HQ.Combo().ID("cboChannel")
                     .HQLangCode("Channel").HQProcedure("OM23400_pcChannel").DataIndex("Channel")
                     .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
@@ -87,8 +87,8 @@
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
                     })
                     .LoadData()
-                    .Listeners(l=>l.Change.Fn="Event.Form.cboChannel_change")
-                    
+                    .Listeners(l => l.Change.Fn = "Event.Form.cboChannel_change")
+
                     , HQ.Combo().ID("cboBonusFor")
                     .HQLangCode("BonusFor").HQProcedure("OM23400_pcBonusFor").DataIndex("BonusFor")
                     .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
@@ -99,7 +99,7 @@
                     })
                     .LoadData()
                 )
-                
+
                 // Third Column
                 , X.Container()
                 .Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
@@ -109,12 +109,12 @@
                    HQ.DateField().ID("dtpFromDate")
                     .HQLangCode("FromDate").DataIndex("FromDate")
                     .AllowBlank(false)
-                    .Listeners(l=>l.Change.Fn="Event.Form.dtpFromDate_change")
-                    
+                    .Listeners(l => l.Change.Fn = "Event.Form.dtpFromDate_change")
+
                     , HQ.DateField().ID("dtpToDate")
                     .AllowBlank(false)
                     .HQLangCode("ToDate").DataIndex("ToDate")
-                    
+
                     , HQ.Combo().ID("cboRSApplyType")
                     .HQLangCode("ProductApply").HQProcedure("OM23400_pcRSApplyType").DataIndex("RSApplyType")
                     .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
@@ -124,11 +124,12 @@
                         ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                     })
                     .LoadData()
-                    .Listeners(l=>l.Change.Fn="Event.Form.cboRSApplyType_change")
+                    .Listeners(l => l.Change.Fn = "Event.Form.cboRSApplyType_change")
                 )
             )
-            .Listeners(x => { 
-                x.Render.Handler = "HQ.common.control_render(this,'bonus')"; 
+            .Listeners(x =>
+            {
+                x.Render.Handler = "HQ.common.control_render(this,'bonus')";
             })// pnlHeader
 
             , X.TabPanel().ID("tabBonusRS")
@@ -150,24 +151,24 @@
                     .ColumnModel(
                         X.RowNumbererColumn()
                         , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
-                
+
                         , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
                         .Format("0,000")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
-                
+
                         , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
                          .Format("0,000")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
-                        
+
                         , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField()
+                            HQ.NumberField().MinValue(0)
                         )
-                        
+
                         , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
@@ -199,27 +200,28 @@
                             , X.NumericFilter().DataIndex("AmtBonus")
                         )
                     )
-                    .Listeners(x => { 
-                        x.Render.Handler = "HQ.common.control_render(this,'BonusRS')"; 
+                    .Listeners(x =>
+                    {
+                        x.Render.Handler = "HQ.common.control_render(this,'BonusRS')";
                     })
-                    //.BottomBar(
-                    //    X.PagingToolbar().ID("pag")
-                    //    .Items(
-                    //        X.Label(Util.GetLang("PageSize")),
-                    //        X.ToolbarSpacer(10),
-                    //        X.ComboBox()
-                    //        .Width(80)
-                    //        .Items("1", "2", "10", "20", "30", "50")
-                    //        .SelectedItems("50")
-                    //        .Listeners(l =>
-                    //            {
-                    //                l.Select.Fn = "HQ.grid.onPageSelect";
-                    //            })
-                    //    )
-                    //    .Plugins(X.ProgressBarPager())
-                    //)// grdBonusRS
+        //.BottomBar(
+        //    X.PagingToolbar().ID("pag")
+        //    .Items(
+        //        X.Label(Util.GetLang("PageSize")),
+        //        X.ToolbarSpacer(10),
+        //        X.ComboBox()
+        //        .Width(80)
+        //        .Items("1", "2", "10", "20", "30", "50")
+        //        .SelectedItems("50")
+        //        .Listeners(l =>
+        //            {
+        //                l.Select.Fn = "HQ.grid.onPageSelect";
+        //            })
+        //    )
+        //    .Plugins(X.ProgressBarPager())
+        //)// grdBonusRS
                 ) // pnlBonusRS
-                
+
                 , X.Panel().ID("pnlProduct")
                 .Title(Util.GetLang("Product"))
                 .Layout(LayoutType.Border)
@@ -237,7 +239,7 @@
                         .Editor(
                             HQ.Combo().ID("cboColProductID")
                             .HQProcedure("OM23400_pcInvtID")
-                            .HQHeightWidth(400,300).HQColumnShow("Code,Descr")
+                            .HQHeightWidth(400, 300).HQColumnShow("Code,Descr")
                             .ValueField("Code").DisplayField("Code")
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
@@ -245,10 +247,10 @@
                             })
                             .LoadData()
                         )
-                        
+
                         , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
                         .Renderer("Process.renderProductDescr")
-                        
+
                         , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
@@ -278,12 +280,13 @@
                             , X.StringFilter().DataIndex("Descr")
                         )
                     )
-                    .Listeners(x => { 
-                        x.Render.Handler = "HQ.common.control_render(this,'Product')"; 
+                    .Listeners(x =>
+                    {
+                        x.Render.Handler = "HQ.common.control_render(this,'Product')";
                     }) // grdProduct
                 ) // pnlProduct
             ) // tabBonusRS
-            
+
             , X.TabPanel().ID("tabBonusKA")
             .Region(Region.Center)
             .Layout(LayoutType.Border)
@@ -303,50 +306,54 @@
                     .ColumnModel(
                         X.RowNumbererColumn()
                         , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
-                        
-                        , X.Column().Text(Util.GetLang("ProductClass")).DataIndex("ClassID")
-                        .Editor(
-                            HQ.Combo().ID("cboColClassIDMonth")
-                            .HQProcedure("OM23400_pcInvtID")
-                            .HQHeightWidth(400,300).HQColumnShow("Code,Descr")
-                            .ValueField("Code").DisplayField("Code")
-                            .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
-                                , new StoreParameter("@ProductType", "PC", ParameterMode.Value)
-                            })
-                            .LoadData()
-                        )
-                        
+
+                        //, X.Column().Text(Util.GetLang("ProductClass")).DataIndex("ClassID")
+        //.Editor(
+        //    HQ.Combo().ID("cboColClassIDMonth")
+        //    .HQProcedure("OM23400_pcInvtID")
+        //    .HQHeightWidth(400,300).HQColumnShow("Code,Descr")
+        //    .ValueField("Code").DisplayField("Code")
+        //    .HQParam(new StoreParameterCollection() { 
+        //        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+        //        , new StoreParameter("@ProductType", "PC", ParameterMode.Value)
+        //    })
+        //    .LoadData()
+        //)
+
                         , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
                         .Format("0,000")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
                         , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
                         .Format("0,000")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
-                
+
                         , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
                          .Format("0,000")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
-                        
+
                         , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField()
+                        .Align(Alignment.Right).Format("0,000")
+                        .Editor(
+                            HQ.NumberField().MinValue(0)
                         )
-                        
+
                         , X.CommandColumn().Width(150)
-                        .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
-                        )
+                        .Commands(cs =>
+                        {
+                            cs.Add(
+                                X.GridCommand()
+                                .Text(Util.GetLang("Reject"))
+                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                .CommandName("reject")
+                                .Icon(Icon.ArrowUndo)
+                            );
+                        })
                         .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
                         .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                     )
@@ -365,18 +372,18 @@
                         X.GridFilters().Local(true)
                         .Filters(
                             X.NumericFilter().DataIndex("LevelNbr")
-                            , X.StringFilter().DataIndex("ClassID")
                             , X.NumericFilter().DataIndex("SlsAmt")
                             , X.NumericFilter().DataIndex("AmtBegin")
                             , X.NumericFilter().DataIndex("AmtEnd")
                             , X.NumericFilter().DataIndex("AmtBonus")
                         )
                     )
-                    .Listeners(x => { 
-                        x.Render.Handler = "HQ.common.control_render(this,'month')"; 
+                    .Listeners(x =>
+                    {
+                        x.Render.Handler = "HQ.common.control_render(this,'month')";
                     }) // grdMonth
                 ) // pnlMonth
-                
+
                 , X.Panel().ID("pnlQuarter")
                 .Title(Util.GetLang("Quarter"))
                 .Layout(LayoutType.Border)
@@ -388,7 +395,7 @@
                         , X.ToolbarSpacer()
                         , X.ToolbarSeparator()
                         , X.ToolbarSpacer()
-                        
+
                         , HQ.Button().ID("btnQuarterClone")
                         .HQLangCode("CloneFromMonth").Icon(Icon.PageCopy)
                         .Handler("Event.Form.btnQuarterClone_click")
@@ -404,42 +411,30 @@
                     .ColumnModel(
                         X.RowNumbererColumn()
                         , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
-                        , X.Column().Text(Util.GetLang("ProductClass")).DataIndex("ClassID")
-                        .Editor(
-                            HQ.Combo().ID("cboColClassIDQuarter")
-                            .HQProcedure("OM23400_pcInvtID")
-                            .HQHeightWidth(400,300).HQColumnShow("Code,Descr")
-                            .ValueField("Code").DisplayField("Code")
-                            .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
-                                , new StoreParameter("@ProductType", "PC", ParameterMode.Value)
-                            })
-                            .LoadData()
-                        )
-                        
+
                         , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
                         .Format("0,000").Align(Alignment.Right)
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
-                        
+
                         , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
                         .Format("0,000")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
-                
+
                         , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
                          .Format("0,000")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
-                        
+
                         , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField()
+                            HQ.NumberField().MinValue(0)
                         )
-                        
+
                         , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
@@ -466,18 +461,18 @@
                         X.GridFilters().Local(true)
                         .Filters(
                             X.NumericFilter().DataIndex("LevelNbr")
-                            , X.StringFilter().DataIndex("ClassID")
                             , X.NumericFilter().DataIndex("SlsAmt")
                             , X.NumericFilter().DataIndex("AmtBegin")
                             , X.NumericFilter().DataIndex("AmtEnd")
                             , X.NumericFilter().DataIndex("AmtBonus")
                         )
                     )
-                    .Listeners(x => {
-                        x.Render.Handler = "HQ.common.control_render(this,'quarter')"; 
+                    .Listeners(x =>
+                    {
+                        x.Render.Handler = "HQ.common.control_render(this,'quarter')";
                     }) // grdQuarter
                 ) // pnlQuarter
-                
+
                 , X.Panel().ID("pnlYear")
                 .Title(Util.GetLang("Year"))
                 .Layout(LayoutType.Border)
@@ -489,6 +484,7 @@
                         , X.ToolbarSpacer()
                         , X.ToolbarSeparator()
                         , X.ToolbarSpacer()
+
                         , HQ.Button().ID("btnYearClone")
                         .HQLangCode("CloneFromMonth").Icon(Icon.PageCopy)
                         .Handler("Event.Form.btnYearClone_click")
@@ -504,42 +500,30 @@
                     .ColumnModel(
                         X.RowNumbererColumn()
                         , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
-                        , X.Column().Text(Util.GetLang("ProductClass")).DataIndex("ClassID")
-                        .Editor(
-                            HQ.Combo().ID("cboColClassIDYear")
-                            .HQProcedure("OM23400_pcInvtID")
-                            .HQHeightWidth(400,300).HQColumnShow("Code,Descr")
-                            .ValueField("Code").DisplayField("Code")
-                            .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
-                                , new StoreParameter("@ProductType", "PC", ParameterMode.Value)
-                            })
-                            .LoadData()
-                        )
-                        
+
                         , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
                         .Format("0,000").Align(Alignment.Right)
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
-                        
+
                         , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
                         .Format("0,000")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
-                
+
                         , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
                          .Format("0,000")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0)
+                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
                         )
-                        
+
                         , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
                         .Align(Alignment.Right).Editor(
-                            HQ.NumberField()
+                            HQ.NumberField().MinValue(0)
                         )
-                        
+
                         , X.CommandColumn().Width(150)
                         .Commands(
                             X.GridCommand()
@@ -566,15 +550,15 @@
                         X.GridFilters().Local(true)
                         .Filters(
                             X.NumericFilter().DataIndex("LevelNbr")
-                            , X.StringFilter().DataIndex("ClassID")
                             , X.NumericFilter().DataIndex("SlsAmt")
                             , X.NumericFilter().DataIndex("AmtBegin")
                             , X.NumericFilter().DataIndex("AmtEnd")
                             , X.NumericFilter().DataIndex("AmtBonus")
                         )
                     )
-                    .Listeners(x => {
-                        x.Render.Handler = "HQ.common.control_render(this,'year')"; 
+                    .Listeners(x =>
+                    {
+                        x.Render.Handler = "HQ.common.control_render(this,'year')";
                     }) // grdYear
                 ) // pnlYear
             ) //tabBonusKA

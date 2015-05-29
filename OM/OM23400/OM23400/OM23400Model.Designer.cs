@@ -752,7 +752,6 @@ namespace OM23400
         /// <param name="recID">Initial value of the RecID property.</param>
         /// <param name="levelNbr">Initial value of the LevelNbr property.</param>
         /// <param name="bonusID">Initial value of the BonusID property.</param>
-        /// <param name="classID">Initial value of the ClassID property.</param>
         /// <param name="kaType">Initial value of the KaType property.</param>
         /// <param name="slsAmt">Initial value of the SlsAmt property.</param>
         /// <param name="amtBegin">Initial value of the AmtBegin property.</param>
@@ -765,13 +764,12 @@ namespace OM23400
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_TBonusKA CreateOM_TBonusKA(global::System.Int32 recID, global::System.Int32 levelNbr, global::System.String bonusID, global::System.String classID, global::System.String kaType, global::System.Double slsAmt, global::System.Double amtBegin, global::System.Double amtEnd, global::System.Double amtBonus, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static OM_TBonusKA CreateOM_TBonusKA(global::System.Int32 recID, global::System.Int32 levelNbr, global::System.String bonusID, global::System.String kaType, global::System.Double slsAmt, global::System.Double amtBegin, global::System.Double amtEnd, global::System.Double amtBonus, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_TBonusKA oM_TBonusKA = new OM_TBonusKA();
             oM_TBonusKA.RecID = recID;
             oM_TBonusKA.LevelNbr = levelNbr;
             oM_TBonusKA.BonusID = bonusID;
-            oM_TBonusKA.ClassID = classID;
             oM_TBonusKA.KaType = kaType;
             oM_TBonusKA.SlsAmt = slsAmt;
             oM_TBonusKA.AmtBegin = amtBegin;
@@ -868,30 +866,6 @@ namespace OM23400
         private global::System.String _BonusID;
         partial void OnBonusIDChanging(global::System.String value);
         partial void OnBonusIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String ClassID
-        {
-            get
-            {
-                return _ClassID;
-            }
-            set
-            {
-                OnClassIDChanging(value);
-                ReportPropertyChanging("ClassID");
-                _ClassID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ClassID");
-                OnClassIDChanged();
-            }
-        }
-        private global::System.String _ClassID;
-        partial void OnClassIDChanging(global::System.String value);
-        partial void OnClassIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1878,20 +1852,18 @@ namespace OM23400
         /// <param name="recID">Initial value of the RecID property.</param>
         /// <param name="levelNbr">Initial value of the LevelNbr property.</param>
         /// <param name="bonusID">Initial value of the BonusID property.</param>
-        /// <param name="classID">Initial value of the ClassID property.</param>
         /// <param name="kaType">Initial value of the KaType property.</param>
         /// <param name="slsAmt">Initial value of the SlsAmt property.</param>
         /// <param name="amtBegin">Initial value of the AmtBegin property.</param>
         /// <param name="amtEnd">Initial value of the AmtEnd property.</param>
         /// <param name="amtBonus">Initial value of the AmtBonus property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM23400_pgBonusKA_Result CreateOM23400_pgBonusKA_Result(global::System.Int32 recID, global::System.Int32 levelNbr, global::System.String bonusID, global::System.String classID, global::System.String kaType, global::System.Double slsAmt, global::System.Double amtBegin, global::System.Double amtEnd, global::System.Double amtBonus, global::System.Byte[] tstamp)
+        public static OM23400_pgBonusKA_Result CreateOM23400_pgBonusKA_Result(global::System.Int32 recID, global::System.Int32 levelNbr, global::System.String bonusID, global::System.String kaType, global::System.Double slsAmt, global::System.Double amtBegin, global::System.Double amtEnd, global::System.Double amtBonus, global::System.Byte[] tstamp)
         {
             OM23400_pgBonusKA_Result oM23400_pgBonusKA_Result = new OM23400_pgBonusKA_Result();
             oM23400_pgBonusKA_Result.RecID = recID;
             oM23400_pgBonusKA_Result.LevelNbr = levelNbr;
             oM23400_pgBonusKA_Result.BonusID = bonusID;
-            oM23400_pgBonusKA_Result.ClassID = classID;
             oM23400_pgBonusKA_Result.KaType = kaType;
             oM23400_pgBonusKA_Result.SlsAmt = slsAmt;
             oM23400_pgBonusKA_Result.AmtBegin = amtBegin;
@@ -1976,30 +1948,6 @@ namespace OM23400
         private global::System.String _BonusID;
         partial void OnBonusIDChanging(global::System.String value);
         partial void OnBonusIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String ClassID
-        {
-            get
-            {
-                return _ClassID;
-            }
-            set
-            {
-                OnClassIDChanging(value);
-                ReportPropertyChanging("ClassID");
-                _ClassID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ClassID");
-                OnClassIDChanged();
-            }
-        }
-        private global::System.String _ClassID;
-        partial void OnClassIDChanging(global::System.String value);
-        partial void OnClassIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

@@ -59,12 +59,12 @@
             .Model(Util.GenerateModel(typeof(OM23400_pgBonusRS_Result), "mdlBonusRS", ""))       
             .ServerProxy(
                 X.AjaxProxy()                
-                .Url(Url.Action("GetBonusRS", "OM23400"))                
-                //.ActionMethods(action =>
-                //{
-                //    action.Read = HttpMethod.POST;
-                //})
-                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                .Url(Url.Action("GetBonusRS", "OM23400"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
             ) 
             .Parameters(ps =>
             {
@@ -85,12 +85,12 @@
             .Model(Util.GenerateModel(typeof(OM23400_pgProduct_Result), "mdlProduct", ""))       
             .ServerProxy(
                 X.AjaxProxy()                
-                .Url(Url.Action("GetProduct", "OM23400"))                
-                //.ActionMethods(action =>
-                //{
-                //    action.Read = HttpMethod.POST;
-                //})
-                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                .Url(Url.Action("GetProduct", "OM23400"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
             ) 
             .Parameters(ps =>
             {
@@ -112,12 +112,12 @@
             .Model(Util.GenerateModel(typeof(OM23400_pgBonusKA_Result), "mdlMonth", ""))       
             .ServerProxy(
                 X.AjaxProxy()                
-                .Url(Url.Action("GetBonusKA", "OM23400"))                
-                //.ActionMethods(action =>
-                //{
-                //    action.Read = HttpMethod.POST;
-                //})
-                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                .Url(Url.Action("GetBonusKA", "OM23400"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
             ) 
             .Parameters(ps =>
             {
@@ -125,7 +125,7 @@
                 ps.Add(new StoreParameter("kaType", "M", ParameterMode.Value));
             })
             .Listeners(p => {
-                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr','ClassID'];";//,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr'];";//,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
                 p.Load.Fn = "Store.stoBonusRS_load";
                 p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
                 p.Update.Handler = "Event.Form.frmMain_fieldChange()";
@@ -139,12 +139,12 @@
             .Model(Util.GenerateModel(typeof(OM23400_pgBonusKA_Result), "mdlQuarter", ""))       
             .ServerProxy(
                 X.AjaxProxy()                
-                .Url(Url.Action("GetBonusKA", "OM23400"))                
-                //.ActionMethods(action =>
-                //{
-                //    action.Read = HttpMethod.POST;
-                //})
-                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                .Url(Url.Action("GetBonusKA", "OM23400"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
             ) 
             .Parameters(ps =>
             {
@@ -152,7 +152,7 @@
                 ps.Add(new StoreParameter("kaType", "Q", ParameterMode.Value));
             })
             .Listeners(p => {
-                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr','ClassID'];"; //,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr'];"; //,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
                 p.Load.Fn = "Store.stoBonusRS_load";
                 p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
                 p.Update.Handler = "Event.Form.frmMain_fieldChange()";
@@ -166,12 +166,12 @@
             .Model(Util.GenerateModel(typeof(OM23400_pgBonusKA_Result), "mdlYear", ""))       
             .ServerProxy(
                 X.AjaxProxy()                
-                .Url(Url.Action("GetBonusKA", "OM23400"))                
-                //.ActionMethods(action =>
-                //{
-                //    action.Read = HttpMethod.POST;
-                //})
-                //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                .Url(Url.Action("GetBonusKA", "OM23400"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
             ) 
             .Parameters(ps =>
             {
@@ -179,7 +179,7 @@
                 ps.Add(new StoreParameter("kaType", "Y", ParameterMode.Value));
             })
             .Listeners(p => {
-                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr','ClassID'];";//,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
+                p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr'];";//,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
                 p.Load.Fn = "Store.stoBonusRS_load";
                 p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
                 p.Update.Handler = "Event.Form.frmMain_fieldChange()";

@@ -41,7 +41,6 @@
           <Property Name="RecID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="LevelNbr" Type="int" Nullable="false" />
           <Property Name="BonusID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="KaType" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="SlsAmt" Type="float" Nullable="false" />
           <Property Name="AmtBegin" Type="float" Nullable="false" />
@@ -206,7 +205,6 @@
           <Property Type="Int32" Name="RecID" Nullable="false" />
           <Property Type="Int32" Name="LevelNbr" Nullable="false" />
           <Property Type="String" Name="BonusID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="KaType" Nullable="false" MaxLength="1" />
           <Property Type="Double" Name="SlsAmt" Nullable="false" />
           <Property Type="Double" Name="AmtBegin" Nullable="false" />
@@ -223,7 +221,6 @@
           <Property Type="Int32" Name="RecID" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="LevelNbr" Nullable="false" />
           <Property Type="String" Name="BonusID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="KaType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="SlsAmt" Nullable="false" />
           <Property Type="Double" Name="AmtBegin" Nullable="false" />
@@ -330,7 +327,6 @@
                 <ScalarProperty Name="RecID" ColumnName="RecID" />
                 <ScalarProperty Name="LevelNbr" ColumnName="LevelNbr" />
                 <ScalarProperty Name="BonusID" ColumnName="BonusID" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="KaType" ColumnName="KaType" />
                 <ScalarProperty Name="SlsAmt" ColumnName="SlsAmt" />
                 <ScalarProperty Name="AmtBegin" ColumnName="AmtBegin" />
@@ -355,7 +351,6 @@
                 <ScalarProperty Name="AmtBegin" ColumnName="AmtBegin" />
                 <ScalarProperty Name="SlsAmt" ColumnName="SlsAmt" />
                 <ScalarProperty Name="KaType" ColumnName="KaType" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="BonusID" ColumnName="BonusID" />
                 <ScalarProperty Name="LevelNbr" ColumnName="LevelNbr" />
                 <ScalarProperty Name="RecID" ColumnName="RecID" />

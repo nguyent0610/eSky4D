@@ -30,6 +30,7 @@ namespace OM23400.Controllers
         private string _yeatType = "Y";
 
         OM23400Entities _db = Util.CreateObjectContext<OM23400Entities>(false);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         //
         // GET: /OM23400/
         public ActionResult Index()
@@ -150,21 +151,21 @@ namespace OM23400.Controllers
                             }
                         }
 
-                        foreach (var deleted in lstBonusRSChange.Deleted)
-                        {
-                            if (deleted.AmtBegin > 0 || deleted.AmtEnd > 0 || deleted.AmtEnd > 0)
-                            {
-                                deleted.BonusID = bonusInput.BonusID;
+                        //foreach (var deleted in lstBonusRSChange.Deleted)
+                        //{
+                        //    if (deleted.AmtBegin > 0 || deleted.AmtEnd > 0 || deleted.AmtEnd > 0)
+                        //    {
+                        //        deleted.BonusID = bonusInput.BonusID;
 
-                                var deletedBonusRS = _db.OM_TBonusRS.FirstOrDefault(
-                                    x => x.LevelNbr == deleted.LevelNbr
-                                        && x.BonusID == deleted.BonusID);
-                                if (deletedBonusRS != null)
-                                {
-                                    _db.OM_TBonusRS.DeleteObject(deletedBonusRS);
-                                }
-                            }
-                        }
+                        //        var deletedBonusRS = _db.OM_TBonusRS.FirstOrDefault(
+                        //            x => x.LevelNbr == deleted.LevelNbr
+                        //                && x.BonusID == deleted.BonusID);
+                        //        if (deletedBonusRS != null)
+                        //        {
+                        //            _db.OM_TBonusRS.DeleteObject(deletedBonusRS);
+                        //        }
+                        //    }
+                        //}
                         #endregion
 
                         #region Product
@@ -246,7 +247,7 @@ namespace OM23400.Controllers
 
                             foreach (var updated in lstMqyChange.Updated)
                             {
-                                if (!string.IsNullOrWhiteSpace(updated.ClassID))
+                                if (updated.SlsAmt > 0 || updated.AmtBegin > 0 || updated.AmtEnd > 0 || updated.AmtBonus > 0)
                                 {
                                     updated.BonusID = bonusInput.BonusID;
                                     updated.KaType = mqy.Key;
@@ -254,7 +255,6 @@ namespace OM23400.Controllers
                                     var updatedBonusKA = _db.OM_TBonusKA.FirstOrDefault(
                                         x => x.LevelNbr == updated.LevelNbr
                                             && x.BonusID == updated.BonusID
-                                            && x.ClassID == updated.ClassID
                                             && x.KaType == updated.KaType);
                                     if (updatedBonusKA != null)
                                     {
@@ -269,28 +269,26 @@ namespace OM23400.Controllers
                                 }
                             }
 
-                            foreach (var deleted in lstMqyChange.Deleted)
-                            {
-                                if (!string.IsNullOrWhiteSpace(deleted.ClassID))
-                                {
-                                    deleted.BonusID = bonusInput.BonusID;
-                                    deleted.KaType = mqy.Key;
+                            //foreach (var deleted in lstMqyChange.Deleted)
+                            //{
+                            //    if (deleted.SlsAmt > 0 || deleted.AmtBegin > 0 || deleted.AmtEnd > 0 || deleted.AmtBonus > 0)
+                            //    {
+                            //        deleted.BonusID = bonusInput.BonusID;
+                            //        deleted.KaType = mqy.Key;
 
-                                    var deletedBonusKA = _db.OM_TBonusKA.FirstOrDefault(
-                                        x => x.LevelNbr == deleted.LevelNbr
-                                            && x.BonusID == deleted.BonusID
-                                            && x.ClassID == deleted.ClassID
-                                            && x.KaType == deleted.KaType);
-                                    if (deletedBonusKA != null)
-                                    {
-                                        if (!lstMqyChange.Created.Exists(c => c.LevelNbr == deletedBonusKA.LevelNbr 
-                                            && c.ClassID == deletedBonusKA.ClassID))
-                                        {
-                                            _db.OM_TBonusKA.DeleteObject(deletedBonusKA);
-                                        }
-                                    }
-                                }
-                            }
+                            //        var deletedBonusKA = _db.OM_TBonusKA.FirstOrDefault(
+                            //            x => x.LevelNbr == deleted.LevelNbr
+                            //                && x.BonusID == deleted.BonusID
+                            //                && x.KaType == deleted.KaType);
+                            //        if (deletedBonusKA != null)
+                            //        {
+                            //            if (!lstMqyChange.Created.Exists(c => c.LevelNbr == deletedBonusKA.LevelNbr))
+                            //            {
+                            //                _db.OM_TBonusKA.DeleteObject(deletedBonusKA);
+                            //            }
+                            //        }
+                            //    }
+                            //}
                         }
                         #endregion
                     }
@@ -358,13 +356,85 @@ namespace OM23400.Controllers
             }
         }
 
+        public ActionResult DeleteBonusKA(FormCollection data)
+        {
+            try
+            {
+                var mqyHandler = new StoreDataHandler(data["lstChange"]);
+                var lstMqyChange = mqyHandler.BatchObjectData<OM23400_pgBonusKA_Result>();
+
+                foreach (var deleted in lstMqyChange.Deleted)
+                {
+                    var deletedBonusKAs = _db.OM_TBonusKA.Where(
+                        x => x.BonusID == deleted.BonusID
+                            && x.KaType == deleted.KaType).ToList();
+                    foreach (var deletedBonusKA in deletedBonusKAs)
+                    {
+                        if (deletedBonusKA.LevelNbr >= deleted.LevelNbr)
+                        {
+                            _db.OM_TBonusKA.DeleteObject(deletedBonusKA);
+                        }
+                    }
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+
+        public ActionResult DeleteBonusRS(FormCollection data)
+        {
+            try
+            {
+                var bonusRSHandler = new StoreDataHandler(data["lstBonusRSChange"]);
+                var lstBonusRSChange = bonusRSHandler.BatchObjectData<OM23400_pgBonusRS_Result>();
+
+                foreach (var deleted in lstBonusRSChange.Deleted)
+                {
+                    var deletedBonusRSs = _db.OM_TBonusRS.Where(
+                        x => x.BonusID == deleted.BonusID).ToList();
+                    foreach (var deletedBonusRS in deletedBonusRSs)
+                    {
+                        if (deletedBonusRS.LevelNbr >= deleted.LevelNbr)
+                        {
+                            _db.OM_TBonusRS.DeleteObject(deletedBonusRS);
+                        }
+                    }
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+
         private void updateBonusKA(ref OM_TBonusKA updatedBonusKA, OM23400_pgBonusKA_Result updated, bool isNew)
         {
             if (isNew)
             {
                 updatedBonusKA.BonusID = updated.BonusID;
                 updatedBonusKA.LevelNbr = updated.LevelNbr;
-                updatedBonusKA.ClassID = updated.ClassID;
                 updatedBonusKA.KaType = updated.KaType;
 
                 updatedBonusKA.Crtd_DateTime = DateTime.Now;

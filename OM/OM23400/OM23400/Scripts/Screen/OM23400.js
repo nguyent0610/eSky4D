@@ -74,6 +74,28 @@ var Process = {
     deleteBonusRS: function (item) {
         if (item == "yes"){
             App.grdBonusRS.deleteSelected();
+            App.frmMain.submit({
+                url: 'OM23400/DeleteBonusRS',
+                waitMsg: HQ.common.getLang('Deleting') + "...",
+                timeout: 1800000,
+                params: {
+                    lstBonusRSChange: HQ.store.getData(App.grdBonusRS.store)
+                },
+                success: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode);
+                    }
+                    App.grdBonusRS.store.reload();
+                },
+                failure: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode);
+                    }
+                    else {
+                        HQ.message.process(msg, data, true);
+                    }
+                }
+            });
         }
     },
 
@@ -85,20 +107,46 @@ var Process = {
 
     deleteMonth: function (item) {
         if (item == "yes") {
-            App.grdMonth.deleteSelected();
+            Process.submitDeleteKa(App.grdMonth);
         }
     },
 
     deleteQuarter: function (item) {
         if (item == "yes") {
-            App.grdQuarter.deleteSelected();
+            Process.submitDeleteKa(App.grdQuarter);
         }
     },
 
     deleteYear: function (item) {
         if (item == "yes") {
-            App.grdYear.deleteSelected();
+            Process.submitDeleteKa(App.grdYear);
         }
+    },
+
+    submitDeleteKa: function (grid) {
+        grid.deleteSelected();
+        App.frmMain.submit({
+            url: 'OM23400/DeleteBonusKA',
+            waitMsg: HQ.common.getLang('Deleting') + "...",
+            timeout: 1800000,
+            params: {
+                lstChange: HQ.store.getData(grid.store)
+            },
+            success: function (msg, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode);
+                }
+                grid.store.reload();
+            },
+            failure: function (msg, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+            }
+        });
     },
 
     showFieldInvalid: function (form) {
@@ -533,7 +581,36 @@ var Event = {
                             HQ.message.show(150, '', '');
                         }
                         else {
-                            App.cboBonusID.clearValue();
+                            
+                            if (HQ.focus == 'bonus') {
+                                App.cboBonusID.clearValue();
+                            }
+                            else if (HQ.focus == 'BonusRS') {
+                                //App.grdBonusRS.store.reload();
+                            }
+                            else if (HQ.focus == 'Product') {
+                                //App.grdProduct.store.reload();
+                            }
+                            else if (HQ.focus == 'month') {
+                                if (HQ.isUpdate) {
+                                    var keys = App.grdMonth.store.HQFieldKeys ? App.grdMonth.store.HQFieldKeys : [];
+                                    if (keys.indexOf('LevelNbr') > -1) {
+                                        var rec = Ext.create(App.grdMonth.store.model.modelName, {
+                                            LevelNbr: Process.lastNbr(App.grdMonth.store)
+                                        });
+                                        HQ.store.insertRecord(App.grdMonth.store, keys, rec);
+                                    }
+                                    else {
+                                        HQ.store.insertBlank(App.grdMonth.store, keys);
+                                    }
+                                }
+                            }
+                            else if (HQ.focus == 'quarter') {
+                                App.grdQuarter.store.reload();
+                            }
+                            else if (HQ.focus == 'year') {
+                                App.grdYear.store.reload();
+                            }
                         }
                     }
                     break;
@@ -602,15 +679,22 @@ var Event = {
                         else if (HQ.focus == 'month') {
                             if (App.cboBonusID.getValue() && App.slmMonth.getCount()) {
                                 HQ.message.show(2015020806,
-                                    HQ.common.getLang('ProductClass') + " " + App.slmMonth.selected.items[0].data.ClassID,
+                                    HQ.common.getLang('Level') + " " + App.slmMonth.selected.items[0].data.LevelNbr,
                                     'Process.deleteMonth');
                             }
                         }
                         else if (HQ.focus == 'quarter') {
                             if (App.cboBonusID.getValue() && App.slmQuarter.getCount()) {
                                 HQ.message.show(2015020806,
-                                    HQ.common.getLang('ProductClass') + " " + App.slmQuater.selected.items[0].data.ClassID,
+                                    HQ.common.getLang('Level') + " " + App.slmQuater.selected.items[0].data.LevelNbr,
                                     'Process.deleteQuarter');
+                            }
+                        }
+                        else if (HQ.focus == 'year') {
+                            if (App.cboBonusID.getValue() && App.slmYear.getCount()) {
+                                HQ.message.show(2015020806,
+                                    HQ.common.getLang('Level') + " " + App.slmYear.selected.items[0].data.LevelNbr,
+                                    'Process.deleteYear');
                             }
                         }
                     }
@@ -623,6 +707,7 @@ var Event = {
     },
 
     Grid: {
+
         grdBonusRS_beforeEdit: function (editor, e) {
             if (HQ.isUpdate) {
                 if (App.frmMain.isValid()) {
