@@ -51,7 +51,7 @@ var save = function (b76,b81) {
         url: 'IN40100/Process',
         timeout: 180000,
         params: {
-            lstPPC_StockRecovery: Ext.encode(App.grdIN40100.store.getRecordsValues()),
+            lstIN40100: Ext.encode(App.grdIN40100.store.getRecordsValues()),
             mess76: b76
         },
         success: function (msg, data) {

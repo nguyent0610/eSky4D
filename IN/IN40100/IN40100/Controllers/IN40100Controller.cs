@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
+using HQFramework.DAL;
 
 
 namespace IN40100.Controllers
@@ -50,6 +51,26 @@ namespace IN40100.Controllers
             {
                 
                 string PerNbr=data["txtPerPost"].PassNull();
+                string SiteID=string.Empty;
+                string InvtID=string.Empty;
+                string Type = data["cboOption"].PassNull();
+                StoreDataHandler custHandler = new StoreDataHandler(data["lstIN40100"]);
+                var lstIN40100 = custHandler.ObjectData<IN40100_pgGetListItemForCosting_Result>();
+
+                foreach (var result in lstIN40100)
+                {
+                    if (result.Sel == true)
+                    {
+                        InvtID+=result.Invtid+',';
+                        SiteID += result.SiteID + ',';
+                    }
+                }
+                if (SiteID.Length > 0)
+                {
+                    InvtID = InvtID.Substring(0, InvtID.Length - 1);
+                    SiteID = SiteID.Substring(0, SiteID.Length - 1);
+                }
+
                 var lstwrk = _db.IN_WrkCosting.ToList();
                 if (mess76) goto MESS76;
                 if (mess81) goto MESS81;
@@ -64,13 +85,10 @@ namespace IN40100.Controllers
                 if (endCost != null)
                 {
                     throw new MessageException(MessageType.Message, "81", fn: "process81");
-                MESS81:
-                    Data_Release();
+              
                 }
-                else
-                {
-                    Data_Release();
-                }
+            MESS81:
+                Data_Release(PerNbr, SiteID.Split(','), InvtID.Split(','), Type);
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -86,9 +104,35 @@ namespace IN40100.Controllers
             }
         }
 
-        private void Data_Release()
+        private void Data_Release(string perPost, string[] lstSite, string[] lstInvtID, string type)
         {
+            
+                DataAccess dal = Util.Dal();
+                try
+                {
+                    INProcess.IN po = new INProcess.IN(Current.UserName,_screenNbr, dal);
+                    
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                        if (!po.IN40100_Release(perPost,lstSite,lstInvtID,type))
+                        {
+                            dal.RollbackTrans();
+                        }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
 
+                        //Util.AppendLog(ref _logMessage, "9999", data: new { success = true, batNbr = _batNbr });
+                    
+                   
+                    po = null;
+                }
+                catch (Exception)
+                {
+                    dal.RollbackTrans();
+                    throw;
+                }
+            
         }
 
 
