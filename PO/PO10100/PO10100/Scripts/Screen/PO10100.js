@@ -79,10 +79,7 @@ var loadDataHeader = function (sto) {
     HQ.isChange = false;
     HQ.common.changeData(HQ.isChange, 'PO10100');
    
-    //App.stoPO10100_pgDetail.reload();
-    //App.stoPO10100_pgLoadTaxTrans.reload();
-    //App.grdTaxTrans.getView().refresh();
-    //calcDet();
+  
     if (App.stoPO10100_pdPO_Setup.data.length == 0) {// chua cai dat PO_Setup thong bao 
         HQ.isChange = false;
         HQ.common.changeData(HQ.isChange, 'PO10100');
@@ -221,10 +218,7 @@ var menuClick = function (command) {
                     waitMsg: HQ.common.getLang("LoadReporting"),
                     method: 'POST',
                     url: 'PO10100/Report',
-                    timeout: 180000,
-                    params: {
-                        POSCode: record.data.POSCode
-                    },
+                    timeout: 180000,                   
                     success: function (msg, data) {
                         if (this.result.reportID != null) {
 
@@ -565,26 +559,25 @@ var grdPO_Detail_Edit = function (item, e) {
   
 };
 var grdPO_Detail_Deselect = function (item, e) {
-    calcDet();
+   
     delTax(e.rowIdx); 
     calcTaxTotal();
 };
 var grdPO_Detail_Reject = function (record) {
     if (record.data.tstamp == '') {
         var index = App.stoPO10100_pgDetail.indexOf(record);
-        delTax(index);
-        calcTaxTotal();
+        delTax(index);      
         App.grdDetail.getStore().remove(record, App.grdDetail);
         App.grdDetail.getView().focusRow(App.grdDetail.getStore().getCount() - 1);
         App.grdDetail.getSelectionModel().select(App.grdDetail.getStore().getCount() - 1);
-        calcDet();
+        calcTaxTotal();
     } else {
         var index = App.stoPO10100_pgDetail.indexOf(record);       
         record.reject();
         delTax(index);
         calcTax(index);
         calcTaxTotal();
-        calcDet();
+     
 
     }
 };
@@ -1078,9 +1071,8 @@ var deleteRecordGrid = function (item) {
     if (item == "yes") {
         if (item == 'yes') {
             if (App.slmPO_Detail.selected.items[0].data.tstamp != "") {
-                App.grdDetail.deleteSelected();
                 delTaxMutil();
-                calcDet();
+                App.grdDetail.deleteSelected();             
                 App.frmMain.getForm().updateRecord();
                 if (App.frmMain.isValid()) {
                     App.frmMain.submit({
@@ -1116,9 +1108,8 @@ var deleteRecordGrid = function (item) {
                 }
             }
             else {
-                App.grdDetail.deleteSelected();
                 delTaxMutil();
-                calcDet();
+                App.grdDetail.deleteSelected();              
             }
         }
     }
@@ -1233,7 +1224,7 @@ var insertItemGrid = function (grd, item) {
     objDetail.set('LineRef', lastLineRef(App.stoPO10100_pgDetail));
 
     
-    calcDet();
+ 
     delTax(App.stoPO10100_pgDetail.getCount() - 1);
     calcTax(App.stoPO10100_pgDetail.getCount() - 1);
     calcTaxTotal();
@@ -1272,7 +1263,13 @@ function calcDet() {
     var taxAmt01 = 0;
     var taxAmt02 = 0;
     var taxAmt03 = 0;
-    var taxAmt03 = 0;
+  
+
+    var txblAmtTot00 = 0;
+    var txblAmtTot01 = 0;
+    var txblAmtTot02 = 0;
+    var txblAmtTot03 = 0;
+
     var extvol = 0;
     var extwei = 0;
     var extCost = 0;
@@ -1281,18 +1278,26 @@ function calcDet() {
     var CnvFact = 0;
     var CTN = 0;
     var PCS = 0;
-
-    for (var j = 0; j < App.stoPO10100_pgDetail.allData.length; j++) {
-        var det = App.stoPO10100_pgDetail.allData.items[j];
+    var lstdata = App.stoPO10100_pgDetail.allData ? App.stoPO10100_pgDetail.allData : App.stoPO10100_pgDetail.data;
+    for (var j = 0; j < lstdata.length; j++) {
+        var det = lstdata.items[j];
         taxAmt00 += det.data.TaxAmt00;
         taxAmt01 += det.data.TaxAmt01;
         taxAmt02 += det.data.TaxAmt02;
         taxAmt03 += det.data.TaxAmt03;
+
+        txblAmtTot00 += det.data.TaxAmt00 == 0 ? det.data.ExtCost : det.data.TxblAmt00;
+        txblAmtTot01 += det.data.TxblAmt01;
+        txblAmtTot02 += det.data.TxblAmt02;
+        txblAmtTot03 += det.data.TxblAmt03;
+
         poFee += det.data.POFee;
         extvol += det.data.ExtVolume;
         extwei += det.data.ExtWeight;
         extCost += det.data.ExtCost;
         discount += det.data.DiscAmt
+
+
         //ordQty += det.data.LineQty;
 
         //tinh thung le  
@@ -1306,7 +1311,9 @@ function calcDet() {
         }
 
     };
-   
+    txblAmtTot = txblAmtTot00 + txblAmtTot01 + txblAmtTot02 + txblAmtTot03;
+    taxAmt = taxAmt00 + taxAmt01 + taxAmt02 + taxAmt03;
+
         App.txtCA.setValue(Math.round(CTN, 0));
         App.txtEA.setValue(Math.round(PCS, 0));
         App.POFeeTot.setValue(Math.round(poFee, 0));
@@ -1314,10 +1321,10 @@ function calcDet() {
         App.EXTVOL.setValue(Math.round(extvol, 0));
         App.EXTWEIGHT.setValue(Math.round(extwei, 0));
      
-        App.POAmt.setValue(Math.round(taxAmt00 + taxAmt01 + taxAmt02 + taxAmt03, 0) + Math.round(extCost, 0) + Math.round(poFee, 0));
+        App.POAmt.setValue(Math.round(taxAmt, 0) + Math.round(txblAmtTot, 0) + Math.round(poFee, 0));
         //App.CuryLineAmt.setValue(Math.round(curyLineAmt, 0));
         App.DISCOUNT.setValue(Math.round(discount, 0));      
-        App.txtRcptTotAmt.setValue(Math.round(extCost, 0) + Math.round(poFee, 0));
+        App.txtTxblAmt.setValue(Math.round(txblAmtTot, 0));
     
 }
 function delTaxMutil() {
@@ -1338,7 +1345,7 @@ function delTax(index) {
     }
     clearTax(index);
     calcTaxTotal();
-    calcDet();
+ 
     return true;
 
 }
@@ -1609,7 +1616,7 @@ function calcTaxTotal() {
     };
     App.grdTaxTrans.getView().refresh(false);
     App.grdTaxDoc.getView().refresh(false);
-   
+    calcDet();
 }
 
 function lastLineRef(store) {
