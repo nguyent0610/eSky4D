@@ -1457,7 +1457,12 @@ function calcDet() {
         taxAmt02 += det.data.TaxAmt02;
         taxAmt03 += det.data.TaxAmt03;
 
-        
+        txblAmtTot00 += det.data.TaxAmt00 == 0 ? det.data.TranAmt : det.data.TxblAmt00;
+        txblAmtTot01 += det.data.TxblAmt01;
+        txblAmtTot02 += det.data.TxblAmt02;
+        txblAmtTot03 += det.data.TxblAmt03;
+
+
 
         poFee += det.data.RcptFee;     
         extCost += det.data.TranAmt;
@@ -1472,31 +1477,39 @@ function calcDet() {
         var det = App.stoPO10200_LoadTaxDoc.data.items[j];
         if (j == 0) {
             record.TaxAmtTot00 = det.data.TaxAmt;
-            record.TxblAmtTot00 = det.data.TxblAmt;
+            //record.TxblAmtTot00 = det.data.TxblAmt;
             record.TaxID00 = det.data.TaxID;
         }
         else if (j == 1) {
             record.TaxAmtTot01 = det.data.TaxAmt;
-            record.TxblAmtTot01 = det.data.TxblAmt;
+            //record.TxblAmtTot01 = det.data.TxblAmt;
             record.TaxID01 = det.data.TaxID;
         }
         else if (j == 2) {
             record.TaxAmtTot02 = det.data.TaxAmt;
-            record.TxblAmtTot02 = det.data.TxblAmt;
+            //record.TxblAmtTot02 = det.data.TxblAmt;
             record.TaxID02 = det.data.TaxID;
         }
         else if (j == 3) {
             record.TaxAmtTot03 = det.data.TaxAmt;
-            record.TxblAmtTot03 = det.data.TxblAmt;
+            //record.TxblAmtTot03 = det.data.TxblAmt;
             record.TaxID03 = det.data.TaxID;
         }        
     };
-    txblAmtTot = record.TxblAmtTot00 + record.TxblAmtTot01 + record.TxblAmtTot02 + record.TxblAmtTot03;
+   
+    record.TxblAmtTot00 = txblAmtTot00;
+    record.TxblAmtTot01 = txblAmtTot01;
+    record.TxblAmtTot02 = txblAmtTot02;
+    record.TxblAmtTot03 = txblAmtTot03;
+
+    txblAmtTot = txblAmtTot00 + txblAmtTot01 + txblAmtTot02 + txblAmtTot03;
     taxAmt = record.TaxAmtTot00 + record.TaxAmtTot01 + record.TaxAmtTot02 + record.TaxAmtTot03;
+
+
     if(App.cboStatus.getValue()!="V")
         App.txtTotAmt.setValue(Math.round(taxAmt, 0) + Math.round(txblAmtTot, 0) + Math.round(poFee, 0));
     record.RcptTotAmt = (Math.round(taxAmt, 0) + Math.round(txblAmtTot, 0) + Math.round(poFee, 0));
-
+    
     App.txtRcptAmtTot.setValue(Math.round(txblAmtTot, 0) + Math.round(poFee, 0));
     App.txtRcptQtyTot.setValue(Math.round(qty, 0));
     App.txtDiscAmt.setValue(Math.round(discount, 0));
