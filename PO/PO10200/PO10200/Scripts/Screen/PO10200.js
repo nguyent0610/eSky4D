@@ -1188,8 +1188,9 @@ var deleteRecordGrid = function (item) {
     if (item == "yes") {
         if (item == 'yes') {
             if (App.slmPO_Trans.selected.items[0].data.tstamp != "") {
+                delTax(App.slmPO_Trans.selected.items[0]);
                 App.grdDetail.deleteSelected();
-                delTaxMutil();
+              
               
                 App.frmMain.getForm().updateRecord();
                 if (App.frmMain.isValid()) {
@@ -1230,8 +1231,9 @@ var deleteRecordGrid = function (item) {
                         App.stoLotTrans.data.removeAt(i);
                     }
                 }
+                delTax(App.slmPO_Trans.selected.items[0]);
                 App.grdDetail.deleteSelected();
-                delTaxMutil();
+             
              
             }
         }
@@ -1433,6 +1435,20 @@ function calcDet() {
     var qty = 0;
     var lstdata = App.stoPO10200_pgDetail.allData ? App.stoPO10200_pgDetail.allData : App.stoPO10200_pgDetail.data;
     var record = App.stoHeader.getAt(0).data;
+
+    record.TaxAmtTot00 = 0;
+    record.TaxAmtTot01 = 0;
+    record.TaxAmtTot02 = 0;
+    record.TaxAmtTot03 = 0;
+
+    record.TxblAmtTot00 = 0;
+    record.TaxID00 = '';
+    record.TxblAmtTot01 = 0;
+    record.TaxID01 = '';
+    record.TxblAmtTot02 = 0;
+    record.TaxID02 = '';
+    record.TxblAmtTot03 = 0;
+    record.TaxID03 = '';
 
     for (var j = 0; j < lstdata.length; j++) {
         var det = lstdata.items[j];
