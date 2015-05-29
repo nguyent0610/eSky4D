@@ -1,0 +1,122 @@
+
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN40300;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+        X.FormPanel()
+        .ID("frmMain")
+        .BodyPadding(0)
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar("Print,Save,New,Delete", true, ""))
+        .Layout(LayoutType.Border)
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
+        .Listeners(lst =>
+        {
+           // lst.BoxReady.Fn = "loadSourceCombo";
+        })
+        .Items(
+            X.Panel().ID("pnlHeader")
+            .Region(Region.North)
+            .Layout(LayoutType.HBox)
+            .AutoScroll(true)
+            .Items(
+                X.FieldSet().Layout(LayoutType.HBox).MarginSpec("0 0 5 5")
+                .Title(Util.GetLang("RebuildINTrans"))
+                .LayoutConfig(new HBoxLayoutConfig { Align=HBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    X.Container().Layout(LayoutType.VBox)
+                    .Items(
+                        HQ.Checkbox().ID("chkINValidate").HQLangCode("INValidate")
+                        , HQ.Checkbox().ID("chkCalQty").HQLangCode("INRebuildQtyCost")
+                        , HQ.Checkbox().ID("chkCalSOQty").HQLangCode("INRebuildOnSOQty")
+                    )
+                    
+                    , X.Container().Layout(LayoutType.VBox)
+                    .Items(
+                        HQ.Combo().ID("cboSiteID").Name("cboSiteID").Width(250)
+                            .HQLangCode("SiteID").HQDBSys(false).HQProcedure("IN40300_pcSiteAll")
+                            .HQColumnShow("SiteID,Name").ForceSelection(true).AllowBlank(false)
+                            .DisplayField("SiteID").ValueField("SiteID").HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                                new StoreParameter() { Name = "@ScreenNbr", Value ="IN40300", Mode = ParameterMode.Value},
+                                new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                lst.Focus.Handler = "this.forceSelection=true;";
+                            })
+                            .LoadData()
+                            
+                        , HQ.Combo().ID("cboInvtID").Name("cboInvtID").Width(250)
+                            .HQLangCode("InvtID").HQDBSys(false).HQProcedure("IN40300_pcInventoryActiveByBranch")
+                            .HQColumnShow("InvtID,Descr").ForceSelection(true).AllowBlank(false)
+                            .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                lst.Focus.Handler = "this.forceSelection=true;";
+                            })
+                            .LoadData()
+                            
+                        , HQ.Button().ID("btnRebuildINTrans").HQLangCode("Handle").MarginSpec("0 0 32 105").Width(145)
+                            .Listeners(p =>
+                            {
+                                //p.Click.Fn = "btnRebuildINTrans_Click";
+                            })
+                    )
+                    
+                )//RebuildINTrans
+                
+                , X.FieldSet().Layout(LayoutType.HBox).MarginSpec("0 0 5 5")
+                .Title(Util.GetLang("RebuildINBat"))
+                .LayoutConfig(new HBoxLayoutConfig { Align=HBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    X.Container().Layout(LayoutType.VBox)
+                    .Items(
+                        HQ.TextBox().ID("txtBatNbr").HQLangCode("BatNbr").Width(250)
+                        , HQ.TextBox().ID("txtBranchID").HQLangCode("BranchID").Width(250)
+                        , HQ.Combo().ID("cboStatus").Name("cboStatus").Width(250)
+                            .HQLangCode("Status").HQDBSys(false).HQProcedure("IN40300_pcStatus")
+                            .HQColumnShow("Descr").ForceSelection(true).AllowBlank(false)
+                            .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300)
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                            })
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                                lst.Focus.Handler = "this.forceSelection=true;";
+                            })
+                            .LoadData()
+                        , HQ.Button().ID("btnRebuildINBat").HQLangCode("Handle").MarginSpec("0 0 5 105").Width(145)
+                            .Listeners(p =>
+                            {
+                                //p.Click.Fn = "btnRebuildINBat_Click";
+                            })
+                    )
+           
+                )//RebuildINBat
+            )//pnl Header
+
+        )//frm Main
+)//View port
+)
