@@ -1,0 +1,190 @@
+
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN40100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+        X.FormPanel()
+        .ID("frmMain")
+        .BodyPadding(0)
+        .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar("Print,Save,New,Delete", true, ""))
+        .Layout(LayoutType.Border)
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
+        .Listeners(lst =>
+        {
+            //lst.BoxReady.Fn = "loadSourceCombo";
+        })
+        .Items(
+            X.Panel().ID("pnlHeader")
+            .Region(Region.North)
+            .Layout(LayoutType.HBox)
+            .AutoScroll(true)
+            .Items(
+                //Column 1
+                X.Container().Layout(LayoutType.VBox)
+                    .Items(
+                        HQ.DateField().ID("txtPerPost").Name("txtPerPost").HQLangCode("PerPost").Format("MM/yyyy").MarginSpec("5 0 0 0").Width(300).ReadOnly(true)
+                            
+                        , HQ.Combo().ID("cboSiteID").Name("cboSiteID").MarginSpec("5 0 0 0").Width(300)
+                        .HQLangCode("SiteID").HQDBSys(false).HQProcedure("IN40100_pcSiteAll")
+                        .HQColumnShow("SiteID,Name").ForceSelection(true).AllowBlank(false)
+                        .DisplayField("SiteID")
+                        .ValueField("SiteID")
+                        .HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@ScreenNbr", Value ="IN40100", Mode = ParameterMode.Value},
+                            new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue(); }";
+                            lst.Focus.Handler = "this.forceSelection=true;";
+                        })
+                        .LoadData()
+                          
+                    )
+                      
+                , X.Container().Layout(LayoutType.VBox)
+                .Items(
+                    HQ.Combo().ID("cboOption")
+                        .Name("cboOption").HQLangCode("Option").HQProcedure("IN40100_pcOption")
+                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").AllowBlank(false)
+                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .ForceSelection(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection() 
+                        {
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }  
+                        })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+ 
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+
+                    , X.Container().Layout(LayoutType.HBox)
+                    .Items(
+                        HQ.Button().ID("btnLoad").HQLangCode("LoadData").MarginSpec("5 5 5 105").Width(95).Icon(Icon.ArrowRefresh)
+                        .Listeners(lst =>
+                        {
+                            lst.Click.Fn = "btnLoad_Click";
+                        })
+                    
+                        , HQ.Button().ID("btnProcess").HQLangCode("Handle").MarginSpec("5 0 5 0").Width(95)
+                        .Listeners(p =>
+                        {
+                            p.Click.Fn = "btnProcess_Click";
+                        })
+                    )
+                )
+            )//pnl Header
+
+            , X.Panel().ID("pnlGrid")
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .AutoScroll(true)
+            .Items(
+                X.GridPanel().ID("grdIN40100")
+                    .Scroll(ScrollMode.Both)
+                    .View(X.GridView().TrackOver(false).LoadMask(true))
+                    .Region(Region.Center).Flex(1)
+                    .SelectionMemory(false)
+                    .Store(
+                        X.Store()
+                        .ID("stoIN40100")
+                        .PageSize(50)
+                        .Model(Util.GenerateModel(typeof(IN40100_pgGetListItemForCosting_Result), "mdlIN40100_pgGetListItemForCosting", ""))
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
+                        .Parameters(ps =>
+                        {
+                            ps.Add(new StoreParameter("PerNbr", "App.txtPerPost.rawValue.replace('/','')", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("SiteID", "App.cboSiteID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("Type", "App.cboOption.getValue()=='A'?1:2", ParameterMode.Raw));
+                        })
+                        .Listeners(l =>
+                        {
+                            //l.BeforeLoad.Fn = "stoBeforeLoad";
+                            //l.Load.Fn = "stoLoad";
+                            //l.Update.Fn = "stoChanged";
+                        })
+                    )
+                    .Listeners(p =>
+                    {
+                        p.BoxReady.Handler = "firstLoad();";
+                    })
+                    .SortableColumns(false)
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40)
+
+                        //Colum Check
+                        , X.CheckColumn().ID("Sel").DataIndex("Sel").Width(30).Editable(true).HideTitleEl(true)
+                        .HeaderItems(
+                            HQ.Checkbox().ID("ColCheck_Header").MarginSpec("0 0 0 7")
+                                .Listeners(l =>
+                                {
+                                    l.Change.Fn = "ColCheck_Header_Change";
+                                })
+                        )
+                      
+                        , X.Column().Text(Util.GetLang("InvtID")).DataIndex("Invtid").Width(150)
+                        , X.Column().Text(Util.GetLang("SiteID")).DataIndex("SiteID").Width(100)
+                        , X.NumberColumn().Text(Util.GetLang("QtySales")).DataIndex("QtySales").Width(100).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("CurrAvgCost")).DataIndex("AvgCost").Width(100).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("AvgCosted")).DataIndex("AvgCosted").Width(100).Align(Alignment.Right).Format("0,000")
+                        , X.DateColumn().Text(Util.GetLang("CostDate")).DataIndex("CostDate").Width(150).Format("dd/MM/yyyy")
+                       
+                        , X.CommandColumn().Width(150)
+                        .Commands(
+                            X.GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                        )
+                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                        .Listeners(l => l.Command.Handler = "grdIN40100_Reject(record);")
+                    )
+                    .SelectionModel(X.RowSelectionModel().ID("slmIN40100").Mode(SelectionMode.Multi))
+                   
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            //ls.BeforeEdit.Fn = "grdIN40100_BeforeEdit";
+                            //ls.Edit.Fn = "grdIN40100_Edit";
+                            //ls.ValidateEdit.Fn = "grdIN40100_ValidateEdit";
+                        })
+                    )
+
+                    .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("Invtid"),
+                                X.StringFilter().DataIndex("SiteID"),
+                                X.NumericFilter().DataIndex("QtySales"),
+                                X.NumericFilter().DataIndex("AvgCost"),
+                                X.NumericFilter().DataIndex("AvgCosted"),
+                                X.DateFilter().DataIndex("CostDate")
+                            )
+                    )
+            )//pnl Grid
+
+        )//frm Main
+)//View port
+)
