@@ -176,10 +176,11 @@
                         )
                         , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150)
                         , X.Column().Text(Util.GetLang("CustName")).DataIndex("OutletName").Width(150)
+                        , X.Column().Text(Util.GetLang("Phone")).DataIndex("Phone").Width(150)
                         , X.Column().Text(Util.GetLang("SlsperID")).DataIndex("SlsperID").Width(150)
                         , X.Column().Text(Util.GetLang("SlsName")).DataIndex("Name").Width(150)
                         , X.Column().Text(Util.GetLang("Addr")).DataIndex("Addr1").Width(150)
-                        , X.Column().Text(Util.GetLang("CustID")).DataIndex("NewCustID").Width(150)
+                        , X.Column().Text(Util.GetLang("NewCustID")).DataIndex("NewCustID").Width(150)
                         , X.Column()
                             .Text(Util.GetLang("SalesRouteID")).DataIndex("SalesRouteID").Renderer("renderSalesRouteID")
                             .Editor(
@@ -191,6 +192,12 @@
                                     new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
                                 })
                                 .LoadData()
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                    {
+
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
                             )
                         , X.Column()
                             .Text(Util.GetLang("SlsFreq")).DataIndex("SlsFreq")
@@ -203,6 +210,12 @@
                                     new StoreParameter() { Name = "@langid", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                 })
                                 .LoadData()
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                    {
+
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
                             )
 
                         , X.Column()
@@ -224,6 +237,12 @@
                                     , new StoreParameter() { Name = "@langid", Value = "HQ.langID", Mode = ParameterMode.Raw }
                                 })
                                 .LoadData()
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                    {
+
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
                             )
 
                         , X.CheckColumn().ID("ColCheckMon").DataIndex("Mon").Width(120).Editable(true).Text(Util.GetLang("Mon")).Align(Alignment.Center)
@@ -248,7 +267,7 @@
                                 l.Command.Handler = "grdCust_Reject(record);"; 
                             })
                     )
-                    .SelectionModel(X.RowSelectionModel().ID("slmCust").Mode(SelectionMode.Multi))
+                    .SelectionModel(X.RowSelectionModel().ID("slmCust").Mode(SelectionMode.Multi).Listeners(l => l.Select.Fn = "slmCust_Select"))
 
                     .Plugins(
                         X.CellEditing()
@@ -275,8 +294,18 @@
                                 X.StringFilter().DataIndex("Addr1"),
                                 X.StringFilter().DataIndex("NewCustID")
                             )
-                    )
-            )// grid
+                    )// grid
+                     ,X.Panel().Region(Region.South).Layout(LayoutType.HBox).Height(200).Items(
+                            X.Panel().ID("map_canvas").Flex(1).Height(200).Listeners(x =>
+                                {
+                                    x.AfterRender.Handler = "Gmap.Process.initialize()";
+                                    x.Resize.Handler = "google.maps.event.trigger(Gmap.Declare.map, 'resize');";
+                                }) // Panel: map_canvas                            
+                                , X.Image().ID("imgImages").Width(300).Height(200).MarginSpec("10 10 10 10")                 
+                    )//end PanelMap Picture
+            )
+            
+            
             ,X.Window().ID("winProcess")   
                 .Icon(Icon.UserAdd).Layout(LayoutType.Fit)
                 .Title(Util.GetLang("MCPDate"))

@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
+using HQ.eSkySys;
 namespace AR20500.Controllers
 {
     [DirectController]
@@ -22,11 +23,32 @@ namespace AR20500.Controllers
         private string _screenNbr = "AR20500";
         private string _userName = Current.UserName;
         AR20500Entities _db = Util.CreateObjectContext<AR20500Entities>(false);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
+
         private JsonResult mLogMessage;
         private FormCollection mForm;
+
+        private string _filePath;
+        internal string FilePath
+        {
+            get
+            {
+                var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadAR20500");
+                if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
+                {
+                    _filePath = config.TextVal;
+                }
+                else
+                {
+                    _filePath = Server.MapPath("\\Images\\AR20500");
+                }
+                return _filePath;
+            }
+        }
+
         public ActionResult Index()
         {
-            Util.InitRight(_screenNbr);
+            Util.InitRight(_screenNbr);            
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
@@ -94,7 +116,8 @@ namespace AR20500.Controllers
                                 objNew.Fri = item.Fri.Value ? int.Parse("1") : int.Parse("0");
                                 objNew.Sat = item.Sat.Value ? int.Parse("1") : int.Parse("0");
                                 objNew.Sun = item.Sun.Value ? int.Parse("1") : int.Parse("0");
-                                objNew.SalesRouteID = item.BranchID;
+                                objNew.SalesRouteID = item.SalesRouteID;
+                                objNew.PJPID = item.PJPID;
                                 objNew.SlsFreq = item.SlsFreq;                             
                                 objNew.Startday =fromDate;
                                 objNew.Endday = toDate;
@@ -129,6 +152,7 @@ namespace AR20500.Controllers
                                 objCust.Country = objCust.BillCountry = "VN";
                                 objCust.District = item.District.PassNull(); ;
                                 objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId).FirstOrDefault();
+                              
 
 
                                 objCust.LUpd_Datetime = DateTime.Now;
@@ -1133,6 +1157,41 @@ namespace AR20500.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+        public ActionResult ImageToBin(string fileName)
+        {
+            try
+            {
+                string filename = FilePath + "\\" + fileName;
+                if (System.IO.File.Exists(filename))
+                {
+                    FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                    BinaryReader reader = new BinaryReader(fileStream);
+                    byte[] imageBytes = reader.ReadBytes((int)fileStream.Length);
+                    reader.Close();
+
+                    var imgString64 = Convert.ToBase64String(imageBytes, 0, imageBytes.Length);
+
+                    var jsonResult = Json(new { success = true, imgSrc = @"data:image/jpg;base64," + imgString64 }, JsonRequestBehavior.AllowGet);
+                    jsonResult.MaxJsonLength = int.MaxValue;
+                    return jsonResult;
+                }
+                else
+                {
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
             }
         }
 
