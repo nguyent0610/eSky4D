@@ -48,7 +48,8 @@ namespace AR20500.Controllers
 
         public ActionResult Index()
         {
-            Util.InitRight(_screenNbr);            
+            Util.InitRight(_screenNbr);
+            ViewBag.ImagePath = FilePath;
             return View();
         }
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
