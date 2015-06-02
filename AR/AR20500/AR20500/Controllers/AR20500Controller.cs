@@ -208,7 +208,7 @@ namespace AR20500.Controllers
                                 master.LUpd_Prog = "AR20500";
                                 master.LUpd_User = Current.UserName;
                                 master.CustID = objCust.CustId;
-                                master.BranchID = Current.CpnyID;
+                                master.BranchID = item.BranchID;
                                 master.WeekofVisit = item.WeekofVisit;
                                 master.Mon = item.Mon.ToBool();
                                 master.Tue = item.Tue.ToBool();

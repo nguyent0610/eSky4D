@@ -404,9 +404,9 @@ var renderSalesRouteID = function (value) {
 var slmCust_Select = function (rowModel, record, index, eOpts) {
     if (record && record.data.Lat && record.data.Lng) {
         Gmap.Process.navMapCenterByLocation(record.data.Lat, record.data.Lng, record.index + 1);
-        //App.imgImages.setImageUrl(HQ.imagePath+'\\'+record.data.ImageFileName)// get image theo url
+        App.imgImages.setImageUrl(HQ.imagePath+'\\'+record.data.ImageFileName)// get image theo url
 
-        displayImage(App.imgImages, record.data.ImageFileName);// get image theo binary
+        //displayImage(App.imgImages, record.data.ImageFileName);// get image theo binary
 
     }
 }
