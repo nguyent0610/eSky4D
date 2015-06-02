@@ -1,4 +1,8 @@
 var _beginStatus = "H";
+var _tradeType = {
+    bonus: "B",
+    display: "D"
+};
 
 var Process = {
     checkAllValid: function (store) {
@@ -7,6 +11,17 @@ var Process = {
             if (record.data.Selected && !record.data.LevelID) {
                 flag = false;
                 HQ.message.show(15, HQ.common.getLang("LevelID"));
+                return false;
+            }
+        });
+        return flag;
+    },
+
+    confirmWarning: function (store) {
+        var flag = false;
+        store.each(function (record) {
+            if (record.data.Selected && !record.data.Registered) {
+                flag = true;
                 return false;
             }
         });
@@ -27,6 +42,33 @@ var Process = {
                         HQ.message.show(data.result.msgCode);
                     }
                     App.grdDet.store.reload();
+                },
+                failure: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode);
+                    }
+                    else {
+                        HQ.message.process(msg, data, true);
+                    }
+                }
+            });
+        }
+    },
+
+    saveDataBonus: function (item) {
+        if (item == "yes") {
+            App.frmMain.submit({
+                url: 'OM22002/SaveDataBonus',
+                waitMsg: HQ.common.getLang('Submiting') + "...",
+                timeout: 1800000,
+                params: {
+                    lstCustChange: HQ.store.getData(App.grdBonus.store),
+                },
+                success: function (msg, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode);
+                    }
+                    App.btnLoadBonus.fireEvent("click");
                 },
                 failure: function (msg, data) {
                     if (data.result.msgCode) {
@@ -83,6 +125,22 @@ var Event = {
 
         cboTradeType_change: function (cbo, newValue, oldValue, eOpts) {
             App.cboObjectID.store.reload();
+            if (cbo.value == _tradeType.bonus) {
+                App.grdDet.hide();
+                App.btnLoad.hide();
+                App.btnLoadBonus.show();
+                if (App.grdBonus) {
+                    App.grdBonus.show();
+                }
+            }
+            else {
+                App.grdDet.show();
+                App.btnLoad.show();
+                App.btnLoadBonus.hide();
+                if (App.grdBonus) {
+                    App.grdBonus.hide();
+                }
+            }
         },
 
         cboObjectID_change: function (cbo, newValue, oldValue, eOpts) {
@@ -92,16 +150,36 @@ var Event = {
         menuClick: function (command) {
             switch (command) {
                 case "first":
-                    HQ.grid.first(App.grdDet, HQ.isChange);
+                    if (App.cboTradeType.value == _tradeType.display) {
+                        HQ.grid.first(App.grdDet, HQ.isChange);
+                    }
+                    else {
+                        HQ.grid.first(App.grdBonus, HQ.isChange);
+                    }
                     break;
                 case "next":
-                    HQ.grid.next(App.grdDet, HQ.isChange);
+                    if (App.cboTradeType.value == _tradeType.display) {
+                        HQ.grid.next(App.grdDet, HQ.isChange);
+                    }
+                    else {
+                        HQ.grid.next(App.grdBonus, HQ.isChange);
+                    }
                     break;
                 case "prev":
-                    HQ.grid.prev(App.grdDet, HQ.isChange);
+                    if (App.cboTradeType.value == _tradeType.display) {
+                        HQ.grid.prev(App.grdDet, HQ.isChange);
+                    }
+                    else {
+                        HQ.grid.prev(App.grdBonus, HQ.isChange);
+                    }
                     break;
                 case "last":
-                    HQ.grid.last(App.grdDet, HQ.isChange);
+                    if (App.cboTradeType.value == _tradeType.display) {
+                        HQ.grid.last(App.grdDet, HQ.isChange);
+                    }
+                    else {
+                        HQ.grid.last(App.grdBonus, HQ.isChange);
+                    }
                     break;
                 case "refresh":
                     if (App.frmMain.isValid()) {
@@ -109,15 +187,32 @@ var Event = {
                             HQ.message.show(20150303, '', 'Process.refresh');
                         }
                         else {
-                            App.grdDet.store.reload();
+                            if (App.cboTradeType.value == _tradeType.display) {
+                                App.grdDet.store.reload();
+                            }
+                            else {
+                                App.btnLoadBonus.fireEvent("click");
+                            }
                         }
                     }
                     break;
                 case "save":
                     if (HQ.isUpdate) {
                         if (App.frmMain.isValid()) {
-                            if (Process.checkAllValid(App.grdDet.store)) {
-                                HQ.message.show(20150407, '', 'Process.saveData');
+                            if (App.cboTradeType.value == _tradeType.display) {
+                                if (Process.checkAllValid(App.grdDet.store)) {
+                                    HQ.message.show(20150407, '', 'Process.saveData');
+                                }
+                            }
+                            else {
+                                if (App.grdBonus && Process.checkAllValid(App.grdBonus.store)) {
+                                    if (Process.confirmWarning(App.grdBonus.store)) {
+                                        HQ.message.show(20150407, '', 'Process.saveDataBonus');
+                                    }
+                                    else {
+                                        Process.saveDataBonus("yes");
+                                    }
+                                }
                             }
                         }
                     }
@@ -131,10 +226,27 @@ var Event = {
 
     Grid: {
         grdDet_beforeEdit: function (editor, e) {
-            if (e.field == "LevelID") {
-                App.cboColLevelID.store.reload();
+            if (!e.record.data.Registered) {
+                if (e.field == "LevelID") {
+                    App.cboColLevelID.store.reload();
+                }
+            }
+            else {
+                return false;
             }
         },
+
+        grdBonus_beforeEdit: function (editor, e) {
+            if (!e.record.data.Registered) {
+                if (e.field == "LevelID") {
+                    App.cboColLevelIDBonus.store.reload();
+                }
+            }
+            else {
+                return false;
+            }
+        },
+
         grd_reject: function (col, record) {
             //var grd = col.up('grid');
             //if (!record.data.tstamp) {

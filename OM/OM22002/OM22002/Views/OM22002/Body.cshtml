@@ -137,10 +137,30 @@
                      .MarginSpec("5 0 0 0").Hidden(true)
                      .HQLangCode("ImportExcel").Icon(Icon.DiskDownload)
                      .Handler("Event.Form.btnImport_click")
+                     
+                     ,HQ.Button().ID("btnLoadBonus").Hidden(true)
+                    .HQLangCode("LoadData").Icon(Icon.ArrowRefresh)
+                    .DirectEvents(de => 
+                    {
+                        de.Click.Url = Url.Action("GetGridPanel");
+                        de.Click.ExtraParams.Add(new { containerId = "pnlDet" });
+                        de.Click.ExtraParams.Add(new Parameter("cpnyID", "App.cboCpny.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("objectID", "App.cboObjectID.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("tradeType", "App.cboTradeType.getValue()", ParameterMode.Raw));
+                        de.Click.EventMask.ShowMask = true;
+                        de.Click.EventMask.Target = MaskTarget.CustomTarget;
+                        de.Click.EventMask.CustomTarget = "pnlDet";
+                        //de.Click.Before = "this.disable()";
+                    })
                 ) // Third Column
             ) // pnlHeader
 
-            , X.GridPanel().ID("grdDet")
+            , X.Panel().ID("pnlDet")
+            .Layout(LayoutType.Border)
+            .Region(Region.Center)
+            .Items(
+            
+            X.GridPanel().ID("grdDet")
             .Region(Region.Center)
             .Scroll(ScrollMode.Both)
             .View(X.GridView().TrackOver(false))
@@ -178,7 +198,7 @@
                 , X.Column().Text(Util.GetLang("SlsName")).DataIndex("SlsName")      
                 , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
                 , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")      
-                , X.Column().Text(Util.GetLang("ObjectID")).DataIndex("ObjectID")
+                , X.Column().Text(Util.GetLang("DisplayID")).DataIndex("ObjectID")
                 , X.Column().Text(Util.GetLang("LevelID")).DataIndex("LevelID")
                 .Editor(
                     HQ.Combo().ID("cboColLevelID")
@@ -189,7 +209,8 @@
                         new StoreParameter("@ObjectID", 
                             "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.ObjectID : Ext.String.empty", 
                             ParameterMode.Raw) 
-                        , new StoreParameter("@TradeType", "App.cboTradeType.getValue()", ParameterMode.Raw) 
+                        //, new StoreParameter("@TradeType", "App.cboTradeType.getValue()", ParameterMode.Raw) 
+                        , new StoreParameter("@TradeType", "D", ParameterMode.Value) 
                     })
                     .LoadData()
                 )
@@ -250,6 +271,7 @@
                 )
                 .Plugins(X.ProgressBarPager())
             )// grdDet
+            )
         )
         .Listeners(lst =>
         {

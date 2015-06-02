@@ -161,6 +161,36 @@ namespace OM22002
     
             return base.ExecuteFunction<OM22002_pgCust_Result>("OM22002_pgCust", branchIDParameter, objectIDParameter, tradeTypeParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM22002_pcProductClass_Result> OM22002_pcProductClass(global::System.String userID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM22002_pcProductClass_Result>("OM22002_pcProductClass", userIDParameter, langIDParameter);
+        }
 
         #endregion
 
@@ -194,7 +224,11 @@ namespace OM22002
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
-        public static OM_TBonusCustomer CreateOM_TBonusCustomer(global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String bonusID, global::System.String levelID, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User)
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        /// <param name="classID">Initial value of the ClassID property.</param>
+        /// <param name="slsAmt">Initial value of the SlsAmt property.</param>
+        /// <param name="status">Initial value of the Status property.</param>
+        public static OM_TBonusCustomer CreateOM_TBonusCustomer(global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String bonusID, global::System.String levelID, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String classID, global::System.Double slsAmt, global::System.String status)
         {
             OM_TBonusCustomer oM_TBonusCustomer = new OM_TBonusCustomer();
             oM_TBonusCustomer.BranchID = branchID;
@@ -208,6 +242,10 @@ namespace OM22002
             oM_TBonusCustomer.LUpd_DateTime = lUpd_DateTime;
             oM_TBonusCustomer.LUpd_Prog = lUpd_Prog;
             oM_TBonusCustomer.LUpd_User = lUpd_User;
+            oM_TBonusCustomer.tstamp = tstamp;
+            oM_TBonusCustomer.ClassID = classID;
+            oM_TBonusCustomer.SlsAmt = slsAmt;
+            oM_TBonusCustomer.Status = status;
             return oM_TBonusCustomer;
         }
 
@@ -542,7 +580,7 @@ namespace OM22002
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Byte[] tstamp
         {
@@ -562,6 +600,81 @@ namespace OM22002
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ClassID
+        {
+            get
+            {
+                return _ClassID;
+            }
+            set
+            {
+                if (_ClassID != value)
+                {
+                    OnClassIDChanging(value);
+                    ReportPropertyChanging("ClassID");
+                    _ClassID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("ClassID");
+                    OnClassIDChanged();
+                }
+            }
+        }
+        private global::System.String _ClassID;
+        partial void OnClassIDChanging(global::System.String value);
+        partial void OnClassIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double SlsAmt
+        {
+            get
+            {
+                return _SlsAmt;
+            }
+            set
+            {
+                OnSlsAmtChanging(value);
+                ReportPropertyChanging("SlsAmt");
+                _SlsAmt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SlsAmt");
+                OnSlsAmtChanged();
+            }
+        }
+        private global::System.Double _SlsAmt;
+        partial void OnSlsAmtChanging(global::System.Double value);
+        partial void OnSlsAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.String _Status;
+        partial void OnStatusChanging(global::System.String value);
+        partial void OnStatusChanged();
 
         #endregion
 
@@ -1086,6 +1199,54 @@ namespace OM22002
         private global::System.String _Type;
         partial void OnTypeChanging(global::System.String value);
         partial void OnTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Pass
+        {
+            get
+            {
+                return _Pass;
+            }
+            set
+            {
+                OnPassChanging(value);
+                ReportPropertyChanging("Pass");
+                _Pass = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Pass");
+                OnPassChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Pass;
+        partial void OnPassChanging(Nullable<global::System.Boolean> value);
+        partial void OnPassChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Remark
+        {
+            get
+            {
+                return _Remark;
+            }
+            set
+            {
+                OnRemarkChanging(value);
+                ReportPropertyChanging("Remark");
+                _Remark = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Remark");
+                OnRemarkChanged();
+            }
+        }
+        private global::System.String _Remark;
+        partial void OnRemarkChanging(global::System.String value);
+        partial void OnRemarkChanged();
 
         #endregion
 
@@ -1095,6 +1256,83 @@ namespace OM22002
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM22002Model", Name="OM22002_pcProductClass_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM22002_pcProductClass_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM22002_pcProductClass_Result object.
+        /// </summary>
+        /// <param name="code">Initial value of the Code property.</param>
+        public static OM22002_pcProductClass_Result CreateOM22002_pcProductClass_Result(global::System.String code)
+        {
+            OM22002_pcProductClass_Result oM22002_pcProductClass_Result = new OM22002_pcProductClass_Result();
+            oM22002_pcProductClass_Result.Code = code;
+            return oM22002_pcProductClass_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Code
+        {
+            get
+            {
+                return _Code;
+            }
+            set
+            {
+                OnCodeChanging(value);
+                ReportPropertyChanging("Code");
+                _Code = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Code");
+                OnCodeChanged();
+            }
+        }
+        private global::System.String _Code;
+        partial void OnCodeChanging(global::System.String value);
+        partial void OnCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.
@@ -1393,6 +1631,30 @@ namespace OM22002
         private global::System.String _TradeType;
         partial void OnTradeTypeChanging(global::System.String value);
         partial void OnTradeTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> Registered
+        {
+            get
+            {
+                return _Registered;
+            }
+            set
+            {
+                OnRegisteredChanging(value);
+                ReportPropertyChanging("Registered");
+                _Registered = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Registered");
+                OnRegisteredChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _Registered;
+        partial void OnRegisteredChanging(Nullable<global::System.Boolean> value);
+        partial void OnRegisteredChanged();
 
         #endregion
 

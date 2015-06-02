@@ -15,6 +15,7 @@
             <PropertyRef Name="SlsperID" />
             <PropertyRef Name="CustID" />
             <PropertyRef Name="BonusID" />
+            <PropertyRef Name="ClassID" />
           </Key>
           <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="SlsperID" Type="varchar" Nullable="false" MaxLength="50" />
@@ -29,7 +30,10 @@
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="SlsAmt" Type="float" Nullable="false" />
+          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="2" />
         </EntityType>
         <EntityType Name="OM_TDisplayCustomer">
           <Key>
@@ -57,7 +61,13 @@
           <Property Name="PercentImage" Type="float" Nullable="false" />
           <Property Name="Status" Type="varchar" MaxLength="2" />
           <Property Name="Type" Type="varchar" MaxLength="2" />
+          <Property Name="Pass" Type="bit" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <Function Name="OM22002_pcProductClass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
         <Function Name="OM22002_pgCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="ObjectID" Type="varchar" Mode="In" />
@@ -75,6 +85,10 @@
             <Parameter Name="TradeType" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="OM_TBonusCustomer" EntityType="OM22002Model.OM_TBonusCustomer" />
+          <FunctionImport Name="OM22002_pcProductClass" ReturnType="Collection(OM22002Model.OM22002_pcProductClass_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="OM_TDisplayCustomer">
           <Key>
@@ -102,6 +116,8 @@
           <Property Type="Double" Name="PercentImage" Nullable="false" />
           <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Type" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Pass" />
+          <Property Type="String" Name="Remark" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="OM22002_pgCust_Result">
           <Property Type="Boolean" Name="Selected" Nullable="true" />
@@ -116,6 +132,7 @@
           <Property Type="String" Name="SlsperID" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="SlsName" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="TradeType" Nullable="true" MaxLength="2" />
+          <Property Type="Boolean" Name="Registered" Nullable="true" />
         </ComplexType>
         <EntityType Name="OM_TBonusCustomer">
           <Key>
@@ -123,6 +140,7 @@
             <PropertyRef Name="SlsperID" />
             <PropertyRef Name="CustID" />
             <PropertyRef Name="BonusID" />
+            <PropertyRef Name="ClassID" />
           </Key>
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SlsperID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -137,8 +155,15 @@
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="SlsAmt" Nullable="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="OM22002_pcProductClass_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="50" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -148,6 +173,8 @@
           <EntitySetMapping Name="OM_TDisplayCustomer">
             <EntityTypeMapping TypeName="OM22002Model.OM_TDisplayCustomer">
               <MappingFragment StoreEntitySet="OM_TDisplayCustomer">
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="PercentImage" ColumnName="PercentImage" />
@@ -185,12 +212,16 @@
                 <ScalarProperty Name="SlsperID" ColumnName="SlsperID" />
                 <ScalarProperty Name="SlsName" ColumnName="SlsName" />
                 <ScalarProperty Name="TradeType" ColumnName="TradeType" />
+                <ScalarProperty Name="Registered" ColumnName="Registered" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="OM_TBonusCustomer">
             <EntityTypeMapping TypeName="OM22002Model.OM_TBonusCustomer">
               <MappingFragment StoreEntitySet="OM_TBonusCustomer">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="SlsAmt" ColumnName="SlsAmt" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -208,6 +239,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM22002_pcProductClass" FunctionName="eBiz4DWebAppModel.Store.OM22002_pcProductClass">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM22002Model.OM22002_pcProductClass_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
