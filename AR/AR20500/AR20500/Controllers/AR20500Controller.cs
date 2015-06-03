@@ -101,14 +101,6 @@ namespace AR20500.Controllers
                             if (objNew == null || objNew.Status == "A" || objNew.Status == "D") continue;
                             if (handle == "A")
                             {
-                                string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID).FirstOrDefault();
-                                if (cust.PassNull() != "")
-                                {
-                                    custlist += cust.TrimEnd(',') + ",";
-                                    _db.Dispose();
-                                    continue;
-                                    //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
-                                }
                                 objNew.WeekofVisit = item.WeekofVisit;
                                 objNew.Mon = item.Mon.Value ? int.Parse("1") : int.Parse("0");
                                 objNew.Tue = item.Tue.Value ? int.Parse("1") : int.Parse("0");
@@ -119,10 +111,24 @@ namespace AR20500.Controllers
                                 objNew.Sun = item.Sun.Value ? int.Parse("1") : int.Parse("0");
                                 objNew.SalesRouteID = item.SalesRouteID;
                                 objNew.PJPID = item.PJPID;
-                                objNew.SlsFreq = item.SlsFreq;                             
-                                objNew.Startday =fromDate;
+                                objNew.SlsFreq = item.SlsFreq;
+                                objNew.Startday = fromDate;
                                 objNew.Endday = toDate;
                                 objNew.VisitSort = item.VisitSort.Value;
+
+                                objNew.OutletName = item.OutletName;
+                                objNew.Phone = item.OutletName;
+                                objNew.Addr1 = item.Addr1;
+                                _db.SaveChanges();
+                                string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID).FirstOrDefault();
+                                if (cust.PassNull() != "")
+                                {
+                                    custlist += cust.TrimEnd(',') + ",";
+                                    _db.Dispose();
+                                    continue;
+                                    //throw new MessageException(MessageType.Message, "201405281", "", new string[] { cust.TrimEnd(',') });
+                                }
+                               
                                
 
                                 var objCust = new AR_Customer();
@@ -134,6 +140,9 @@ namespace AR20500.Controllers
                                 objCust.City = item.City.PassNull();
                                 objCust.State = item.State.PassNull();
                                 objCust.ClassId = item.ClassId.PassNull();
+
+                                objCust.Phone = item.Phone.PassNull();
+
                                 objCust.CrRule = "N";
                                 objCust.Crtd_Datetime = DateTime.Now;
                                 objCust.Crtd_Prog = "AR20500";
