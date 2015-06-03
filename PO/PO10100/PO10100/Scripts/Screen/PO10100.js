@@ -625,6 +625,7 @@ var cboBranchID_Change = function (item, newValue, oldValue) {
                                         HQ.message.show(20404, 'PO_Setup', '');
                                         lockControl(true);
                                         App.cboBranchID.setReadOnly(false);
+                                        HQ.common.showBusy(false);
                                     }
                                     else {
                                         lockControl(false);
@@ -648,6 +649,7 @@ var cboBranchID_Change = function (item, newValue, oldValue) {
                                         App.cboSlsperID.allowBlank = true;
                                         App.cboSlsperID.validate();
                                     }
+                                    HQ.common.showBusy(false);
                             });
                         });
                     });

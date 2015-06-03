@@ -28,7 +28,7 @@ namespace PO10100
         protected void Session_Start(object sender, EventArgs e)
         {
             Current.Authorize = false;
-            Current.Server ="MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();// "EARTHSVR\\SQL2012";//
+            Current.Server ="EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();// "EARTHSVR\\SQL2012";//
             Current.DBSys = "eSky4DSys";// "eBiz4DWebSys";// ConfigurationManager.AppSettings["DBSys"].ToString();
             Current.Theme = "Default";
             AccessRight acc = new AccessRight();
@@ -38,7 +38,7 @@ namespace PO10100
             Session["PO10100"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "ADMIN";
-            Session["CpnyID"] = Current.CpnyID = "040100001";
+            Session["CpnyID"] = Current.CpnyID = "NDMT";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 0;
            
