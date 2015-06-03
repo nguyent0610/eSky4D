@@ -244,7 +244,15 @@ var stoLoad = function (sto) {
     //HQ.isFirstLoad = true;
     HQ.isNew = false;
     HQ.common.showBusy(false);
-    App.cboUserID.forceSelection = true;
+
+    App.cboUserID.forceSelection = false;
+    App.CpnyID.forceSelection = false;
+    App.UserTypes.forceSelection = false;
+    App.Channel.forceSelection = false;
+    App.Manager.forceSelection = false;
+    App.Department.forceSelection = false;
+    App.HomeScreenNbr.forceSelection = false;
+
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "UserID");
         record = sto.getAt(0);

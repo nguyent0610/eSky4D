@@ -38,7 +38,7 @@ namespace SA00300
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";
+            Current.Server = "EARTHSVR\\SQL2012";
             Current.DBSys = "eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;

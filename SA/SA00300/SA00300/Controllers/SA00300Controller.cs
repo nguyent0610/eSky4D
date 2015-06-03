@@ -21,7 +21,7 @@ namespace SA00300.Controllers
         private string _screenNbr = "SA00300";
         private string _userName = Current.UserName;
         SA00300Entities _db = Util.CreateObjectContext<SA00300Entities>(true);
-
+        //\\192.168.130.4\DevProjects\eSky4D\App\Images\SA00300
         private string _filePath;
         internal string FilePath
         {
@@ -46,7 +46,7 @@ namespace SA00300.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();

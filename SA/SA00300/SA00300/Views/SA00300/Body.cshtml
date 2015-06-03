@@ -42,6 +42,7 @@
                             lst.Change.Fn = "cboUserID_Change";
                             lst.Expand.Fn = "cboUserID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
                             lst.Select.Fn = "cboUserID_Select";
+                            lst.Focus.Handler = "this.forceSelection = true;";
                         })
                         , HQ.Checkbox().ID("chkAuto").LabelWidth(500)
                         .Name("chkAuto").HQLangCode("CHECKAUTOUSERID").MarginSpec("5 0 0 10")
@@ -85,7 +86,7 @@
                                                     .MultiSelect(true)
                                                     .HQHeightWidth(400, 300)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; })
+                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; lst.Focus.Handler = "this.forceSelection = true;"; })
                                                     .LoadData().Width(500)
                             ,HQ.Combo().ID("UserTypes").Name("UserTypes").MarginSpec("3 0 0 0").AllowBlank(false)
                                                     .HQLangCode("UserTypes").HQDBSys(true).HQProcedure("SA00300_pcSYS_Role")
@@ -95,7 +96,7 @@
                                                     .MultiSelect(true)
                                                     .HQHeightWidth(400, 300)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; })
+                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Expand.Handler = "HQ.combo.expand(this,',');"; lst.Focus.Handler = "this.forceSelection = true;"; })
                                                     .LoadData().Width(500)      
                             ,HQ.Combo().ID("Channel").Name("Channel").MarginSpec("3 0 0 0").AllowBlank(false)
                                                     .HQLangCode("Channel").HQDBSys(false).HQProcedure("SA00300_pcSalesChannel")
@@ -104,7 +105,7 @@
                                                     .ValueField("Code")
                                                     .HQHeightWidth(400, 300)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
+                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
                                                     .LoadData().Width(500)        
                             ,HQ.Checkbox().ID("Blocked").Name("Blocked").HQLangCode("Blocked").MarginSpec("3 0 0 205").Width(500)
                             ,HQ.DateField().ID("BlockedTime").Name("BlockedTime").HQLangCode("BlockedTime").MarginSpec("3 0 0 0").Width(500)
@@ -121,7 +122,7 @@
                                                     .ValueField("UserName")
                                                     .HQHeightWidth(400, 300)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
+                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
                                                     .LoadData().Width(500)
                             ,HQ.Combo().ID("Department").Name("Department").MarginSpec("3 0 0 0")
                                                     .HQLangCode("Department").HQDBSys(false).HQProcedure("SA00300_pcDepartment")
@@ -130,7 +131,7 @@
                                                     .ValueField("Department")
                                                     .HQHeightWidth(400, 300)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
+                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
                                                     .LoadData().Width(500)
                             ,HQ.Checkbox().ID("CheckFirstLogin").Name("CheckFirstLogin").HQLangCode("CheckFirstLogin").MarginSpec("3 0 0 205")                                            
                             ,HQ.Combo().ID("HomeScreenNbr").Name("HomeScreenNbr").MarginSpec("3 0 5 0")
@@ -140,7 +141,7 @@
                                                     .ValueField("Code")
                                                     .HQHeightWidth(400, 300)
                                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";})
+                                                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; lst.Focus.Handler = "this.forceSelection = true;"; })
                                                     .LoadData().Width(500)
                                    
                                     //,HQ.TextBox().ID("AutoID").Name("AutoID").HQLangCode("AutoID").MarginSpec("3 0 0 0").HQControlFocus("").Listeners(lst => { lst.Focus.Handler = "focus='Header'";})                                                                                                                                                
