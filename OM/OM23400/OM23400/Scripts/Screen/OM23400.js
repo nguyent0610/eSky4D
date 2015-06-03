@@ -231,17 +231,17 @@ var Process = {
             var keys = App.grdQuarter.store.HQFieldKeys ? App.grdQuarter.store.HQFieldKeys : [];
             var monthCount = 3;
             App.grdMonth.store.each(function (record) {
-                if (record.data.ClassID) {
+                if (record.data.LevelNbr) {
                     var rec = Ext.create(App.grdQuarter.store.model.modelName, record.data);
                     rec.set("SlsAmt", record.data.SlsAmt * monthCount);
                     HQ.store.insertRecord(App.grdQuarter.store, keys, rec);
                 }
             });
 
-            var newRec = Ext.create(App.grdQuarter.store.model.modelName, {
-                LevelNbr: Process.lastNbr(App.grdQuarter.store)
-            });
-            HQ.store.insertRecord(App.grdQuarter.store, keys, newRec);
+            //var newRec = Ext.create(App.grdQuarter.store.model.modelName, {
+            //    LevelNbr: Process.lastNbr(App.grdQuarter.store)
+            //});
+            //HQ.store.insertRecord(App.grdQuarter.store, keys, newRec);
         }
     },
 
@@ -255,17 +255,17 @@ var Process = {
 
             var monthCount = Process.monthDiff(App.dtpFromDate.value, App.dtpToDate.value);
             App.grdMonth.store.each(function (record) {
-                if (record.data.ClassID) {
+                if (record.data.LevelNbr) {
                     var rec = Ext.create(App.grdYear.store.model.modelName, record.data);
                     rec.set("SlsAmt", record.data.SlsAmt * monthCount);
                     HQ.store.insertRecord(App.grdYear.store, keys, rec);
                 }
             });
 
-            var newRec = Ext.create(App.grdYear.store.model.modelName, {
-                LevelNbr: Process.lastNbr(App.grdYear.store)
-            });
-            HQ.store.insertRecord(App.grdYear.store, keys, newRec);
+            //var newRec = Ext.create(App.grdYear.store.model.modelName, {
+            //    LevelNbr: Process.lastNbr(App.grdYear.store)
+            //});
+            //HQ.store.insertRecord(App.grdYear.store, keys, newRec);
         }
     },
 };
@@ -288,13 +288,26 @@ var Store = {
         App.cboRSApplyType.setReadOnly(frmRecord.data.tstamp);
 
         // load RS
-        App.grdBonusRS.store.reload();
-        App.grdProduct.store.reload();
+        if (App.tabBonusRS.hidden) {
+            App.grdBonusRS.store.removeAll();
+            App.grdProduct.store.removeAll();
+        }
+        else {
+            App.grdBonusRS.store.reload();
+            App.grdProduct.store.reload();
+        }
 
         // load KA
-        App.grdMonth.store.reload();
-        App.grdQuarter.store.reload();
-        App.grdYear.store.reload();
+        if (App.tabBonusKA.hidden) {
+            App.grdMonth.store.removeAll();
+            App.grdQuarter.store.removeAll();
+            App.grdYear.store.removeAll();
+        }
+        else {
+            App.grdMonth.store.reload();
+            App.grdQuarter.store.reload();
+            App.grdYear.store.reload();
+        }
 
         Event.Form.frmMain_fieldChange();
     },
@@ -307,6 +320,7 @@ var Store = {
                     var rec = Ext.create(sto.model.modelName, {
                         LevelNbr: Process.lastNbr(sto)
                     });
+
                     HQ.store.insertRecord(sto, keys, rec);
                 }
                 else {
@@ -686,7 +700,7 @@ var Event = {
                         else if (HQ.focus == 'quarter') {
                             if (App.cboBonusID.getValue() && App.slmQuarter.getCount()) {
                                 HQ.message.show(2015020806,
-                                    HQ.common.getLang('Level') + " " + App.slmQuater.selected.items[0].data.LevelNbr,
+                                    HQ.common.getLang('Level') + " " + App.slmQuarter.selected.items[0].data.LevelNbr,
                                     'Process.deleteQuarter');
                             }
                         }
