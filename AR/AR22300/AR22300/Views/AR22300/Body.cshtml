@@ -58,7 +58,7 @@
 
                     , HQ.Combo().ID("cboProvincePlan").Name("cboProvincePlan").HQLangCode("Province").HQProcedure("AR22300_pcProvince")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
-                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1)
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).Hidden(true)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }

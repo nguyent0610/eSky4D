@@ -41,7 +41,7 @@ var Event = {
         },
 
         cboAreaPlan_change: function (cbo, newValue, oldValue, eOpts) {
-            App.cboProvincePlan.store.reload();
+            //App.cboProvincePlan.store.reload();
             App.cboDistributorPlan.store.reload();
         },
 
