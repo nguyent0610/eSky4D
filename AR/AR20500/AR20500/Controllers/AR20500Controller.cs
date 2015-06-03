@@ -117,8 +117,10 @@ namespace AR20500.Controllers
                                 objNew.VisitSort = item.VisitSort.Value;
 
                                 objNew.OutletName = item.OutletName;
-                                objNew.Phone = item.OutletName;
+                                objNew.Phone = item.Phone;
                                 objNew.Addr1 = item.Addr1;
+
+                               
                                 _db.SaveChanges();
                                 string cust = _db.AR20500_ppCheckCustomerApprove(data["cboCpnyID"].ToString(), item.CustID).FirstOrDefault();
                                 if (cust.PassNull() != "")
