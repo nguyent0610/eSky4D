@@ -288,28 +288,13 @@ var Store = {
         App.cboRSApplyType.setReadOnly(frmRecord.data.tstamp);
 
         // load RS
-        if (App.tabBonusRS.hidden) {
-            App.grdBonusRS.store.removeAll();
-            App.grdProduct.store.removeAll();
-        }
-        else {
-            App.grdBonusRS.store.reload();
-            App.grdProduct.store.reload();
-        }
+        App.grdBonusRS.store.reload();
+        App.grdProduct.store.reload();
 
         // load KA
-        if (App.tabBonusKA.hidden) {
-            App.grdMonth.store.removeAll();
-            App.grdQuarter.store.removeAll();
-            App.grdYear.store.removeAll();
-        }
-        else {
-            App.grdMonth.store.reload();
-            App.grdQuarter.store.reload();
-            App.grdYear.store.reload();
-        }
-
-        Event.Form.frmMain_fieldChange();
+        App.grdMonth.store.reload();
+        App.grdQuarter.store.reload();
+        App.grdYear.store.reload();
     },
 
     stoBonusRS_load: function (sto, records, successful, eOpts) {
@@ -341,7 +326,7 @@ var Event = {
         frmMain_fieldChange: function () {
             if (App.stoBonus.getCount() > 0) {
                 App.frmMain.updateRecord();
-                if (!HQ.store.isChange(App.stoBonus)) {
+                if (!App.stoBonus.getAt(0).dirty) {
                     if (App.cboChannel.value == _rs) {
                         if (!HQ.store.isChange(App.grdBonusRS.store)) {
                             HQ.isChange = HQ.store.isChange(App.grdProduct.store);
@@ -377,10 +362,11 @@ var Event = {
 
                 var frmRecord = App.frmMain.getRecord();
                 if (!frmRecord.data.tstamp) {
-                    if (HQ.isChange && (App.grdBonusRS.store.getCount()
-                                        || App.grdProduct.store.getCount()
-                                        || App.grdMonth.store.getCount()
-                                        || App.grdYear.store.getCount())) {
+                    if (HQ.isChange && (App.grdBonusRS.store.getCount() > 1
+                                        || App.grdProduct.store.getCount() > 1
+                                        || App.grdMonth.store.getCount() > 1
+                                        || App.grdQuarter.store.getCount() > 1
+                                        || App.grdYear.store.getCount()> 1)) {
                         App.cboChannel.setReadOnly(true);
                         App.cboRSApplyType.setReadOnly(true);
                     }
