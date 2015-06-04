@@ -198,82 +198,73 @@ namespace OM22002.Controllers
                     var lstProductClass = _db.OM22002_pcProductClass(Current.UserName, Current.LangID).ToList();
                     for (int i = 0; i < dtUpdated.Rows.Count; i++)
                     {
-                        if (dtUpdated.Rows[i]["Action"].ToString() == "Updated")
+                        var branchID = dtUpdated.Rows[i]["BranchID"].ToString();
+                        var slsperID = dtUpdated.Rows[i]["SlsperID"].ToString();
+                        var custID = dtUpdated.Rows[i]["CustID"].ToString();
+                        var bonusID = dtUpdated.Rows[i]["BonusID"].ToString();
+                        var levelID = dtUpdated.Rows[i]["LevelID"].ToString();
+                        var selected = dtUpdated.Rows[i]["Selected"].ToBool();
+                        var registered = dtUpdated.Rows[i]["Registered"].ToBool();
+
+                        if (!registered || (selected && !string.IsNullOrWhiteSpace(levelID)))
                         {
-                            var branchID = dtUpdated.Rows[i]["BranchID"].ToString();
-                            var slsperID = dtUpdated.Rows[i]["SlsperID"].ToString();
-                            var custID = dtUpdated.Rows[i]["CustID"].ToString();
-                            var bonusID = dtUpdated.Rows[i]["BonusID"].ToString();
-                            var levelID = dtUpdated.Rows[i]["LevelID"].ToString();
-                            var selected = dtUpdated.Rows[i]["Selected"].ToBool();
-                            var registered = dtUpdated.Rows[i]["Registered"].ToBool();
-
-                            if (!registered || (selected && !string.IsNullOrWhiteSpace(levelID)))
+                            for (int j = 0; j < lstProductClass.Count; j++)
                             {
-                                for (int j = 0; j < lstProductClass.Count; j++)
-                                {
-                                    #region BonusTradeType
-                                    var classID = lstProductClass[j].Code;
-                                    var slsAmt = dtUpdated.Rows[i]["PC_" + classID].ToDouble();
+                                #region BonusTradeType
+                                var classID = lstProductClass[j].Code;
+                                var slsAmt = dtUpdated.Rows[i]["PC_" + classID].ToDouble();
 
-                                    var regisObj = _db.OM_TBonusCustomer.FirstOrDefault(p => p.BranchID == branchID
-                                        && p.SlsperID == slsperID && p.CustID == custID
-                                        && p.BonusID == bonusID && p.ClassID == classID);
-                                    if (regisObj != null)
+                                var regisObj = _db.OM_TBonusCustomer.FirstOrDefault(p => p.BranchID == branchID
+                                    && p.SlsperID == slsperID && p.CustID == custID
+                                    && p.BonusID == bonusID && p.ClassID == classID);
+                                if (regisObj != null)
+                                {
+                                    if (slsAmt > 0)
                                     {
-                                        if (slsAmt > 0)
-                                        {
-                                            regisObj.LevelID = levelID;
-                                            regisObj.LUpd_DateTime = DateTime.Now;
-                                            regisObj.LUpd_Prog = _screenNbr;
-                                            regisObj.LUpd_User = Current.UserName;
-                                            regisObj.SlsAmt = slsAmt;
-                                            regisObj.Status = selected?"C":"H";
-                                        }
-                                        else
-                                        {
-                                            _db.OM_TBonusCustomer.DeleteObject(regisObj);
-                                        }
+                                        regisObj.LevelID = levelID;
+                                        regisObj.LUpd_DateTime = DateTime.Now;
+                                        regisObj.LUpd_Prog = _screenNbr;
+                                        regisObj.LUpd_User = Current.UserName;
+                                        regisObj.SlsAmt = slsAmt;
+                                        regisObj.Status = selected ? "C" : "H";
                                     }
                                     else
                                     {
-                                        if (slsAmt > 0)
-                                        {
-                                            regisObj = new OM_TBonusCustomer()
-                                            {
-                                                BranchID = branchID,
-                                                CustID = custID,
-                                                BonusID = bonusID,
-                                                LevelID = levelID,
-                                                //Rate = (double)updated.Rate,
-                                                SlsperID = slsperID,
-                                                ClassID = lstProductClass[j].Code,
-
-                                                Crtd_DateTime = DateTime.Now,
-                                                Crtd_Prog = _screenNbr,
-                                                Crtd_User = Current.UserName,
-                                                LUpd_DateTime = DateTime.Now,
-                                                LUpd_Prog = _screenNbr,
-                                                LUpd_User = Current.UserName,
-                                                SlsAmt = slsAmt,
-                                                Territory = dtUpdated.Rows[i]["Territory"].ToString(),
-                                                Zone = dtUpdated.Rows[i]["Zone"].ToString(),
-                                                Status = selected?"C":"H"
-                                            };
-                                            _db.OM_TBonusCustomer.AddObject(regisObj);
-                                        }
-
+                                        _db.OM_TBonusCustomer.DeleteObject(regisObj);
                                     }
-                                    #endregion
                                 }
+                                else
+                                {
+                                    if (slsAmt > 0)
+                                    {
+                                        regisObj = new OM_TBonusCustomer()
+                                        {
+                                            BranchID = branchID,
+                                            CustID = custID,
+                                            BonusID = bonusID,
+                                            LevelID = levelID,
+                                            //Rate = (double)updated.Rate,
+                                            SlsperID = slsperID,
+                                            ClassID = lstProductClass[j].Code,
+
+                                            Crtd_DateTime = DateTime.Now,
+                                            Crtd_Prog = _screenNbr,
+                                            Crtd_User = Current.UserName,
+                                            LUpd_DateTime = DateTime.Now,
+                                            LUpd_Prog = _screenNbr,
+                                            LUpd_User = Current.UserName,
+                                            SlsAmt = slsAmt,
+                                            Territory = dtUpdated.Rows[i]["Territory"].ToString(),
+                                            Zone = dtUpdated.Rows[i]["Zone"].ToString(),
+                                            Status = selected ? "C" : "H"
+                                        };
+                                        _db.OM_TBonusCustomer.AddObject(regisObj);
+                                    }
+
+                                }
+                                #endregion
                             }
                         }
-                        //else
-                        //{
-                        //    throw new MessageException("15", "", new string[] { 
-                        //        Util.GetLang("BonusID")
-                        //    });
-                        //}
                     }
 
                     _db.SaveChanges();
@@ -309,7 +300,12 @@ namespace OM22002.Controllers
             DataTable dtDataExport = dal.ExecDataTable("OM22002_pgBonus", CommandType.StoredProcedure, ref pc);
             var lstProductClass = _db.OM22002_pcProductClass(Current.UserName, Current.LangID).ToList();
 
-            var grdTest = new Ext.Net.GridPanel
+            var filters = new Ext.Net.GridFilters()
+            {
+                Local = true
+            };
+
+            var grdBonus = new Ext.Net.GridPanel
             {
                 ID = "grdBonus",
                 Region = Ext.Net.Region.Center,
@@ -343,16 +339,11 @@ namespace OM22002.Controllers
                             }
                         }
                      }
-                },
-                Features = { 
-                    new Ext.Net.GridFilters(){
-                        Local = true
-                    }
                 }
             };
 
             var mergeCol = new Column() { 
-                Text = Util.GetLang("ProductClass")
+                Text = Util.GetLang("SlsAmt")
             };
             foreach (System.Data.DataColumn col in dtDataExport.Columns)
             {
@@ -368,7 +359,7 @@ namespace OM22002.Controllers
                             Locked = true,
                             Width = 50
                         };
-                        grdTest.ColumnModel.Columns.Add(column);
+                        grdBonus.ColumnModel.Columns.Add(column);
                     }
                     else
                     {
@@ -391,11 +382,12 @@ namespace OM22002.Controllers
                                     new HQNumberField()
                                     {
                                         MinValue = 0,
-                                        DecimalPrecision = 2
+                                        DecimalPrecision = 0
                                     }
                                 }
                             };
                             mergeCol.Columns.Add(column);
+                            filters.Filters.Add(new NumericFilter() { DataIndex = col.ColumnName });
                             //grdTest.ColumnModel.Columns.Add(column);
                         }
                         else
@@ -429,12 +421,14 @@ namespace OM22002.Controllers
                                 column.Editor.Add(cboColLevelIDBonus);
                             }
 
-                            grdTest.ColumnModel.Columns.Add(column);
+                            grdBonus.ColumnModel.Columns.Add(column);
+                            filters.Filters.Add(new StringFilter() { DataIndex = col.ColumnName });
                         }
                     }
                 }
             }
-            grdTest.ColumnModel.Columns.Add(mergeCol);
+            grdBonus.ColumnModel.Columns.Add(mergeCol);
+            grdBonus.Features.Add(filters);
 
             var rejectCol = new CommandColumn()
             {
@@ -462,9 +456,9 @@ namespace OM22002.Controllers
                     }
                 }
             };
-            grdTest.ColumnModel.Columns.Add(rejectCol);
+            grdBonus.ColumnModel.Columns.Add(rejectCol);
 
-            return grdTest;
+            return grdBonus;
         }
 
         private Store BuildStore(System.Data.DataTable data)

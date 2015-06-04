@@ -105,6 +105,7 @@ var Event = {
                 //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
             }
         },
+
         btnLoad_click: function (btn, e) {
             if (App.frmMain.isValid()) {
                 App.grdDet.store.reload();
