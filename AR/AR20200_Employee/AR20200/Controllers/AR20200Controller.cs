@@ -111,12 +111,13 @@ namespace AR20200.Controllers
                     nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = addr.AddrID, Mode = ParameterMode.Value });
                     nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Addr", Mode = ParameterMode.Value });
                     nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "AddrName", Value = addr.Name, Mode = ParameterMode.Value });
+                    nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "Addr1", Value = addr.Addr1, Mode = ParameterMode.Value });
                     //nodeCompany.Cls = "tree-node-parent";
-                    nodeCpnyAddr.Text = addr.Addr1;
+                    nodeCpnyAddr.Text = addr.Name;
                     nodeCpnyAddr.Checked = false;
                     nodeCpnyAddr.Leaf = true;
                     nodeCpnyAddr.NodeID = "cpny-addr-" + item.CpnyID + "-" + addr.AddrID;
-                    nodeCpnyAddr.Qtip = addr.AddrID;
+                    nodeCpnyAddr.Qtip = addr.Addr1;
                     //nodeCompany.IconCls = "tree-parent-icon";
 
                     nodeCpny.Children.Add(nodeCpnyAddr);
@@ -397,6 +398,11 @@ namespace AR20200.Controllers
                     {
                         var fileName = slsper.Images;
                         _db.AR_Salesperson.DeleteObject(slsper);
+                        var lstAddr = _db.AR_SalespersonCpnyAddr.Where(p => p.SlsperID == slsperID && p.BranchID == branchID).ToList();
+                        foreach (var addr in lstAddr)
+                        {
+                            _db.AR_SalespersonCpnyAddr.DeleteObject(addr);
+                        }
                         _db.SaveChanges();
 
                         if (!string.IsNullOrWhiteSpace(fileName))

@@ -70,6 +70,9 @@ var Process = {
                 }
             });
         }
+        else {
+            Process.showFieldInvalid(App.frmMain);
+        }
     },
 
     deleteData: function (item) {
@@ -138,18 +141,6 @@ var Process = {
         return returnValue;
     },
 
-    showFieldInvalid: function (form) {
-        var done = 1;
-        form.getForm().getFields().each(function (field) {
-            if (!field.isValid()) {
-                HQ.message.show(15, field.fieldLabel, '');
-                done = 0;
-                return false;
-            }
-        });
-        return done;
-    },
-
     isAllValidKey: function (items, keys) {
         if (items != undefined) {
             for (var i = 0; i < items.length; i++) {
@@ -179,6 +170,34 @@ var Process = {
             );
         }
         return allNodes;
+    },
+
+    showFieldInvalid: function (form) {
+        var done = 1;
+        form.getForm().getFields().each(function (field) {
+            if (!field.isValid()) {
+                if (field.id == "txtEMailAddr") {
+                    HQ.message.show(999, '', 'Process.focusOnInvalidField');
+                }
+                else {
+                    HQ.message.show(15, field.fieldLabel, 'Process.focusOnInvalidField');
+                }
+                done = 0;
+                return false;
+            }
+        });
+        return done;
+    },
+
+    focusOnInvalidField: function (item) {
+        if (item == "ok") {
+            App.frmMain.getForm().getFields().each(function (field) {
+                if (!field.isValid()) {
+                    field.focus();
+                    return false;
+                }
+            });
+        }
     }
 };
 
@@ -253,6 +272,7 @@ var Store = {
 var Event = {
     Form: {
         frmMain_boxReady: function (frm, width, height, eOpts) {
+            HQ.common.setRequire(frm);
             App.cboBranchID.store.load(function (records, operation, success) {
                 App.cboBranchID.setValue(HQ.cpnyID);
             });
@@ -551,9 +571,9 @@ var Event = {
                 if (App.frmMain.isValid()) {
                     var branchID = App.cboBranchID.getValue();
                     var slperID = App.cboSlsperid.getValue();
-                    var status = App.cboStatus.getValue();
+                    //var status = App.cboStatus.getValue();
 
-                    if (branchID && slperID && status == _beginStatus) {
+                    if (branchID && slperID) {
                         var allNodes = Process.getDeepAllLeafNodes(App.treePanelCpnyAddr.getRootNode(), true);
                         if (allNodes && allNodes.length > 0) {
                             allNodes.forEach(function (node) {
@@ -565,7 +585,7 @@ var Event = {
                                     if (!record) {
                                         App.grdSlsperCpnyAddr.store.insert(idx, Ext.create("App.mdlSlsperCpnyAddr", {
                                             CpnyAddrID: node.raw.RecID,
-                                            Addr1: node.raw.text,
+                                            Addr1: node.raw.Addr1,
                                             Name: node.raw.AddrName
                                         }));
                                     }
@@ -589,9 +609,9 @@ var Event = {
                 if (App.frmMain.isValid()) {
                     var branchID = App.cboBranchID.getValue();
                     var slperID = App.cboSlsperid.getValue();
-                    var status = App.cboStatus.getValue();
+                    //var status = App.cboStatus.getValue();
 
-                    if (branchID && slperID && status == _beginStatus) {
+                    if (branchID && slperID) {
                         var allNodes = App.treePanelCpnyAddr.getChecked();
                         if (allNodes && allNodes.length > 0) {
                             allNodes.forEach(function (node) {
@@ -603,7 +623,7 @@ var Event = {
                                     if (!record) {
                                         App.grdSlsperCpnyAddr.store.insert(idx, Ext.create("App.mdlSlsperCpnyAddr", {
                                             CpnyAddrID: node.raw.RecID,
-                                            Addr1: node.raw.text,
+                                            Addr1: node.raw.Addr1,
                                             Name: node.raw.AddrName
                                         }));
                                     }
@@ -625,9 +645,9 @@ var Event = {
         btnDel_click: function (btn, e, eOpts) {
             if (HQ.isUpdate) {
                 if (App.frmMain.isValid()) {
-                    var status = App.cboStatus.value;
+                    //var status = App.cboStatus.value;
 
-                    if (status == _beginStatus) {
+                    //if (status == _beginStatus) {
                         var selRecs = App.grdSlsperCpnyAddr.selModel.selected.items;
                         if (selRecs.length > 0) {
                             var params = [];
@@ -638,7 +658,7 @@ var Event = {
                                 params.join(" & ") + "," + HQ.common.getLang("SlsperCpnyAddr"),
                                 'Process.deleteSlsperCpnyAddr');
                         }
-                    }
+                    //}
                 }
                 else {
                     Process.showFieldInvalid(App.frmMain);
@@ -652,10 +672,10 @@ var Event = {
         btnDelAll_click: function (btn, e, eOpts) {
             if (HQ.isUpdate) {
                 if (App.frmMain.isValid()) {
-                    var status = App.cboStatus.value;
-                    if (status == _beginStatus) {
+                    //var status = App.cboStatus.value;
+                    //if (status == _beginStatus) {
                         HQ.message.show(11, '', 'Process.deleteAllCpnyAddrs');
-                    }
+                    //}
                 }
                 else {
                     Process.showFieldInvalid(App.frmMain);

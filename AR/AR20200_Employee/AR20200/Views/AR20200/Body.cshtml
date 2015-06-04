@@ -53,7 +53,7 @@
                     .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle })
                     .Items(
                         HQ.Combo().ID("cboSlsperid").Name("cboSlsperid").HQLangCode("Slsperid")
-                        .HQProcedure("AR20200_pcSalesPersonMaster")
+                        .HQProcedure("AR20200_pcSalesPersonMaster").MaxLength(30).EnforceMaxLength(true)
                         .HQColumnShow("SlsperId,Name").DisplayField("SlsperId").ValueField("SlsperId")//.DataIndex("SlsperId")
                         .MinWidth(250).HQHeightWidth(400, 300).AllowBlank(false).HQAutoLoad(false)//.ForceSelection(true)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false }).Flex(4)
@@ -82,16 +82,16 @@
                     .LoadData()
 
                     , HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("Name").DataIndex("Name")
-                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtAddr1").Name("txtAddr1").HQLangCode("Addr1").DataIndex("Addr1")
-                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(50).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtAddr2").Name("txtAddr2").HQLangCode("Addr2").DataIndex("Addr2")
-                    .Width(400).MarginSpec("5 0 0 0")
+                    .Width(400).MarginSpec("5 0 0 0").MaxLength(50).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtEMailAddr").Name("txtEMailAddr").HQLangCode("EMailAddr").DataIndex("EMailAddr")
-                    .Width(300).MarginSpec("5 0 0 0").StandardVtype(ValidationType.Email)
+                    .Width(300).MarginSpec("5 0 0 0").StandardVtype(ValidationType.Email).MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.Combo().ID("cboDeliveryMan").Name("cboDeliveryMan").HQLangCode("DeliveryMan").HQProcedure("AR20200_pcDeliveryPerson")
                     .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid").DataIndex("DeliveryMan")
@@ -113,7 +113,7 @@
                     .LoadData()
 
                     , HQ.NumberField().ID("txtCrLmt").Name("txtCrLmt").HQLangCode("CrLmt").DataIndex("CrLmt")
-                    .Width(300).MarginSpec("5 0 0 0").DecimalPrecision(0).SelectOnFocus(true)
+                    .Width(300).MarginSpec("5 0 0 0").DecimalPrecision(0).SelectOnFocus(true).MinValue(0)
 
                     , HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("SiteID").HQProcedure("AR20200_pcVend")
                     .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code").DataIndex("VendID")
@@ -191,16 +191,16 @@
                     })
 
                     , HQ.TextBox().ID("txtPhone").Name("txtPhone").HQLangCode("Phone").DataIndex("Phone")
-                    .Width(300).MarginSpec("5 0 0 0")
+                    .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.TextBox().ID("txtFax").Name("txtFax").HQLangCode("Fax").DataIndex("Fax")
-                    .Width(300).MarginSpec("5 0 0 0")
+                    .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.NumberField().ID("txtCmmnPct").Name("txtCmmnPct").HQLangCode("CmmnPct").DataIndex("CmmnPct")
-                    .Width(300).MarginSpec("5 0 0 0").SelectOnFocus(true)
+                    .Width(300).MarginSpec("5 0 0 0").SelectOnFocus(true).MinValue(0)
 
                     , HQ.TextBox().ID("txtPPCPassword").Name("txtPPCPassword").HQLangCode("PPCPassword").DataIndex("PPCPassword")
-                    .Width(300).MarginSpec("5 0 0 0").InputType(Ext.Net.InputType.Password)
+                    .Width(300).MarginSpec("5 0 0 0").InputType(Ext.Net.InputType.Password).MaxLength(100).EnforceMaxLength(true)
 
                     , HQ.Checkbox().ID("chkPPCStorePicReq").Name("chkPPCStorePicReq").HQLangCode("PPCSTOREPICREQ")
                     .MarginSpec("5 0 0 155").DataIndex("PPCStorePicReq")
