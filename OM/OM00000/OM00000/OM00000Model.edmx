@@ -1,0 +1,387 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="OM_Setup" EntityType="eBiz4DWebAppModel.Store.OM_Setup" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="OM_Setup">
+          <Key>
+            <PropertyRef Name="SetupID" />
+          </Key>
+          <Property Name="SetupID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="AutoReleaseAR" Type="smallint" Nullable="false" />
+          <Property Name="AutoReleaseIN" Type="smallint" Nullable="false" />
+          <Property Name="BGWarningMsg" Type="smallint" Nullable="false" />
+          <Property Name="DetDiscG1App" Type="smallint" Nullable="false" />
+          <Property Name="DetDiscG1C1" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG1C2" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG2App" Type="smallint" Nullable="false" />
+          <Property Name="DetDiscG2C1" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG2C2" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG3App" Type="smallint" Nullable="false" />
+          <Property Name="DetDiscG3C1" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG3C2" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG4App" Type="smallint" Nullable="false" />
+          <Property Name="DetDiscG4C1" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG4C2" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG5App" Type="smallint" Nullable="false" />
+          <Property Name="DetDiscG5C1" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG5C2" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG6App" Type="smallint" Nullable="false" />
+          <Property Name="DetDiscG6C1" Type="varchar" MaxLength="10" />
+          <Property Name="DetDiscG6C2" Type="varchar" MaxLength="10" />
+          <Property Name="DfltOrderType" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="DfltSalesPrice" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="DocDiscG1App" Type="smallint" Nullable="false" />
+          <Property Name="DocDiscG1C1" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG1C2" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG2App" Type="smallint" Nullable="false" />
+          <Property Name="DocDiscG2C1" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG2C2" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG3App" Type="smallint" Nullable="false" />
+          <Property Name="DocDiscG3C1" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG3C2" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG4App" Type="smallint" Nullable="false" />
+          <Property Name="DocDiscG4C1" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG4C2" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG5App" Type="smallint" Nullable="false" />
+          <Property Name="DocDiscG5C1" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG5C2" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG6App" Type="smallint" Nullable="false" />
+          <Property Name="DocDiscG6C1" Type="varchar" MaxLength="10" />
+          <Property Name="DocDiscG6C2" Type="varchar" MaxLength="10" />
+          <Property Name="EditableSlsPrice" Type="bit" Nullable="false" />
+          <Property Name="GroupDiscG10App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG10C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG10C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG11App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG11C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG11C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG12App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG12C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG12C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG1App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG1C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG1C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG2App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG2C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG2C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG3App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG3C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG3C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG4App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG4C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG4C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG5App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG5C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG5C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG6App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG6C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG6C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG7App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG7C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG7C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG8App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG8C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG8C2" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG9App" Type="smallint" Nullable="false" />
+          <Property Name="GroupDiscG9C1" Type="varchar" MaxLength="10" />
+          <Property Name="GroupDiscG9C2" Type="varchar" MaxLength="10" />
+          <Property Name="POSPrinter" Type="varchar" MaxLength="10" />
+          <Property Name="PrcClsHierarchyLevel" Type="smallint" Nullable="false" />
+          <Property Name="PrefixBat" Type="varchar" MaxLength="2" />
+          <Property Name="PriceSeq00" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="PriceSeq01" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="PriceSeq02" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="PriceSeq03" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="PriceSeq04" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="PriceSeq05" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="ProrateDisc" Type="smallint" Nullable="false" />
+          <Property Name="SimpleDiscounts" Type="smallint" Nullable="false" />
+          <Property Name="UseBarCode" Type="smallint" Nullable="false" />
+          <Property Name="UseDiscTerm" Type="smallint" Nullable="false" />
+          <Property Name="VN32Promotion" Type="smallint" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="AutoInvcNbr" Type="bit" Nullable="false" />
+          <Property Name="CreditChkRule" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="InlcSOFeeDisc" Type="bit" Nullable="false" />
+          <Property Name="InlcSOFeeProm" Type="bit" Nullable="false" />
+          <Property Name="ReqDiscID" Type="bit" Nullable="false" />
+          <Property Name="ShowCustClass" Type="bit" Nullable="false" />
+          <Property Name="ShowKPI" Type="bit" Nullable="false" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM00000Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="OM00000Entities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="OM_Setup" EntityType="OM00000Model.OM_Setup" />
+        </EntityContainer>
+        <EntityType Name="OM_Setup">
+          <Key>
+            <PropertyRef Name="SetupID" />
+          </Key>
+          <Property Type="String" Name="SetupID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="AutoReleaseAR" Nullable="false" />
+          <Property Type="Int16" Name="AutoReleaseIN" Nullable="false" />
+          <Property Type="Int16" Name="BGWarningMsg" Nullable="false" />
+          <Property Type="Int16" Name="DetDiscG1App" Nullable="false" />
+          <Property Type="String" Name="DetDiscG1C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DetDiscG1C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DetDiscG2App" Nullable="false" />
+          <Property Type="String" Name="DetDiscG2C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DetDiscG2C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DetDiscG3App" Nullable="false" />
+          <Property Type="String" Name="DetDiscG3C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DetDiscG3C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DetDiscG4App" Nullable="false" />
+          <Property Type="String" Name="DetDiscG4C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DetDiscG4C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DetDiscG5App" Nullable="false" />
+          <Property Type="String" Name="DetDiscG5C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DetDiscG5C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DetDiscG6App" Nullable="false" />
+          <Property Type="String" Name="DetDiscG6C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DetDiscG6C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltOrderType" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltSalesPrice" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DocDiscG1App" Nullable="false" />
+          <Property Type="String" Name="DocDiscG1C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DocDiscG1C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DocDiscG2App" Nullable="false" />
+          <Property Type="String" Name="DocDiscG2C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DocDiscG2C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DocDiscG3App" Nullable="false" />
+          <Property Type="String" Name="DocDiscG3C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DocDiscG3C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DocDiscG4App" Nullable="false" />
+          <Property Type="String" Name="DocDiscG4C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DocDiscG4C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DocDiscG5App" Nullable="false" />
+          <Property Type="String" Name="DocDiscG5C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DocDiscG5C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="DocDiscG6App" Nullable="false" />
+          <Property Type="String" Name="DocDiscG6C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DocDiscG6C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="EditableSlsPrice" Nullable="false" />
+          <Property Type="Int16" Name="GroupDiscG10App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG10C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG10C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG11App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG11C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG11C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG12App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG12C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG12C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG1App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG1C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG1C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG2App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG2C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG2C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG3App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG3C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG3C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG4App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG4C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG4C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG5App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG5C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG5C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG6App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG6C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG6C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG7App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG7C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG7C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG8App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG8C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG8C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GroupDiscG9App" Nullable="false" />
+          <Property Type="String" Name="GroupDiscG9C1" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="GroupDiscG9C2" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="POSPrinter" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="PrcClsHierarchyLevel" Nullable="false" />
+          <Property Type="String" Name="PrefixBat" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PriceSeq00" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PriceSeq01" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PriceSeq02" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PriceSeq03" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PriceSeq04" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PriceSeq05" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="ProrateDisc" Nullable="false" />
+          <Property Type="Int16" Name="SimpleDiscounts" Nullable="false" />
+          <Property Type="Int16" Name="UseBarCode" Nullable="false" />
+          <Property Type="Int16" Name="UseDiscTerm" Nullable="false" />
+          <Property Type="Int16" Name="VN32Promotion" Nullable="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="Boolean" Name="AutoInvcNbr" Nullable="false" />
+          <Property Type="String" Name="CreditChkRule" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="InlcSOFeeDisc" Nullable="false" />
+          <Property Type="Boolean" Name="InlcSOFeeProm" Nullable="false" />
+          <Property Type="Boolean" Name="ReqDiscID" Nullable="false" />
+          <Property Type="Boolean" Name="ShowCustClass" Nullable="false" />
+          <Property Type="Boolean" Name="ShowKPI" Nullable="false" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="OM00000Entities">
+          <EntitySetMapping Name="OM_Setup">
+            <EntityTypeMapping TypeName="OM00000Model.OM_Setup">
+              <MappingFragment StoreEntitySet="OM_Setup">
+                <ScalarProperty Name="ShowKPI" ColumnName="ShowKPI" />
+                <ScalarProperty Name="ShowCustClass" ColumnName="ShowCustClass" />
+                <ScalarProperty Name="ReqDiscID" ColumnName="ReqDiscID" />
+                <ScalarProperty Name="InlcSOFeeProm" ColumnName="InlcSOFeeProm" />
+                <ScalarProperty Name="InlcSOFeeDisc" ColumnName="InlcSOFeeDisc" />
+                <ScalarProperty Name="CreditChkRule" ColumnName="CreditChkRule" />
+                <ScalarProperty Name="AutoInvcNbr" ColumnName="AutoInvcNbr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="VN32Promotion" ColumnName="VN32Promotion" />
+                <ScalarProperty Name="UseDiscTerm" ColumnName="UseDiscTerm" />
+                <ScalarProperty Name="UseBarCode" ColumnName="UseBarCode" />
+                <ScalarProperty Name="SimpleDiscounts" ColumnName="SimpleDiscounts" />
+                <ScalarProperty Name="ProrateDisc" ColumnName="ProrateDisc" />
+                <ScalarProperty Name="PriceSeq05" ColumnName="PriceSeq05" />
+                <ScalarProperty Name="PriceSeq04" ColumnName="PriceSeq04" />
+                <ScalarProperty Name="PriceSeq03" ColumnName="PriceSeq03" />
+                <ScalarProperty Name="PriceSeq02" ColumnName="PriceSeq02" />
+                <ScalarProperty Name="PriceSeq01" ColumnName="PriceSeq01" />
+                <ScalarProperty Name="PriceSeq00" ColumnName="PriceSeq00" />
+                <ScalarProperty Name="PrefixBat" ColumnName="PrefixBat" />
+                <ScalarProperty Name="PrcClsHierarchyLevel" ColumnName="PrcClsHierarchyLevel" />
+                <ScalarProperty Name="POSPrinter" ColumnName="POSPrinter" />
+                <ScalarProperty Name="GroupDiscG9C2" ColumnName="GroupDiscG9C2" />
+                <ScalarProperty Name="GroupDiscG9C1" ColumnName="GroupDiscG9C1" />
+                <ScalarProperty Name="GroupDiscG9App" ColumnName="GroupDiscG9App" />
+                <ScalarProperty Name="GroupDiscG8C2" ColumnName="GroupDiscG8C2" />
+                <ScalarProperty Name="GroupDiscG8C1" ColumnName="GroupDiscG8C1" />
+                <ScalarProperty Name="GroupDiscG8App" ColumnName="GroupDiscG8App" />
+                <ScalarProperty Name="GroupDiscG7C2" ColumnName="GroupDiscG7C2" />
+                <ScalarProperty Name="GroupDiscG7C1" ColumnName="GroupDiscG7C1" />
+                <ScalarProperty Name="GroupDiscG7App" ColumnName="GroupDiscG7App" />
+                <ScalarProperty Name="GroupDiscG6C2" ColumnName="GroupDiscG6C2" />
+                <ScalarProperty Name="GroupDiscG6C1" ColumnName="GroupDiscG6C1" />
+                <ScalarProperty Name="GroupDiscG6App" ColumnName="GroupDiscG6App" />
+                <ScalarProperty Name="GroupDiscG5C2" ColumnName="GroupDiscG5C2" />
+                <ScalarProperty Name="GroupDiscG5C1" ColumnName="GroupDiscG5C1" />
+                <ScalarProperty Name="GroupDiscG5App" ColumnName="GroupDiscG5App" />
+                <ScalarProperty Name="GroupDiscG4C2" ColumnName="GroupDiscG4C2" />
+                <ScalarProperty Name="GroupDiscG4C1" ColumnName="GroupDiscG4C1" />
+                <ScalarProperty Name="GroupDiscG4App" ColumnName="GroupDiscG4App" />
+                <ScalarProperty Name="GroupDiscG3C2" ColumnName="GroupDiscG3C2" />
+                <ScalarProperty Name="GroupDiscG3C1" ColumnName="GroupDiscG3C1" />
+                <ScalarProperty Name="GroupDiscG3App" ColumnName="GroupDiscG3App" />
+                <ScalarProperty Name="GroupDiscG2C2" ColumnName="GroupDiscG2C2" />
+                <ScalarProperty Name="GroupDiscG2C1" ColumnName="GroupDiscG2C1" />
+                <ScalarProperty Name="GroupDiscG2App" ColumnName="GroupDiscG2App" />
+                <ScalarProperty Name="GroupDiscG1C2" ColumnName="GroupDiscG1C2" />
+                <ScalarProperty Name="GroupDiscG1C1" ColumnName="GroupDiscG1C1" />
+                <ScalarProperty Name="GroupDiscG1App" ColumnName="GroupDiscG1App" />
+                <ScalarProperty Name="GroupDiscG12C2" ColumnName="GroupDiscG12C2" />
+                <ScalarProperty Name="GroupDiscG12C1" ColumnName="GroupDiscG12C1" />
+                <ScalarProperty Name="GroupDiscG12App" ColumnName="GroupDiscG12App" />
+                <ScalarProperty Name="GroupDiscG11C2" ColumnName="GroupDiscG11C2" />
+                <ScalarProperty Name="GroupDiscG11C1" ColumnName="GroupDiscG11C1" />
+                <ScalarProperty Name="GroupDiscG11App" ColumnName="GroupDiscG11App" />
+                <ScalarProperty Name="GroupDiscG10C2" ColumnName="GroupDiscG10C2" />
+                <ScalarProperty Name="GroupDiscG10C1" ColumnName="GroupDiscG10C1" />
+                <ScalarProperty Name="GroupDiscG10App" ColumnName="GroupDiscG10App" />
+                <ScalarProperty Name="EditableSlsPrice" ColumnName="EditableSlsPrice" />
+                <ScalarProperty Name="DocDiscG6C2" ColumnName="DocDiscG6C2" />
+                <ScalarProperty Name="DocDiscG6C1" ColumnName="DocDiscG6C1" />
+                <ScalarProperty Name="DocDiscG6App" ColumnName="DocDiscG6App" />
+                <ScalarProperty Name="DocDiscG5C2" ColumnName="DocDiscG5C2" />
+                <ScalarProperty Name="DocDiscG5C1" ColumnName="DocDiscG5C1" />
+                <ScalarProperty Name="DocDiscG5App" ColumnName="DocDiscG5App" />
+                <ScalarProperty Name="DocDiscG4C2" ColumnName="DocDiscG4C2" />
+                <ScalarProperty Name="DocDiscG4C1" ColumnName="DocDiscG4C1" />
+                <ScalarProperty Name="DocDiscG4App" ColumnName="DocDiscG4App" />
+                <ScalarProperty Name="DocDiscG3C2" ColumnName="DocDiscG3C2" />
+                <ScalarProperty Name="DocDiscG3C1" ColumnName="DocDiscG3C1" />
+                <ScalarProperty Name="DocDiscG3App" ColumnName="DocDiscG3App" />
+                <ScalarProperty Name="DocDiscG2C2" ColumnName="DocDiscG2C2" />
+                <ScalarProperty Name="DocDiscG2C1" ColumnName="DocDiscG2C1" />
+                <ScalarProperty Name="DocDiscG2App" ColumnName="DocDiscG2App" />
+                <ScalarProperty Name="DocDiscG1C2" ColumnName="DocDiscG1C2" />
+                <ScalarProperty Name="DocDiscG1C1" ColumnName="DocDiscG1C1" />
+                <ScalarProperty Name="DocDiscG1App" ColumnName="DocDiscG1App" />
+                <ScalarProperty Name="DfltSalesPrice" ColumnName="DfltSalesPrice" />
+                <ScalarProperty Name="DfltOrderType" ColumnName="DfltOrderType" />
+                <ScalarProperty Name="DetDiscG6C2" ColumnName="DetDiscG6C2" />
+                <ScalarProperty Name="DetDiscG6C1" ColumnName="DetDiscG6C1" />
+                <ScalarProperty Name="DetDiscG6App" ColumnName="DetDiscG6App" />
+                <ScalarProperty Name="DetDiscG5C2" ColumnName="DetDiscG5C2" />
+                <ScalarProperty Name="DetDiscG5C1" ColumnName="DetDiscG5C1" />
+                <ScalarProperty Name="DetDiscG5App" ColumnName="DetDiscG5App" />
+                <ScalarProperty Name="DetDiscG4C2" ColumnName="DetDiscG4C2" />
+                <ScalarProperty Name="DetDiscG4C1" ColumnName="DetDiscG4C1" />
+                <ScalarProperty Name="DetDiscG4App" ColumnName="DetDiscG4App" />
+                <ScalarProperty Name="DetDiscG3C2" ColumnName="DetDiscG3C2" />
+                <ScalarProperty Name="DetDiscG3C1" ColumnName="DetDiscG3C1" />
+                <ScalarProperty Name="DetDiscG3App" ColumnName="DetDiscG3App" />
+                <ScalarProperty Name="DetDiscG2C2" ColumnName="DetDiscG2C2" />
+                <ScalarProperty Name="DetDiscG2C1" ColumnName="DetDiscG2C1" />
+                <ScalarProperty Name="DetDiscG2App" ColumnName="DetDiscG2App" />
+                <ScalarProperty Name="DetDiscG1C2" ColumnName="DetDiscG1C2" />
+                <ScalarProperty Name="DetDiscG1C1" ColumnName="DetDiscG1C1" />
+                <ScalarProperty Name="DetDiscG1App" ColumnName="DetDiscG1App" />
+                <ScalarProperty Name="BGWarningMsg" ColumnName="BGWarningMsg" />
+                <ScalarProperty Name="AutoReleaseIN" ColumnName="AutoReleaseIN" />
+                <ScalarProperty Name="AutoReleaseAR" ColumnName="AutoReleaseAR" />
+                <ScalarProperty Name="SetupID" ColumnName="SetupID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
+        <EntityTypeShape EntityType="OM00000Model.OM_Setup" Width="1.5" PointX="0.75" PointY="0.75" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

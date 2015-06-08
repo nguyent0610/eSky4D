@@ -1,0 +1,1255 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM00000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Border)
+        .ID("frmMain")
+        .TrackResetOnLoad(true)
+        //.DefaultAnchor("100%")
+        .BodyPadding(5)
+        .BodyBorder(0).AutoScroll(true)
+        .TopBar(Util.SetupToolbar("print,close,new,delete", false, "Event.Form.menuClick"))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+        .Items(
+            X.TabPanel()
+            .Region(Region.Center).Layout(LayoutType.Border)
+            .Items(
+                X.Panel().ID("tabDfltInfo")
+                .Title(Util.GetLang("General"))
+                .Region(Region.Center).Layout(LayoutType.HBox).AutoScroll(true)
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
+                .Items(
+        // First Column
+                    X.Container().Layout(LayoutType.VBox).MinWidth(250)
+                    .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                    .Items(
+                        HQ.Checkbox().ID("chkAutoReleaseAR")
+                        .HQLangCode("Auto Released AR Bat").MarginSpec("5 0 0 5")
+                        .DataIndex("AutoReleaseAR")
+
+                        , HQ.Checkbox().ID("chkAutoReleaseIN")
+                        .HQLangCode("Auto Released IN Bat").MarginSpec("5 0 0 5")
+                        .DataIndex("AutoReleaseIN")
+                        
+                        , HQ.Checkbox().ID("chkUseBarCode")
+                        .HQLangCode("USEBARCODE").MarginSpec("5 0 0 5")
+                        .DataIndex("UseBarCode")
+                        
+                        , HQ.Checkbox().ID("chkEditableSlsPrice")
+                        .HQLangCode("EditableSlsPrice").MarginSpec("5 0 0 5")
+                        .DataIndex("EditableSlsPrice")
+                        
+                        , HQ.Checkbox().ID("chkAutoInvcNbr")
+                        .HQLangCode("AUTOINVCNBR").MarginSpec("5 0 0 5")
+                        .DataIndex("AutoInvcNbr")
+
+                        , HQ.Checkbox().ID("chkShowCustClass")
+                        .HQLangCode("ShowCustType").MarginSpec("5 0 0 5")
+                        .DataIndex("ShowCustClass")
+                        
+                        , HQ.Checkbox().ID("chkShowKPI")
+                        .HQLangCode("ShowKPI").MarginSpec("5 0 0 5")
+                        .DataIndex("ShowKPI")
+                    )
+
+                    // Second Column
+                    , X.Container().Layout(LayoutType.VBox).MinWidth(250)
+                    .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                    .Items(
+                        HQ.Combo().ID("cboPOSPrinter")
+                        .HQLangCode("POSPrinter").MarginSpec("5 5 0 5").DataIndex("POSPrinter")
+                        .HQProcedure("OM00000_pcPOSPrinter").HQColumnShow("Descr")
+                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .ForceSelection(true)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                            , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+
+                        , HQ.Combo().ID("cboOrderType")
+                        .HQLangCode("DfltOrderType").MarginSpec("5 5 0 5").DataIndex("DfltOrderType")
+                        .HQProcedure("OM00000_pcOrderTypeActive").HQColumnShow("OrderType,Descr")
+                        .HQHeightWidth(400, 300).ValueField("OrderType").DisplayField("OrderType")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .ForceSelection(true)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                        })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+
+                        , HQ.TextBox().ID("txtPrefixBat")
+                        .HQLangCode("Prefix").MarginSpec("5 5 0 5")
+                        .MaxLength(2).EnforceMaxLength(true)
+                        .DataIndex("PrefixBat")
+
+                        , HQ.Combo().ID("cboSalesPrice")
+                        .HQLangCode("DFLTSALESPRICE").MarginSpec("5 5 0 5").DataIndex("DfltSalesPrice")
+                        .HQProcedure("OM00000_pcSalesPrice").HQColumnShow("Descr")
+                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .ForceSelection(true)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                            , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        
+                        , HQ.Combo().ID("cboCheckCreditRule")
+                        .HQLangCode("CreditChkRule").MarginSpec("5 5 0 5").DataIndex("CreditChkRule")
+                        .HQProcedure("OM00000_pcCreditChkRule").HQColumnShow("Descr")
+                        .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .ForceSelection(true)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                            , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    )
+                ) // tabDfltInfo
+
+                , X.Panel().ID("tabPriceDiscount")
+                .Title(Util.GetLang("Price/Discount Calc"))
+                .Region(Region.Center).Layout(LayoutType.VBox).AutoScroll(true)
+        //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Left })
+                .Items(
+                    X.Container().Layout(LayoutType.HBox)
+                    .Items(
+                        HQ.Checkbox().ID("chkProrateDisc")
+                        .HQLangCode("ProrateDiscount").MarginSpec("5 5 0 20")//.Flex(1)
+                        .DataIndex("ProrateDisc")
+                        
+                        , HQ.Checkbox().ID("chkSimpleDiscounts")
+                        .HQLangCode("SimpleDiscount").MarginSpec("5 5 0 100")//.Flex(1)
+                        .DataIndex("SimpleDiscounts")
+                    ) // Row 1
+
+                    , X.Container().Layout(LayoutType.HBox)
+                    .Items(
+        // First Column
+                        X.Container().Layout(LayoutType.VBox).MinWidth(300)
+                        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                        .Items(
+                            X.FieldSet()
+                            .Title(Util.GetLang("DetailDiscSeq"))
+                            .Layout(LayoutType.HBox).MarginSpec("0 0 0 5")
+                            .Items(
+                                X.Container().Layout(LayoutType.VBox)
+                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center })
+                                .Items(
+                                    HQ.Label().HQLangCode("Comp 1")
+
+                                    , HQ.Combo().ID("cboDetDiscG1C1")
+                                    .HQLangCode("Group 1").DataIndex("DetDiscG1C1")
+                                    .LabelWidth(50).MarginSpec("5 5 0 0")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+
+                                    , HQ.Combo().ID("cboDetDiscG2C1")
+                                    .HQLangCode("Group 2").DataIndex("DetDiscG2C1")
+                                    .LabelWidth(50).MarginSpec("5 5 0 0")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+
+                                    , HQ.Combo().ID("cboDetDiscG3C1")
+                                    .HQLangCode("Group 3").DataIndex("DetDiscG3C1")
+                                    .LabelWidth(50).MarginSpec("5 5 0 0")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+
+                                    , HQ.Combo().ID("cboDetDiscG4C1")
+                                    .HQLangCode("Group 4").DataIndex("DetDiscG4C1")
+                                    .LabelWidth(50).MarginSpec("5 5 0 0")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+
+                                    , HQ.Combo().ID("cboDetDiscG5C1")
+                                    .HQLangCode("Group 5").DataIndex("DetDiscG5C1")
+                                    .LabelWidth(50).MarginSpec("5 5 0 0")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+
+                                    , HQ.Combo().ID("cboDetDiscG6C1")
+                                    .HQLangCode("Group 6").DataIndex("DetDiscG6C1")
+                                    .LabelWidth(50).MarginSpec("5 5 5 0")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                ) // Comp 1
+
+                                , X.Container().Layout(LayoutType.VBox)
+                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center })
+                                .Items(
+                                    HQ.Label().HQLangCode("Comp 2")
+                                    
+                                    , HQ.Combo().ID("cboDetDiscG1C2").MarginSpec("5 5 0 0").DataIndex("DetDiscG1C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDetDiscG2C2").MarginSpec("5 5 0 0").DataIndex("DetDiscG2C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDetDiscG3C2").MarginSpec("5 5 0 0").DataIndex("DetDiscG3C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDetDiscG4C2").MarginSpec("5 5 0 0").DataIndex("DetDiscG4C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDetDiscG5C2").MarginSpec("5 5 0 0").DataIndex("DetDiscG5C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDetDiscG6C2").MarginSpec("5 5 5 0").DataIndex("DetDiscG6C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                ) // Comp 2
+
+                                , X.Container().Layout(LayoutType.VBox)
+                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center })
+                                .Items(
+                                    HQ.Label().Text("% %")
+                                    , HQ.Checkbox().ID("chkDetDiscG1App").MarginSpec("5 0 0 5")
+                                    .DataIndex("DetDiscG1App")
+                                    
+                                    , HQ.Checkbox().ID("chkDetDiscG2App").MarginSpec("5 0 0 5")
+                                    .DataIndex("DetDiscG2App")
+                                    
+                                    , HQ.Checkbox().ID("chkDetDiscG3App").MarginSpec("5 0 0 5")
+                                    .DataIndex("DetDiscG3App")
+                                    
+                                    , HQ.Checkbox().ID("chkDetDiscG4App").MarginSpec("5 0 0 5")
+                                    .DataIndex("DetDiscG4App")
+                                    
+                                    , HQ.Checkbox().ID("chkDetDiscG5App").MarginSpec("5 0 0 5")
+                                    .DataIndex("DetDiscG5App")
+                                    
+                                    , HQ.Checkbox().ID("chkDetDiscG6App").MarginSpec("5 0 5 5")
+                                    .DataIndex("DetDiscG6App")
+                                ) // % %
+                            ) // FieldSet
+
+                            , X.FieldSet().Title(Util.GetLang("SalesPriceSeq"))
+                            .Layout(LayoutType.VBox).MarginSpec("0 0 0 5")
+                            //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                            .Items(
+                                HQ.Combo().ID("cboPriceSeq00")
+                                .FieldLabel("1").LabelWidth(50).Width(270).DataIndex("PriceSeq00")
+                                .HQProcedure("OM00000_pcPriceSeq").HQColumnShow("Descr")
+                                .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .ForceSelection(true)
+                                .HQParam(new StoreParameterCollection() 
+                                { 
+                                    new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                    , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                                
+                                , HQ.Combo().ID("cboPriceSeq01")
+                                .FieldLabel("2").LabelWidth(50).Width(270).DataIndex("PriceSeq01")
+                                .HQProcedure("OM00000_pcPriceSeq").HQColumnShow("Descr")
+                                .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .ForceSelection(true)
+                                .HQParam(new StoreParameterCollection() 
+                                { 
+                                    new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                    , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                                
+                                , HQ.Combo().ID("cboPriceSeq02")
+                                .FieldLabel("3").LabelWidth(50).Width(270).DataIndex("PriceSeq02")
+                                .HQProcedure("OM00000_pcPriceSeq").HQColumnShow("Descr")
+                                .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .ForceSelection(true)
+                                .HQParam(new StoreParameterCollection() 
+                                { 
+                                    new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                    , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                                
+                                , HQ.Combo().ID("cboPriceSeq03")
+                                .FieldLabel("4").LabelWidth(50).Width(270).DataIndex("PriceSeq03")
+                                .HQProcedure("OM00000_pcPriceSeq").HQColumnShow("Descr")
+                                .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .ForceSelection(true)
+                                .HQParam(new StoreParameterCollection() 
+                                { 
+                                    new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                    , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                                
+                                , HQ.Combo().ID("cboPriceSeq04")
+                                .FieldLabel("5").LabelWidth(50).Width(270).DataIndex("PriceSeq04")
+                                .HQProcedure("OM00000_pcPriceSeq").HQColumnShow("Descr")
+                                .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .ForceSelection(true)
+                                .HQParam(new StoreParameterCollection() 
+                                { 
+                                    new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                    , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                                
+                                , HQ.Combo().ID("cboPriceSeq05")
+                                .FieldLabel("6").LabelWidth(50).Width(270).DataIndex("PriceSeq05")
+                                .HQProcedure("OM00000_pcPriceSeq").HQColumnShow("Descr")
+                                .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .ForceSelection(true)
+                                .HQParam(new StoreParameterCollection() 
+                                { 
+                                    new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                    , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                })
+                                .LoadData()
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                            )
+                        ) // First Column
+
+                        // Second Column
+                        , X.Container().Layout(LayoutType.VBox).MinWidth(250)
+                        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                        .Items(
+                            X.FieldSet()
+                            .Title(Util.GetLang("GroupDiscSeq"))
+                            .Layout(LayoutType.HBox).MarginSpec("0 0 0 5")
+                            .Items(
+                                X.Container().Layout(LayoutType.VBox)
+                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center })
+                                .Items(
+                                    HQ.Label().HQLangCode("Comp 1")
+
+                                    , HQ.Combo().ID("cboGroupDiscG1C1")
+                                    .HQLangCode("Group 1").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG1C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+
+                                    , HQ.Combo().ID("cboGroupDiscG2C1")
+                                    .HQLangCode("Group 2").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG2C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+
+                                    , HQ.Combo().ID("cboGroupDiscG3C1")
+                                    .HQLangCode("Group 3").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG3C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+
+                                    , HQ.Combo().ID("cboGroupDiscG4C1")
+                                    .HQLangCode("Group 4").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG4C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+
+                                    , HQ.Combo().ID("cboGroupDiscG5C1")
+                                    .HQLangCode("Group 5").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG5C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG6C1")
+                                    .HQLangCode("Group 6").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG6C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG7C1")
+                                    .HQLangCode("Group 7").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG7C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG8C1")
+                                    .HQLangCode("Group 8").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG8C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG9C1")
+                                    .HQLangCode("Group 9").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG9C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG10C1")
+                                    .HQLangCode("Group 10").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG10C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG11C1")
+                                    .HQLangCode("Group 11").LabelWidth(60).MarginSpec("5 5 0 0").DataIndex("GroupDiscG11C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG12C1")
+                                    .HQLangCode("Group 12").LabelWidth(60).MarginSpec("5 5 5 0").DataIndex("GroupDiscG12C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                ) // Comp 1
+
+                                , X.Container().Layout(LayoutType.VBox)
+                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center })
+                                .Items(
+                                    HQ.Label().HQLangCode("Comp 2")
+                                    , HQ.Combo().ID("cboGroupDiscG1C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG1C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG2C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG2C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG3C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG3C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG4C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG4C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG5C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG5C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG6C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG6C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG7C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG7C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG8C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG8C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG9C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG9C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG10C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG10C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG11C2").MarginSpec("5 5 0 0").DataIndex("GroupDiscG11C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboGroupDiscG12C2").MarginSpec("5 5 5 0").DataIndex("GroupDiscG12C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                ) // Comp 2
+
+                                , X.Container().Layout(LayoutType.VBox)
+                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center })
+                                .Items(
+                                    HQ.Label().Text("% %")
+                                    , HQ.Checkbox().ID("chkGroupDiscG1App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG1App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG2App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG2App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG3App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG3App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG4App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG4App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG5App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG5App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG6App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG6App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG7App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG7App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG8App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG8App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG9App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG9App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG10App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG10App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG11App").MarginSpec("5 0 0 5")
+                                    .DataIndex("GroupDiscG11App")
+                                    
+                                    , HQ.Checkbox().ID("chkGroupDiscG12App").MarginSpec("5 0 5 5")
+                                    .DataIndex("GroupDiscG12App")
+                                ) // % %
+                            ) // FieldSet
+                        ) // Second Column
+
+                        // Third Column
+                        , X.Container().Layout(LayoutType.VBox).MinWidth(250)
+                        .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                        .Items(
+                            X.FieldSet()
+                            .Title(Util.GetLang("DetailDiscSeq"))
+                            .Layout(LayoutType.HBox).MarginSpec("0 5 0 5")
+                            .Items(
+                                X.Container().Layout(LayoutType.VBox)
+                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center })
+                                .Items(
+                                    HQ.Label().HQLangCode("Comp 1")
+
+                                    , HQ.Combo().ID("cboDocDiscG1C1")
+                                    .HQLangCode("Group 1").LabelWidth(50).MarginSpec("5 5 0 0").DataIndex("DocDiscG1C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDocDiscG2C1")
+                                    .HQLangCode("Group 2").LabelWidth(50).MarginSpec("5 5 0 0").DataIndex("DocDiscG2C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDocDiscG3C1")
+                                    .HQLangCode("Group 3").LabelWidth(50).MarginSpec("5 5 0 0").DataIndex("DocDiscG3C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDocDiscG4C1")
+                                    .HQLangCode("Group 4").LabelWidth(50).MarginSpec("5 5 0 0").DataIndex("DocDiscG4C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDocDiscG5C1")
+                                    .HQLangCode("Group 5").LabelWidth(50).MarginSpec("5 5 0 0").DataIndex("DocDiscG5C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDocDiscG6C1")
+                                    .HQLangCode("Group 6").LabelWidth(50).MarginSpec("5 5 5 0").DataIndex("DocDiscG6C1")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                ) // Comp 1
+
+                                , X.Container().Layout(LayoutType.VBox)
+                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center })
+                                .Items(
+                                    HQ.Label().HQLangCode("Comp 2")
+                                    , HQ.Combo().ID("cboDocDiscG1C2")
+                                    .MarginSpec("5 5 0 0").DataIndex("DocDiscG1C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDocDiscG2C2")
+                                    .MarginSpec("5 5 0 0").DataIndex("DocDiscG2C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDocDiscG3C2")
+                                    .MarginSpec("5 5 0 0").DataIndex("DocDiscG3C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDocDiscG4C2")
+                                    .MarginSpec("5 5 0 0").DataIndex("DocDiscG4C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDocDiscG5C2")
+                                    .MarginSpec("5 5 0 0").DataIndex("DocDiscG5C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                    
+                                    , HQ.Combo().ID("cboDocDiscG6C2")
+                                    .MarginSpec("5 5 5 0").DataIndex("DocDiscG6C2")
+                                    .HQProcedure("OM00000_pcDiscountType").HQColumnShow("DiscID,Descr,DiscType,DiscClass")
+                                    .HQHeightWidth(400, 300).ValueField("DiscID").DisplayField("DiscID")
+                                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                    .ForceSelection(true)
+                                    .HQParam(new StoreParameterCollection() 
+                                    { 
+                                        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                        , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+                                    })
+                                    .LoadData()
+                                    .Listeners(lst =>
+                                    {
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    })
+                                ) // Comp 2
+
+                                , X.Container().Layout(LayoutType.VBox)
+                                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Center })
+                                .Items(
+                                    HQ.Label().Text("% %")
+                                    , HQ.Checkbox().ID("chkDocDiscG1App").MarginSpec("5 0 0 5")
+                                    .DataIndex("DocDiscG1App")
+                                    
+                                    , HQ.Checkbox().ID("chkDocDiscG2App").MarginSpec("5 0 0 5")
+                                    .DataIndex("DocDiscG2App")
+                                    
+                                    , HQ.Checkbox().ID("chkDocDiscG3App").MarginSpec("5 0 0 5")
+                                    .DataIndex("DocDiscG3App")
+                                    
+                                    , HQ.Checkbox().ID("chkDocDiscG4App").MarginSpec("5 0 0 5")
+                                    .DataIndex("DocDiscG4App")
+                                    
+                                    , HQ.Checkbox().ID("chkDocDiscG5App").MarginSpec("5 0 0 5")
+                                    .DataIndex("DocDiscG5App")
+                                    
+                                    , HQ.Checkbox().ID("chkDocDiscG6App").MarginSpec("5 0 5 5")
+                                    .DataIndex("DocDiscG6App")
+                                ) // % %
+                            ) // FieldSet
+
+                            , HQ.Checkbox().ID("chkUseDiscTerm").HQLangCode("UseDiscTerm").MarginSpec("15 0 0 5")
+                            .DataIndex("UseDiscTerm")
+                            
+                            , HQ.Checkbox().ID("chkInlcSOFeeDisc").HQLangCode("InlcSOFeeDisc").MarginSpec("5 0 0 5")
+                            .DataIndex("InlcSOFeeDisc")
+                            
+                            , HQ.Checkbox().ID("chkInlcSOFeeProm").HQLangCode("InlcSOFeeProm").MarginSpec("5 0 0 5")
+                            .DataIndex("InlcSOFeeProm")
+                            
+                            , HQ.Checkbox().ID("chkReqDiscID").HQLangCode("ReqDiscID").MarginSpec("5 0 5 5")
+                            .DataIndex("ReqDiscID")
+                        ) // // Third Column
+                    ) // Row 2
+                ) // tabPriceDiscount
+                
+                , X.Panel().ID("tabDiscountBudget")
+                .Title(Util.GetLang("DiscountBudget"))
+                .Region(Region.Center).Layout(LayoutType.VBox).AutoScroll(true)
+        //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Left })
+                .Items(
+                    HQ.Checkbox().ID("chkBGWarningMsg")
+                    .HQLangCode("BudgetWarn").MarginSpec("5 0 0 10")
+                    .DataIndex("BGWarningMsg")
+                ) // tabDiscountBudget
+            ) // TabPanel
+        )
+        .Listeners(lst =>
+        {
+            lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
+            lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
+        })// Form: frmMain
+    )
+)

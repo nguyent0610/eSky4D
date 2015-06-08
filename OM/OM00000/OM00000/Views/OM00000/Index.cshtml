@@ -1,0 +1,74 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM00000;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM00000";
+    var acc = Session["OM00000"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/OM00000.js")' type="text/javascript"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("stoSetup")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM_Setup), "mdlOM_Setup", "SetupID",true,
+            "AutoReleaseAR,AutoReleaseIN,UseBarCode,ProrateDisc,SimpleDiscounts,DetDiscG1App,"+
+            "DetDiscG2App,DetDiscG3App,DetDiscG4App,DetDiscG5App,DetDiscG6App,"+
+            "GroupDiscG1App,GroupDiscG2App,GroupDiscG3App,GroupDiscG4App,GroupDiscG5App,"+
+            "GroupDiscG6App,GroupDiscG7App,GroupDiscG8App,GroupDiscG9App,GroupDiscG10App,"+
+            "GroupDiscG11App,GroupDiscG12App,DocDiscG1App,DocDiscG2App,DocDiscG3App,"+
+            "DocDiscG4App,DocDiscG5App,DocDiscG6App,UseDiscTerm,BGWarningMsg"))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetOMSetup", "OM00000"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                //ps.Add(new StoreParameter("branchId", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                //ps.Add(new StoreParameter("slsperid", "App.cboSlsperid.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(p=>p.Load.Fn="Event.Store.stoSetup_load" )
+            // Store: stoSalesPerson
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong OM00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>
