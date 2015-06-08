@@ -51,7 +51,7 @@ namespace PO10200.Controllers
             ViewBag.BussinessTime = DateTime.Now;
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -136,16 +136,10 @@ namespace PO10200.Controllers
                 
                 if (Data_Checking(b235))
                 {
-                    if ((_status == "U" || _status == "C" || _status == "H") && (_handle == "C" || _handle == "V" || _handle == "R"))
+                    if ((_status == "U" || _status == "C"  ) && (_handle == "C" || _handle == "V"))
                     {
 
-                        if (_handle == "R" || _handle == "V" || _handle == "C")
-                        {
-                            if (_handle == "R" && !acc.Release)
-                            {
-                                throw new MessageException(MessageType.Message, "737");
-                            }
-                            else if ((_handle == "V" || _handle == "C") && !acc.Release)
+                       if ((_handle == "V" || _handle == "C") && !acc.Release)
                             {
                                 throw new MessageException(MessageType.Message, "725");
                             }
@@ -155,11 +149,17 @@ namespace PO10200.Controllers
                                 {
                                     Data_Release();
                                 }
-                                else if (_handle == "R") Save_Batch();
-                            }
-                        }
+                              
+                            }                      
                     }
-                    else Save_Batch();
+                    else if (_status == "H")
+                    {
+                        if (_handle == "R" && !acc.Release)
+                        {
+                            throw new MessageException(MessageType.Message, "737");
+                        }
+                        else Save_Batch();
+                    }
                 }
                 if (_logMessage != null)
                 {
@@ -231,6 +231,24 @@ namespace PO10200.Controllers
                             objItemSite.LUpd_DateTime = DateTime.Now;
                             objItemSite.LUpd_Prog = ScreenNbr;
                             objItemSite.LUpd_User = Current.UserName;
+
+                            // delete lot
+                            var lstold = _db.PO_LotTrans.Where(p => p.BranchID == obj.BranchID && p.BatNbr == obj.BatNbr && p.RefNbr == obj.RcptNbr && p.POTranLineRef == obj.LineRef).ToList();
+                            foreach (var objlot in lstold)
+                            {
+                                _db.PO_LotTrans.DeleteObject(objlot);
+                                double NewQty = (objlot.UnitMultDiv == "D" ? (objlot.Qty / objlot.CnvFact) : (objlot.Qty * obj.CnvFact));
+                                var objItemLot = _db.IN_ItemLot.Where(p => p.InvtID == objlot.InvtID && p.SiteID == obj.SiteID && p.LotSerNbr == objlot.LotSerNbr).FirstOrDefault();
+
+                                objItemLot.QtyAllocPORet = Math.Round(objItemLot.QtyAllocPORet - NewQty, 0);
+                                objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + NewQty, 0);
+
+                                objItemLot.LUpd_DateTime = DateTime.Now;
+                                objItemLot.LUpd_Prog = ScreenNbr;
+                                objItemLot.LUpd_User = Current.UserName;
+
+
+                            }
                         }
                         _db.PO_Trans.DeleteObject(obj);
                         lstdel.Remove(obj);
@@ -294,7 +312,7 @@ namespace PO10200.Controllers
                             objItemSite.QtyAvail = Math.Round(objItemSite.QtyAvail + dblQty, 0);
                             objItemSite.LUpd_DateTime = DateTime.Now;
                             objItemSite.LUpd_Prog = ScreenNbr;
-                            objItemSite.LUpd_User = Current.UserName;
+                            objItemSite.LUpd_User = Current.UserName;                           
                         }
                         _db.PO_Trans.DeleteObject(obj);
                     }
@@ -333,6 +351,24 @@ namespace PO10200.Controllers
             return this.Direct(objIN_ItemSite);
 
         }
+        [DirectMethod]
+        public ActionResult PO10200ItemSiteQty(string branchID = "", string invtID = "", string siteID = "", string batNbr = "", string rcptNbr = "", string lineRef = "")
+        {
+            var objold = _db.PO_Trans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr && p.RcptNbr == rcptNbr && p.InvtID == invtID && p.SiteID == siteID && p.LineRef == lineRef).FirstOrDefault();
+            var qtyold = objold == null ? 0 : objold.UnitMultDiv == "M" ? objold.Qty * objold.CnvFact : objold.Qty / objold.CnvFact;
+
+            var objIN_ItemSite = _db.IN_ItemSite.Where(p => p.InvtID == invtID && p.SiteID == siteID).FirstOrDefault();
+            if (objIN_ItemSite == null)
+            {
+                objIN_ItemSite = new IN_ItemSite();
+                objIN_ItemSite.ResetET();
+            }
+            objIN_ItemSite.QtyAvail=objIN_ItemSite.QtyAvail + qtyold;
+            return this.Direct(objIN_ItemSite);
+
+        }
+       
+
         [DirectMethod]
         public ActionResult INNumberingLot(string invtID = "", DateTime? tranDate = null, string getType = "LotNbr")
         {
@@ -470,30 +506,75 @@ namespace PO10200.Controllers
                     obj.tstamp = new byte[0];
                     _db.PO_Trans.AddObject(obj);
                 }
-               
+             
             }
-             Save_PO_LotTrans();
+            Save_PO_LotTrans();
         
         }
         private void Save_PO_LotTrans()
         {
             try
             {
-                // delete lot cu
+                //// delete lot cu khong co tren luoi lot
                 var lstold = _db.PO_LotTrans.Where(p => p.BranchID == _branchID && p.BatNbr == _batNbr && p.RefNbr == _rcptNbr).ToList();
                 foreach (var obj in lstold)
                 {
-                    _db.PO_LotTrans.DeleteObject(obj);
+                    if (_lstLot.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID && p.LotSerNbr == obj.LotSerNbr && p.POTranLineRef == obj.POTranLineRef).FirstOrDefault() == null)
+                    {
+                        _db.PO_LotTrans.DeleteObject(obj);
+                        if (_poHead.RcptType == "X")
+                        {
+                            double NewQty = (obj.UnitMultDiv == "D" ? (obj.Qty / obj.CnvFact) : (obj.Qty * obj.CnvFact));
+                            var objItemLot = _db.IN_ItemLot.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID && p.LotSerNbr == obj.LotSerNbr).FirstOrDefault();
+
+                            objItemLot.QtyAllocPORet = Math.Round(objItemLot.QtyAllocPORet - NewQty, 0);
+                            objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + NewQty, 0);
+
+                            objItemLot.LUpd_DateTime = DateTime.Now;
+                            objItemLot.LUpd_Prog = ScreenNbr;
+                            objItemLot.LUpd_User = Current.UserName;
+                        }
+                    }
                 }
+              
 
                 //Save Lot/Serial from datatable to in_lottrans
 
                 foreach (var row in _lstLot)
                 {
-                    var obj = new PO_LotTrans();
-                    obj.ResetET();
-                    Update_PO_LotTrans(row, obj);
-                    _db.PO_LotTrans.AddObject(obj);
+                    double oldQty = 0;
+                    var obj = lstold.Where(p => p.BranchID == _branchID && p.BatNbr == _batNbr && p.RefNbr == _rcptNbr && p.InvtID == row.InvtID && p.LotSerNbr == row.LotSerNbr && p.SiteID == row.SiteID).FirstOrDefault();
+                    if (obj == null)
+                    {
+                        obj = new PO_LotTrans();
+                        obj.ResetET();
+                        Update_PO_LotTrans(row, obj);
+                        obj.Crtd_Prog = ScreenNbr;
+                        obj.Crtd_User = Current.UserName;
+                        obj.Crtd_DateTime = DateTime.Now;
+                        _db.PO_LotTrans.AddObject(obj);
+                    }
+                    else
+                    {
+                        oldQty = obj == null ? 0 : obj.UnitMultDiv == "M" ? obj.Qty * obj.CnvFact : obj.Qty / obj.CnvFact;
+                        Update_PO_LotTrans(row, obj);
+                    }
+                     //Update Location and Site Qty
+                    if (_poHead.RcptType == "X")
+                    {
+                        
+                        var qty = obj.UnitMultDiv == "M" ? obj.Qty * obj.CnvFact : obj.Qty / obj.CnvFact;                      
+                        var objItemLot = _db.IN_ItemLot.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID && p.LotSerNbr == obj.LotSerNbr).FirstOrDefault();
+
+                        objItemLot.QtyAllocPORet = Math.Round(objItemLot.QtyAllocPORet + qty - oldQty, 0);
+                        objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail - qty + oldQty, 0);
+
+                        objItemLot.LUpd_DateTime = DateTime.Now;
+                        objItemLot.LUpd_Prog = ScreenNbr;
+                        objItemLot.LUpd_User = Current.UserName;
+                        if (objItemLot.QtyAvail < 0)
+                            throw new MessageException(MessageType.Message, "35");
+                    }
                 }
                 _db.SaveChanges();
                 if (_handle == "R")
@@ -778,9 +859,7 @@ namespace PO10200.Controllers
             objPO_LotTrans.UnitMultDiv = row.UnitMultDiv;
             objPO_LotTrans.UnitDesc = row.UnitDesc;
 
-            objPO_LotTrans.Crtd_Prog = ScreenNbr;
-            objPO_LotTrans.Crtd_User = Current.UserName;
-            objPO_LotTrans.Crtd_DateTime = DateTime.Now;
+          
             objPO_LotTrans.LUpd_Prog = ScreenNbr;
             objPO_LotTrans.LUpd_User = Current.UserName;
             objPO_LotTrans.LUpd_DateTime = DateTime.Now;
@@ -921,29 +1000,53 @@ namespace PO10200.Controllers
                         throw new MessageException(MessageType.Message, "222");
 
                     }
-                    if ((objPO_Trans.RcptQty == 0 || objPO_Trans.TranAmt == 0) && objPO_Trans.PurchaseType!="PR")
+                    if ((objPO_Trans.RcptQty == 0 || objPO_Trans.TranAmt == 0) && objPO_Trans.PurchaseType != "PR")
                     {
                         throw new MessageException(MessageType.Message, "44");
 
                     }
+
                 }
 
-                //kiem tra ton kho co du tra hang ko
+
                 if (_poHead.RcptType == "X")
                 {
-                    string invtID="";
+                    string invtID = "";
+
+                    //kiểm tra trong itemSite
+                    foreach (var objTran in _lstPOTrans)
+                    {
+                        var objold = _db.PO_Trans.Where(p => p.BranchID == _branchID && p.BatNbr == _batNbr && p.RcptNbr == _rcptNbr && p.InvtID == objTran.InvtID && p.SiteID == objTran.SiteID && p.LineRef == objTran.LineRef).FirstOrDefault();
+
+                        var qtyold = objold == null ? 0 : objold.UnitMultDiv == "M" ? objold.Qty * objold.CnvFact : objold.Qty / objold.CnvFact;
+                        var qty = objTran.UnitMultDiv == "M" ? objTran.Qty * objTran.CnvFact : objTran.Qty / objTran.CnvFact;
+                        var objItemSite = _db.IN_ItemSite.Where(p => p.InvtID == objTran.InvtID && p.SiteID == objTran.SiteID).FirstOrDefault();
+
+                        if (objItemSite == null || (qty - qtyold) > objItemSite.QtyAvail)
+                        {
+                            invtID += objTran.InvtID + ",";
+                        }
+
+                    }
+                    if (invtID != "") throw new MessageException(MessageType.Message, "1043", parm: new[] { invtID, "" });
+
                     //kiểm tra trong itemlot
                     foreach (var objlot in _lstLot)
                     {
+                        var objold = _db.PO_LotTrans.Where(p => p.BranchID == _branchID && p.BatNbr == _batNbr && p.RefNbr == _rcptNbr && p.POTranLineRef == objlot.POTranLineRef && p.LotSerNbr == objlot.LotSerNbr && p.InvtID == objlot.InvtID && p.SiteID == objlot.SiteID).FirstOrDefault();
+
+                        var qtyold = objold == null ? 0 : objold.UnitMultDiv == "M" ? objold.Qty * objold.CnvFact : objold.Qty / objold.CnvFact;
                         var qty = objlot.UnitMultDiv == "M" ? objlot.Qty * objlot.CnvFact : objlot.Qty / objlot.CnvFact;
                         var objItemLot = _db.IN_ItemLot.Where(p => p.InvtID == objlot.InvtID && p.SiteID == objlot.SiteID && p.LotSerNbr == objlot.LotSerNbr).FirstOrDefault();
-                        if (objItemLot==null || qty > objItemLot.QtyAvail)
+
+                        if (objItemLot == null || (qty - qtyold) > objItemLot.QtyAvail)
                         {
                             invtID += objlot.InvtID + ",";
                         }
-                        
+
                     }
-                    if (invtID != "") throw new MessageException(MessageType.Message, "1043",parm: new[] { invtID,""});
+                    if (invtID != "") throw new MessageException(MessageType.Message, "1043", parm: new[] { invtID, "" });
+
                 }
 
 
