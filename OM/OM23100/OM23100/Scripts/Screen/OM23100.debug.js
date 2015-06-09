@@ -72,6 +72,17 @@ var menuClick = function (command) {
 
 };
 
+var renderPosition = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboPositionOM23100_pcPosition.findRecord("Code", rec.data.Position);
+    if (record) {
+        return record.data.Descr;
+    }
+    else {
+        return value;
+    }
+};
+
+
 var beforeSelectcombo = function () {
     loadSourceCombo();
 };

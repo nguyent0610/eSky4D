@@ -101,6 +101,25 @@ namespace OM23100
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<OM23100_getIN_ProductClass_Result> OM23100_getIN_ProductClass(global::System.String branchID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM23100_getIN_ProductClass_Result>("OM23100_getIN_ProductClass", branchIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="fCSDate">No Metadata Documentation available.</param>
         public int OM23100_pgLoadGrid(global::System.String branchID, Nullable<global::System.DateTime> fCSDate)
         {
@@ -125,25 +144,6 @@ namespace OM23100
             }
     
             return base.ExecuteFunction("OM23100_pgLoadGrid", branchIDParameter, fCSDateParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        public ObjectResult<OM23100_getIN_ProductClass_Result> OM23100_getIN_ProductClass(global::System.String branchID)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<OM23100_getIN_ProductClass_Result>("OM23100_getIN_ProductClass", branchIDParameter);
         }
 
         #endregion
@@ -170,6 +170,7 @@ namespace OM23100
         /// <param name="slsperId">Initial value of the SlsperId property.</param>
         /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="fCSDate">Initial value of the FCSDate property.</param>
+        /// <param name="classID">Initial value of the ClassID property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
@@ -177,13 +178,13 @@ namespace OM23100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        /// <param name="classID">Initial value of the ClassID property.</param>
-        public static OM_FCS CreateOM_FCS(global::System.String slsperId, global::System.String branchID, global::System.DateTime fCSDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String classID)
+        public static OM_FCS CreateOM_FCS(global::System.String slsperId, global::System.String branchID, global::System.DateTime fCSDate, global::System.String classID, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_FCS oM_FCS = new OM_FCS();
             oM_FCS.SlsperId = slsperId;
             oM_FCS.BranchID = branchID;
             oM_FCS.FCSDate = fCSDate;
+            oM_FCS.ClassID = classID;
             oM_FCS.Crtd_DateTime = crtd_DateTime;
             oM_FCS.Crtd_Prog = crtd_Prog;
             oM_FCS.Crtd_User = crtd_User;
@@ -191,7 +192,6 @@ namespace OM23100
             oM_FCS.LUpd_Prog = lUpd_Prog;
             oM_FCS.LUpd_User = lUpd_User;
             oM_FCS.tstamp = tstamp;
-            oM_FCS.ClassID = classID;
             return oM_FCS;
         }
 
@@ -279,6 +279,33 @@ namespace OM23100
         private global::System.DateTime _FCSDate;
         partial void OnFCSDateChanging(global::System.DateTime value);
         partial void OnFCSDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ClassID
+        {
+            get
+            {
+                return _ClassID;
+            }
+            set
+            {
+                if (_ClassID != value)
+                {
+                    OnClassIDChanging(value);
+                    ReportPropertyChanging("ClassID");
+                    _ClassID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("ClassID");
+                    OnClassIDChanged();
+                }
+            }
+        }
+        private global::System.String _ClassID;
+        partial void OnClassIDChanging(global::System.String value);
+        partial void OnClassIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -619,29 +646,26 @@ namespace OM23100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String ClassID
+        public Nullable<global::System.Double> SellOut
         {
             get
             {
-                return _ClassID;
+                return _SellOut;
             }
             set
             {
-                if (_ClassID != value)
-                {
-                    OnClassIDChanging(value);
-                    ReportPropertyChanging("ClassID");
-                    _ClassID = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("ClassID");
-                    OnClassIDChanged();
-                }
+                OnSellOutChanging(value);
+                ReportPropertyChanging("SellOut");
+                _SellOut = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SellOut");
+                OnSellOutChanged();
             }
         }
-        private global::System.String _ClassID;
-        partial void OnClassIDChanging(global::System.String value);
-        partial void OnClassIDChanged();
+        private Nullable<global::System.Double> _SellOut;
+        partial void OnSellOutChanging(Nullable<global::System.Double> value);
+        partial void OnSellOutChanged();
 
         #endregion
 

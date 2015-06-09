@@ -29,6 +29,7 @@ namespace OM23100.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
+
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
@@ -57,10 +58,11 @@ namespace OM23100.Controllers
                         var tmpBranchID = BranchID;
                         var tmpSlsperId = listRecordChange[i]["SlsperId"];
                         var tmpClassID = lstIN_ProductClass[k].ClassID;
-                        var tmpSellIn = listRecordChange[i]["SellIn_" + lstIN_ProductClass[k].ClassID];
-                        var tmpCoverage = listRecordChange[i]["Coverage_" + lstIN_ProductClass[k].ClassID];
-                        var tmpDNA = listRecordChange[i]["DNA_" + lstIN_ProductClass[k].ClassID];
-                        var tmpForcusedSKU = listRecordChange[i]["ForcusedSKU_" + lstIN_ProductClass[k].ClassID];
+                        var tmpSellIn = listRecordChange[i]["SellIn_" + tmpClassID];
+                        var tmpSellOut = listRecordChange[i]["SellOut_" + tmpClassID];
+                        var tmpCoverage = listRecordChange[i]["Coverage_" + tmpClassID];
+                        var tmpDNA = listRecordChange[i]["DNA_" + tmpClassID];
+                        var tmpForcusedSKU = listRecordChange[i]["ForcusedSKU_" + tmpClassID];
                         var tmpLPPC = listRecordChange[i]["LPPC"];
                         var tmpVisit = listRecordChange[i]["Visit"];
                         var tmpVisitTime = listRecordChange[i]["VisitTime"];
@@ -70,6 +72,7 @@ namespace OM23100.Controllers
                         if (record != null)
                         {
                             record.SellIn = Convert.ToDouble(tmpSellIn);
+                            record.SellOut = Convert.ToDouble(tmpSellOut);
                             record.Coverage = Convert.ToDouble(tmpCoverage);
                             record.DNA = Convert.ToDouble(tmpDNA);
                             record.Visit = Convert.ToDouble(tmpVisit);
@@ -105,6 +108,7 @@ namespace OM23100.Controllers
                             recordNew.FCSDate = Convert.ToDateTime(FCSDate);
 
                             recordNew.SellIn = Convert.ToDouble(tmpSellIn);
+                            recordNew.SellOut = Convert.ToDouble(tmpSellOut);
                             recordNew.Coverage = Convert.ToDouble(tmpCoverage);
                             recordNew.DNA = Convert.ToDouble(tmpDNA);
                             recordNew.Visit = Convert.ToDouble(tmpVisit);
@@ -225,11 +229,40 @@ namespace OM23100.Controllers
                     Text = lstIN_ProductClass[i].Descr,
                     DataIndex = "SellIn_" + lstIN_ProductClass[i].ClassID,
                     Align = Alignment.Right,
+                    Format="0,000",
                     Editor =
                     {
                         new NumberField
                         {
-                            DecimalPrecision=2,
+                            DecimalPrecision=0,
+                            MinValue=0
+                        }
+                    }
+                };
+                clm.Columns.Add(nbcl);
+                grid.AddColumn(clm);
+            }
+
+            //Column SellOut
+            clm = new Column
+            {
+                Text = Util.GetLang("OM23100_SellOut"),
+                ID = "txt_SellOut"
+            };
+
+            for (int i = 0; i < lstIN_ProductClass.Count; i++)
+            {
+                NumberColumn nbcl = new NumberColumn
+                {
+                    Text = lstIN_ProductClass[i].Descr,
+                    DataIndex = "SellOut_" + lstIN_ProductClass[i].ClassID,
+                    Align = Alignment.Right,
+                    Format = "0,000",
+                    Editor =
+                    {
+                        new NumberField
+                        {
+                            DecimalPrecision=0,
                             MinValue=0
                         }
                     }
@@ -252,11 +285,12 @@ namespace OM23100.Controllers
                     Text = lstIN_ProductClass[i].Descr,
                     DataIndex = "Coverage_" + lstIN_ProductClass[i].ClassID,
                     Align = Alignment.Right,
+                    Format = "0,000",
                     Editor =
                     {
                         new NumberField
                         {
-                            DecimalPrecision=2,
+                            DecimalPrecision=0,
                             MinValue=0
                         }
                     }
@@ -279,11 +313,12 @@ namespace OM23100.Controllers
                     Text = lstIN_ProductClass[i].Descr,
                     DataIndex = "DNA_" + lstIN_ProductClass[i].ClassID,
                     Align = Alignment.Right,
+                    Format = "0,000",
                     Editor =
                     {
                         new NumberField
                         {
-                            DecimalPrecision=2,
+                            DecimalPrecision=0,
                             MinValue=0
                         }
                     }
@@ -306,11 +341,12 @@ namespace OM23100.Controllers
                     Text = lstIN_ProductClass[i].Descr,
                     DataIndex = "ForcusedSKU_" + lstIN_ProductClass[i].ClassID,
                     Align = Alignment.Right,
+                    Format = "0,000",
                     Editor =
                     {
                         new NumberField
                         {
-                            DecimalPrecision=2,
+                            DecimalPrecision=0,
                             MinValue=0
                         }
                     }
@@ -326,11 +362,12 @@ namespace OM23100.Controllers
                 ID = "txt_Visit",
                 Align = Alignment.Right,
                 DataIndex = "Visit",
+                Format = "0,000",
                 Editor =
                 {
                     new NumberField
                     {
-                        DecimalPrecision=2,
+                        DecimalPrecision=0,
                         MinValue=0
                     }
                 }
@@ -369,7 +406,7 @@ namespace OM23100.Controllers
                 {
                     new NumberField
                     {
-                        DecimalPrecision=2,
+                        DecimalPrecision=0,
                         MinValue=0
                     }
                 }

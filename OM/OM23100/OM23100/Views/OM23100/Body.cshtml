@@ -166,6 +166,19 @@
                         .LoadData()
                     )
                     , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(150).Locked(true)
+                    , X.Column().DataIndex("Position").Text(Util.GetLang("Position")).Width(120).Locked(true).Renderer("renderPosition")
+                    .Editor(
+                        HQ.Combo().ID("cboPosition").ReadOnly(true)
+                        .Name("cboPosition").HQProcedure("OM23100_pcPosition")
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                        .Width(300).HQHeightWidth(500, 400).ForceSelection(true)
+                    
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                    )
                     //, X.NumberColumn().Text(Util.GetLang("OM23100_SellIn")).DataIndex("SellIn").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
                     //, X.NumberColumn().Text(Util.GetLang("OM23100_Coverage")).DataIndex("Coverage").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
                     //, X.NumberColumn().Text(Util.GetLang("OM23100_DNA")).DataIndex("DNA").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
@@ -186,22 +199,22 @@
                 //    .Listeners(l => l.Command.Handler = "grdOM_FCS_Reject(record);")
                 )
                 .SelectionModel(X.RowSelectionModel().ID("slmOM_FCS").Mode(SelectionMode.Multi))
-            .BottomBar(
-                X.PagingToolbar()
-                .Items(
-                    X.Label("Page size:"),
-                    X.ToolbarSpacer(10),
-                    X.ComboBox()
-                    .Width(80)
-                    .Items("1", "2", "10", "20", "30", "50")
-                    .SelectedItems("50")
-                    .Listeners(l =>
-                        {
-                            l.Select.Fn = "HQ.grid.onPageSelect";
-                        })
-                )
-                .Plugins(X.ProgressBarPager())
-            )
+            //.BottomBar(
+            //    X.PagingToolbar()
+            //    .Items(
+            //        X.Label("Page size:"),
+            //        X.ToolbarSpacer(10),
+            //        X.ComboBox()
+            //        .Width(80)
+            //        .Items("1", "2", "10", "20", "30", "50")
+            //        .SelectedItems("50")
+            //        .Listeners(l =>
+            //            {
+            //                l.Select.Fn = "HQ.grid.onPageSelect";
+            //            })
+            //    )
+            //    .Plugins(X.ProgressBarPager())
+            //)
                 .Plugins(
                     X.CellEditing()
                     .ClicksToEdit(1)
