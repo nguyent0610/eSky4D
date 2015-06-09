@@ -24,6 +24,7 @@ var _objIN_ItemSite = null;
 //////////////////////////////////////////////////////////////////
 
 var loadDataHeader = function (sto) {
+    App.lblQtyAvail.setText('');
     App.cboPONbr.allowBlank = true;
     App.cboPONbr.validate();
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));   
@@ -497,8 +498,11 @@ var grdPO_Trans_ValidateEdit = function (item, e) {
             //var QtyTot = Qty;//+ CalculateInvtTotals(dtIntrans, objDetail.InvtID, objDetail.SiteID, objDetail.LineRef);XX vi chi co 1 san pham nen ko tinh lai
             if (Qty > QtyAvail) {
                 HQ.message.show(35, '', '');
-                objdet.set('RcptQty', 0);
-              
+                if (objIN_Inventory.LotSerTrack != 'N' && !Ext.isEmpty(objIN_Inventory.LotSerTrack)) {
+                    showLot(e.record);
+
+                }
+                else objdet.set('RcptQty', 0);
                 return false;
             }
         }
@@ -2358,8 +2362,14 @@ var PopupWinLot = {
             var Qty = 0;
             Qty = e.record.data.UnitMultDiv == "M" ? e.value * e.record.data.CnvFact : e.value / e.record.data.CnvFact;
             if (App.cboRcptType.getValue() == "X" && (recordTran.PurchaseType == "GI" | recordTran.PurchaseType == "PR" | recordTran.PurchaseType == "GS")) {                
-                QtyAvail = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [objdet.data.LotSerNbr]).Qty;
-                if (Qty > QtyAvail) {
+                var objLot = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [objdet.data.LotSerNbr]);
+                if (objLot) {
+                    if (Qty > objLot.Qty) {
+                        HQ.message.show(35, '', '');
+                        objdet.set('Qty', 0);
+                        return false;
+                    }
+                } else {
                     HQ.message.show(35, '', '');
                     objdet.set('Qty', 0);
                     return false;
