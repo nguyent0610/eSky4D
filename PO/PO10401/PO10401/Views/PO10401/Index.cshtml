@@ -116,7 +116,7 @@
                                 }).LoadData()
         )
         @*Make the store - the binding data of the form*@
-        <!-- Begin Cac store phu thuoc vao cboBatNbr-->
+        <!-- Begin Cac store phu thuoc vao txtBatNbr-->
          @(X.Store().ID("stoHeader").AutoLoad(false)   
             .Model(Util.GenerateModel(typeof(PO10401_pdHeader_Result), "PO10401_pdHeaderModel", "BatNbr,RcptNbr"))          
             .Proxy(
@@ -178,7 +178,7 @@
                             .Listeners(p => p.Load.Handler = "loadstoPO10401_pgLoadTaxTrans();")       
    
         )
-         <!-- End Cac store phu thuoc vao cboBatNbr-->
+         <!-- End Cac store phu thuoc vao txtBatNbr-->
          <!-- Begin Cac store phu thuoc vao cboBranchID-->
         @HQ.Store().ID("stoPO10401_pdOM_UserDefault").HQProcedure("PO10401_pdOM_UserDefault").HQDBSys(false).AutoLoad(false).HQParam(new StoreParameterCollection() {
 											                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}

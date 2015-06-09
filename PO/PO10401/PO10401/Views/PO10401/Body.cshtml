@@ -389,7 +389,7 @@
 
                         )
                         , X.Container().Layout(LayoutType.HBox).Items(
-                                //HQ.Combo().ID("cboBatNbr").Name("cboBatNbr").MarginSpec("3 0 0 0").LabelWidth(110).InputWidth(150).HQAutoLoad(false)
+                                //HQ.Combo().ID("txtBatNbr").Name("txtBatNbr").MarginSpec("3 0 0 0").LabelWidth(110).InputWidth(150).HQAutoLoad(false)
                                 //                .HQLangCode("BatNbr").HQDBSys(false).HQProcedure("PO10401_pcReceipt_Batch").ReadOnly(true).Tag("X")
                                 //                .HQColumnShow("BatNbr,RefNbr,TotAmt,RcptDate,PONbr,Status,Name,invcnbr")
                                 //                .DisplayField("BatNbr")
@@ -930,20 +930,20 @@
 
                 , X.Column().ID("colLotSerNbr").DataIndex("LotSerNbr").Text(Util.GetLang("LotSerNbr"))
                     .Editor(HQ.Combo().ID("cboLotSerNbr").Name("cboLotSerNbr").HideLabel(true).LabelWidth(0).HQAutoLoad(false)
-                                        .HQDBSys(false).HQProcedure("PO10201_pcLotSerNbrIssue").ForceSelection(true)
+                                        .HQDBSys(false).HQProcedure("PO10401_pcLotSerNbrIssue").ForceSelection(true)
                                         .HQColumnShow("LotSerNbr,ExpDate,Qty")
                                         .DisplayField("LotSerNbr")
                                         .ValueField("LotSerNbr")
                                         .HQHeightWidth(400, 300)
                                         .HQParam(new StoreParameterCollection() {
-                                                new StoreParameter() { Name = "@BranchID", Value = "App.txtBranchID.getValue()", Mode = ParameterMode.Raw}
-                                                //,new StoreParameter() { Name = "@POBatNbr", Value = "record.", Mode = ParameterMode.Raw}
-                                                //,new StoreParameter() { Name = "@RcptNbr", Value = "record.", Mode = ParameterMode.Raw}
-                                                ,new StoreParameter() { Name = "@POTranLineRef", Value = "_lineRef", Mode = ParameterMode.Raw}
+                                                new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
+                                                ,new StoreParameter() { Name = "@BatNbr", Value = "App.txtBatNbr.getValue()", Mode = ParameterMode.Raw}
+                                                ,new StoreParameter() { Name = "@RcptNbr", Value = "App.txtRcptNbr.getValue()", Mode = ParameterMode.Raw}
+                                                ,new StoreParameter() { Name = "@RcptType", Value = "App.cboRcptType.getValue()", Mode = ParameterMode.Raw}
                                                 ,new StoreParameter() { Name = "@SiteID", Value = "_siteID", Mode = ParameterMode.Raw}
                                                 ,new StoreParameter() { Name = "@WhseLoc", Value = "''", Mode = ParameterMode.Raw}
                                                 ,new StoreParameter() { Name = "@InvtID", Value = "_invtID", Mode = ParameterMode.Raw}		
-                                    })
+                                            })
                                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                         .Listeners(lst =>
                                         {
@@ -956,7 +956,7 @@
                 .Width(120)
                 , Html.X().Column().ID("colLotUnitDesc").Text(Util.GetLang("Unit")).DataIndex("UnitDesc")
                         .Editor(HQ.Combo().ID("cbocolLotUnitDesc").Name("cbocolLotUnitDesc").HideLabel(true).LabelWidth(0)
-                        .HQDBSys(false).HQProcedure("PO10201_pcINUnit_Invt_Class_From_To").HQValue("_purUnit", true)
+                        .HQDBSys(false).HQProcedure("PO10401_pcINUnit_Invt_Class_From_To").HQValue("_purUnit", true)
                         .HQColumnShow("FromUnit").ForceSelection(true)
                         .DisplayField("FromUnit")
                         .ValueField("FromUnit")

@@ -455,11 +455,11 @@ loadDataHeader = function (sto) {
     }
 }
 loadDataDetail = function (sto) {
-   
-    if (HQ.isFirstLoad) {
+    if (HQ.isFirstLoad || App.cboStatus.getValue() == 'H') {
         HQ.store.insertBlank(sto, _keys);
         HQ.isFirstLoad = false;
     }
+    
     calcDet();
     frmChange();
     HQ.common.showBusy(false);
@@ -674,23 +674,25 @@ grdPO_Trans_BeforeEdit = function (editor, e) {
     if (e.field == "RcptQty" || e.field == 'RcptUnitDescr' || e.field == "InvtID" || e.field == "SiteID") {
         if (App.cboRcptType.getValue() == "X" && (det.PurchaseType == "GI" | det.PurchaseType == "PR" | det.PurchaseType == "GS")) {
             HQ.common.showBusy(true);
-            App.direct.PO10401ItemSitePrice(App.txtBranchID.getValue(), det.InvtID, det.SiteID,
-               {
-                   success: function (result) {
-                       _objIN_ItemSite = result;
-                       if (!Ext.isEmpty(_objIN_ItemSite)) {
-                           App.lblQtyAvail.setText(det.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + _objIN_ItemSite.QtyAvail);
-                       }
-                       else {
-                           App.lblQtyAvail.setText(det.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + 0);
-                       }
-                       HQ.common.showBusy(false);
-                   },
-                   failure: function (result) {
-                       HQ.common.showBusy(false);
-                   }
+            App.direct.PO10401ItemSiteQty(App.cboBranchID.getValue(), det.InvtID, det.SiteID, App.txtBatNbr.getValue(), App.txtRcptNbr.getValue(), det.LineRef,
+              {
+                  success: function (result) {
+                      _objIN_ItemSite = result;
+                      var Qty = det.RcptMultDiv == "M" ? Math.floor(_objIN_ItemSite.QtyAvail / det.RcptConvFact, 0) : _objIN_ItemSite.QtyAvail * det.RcptConvFact;
 
-               });
+                      if (!Ext.isEmpty(_objIN_ItemSite)) {
+                          App.lblQtyAvail.setText(det.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + Qty + ' ' + det.RcptUnitDescr);
+                      }
+                      else {
+                          App.lblQtyAvail.setText(det.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + 0 + ' ' + det.RcptUnitDescr);
+                      }
+                      HQ.common.showBusy(false);
+                  },
+                  failure: function (result) {
+                      HQ.common.showBusy(false);
+                  }
+
+              });
 
         }
     }
@@ -1006,18 +1008,20 @@ grdPO_Trans_Reject = function (record) {
 }
 cboGInvtID_Change = function (item, newValue, oldValue) {
     var objdet = App.slmPO_Trans.getSelection()[0];
-    App.direct.PO10401ItemSitePrice(App.cboBranchID.getValue(), newValue, objdet.data.SiteID,
-          {
-              success: function (result) {
-                  _objIN_ItemSite = result;
-                  if (!Ext.isEmpty(_objIN_ItemSite)) {
-                      App.lblQtyAvail.setText(newValue + " - " + HQ.common.getLang('qtyavail') + ":" + _objIN_ItemSite.QtyAvail);
-                  }
-                  else {
-                      App.lblQtyAvail.setText(newValue + " - " + HQ.common.getLang('qtyavail') + ":" + 0);
-                  }
-              }
-          });
+    App.direct.PO10401ItemSiteQty(App.cboBranchID.getValue(), newValue, objdet.data.SiteID, App.txtBatNbr.getValue(), App.txtRcptNbr.getValue(), objdet.data.LineRef,
+           {
+               success: function (result) {
+                   _objIN_ItemSite = result;
+                   var Qty = objdet.data.RcptMultDiv == "M" ? Math.floor(_objIN_ItemSite.QtyAvail / objdet.data.RcptConvFact, 0) : _objIN_ItemSite.QtyAvail * objdet.data.RcptConvFact;
+
+                   if (!Ext.isEmpty(_objIN_ItemSite)) {
+                       App.lblQtyAvail.setText(newValue + " - " + HQ.common.getLang('qtyavail') + ":" + _objIN_ItemSite.Qty + ' ' + objdet.data.RcptUnitDescr);
+                   }
+                   else {
+                       App.lblQtyAvail.setText(newValue + " - " + HQ.common.getLang('qtyavail') + ":" + 0 + ' ' + objdet.data.RcptUnitDescr);
+                   }
+               }
+           });
 }
 cboStatus_Change = function (item, newValue, oldValue) {
     App.cboHandle.getStore().reload();
@@ -1779,32 +1783,33 @@ closeWinDetail=function (item) {
 
 var PopupWinLot = {
     showLot: function (record) {
+        App.lblLotQtyAvail.setText('');// xet lai so luong co the xuat =''
         App.cbocolLotUnitDesc.getStore().reload();
         App.lblQtyAvail.setText('');
-     
-     
+        var lock = !((App.txtBatNbr.value && HQ.isUpdate) || (!App.txtBatNbr.value && HQ.isInsert)) || App.cboStatus.getValue() != "H";
+        App.grdLot.isLock = lock;
+
 
         App.stoLotTrans.clearFilter();
         App.stoLotTrans.filter('POTranLineRef', record.data.LineRef);
         App.winLot.record = record.data;
-  
+
         App.winLot.record = record;
         App.grdLot.view.refresh();
-       
+
         App.winLot.setTitle(record.data.InvtID + ' - ' + record.data.SiteID + ' - ' + record.data.RcptUnitDescr);
         var flat = false;
-        if (_recordEdit.IsEditOrder ) {
+        if (App.cboStatus.getValue() == "H") {
             if (App.cboRcptType.getValue() == "X") {
-
                 App.stoLotTrans.data.each(function (item) {
+                    flat = true;
                     //if (item.data.POTranLineRef == App.winLot.record.LineRef && !Ext.isEmpty(item.data.LotSerNbr)) {
                     //    flat = true;
                     //}
-                    flat = true;
                 });
                 if (!flat) {
-                    App.cboLotSerNbr.getStore().load(function () {                        
-                        PopupWinLot.addNewLot(record.data, App.cboLotSerNbr.getStore().getCount() > 0 ? App.cboLotSerNbr.getStore().getAt(0).data.LotSerNbr : '');
+                    App.cboLotSerNbr.getStore().load(function () {
+                        PopupWinLot.addNewLot(record.data, App.cboLotSerNbr.getStore().getCount() > 0 ? App.cboLotSerNbr.getStore().getAt(0).data.LotSerNbr : "");
                     })
                 } else {
 
@@ -1820,154 +1825,167 @@ var PopupWinLot = {
         App.winLot.show();
     },
     btnLotOK_Click: function () {
-      
-        var recordTran = App.winLot.record.data;
+        setTimeout(function () {
+            HQ.common.showBusy(false);
+            var recordTran = App.winLot.record.data;
 
-        var flat = null;
-        App.stoLotTrans.data.each(function (item) {
-            if (_recordEdit.IsEditOrder) {
+            var flat = null;
+            App.stoLotTrans.data.each(function (item) {
+                if (App.cboStatus.getValue() == "H") {
 
-                if (!Ext.isEmpty(item.data.LotSerNbr)) {
-                    if (item.data.Qty == 0) {
-                        if (App.cboRcptType.getValue() == "X") {
-                            App.smlLot.select(App.stoLotTrans.indexOf(item));
-                            App.grdLot.deleteSelected();
+                    if (!Ext.isEmpty(item.data.LotSerNbr)) {
+                        if (item.data.Qty == 0) {
+                            if (App.cboRcptType.getValue() == "X") {
+                                App.smlLot.select(App.stoLotTrans.indexOf(item));
+                                App.grdLot.deleteSelected();
+                            }
+                            else {
+                                HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
+                                flat = item;
+                                return false;
+                            }
                         }
-                        else {
-                            HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
+
+                        if (Ext.isEmpty(item.data.UnitDesc)) {
+                            HQ.message.show(1000, [HQ.common.getLang('unitDesc')], '', true);
+                            flat = item;
+                            return false;
+                        }
+
+                        if (Ext.isEmpty(item.data.UnitMultDiv)) {
+                            HQ.message.show(2525, [item.data.InvtID], '', true);
                             flat = item;
                             return false;
                         }
                     }
-
-                    if (Ext.isEmpty(item.data.UnitDesc)) {
-                        HQ.message.show(1000, [HQ.common.getLang('unitDesc')], '', true);
-                        flat = item;
-                        return false;
-                    }
-
-                    if (Ext.isEmpty(item.data.UnitMultDiv)) {
-                        HQ.message.show(2525, [item.data.InvtID], '', true);
-                        flat = item;
-                        return false;
-                    }
-                }
-                else if (item.data.Qty == 0) {
-                    if (App.cboRcptType.getValue() == "X") {
-                        App.smlLot.select(App.stoLotTrans.indexOf(item));
-                        App.grdLot.deleteSelected();
-                    }
-                } else if (item.data.Qty > 0) {
-                    return false;
-                }
-            }
-        });
-        App.grdLot.view.refresh();
-        if (!Ext.isEmpty(flat)) {
-            App.smlLot.select(App.stoLotTrans.indexOf(flat));
-            return;
-        }
-
-        var qty = 0;
-        App.stoLotTrans.data.each(function (item) {
-            if (!Ext.isEmpty(item.data.LotSerNbr)) {
-                if (item.data.SiteID == recordTran.SiteID && item.data.InvtID == recordTran.InvtID && item.data.POTranLineRef == recordTran.LineRef) {
-                    qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
-                }
-            }
-
-        });
-        if (!Ext.isEmpty(recordTran.PONbr) && qty > (recordTran.UnitMultDiv == "M" ? recordTran.Qty * recordTran.CnvFact : recordTran.Qty / recordTran.CnvFact)) {
-            HQ.message.show(20150326, '', '');
-            return false;
-        }
-        var RcptQty = (recordTran.UnitMultDiv == "M" ? qty / recordTran.RcptConvFact : recordTran.RcptQty * recordTran.RcptConvFact)
-        if (RcptQty % 1 > 0) {
-            App.winLot.record.data.RcptQty = qty;
-            App.winLot.record.data.RcptUnitDescr = App.winLot.record.invt.StkUnit;
-            App.winLot.record.data.RcptConvFact = 1;
-            App.winLot.record.data.UnitMultDiv = "M";
-
-
-            if (_objPO_Setup.DfltLstUnitCost == "A" || _objPO_Setup.DfltLstUnitCost == "L") {
-                HQ.common.showBusy(true);
-                App.direct.PO10401ItemSitePrice(
-                    App.txtBranchID.getValue(), recordTran.InvtID, recordTran.SiteID,
-                   {
-                       success: function (result) {
-                           _objIN_ItemSite = result;
-                           UnitCost = result == null ? 0 : (_objPO_Setup.DfltLstUnitCost == "A" ? result.AvgCost : result.LastPurchasePrice);
-                           UnitCost = Math.round((recordTran.RcptMultDiv == "D" ? (UnitCost / recordTran.RcptConvFact) : (UnitCost * recordTran.RcptConvFact)));
-                           App.winLot.record.set("UnitCost", UnitCost);
-                           App.winLot.record.set("TranAmt", UnitCost * recordTran.RcptQty - recordTran.DocDiscAmt);
-                           App.winLot.record.commit();
-                           delTax(App.winLot.record);
-                           calcTax(App.winLot.record);
-                           calcTaxTotal();
-                           HQ.common.showBusy(false);
-                       },
-                       failure: function (result) {
-                           HQ.common.showBusy(false);
-                       }
-
-                   });
-            }
-            else if (_objPO_Setup.DfltLstUnitCost == "P") {
-                HQ.common.showBusy(true);
-                App.direct.PO10401POPrice(
-                   App.txtBranchID.getValue(), recordTran.InvtID, recordTran.RcptUnitDescr, Ext.Date.format(App.dtRcptDate.getValue(), 'Y-m-d'),
-                    {
-                        success: function (result) {
-                            UnitCost = result;
-                            App.winLot.record.set("UnitCost", result);
-                            App.winLot.record.set("TranAmt", result * recordTran.RcptQty - recordTran.DocDiscAmt);
-                            App.winLot.record.commit();
-                            delTax(App.winLot.record);
-                            calcTax(App.winLot.record);
-                            calcTaxTotal();
-                            HQ.common.showBusy(false);
-
-                        },
-                        failure: function (result) {
-                            HQ.common.showBusy(false);
+                    else if (item.data.Qty == 0) {
+                        if (App.cboRcptType.getValue() == "X") {
+                            App.smlLot.select(App.stoLotTrans.indexOf(item));
+                            App.grdLot.deleteSelected();
                         }
-                    });
-
+                    }
+                    else if (item.data.Qty > 0) {
+                        return false;
+                    }
+                }
+            });
+            if (!Ext.isEmpty(flat)) {
+                App.smlLot.select(App.stoLotTrans.indexOf(flat));
+                return;
             }
-            else if (_objPO_Setup.DfltLstUnitCost == "I") {
-                var UnitCost = objIN_Inventory.POPrice;
-                UnitCost = Math.round((recordTran.RcptMultDiv == "D" ? (UnitCost / recordTran.RcptConvFact) : (UnitCost * recordTran.RcptConvFact)));
-                App.winLot.record.set("UnitCost", UnitCost);
-                App.winLot.record.set("TranAmt", UnitCost * recordTran.RcptQty - recordTran.DocDiscAmt);
+
+            var qty = 0;
+            App.stoLotTrans.data.each(function (item) {
+                if (!Ext.isEmpty(item.data.LotSerNbr)) {
+                    if (item.data.SiteID == recordTran.SiteID && item.data.InvtID == recordTran.InvtID && item.data.POTranLineRef == recordTran.LineRef) {
+                        qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
+                    }
+                }
+
+            });
+            if (!Ext.isEmpty(recordTran.PONbr) && qty > (recordTran.UnitMultDiv == "M" ? recordTran.Qty * recordTran.CnvFact : recordTran.Qty / recordTran.CnvFact)) {
+                HQ.message.show(20150326, '', '');
+                return false;
+            }
+            var RcptQty = (recordTran.UnitMultDiv == "M" ? qty / recordTran.RcptConvFact : recordTran.RcptQty * recordTran.RcptConvFact)
+            if (RcptQty % 1 > 0) {
+                App.winLot.record.data.RcptQty = qty;
+                App.winLot.record.data.RcptUnitDescr = App.winLot.record.invt.StkUnit;
+                App.winLot.record.data.RcptConvFact = 1;
+                App.winLot.record.data.UnitMultDiv = "M";
+
+
+                if (recordTran.PurchaseType == "PR") {
+                    App.winLot.record.set("UnitCost", 0);
+                    App.winLot.record.set("TranAmt", 0);
+                    App.winLot.record.commit();
+                    delTax(App.winLot.record);
+                    calcTax(App.winLot.record);
+                    calcTaxTotal();
+                    HQ.common.showBusy(false);
+                }
+                else if (_objPO_Setup.DfltLstUnitCost == "A" || _objPO_Setup.DfltLstUnitCost == "L") {
+                    HQ.common.showBusy(true);
+                    App.direct.PO10401ItemSitePrice(
+                        App.cboBranchID.getValue(), recordTran.InvtID, recordTran.SiteID,
+                       {
+                           success: function (result) {
+                               _objIN_ItemSite = result;
+                               UnitCost = result == null ? 0 : (_objPO_Setup.DfltLstUnitCost == "A" ? result.AvgCost : result.LastPurchasePrice);
+                               UnitCost = Math.round((recordTran.RcptMultDiv == "D" ? (UnitCost / recordTran.RcptConvFact) : (UnitCost * recordTran.RcptConvFact)));
+                               App.winLot.record.set("UnitCost", UnitCost);
+                               App.winLot.record.set("TranAmt", UnitCost * recordTran.RcptQty - recordTran.DocDiscAmt);
+
+                               App.winLot.record.commit();
+                               delTax(App.winLot.record);
+                               calcTax(App.winLot.record);
+                               calcTaxTotal();
+                               HQ.common.showBusy(false);
+                           },
+                           failure: function (result) {
+                               HQ.common.showBusy(false);
+                           }
+
+                       });
+                }
+                else if (_objPO_Setup.DfltLstUnitCost == "P") {
+                    HQ.common.showBusy(true);
+                    App.direct.PO10401POPrice(
+                       App.cboBranchID.getValue(), recordTran.InvtID, recordTran.RcptUnitDescr, Ext.Date.format(App.dtRcptDate.getValue(), 'Y-m-d'),
+                        {
+                            success: function (result) {
+                                UnitCost = result;
+                                App.winLot.record.set("UnitCost", result);
+                                App.winLot.record.set("TranAmt", result * recordTran.RcptQty - recordTran.DocDiscAmt);
+                                App.winLot.record.commit();
+                                delTax(App.winLot.record);
+                                calcTax(App.winLot.record);
+                                calcTaxTotal();
+                                HQ.common.showBusy(false);
+
+                            },
+                            failure: function (result) {
+                                HQ.common.showBusy(false);
+                            }
+                        });
+
+                }
+                else if (_objPO_Setup.DfltLstUnitCost == "I") {
+                    var UnitCost = objIN_Inventory.POPrice;
+                    UnitCost = Math.round((recordTran.RcptMultDiv == "D" ? (UnitCost / recordTran.RcptConvFact) : (UnitCost * recordTran.RcptConvFact)));
+                    App.winLot.record.set("UnitCost", UnitCost);
+                    App.winLot.record.set("TranAmt", UnitCost * recordTran.RcptQty - recordTran.DocDiscAmt);
+                    App.winLot.record.commit();
+                    delTax(App.winLot.record);
+                    calcTax(App.winLot.record);
+                    calcTaxTotal();
+                }
+            } else {
+                App.winLot.record.data.RcptQty = Math.round(RcptQty);
+                App.winLot.record.set("TranAmt", App.winLot.record.data.UnitCost * recordTran.RcptQty - recordTran.DocDiscAmt);
                 App.winLot.record.commit();
                 delTax(App.winLot.record);
                 calcTax(App.winLot.record);
                 calcTaxTotal();
             }
-        } else {
-            App.winLot.record.data.RcptQty = Math.round(RcptQty);
-            App.winLot.record.set("TranAmt", App.winLot.record.data.UnitCost * recordTran.RcptQty - recordTran.DocDiscAmt);
-            App.winLot.record.commit();
-            delTax(App.winLot.record);
-            calcTax(App.winLot.record);
-            calcTaxTotal();
-        }
 
 
-        //checkSubDisc(App.winLot.record);
-        //checkTaxInGrid("RcptQty", App.winLot.record);
+            //checkSubDisc(App.winLot.record);
+            //checkTaxInGrid("RcptQty", App.winLot.record);
 
-        for (i = App.stoLotTrans.data.items.length - 1; i >= 0; i--) {
-            if (!Ext.isEmpty(App.stoLotTrans.data.items[i].data.LotSerNbr)) {
-                App.stoLotTrans.data.removeAt(i);
+            for (i = App.stoLotTrans.data.items.length - 1; i >= 0; i--) {
+                if (!Ext.isEmpty(App.stoLotTrans.data.items[i].data.LotSerNbr)) {
+                    App.stoLotTrans.data.removeAt(i);
+                }
             }
-        }
-        App.winLot.hide();
+            App.winLot.record.set("ExtWeight", recordTran.UnitWeight * recordTran.RcptQty);
+            App.winLot.record.set("ExtVolume", recordTran.UnitVolume * recordTran.RcptQty);
+            App.winLot.hide();
+        }, 300);
     },
     btnLotDel_Click: function () {
-
         if ((App.txtBatNbr.value && HQ.isUpdate) || (!App.txtBatNbr.value && HQ.isInsert)) {
-            if (!_recordEdit.IsEditOrder ) {
+            if (App.cboStatus.getValue() != "H") {
                 HQ.message.show(2015020805, [App.txtBatNbr.value], '', true);
                 return;
             }
@@ -1979,13 +1997,13 @@ var PopupWinLot = {
         }
     },
     grdLot_BeforeEdit: function (item, e) {
-        if (!_recordEdit.IsEditOrder ) return false;
         var obj = e.record.data;
+        App.lblLotQtyAvail.setText('');
         if (App.cboRcptType.getValue() == "X") {
             var objLot = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [obj.LotSerNbr]);
             if (!Ext.isEmpty(objLot)) {
 
-                var Qty = obj.UnitMultDiv == "M" ? objLot.Qty / obj.CnvFact : objLot.Qty * obj.CnvFact;
+                var Qty = obj.UnitMultDiv == "M" ? Math.floor(objLot.Qty / obj.CnvFact, 0) : objLot.Qty * obj.CnvFact;
                 App.lblLotQtyAvail.setText(_invtID + " - " + HQ.common.getLang('qtyavail') + ":" + Qty + " " + obj.UnitDesc);
                 App.smlLot.selected.items[0].set("ExpDate", objLot.ExpDate);
             }
@@ -1995,11 +2013,15 @@ var PopupWinLot = {
 
         }
 
+
+        if (App.grdLot.isLock || e.field == "UnitDesc") {
+            return false;
+        }
         if (e.field == 'LotSerNbr' && App.winLot.invt.LotSerRcptAuto && App.cboRcptType.getValue() != 'X') return false;
         if (e.field != 'LotSerNbr' && App.cboRcptType.getValue() == 'X' && Ext.isEmpty(e.record.data.LotSerNbr)) return false;
-       
 
-       
+
+
 
         var det = App.winLot.record;
         if (!_objPO_Setup.EditablePOPrice && e.column.dataIndex == "UnitPrice") {
@@ -2010,7 +2032,7 @@ var PopupWinLot = {
         }
 
         if (e.field == "Qty") {
-          
+
         }
 
     },
@@ -2032,9 +2054,9 @@ var PopupWinLot = {
         //}
     },
     grdLot_Edit: function (item, e) {
-      
+        HQ.common.showBusy(true);
         var objDetail = e.record.data;
-        
+
         var recordTran = App.winLot.record.data;
         var objIN_Inventory = App.winLot.invt;
 
@@ -2053,7 +2075,7 @@ var PopupWinLot = {
             if (_objPO_Setup.DfltLstUnitCost == "A" || _objPO_Setup.DfltLstUnitCost == "L") {
                 HQ.common.showBusy(true, '', App.winLot);
                 App.direct.PO10401ItemSitePrice(
-                    App.txtBranchID.getValue(), recordTran.InvtID, recordTran.SiteID,
+                    App.cboBranchID.getValue(), recordTran.InvtID, recordTran.SiteID,
                    {
                        success: function (result) {
                            _objIN_ItemSite = result;
@@ -2071,7 +2093,7 @@ var PopupWinLot = {
             else if (_objPO_Setup.DfltLstUnitCost == "P") {
                 HQ.common.showBusy(true, '', App.winLot);
                 App.direct.PO10401POPrice(
-                   App.txtBranchID.getValue(), recordTran.InvtID, objDetail.UnitDesc, Ext.Date.format(App.dtRcptDate.getValue(), 'Y-m-d'),
+                   App.cboBranchID.getValue(), recordTran.InvtID, objDetail.UnitDesc, Ext.Date.format(App.dtRcptDate.getValue(), 'Y-m-d'),
                     {
                         success: function (result) {
                             UnitCost = result;
@@ -2141,7 +2163,7 @@ var PopupWinLot = {
         }
     },
     grdLot_ValidateEdit: function (item, e) {
-        if (!_recordEdit.IsEditOrder) return false;
+        if (App.cboStatus.getValue() != "H") return false;
         var Qty = 0;
         var objdet = e.record;
         var recordTran = App.winLot.record.data;
@@ -2150,28 +2172,28 @@ var PopupWinLot = {
                 HQ.message.show(1112, e.value, '');
                 return false;
             }
-        }          
-        if (e.field == "Qty") {         
+        }
+        if (e.field == "Qty") {
             var Qty = 0;
             Qty = e.record.data.UnitMultDiv == "M" ? e.value * e.record.data.CnvFact : e.value / e.record.data.CnvFact;
-            if (App.cboRcptType.getValue() == "X" && (recordTran.PurchaseType == "GI" | recordTran.PurchaseType == "PR" | recordTran.PurchaseType == "GS")) {                
+            if (App.cboRcptType.getValue() == "X" && (recordTran.PurchaseType == "GI" | recordTran.PurchaseType == "PR" | recordTran.PurchaseType == "GS")) {
                 QtyAvail = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [objdet.data.LotSerNbr]).Qty;
                 if (Qty > QtyAvail) {
                     HQ.message.show(35, '', '');
                     objdet.set('Qty', 0);
                     return false;
                 }
-            }                    
+            }
         }
     },
-    cboLotTrans_Change: function (sender)
-    {
+    cboLotTrans_Change: function (sender) {
+        App.lblLotQtyAvail.setText('');
         if (App.cboRcptType.getValue() == "X") {
             var objLot = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [sender.value]);
             if (!Ext.isEmpty(objLot)) {
                 var obj = App.smlLot.selected.items[0].data;
-                var Qty=obj.UnitMultDiv == "M" ? objLot.Qty / obj.CnvFact : objLot.Qty * obj.CnvFact;
-                App.lblLotQtyAvail.setText(_invtID + " - " + HQ.common.getLang('qtyavail') + ":" + Qty +" "+obj.UnitDesc);
+                var Qty = obj.UnitMultDiv == "M" ? Math.floor(objLot.Qty / obj.CnvFact) : objLot.Qty * obj.CnvFact;
+                App.lblLotQtyAvail.setText(_invtID + " - " + HQ.common.getLang('qtyavail') + ":" + Qty + " " + obj.UnitDesc);
                 App.smlLot.selected.items[0].set("ExpDate", objLot.ExpDate);
             }
             else {
