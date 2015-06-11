@@ -1,0 +1,155 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM23800;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM23800";
+    var acc = Session["OM23800"] as AccessRight;
+    var HQ = Html.HQ();
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/OM23800.js")' type="text/javascript"></script>
+
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1KCqJiFRTtXsU2UxG3Zf7D55Gjft7JJI&sensor=false&libraries=drawing"></script>
+        <script src="~/Scripts/Screen/OM30400_map_label.js"></script>
+        <script src="~/Scripts/Screen/OM30400_map_contextMenu.js"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        </script>
+        <style type="text/css">
+            html {
+                height: 100%;
+            }
+            body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            #map_canvas {
+                height: 100%;
+            }
+            .x-grid3-hd-inner {
+                white-space: normal;
+            }
+            #content {
+                line-height: 1.35;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .row-FF0000 .x-grid-cell {
+                color: #FF0000 !important;
+            }
+
+            .row-CCFF33 .x-grid-cell {
+                background-color: #CCFF33 !important;
+            }
+
+            .row-000000 .x-grid-cell {
+                color: #000000 !important;
+            }
+
+            .labels {
+                color: #FF0000;
+                background-color: white;
+                font-family: "Lucida Grande", "Arial", sans-serif;
+                font-size: 10px;
+                font-weight: bold;
+                text-align: center;
+                width: 60px;
+                border: 2px solid black;
+                white-space: nowrap;
+            }
+
+           
+            /*	start styles for the ContextMenu	*/
+            .context_menu{
+	            background-color:white;
+	            border:1px solid gray;
+            }
+            .context_menu_item{
+	            padding:3px 6px;
+            }
+            .context_menu_item:hover{
+	            background-color:#CCCCCC;
+            }
+            .context_menu_separator{
+	            background-color:gray;
+	            height:1px;
+	            margin:0;
+	            padding:0;
+            }
+            /*	end styles for the ContextMenu	*/
+        </style>
+    </head>
+    <body>
+        @(X.ResourceManager()
+        .ShowWarningOnAjaxFailure(false)
+        .Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
+
+        @( X.Store().ID("stoMCL")
+                //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM23800_pgMCL_Result), "mdlMCP", ""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadMCP", "OM23800")))
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("channel", "App.cboChannelMCL.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("territory", "App.cboAreaMCL.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("province", "App.cboProvinceMCL.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("distributor", "App.cboDistributorMCL.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("shopType", "App.cboShopTypeMCL.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperId", "App.cboSalesManMCL.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("daysOfWeek", "App.cboDayOfWeek.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("weekOfVisit", "App.cboWeekOfVisit.value", ParameterMode.Raw));
+            })
+            .Listeners(l => {
+                l.BeforeLoad.Handler = "App.frmMain.getEl().mask(HQ.common.getLang('Loading'), 'x-mask-loading');";
+                l.Load.Fn = "Event.Store.stoMCL_load";
+            })
+        )
+
+        @(
+            X.Store().ID("storeMcpInfo")
+            //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM_SalesRouteMaster),"OM_SalesRouteMasterModel","PJPID,SalesRouteID,CustID,SlsPerID,BranchID"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadSalesRouteMaster")))
+                    .Parameters(ps =>
+                    {
+                        //ps.Add(new StoreParameter("CustID", "", ParameterMode.Value));
+                        //ps.Add(new StoreParameter("SlsPerID", "", ParameterMode.Value));
+                        //ps.Add(new StoreParameter("BranchID", "", ParameterMode.Value));
+                    })
+            .Listeners(l=>l.Load.Fn="McpInfo.storeMcpInfo_load")
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong OM22001Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", "OM23800", new { lang = Current.LangID }); }
+        @{ Html.RenderAction("MCPInfo","OM23800", new { lang = Current.LangID }); }
+        @{ Html.RenderAction("ImportExport","OM23800", new { lang = Current.LangID }); }
+    </body>
+</html>

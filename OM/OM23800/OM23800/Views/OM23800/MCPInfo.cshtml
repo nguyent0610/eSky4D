@@ -1,0 +1,185 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM23800;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+X.Window().ID("winMcpInfo")
+.Title(Util.GetLang("UpdateToMcp"))
+.Icon(Icon.BookOpen).Layout(LayoutType.Fit)
+.Hidden(true).Maximizable(true)
+.Height(350)
+.Width(700)
+.Modal(true)
+.Items(
+    X.FormPanel().ID("frmMcpInfo")
+    .Layout(LayoutType.Border)
+    .TrackResetOnLoad(true)
+    .DefaultAnchor("100%")
+    .BodyPadding(5)
+    .BodyBorder(0)
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Items(
+        X.FormPanel().ID("frmHeaderMcp")
+        .Region(Region.North).Border(false)
+        .BodyStyle("BodyStyle='background: none;'")
+        .Layout(LayoutType.Fit)
+        .Items(
+            X.FieldSet().ID("fdsHeaderMcp")
+            .Title(Util.GetLang("CustInfo"))
+            .Layout(LayoutType.HBox)
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
+            .Items(
+                X.Container()
+                .Layout(LayoutType.VBox).Flex(1).MarginSpec("5 5 5 5")
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.TextBox().ID("txtCustIDMcpInfo")
+                    .HQLangCode("CustID").ReadOnly(true).DataIndex("CustId")
+                            
+                    , HQ.TextBox().ID("txtSlsperIDMcpInfo")
+                    .HQLangCode("SlsperID").ReadOnly(true).DataIndex("SlsperId")
+
+                    , HQ.TextBox().ID("txtDistributorMcpInfo")
+                    .HQLangCode("Distributor").ReadOnly(true).DataIndex("Distributor")
+                            
+                    , HQ.Checkbox().ID("chkCustStatusMcpInfo")
+                    .HQLangCode("Active").FieldLabel(Util.GetLang("Status"))
+                    .Handler("McpInfo.chkCustStatusMcpInfo_change")
+                )
+
+                , X.Container()
+                .Layout(LayoutType.VBox).Flex(1).MarginSpec("5 5 5 0")
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.TextBox().ID("txtCustNameMcpInfo")
+                    .HQLangCode("CustName").ReadOnly(true).DataIndex("CustName")
+                            
+                    ,X.TextArea().ID("txtAddressMcpInfo")
+                    .FieldLabel(Util.GetLang("Address"))
+                    .Height(50).ReadOnly(true).DataIndex("Addr1")
+                )
+            ) // fdsHeaderMcp
+        )
+                    
+        ,X.FormPanel().ID("frmContentMcp")
+        .Region(Region.Center).Border(false)
+        .BodyStyle("BodyStyle='background: none;'")
+        .Layout(LayoutType.Fit)
+        .Items(
+            X.FieldSet().ID("fdsContentMcp")
+            .Title(Util.GetLang("MCP"))
+            .Layout(LayoutType.VBox)
+            .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+            .Flex(1).Disabled(true)
+            .Items(
+                X.Container()
+                .Layout(LayoutType.HBox).MarginSpec("5 5 5 5")
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
+                .Items(
+                    HQ.Combo().ID("cboSlsFreqMcpInfo")
+                    .Flex(1).ForceSelection(true).AllowBlank(false)
+                    .DataIndex("SlsFreq")
+                    .HQLangCode("SLSFREQ").HQProcedure("OM23800_pcSlsFreq")
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@langid", "HQ.langID", ParameterMode.Raw)
+                    })
+                    .LoadData()
+                    .Listeners(x => x.Change.Handler = "App.cboWeekofVisitMcpInfo.store.reload()")
+
+                    , HQ.Combo().ID("cboWeekofVisitMcpInfo")
+                    .Flex(1).ForceSelection(true).AllowBlank(false)
+                    .HQFirstDefault(true).DataIndex("WeekofVisit")
+                    .HQLangCode("WEEKOFVISIT").HQProcedure("OM23800_pcWeekofVisitMCL")
+                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@SlsFreq", "App.cboSlsFreqMcpInfo.value", ParameterMode.Raw)
+                        ,new StoreParameter("@SlsFreqType", "R", ParameterMode.Value)
+                        ,new StoreParameter("@langid", "HQ.langID", ParameterMode.Raw)
+                    })
+                    .LoadData()
+                )
+
+                , X.Container()
+                .Layout(LayoutType.HBox).MarginSpec("5 5 5 5")
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
+                .Items(
+                    HQ.NumberField().ID("numVisitSortMcpInfo")
+                    .HQLangCode("VisitSort").DataIndex("VisitSort")
+                    .AllowBlank(false).DecimalPrecision(0).Width(150).MinValue(1)
+
+                    , X.Container().Layout(LayoutType.HBox).Flex(1)
+                    .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top, Pack = BoxPack.Center })
+                    .Items(
+                        HQ.Checkbox()
+                        .HQLangCode("Sun").DataIndex("Sun")
+                        .MarginSpec("0 0 0 10")
+
+                        , HQ.Checkbox()
+                        .HQLangCode("Mon").DataIndex("Mon")
+                        .MarginSpec("0 0 0 5")
+
+                        , HQ.Checkbox()
+                        .HQLangCode("Tue").DataIndex("Tue")
+                        .MarginSpec("0 0 0 5")
+
+                        , HQ.Checkbox()
+                        .HQLangCode("Wed").DataIndex("Wed")
+                        .MarginSpec("0 0 0 5")
+
+                        , HQ.Checkbox()
+                        .HQLangCode("Thu").DataIndex("Thu")
+                        .MarginSpec("0 0 0 5")
+
+                        , HQ.Checkbox()
+                        .HQLangCode("Fri").DataIndex("Fri")
+                        .MarginSpec("0 0 0 5")
+
+                        , HQ.Checkbox()
+                        .HQLangCode("Sat").DataIndex("Sat")
+                        .MarginSpec("0 0 0 5")
+                    )
+                )
+                        
+                , X.Container()
+                .Layout(LayoutType.HBox).MarginSpec("5 5 5 5")
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top, Pack = BoxPack.Center })
+                .Items(
+                    HQ.Button().ID("btnDeleteMcpInfo")
+                    .HQLangCode("Delete").Icon(Icon.Delete)
+                    .MarginSpec("0 0 0 10")
+                    .Handler("McpInfo.btnDeleteMcpInfo_click")
+                ) // buttons
+            ) // fdsContentMcp
+        )
+                    
+        , X.Container()
+        .Region(Region.South)
+        .Layout(LayoutType.HBox).MarginSpec("5 5 5 5")
+        .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top, Pack = BoxPack.Center })
+        .Items(
+            HQ.Button().ID("btnSaveMcpInfo")
+            .HQLangCode("Save").Icon(Icon.Disk)
+            .Handler("McpInfo.btnSaveMcpInfo_click")
+                            
+            , HQ.Button().ID("btnCancelMcpInfo")
+            .HQLangCode("Cancel").Icon(Icon.Decline)
+            .MarginSpec("0 0 0 5")
+            .Handler("McpInfo.btnCancelMcpInfo_click")
+        ) // buttons
+    )// FormPanel: frmMcpInfo
+)
+.Listeners(l =>
+{
+    //l.BeforeShow.Fn = "EmailQuotation.winEmail_beforeShow";
+    //l.BeforeClose.Fn = "EmailQuotation.winEmail_beforeClose";
+    //l.Close.Fn = "EmailQuotation.winEmail_close";
+}) // Window: winMcpInfo
+)
