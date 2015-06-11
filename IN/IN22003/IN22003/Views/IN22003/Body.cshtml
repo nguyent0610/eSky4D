@@ -241,6 +241,23 @@
                         , X.Column().Text(Util.GetLang("IN22003_InvtName")).DataIndex("InvtName").Width(200)
                         , X.NumberColumn().Text(Util.GetLang("IN22003_StkQty")).DataIndex("StkQty").Width(100).Width(100).Align(Alignment.Right).Format("0,000")
                         , X.NumberColumn().Text(Util.GetLang("IN22003PriceStkQty")).DataIndex("PriceStkQty").Width(100).Align(Alignment.Right).Format("0,000")
+                        
+                        , X.ImageCommandColumn().Text(Util.GetLang(""))
+                            .Commands(
+                                    X.ImageCommand()
+                                    .Icon(Icon.TabEdit)
+                                    .ToolTip(t =>
+                                    {
+                                        t.Text = Util.GetLang("ShowApprStkQty");
+                                    })                                                        
+                                    .CommandName("Update")
+                            )
+                            .Listeners(l => {
+                                l.Command.Handler = "PopupWin.showDetail(record);";
+                               
+                            })
+                        
+                        
                         , X.NumberColumn().Text(Util.GetLang("IN22003ApprStkQty"))
                         .DataIndex("ApproveStkQty").Format("0,000").Width(100).Align(Alignment.Right)
                         .Editor( X.NumberField().DecimalPrecision(0).MinValue(0))
@@ -293,4 +310,50 @@
 
         )//frm Main
 )//View port
+)
+@(X.Window()
+        .ID("winDetail")
+        .Hidden(true)
+        .Layout(LayoutType.Fit)
+        .Height(300)
+        .Width(550)
+        .Modal(true)
+        .Closable(false)
+        .Buttons(
+            X.Button().ID("btnLotDel").Text(Util.GetLang("DeleteRights"))
+                //.Listeners(p => p.Click.Fn = "PopupWin.btnLotDel_Click")
+            , X.Button().ID("btnOK").Text(Util.GetLang("OK"))
+                .Listeners(p => p.Click.Fn = "PopupWin.btnOK_Click")
+        )
+        .BottomBar(
+            X.Toolbar()
+            .Border(false)
+            .Items(
+                X.Label().ID("lblLotQtyAvail").Width(200).MarginSpec("0 0 0 5")
+            )
+        )
+        .Items(
+            X.GridPanel().ID("grdPopUp")
+            .Border(true).BorderSpec("1 0 0 0")
+            .StoreID("stoPopUp")
+            .ColumnModel(
+                X.RowNumbererColumn()
+                
+                , X.Column().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("Qty"))
+                .Width(75).Align(Alignment.Right).Editor(X.NumberField().MinValue(0).DecimalPrecision(0))
+
+                , X.DateColumn().ID("NewExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(X.DateField())
+            )
+            //.Listeners(lst =>
+            //{
+            //    lst.Select.Handler = "HQ.focus='lot';";
+            //    lst.Edit.Fn = "PopupWinLot.grdLot_Edit";
+            //    lst.BeforeEdit.Fn = "PopupWinLot.grdLot_BeforeEdit";
+            //    lst.ValidateEdit.Fn = "PopupWinLot.grdLot_ValidateEdit";
+            //    lst.SelectionChange.Fn = "PopupWinLot.grdLot_SelectionChange";
+            //})
+            .SelectionModel(X.RowSelectionModel().ID("slmPopUp").Mode(SelectionMode.Single))
+            .View(X.GridView().TrackOver(false))
+            .Plugins(X.CellEditing().ClicksToEdit(1))
+        )
 )

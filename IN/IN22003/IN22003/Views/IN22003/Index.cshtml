@@ -33,7 +33,7 @@
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');
     </script>  
     <title>@ViewBag.Title</title>
 </head>
@@ -42,6 +42,28 @@
     
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
+
+        @(X.Store().ID("stoPopUp").AutoLoad(false)   
+            .Model(Util.GenerateModel(typeof(IN22003_pgLoadGridPopUp_Result), "mdlPopUp", ""))          
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetPopUp", "IN22003"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("Date", "App.dateKPI.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("Territory", "App.cboTerritory.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue().join(',')", ParameterMode.Raw));
+            })  
+              
+        )
+
+
         <!-- Gọi hàm Body trong IN22003Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
         @{Html.RenderAction("Body", new { lang=Current.LangID});}   
     

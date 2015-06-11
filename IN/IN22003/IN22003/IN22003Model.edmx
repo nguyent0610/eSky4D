@@ -8,6 +8,7 @@
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
           <EntitySet Name="IN_StockRecoveryCust" EntityType="eBiz4DWebSysModel.Store.IN_StockRecoveryCust" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="IN_StockRecoveryDet" EntityType="eBiz4DWebSysModel.Store.IN_StockRecoveryDet" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="IN_StockRecoveryPopUp" EntityType="eBiz4DWebSysModel.Store.IN_StockRecoveryPopUp" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="IN_StockRecoveryCust">
           <Key>
@@ -56,7 +57,37 @@
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="NewExpDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="IN_StockRecoveryPopUp">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="StkRecNbr" />
+            <PropertyRef Name="ExpDate" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="NewExpDate" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="StkRecNbr" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ExpDate" Type="datetime" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="NewExpDate" Type="datetime" Nullable="false" />
+          <Property Name="StkQty" Type="float" />
+          <Property Name="Price" Type="float" />
+          <Property Name="ApproveStkQty" Type="float" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <Function Name="IN22003_pgLoadGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="Territory" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="IN22003_pgLoadGridPopUp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="Territory" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar(max)" Mode="In" />
@@ -69,6 +100,12 @@
           <EntitySet Name="IN_StockRecoveryDet" EntityType="IN22003Model.IN_StockRecoveryDet" />
           <EntitySet Name="IN_StockRecoveryCust" EntityType="IN22003Model.IN_StockRecoveryCust" />
           <FunctionImport Name="IN22003_pgLoadGrid" ReturnType="Collection(IN22003Model.IN22003_pgLoadGrid_Result)">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Territory" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="IN_StockRecoveryPopUp" EntityType="IN22003Model.IN_StockRecoveryPopUp" />
+          <FunctionImport Name="IN22003_pgLoadGridPopUp" ReturnType="Collection(IN22003Model.IN22003_pgLoadGridPopUp_Result)">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="Territory" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -127,6 +164,49 @@
           <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
           <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="23" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtName" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="Price" Nullable="true" />
+          <Property Type="Double" Name="StkQty" Nullable="true" />
+          <Property Type="Double" Name="PriceStkQty" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="ApproveStkQty" Nullable="true" />
+          <Property Type="Double" Name="ApprovePriceStkQty" Nullable="true" />
+          <Property Type="String" Name="StkRecNbr" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="isEdit" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <EntityType Name="IN_StockRecoveryPopUp">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="StkRecNbr" />
+            <PropertyRef Name="ExpDate" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="NewExpDate" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StkRecNbr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="3" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="NewExpDate" Nullable="false" Precision="3" />
+          <Property Type="Double" Name="StkQty" />
+          <Property Type="Double" Name="Price" />
+          <Property Type="Double" Name="ApproveStkQty" />
+          <Property Type="String" Name="Status" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="IN22003_pgLoadGridPopUp_Result">
+          <Property Type="Boolean" Name="ColCheck" Nullable="true" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="NewExpDate" Nullable="false" Precision="23" />
           <Property Type="String" Name="InvtName" Nullable="true" MaxLength="100" />
           <Property Type="Double" Name="Price" Nullable="true" />
           <Property Type="Double" Name="StkQty" Nullable="true" />
@@ -207,6 +287,50 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="IN_StockRecoveryPopUp">
+            <EntityTypeMapping TypeName="IN22003Model.IN_StockRecoveryPopUp">
+              <MappingFragment StoreEntitySet="IN_StockRecoveryPopUp">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ApproveStkQty" ColumnName="ApproveStkQty" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="StkQty" ColumnName="StkQty" />
+                <ScalarProperty Name="NewExpDate" ColumnName="NewExpDate" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="StkRecNbr" ColumnName="StkRecNbr" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN22003_pgLoadGridPopUp" FunctionName="eBiz4DWebSysModel.Store.IN22003_pgLoadGridPopUp">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN22003Model.IN22003_pgLoadGridPopUp_Result">
+                <ScalarProperty Name="ColCheck" ColumnName="ColCheck" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="NewExpDate" ColumnName="NewExpDate" />
+                <ScalarProperty Name="InvtName" ColumnName="InvtName" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="StkQty" ColumnName="StkQty" />
+                <ScalarProperty Name="PriceStkQty" ColumnName="PriceStkQty" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ApproveStkQty" ColumnName="ApproveStkQty" />
+                <ScalarProperty Name="ApprovePriceStkQty" ColumnName="ApprovePriceStkQty" />
+                <ScalarProperty Name="StkRecNbr" ColumnName="StkRecNbr" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="isEdit" ColumnName="isEdit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -228,8 +352,9 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="73" >
-        <EntityTypeShape EntityType="IN22003Model.IN_StockRecoveryDet" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="IN22003Model.IN_StockRecoveryCust" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN22003Model.IN_StockRecoveryDet" Width="2" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN22003Model.IN_StockRecoveryCust" Width="2.125" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN22003Model.IN_StockRecoveryPopUp" Width="1.5" PointX="0.75" PointY="5.75" />
       </Diagram>
     </Diagrams>
   </Designer>

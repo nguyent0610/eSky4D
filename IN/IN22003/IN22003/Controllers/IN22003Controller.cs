@@ -29,7 +29,7 @@ namespace IN22003.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -38,6 +38,11 @@ namespace IN22003.Controllers
         public ActionResult GetData(DateTime Date, string Territory,string BranchID)
         {
             return this.Store(_db.IN22003_pgLoadGrid(Date, Territory, BranchID).ToList());
+        }
+
+        public ActionResult GetPopUp(DateTime Date, string Territory, string BranchID)
+        {
+            return this.Store(_db.IN22003_pgLoadGridPopUp(Date, Territory, BranchID).ToList());
         }
 
         [HttpPost]
@@ -72,7 +77,7 @@ namespace IN22003.Controllers
                                 if (handle == "A")
                                 {
                                     obj.ApproveStkQty = item.ApproveStkQty;
-                                    obj.NewExpDate = date;
+                                    //obj.NewExpDate = date;
                                     obj.Status = handle;
 
                                     //var obj1 = _db.IN_StockRecoveryCust.FirstOrDefault(p => p.BranchID == item.BranchID

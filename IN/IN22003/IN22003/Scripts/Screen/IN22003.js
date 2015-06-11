@@ -1,1 +1,288 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('m a=["","\\p\\g\\e\\k\\n\\r\\z\\H\\e\\c\\e","\\z\\b\\c\\1m\\e\\r\\z","\\f\\g\\J\\J\\g\\r","\\h\\s\\g\\1f\\1I\\D\\h\\C","\\1c","\\h\\b\\c\\1b\\e\\p\\D\\b","\\f\\F\\g\\y\\c\\e\\c\\D\\h","\\O","\\f\\F\\g\\1c\\e\\r\\k\\p\\b","\\p\\g\\e\\k","\\z\\b\\c\\y\\c\\g\\i\\b","\\f\\F\\g\\1H\\b\\i\\i\\n\\c\\g\\i\\C","\\f\\F\\g\\1T\\g\\r\\b","\\h\\b\\c\\1U\\n\\k\\c\\s","\\x\\n\\f\\w\\b\\i","\\s\\n\\k\\b","\\J\\g\\r\\c\\s\\Z\\p","\\n\\h\\R\\s\\e\\r\\z\\b","\\i\\b\\M\\i\\b\\h\\s","\\h\\s\\g\\1f","\\J\\b\\h\\h\\e\\z\\b","\\h\\c\\g\\i\\b","\\i\\b\\p\\g\\e\\k","\\f\\F\\g\\1I\\i\\e\\r\\f\\s\\Q\\H","\\R\\g\\p\\R\\s\\b\\f\\w","\\h\\b\\c","\\b\\e\\f\\s","\\h\\c\\g\\Q\\O\\1e\\y\\c\\g\\f\\w\\P\\b\\f\\g\\N\\b\\i\\C\\H\\b\\c","\\R\\g\\p\\R\\s\\b\\f\\w\\1e\\1c\\b\\e\\k\\b\\i","\\M\\i\\J\\2f\\e\\n\\r","\\f\\s\\b\\f\\w\\P\\b\\2g\\D\\n\\i\\b\\W\\e\\h\\h","\\M\\g\\i\\J","\\y\\c\\e\\c\\D\\h","\\k\\e\\c\\e","\\z\\b\\c\\1b\\e\\p\\D\\b","\\f\\s\\b\\f\\w\\b\\k","\\M\\n\\b\\p\\k\\1m\\e\\F\\b\\p","\\O\\b\\1f\\H\\e\\c\\b\\Z\\1E\\x","\\N\\e\\p\\n\\k\\e\\c\\b","\\n\\h\\Z\\J\\x\\c\\C","\\1c\\e\\r\\k\\p\\b","\\W\\1L\\y\\1H","\\Q\\O\\T\\T\\U\\U\\1j\\2e\\W\\i\\g\\f\\b\\h\\h","\\z\\b\\c\\P\\b\\f\\g\\i\\k\\h\\1b\\e\\p\\D\\b\\h","\\z\\i\\k\\Q\\O\\1e\\y\\c\\g\\f\\w\\P\\b\\f\\g\\N\\b\\i\\C\\H\\b\\c","\\b\\r\\f\\g\\k\\b","\\x\\i\\g\\f\\b\\h\\h","\\h\\D\\F\\J\\n\\c","\\M\\n\\i\\h\\c","\\z\\i\\n\\k","\\x\\i\\b\\N","\\r\\b\\1E\\c","\\p\\e\\h\\c","\\r\\b\\1f","\\k\\b\\p\\b\\c\\b","\\h\\e\\N\\b","\\x\\i\\n\\r\\c","\\f\\p\\g\\h\\b","\\f\\s\\b\\f\\w\\1b\\e\\p\\n\\k\\e\\c\\b\\Z\\k\\n\\c","\\M\\n\\b\\p\\k","\\i\\b\\f\\g\\i\\k","\\n\\h\\Z\\k\\n\\c","\\1Z","\\1D\\x\\x\\i\\g\\N\\b\\y\\c\\w\\1n\\c\\C","\\y\\c\\w\\1n\\c\\C","\\1D\\x\\x\\i\\g\\N\\b\\W\\i\\n\\f\\b\\y\\c\\w\\1n\\c\\C","\\W\\i\\n\\f\\b","\\f\\s\\b\\f\\w\\P\\b\\2a\\b\\f\\c","\\Q\\O\\T\\T\\U\\U\\1j","\\f\\s\\e\\r\\z\\b\\H\\e\\c\\e","\\h\\b\\c\\P\\b\\e\\k\\1L\\r\\p\\C","\\h\\b\\c\\H\\n\\h\\e\\F\\p\\b\\k","\\F\\c\\r\\1m\\g\\e\\k","\\k\\e\\c\\b\\2b\\W\\Q","\\C\\b\\h","\\R\\g\\k\\b","\\M\\n\\r\\k\\P\\b\\f\\g\\i\\k","\\f\\F\\g\\y\\c\\e\\c\\D\\h\\Q\\O\\T\\T\\U\\U\\1j\\1e\\x\\f\\y\\c\\e\\c\\D\\h","\\H\\b\\h\\f\\i"];m v=t;m 1N=[a[0]];m 1i=I;m 1o=I;m 2d=l(){j[a[3]][a[4]](I,j[a[3]][a[2]](a[1]));d[a[13]][a[11]]()[a[10]](l(){d[a[12]][a[11]]()[a[10]](l(){d[a[7]][a[11]]()[a[10]](l(){q(1o){d[a[7]][a[6]](a[5]);1o=t};d[a[9]][a[11]]()[a[10]](l(){j[a[3]][a[4]](t,j[a[3]][a[2]](a[1]));q(1i){d[a[9]][a[6]](a[8]);1i=t}})})})})};m 1Y=l(1d,2i){1d[a[15]][a[14]](2h);1d[a[15]][a[17]][a[16]]();1d[a[15]][a[17]][a[14]](0)};m 2j=l(1k,o){};m 1V=l(1k,o){q(j[a[18]]){j[a[21]][a[20]](1g,a[0],a[19])}G{d[a[12]][a[22]][a[10]]()}};m 1Q=l(1k,o){q(j[a[18]]){j[a[21]][a[20]](1g,a[0],a[19])}G{d[a[24]][a[22]][a[23]]()}};m 1P=l(V){q(v==I){j[a[21]][a[20]](1g,a[0],a[19])}G{d[a[28]][a[27]](l(A){A[a[26]](a[25],t)});d[a[29]][a[6]](t);d[a[9]][a[22]][a[23]]()}};m 1O=l(){q(j[a[32]][a[31]](d[a[30]])){d[a[28]][a[23]]()}};m 1X=l(V,1G,1W){q(V){d[a[28]][a[27]](l(A){q(A[a[34]][a[33]]==d[a[7]][a[35]]()){A[a[26]](a[25],V[a[36]])}})}};m 1R=l(){q(!d[a[9]][a[35]]()){j[a[21]][a[20]](1u,d[a[9]][a[37]])}G{q(!d[a[38]][a[35]]()){j[a[21]][a[20]](1u,d[a[38]][a[37]])}G{q(d[a[38]][a[39]]()==t){j[a[21]][a[20]](1S)}G{m 1l=t;d[a[28]][a[34]][a[27]](l(A){q(A[a[34]][a[25]]){1l=I;K t}});q(1l&&!1v[a[2c]](d[a[9]][a[35]]())&&d[a[9]][a[35]]()!=a[8]){d[a[30]][a[3f]]({2V:t,2U:j[a[3]][a[2]](a[2Z]),2Y:a[3a],2X:a[2W],2T:3c,2k:{3b:1v[a[3h]](d[a[L]][a[22]][a[3g]]())},3d:l(1p,1s){j[a[21]][a[20]](3e);d[a[28]][a[23]]()},2R:l(1p,1s){j[a[21]][a[2v]](1p,1s,I)}})}}}}};m 2u=l(1t){2w(1t){E a[1x]:j[a[S]][a[1x]](d[a[L]]);B;E a[1y]:j[a[S]][a[1y]](d[a[L]]);B;E a[1z]:j[a[S]][a[1z]](d[a[L]]);B;E a[1w]:j[a[S]][a[1w]](d[a[L]]);B;E a[19]:q(v){j[a[21]][a[20]](1g,a[0],a[19])}G{d[a[28]][a[23]]()};B;E a[2x]:B;E a[2S]:B;E a[2z]:B;E a[2y]:B;E a[1F]:j[a[3]][a[1F]](2t);B}};m 2s=l(A,o){K j[a[S]][a[2n]](d[a[L]],o,1N)};m 2m=l(2l,o){q(o[a[1r]]==a[25]&&o[a[u]][a[34]][a[33]]==d[a[7]][a[35]]()){K I};q(o[a[u]][a[34]][a[2o]]==a[2p]&&o[a[1r]]!=a[25]){K I};K t};m 2r=l(A,o){q(o[a[1r]]==a[X]){q(o[a[u]][a[34]][a[1A]]<o[a[u]][a[34]][a[X]]||o[a[u]][a[34]][a[X]]<0){o[a[u]][a[26]](a[X],o[a[u]][a[34]].2q);o[a[u]][a[26]](a[1J],o[a[u]][a[34]][a[1A]]*o[a[u]][a[34]][a[1M]])}G{o[a[u]][a[26]](a[1J],o[a[u]][a[34]][a[X]]*o[a[u]][a[34]][a[1M]])}}};m 2A=l(1a){j[a[S]][a[2B]](1a,d[a[L]]);1q(d[a[28]])};m 1q=l(1h){v=j[a[22]][a[18]](1h);j[a[3]][a[1C]](v,a[1B]);d[a[7]][a[Y]](v);d[a[2M]][a[2L]](v);d[a[12]][a[Y]](v);d[a[13]][a[Y]](v);d[a[24]][a[Y]](v);d[a[2N]][a[Y]](v)};m 2O=l(1h){v=j[a[22]][a[18]](1h);j[a[3]][a[1C]](j[a[18]],a[1B]);j[a[3]][a[4]](t);1q(d[a[28]])};l 2Q(A){q(A==a[2P]){v=t;d[a[28]][a[23]]()}}m 2K=l(V,2J,1K,1G,2E,2D){m 1a=d[a[2C]][a[2F]](a[2G],1K[a[34]].2I);q(1a){K 1a[a[34]][a[2H]]}G{K V}};', 62, 204, '||||||||||_0x4869|x65|x74|App|x61|x63|x6F|x73|x72|HQ|x64|function|var|x69|_0x8a32xb|x6C|if|x6E|x68|false|61|_Change|x6B|x70|x53|x67|_0x8a32x10|break|x79|x75|case|x62|else|x44|true|x6D|return|45|x66|x76|x4E|x52|x49|x43|50|x32|x30|_0x8a32xf|x50|64|71|x45|||||||||||_0x8a32x20|x56|x48|_0x8a32x7|x5F|x77|20150303|_0x8a32x22|_firstLoad|x33|_0x8a32xa|_0x8a32x16|x4C|x51|_firstLoad1|_0x8a32x17|stoChanged|60|_0x8a32x18|_0x8a32x1a|1000|Ext|53|49|51|52|65|69|70|x41|x78|58|_0x8a32x13|x54|x42|66|_0x8a32x27|x4F|67|keys|btnLoad_Click|cboStatus_Change|cboTerritory_Change|btnProcess_Click|1555|x5A|x57|cboZone_Change|_0x8a32x14|ColCheck_Header_Change|dateKPI_expand|x31|||||||||||x6A|x4B|40|loadSourceCombo|x2F|x4D|x71|100|_0x8a32x8|dateKPI_Select|params|_0x8a32x1d|grdIN_StockRecoveryDet_BeforeEdit|59|62|63|StkQty|grdIN_StockRecoveryDet_Edit|grdIN_StockRecoveryDet_ValidateEdit|this|menuClick|47|switch|54|57|56|grdIN_StockRecoveryDet_Reject|68|78|_0x8a32x29|_0x8a32x28|77|76|79|Status|_0x8a32x26|renderStatus|72|73|74|stoLoad|75|refresh|failure|55|timeout|waitMsg|clientValidation|43|url|method|41|||||||||||42|lstIN_StockRecoveryDet|180000|success|201405071|48|44|46'.split('|'), 0, {}))
+var _Change = false;
+var keys = [''];
+var _firstLoad = true;
+var _firstLoad1 = true;
+
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboZone.getStore().load(function () {
+        App.cboTerritory.getStore().load(function () {
+
+            App.cboStatus.getStore().load(function () {
+                if (_firstLoad1) {
+                    App.cboStatus.setValue("H");
+                    //App.cboHandle.setValue("N");
+                    _firstLoad1 = false;
+                }
+
+                App.cboHandle.getStore().load(function () {
+                    HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                    if (_firstLoad) {
+                        //App.cboStatus.setValue("H");
+                        App.cboHandle.setValue("N");
+                        _firstLoad = false;
+                    }
+
+                })
+            })
+        })
+    })
+};
+
+var dateKPI_expand = function (dte, eOpts) {
+    dte.picker.setWidth(100);
+    dte.picker.monthEl.hide();
+    dte.picker.monthEl.setWidth(0);
+};
+
+var dateKPI_Select = function (sender, e) {
+    //App.cboCycle.store.reload();
+};
+    
+var cboZone_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        //App.grdOM_FCSBranch.store.removeAll();
+        //App.grdOM_FCSBranch.hide();
+        App.cboTerritory.store.load();
+    }
+};
+
+var cboTerritory_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        //App.grdOM_FCSBranch.store.removeAll();
+        //App.grdOM_FCSBranch.hide();
+        App.cboBranchID.store.reload();
+    }
+};
+
+var cboStatus_Change = function (value) {
+    if (_Change == true) {
+        HQ.message.show(20150303, '', 'refresh');
+    } else {
+        //App.grdIN_StockRecoveryDet.store.removeAll();
+        App.stoIN_StockRecoveryDet.each(function (item) {
+            item.set("ColCheck", false);
+        });
+        App.ColCheck_Header.setValue(false);
+        App.cboHandle.store.reload();
+    }
+};
+
+var btnLoad_Click = function () {
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        App.stoIN_StockRecoveryDet.reload();
+        App.stoPopUp.reload();
+    }
+};
+
+var ColCheck_Header_Change = function (value, rowIndex, checked) {
+    if (value) {
+        App.stoIN_StockRecoveryDet.each(function (item) {
+            if (item.data.Status == App.cboStatus.getValue()) {
+                item.set("ColCheck", value.checked);
+            }
+        });
+    }
+};
+
+var btnProcess_Click = function () {
+    if (!App.cboHandle.getValue()) {
+        HQ.message.show(1000, App.cboHandle.fieldLabel);
+    }
+    else if (!App.NewDateExp.getValue()) {
+        HQ.message.show(1000, App.NewDateExp.fieldLabel);
+    }
+    else if (App.NewDateExp.validate() == false) {
+        HQ.message.show(1555);
+    }
+    else {
+        var flat = false;
+        App.stoIN_StockRecoveryDet.data.each(function (item) {
+            if (item.data.ColCheck) {
+                flat = true;
+                return false;
+            }
+        });
+        if (flat && !Ext.isEmpty(App.cboHandle.getValue()) && App.cboHandle.getValue() != 'N') {
+            App.frmMain.submit({
+                clientValidation: false,
+                waitMsg: HQ.common.getLang("Handle"),
+                method: 'POST',
+                url: 'IN22003/Process',
+                timeout: 180000,
+                params: {
+                    lstIN_StockRecoveryDet: Ext.encode(App.grdIN_StockRecoveryDet.store.getRecordsValues())
+                },
+                success: function (msg, data) {
+                    HQ.message.show(201405071);
+                    App.stoIN_StockRecoveryDet.reload();
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+};
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdIN_StockRecoveryDet);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdIN_StockRecoveryDet);
+            break;
+        case "next":
+            HQ.grid.next(App.grdIN_StockRecoveryDet);
+            break;
+        case "last":
+            HQ.grid.last(App.grdIN_StockRecoveryDet);
+            break;
+        case "refresh":
+            if (_Change) {
+                HQ.message.show(20150303, '', 'refresh');
+            } else {
+                App.stoIN_StockRecoveryDet.reload();
+            }
+            break;
+        case "new":
+            break;
+        case "delete":
+            break;
+        case "save":
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+
+};
+
+var grdIN_StockRecoveryDet_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdIN_StockRecoveryDet, e, keys);
+};
+
+var grdIN_StockRecoveryDet_BeforeEdit = function (editor, e) {
+    if (e.field == 'ColCheck' && e.record.data.Status == App.cboStatus.getValue()) {
+        return true;
+    }
+
+    if (e.record.data.isEdit == '1' && e.field != 'ColCheck') {
+        return true;
+    }
+    return false;
+};
+
+var grdIN_StockRecoveryDet_Edit = function (item, e) {
+    if (e.field == "ApproveStkQty") {
+        if (e.record.data.StkQty < e.record.data.ApproveStkQty || e.record.data.ApproveStkQty < 0) {
+            e.record.set("ApproveStkQty", e.record.data.StkQty);
+            e.record.set("ApprovePriceStkQty", e.record.data.StkQty * e.record.data.Price)
+        } else {
+            e.record.set("ApprovePriceStkQty", e.record.data.ApproveStkQty * e.record.data.Price)
+        }
+    }
+};
+
+var grdIN_StockRecoveryDet_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdIN_StockRecoveryDet);
+    stoChanged(App.stoIN_StockRecoveryDet);
+};
+
+var stoChanged = function (sto) {
+    _Change = HQ.store.isChange(sto);
+    HQ.common.changeData(_Change, 'IN22003');
+    App.cboStatus.setReadOnly(_Change);
+    App.btnLoad.setDisabled(_Change);
+
+    App.cboTerritory.setReadOnly(_Change);
+    App.cboZone.setReadOnly(_Change);
+    App.cboBranchID.setReadOnly(_Change);
+    App.dateKPI.setReadOnly(_Change);
+};
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    _Change = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'IN22003');
+    HQ.common.showBusy(false);
+    stoChanged(App.stoIN_StockRecoveryDet);
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        _Change = false;
+        App.stoIN_StockRecoveryDet.reload();
+    }
+};
+
+var renderStatus = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboStatusIN22003_pcStatus.findRecord("Code", rec.data.Status);
+    if (record) {
+        return record.data.Descr;
+    }
+    else {
+        return value;
+    }
+};
+
+var PopupWin = {
+    showDetail: function (record) {
+        var lock = App.cboStatus.getValue() != "H";
+        App.grdPopUp.isLock = lock;
+
+        App.stoPopUp.clearFilter();
+        App.stoPopUp.filter('StkRecNbr', record.data.StkRecNbr);
+        App.stoPopUp.filter('ExpDate', record.data.ExpDate);
+        App.stoPopUp.filter('InvtID', record.data.InvtID);
+
+        //App.winDetail.record = record.data;
+        //App.winDetail.record = record;
+        if (App.cboStatus.getValue() == "H") {
+            PopupWin.addNewLot(record.data);
+        }
+
+        App.grdPopUp.view.refresh();
+        App.winDetail.show();
+    },
+
+    btnOK_Click: function () {
+        setTimeout(function () {
+        HQ.common.showBusy(false);
+        var recordTran = App.winDetail.record.data;
+
+        App.winDetail.hide();
+        }, 300);
+    },
+    addNewLot: function (record, lotSerNbr) {
+        var newRow = Ext.create('App.mdlPopUp');
+
+        newRow.data.BranchID = record.BranchID;
+        newRow.data.StkRecNbr = record.StkRecNbr;
+        newRow.data.ExpDate = record.ExpDate;
+        newRow.data.InvtID = record.InvtID;
+        newRow.data.NewDateExp = HQ.bussinessDate;
+        newRow.data.StkQty = record.StkQty;
+        newRow.data.Price = record.Price;
+        newRow.data.ApproveStkQty = 0;
+        newRow.data.Status = App.Status;
+        
+        HQ.store.insertRecord(App.stoPopUp, "NewDateExp", newRow, true);
+    }
+
+};
+
+
+
+///////////////////////////////////////////////////////////////////////
