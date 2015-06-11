@@ -113,6 +113,10 @@ var btnProcess_Click = function () {
 };
 var btnOKMCP_Click = function () {
     if (App.dteFromDate.isValid() && App.dteToDate.isValid()) {
+        if (App.dteFromDate.lastValue.getFullYear() != App.dteToDate.lastValue.getFullYear()) {
+            HQ.message.show(201506111);
+            return;
+        }
         App.winProcess.hide();
         var d = Ext.Date.parse("01/01/1990", "m/d/Y");
         if (App.FromDate.getValue() < d || App.ToDate.getValue() < d) return;
