@@ -260,7 +260,7 @@
                         
                         , X.NumberColumn().Text(Util.GetLang("IN22003ApprStkQty"))
                         .DataIndex("ApproveStkQty").Format("0,000").Width(100).Align(Alignment.Right)
-                        .Editor( X.NumberField().DecimalPrecision(0).MinValue(0))
+                        //.Editor( X.NumberField().DecimalPrecision(0).MinValue(0))
                         , X.NumberColumn().Text(Util.GetLang("ApprPriceStkQty")).DataIndex("ApprovePriceStkQty").Width(100).Align(Alignment.Right).Format("0,000")
                         , X.Column().Text(Util.GetLang("IN22003_Status")).DataIndex("Status").Width(100).Renderer("renderStatus")
                         , X.CommandColumn().Width(150)
@@ -320,8 +320,8 @@
         .Modal(true)
         .Closable(false)
         .Buttons(
-            X.Button().ID("btnLotDel").Text(Util.GetLang("DeleteRights"))
-                //.Listeners(p => p.Click.Fn = "PopupWin.btnLotDel_Click")
+            X.Button().ID("btnDel").Text(Util.GetLang("DeleteRights"))
+                .Listeners(p => p.Click.Fn = "PopupWin.btnDel_Click")
             , X.Button().ID("btnOK").Text(Util.GetLang("OK"))
                 .Listeners(p => p.Click.Fn = "PopupWin.btnOK_Click")
         )
@@ -339,19 +339,19 @@
             .ColumnModel(
                 X.RowNumbererColumn()
                 
-                , X.Column().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("Qty"))
+                , X.Column().ID("colLotQty").DataIndex("ApproveStkQty").Text(Util.GetLang("IN22003ApprStkQty"))
                 .Width(75).Align(Alignment.Right).Editor(X.NumberField().MinValue(0).DecimalPrecision(0))
 
-                , X.DateColumn().ID("NewExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(X.DateField())
+                , X.DateColumn().ID("NewExpDate").DataIndex("NewExpDate").Text(Util.GetLang("NewDateExp")).Format("dd/MM/yyyy").Editor(X.DateField().Format("dd/MM/yyyy"))
             )
-            //.Listeners(lst =>
-            //{
-            //    lst.Select.Handler = "HQ.focus='lot';";
-            //    lst.Edit.Fn = "PopupWinLot.grdLot_Edit";
-            //    lst.BeforeEdit.Fn = "PopupWinLot.grdLot_BeforeEdit";
-            //    lst.ValidateEdit.Fn = "PopupWinLot.grdLot_ValidateEdit";
-            //    lst.SelectionChange.Fn = "PopupWinLot.grdLot_SelectionChange";
-            //})
+                .Listeners(lst =>
+                {
+                    //lst.Select.Handler = "HQ.focus='lot';";
+                    lst.Edit.Fn = "PopupWin.grdPopUp_Edit";
+                    //lst.BeforeEdit.Fn = "PopupWinLot.grdLot_BeforeEdit";
+                    //lst.ValidateEdit.Fn = "PopupWinLot.grdLot_ValidateEdit";
+                    //lst.SelectionChange.Fn = "PopupWinLot.grdLot_SelectionChange";
+                })
             .SelectionModel(X.RowSelectionModel().ID("slmPopUp").Mode(SelectionMode.Single))
             .View(X.GridView().TrackOver(false))
             .Plugins(X.CellEditing().ClicksToEdit(1))

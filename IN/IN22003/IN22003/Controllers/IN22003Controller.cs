@@ -21,7 +21,9 @@ namespace IN22003.Controllers
         private string mCpnyID = Current.CpnyID;
         private string _screenNbr = "IN22003";
         private string _userName = Current.UserName;
+        private string _branchID = "";
         IN22003Entities _db = Util.CreateObjectContext<IN22003Entities>(false);
+        private List<IN22003_pgLoadGridPopUp_Result> _lstPopUp = new List<IN22003_pgLoadGridPopUp_Result>();
         private JsonResult mLogMessage;
         private FormCollection mForm;
         public ActionResult Index()
@@ -51,8 +53,12 @@ namespace IN22003.Controllers
             try
             {
                 mForm = data;
-                StoreDataHandler custHandler = new StoreDataHandler(data["lstIN_StockRecoveryDet"]);
+                _branchID = data["cboBranchID"].PassNull();
 
+                var detHandlerPopUp = new StoreDataHandler(data["lstPopUp"]);
+                _lstPopUp = detHandlerPopUp.ObjectData<IN22003_pgLoadGridPopUp_Result>().ToList();
+
+                StoreDataHandler custHandler = new StoreDataHandler(data["lstIN_StockRecoveryDet"]);
                 var lstIN_StockRecoveryDet = custHandler.ObjectData<IN22003_pgLoadGrid_Result>();
 
                 var access = Session["IN22003"] as AccessRight;
@@ -79,7 +85,7 @@ namespace IN22003.Controllers
                                     obj.ApproveStkQty = item.ApproveStkQty;
                                     //obj.NewExpDate = date;
                                     obj.Status = handle;
-
+                                    Save_PopUp(handle);
                                     //var obj1 = _db.IN_StockRecoveryCust.FirstOrDefault(p => p.BranchID == item.BranchID
                                     //                                                    && p.StkRecNbr == item.StkRecNbr
                                     //                                                    && p.InvtID == item.InvtID
@@ -135,6 +141,56 @@ namespace IN22003.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
+        }
+
+        private void Save_PopUp(string handle)
+        {
+            foreach(var row in _lstPopUp)
+            {
+                //double ApproveStkQty=0;
+                var obj=_db.IN_StockRecoveryPopUp.FirstOrDefault(p=>p.BranchID == _branchID 
+                                                        && p.StkRecNbr == row.StkRecNbr
+                                                        && p.ExpDate == row.ExpDate
+                                                        && p.InvtID == row.InvtID
+                                                        && p.NewExpDate ==row.NewExpDate);
+
+                if(obj==null)
+                {
+                    obj=new IN_StockRecoveryPopUp();
+                    obj.ResetET();
+
+                    obj.BranchID = _branchID;
+                    obj.StkRecNbr = row.StkRecNbr;
+                    obj.ExpDate = row.ExpDate;
+                    obj.InvtID = row.InvtID;
+                    obj.Status = handle;
+                    obj.StkQty = row.StkQty;
+                    obj.Price = row.Price;
+
+                    Update_PopUp(row,obj);
+                    obj.Crtd_Prog = _screenNbr;
+                    obj.Crtd_User = _userName;
+                    obj.Crtd_DateTime = DateTime.Now;
+                    _db.IN_StockRecoveryPopUp.AddObject(obj);
+
+                }
+                else
+                {
+
+                }
+            }
+                                        
+        }
+
+        private void Update_PopUp(IN22003_pgLoadGridPopUp_Result row, IN_StockRecoveryPopUp obj)
+        {
+            obj.ApproveStkQty = row.ApproveStkQty;
+            obj.NewExpDate = row.NewExpDate;
+            
+
+            obj.LUpd_Prog = _screenNbr;
+            obj.LUpd_User = _userName;
+            obj.LUpd_DateTime = DateTime.Now;
         }
 
     }
