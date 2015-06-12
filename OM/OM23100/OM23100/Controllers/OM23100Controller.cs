@@ -439,7 +439,7 @@ namespace OM23100.Controllers
                 {
                     Command =
                     {
-                        Handler = "grd_Reject(record);"
+                        Handler = "grdOM_FCS_Reject(record);"
                     }
                 }
             };
