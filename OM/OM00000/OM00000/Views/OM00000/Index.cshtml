@@ -65,6 +65,50 @@
             // Store: stoSalesPerson
         )
 
+        @(
+            Html.HQ().Store().ID("stoDetDiscGxC1")
+            .HQProcedure("OM00000_pcDiscountType").AutoLoad(false)
+            .HQParam(new StoreParameterCollection() 
+            { 
+                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                , new StoreParameter("@DiscType", "L", ParameterMode.Value)
+            })
+            .LoadData()
+        )
+
+        @(
+            Html.HQ().Store().ID("stoPriceSeqxx")
+            .HQProcedure("OM00000_pcPriceSeq").AutoLoad(false)
+            .HQParam(new StoreParameterCollection() 
+            { 
+                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+            })
+            .LoadData()
+        )
+
+        @(
+            Html.HQ().Store().ID("stoGroupDiscGxC1")
+            .HQProcedure("OM00000_pcDiscountType").AutoLoad(false)
+            .HQParam(new StoreParameterCollection() 
+            { 
+                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                , new StoreParameter("@DiscType", "G", ParameterMode.Value)
+            })
+            .LoadData()
+        )
+
+        @(
+            Html.HQ().Store().ID("stoDocDiscGxCx")
+            .HQProcedure("OM00000_pcDiscountType").AutoLoad(false)
+            .HQParam(new StoreParameterCollection() 
+            { 
+                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                , new StoreParameter("@DiscType", "D", ParameterMode.Value)
+            })
+            .LoadData()
+        )
+
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 

@@ -5,7 +5,15 @@ var Declare = {
 var Event = {
     Form: {
         frmMain_boxReady: function (frm, width, height, eOpts) {
-            App.stoSetup.reload();
+            App.stoDetDiscGxC1.load(function () {
+                App.stoPriceSeqxx.load(function () {
+                    App.stoGroupDiscGxC1.load(function () {
+                        App.stoDocDiscGxCx.load(function () {
+                            App.stoSetup.reload();
+                        });
+                    });
+                });
+            });
         },
 
         frmMain_fieldChange: function () {
@@ -15,7 +23,6 @@ var Event = {
                 HQ.isChange = HQ.store.isChange(App.stoSetup);
 
                 HQ.common.changeData(HQ.isChange, 'OM00000');//co thay doi du lieu gan * tren tab title header
-                App.cboPOSPrinter.setReadOnly(HQ.isChange);
             }
         },
 
@@ -79,6 +86,9 @@ var Event = {
             }
             var frmRecord = sto.getAt(0);
             App.frmMain.loadRecord(frmRecord);
+
+            HQ.isChange = false;
+            HQ.common.changeData(HQ.isChange, 'OM00000');
         }
     }
 };

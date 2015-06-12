@@ -123,6 +123,7 @@ namespace OM00000.Controllers
             if (isNew)
             {
                 setup = new OM_Setup();
+                setup.SetupID = inputSetup.SetupID;
                 setup.Crtd_DateTime = DateTime.Now;
                 setup.Crtd_Prog = _screenNbr;
                 setup.Crtd_User = Current.UserName;
@@ -227,11 +228,11 @@ namespace OM00000.Controllers
             setup.DocDiscG6C2 = inputSetup.DocDiscG6C2;
 
             setup.PriceSeq00 = inputSetup.PriceSeq00;
-            setup.PriceSeq01 = inputSetup.PriceSeq00;
-            setup.PriceSeq02 = inputSetup.PriceSeq00;
-            setup.PriceSeq03 = inputSetup.PriceSeq00;
-            setup.PriceSeq04 = inputSetup.PriceSeq00;
-            setup.PriceSeq05 = inputSetup.PriceSeq00;
+            setup.PriceSeq01 = inputSetup.PriceSeq01;
+            setup.PriceSeq02 = inputSetup.PriceSeq02;
+            setup.PriceSeq03 = inputSetup.PriceSeq03;
+            setup.PriceSeq04 = inputSetup.PriceSeq04;
+            setup.PriceSeq05 = inputSetup.PriceSeq05;
 
             setup.ReqDiscID = inputSetup.ReqDiscID;
             setup.BGWarningMsg = inputSetup.BGWarningMsg;
