@@ -281,9 +281,9 @@ var PopupWin = {
                             flat = item;
                             return false;
                         }
-                        date = item.data.NewDateExp;
+                        date = item.data.NewExpDate;
 
-                        if (Ext.isEmpty(item.data.NewExpDate)) {
+                        if (Ext.isEmpty(item.data.NewExpDate) && item.data.ApproveStkQty > 0) {
                             HQ.message.show(1000, [HQ.common.getLang('NewExpDate')], '', true);
                             flat = item;
                             return false;
@@ -346,7 +346,7 @@ var PopupWin = {
         newRow.data.StkRecNbr = record.StkRecNbr;
         newRow.data.ExpDate = record.ExpDate;
         newRow.data.InvtID = record.InvtID;
-        newRow.data.NewExpDate = HQ.bussinessDate;
+        newRow.data.NewExpDate = '';
         newRow.data.StkQty = record.StkQty;
         newRow.data.Price = record.Price;
         newRow.data.ApproveStkQty = 0;
@@ -365,11 +365,37 @@ var PopupWin = {
     grdPopUp_Edit: function (item, e) {
         HQ.common.showBusy(true);
         var objDetail = e.record.data;
+        
 
         var recordTran = App.winDetail.record.data;
         if (e.field == 'ApproveStkQty' && e.value > 0) {
             PopupWin.addPopUp(recordTran);
         }
+        
+
+    },
+
+    checkValidate: function (grd, e, keys) {
+        if (keys.indexOf(e.field) != -1) {
+            if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                HQ.message.show(1112, e.value);
+                return false;
+            }
+
+        }
+    },
+
+    grdPopUp_ValidateEdit: function (item, e) {
+        return PopupWin.checkValidate(App.grdPopUp, e, ['NewExpDate']);
+    },
+
+    grdPopUp_BeforeEdit: function (item, e) {
+        if (App.winDetail.record.data.Status == 'H')
+            return true;
+        else
+            if (App.winDetail.record.data.isEdit == '1')
+                return true;
+        return false;
     }
 };
 

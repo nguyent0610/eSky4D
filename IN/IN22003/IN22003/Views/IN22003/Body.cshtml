@@ -338,18 +338,18 @@
             .StoreID("stoPopUp")
             .ColumnModel(
                 X.RowNumbererColumn()
-                
-                , X.Column().ID("colLotQty").DataIndex("ApproveStkQty").Text(Util.GetLang("IN22003ApprStkQty"))
+                , X.DateColumn().ID("NewExpDate").DataIndex("NewExpDate").Text(Util.GetLang("NewDateExp")).Format("dd/MM/yyyy").Editor(X.DateField().Format("dd/MM/yyyy"))
+            
+                , X.Column().ID("ApproveStkQty").DataIndex("ApproveStkQty").Text(Util.GetLang("IN22003ApprStkQty"))
                 .Width(75).Align(Alignment.Right).Editor(X.NumberField().MinValue(0).DecimalPrecision(0))
 
-                , X.DateColumn().ID("NewExpDate").DataIndex("NewExpDate").Text(Util.GetLang("NewDateExp")).Format("dd/MM/yyyy").Editor(X.DateField().Format("dd/MM/yyyy"))
-            )
+                )
                 .Listeners(lst =>
                 {
                     //lst.Select.Handler = "HQ.focus='lot';";
                     lst.Edit.Fn = "PopupWin.grdPopUp_Edit";
-                    //lst.BeforeEdit.Fn = "PopupWinLot.grdLot_BeforeEdit";
-                    //lst.ValidateEdit.Fn = "PopupWinLot.grdLot_ValidateEdit";
+                    lst.BeforeEdit.Fn = "PopupWin.grdPopUp_BeforeEdit";
+                    lst.ValidateEdit.Fn = "PopupWin.grdPopUp_ValidateEdit";
                     //lst.SelectionChange.Fn = "PopupWinLot.grdLot_SelectionChange";
                 })
             .SelectionModel(X.RowSelectionModel().ID("slmPopUp").Mode(SelectionMode.Single))
