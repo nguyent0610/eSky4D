@@ -252,6 +252,7 @@ var PopupWin = {
         }
 
         App.grdPopUp.view.refresh();
+        App.winDetail.setTitle(record.data.InvtID + ' - ' + record.data.StkQty + ' - ' + record.data.PriceStkQty);
         App.winDetail.show();
     },
 
@@ -326,9 +327,11 @@ var PopupWin = {
     },
 
     btnDel_Click: function () {
-        if (HQ.isUpdate || HQ.isInsert) {
-            if (App.slmPopUp.selected.items.length != 0) {
-                HQ.message.show(11, '', 'PopupWin.deletePopUp');
+        if (App.winDetail.record.data.Status == 'H' || App.winDetail.record.data.isEdit == '1') {
+            if (HQ.isUpdate || HQ.isInsert) {
+                if (App.slmPopUp.selected.items.length != 0) {
+                    HQ.message.show(11, '', 'PopupWin.deletePopUp');
+                }
             }
         }
     },
@@ -350,6 +353,7 @@ var PopupWin = {
     },
 
     deletePopUp: function (item) {
+
         if (item == 'yes') {
             App.grdPopUp.deleteSelected();
         }
