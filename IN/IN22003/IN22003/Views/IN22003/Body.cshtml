@@ -152,7 +152,7 @@
                             , HQ.Combo().ID("cboHandle")
                             .Name("cboHandle").HQLangCode("Handle").HQProcedure("IN22003_pcHandle")
                             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
-                            .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                            .Width(250).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
                             .ForceSelection(true).HQAutoLoad(false)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .HQParam(new StoreParameterCollection() 
@@ -166,8 +166,8 @@
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
-                            , HQ.DateField().ID("NewDateExp").HQLangCode("IN22003_Date")
-                        .MarginSpec("5 0 10 0").Width(250).Format("dd/MM/yyyy").Value(DateTime.Now)
+                        //    , HQ.DateField().ID("NewDateExp").HQLangCode("IN22003_Date")
+                        //.MarginSpec("5 0 10 0").Width(250).Format("dd/MM/yyyy").Value(DateTime.Now)
               
                     )
 
@@ -242,7 +242,7 @@
                         , X.NumberColumn().Text(Util.GetLang("IN22003_StkQty")).DataIndex("StkQty").Width(100).Width(100).Align(Alignment.Right).Format("0,000")
                         , X.NumberColumn().Text(Util.GetLang("IN22003PriceStkQty")).DataIndex("PriceStkQty").Width(100).Align(Alignment.Right).Format("0,000")
                         
-                        , X.ImageCommandColumn().Text(Util.GetLang(""))
+                        , X.ImageCommandColumn().Text(Util.GetLang("")).Width(25)
                             .Commands(
                                     X.ImageCommand()
                                     .Icon(Icon.TabEdit)
@@ -337,8 +337,8 @@
             .Border(true).BorderSpec("1 0 0 0")
             .StoreID("stoPopUp")
             .ColumnModel(
-                X.RowNumbererColumn()
-                , X.DateColumn().ID("NewExpDate").DataIndex("NewExpDate").Text(Util.GetLang("NewDateExp")).Format("dd/MM/yyyy").Editor(X.DateField().Format("dd/MM/yyyy"))
+                //X.RowNumbererColumn(),
+                X.DateColumn().ID("NewExpDate").DataIndex("NewExpDate").Text(Util.GetLang("NewDateExp")).Format("dd/MM/yyyy").Editor(X.DateField().Format("dd/MM/yyyy"))
             
                 , X.Column().ID("ApproveStkQty").DataIndex("ApproveStkQty").Text(Util.GetLang("IN22003ApprStkQty"))
                 .Width(75).Align(Alignment.Right).Editor(X.NumberField().MinValue(0).DecimalPrecision(0))

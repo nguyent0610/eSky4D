@@ -77,6 +77,7 @@ var cboStatus_Change = function (value) {
 var btnLoad_Click = function () {
     if (HQ.form.checkRequirePass(App.frmMain)) {
         App.stoIN_StockRecoveryDet.reload();
+        App.stoPopUp.reload();
     }
 };
 
@@ -94,12 +95,6 @@ var btnProcess_Click = function () {
     if (!App.cboHandle.getValue()) {
         HQ.message.show(1000, App.cboHandle.fieldLabel);
     }
-    else if (!App.NewDateExp.getValue()) {
-        HQ.message.show(1000, App.NewDateExp.fieldLabel);
-    }
-    else if (App.NewDateExp.validate() == false) {
-        HQ.message.show(1555);
-    }
     else {
         var flat = false;
         App.stoIN_StockRecoveryDet.data.each(function (item) {
@@ -109,6 +104,7 @@ var btnProcess_Click = function () {
             }
         });
         if (flat && !Ext.isEmpty(App.cboHandle.getValue()) && App.cboHandle.getValue() != 'N') {
+            App.stoPopUp.clearFilter();
             App.frmMain.submit({
                 clientValidation: false,
                 waitMsg: HQ.common.getLang("Handle"),
@@ -116,6 +112,7 @@ var btnProcess_Click = function () {
                 url: 'IN22003/Process',
                 timeout: 180000,
                 params: {
+                    lstPopUp: Ext.encode(App.stoPopUp.getRecordsValues()),
                     lstIN_StockRecoveryDet: Ext.encode(App.grdIN_StockRecoveryDet.store.getRecordsValues())
                 },
                 success: function (msg, data) {
@@ -223,6 +220,7 @@ function refresh(item) {
     if (item == 'yes') {
         _Change = false;
         App.stoIN_StockRecoveryDet.reload();
+        App.stoPopUp.reload();
     }
 };
 
@@ -235,4 +233,168 @@ var renderStatus = function (value, metaData, rec, rowIndex, colIndex, store) {
         return value;
     }
 };
+
+var PopupWin = {
+
+    showDetail: function (record) {
+        var lock = record.data.Status != "H";
+        App.grdPopUp.isLock = lock;
+
+        App.stoPopUp.clearFilter();
+        App.stoPopUp.filter('StkRecNbr', record.data.StkRecNbr);
+        App.stoPopUp.filter('ExpDate', record.data.ExpDate);
+        App.stoPopUp.filter('InvtID', record.data.InvtID);
+
+        App.winDetail.record = record;
+
+        if (record.data.Status == "H") {
+            PopupWin.addPopUp(record.data);
+        }
+
+        App.grdPopUp.view.refresh();
+        App.winDetail.show();
+    },
+
+    btnOK_Click: function () {
+        var recordTran = App.winDetail.record.data;
+        if (recordTran.Status == 'H' || recordTran.isEdit == '1') {
+            setTimeout(function () {
+                HQ.common.showBusy(false);
+
+
+                var flat = null;
+                var date;
+                //App.stoPopUp.clearFilter();
+
+
+                App.stoPopUp.data.each(function (item) {
+                    if (recordTran.Status == 'H') {
+
+                        if (item.data.NewExpDate == date && item.data.ApproveStkQty > 0) {
+                            HQ.message.show(2015061203, '', '');
+                            flat = item;
+                            return false;
+                        }
+                        date = item.data.NewExpDate;
+
+                        if (Ext.isEmpty(item.data.NewExpDate) && item.data.ApproveStkQty > 0) {
+                            HQ.message.show(1000, [HQ.common.getLang('NewExpDate')], '', true);
+                            flat = item;
+                            return false;
+                        }
+                        if (Ext.isEmpty(item.data.ApproveStkQty)) {
+                            HQ.message.show(1000, [HQ.common.getLang('ApproveStkQty')], '', true);
+                            flat = item;
+                            return false;
+                        }
+                        if (item.data.ApproveStkQty == 0) {
+                            App.slmPopUp.select(App.stoPopUp.indexOf(item));
+                            App.grdPopUp.deleteSelected();
+                        }
+
+                    }
+
+                });
+
+                if (!Ext.isEmpty(flat)) {
+                    App.slmPopUp.select(App.stoPopUp.indexOf(flat));
+                    return;
+                }
+
+                var ApproveStkQty = 0;
+                var Price = 0;
+                App.stoPopUp.data.each(function (item) {
+                    ApproveStkQty += item.data.ApproveStkQty;
+                    Price = item.data.Price;
+                });
+
+                if (ApproveStkQty > recordTran.StkQty) {
+                    HQ.message.show(2015061201, '', '');
+                    return false;
+                }
+                else {
+                    App.winDetail.record.set('ApproveStkQty', ApproveStkQty);
+                    App.winDetail.record.set('ApprovePriceStkQty', ApproveStkQty * Price);
+                }
+
+                App.winDetail.hide();
+            }, 300);
+        }
+        else {
+            App.winDetail.hide();
+        }
+    },
+
+    btnDel_Click: function () {
+        if (HQ.isUpdate || HQ.isInsert) {
+            if (App.slmPopUp.selected.items.length != 0) {
+                HQ.message.show(11, '', 'PopupWin.deletePopUp');
+            }
+        }
+    },
+
+    addPopUp: function (record, lotSerNbr) {
+        var newRow = Ext.create('App.mdlPopUp');
+
+        newRow.data.BranchID = record.BranchID;
+        newRow.data.StkRecNbr = record.StkRecNbr;
+        newRow.data.ExpDate = record.ExpDate;
+        newRow.data.InvtID = record.InvtID;
+        newRow.data.NewExpDate = '';
+        newRow.data.StkQty = record.StkQty;
+        newRow.data.Price = record.Price;
+        newRow.data.ApproveStkQty = 0;
+        newRow.data.Status = record.Status;
+
+        HQ.store.insertRecord(App.stoPopUp, "NewExpDate", newRow, true);
+    },
+
+    deletePopUp: function (item) {
+        if (item == 'yes') {
+            App.grdPopUp.deleteSelected();
+        }
+    },
+
+
+    grdPopUp_Edit: function (item, e) {
+        HQ.common.showBusy(true);
+        var objDetail = e.record.data;
+        var recordTran = App.winDetail.record.data;
+        if (e.field == 'NewExpDate' && !e.value) {
+            HQ.message.show(1000, e.field);
+        }
+            //else if (e.field == 'NewExpDate' && e.validate == false) {
+            //    HQ.message.show(1555);
+            //}
+        else if (e.field == 'ApproveStkQty' && e.value > 0) {
+            PopupWin.addPopUp(recordTran);
+        }
+    },
+
+    checkValidate: function (grd, e, keys) {
+        if (keys.indexOf(e.field) != -1) {
+            if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                HQ.message.show(1112, e.value);
+                return false;
+            }
+
+        }
+    },
+
+    grdPopUp_ValidateEdit: function (item, e) {
+        return PopupWin.checkValidate(App.grdPopUp, e, ['NewExpDate']);
+    },
+
+    grdPopUp_BeforeEdit: function (item, e) {
+        if (App.winDetail.record.data.Status == 'H')
+            return true;
+        else
+            if (App.winDetail.record.data.isEdit == '1')
+                return true;
+        return false;
+    }
+};
+
+
+
 ///////////////////////////////////////////////////////////////////////

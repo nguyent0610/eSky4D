@@ -31,6 +31,7 @@ namespace IN22003.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
+        
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
@@ -66,8 +67,8 @@ namespace IN22003.Controllers
                 if (!access.Update && !access.Insert)
                     throw new MessageException(MessageType.Message, "728");
                 string handle = data["cboHandle"];
-                string date_temp = data["NewDateExp"];
-                DateTime date = DateTime.Parse(date_temp);
+                //string date_temp = data["NewDateExp"];
+                //DateTime date = DateTime.Parse(date_temp);
                 if (handle != "N" && handle != string.Empty)
                 {
                     foreach (var item in lstIN_StockRecoveryDet)
