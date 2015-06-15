@@ -146,7 +146,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -162,7 +162,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].trim() == "") {
+                                if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }

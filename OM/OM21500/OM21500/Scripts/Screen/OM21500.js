@@ -1,1 +1,150 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('n a=["\\q\\g\\d\\h\\1c\\l\\j\\b","\\u\\i\\j\\F\\A\\N\\q\\g\\d\\h\\q\\b\\d\\h\\i","\\I\\g\\i\\d\\e","\\u\\i\\g\\j","\\L\\i\\b\\H","\\o\\b\\1Q\\e","\\m\\f\\d\\e","\\g\\d\\1c\\t\\f\\o\\u\\b","","\\i\\b\\I\\i\\b\\d\\t","\\d\\t\\l\\T","\\x\\b\\d\\d\\f\\u\\b","\\g\\d\\1a\\g\\i\\d\\e\\1b\\l\\f\\j","\\i\\b\\m\\l\\f\\j","\\d\\e\\l\\F\\A\\N\\q\\g\\d\\h\\q\\b\\d\\h\\i","\\g\\d\\Z\\o\\d\\b\\i\\e","\\g\\o\\d\\b\\i\\e","\\o\\b\\T","\\g\\e\\b\\x\\d","\\d\\b\\m\\b\\h\\e\\b\\j","\\d\\m\\x\\F\\A\\N\\q\\g\\d\\h\\q\\b\\d\\h\\i","\\g\\d\\q\\b\\m\\b\\e\\b","\\j\\b\\m\\b\\e\\b\\q\\f\\e\\f","\\j\\b\\m\\b\\e\\b","\\g\\d\\1R\\L\\j\\f\\e\\b","\\h\\t\\b\\h\\B\\1e\\b\\1P\\K\\g\\i\\b\\1O\\f\\d\\d","\\d\\e\\l\\i\\b","\\d\\f\\H\\b","\\L\\i\\g\\o\\e","\\h\\m\\l\\d\\b","\\h\\l\\x\\x\\l\\o","\\F\\A\\1g\\Y\\1i\\J\\J","\\h\\t\\f\\o\\u\\b\\q\\f\\e\\f","\\d\\t\\l\\T\\O\\K\\d\\M","\\g\\o\\d\\b\\i\\e\\O\\m\\f\\o\\B","\\m\\l\\f\\j\\g\\o\\u\\j\\f\\e\\f","\\u\\b\\e\\1b\\f\\o\\u","\\h\\t\\b\\h\\B\\O\\b\\I\\l\\i\\b\\1d\\j\\g\\e","\\I\\g\\b\\m\\j","\\1N\\l\\q\\f\\e\\b","\\H\\f\\m\\K\\b","\\1a\\i\\l\\x\\q\\f\\e\\b","\\j\\f\\e\\f","\\i\\b\\h\\l\\i\\j","\\h\\t\\b\\h\\B\\Z\\o\\d\\b\\i\\e\\1T\\b\\M","\\h\\t\\b\\h\\B\\1h\\f\\m\\g\\j\\f\\e\\b\\1d\\j\\g\\e","\\h\\t\\b\\h\\B\\1e\\b\\1X\\b\\h\\e","\\g\\d\\1h\\f\\m\\g\\j","\\I\\i\\x\\A\\f\\g\\o","\\P\\f\\H\\g\\o\\u\\q\\f\\e\\f","\\F\\A\\1g\\Y\\1i\\J\\J\\1y\\P\\f\\H\\b","\\u\\b\\e\\q\\f\\e\\f","\\L\\i\\l\\h\\b\\d\\d","\\d\\K\\1H\\x\\g\\e","\\M\\b\\d","\\j\\b\\m\\b\\e\\b\\P\\b\\m\\b\\h\\e\\b\\j"];n y=[a[0]];n X=[a[0]];n W=[a[0]];n 1p=p(U){2m(U){s a[2]:c[a[3]][a[2]](k[a[1]]);v;s a[4]:c[a[3]][a[4]](k[a[1]]);v;s a[5]:c[a[3]][a[5]](k[a[1]]);v;s a[6]:c[a[3]][a[6]](k[a[1]]);v;s a[9]:r(c[a[7]]){c[a[11]][a[10]](2l,a[8],a[9])}1q{c[a[7]]=G;c[a[12]]=E;k[a[14]][a[13]]()};v;s a[17]:r(c[a[15]]){c[a[3]][a[16]](k[a[1]],y)};v;s a[23]:r(k[a[20]][a[19]][a[18]][0]!=2j){r(c[a[21]]){c[a[11]][a[10]](11,a[8],a[22])}};v;s a[27]:r(c[a[24]]||c[a[15]]||c[a[21]]){r(c[a[26]][a[25]](k[a[14]],y,X,W)){1k()}};v;s a[28]:v;s a[29]:c[a[z]][a[29]](2i);v}};n 2d=p(){c[a[12]]=E;k[a[14]][a[13]]()};n S=p(D){c[a[7]]=c[a[26]][a[7]](D);c[a[z]][a[1j]](c[a[7]],a[V])};n 2e=p(D){c[a[z]][a[1f]](G);c[a[7]]=c[a[26]][a[7]](D);c[a[z]][a[1j]](c[a[7]],a[V]);r(c[a[12]]){r(c[a[15]]){c[a[26]][a[2p]](D,y)};c[a[12]]=G}};n 2o=p(D){c[a[z]][a[1f]](E,c[a[z]][a[1n]](a[1C]))};n 1F=p(1I,w){1r c[a[3]][a[1s]](w,y)};n 1U=p(C,w){r(w[a[1L]]==a[2f]){r(w[a[2n]]<w[a[1D]][a[2k]][a[2g]]){c[a[11]][a[10]](2h,a[8],a[8])}1q{c[a[3]][a[2r]](k[a[1]],w,y)}}};n 2q=p(C,w){1r c[a[3]][a[2b]](k[a[1]],w,y)};n 1E=p(1l){c[a[3]][a[2c]](1l,k[a[1]]);S(k[a[14]])};n 1k=p(){r(k[a[1m]][a[1G]]()){k[a[1m]][a[1B]]({1A:1u,1t:c[a[z]][a[1n]](a[1v]),1w:a[1z],1x:{1J:c[a[26]][a[1K]](k[a[14]])},1W:p(Q,R){c[a[11]][a[10]](1V);c[a[7]]=G;1p(a[9])},1Y:p(Q,R){c[a[11]][a[2a]](Q,R,E)}})}};n 1Z=p(C){r(C==a[1o]){k[a[1]][a[1S]]();S(k[a[14]])}};p 1M(C){r(C==a[1o]){c[a[7]]=G;c[a[12]]=E;k[a[14]][a[13]]()}}', 62, 152, '||||||||||_0xb830|x65|HQ|x73|x74|x61|x69|x63|x72|x64|App|x6F|x6C|var|x6E|function|x44|if|case|x68|x67|break|_0x6720xd|x6D|keys|30|x4D|x6B|_0x6720xf|_0x6720x8|true|x4F|false|x76|x66|x30|x75|x70|x79|x5F|x42|x53|_0x6720x14|_0x6720x15|stoChanged|x77|_0x6720x5|31|fieldsLangCheckRequire|fieldsCheckRequire|x31|x49|||||||||||x46|x4C|x43|x45|x52|33|x32|x56|x35|32|save|_0x6720x12|48|36|54|menuClick|else|return|37|waitMsg|1800000|49|url|params|x2F|50|timeout|53|35|43|grdOM_DiscDescr_Reject|grdOM_DiscDescr_BeforeEdit|47|x62|_0x6720xc|lstOM_DiscDescr|51|38|refresh|x54|x50|x71|x78|x55|55|x4B|grdOM_DiscDescr_Edit|201405071|success|x6A|failure|deleteData|||||||||||52|45|46|firstLoad|stoLoad|39|41|2015061501|this|undefined|42|20150303|switch|40|stoBeforeLoad|34|grdOM_DiscDescr_ValidateEdit|44'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+
+var keys = ['DiscCode'];
+var fieldsCheckRequire = ["DiscCode", "Descr", "FromDate", "ToDate"];
+var fieldsLangCheckRequire = ["DiscCode", "Descr", "FromDate", "ToDate"];
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdOM_DiscDescr);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdOM_DiscDescr);
+            break;
+        case "next":
+            HQ.grid.next(App.grdOM_DiscDescr);
+            break;
+        case "last":
+            HQ.grid.last(App.grdOM_DiscDescr);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoOM_DiscDescr.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdOM_DiscDescr, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmOM_DiscDescr.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoOM_DiscDescr, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+
+};
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoOM_DiscDescr.reload();
+}
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM21500');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM21500');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+var grdOM_DiscDescr_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+var grdOM_DiscDescr_Edit = function (item, e) {
+    if (e.field == 'ToDate') {
+        if (e.value < e.record.data.FromDate) {
+            HQ.message.show(2015061501, '', '');
+        }
+        else {
+            HQ.grid.checkInsertKey(App.grdOM_DiscDescr, e, keys);
+        }
+    }
+
+
+};
+var grdOM_DiscDescr_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdOM_DiscDescr, e, keys);
+};
+var grdOM_DiscDescr_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_DiscDescr);
+    stoChanged(App.stoOM_DiscDescr);
+};
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'OM21500/Save',
+            params: {
+                lstOM_DiscDescr: HQ.store.getData(App.stoOM_DiscDescr)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdOM_DiscDescr.deleteSelected();
+        stoChanged(App.stoOM_DiscDescr);
+    }
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoOM_DiscDescr.reload();
+    }
+};
+///////////////////////////////////
