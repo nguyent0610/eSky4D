@@ -1,0 +1,108 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM21500;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdOM_DiscDescr")
+        .SelectionMemory(false)
+        .Store(
+            X.Store()
+            .ID("stoOM_DiscDescr")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(OM21500_pgLoadGrid_Result), "mdlOM21500_pgLoadGrid", "DiscCode"))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_DiscDescr"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoBeforeLoad";
+                l.Load.Fn = "stoLoad";
+                l.Update.Fn = "stoChanged";
+            })
+        )
+        .Listeners(p =>
+                 {
+                     p.BoxReady.Handler = "firstLoad();";
+                 })
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40)
+            , X.Column().Text(Util.GetLang("DiscCode")).DataIndex("DiscCode").Width(150).Editor(X.TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true))
+            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().AllowBlank(false).MaxLength(300).EnforceMaxLength(true))
+            , X.CheckColumn().Text(Util.GetLang("Active")).DataIndex("Active").Width(150).Editable(true)
+            , X.DateColumn().ID("txtFromDate").DataIndex("FromDate").Text(Util.GetLang("FromDate")).Format("dd/MM/yyyy").Editor(X.DateField().Format("dd/MM/yyyy"))
+            , X.DateColumn().ID("txtToDate").DataIndex("ToDate").Text(Util.GetLang("ToDate")).Format("dd/MM/yyyy").Editor(X.DateField().Format("dd/MM/yyyy"))
+            
+            
+            , X.CommandColumn().Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdOM_DiscDescr_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmOM_DiscDescr").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdOM_DiscDescr_BeforeEdit";
+                ls.Edit.Fn = "grdOM_DiscDescr_Edit";
+                ls.ValidateEdit.Fn = "grdOM_DiscDescr_ValidateEdit";
+
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("DiscCode"),
+                    X.StringFilter().DataIndex("Descr"),
+                    X.BooleanFilter().DataIndex("Active"),
+                    X.DateFilter().DataIndex("FromDate"),
+                    X.DateFilter().DataIndex("ToDate")
+                )
+        )
+    )
+))
