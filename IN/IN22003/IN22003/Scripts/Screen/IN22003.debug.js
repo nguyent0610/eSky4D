@@ -365,7 +365,7 @@ var PopupWin = {
         var objDetail = e.record.data;
         var recordTran = App.winDetail.record.data;
         if (e.field == 'NewExpDate' && !e.value) {
-            HQ.message.show(1000, e.field);
+            HQ.message.show(15, 'NewDateExp');
         }
             //else if (e.field == 'NewExpDate' && e.validate == false) {
             //    HQ.message.show(1555);
