@@ -1258,6 +1258,10 @@ var save = function () {
         HQ.message.show(2015020804, [App.cboOrderNbr.getValue()], '', true);
         return;
     }
+    if (Ext.isEmpty(App.cboShiptoID.getValue())) {
+        HQ.message.show(1000, [HQ.common.getLang('shiptoid')], '', true);
+        return;
+    }
     var flat = null;
     App.stoLotTrans.clearFilter();
     App.stoOrdDet.data.each(function (item) {
@@ -1369,6 +1373,7 @@ var save = function () {
         App.smlOrdDet.select(App.stoOrdDet.indexOf(flat));
         return;
     }
+    
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             waitMsg: HQ.waitMsg,
@@ -1678,7 +1683,7 @@ var checkExitEdit = function (row) {
                     budgetID = objDisc.BudgetID;
                     discCode = objDisc.DiscCode;
                     discID = discCode;
-                    discSeg = string.Empty;
+                    discSeg = "";
                     mannualDisc = true;
                     firstCal = true;
                 }
@@ -2695,6 +2700,7 @@ var setStatusForm = function () {
 
     App.cboOrderNbr.setReadOnly(false);
     App.cboHandle.setReadOnly(false);
+    App.cboCustID.setReadOnly(false);
     App.cboOrderType.setReadOnly(false);
     App.cboStatus.setReadOnly(true);
     App.txtCustName.setReadOnly(true);
@@ -2724,7 +2730,7 @@ var checkDetAdd = function () {
             return false;
         }
     });
-
+    App.cboCustID.setReadOnly(true);//fix loi combo CustID khong the chon du set readonly = false
     App.cboCustID.setReadOnly(App.cboStatus.getValue() != 'N' || flat);
     App.cboSlsPerID.setReadOnly(App.cboStatus.getValue() != 'N' || flat);
     App.txtOrderDate.setReadOnly(App.cboStatus.getValue() != 'N' || flat);
