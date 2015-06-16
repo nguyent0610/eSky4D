@@ -145,6 +145,10 @@ namespace AR20500.Controllers
 
                                 objCust.Phone = item.Phone.PassNull();
 
+                                objCust.Channel = item.Channel.PassNull();
+
+                                objCust.EMailAddr = item.Email.PassNull();
+
                                 objCust.CrRule = "N";
                                 objCust.Crtd_Datetime = DateTime.Now;
                                 objCust.Crtd_Prog = "AR20500";
