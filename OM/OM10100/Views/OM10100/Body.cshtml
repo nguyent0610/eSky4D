@@ -646,6 +646,7 @@
                                                 <tr>
                                                     <th>" + Util.GetLang("OrderNbr") + @"</th>
                                                     <th>" + Util.GetLang("OrderDate") + @"</th>
+                                                    <th>" + Util.GetLang("OrderPDA") + @"</th>
                                                     <th>" + Util.GetLang("CustID") + @"</th>
                                                     <th>" + Util.GetLang("SlsPerID") + @"</th>
                                                     <th>" + Util.GetLang("Status") + @"</th>
@@ -654,6 +655,7 @@
                                         <tr class='x-boundlist-item'>
                                             <td style='width:100px;'>{OrderNbr}</td>
                                             <td>{OrderDate:date(""m-d-Y"")}</td>
+                                            <td style='width:100px;'>{OrigOrderNbr}</td>
                                             <td>{CustID}</td>
                                             <td>{SlsPerID}</td>
                                             <td>{Status}</td>
@@ -1035,11 +1037,10 @@
                         )
                                         
                         , X.Column().ID("colDescr").DataIndex("Descr").Text(Util.GetLang("Descr"))
-                        .Flex(1)
                         .MinWidth(120)
                             
                             
-                        , X.CheckColumn().ID("colFreeItem").DataIndex("FreeItem").Text(Util.GetLang("FreeItem"))
+                        , X.CheckColumn().ID("colFreeItem").DataIndex("FreeItem").Editable(true).Text(Util.GetLang("FreeItem"))
                         .Width(50)
                             
                         , X.Column().ID("colDiscCode").DataIndex("DiscCode") .Text(Util.GetLang("DiscCode"))

@@ -116,22 +116,6 @@ namespace OM10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_OrdDisc> OM_OrdDisc
-        {
-            get
-            {
-                if ((_OM_OrdDisc == null))
-                {
-                    _OM_OrdDisc = base.CreateObjectSet<OM_OrdDisc>("OM_OrdDisc");
-                }
-                return _OM_OrdDisc;
-            }
-        }
-        private ObjectSet<OM_OrdDisc> _OM_OrdDisc;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_Setup> OM_Setup
         {
             get
@@ -224,22 +208,6 @@ namespace OM10100
             }
         }
         private ObjectSet<IN_Inventory> _IN_Inventory;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<OM_SalesOrd> OM_SalesOrd
-        {
-            get
-            {
-                if ((_OM_SalesOrd == null))
-                {
-                    _OM_SalesOrd = base.CreateObjectSet<OM_SalesOrd>("OM_SalesOrd");
-                }
-                return _OM_SalesOrd;
-            }
-        }
-        private ObjectSet<OM_SalesOrd> _OM_SalesOrd;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -528,6 +496,38 @@ namespace OM10100
             }
         }
         private ObjectSet<OM_LotTrans> _OM_LotTrans;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_SalesOrd> OM_SalesOrd
+        {
+            get
+            {
+                if ((_OM_SalesOrd == null))
+                {
+                    _OM_SalesOrd = base.CreateObjectSet<OM_SalesOrd>("OM_SalesOrd");
+                }
+                return _OM_SalesOrd;
+            }
+        }
+        private ObjectSet<OM_SalesOrd> _OM_SalesOrd;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_OrdDisc> OM_OrdDisc
+        {
+            get
+            {
+                if ((_OM_OrdDisc == null))
+                {
+                    _OM_OrdDisc = base.CreateObjectSet<OM_OrdDisc>("OM_OrdDisc");
+                }
+                return _OM_OrdDisc;
+            }
+        }
+        private ObjectSet<OM_OrdDisc> _OM_OrdDisc;
 
         #endregion
 
@@ -555,14 +555,6 @@ namespace OM10100
         public void AddToOM_OrdAddr(OM_OrdAddr oM_OrdAddr)
         {
             base.AddObject("OM_OrdAddr", oM_OrdAddr);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_OrdDisc EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_OrdDisc(OM_OrdDisc oM_OrdDisc)
-        {
-            base.AddObject("OM_OrdDisc", oM_OrdDisc);
         }
     
         /// <summary>
@@ -611,14 +603,6 @@ namespace OM10100
         public void AddToIN_Inventory(IN_Inventory iN_Inventory)
         {
             base.AddObject("IN_Inventory", iN_Inventory);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the OM_SalesOrd EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_SalesOrd(OM_SalesOrd oM_SalesOrd)
-        {
-            base.AddObject("OM_SalesOrd", oM_SalesOrd);
         }
     
         /// <summary>
@@ -763,6 +747,22 @@ namespace OM10100
         public void AddToOM_LotTrans(OM_LotTrans oM_LotTrans)
         {
             base.AddObject("OM_LotTrans", oM_LotTrans);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_SalesOrd EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_SalesOrd(OM_SalesOrd oM_SalesOrd)
+        {
+            base.AddObject("OM_SalesOrd", oM_SalesOrd);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_OrdDisc EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_OrdDisc(OM_OrdDisc oM_OrdDisc)
+        {
+            base.AddObject("OM_OrdDisc", oM_OrdDisc);
         }
 
         #endregion
@@ -4843,7 +4843,11 @@ namespace OM10100
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="approveStatus">Initial value of the ApproveStatus property.</param>
-        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus)
+        /// <param name="category">Initial value of the Category property.</param>
+        /// <param name="brand">Initial value of the Brand property.</param>
+        /// <param name="proGroup">Initial value of the ProGroup property.</param>
+        /// <param name="proType">Initial value of the ProType property.</param>
+        public static IN_Inventory CreateIN_Inventory(global::System.String invtID, global::System.Int16 exported, global::System.Double iRSftyStkDays, global::System.Double iRSftyStkPct, global::System.Double iRSftyStkQty, global::System.Double iROverStkQty, global::System.Double lastCost, global::System.Double lossRate00, global::System.Double lossRate01, global::System.Double lossRate02, global::System.Double lossRate03, global::System.Int16 lotSerFxdLen, global::System.Int16 lotSerNumLen, global::System.Int16 nodeLevel, global::System.Int32 parentRecordID, global::System.Double pOFee, global::System.Double pOPrice, global::System.Double prePayPct, global::System.Int16 shelfLife, global::System.Double sOFee, global::System.Double sOPrice, global::System.Int16 stkItem, global::System.Double stkVol, global::System.Double stkWt, global::System.Int16 warrantyDays, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String approveStatus, global::System.String category, global::System.String brand, global::System.String proGroup, global::System.String proType)
         {
             IN_Inventory iN_Inventory = new IN_Inventory();
             iN_Inventory.InvtID = invtID;
@@ -4875,6 +4879,10 @@ namespace OM10100
             iN_Inventory.LUpd_DateTime = lUpd_DateTime;
             iN_Inventory.tstamp = tstamp;
             iN_Inventory.ApproveStatus = approveStatus;
+            iN_Inventory.Category = category;
+            iN_Inventory.Brand = brand;
+            iN_Inventory.ProGroup = proGroup;
+            iN_Inventory.ProType = proType;
             return iN_Inventory;
         }
 
@@ -6444,6 +6452,126 @@ namespace OM10100
         private global::System.String _Media;
         partial void OnMediaChanging(global::System.String value);
         partial void OnMediaChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> LotSerRcptAuto
+        {
+            get
+            {
+                return _LotSerRcptAuto;
+            }
+            set
+            {
+                OnLotSerRcptAutoChanging(value);
+                ReportPropertyChanging("LotSerRcptAuto");
+                _LotSerRcptAuto = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LotSerRcptAuto");
+                OnLotSerRcptAutoChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _LotSerRcptAuto;
+        partial void OnLotSerRcptAutoChanging(Nullable<global::System.Boolean> value);
+        partial void OnLotSerRcptAutoChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Category
+        {
+            get
+            {
+                return _Category;
+            }
+            set
+            {
+                OnCategoryChanging(value);
+                ReportPropertyChanging("Category");
+                _Category = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Category");
+                OnCategoryChanged();
+            }
+        }
+        private global::System.String _Category;
+        partial void OnCategoryChanging(global::System.String value);
+        partial void OnCategoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Brand
+        {
+            get
+            {
+                return _Brand;
+            }
+            set
+            {
+                OnBrandChanging(value);
+                ReportPropertyChanging("Brand");
+                _Brand = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Brand");
+                OnBrandChanged();
+            }
+        }
+        private global::System.String _Brand;
+        partial void OnBrandChanging(global::System.String value);
+        partial void OnBrandChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ProGroup
+        {
+            get
+            {
+                return _ProGroup;
+            }
+            set
+            {
+                OnProGroupChanging(value);
+                ReportPropertyChanging("ProGroup");
+                _ProGroup = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ProGroup");
+                OnProGroupChanged();
+            }
+        }
+        private global::System.String _ProGroup;
+        partial void OnProGroupChanging(global::System.String value);
+        partial void OnProGroupChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ProType
+        {
+            get
+            {
+                return _ProType;
+            }
+            set
+            {
+                OnProTypeChanging(value);
+                ReportPropertyChanging("ProType");
+                _ProType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ProType");
+                OnProTypeChanged();
+            }
+        }
+        private global::System.String _ProType;
+        partial void OnProTypeChanging(global::System.String value);
+        partial void OnProTypeChanged();
 
         #endregion
 
@@ -11046,7 +11174,8 @@ namespace OM10100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_Discount CreateOM_Discount(global::System.String discID, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        /// <param name="accumulate">Initial value of the Accumulate property.</param>
+        public static OM_Discount CreateOM_Discount(global::System.String discID, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Boolean accumulate)
         {
             OM_Discount oM_Discount = new OM_Discount();
             oM_Discount.DiscID = discID;
@@ -11057,6 +11186,7 @@ namespace OM10100
             oM_Discount.LUpd_Prog = lUpd_Prog;
             oM_Discount.LUpd_User = lUpd_User;
             oM_Discount.tstamp = tstamp;
+            oM_Discount.Accumulate = accumulate;
             return oM_Discount;
         }
 
@@ -11354,6 +11484,30 @@ namespace OM10100
         private global::System.String _Crtd_Role;
         partial void OnCrtd_RoleChanging(global::System.String value);
         partial void OnCrtd_RoleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Accumulate
+        {
+            get
+            {
+                return _Accumulate;
+            }
+            set
+            {
+                OnAccumulateChanging(value);
+                ReportPropertyChanging("Accumulate");
+                _Accumulate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Accumulate");
+                OnAccumulateChanged();
+            }
+        }
+        private global::System.Boolean _Accumulate;
+        partial void OnAccumulateChanging(global::System.Boolean value);
+        partial void OnAccumulateChanged();
 
         #endregion
 

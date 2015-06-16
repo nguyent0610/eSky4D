@@ -385,6 +385,14 @@ var menuClick = function (command) {
     }
 }
 
+var btnPopupOk_Click = function () {
+    if (!Ext.isEmpty(App.cboPopupCpny.getValue())) {
+        App.winPopup.hide();
+        window.location.href = 'OM10100?branchID=' + App.cboPopupCpny.getValue();
+    } else {
+        HQ.message.show(1000, [HQ.common.getLang('branchid')], '', true);
+    }
+}
 var btnLot_Click = function () {
     if (Ext.isEmpty(this.record.invt)) {
         this.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [this.record.data.InvtID]);
@@ -2095,12 +2103,12 @@ var checkExitEditLot = function (row) {
         getLotQtyAvail(record);
     } else if (key == "LotSerNbr") {
         var flat = false;
-        App.stoLotTrans.data.each(function (item) {
-            if (item.data.LotSerNbr == lot.LotSerNbr && item.id != record.id) {
-                flat = true;
-                return false;
-            }
-        });
+        //App.stoLotTrans.data.each(function (item) {
+        //    if (item.data.LotSerNbr == lot.LotSerNbr && item.id != record.id) {
+        //        flat = true;
+        //        return false;
+        //    }
+        //});
         if (flat) {
             HQ.message.show(219, "", "", true);
             lot.LotSerNbr = "";
@@ -2307,7 +2315,7 @@ var formatGrid = function () {
         App.colUnitRate.hide();
     }
 
-    App.colFreeItem.disabled = !HQ.objType.ManualDisc;
+    App.colFreeItem.editable = HQ.objType.ManualDisc;
 }
 
 var lastLineRef = function () {
@@ -2451,7 +2459,7 @@ var calcTax = function (record) {
                                                             objTax.CatExcept04 == taxCat || objTax.CatExcept05 == taxCat))) {
                 if ((HQ.objType.DiscType == "A" && objTax.PrcTaxIncl == "0") ||
                     (HQ.objType.DiscType == "B" && objTax.PrcTaxIncl != "0")) {
-                    callMessage(730, '', '');
+                    HQ.message.show(730, '', '', true);
                     return false;
                 }
                 if (objTax.TaxCalcLvl == "1" && objTax.PrcTaxIncl != "0") {
