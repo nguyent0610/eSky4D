@@ -1,8 +1,8 @@
 //// Declare //////////////////////////////////////////////////////////
 
 var keys = ['DiscCode'];
-var fieldsCheckRequire = ["DiscCode"];
-var fieldsLangCheckRequire = ["DiscCode"];
+var fieldsCheckRequire = ["DiscCode", "Descr", "FromDate", "ToDate"];
+var fieldsLangCheckRequire = ["DiscCode", "Descr", "FromDate", "ToDate"];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ var menuClick = function (command) {
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
                 App.stoOM_DiscDescr.reload();
-            }          
+            }
             break;
         case "new":
             if (HQ.isInsert) {
@@ -54,7 +54,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            HQ.common.close(this);            
+            HQ.common.close(this);
             break;
     }
 
@@ -98,7 +98,7 @@ var grdOM_DiscDescr_Edit = function (item, e) {
         }
     }
 
-    
+
 };
 var grdOM_DiscDescr_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdOM_DiscDescr, e, keys);
@@ -148,11 +148,3 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
-
-
-
-
-
-
-
-
