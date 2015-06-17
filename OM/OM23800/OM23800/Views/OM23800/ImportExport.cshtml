@@ -139,7 +139,7 @@
             .LoadData()
             .Listeners(lst =>
             {
-                lst.TriggerClick.Handler = "Event.Form.btnHideTrigger_click";
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
             })
 
             ,  HQ.Combo().ID("cboProvince_ImExCust").Name("cboProvince_ImExCust").HQLangCode("Province")
@@ -155,7 +155,7 @@
             .LoadData()
             .Listeners(lst =>
             {
-                lst.TriggerClick.Handler = "Event.Form.btnHideTrigger_click";
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
             })
             
             , X.RadioGroup().ID("radgActionCust")

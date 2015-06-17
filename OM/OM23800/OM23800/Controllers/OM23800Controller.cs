@@ -844,7 +844,7 @@ namespace OM23800.Controllers
                 DataAccess dal = Util.Dal();
                 Style style = workbook.GetStyleInPool(0);
                 StyleFlag flag = new StyleFlag();
-                var beforeColTexts = new string[] { "N0", "BranchID", "CpnyName", "SlsperID", "SlsName", "CustID", "CustName", "Address", "WeekofVisit", "DayOfWeek" };
+                var beforeColTexts = new string[] { "N0", "CustId", "CustName", "Addr1", "Name", "Lat", "lng" };
 
                 #region header info
                 // Title header
@@ -1616,7 +1616,7 @@ namespace OM23800.Controllers
 
                 var headerRowIdx = 3;
                 var maxRow = 1000;
-                var ColTexts = new List<string>() { "N0", "SlsperID", "SlsName", "ShopID", "ShopName", "Attn", "Addr", "Province", "ProvinceCode", "District", "DistrictCode", "Phone", "CustClass", "Location" };
+                var ColTexts = new List<string>() { "N0", "SlsperID", "SlsName", "ShopID", "ShopName", "Attn", "Addr", "Province", "ProvinceCode", "District", "DistrictCode", "Phone", "CustClass", "ShopID2" };
 
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
@@ -1835,8 +1835,8 @@ namespace OM23800.Controllers
                     Getcell(ColTexts.IndexOf("CustClass")) + strLastRow);
                 range.SetStyle(style);
 
-                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("Location")) + strFirstRow, 
-                    Getcell(ColTexts.IndexOf("Location")) + strLastRow);
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("ShopID2")) + strFirstRow,
+                    Getcell(ColTexts.IndexOf("ShopID2")) + strLastRow);
                 range.SetStyle(style);
 
                 style = SheetMCP.Cells["Z1"].GetStyle();
@@ -2073,27 +2073,33 @@ namespace OM23800.Controllers
                             }
                             if (lineSuccess.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng import thành công: {0}, ...<br/>", string.Join(", ", lineSuccess.Take(5)));
+                                message += string.Format("Dòng khách hàng import thành công: {0}<br/>",
+                                    lineSuccess.Count > 5 ? string.Join(", ", lineSuccess.Take(5)) + ", ..." : string.Join(", ", lineSuccess));
                             }
                             if (lineBlank.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng thiếu dữ liệu: {0}, ...<br/>", string.Join(", ", lineBlank.Take(5)));
+                                message += string.Format("Dòng khách hàng thiếu dữ liệu: {0}<br/>",
+                                    lineBlank.Count > 5 ? string.Join(", ", lineBlank.Take(5)) + ", ..." : string.Join(", ", lineBlank));
                             }
                             if (lineExist.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng đã tồn tại: {0}, ...<br/>", string.Join(", ", lineExist.Take(5)));
+                                message += string.Format("Dòng khách hàng đã tồn tại: {0}<br/>",
+                                    lineExist.Count > 5 ? string.Join(", ", lineExist.Take(5)) + ", ..." : string.Join(", ", lineExist));
                             }
                             if (lineNoExist.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng không tồn tại: {0}, ...<br/>", string.Join(", ", lineNoExist.Take(5)));
+                                message += string.Format("Dòng khách hàng không tồn tại: {0}<br/>",
+                                    lineNoExist.Count > 5 ? string.Join(", ", lineNoExist.Take(5)) + ", ..." : string.Join(", ", lineNoExist));
                             }
                             if (lineSlsNoExist.Count > 0)
                             {
-                                message += string.Format("Dòng dữ liệu nhập nhân viên bán hàng không tồn tại: {0}, ...<br/>", string.Join(", ", lineSlsNoExist.Take(5)));
+                                message += string.Format("Dòng dữ liệu nhập nhân viên bán hàng không tồn tại: {0}<br/>",
+                                    lineSlsNoExist.Count > 5 ? string.Join(", ", lineSlsNoExist.Take(5)) + ", ..." : string.Join(", ", lineSlsNoExist));
                             }
                             if (lineInvalidDistrict.Count > 0)
                             {
-                                message += string.Format("Dòng dữ liệu nhập sai quận huyện hoặc tỉnh: {0}, ...<br/>", string.Join(", ", lineInvalidDistrict.Take(5)));
+                                message += string.Format("Dòng dữ liệu nhập sai quận huyện hoặc tỉnh: {0}<br/>",
+                                    lineInvalidDistrict.Count > 5 ? string.Join(", ", lineInvalidDistrict.Take(5)) + ", ..." : string.Join(", ", lineInvalidDistrict));
                             }
                             Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
                         }
