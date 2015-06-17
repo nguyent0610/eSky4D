@@ -38,7 +38,7 @@ namespace OM23800
             Session["OM23800"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004";
+            Session["CpnyID"] = Current.CpnyID = "JFV";
             Session["Language"] = Current.Language = "en";
             Session["LangID"] = 0;
         }

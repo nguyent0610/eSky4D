@@ -41,7 +41,7 @@
             .LoadData()
             .Listeners(lst =>
             {
-                lst.TriggerClick.Handler = "Event.Form.btnHideTrigger_click";
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                 lst.Change.Fn = "ImExMcp.cboBranchID_Change";
             })
 
@@ -60,7 +60,7 @@
             .LoadData()
             .Listeners(lst =>
             {
-                lst.TriggerClick.Handler = "Event.Form.btnHideTrigger_click";
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
             })
 
             , HQ.Combo().ID("cboRouteID_ImExMcp").Name("cboRouteID_ImExMcp")
@@ -77,7 +77,7 @@
             .LoadData()
             .Listeners(lst =>
             {
-                lst.TriggerClick.Handler = "Event.Form.btnHideTrigger_click";
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
             })
         )
 
@@ -146,7 +146,7 @@
             .HQProcedure("OM23800_pcProvince_ImExCust").Hidden(true)
             .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
             .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").InputWidth(200)//.AllowBlank(false)
-            .HQDBSys(false).ForceSelection(true).MultiSelect(true)
+            .HQDBSys(false).ForceSelection(true)//.MultiSelect(true)
             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
             .HQParam(new StoreParameterCollection()
             {
@@ -159,7 +159,7 @@
             })
             
             , X.RadioGroup().ID("radgActionCust")
-            .Hidden(true).MarginSpec("5 5 0 5")//.AllowBlank(false)
+            .MarginSpec("5 5 0 5").AllowBlank(false)
             .Items(
                 X.Radio().ID("radUpdateCust")
                 .BoxLabel(Util.GetLang("Update"))

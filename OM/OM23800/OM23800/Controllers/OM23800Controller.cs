@@ -330,7 +330,7 @@ namespace OM23800.Controllers
         }
 
         [DirectMethod]
-        public ActionResult ExportSelectedCust(string custIDs)
+        public ActionResult ExportSelectedCust_old(string custIDs)
         {
             try
             {
@@ -414,6 +414,400 @@ namespace OM23800.Controllers
                     throw new MessageException(MessageType.Message, "14091901");
                 }
 
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+
+        }
+
+        [DirectMethod]
+        public ActionResult ExportSelectedCust(string custIDs, string pBranchID, string pBranchName)
+        {
+            try
+            {
+                string[] paraStringsD = JSON.Deserialize<string[]>(custIDs);
+
+                if (paraStringsD.Length > 0)
+                {
+                    //string branchID = data["BranchID"].PassNull();
+                    string branchID = pBranchID;
+                    string pjp = pBranchID;
+                    string branchName = pBranchName;
+                    string routeID = string.Empty;
+                    string slsperID = string.Empty;
+                    var headerRowIdx = 3;
+
+                    Stream stream = new MemoryStream();
+                    Workbook workbook = new Workbook();
+                    Worksheet SheetMCP = workbook.Worksheets[0];
+                    SheetMCP.Name = Util.GetLang("MCP");
+                    DataAccess dal = Util.Dal();
+                    Style style = workbook.GetStyleInPool(0);
+                    StyleFlag flag = new StyleFlag();
+                    Range range;
+                    Cell cell;
+                    #region master data
+                    ParamCollection pc = new ParamCollection();
+                    pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
+
+                    DataTable dtCustomer = dal.ExecDataTable("OM23800_peCustomerMCP", CommandType.StoredProcedure, ref pc);
+                    SheetMCP.Cells.ImportDataTable(dtCustomer, true, 0, 26, false);// du lieu AR_Customer
+
+
+                    pc = new ParamCollection();
+                    pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
+
+                    DataTable dtSales = dal.ExecDataTable("OM23800_peSalespersonMCP", CommandType.StoredProcedure, ref pc);
+                    SheetMCP.Cells.ImportDataTable(dtSales, true, 0, 52, false);// du lieu Salesperson
+
+
+                    pc = new ParamCollection();
+                    pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
+
+                    DataTable dtRoute = dal.ExecDataTable("OM23800_peRouteMCP", CommandType.StoredProcedure, ref pc);
+                    SheetMCP.Cells.ImportDataTable(dtRoute, true, 0, 78, false);// du lieu SalesRoute
+
+
+                    SheetMCP.Cells["Z1"].PutValue("W159");
+                    SheetMCP.Cells["Z2"].PutValue("W2610");
+                    SheetMCP.Cells["Z3"].PutValue("W3711");
+                    SheetMCP.Cells["Z4"].PutValue("W4812");
+                    SheetMCP.Cells["Z5"].PutValue("OW");
+                    SheetMCP.Cells["Z6"].PutValue("EW");
+                    SheetMCP.Cells["Z7"].PutValue("NA");
+
+                    #endregion
+
+                    #region header info
+                    // Title header
+                    SetCellValue(SheetMCP.Cells["B1"],
+                        string.Format("{0} ({1})", Util.GetLang("OM23800EHeader"), Util.GetLang("DrawingArea")),
+                        TextAlignmentType.Center, TextAlignmentType.Center, true, 16, true);
+                    SheetMCP.Cells.Merge(0, 1, 1, 6);
+
+                    // Title info
+                    SetCellValue(SheetMCP.Cells["B2"], Util.GetLang("BranchID"), TextAlignmentType.Center, TextAlignmentType.Right, true, 10, true);
+                    SetCellValue(SheetMCP.Cells["B3"], Util.GetLang("BranchName"), TextAlignmentType.Center, TextAlignmentType.Right, true, 10, true);
+                    SetCellValue(SheetMCP.Cells["C2"], branchID, TextAlignmentType.Center, TextAlignmentType.Left, false, 10, true);
+                    SetCellValue(SheetMCP.Cells["C3"], branchName, TextAlignmentType.Center, TextAlignmentType.Left, false, 10, true);
+
+                    // Header text columns
+                    // before of Route column
+                    var beforeColTexts = new string[] { "N0", "CustID", "CustName", "Address", "SlsperID", "SlsName", "StartDate", "EndDate", "SlsFreq", "WeekofVisit" };
+                    for (int i = 0; i < beforeColTexts.Length; i++)
+                    {
+                        var colIdx = i;
+                        SetCellValue(SheetMCP.Cells[3, colIdx], Util.GetLang(beforeColTexts[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10);
+                        SheetMCP.Cells.Merge(headerRowIdx, colIdx, 2, 1);
+                    }
+
+                    //Route column
+                    var daysOfWeeks = new string[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+
+                    SetCellValue(SheetMCP.Cells[headerRowIdx, beforeColTexts.Length], Util.GetLang("Route"), TextAlignmentType.Center, TextAlignmentType.Center, true, 10);
+                    SheetMCP.Cells.Merge(headerRowIdx, beforeColTexts.Length, 1, daysOfWeeks.Length);
+                    for (int i = 0; i < daysOfWeeks.Length; i++)
+                    {
+                        var colIdx = beforeColTexts.Length + i;
+                        SetCellValue(SheetMCP.Cells[headerRowIdx + 1, colIdx], Util.GetLang(daysOfWeeks[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10);
+                    }
+
+                    // after of Route column
+                    var afterColTexts = new string[] { "SalesRouteID", "RouteName", "VisitSort", "CustCancel" };
+                    for (int i = 0; i < afterColTexts.Length; i++)
+                    {
+                        var colIdx = beforeColTexts.Length + daysOfWeeks.Length + i;
+                        SetCellValue(SheetMCP.Cells[headerRowIdx, colIdx], Util.GetLang(afterColTexts[i]), TextAlignmentType.Center, TextAlignmentType.Center, true, 10);
+
+
+
+                        SheetMCP.Cells.Merge(headerRowIdx, colIdx, 2, 1);
+                    }
+
+
+
+                    var allColumns = new List<string>();
+                    allColumns.AddRange(beforeColTexts);
+                    allColumns.AddRange(daysOfWeeks);
+                    allColumns.AddRange(afterColTexts);
+
+                    #endregion
+
+                    #region formular
+
+                    Validation validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
+                    validation.IgnoreBlank = true;
+                    validation.Type = Aspose.Cells.ValidationType.Date;
+                    validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                    validation.Operator = OperatorType.GreaterOrEqual;
+                    validation.Formula1 = DateTime.Now.ToShortDateString();
+                    validation.InputTitle = "Chọn Ngày Bắt Đầu(MM/dd/yyyy)";
+                    validation.InputMessage = "Ngày Bắt Đầu Không Thể Nhỏ Hơn Ngày " + DateTime.Now.ToString("MM/dd/yyyy");
+                    validation.ErrorMessage = "Ngày Bắt Đầu Không Thể Nhỏ Hơn Ngày " + DateTime.Now.ToString("MM/dd/yyyy");
+
+                    CellArea area;
+                    area.StartRow = 5;
+                    area.EndRow = dtCustomer.Rows.Count + 5;
+                    area.StartColumn = allColumns.IndexOf("StartDate");
+                    area.EndColumn = allColumns.IndexOf("StartDate");
+                    validation.AddArea(area);
+
+                    string formulaDate = "=$" + Getcell(allColumns.IndexOf("StartDate")) + "$6";
+                    validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
+                    validation.IgnoreBlank = true;
+                    validation.Type = Aspose.Cells.ValidationType.Date;
+                    validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                    validation.Operator = OperatorType.GreaterOrEqual;
+                    validation.Formula1 = formulaDate;
+                    validation.InputTitle = "Chọn Ngày Kết Thúc(MM/dd/yyyy)";
+                    validation.InputMessage = "Ngày Kết Thúc Không Thể Nhỏ Hơn Ngày Bắt Đầu ";
+                    validation.ErrorMessage = "Ngày Kết Thúc Không Thể Nhỏ Hơn Ngày Bắt Đầu ";
+
+                    area = new CellArea();
+                    area.StartRow = 5;
+                    area.EndRow = dtCustomer.Rows.Count + 5;
+                    area.StartColumn = allColumns.IndexOf("EndDate");
+                    area.EndColumn = allColumns.IndexOf("EndDate");
+                    validation.AddArea(area);
+
+                    //custid
+                    string formulaCustomer = "=$AA$2:$AA$" + (dtCustomer.Rows.Count + 2);
+                    validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
+                    validation.IgnoreBlank = true;
+                    validation.Type = Aspose.Cells.ValidationType.List;
+                    validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                    validation.Operator = OperatorType.Between;
+                    validation.Formula1 = formulaCustomer;
+                    validation.InputTitle = "";
+                    validation.InputMessage = "Chọn Mã Khách Hàng ";
+                    validation.ErrorMessage = "Mã Khách Hàng này không tồn tại";
+
+                    area = new CellArea();
+                    area.StartRow = 5;
+                    area.EndRow = dtCustomer.Rows.Count + 5;
+                    area.StartColumn = allColumns.IndexOf("CustID");
+                    area.EndColumn = allColumns.IndexOf("CustID");
+                    validation.AddArea(area);
+
+                    //SALES
+                    string formulaSales = "=$BA$2:$BA$" + (dtSales.Rows.Count + 2);
+                    validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
+                    validation.IgnoreBlank = true;
+                    validation.Type = Aspose.Cells.ValidationType.List;
+                    validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                    validation.Operator = OperatorType.Between;
+                    validation.Formula1 = formulaSales;
+                    validation.InputTitle = "";
+                    validation.InputMessage = "Chọn Mã Nhân Viên Bán Hàng";
+                    validation.ErrorMessage = "Mã Nhân Viên này không tồn tại";
+
+                    area = new CellArea();
+                    area.StartRow = 5;
+                    area.EndRow = dtCustomer.Rows.Count + 5;
+                    area.StartColumn = allColumns.IndexOf("SlsperID");
+                    area.EndColumn = allColumns.IndexOf("SlsperID");
+                    validation.AddArea(area);
+
+                    //Route
+                    string formulaRoutes = "=$CA$2:$CA$" + (dtRoute.Rows.Count + 2);
+                    validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
+                    validation.IgnoreBlank = true;
+                    validation.Type = Aspose.Cells.ValidationType.List;
+                    validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                    validation.Operator = OperatorType.Between;
+                    validation.Formula1 = formulaRoutes;
+                    validation.InputTitle = "";
+                    validation.InputMessage = "Chọn Mã Tuyến Đường";
+                    validation.ErrorMessage = "Mã Tuyến Đường này không tồn tại";
+
+                    area = new CellArea();
+                    area.StartRow = 5;
+                    area.EndRow = dtCustomer.Rows.Count + 5;
+                    area.StartColumn = allColumns.IndexOf("SalesRouteID");
+                    area.EndColumn = allColumns.IndexOf("SalesRouteID");
+                    validation.AddArea(area);
+                    //Requency LIST
+                    string formulaRequenc = "F1,F2,F4,F4A,F8,F8A,F12,F16,F20,F24,A";
+                    validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
+                    validation.IgnoreBlank = true;
+                    validation.Type = Aspose.Cells.ValidationType.List;
+                    validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                    validation.Operator = OperatorType.Between;
+                    validation.Formula1 = formulaRequenc;
+                    validation.InputTitle = "";
+                    validation.InputMessage = "Chọn Tần Suất Thăm Viếng";
+                    validation.ErrorMessage = "Mã Tần Suất này không tồn tại";
+
+                    area = new CellArea();
+                    area.StartRow = 5;
+                    area.EndRow = dtCustomer.Rows.Count + 5;
+                    area.StartColumn = allColumns.IndexOf("SlsFreq");
+                    area.EndColumn = allColumns.IndexOf("SlsFreq");
+                    validation.AddArea(area);
+
+
+                    string formula = "=IF(I6=\"F1\",$Z$1:$Z$4,IF(OR(I6=\"F2\",I6=\"F4A\",I6=\"F8A\"),$Z$5:$Z$6,$Z$7:$Z$7))";// + dtOMRoute.Rows.Count + 2;               
+                    validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
+                    validation.IgnoreBlank = true;
+                    validation.Type = Aspose.Cells.ValidationType.List;
+                    validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                    validation.Operator = OperatorType.Between;
+                    validation.Formula1 = formula;
+                    validation.InputTitle = "";
+                    validation.InputMessage = "Chọn Tuần Bán Hàng";
+                    validation.ErrorMessage = "Mã Tuần Bán Hàng Không tồn tại";
+
+                    area = new CellArea();
+                    area.StartRow = 5;
+                    area.EndRow = dtCustomer.Rows.Count + 5;
+                    area.StartColumn = allColumns.IndexOf("WeekofVisit");
+                    area.EndColumn = allColumns.IndexOf("WeekofVisit");
+                    validation.AddArea(area);
+
+                    string formulaCheck = "X";
+                    validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
+                    validation.IgnoreBlank = true;
+                    validation.Type = Aspose.Cells.ValidationType.List;
+                    validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                    validation.Operator = OperatorType.Between;
+                    validation.Formula1 = formulaCheck;
+                    area = new CellArea();
+                    area.StartRow = 5;
+                    area.EndRow = dtCustomer.Rows.Count + 5;
+                    area.StartColumn = allColumns.IndexOf("Mon");
+                    area.EndColumn = allColumns.IndexOf("Sun");
+                    validation.AddArea(area);
+
+                    area = new CellArea();
+                    area.StartRow = 5;
+                    area.EndRow = dtCustomer.Rows.Count + 5;
+                    area.StartColumn = allColumns.IndexOf("CustCancel");
+                    area.EndColumn = allColumns.IndexOf("CustCancel");
+                    validation.AddArea(area);
+
+
+                    string formulaCustName = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AC,2,0)),\"\",VLOOKUP({0},AA:AC,2,0))", "B6");
+                    SheetMCP.Cells[Getcell(allColumns.IndexOf("CustName")) + "6"].SetSharedFormula(formulaCustName, (dtCustomer.Rows.Count + 6), 1);
+
+
+                    string formulaCustAddr = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AC,3,0)),\"\",VLOOKUP({0},AA:AC,3,0))", "B6");
+                    SheetMCP.Cells[Getcell(allColumns.IndexOf("Address")) + "6"].SetSharedFormula(formulaCustAddr, (dtCustomer.Rows.Count + 6), 1);
+
+
+                    string formulaSalesName = string.Format("=IF(ISERROR(VLOOKUP({0},BA:BC,2,0)),\"\",VLOOKUP({0},BA:BC,2,0))", "E6");
+                    SheetMCP.Cells[Getcell(allColumns.IndexOf("SlsName")) + "6"].SetSharedFormula(formulaSalesName, (dtCustomer.Rows.Count + 6), 1);
+
+
+                    string formulaRoute = string.Format("=IF(ISERROR(VLOOKUP({0},CA:CC,2,0)),\"\",VLOOKUP({0},CA:CC,2,0))", "R6");
+                    SheetMCP.Cells[Getcell(allColumns.IndexOf("RouteName")) + "6"].SetSharedFormula(formulaRoute, (dtCustomer.Rows.Count + 6), 1);
+
+
+                    string formulaSTT = "=IFERROR( IF(B6<>\"\",A5+1 & \"\",\"\"),1)";
+                    SheetMCP.Cells["A6"].SetSharedFormula(formulaSTT, (dtCustomer.Rows.Count + 6), 1);
+
+
+
+                    #endregion
+                    #region export data
+                    pc = new ParamCollection();
+                    pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@SelectedCusts", DbType.String, clsCommon.GetValueDBNull(string.Join(",",paraStringsD)), ParameterDirection.Input, int.MaxValue));
+
+                    DataTable dtDataExport = dal.ExecDataTable("OM23800_peExportDataCustSelected", CommandType.StoredProcedure, ref pc);
+                    //SheetMCP.Cells.ImportDataTable(dtDataExport, false, "B6");// du lieu data export
+
+
+                    for (int i = 0; i < dtDataExport.Rows.Count; i++)
+                    {
+                        for (int j = 0; j < allColumns.Count; j++)
+                        {
+                            if (allColumns[j] == "N0" || allColumns[j] == "CustName" || allColumns[j] == "SlsName" || allColumns[j] == "Address" || allColumns[j] == "RouteName")
+                            {
+                                //SheetMCP.Cells[5 + i, j].PutValue(i + 1);
+                            }
+                            else if (dtDataExport.Columns.Contains(allColumns[j]))
+                            {
+                                SheetMCP.Cells[5 + i, j].PutValue(dtDataExport.Rows[i][allColumns[j]]);
+                            }
+                        }
+                    }
+                    #endregion
+                    #region Fomat cell
+
+                    style = SheetMCP.Cells[allColumns.IndexOf("StartDate")].GetStyle();
+                    style.Custom = "MM/dd/yyyy";
+                    style.Font.Color = Color.Black;
+                    style.HorizontalAlignment = TextAlignmentType.Left;
+
+                    range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("StartDate")) + "5", Getcell(allColumns.IndexOf("StartDate")) + dtCustomer.Rows.Count + 5);
+                    range.SetStyle(style);
+
+                    range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("EndDate")) + "5", Getcell(allColumns.IndexOf("EndDate")) + dtCustomer.Rows.Count + 5);
+                    range.SetStyle(style);
+
+
+                    style = SheetMCP.Cells[allColumns.IndexOf("VisitSort")].GetStyle();
+                    style.Custom = "#,##0";
+                    style.Font.Color = Color.Black;
+                    style.HorizontalAlignment = TextAlignmentType.Right;
+
+                    range = SheetMCP.Cells.CreateRange(Getcell(allColumns.IndexOf("VisitSort")) + "5", Getcell(allColumns.IndexOf("VisitSort")) + dtCustomer.Rows.Count + 5);
+                    range.SetStyle(style);
+
+
+                    style = SheetMCP.Cells["Z1"].GetStyle();
+                    style.Font.Color = Color.Transparent;
+                    flag.FontColor = true;
+                    flag.NumberFormat = true;
+                    flag.Locked = true;
+
+                    range = SheetMCP.Cells.CreateRange("Z1", "ZZ" + (dtCustomer.Rows.Count + dtSales.Rows.Count + dtRoute.Rows.Count + 100));
+                    range.ApplyStyle(style, flag);
+
+
+                    #endregion
+                    SheetMCP.AutoFitColumns();
+
+                    SheetMCP.Cells.Columns[allColumns.IndexOf("CustID")].Width = 30;
+                    SheetMCP.Cells.Columns[allColumns.IndexOf("CustName")].Width = 30;
+                    SheetMCP.Cells.Columns[allColumns.IndexOf("SlsName")].Width = 30;
+                    SheetMCP.Cells.Columns[allColumns.IndexOf("Address")].Width = 30;
+
+                    //SheetPOSuggest.Protect(ProtectionType.Objects);
+                    workbook.Save(stream, SaveFormat.Xlsx);
+                    stream.Flush();
+                    stream.Position = 0;
+
+                    return new FileStreamResult(stream, "application/vnd.ms-excel")
+                    {
+                        FileDownloadName = string.Format("{0}_{1}.xlsx", Util.GetLang("OM23800"), Util.GetLang("DrawingArea"))
+                    };
+                }
+                else
+                {
+                    throw new MessageException(MessageType.Message, "14091901");
+                }
             }
             catch (Exception ex)
             {
@@ -961,8 +1355,10 @@ namespace OM23800.Controllers
         [HttpPost]
         public ActionResult ImportMCP(FormCollection data)
         {
-            string BranchID = data["BranchID"].PassNull();
-            string PJP = BranchID;
+            try
+            {
+                string BranchID = data["BranchID"].PassNull();
+                string PJP = BranchID;
                 var date = DateTime.Now.Date;
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("fupImport_ImExMcp");
                 HttpPostedFile file = fileUploadField.PostedFile;
@@ -985,8 +1381,6 @@ namespace OM23800.Controllers
                     if (workbook.Worksheets.Count > 0)
                     {
                         Worksheet workSheet = workbook.Worksheets[0];
-
-
 
                         string strEBanchID = workSheet.Cells[1, 2].StringValue;//dataArray.GetValue(2, 3).PassNull();// w1.Rows[1].Cells[2).PassNull();
                         string strEPJP = workSheet.Cells[1, 2].StringValue;// dataArray.GetValue(2, 3).PassNull();
@@ -1194,20 +1588,35 @@ namespace OM23800.Controllers
                 {
                     Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
                 }
-            return _logMessage;
+                return _logMessage;
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
         }
 
         [HttpPost]
-        public ActionResult ExportCust(FormCollection data, string[] provinces)
+        public ActionResult ExportCust(FormCollection data, string[] provinces, string provinceRawValue, bool isUpdated)
         {
             try
             {
                 string branchID = data["branchID"].PassNull();
                 string branchName = data["branchName"].PassNull();
+                string[] provincesDescr = provinceRawValue.Contains(", ") 
+                    ? provinceRawValue.Split(new string[] { ", " }, StringSplitOptions.None) 
+                    : new string[] { provinceRawValue };
 
                 var headerRowIdx = 3;
-                var maxRow = 10000;
-                var ColTexts = new List<string>() { "N0", "SlsperID", "SlsName", "ShopID", "ShopName", "Attn", "Addr", "Province", "District", "Phone", "CustClass" };
+                var maxRow = 1000;
+                var ColTexts = new List<string>() { "N0", "SlsperID", "SlsName", "ShopID", "ShopName", "Attn", "Addr", "Province", "ProvinceCode", "District", "DistrictCode", "Phone", "CustClass", "Location" };
 
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
@@ -1218,6 +1627,8 @@ namespace OM23800.Controllers
                 StyleFlag flag = new StyleFlag();
                 Range range;
                 Cell cell;
+
+
                 #region master data
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
@@ -1241,7 +1652,8 @@ namespace OM23800.Controllers
 
                 for (var i = 0; i < provinces.Length; i++)
                 {
-                    SheetMCP.Cells["Z" + (i+1).ToString()].PutValue(provinces[i]);
+                    SheetMCP.Cells["DA" + (i + 1).ToString()].PutValue(provinces[i]);
+                    SheetMCP.Cells["DB" + (i + 1).ToString()].PutValue(provincesDescr[i]);
                 }
 
                 #endregion
@@ -1268,12 +1680,12 @@ namespace OM23800.Controllers
                 }
                 #endregion
 
-                
                 #region export data
                 pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@State", DbType.String, clsCommon.GetValueDBNull(string.Join(",", provinces)), ParameterDirection.Input, int.MaxValue));
+                pc.Add(new ParamStruct("@IsUpdated", DbType.String, clsCommon.GetValueDBNull(isUpdated), ParameterDirection.Input, 10));
 
                 DataTable dtDataExport = dal.ExecDataTable("OM23800_peExportDataCust", CommandType.StoredProcedure, ref pc);
                 //SheetMCP.Cells.ImportDataTable(dtDataExport, false, "B6");// du lieu data export
@@ -1309,13 +1721,13 @@ namespace OM23800.Controllers
 
                 CellArea area = new CellArea();
                 area.StartRow = headerRowIdx + 2;
-                area.EndRow = maxRow + headerRowIdx + 2;
+                area.EndRow = dtDataExport.Rows.Count + maxRow + headerRowIdx + 2;
                 area.StartColumn = ColTexts.IndexOf("SlsperID");
                 area.EndColumn = ColTexts.IndexOf("SlsperID");
                 validation.AddArea(area);
 
                 // State
-                string formulaState = string.Join(",", provinces);
+                string formulaState = "=$DB$1:$DB$" + (provinces.Length + 2);
                 validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
                 validation.IgnoreBlank = true;
                 validation.Type = Aspose.Cells.ValidationType.List;
@@ -1328,13 +1740,13 @@ namespace OM23800.Controllers
 
                 area = new CellArea();
                 area.StartRow = headerRowIdx + 2;
-                area.EndRow = maxRow + headerRowIdx + 2;
+                area.EndRow = dtDataExport.Rows.Count + maxRow + headerRowIdx + 2;
                 area.StartColumn = ColTexts.IndexOf("Province");
                 area.EndColumn = ColTexts.IndexOf("Province");
                 validation.AddArea(area);
 
                 // District
-                string formula = string.Format("=OFFSET($BA$1,IFERROR(MATCH(H{0},$BC$2:$BC${1},0),{2}),0, IF(COUNTIF($BC$2:$BC${1},H{0})=0,1,COUNTIF($BC$2:$BC${1},H{0})),1)", new string[] { "6", (dtDistrict.Rows.Count + 1).ToString(), (dtDistrict.Rows.Count + 2).ToString() });
+                string formula = string.Format("=OFFSET($BB$1,IFERROR(MATCH(I{0},$BC$2:$BC${1},0),{2}),0, IF(COUNTIF($BC$2:$BC${1},I{0})=0,1,COUNTIF($BC$2:$BC${1},I{0})),1)", new string[] { "6", (dtDistrict.Rows.Count + 1).ToString(), (dtDistrict.Rows.Count + 2).ToString() });
                 validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
                 validation.IgnoreBlank = true;
                 validation.Type = Aspose.Cells.ValidationType.List;
@@ -1347,7 +1759,7 @@ namespace OM23800.Controllers
 
                 area = new CellArea();
                 area.StartRow = headerRowIdx + 2;
-                area.EndRow = maxRow + headerRowIdx + 2;
+                area.EndRow = dtDataExport.Rows.Count + maxRow + headerRowIdx + 2;
                 area.StartColumn = ColTexts.IndexOf("District");
                 area.EndColumn = ColTexts.IndexOf("District");
                 validation.AddArea(area);
@@ -1366,37 +1778,80 @@ namespace OM23800.Controllers
 
                 area = new CellArea();
                 area.StartRow = headerRowIdx + 2;
-                area.EndRow = maxRow + headerRowIdx + 2;
+                area.EndRow = dtDataExport.Rows.Count + maxRow + headerRowIdx + 2;
                 area.StartColumn = ColTexts.IndexOf("CustClass");
                 area.EndColumn = ColTexts.IndexOf("CustClass");
                 validation.AddArea(area);
 
                 string formulaSlsName = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AC,2,0)),\"\",VLOOKUP({0},AA:AC,2,0))", "B6");
-                SheetMCP.Cells[Getcell(ColTexts.IndexOf("SlsName")) + (headerRowIdx + 3).ToString()].SetSharedFormula(formulaSlsName, (maxRow + headerRowIdx + 5), 1);
+                SheetMCP.Cells[Getcell(ColTexts.IndexOf("SlsName")) + (headerRowIdx + 3).ToString()].SetSharedFormula(formulaSlsName, (dtDataExport.Rows.Count + maxRow + headerRowIdx + 5), 1);
+
+                string formulaDistrictCode = string.Format("=IF(ISERROR(VLOOKUP({0},CHOOSE({{2,1}},$BA$1:$BA${1},$BB$1:$BB${1}),2,0)),\"\",VLOOKUP({0},CHOOSE({{2,1}},$BA$1:$BA${1},$BB$1:$BB${1}),2,0))", "J6", dtDistrict.Rows.Count + 1);
+                SheetMCP.Cells[Getcell(ColTexts.IndexOf("DistrictCode")) + (headerRowIdx + 3).ToString()].SetSharedFormula(formulaDistrictCode, (dtDataExport.Rows.Count + maxRow + headerRowIdx + 5), 1);
+
+                string formulaProvinceCode = string.Format("=IF(ISERROR(VLOOKUP({0},CHOOSE({{2,1}},$DA$1:$DA${1},$DB$1:$DB${1}),2,0)),\"\",VLOOKUP({0},CHOOSE({{2,1}},$DA$1:$DA${1},$DB$1:$DB${1}),2,0))", "H6", provinces.Length);
+                SheetMCP.Cells[Getcell(ColTexts.IndexOf("ProvinceCode")) + (headerRowIdx + 3).ToString()].SetSharedFormula(formulaProvinceCode, (dtDataExport.Rows.Count + maxRow + headerRowIdx + 5), 1);
                 #endregion
 
-
                 #region Fomat cell
-                style = SheetMCP.Cells[ColTexts.IndexOf("Province")].GetStyle();
-                style.Number = 49;//text???
+                var strFirstRow = (headerRowIdx + 2).ToString();
+                var strLastRow = (dtDataExport.Rows.Count + maxRow + headerRowIdx + 2).ToString();
 
-                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("Province")) + (headerRowIdx + 2).ToString(), Getcell(ColTexts.IndexOf("Province")) + dtSlsperMaster.Rows.Count + headerRowIdx + 2);
+                style = SheetMCP.Cells["A" + strFirstRow].GetStyle();
+                style.IsLocked = false;
+                range = SheetMCP.Cells.CreateRange("A" + strFirstRow, 
+                    "A" + strLastRow);
+                range.SetStyle(style);
+
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("SlsperID")) + strFirstRow, 
+                    Getcell(ColTexts.IndexOf("SlsperID")) + strLastRow);
+                range.SetStyle(style);
+
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("ShopName")) + strFirstRow, 
+                    Getcell(ColTexts.IndexOf("ShopName")) + strLastRow);
+                range.SetStyle(style);
+
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("Attn")) + strFirstRow, 
+                    Getcell(ColTexts.IndexOf("Attn")) + strLastRow);
+                range.SetStyle(style);
+
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("Addr")) + strFirstRow, 
+                    Getcell(ColTexts.IndexOf("Addr")) + strLastRow);
+                range.SetStyle(style);
+
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("Province")) + strFirstRow, 
+                    Getcell(ColTexts.IndexOf("Province")) + strLastRow);
+                range.SetStyle(style);
+
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("District")) + strFirstRow, 
+                    Getcell(ColTexts.IndexOf("District")) + strLastRow);
+                range.SetStyle(style);
+
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("Phone")) + strFirstRow, 
+                    Getcell(ColTexts.IndexOf("Phone")) + strLastRow);
+                range.SetStyle(style);
+
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("CustClass")) + strFirstRow,
+                    Getcell(ColTexts.IndexOf("CustClass")) + strLastRow);
+                range.SetStyle(style);
+
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("Location")) + strFirstRow, 
+                    Getcell(ColTexts.IndexOf("Location")) + strLastRow);
                 range.SetStyle(style);
 
                 style = SheetMCP.Cells["Z1"].GetStyle();
                 style.Font.Color = Color.Transparent;
+                style.IsLocked = false;
                 flag.FontColor = true;
                 flag.NumberFormat = true;
                 flag.Locked = true;
-
                 range = SheetMCP.Cells.CreateRange("Z1", "ZZ" + (dtSlsperMaster.Rows.Count + dtDistrict.Rows.Count + dtCustClass.Rows.Count + 100));
                 range.ApplyStyle(style, flag);
-
-
+                
+                SheetMCP.Protect(ProtectionType.All);
                 #endregion
                 SheetMCP.AutoFitColumns();
 
-                //SheetPOSuggest.Protect(ProtectionType.Objects);
                 workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Flush();
                 stream.Position = 0;
@@ -1434,10 +1889,12 @@ namespace OM23800.Controllers
                 if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
                 {
                     Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+                    var lineSuccess = new List<string>();
                     var lineBlank = new List<string>();
                     var lineExist = new List<string>();
                     var lineNoExist = new List<string>();
                     var lineSlsNoExist = new List<string>();
+                    var lineInvalidDistrict = new List<string>();
 
                     if (workbook.Worksheets.Count > 0)
                     {
@@ -1453,6 +1910,7 @@ namespace OM23800.Controllers
                         string strProvince = string.Empty;
                         string strPhone = string.Empty;
                         string strCustClass = string.Empty;
+                        string strLocation = string.Empty;
                         if (strEBranchID == BranchID)
                         {
                             for (int i = dataRowIdx; i <= workSheet.Cells.MaxDataRow; i++)
@@ -1462,10 +1920,12 @@ namespace OM23800.Controllers
                                 strShopName = workSheet.Cells[i, 4].StringValue.Trim();
                                 strAttn = workSheet.Cells[i, 5].StringValue.Trim();
                                 strAddr = workSheet.Cells[i, 6].StringValue.Trim();
-                                strDistrict = workSheet.Cells[i, 7].StringValue.Trim();
+                                strDistrict = workSheet.Cells[i, 10].StringValue.Trim();
                                 strProvince = workSheet.Cells[i, 8].StringValue.Trim();
-                                strPhone = workSheet.Cells[i, 9].StringValue.Trim();
-                                strCustClass = workSheet.Cells[i, 10].StringValue.Trim();
+                                strPhone = workSheet.Cells[i, 11].StringValue.Trim();
+                                strCustClass = workSheet.Cells[i, 12].StringValue.Trim();
+                                strLocation = workSheet.Cells[i, 13].StringValue.Trim();
+
                                 if (!string.IsNullOrWhiteSpace(strSlsPerID)
                                     || !string.IsNullOrWhiteSpace(strShopID)
                                     || !string.IsNullOrWhiteSpace(strShopName)
@@ -1474,7 +1934,8 @@ namespace OM23800.Controllers
                                     || !string.IsNullOrWhiteSpace(strDistrict)
                                     || !string.IsNullOrWhiteSpace(strProvince)
                                     || !string.IsNullOrWhiteSpace(strPhone)
-                                    || !string.IsNullOrWhiteSpace(strCustClass))
+                                    || !string.IsNullOrWhiteSpace(strCustClass)
+                                    || !string.IsNullOrWhiteSpace(strLocation))
                                 {
                                     var slsright = true;
                                     if (!string.IsNullOrWhiteSpace(strSlsPerID))
@@ -1482,7 +1943,17 @@ namespace OM23800.Controllers
                                         var slsper = _db.AR_Salesperson.FirstOrDefault(s => s.SlsperId == strSlsPerID && s.BranchID == strEBranchID);
                                         if (slsper == null)
                                         {
-                                            lineSlsNoExist.Add((i + 1).ToString());
+                                            lineSlsNoExist.Add((i - dataRowIdx + 1).ToString());
+                                            slsright = false;
+                                        }
+                                    }
+
+                                    if (!string.IsNullOrWhiteSpace(strDistrict))
+                                    {
+                                        var district = _db.SI_District.FirstOrDefault(d => d.District == strDistrict && d.State == strProvince);
+                                        if (district == null)
+                                        {
+                                            lineInvalidDistrict.Add((i - dataRowIdx + 1).ToString());
                                             slsright = false;
                                         }
                                     }
@@ -1507,6 +1978,7 @@ namespace OM23800.Controllers
                                                     existCust.State = existCust.BillState = strProvince;
                                                     existCust.Phone = existCust.BillPhone = strPhone;
                                                     existCust.ClassId = strCustClass;
+                                                    existCust.Location = strLocation;
                                                     existCust.LUpd_Datetime = DateTime.Now;
                                                     existCust.LUpd_Prog = _screenName;
                                                     existCust.LUpd_User = Current.UserName;
@@ -1514,16 +1986,17 @@ namespace OM23800.Controllers
                                                     {
                                                         existCust.SlsperId = strSlsPerID;
                                                     }
+                                                    lineSuccess.Add((i - dataRowIdx + 1).ToString());
                                                 }
                                                 else
                                                 {
-                                                    lineNoExist.Add((i + 1).ToString());
+                                                    lineNoExist.Add((i - dataRowIdx + 1).ToString());
                                                 }
                                             }
                                         }
                                         else
                                         {
-                                            lineBlank.Add((i + 1).ToString());
+                                            lineBlank.Add((i - dataRowIdx + 1).ToString());
                                         }
                                     }
                                     else
@@ -1535,45 +2008,61 @@ namespace OM23800.Controllers
                                         {
                                             if (slsright)
                                             {
+                                                var canInsert = true;
                                                 if (!string.IsNullOrWhiteSpace(strShopID))
                                                 {
                                                     var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustId == strShopID && c.BranchID == strEBranchID);
                                                     if (existCust != null)
                                                     {
-                                                        lineExist.Add((i + 1).ToString());
+                                                        lineExist.Add((i - dataRowIdx + 1).ToString());
+                                                        canInsert = false;
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    strShopID = _db.OM23800_CustID(strEBranchID, strCustClass).FirstOrDefault().ToString();
+                                                    var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustName == strShopName && c.Addr1 == strAddr);
+                                                    if (existCust != null)
+                                                    {
+                                                        lineExist.Add((i - dataRowIdx + 1).ToString());
+                                                        canInsert = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        strShopID = _db.OM23800_CustID(strEBranchID, strProvince, strDistrict, strCustClass).FirstOrDefault().ToString();
+                                                    }
                                                 }
 
-                                                var newCust = new AR_Customer();
-                                                newCust.ResetET();
-                                                newCust.CustId = strShopID;
-                                                newCust.BranchID = strEBranchID;
-                                                newCust.CustName = newCust.BillName = strShopName;
-                                                newCust.Attn = newCust.BillAttn = strAttn;
-                                                newCust.Addr1 = newCust.BillAddr1 = strAddr;
-                                                newCust.District = strDistrict;
-                                                newCust.State = newCust.BillState = strProvince;
-                                                newCust.Phone = newCust.BillPhone = strPhone;
-                                                newCust.ClassId = strCustClass;
-
-                                                newCust.LUpd_Datetime = newCust.Crtd_Datetime = DateTime.Now;
-                                                newCust.LUpd_Prog = newCust.Crtd_Prog = _screenName;
-                                                newCust.LUpd_User = newCust.Crtd_User = Current.UserName;
-                                                if (!string.IsNullOrWhiteSpace(strSlsPerID))
+                                                if (canInsert)
                                                 {
-                                                    newCust.SlsperId = strSlsPerID;
+                                                    var newCust = new AR_Customer();
+                                                    newCust.ResetET();
+                                                    newCust.CustId = strShopID;
+                                                    newCust.BranchID = strEBranchID;
+                                                    newCust.CustName = newCust.BillName = strShopName;
+                                                    newCust.Attn = newCust.BillAttn = strAttn;
+                                                    newCust.Addr1 = newCust.BillAddr1 = strAddr;
+                                                    newCust.District = strDistrict;
+                                                    newCust.State = newCust.BillState = strProvince;
+                                                    newCust.Phone = newCust.BillPhone = strPhone;
+                                                    newCust.ClassId = strCustClass;
+                                                    newCust.Location = strLocation;
+
+                                                    newCust.LUpd_Datetime = newCust.Crtd_Datetime = DateTime.Now;
+                                                    newCust.LUpd_Prog = newCust.Crtd_Prog = _screenName;
+                                                    newCust.LUpd_User = newCust.Crtd_User = Current.UserName;
+                                                    if (!string.IsNullOrWhiteSpace(strSlsPerID))
+                                                    {
+                                                        newCust.SlsperId = strSlsPerID;
+                                                    }
+                                                    _db.AR_Customer.AddObject(newCust);
+                                                    _db.SaveChanges();
+                                                    lineSuccess.Add((i - dataRowIdx + 1).ToString());
                                                 }
-                                                _db.AR_Customer.AddObject(newCust);
-                                                _db.SaveChanges();
                                             }
                                         }
                                         else
                                         {
-                                            lineBlank.Add((i + 1).ToString());
+                                            lineBlank.Add((i - dataRowIdx + 1).ToString());
                                         }
                                     }
                                 }
@@ -1582,21 +2071,29 @@ namespace OM23800.Controllers
                             {
                                 _db.SaveChanges();
                             }
+                            if (lineSuccess.Count > 0)
+                            {
+                                message += string.Format("Dòng khách hàng import thành công: {0}, ...<br/>", string.Join(", ", lineSuccess.Take(5)));
+                            }
                             if (lineBlank.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng thiếu dữ liệu: {0}<br/>", string.Join(", ", lineBlank));
+                                message += string.Format("Dòng khách hàng thiếu dữ liệu: {0}, ...<br/>", string.Join(", ", lineBlank.Take(5)));
                             }
                             if (lineExist.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng đã tồn tại: {0}<br/>", string.Join(", ", lineExist));
+                                message += string.Format("Dòng khách hàng đã tồn tại: {0}, ...<br/>", string.Join(", ", lineExist.Take(5)));
                             }
                             if (lineNoExist.Count > 0)
                             {
-                                message += string.Format("Dòng khách hàng không tồn tại: {0}<br/>", string.Join(", ", lineNoExist));
+                                message += string.Format("Dòng khách hàng không tồn tại: {0}, ...<br/>", string.Join(", ", lineNoExist.Take(5)));
                             }
                             if (lineSlsNoExist.Count > 0)
                             {
-                                message += string.Format("Dòng dữ liệu nhập nhân viên bán hàng không tồn tại: {0}<br/>", string.Join(", ", lineSlsNoExist));
+                                message += string.Format("Dòng dữ liệu nhập nhân viên bán hàng không tồn tại: {0}, ...<br/>", string.Join(", ", lineSlsNoExist.Take(5)));
+                            }
+                            if (lineInvalidDistrict.Count > 0)
+                            {
+                                message += string.Format("Dòng dữ liệu nhập sai quận huyện hoặc tỉnh: {0}, ...<br/>", string.Join(", ", lineInvalidDistrict.Take(5)));
                             }
                             Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
                         }

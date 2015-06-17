@@ -1,5 +1,6 @@
 var Declare = {
-
+    selBranchID: '',
+    selBranchName: ''
 };
 
 var Process = {
@@ -58,7 +59,7 @@ var Process = {
         return totalStrs.join(", ");
     },
 
-    exportSelectedCust: function (custIDs) {
+    exportSelectedCust: function (custIDs, branchID, branchName) {
         Ext.net.DirectMethod.request({
             url: "OM23800/ExportSelectedCust",
             isUpload: true,
@@ -66,7 +67,9 @@ var Process = {
             cleanRequest: true,
             timeout: 1000000,
             params: {
-                custIDs: custIDs
+                custIDs: custIDs,
+                pBranchID: branchID,
+                pBranchName: branchName
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -135,6 +138,8 @@ var Event = {
 
         btnLoadDataPlan_click: function (btn, e, eOpts) {
             if (App.pnlMCL.isValid()) {
+                Declare.selBranchID = App.cboDistributorMCL.value;
+                Declare.selBranchName = App.cboDistributorMCL.rawValue;
                 App.grdMCL.store.reload();
             }
             else {
@@ -396,13 +401,18 @@ var ImExMcp = {
     },
 
     fupImport_ImExMcp_change: function (fup, newValue, oldValue, eOpts) {
-        var fileName = fup.getValue();
-        var ext = fileName.split(".").pop().toLowerCase();
-        if (ext == "xls" || ext == "xlsx") {
-            ImExMcp.importMCP();
+        if (App.frmMain_ImExMcp.isValid()) {
+            var fileName = fup.getValue();
+            var ext = fileName.split(".").pop().toLowerCase();
+            if (ext == "xls" || ext == "xlsx") {
+                ImExMcp.importMCP();
 
-        } else {
-            alert("Please choose a Media! (.xls, .xlsx)");
+            } else {
+                alert("Please choose a Media! (.xls, .xlsx)");
+                fup.reset();
+            }
+        }
+        else {
             fup.reset();
         }
     },
@@ -433,6 +443,7 @@ var ImExMcp = {
                     HQ.message.process(msg, data, true);
                 }
             });
+            App.winImExMcp.close();
         }
         else {
             App.frmMain_ImExMcp.getForm().getFields().each(
@@ -463,7 +474,7 @@ var ImExMcp = {
                 else {
                     HQ.message.process(msg, data, true);
                 }
-
+                App.winImExMcp.close();
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -481,8 +492,8 @@ var ImExCust = {
         if (win.isImport) {
             App.cboProvince_ImExCust.hide();
             App.cboProvince_ImExCust.allowBlank = true;
-            App.radgActionCust.show();
-            App.radgActionCust.allowBlank = false;
+            //App.radgActionCust.show();
+            //App.radgActionCust.allowBlank = false;
 
             App.fupImport_ImExCust.show();
             App.btnExport_ImExCust.hide();
@@ -490,8 +501,8 @@ var ImExCust = {
         else {
             App.cboProvince_ImExCust.show();
             App.cboProvince_ImExCust.allowBlank = false;
-            App.radgActionCust.hide();
-            App.radgActionCust.allowBlank = true;
+            //App.radgActionCust.hide();
+            //App.radgActionCust.allowBlank = true;
 
             App.fupImport_ImExCust.hide();
             App.btnExport_ImExCust.show();
@@ -499,13 +510,18 @@ var ImExCust = {
     },
 
     fupImport_ImExCust_change: function (fup, newValue, oldValue, eOpts) {
-        var fileName = fup.getValue();
-        var ext = fileName.split(".").pop().toLowerCase();
-        if (ext == "xls" || ext == "xlsx") {
-            ImExCust.importCust();
+        if (App.frmMain_ImExCust.isValid()) {
+            var fileName = fup.getValue();
+            var ext = fileName.split(".").pop().toLowerCase();
+            if (ext == "xls" || ext == "xlsx") {
+                ImExCust.importCust();
 
-        } else {
-            alert("Please choose a Media! (.xls, .xlsx)");
+            } else {
+                alert("Please choose a Media! (.xls, .xlsx)");
+                fup.reset();
+            }
+        }
+        else {
             fup.reset();
         }
     },
@@ -521,7 +537,9 @@ var ImExCust = {
                 params: {
                     branchID: App.cboBranchID_ImExCust.getValue(),//,
                     branchName: App.cboBranchID_ImExCust.getRawValue(),
-                    provinces: App.cboProvince_ImExCust.getValue()
+                    provinces: App.cboProvince_ImExCust.getValue(),
+                    provinceRawValue: App.cboProvince_ImExCust.getRawValue(),
+                    isUpdated: App.radUpdateCust.value ? true : false
                 },
                 success: function (msg, data) {
                     //processMessage(msg, data, true);
@@ -535,6 +553,7 @@ var ImExCust = {
                     HQ.message.process(msg, data, true);
                 }
             });
+            App.winImExCust.close();
         }
         else {
             App.frmMain_ImExCust.getForm().getFields().each(
@@ -566,7 +585,7 @@ var ImExCust = {
                 else {
                     HQ.message.process(msg, data, true);
                 }
-
+                App.winImExCust.close();
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -752,7 +771,7 @@ var Gmap = {
                 switch (eventName) {
                     case 'export_excel':
                         if (custIDs.length) {
-                            Process.exportSelectedCust(custIDs);
+                            Process.exportSelectedCust(custIDs, Declare.selBranchID, Declare.selBranchName);
                         }
                         contextMenu.hide();
                         break;
@@ -883,6 +902,7 @@ var Gmap = {
 
         drawMCP: function (markers) {
             Gmap.Process.prepairMap();
+            Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
 
             if (markers.length > 0) {
                 Gmap.Declare.stopMarkers = [];
