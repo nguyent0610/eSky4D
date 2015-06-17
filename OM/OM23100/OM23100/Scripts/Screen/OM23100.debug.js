@@ -45,8 +45,7 @@ var menuClick = function (command) {
             break;
         case "new":
             if (HQ.isInsert) {
-                //App.App
-                HQ.grid.insert(App.grdOM_FCS, keys);
+                //HQ.grid.insert(App.grdOM_FCS, keys);
             }
             break;
         case "delete":
@@ -111,7 +110,7 @@ var stoLoad = function (sto) {
     HQ.common.changeData(HQ.isChange, 'OM23100');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
+            //HQ.store.insertBlank(sto, keys);
         }
         HQ.isFirstLoad = false;
     }
