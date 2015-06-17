@@ -49,7 +49,7 @@
     </Reference>
     <Reference Include="eBiz4DApp_PJP, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\DlleSky4D\eBiz4DApp_PJP.dll</HintPath>
+      <HintPath>..\..\..\..\JFV\OM22200\bin\eBiz4DApp_PJP.dll</HintPath>
     </Reference>
     <Reference Include="Encryption">
       <HintPath>C:\Users\admin\Desktop\newest\DLL\WEB\Encryption.dll</HintPath>
@@ -72,7 +72,7 @@
     </Reference>
     <Reference Include="HQFramework.Common, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\DlleSky4D\HQFramework.Common.DLL</HintPath>
+      <HintPath>..\..\..\..\JFV\OM22200\bin\HQFramework.Common.DLL</HintPath>
     </Reference>
     <Reference Include="HQFramework.DAL, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -329,7 +329,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

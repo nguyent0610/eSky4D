@@ -3283,7 +3283,9 @@ namespace OM23800.Controllers
             System.DateTime dSat = default(System.DateTime);
             System.DateTime dSun = default(System.DateTime);
             List<clsOM_SalesRouteDet> lstOM_SalesRouteDet = new List<clsOM_SalesRouteDet>();
-
+            clsSQL objSql = new clsSQL(_daapp);
+            objSql.OM_DeleteSalesRouteDetByDate(Fromdate, Todate, objSaleMaster.SalesRouteID, objSaleMaster.CustID, objSaleMaster.BranchID, objSaleMaster.PJPID, objSaleMaster.SlsPerID);
+          
             if (objSaleMaster.SlsFreqType == "R")
             {
 
