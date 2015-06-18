@@ -1358,6 +1358,10 @@ namespace OM23800.Controllers
             try
             {
                 string BranchID = data["BranchID"].PassNull();
+                string slsperID=data["cboSlsPerID_ImExMcp"].PassNull();
+                string routeID = data["cboRouteID_ImExMcp"].PassNull();
+
+                 //string slsPerID = data["slsPer"].PassNull();
                 string PJP = BranchID;
                 var date = DateTime.Now.Date;
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("fupImport_ImExMcp");
@@ -1394,6 +1398,7 @@ namespace OM23800.Controllers
                         string strESTT = "";
                         DateTime startDate = DateTime.Now;
                         DateTime endDate = DateTime.Now;
+                       
                         if (strEPJP.ToUpper().Trim() != PJP.ToUpper().Trim() || BranchID != strEBanchID.ToUpper().Trim())
                         {
                             throw new MessageException(MessageType.Message, "201401221", "", new string[] { strEPJP, strEBanchID, PJP, BranchID });
@@ -1433,7 +1438,8 @@ namespace OM23800.Controllers
                             strEEndDate = workSheet.Cells[i, 7].StringValue;//dataArray.GetValue(i, 8).PassNull();
                             strETS = workSheet.Cells[i, 8].StringValue;//dataArray.GetValue(i, 9).PassNull();
                             strETBH = workSheet.Cells[i, 9].StringValue;//dataArray.GetValue(i, 10).PassNull();
-
+                            if (strESlsperID != slsperID && slsperID != "") continue;
+                            if (strERouteID != routeID && routeID != "") continue;
                             if (strECustID == "") continue;
                             else if (strERouteID == ""
                                  || strECustID == ""
