@@ -134,6 +134,33 @@
         )
 
         @(
+            X.Store().ID("stoMonthDetail")
+            .AutoLoad(false).PageSize(50)//.RemotePaging(true)
+            .Model(Util.GenerateModel(typeof(OM23400_pgBonusKADetail_Result), "mdlMonthDetail", ""))       
+            .ServerProxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetBonusKADetail", "OM23400"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("bonusID", "App.cboBonusID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("kaType", "M", ParameterMode.Value));
+            })
+            .Listeners(p => {
+                //p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr'];";//,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
+                p.Load.Fn = "Store.stoDetail_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+            // Store: stoMonth
+        )
+
+        @(
             X.Store().ID("stoQuarter")
             .AutoLoad(false).PageSize(50)//.RemotePaging(true)
             .Model(Util.GenerateModel(typeof(OM23400_pgBonusKA_Result), "mdlQuarter", ""))       
@@ -154,6 +181,33 @@
             .Listeners(p => {
                 p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr'];"; //,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
                 p.Load.Fn = "Store.stoBonusRS_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+            // Store: stoQuarter
+        )
+
+        @(
+            X.Store().ID("stoQuarterDetail")
+            .AutoLoad(false).PageSize(50)//.RemotePaging(true)
+            .Model(Util.GenerateModel(typeof(OM23400_pgBonusKADetail_Result), "mdlQuarterDetail", ""))       
+            .ServerProxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetBonusKADetail", "OM23400"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("bonusID", "App.cboBonusID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("kaType", "Q", ParameterMode.Value));
+            })
+            .Listeners(p => {
+                //p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr'];";//,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
+                p.Load.Fn = "Store.stoDetail_load";
                 p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
                 p.Update.Handler = "Event.Form.frmMain_fieldChange()";
             })
@@ -185,6 +239,33 @@
                 p.Update.Handler = "Event.Form.frmMain_fieldChange()";
             })
             // Store: stoQuarter
+        )
+
+        @(
+            X.Store().ID("stoYearDetail")
+            .AutoLoad(false).PageSize(50)//.RemotePaging(true)
+            .Model(Util.GenerateModel(typeof(OM23400_pgBonusKADetail_Result), "mdlYearDetail", ""))       
+            .ServerProxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetBonusKADetail", "OM23400"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("bonusID", "App.cboBonusID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("kaType", "Y", ParameterMode.Value));
+            })
+            .Listeners(p => {
+                //p.BeforeLoad.Handler = "this.HQFieldKeys=['LevelNbr'];";//,'SlsAmt','AmtBegin','AmtEnd','AmtBonus'
+                p.Load.Fn = "Store.stoDetail_load";
+                p.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                p.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+            // Store: stoYear
         )
 
         @X.GridFilters() <!--Khi cache cho grid-->

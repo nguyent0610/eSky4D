@@ -128,6 +128,22 @@ namespace OM23400
             }
         }
         private ObjectSet<OM_TBonusKA> _OM_TBonusKA;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_TBonusKADetail> OM_TBonusKADetail
+        {
+            get
+            {
+                if ((_OM_TBonusKADetail == null))
+                {
+                    _OM_TBonusKADetail = base.CreateObjectSet<OM_TBonusKADetail>("OM_TBonusKADetail");
+                }
+                return _OM_TBonusKADetail;
+            }
+        }
+        private ObjectSet<OM_TBonusKADetail> _OM_TBonusKADetail;
 
         #endregion
 
@@ -163,6 +179,14 @@ namespace OM23400
         public void AddToOM_TBonusKA(OM_TBonusKA oM_TBonusKA)
         {
             base.AddObject("OM_TBonusKA", oM_TBonusKA);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_TBonusKADetail EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_TBonusKADetail(OM_TBonusKADetail oM_TBonusKADetail)
+        {
+            base.AddObject("OM_TBonusKADetail", oM_TBonusKADetail);
         }
 
         #endregion
@@ -279,6 +303,47 @@ namespace OM23400
             }
     
             return base.ExecuteFunction<OM23400_pgBonusKA_Result>("OM23400_pgBonusKA", userIDParameter, bonusIDParameter, kaTypeParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="bonusID">No Metadata Documentation available.</param>
+        /// <param name="kaType">No Metadata Documentation available.</param>
+        public ObjectResult<OM23400_pgBonusKADetail_Result> OM23400_pgBonusKADetail(global::System.String userID, global::System.String bonusID, global::System.String kaType)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter bonusIDParameter;
+            if (bonusID != null)
+            {
+                bonusIDParameter = new ObjectParameter("BonusID", bonusID);
+            }
+            else
+            {
+                bonusIDParameter = new ObjectParameter("BonusID", typeof(global::System.String));
+            }
+    
+            ObjectParameter kaTypeParameter;
+            if (kaType != null)
+            {
+                kaTypeParameter = new ObjectParameter("KaType", kaType);
+            }
+            else
+            {
+                kaTypeParameter = new ObjectParameter("KaType", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM23400_pgBonusKADetail_Result>("OM23400_pgBonusKADetail", userIDParameter, bonusIDParameter, kaTypeParameter);
         }
 
         #endregion
@@ -754,9 +819,6 @@ namespace OM23400
         /// <param name="bonusID">Initial value of the BonusID property.</param>
         /// <param name="kaType">Initial value of the KaType property.</param>
         /// <param name="slsAmt">Initial value of the SlsAmt property.</param>
-        /// <param name="amtBegin">Initial value of the AmtBegin property.</param>
-        /// <param name="amtEnd">Initial value of the AmtEnd property.</param>
-        /// <param name="amtBonus">Initial value of the AmtBonus property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
@@ -764,7 +826,7 @@ namespace OM23400
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM_TBonusKA CreateOM_TBonusKA(global::System.Int32 recID, global::System.Int32 levelNbr, global::System.String bonusID, global::System.String kaType, global::System.Double slsAmt, global::System.Double amtBegin, global::System.Double amtEnd, global::System.Double amtBonus, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static OM_TBonusKA CreateOM_TBonusKA(global::System.Int32 recID, global::System.Int32 levelNbr, global::System.String bonusID, global::System.String kaType, global::System.Double slsAmt, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             OM_TBonusKA oM_TBonusKA = new OM_TBonusKA();
             oM_TBonusKA.RecID = recID;
@@ -772,9 +834,6 @@ namespace OM23400
             oM_TBonusKA.BonusID = bonusID;
             oM_TBonusKA.KaType = kaType;
             oM_TBonusKA.SlsAmt = slsAmt;
-            oM_TBonusKA.AmtBegin = amtBegin;
-            oM_TBonusKA.AmtEnd = amtEnd;
-            oM_TBonusKA.AmtBonus = amtBonus;
             oM_TBonusKA.Crtd_DateTime = crtd_DateTime;
             oM_TBonusKA.Crtd_Prog = crtd_Prog;
             oM_TBonusKA.Crtd_User = crtd_User;
@@ -917,6 +976,338 @@ namespace OM23400
         private global::System.Double _SlsAmt;
         partial void OnSlsAmtChanging(global::System.Double value);
         partial void OnSlsAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime Crtd_DateTime
+        {
+            get
+            {
+                return _Crtd_DateTime;
+            }
+            set
+            {
+                OnCrtd_DateTimeChanging(value);
+                ReportPropertyChanging("Crtd_DateTime");
+                _Crtd_DateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Crtd_DateTime");
+                OnCrtd_DateTimeChanged();
+            }
+        }
+        private global::System.DateTime _Crtd_DateTime;
+        partial void OnCrtd_DateTimeChanging(global::System.DateTime value);
+        partial void OnCrtd_DateTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_Prog
+        {
+            get
+            {
+                return _Crtd_Prog;
+            }
+            set
+            {
+                OnCrtd_ProgChanging(value);
+                ReportPropertyChanging("Crtd_Prog");
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Crtd_Prog");
+                OnCrtd_ProgChanged();
+            }
+        }
+        private global::System.String _Crtd_Prog;
+        partial void OnCrtd_ProgChanging(global::System.String value);
+        partial void OnCrtd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_User
+        {
+            get
+            {
+                return _Crtd_User;
+            }
+            set
+            {
+                OnCrtd_UserChanging(value);
+                ReportPropertyChanging("Crtd_User");
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Crtd_User");
+                OnCrtd_UserChanged();
+            }
+        }
+        private global::System.String _Crtd_User;
+        partial void OnCrtd_UserChanging(global::System.String value);
+        partial void OnCrtd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime LUpd_DateTime
+        {
+            get
+            {
+                return _LUpd_DateTime;
+            }
+            set
+            {
+                OnLUpd_DateTimeChanging(value);
+                ReportPropertyChanging("LUpd_DateTime");
+                _LUpd_DateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LUpd_DateTime");
+                OnLUpd_DateTimeChanged();
+            }
+        }
+        private global::System.DateTime _LUpd_DateTime;
+        partial void OnLUpd_DateTimeChanging(global::System.DateTime value);
+        partial void OnLUpd_DateTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_Prog
+        {
+            get
+            {
+                return _LUpd_Prog;
+            }
+            set
+            {
+                OnLUpd_ProgChanging(value);
+                ReportPropertyChanging("LUpd_Prog");
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LUpd_Prog");
+                OnLUpd_ProgChanged();
+            }
+        }
+        private global::System.String _LUpd_Prog;
+        partial void OnLUpd_ProgChanging(global::System.String value);
+        partial void OnLUpd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_User
+        {
+            get
+            {
+                return _LUpd_User;
+            }
+            set
+            {
+                OnLUpd_UserChanging(value);
+                ReportPropertyChanging("LUpd_User");
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LUpd_User");
+                OnLUpd_UserChanged();
+            }
+        }
+        private global::System.String _LUpd_User;
+        partial void OnLUpd_UserChanging(global::System.String value);
+        partial void OnLUpd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="OM23400Model", Name="OM_TBonusKADetail")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class OM_TBonusKADetail : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM_TBonusKADetail object.
+        /// </summary>
+        /// <param name="recID">Initial value of the RecID property.</param>
+        /// <param name="levelNbr">Initial value of the LevelNbr property.</param>
+        /// <param name="bonusID">Initial value of the BonusID property.</param>
+        /// <param name="kaType">Initial value of the KaType property.</param>
+        /// <param name="amtBegin">Initial value of the AmtBegin property.</param>
+        /// <param name="amtEnd">Initial value of the AmtEnd property.</param>
+        /// <param name="amtBonus">Initial value of the AmtBonus property.</param>
+        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
+        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
+        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static OM_TBonusKADetail CreateOM_TBonusKADetail(global::System.Int32 recID, global::System.Int32 levelNbr, global::System.String bonusID, global::System.String kaType, global::System.Double amtBegin, global::System.Double amtEnd, global::System.Double amtBonus, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        {
+            OM_TBonusKADetail oM_TBonusKADetail = new OM_TBonusKADetail();
+            oM_TBonusKADetail.RecID = recID;
+            oM_TBonusKADetail.LevelNbr = levelNbr;
+            oM_TBonusKADetail.BonusID = bonusID;
+            oM_TBonusKADetail.KaType = kaType;
+            oM_TBonusKADetail.AmtBegin = amtBegin;
+            oM_TBonusKADetail.AmtEnd = amtEnd;
+            oM_TBonusKADetail.AmtBonus = amtBonus;
+            oM_TBonusKADetail.Crtd_DateTime = crtd_DateTime;
+            oM_TBonusKADetail.Crtd_Prog = crtd_Prog;
+            oM_TBonusKADetail.Crtd_User = crtd_User;
+            oM_TBonusKADetail.LUpd_DateTime = lUpd_DateTime;
+            oM_TBonusKADetail.LUpd_Prog = lUpd_Prog;
+            oM_TBonusKADetail.LUpd_User = lUpd_User;
+            oM_TBonusKADetail.tstamp = tstamp;
+            return oM_TBonusKADetail;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 RecID
+        {
+            get
+            {
+                return _RecID;
+            }
+            set
+            {
+                if (_RecID != value)
+                {
+                    OnRecIDChanging(value);
+                    ReportPropertyChanging("RecID");
+                    _RecID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("RecID");
+                    OnRecIDChanged();
+                }
+            }
+        }
+        private global::System.Int32 _RecID;
+        partial void OnRecIDChanging(global::System.Int32 value);
+        partial void OnRecIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 LevelNbr
+        {
+            get
+            {
+                return _LevelNbr;
+            }
+            set
+            {
+                if (_LevelNbr != value)
+                {
+                    OnLevelNbrChanging(value);
+                    ReportPropertyChanging("LevelNbr");
+                    _LevelNbr = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("LevelNbr");
+                    OnLevelNbrChanged();
+                }
+            }
+        }
+        private global::System.Int32 _LevelNbr;
+        partial void OnLevelNbrChanging(global::System.Int32 value);
+        partial void OnLevelNbrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BonusID
+        {
+            get
+            {
+                return _BonusID;
+            }
+            set
+            {
+                if (_BonusID != value)
+                {
+                    OnBonusIDChanging(value);
+                    ReportPropertyChanging("BonusID");
+                    _BonusID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("BonusID");
+                    OnBonusIDChanged();
+                }
+            }
+        }
+        private global::System.String _BonusID;
+        partial void OnBonusIDChanging(global::System.String value);
+        partial void OnBonusIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String KaType
+        {
+            get
+            {
+                return _KaType;
+            }
+            set
+            {
+                if (_KaType != value)
+                {
+                    OnKaTypeChanging(value);
+                    ReportPropertyChanging("KaType");
+                    _KaType = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("KaType");
+                    OnKaTypeChanged();
+                }
+            }
+        }
+        private global::System.String _KaType;
+        partial void OnKaTypeChanging(global::System.String value);
+        partial void OnKaTypeChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1854,11 +2245,8 @@ namespace OM23400
         /// <param name="bonusID">Initial value of the BonusID property.</param>
         /// <param name="kaType">Initial value of the KaType property.</param>
         /// <param name="slsAmt">Initial value of the SlsAmt property.</param>
-        /// <param name="amtBegin">Initial value of the AmtBegin property.</param>
-        /// <param name="amtEnd">Initial value of the AmtEnd property.</param>
-        /// <param name="amtBonus">Initial value of the AmtBonus property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static OM23400_pgBonusKA_Result CreateOM23400_pgBonusKA_Result(global::System.Int32 recID, global::System.Int32 levelNbr, global::System.String bonusID, global::System.String kaType, global::System.Double slsAmt, global::System.Double amtBegin, global::System.Double amtEnd, global::System.Double amtBonus, global::System.Byte[] tstamp)
+        public static OM23400_pgBonusKA_Result CreateOM23400_pgBonusKA_Result(global::System.Int32 recID, global::System.Int32 levelNbr, global::System.String bonusID, global::System.String kaType, global::System.Double slsAmt, global::System.Byte[] tstamp)
         {
             OM23400_pgBonusKA_Result oM23400_pgBonusKA_Result = new OM23400_pgBonusKA_Result();
             oM23400_pgBonusKA_Result.RecID = recID;
@@ -1866,9 +2254,6 @@ namespace OM23400
             oM23400_pgBonusKA_Result.BonusID = bonusID;
             oM23400_pgBonusKA_Result.KaType = kaType;
             oM23400_pgBonusKA_Result.SlsAmt = slsAmt;
-            oM23400_pgBonusKA_Result.AmtBegin = amtBegin;
-            oM23400_pgBonusKA_Result.AmtEnd = amtEnd;
-            oM23400_pgBonusKA_Result.AmtBonus = amtBonus;
             oM23400_pgBonusKA_Result.tstamp = tstamp;
             return oM23400_pgBonusKA_Result;
         }
@@ -1996,6 +2381,169 @@ namespace OM23400
         private global::System.Double _SlsAmt;
         partial void OnSlsAmtChanging(global::System.Double value);
         partial void OnSlsAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM23400Model", Name="OM23400_pgBonusKADetail_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM23400_pgBonusKADetail_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM23400_pgBonusKADetail_Result object.
+        /// </summary>
+        /// <param name="recID">Initial value of the RecID property.</param>
+        /// <param name="levelNbr">Initial value of the LevelNbr property.</param>
+        /// <param name="bonusID">Initial value of the BonusID property.</param>
+        /// <param name="kaType">Initial value of the KaType property.</param>
+        /// <param name="amtBegin">Initial value of the AmtBegin property.</param>
+        /// <param name="amtEnd">Initial value of the AmtEnd property.</param>
+        /// <param name="amtBonus">Initial value of the AmtBonus property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static OM23400_pgBonusKADetail_Result CreateOM23400_pgBonusKADetail_Result(global::System.Int32 recID, global::System.Int32 levelNbr, global::System.String bonusID, global::System.String kaType, global::System.Double amtBegin, global::System.Double amtEnd, global::System.Double amtBonus, global::System.Byte[] tstamp)
+        {
+            OM23400_pgBonusKADetail_Result oM23400_pgBonusKADetail_Result = new OM23400_pgBonusKADetail_Result();
+            oM23400_pgBonusKADetail_Result.RecID = recID;
+            oM23400_pgBonusKADetail_Result.LevelNbr = levelNbr;
+            oM23400_pgBonusKADetail_Result.BonusID = bonusID;
+            oM23400_pgBonusKADetail_Result.KaType = kaType;
+            oM23400_pgBonusKADetail_Result.AmtBegin = amtBegin;
+            oM23400_pgBonusKADetail_Result.AmtEnd = amtEnd;
+            oM23400_pgBonusKADetail_Result.AmtBonus = amtBonus;
+            oM23400_pgBonusKADetail_Result.tstamp = tstamp;
+            return oM23400_pgBonusKADetail_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 RecID
+        {
+            get
+            {
+                return _RecID;
+            }
+            set
+            {
+                OnRecIDChanging(value);
+                ReportPropertyChanging("RecID");
+                _RecID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RecID");
+                OnRecIDChanged();
+            }
+        }
+        private global::System.Int32 _RecID;
+        partial void OnRecIDChanging(global::System.Int32 value);
+        partial void OnRecIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 LevelNbr
+        {
+            get
+            {
+                return _LevelNbr;
+            }
+            set
+            {
+                OnLevelNbrChanging(value);
+                ReportPropertyChanging("LevelNbr");
+                _LevelNbr = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LevelNbr");
+                OnLevelNbrChanged();
+            }
+        }
+        private global::System.Int32 _LevelNbr;
+        partial void OnLevelNbrChanging(global::System.Int32 value);
+        partial void OnLevelNbrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BonusID
+        {
+            get
+            {
+                return _BonusID;
+            }
+            set
+            {
+                OnBonusIDChanging(value);
+                ReportPropertyChanging("BonusID");
+                _BonusID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BonusID");
+                OnBonusIDChanged();
+            }
+        }
+        private global::System.String _BonusID;
+        partial void OnBonusIDChanging(global::System.String value);
+        partial void OnBonusIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String KaType
+        {
+            get
+            {
+                return _KaType;
+            }
+            set
+            {
+                OnKaTypeChanging(value);
+                ReportPropertyChanging("KaType");
+                _KaType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("KaType");
+                OnKaTypeChanged();
+            }
+        }
+        private global::System.String _KaType;
+        partial void OnKaTypeChanging(global::System.String value);
+        partial void OnKaTypeChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

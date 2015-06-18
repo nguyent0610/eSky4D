@@ -132,76 +132,79 @@
                 x.Render.Handler = "HQ.common.control_render(this,'bonus')";
             })// pnlHeader
 
-            , X.TabPanel().ID("tabBonusRS")
-            .Region(Region.Center)
+            , X.Panel().Region(Region.Center)
             .Layout(LayoutType.Fit)
-            .Hidden(true)
             .Items(
-                X.Panel().ID("pnlBonusRS")
-                .Title(Util.GetLang("Define"))
+                X.TabPanel().ID("tabBonusRS")
+        //.Region(Region.Center)
                 .Layout(LayoutType.Fit)
+                .Hidden(true)
                 .Items(
-                    X.GridPanel().ID("grdBonusRS")
-                    .Scroll(ScrollMode.Both)
-                    .View(X.GridView().TrackOver(false))
-                    .SortableColumns(false)
-                    .StoreID("stoBonusRS")
-                    .ColumnModel(
-                        X.RowNumbererColumn()
-                        , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
+                    X.Panel().ID("pnlBonusRS")
+                    .Title(Util.GetLang("Define"))
+                    .Layout(LayoutType.Fit)
+                    .Items(
+                        X.GridPanel().ID("grdBonusRS")
+                        .Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false))
+                        .SortableColumns(false)
+                        .StoreID("stoBonusRS")
+                        .ColumnModel(
+                            X.RowNumbererColumn()
+                            , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
 
-                        , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
-                        .Format("0,000")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
-                        )
+                            , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
+                            .Format("0,000")
+                            .Align(Alignment.Right).Editor(
+                                HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                            )
 
-                        , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
-                         .Format("0,000")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
-                        )
+                            , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
+                             .Format("0,000")
+                            .Align(Alignment.Right).Editor(
+                                HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                            )
 
-                        , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().MinValue(0)
-                        )
+                            , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
+                            .Align(Alignment.Right).Editor(
+                                HQ.NumberField().MinValue(0)
+                            )
 
-                        , X.CommandColumn().Width(150)
-                        .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
+                            , X.CommandColumn().Width(150)
+                            .Commands(
+                                X.GridCommand()
+                                .Text(Util.GetLang("Reject"))
+                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                .CommandName("reject")
+                                .Icon(Icon.ArrowUndo)
+                            )
+                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                            .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                         )
-                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
-                    )
-                    .SelectionModel(X.RowSelectionModel().ID("slmBonusRS").Mode(SelectionMode.Single))
-                    .Plugins(
-                        X.CellEditing()
-                        .ClicksToEdit(1)
-                        .Listeners(ls =>
+                        .SelectionModel(X.RowSelectionModel().ID("slmBonusRS").Mode(SelectionMode.Single))
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "Event.Grid.grdBonusRS_beforeEdit";
+                                ls.Edit.Fn = "Event.Grid.grdBonusRS_edit";
+                                ls.ValidateEdit.Fn = "Event.Grid.grdBonusRS_validateEdit";
+                            })
+                        )
+                        .Features(
+                            X.GridFilters().Local(true)
+                            .Filters(
+                                X.NumericFilter().DataIndex("LevelNbr")
+                                , X.NumericFilter().DataIndex("AmtBegin")
+                                , X.NumericFilter().DataIndex("AmtEnd")
+                                , X.NumericFilter().DataIndex("AmtBonus")
+                            )
+                        )
+                        .Listeners(x =>
                         {
-                            ls.BeforeEdit.Fn = "Event.Grid.grdBonusRS_beforeEdit";
-                            ls.Edit.Fn = "Event.Grid.grdBonusRS_edit";
-                            ls.ValidateEdit.Fn = "Event.Grid.grdBonusRS_validateEdit";
+                            x.Render.Handler = "HQ.common.control_render(this,'BonusRS')";
                         })
-                    )
-                    .Features(
-                        X.GridFilters().Local(true)
-                        .Filters(
-                            X.NumericFilter().DataIndex("LevelNbr")
-                            , X.NumericFilter().DataIndex("AmtBegin")
-                            , X.NumericFilter().DataIndex("AmtEnd")
-                            , X.NumericFilter().DataIndex("AmtBonus")
-                        )
-                    )
-                    .Listeners(x =>
-                    {
-                        x.Render.Handler = "HQ.common.control_render(this,'BonusRS')";
-                    })
         //.BottomBar(
         //    X.PagingToolbar().ID("pag")
         //    .Items(
@@ -218,342 +221,460 @@
         //    )
         //    .Plugins(X.ProgressBarPager())
         //)// grdBonusRS
-                ) // pnlBonusRS
+                    ) // pnlBonusRS
 
-                , X.Panel().ID("pnlProduct")
-                .Title(Util.GetLang("Product"))
-                .Layout(LayoutType.Fit)
-                .Items(
-                    X.GridPanel().ID("grdProduct")
-                    .Scroll(ScrollMode.Both)
-                    .View(X.GridView().TrackOver(false))
-                    .SortableColumns(false)
-                    .StoreID("stoProduct")
-                    .ColumnModel(
-                        X.RowNumbererColumn()
-                        , X.Column().Text(Util.GetLang("ProductID")).DataIndex("ProductID")
-                        .Editor(
-                            HQ.Combo().ID("cboColProductID")
-                            .HQProcedure("OM23400_pcInvtID")
-                            .HQHeightWidth(400, 300).HQColumnShow("Code,Descr")
-                            .ValueField("Code").DisplayField("Code")
-                            .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
-                                , new StoreParameter("@ProductType", "App.cboRSApplyType.getValue()", ParameterMode.Raw)
-                            })
-                            .LoadData()
-                        )
+                    , X.Panel().ID("pnlProduct")
+                    .Title(Util.GetLang("Product"))
+                    .Layout(LayoutType.Fit)
+                    .Items(
+                        X.GridPanel().ID("grdProduct")
+                        .Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false))
+                        .SortableColumns(false)
+                        .StoreID("stoProduct")
+                        .ColumnModel(
+                            X.RowNumbererColumn()
+                            , X.Column().Text(Util.GetLang("ProductID")).DataIndex("ProductID")
+                            .Editor(
+                                HQ.Combo().ID("cboColProductID")
+                                .HQProcedure("OM23400_pcInvtID")
+                                .HQHeightWidth(400, 300).HQColumnShow("Code,Descr")
+                                .ValueField("Code").DisplayField("Code")
+                                .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                                    , new StoreParameter("@ProductType", "App.cboRSApplyType.getValue()", ParameterMode.Raw)
+                                })
+                                .LoadData()
+                            )
 
-                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
-                        .Renderer("Process.renderProductDescr")
+                            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
+                            .Renderer("Process.renderProductDescr")
 
-                        , X.CommandColumn().Width(150)
-                        .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
-                        )
-                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
-                    )
-                    .SelectionModel(X.RowSelectionModel().ID("slmProduct").Mode(SelectionMode.Single))
-                    .Plugins(
-                        X.CellEditing()
-                        .ClicksToEdit(1)
-                        .Listeners(ls =>
-                        {
-                            ls.BeforeEdit.Fn = "Event.Grid.grdBonusRS_beforeEdit";
-                            ls.Edit.Fn = "Event.Grid.grdBonusRS_edit";
-                            ls.ValidateEdit.Fn = "Event.Grid.grdBonusRS_validateEdit";
-                        })
-                    )
-                    .Features(
-                        X.GridFilters().Local(true)
-                        .Filters(
-                            X.StringFilter().DataIndex("ProductID")
-                            , X.StringFilter().DataIndex("Descr")
-                        )
-                    )
-                    .Listeners(x =>
-                    {
-                        x.Render.Handler = "HQ.common.control_render(this,'Product')";
-                    }) // grdProduct
-                ) // pnlProduct
-            ) // tabBonusRS
-
-            , X.TabPanel().ID("tabBonusKA")
-            .Region(Region.Center)
-            .Layout(LayoutType.Fit)
-            .Hidden(true)
-            .Items(
-                X.Panel().ID("pnlMonth")
-                .Title(Util.GetLang("Month"))
-                .Layout(LayoutType.Fit)
-                .Items(
-                    X.GridPanel().ID("grdMonth")
-                    .Scroll(ScrollMode.Both)
-                    .View(X.GridView().TrackOver(false))
-                    .SortableColumns(false)
-                    .StoreID("stoMonth")
-                    .ColumnModel(
-                        X.RowNumbererColumn()
-                        , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
-
-                        //, X.Column().Text(Util.GetLang("ProductClass")).DataIndex("ClassID")
-        //.Editor(
-        //    HQ.Combo().ID("cboColClassIDMonth")
-        //    .HQProcedure("OM23400_pcInvtID")
-        //    .HQHeightWidth(400,300).HQColumnShow("Code,Descr")
-        //    .ValueField("Code").DisplayField("Code")
-        //    .HQParam(new StoreParameterCollection() { 
-        //        new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
-        //        , new StoreParameter("@ProductType", "PC", ParameterMode.Value)
-        //    })
-        //    .LoadData()
-        //)
-
-                        , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
-                        .Format("0,000")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
-                        )
-                        , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
-                        .Format("0,000")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
-                        )
-
-                        , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
-                         .Format("0,000")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
-                        )
-
-                        , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
-                        .Align(Alignment.Right).Format("0,000.00")
-                        .Editor(
-                            HQ.NumberField().MinValue(0)
-                        )
-
-                        , X.CommandColumn().Width(150)
-                        .Commands(cs =>
-                        {
-                            cs.Add(
+                            , X.CommandColumn().Width(150)
+                            .Commands(
                                 X.GridCommand()
                                 .Text(Util.GetLang("Reject"))
                                 .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
                                 .CommandName("reject")
                                 .Icon(Icon.ArrowUndo)
-                            );
-                        })
-                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
-                    )
-                    .SelectionModel(X.RowSelectionModel().ID("slmMonth").Mode(SelectionMode.Single))
-                    .Plugins(
-                        X.CellEditing()
-                        .ClicksToEdit(1)
-                        .Listeners(ls =>
-                        {
-                            ls.BeforeEdit.Fn = "Event.Grid.grdBonusRS_beforeEdit";
-                            ls.Edit.Fn = "Event.Grid.grdBonusRS_edit";
-                            ls.ValidateEdit.Fn = "Event.Grid.grdBonusRS_validateEdit";
-                        })
-                    )
-                    .Features(
-                        X.GridFilters().Local(true)
-                        .Filters(
-                            X.NumericFilter().DataIndex("LevelNbr")
-                            , X.NumericFilter().DataIndex("SlsAmt")
-                            , X.NumericFilter().DataIndex("AmtBegin")
-                            , X.NumericFilter().DataIndex("AmtEnd")
-                            , X.NumericFilter().DataIndex("AmtBonus")
+                            )
+                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                            .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                         )
-                    )
-                    .Listeners(x =>
-                    {
-                        x.Render.Handler = "HQ.common.control_render(this,'month')";
-                    }) // grdMonth
-                ) // pnlMonth
+                        .SelectionModel(X.RowSelectionModel().ID("slmProduct").Mode(SelectionMode.Single))
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "Event.Grid.grdBonusRS_beforeEdit";
+                                ls.Edit.Fn = "Event.Grid.grdBonusRS_edit";
+                                ls.ValidateEdit.Fn = "Event.Grid.grdBonusRS_validateEdit";
+                            })
+                        )
+                        .Features(
+                            X.GridFilters().Local(true)
+                            .Filters(
+                                X.StringFilter().DataIndex("ProductID")
+                                , X.StringFilter().DataIndex("Descr")
+                            )
+                        )
+                        .Listeners(x =>
+                        {
+                            x.Render.Handler = "HQ.common.control_render(this,'Product')";
+                        }) // grdProduct
+                    ) // pnlProduct
+                ) // tabBonusRS
 
-                , X.Panel().ID("pnlQuarter")
-                .Title(Util.GetLang("Quarter"))
+                , X.TabPanel().ID("tabBonusKA")
+        //.Region(Region.Center)
                 .Layout(LayoutType.Fit)
-                .TopBar(
-                    X.Toolbar()
-                    .Items(
-                        X.ToolbarTextItem().Text(Util.GetLang("Quarter"))
-                        , X.ToolbarSpacer()
-                        , X.ToolbarSeparator()
-                        , X.ToolbarSpacer()
-
-                        , HQ.Button().ID("btnQuarterClone")
-                        .HQLangCode("CloneFromMonth").Icon(Icon.PageCopy)
-                        .Handler("Event.Form.btnQuarterClone_click")
-                    )
-                )
+                .Hidden(true)
                 .Items(
-                    X.GridPanel().ID("grdQuarter")
-                    .Scroll(ScrollMode.Both)
-                    .View(X.GridView().TrackOver(false))
-                    .SortableColumns(false)
-                    .StoreID("stoQuarter")
-                    .ColumnModel(
-                        X.RowNumbererColumn()
-                        , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
-
-                        , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
-                        .Format("0,000").Align(Alignment.Right)
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
-                        )
-
-                        , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
-                        .Format("0,000")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
-                        )
-
-                        , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
-                         .Format("0,000")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
-                        )
-
-                        , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
-                        .Align(Alignment.Right).Format("0,000.00")
-                        .Editor(
-                            HQ.NumberField().MinValue(0)
-                        )
-
-                        , X.CommandColumn().Width(150)
-                        .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
-                        )
-                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
-                    )
-                    .SelectionModel(X.RowSelectionModel().ID("slmQuarter").Mode(SelectionMode.Single))
-                    .Plugins(
-                        X.CellEditing()
-                        .ClicksToEdit(1)
-                        .Listeners(ls =>
-                        {
-                            ls.BeforeEdit.Fn = "Event.Grid.grdBonusRS_beforeEdit";
-                            ls.Edit.Fn = "Event.Grid.grdBonusRS_edit";
-                            ls.ValidateEdit.Fn = "Event.Grid.grdBonusRS_validateEdit";
-                        })
-                    )
-                    .Features(
-                        X.GridFilters().Local(true)
-                        .Filters(
-                            X.NumericFilter().DataIndex("LevelNbr")
-                            , X.NumericFilter().DataIndex("SlsAmt")
-                            , X.NumericFilter().DataIndex("AmtBegin")
-                            , X.NumericFilter().DataIndex("AmtEnd")
-                            , X.NumericFilter().DataIndex("AmtBonus")
-                        )
-                    )
-                    .Listeners(x =>
-                    {
-                        x.Render.Handler = "HQ.common.control_render(this,'quarter')";
-                    }) // grdQuarter
-                ) // pnlQuarter
-
-                , X.Panel().ID("pnlYear")
-                .Title(Util.GetLang("Year"))
-                .Layout(LayoutType.Fit)
-                .TopBar(
-                    X.Toolbar()
+                    X.Panel().ID("pnlMonth")
+                    .Title(Util.GetLang("Month"))
+                    .Layout(LayoutType.Border)
                     .Items(
-                        X.ToolbarTextItem().Text(Util.GetLang("Year"))
-                        , X.ToolbarSpacer()
-                        , X.ToolbarSeparator()
-                        , X.ToolbarSpacer()
+                        X.Panel().Flex(1)
+                        .Region(Region.Center)
+                        .Layout(LayoutType.Fit)
+                        .Items(
+                            X.GridPanel().ID("grdMonth")
+                            .Scroll(ScrollMode.Both)
+                            .View(X.GridView().TrackOver(false))
+                            .SortableColumns(false)
+                            .StoreID("stoMonth")
+                            .ColumnModel(
+                                X.RowNumbererColumn()
+                                , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
 
-                        , HQ.Button().ID("btnYearClone")
-                        .HQLangCode("CloneFromMonth").Icon(Icon.PageCopy)
-                        .Handler("Event.Form.btnYearClone_click")
+                                , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
+                                .Format("0,000")
+                                .Align(Alignment.Right).Editor(
+                                    HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                                )
+
+                                , X.CommandColumn().Width(150)
+                                .Commands(cs =>
+                                {
+                                    cs.Add(
+                                        X.GridCommand()
+                                        .Text(Util.GetLang("Reject"))
+                                        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                        .CommandName("reject")
+                                        .Icon(Icon.ArrowUndo)
+                                    );
+                                })
+                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
+                            )
+                            .SelectionModel(
+                                X.RowSelectionModel().ID("slmMonth").Mode(SelectionMode.Single)
+                                .Listeners(x =>
+                                {
+                                    x.SelectionChange.Fn = "Event.Grid.slmMonth_selectChange";
+                                })
+                            )
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "Event.Grid.grdBonusRS_beforeEdit";
+                                    ls.Edit.Fn = "Event.Grid.grdBonusRS_edit";
+                                    ls.ValidateEdit.Fn = "Event.Grid.grdBonusRS_validateEdit";
+                                })
+                            )
+                            .Features(
+                                X.GridFilters().Local(true)
+                                .Filters(
+                                    X.NumericFilter().DataIndex("LevelNbr")
+                                    , X.NumericFilter().DataIndex("SlsAmt")
+                                )
+                            )
+                            .Listeners(x =>
+                            {
+                                x.Render.Handler = "HQ.common.control_render(this,'month')";
+                            }) // grdMonth
+                        )
+                        
+                        ,X.Panel().Flex(1)
+                        .Region(Region.South)
+                        .Layout(LayoutType.Fit).Split(true)
+                        .Items(
+                            X.GridPanel().ID("grdMonthDetail")
+                            .Scroll(ScrollMode.Both)
+                            .View(X.GridView().TrackOver(false))
+                            .SortableColumns(false)
+                            .StoreID("stoMonthDetail")
+                            .ColumnModel(
+                                X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
+                                .Format("0,000")
+                                .Align(Alignment.Right).Editor(
+                                    HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                                )
+
+                                , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
+                                    .Format("0,000")
+                                .Align(Alignment.Right).Editor(
+                                    HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                                )
+
+                                , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
+                                .Align(Alignment.Right).Format("0,000.00")
+                                .Editor(
+                                    HQ.NumberField().MinValue(0)
+                                )
+                            )
+                            .SelectionModel(X.RowSelectionModel().ID("slmMonthDetail").Mode(SelectionMode.Single))
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "Event.Grid.grdMonthDetail_beforeEdit";
+                                    ls.Edit.Fn = "Event.Grid.grdMonthDetail_edit";
+                                    ls.ValidateEdit.Fn = "Event.Grid.grdDetail_validateEdit";
+                                })
+                            )
+                            .Features(
+                                X.GridFilters().Local(true)
+                                .Filters(
+                                    X.NumericFilter().DataIndex("AmtBegin")
+                                    , X.NumericFilter().DataIndex("AmtEnd")
+                                    , X.NumericFilter().DataIndex("AmtBonus")
+                                )
+                            )
+                            .Listeners(x =>
+                            {
+                                x.Render.Handler = "HQ.common.control_render(this,'monthDetail');";
+                            }) // grdMonthDetail
+                        )
+                    ) // pnlMonth
+
+                    , X.Panel().ID("pnlQuarter")
+                    .Title(Util.GetLang("Quarter"))
+                    .Layout(LayoutType.Border)
+                    .TopBar(
+                        X.Toolbar()
+                        .Items(
+                            X.ToolbarTextItem().Text(Util.GetLang("Quarter"))
+                            , X.ToolbarSpacer()
+                            , X.ToolbarSeparator()
+                            , X.ToolbarSpacer()
+
+                            , HQ.Button().ID("btnQuarterClone")
+                            .HQLangCode("CloneFromMonth").Icon(Icon.PageCopy)
+                            .Handler("Event.Form.btnQuarterClone_click")
+                        )
                     )
-                )
-                .Items(
-                    X.GridPanel().ID("grdYear")
-                    .Scroll(ScrollMode.Both)
-                    .View(X.GridView().TrackOver(false))
-                    .SortableColumns(false)
-                    .StoreID("stoYear")
-                    .ColumnModel(
-                        X.RowNumbererColumn()
-                        , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
+                    .Items(
+                        X.Panel().Flex(1)
+                        .Region(Region.Center)
+                        .Layout(LayoutType.Fit)
+                        .Items(
+                            X.GridPanel().ID("grdQuarter")
+                            .Scroll(ScrollMode.Both)
+                            .View(X.GridView().TrackOver(false))
+                            .SortableColumns(false)
+                            .StoreID("stoQuarter")
+                            .ColumnModel(
+                                X.RowNumbererColumn()
+                                , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
 
-                        , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
-                        .Format("0,000").Align(Alignment.Right)
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
-                        )
+                                , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
+                                .Format("0,000").Align(Alignment.Right)
+                                .Align(Alignment.Right).Editor(
+                                    HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                                )
 
-                        , X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
-                        .Format("0,000")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                                , X.CommandColumn().Width(150)
+                                .Commands(
+                                    X.GridCommand()
+                                    .Text(Util.GetLang("Reject"))
+                                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                    .CommandName("reject")
+                                    .Icon(Icon.ArrowUndo)
+                                )
+                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
+                            )
+                            .SelectionModel(
+                                X.RowSelectionModel().ID("slmQuarter").Mode(SelectionMode.Single)
+                                .Listeners(x =>
+                                {
+                                    x.SelectionChange.Fn = "Event.Grid.slmQuarter_selectChange";
+                                })
+                            )
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "Event.Grid.grdBonusRS_beforeEdit";
+                                    ls.Edit.Fn = "Event.Grid.grdBonusRS_edit";
+                                    ls.ValidateEdit.Fn = "Event.Grid.grdBonusRS_validateEdit";
+                                })
+                            )
+                            .Features(
+                                X.GridFilters().Local(true)
+                                .Filters(
+                                    X.NumericFilter().DataIndex("LevelNbr")
+                                    , X.NumericFilter().DataIndex("SlsAmt")
+                                )
+                            )
+                            .Listeners(x =>
+                            {
+                                x.Render.Handler = "HQ.common.control_render(this,'quarter')";
+                            }) // grdQuarter
                         )
+                        
+                        ,X.Panel().Flex(1)
+                        .Region(Region.South)
+                        .Layout(LayoutType.Fit).Split(true)
+                        .Items(
+                            X.GridPanel().ID("grdQuarterDetail")
+                            .Scroll(ScrollMode.Both)
+                            .View(X.GridView().TrackOver(false))
+                            .SortableColumns(false)
+                            .StoreID("stoQuarterDetail")
+                            .ColumnModel(
+                                X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
+                                .Format("0,000")
+                                .Align(Alignment.Right).Editor(
+                                    HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                                )
 
-                        , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
-                         .Format("0,000")
-                        .Align(Alignment.Right).Editor(
-                            HQ.NumberField().DecimalPrecision(0).MinValue(0)
-                        )
+                                , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
+                                    .Format("0,000")
+                                .Align(Alignment.Right).Editor(
+                                    HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                                )
 
-                        , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
-                        .Align(Alignment.Right).Format("0,000.00")
-                        .Editor(
-                            HQ.NumberField().MinValue(0)
+                                , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
+                                .Align(Alignment.Right).Format("0,000.00")
+                                .Editor(
+                                    HQ.NumberField().MinValue(0)
+                                )
+                            )
+                            .SelectionModel(X.RowSelectionModel().ID("slmQuarterDetail").Mode(SelectionMode.Single))
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "Event.Grid.grdQuarterDetail_beforeEdit";
+                                    ls.Edit.Fn = "Event.Grid.grdQuarterDetail_edit";
+                                    ls.ValidateEdit.Fn = "Event.Grid.grdDetail_validateEdit";
+                                })
+                            )
+                            .Features(
+                                X.GridFilters().Local(true)
+                                .Filters(
+                                    X.NumericFilter().DataIndex("AmtBegin")
+                                    , X.NumericFilter().DataIndex("AmtEnd")
+                                    , X.NumericFilter().DataIndex("AmtBonus")
+                                )
+                            )
+                            .Listeners(x =>
+                            {
+                                x.Render.Handler = "HQ.common.control_render(this,'quarterDetail');";
+                            }) // grdQuarterDetail
                         )
+                    ) // pnlQuarter
 
-                        , X.CommandColumn().Width(150)
-                        .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
+                    , X.Panel().ID("pnlYear")
+                    .Title(Util.GetLang("Year"))
+                    .Layout(LayoutType.Border)
+                    .TopBar(
+                        X.Toolbar()
+                        .Items(
+                            X.ToolbarTextItem().Text(Util.GetLang("Year"))
+                            , X.ToolbarSpacer()
+                            , X.ToolbarSeparator()
+                            , X.ToolbarSpacer()
+
+                            , HQ.Button().ID("btnYearClone")
+                            .HQLangCode("CloneFromMonth").Icon(Icon.PageCopy)
+                            .Handler("Event.Form.btnYearClone_click")
                         )
-                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                     )
-                    .SelectionModel(X.RowSelectionModel().ID("slmYear").Mode(SelectionMode.Single))
-                    .Plugins(
-                        X.CellEditing()
-                        .ClicksToEdit(1)
-                        .Listeners(ls =>
-                        {
-                            ls.BeforeEdit.Fn = "Event.Grid.grdBonusRS_beforeEdit";
-                            ls.Edit.Fn = "Event.Grid.grdBonusRS_edit";
-                            ls.ValidateEdit.Fn = "Event.Grid.grdBonusRS_validateEdit";
-                        })
-                    )
-                    .Features(
-                        X.GridFilters().Local(true)
-                        .Filters(
-                            X.NumericFilter().DataIndex("LevelNbr")
-                            , X.NumericFilter().DataIndex("SlsAmt")
-                            , X.NumericFilter().DataIndex("AmtBegin")
-                            , X.NumericFilter().DataIndex("AmtEnd")
-                            , X.NumericFilter().DataIndex("AmtBonus")
+                    .Items(
+                        X.Panel().Flex(1)
+                        .Region(Region.Center)
+                        .Layout(LayoutType.Fit)
+                        .Items(
+                            X.GridPanel().ID("grdYear")
+                            .Scroll(ScrollMode.Both)
+                            .View(X.GridView().TrackOver(false))
+                            .SortableColumns(false)
+                            .StoreID("stoYear")
+                            .ColumnModel(
+                                X.RowNumbererColumn()
+                                , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelNbr")
+
+                                , X.NumberColumn().Text(Util.GetLang("AmtTot")).DataIndex("SlsAmt")
+                                .Format("0,000").Align(Alignment.Right)
+                                .Align(Alignment.Right).Editor(
+                                    HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                                )
+
+                                , X.CommandColumn().Width(150)
+                                .Commands(
+                                    X.GridCommand()
+                                    .Text(Util.GetLang("Reject"))
+                                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                    .CommandName("reject")
+                                    .Icon(Icon.ArrowUndo)
+                                )
+                                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                                .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
+                            )
+                            .SelectionModel(
+                                X.RowSelectionModel().ID("slmYear").Mode(SelectionMode.Single)
+                                .Listeners(x =>
+                                {
+                                    x.SelectionChange.Fn = "Event.Grid.slmYear_selectChange";
+                                })
+                            )
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "Event.Grid.grdBonusRS_beforeEdit";
+                                    ls.Edit.Fn = "Event.Grid.grdBonusRS_edit";
+                                    ls.ValidateEdit.Fn = "Event.Grid.grdBonusRS_validateEdit";
+                                })
+                            )
+                            .Features(
+                                X.GridFilters().Local(true)
+                                .Filters(
+                                    X.NumericFilter().DataIndex("LevelNbr")
+                                    , X.NumericFilter().DataIndex("SlsAmt")
+                                )
+                            )
+                            .Listeners(x =>
+                            {
+                                x.Render.Handler = "HQ.common.control_render(this,'year')";
+                            }) // grdYear
                         )
-                    )
-                    .Listeners(x =>
-                    {
-                        x.Render.Handler = "HQ.common.control_render(this,'year')";
-                    }) // grdYear
-                ) // pnlYear
-            ) //tabBonusKA
+                        
+                        ,X.Panel().Flex(1)
+                        .Region(Region.South)
+                        .Layout(LayoutType.Fit).Split(true)
+                        .Items(
+                            X.GridPanel().ID("grdYearDetail")
+                            .Scroll(ScrollMode.Both)
+                            .View(X.GridView().TrackOver(false))
+                            .SortableColumns(false)
+                            .StoreID("stoYearDetail")
+                            .ColumnModel(
+                                X.NumberColumn().Text(Util.GetLang("FromLevel")).DataIndex("AmtBegin")
+                                .Format("0,000")
+                                .Align(Alignment.Right).Editor(
+                                    HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                                )
+
+                                , X.NumberColumn().Text(Util.GetLang("ToLevel")).DataIndex("AmtEnd")
+                                    .Format("0,000")
+                                .Align(Alignment.Right).Editor(
+                                    HQ.NumberField().DecimalPrecision(0).MinValue(0)
+                                )
+
+                                , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("AmtBonus")
+                                .Align(Alignment.Right).Format("0,000.00")
+                                .Editor(
+                                    HQ.NumberField().MinValue(0)
+                                )
+                            )
+                            .SelectionModel(X.RowSelectionModel().ID("slmYearDetail").Mode(SelectionMode.Single))
+                            .Plugins(
+                                X.CellEditing()
+                                .ClicksToEdit(1)
+                                .Listeners(ls =>
+                                {
+                                    ls.BeforeEdit.Fn = "Event.Grid.grdYearDetail_beforeEdit";
+                                    ls.Edit.Fn = "Event.Grid.grdYearDetail_edit";
+                                    ls.ValidateEdit.Fn = "Event.Grid.grdDetail_validateEdit";
+                                })
+                            )
+                            .Features(
+                                X.GridFilters().Local(true)
+                                .Filters(
+                                    X.NumericFilter().DataIndex("AmtBegin")
+                                    , X.NumericFilter().DataIndex("AmtEnd")
+                                    , X.NumericFilter().DataIndex("AmtBonus")
+                                )
+                            )
+                            .Listeners(x =>
+                            {
+                                x.Render.Handler = "HQ.common.control_render(this,'yearDetail');";
+                            }) // grdYearDetail
+                        )
+                    ) // pnlYear
+                ) //tabBonusKA
+            )
         )
         .Listeners(lst =>
         {

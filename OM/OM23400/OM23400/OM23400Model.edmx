@@ -8,6 +8,7 @@
         <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
           <EntitySet Name="OM_TBonus" EntityType="eBiz4DWebAppModel.Store.OM_TBonus" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_TBonusKA" EntityType="eBiz4DWebAppModel.Store.OM_TBonusKA" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_TBonusKADetail" EntityType="eBiz4DWebAppModel.Store.OM_TBonusKADetail" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_TBonusProduct" EntityType="eBiz4DWebAppModel.Store.OM_TBonusProduct" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_TBonusRS" EntityType="eBiz4DWebAppModel.Store.OM_TBonusRS" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
@@ -43,6 +44,25 @@
           <Property Name="BonusID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="KaType" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="SlsAmt" Type="float" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_TBonusKADetail">
+          <Key>
+            <PropertyRef Name="RecID" />
+            <PropertyRef Name="LevelNbr" />
+            <PropertyRef Name="BonusID" />
+            <PropertyRef Name="KaType" />
+          </Key>
+          <Property Name="RecID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LevelNbr" Type="int" Nullable="false" />
+          <Property Name="BonusID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="KaType" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="AmtBegin" Type="float" Nullable="false" />
           <Property Name="AmtEnd" Type="float" Nullable="false" />
           <Property Name="AmtBonus" Type="float" Nullable="false" />
@@ -95,6 +115,11 @@
           <Parameter Name="BonusID" Type="varchar" Mode="In" />
           <Parameter Name="KaType" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="OM23400_pgBonusKADetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="BonusID" Type="varchar" Mode="In" />
+          <Parameter Name="KaType" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="OM23400_pgBonusRS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="BonusID" Type="varchar" Mode="In" />
@@ -127,6 +152,12 @@
             <Parameter Name="KaType" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="OM_TBonusKA" EntityType="OM23400Model.OM_TBonusKA" />
+          <EntitySet Name="OM_TBonusKADetail" EntityType="OM23400Model.OM_TBonusKADetail" />
+          <FunctionImport Name="OM23400_pgBonusKADetail" ReturnType="Collection(OM23400Model.OM23400_pgBonusKADetail_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BonusID" Mode="In" Type="String" />
+            <Parameter Name="KaType" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="OM_TBonus">
           <Key>
@@ -207,9 +238,6 @@
           <Property Type="String" Name="BonusID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="KaType" Nullable="false" MaxLength="1" />
           <Property Type="Double" Name="SlsAmt" Nullable="false" />
-          <Property Type="Double" Name="AmtBegin" Nullable="false" />
-          <Property Type="Double" Name="AmtEnd" Nullable="false" />
-          <Property Type="Double" Name="AmtBonus" Nullable="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
         <EntityType Name="OM_TBonusKA">
@@ -223,6 +251,25 @@
           <Property Type="String" Name="BonusID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="KaType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="SlsAmt" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_TBonusKADetail">
+          <Key>
+            <PropertyRef Name="RecID" />
+            <PropertyRef Name="LevelNbr" />
+            <PropertyRef Name="BonusID" />
+            <PropertyRef Name="KaType" />
+          </Key>
+          <Property Type="Int32" Name="RecID" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="LevelNbr" Nullable="false" />
+          <Property Type="String" Name="BonusID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="KaType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="AmtBegin" Nullable="false" />
           <Property Type="Double" Name="AmtEnd" Nullable="false" />
           <Property Type="Double" Name="AmtBonus" Nullable="false" />
@@ -234,6 +281,16 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="OM23400_pgBonusKADetail_Result">
+          <Property Type="Int32" Name="RecID" Nullable="false" />
+          <Property Type="Int32" Name="LevelNbr" Nullable="false" />
+          <Property Type="String" Name="BonusID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="KaType" Nullable="false" MaxLength="1" />
+          <Property Type="Double" Name="AmtBegin" Nullable="false" />
+          <Property Type="Double" Name="AmtEnd" Nullable="false" />
+          <Property Type="Double" Name="AmtBonus" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -329,9 +386,6 @@
                 <ScalarProperty Name="BonusID" ColumnName="BonusID" />
                 <ScalarProperty Name="KaType" ColumnName="KaType" />
                 <ScalarProperty Name="SlsAmt" ColumnName="SlsAmt" />
-                <ScalarProperty Name="AmtBegin" ColumnName="AmtBegin" />
-                <ScalarProperty Name="AmtEnd" ColumnName="AmtEnd" />
-                <ScalarProperty Name="AmtBonus" ColumnName="AmtBonus" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -346,9 +400,6 @@
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
                 <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="AmtBonus" ColumnName="AmtBonus" />
-                <ScalarProperty Name="AmtEnd" ColumnName="AmtEnd" />
-                <ScalarProperty Name="AmtBegin" ColumnName="AmtBegin" />
                 <ScalarProperty Name="SlsAmt" ColumnName="SlsAmt" />
                 <ScalarProperty Name="KaType" ColumnName="KaType" />
                 <ScalarProperty Name="BonusID" ColumnName="BonusID" />
@@ -357,6 +408,40 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OM_TBonusKADetail">
+            <EntityTypeMapping TypeName="OM23400Model.OM_TBonusKADetail">
+              <MappingFragment StoreEntitySet="OM_TBonusKADetail">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="AmtBonus" ColumnName="AmtBonus" />
+                <ScalarProperty Name="AmtEnd" ColumnName="AmtEnd" />
+                <ScalarProperty Name="AmtBegin" ColumnName="AmtBegin" />
+                <ScalarProperty Name="KaType" ColumnName="KaType" />
+                <ScalarProperty Name="BonusID" ColumnName="BonusID" />
+                <ScalarProperty Name="LevelNbr" ColumnName="LevelNbr" />
+                <ScalarProperty Name="RecID" ColumnName="RecID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM23400_pgBonusKADetail" FunctionName="eBiz4DWebAppModel.Store.OM23400_pgBonusKADetail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23400Model.OM23400_pgBonusKADetail_Result">
+                <ScalarProperty Name="RecID" ColumnName="RecID" />
+                <ScalarProperty Name="LevelNbr" ColumnName="LevelNbr" />
+                <ScalarProperty Name="BonusID" ColumnName="BonusID" />
+                <ScalarProperty Name="KaType" ColumnName="KaType" />
+                <ScalarProperty Name="AmtBegin" ColumnName="AmtBegin" />
+                <ScalarProperty Name="AmtEnd" ColumnName="AmtEnd" />
+                <ScalarProperty Name="AmtBonus" ColumnName="AmtBonus" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -383,6 +468,7 @@
         <EntityTypeShape EntityType="OM23400Model.OM_TBonusProduct" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM23400Model.OM_TBonusRS" Width="1.5" PointX="4.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM23400Model.OM_TBonusKA" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="OM23400Model.OM_TBonusKADetail" Width="1.5" PointX="2.75" PointY="5.75" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -69,6 +69,12 @@ namespace OM23400.Controllers
             return this.Store(kas);
         }
 
+        public ActionResult GetBonusKADetail(string bonusID, string kaType)
+        {
+            var kaDetails = _db.OM23400_pgBonusKADetail(Current.UserName, bonusID, kaType).ToList();
+            return this.Store(kaDetails);
+        }
+
         public ActionResult SaveData(FormCollection data, bool isNew)
         {
             try
@@ -233,21 +239,24 @@ namespace OM23400.Controllers
                     else if (bonusInput.Channel == _ka)
                     {
                         #region Month/Quarter/Year
-                        var dicMQY = new Dictionary<string, string>();
-                        dicMQY.Add(_monthType, "lstMonthChange");
-                        dicMQY.Add(_quarterType, "lstQuarterChange");
-                        dicMQY.Add(_yeatType, "lstYearChange");
+                        var dicMQY = new Dictionary<string, string[]>();
+                        dicMQY.Add(_monthType, new string[] { "lstMonthChange", "lstMonthDetailChange" });
+                        dicMQY.Add(_quarterType, new string[] { "lstQuarterChange", "lstQuarterDetailChange" });
+                        dicMQY.Add(_yeatType, new string[] { "lstYearChange", "lstYearDetailChange" });
 
                         foreach (var mqy in dicMQY)
                         {
-                            var mqyHandler = new StoreDataHandler(data[mqy.Value]);
+                            var mqyHandler = new StoreDataHandler(data[mqy.Value[0]]);
                             var lstMqyChange = mqyHandler.BatchObjectData<OM23400_pgBonusKA_Result>();
 
-                            lstMqyChange.Updated.AddRange(lstMqyChange.Created);
+                            var mqyDetailHandler = new StoreDataHandler(data[mqy.Value[1]]);
+                            var lstMqyDetailChange = mqyDetailHandler.BatchObjectData<OM23400_pgBonusKADetail_Result>();
 
+                            // Bonus KA
+                            lstMqyChange.Updated.AddRange(lstMqyChange.Created);
                             foreach (var updated in lstMqyChange.Updated)
                             {
-                                if (updated.SlsAmt > 0 || updated.AmtBegin > 0 || updated.AmtEnd > 0 || updated.AmtBonus > 0)
+                                if (updated.SlsAmt > 0)
                                 {
                                     updated.BonusID = bonusInput.BonusID;
                                     updated.KaType = mqy.Key;
@@ -265,6 +274,50 @@ namespace OM23400.Controllers
                                         updatedBonusKA = new OM_TBonusKA();
                                         updateBonusKA(ref updatedBonusKA, updated, true);
                                         _db.OM_TBonusKA.AddObject(updatedBonusKA);
+                                    }
+                                }
+                            }
+
+                            // Bonus KA detail
+                            lstMqyDetailChange.Updated.AddRange(lstMqyDetailChange.Created);
+                            foreach (var updated in lstMqyDetailChange.Updated)
+                            {
+                                if (updated.AmtBegin > 0 || updated.AmtEnd > 0 || updated.AmtBonus > 0)
+                                {
+                                    updated.BonusID = bonusInput.BonusID;
+                                    updated.KaType = mqy.Key;
+
+                                    var updatedBonusKaDetail = _db.OM_TBonusKADetail.FirstOrDefault(
+                                        x => x.LevelNbr == updated.LevelNbr
+                                            && x.BonusID == updated.BonusID
+                                            && x.KaType == updated.KaType
+                                            && x.RecID == updated.RecID);
+                                    if (updatedBonusKaDetail != null)
+                                    {
+                                        updateBonusKADetail(ref updatedBonusKaDetail, updated, false);
+                                    }
+                                    else {
+                                        updateBonusKADetail(ref updatedBonusKaDetail, updated, true);
+                                        _db.OM_TBonusKADetail.AddObject(updatedBonusKaDetail);
+                                    }
+                                }
+                            }
+
+                            foreach (var deleted in lstMqyDetailChange.Deleted)
+                            {
+                                if (deleted.AmtBegin > 0 || deleted.AmtEnd > 0 || deleted.AmtBonus > 0)
+                                {
+                                    deleted.BonusID = bonusInput.BonusID;
+                                    deleted.KaType = mqy.Key;
+
+                                    var deletedBonusKaDetail = _db.OM_TBonusKADetail.FirstOrDefault(
+                                        x => x.LevelNbr == deleted.LevelNbr
+                                            && x.BonusID == deleted.BonusID
+                                            && x.KaType == deleted.KaType
+                                            && x.RecID == deleted.RecID);
+                                    if (deletedBonusKaDetail != null)
+                                    {
+                                        _db.OM_TBonusKADetail.DeleteObject(deletedBonusKaDetail);
                                     }
                                 }
                             }
@@ -323,16 +376,33 @@ namespace OM23400.Controllers
                 {
                     _db.OM_TBonus.DeleteObject(bonus);
 
-                    var BonusRSs = _db.OM_TBonusRS.Where(c => c.BonusID == bonusID).ToList();
-                    foreach (var BonusRS in BonusRSs)
+                    if (bonus.Channel == _rs)
                     {
-                        _db.OM_TBonusRS.DeleteObject(BonusRS);
-                    }
+                        var BonusRSs = _db.OM_TBonusRS.Where(c => c.BonusID == bonusID).ToList();
+                        foreach (var BonusRS in BonusRSs)
+                        {
+                            _db.OM_TBonusRS.DeleteObject(BonusRS);
+                        }
 
-                    var Products = _db.OM_TBonusProduct.Where(c => c.BonusID == bonusID).ToList();
-                    foreach (var Product in Products)
+                        var Products = _db.OM_TBonusProduct.Where(c => c.BonusID == bonusID).ToList();
+                        foreach (var Product in Products)
+                        {
+                            _db.OM_TBonusProduct.DeleteObject(Product);
+                        }
+                    }
+                    else if (bonus.Channel == _ka)
                     {
-                        _db.OM_TBonusProduct.DeleteObject(Product);
+                        var bonusKAs = _db.OM_TBonusKA.Where(c => c.BonusID == bonusID).ToList();
+                        foreach (var bonusKA in bonusKAs)
+                        {
+                            _db.OM_TBonusKA.DeleteObject(bonusKA);
+                        }
+
+                        var bonusKaDetails = _db.OM_TBonusKADetail.Where(c => c.BonusID == bonusID).ToList();
+                        foreach (var bonusKaDetail in bonusKaDetails)
+                        {
+                            _db.OM_TBonusKADetail.DeleteObject(bonusKaDetail);
+                        }
                     }
 
                     _db.SaveChanges();
@@ -373,6 +443,12 @@ namespace OM23400.Controllers
                         if (deletedBonusKA.LevelNbr >= deleted.LevelNbr)
                         {
                             _db.OM_TBonusKA.DeleteObject(deletedBonusKA);
+                            var details = _db.OM_TBonusKADetail.Where(d => d.BonusID == deleted.BonusID
+                                && d.KaType == deleted.KaType && d.LevelNbr == deletedBonusKA.LevelNbr).ToList();
+                            foreach (var detail in details)
+                            {
+                                _db.OM_TBonusKADetail.DeleteObject(detail);
+                            }
                         }
                     }
                 }
@@ -429,6 +505,28 @@ namespace OM23400.Controllers
             }
         }
 
+        private void updateBonusKADetail(ref OM_TBonusKADetail updatedBonusKaDetail, OM23400_pgBonusKADetail_Result updated, bool isNew)
+        {
+            if (isNew)
+            {
+                updatedBonusKaDetail = new OM_TBonusKADetail();
+                updatedBonusKaDetail.BonusID = updated.BonusID;
+                updatedBonusKaDetail.LevelNbr = updated.LevelNbr;
+                updatedBonusKaDetail.KaType = updated.KaType;
+
+                updatedBonusKaDetail.Crtd_DateTime = DateTime.Now;
+                updatedBonusKaDetail.Crtd_Prog = _screenNbr;
+                updatedBonusKaDetail.Crtd_User = Current.UserName;
+            }
+            updatedBonusKaDetail.AmtBegin = updated.AmtBegin;
+            updatedBonusKaDetail.AmtEnd = updated.AmtEnd;
+            updatedBonusKaDetail.AmtBonus = updated.AmtBonus;
+
+            updatedBonusKaDetail.LUpd_DateTime = DateTime.Now;
+            updatedBonusKaDetail.LUpd_Prog = _screenNbr;
+            updatedBonusKaDetail.LUpd_User = Current.UserName;
+        }
+
         private void updateBonusKA(ref OM_TBonusKA updatedBonusKA, OM23400_pgBonusKA_Result updated, bool isNew)
         {
             if (isNew)
@@ -442,15 +540,11 @@ namespace OM23400.Controllers
                 updatedBonusKA.Crtd_User = Current.UserName;
             }
             updatedBonusKA.SlsAmt = updated.SlsAmt;
-            updatedBonusKA.AmtBegin = updated.AmtBegin;
-            updatedBonusKA.AmtBonus = updated.AmtBonus;
-            updatedBonusKA.AmtEnd = updated.AmtEnd;
 
             updatedBonusKA.LUpd_DateTime = DateTime.Now;
             updatedBonusKA.LUpd_Prog = _screenNbr;
             updatedBonusKA.LUpd_User = Current.UserName;
         }
-
 
         private void updateBonusRS(ref OM_TBonusRS createdCpny, OM23400_pgBonusRS_Result created, bool isNew)
         {

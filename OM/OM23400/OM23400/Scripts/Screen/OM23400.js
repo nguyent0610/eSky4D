@@ -19,6 +19,10 @@ var Process = {
                 lstMonthChange: HQ.store.getData(App.grdMonth.store),
                 lstQuarterChange: HQ.store.getData(App.grdQuarter.store),
                 lstYearChange: HQ.store.getData(App.grdYear.store),
+
+                lstMonthDetailChange: Process.getChangedFilteredData(App.grdMonthDetail.store),
+                lstQuarterDetailChange: Process.getChangedFilteredData(App.grdQuarterDetail.store),
+                lstYearDetailChange: Process.getChangedFilteredData(App.grdYearDetail.store),
                 isNew: HQ.isNew
             },
             success: function (msg, data) {
@@ -187,6 +191,17 @@ var Process = {
         }
     },
 
+    isDetailValid: function (store) {
+        var flag = true;
+        store.each(function (record) {
+            if (!record.data.AmtBegin && !record.data.AmtEnd && !record.data.AmtBonus) {
+                flag = false;
+                return false;
+            }
+        });
+        return flag;
+    },
+
     refresh: function (item) {
         if (item == 'yes') {
             HQ.isChange = false;
@@ -268,6 +283,34 @@ var Process = {
             //HQ.store.insertRecord(App.grdYear.store, keys, newRec);
         }
     },
+
+    deleteMonthDetail: function (item) {
+        if (item == "yes") {
+            App.grdMonthDetail.deleteSelected();
+        }
+    },
+
+    deleteQuarterDetail: function (item) {
+        if (item == "yes") {
+            App.grdQuarterDetail.deleteSelected();
+        }
+    },
+
+    deleteYearDetail: function (item) {
+        if (item == "yes") {
+            App.grdYearDetail.deleteSelected();
+        }
+    },
+
+    getChangedFilteredData: function (store) {
+        var data = store.data,
+            changedData
+
+        store.data = store.snapshot; // does the trick
+        changedData = store.getChangedData();
+        store.data = data; // to revert the changes back
+        return Ext.encode(changedData);
+    }
 };
 
 var Store = {
@@ -287,14 +330,19 @@ var Store = {
         App.cboChannel.setReadOnly(frmRecord.data.tstamp);
         App.cboRSApplyType.setReadOnly(frmRecord.data.tstamp);
 
-        // load RS
-        App.grdBonusRS.store.reload();
-        App.grdProduct.store.reload();
+        if (!App.tabBonusRS.hidden) {
+            // load RS
+            App.stoBonusRS.reload();
+            App.stoProduct.reload();
+        }
+        if (!App.tabBonusKA.hidden) {
+            // load KA
+            App.stoMonth.reload();
+            App.stoQuarter.reload();
+            App.stoYear.reload();
+        }
 
-        // load KA
-        App.grdMonth.store.reload();
-        App.grdQuarter.store.reload();
-        App.grdYear.store.reload();
+        Event.Form.frmMain_fieldChange();
     },
 
     stoBonusRS_load: function (sto, records, successful, eOpts) {
@@ -313,6 +361,21 @@ var Store = {
                 }
             }
         }
+        if (sto.storeId == "stoMonth") {
+            App.grdMonthDetail.store.reload();
+        }
+        if (sto.storeId == "stoQuarter") {
+            App.grdQuarterDetail.store.reload();
+        }
+        if (sto.storeId == "stoYear") {
+            App.grdYearDetail.store.reload();
+        }
+    },
+
+    stoDetail_load: function (sto, records, successful, eOpts) {
+        setTimeout(function () {
+            sto.filter('LevelNbr', -1);
+        }, 10);
     }
 };
 
@@ -338,7 +401,9 @@ var Event = {
                     else if (App.cboChannel.value == _ka) {
                         if (!HQ.store.isChange(App.grdMonth.store)) {
                             if (!HQ.store.isChange(App.grdQuarter.store)) {
-                                HQ.isChange = HQ.store.isChange(App.grdYear.store);
+                                if (!HQ.store.isChange(App.grdYear.store)) {
+                                    HQ.isChange = HQ.store.isChange(App.grdMonthDetail.store);
+                                }
                             }
                             else {
                                 HQ.isChange = true;
@@ -366,7 +431,7 @@ var Event = {
                                         || App.grdProduct.store.getCount() > 1
                                         || App.grdMonth.store.getCount() > 1
                                         || App.grdQuarter.store.getCount() > 1
-                                        || App.grdYear.store.getCount()> 1)) {
+                                        || App.grdYear.store.getCount() > 1)) {
                         App.cboChannel.setReadOnly(true);
                         App.cboRSApplyType.setReadOnly(true);
                     }
@@ -398,6 +463,9 @@ var Event = {
 
                     App.tabBonusRS.show();
                     App.tabBonusKA.hide();
+
+                    App.grdBonusRS.store.reload();
+                    App.grdProduct.store.reload();
                 }
                 else if (cbo.value == _ka) {
                     App.cboRSApplyType.hide();
@@ -405,6 +473,10 @@ var Event = {
 
                     App.tabBonusRS.hide();
                     App.tabBonusKA.show();
+
+                    App.grdMonth.store.reload();
+                    App.grdQuarter.store.reload();
+                    App.grdYear.store.reload();
                 }
             }
             else {
@@ -487,6 +559,15 @@ var Event = {
                     else if (HQ.focus == 'year') {
                         HQ.grid.first(App.grdYear);
                     }
+                    else if (HQ.focus == 'monthDetail') {
+                        HQ.grid.first(App.grdMonthDetail);
+                    }
+                    else if (HQ.focus == 'quarterDetail') {
+                        HQ.grid.first(App.grdQuarterDetail);
+                    }
+                    else if (HQ.focus == 'yearDetail') {
+                        HQ.grid.first(App.grdYearDetail);
+                    }
                     break;
                 case "next":
                     if (HQ.focus == 'bonus') {
@@ -506,6 +587,15 @@ var Event = {
                     }
                     else if (HQ.focus == 'year') {
                         HQ.grid.next(App.grdYear);
+                    }
+                    else if (HQ.focus == 'monthDetail') {
+                        HQ.grid.next(App.grdMonthDetail);
+                    }
+                    else if (HQ.focus == 'quarterDetail') {
+                        HQ.grid.next(App.grdQuarterDetail);
+                    }
+                    else if (HQ.focus == 'yearDetail') {
+                        HQ.grid.next(App.grdYearDetail);
                     }
                     break;
                 case "prev":
@@ -527,6 +617,15 @@ var Event = {
                     else if (HQ.focus == 'year') {
                         HQ.grid.prev(App.grdYear);
                     }
+                    else if (HQ.focus == 'monthDetail') {
+                        HQ.grid.prev(App.grdMonthDetail);
+                    }
+                    else if (HQ.focus == 'quarterDetail') {
+                        HQ.grid.prev(App.grdQuarterDetail);
+                    }
+                    else if (HQ.focus == 'yearDetail') {
+                        HQ.grid.prev(App.grdYearDetail);
+                    }
                     break;
                 case "last":
                     if (HQ.focus == 'bonus') {
@@ -546,6 +645,15 @@ var Event = {
                     }
                     else if (HQ.focus == 'year') {
                         HQ.grid.last(App.grdYear);
+                    }
+                    else if (HQ.focus == 'monthDetail') {
+                        HQ.grid.last(App.grdMonthDetail);
+                    }
+                    else if (HQ.focus == 'quarterDetail') {
+                        HQ.grid.last(App.grdQuarterDetail);
+                    }
+                    else if (HQ.focus == 'yearDetail') {
+                        HQ.grid.last(App.grdYearDetail);
                     }
                     break;
                 case "refresh":
@@ -572,6 +680,15 @@ var Event = {
                         }
                         else if (HQ.focus == 'year') {
                             App.grdYear.store.reload();
+                        }
+                        else if (HQ.focus == 'monthDetail') {
+                            //App.grdMonthDetail.store.reload();
+                        }
+                        else if (HQ.focus == 'quarterDetail') {
+                            //App.grdQuarterDetail.store.reload();
+                        }
+                        else if (HQ.focus == 'yearDetail') {
+                            //App.grdYearDetail.store.reload();
                         }
                     }
                     break;
@@ -697,6 +814,21 @@ var Event = {
                                     'Process.deleteYear');
                             }
                         }
+                        else if (HQ.focus == 'monthDetail') {
+                            if (App.cboBonusID.getValue() && App.slmMonthDetail.getCount()) {
+                                HQ.message.show(11, '', 'Process.deleteMonthDetail');
+                            }
+                        }
+                        else if (HQ.focus == 'quarterDetail') {
+                            if (App.cboBonusID.getValue() && App.slmQuarterDetail.getCount()) {
+                                HQ.message.show(11, '', 'Process.deleteQuarterDetail');
+                            }
+                        }
+                        else if (HQ.focus == 'yearDetail') {
+                            if (App.cboBonusID.getValue() && App.slmYearDetail.getCount()) {
+                                HQ.message.show(11, '', 'Process.deleteYearDetail');
+                            }
+                        }
                     }
                     else {
                         HQ.message.show(4, '', '');
@@ -805,6 +937,232 @@ var Event = {
                 }
 
             }
+        },
+
+        slmMonth_selectChange: function (grid, selected, eOpts) {
+            var store = App.grdMonthDetail.store;
+            var keys = store.HQFieldKeys ? store.HQFieldKeys : "";
+
+            store.clearFilter();
+            if (selected.length > 0) {
+                store.filter('LevelNbr', selected[0].data.LevelNbr);
+                //store.filterBy(function (record) {
+                //    if (record.data.LevelNbr == selected[0].data.LevelNbr) {
+                //        return record;
+                //    }
+                //});
+
+                if (selected[0].data.LevelNbr) {
+                    if (Process.isDetailValid(store)) {
+                        var newData = {
+                            LevelNbr: selected[0].data.LevelNbr
+                        };
+
+                        var newRec = Ext.create(store.model.modelName, newData);
+                        HQ.store.insertRecord(store, [], newRec, false);
+                    }
+                }
+            }
+            else {
+                store.filterBy(function (record) {
+                    // no data
+                });
+            }
+        },
+
+        grdMonthDetail_beforeEdit: function (item, e) {
+            if (HQ.isUpdate) {
+                if (App.frmMain.isValid()) {
+                    var selected = App.grdMonth.getSelectionModel().getSelection();
+                    if (selected && selected[0]) {
+                        if (selected[0].data.LevelNbr && selected[0].data.SlsAmt) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                else {
+                    Process.showFieldInvalid(App.frmMain);
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        },
+
+        grdMonthDetail_edit: function (item, e) {
+            if (e.record.data.AmtBegin || e.record.data.AmtEnd || e.record.data.AmtBonus) {
+                var selected = App.grdMonth.getSelectionModel().getSelection();
+                if (selected && selected[0]) {
+                    if (Process.isDetailValid(e.store)) {
+                        var newData = {
+                            LevelNbr: selected[0].data.LevelNbr
+                        };
+
+                        var newRec = Ext.create(e.store.model.modelName, newData);
+                        HQ.store.insertRecord(e.store, [], newRec, false);
+                    }
+                }
+            }
+        },
+
+        slmQuarter_selectChange: function (grid, selected, eOpts) {
+            var store = App.grdQuarterDetail.store;
+            var keys = store.HQFieldKeys ? store.HQFieldKeys : "";
+
+            store.clearFilter();
+            if (selected.length > 0) {
+                store.filter('LevelNbr', selected[0].data.LevelNbr);
+                //store.filterBy(function (record) {
+                //    if (record.data.LevelNbr == selected[0].data.LevelNbr) {
+                //        return record;
+                //    }
+                //});
+
+                if (selected[0].data.LevelNbr) {
+                    if (Process.isDetailValid(store)) {
+                        var newData = {
+                            LevelNbr: selected[0].data.LevelNbr
+                        };
+
+                        var newRec = Ext.create(store.model.modelName, newData);
+                        HQ.store.insertRecord(store, [], newRec, false);
+                    }
+                }
+            }
+            else {
+                store.filterBy(function (record) {
+                    // no data
+                });
+            }
+        },
+
+        grdQuarterDetail_beforeEdit: function (item, e) {
+            if (HQ.isUpdate) {
+                if (App.frmMain.isValid()) {
+                    var selected = App.grdQuarter.getSelectionModel().getSelection();
+                    if (selected && selected[0]) {
+                        if (selected[0].data.LevelNbr && selected[0].data.SlsAmt) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                else {
+                    Process.showFieldInvalid(App.frmMain);
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        },
+
+        grdQuarterDetail_edit: function (item, e) {
+            if (e.record.data.AmtBegin || e.record.data.AmtEnd || e.record.data.AmtBonus) {
+                var selected = App.grdQuarter.getSelectionModel().getSelection();
+                if (selected && selected[0]) {
+                    if (Process.isDetailValid(e.store)) {
+                        var newData = {
+                            LevelNbr: selected[0].data.LevelNbr
+                        };
+
+                        var newRec = Ext.create(e.store.model.modelName, newData);
+                        HQ.store.insertRecord(e.store, [], newRec, false);
+                    }
+                }
+            }
+        },
+
+        slmYear_selectChange: function (grid, selected, eOpts) {
+            var store = App.grdYearDetail.store;
+            var keys = store.HQFieldKeys ? store.HQFieldKeys : "";
+
+            store.clearFilter();
+            if (selected.length > 0) {
+                store.filter('LevelNbr', selected[0].data.LevelNbr);
+                //store.filterBy(function (record) {
+                //    if (record.data.LevelNbr == selected[0].data.LevelNbr) {
+                //        return record;
+                //    }
+                //});
+
+                if (selected[0].data.LevelNbr) {
+                    if (Process.isDetailValid(store)) {
+                        var newData = {
+                            LevelNbr: selected[0].data.LevelNbr
+                        };
+
+                        var newRec = Ext.create(store.model.modelName, newData);
+                        HQ.store.insertRecord(store, [], newRec, false);
+                    }
+                }
+            }
+            else {
+                store.filterBy(function (record) {
+                    // no data
+                });
+            }
+        },
+
+        grdYearDetail_beforeEdit: function (item, e) {
+            if (HQ.isUpdate) {
+                if (App.frmMain.isValid()) {
+                    var selected = App.grdYear.getSelectionModel().getSelection();
+                    if (selected && selected[0]) {
+                        if (selected[0].data.LevelNbr && selected[0].data.SlsAmt) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                else {
+                    Process.showFieldInvalid(App.frmMain);
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        },
+
+        grdYearDetail_edit: function (item, e) {
+            if (e.record.data.AmtBegin || e.record.data.AmtEnd || e.record.data.AmtBonus) {
+                var selected = App.grdYear.getSelectionModel().getSelection();
+                if (selected && selected[0]) {
+                    if (Process.isDetailValid(e.store)) {
+                        var newData = {
+                            LevelNbr: selected[0].data.LevelNbr
+                        };
+
+                        var newRec = Ext.create(e.store.model.modelName, newData);
+                        HQ.store.insertRecord(e.store, [], newRec, false);
+                    }
+                }
+            }
+        },
+
+        grdDetail_validateEdit: function (item, e) {
+            var fields = ["AmtBegin", "AmtEnd", "AmtBonus"];
+            var countFalse = 0;
+            for (var i = 0; i < fields.length; i++) {
+                if (fields[i] == e.field) {
+                    if (!e.value) {
+                        countFalse++;
+                    }
+                }
+                else {
+                    if (!e.record.data[fields[i]]) {
+                        countFalse++;
+                    }
+                }
+            }
+
+            if (countFalse == fields.length) {
+                HQ.message.show(1235, e.column.text, '');
+                return false;
+            }
         }
-    },
+    }
 };
