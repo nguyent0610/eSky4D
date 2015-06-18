@@ -1367,6 +1367,9 @@ namespace OM23800.Controllers
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("fupImport_ImExMcp");
                 HttpPostedFile file = fileUploadField.PostedFile;
                 FileInfo fileInfo = new FileInfo(file.FileName);
+                string errorERouteID = string.Empty;
+                string errorESlsperID = string.Empty;
+
                 string messagestrERouteID = string.Empty;
                 string messagestrECustID = string.Empty;
                 string messagestrESlsperID = string.Empty;
@@ -1438,8 +1441,18 @@ namespace OM23800.Controllers
                             strEEndDate = workSheet.Cells[i, 7].StringValue;//dataArray.GetValue(i, 8).PassNull();
                             strETS = workSheet.Cells[i, 8].StringValue;//dataArray.GetValue(i, 9).PassNull();
                             strETBH = workSheet.Cells[i, 9].StringValue;//dataArray.GetValue(i, 10).PassNull();
-                            if (strESlsperID != slsperID && slsperID != "") continue;
-                            if (strERouteID != routeID && routeID != "") continue;
+                            if (strESlsperID != slsperID && slsperID != "")
+                            {
+                                errorESlsperID += (i + 1).ToString() + ",";
+                                continue;
+
+                            };
+                            if (strERouteID != routeID && routeID != "")
+                            {
+                                errorERouteID += (i + 1).ToString() + ",";
+                                continue;
+
+                            };
                             if (strECustID == "") continue;
                             else if (strERouteID == ""
                                  || strECustID == ""
@@ -1584,7 +1597,8 @@ namespace OM23800.Controllers
                         message += messagestrERouteID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ thiếu {1}<br/>", messagestrERouteID, workSheet.Cells[3, 13].StringValue);
                         message += messageerror == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ<br/>", messageerror);
                         message += messageduplicate == "" ? "" : string.Format("Dòng {0} dữ liệu bi trùng<br/>", messageduplicate);
-
+                        message += errorESlsperID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ khác sales<br/>", errorESlsperID);
+                        message += errorERouteID == "" ? "" : string.Format("Dòng {0} dữ liệu không hợp lệ khác tuyến bán hàng<br/>", errorERouteID);
                         Util.AppendLog(ref _logMessage, "20121418", "", data: new { message });
                     }
                     return _logMessage;
