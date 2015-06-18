@@ -1,0 +1,155 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM23900;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")  
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Items(
+        ////Thiet ke giao dien o day
+            X.Panel()
+            .Region(Region.North)
+            .Items(
+                X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 5 0")
+                .Items(
+                    HQ.Combo().ID("cboBranchID")
+                    .Name("cboBranchID").HQLangCode("BranchID").HQDBSys(false).AllowBlank(false).ForceSelection(true)
+                    .HQProcedure("OM23900_pcBranchAllByUser").HQColumnShow("BranchID,BranchName,Addr,Channel").DisplayField("BranchID").ValueField("BranchID")
+                    .HQHeightWidth(400, 300).Width(300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                    })
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => { 
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboBranchID_Change";
+                        lst.Select.Fn = "cboBranchID_Select";
+                    })
+                    
+                    ,HQ.TextBox().ID("txtBranchName").HQLangCode("BranchName").ReadOnly(true).Width(300)
+                )
+            )
+            ,
+            
+                X.GridPanel().ID("grdOM_DiscConsumers")
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false))
+                .Region(Region.Center).Flex(1)
+                .Store(
+                    X.Store()
+                    .ID("stoOM_DiscConsumers")
+                    .PageSize(50)//.AutoLoad(true)
+                    .Model(Util.GenerateModel(typeof(OM23900_pgLoadGrid_Result), "mdlOM_DiscConsumer", "InvtID"))
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                    })
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_DiscConsumer"))).AutoLoad(false)
+                    .Listeners(l =>
+                    {
+                        l.BeforeLoad.Fn = "stoBeforeLoad";
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "stoChanged";
+                    })
+                )
+                .Listeners(p =>
+                {
+                    p.BoxReady.Handler = "firstLoad();";
+                })
+                .SortableColumns(false)
+                .ColumnModel(
+                    X.RowNumbererColumn()
+                        
+                    , X.Column().Text(Util.GetLang("InvtID")).Width(150).DataIndex("InvtID")
+                    .Editor(
+                        HQ.Combo().ID("cboInvt").Name("cboInvt").HQProcedure("OM23900_pcInventoryActiveByBranch")
+                        .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID").HQAutoLoad(false)
+                        .Width(300).HQHeightWidth(400, 300).ForceSelection(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw}
+                        })
+                        .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "cboInvt_Change";
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .LoadData()
+                    )
+                    
+                    , X.Column().ID("txtInvtName").DataIndex("Descr").Text(Util.GetLang("InvtName")).Width(300).Renderer("renderInvtName")
+                    , X.NumberColumn().Text(Util.GetLang("TotAlloc")).DataIndex("TotAlloc").Width(150).Align(Alignment.Right)
+                .Editor(X.NumberField().MinValue(0).DecimalPrecision(2))
+                    
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(("Reject"))
+                        .ToolTip(t =>
+                        {
+                            t.Text = ("Rejectrowchanges");
+                        })
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t =>
+                    {
+                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Command.Handler = "grdOM_DiscConsumers_Reject(record);";
+                    })
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmOM_DiscConsumers")
+                .Mode(SelectionMode.Multi))
+                .BottomBar(
+                    X.PagingToolbar()
+                    .Items(
+                        X.Label("Page size:"),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("50")
+                        .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                    )
+                    .Plugins(X.ProgressBarPager())
+                )
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdOM_DiscConsumers_BeforeEdit";
+                        ls.Edit.Fn = "grdOM_DiscConsumers_Edit";
+                        ls.ValidateEdit.Fn = "grdOM_DiscConsumers_ValidateEdit";
+                    })
+                )
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("InvtID"),
+                            X.StringFilter().DataIndex("Descr"),
+                            X.NumericFilter().DataIndex("TotAlloc")
+                        )
+                )
+            
+        )
+    )// frmMain
+)
