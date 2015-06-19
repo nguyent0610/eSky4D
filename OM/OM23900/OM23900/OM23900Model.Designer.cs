@@ -115,6 +115,25 @@ namespace OM23900
     
             return base.ExecuteFunction<OM23900_pgLoadGrid_Result>("OM23900_pgLoadGrid", branchIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<OM23900_pdPPC_DisConsumers_Result> OM23900_pdPPC_DisConsumers(global::System.String branchID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM23900_pdPPC_DisConsumers_Result>("OM23900_pdPPC_DisConsumers", branchIDParameter);
+        }
 
         #endregion
 
@@ -445,6 +464,59 @@ namespace OM23900
     #endregion
 
     #region ComplexTypes
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM23900Model", Name="OM23900_pdPPC_DisConsumers_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM23900_pdPPC_DisConsumers_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM23900_pdPPC_DisConsumers_Result object.
+        /// </summary>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        public static OM23900_pdPPC_DisConsumers_Result CreateOM23900_pdPPC_DisConsumers_Result(global::System.String invtID)
+        {
+            OM23900_pdPPC_DisConsumers_Result oM23900_pdPPC_DisConsumers_Result = new OM23900_pdPPC_DisConsumers_Result();
+            oM23900_pdPPC_DisConsumers_Result.InvtID = invtID;
+            return oM23900_pdPPC_DisConsumers_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

@@ -28,7 +28,8 @@ namespace OM23900.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -39,24 +40,39 @@ namespace OM23900.Controllers
             return this.Store(_db.OM23900_pgLoadGrid(BranchID).ToList());
         }
 
+        public ActionResult GetPPC_DisConsumers(string BranchID)
+        {
+            return this.Store(_db.OM23900_pdPPC_DisConsumers(BranchID).ToList());
+        }
+
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
-                string BranchID = data["cboBranchID"].PassNull() ;
-
+                string BranchID = data["cboBranchID"].PassNull();
+                
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_DiscConsumers"]);
                 ChangeRecords<OM23900_pgLoadGrid_Result> lstOM_DiscConsumers = dataHandler.BatchObjectData<OM23900_pgLoadGrid_Result>();
 
-                foreach (OM23900_pgLoadGrid_Result deleted in lstOM_DiscConsumers.Deleted)
-                {
-                    var del = _db.OM_DiscConsumers.Where(p => p.BranchID == BranchID && p.InvtID == deleted.InvtID).FirstOrDefault();
-                    if (del != null)
-                    {
-                        _db.OM_DiscConsumers.DeleteObject(del);
-                    }
-                }
+                //var lstPPC_DiscConsumers = _db.OM23900_pdPPC_DisConsumers(BranchID).ToList();
+
+                //foreach (OM23900_pgLoadGrid_Result deleted in lstOM_DiscConsumers.Deleted)
+                //{
+                //    var flag = lstPPC_DiscConsumers.FirstOrDefault(p => p.InvtID == deleted.InvtID);
+                //    if (flag!=null)
+                //    {
+                //        throw new MessageException(MessageType.Message, "2015061901",parm:new string []{deleted.InvtID});
+                //    }
+                //    else
+                //    {
+                //        var del = _db.OM_DiscConsumers.Where(p => p.BranchID == BranchID && p.InvtID == deleted.InvtID).FirstOrDefault();
+                //        if (del != null)
+                //        {
+                //            _db.OM_DiscConsumers.DeleteObject(del);
+                //        }
+                //    }
+                //}
 
                 lstOM_DiscConsumers.Created.AddRange(lstOM_DiscConsumers.Updated);
 
@@ -112,6 +128,39 @@ namespace OM23900.Controllers
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAll(FormCollection data,string InvtID)
+        {
+            try
+            {
+                string BranchID = data["cboBranchID"].PassNull();
+
+                var lstPPC_DiscConsumers = _db.OM23900_pdPPC_DisConsumers(BranchID).ToList();
+                var flag = lstPPC_DiscConsumers.FirstOrDefault(p => p.InvtID == InvtID);
+
+                if (flag != null)
+                {
+                    throw new MessageException(MessageType.Message, "2015061901", parm: new[] { InvtID });
+                }
+                else
+                {
+                    var del = _db.OM_DiscConsumers.FirstOrDefault(p => p.BranchID == BranchID && p.InvtID == InvtID);
+                    if (del != null)
+                    {
+                        _db.OM_DiscConsumers.DeleteObject(del);
+                    }
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
         }
 
     }
