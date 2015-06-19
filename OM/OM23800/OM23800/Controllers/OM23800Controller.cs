@@ -1931,6 +1931,11 @@ namespace OM23800.Controllers
                         string strPhone = string.Empty;
                         string strCustClass = string.Empty;
                         string strLocation = string.Empty;
+
+                        string strCountry = string.Empty;
+                        string strCity = string.Empty;
+                        string strTerritory = string.Empty;
+
                         if (strEBranchID == BranchID)
                         {
                             for (int i = dataRowIdx; i <= workSheet.Cells.MaxDataRow; i++)
@@ -1976,6 +1981,19 @@ namespace OM23800.Controllers
                                             lineInvalidDistrict.Add((i - dataRowIdx + 1).ToString());
                                             slsright = false;
                                         }
+                                        else {
+                                            strCountry = district.Country;
+                                            var state = _db.SI_State.FirstOrDefault(s => s.Country == strCountry && s.State == strProvince);
+                                            if (state != null)
+                                            {
+                                                strTerritory = state.Territory;
+                                            }
+                                            var city = _db.SI_City.FirstOrDefault(c => c.Country == strCountry && c.State == strProvince);
+                                            if (city != null)
+                                            {
+                                                strCity = city.City;
+                                            }
+                                        }
                                     }
 
                                     if (isUpdated)
@@ -1997,6 +2015,9 @@ namespace OM23800.Controllers
                                                     existCust.District = strDistrict;
                                                     existCust.State = existCust.BillState = strProvince;
                                                     existCust.Phone = existCust.BillPhone = strPhone;
+                                                    existCust.Country = existCust.BillCountry = strCountry;
+                                                    existCust.City = existCust.BillCity = strCity;
+                                                    existCust.Territory = strTerritory;
                                                     existCust.ClassId = strCustClass;
                                                     existCust.Location = strLocation;
                                                     existCust.LUpd_Datetime = DateTime.Now;
@@ -2064,9 +2085,26 @@ namespace OM23800.Controllers
                                                     newCust.District = strDistrict;
                                                     newCust.State = newCust.BillState = strProvince;
                                                     newCust.Phone = newCust.BillPhone = strPhone;
+                                                    newCust.Country = newCust.BillCountry = strCountry;
+                                                    newCust.City = newCust.BillCity = strCity;
+                                                    newCust.Territory = strTerritory;
                                                     newCust.ClassId = strCustClass;
                                                     newCust.Location = strLocation;
-
+                                                    newCust.CrRule = "N";
+                                                    newCust.CustType = "R";
+                                                    newCust.DfltShipToId = "DEFAULT";
+                                                    newCust.NodeLevel = 2;
+                                                    newCust.ParentRecordID = 4;
+                                                    newCust.Status = "A";
+                                                    newCust.SupID = "";
+                                                    newCust.TaxDflt = "C";
+                                                    newCust.TaxID00 = "OVAT10-00";
+                                                    newCust.TaxID01 = "OVAT05-00";
+                                                    newCust.TaxID02 = "VAT00";
+                                                    newCust.TaxID03 = "NONEVAT";
+                                                    newCust.TaxLocId = "";
+                                                    newCust.TaxRegNbr = "123456789";
+                                                    newCust.Terms = "07";
                                                     newCust.LUpd_Datetime = newCust.Crtd_Datetime = DateTime.Now;
                                                     newCust.LUpd_Prog = newCust.Crtd_Prog = _screenName;
                                                     newCust.LUpd_User = newCust.Crtd_User = Current.UserName;

@@ -140,6 +140,7 @@
             .Listeners(lst =>
             {
                 lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                lst.Change.Fn = "Event.Form.cboBranchID_ImExCust_change";
             })
 
             ,  HQ.Combo().ID("cboProvince_ImExCust").Name("cboProvince_ImExCust").HQLangCode("Province")

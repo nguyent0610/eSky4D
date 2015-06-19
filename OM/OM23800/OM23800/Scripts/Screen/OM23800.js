@@ -132,6 +132,10 @@ var Event = {
             App.cboDistributorMCL.store.reload();
         },
 
+        cboProvinceMCL_change: function (cbo, newValue, oldValue, eOpts) {
+            App.cboDistributorMCL.store.reload();
+        },
+
         cboDistributorMCL_change: function (cbo, newValue, oldValue, eOpts) {
             App.cboSalesManMCL.store.reload();
         },
@@ -215,6 +219,15 @@ var Event = {
         mniImportCust_click: function (mni, e, eOpts) {
             App.winImExCust.isImport = true;
             App.winImExCust.show();
+        },
+
+        cboBranchID_ImExCust_change: function (cbo, newValue, oldValue, eOpts) {
+            if (!App.cboProvinceMCL.value) {
+                var selRec = HQ.store.findRecord(cbo.store, ["BranchID"], [cbo.getValue()]);
+                if (selRec) {
+                    App.cboProvince_ImExCust.setValue(selRec.data.State);
+                }
+            }
         }
     },
 

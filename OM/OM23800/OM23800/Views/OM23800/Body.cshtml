@@ -107,7 +107,7 @@
                     .Listeners(lst =>
                         {
                             lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
-                            //lst.Change.Fn = "Event.Form.cboProvinceMCL_change";
+                            lst.Change.Fn = "Event.Form.cboProvinceMCL_change";
                         })
 
                     , HQ.Combo().ID("cboDistributorMCL").HQLangCode("Distributor").HQProcedure("OM23800_pcDistributor")
