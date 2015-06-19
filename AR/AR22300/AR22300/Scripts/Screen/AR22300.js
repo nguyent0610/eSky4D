@@ -9,7 +9,7 @@ var Event = {
                 var markers = [];
                 records.forEach(function (record) {
                     var marker = {
-                        "id": record.index + 1,
+                        "id": record.data.CustId,
                         "title": record.data.CustId + ": " + record.data.CustName,
                         "lat": record.data.Lat,
                         "lng": record.data.Lng,
@@ -66,20 +66,81 @@ var Event = {
         },
 
         btnResetGeo_click: function (btn, e, eOpts) {
-            if (App.grdMCP.selModel.getSelection().length) {
+            if (Process.isCustSelected(App.grdMCP.store)) {
                 HQ.message.show(2015052201, '', 'Process.resetGeo');
             }
             else {
                 HQ.message.show(20412, HQ.common.getLang('Customer'), '');
             }
+        },
+
+        btnExportToExcel_click: function (btn, e, eOpts) {
+            if (App.pnlMCP.isValid()) {
+                Ext.net.DirectMethod.request({
+                    url: "AR22300/ExportMcpExcel",
+                    isUpload: true,
+                    formProxyArg: "pnlMCP",
+                    cleanRequest: true,
+                    timeout: 1000000,
+                    params: {
+                        channel: "",
+                        territory: Process.passNullValue(App.cboAreaPlan),
+                        province: Process.passNullValue(App.cboProvincePlan),
+                        distributor: Process.passNullValue(App.cboDistributorPlan),
+                        shopType: "",
+                        slsperId: Process.passNullValue(App.cboSalesManPlan),
+                        daysOfWeek: Process.passNullValue(App.cboDayOfWeek),
+                        weekOfVisit: Process.passNullValue(App.cboWeekOfVisit),
+
+                        territoryHeader: Process.passNullRawValue(App.cboAreaPlan),
+                        distributorHeader: Process.passNullRawValue(App.cboDistributorPlan),
+                        slsperHeader: Process.passNullRawValue(App.cboSalesManPlan),
+                        daysOfWeekHeader: Process.passNullRawValue(App.cboDayOfWeek),
+                        weekOfVisitHeader: Process.passNullRawValue(App.cboWeekOfVisit)
+                    },
+                    failure: function (msg, data) {
+                        HQ.message.process(msg, data, true);
+                    }
+                });
+            }
+            else {
+                App.pnlMCP.getForm().getFields().each(
+                    function (item) {
+                        if (!item.isValid()) {
+                            item.focus();
+                            return false;
+                        }
+                    }
+                );
+            }
+        },
+
+        btnSuggest_click: function (btn, e, eOpts) {
+            if (App.slmMCP.getSelection().length) {
+                var selected = App.slmMCP.getSelection()[0];
+                Gmap.Process.getGeobyAddress(selected);
+            }
+            else {
+                HQ.message.show(718, '', '');
+            }
+        },
+
+        btnUpdate_Suggest_click: function () {
+            Process.updateNewPostion();
         }
     },
 
     Grid: {
         chkMcpAll_change: function (chk, newValue, oldValue, eOpts) {
-            for (var i = 0; i < App.grdMCP.store.getCount() ; i++) {
-                App.grdMCP.store.getAt(i).set("Selected", chk.value);
+            var record;
+            var length= App.grdMCP.store.getCount();
+            for (var i = 0; i < length; i++) {
+                record = App.grdMCP.store.data.items[i];
+                record.data.Selected = chk.value;
             }
+            App.grdMCP.store.commitChanges();
+            App.grdMCP.view.refresh();
+            //App.grdMCP.store.commitChanges();
             //App.grdMCP.store.each(function (record) {
             //    record.set("Selected", chk.value);
             //});
@@ -87,7 +148,7 @@ var Event = {
 
         slmMCP_Select: function (rowModel, record, index, eOpts) {
             if (record && record.data.Lat && record.data.Lng){
-                Gmap.Process.navMapCenterByLocation(record.data.Lat, record.data.Lng, record.index + 1);
+                Gmap.Process.navMapCenterByLocation(record.data.Lat, record.data.Lng, record.data.kCustId);
             }
         },
 
@@ -95,9 +156,32 @@ var Event = {
             if (!record.data.Lat || !record.data.Lng) {
                 return "row-FF0000";
             }
+        },
+
+        grdMCP_edit: function (editor, e) {
+            var selectedCount = 0;
+            if (e.field == "Selected") {
+                e.grid.store.each(function (record) {
+                    if (record.data.Selected) {
+                        selectedCount++;
+                    }
+                });
+            }
+
+            if (selectedCount == e.grid.store.getCount()) {
+                App.chkMcpAll.suspendCheckChange = true;
+                App.chkMcpAll.setValue(true);
+                App.chkMcpAll.suspendCheckChange = false;
+            }
+            else {
+                App.chkMcpAll.suspendCheckChange = true;
+                App.chkMcpAll.setValue(false);
+                App.chkMcpAll.suspendCheckChange = false;
+            }
         }
     }
 };
+
 
 var Gmap = {
     Declare: {
@@ -108,7 +192,10 @@ var Gmap = {
         directionsDisplays: [],
         infoWindow: {},
         stopMarkers: [],
-        drawingManager: {}
+        drawingManager: {},
+
+        geocoder: {},
+        suggestMarker: null
     },
 
     Process: {
@@ -126,8 +213,11 @@ var Gmap = {
             Gmap.Declare.directionsService = new google.maps.DirectionsService();
             Gmap.Declare.directionsDisplay = new google.maps.DirectionsRenderer();
             Gmap.Declare.infoWindow = new google.maps.InfoWindow();
+            Gmap.Declare.geocoder = new google.maps.Geocoder();
 
             Gmap.Declare.stopMarkers = [];
+
+            Gmap.Process.showContextMenu(Gmap.Declare.map);
         },
 
         navMapCenterByLocation: function (lat, lng, id) {
@@ -224,6 +314,10 @@ var Gmap = {
         },
 
         clearMap: function (stopMarkers) {
+            if (Gmap.Declare.suggestMarker) {
+                Gmap.Declare.suggestMarker.setMap(null);
+                Gmap.Declare.suggestMarker = null;
+            }
             for (i = 0; i < stopMarkers.length; i++) {
                 Gmap.Declare.stopMarkers[i].setMap(null);
 
@@ -236,73 +330,178 @@ var Gmap = {
 
         drawMCP: function (markers) {
             Gmap.Process.prepairMap();
+            Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
 
             if (markers.length > 0) {
                 Gmap.Declare.stopMarkers = [];
-                // List of locations
-                var lat_lng = new Array();
-
                 // For each marker in list
                 for (i = 0; i < markers.length; i++) {
                     var data = markers[i];
-                    if (data.lat && data.lng) {
-                        var myLatlng = new google.maps.LatLng(data.lat, data.lng);
-
-                        // pin color
-                        var pinColor = "FE6256";//"BDBDBD";//FE6256
-
-                        // Push the location to list
-                        lat_lng.push(myLatlng);
-
-                        // Maps center at the first location
-                        if (i == 0) {
-                            var myOptions = {
-                                center: myLatlng,
-                                zoom: 16,
-                                mapTypeId: google.maps.MapTypeId.ROADMAP
-                            };
-                            Gmap.Declare.map = new google.maps.Map(Gmap.Declare.map_canvas, myOptions);
-                        }
-
-                        // Make the marker at each location
-                        var markerLabel = data.visitSort;
-                        var marker = new google.maps.Marker({
-                            id: data.id,
-                            position: myLatlng,
-                            map: Gmap.Declare.map,
-                            title: data.title,
-                            icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i + 1, pinColor)
-                        });
-
-                        // Set info display of the marker
-                        (function (marker, data) {
-                            google.maps.event.addListener(marker, "click", function (e) {
-                                infoWindow.setContent(data.description);
-                                infoWindow.open(Gmap.Declare.map, marker);
-
-                                // Set animation of marker
-                                if (marker.getAnimation() != null) {
-                                    marker.setAnimation(null);
-                                } else {
-                                    marker.setAnimation(google.maps.Animation.BOUNCE);
-                                    setTimeout(function () {
-                                        marker.setAnimation(null);
-                                    }, 1400);
-                                }
-                            });
-                        })(marker, data);
-
-                        Gmap.Declare.stopMarkers.push(marker);
-                    }
+                    Gmap.Process.makeMarker(data, i);
                 }
 
                 Gmap.Declare.directionsDisplay.setMap(Gmap.Declare.map);
                 //directionsDisplay.setOptions({ suppressMarkers: true });
             }
-            else {
-                Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
+            //else {
+            //    Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
+            //}
+        },
+
+        makeMarker: function (markerData, index) {
+            if (markerData.lat && markerData.lng) {
+                var myLatlng = new google.maps.LatLng(markerData.lat, markerData.lng);
+
+                // pin color
+                var pinColor = "FE6256";//"BDBDBD";//FE6256
+
+                // Maps center at the first location
+                if (i == 0) {
+                    var myOptions = {
+                        center: myLatlng,
+                        zoom: 16,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    Gmap.Declare.map = new google.maps.Map(Gmap.Declare.map_canvas, myOptions);
+                }
+
+                // Make the marker at each location
+                var marker = new google.maps.Marker({
+                    id: markerData.id,
+                    position: myLatlng,
+                    map: Gmap.Declare.map,
+                    title: markerData.title,
+                    icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', index + 1, pinColor)
+                });
+
+                // Set info display of the marker
+                (function (marker, markerData) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        Gmap.Declare.infoWindow.setContent(markerData.description);
+                        Gmap.Declare.infoWindow.open(Gmap.Declare.map, marker);
+
+                        // Set animation of marker
+                        if (marker.getAnimation() != null) {
+                            marker.setAnimation(null);
+                        } else {
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                            setTimeout(function () {
+                                marker.setAnimation(null);
+                            }, 1400);
+                        }
+                    });
+
+                    google.maps.event.addListener(Gmap.Declare.map, "click", function (event) {
+                        Gmap.Declare.infoWindow.close();
+                    });
+                })(marker, markerData);
+
+                Gmap.Declare.stopMarkers.push(marker);
             }
         },
+
+        getGeobyAddress: function (record) {
+            Gmap.Declare.geocoder = new google.maps.Geocoder();
+            if (Gmap.Declare.suggestMarker) {
+                Gmap.Declare.suggestMarker.setMap(null);
+                Gmap.Declare.suggestMarker = null;
+            }
+            Gmap.Declare.geocoder.geocode({ 'address': record.data.Addr }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var location = results[0].geometry.location;
+                    if (location.A != record.data.Lat || location.F != record.data.Lng) {
+                        Gmap.Declare.map.setCenter(location);
+                        Gmap.Declare.suggestMarker = new google.maps.Marker({
+                            map: Gmap.Declare.map,
+                            position: location,
+                            icon: 'Images/AR22300/flaggreen.png',
+                            animation: google.maps.Animation.DROP,
+                            record: record
+                        });
+
+                        google.maps.event.addListener(Gmap.Declare.suggestMarker, "click", function (e) {
+                            // Set animation of marker
+                            if (Gmap.Declare.suggestMarker.getAnimation() != null) {
+                                Gmap.Declare.suggestMarker.setAnimation(null);
+                            } else {
+                                Gmap.Declare.suggestMarker.setAnimation(google.maps.Animation.BOUNCE);
+                                setTimeout(function () {
+                                    Gmap.Declare.suggestMarker.setAnimation(null);
+                                    Process.showSuggestPopup(record, location.A, location.F, Gmap.Declare.suggestMarker);
+                                }, 1400);
+                            }
+                        });
+                    }
+                    else {
+                        HQ.message.show(20150618, '', '');
+                    }
+                } else {
+                    HQ.message.show(20150612, status, '');
+                }
+            });
+        },
+
+        showContextMenu: function (objMap) {
+            //	create the ContextMenuOptions object
+            var contextMenuOptions = {};
+            contextMenuOptions.classNames = { menu: 'context_menu', menuSeparator: 'context_menu_separator' };
+
+            //	create an array of ContextMenuItem objects
+            var menuItems = [];
+            menuItems.push({ className: 'context_menu_item', eventName: 'set_location', label: HQ.common.getLang('SetLocation') });
+            //	a menuItem with no properties will be rendered as a separator
+            menuItems.push({});
+            menuItems.push({ className: 'context_menu_item', eventName: 'zoom_in_click', label: HQ.common.getLang('ZoomIn') });
+            menuItems.push({ className: 'context_menu_item', eventName: 'zoom_out_click', label: HQ.common.getLang('ZoomOut') });
+            //	a menuItem with no properties will be rendered as a separator
+            menuItems.push({});
+            menuItems.push({ className: 'context_menu_item', eventName: 'center_map_click', label: HQ.common.getLang('CenterMapHere') });
+            contextMenuOptions.menuItems = menuItems;
+
+            //	create the ContextMenu object
+            var contextMenu = new ContextMenu(objMap, contextMenuOptions);
+
+            //	display the ContextMenu on a Map right click
+            google.maps.event.addListener(objMap, 'rightclick', function (mouseEvent) {
+                //if (polygon.containsLatLng(mouseEvent.latLng)) {
+                contextMenu.show(mouseEvent.latLng);
+                //}
+            });
+
+            //	listen for the ContextMenu 'menu_item_selected' event
+            google.maps.event.addListener(contextMenu, 'menu_item_selected', function (latLng, eventName) {
+                //	latLng is the position of the ContextMenu
+                //	eventName is the eventName defined for the clicked ContextMenuItem in the ContextMenuOptions
+                switch (eventName) {
+                    case 'set_location':
+                        var newLat = latLng.lat();
+                        var newLng = latLng.lng();
+
+                        if (App.slmMCP.getSelection().length) {
+                            var selected = App.slmMCP.getSelection()[0];
+                            Process.showSuggestPopup(selected, newLat, newLng);
+                        }
+                        else {
+                            HQ.message.show(718, '', '');
+                        }
+
+                        contextMenu.hide();
+                        break;
+                    case 'zoom_in_click':
+                        Gmap.Declare.map.setZoom(objMap.getZoom() + 1);
+                        contextMenu.hide();
+                        break;
+                    case 'zoom_out_click':
+                        Gmap.Declare.map.setZoom(objMap.getZoom() - 1);
+                        contextMenu.hide();
+                        break;
+                    case 'center_map_click':
+                        Gmap.Declare.map.panTo(latLng);
+                        contextMenu.hide();
+                        break;
+                }
+            });
+        }
     }
 };
 
@@ -313,11 +512,14 @@ var Process = {
                 App.pnlMCP.submit({
                     waitMsg: 'Submiting...',
                     url: 'AR22300/ResetGeo',
+                    timeout: 1800000,
                     params: {
                         lstSelCust: (function () {
                             values = []
-                            App.grdMCP.selModel.getSelection().forEach(function (record) {
-                                values.push(record.data);
+                            App.grdMCP.store.each(function (record) {
+                                if (record.data.Selected) {
+                                    values.push(record.data);
+                                }
                             });
                             return Ext.encode(values);
                         })()
@@ -326,26 +528,29 @@ var Process = {
                         if (data.result.msgcode) {
                             HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
                         }
-                        App.grdMCP.selModel.getSelection().forEach(function (record) {
-                            record.set("Lat", 0);
-                            record.set("Lng", 0);
+                        App.grdMCP.store.each(function (record) {
+                            if (record.data.Selected) {
+                                record.data.Lat = 0;
+                                record.data.Lng = 0;
+                                record.data.Selected = false;
 
-                            var markerId = record.index + 1;
-                            var marker;
-                            if (markerId) {
-                                marker = Gmap.Process.find_marker_id(markerId);
-                            }
+                                var markerId = record.data.CustId;
+                                var marker;
+                                if (markerId) {
+                                    marker = Gmap.Process.find_marker_id(markerId);
+                                }
 
-                            if (marker) {
-                                marker.setAnimation(google.maps.Animation.BOUNCE);
-                                setTimeout(function () {
-                                    marker.setAnimation(null);
-                                    marker.visible = false;
-                                }, 1400);
+                                if (marker) {
+                                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                                    setTimeout(function () {
+                                        marker.setAnimation(null);
+                                        marker.visible = false;
+                                    }, 1400);
+                                }
                             }
                         });
                         App.grdMCP.store.commitChanges();
-                        App.grdMCP.selModel.deselectAll();
+                        App.grdMCP.view.refresh();
                     },
 
                     failure: function (errorMsg, data) {
@@ -359,5 +564,142 @@ var Process = {
                 });
             }
         }
+    },
+
+    isCustSelected: function (store) {
+        var selected = false;
+        store.each(function (record) {
+            if (record.data.Selected) {
+                selected = true;
+                return false;
+            }
+        });
+        return selected;
+    },
+
+    passNullValue: function (combo) {
+        if (combo.value) {
+            return combo.value;
+        }
+        else {
+            return "";
+        }
+    },
+
+    passNullRawValue: function (combo) {
+        if (combo.value) {
+            return combo.value +" - "+combo.rawValue;
+        }
+        else {
+            return "";
+        }
+    },
+
+    showSuggestPopup: function (record, newLat, newLng, suggestMarker) {
+        //suggestMarker.position.A or F
+        App.frmMain_Suggest.loadRecord(record);
+        App.frmMain_Suggest.suggestMarker = suggestMarker;
+        App.frmMain_Suggest.newLat = newLat;
+        App.frmMain_Suggest.newLng = newLng;
+
+        if (record.data.Lat && record.data.Lng) {
+            App.imgMarkerOld_Suggest.setImageUrl(
+                "https://maps.googleapis.com/maps/api/staticmap?zoom=17&size=300x200&maptype=roadmap&markers=color:red%7Clabel:B%7C"
+                + record.data.Lat + ","
+                + record.data.Lng);
+        }
+        else {
+            App.imgMarkerOld_Suggest.setImageUrl("Images/AR22300/maps.jpg");
+        }
+
+        App.imgMarkerNew_Suggest.setImageUrl(
+            "https://maps.googleapis.com/maps/api/staticmap?zoom=17&size=300x200&maptype=roadmap&markers=color:green%7Clabel:A%7C"
+            + newLat + "," + newLng);
+        App.winSuggest.show();
+    },
+
+    updateNewPostion: function () {
+        var record = App.frmMain_Suggest.getRecord();
+        var newLat = App.frmMain_Suggest.newLat;
+        var newLng = App.frmMain_Suggest.newLng;
+        var suggestMarker = App.frmMain_Suggest.suggestMarker;
+        App.frmMain_Suggest.submit({
+            waitMsg: 'Submiting...',
+            url: 'AR22300/UpdateNewPosition',
+            timeout: 1800000,
+            params: {
+                lstSelCust: (function () {
+                    values = []
+                    values.push(record.data);
+                    return Ext.encode(values);
+                })(),
+                newLat: newLat,
+                newLng: newLng
+            },
+            success: function (action, data) {
+                if (data.result.msgcode) {
+                    HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
+                }
+                App.grdMCP.store.each(function (rec) {
+                    if (rec.data.CustId == record.data.CustId) {
+                        rec.data.Lat = newLat;
+                        rec.data.Lng = newLng;
+
+                        var markerId = rec.data.CustId;
+                        var marker;
+                        if (markerId) {
+                            marker = Gmap.Process.find_marker_id(markerId);
+                        }
+
+                        if (marker) {
+                            marker.position.A = newLat;
+                            marker.position.F = newLng;
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                            setTimeout(function () {
+                                marker.setAnimation(null);
+                            }, 1400);
+                        }
+                        else {
+                            var markerData = {
+                                "id": rec.data.CustId,
+                                "title": rec.data.CustId + ": " + rec.data.CustName,
+                                "lat": rec.data.Lat,
+                                "lng": rec.data.Lng,
+                                "description":
+                                    '<div id="content">' +
+                                        '<div id="siteNotice">' +
+                                        '</div>' +
+                                        '<h1 id="firstHeading" class="firstHeading">' +
+                                            rec.data.CustName +
+                                        '</h1>' +
+                                        '<div id="bodyContent">' +
+                                            '<p>' +
+                                                rec.data.Addr +
+                                            '</p>' +
+                                        '</div>' +
+                                    '</div>'
+                            }
+                            Gmap.Process.makeMarker(markerData, rec.index);
+                        }
+                    }
+                });
+                App.grdMCP.store.commitChanges();
+                App.grdMCP.view.refresh();
+                App.winSuggest.close();
+                if (suggestMarker) {
+                    suggestMarker.setMap(null);
+                    suggestMarker = null;
+                }
+            },
+
+            failure: function (errorMsg, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
+                }
+                else {
+                    HQ.message.process(errorMsg, data, true);
+                }
+            }
+        });
     }
 };

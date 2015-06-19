@@ -268,11 +268,13 @@
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\Screen\AR22300.debug.js" />
     <Content Include="Scripts\Screen\AR22300.js" />
+    <Content Include="Scripts\Screen\OM30400_map_contextMenu.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\AR22300\Body.cshtml" />
+    <Content Include="Views\AR22300\Suggest.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -308,7 +310,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>3545</DevelopmentServerPort>
+          <DevelopmentServerPort>17913</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

@@ -31,10 +31,17 @@
         .Region(Region.East).Layout(LayoutType.Border)
         .Items(
             X.FormPanel()
-            .Title(Util.GetLang("MCP"))
             .ID("pnlMCP")
             .Border(false).Width(350)
             .Region(Region.Center).Layout(LayoutType.Border)
+            .TopBar(
+                X.Toolbar().Items(
+                    X.ToolbarFill()
+                    , HQ.Button().ID("btnSuggest")
+                    .Icon(Icon.FlagGreen).HQLangCode("Suggest")
+                    .Handler("Event.Form.btnSuggest_click")
+                )
+            )
             .Items(
                 X.Container().Layout(LayoutType.VBox)
                 .Region(Region.North)
@@ -75,7 +82,7 @@
 
                     , HQ.Combo().ID("cboDistributorPlan").HQLangCode("Distributor").HQProcedure("AR22300_pcDistributor")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").EmptyText(Util.GetLang("Select"))
-                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1)
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
                      .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
@@ -96,7 +103,7 @@
 
                      , HQ.Combo().ID("cboSalesManPlan").Name("cboSalesManPlan").HQLangCode("SalesMan").HQProcedure("AR22300_pcSalesMan")
                     .HQColumnShow("SlsperId,Name").DisplayField("Name").ValueField("SlsperId").EmptyText(Util.GetLang("Select"))
-                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1)//.AllowBlank(false)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
@@ -117,7 +124,7 @@
                     , HQ.Combo().ID("cboDayOfWeek").HQLangCode("DayOfWeek").HQProcedure("AR22300_pcDaysOfWeek")
                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
                     .EmptyText(Util.GetLang("Select")).MarginSpec("5 5 0 0")
-                    .ForceSelection(true).Flex(1).AllowBlank(false)
+                    .ForceSelection(true).Flex(1)//.AllowBlank(false)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
@@ -144,10 +151,18 @@
                         lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                     })
 
-                    , HQ.Button().ID("btnLoadDataPlan").HQLangCode("LoadData")
-                    .Icon(Icon.MapStart).Flex(1).MarginSpec("5 5 0 105")
-                    .Handler("Event.Form.btnLoadDataPlan_click")
-                    
+                     , X.Container().Layout(LayoutType.HBox).Flex(1)
+                    .Items(
+                        HQ.Button().ID("btnExportToExcel")
+                        .MarginSpec("5 5 0 5").Icon(Icon.PageExcel)
+                        .ToolTip(Util.GetLang("ExportToExcel"))
+                        .Handler("Event.Form.btnExportToExcel_click")
+
+                        , HQ.Button().ID("btnLoadDataPlan").HQLangCode("LoadData")
+                        .Icon(Icon.MapStart).Flex(1).MarginSpec("5 5 0 72")
+                        .Handler("Event.Form.btnLoadDataPlan_click")
+                    )
+
                     , HQ.Button().ID("btnResetGeo").HQLangCode("ResetGEO")
                     .Icon(Icon.MapDelete).Flex(1).MarginSpec("5 5 0 105").UI(UI.Warning)
                     .Handler("Event.Form.btnResetGeo_click")
@@ -168,27 +183,34 @@
                     .StoreID("stoMCP")
                     .SortableColumns(false)
                     .ColumnModel(
-                        //X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-                        //X.CheckColumn().DataIndex("Selected").Editable(true)
-                        //.HideTitleEl(true).Width(30).Align(Alignment.Center)
-                        //.HeaderItems(
-                        //    HQ.Checkbox().ID("chkMcpAll")
-                        //    .Handler("Event.Grid.chkMcpAll_change")
-                        //)
-                        
-                        X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-                        //, X.Column().DataIndex("VisitSort").Width(30).Resizable(true)
+                        X.CheckColumn().DataIndex("Selected").Editable(true)
+                        .HideTitleEl(true).Width(30).Align(Alignment.Center)
+                        .HeaderItems(
+                            HQ.Checkbox().ID("chkMcpAll")
+                            .Handler("Event.Grid.chkMcpAll_change")
+                        )
+
+                        , X.RowNumbererColumn().Width(30).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
                         , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustId")
                         , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName")
                         , X.Column().Text(Util.GetLang("Address")).DataIndex("Addr").MinWidth(100).Flex(1)
-                        , X.Column().Text(Util.GetLang("Lat")).DataIndex("Lat").Align(Alignment.Right).Width(80)
-                        , X.Column().Text(Util.GetLang("Lng")).DataIndex("Lng").Align(Alignment.Right).Width(80)
+                        , X.TemplateColumn().Text(Util.GetLang("Lat") + "/" + Util.GetLang("Lng"))
+                        .TemplateString("{Lat}, {Lng}")
+        //, X.Column().Text(Util.GetLang("Lat")).DataIndex("Lat").Align(Alignment.Right).Width(80)
+        //, X.Column().Text(Util.GetLang("Lng")).DataIndex("Lng").Align(Alignment.Right).Width(80)
+                        //, X.Column().Text(Util.GetLang("Lat") + "/" + Util.GetLang("Lng")).DataIndex("LatLng")
                     )
                     .SelectionModel(
-                        //X.RowSelectionModel().ID("slmMCP").Mode(SelectionMode.Single)
-                        X.CheckboxSelectionModel().ID("slmMCP").Mode(SelectionMode.Multi)
+        //X.RowSelectionModel().ID("slmMCP").Mode(SelectionMode.Single)
+                        X.RowSelectionModel().ID("slmMCP").Mode(SelectionMode.Single)
                         .Listeners(l => l.Select.Fn = "Event.Grid.slmMCP_Select")
-                    ) //.Listeners(l => l.CellClick.Fn = "Index.grdVisitCustomerPlan_cellClick") // GridPanel: grdMCP
+                    )
+                    .Plugins(
+                        X.CellEditing()
+                        .Listeners(l => {
+                            l.Edit.Fn = "Event.Grid.grdMCP_edit"; 
+                        })
+                    )// GridPanel: grdMCP
                 ) // Container: pnlGridPlan
             ) // FormPanel: pnlMCP
 

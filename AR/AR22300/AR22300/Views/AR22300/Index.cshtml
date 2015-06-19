@@ -25,6 +25,7 @@
         <script src='@Url.Content("Scripts/Screen/AR22300.js")' type="text/javascript"></script>
 
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1KCqJiFRTtXsU2UxG3Zf7D55Gjft7JJI&sensor=false&libraries=drawing"></script>
+        <script src="~/Scripts/Screen/OM30400_map_contextMenu.js"></script>
 
         <script type="text/javascript">
             HQ.cpnyID = '@Current.CpnyID';
@@ -58,6 +59,25 @@
             .row-FF0000 .x-grid-cell {
                 color: #FF0000 !important;
             }
+
+            /*	start styles for the ContextMenu	*/
+            .context_menu{
+	            background-color:white;
+	            border:1px solid gray;
+            }
+            .context_menu_item{
+	            padding:3px 6px;
+            }
+            .context_menu_item:hover{
+	            background-color:#CCCCCC;
+            }
+            .context_menu_separator{
+	            background-color:gray;
+	            height:1px;
+	            margin:0;
+	            padding:0;
+            }
+            /*	end styles for the ContextMenu	*/
         </style>
 
 
@@ -85,24 +105,26 @@
             })
             .Listeners(l => {
                 l.BeforeLoad.Handler = "App.frmMain.getEl().mask('Loading Maps', 'x-mask-loading');";
-                l.Load.Fn = "Event.Store.stoMCP_load"; 
+                l.Load.Fn = "Event.Store.stoMCP_load";
             })
         )
 
          
-        @(
+        @*@(
             X.ToolTip()
             .Target("={App.grdMCP.getView().el}")
             .TrackMouse(true)
             .Delegate(".x-grid-cell")
             .Listeners(l=>l.Show.Handler="HQ.tooltip.showOnGrid(this, App.grdMCP, false);")
-        )
+        )*@
 
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 
         <!-- Gọi hàm Body trong OM22001Controller để dựng view Body.cshtml, mục đích tạo cache. -->
         @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
-        )
+
+        @{ Html.RenderAction("Suggest", new { lang = Current.LangID }); }
+        
     </body>
 </html>

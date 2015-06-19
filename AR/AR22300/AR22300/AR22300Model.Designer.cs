@@ -797,6 +797,30 @@ namespace AR22300
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LatLng
+        {
+            get
+            {
+                return _LatLng;
+            }
+            set
+            {
+                OnLatLngChanging(value);
+                ReportPropertyChanging("LatLng");
+                _LatLng = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LatLng");
+                OnLatLngChanged();
+            }
+        }
+        private global::System.String _LatLng;
+        partial void OnLatLngChanging(global::System.String value);
+        partial void OnLatLngChanged();
 
         #endregion
 

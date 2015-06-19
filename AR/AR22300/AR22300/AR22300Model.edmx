@@ -66,6 +66,7 @@
           <Property Type="Double" Name="Lng" Nullable="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="LatLng" Nullable="true" MaxLength="42" />
         </ComplexType>
         <EntityType Name="AR_CustomerLocation">
           <Key>
@@ -102,6 +103,7 @@
                 <ScalarProperty Name="Lng" ColumnName="Lng" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LatLng" ColumnName="LatLng" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
