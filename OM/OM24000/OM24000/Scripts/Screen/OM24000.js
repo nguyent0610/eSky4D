@@ -67,19 +67,26 @@ var firstLoad = function () {
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SA00900');
+    HQ.common.changeData(HQ.isChange, 'OM24000');
+    App.cboBranchID.setReadOnly(HQ.isChange);
+    App.cboSlsperID.setReadOnly(HQ.isChange);
+    App.cboCustID.setReadOnly(HQ.isChange);
+    App.FromDate.setReadOnly(HQ.isChange);
+    App.ToDate.setReadOnly(HQ.isChange);
+    App.btnLoad.setDisabled(HQ.isChange);
 };
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SA00900');
+    HQ.common.changeData(HQ.isChange, 'OM24000');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
             //HQ.store.insertBlank(sto, keys);
         }
         HQ.isFirstLoad = false;
     }
+    stoChanged(sto);
 };
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
@@ -90,6 +97,7 @@ var grdPPC_DiscConsumers_BeforeEdit = function (editor, e) {
 };
 var grdPPC_DiscConsumers_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdPPC_DiscConsumers, e, keys);
+
 };
 var grdPPC_DiscConsumers_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdPPC_DiscConsumers, e, keys);
@@ -105,9 +113,9 @@ var save = function () {
         App.frmMain.submit({
             timeout: 1800000,
             waitMsg: HQ.common.getLang("SavingData"),
-            url: 'SA00900/Save',
+            url: 'OM24000/Save',
             params: {
-                lstSYS_Language: HQ.store.getData(App.stoPPC_DiscConsumers)
+                lstPPC_DiscConsumers: HQ.store.getData(App.stoPPC_DiscConsumers)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);

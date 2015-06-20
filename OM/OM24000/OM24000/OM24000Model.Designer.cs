@@ -159,6 +159,25 @@ namespace OM24000
     
             return base.ExecuteFunction<OM24000_pgLoadGrid_Result>("OM24000_pgLoadGrid", branchIDParameter, slsperIDParameter, custIDParameter, fromDateParameter, toDateParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<OM24000_ppGetTotAlloc_Result> OM24000_ppGetTotAlloc(global::System.String branchID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM24000_ppGetTotAlloc_Result>("OM24000_ppGetTotAlloc", branchIDParameter);
+        }
 
         #endregion
 
@@ -642,7 +661,8 @@ namespace OM24000
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="custName">Initial value of the CustName property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
-        public static OM24000_pgLoadGrid_Result CreateOM24000_pgLoadGrid_Result(global::System.DateTime visitDate, global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String custName, global::System.String invtID)
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static OM24000_pgLoadGrid_Result CreateOM24000_pgLoadGrid_Result(global::System.DateTime visitDate, global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String custName, global::System.String invtID, global::System.Byte[] tstamp)
         {
             OM24000_pgLoadGrid_Result oM24000_pgLoadGrid_Result = new OM24000_pgLoadGrid_Result();
             oM24000_pgLoadGrid_Result.VisitDate = visitDate;
@@ -651,6 +671,7 @@ namespace OM24000
             oM24000_pgLoadGrid_Result.CustID = custID;
             oM24000_pgLoadGrid_Result.CustName = custName;
             oM24000_pgLoadGrid_Result.InvtID = invtID;
+            oM24000_pgLoadGrid_Result.tstamp = tstamp;
             return oM24000_pgLoadGrid_Result;
         }
 
@@ -921,6 +942,135 @@ namespace OM24000
         private Nullable<global::System.Double> _Advanced;
         partial void OnAdvancedChanging(Nullable<global::System.Double> value);
         partial void OnAdvancedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM24000Model", Name="OM24000_ppGetTotAlloc_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM24000_ppGetTotAlloc_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM24000_ppGetTotAlloc_Result object.
+        /// </summary>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        /// <param name="totAlloc">Initial value of the TotAlloc property.</param>
+        public static OM24000_ppGetTotAlloc_Result CreateOM24000_ppGetTotAlloc_Result(global::System.String branchID, global::System.String invtID, global::System.Double totAlloc)
+        {
+            OM24000_ppGetTotAlloc_Result oM24000_ppGetTotAlloc_Result = new OM24000_ppGetTotAlloc_Result();
+            oM24000_ppGetTotAlloc_Result.BranchID = branchID;
+            oM24000_ppGetTotAlloc_Result.InvtID = invtID;
+            oM24000_ppGetTotAlloc_Result.TotAlloc = totAlloc;
+            return oM24000_ppGetTotAlloc_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String BranchID
+        {
+            get
+            {
+                return _BranchID;
+            }
+            set
+            {
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
+            }
+        }
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double TotAlloc
+        {
+            get
+            {
+                return _TotAlloc;
+            }
+            set
+            {
+                OnTotAllocChanging(value);
+                ReportPropertyChanging("TotAlloc");
+                _TotAlloc = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TotAlloc");
+                OnTotAllocChanged();
+            }
+        }
+        private global::System.Double _TotAlloc;
+        partial void OnTotAllocChanging(global::System.Double value);
+        partial void OnTotAllocChanged();
 
         #endregion
 

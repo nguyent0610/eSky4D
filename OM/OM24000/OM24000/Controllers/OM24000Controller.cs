@@ -41,82 +41,88 @@ namespace OM24000.Controllers
             return this.Store(_db.OM24000_pgLoadGrid(BranchID, SlsperID, CustID, FromDate, ToDate).ToList());
         }
 
-        //[HttpPost]
-        //public ActionResult Save(FormCollection data)
-        //{
-        //    try
-        //    {
+        [HttpPost]
+        public ActionResult Save(FormCollection data)
+        {
+            try
+            {
+                var errorRecoverd = "";
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstPPC_DiscConsumers"]);
+                ChangeRecords<OM24000_pgLoadGrid_Result> lstLang = dataHandler.BatchObjectData<OM24000_pgLoadGrid_Result>();
+                var objItem=lstLang.Updated.Count>0?lstLang.Updated[0]:null;
+                if(objItem!=null)
+                {
+                List<PPC_DiscConsumers> lstdata =_db.PPC_DiscConsumers.Where(p=>p.BranchID==objItem.BranchID&& p.SlsperID==objItem.SlsperID).ToList();
+                List<OM24000_pgLoadGrid_Result> lstGrid = lstLang.Updated;
+                ////cap nhat lai cho so luong lstdata
+                //foreach (var obj in lstGrid)
+                //{
+                //    var obj=lstdata.dat
+                //}
 
-        //        StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Language"]);
-        //        ChangeRecords<OM24000_pgLoadGrid_Result> lstLang = dataHandler.BatchObjectData<OM24000_pgLoadGrid_Result>();
-        //        foreach (OM24000_pgLoadGrid_Result deleted in lstLang.Deleted)
-        //        {
-        //            var del = _db.SYS_Language.Where(p => p.Code == deleted.Code).FirstOrDefault();
-        //            if (del != null)
-        //            {
-        //                _db.SYS_Language.DeleteObject(del);
-        //            }
-        //        }
 
-        //        lstLang.Created.AddRange(lstLang.Updated);
+                foreach (OM24000_pgLoadGrid_Result curLang in lstLang.Updated)
+                {
+                    if (curLang.BranchID.PassNull() == "" || curLang.SlsperID.PassNull() == "" || curLang.CustID.PassNull() == "" || curLang.InvtID.PassNull() == "" || curLang.VisitDate.PassNull() == "") continue;
 
-        //        foreach (OM24000_pgLoadGrid_Result curLang in lstLang.Created)
-        //        {
-        //            if (curLang.Code.PassNull() == "") continue;
+                    var lang = _db.PPC_DiscConsumers.Where(p => p.BranchID.ToLower() == curLang.BranchID.ToLower()
+                                                             && p.SlsperID.ToLower() == curLang.SlsperID.ToLower()
+                                                             && p.CustID.ToLower() == curLang.CustID.ToLower()
+                                                             && p.InvtID.ToLower() == curLang.InvtID.ToLower()
+                                                             && p.VisitDate.Year == curLang.VisitDate.Year
+                                                             && p.VisitDate.Month == curLang.VisitDate.Month
+                                                             && p.VisitDate.Day == curLang.VisitDate.Day
+                                                            ).FirstOrDefault();
 
-        //            var lang = _db.SYS_Language.Where(p => p.Code.ToLower() == curLang.Code.ToLower()).FirstOrDefault();
+                    if (lang != null)
+                    {
+                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        {
+                            Update_Language(lang, curLang);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+                }
 
-        //            if (lang != null)
-        //            {
-        //                if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
-        //                {
-        //                    Update_Language(lang, curLang, false);
-        //                }
-        //                else
-        //                {
-        //                    throw new MessageException(MessageType.Message, "19");
-        //                }
-        //            }
-        //            else
-        //            {
-        //                lang = new SYS_Language();
-        //                Update_Language(lang, curLang, true);
-        //                _db.SYS_Language.AddObject(lang);
-        //            }
-        //        }
+   
+                var lst = _db.PPC_DiscConsumers.ToList();
+                string error="";
 
-        //        _db.SaveChanges();
-         
+                foreach (var tot in lstLang.Updated.Select(p=>p.InvtID).Distinct())
+                {
+                    var objTot = _db.OM24000_ppGetTotAlloc(lstLang.Updated[0].BranchID).Where(p => p.InvtID == tot).FirstOrDefault();
+                    var obj = lst.Where(p => p.BranchID == lstLang.Updated[0].BranchID && p.InvtID == tot).Sum(p => p.AdvanceNew);
+                    if (obj > (objTot == null ? 0 : objTot.TotAlloc)) error += tot + ",";
+                }
 
-        //        return Json(new { success = true });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is MessageException) return (ex as MessageException).ToMessage();
-        //        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-        //    }
-        //}
+                if (error != "")
+                {
+                    throw new MessageException(MessageType.Message, "2015062001", parm: new[] { error.TrimEnd(',') });
+                }
 
-        //private void Update_Language(SYS_Language t, OM24000_pgLoadGrid_Result s, bool isNew)
-        //{
-        //    if (isNew)
-        //    {
-        //        t.Code = s.Code;
-        //        t.Crtd_Datetime = DateTime.Now;
-        //        t.Crtd_Prog = _screenNbr;
-        //        t.Crtd_User = _userName;
-        //    }
-        //    t.Lang00 = s.Lang00;
-        //    t.Lang01 = s.Lang01;
-        //    t.Lang02 = s.Lang02;
-        //    t.Lang03 = s.Lang03;
-        //    t.Lang04 = s.Lang04;
+                _db.SaveChanges();
 
-        //    t.LUpd_Datetime = DateTime.Now;
-        //    t.LUpd_Prog = _screenNbr;
-        //    t.LUpd_User = _userName;
-        //}
-      
+                }
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
 
+        private void Update_Language(PPC_DiscConsumers t, OM24000_pgLoadGrid_Result s)
+        {
+            t.AdvanceNew = s.AdvanceNew;
+            t.Recovered = s.Recovered;
+
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
     }
 }

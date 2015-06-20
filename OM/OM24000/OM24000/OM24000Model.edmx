@@ -40,6 +40,9 @@
           <Parameter Name="FromDate" Type="datetime" Mode="In" />
           <Parameter Name="ToDate" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="OM24000_ppGetTotAlloc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -52,6 +55,9 @@
             <Parameter Name="CustID" Mode="In" Type="String" />
             <Parameter Name="FromDate" Mode="In" Type="DateTime" />
             <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="OM24000_ppGetTotAlloc" ReturnType="Collection(OM24000Model.OM24000_ppGetTotAlloc_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="PPC_DiscConsumers">
@@ -91,6 +97,12 @@
           <Property Type="Double" Name="AdvanceNew" Nullable="true" />
           <Property Type="Double" Name="Recovered" Nullable="true" />
           <Property Type="Double" Name="Advanced" Nullable="true" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="OM24000_ppGetTotAlloc_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="50" />
+          <Property Type="Double" Name="TotAlloc" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -134,6 +146,16 @@
                 <ScalarProperty Name="AdvanceNew" ColumnName="AdvanceNew" />
                 <ScalarProperty Name="Recovered" ColumnName="Recovered" />
                 <ScalarProperty Name="Advanced" ColumnName="Advanced" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM24000_ppGetTotAlloc" FunctionName="eBiz4DWebSysModel.Store.OM24000_ppGetTotAlloc">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM24000Model.OM24000_ppGetTotAlloc_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="TotAlloc" ColumnName="TotAlloc" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
