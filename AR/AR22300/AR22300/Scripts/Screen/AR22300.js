@@ -216,8 +216,6 @@ var Gmap = {
             Gmap.Declare.geocoder = new google.maps.Geocoder();
 
             Gmap.Declare.stopMarkers = [];
-
-            Gmap.Process.showContextMenu(Gmap.Declare.map);
         },
 
         navMapCenterByLocation: function (lat, lng, id) {
@@ -343,9 +341,7 @@ var Gmap = {
                 Gmap.Declare.directionsDisplay.setMap(Gmap.Declare.map);
                 //directionsDisplay.setOptions({ suppressMarkers: true });
             }
-            //else {
-            //    Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
-            //}
+            Gmap.Process.showContextMenu(Gmap.Declare.map);
         },
 
         makeMarker: function (markerData, index) {
@@ -371,6 +367,7 @@ var Gmap = {
                     position: myLatlng,
                     map: Gmap.Declare.map,
                     title: markerData.title,
+                    draggable:true,
                     icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', index + 1, pinColor)
                 });
 
@@ -389,6 +386,16 @@ var Gmap = {
                                 marker.setAnimation(null);
                             }, 1400);
                         }
+                    });
+
+                    google.maps.event.addListener(marker, 'dragend', function (e) {
+                        var newLat = e.latLng.lat();
+                        var newLng = e.latLng.lng();
+                        var record = HQ.store.findRecord(App.grdMCP.store, ["CustId"], [markerData.id]);
+                        if (record) {
+                            Process.showSuggestPopup(record, newLat, newLng);
+                        }
+                        marker.setPosition(myLatlng);
                     });
 
                     google.maps.event.addListener(Gmap.Declare.map, "click", function (event) {
@@ -604,7 +611,7 @@ var Process = {
 
         if (record.data.Lat && record.data.Lng) {
             App.imgMarkerOld_Suggest.setImageUrl(
-                "https://maps.googleapis.com/maps/api/staticmap?zoom=17&size=300x200&maptype=roadmap&markers=color:red%7Clabel:B%7C"
+                "https://maps.googleapis.com/maps/api/staticmap?zoom=16&size=300x200&maptype=roadmap&markers=color:red%7Clabel:B%7C"
                 + record.data.Lat + ","
                 + record.data.Lng);
         }
@@ -613,7 +620,7 @@ var Process = {
         }
 
         App.imgMarkerNew_Suggest.setImageUrl(
-            "https://maps.googleapis.com/maps/api/staticmap?zoom=17&size=300x200&maptype=roadmap&markers=color:green%7Clabel:A%7C"
+            "https://maps.googleapis.com/maps/api/staticmap?zoom=16&size=300x200&maptype=roadmap&markers=color:green%7Clabel:A%7C"
             + newLat + "," + newLng);
         App.winSuggest.show();
     },
@@ -640,49 +647,47 @@ var Process = {
                 if (data.result.msgcode) {
                     HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
                 }
-                App.grdMCP.store.each(function (rec) {
-                    if (rec.data.CustId == record.data.CustId) {
-                        rec.data.Lat = newLat;
-                        rec.data.Lng = newLng;
-
-                        var markerId = rec.data.CustId;
-                        var marker;
-                        if (markerId) {
-                            marker = Gmap.Process.find_marker_id(markerId);
-                        }
-
-                        if (marker) {
-                            marker.position.A = newLat;
-                            marker.position.F = newLng;
-                            marker.setAnimation(google.maps.Animation.BOUNCE);
-                            setTimeout(function () {
-                                marker.setAnimation(null);
-                            }, 1400);
-                        }
-                        else {
-                            var markerData = {
-                                "id": rec.data.CustId,
-                                "title": rec.data.CustId + ": " + rec.data.CustName,
-                                "lat": rec.data.Lat,
-                                "lng": rec.data.Lng,
-                                "description":
-                                    '<div id="content">' +
-                                        '<div id="siteNotice">' +
-                                        '</div>' +
-                                        '<h1 id="firstHeading" class="firstHeading">' +
-                                            rec.data.CustName +
-                                        '</h1>' +
-                                        '<div id="bodyContent">' +
-                                            '<p>' +
-                                                rec.data.Addr +
-                                            '</p>' +
-                                        '</div>' +
-                                    '</div>'
-                            }
-                            Gmap.Process.makeMarker(markerData, rec.index);
-                        }
+                var rec = HQ.store.findRecord(App.grdMCP.store, ["CustId"], [record.data.CustId]);
+                if (rec) {
+                    rec.data.Lat = newLat;
+                    rec.data.Lng = newLng;
+                    var markerId = rec.data.CustId;
+                    var marker;
+                    if (markerId) {
+                        marker = Gmap.Process.find_marker_id(markerId);
                     }
-                });
+
+                    if (marker) {
+                        marker.position.A = newLat;
+                        marker.position.F = newLng;
+                        marker.setAnimation(google.maps.Animation.BOUNCE);
+                        setTimeout(function () {
+                            marker.setAnimation(null);
+                        }, 1400);
+                    }
+                    else {
+                        var markerData = {
+                            "id": rec.data.CustId,
+                            "title": rec.data.CustId + ": " + rec.data.CustName,
+                            "lat": rec.data.Lat,
+                            "lng": rec.data.Lng,
+                            "description":
+                                '<div id="content">' +
+                                    '<div id="siteNotice">' +
+                                    '</div>' +
+                                    '<h1 id="firstHeading" class="firstHeading">' +
+                                        rec.data.CustName +
+                                    '</h1>' +
+                                    '<div id="bodyContent">' +
+                                        '<p>' +
+                                            rec.data.Addr +
+                                        '</p>' +
+                                    '</div>' +
+                                '</div>'
+                        }
+                        Gmap.Process.makeMarker(markerData, rec.index);
+                    }
+                }
                 App.grdMCP.store.commitChanges();
                 App.grdMCP.view.refresh();
                 App.winSuggest.close();

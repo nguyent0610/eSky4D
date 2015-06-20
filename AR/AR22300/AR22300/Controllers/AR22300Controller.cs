@@ -177,8 +177,9 @@ namespace AR22300.Controllers
                         {
                             custLoc.Lat = newLat;
                             custLoc.Lng = newLng;
-                            _db.SaveChanges();
-                            return Json(new { success = true, msgCode = 201405071 });
+                            custLoc.LUpd_Datetime = DateTime.Now;
+                            custLoc.LUpd_Prog = _screenName;
+                            custLoc.LUpd_User = Current.UserName;
                         }
                         else
                         {
@@ -187,8 +188,19 @@ namespace AR22300.Controllers
                     }
                     else
                     {
-                        throw new MessageException(MessageType.Message, "8");
+                        custLoc = new AR_CustomerLocation();
+                        custLoc.CustID = selCust.CustId;
+                        custLoc.BranchID = selCust.BranchID;
+                        custLoc.Lat = newLat;
+                        custLoc.Lng = newLng;
+
+                        custLoc.Crtd_Datetime = custLoc.LUpd_Datetime = DateTime.Now;
+                        custLoc.Crtd_Prog = custLoc.LUpd_Prog = _screenName;
+                        custLoc.Crtd_User = custLoc.LUpd_User = Current.UserName;
+                        _db.AR_CustomerLocation.AddObject(custLoc);
                     }
+                    _db.SaveChanges();
+                    return Json(new { success = true, msgCode = 201405071 });
                 }
                 else
                 {

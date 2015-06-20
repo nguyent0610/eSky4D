@@ -36,10 +36,17 @@
             .Region(Region.Center).Layout(LayoutType.Border)
             .TopBar(
                 X.Toolbar().Items(
-                    X.ToolbarFill()
-                    , HQ.Button().ID("btnSuggest")
+                    HQ.Button().ID("btnSuggest")
                     .Icon(Icon.FlagGreen).HQLangCode("Suggest")
+                    .ToolTip(Util.GetLang("Suggest"))
                     .Handler("Event.Form.btnSuggest_click")
+                    
+                    ,X.ToolbarFill()
+                    
+                    ,HQ.Button().ID("btnExportToExcel")
+                    .Icon(Icon.PageExcel).HQLangCode("ExportToExcel")
+                    .ToolTip(Util.GetLang("ExportToExcel"))
+                    .Handler("Event.Form.btnExportToExcel_click")
                 )
             )
             .Items(
@@ -151,17 +158,9 @@
                         lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                     })
 
-                     , X.Container().Layout(LayoutType.HBox).Flex(1)
-                    .Items(
-                        HQ.Button().ID("btnExportToExcel")
-                        .MarginSpec("5 5 0 5").Icon(Icon.PageExcel)
-                        .ToolTip(Util.GetLang("ExportToExcel"))
-                        .Handler("Event.Form.btnExportToExcel_click")
-
-                        , HQ.Button().ID("btnLoadDataPlan").HQLangCode("LoadData")
-                        .Icon(Icon.MapStart).Flex(1).MarginSpec("5 5 0 72")
-                        .Handler("Event.Form.btnLoadDataPlan_click")
-                    )
+                    , HQ.Button().ID("btnLoadDataPlan").HQLangCode("LoadData")
+                    .Icon(Icon.MapStart).Flex(1).MarginSpec("5 5 0 105")
+                    .Handler("Event.Form.btnLoadDataPlan_click")
 
                     , HQ.Button().ID("btnResetGeo").HQLangCode("ResetGEO")
                     .Icon(Icon.MapDelete).Flex(1).MarginSpec("5 5 0 105").UI(UI.Warning)
