@@ -40,8 +40,8 @@ namespace AR22300.Controllers
                 // user;company;langid => ?data=admin;LCUS-HCM-0004;1
                 try
                 {
-                    //data = data.Replace(" ", "+");
-                    //data = Encryption.Decrypt(data, DateTime.Now.ToString("yyyyMMdd"));
+                    data = data.Replace(" ", "+");
+                    data = Encryption.Encryption.Decrypt(data, DateTime.Now.ToString("yyyyMMdd"));
                     Session["Server"] = Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
 
                     Session["DBApp"] = Current.DBApp = ConfigurationManager.AppSettings["DBApp"].ToString();
@@ -180,6 +180,9 @@ namespace AR22300.Controllers
                             custLoc.LUpd_Datetime = DateTime.Now;
                             custLoc.LUpd_Prog = _screenName;
                             custLoc.LUpd_User = Current.UserName;
+
+                            _db.SaveChanges();
+                            return Json(new { success = true, msgCode = 201405071, tstamp = custLoc.tstamp });
                         }
                         else
                         {
@@ -198,9 +201,10 @@ namespace AR22300.Controllers
                         custLoc.Crtd_Prog = custLoc.LUpd_Prog = _screenName;
                         custLoc.Crtd_User = custLoc.LUpd_User = Current.UserName;
                         _db.AR_CustomerLocation.AddObject(custLoc);
+
+                        _db.SaveChanges();
+                        return Json(new { success = true, msgCode = 201405071, tstamp = custLoc.tstamp });
                     }
-                    _db.SaveChanges();
-                    return Json(new { success = true, msgCode = 201405071 });
                 }
                 else
                 {

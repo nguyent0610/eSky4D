@@ -11,7 +11,7 @@
 
 @(
 X.Window().ID("winSuggest")
-.Title(Util.GetLang("Suggest"))
+.Title(Util.GetLang("Position"))
 .Icon(Icon.FlagGreen).Layout(LayoutType.Fit)
 .Hidden(true).Height(385).Width(635)
 .Modal(true).Resizable(false)
@@ -41,7 +41,7 @@ X.Window().ID("winSuggest")
             
                 ,X.TextArea().ID("txtAddr_Suggest")
                 .Width(300).Height(50).MarginSpec("0 0 0 10")
-                .DataIndex("Addr")//.FieldLabel(Util.GetLang("Address"))
+                .DataIndex("Addr").ReadOnly(true)//.FieldLabel(Util.GetLang("Address"))
             )
             
             , X.DisplayField().Text(Message.GetString("20150619",null))

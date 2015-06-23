@@ -651,6 +651,9 @@ var Process = {
                 if (rec) {
                     rec.data.Lat = newLat;
                     rec.data.Lng = newLng;
+                    if (data.result.tstamp) {
+                        rec.data.tstamp = data.result.tstamp;
+                    }
                     var markerId = rec.data.CustId;
                     var marker;
                     if (markerId) {
