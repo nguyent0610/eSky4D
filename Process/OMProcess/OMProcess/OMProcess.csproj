@@ -60,10 +60,10 @@
     </Reference>
     <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\INProcess\INProcess\bin\Debug\eBiz4DApp.dll</HintPath>
+      <HintPath>..\..\eBiz4DApp\eBiz4DApp\bin\Release\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DSys">
-      <HintPath>..\..\INProcess\INProcess\bin\Debug\eBiz4DSys.dll</HintPath>
+      <HintPath>..\..\eBiz4DSys\eBiz4DSys\bin\Debug\eBiz4DSys.dll</HintPath>
     </Reference>
     <Reference Include="Encryption">
       <HintPath>..\..\APProcess\APProcess\bin\Release\Encryption.dll</HintPath>
@@ -135,7 +135,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

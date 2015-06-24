@@ -544,7 +544,7 @@ namespace OMProcess
             }
         }
 
-        public bool OM20500_Release(string branchID, string orderNbr, Dictionary<string, double> dicRef, string deliveryID, DateTime shipDate, DateTime docDate)
+        public bool OM20500_Release(string branchID, string orderNbr, Dictionary<string, double> dicRef, string deliveryID, DateTime shipDate, DateTime docDate,bool isAddStock)
         {
 
             try
@@ -590,6 +590,7 @@ namespace OMProcess
                     objSalesOrd.PriceClassID = objPDAOrd.PriceClassID;
                     objSalesOrd.ClassID = objPDAOrd.ClassID;
                 }
+                objSalesOrd.IsAddStock = isAddStock;
                 objSalesOrd.BranchID = branchID;
                 objSalesOrd.OrderNbr = nbr;
                 objSalesOrd.DeliveryID = deliveryID;
