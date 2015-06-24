@@ -54,10 +54,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HQFramework.Common">
-      <HintPath>..\..\..\..\..\Auto Application\eBiz4DServer\eBiz4DServer\bin\Debug\HQFramework.Common.DLL</HintPath>
+      <HintPath>..\..\..\..\..\..\DLL\DLL4DSERVER\HQFramework.Common.dll</HintPath>
     </Reference>
     <Reference Include="HQFramework.DAL">
-      <HintPath>..\..\..\..\..\Auto Application\eBiz4DServer\eBiz4DServer\bin\Debug\HQFramework.DAL.DLL</HintPath>
+      <HintPath>..\..\..\..\..\..\DLL\DLL4DSERVER\HQFramework.DAL.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -158,6 +158,11 @@
     <Compile Include="AppTables\clsIN_Transfer.vb" />
     <Compile Include="AppTables\clsIN_UnitConversion.vb" />
     <Compile Include="AppTables\clsIN_WrkCosting.vb" />
+    <Compile Include="AppTables\clsOM_Allocate.vb" />
+    <Compile Include="AppTables\clsOM_AllocateHeader.vb" />
+    <Compile Include="AppTables\clsOM_AllocateInvt.vb" />
+    <Compile Include="AppTables\clsOM_AllocateSales.vb" />
+    <Compile Include="AppTables\clsOM_AllocateTrans.vb" />
     <Compile Include="AppTables\clsOM_BottleDoc.vb" />
     <Compile Include="AppTables\clsOM_BottleTrans.vb" />
     <Compile Include="AppTables\clsOM_ConcenProgH.vb" />
@@ -333,7 +338,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
