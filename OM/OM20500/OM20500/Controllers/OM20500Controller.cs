@@ -38,13 +38,11 @@ namespace OM20500.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
         public ActionResult GetOrder(string branchID, 
             string slsperID, string custID, string status,
             DateTime startDate, DateTime endDate)
@@ -52,7 +50,6 @@ namespace OM20500.Controllers
             var orders = _db.OM20500_pgOrder(branchID, slsperID,custID, status, startDate,endDate).ToList();
             return this.Store(orders);
         }
-
         public ActionResult GetDet(string branchID,
             string slsperID, string custID, string status,
             DateTime startDate, DateTime endDate)
@@ -60,13 +57,11 @@ namespace OM20500.Controllers
             var dets = _db.OM20500_pgDet(branchID, slsperID, custID, status, startDate, endDate).ToList();
             return this.Store(dets);
         }
-
         public ActionResult GetHisOrd(string branchID, string orderNbr)
         {
             var hisOrders = _db.OM20500_pgHistoryOrd(branchID, orderNbr).ToList();
             return this.Store(hisOrders);
         }
-
         public ActionResult GetHisDet(string branchID, string orderNbr)
         {
             var hisDets = _db.OM20500_pgHisDet(branchID, orderNbr).ToList();
@@ -76,8 +71,7 @@ namespace OM20500.Controllers
         {
             var objSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
             return this.Store(objSite);
-        }
-       
+        }       
         #region DataProcess
         [HttpPost]
         public ActionResult Save(FormCollection data)
@@ -85,17 +79,15 @@ namespace OM20500.Controllers
             DataAccess dal = Util.Dal();
             try
             {
-
                 _form = data;
                 var detHeader = new StoreDataHandler(data["lstOrder"]);
                 var lstOrd = detHeader.ObjectData<OM20500_pgOrder_Result>().Where(p => p.Selected == true).ToList();
-
-
                 var detHandler = new StoreDataHandler(data["lstDet"]);
                 var lstDet = detHandler.ObjectData<OM20500_pgDet_Result>().Where(p => p.Selected == true).ToList();
                 string Delivery = data["delivery"];
                 DateTime dteShipDate = data["shipDate"].ToDateShort();
                 DateTime dteARDocDate = data["aRDocDate"].ToDateShort();
+                bool isAddStock = data["isAddStock"].ToBool();
                 string message = "";
                 foreach (var objHeader in lstOrd)
                 {
@@ -109,8 +101,7 @@ namespace OM20500.Controllers
                     {
                         OM om = new OM(Current.UserName, _screenNbr, dal);
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-
-                        if (!om.OM20500_Release(objHeader.BranchID, objHeader.OrderNbr, dicRef, Delivery, dteShipDate, dteARDocDate))
+                        if (!om.OM20500_Release(objHeader.BranchID, objHeader.OrderNbr, dicRef, Delivery, dteShipDate, dteARDocDate,isAddStock))
                         {
                             dal.RollbackTrans();
                         }
@@ -137,13 +128,10 @@ namespace OM20500.Controllers
                 {
                     throw new MessageException("20410", parm: new[] { message });
                 }
-
                 return Util.CreateMessage(MessageProcess.Process);
-
             }
             catch (Exception ex)
-            {
-              
+            {              
                 if (ex is MessageException)
                 {
                     return (ex as MessageException).ToMessage();

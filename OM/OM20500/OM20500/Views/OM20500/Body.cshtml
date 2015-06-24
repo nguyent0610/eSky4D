@@ -17,7 +17,7 @@
         .ID("frmMain")
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
-        .BodyBorder(0).AutoScroll(true)
+        .BodyBorder(0)
         .DefaultButton("btnLoad")
         .TopBar(Util.SetupToolbar("new,delete,refresh,close", false, "Event.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
@@ -463,7 +463,7 @@
         .Modal(true)
         .Closable(false)
         .Title(Util.GetLang("OM205Order"))        
-        .Height(150)
+        .Height(170)
         .Width(400)
         .Items(
            X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0").Width(350)
@@ -499,6 +499,7 @@
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
                             })
+                    ,HQ.Checkbox().ID("chkAddStock").HQLangCode("OM205AddStock").MarginSpec("0 0 0 155")   
                 )
                 , X.Container().Layout(LayoutType.HBox)
                         .Items(

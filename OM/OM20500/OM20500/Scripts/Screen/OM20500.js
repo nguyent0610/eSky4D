@@ -285,7 +285,8 @@ var save = function () {
                 lstOrder: HQ.store.getAllData(App.stoOrder, ["Selected"], [true]),
                 delivery: App.cboDelivery.getValue(),
                 shipDate: App.dteShipDate.getValue(),
-                aRDocDate: App.dteARDocDate.getValue()
+                aRDocDate: App.dteARDocDate.getValue(),
+                isAddStock: App.chkAddStock.getValue()
             },
             success: function (msg, data) {
                 HQ.message.process(msg, data, true);
