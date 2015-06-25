@@ -108,7 +108,7 @@ namespace OM24000.Controllers
                 }
                 
                 if(errorAdvanceNew != "")
-                    message += "Mã sản phẩm " + errorAdvanceNew.TrimEnd(',') +" có số lượng ứng mới không hợp lệ.<br/>";
+                    message += "Mã sản phẩm " + errorAdvanceNew.TrimEnd(',') + " có tổng số lượng ứng mới > số lượng đã phân bổ cho NPP: " + lstLang.Updated[0].BranchID + ".<br/>";
                 if (errorRecoverd != "")
                     message += errorRecoverd;
 

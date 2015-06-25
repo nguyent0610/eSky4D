@@ -69,7 +69,7 @@
 
                         , HQ.Combo().ID("cboCustID").Name("cboCustID").MarginSpec("5 0 0 0").Width(300).HQAutoLoad(false)
                         .HQLangCode("CustID").HQDBSys(false).HQProcedure("OM24000_pcCustomer")
-                        .HQColumnShow("CustID,Name,Addr1,Addr2").AllowBlank(false).MultiSelect(true)
+                        .HQColumnShow("CustID,Name,Addr1,Addr2").AllowBlank(false).MultiSelect(true).ForceSelection(true)
                         .DisplayField("Name").ValueField("CustID").HQHeightWidth(400, 300)
                         .HQParam(new StoreParameterCollection() {
                             new StoreParameter() { Name = "@BranchID", Value ="App.cboBranchID.getValue()", Mode = ParameterMode.Raw},
