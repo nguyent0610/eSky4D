@@ -40,7 +40,7 @@
                         lst.Select.Fn = "cboBranchID_Select";
                     })
                     
-                    ,HQ.TextBox().ID("txtBranchName").HQLangCode("BranchName").ReadOnly(true).Width(300)
+                    ,HQ.TextBox().ID("txtBranchName").HQLangCode("BranchName").ReadOnly(true).Width(425).LabelWidth(225)
                 )
             )
             ,
@@ -92,8 +92,8 @@
                     )
                     
                     , X.Column().ID("txtInvtName").DataIndex("Descr").Text(Util.GetLang("InvtName")).Width(300).Renderer("renderInvtName")
-                    , X.NumberColumn().Text(Util.GetLang("TotAlloc")).DataIndex("TotAlloc").Width(150).Align(Alignment.Right)
-                .Editor(X.NumberField().MinValue(0).DecimalPrecision(2))
+                    , X.NumberColumn().Text(Util.GetLang("TotAlloc")).DataIndex("TotAlloc").Width(150).Align(Alignment.Right).Format("0,000")
+                .Editor(X.NumberField().MinValue(0).DecimalPrecision(0))
                     
                     , X.CommandColumn().Width(150)
                     .Commands(
