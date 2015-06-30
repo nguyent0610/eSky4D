@@ -27,8 +27,13 @@ namespace SA00000.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
+        {
+            return PartialView();
+        }
+
+        public PartialViewResult BodyofND(string lang)
         {
             return PartialView();
         }
@@ -216,6 +221,7 @@ namespace SA00000.Controllers
             t.MaxValue = s.MaxValue;
             t.Type = s.Type;
             t.State = s.State;
+            t.ReturnLimit = s.ReturnLimit;
 
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

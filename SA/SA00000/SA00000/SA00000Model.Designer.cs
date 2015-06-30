@@ -84,22 +84,6 @@ namespace SA00000
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<SYS_Company> SYS_Company
-        {
-            get
-            {
-                if ((_SYS_Company == null))
-                {
-                    _SYS_Company = base.CreateObjectSet<SYS_Company>("SYS_Company");
-                }
-                return _SYS_Company;
-            }
-        }
-        private ObjectSet<SYS_Company> _SYS_Company;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<Sys_CompanyAddr> Sys_CompanyAddr
         {
             get
@@ -112,6 +96,22 @@ namespace SA00000
             }
         }
         private ObjectSet<Sys_CompanyAddr> _Sys_CompanyAddr;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SYS_Company> SYS_Company
+        {
+            get
+            {
+                if ((_SYS_Company == null))
+                {
+                    _SYS_Company = base.CreateObjectSet<SYS_Company>("SYS_Company");
+                }
+                return _SYS_Company;
+            }
+        }
+        private ObjectSet<SYS_Company> _SYS_Company;
 
         #endregion
 
@@ -126,19 +126,19 @@ namespace SA00000
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the SYS_Company EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSYS_Company(SYS_Company sYS_Company)
-        {
-            base.AddObject("SYS_Company", sYS_Company);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the Sys_CompanyAddr EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToSys_CompanyAddr(Sys_CompanyAddr sys_CompanyAddr)
         {
             base.AddObject("Sys_CompanyAddr", sys_CompanyAddr);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SYS_Company EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSYS_Company(SYS_Company sYS_Company)
+        {
+            base.AddObject("SYS_Company", sYS_Company);
         }
 
         #endregion
@@ -964,6 +964,30 @@ namespace SA00000
         private global::System.String _State;
         partial void OnStateChanging(global::System.String value);
         partial void OnStateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int16> ReturnLimit
+        {
+            get
+            {
+                return _ReturnLimit;
+            }
+            set
+            {
+                OnReturnLimitChanging(value);
+                ReportPropertyChanging("ReturnLimit");
+                _ReturnLimit = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ReturnLimit");
+                OnReturnLimitChanged();
+            }
+        }
+        private Nullable<global::System.Int16> _ReturnLimit;
+        partial void OnReturnLimitChanging(Nullable<global::System.Int16> value);
+        partial void OnReturnLimitChanged();
 
         #endregion
 

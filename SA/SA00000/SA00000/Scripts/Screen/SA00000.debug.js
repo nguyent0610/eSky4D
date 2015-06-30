@@ -176,7 +176,7 @@ var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store
     else {
         return value;
     }
-};  
+};
 
 var cboCountry_Change = function (sender, e) {
     App.cboState.getStore().load(function () {
@@ -324,6 +324,7 @@ var stoLoad = function (sto) {
     HQ.isFirstLoad = true;
     HQ.common.showBusy(false);
     HQ.isNew = false;
+    App.cboCpnyID.forceSelection = true;
     App.cboCountry.forceSelection = false;
     App.cboState.forceSelection = false;
     App.cboCity.forceSelection = false;
@@ -335,7 +336,7 @@ var stoLoad = function (sto) {
         record = sto.getAt(0);
 
         HQ.isNew = true;//record la new    
-
+        App.cboCpnyID.forceSelection = false;
         HQ.common.setRequire(App.frmMain);  //to do cac o la require            
         App.cboCpnyID.focus(true);//focus ma khi tao moi
         sto.commitChanges();
@@ -381,25 +382,17 @@ var stoBeforeLoad = function (sto) {
 // Event when cboVendID is changed or selected item 
 var cboCpnyID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
-    if (sender.valueModels != null) {
+    if ((!HQ.isNew || sender.valueModels != null) && !App.stoSYS_Company.loading) {
         App.stoSYS_Company.reload();
     }
 };
-var cboDistrict_Change = function (sender, value) {
-    //var curRecord = App.frmMain.getRecord();
-    //if (curRecord && curRecord.data.District) {
-    //    App.cboDistrict.setValue(curRecord.data.District);
-    //    HQ.combo.expand(App.cboDistrict, ',');
-    //}
-    //var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], App.cboDistrict.getValue());
-    //if (!dt) {
-    //    curRecord.data.District = '';
-    //    App.cboDistrict.setValue("");
-    //}
-    //else {
-    //    HQ.combo.expand(App.cboDistrict, ',');
-    //}
+
+var cboCpnyID_Select = function (sender, value) {
+    if (sender.valueModels != null && !App.stoSYS_Company.loading) {
+        App.stoSYS_Company.reload();
+    }
 };
+
 //khi nhan combo xo ra, neu da thay doi thi ko xo ra
 var cboCpnyID_Expand = function (sender, value) {
     if (HQ.isChange) {
@@ -416,6 +409,22 @@ var cboCpnyID_TriggerClick = function (sender, value) {
         menuClick('new');
     }
 
+};
+
+var cboDistrict_Change = function (sender, value) {
+    //var curRecord = App.frmMain.getRecord();
+    //if (curRecord && curRecord.data.District) {
+    //    App.cboDistrict.setValue(curRecord.data.District);
+    //    HQ.combo.expand(App.cboDistrict, ',');
+    //}
+    //var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], App.cboDistrict.getValue());
+    //if (!dt) {
+    //    curRecord.data.District = '';
+    //    App.cboDistrict.setValue("");
+    //}
+    //else {
+    //    HQ.combo.expand(App.cboDistrict, ',');
+    //}
 };
 
 function save() {
