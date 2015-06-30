@@ -83,6 +83,10 @@
           <Property Name="MultiLogin" Type="bit" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="SA02500_ppCheckPass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -91,6 +95,10 @@
           <EntitySet Name="SYS_PassHistory" EntityType="SA02500Model.SYS_PassHistory" />
           <EntitySet Name="Users" EntityType="SA02500Model.User" />
           <EntitySet Name="SYS_Configurations" EntityType="SA02500Model.SYS_Configurations" />
+          <FunctionImport Name="SA02500_ppCheckPass" ReturnType="Collection(String)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="SYS_PassHistory">
           <Key>
@@ -247,6 +255,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SA02500_ppCheckPass" FunctionName="SA02500Model.Store.SA02500_ppCheckPass" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -143,6 +143,40 @@ namespace SA02500
 
         #endregion
 
+        #region Function Imports
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="password">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> SA02500_ppCheckPass(global::System.String userName, global::System.String password)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter passwordParameter;
+            if (password != null)
+            {
+                passwordParameter = new ObjectParameter("Password", password);
+            }
+            else
+            {
+                passwordParameter = new ObjectParameter("Password", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("SA02500_ppCheckPass", userNameParameter, passwordParameter);
+        }
+
+        #endregion
+
     }
 
     #endregion
