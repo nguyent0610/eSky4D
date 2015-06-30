@@ -202,10 +202,10 @@
                     .ColumnModel(
                         X.RowNumbererColumn()
                         
-                        ,Html.X().Column().Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(120)
+                        , X.Column().Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(120)
                         .Editor(
                             HQ.Combo().ID("cboGroupIDGroup").Name("cboGroupIDGroup")
-                            .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
+                            .HideLabel(true).LabelWidth(0)
                             .HQLangCode("GroupID").HQDBSys(true).HQProcedure("SA00300_pcUserGroup").HQAutoLoad(false)
                             .HQColumnShow("GroupID,Descr")
                             .DisplayField("GroupID")
@@ -218,7 +218,7 @@
                             })
                             .LoadData()            
                         )
-                        ,Html.X().Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(120) 
+                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(120) 
 
                         , X.CommandColumn().Width(150)
                         .Commands(
@@ -313,7 +313,7 @@
                         , X.Column().Text(Util.GetLang("GroupID")).DataIndex("GroupID").Width(120)
                             .Editor(
                                 HQ.Combo().ID("cboGroupIDCompany").Name("cboGroupIDCompany")
-                                .MarginSpec("3 0 0 0").HideLabel(true).LabelWidth(0)
+                                .HideLabel(true).LabelWidth(0)
                                 .HQLangCode("GroupID").HQDBSys(true).HQProcedure("ppv_SA00300CompanyGroup")
                                 .HQColumnShow("GroupID,Descr,ListCpny")
                                 .DisplayField("GroupID")
@@ -326,8 +326,8 @@
                                 })
                                 .LoadData()
                                 )
-                                                , X.Column().Text(Util.GetLang("ListCpny")).DataIndex("ListCpny").Width(120)
-                                                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(120)
+                        , X.Column().Text(Util.GetLang("ListCpny")).DataIndex("ListCpny").Width(120)
+                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(120)
                      
                         , X.CommandColumn().Width(150)
                         .Commands(

@@ -140,6 +140,14 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.TextVal == '1') {
+                    var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+                    if (!App.Password.value.match(decimal)) {
+                        HQ.message.show(998, '', null);
+                        App.Password.focus();
+                        break;
+                    }
+                }
                 if (HQ.form.checkRequirePass(App.frmMain) && HQ.util.checkEmail(App.Email.value) && HQ.store.checkRequirePass(App.stoSYS_UserGroup, keys, fieldsCheckRequireUserGroup, fieldsLangCheckRequireUserGroup)
                         && HQ.store.checkRequirePass(App.stoSYS_UserCompany, keys, fieldsCheckRequireUserCompany, fieldsLangCheckRequireUserCompany)) {
                     save();

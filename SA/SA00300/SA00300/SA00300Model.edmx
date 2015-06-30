@@ -355,7 +355,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="SA00300Model.SYS_Configurations" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SA00300Model.SYS_Configurations" Width="1.75" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SA00300Model.SYS_UserCompany" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="SA00300Model.SYS_UserGroup" Width="1.5" PointX="4.75" PointY="0.75" />
         <EntityTypeShape EntityType="SA00300Model.User" Width="1.5" PointX="2.75" PointY="4.75" />

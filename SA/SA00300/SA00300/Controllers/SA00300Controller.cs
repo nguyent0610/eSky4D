@@ -41,7 +41,9 @@ namespace SA00300.Controllers
         }
 
         public ActionResult Index()
-        {  
+        {
+            ViewBag.TextVal = _db.SYS_Configurations.FirstOrDefault(p => p.Code == "SA02500Check").TextVal;
+
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -394,7 +396,6 @@ namespace SA00300.Controllers
             foreach (var item in lstSub)
             {
                 _db.SYS_UserCompany.DeleteObject(item);
-
             }
 
             _db.SaveChanges();
