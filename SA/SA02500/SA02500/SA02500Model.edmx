@@ -6,9 +6,27 @@
     <edmx:StorageModels>
     <Schema Namespace="SA02500Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="SA02500ModelStoreContainer">
+          <EntitySet Name="SYS_Configurations" EntityType="SA02500Model.Store.SYS_Configurations" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SYS_PassHistory" EntityType="SA02500Model.Store.SYS_PassHistory" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Users" EntityType="SA02500Model.Store.Users" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
+        <EntityType Name="SYS_Configurations">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="DateVal" Type="datetime" Nullable="false" />
+          <Property Name="FloatVal" Type="float" Nullable="false" />
+          <Property Name="IntVal" Type="int" Nullable="false" />
+          <Property Name="TextVal" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="SYS_PassHistory">
           <Key>
             <PropertyRef Name="ID" />
@@ -72,6 +90,7 @@
         <EntityContainer Name="SA02500Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="SYS_PassHistory" EntityType="SA02500Model.SYS_PassHistory" />
           <EntitySet Name="Users" EntityType="SA02500Model.User" />
+          <EntitySet Name="SYS_Configurations" EntityType="SA02500Model.SYS_Configurations" />
         </EntityContainer>
         <EntityType Name="SYS_PassHistory">
           <Key>
@@ -128,6 +147,23 @@
           <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="MultiLogin" Nullable="false" />
           <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="SYS_Configurations">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DateVal" Nullable="false" Precision="3" />
+          <Property Type="Double" Name="FloatVal" Nullable="false" />
+          <Property Type="Int32" Name="IntVal" Nullable="false" />
+          <Property Type="String" Name="TextVal" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -193,6 +229,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SYS_Configurations">
+            <EntityTypeMapping TypeName="SA02500Model.SYS_Configurations">
+              <MappingFragment StoreEntitySet="SYS_Configurations">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="TextVal" ColumnName="TextVal" />
+                <ScalarProperty Name="IntVal" ColumnName="IntVal" />
+                <ScalarProperty Name="FloatVal" ColumnName="FloatVal" />
+                <ScalarProperty Name="DateVal" ColumnName="DateVal" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -216,7 +270,8 @@
     <Diagrams>
       <Diagram DiagramId="524c08638f4b4aba82525e08c6d0c477" Name="Diagram1" ZoomLevel="84">
         <EntityTypeShape EntityType="SA02500Model.SYS_PassHistory" Width="1.625" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SA02500Model.User" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SA02500Model.User" Width="1.5" PointX="3.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SA02500Model.SYS_Configurations" Width="1.5" PointX="0.75" PointY="4.75" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -13,7 +13,7 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain))//check require truoc khi save
-                    save();
+                    Check();
             }
             break;
         case "close":
@@ -61,7 +61,7 @@ var LoginPage_Click = function () {
 };
 
 
-function save() {
+function Check() {
     var decimal = /^(?=.*\d)((?=.*[a-z])|(?=.*[A-Z]))(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
     if (App.txtOldPassword.value == "") {
         HQ.message.show(1500, '', null);
@@ -72,43 +72,47 @@ function save() {
         HQ.message.show(1501, '', null);
         App.txtReNewPassword.focus();
         return;
-    } else if (App.txtReNewPassword.value != App.txtNewPassword.value) {
+    }
+    else if (HQ.TextVal == '1') {
+        if (!App.txtNewPassword.value.match(decimal)) {
+            HQ.message.show(998, '', null);
+            App.txtNewPassword.focus();
+            return;
+        }
+    }
+    else if (App.txtReNewPassword.value != App.txtNewPassword.value) {
         HQ.message.show(1503, '', null);
         App.txtReNewPassword.focus();
         return;
-    } else if (App.txtNewPassword.value.match(decimal)) {
-        if (App.frmMain.isValid()) {
-            App.frmMain.submit({
-                waitMsg: 'Submiting...',
-                url: 'SA02500/SA02500Save',
-                params: {
-                },
-                success: function (result, data) {
-                    HQ.message.show(1504, '', null);
-                    menuClick("refresh");
-
-                }
-                , failure: function (errorMsg, data) {
-
-                    if (data.result.code) {
-                        HQ.message.show(data.result.code, '', '');
-                        menuClick("refresh");
-                    }
-                    else {
-                        processMessage(errorMsg, data);
-                    }
-                }
-            });
-        }
-    } else {
-        HQ.message.show(998, '', null);
-        App.txtNewPassword.focus();
-        return false;
     }
-
-
+    save();
 };
 
+function save() {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: 'Submiting...',
+            url: 'SA02500/SA02500Save',
+            params: {
+            },
+            success: function (result, data) {
+                HQ.message.show(1504, '', null);
+                menuClick("refresh");
+
+            }
+            , failure: function (errorMsg, data) {
+
+                if (data.result.code) {
+                    HQ.message.show(data.result.code, '', '');
+                    menuClick("refresh");
+                }
+                else {
+                    processMessage(errorMsg, data);
+                }
+            }
+        });
+    }
+};
 var txtNewPassword_Change = function (sender, e) {
 
 };
