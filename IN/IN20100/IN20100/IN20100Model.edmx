@@ -25,10 +25,10 @@
           <Property Name="CnvFact" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <Function Name="IN20100_pcLoadClasID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -49,10 +49,10 @@
           <FunctionImport Name="IN20100_pcLoadClasID" ReturnType="Collection(IN20100Model.IN20100_pcLoadClasID_Result)" />
           <FunctionImport Name="IN20100_pcLoadInventory" ReturnType="Collection(IN20100Model.IN20100_pcLoadInventory_Result)" />
           <FunctionImport Name="IN20100_pcLoadMultDiv" ReturnType="Collection(IN20100Model.IN20100_pcLoadMultDiv_Result)">
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="IN20100_pcLoadUnitType" ReturnType="Collection(IN20100Model.IN20100_pcLoadUnitType_Result)">
-            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <FunctionImport Name="IN20100_pgLoadUnitConversion" ReturnType="Collection(IN20100Model.IN20100_pgLoadUnitConversion_Result)" />
         </EntityContainer>
@@ -73,10 +73,10 @@
           <Property Type="Double" Name="CnvFact" Nullable="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <ComplexType Name="IN20100_pcLoadClasID_Result">
@@ -105,6 +105,7 @@
           <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="6" />
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" />
           <Property Type="String" Name="ToUnit" Nullable="false" MaxLength="15" />
           <Property Type="String" Name="MultDiv" Nullable="false" MaxLength="1" />
@@ -181,6 +182,7 @@
                 <ScalarProperty Name="UnitType" ColumnName="UnitType" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="FromUnit" ColumnName="FromUnit" />
                 <ScalarProperty Name="ToUnit" ColumnName="ToUnit" />
                 <ScalarProperty Name="MultDiv" ColumnName="MultDiv" />
@@ -210,7 +212,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="97" >
-        <EntityTypeShape EntityType="IN20100Model.IN_UnitConversion" Width="1.5" PointX="10.586436604422721" PointY="29.283558829353918" />
+        <EntityTypeShape EntityType="IN20100Model.IN_UnitConversion" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

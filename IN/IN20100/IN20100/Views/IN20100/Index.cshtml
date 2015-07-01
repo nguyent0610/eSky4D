@@ -44,7 +44,7 @@
     @X.ProgressBarPager()<!--Khi cache cho grid -->   
     <!-- Gọi hàm Body trong IN20100Controller để dựng view Body.cshtml, mục đích tạo cache. -->      
     @(
-         HQ.Store().ID("stoUnitType")
+         HQ.Store().ID("stoUnitType").AutoLoad(false)
         .HQProcedure("IN20100_pcLoadUnitType")
         .HQParam(new StoreParameterCollection() { 
             new StoreParameter() { Name = "@LangID", Value = "HQ.langID" , Mode = ParameterMode.Raw }
@@ -52,14 +52,14 @@
         .LoadData()
     )
     @(
-         HQ.Store().ID("stoMultDiv")
+         HQ.Store().ID("stoMultDiv").AutoLoad(false)
         .HQProcedure("IN20100_pcLoadMultDiv")
         .HQParam(new StoreParameterCollection() { 
             new StoreParameter() { Name = "@LangID", Value = "HQ.langID" , Mode = ParameterMode.Raw }
         })
         .LoadData()
     )
-    @{Html.RenderAction("Body", new { lang=@Current.LangID});}   
+    @{Html.RenderAction("Body", new { lang=Current.LangID});}   
 
     
 </body>

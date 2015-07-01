@@ -26,15 +26,18 @@ namespace IN20100.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
+
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
+
         public ActionResult GetUnitConversion()
         {           
             return this.Store(_db.IN20100_pgLoadUnitConversion().ToList());
         }
+
         public ActionResult Save(FormCollection data)
         {
             try

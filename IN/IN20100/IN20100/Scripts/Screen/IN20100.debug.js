@@ -7,6 +7,44 @@ var fieldsLangCheckRequire = ["UnitType", "ClassID", "InvtID", "FromUnit", "ToUn
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
 
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboUnitType.getStore().load(function () {
+        App.cboClassID.getStore().load(function () {
+            App.cboInvtID.getStore().load(function () {
+                App.cboMultDiv.getStore().load(function () {
+                    HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                    App.stoUnitConversion.reload();
+
+                    var UnitType = [];
+                    App.cboUnitType.getStore().data.each(function (item) {
+                        if (UnitType.indexOf(item.data.Code) == -1) {
+                            UnitType.push([item.data.UnitType, item.data.Code]);
+                        }
+                    });
+                    filterFeature = App.grdUnitConversion.filters;
+                    colAFilter = filterFeature.getFilter('UnitType');
+                    colAFilter.menu = colAFilter.createMenu({
+                        options: UnitType
+                    });
+
+                    var MultDiv = [];
+                    App.cboMultDiv.getStore().data.each(function (item) {
+                        if (MultDiv.indexOf(item.data.Code) == -1) {
+                            MultDiv.push([item.data.MultDiv, item.data.Code]);
+                        }
+                    });
+
+                    colAFilter = filterFeature.getFilter('MultDiv');
+                    colAFilter.menu = colAFilter.createMenu({
+                        options: MultDiv
+                    });
+                })
+            })
+        })
+    })
+};
+
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -58,8 +96,8 @@ var menuClick = function (command) {
     }
 };
 
-var UnitTypechange = function (value) {
-    var record = App.stoUnitType.findRecord("UnitType", value);
+var UnitTypechange = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboUnitTypeIN20100_pcLoadUnitType.findRecord("UnitType", rec.data.UnitType);
     if (record) {
         return record.data.Code;
     }
@@ -68,8 +106,8 @@ var UnitTypechange = function (value) {
     }
 };
 
-var MultDivchange = function (value) {
-    var record = App.stoMultDiv.findRecord("MultDiv", value);
+var MultDivchange = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboMultDivIN20100_pcLoadMultDiv.findRecord("MultDiv", rec.data.MultDiv);
     if (record) {
         return record.data.Code;
     }
@@ -78,8 +116,18 @@ var MultDivchange = function (value) {
     }
 };
 
-var getDescr = function (value) {
-    var record = App.cboInvtID.findRecord("InvtID", value);
+//var getDescr = function (value) {
+//    var record = App.cboInvtID.findRecord("InvtID", value);
+//    if (record) {
+//        return record.data.Descr;
+//    }
+//    else {
+//        return value;
+//    }
+//};
+
+var getDescr = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboInvtID1IN20100_pcLoadInventory.findRecord("InvtID", rec.data.InvtID);
     if (record) {
         return record.data.Descr;
     }
@@ -88,15 +136,16 @@ var getDescr = function (value) {
     }
 };
 
-
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
-    App.stoUnitConversion.reload(
-        App.stoUnitType.reload(
-            App.stoMultDiv.reload()
-        )
-    );
+    loadSourceCombo();
+    //App.stoUnitConversion.reload();
+    //App.stoUnitConversion.reload(
+    //    App.stoUnitType.reload(
+    //        App.stoMultDiv.reload()
+    //    )
+    //);
 };
 
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
@@ -107,13 +156,14 @@ var stoChanged = function (sto) {
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
-    HQ.isFirstLoad = true;
     HQ.common.showBusy(false);
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'IN20100');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
+            //HQ.store.insertBlank(sto, keys);
+            var record = { UnitType: '1', MultDiv: 'M', ClassID: '*', InvtID: '*', Descr: '*' };
+            HQ.store.insertRecord(sto, keys, record, true);
         }
         HQ.isFirstLoad = false;
     }
@@ -125,11 +175,44 @@ var stoBeforeLoad = function (sto) {
 };
 
 var grdUnitConversion_BeforeEdit = function (editor, e) {
+    if (e.field == 'Descr') {
+        return false;
+    }
+    if (e.record.data.UnitType == '1') {
+        if (e.field == 'InvtID' || e.field == 'ClassID')
+            return false;
+    }
+    if (e.record.data.UnitType == '2') {
+        if (e.field == 'InvtID')
+            return false;
+    }
+    if (e.record.data.UnitType == '3') {
+        if (e.field == 'ClassID')
+            return false;
+    }
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 
 var grdUnitConversion_Edit = function (item, e) {
+    if (e.field == 'UnitType') {
+        if (e.value == '1') {
+            e.record.set('ClassID', '*');
+            e.record.set('InvtID', '*');
+            e.record.set('Descr', '*');
+        }
+        if (e.value == '2') {
+            e.record.set('InvtID', '*');
+            e.record.set('Descr', '*');
+            e.record.set('ClassID', '');
+        }
+        if (e.value == '3') {
+            e.record.set('InvtID', '');
+            e.record.set('Descr', '');
+            e.record.set('ClassID', '*');
+        }
+    }
     HQ.grid.checkInsertKey(App.grdUnitConversion, e, keys);
+
 };
 
 var grdUnitConversion_ValidateEdit = function (item, e) {
