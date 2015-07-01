@@ -101,9 +101,7 @@ namespace IN20700
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="username">No Metadata Documentation available.</param>
-        /// <param name="screenNbr">No Metadata Documentation available.</param>
-        public ObjectResult<IN20700_pcLoadSalesPerson_Result> IN20700_pcLoadSalesPerson(global::System.String branchID, global::System.String username, global::System.String screenNbr)
+        public ObjectResult<IN20700_pgLoadGrid_Result> IN20700_pgLoadGrid(global::System.String branchID)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -115,54 +113,7 @@ namespace IN20700
                 branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
             }
     
-            ObjectParameter usernameParameter;
-            if (username != null)
-            {
-                usernameParameter = new ObjectParameter("Username", username);
-            }
-            else
-            {
-                usernameParameter = new ObjectParameter("Username", typeof(global::System.String));
-            }
-    
-            ObjectParameter screenNbrParameter;
-            if (screenNbr != null)
-            {
-                screenNbrParameter = new ObjectParameter("ScreenNbr", screenNbr);
-            }
-            else
-            {
-                screenNbrParameter = new ObjectParameter("ScreenNbr", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<IN20700_pcLoadSalesPerson_Result>("IN20700_pcLoadSalesPerson", branchIDParameter, usernameParameter, screenNbrParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        public ObjectResult<IN20700_pcLoadSiteAll_Result> IN20700_pcLoadSiteAll(global::System.String branchID)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<IN20700_pcLoadSiteAll_Result>("IN20700_pcLoadSiteAll", branchIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectResult<IN20700_pgLoadReasonCode_Result> IN20700_pgLoadReasonCode()
-        {
-            return base.ExecuteFunction<IN20700_pgLoadReasonCode_Result>("IN20700_pgLoadReasonCode");
+            return base.ExecuteFunction<IN20700_pgLoadGrid_Result>("IN20700_pgLoadGrid", branchIDParameter);
         }
 
         #endregion
@@ -491,230 +442,24 @@ namespace IN20700
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="IN20700Model", Name="IN20700_pcLoadSalesPerson_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="IN20700Model", Name="IN20700_pgLoadGrid_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class IN20700_pcLoadSalesPerson_Result : ComplexObject
+    public partial class IN20700_pgLoadGrid_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new IN20700_pcLoadSalesPerson_Result object.
-        /// </summary>
-        /// <param name="slsperid">Initial value of the Slsperid property.</param>
-        /// <param name="branchID">Initial value of the BranchID property.</param>
-        public static IN20700_pcLoadSalesPerson_Result CreateIN20700_pcLoadSalesPerson_Result(global::System.String slsperid, global::System.String branchID)
-        {
-            IN20700_pcLoadSalesPerson_Result iN20700_pcLoadSalesPerson_Result = new IN20700_pcLoadSalesPerson_Result();
-            iN20700_pcLoadSalesPerson_Result.Slsperid = slsperid;
-            iN20700_pcLoadSalesPerson_Result.BranchID = branchID;
-            return iN20700_pcLoadSalesPerson_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Slsperid
-        {
-            get
-            {
-                return _Slsperid;
-            }
-            set
-            {
-                OnSlsperidChanging(value);
-                ReportPropertyChanging("Slsperid");
-                _Slsperid = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Slsperid");
-                OnSlsperidChanged();
-            }
-        }
-        private global::System.String _Slsperid;
-        partial void OnSlsperidChanging(global::System.String value);
-        partial void OnSlsperidChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Name
-        {
-            get
-            {
-                return _Name;
-            }
-            set
-            {
-                OnNameChanging(value);
-                ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Name");
-                OnNameChanged();
-            }
-        }
-        private global::System.String _Name;
-        partial void OnNameChanging(global::System.String value);
-        partial void OnNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String BranchID
-        {
-            get
-            {
-                return _BranchID;
-            }
-            set
-            {
-                OnBranchIDChanging(value);
-                ReportPropertyChanging("BranchID");
-                _BranchID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("BranchID");
-                OnBranchIDChanged();
-            }
-        }
-        private global::System.String _BranchID;
-        partial void OnBranchIDChanging(global::System.String value);
-        partial void OnBranchIDChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="IN20700Model", Name="IN20700_pcLoadSiteAll_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class IN20700_pcLoadSiteAll_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new IN20700_pcLoadSiteAll_Result object.
-        /// </summary>
-        /// <param name="siteID">Initial value of the SiteID property.</param>
-        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
-        public static IN20700_pcLoadSiteAll_Result CreateIN20700_pcLoadSiteAll_Result(global::System.String siteID, global::System.String cpnyID)
-        {
-            IN20700_pcLoadSiteAll_Result iN20700_pcLoadSiteAll_Result = new IN20700_pcLoadSiteAll_Result();
-            iN20700_pcLoadSiteAll_Result.SiteID = siteID;
-            iN20700_pcLoadSiteAll_Result.CpnyID = cpnyID;
-            return iN20700_pcLoadSiteAll_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String SiteID
-        {
-            get
-            {
-                return _SiteID;
-            }
-            set
-            {
-                OnSiteIDChanging(value);
-                ReportPropertyChanging("SiteID");
-                _SiteID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("SiteID");
-                OnSiteIDChanged();
-            }
-        }
-        private global::System.String _SiteID;
-        partial void OnSiteIDChanging(global::System.String value);
-        partial void OnSiteIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Name
-        {
-            get
-            {
-                return _Name;
-            }
-            set
-            {
-                OnNameChanging(value);
-                ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Name");
-                OnNameChanged();
-            }
-        }
-        private global::System.String _Name;
-        partial void OnNameChanging(global::System.String value);
-        partial void OnNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyID
-        {
-            get
-            {
-                return _CpnyID;
-            }
-            set
-            {
-                OnCpnyIDChanging(value);
-                ReportPropertyChanging("CpnyID");
-                _CpnyID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CpnyID");
-                OnCpnyIDChanged();
-            }
-        }
-        private global::System.String _CpnyID;
-        partial void OnCpnyIDChanging(global::System.String value);
-        partial void OnCpnyIDChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="IN20700Model", Name="IN20700_pgLoadReasonCode_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class IN20700_pgLoadReasonCode_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new IN20700_pgLoadReasonCode_Result object.
+        /// Create a new IN20700_pgLoadGrid_Result object.
         /// </summary>
         /// <param name="reasonCD">Initial value of the ReasonCD property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static IN20700_pgLoadReasonCode_Result CreateIN20700_pgLoadReasonCode_Result(global::System.String reasonCD, global::System.Byte[] tstamp)
+        public static IN20700_pgLoadGrid_Result CreateIN20700_pgLoadGrid_Result(global::System.String reasonCD, global::System.Byte[] tstamp)
         {
-            IN20700_pgLoadReasonCode_Result iN20700_pgLoadReasonCode_Result = new IN20700_pgLoadReasonCode_Result();
-            iN20700_pgLoadReasonCode_Result.ReasonCD = reasonCD;
-            iN20700_pgLoadReasonCode_Result.tstamp = tstamp;
-            return iN20700_pgLoadReasonCode_Result;
+            IN20700_pgLoadGrid_Result iN20700_pgLoadGrid_Result = new IN20700_pgLoadGrid_Result();
+            iN20700_pgLoadGrid_Result.ReasonCD = reasonCD;
+            iN20700_pgLoadGrid_Result.tstamp = tstamp;
+            return iN20700_pgLoadGrid_Result;
         }
 
         #endregion

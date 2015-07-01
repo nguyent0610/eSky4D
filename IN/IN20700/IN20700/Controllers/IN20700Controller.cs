@@ -26,6 +26,7 @@ namespace IN20700.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
+
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
@@ -33,7 +34,7 @@ namespace IN20700.Controllers
         }
         public ActionResult GetReasonCode()
         {           
-            return this.Store(_db.IN20700_pgLoadReasonCode().ToList());
+            return this.Store(_db.IN20700_pgLoadGrid(Current.CpnyID).ToList());
         }
         public ActionResult Save(FormCollection data)
         {
@@ -41,8 +42,8 @@ namespace IN20700.Controllers
             {
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstReasonCode"]);
-                ChangeRecords<IN_ReasonCode> lstReasonCode = dataHandler.BatchObjectData<IN_ReasonCode>();
-                foreach (IN_ReasonCode deleted in lstReasonCode.Deleted)
+                ChangeRecords<IN20700_pgLoadGrid_Result> lstReasonCode = dataHandler.BatchObjectData<IN20700_pgLoadGrid_Result>();
+                foreach (IN20700_pgLoadGrid_Result deleted in lstReasonCode.Deleted)
                 {
                     var del = _db.IN_ReasonCode.Where(p => p.ReasonCD == deleted.ReasonCD).FirstOrDefault();
                     if (del != null)
@@ -53,7 +54,7 @@ namespace IN20700.Controllers
 
                 lstReasonCode.Created.AddRange(lstReasonCode.Updated);
 
-                foreach (IN_ReasonCode curReasonCode in lstReasonCode.Created)
+                foreach (IN20700_pgLoadGrid_Result curReasonCode in lstReasonCode.Created)
                 {
                     if (curReasonCode.ReasonCD.PassNull() == "") continue;
 
@@ -89,7 +90,7 @@ namespace IN20700.Controllers
             }
         }
 
-        private void Update_IN_ReasonCode(IN_ReasonCode t, IN_ReasonCode s, bool isNew)
+        private void Update_IN_ReasonCode(IN_ReasonCode t, IN20700_pgLoadGrid_Result s, bool isNew)
         {
             if (isNew)
             {

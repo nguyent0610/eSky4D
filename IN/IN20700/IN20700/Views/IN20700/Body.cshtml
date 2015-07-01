@@ -29,7 +29,7 @@
             X.Store()
             .ID("stoReasonCode")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(IN20700_pgLoadReasonCode_Result), "mdlIN20700_pgLoadReasonCode", "ReasonCD"))
+            .Model(Util.GenerateModel(typeof(IN20700_pgLoadGrid_Result), "mdlIN20700_pgLoadGrid", "ReasonCD"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetReasonCode"))).AutoLoad(false)
             .Listeners(l =>
             {
@@ -53,7 +53,7 @@
             .Editor(
                 HQ.Combo().ID("cboSiteID").Name("cboSiteID").HQProcedure("IN20700_pcLoadSiteAll")
                 .HQColumnShow("SiteID,Name").DisplayField("SiteID").ValueField("SiteID")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
                     new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID" , Mode = ParameterMode.Raw }
@@ -64,7 +64,7 @@
             .Editor(
                 HQ.Combo().ID("cboSlsperID").Name("cboSlsperID").HQProcedure("IN20700_pcLoadSalesPerson")
                 .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                .Width(300).HQHeightWidth(500, 400)
                 .HQDBSys(false).AllowBlank(true).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() { 
                     new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
