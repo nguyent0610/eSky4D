@@ -269,8 +269,6 @@ var firstLoad = function () {
     App.cboBranchID.store.load(function () {
         App.stoSYS_CloseDateSetUp.reload();
     });
-
-
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoChanged = function (sto) {
