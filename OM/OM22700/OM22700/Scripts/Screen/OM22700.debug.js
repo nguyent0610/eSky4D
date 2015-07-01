@@ -30,7 +30,7 @@ var menuClick = function (command) {
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
                 App.stoOM_WeekOfVisit.reload();
-            }          
+            }
             break;
         case "new":
             if (HQ.isInsert) {
@@ -54,7 +54,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            HQ.common.close(this);            
+            HQ.common.close(this);
             break;
     }
 
@@ -90,6 +90,7 @@ var grdOM_WeekOfVisit_BeforeEdit = function (editor, e) {
 };
 var grdOM_WeekOfVisit_Edit = function (item, e) {
     HQ.grid.checkInsertKey(App.grdOM_WeekOfVisit, e, keys);
+    stoChanged(App.stoOM_WeekOfVisit);
 };
 var grdOM_WeekOfVisit_ValidateEdit = function (item, e) {
     return HQ.grid.checkValidateEdit(App.grdOM_WeekOfVisit, e, keys);
@@ -102,7 +103,7 @@ var grdOM_WeekOfVisit_Reject = function (record) {
 //// Process Data ///////////////////////////////////////////////////////
 var save = function () {
     if (CheckData()) {
-        HQ.message.show(201302071,[msgError.slice(0,-2)],'',true);
+        HQ.message.show(201302071, [msgError.slice(0, -2)], '', true);
     }
     else {
         if (App.frmMain.isValid()) {
@@ -129,7 +130,7 @@ var save = function () {
 var CheckData = function () {
     msgError = '';
     App.grdOM_WeekOfVisit.getStore().each(function (item) {
-        var total = item.data.SlsFreqID =='F8'?2:3;
+        var total = item.data.SlsFreqID == 'F8' ? 2 : 3;
         var count = 0;
         if (item.data.SlsFreqID != '' && item.data.WeekofVisit != '') {
             if (item.data.Mon)
@@ -175,11 +176,3 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
-
-
-
-
-
-
-
-
