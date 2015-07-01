@@ -26,6 +26,7 @@ namespace SA01100.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
+
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
@@ -98,7 +99,7 @@ namespace SA01100.Controllers
                 t.Crtd_User = _userName;
             }
 
-            t.Type = s.Type;
+            t.Type = s.Type.ToShort();
             t.Title00 = s.Title00;
             t.Title01 = s.Title01;
             t.Title02 = s.Title02;

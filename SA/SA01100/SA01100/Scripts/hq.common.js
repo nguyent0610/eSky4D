@@ -163,34 +163,66 @@ var HQ = {
         },
         findInStore: function (store, fields, values) {
             var data;
-            store.data.each(function (item) {
-                var intT = 0;
-                for (var i = 0; i < fields.length; i++) {
-                    if (item.get(fields[i]) == values[i]) {
-                        intT++;
+            if (store.allData) {
+                store.allData.each(function (item) {
+                    var intT = 0;
+                    for (var i = 0; i < fields.length; i++) {
+                        if (item.get(fields[i]) == values[i]) {
+                            intT++;
+                        }
                     }
-                }
-                if (intT == fields.length) {
-                    data = item.data;
-                    return false;
-                }
-            });
+                    if (intT == fields.length) {
+                        data = item.data;
+                        return false;
+                    }
+                });
+            }
+            else {
+                store.data.each(function (item) {
+                    var intT = 0;
+                    for (var i = 0; i < fields.length; i++) {
+                        if (item.get(fields[i]) == values[i]) {
+                            intT++;
+                        }
+                    }
+                    if (intT == fields.length) {
+                        data = item.data;
+                        return false;
+                    }
+                });
+            }
             return data;
         },
         findRecord: function (store, fields, values) {
             var data;
-            store.data.each(function (item) {
-                var intT = 0;
-                for (var i = 0; i < fields.length; i++) {
-                    if (item.get(fields[i]) == values[i]) {
-                        intT++;
+            if (store.allData) {
+                store.allData.each(function (item) {
+                    var intT = 0;
+                    for (var i = 0; i < fields.length; i++) {
+                        if (item.get(fields[i]) == values[i]) {
+                            intT++;
+                        }
                     }
-                }
-                if (intT == fields.length) {
-                    data = item;
-                    return false;
-                }
-            });
+                    if (intT == fields.length) {
+                        data = item;
+                        return false;
+                    }
+                });
+            }
+            else {
+                store.data.each(function (item) {
+                    var intT = 0;
+                    for (var i = 0; i < fields.length; i++) {
+                        if (item.get(fields[i]) == values[i]) {
+                            intT++;
+                        }
+                    }
+                    if (intT == fields.length) {
+                        data = item;
+                        return false;
+                    }
+                });
+            }
             return data;
         },
         // TinhHV using for auto gen the LineRef
@@ -232,7 +264,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
+                                if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -248,7 +280,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
+                                if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -318,6 +350,20 @@ var HQ = {
             if (cbo.getValue())
                 cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
         },
+        expandScrollToItem: function (combo) {
+            var val = combo.getValue();
+            if (val !== null) {
+                var rec = combo.findRecordByValue(combo.getValue()),
+                  node = combo.picker.getNode(rec);
+                if (node != null) {
+                    combo.picker.highlightItem(node);
+                    combo.picker.listEl.scrollChildIntoView(node, false);
+                }
+                //$(combo.picker.listEl.dom).scrollTop($(combo.picker.listEl.dom).scrollTop() + $(node).position().top);
+            }
+
+        },
+
         selectAll: function (cbo) {
             var value = [];
             cbo.setValue('');
@@ -552,12 +598,12 @@ var HQ = {
         checkValidateEdit: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-                if (!HQ.util.passNull(e.value.toString()) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+                if (!HQ.util.passNull(e.value).toString() == '' && !HQ.util.passNull(e.value).toString().match(regex)) {
                     HQ.message.show(20140811, e.column.text);
                     return false;
                 }
                 if (HQ.grid.checkDuplicate(grd, e, keys)) {
-                    HQ.message.show(1112, e.value.toString());
+                    HQ.message.show(1112, e.value);
                     return false;
                 }
 
