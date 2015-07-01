@@ -72,6 +72,8 @@
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Expand.Handler = "HQ.combo.expand(this,';');";
+                                    lst.Focus.Handler = "this.forceSelection = true;";
+
                                 })
                       , HQ.Combo().ID("cboType").Name("cboType").HQLangCode("SA40300TYPE").HQProcedure("SA40300_pcType")
                             .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("TypeAuto")
@@ -99,6 +101,7 @@
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Expand.Handler = "HQ.combo.expand(this,';');";
+                                    lst.Focus.Handler = "this.forceSelection = true;";
                                 })
 
                     , HQ.DateField().ID("dtmDateTime").Name("dtmDateTime").HQLangCode("DATE").DataIndex("DateTime")

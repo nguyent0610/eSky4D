@@ -34,7 +34,7 @@ var menuClick = function (command) {
                 HQ.grid.prev(App.grdMailDetail);
             }
             break;
-        
+
         case "last":
             if (HQ.focus == 'header') {
                 HQ.combo.last(App.cboMailID, HQ.isChange);
@@ -49,7 +49,7 @@ var menuClick = function (command) {
             else {
                 HQ.isChange = false;
                 App.cboMailID.getStore().load(function () { App.stoMailHeader.reload(); });
-                
+
             }
             break;
         case "new":
@@ -64,18 +64,18 @@ var menuClick = function (command) {
                         cboMailID_Change(App.cboMailID);
                     }
                 } else if (HQ.focus == 'grdMailDetail') {
-                    HQ.grid.insert(App.grdMailDetail,keys);
+                    HQ.grid.insert(App.grdMailDetail, keys);
                 }
             }
             break;
-        case "delete":         
+        case "delete":
             if (HQ.isDelete) {
                 if (HQ.focus == 'header') {
                     HQ.message.show(11, '', 'deleteRecordForm');
                 } else if (HQ.focus == 'grdMailDetail') {
                     var rowindex = HQ.grid.indexSelect(App.grdMailDetail);
-                    if(rowindex!='')
-                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdMailDetail),''], 'deleteRecordGrid',true)
+                    if (rowindex != '')
+                        HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdMailDetail), ''], 'deleteRecordGrid', true)
                 }
             }
             break;
@@ -87,7 +87,7 @@ var menuClick = function (command) {
                 }
             }
             break;
-        case "print":           
+        case "print":
             break;
         case "close":
             HQ.common.close(this);
@@ -129,13 +129,15 @@ var loadDataAutoHeader = function (sto) {
     HQ.isFirstLoad = true;
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
     HQ.isNew = false;
+    App.cboMailTo.forceSelection = false;
+    App.cboMailCC.forceSelection = false;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "MailID");
         record = sto.getAt(0);
         //gan du lieu mac dinh ban dau
         record.data.DateTime = HQ.bussinessDate;;
         record.data.Time = HQ.bussinessTime;
-        
+
         record.data.TypeAuto = 'M';
         HQ.isNew = true;//record la new    
         HQ.common.setRequire(App.frmMain);  //to do cac o la require                       
@@ -162,17 +164,17 @@ var loadDataAutoDetail = function (sto) {
     HQ.common.showBusy(false);
 };
 var cboMailID_Change = function (sender, newValue, oldValue) {
-    if ((!HQ.isNew || sender.valueModels != null) && !App.stoMailHeader.loading ) {
+    if ((!HQ.isNew || sender.valueModels != null) && !App.stoMailHeader.loading) {
         App.stoMailHeader.reload();
     }
-   
+
 };
-var cboMailID_Select = function (sender) {  
+var cboMailID_Select = function (sender) {
     if (sender.valueModels != null && !App.stoMailHeader.loading) {
         App.stoMailHeader.reload();
     }
 };
-var chkIsAttachFile_Change = function (sender, e) { 
+var chkIsAttachFile_Change = function (sender, e) {
     if (e) {
         App.chkIsDeleteFile.setValue(true);
         App.chkIsDeleteFile.disable();
@@ -210,7 +212,7 @@ function save() {
                 App.cboMailID.getStore().load(function () {
                     App.cboMailID.setValue(mailId);
                     App.stoMailHeader.reload();
-                });                                         
+                });
             }
             , failure: function (errorMsg, data) {
                 if (data.result.msgCode) {
@@ -261,7 +263,7 @@ function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         App.cboMailID.getStore().load(function () { App.stoMailHeader.reload(); });
-        
+
     }
 };
 ///////////////////////////////////
