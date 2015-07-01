@@ -44,9 +44,9 @@
                     .Width(350).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true).DataIndex("Descr")  
                                       
                     ,HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQLangCode("Territory").HQProcedure("AR20100_pcTerritory")
-                    .HQColumnShow("Territory,Descr").DisplayField("Territory").ValueField("Territory").DataIndex("Territory")
+                    .HQColumnShow("Territory,Descr").DisplayField("Descr").ValueField("Territory").DataIndex("Territory")
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                    .HQDBSys(false).MaxLength(10).EnforceMaxLength(true).ForceSelection(true).HQAutoLoad(false)
+                    .HQDBSys(false).ForceSelection(true).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
                     {
@@ -60,7 +60,7 @@
                     })
                     //  cboTerritory   
                     , HQ.Combo().ID("cboCountry").Name("cboCountry").HQLangCode("Country").HQProcedure("AR20100_pcCountry")
-                    .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID").DataIndex("Country")
+                    .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").DataIndex("Country")
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                     .HQDBSys(false).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -74,7 +74,7 @@
                     // cboCountry                    
 
                     , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("STATE").HQProcedure("AR20100_pcStateByCountry")
-                    .HQColumnShow("State,Descr").DisplayField("State").ValueField("State").DataIndex("State")
+                    .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").DataIndex("State")
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                     .HQDBSys(false).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -91,7 +91,7 @@
                         }) // cboState
 
                         , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("CITY").HQProcedure("AR20100_pcCityByCountryState")
-                        .HQColumnShow("City,Name").DisplayField("City").ValueField("City").DataIndex("City")
+                        .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").DataIndex("City")
                         .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                         .HQDBSys(false).HQAutoLoad(false)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -108,7 +108,7 @@
                         }) // cboCity
 
                     , HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQLangCode("DISTRICT").HQProcedure("AR20100_pcDistrictByCountryState")
-                    .HQColumnShow("District,Name").DisplayField("District").ValueField("District").DataIndex("District")
+                    .HQColumnShow("District,Name").DisplayField("Name").ValueField("District").DataIndex("District")
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                     .HQDBSys(false).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -135,9 +135,9 @@
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                     }) // cboPriceClass
                     , HQ.Combo().ID("cboTerms").Name("cboTerms").HQLangCode("Term").HQProcedure("AR20100_pcTerms")
-                    .HQColumnShow("TermsID,Descr").DisplayField("TermsID").ValueField("TermsID").DataIndex("Terms")
+                    .HQColumnShow("TermsID,Descr").DisplayField("Descr").ValueField("TermsID").DataIndex("Terms")
                     .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                    .HQDBSys(false).MaxLength(2).EnforceMaxLength(true).ForceSelection(true)
+                    .HQDBSys(false).ForceSelection(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
                     .Listeners(lst =>
