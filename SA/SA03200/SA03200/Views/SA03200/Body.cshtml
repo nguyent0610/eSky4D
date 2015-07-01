@@ -53,7 +53,7 @@
             .Editor(
                 HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQDBSys(true).HQProcedure("SA03200_pcBranchAllByUser")
                 .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
-                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                .Width(300).HQHeightWidth(500, 400).ForceSelection(true)
                 .HQParam(new StoreParameterCollection() {                                
                     new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
                 })
@@ -69,7 +69,7 @@
                 .Editor(
                     HQ.Combo().ID("cboSlsperId").Name("cboSlsperId").HQProcedure("SA03200_pcSalesperson").HQDBSys(false)
                     .HQColumnShow("Slsperid,Name,BranchID").DisplayField("Name").ValueField("Slsperid").HQAutoLoad(false)
-                    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true)
+                    .Width(300).HQHeightWidth(500, 400).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() {
                      new StoreParameter() { Name = "@CpnyID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw},
                      new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw}
@@ -87,8 +87,8 @@
             X.NumberColumn().Text(Util.GetLang("ActivitionDay")).DataIndex("ActivitionDay").Format("0,000").Width(150).Align(Alignment.Right)
             .Editor(X.NumberField().DecimalPrecision(0)).ID("txtActivitionDay"),
                                                 
-            X.DateColumn().Text(Util.GetLang("LastSyncDate")).DataIndex("LastSyncDate").Width(150).ID("txtLastSyncDate")
-            .Editor(X.DateField().Format("MM/dd/yyyy")),
+            X.DateColumn().Text(Util.GetLang("LastSyncDate")).DataIndex("LastSyncDate").Width(150).ID("txtLastSyncDate").Format("dd/MM/yyyy")
+            .Editor(X.DateField().Format("dd/MM/yyyy")),
             
             X.CheckColumn().DataIndex("Status").Width(85).Editable(true).HideTitleEl(true).Align(Alignment.Center)
             .HeaderItems(
