@@ -1,10 +1,3 @@
-//// Declare //////////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////////////////////////
-//// Store /////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-//// Event /////////////////////////////////////////////////////////////
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     App.cboSiteId.getStore().load(function () {
@@ -61,9 +54,17 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.form.checkRequirePass(App.frmMain) && HQ.util.checkEmail(App.txtEmailAddr.value)) {
-                    save();
+                if (App.txtEmailAddr.getValue() != "") {
+                    if (HQ.util.checkEmail(App.txtEmailAddr.value) && HQ.form.checkRequirePass(App.frmMain)) {
+                        save();
+                    }
                 }
+                else {
+                    if (HQ.form.checkRequirePass(App.frmMain)) {
+                        save();
+                    }
+                }
+
             }
             break;
         case "print":

@@ -81,7 +81,7 @@
                             , HQ.TextBox().ID("txtAddress2").Name("txtAddress2").HQLangCode("Address2").DataIndex("Addr2")
                                 .Width(350).MarginSpec("5 0 0 0").MaxLength(200).EnforceMaxLength(true)
                                 
-                            , HQ.Combo().ID("cboCountry").Name("cboCountry").HQLangCode("Country").HQProcedure("AR20100_pcCountry")
+                            , HQ.Combo().ID("cboCountry").Name("cboCountry").HQLangCode("Country").HQProcedure("IN20300_pcCountry")
                             .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID").DataIndex("Country")
                             .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                             .HQDBSys(false).HQAutoLoad(false)
@@ -95,7 +95,7 @@
                             })
                             // cboCountry                    
 
-                            , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("STATE").HQProcedure("AR20100_pcStateByCountry")
+                            , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("STATE").HQProcedure("IN20300_pcStateByCountry")
                             .HQColumnShow("State,Descr").DisplayField("State").ValueField("State").DataIndex("State")
                             .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                             .HQDBSys(false).HQAutoLoad(false)
@@ -112,7 +112,7 @@
                                     lst.Focus.Handler = "this.forceSelection = true;";
                                 }) // cboState
 
-                                , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("CITY").HQProcedure("AR20100_pcCityByCountryState")
+                                , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("CITY").HQProcedure("IN20300_pcCityByCountryState")
                                 .HQColumnShow("City,Name").DisplayField("City").ValueField("City").DataIndex("City")
                                 .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                                 .HQDBSys(false).HQAutoLoad(false)
@@ -129,7 +129,7 @@
                                     lst.Focus.Handler = "this.forceSelection = true;";
                                 }) // cboCity
 
-                            , HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQLangCode("DISTRICT").HQProcedure("AR20100_pcDistrictByCountryState")
+                            , HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQLangCode("DISTRICT").HQProcedure("IN20300_pcDistrictByCountryState")
                             .HQColumnShow("District,Name").DisplayField("District").ValueField("District").DataIndex("District")
                             .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                             .HQDBSys(false).HQAutoLoad(false)
