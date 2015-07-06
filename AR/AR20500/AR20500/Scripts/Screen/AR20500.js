@@ -436,6 +436,10 @@ var displayImage= function (imgControl, fileName) {
         }
     });
 }
+var pnlGridMCL_viewGetRowClass = function (record) {
+    if(record.data.Color!='0')
+    return  'hightlight-row'  
+}
 ///////////////////////////////////////////////////////////////////////
 
 var Gmap = {

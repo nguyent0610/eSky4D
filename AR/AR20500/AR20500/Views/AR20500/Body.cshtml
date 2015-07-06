@@ -131,8 +131,11 @@
             )//pnl header
             , X.GridPanel().ID("grdCust")
         //.Hidden(true)
-                    .Scroll(ScrollMode.Both)
-                    .View(X.GridView().TrackOver(false).LoadMask(true))
+                    .Scroll(ScrollMode.Both)                   
+                    .View(
+                        X.GridView().TrackOver(false).EnableTextSelection(true)
+                        .GetRowClass(grc => grc.Fn = "pnlGridMCL_viewGetRowClass")
+                    )
                     .Region(Region.Center)
                     .SelectionMemory(false)
                     .Store(

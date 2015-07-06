@@ -416,6 +416,7 @@
           <Property Type="String" Name="SalesRouteID" Nullable="true" MaxLength="15" />
           <Property Type="DateTime" Name="DateCust" Nullable="true" Precision="23" />
           <Property Type="String" Name="TaxCode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Color" Nullable="false" MaxLength="3" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -732,6 +733,7 @@
                 <ScalarProperty Name="SalesRouteID" ColumnName="SalesRouteID" />
                 <ScalarProperty Name="DateCust" ColumnName="DateCust" />
                 <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1005,7 +1007,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="48" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="26" >
         <EntityTypeShape EntityType="AR20500Model.AR_Customer" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_CustomerLocation" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.OM_PJP" Width="1.5" PointX="4.75" PointY="0.75" />
