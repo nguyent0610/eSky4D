@@ -4,7 +4,7 @@ var Declare = {
 };
 
 var Process = {
-    createMarkerDescription: function (record) {
+    createMarkerDescription: function (record, hightLight) {
         var dayOfWeekStr = Process.getDisplayDaysOfWeek(record);
         return '<div id="content">' +
             '<div id="siteNotice">' +
@@ -27,8 +27,8 @@ var Process = {
                     (record.data.WeekofVisit ? (HQ.common.getLang(record.data.WeekofVisit) + '<br/>') : '') +
                     (record.data.VisitSort ? (HQ.common.getLang("VisitSort") + ': ' + record.data.VisitSort + '<br/>') : '') +
                     (dayOfWeekStr ? (' (' + dayOfWeekStr + ')') : '') +
-                '</p>' +
-                '<a class="x-btn-default-toolbar-small-icon" href="javascript: McpInfo.editFromMap(\'' + record.data.CustId + '\',\'' + record.data.SlsperId + '\',\'' + record.data.BranchID + '\') ">edit</a>' +
+                '</p>' + (hightLight ? '' :
+                '<a class="x-btn-default-toolbar-small-icon" href="javascript: McpInfo.editFromMap(\'' + record.data.CustId + '\',\'' + record.data.SlsperId + '\',\'' + record.data.BranchID + '\') ">edit</a>') +
             '</div>' +
         '</div>';
     },
@@ -93,6 +93,18 @@ var Process = {
         else {
             return "";
         }
+    },
+
+    genColor: function () {
+        var color = Process.rgbToHex(Math.floor(Math.random() * 255),
+            Math.floor(Math.random() * 255),
+            Math.floor(Math.random() * 255));
+        return color;
+    },
+
+    rgbToHex: function (red, green, blue) {
+        var rgb = blue | (green << 8) | (red << 16);
+        return (0x1000000 + rgb).toString(16).slice(1);
     }
 };
 
@@ -108,12 +120,12 @@ var Event = {
                         "lat": record.data.Lat,
                         "lng": record.data.Lng,
                         "color": record.data.Color,
-                        "description": Process.createMarkerDescription(record),
+                        "description": Process.createMarkerDescription(record, App.chkHightLight.value),
                         "custId": record.data.CustId
                     }
                     markers.push(marker);
                 });
-                Gmap.Process.drawMCP(markers, false);
+                Gmap.Process.drawMCP(markers, App.chkHightLight.value);
                 if (markers.length) {
                     Gmap.Process.prepairDrawing();
                 }
@@ -123,6 +135,17 @@ var Event = {
     },
 
     Form: {
+        frmMain_boxReady: function () {
+            if (HQ.allowModifyCust) {
+                App.mniImportCust.enable();
+                App.mniTemplateCust.enable();
+            }
+            else {
+                App.mniImportCust.disable();
+                App.mniTemplateCust.disable();
+            }
+        },
+
         btnHideTrigger_click: function (sender) {
             sender.clearValue();
         },
@@ -207,8 +230,13 @@ var Event = {
         },
 
         mniImportMCP_click: function (mni, e, eOpts) {
-            App.winImExMcp.isImport = true;
-            App.winImExMcp.show();
+            if (HQ.isUpdate) {
+                App.winImExMcp.isImport = true;
+                App.winImExMcp.show();
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
         },
 
         mniTemplateCust_click: function (mni, e, eOpts) {
@@ -217,8 +245,13 @@ var Event = {
         },
 
         mniImportCust_click: function (mni, e, eOpts) {
-            App.winImExCust.isImport = true;
-            App.winImExCust.show();
+            if (HQ.isUpdate) {
+                App.winImExCust.isImport = true;
+                App.winImExCust.show();
+            }
+            else {
+                HQ.message.show(4, '', '');
+            }
         },
 
         cboBranchID_ImExCust_change: function (cbo, newValue, oldValue, eOpts) {
@@ -227,6 +260,15 @@ var Event = {
                 if (selRec) {
                     App.cboProvince_ImExCust.setValue(selRec.data.State);
                 }
+            }
+        },
+
+        chkHightLight_change: function (cbo, newValue, oldValue, eOpts) {
+            if (cbo.value) {
+                App.ctnMCP.hide();
+            }
+            else {
+                App.ctnMCP.show();
             }
         }
     },
@@ -239,24 +281,39 @@ var Event = {
         },
 
         grdMCL_viewGetRowClass: function (record, rowIndex, rowParams, store) {
-            return "row-" + record.data.Color;
+            if (App.chkHightLight.value) {
+                var clsName = "row-" + record.data.SlsperId,
+                    clsStyle = Ext.String.format(".{0} .x-grid-cell{ color: #{1} !important; }", clsName, record.data.Color);
+
+                Ext.net.ResourceMgr.registerCssClass(clsName, clsStyle);
+
+                return clsName;
+            }
+            else {
+                return "row-" + record.data.Color;
+            }
         },
 
         grdMCL_commandEdit: function (item, command, record, index, eOpts) {
-            if (command == "Edit") {
-                App.frmHeaderMcp.loadRecord(record);
-                //App.txtCustIDMcpInfo.setValue(record.data.CustId);
-                //App.txtCustNameMcpInfo.setValue(record.data.CustName);
-                //App.txtAddressMcpInfo.setValue(record.data.Addr1);
-                //App.hdnSlsperIDMcpInfo.setValue(record.data.SlsperId);
-                //App.txtSlsperIDMcpInfo.setValue(record.data.SlsperId + "_" + record.data.Name);
-                //App.hdnBranchIDMcpInfo.setValue(record.data.BranchID);
-                //App.txtDistributorMcpInfo.setValue(record.data.Distributor);
-                App.chkCustStatusMcpInfo.setValue(record.data.Status == "A" ? true : false);
+            if (HQ.isUpdate) {
+                if (command == "Edit") {
+                    App.frmHeaderMcp.loadRecord(record);
+                    //App.txtCustIDMcpInfo.setValue(record.data.CustId);
+                    //App.txtCustNameMcpInfo.setValue(record.data.CustName);
+                    //App.txtAddressMcpInfo.setValue(record.data.Addr1);
+                    //App.hdnSlsperIDMcpInfo.setValue(record.data.SlsperId);
+                    //App.txtSlsperIDMcpInfo.setValue(record.data.SlsperId + "_" + record.data.Name);
+                    //App.hdnBranchIDMcpInfo.setValue(record.data.BranchID);
+                    //App.txtDistributorMcpInfo.setValue(record.data.Distributor);
+                    App.chkCustStatusMcpInfo.setValue(record.data.Status == "A" ? true : false);
 
-                App.storeMcpInfo.serverProxy.url =
-                    Ext.String.format("OM23800/LoadSalesRouteMaster?branchID={0}&custID={1}&slsPerID={2}", record.data.BranchID, record.data.CustId, record.data.SlsperId);
-                App.storeMcpInfo.reload();
+                    App.storeMcpInfo.serverProxy.url =
+                        Ext.String.format("OM23800/LoadSalesRouteMaster?branchID={0}&custID={1}&slsPerID={2}", record.data.BranchID, record.data.CustId, record.data.SlsperId);
+                    App.storeMcpInfo.reload();
+                }
+            }
+            else {
+                HQ.message.show(4, '', '');
             }
         }
     }
@@ -303,11 +360,21 @@ var McpInfo = {
     },
 
     btnSaveMcpInfo_click: function () {
-        McpInfo.saveMcp();
+        if (HQ.isUpdate) {
+            McpInfo.saveMcp();
+        }
+        else {
+            HQ.message.show(4, '', '');
+        }
     },
 
     btnDeleteMcpInfo_click: function () {
-        HQ.message.show(11, '', 'McpInfo.deleteMcpInfo');
+        if (HQ.isDelete) {
+            HQ.message.show(11, '', 'McpInfo.deleteMcpInfo');
+        }
+        else {
+            HQ.message.show(4, '', '');
+        }
     },
 
     btnCancelMcpInfo_click: function () {
@@ -356,7 +423,7 @@ var McpInfo = {
                                 var selectedMarker = Gmap.Process.find_closest_marker(record.data.Lat, record.data.Lng);
                                 if (selectedMarker) {
                                     google.maps.event.addListener(selectedMarker, "click", function (e) {
-                                        Gmap.Declare.infoWindow.setContent(Process.createMarkerDescription(record));
+                                        Gmap.Declare.infoWindow.setContent(Process.createMarkerDescription(record, false));
                                         Gmap.Declare.infoWindow.open(Gmap.Declare.map, selectedMarker);
                                     });
                                     google.maps.event.addListener(Gmap.Declare.map, "click", function (event) {
@@ -756,15 +823,15 @@ var Gmap = {
 
             //	create an array of ContextMenuItem objects
             var menuItems = [];
-            menuItems.push({ className: 'context_menu_item', eventName: 'export_excel', label: 'Export excel' });
-            menuItems.push({ className: 'context_menu_item', eventName: 'clear_zone', label: 'Clear zone' });
+            menuItems.push({ className: 'context_menu_item', eventName: 'export_excel', label: HQ.common.getLang('ExportExcel') });
+            menuItems.push({ className: 'context_menu_item', eventName: 'clear_zone', label: HQ.common.getLang('ClearZone') });
             //	a menuItem with no properties will be rendered as a separator
             menuItems.push({});
-            menuItems.push({ className: 'context_menu_item', eventName: 'zoom_in_click', label: 'Zoom in' });
-            menuItems.push({ className: 'context_menu_item', eventName: 'zoom_out_click', label: 'Zoom out' });
+            menuItems.push({ className: 'context_menu_item', eventName: 'zoom_in_click', label: HQ.common.getLang('ZoomIn') });
+            menuItems.push({ className: 'context_menu_item', eventName: 'zoom_out_click', label: HQ.common.getLang('ZoomOut') });
             //	a menuItem with no properties will be rendered as a separator
             menuItems.push({});
-            menuItems.push({ className: 'context_menu_item', eventName: 'center_map_click', label: 'Center map here' });
+            menuItems.push({ className: 'context_menu_item', eventName: 'center_map_click', label: HQ.common.getLang('CenterMapHere') });
             contextMenuOptions.menuItems = menuItems;
 
             //	create the ContextMenu object
@@ -913,7 +980,7 @@ var Gmap = {
             Gmap.Declare.directionsDisplay.setMap(Gmap.Declare.map);
         },
 
-        drawMCP: function (markers) {
+        drawMCP: function (markers, hightLight) {
             Gmap.Process.prepairMap();
             Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
 
@@ -936,16 +1003,27 @@ var Gmap = {
                         }
 
                         // Make the marker at each location
-                        var markerLabel = data.visitSort;
-                        var marker = new google.maps.Marker({
-                            custId: data.custId,
-                            id: data.id,
-                            position: myLatlng,
-                            map: Gmap.Declare.map,
-                            title: data.title,
-                            //icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i + 1, pinColor)
-                            icon: Ext.String.format('Images/OM23800/circle_{0}.png', data.color ? data.color : "white")
-                        });
+                        if (hightLight) {
+                            var marker = new google.maps.Marker({
+                                custId: data.custId,
+                                id: data.id,
+                                position: myLatlng,
+                                map: Gmap.Declare.map,
+                                title: data.title,
+                                icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i+1, data.color)
+                            });
+                        }
+                        else {
+                            var marker = new google.maps.Marker({
+                                custId: data.custId,
+                                id: data.id,
+                                position: myLatlng,
+                                map: Gmap.Declare.map,
+                                title: data.title,
+                                //icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i + 1, pinColor)
+                                icon: Ext.String.format('Images/OM23800/circle_{0}.png', data.color ? data.color : "white")
+                            });
+                        }
 
                         // Set info display of the marker
                         (function (marker, data) {

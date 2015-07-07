@@ -79,6 +79,7 @@ namespace OM23800.Controllers
                 return View("Error");
             }
             ViewBag.Title = Util.GetLang("OM23800");
+            ViewBag.AllowModifyCust = _db.OM23800_ppAllowModifyCust(Current.UserName, Current.CpnyID).FirstOrDefault();
             return View();
         }
 
@@ -102,12 +103,46 @@ namespace OM23800.Controllers
 
         public ActionResult LoadMCP(string channel, string territory,
             string province, string distributor, string shopType,
-            string slsperId, string daysOfWeek, string weekOfVisit)
+            string slsperId, string daysOfWeek, string weekOfVisit,
+            bool hightLight)
         {
-            var planVisit = _db.OM23800_pgMCL(Current.CpnyID, Current.UserName,
+            _db.CommandTimeout = 3600;
+
+            var planVisits = _db.OM23800_pgMCL(Current.CpnyID, Current.UserName,
                 channel, territory, province, distributor,
                 shopType, slsperId, daysOfWeek, weekOfVisit).ToList();
-            return this.Store(planVisit);
+
+            if (hightLight)
+            {
+                var lstSlspers = planVisits.Select(x => x.SlsperId).Distinct().ToList();
+                var lstColors = _db.OM23800_ppListColors(Current.UserName, Current.CpnyID, Current.LangID).Select(x=>x.Code).ToList();
+                var lstSlsperColor = new Dictionary<string, string>();
+
+                if (lstSlspers.Count <= lstColors.Count)
+                {
+                    for (int i = 0; i < lstSlspers.Count; i++)
+                    {
+                        lstSlsperColor.Add(lstSlspers[i], lstColors[i]);
+                    }
+                }
+                else {
+                    for (int i = 0; i < lstColors.Count; i++)
+                    {
+                        lstSlsperColor.Add(lstSlspers[i], lstColors[i]);
+                    }
+                    for (int i = lstColors.Count; i < lstSlspers.Count; i++)
+                    {
+                        lstSlsperColor.Add(lstSlspers[i], lstColors[i % lstColors.Count]);
+                    }
+                }
+
+                foreach (var plan in planVisits)
+                {
+                    plan.Color = lstSlsperColor[plan.SlsperId];
+                }
+            }
+
+            return this.Store(planVisits);
         }
 
         public ActionResult LoadSalesRouteMaster(string branchID, string custID, string slsPerID)
@@ -2023,10 +2058,7 @@ namespace OM23800.Controllers
                                                     existCust.LUpd_Datetime = DateTime.Now;
                                                     existCust.LUpd_Prog = _screenName;
                                                     existCust.LUpd_User = Current.UserName;
-                                                    if (!string.IsNullOrWhiteSpace(strSlsPerID))
-                                                    {
-                                                        existCust.SlsperId = strSlsPerID;
-                                                    }
+                                                    existCust.SlsperId = strSlsPerID;
                                                     lineSuccess.Add((i - dataRowIdx + 1).ToString());
                                                 }
                                                 else
@@ -2108,10 +2140,7 @@ namespace OM23800.Controllers
                                                     newCust.LUpd_Datetime = newCust.Crtd_Datetime = DateTime.Now;
                                                     newCust.LUpd_Prog = newCust.Crtd_Prog = _screenName;
                                                     newCust.LUpd_User = newCust.Crtd_User = Current.UserName;
-                                                    if (!string.IsNullOrWhiteSpace(strSlsPerID))
-                                                    {
-                                                        newCust.SlsperId = strSlsPerID;
-                                                    }
+                                                    newCust.SlsperId = strSlsPerID;
                                                     _db.AR_Customer.AddObject(newCust);
                                                     _db.SaveChanges();
                                                     lineSuccess.Add((i - dataRowIdx + 1).ToString());

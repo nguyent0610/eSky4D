@@ -44,7 +44,7 @@
           <Property Name="CrRule" Type="varchar" MaxLength="1" />
           <Property Name="CustFillPriority" Type="smallint" Nullable="false" />
           <Property Name="CustType" Type="varchar" MaxLength="1" />
-          <Property Name="DeliveryID" Type="varchar" MaxLength="10" />
+          <Property Name="DeliveryID" Type="varchar" MaxLength="30" />
           <Property Name="DflSaleRouteID" Type="varchar" MaxLength="10" />
           <Property Name="DfltShipToId" Type="varchar" MaxLength="10" />
           <Property Name="District" Type="nvarchar" MaxLength="30" />
@@ -63,10 +63,10 @@
           <Property Name="Salut" Type="nvarchar" MaxLength="30" />
           <Property Name="ShopType" Type="varchar" MaxLength="10" />
           <Property Name="SiteId" Type="varchar" MaxLength="10" />
-          <Property Name="SlsperId" Type="varchar" MaxLength="10" />
+          <Property Name="SlsperId" Type="varchar" MaxLength="30" />
           <Property Name="State" Type="varchar" MaxLength="10" />
           <Property Name="Status" Type="varchar" MaxLength="1" />
-          <Property Name="SupID" Type="varchar" MaxLength="10" />
+          <Property Name="SupID" Type="varchar" MaxLength="30" />
           <Property Name="TaxDflt" Type="varchar" MaxLength="1" />
           <Property Name="TaxID00" Type="varchar" MaxLength="10" />
           <Property Name="TaxID01" Type="varchar" MaxLength="10" />
@@ -98,7 +98,7 @@
             <PropertyRef Name="SlsperId" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="SlsperId" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Addr1" Type="nvarchar" MaxLength="50" />
           <Property Name="Addr2" Type="nvarchar" MaxLength="50" />
           <Property Name="CmmnPct" Type="float" />
@@ -110,17 +110,17 @@
           <Property Name="ProductGroup" Type="varchar" MaxLength="20" />
           <Property Name="State" Type="varchar" MaxLength="10" />
           <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="DeliveryMan" Type="varchar" MaxLength="10" />
+          <Property Name="DeliveryMan" Type="varchar" MaxLength="30" />
           <Property Name="Position" Type="varchar" MaxLength="2" />
           <Property Name="LUpd_DateTime" Type="datetime" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
           <Property Name="District" Type="nvarchar" MaxLength="30" />
-          <Property Name="SupID" Type="varchar" MaxLength="10" />
+          <Property Name="SupID" Type="varchar" MaxLength="30" />
           <Property Name="CrLmt" Type="float" />
           <Property Name="Active" Type="bit" />
           <Property Name="PPCPassword" Type="varchar" MaxLength="100" />
@@ -156,10 +156,10 @@
             <PropertyRef Name="SlsPerID" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="PJPID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="PJPID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="SalesRouteID" Type="varchar" Nullable="false" MaxLength="15" />
           <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="SlsFreq" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="SlsFreqType" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="VisitSort" Type="int" Nullable="false" />
@@ -193,10 +193,10 @@
           </Key>
           <Property Name="ID" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="PJPID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="PJPID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="SalesRouteID" Type="varchar" Nullable="false" MaxLength="15" />
           <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="SlsFreq" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="SlsFreqType" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="VisitSort" Type="int" Nullable="false" />
@@ -290,6 +290,15 @@
           <Parameter Name="DaysOfWeek" Type="varchar" Mode="In" />
           <Parameter Name="WeekEO" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="OM23800_ppAllowModifyCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM23800_ppListColors" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -321,6 +330,15 @@
           <EntitySet Name="SI_District" EntityType="OM23800Model.SI_District" />
           <EntitySet Name="SI_City" EntityType="OM23800Model.SI_City" />
           <EntitySet Name="SI_State" EntityType="OM23800Model.SI_State" />
+          <FunctionImport Name="OM23800_ppAllowModifyCust" ReturnType="Collection(Boolean)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM23800_ppListColors" ReturnType="Collection(OM23800Model.OM23800_ppListColors_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM23800_pgMCL_Result">
           <Property Type="String" Name="CustId" Nullable="true" MaxLength="50" />
@@ -353,10 +371,10 @@
             <PropertyRef Name="SlsPerID" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Type="String" Name="PJPID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PJPID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SalesRouteID" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SlsFreq" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SlsFreqType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="VisitSort" Nullable="false" />
@@ -408,7 +426,7 @@
           <Property Type="String" Name="CrRule" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Int16" Name="CustFillPriority" Nullable="false" />
           <Property Type="String" Name="CustType" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DeliveryID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DeliveryID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DflSaleRouteID" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DfltShipToId" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="District" MaxLength="30" FixedLength="false" Unicode="true" />
@@ -427,10 +445,10 @@
           <Property Type="String" Name="Salut" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ShopType" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SiteId" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SlsperId" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperId" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Status" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SupID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SupID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxDflt" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxID00" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TaxID01" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -486,10 +504,10 @@
           </Key>
           <Property Type="String" Name="ID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="PJPID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PJPID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SalesRouteID" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SlsFreq" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SlsFreqType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="VisitSort" Nullable="false" />
@@ -517,7 +535,7 @@
             <PropertyRef Name="SlsperId" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperId" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Addr1" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Double" Name="CmmnPct" />
@@ -529,17 +547,17 @@
           <Property Type="String" Name="ProductGroup" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="DeliveryMan" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DeliveryMan" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Position" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="District" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="SupID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SupID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="CrLmt" />
           <Property Type="Boolean" Name="Active" />
           <Property Type="String" Name="PPCPassword" MaxLength="100" FixedLength="false" Unicode="false" />
@@ -602,6 +620,10 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="OM23800_ppListColors_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="7" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -884,6 +906,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM23800_ppAllowModifyCust" FunctionName="eBiz4DWebAppModel.Store.OM23800_ppAllowModifyCust" />
+          <FunctionImportMapping FunctionImportName="OM23800_ppListColors" FunctionName="eBiz4DWebAppModel.Store.OM23800_ppListColors">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23800Model.OM23800_ppListColors_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

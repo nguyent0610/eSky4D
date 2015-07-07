@@ -35,6 +35,7 @@
             HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
             HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
             HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.allowModifyCust = HQ.util.toBool('@ViewBag.AllowModifyCust');
         </script>
         <style type="text/css">
             html {
@@ -111,7 +112,7 @@
                 //.RemotePaging(true).PageSize(50)
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM23800_pgMCL_Result), "mdlMCP", ""))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadMCP", "OM23800")))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadMCP", "OM23800")).Timeout(1800000))
             .Parameters(ps =>
             {
                 ps.Add(new StoreParameter("channel", "App.cboChannelMCL.value", ParameterMode.Raw));
@@ -122,6 +123,7 @@
                 ps.Add(new StoreParameter("slsperId", "App.cboSalesManMCL.value", ParameterMode.Raw));
                 ps.Add(new StoreParameter("daysOfWeek", "App.cboDayOfWeek.value", ParameterMode.Raw));
                 ps.Add(new StoreParameter("weekOfVisit", "App.cboWeekOfVisit.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("hightLight", "App.chkHightLight.value", ParameterMode.Raw));
             })
             .Listeners(l => {
                 l.BeforeLoad.Handler = "App.frmMain.getEl().mask(HQ.common.getLang('Loading'), 'x-mask-loading');";
