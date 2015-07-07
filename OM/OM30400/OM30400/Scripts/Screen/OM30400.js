@@ -444,6 +444,27 @@ var Index = {
         return value;
     },
 
+    renderShopDistance: function (value, metaData, record, rowIndex, colIndex, store) {
+        var lat1 = 0;
+        var lng1 = 0;
+        var lat2 = record.data.CiLat;
+        var lng2 = record.data.CiLng;
+        var distance = 0;
+
+        if (rowIndex > 0) {
+            var record1 = store.getAt(rowIndex - 1);
+            if (record1) {
+                lat1 = record1.data.CiLat;
+                lng1 = record1.data.CiLng;
+            }
+        }
+
+        if (lat1 && lng1 && lat2 && lng2) {
+            distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(lat1, lng1), new google.maps.LatLng(lat2, lng2));
+        }
+        return Math.round(distance);
+    },
+
     btnGetCurrentLocation_click: function (btn, e, eOpts) {
         var store = App.storeGridActualVisit;
         if (store.getCount() > 0) {
@@ -455,8 +476,7 @@ var Index = {
     },
 
     chkRealTime_change: function (chk, newValue, oldValue, eOpts) {
-        App.grdVisitCustomerActual.store.reload();
-        //App.storeVisitCustomerActual.reload();
+        Index.btnLoadDataActual_click();
     },
 
     chkShowAgent_change: function (chk, newValue, oldValue, eOpts) {
