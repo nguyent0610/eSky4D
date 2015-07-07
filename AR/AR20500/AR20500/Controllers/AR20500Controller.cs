@@ -136,8 +136,8 @@ namespace AR20500.Controllers
                                 var objCust = new AR_Customer();
                                 objCust.ResetET();
 
-                                objCust.Addr1 = item.Addr1.PassNull();// item.Addr2.PassNull() + (item.Addr1.PassNull() != "" ? "," + item.Addr1.PassNull() : "");
-                                objCust.Addr2 = item.Addr2.PassNull();//
+                                objCust.Addr1 =  objCust.BillAddr1=item.Addr1.PassNull();// item.Addr2.PassNull() + (item.Addr1.PassNull() != "" ? "," + item.Addr1.PassNull() : "");
+                                objCust.Addr2 =  objCust.BillAddr2=item.Addr2.PassNull();//
                                 objCust.BranchID = item.BranchID.PassNull();
                                 objCust.City = item.City.PassNull();
                                 objCust.State = item.State.PassNull();
@@ -169,7 +169,6 @@ namespace AR20500.Controllers
                                 objCust.District = item.District.PassNull(); ;
                                 objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId).FirstOrDefault();
                               
-
 
                                 objCust.LUpd_Datetime = DateTime.Now;
                                 objCust.LUpd_Prog = "AR20500";
@@ -205,6 +204,52 @@ namespace AR20500.Controllers
                                 loc.Lat = item.Lat.Value;
 
                                 _db.AR_CustomerLocation.AddObject(loc);
+
+                                AR_SOAddress objAR_SOAddress = new AR_SOAddress();
+                                objAR_SOAddress.ResetET();
+
+                                objAR_SOAddress.Addr1 = objCust.Addr1.PassNull();// item.Addr2.PassNull() + (item.Addr1.PassNull() != "" ? "," + item.Addr1.PassNull() : "");
+                                objAR_SOAddress.Addr2 = objCust.Addr2.PassNull();//
+                                objAR_SOAddress.Attn = objCust.Attn.PassNull();
+                                objAR_SOAddress.BranchID = objCust.BranchID;
+                                objAR_SOAddress.City = objCust.City;
+                                objAR_SOAddress.Country = objCust.Country;
+                                objAR_SOAddress.Crtd_DateTime = objCust.Crtd_Datetime;
+                                objAR_SOAddress.Crtd_Prog = objCust.Crtd_Prog;
+                                objAR_SOAddress.Crtd_User = objCust.Crtd_User;
+
+                                objAR_SOAddress.CustId = objCust.CustId;
+                                objAR_SOAddress.Descr = objCust.CustName;
+                                objAR_SOAddress.District = objCust.District;
+
+                                objAR_SOAddress.Fax = objCust.Fax;
+                                objAR_SOAddress.LUpd_DateTime = objCust.LUpd_Datetime;
+                                objAR_SOAddress.LUpd_Prog = objCust.LUpd_Prog;
+                                objAR_SOAddress.LUpd_User = objCust.LUpd_User;
+
+                                objAR_SOAddress.Phone = objCust.Phone;
+                                objAR_SOAddress.ShipToId = objCust.CustId.Length > 10 ? objCust.CustId.Substring(objCust.CustId.Length-10, 10) : objCust.CustId;
+                                objAR_SOAddress.ShipViaID = "";
+                                objAR_SOAddress.SiteId = objCust.SiteId;
+
+                                objAR_SOAddress.SOName = objCust.CustName;
+                                objAR_SOAddress.State = objCust.State;
+                                objAR_SOAddress.TaxId00 = objCust.TaxID00;
+                                objAR_SOAddress.TaxId01 = objCust.TaxID01;
+                                objAR_SOAddress.TaxId02 = objCust.TaxID02;
+
+                                objAR_SOAddress.TaxId01 = objCust.TaxID01;
+                                objAR_SOAddress.TaxLocId = objCust.TaxLocId;
+                                objAR_SOAddress.TaxRegNbr = objCust.TaxRegNbr;
+
+                                objAR_SOAddress.Zip = objCust.Zip;
+
+
+                                _db.AR_SOAddress.AddObject(objAR_SOAddress);  
+                             
+
+
+                            
 
                                 OM_SalesRouteMaster master = new OM_SalesRouteMaster();
                                 master.ResetET();

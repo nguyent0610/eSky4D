@@ -9,6 +9,7 @@
           <EntitySet Name="AR_Customer" EntityType="eBiz4DWebSysModel.Store.AR_Customer" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AR_CustomerLocation" EntityType="eBiz4DWebSysModel.Store.AR_CustomerLocation" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="AR_NewCustomerInfor" EntityType="eBiz4DWebSysModel.Store.AR_NewCustomerInfor" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="AR_SOAddress" EntityType="eBiz4DWebSysModel.Store.AR_SOAddress" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_PJP" EntityType="eBiz4DWebSysModel.Store.OM_PJP" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_SalesRouteDet" EntityType="eBiz4DWebSysModel.Store.OM_SalesRouteDet" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_SalesRouteMaster" EntityType="eBiz4DWebSysModel.Store.OM_SalesRouteMaster" store:Type="Tables" Schema="dbo" />
@@ -167,6 +168,43 @@
           <Property Name="DateCust" Type="datetime" />
           <Property Name="TaxCode" Type="nvarchar" MaxLength="50" />
           <Property Name="VisitSort" Type="int" />
+        </EntityType>
+        <EntityType Name="AR_SOAddress">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="CustId" />
+            <PropertyRef Name="ShipToId" />
+          </Key>
+          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="CustId" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ShipToId" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="30" />
+          <Property Name="SOName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Attn" Type="nvarchar" MaxLength="200" />
+          <Property Name="Addr1" Type="nvarchar" MaxLength="200" />
+          <Property Name="Addr2" Type="nvarchar" MaxLength="100" />
+          <Property Name="City" Type="varchar" MaxLength="10" />
+          <Property Name="State" Type="varchar" MaxLength="10" />
+          <Property Name="Zip" Type="varchar" MaxLength="10" />
+          <Property Name="Country" Type="varchar" MaxLength="3" />
+          <Property Name="Phone" Type="varchar" MaxLength="30" />
+          <Property Name="Fax" Type="varchar" MaxLength="30" />
+          <Property Name="TaxRegNbr" Type="varchar" MaxLength="15" />
+          <Property Name="TaxLocId" Type="varchar" MaxLength="15" />
+          <Property Name="TaxId00" Type="varchar" MaxLength="10" />
+          <Property Name="TaxId01" Type="varchar" MaxLength="10" />
+          <Property Name="TaxId02" Type="varchar" MaxLength="10" />
+          <Property Name="TaxId03" Type="varchar" MaxLength="10" />
+          <Property Name="SiteId" Type="varchar" MaxLength="10" />
+          <Property Name="ShipViaID" Type="varchar" MaxLength="15" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="District" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="OM_PJP">
           <Key>
@@ -359,6 +397,7 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="CustID" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="AR_SOAddress" EntityType="AR20500Model.AR_SOAddress" />
         </EntityContainer>
         <ComplexType Name="AR20500_pgDetail_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
@@ -668,6 +707,43 @@
           <Property Type="DateTime" Name="DateCust" Precision="3" />
           <Property Type="String" Name="TaxCode" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="VisitSort" />
+        </EntityType>
+        <EntityType Name="AR_SOAddress">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="CustId" />
+            <PropertyRef Name="ShipToId" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipToId" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descr" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SOName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Attn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr1" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="City" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Zip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Fax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxRegNbr" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxLocId" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId00" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId01" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId02" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxId03" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SiteId" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ShipViaID" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="District" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -987,6 +1063,42 @@
           <FunctionImportMapping FunctionImportName="AR20500_AfterApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_AfterApprove" />
           <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerReject" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerReject" />
           <FunctionImportMapping FunctionImportName="AR20500_ppCheckCustomerApprove" FunctionName="eBiz4DWebSysModel.Store.AR20500_ppCheckCustomerApprove" />
+          <EntitySetMapping Name="AR_SOAddress">
+            <EntityTypeMapping TypeName="AR20500Model.AR_SOAddress">
+              <MappingFragment StoreEntitySet="AR_SOAddress">
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="ShipViaID" ColumnName="ShipViaID" />
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="TaxId03" ColumnName="TaxId03" />
+                <ScalarProperty Name="TaxId02" ColumnName="TaxId02" />
+                <ScalarProperty Name="TaxId01" ColumnName="TaxId01" />
+                <ScalarProperty Name="TaxId00" ColumnName="TaxId00" />
+                <ScalarProperty Name="TaxLocId" ColumnName="TaxLocId" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="Attn" ColumnName="Attn" />
+                <ScalarProperty Name="SOName" ColumnName="SOName" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="ShipToId" ColumnName="ShipToId" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1015,6 +1127,7 @@
         <EntityTypeShape EntityType="AR20500Model.SI_State" Width="1.5" PointX="6.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20500Model.OM_SalesRouteDet" Width="1.5" PointX="6.75" PointY="4.75" />
         <EntityTypeShape EntityType="AR20500Model.AR_NewCustomerInfor" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20500Model.AR_SOAddress" Width="1.5" PointX="4.820412779608934" PointY="30.501791789430097" />
       </Diagram>
     </Diagrams>
   </Designer>
