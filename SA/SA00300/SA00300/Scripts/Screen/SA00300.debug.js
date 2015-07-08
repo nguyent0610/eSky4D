@@ -253,7 +253,7 @@ var stoLoad = function (sto) {
     HQ.isNew = false;
     HQ.common.showBusy(false);
 
-    App.cboUserID.forceSelection = false;
+    App.cboUserID.forceSelection = true;
     App.CpnyID.forceSelection = false;
     App.UserTypes.forceSelection = false;
     App.Channel.forceSelection = false;

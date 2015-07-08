@@ -43,7 +43,6 @@ namespace SA00300.Controllers
         public ActionResult Index()
         {
             ViewBag.TextVal = _db.SYS_Configurations.FirstOrDefault(p => p.Code == "SA02500Check").TextVal;
-
             Util.InitRight(_screenNbr);
             return View();
         }
