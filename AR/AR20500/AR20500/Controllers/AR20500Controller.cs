@@ -139,8 +139,8 @@ namespace AR20500.Controllers
                                 objCust.Addr1 =  objCust.BillAddr1=item.Addr1.PassNull();// item.Addr2.PassNull() + (item.Addr1.PassNull() != "" ? "," + item.Addr1.PassNull() : "");
                                 objCust.Addr2 =  objCust.BillAddr2=item.Addr2.PassNull();//
                                 objCust.BranchID = item.BranchID.PassNull();
-                                objCust.City = item.City.PassNull();
-                                objCust.State = item.State.PassNull();
+                                objCust.City = objCust.BillCity = item.City.PassNull();
+                                objCust.State = objCust.BillState = item.State.PassNull();
                                 objCust.ClassId = item.ClassId.PassNull();
 
                                 objCust.Phone = item.Phone.PassNull();
@@ -168,7 +168,7 @@ namespace AR20500.Controllers
                                 objCust.Country = objCust.BillCountry = "VN";
                                 objCust.District = item.District.PassNull(); ;
                                 objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId).FirstOrDefault();
-                              
+                                objCust.DfltShipToId = "DEFAULT";
 
                                 objCust.LUpd_Datetime = DateTime.Now;
                                 objCust.LUpd_Prog = "AR20500";
@@ -228,7 +228,7 @@ namespace AR20500.Controllers
                                 objAR_SOAddress.LUpd_User = objCust.LUpd_User;
 
                                 objAR_SOAddress.Phone = objCust.Phone;
-                                objAR_SOAddress.ShipToId = objCust.CustId.Length > 10 ? objCust.CustId.Substring(objCust.CustId.Length-10, 10) : objCust.CustId;
+                                objAR_SOAddress.ShipToId = "DEFAULT";// objCust.CustId.Length > 10 ? objCust.CustId.Substring(objCust.CustId.Length - 10, 10) : objCust.CustId;
                                 objAR_SOAddress.ShipViaID = "";
                                 objAR_SOAddress.SiteId = objCust.SiteId;
 
