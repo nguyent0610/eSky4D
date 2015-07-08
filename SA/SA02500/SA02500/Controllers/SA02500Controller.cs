@@ -50,7 +50,7 @@ namespace SA02500.Controllers
             string username = Current.UserName.ToString();
 
             // Kiem tra pass trung 5 lan gan nhat
-            var flag = _db.SA02500_ppCheckPass(username, Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t"));
+            var flag = _db.SA02500_ppCheckPass(username, Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t")).FirstOrDefault();
 
             if(flag.ToString()=="0")
             {
