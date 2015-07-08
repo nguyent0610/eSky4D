@@ -133,6 +133,7 @@ var Main = {
                                 hasData = true;
                             }
                             else {
+                                HQ.message.show(1000, HQ.common.getLang('DPBB'), '');
                                 hasData = false;
                             }
                         }
@@ -142,6 +143,7 @@ var Main = {
                                 hasData = true;
                             }
                             else {
+                                HQ.message.show(1000, HQ.common.getLang('DPBB') + ' / ' + HQ.common.getLang('DPCC'), '');
                                 hasData = false;
                             }
                         }
@@ -151,6 +153,7 @@ var Main = {
                                 hasData = true;
                             }
                             else {
+                                HQ.message.show(1000, HQ.common.getLang('DPCC'), '');
                                 hasData = false;
                             }
                         }
@@ -160,6 +163,7 @@ var Main = {
                                 hasData = true;
                             }
                             else {
+                                HQ.message.show(1000, HQ.common.getLang('DPCC') + ' / ' + HQ.common.getLang('DPII'), '');
                                 hasData = false;
                             }
                         }
@@ -169,6 +173,7 @@ var Main = {
                                 hasData = true;
                             }
                             else {
+                                HQ.message.show(1000, HQ.common.getLang('DPII'), '');
                                 hasData = false;
                             }
                         }
@@ -178,6 +183,7 @@ var Main = {
                                 hasData = true;
                             }
                             else {
+                                HQ.message.show(1000, HQ.common.getLang('DPPP'), '');
                                 hasData = false;
                             }
                         }
@@ -187,6 +193,7 @@ var Main = {
                                 hasData = true;
                             }
                             else {
+                                HQ.message.show(1000, HQ.common.getLang('DPTT') + ' / ' + HQ.common.getLang('DPBB'), '');
                                 hasData = false;
                             }
                         }
@@ -196,6 +203,7 @@ var Main = {
                                 hasData = true;
                             }
                             else {
+                                HQ.message.show(1000, HQ.common.getLang('DPTT') + ' / ' + HQ.common.getLang('DPII'), '');
                                 hasData = false;
                             }
                         }
@@ -205,6 +213,7 @@ var Main = {
                                 hasData = true;
                             }
                             else {
+                                HQ.message.show(1000, HQ.common.getLang('DPTT') + ' / ' + HQ.common.getLang('DPPP'), '');
                                 hasData = false;
                             }
                         }
@@ -214,6 +223,7 @@ var Main = {
                                 hasData = true;
                             }
                             else {
+                                HQ.message.show(1000, HQ.common.getLang('DPTT'), '');
                                 hasData = false;
                             }
                         }
@@ -222,6 +232,7 @@ var Main = {
                         }
                 }
                 else {
+                    HQ.message.show(1000, HQ.common.getLang('DiscBreak') +' / '+ HQ.common.getLang('AppComp'), '');
                     hasData = false;
                 }
             }
@@ -230,6 +241,16 @@ var Main = {
             }
 
             return hasData;
+        },
+
+        getChangedFilteredData: function (store) {
+            var data = store.data,
+                changedData
+
+            store.data = store.snapshot; // does the trick
+            changedData = store.getChangedData();
+            store.data = data; // to revert the changes back
+            return Ext.encode(changedData);
         },
 
         saveData: function () {
@@ -255,7 +276,7 @@ var Main = {
 
                                     lstDiscInfo: Ext.encode([App.frmDiscDefintionTop.getRecord().data]),
                                     lstDiscBreakChange: HQ.store.getData(App.grdDiscBreak.store),
-                                    lstFreeItemChange: HQ.store.getData(App.grdFreeItem.store),
+                                    lstFreeItemChange: Main.Process.getChangedFilteredData(App.grdFreeItem.store),
                                     lstCompanyChange: HQ.store.getData(App.grdCompany.store),
                                     lstDiscItemChange: HQ.store.getData(App.grdDiscItem.store),
                                     lstBundleChange: HQ.store.getData(App.grdBundle.store),
@@ -298,9 +319,6 @@ var Main = {
                                 }
                             });
                         }
-                    }
-                    else {
-                        HQ.message.show(744, '', '');
                     }
                     //}
                 }
@@ -416,7 +434,7 @@ var Main = {
                 var discSeq = App.frmDiscSeqInfo.getRecord();
                 if (discSeq) {
                     App.frmDiscSeqInfo.updateRecord();
-                    if (!HQ.store.isChange(App.stoDiscSeqInfo)) {
+                    if (!discSeq.dirty) {
                         if (!HQ.store.isChange(App.grdDiscBreak.store)) {
                             if (!HQ.store.isChange(App.grdFreeItem.store)) {
                                 if (!HQ.store.isChange(App.grdCompany.store)) {
@@ -477,7 +495,7 @@ var Main = {
                 var discSeq = App.cboDiscSeq.getValue();
                 var status = App.cboStatus.getValue();
                 var keys = sto.HQFieldKeys ? sto.HQFieldKeys : "";
-                var idxLref = keys.indexOf("LineRef")
+                var idxLref = keys.indexOf("LineRef");
 
                 if (discId && discSeq && status == _holdStatus) {
                     if (successful) {
@@ -786,8 +804,10 @@ var DiscDefintion = {
                 if (metaData.column.dataIndex == "Descr" && !record.data.Descr) {
                     returnValue = rec.data.Descr;
                 }
-                else if(metaData.column.dataIndex == "UnitDescr" && !record.data.UnitDescr){
+                else if (metaData.column.dataIndex == "UnitDescr" && !record.data.UnitDescr) {
                     returnValue = rec.data.StkUnit;
+                    //record.set("UnitDescr", rec.data.StkUnit);
+                    record.data.UnitDescr = returnValue;
                 }
             }
 
@@ -803,20 +823,29 @@ var DiscDefintion = {
                 }
                 else if (metaData.column.dataIndex == "UnitDesc" && !record.data.UnitDesc) {
                     returnValue = rec.data.StkUnit;
+                    //record.set("UnitDesc", rec.data.StkUnit);
+                    record.data.UnitDesc = returnValue;
                 }
             }
 
             return returnValue;
         },
 
-        renderGInvtName: function (value) {
-            var record = App.cboGInvtID.store.findRecord("InvtID", value);
-            if (record) {
-                return record.data.Descr;
+        renderGInvtName: function (value, metaData, record, rowIndex, colIndex, store) {
+            var rec = App.cboGInvtID.store.findRecord("InvtID", record.data.InvtID);
+            var returnValue = value;
+            if (rec) {
+                if (metaData.column.dataIndex == "Descr" && !record.data.Descr) {
+                    returnValue = rec.data.Descr;
+                }
+                else if (metaData.column.dataIndex == "UnitDesc" && !record.data.UnitDesc) {
+                    returnValue = rec.data.StkUnit;
+                    //record.set("UnitDesc", rec.data.StkUnit);
+                    record.data.UnitDesc = returnValue;
+                }
             }
-            else {
-                return value;
-            }
+
+            return returnValue;
         },
 
         deleteSelectedCompanies: function (item) {
@@ -895,6 +924,21 @@ var DiscDefintion = {
                 App.cboDiscFor.setReadOnly(false);
             }
 
+            if (discSeqRec.data.Status == _holdStatus) {
+                App.cboProAplForItem.setReadOnly(false);
+                App.dteStartDate.setReadOnly(false);
+                App.dteEndDate.setReadOnly(false);
+                App.chkDiscTerm.setReadOnly(false);
+                App.chkAutoFreeItem.setReadOnly(false);
+            }
+            else {
+                App.cboProAplForItem.setReadOnly(true);
+                App.dteStartDate.setReadOnly(true);
+                App.dteEndDate.setReadOnly(true);
+                App.chkDiscTerm.setReadOnly(true);
+                App.chkAutoFreeItem.setReadOnly(true);
+            }
+
             App.grdDiscBreak.store.load(function () {
                 App.grdFreeItem.store.load(function () {
                     App.grdFreeItem.store.filterBy(function (record) { });
@@ -911,58 +955,66 @@ var DiscDefintion = {
         },
 
         cboDiscID_change: function (cbo, newValue, oldValue, eOpts) {
-            App.stoDiscInfo.reload();
-            App.cboDiscSeq.store.load(function () {
-                if (App.cboDiscSeq.store.getCount()) {
-                    App.cboDiscSeq.setValue(App.cboDiscSeq.store.getAt(0).data.DiscSeq);
-                }
-                else {
-                    App.cboDiscSeq.clearValue();
-                }
-            });
+            //var selRec = HQ.store.findInStore(cbo.store, ["DiscID"], [cbo.getValue()]);
+            //if (selRec || !_isNewDisc) {
+                App.stoDiscInfo.reload();
+                App.cboDiscSeq.store.load(function () {
+                    if (App.cboDiscSeq.store.getCount()) {
+                        App.cboDiscSeq.setValue(App.cboDiscSeq.store.getAt(0).data.DiscSeq);
+                    }
+                    else {
+                        App.cboDiscSeq.clearValue();
+                    }
+                });
+            //}
         },
 
         cboDiscType_change: function (cbo, newValue, oldValue, eOpts) {
             var frmRec = App.frmDiscDefintionTop.getRecord();
-            if (!frmRec.data.tstamp) {
-                if (cbo.value) {
-                    if (oldValue) {
-                        if (cbo.value
-                            || App.grdDiscBreak.store.getCount() > 1
-                            || App.grdBundle.store.getCount() > 1
-                            || App.grdDiscCust.store.getCount() > 1
-                            || App.grdDiscCustClass.store.getCount() > 1
-                            || App.grdDiscItem.store.getCount() > 1
-                            || App.grdDiscItemClass.store.getCount() > 1) {
-                            HQ.message.show(43, "", "");
+            //if (!frmRec.data.tstamp) {
+            //    if (cbo.value) {
+            //        if (oldValue) {
+            //            if (cbo.value
+            //                || App.grdDiscBreak.store.getCount() > 1
+            //                || App.grdBundle.store.getCount() > 1
+            //                || App.grdDiscCust.store.getCount() > 1
+            //                || App.grdDiscCustClass.store.getCount() > 1
+            //                || App.grdDiscItem.store.getCount() > 1
+            //                || App.grdDiscItemClass.store.getCount() > 1) {
+            //                HQ.message.show(43, "", "");
 
-                            cbo.suspendEvents(false);
-                            cbo.setValue(oldValue);
-                            cbo.resumeEvents();
-                            return;
-                        }
+            //                cbo.suspendEvents(false);
+            //                cbo.setValue(oldValue);
+            //                cbo.resumeEvents();
+            //                return;
+            //            }
 
-                        if (App.cboDiscFor.value == "X" && cbo.value != "L") {
-                            HQ.message.show(53, "", "");
+            //            if (App.cboDiscFor.value == "X" && cbo.value != "L") {
+            //                HQ.message.show(53, "", "");
 
-                            cbo.suspendEvents(false);
-                            cbo.setValue(oldValue);
-                            cbo.resumeEvents();
-                            return;
-                        }
-                    }
+            //                cbo.suspendEvents(false);
+            //                cbo.setValue(oldValue);
+            //                cbo.resumeEvents();
+            //                return;
+            //            }
+            //        }
 
 
-                    if (cbo.value == "L" || cbo.value == "G") {
-                        App.cboDiscClass.setValue("II");
+            //        if (cbo.value == "L" || cbo.value == "G") {
+            //            App.cboDiscClass.setValue("II");
 
-                    }
-                    else {
-                        App.cboDiscClass.setValue("CC");
-                        App.cboBreakBy.setValue("A");
-                    }
+            //        }
+            //        else {
+            //            App.cboDiscClass.setValue("CC");
+            //            App.cboBreakBy.setValue("A");
+            //        }
+            //    }
+            //}
+            App.cboDiscClass.store.load(function () {
+                if (frmRec.data.tstamp) {
+                    App.cboDiscClass.setValue(frmRec.data.DiscClass);
                 }
-            }
+            });
         },
 
         cboDiscClass_change: function (cbo, newValue, oldValue, eOpts) {
@@ -1012,7 +1064,10 @@ var DiscDefintion = {
         },
 
         cboDiscSeq_change: function (cbo, newValue, oldValue, eOpts) {
-            App.stoDiscSeqInfo.reload();
+            //var selRec = HQ.store.findInStore(cbo.store, ["DiscSeq"], [cbo.getValue()]);
+            //if (selRec || !_isNewSeq) {
+                App.stoDiscSeqInfo.reload();
+            //}
         },
 
         cboDiscFor_change: function (cbo, newValue, oldValue, eOpts) {
@@ -1039,6 +1094,18 @@ var DiscDefintion = {
                     cbo.resumeEvents();
                     return;
                 }
+            }
+
+            var discAmtCol = App.grdDiscBreak.down('[dataIndex=DiscAmt]');
+            var discAmtField = discAmtCol.getEditor().field;
+
+            if (App.cboDiscFor.getValue() == "A") {
+                discAmtCol.format = "0,000";
+                discAmtField.decimalPrecision = 0;
+            }
+            else if(App.cboDiscFor.getValue() == "P"){
+                discAmtCol.format = "0,000.00";
+                discAmtField.decimalPrecision = 2;
             }
         },
 

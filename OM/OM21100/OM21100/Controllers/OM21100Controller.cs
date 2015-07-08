@@ -83,6 +83,11 @@ namespace OM21100.Controllers
             var lstTerritories = _db.OM21100_ptTerritory(Current.UserName).ToList();//tam thoi
             var companies = _db.OM21100_ptCompany(Current.UserName).ToList();
 
+            if (lstTerritories.Count == 0)
+            {
+                node.Leaf = true;
+            }
+
             foreach (var item in lstTerritories)
             {
                 var nodeTerritory = new Node();
@@ -1453,7 +1458,7 @@ namespace OM21100.Controllers
                 t.BundleOrItem = "B";
                 t.BundleQty = s.BundleQty;
                 t.DiscType = s.DiscType;
-                t.UnitDesc = string.Empty;
+                t.UnitDesc = s.UnitDesc;
 
                 t.LUpd_DateTime = DateTime.Now;
                 t.LUpd_Prog = _screenNbr;

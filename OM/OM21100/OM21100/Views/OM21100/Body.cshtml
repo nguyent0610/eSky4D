@@ -84,11 +84,12 @@
 
                             , HQ.Combo().ID("cboDiscClass")
                             .MarginSpec("5 5 0 5")
-                            .HQLangCode("DiscClass").HQProcedure("OM21100_pcDiscClass").HQColumnShow("Descr")
+                            .HQLangCode("DiscClass").HQProcedure("OM21100_pcDiscClass").HQColumnShow("Code,Descr")
                             .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")
-                            .ForceSelection(true).AllowBlank(false).DataIndex("DiscClass")
+                            .Editable(false).AllowBlank(false).DataIndex("DiscClass")//ForceSelection(true)
                             .HQParam(new StoreParameterCollection() { 
                                 new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                                ,new StoreParameter("@DiscType", "App.cboDiscType.getValue()", ParameterMode.Raw)
                             })
                             .LoadData()
                             .Listeners(l => l.Change.Fn = "DiscDefintion.Event.cboDiscClass_change")
@@ -288,24 +289,24 @@
                                     , X.NumberColumn().Text(Util.GetLang("BreakQty")).DataIndex("BreakQty")
                                     .Align(Alignment.Right).Format("0,000")
                                     .Editor(
-                                        X.NumberField().SelectOnFocus(true).MinValue(0)
+                                        X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                                     )
 
                                     , X.NumberColumn().Text(Util.GetLang("BreakAmt")).DataIndex("BreakAmt")
                                     .Align(Alignment.Right).Format("0,000")
                                     .Editor(
-                                        X.NumberField().SelectOnFocus(true).MinValue(0)
+                                        X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(0)
                                     )
 
                                     , X.NumberColumn().Text(Util.GetLang("Discount")).DataIndex("DiscAmt")
-                                    .Align(Alignment.Right).Format("0,000")
+                                    .Align(Alignment.Right).Format("0,000.00")
                                     .Editor(
-                                        X.NumberField().SelectOnFocus(true).MinValue(0)
+                                        X.NumberField().SelectOnFocus(true).MinValue(0).DecimalPrecision(2)
                                     )
 
                                     , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
                                     .Editor(
-                                        HQ.TextBox().SelectOnFocus(true)
+                                        HQ.TextBox().SelectOnFocus(true).MaxLength(200).EnforceMaxLength(true)
                                     )
 
                                     , X.CommandColumn()
@@ -618,18 +619,18 @@
 
                         , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDesc")
                         .Renderer("DiscDefintion.Process.renderDpiiInvtName")
-                        //.Editor(
-                        //    HQ.Combo().ID("cboGItemUnitDescr")
-                        //    .HQProcedure("OM21100_pcClassUnitDescrByInvtID").HQColumnShow("FromUnit,ClassID")//ok
-                        //    .HQHeightWidth(400, 300)
-                        //    .ValueField("FromUnit").DisplayField("FromUnit")
-                        //    .ForceSelection(true).SelectOnFocus(true)
-                        //    .HQParam(new StoreParameterCollection() { 
-                        //        new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdDiscItem,'InvtID')",ParameterMode.Raw)//se fix lai
-                        //    })
-                        //    .LoadData()
-                        //    .Listeners(x => x.Expand.Handler = "this.store.reload();")
-                        //)
+                        .Editor(
+                            HQ.Combo().ID("cboGItemUnitDescr")
+                            .HQProcedure("OM21100_pcClassUnitDescrByInvtID").HQColumnShow("FromUnit,ClassID")//ok
+                            .HQHeightWidth(400, 300)
+                            .ValueField("FromUnit").DisplayField("FromUnit")
+                            .ForceSelection(true).SelectOnFocus(true)
+                            .HQParam(new StoreParameterCollection() { 
+                                new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdDiscItem,'InvtID')",ParameterMode.Raw)//se fix lai
+                            })
+                            .LoadData()
+                            .Listeners(x => x.Expand.Handler = "this.store.reload();")
+                        )
 
                         , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID")
 
@@ -691,6 +692,21 @@
 
                         , X.Column().Text(Util.GetLang("Descr")).DataIndex("InvtID")
                         .Renderer("DiscDefintion.Process.renderGInvtName")
+                        
+                        , X.Column().Text(Util.GetLang("UOM")).DataIndex("UnitDesc")
+                        .Renderer("DiscDefintion.Process.renderGInvtName")
+                        .Editor(
+                            HQ.Combo().ID("cboGInvtUnitDescr")
+                            .HQProcedure("OM21100_pcClassUnitDescrByInvtID").HQColumnShow("FromUnit,ClassID")//ok
+                            .HQHeightWidth(400, 300)
+                            .ValueField("FromUnit").DisplayField("FromUnit")
+                            .ForceSelection(true).SelectOnFocus(true)
+                            .HQParam(new StoreParameterCollection() { 
+                                new StoreParameter("@InvtID","Main.Process.getParamForGridCombo(App.grdBundle,'InvtID')",ParameterMode.Raw)//se fix lai
+                            })
+                            .LoadData()
+                            .Listeners(x => x.Expand.Handler = "this.store.reload();")
+                        )
 
                         , X.NumberColumn().Text(Util.GetLang("BreakQty")).DataIndex("BundleQty")
                         .Align(Alignment.Right).Format("0,000")
