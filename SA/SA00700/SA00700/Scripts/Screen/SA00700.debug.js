@@ -20,7 +20,7 @@ var loadSourceCombo = function () {
 
 var loadCheck = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.txtInitRights.getStore().load(function (){
+    App.txtInitRights.getStore().load(function () {
         HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
     })
 };
@@ -49,7 +49,7 @@ var menuClick = function (command) {
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
                 App.stoSYS_AccessDetRights.reload();
-            }          
+            }
             break;
         case "new":
         case "delete":
@@ -69,7 +69,7 @@ var menuClick = function (command) {
         case "print":
             break;
         case "close":
-            HQ.common.close(this);            
+            HQ.common.close(this);
             break;
     }
 
@@ -119,50 +119,68 @@ var grdSYS_AccessDetRights_Reject = function (record) {
 
 var InitRightsCheckAll_Change = function (value) {
     if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
         App.grdSYS_AccessDetRights.getStore().each(function (item) {
             item.set("InitRights", value.checked);
         });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
     }
 
 };
 
 var InsertRightsCheckAll_Change = function (value) {
     if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
         App.grdSYS_AccessDetRights.getStore().each(function (item) {
             item.set("InsertRights", value.checked);
         });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
     }
 };
 
 var UpdateRightsCheckAll_Change = function (value) {
     if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
         App.grdSYS_AccessDetRights.getStore().each(function (item) {
             item.set("UpdateRights", value.checked);
         });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
     }
 };
 
 var DeleteRightsCheckAll_Change = function (value) {
     if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
         App.grdSYS_AccessDetRights.getStore().each(function (item) {
             item.set("DeleteRights", value.checked);
         });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
     }
 };
 
 var ViewRightsCheckAll_Change = function (value) {
     if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
         App.grdSYS_AccessDetRights.getStore().each(function (item) {
             item.set("ViewRights", value.checked);
         });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
     }
 };
 
 var ReleaseRightsCheckAll_Change = function (value) {
     if (value) {
+        App.stoSYS_AccessDetRights.suspendEvents();
         App.grdSYS_AccessDetRights.getStore().each(function (item) {
             item.set("ReleaseRights", value.checked);
         });
+        App.stoSYS_AccessDetRights.resumeEvents();
+        App.grdSYS_AccessDetRights.view.refresh();
     }
 };
 
@@ -232,11 +250,3 @@ function refresh(item) {
     }
 };
 ///////////////////////////////////
-
-
-
-
-
-
-
-
