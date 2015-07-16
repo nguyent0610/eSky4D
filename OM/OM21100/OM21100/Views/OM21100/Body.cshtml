@@ -54,6 +54,7 @@
                             {
                                 l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                 l.Change.Fn = "DiscDefintion.Event.cboDiscID_change";
+                                l.Blur.Fn = "DiscDefintion.Event.cboDiscID_change";
                             })
 
                             , HQ.Combo().ID("cboDiscType")
@@ -135,6 +136,7 @@
                                     {
                                         l.TriggerClick.Fn = "DiscDefintion.Event.btnHideTrigger_click";
                                         l.Change.Fn = "DiscDefintion.Event.cboDiscSeq_change";
+                                        l.Blur.Fn = "DiscDefintion.Event.cboDiscSeq_change";
                                     })
 
                                     , HQ.Combo().ID("cboDiscFor")
@@ -184,7 +186,7 @@
                                     HQ.Combo().ID("cboProAplForItem")
                                     .MarginSpec("5 5 0 5")
                                     .HQLangCode("ProAplForItem").HQProcedure("OM21100_pcProApl").HQColumnShow("Code,Descr")
-                                    .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr").LabelWidth(160)
+                                    .HQHeightWidth(400, 300).ValueField("Code").DisplayField("Descr")//.LabelWidth(160)
                                     .ForceSelection(true).AllowBlank(false).DataIndex("ProAplForItem")
                                     .HQParam(new StoreParameterCollection() { 
                                         new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
@@ -246,7 +248,7 @@
                                 ) // Container
 
                                 // Forth Column
-                                , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0").MaxWidth(150)
+                                , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")//.MaxWidth(150)
                                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                                 .Items(
                                     HQ.Checkbox().ID("chkActive")

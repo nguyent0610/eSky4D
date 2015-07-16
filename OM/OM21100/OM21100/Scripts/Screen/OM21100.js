@@ -2,6 +2,8 @@ var _holdStatus = "H";
 var _gridForDel;
 var _isNewDisc = false;
 var _isNewSeq = false;
+var _discLoad = "";
+var _seqLoad = "";
 
 var Main = {
 
@@ -126,7 +128,8 @@ var Main = {
         checkHasData: function () {
             var hasData = false;
             if (App.cboStatus.getValue() == _holdStatus) {
-                if (App.grdDiscBreak.store.getCount() > 1 && App.grdCompany.store.getCount() > 0) {
+                if (App.grdDiscBreak.store.getCount() > 1) {
+                    if (App.grdCompany.store.getCount() > 0) {
                         // 0: {Code: "BB", Descr: "Item Bundle"}
                         if (App.cboDiscClass.value == "BB") {
                             if (App.grdBundle.store.getCount() > 1) {
@@ -137,7 +140,7 @@ var Main = {
                                 hasData = false;
                             }
                         }
-                        // 1: {Code: "CB", Descr: "Customer and Item Bundle"}
+                            // 1: {Code: "CB", Descr: "Customer and Item Bundle"}
                         else if (App.cboDiscClass.value == "CB") {
                             if (App.grdBundle.store.getCount() > 1 && App.grdDiscCust.store.getCount() > 1) {
                                 hasData = true;
@@ -147,7 +150,7 @@ var Main = {
                                 hasData = false;
                             }
                         }
-                        // 2: {Code: "CC", Descr: "Customer"}
+                            // 2: {Code: "CC", Descr: "Customer"}
                         else if (App.cboDiscClass.value == "CC") {
                             if (App.grdDiscCust.store.getCount() > 1) {
                                 hasData = true;
@@ -157,7 +160,7 @@ var Main = {
                                 hasData = false;
                             }
                         }
-                        // 3: {Code: "CI", Descr: "Customer and Invt. Item"}
+                            // 3: {Code: "CI", Descr: "Customer and Invt. Item"}
                         else if (App.cboDiscClass.value == "CI") {
                             if (App.grdDiscCust.store.getCount() > 1 && App.grdDiscItem.store.getCount() > 1) {
                                 hasData = true;
@@ -167,7 +170,7 @@ var Main = {
                                 hasData = false;
                             }
                         }
-                        // 4: {Code: "II", Descr: "Inventory Item"}
+                            // 4: {Code: "II", Descr: "Inventory Item"}
                         else if (App.cboDiscClass.value == "II") {
                             if (App.grdDiscItem.store.getCount() > 1) {
                                 hasData = true;
@@ -177,7 +180,7 @@ var Main = {
                                 hasData = false;
                             }
                         }
-                        // 5: {Code: "PP", Descr: "Product Group"}
+                            // 5: {Code: "PP", Descr: "Product Group"}
                         else if (App.cboDiscClass.value == "PP") {
                             if (App.grdDiscItemClass.store.getCount() > 1) {
                                 hasData = true;
@@ -187,7 +190,7 @@ var Main = {
                                 hasData = false;
                             }
                         }
-                        // 6: {Code: "TB", Descr: "Shop Type and Item Bundle"}
+                            // 6: {Code: "TB", Descr: "Shop Type and Item Bundle"}
                         else if (App.cboDiscClass.value == "TB") {
                             if (App.grdDiscCustClass.store.getCount() > 1 && App.grdBundle.store.getCount() > 1) {
                                 hasData = true;
@@ -197,7 +200,7 @@ var Main = {
                                 hasData = false;
                             }
                         }
-                        // 7: {Code: "TI", Descr: "Shop Type and Invt. Item"}
+                            // 7: {Code: "TI", Descr: "Shop Type and Invt. Item"}
                         else if (App.cboDiscClass.value == "TI") {
                             if (App.grdDiscCustClass.store.getCount() > 1 && App.grdDiscItem.store.getCount() > 1) {
                                 hasData = true;
@@ -207,7 +210,7 @@ var Main = {
                                 hasData = false;
                             }
                         }
-                        // 8: {Code: "TP", Descr: "Prod. Group and Shop Type"}
+                            // 8: {Code: "TP", Descr: "Prod. Group and Shop Type"}
                         else if (App.cboDiscClass.value == "TP") {
                             if (App.grdDiscCustClass.store.getCount() > 1 && App.grdDiscItemClass.store.getCount() > 1) {
                                 hasData = true;
@@ -217,7 +220,7 @@ var Main = {
                                 hasData = false;
                             }
                         }
-                        // 9: {Code: "TT", Descr: "Shop Type"}
+                            // 9: {Code: "TT", Descr: "Shop Type"}
                         else if (App.cboDiscClass.value == "TT") {
                             if (App.grdDiscCustClass.store.getCount() > 1) {
                                 hasData = true;
@@ -230,9 +233,14 @@ var Main = {
                         else {
                             hasData = false;
                         }
+                    }
+                    else {
+                        HQ.message.show(1000, HQ.common.getLang('AppComp'), '');
+                        hasData = false;
+                    }
                 }
                 else {
-                    HQ.message.show(1000, HQ.common.getLang('DiscBreak') +' / '+ HQ.common.getLang('AppComp'), '');
+                    HQ.message.show(1000, HQ.common.getLang('DiscBreak'), '');
                     hasData = false;
                 }
             }
@@ -581,11 +589,11 @@ var Main = {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
 
             if (keys.indexOf(e.field) != -1) {
-                var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-                if (e.value && !e.value.match(regex)) {
-                    HQ.message.show(20140811, e.column.text);
-                    return false;
-                }
+                //var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
+                //if (e.value && !e.value.match(regex)) {
+                //    HQ.message.show(20140811, e.column.text);
+                //    return false;
+                //}
                 if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
                     HQ.message.show(1112, e.value);
                     return false;
@@ -876,6 +884,7 @@ var DiscDefintion = {
             }
             var frmRec = sto.getAt(0);
             App.frmDiscDefintionTop.loadRecord(frmRec);
+            _discLoad = frmRec.data.DiscID;
 
             if (frmRec.data.tstamp) {
                 App.cboDiscClass.setReadOnly(true);
@@ -914,6 +923,7 @@ var DiscDefintion = {
 
             var discSeqRec = sto.getAt(0);
             App.frmDiscSeqInfo.loadRecord(discSeqRec);
+            _seqLoad = discSeqRec.data.DiscSeq;
 
             if(discSeqRec.data.tstamp){
                 App.cboBreakBy.setReadOnly(true);
@@ -957,15 +967,21 @@ var DiscDefintion = {
         cboDiscID_change: function (cbo, newValue, oldValue, eOpts) {
             //var selRec = HQ.store.findInStore(cbo.store, ["DiscID"], [cbo.getValue()]);
             //if (selRec || !_isNewDisc) {
+            if (cbo.getValue() != _discLoad && !cbo.hasFocus) {
                 App.stoDiscInfo.reload();
                 App.cboDiscSeq.store.load(function () {
                     if (App.cboDiscSeq.store.getCount()) {
-                        App.cboDiscSeq.setValue(App.cboDiscSeq.store.getAt(0).data.DiscSeq);
+                        var discSeqValue = App.cboDiscSeq.store.getAt(0).data.DiscSeq;
+                        if (discSeqValue == App.cboDiscSeq.getValue()) {
+                            App.cboDiscSeq.clearValue();
+                        }
+                        App.cboDiscSeq.setValue(discSeqValue);
                     }
                     else {
                         App.cboDiscSeq.clearValue();
                     }
                 });
+            }
             //}
         },
 
@@ -1010,6 +1026,7 @@ var DiscDefintion = {
             //        }
             //    }
             //}
+            App.cboDiscClass.clearValue();
             App.cboDiscClass.store.load(function () {
                 if (frmRec.data.tstamp) {
                     App.cboDiscClass.setValue(frmRec.data.DiscClass);
@@ -1061,12 +1078,20 @@ var DiscDefintion = {
             else {
                 DiscDefintion.Process.enableATabInList([]);
             }
+
+            if (App.cboProAplForItem.value == "M"
+                    && cbo.value
+                    && cbo.value.substring(1) != "I") {
+                App.cboProAplForItem.setValue("A");
+            }
         },
 
         cboDiscSeq_change: function (cbo, newValue, oldValue, eOpts) {
             //var selRec = HQ.store.findInStore(cbo.store, ["DiscSeq"], [cbo.getValue()]);
             //if (selRec || !_isNewSeq) {
+            if (cbo.getValue() != _seqLoad && !cbo.hasFocus) {
                 App.stoDiscSeqInfo.reload();
+            }
             //}
         },
 
@@ -1159,11 +1184,19 @@ var DiscDefintion = {
             if (!discSeqRec.data.tstamp) {
                 if (cbo.value == "M"
                     && App.cboDiscClass.value
-                    && App.cboDiscClass.value.substring(1, 1) != "I") {
+                    && App.cboDiscClass.value.substring(1) != "I") {
 
                     cbo.suspendEvents(false);
                     cbo.setValue("A");
                     cbo.resumeEvents();
+                }
+                else {
+                    if (cbo.value == "M") {
+                        App.chkAutoFreeItem.setValue(true);
+                    }
+                    else {
+                        App.chkAutoFreeItem.setValue(false);
+                    }
                 }
             }
         },
