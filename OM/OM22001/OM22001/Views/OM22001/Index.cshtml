@@ -113,6 +113,33 @@
                 // Store: stoLevel
         )
 
+        @(
+            X.Store().ID("stoInvt")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM22001_pgInvt_Result), "mdlInvt", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetInvt", "OM22001"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("displayType", "App.cboDisplayType.getValue()", ParameterMode.Raw));
+            })
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Handler = "this.HQFieldKeys=['InvtID'];";
+                l.DataChanged.Handler = "Event.Form.frmMain_fieldChange()";
+                l.Update.Handler = "Event.Form.frmMain_fieldChange()";
+            })
+                // Store: stoInvt
+        )
+
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 

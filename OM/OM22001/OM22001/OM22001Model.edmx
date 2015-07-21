@@ -9,6 +9,7 @@
           <EntitySet Name="HO_PendingTasks" EntityType="eBiz4DWebAppModel.Store.HO_PendingTasks" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_TDisplay" EntityType="eBiz4DWebAppModel.Store.OM_TDisplay" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_TDisplayCpny" EntityType="eBiz4DWebAppModel.Store.OM_TDisplayCpny" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_TDisplayInvt" EntityType="eBiz4DWebAppModel.Store.OM_TDisplayInvt" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="OM_TDisplayLevel" EntityType="eBiz4DWebAppModel.Store.OM_TDisplayLevel" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="eBiz4DWebAppModel.Store.SI_ApprovalFlowHandle" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
@@ -55,6 +56,7 @@
           <Property Name="Status" Type="varchar" MaxLength="2" />
           <Property Name="Specification" Type="nvarchar" MaxLength="200" />
           <Property Name="DisplayType" Type="varchar" MaxLength="2" />
+          <Property Name="ApplyTime" Type="varchar" MaxLength="2" />
         </EntityType>
         <EntityType Name="OM_TDisplayCpny">
           <Key>
@@ -63,6 +65,26 @@
           </Key>
           <Property Name="DisplayID" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="CpnyID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_TDisplayInvt">
+          <Key>
+            <PropertyRef Name="DisplayID" />
+            <PropertyRef Name="LevelID" />
+            <PropertyRef Name="DisplayType" />
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Name="DisplayID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="LevelID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="DisplayType" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Qty" Type="float" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="12" />
@@ -130,6 +152,11 @@
           <Parameter Name="DisplayID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="OM22001_pgInvt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="DisplayID" Type="varchar" Mode="In" />
+          <Parameter Name="DisplayType" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="OM22001_pgLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DisplayID" Type="varchar" Mode="In" />
           <Parameter Name="DisplayType" Type="varchar" Mode="In" />
@@ -157,10 +184,16 @@
           </FunctionImport>
           <EntitySet Name="HO_PendingTasks" EntityType="OM22001Model.HO_PendingTasks" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="OM22001Model.SI_ApprovalFlowHandle" />
-          <EntitySet Name="OM_TDisplay" EntityType="OM22001Model.OM_TDisplay" />
           <EntitySet Name="OM_TDisplayCpny" EntityType="OM22001Model.OM_TDisplayCpny" />
           <EntitySet Name="OM_TDisplayLevel" EntityType="OM22001Model.OM_TDisplayLevel" />
           <FunctionImport Name="OM22001_pgLevel" ReturnType="Collection(OM22001Model.OM22001_pgLevel_Result)">
+            <Parameter Name="DisplayID" Mode="In" Type="String" />
+            <Parameter Name="DisplayType" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="OM_TDisplay" EntityType="OM22001Model.OM_TDisplay" />
+          <EntitySet Name="OM_TDisplayInvt" EntityType="OM22001Model.OM_TDisplayInvt" />
+          <FunctionImport Name="OM22001_pgInvt" ReturnType="Collection(OM22001Model.OM22001_pgInvt_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="DisplayID" Mode="In" Type="String" />
             <Parameter Name="DisplayType" Mode="In" Type="String" />
           </FunctionImport>
@@ -234,28 +267,6 @@
           <Property Type="String" Name="MailApprove" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProcContent" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="OM_TDisplay">
-          <Key>
-            <PropertyRef Name="DisplayID" />
-          </Key>
-          <Property Type="String" Name="DisplayID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Descr" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="FromDate" Nullable="false" Precision="3" />
-          <Property Type="DateTime" Name="ToDate" Nullable="false" Precision="3" />
-          <Property Type="String" Name="ApplyFor" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ApplyType" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="Boolean" Name="Type" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
-          <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Specification" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="DisplayType" MaxLength="2" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="OM_TDisplayCpny">
           <Key>
             <PropertyRef Name="DisplayID" />
@@ -300,6 +311,57 @@
           <Property Type="String" Name="LocID" Nullable="false" MaxLength="2" />
           <Property Type="String" Name="SoMatTB" Nullable="true" MaxLength="30" />
           <Property Type="Double" Name="ChiPhiDauLon" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="OM_TDisplay">
+          <Key>
+            <PropertyRef Name="DisplayID" />
+          </Key>
+          <Property Type="String" Name="DisplayID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descr" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="FromDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="ToDate" Nullable="false" Precision="3" />
+          <Property Type="String" Name="ApplyFor" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ApplyType" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Type" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="Status" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Specification" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DisplayType" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ApplyTime" MaxLength="2" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="OM_TDisplayInvt">
+          <Key>
+            <PropertyRef Name="DisplayID" />
+            <PropertyRef Name="LevelID" />
+            <PropertyRef Name="DisplayType" />
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Type="String" Name="DisplayID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LevelID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DisplayType" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="Qty" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="OM22001_pgInvt_Result">
+          <Property Type="String" Name="DisplayID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="LevelID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="DisplayType" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="Double" Name="Qty" Nullable="true" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -387,29 +449,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OM_TDisplay">
-            <EntityTypeMapping TypeName="OM22001Model.OM_TDisplay">
-              <MappingFragment StoreEntitySet="OM_TDisplay">
-                <ScalarProperty Name="DisplayType" ColumnName="DisplayType" />
-                <ScalarProperty Name="Specification" ColumnName="Specification" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="ApplyType" ColumnName="ApplyType" />
-                <ScalarProperty Name="ApplyFor" ColumnName="ApplyFor" />
-                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
-                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OM_TDisplayCpny">
             <EntityTypeMapping TypeName="OM22001Model.OM_TDisplayCpny">
               <MappingFragment StoreEntitySet="OM_TDisplayCpny">
@@ -458,6 +497,60 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="OM_TDisplay">
+            <EntityTypeMapping TypeName="OM22001Model.OM_TDisplay">
+              <MappingFragment StoreEntitySet="OM_TDisplay">
+                <ScalarProperty Name="ApplyTime" ColumnName="ApplyTime" />
+                <ScalarProperty Name="DisplayType" ColumnName="DisplayType" />
+                <ScalarProperty Name="Specification" ColumnName="Specification" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ApplyType" ColumnName="ApplyType" />
+                <ScalarProperty Name="ApplyFor" ColumnName="ApplyFor" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_TDisplayInvt">
+            <EntityTypeMapping TypeName="OM22001Model.OM_TDisplayInvt">
+              <MappingFragment StoreEntitySet="OM_TDisplayInvt">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="DisplayType" ColumnName="DisplayType" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM22001_pgInvt" FunctionName="eBiz4DWebAppModel.Store.OM22001_pgInvt">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM22001Model.OM22001_pgInvt_Result">
+                <ScalarProperty Name="DisplayID" ColumnName="DisplayID" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="DisplayType" ColumnName="DisplayType" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -482,9 +575,10 @@
       <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
         <EntityTypeShape EntityType="OM22001Model.HO_PendingTasks" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM22001Model.SI_ApprovalFlowHandle" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="OM22001Model.OM_TDisplay" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="OM22001Model.OM_TDisplayCpny" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="OM22001Model.OM_TDisplayLevel" Width="1.5" PointX="6.75" PointY="4.75" />
+        <EntityTypeShape EntityType="OM22001Model.OM_TDisplayCpny" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM22001Model.OM_TDisplayLevel" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="OM22001Model.OM_TDisplay" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM22001Model.OM_TDisplayInvt" Width="1.5" PointX="6.75" PointY="6.75" />
       </Diagram>
     </Diagrams>
   </Designer>

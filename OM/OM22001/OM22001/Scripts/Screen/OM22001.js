@@ -5,6 +5,11 @@ var _displayType = {
     LCD: "M"
 };
 
+var _applyType = {
+    Amount: "A",
+    Qty: "Q"
+};
+
 var Process = {
     renderCpnyName: function (value) {
         var record = App.cboGCpnyID.store.findRecord("CpnyID", value);
@@ -24,6 +29,21 @@ var Process = {
         else {
             return value;
         }
+    },
+
+    renderInvtInfo: function (value, metaData, record, rowIndex, colIndex, store) {
+        var rec = App.cboColInvtID.store.findRecord("Code", record.data.InvtID);
+        var returnValue = value;
+        if (rec) {
+            if (metaData.column.dataIndex == "Descr") {
+                returnValue = rec.data.Descr;
+            }
+            else if (metaData.column.dataIndex == "StkUnit") {
+                returnValue = rec.data.StkUnit;
+            }
+        }
+
+        return returnValue;
     },
 
     getDeepAllLeafNodes: function (node, onlyLeaf) {
@@ -93,6 +113,21 @@ var Process = {
         }
     },
 
+    //isSomeValidKey: function (items, keys) {
+    //    if (items && items.length > 0) {
+    //        for (var i = 0; i < items.length; i++) {
+    //            for (var j = 0; j < keys.length; j++) {
+    //                if (items[i][keys[j]]) {
+    //                    return true;
+    //                }
+    //            }
+    //        }
+    //        return false;
+    //    } else {
+    //        return true;
+    //    }
+    //},
+
     refresh: function (item) {
         if (item == 'yes') {
             HQ.isChange = false;
@@ -113,6 +148,7 @@ var Process = {
                     lstCpny: Ext.encode(App.grdCompany.store.getRecordsValues()),
                     lstCpnyChange: HQ.store.getData(App.grdCompany.store),
                     lstLevelChange: HQ.store.getData(App.grdLevel.store),
+                    lstInvtChange: Process.getChangedFilteredData(App.grdInvt.store),
                     isNew: HQ.isNew
                 },
                 success: function (msg, data) {
@@ -177,7 +213,14 @@ var Process = {
 
     deleteLevel: function (item) {
         if (item == "yes") {
+            App.grdInvt.store.removeAll();
             App.grdLevel.deleteSelected();
+        }
+    },
+
+    deleteInvt: function (item) {
+        if (item == "yes") {
+            App.grdInvt.deleteSelected();
         }
     },
 
@@ -207,6 +250,16 @@ var Process = {
                 }
             }
         });
+    },
+
+    getChangedFilteredData: function (store) {
+        var data = store.data,
+            changedData
+
+        store.data = store.snapshot; // does the trick
+        changedData = store.getChangedData();
+        store.data = data; // to revert the changes back
+        return Ext.encode(changedData);
     }
 };
 
@@ -226,12 +279,17 @@ var Store = {
         App.frmMain.loadRecord(frmRecord);
 
         App.grdCompany.store.reload();
-        App.grdLevel.store.reload();
+        App.grdLevel.store.load(function () {
+            App.grdInvt.store.load(function () {
+                App.grdInvt.store.filterBy(function (record) { });
+            });
+        });
 
         if (frmRecord.data.tstamp) {
             App.cboApplyFor.setReadOnly(true);
             App.cboApplyType.setReadOnly(true);
             App.cboDisplayType.setReadOnly(true);
+            App.cboApplyTime.setReadOnly(true);
 
             if (frmRecord.data.Status == _beginStatus) {
                 App.dtpFromDate.setReadOnly(false);
@@ -248,6 +306,7 @@ var Store = {
             App.cboApplyFor.setReadOnly(false);
             App.cboApplyType.setReadOnly(false);
             App.cboDisplayType.setReadOnly(false);
+            App.cboApplyTime.setReadOnly(false);
 
             App.dtpFromDate.setReadOnly(false);
             App.dtpToDate.setReadOnly(false);
@@ -309,7 +368,7 @@ var Event = {
 
                 var frmRecord = App.frmMain.getRecord();
                 if (!frmRecord.data.tstamp) {
-                    if (HQ.isChange && App.cboDisplayType.value
+                    if (HQ.isChange && App.cboDisplayType.getValue()
                         && (App.grdCompany.store.getCount() > 0 || App.grdLevel.store.getCount() > 1)) {
                         App.cboDisplayType.setReadOnly(true);
                     }
@@ -332,15 +391,32 @@ var Event = {
             App.dtpToDate.setMinValue(newValue);
         },
 
+        cboApplyType_change: function (cbo, newValue, oldValue, eOpts) {
+            if (cbo.getValue()) {
+                if (cbo.getValue() == _applyType.Amount) {
+                    App.pnlInvt.hide();
+                    Process.showColumns(App.grdLevel, ["Bonus"], true);
+                }
+                else if (cbo.getValue() == _applyType.Qty) {
+                    App.pnlInvt.show();
+                    Process.showColumns(App.grdLevel, ["Bonus"], false);
+                }
+            }
+            else {
+                App.pnlInvt.hide();
+                Process.showColumns(App.grdLevel, ["Bonus"], false);
+            }
+        },
+
         cboDisplayType_change: function (cbo, newValue, oldValue, eOpts) {
-            if (cbo.value) {
-                if (cbo.value == _displayType.Level) {
+            if (cbo.getValue()) {
+                if (cbo.getValue() == _displayType.Level) {
                     Process.showColumns(App.grdLevel, ["SoMatTB", "ChiPhiDauLon"], true);
                 }
-                else if (cbo.value == _displayType.Signboard) {
+                else if (cbo.getValue() == _displayType.Signboard) {
                     Process.showColumns(App.grdLevel, ["SoMatTB", "ChiPhiDauLon"], false);
                 }
-                else if (cbo.value == _displayType.LCD) {
+                else if (cbo.getValue() == _displayType.LCD) {
                     Process.showColumns(App.grdLevel, ["SoMatTB", "ChiPhiDauLon"], false);
                 }
             }
@@ -361,6 +437,9 @@ var Event = {
                     else if (HQ.focus == 'level') {
                         HQ.grid.first(App.grdLevel);
                     }
+                    else if (HQ.focus == 'invt') {
+                        HQ.grid.first(App.grdInvt);
+                    }
                     break;
                 case "next":
                     if (HQ.focus == 'display') {
@@ -371,6 +450,9 @@ var Event = {
                     }
                     else if (HQ.focus == 'level') {
                         HQ.grid.next(App.grdLevel);
+                    }
+                    else if (HQ.focus == 'invt') {
+                        HQ.grid.next(App.grdInvt);
                     }
                     break;
                 case "prev":
@@ -383,6 +465,9 @@ var Event = {
                     else if (HQ.focus == 'level') {
                         HQ.grid.prev(App.grdLevel);
                     }
+                    else if (HQ.focus == 'invt') {
+                        HQ.grid.prev(App.grdInvt);
+                    }
                     break;
 
                 case "last":
@@ -394,6 +479,9 @@ var Event = {
                     }
                     else if (HQ.focus == 'level') {
                         HQ.grid.last(App.grdLevel);
+                    }
+                    else if (HQ.focus == 'invt') {
+                        HQ.grid.last(App.grdInvt);
                     }
                     break;
                 case "refresh":
@@ -411,6 +499,9 @@ var Event = {
                         }
                         else if (HQ.focus == 'level') {
                             App.grdLevel.store.reload();
+                        }
+                        else if (HQ.focus == 'invt') {
+                            
                         }
                     }
                     break;
@@ -446,6 +537,13 @@ var Event = {
                                         'Process.deleteLevel');
                                 }
                             }
+                            else if (HQ.focus == 'invt') {
+                                if (App.cboDisplayID.getValue() && App.slmInvt.getCount()) {
+                                    HQ.message.show(2015020806,
+                                        HQ.common.getLang('InvtID') + " " + App.slmInvt.selected.items[0].data.InvtID,
+                                        'Process.deleteInvt');
+                                }
+                            }
                         }
                     }
                     else {
@@ -467,9 +565,44 @@ var Event = {
     },
 
     Grid: {
+        slmLevel_selectChange: function (grid, selected, eOpts) {
+            var store = App.grdInvt.store;
+            var keys = store.HQFieldKeys ? store.HQFieldKeys : "";
+            var displayID = App.cboDisplayID.getValue();
+            var displayType = App.cboDisplayType.getValue();
+
+            store.clearFilter();
+            if (selected.length > 0) {
+                store.filterBy(function (record) {
+                    if (record.data.LevelID == selected[0].data.LevelID) {
+                        return record;
+                    }
+                });
+
+                if (selected[0].data.LevelID && App.cboStatus.getValue() == _beginStatus) {
+                    if (Process.isAllValidKey(store.getRecordsValues(), keys)) {
+                        var newData = {
+                            DisplayID: displayID,
+                            DisplayType: displayType,
+                            LevelID: selected[0].data.LevelID
+                        };
+
+                        var newRec = Ext.create(store.model.modelName, newData);
+                        HQ.store.insertRecord(store, keys, newRec, false);
+                    }
+                }
+            }
+            else {
+                store.filterBy(function (record) {
+                    // no data
+                });
+            }
+        },
+
         grd_reject: function (col, record) {
             var grd = col.up('grid');
-            if (!record.data.tstamp && !record.fields.containsKey('LevelID')) {
+            var keys = grd.store.HQFieldKeys ? grd.store.HQFieldKeys : "";
+            if (!record.data.tstamp && keys && keys.indexOf('LevelID')<0) {
                 grd.getStore().remove(record, grd);
                 grd.getView().focusRow(grd.getStore().getCount() - 1);
                 grd.getSelectionModel().select(grd.getStore().getCount() - 1);
@@ -520,7 +653,15 @@ var Event = {
                         HQ.store.insertRecord(e.store, keys, rec);
                     }
                     else {
-                        HQ.store.insertBlank(e.store, keys);
+                        if (e.record.data.LevelID) {
+                            var rec = Ext.create(e.store.model.modelName, {
+                                LevelID: e.record.data.LevelID
+                            });
+                            HQ.store.insertRecord(e.store, keys, rec);
+                        }
+                        else {
+                            HQ.store.insertBlank(e.store, keys);
+                        }
                     }
                 }
             }

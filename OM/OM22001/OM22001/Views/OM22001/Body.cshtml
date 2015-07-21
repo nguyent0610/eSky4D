@@ -76,7 +76,8 @@
                         .Items(
                             HQ.DateField().ID("dtpFromDate")
                             .HQLangCode("FromDate").DataIndex("FromDate")
-                            .Listeners(l => {
+                            .Listeners(l =>
+                            {
                                 l.Change.Fn = "Event.Form.dtpFromDate_change";
                             })
 
@@ -92,6 +93,7 @@
                             .LoadData()
                             .Listeners(l =>
                             {
+                                l.Change.Fn = "Event.Form.cboApplyType_change";
                                 l.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                             })
                         )
@@ -119,7 +121,7 @@
                         new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                     })
                     .LoadData()
-                    .Listeners(ls=>ls.Change.Handler="App.cboHandle.store.reload()")
+                    .Listeners(ls => ls.Change.Handler = "App.cboHandle.store.reload()")
 
                     , HQ.Combo().ID("cboHandle")
                     .HQLangCode("Handle").HQProcedure("OM22001_pcHandle")
@@ -140,22 +142,43 @@
                 .Items(
                     HQ.Checkbox().ID("chkType").Hidden(true)
                     .HQLangCode("OM22001Type").MarginSpec("0 0 0 55").DataIndex("Type")
-                    
-                    ,HQ.Combo().ID("cboDisplayType")
+
+                    , HQ.Combo().ID("cboDisplayType")
                     .HQLangCode("DisplayType").HQProcedure("OM22001_pcDisplayType")
                     .HQColumnShow("Code,Descr").ForceSelection(true).DataIndex("DisplayType")
                     .HQHeightWidth(400, 300).MarginSpec("0 5 0 0")
-                    .ValueField("Code").DisplayField("Descr")
+                    .ValueField("Code").DisplayField("Descr").AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
                         , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
                     })
                     .LoadData()
-                    .Listeners(x=>x.Change.Fn="Event.Form.cboDisplayType_change")
+                    .Listeners(x => { 
+                        x.Change.Fn = "Event.Form.cboDisplayType_change";
+                        x.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                    })
+                    
+                    , HQ.Combo().ID("cboApplyTime")
+                    .HQLangCode("ApplyTime").HQProcedure("OM22001_pcApplyTime")
+                    .HQColumnShow("Code,Descr").ForceSelection(true).DataIndex("ApplyTime")
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0")
+                    .ValueField("Code").DisplayField("Descr").AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                        , new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw)
+                    })
+                    .LoadData()
+                    .Listeners(x => {
+                        x.Change.Fn = "Event.Form.cboApplyTime_change";
+                        x.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                    })
                 ) // Third Column
             )
-            .Listeners(x => { 
-                x.Render.Handler = "HQ.common.control_render(this,'display')"; 
+            .Listeners(x =>
+            {
+                x.Render.Handler = "HQ.common.control_render(this,'display')";
             })// pnlHeader
 
             , X.TabPanel().ID("tabInfo")
@@ -294,8 +317,9 @@
                         })
                     ) // grdCompany
                 )
-                .Listeners(x => { 
-                    x.Render.Handler = "HQ.common.control_render(this,'cpny')"; 
+                .Listeners(x =>
+                {
+                    x.Render.Handler = "HQ.common.control_render(this,'cpny')";
                 }) // tabCompany
 
                 , X.Panel().ID("tabLevel")
@@ -303,83 +327,161 @@
                 .Region(Region.Center)
                 .Layout(LayoutType.Border)
                 .Items(
-                    X.GridPanel().ID("grdLevel")
+                    X.Panel().ID("pnlLevel")
                     .Region(Region.Center)
-                    .Scroll(ScrollMode.Both)
-                    .View(X.GridView().TrackOver(false))
-                    .SortableColumns(false)
-                    .StoreID("stoLevel")
-                    .ColumnModel(
-                        X.RowNumbererColumn().Width(40)
+                    .Layout(LayoutType.Fit)
+                    .Flex(1).Split(true)
+                    .Items(
+                        X.GridPanel().ID("grdLevel")
+                        .Layout(LayoutType.Fit)
+                        .Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false))
+                        .SortableColumns(false)
+                        .StoreID("stoLevel")
+                        .ColumnModel(
+                            X.RowNumbererColumn().Width(40)
 
-                        , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelID")
+                            , X.Column().Text(Util.GetLang("Level")).DataIndex("LevelID")
 
-                        , X.Column().Text(Util.GetLang("LocID")).DataIndex("LocID")
-                        .Editor(
-                            HQ.Combo().ID("cboColLocID")
-                            .HQProcedure("OM22001_pcLocID").HQColumnShow("Code,Descr")
-                            .HQHeightWidth(400, 300)
-                            .ValueField("Code").DisplayField("Code")
-                            .ForceSelection(true)
-                            .HQParam(new StoreParameterCollection() { 
-                                new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
-                                , new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw)
+                            , X.Column().Text(Util.GetLang("LocID")).DataIndex("LocID")
+                            .Editor(
+                                HQ.Combo().ID("cboColLocID")
+                                .HQProcedure("OM22001_pcLocID").HQColumnShow("Code,Descr")
+                                .HQHeightWidth(400, 300)
+                                .ValueField("Code").DisplayField("Code")
+                                .ForceSelection(true)
+                                .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
+                                    , new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw)
+                                })
+                                .LoadData()
+                            )
+
+                            , X.Column().Text(Util.GetLang("Descr")).DataIndex("LocID")
+                            .Renderer("Process.renderLocDescr")
+
+                            , X.Column().Text(Util.GetLang("SoMatTB")).DataIndex("SoMatTB")
+                            .Hidden(true).Hideable(false)
+                            .Editor(
+                                HQ.Combo().ID("cboColPPTBLoc")
+                                .HQProcedure("OM22001_pcPPTB").HQColumnShow("Code,Descr")
+                                .HQHeightWidth(400, 300)
+                                .ValueField("Code").DisplayField("Code")
+                                .ForceSelection(true)
+                                .LoadData()
+                            )
+
+                            , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("Bonus")
+                            .Format("0,000").Align(Alignment.Right).Hidden(true).Hideable(false)
+                            .Editor(
+                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                            )
+
+                            , X.NumberColumn().Text(Util.GetLang("ChiPhiDauLon")).DataIndex("ChiPhiDauLon")
+                            .Format("0,000").Align(Alignment.Right).Hidden(true).Hideable(false)
+                            .Editor(
+                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                            )
+
+                            , X.CommandColumn().Width(150)
+                            .Commands(
+                                X.GridCommand()
+                                .Text(Util.GetLang("Reject"))
+                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                .CommandName("reject")
+                                .Icon(Icon.ArrowUndo)
+                            )
+                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                            .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
+                        )
+                        .SelectionModel(
+                            X.RowSelectionModel().ID("slmLevel").Mode(SelectionMode.Single)
+                            .Listeners(x =>
+                            {
+                                x.SelectionChange.Fn = "Event.Grid.slmLevel_selectChange";
                             })
-                            .LoadData()
                         )
-                        
-                        , X.Column().Text(Util.GetLang("Descr")).DataIndex("LocID")
-                        .Renderer("Process.renderLocDescr")
-                        
-                        , X.Column().Text(Util.GetLang("SoMatTB")).DataIndex("SoMatTB")
-                        .Hidden(true).Hideable(false)
-                        .Editor(
-                            HQ.Combo().ID("cboColPPTBLoc")
-                            .HQProcedure("OM22001_pcPPTB").HQColumnShow("Code,Descr")
-                            .HQHeightWidth(400, 300)
-                            .ValueField("Code").DisplayField("Code")
-                            .ForceSelection(true)
-                            .LoadData()
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "Event.Grid.grd_beforeEdit";
+                                ls.Edit.Fn = "Event.Grid.grd_edit";
+                                ls.ValidateEdit.Fn = "Event.Grid.grd_validateEdit";
+                            })
+                        ) // grdLevel
+                    ).Listeners(x =>
+                    {
+                        x.Render.Handler = "HQ.common.control_render(this,'level')";
+                    }) // pnlLevel
+                    
+                    ,X.Panel().ID("pnlInvt")
+                    .Region(Region.East).Hidden(true)
+                    .Layout(LayoutType.Fit).Flex(1).Split(true)
+                    .Items(
+                        X.GridPanel().ID("grdInvt")
+                        .Title(Util.GetLang("Inventory"))
+                        .Layout(LayoutType.Fit)
+                        .Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false))
+                        .SortableColumns(false)//.Hidden(true)
+                        .StoreID("stoInvt")
+                        .ColumnModel(
+                            X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID")
+                            .Editor(
+                                HQ.Combo().ID("cboColInvtID")
+                                .HQProcedure("OM22001_pcInvtID").HQColumnShow("Code,Descr")
+                                .HQHeightWidth(400, 300)
+                                .ValueField("Code").DisplayField("Code")
+                                .ForceSelection(true)
+                                .HQParam(new StoreParameterCollection() { 
+                                    new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
+                                    , new StoreParameter("@LangID","HQ.langID",ParameterMode.Raw)
+                                })
+                                .LoadData()
+                            )
+                            
+                            , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr")
+                            .Renderer("Process.renderInvtInfo")
+
+                            , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("Qty")
+                            .Format("0,000").Align(Alignment.Right)
+                            .Editor(
+                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                            )
+                            
+                            , X.Column().Text(Util.GetLang("StkUnit")).DataIndex("StkUnit")
+                            .Renderer("Process.renderInvtInfo")
+
+                            , X.CommandColumn().Width(150)
+                            .Commands(
+                                X.GridCommand()
+                                .Text(Util.GetLang("Reject"))
+                                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                                .CommandName("reject")
+                                .Icon(Icon.ArrowUndo)
+                            )
+                            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                            .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
                         )
-                        
-                        , X.NumberColumn().Text(Util.GetLang("Bonus")).DataIndex("Bonus")
-                        .Format("0,000").Align(Alignment.Right)
-                        .Editor(
-                            HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
-                        )
-                        
-                        , X.NumberColumn().Text(Util.GetLang("ChiPhiDauLon")).DataIndex("ChiPhiDauLon")
-                        .Format("0,000").Align(Alignment.Right).Hidden(true).Hideable(false)
-                        .Editor(
-                            HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
-                        )
-                        
-                        , X.CommandColumn().Width(150)
-                        .Commands(
-                            X.GridCommand()
-                            .Text(Util.GetLang("Reject"))
-                            .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                            .CommandName("reject")
-                            .Icon(Icon.ArrowUndo)
-                        )
-                        .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                        .Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
+                        .SelectionModel(X.RowSelectionModel().ID("slmInvt").Mode(SelectionMode.Single))
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "Event.Grid.grd_beforeEdit";
+                                ls.Edit.Fn = "Event.Grid.grd_edit";
+                                ls.ValidateEdit.Fn = "Event.Grid.grd_validateEdit";
+                            })
+                        ) // grdInvt
                     )
-                    .SelectionModel(X.RowSelectionModel().ID("slmLevel").Mode(SelectionMode.Single))
-                    .Plugins(
-                        X.CellEditing()
-                        .ClicksToEdit(1)
-                        .Listeners(ls =>
-                        {
-                            ls.BeforeEdit.Fn = "Event.Grid.grd_beforeEdit";
-                            ls.Edit.Fn = "Event.Grid.grd_edit";
-                            ls.ValidateEdit.Fn = "Event.Grid.grd_validateEdit";
-                        })
-                    ) // grdLevel
-                )
-                .Listeners(x => { 
-                    x.Render.Handler = "HQ.common.control_render(this,'level')"; 
-                })// tabLevel
+                    .Listeners(x =>
+                    {
+                        x.Render.Handler = "HQ.common.control_render(this,'invt')";
+                    })// pnlInvt
+                )// tabLevel
             )
         )
         .Listeners(lst =>

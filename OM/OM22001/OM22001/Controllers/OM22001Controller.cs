@@ -24,6 +24,7 @@ namespace OM22001.Controllers
         private string _screenNbr = "OM22001";
         private string _beginStatus = "H";
         private string _noneStatus = "N";
+        private string _applyTypeQty = "Q";
         OM22001Entities _db = Util.CreateObjectContext<OM22001Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
 
@@ -124,6 +125,12 @@ namespace OM22001.Controllers
             return this.Store(displayLevels);
         }
 
+        public ActionResult GetInvt(string displayID, string displayType)
+        {
+            var invts = _db.OM22001_pgInvt(Current.UserName, displayID, displayType).ToList();
+            return this.Store(invts);
+        }
+
         public ActionResult SaveData(FormCollection data, bool isNew)
         {
             try
@@ -154,6 +161,10 @@ namespace OM22001.Controllers
 
                             Save_Cpny(data, display);
                             Save_Level(data, display);
+                            if (inputDisplay.ApplyType == _applyTypeQty)
+                            {
+                                Save_Invt(data, display);
+                            }
 
                             // handle here
                             if (handle != _noneStatus && handle != null)
@@ -175,6 +186,10 @@ namespace OM22001.Controllers
 
                         Save_Cpny(data, display);
                         Save_Level(data, display);
+                        if (inputDisplay.ApplyType == _applyTypeQty)
+                        {
+                            Save_Invt(data, display);
+                        }
 
                         // handle here
                         if (handle != _noneStatus && handle != null)
@@ -405,6 +420,67 @@ namespace OM22001.Controllers
             }
         }
 
+        private void Save_Invt(FormCollection data, OM_TDisplay display)
+        {
+            var invtChangeHandler = new StoreDataHandler(data["lstInvtChange"]);
+            var lstInvtChange = invtChangeHandler.BatchObjectData<OM22001_pgInvt_Result>();
+
+            foreach (var created in lstInvtChange.Created)
+            {
+                var createdInvt = _db.OM_TDisplayInvt.FirstOrDefault(x => x.DisplayID == display.DisplayID
+                    && x.LevelID == created.LevelID && x.DisplayType == display.DisplayType && x.InvtID == created.InvtID);
+                if (!string.IsNullOrWhiteSpace(created.LevelID) && createdInvt == null
+                    && !string.IsNullOrWhiteSpace(created.InvtID))
+                {
+                    createdInvt = new OM_TDisplayInvt();
+                    createdInvt.DisplayID = display.DisplayID;
+                    createdInvt.LevelID = created.LevelID;
+                    createdInvt.DisplayType = display.DisplayType;
+
+                    update_Invt(ref createdInvt, created, true);
+                    _db.OM_TDisplayInvt.AddObject(createdInvt);
+                }
+            }
+
+            foreach (var updated in lstInvtChange.Updated)
+            {
+                var updatedLevel = _db.OM_TDisplayInvt.FirstOrDefault(x => x.DisplayID == display.DisplayID
+                    && x.LevelID == updated.LevelID && x.DisplayType == display.DisplayType && x.InvtID == updated.InvtID);
+                if (!string.IsNullOrWhiteSpace(updated.LevelID) && updatedLevel != null
+                    && !string.IsNullOrWhiteSpace(updated.InvtID))
+                {
+                    update_Invt(ref updatedLevel, updated, false);
+                }
+            }
+
+            foreach (var deleted in lstInvtChange.Deleted)
+            {
+                var deletedLevel = _db.OM_TDisplayInvt.FirstOrDefault(x => x.DisplayID == display.DisplayID
+                    && x.LevelID == deleted.LevelID && x.DisplayType == display.DisplayType && x.InvtID == deleted.InvtID);
+                if (!string.IsNullOrWhiteSpace(deleted.LevelID) && deletedLevel != null
+                    && !string.IsNullOrWhiteSpace(deleted.InvtID))
+                {
+                    _db.OM_TDisplayInvt.DeleteObject(deletedLevel);
+                }
+            }
+        }
+
+        private void update_Invt(ref OM_TDisplayInvt createdInvt, OM22001_pgInvt_Result created, bool isNew)
+        {
+            if (isNew)
+            {
+                createdInvt.InvtID = created.InvtID;
+
+                createdInvt.Crtd_DateTime = DateTime.Now;
+                createdInvt.Crtd_Prog = _screenNbr;
+                createdInvt.Crtd_User = Current.UserName;
+            }
+            createdInvt.Qty = created.Qty;
+            createdInvt.LUpd_DateTime = DateTime.Now;
+            createdInvt.LUpd_Prog = _screenNbr;
+            createdInvt.LUpd_User = Current.UserName;
+        }
+
         private void Update_Header(ref OM_TDisplay display, OM_TDisplay inputDisplay, bool isNew)
         {
             if (isNew)
@@ -425,6 +501,7 @@ namespace OM22001.Controllers
             display.ToDate = inputDisplay.ToDate;
 
             display.DisplayType = inputDisplay.DisplayType;
+            display.ApplyTime = inputDisplay.ApplyTime;
             //if (cboHandle.ToValue() == "N" || cboHandle.ToValue() == null)
             //    display.Status = cboStatus.ToValue().PassNull();
 

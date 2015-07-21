@@ -100,22 +100,6 @@ namespace OM22001
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_TDisplay> OM_TDisplay
-        {
-            get
-            {
-                if ((_OM_TDisplay == null))
-                {
-                    _OM_TDisplay = base.CreateObjectSet<OM_TDisplay>("OM_TDisplay");
-                }
-                return _OM_TDisplay;
-            }
-        }
-        private ObjectSet<OM_TDisplay> _OM_TDisplay;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_TDisplayCpny> OM_TDisplayCpny
         {
             get
@@ -144,6 +128,38 @@ namespace OM22001
             }
         }
         private ObjectSet<OM_TDisplayLevel> _OM_TDisplayLevel;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_TDisplay> OM_TDisplay
+        {
+            get
+            {
+                if ((_OM_TDisplay == null))
+                {
+                    _OM_TDisplay = base.CreateObjectSet<OM_TDisplay>("OM_TDisplay");
+                }
+                return _OM_TDisplay;
+            }
+        }
+        private ObjectSet<OM_TDisplay> _OM_TDisplay;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_TDisplayInvt> OM_TDisplayInvt
+        {
+            get
+            {
+                if ((_OM_TDisplayInvt == null))
+                {
+                    _OM_TDisplayInvt = base.CreateObjectSet<OM_TDisplayInvt>("OM_TDisplayInvt");
+                }
+                return _OM_TDisplayInvt;
+            }
+        }
+        private ObjectSet<OM_TDisplayInvt> _OM_TDisplayInvt;
 
         #endregion
 
@@ -166,14 +182,6 @@ namespace OM22001
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_TDisplay EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_TDisplay(OM_TDisplay oM_TDisplay)
-        {
-            base.AddObject("OM_TDisplay", oM_TDisplay);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the OM_TDisplayCpny EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_TDisplayCpny(OM_TDisplayCpny oM_TDisplayCpny)
@@ -187,6 +195,22 @@ namespace OM22001
         public void AddToOM_TDisplayLevel(OM_TDisplayLevel oM_TDisplayLevel)
         {
             base.AddObject("OM_TDisplayLevel", oM_TDisplayLevel);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_TDisplay EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_TDisplay(OM_TDisplay oM_TDisplay)
+        {
+            base.AddObject("OM_TDisplay", oM_TDisplay);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_TDisplayInvt EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_TDisplayInvt(OM_TDisplayInvt oM_TDisplayInvt)
+        {
+            base.AddObject("OM_TDisplayInvt", oM_TDisplayInvt);
         }
 
         #endregion
@@ -289,6 +313,47 @@ namespace OM22001
             }
     
             return base.ExecuteFunction<OM22001_pgLevel_Result>("OM22001_pgLevel", displayIDParameter, displayTypeParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="displayID">No Metadata Documentation available.</param>
+        /// <param name="displayType">No Metadata Documentation available.</param>
+        public ObjectResult<OM22001_pgInvt_Result> OM22001_pgInvt(global::System.String userID, global::System.String displayID, global::System.String displayType)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter displayIDParameter;
+            if (displayID != null)
+            {
+                displayIDParameter = new ObjectParameter("DisplayID", displayID);
+            }
+            else
+            {
+                displayIDParameter = new ObjectParameter("DisplayID", typeof(global::System.String));
+            }
+    
+            ObjectParameter displayTypeParameter;
+            if (displayType != null)
+            {
+                displayTypeParameter = new ObjectParameter("DisplayType", displayType);
+            }
+            else
+            {
+                displayTypeParameter = new ObjectParameter("DisplayType", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM22001_pgInvt_Result>("OM22001_pgInvt", userIDParameter, displayIDParameter, displayTypeParameter);
         }
 
         #endregion
@@ -1215,6 +1280,30 @@ namespace OM22001
         private global::System.String _DisplayType;
         partial void OnDisplayTypeChanging(global::System.String value);
         partial void OnDisplayTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ApplyTime
+        {
+            get
+            {
+                return _ApplyTime;
+            }
+            set
+            {
+                OnApplyTimeChanging(value);
+                ReportPropertyChanging("ApplyTime");
+                _ApplyTime = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ApplyTime");
+                OnApplyTimeChanged();
+            }
+        }
+        private global::System.String _ApplyTime;
+        partial void OnApplyTimeChanging(global::System.String value);
+        partial void OnApplyTimeChanged();
 
         #endregion
 
@@ -1315,6 +1404,356 @@ namespace OM22001
         private global::System.String _CpnyID;
         partial void OnCpnyIDChanging(global::System.String value);
         partial void OnCpnyIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime Crtd_DateTime
+        {
+            get
+            {
+                return _Crtd_DateTime;
+            }
+            set
+            {
+                OnCrtd_DateTimeChanging(value);
+                ReportPropertyChanging("Crtd_DateTime");
+                _Crtd_DateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Crtd_DateTime");
+                OnCrtd_DateTimeChanged();
+            }
+        }
+        private global::System.DateTime _Crtd_DateTime;
+        partial void OnCrtd_DateTimeChanging(global::System.DateTime value);
+        partial void OnCrtd_DateTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_Prog
+        {
+            get
+            {
+                return _Crtd_Prog;
+            }
+            set
+            {
+                OnCrtd_ProgChanging(value);
+                ReportPropertyChanging("Crtd_Prog");
+                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Crtd_Prog");
+                OnCrtd_ProgChanged();
+            }
+        }
+        private global::System.String _Crtd_Prog;
+        partial void OnCrtd_ProgChanging(global::System.String value);
+        partial void OnCrtd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Crtd_User
+        {
+            get
+            {
+                return _Crtd_User;
+            }
+            set
+            {
+                OnCrtd_UserChanging(value);
+                ReportPropertyChanging("Crtd_User");
+                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Crtd_User");
+                OnCrtd_UserChanged();
+            }
+        }
+        private global::System.String _Crtd_User;
+        partial void OnCrtd_UserChanging(global::System.String value);
+        partial void OnCrtd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime LUpd_DateTime
+        {
+            get
+            {
+                return _LUpd_DateTime;
+            }
+            set
+            {
+                OnLUpd_DateTimeChanging(value);
+                ReportPropertyChanging("LUpd_DateTime");
+                _LUpd_DateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LUpd_DateTime");
+                OnLUpd_DateTimeChanged();
+            }
+        }
+        private global::System.DateTime _LUpd_DateTime;
+        partial void OnLUpd_DateTimeChanging(global::System.DateTime value);
+        partial void OnLUpd_DateTimeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_Prog
+        {
+            get
+            {
+                return _LUpd_Prog;
+            }
+            set
+            {
+                OnLUpd_ProgChanging(value);
+                ReportPropertyChanging("LUpd_Prog");
+                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LUpd_Prog");
+                OnLUpd_ProgChanged();
+            }
+        }
+        private global::System.String _LUpd_Prog;
+        partial void OnLUpd_ProgChanging(global::System.String value);
+        partial void OnLUpd_ProgChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LUpd_User
+        {
+            get
+            {
+                return _LUpd_User;
+            }
+            set
+            {
+                OnLUpd_UserChanging(value);
+                ReportPropertyChanging("LUpd_User");
+                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LUpd_User");
+                OnLUpd_UserChanged();
+            }
+        }
+        private global::System.String _LUpd_User;
+        partial void OnLUpd_UserChanging(global::System.String value);
+        partial void OnLUpd_UserChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
+
+        #endregion
+
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="OM22001Model", Name="OM_TDisplayInvt")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class OM_TDisplayInvt : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM_TDisplayInvt object.
+        /// </summary>
+        /// <param name="displayID">Initial value of the DisplayID property.</param>
+        /// <param name="levelID">Initial value of the LevelID property.</param>
+        /// <param name="displayType">Initial value of the DisplayType property.</param>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
+        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
+        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
+        /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
+        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
+        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static OM_TDisplayInvt CreateOM_TDisplayInvt(global::System.String displayID, global::System.String levelID, global::System.String displayType, global::System.String invtID, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        {
+            OM_TDisplayInvt oM_TDisplayInvt = new OM_TDisplayInvt();
+            oM_TDisplayInvt.DisplayID = displayID;
+            oM_TDisplayInvt.LevelID = levelID;
+            oM_TDisplayInvt.DisplayType = displayType;
+            oM_TDisplayInvt.InvtID = invtID;
+            oM_TDisplayInvt.Crtd_DateTime = crtd_DateTime;
+            oM_TDisplayInvt.Crtd_Prog = crtd_Prog;
+            oM_TDisplayInvt.Crtd_User = crtd_User;
+            oM_TDisplayInvt.LUpd_DateTime = lUpd_DateTime;
+            oM_TDisplayInvt.LUpd_Prog = lUpd_Prog;
+            oM_TDisplayInvt.LUpd_User = lUpd_User;
+            oM_TDisplayInvt.tstamp = tstamp;
+            return oM_TDisplayInvt;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayID
+        {
+            get
+            {
+                return _DisplayID;
+            }
+            set
+            {
+                if (_DisplayID != value)
+                {
+                    OnDisplayIDChanging(value);
+                    ReportPropertyChanging("DisplayID");
+                    _DisplayID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("DisplayID");
+                    OnDisplayIDChanged();
+                }
+            }
+        }
+        private global::System.String _DisplayID;
+        partial void OnDisplayIDChanging(global::System.String value);
+        partial void OnDisplayIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LevelID
+        {
+            get
+            {
+                return _LevelID;
+            }
+            set
+            {
+                if (_LevelID != value)
+                {
+                    OnLevelIDChanging(value);
+                    ReportPropertyChanging("LevelID");
+                    _LevelID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("LevelID");
+                    OnLevelIDChanged();
+                }
+            }
+        }
+        private global::System.String _LevelID;
+        partial void OnLevelIDChanging(global::System.String value);
+        partial void OnLevelIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayType
+        {
+            get
+            {
+                return _DisplayType;
+            }
+            set
+            {
+                if (_DisplayType != value)
+                {
+                    OnDisplayTypeChanging(value);
+                    ReportPropertyChanging("DisplayType");
+                    _DisplayType = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("DisplayType");
+                    OnDisplayTypeChanged();
+                }
+            }
+        }
+        private global::System.String _DisplayType;
+        partial void OnDisplayTypeChanging(global::System.String value);
+        partial void OnDisplayTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                if (_InvtID != value)
+                {
+                    OnInvtIDChanging(value);
+                    ReportPropertyChanging("InvtID");
+                    _InvtID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("InvtID");
+                    OnInvtIDChanged();
+                }
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Qty
+        {
+            get
+            {
+                return _Qty;
+            }
+            set
+            {
+                OnQtyChanging(value);
+                ReportPropertyChanging("Qty");
+                _Qty = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Qty");
+                OnQtyChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Qty;
+        partial void OnQtyChanging(Nullable<global::System.Double> value);
+        partial void OnQtyChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2650,6 +3089,187 @@ namespace OM22001
         private global::System.String _CpnyID;
         partial void OnCpnyIDChanging(global::System.String value);
         partial void OnCpnyIDChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM22001Model", Name="OM22001_pgInvt_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM22001_pgInvt_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM22001_pgInvt_Result object.
+        /// </summary>
+        /// <param name="displayID">Initial value of the DisplayID property.</param>
+        /// <param name="levelID">Initial value of the LevelID property.</param>
+        /// <param name="displayType">Initial value of the DisplayType property.</param>
+        /// <param name="invtID">Initial value of the InvtID property.</param>
+        /// <param name="tstamp">Initial value of the tstamp property.</param>
+        public static OM22001_pgInvt_Result CreateOM22001_pgInvt_Result(global::System.String displayID, global::System.String levelID, global::System.String displayType, global::System.String invtID, global::System.Byte[] tstamp)
+        {
+            OM22001_pgInvt_Result oM22001_pgInvt_Result = new OM22001_pgInvt_Result();
+            oM22001_pgInvt_Result.DisplayID = displayID;
+            oM22001_pgInvt_Result.LevelID = levelID;
+            oM22001_pgInvt_Result.DisplayType = displayType;
+            oM22001_pgInvt_Result.InvtID = invtID;
+            oM22001_pgInvt_Result.tstamp = tstamp;
+            return oM22001_pgInvt_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayID
+        {
+            get
+            {
+                return _DisplayID;
+            }
+            set
+            {
+                OnDisplayIDChanging(value);
+                ReportPropertyChanging("DisplayID");
+                _DisplayID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DisplayID");
+                OnDisplayIDChanged();
+            }
+        }
+        private global::System.String _DisplayID;
+        partial void OnDisplayIDChanging(global::System.String value);
+        partial void OnDisplayIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String LevelID
+        {
+            get
+            {
+                return _LevelID;
+            }
+            set
+            {
+                OnLevelIDChanging(value);
+                ReportPropertyChanging("LevelID");
+                _LevelID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("LevelID");
+                OnLevelIDChanged();
+            }
+        }
+        private global::System.String _LevelID;
+        partial void OnLevelIDChanging(global::System.String value);
+        partial void OnLevelIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DisplayType
+        {
+            get
+            {
+                return _DisplayType;
+            }
+            set
+            {
+                OnDisplayTypeChanging(value);
+                ReportPropertyChanging("DisplayType");
+                _DisplayType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DisplayType");
+                OnDisplayTypeChanged();
+            }
+        }
+        private global::System.String _DisplayType;
+        partial void OnDisplayTypeChanging(global::System.String value);
+        partial void OnDisplayTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String InvtID
+        {
+            get
+            {
+                return _InvtID;
+            }
+            set
+            {
+                OnInvtIDChanging(value);
+                ReportPropertyChanging("InvtID");
+                _InvtID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("InvtID");
+                OnInvtIDChanged();
+            }
+        }
+        private global::System.String _InvtID;
+        partial void OnInvtIDChanging(global::System.String value);
+        partial void OnInvtIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Qty
+        {
+            get
+            {
+                return _Qty;
+            }
+            set
+            {
+                OnQtyChanging(value);
+                ReportPropertyChanging("Qty");
+                _Qty = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Qty");
+                OnQtyChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Qty;
+        partial void OnQtyChanging(Nullable<global::System.Double> value);
+        partial void OnQtyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] tstamp
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_tstamp);
+            }
+            set
+            {
+                OntstampChanging(value);
+                ReportPropertyChanging("tstamp");
+                _tstamp = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("tstamp");
+                OntstampChanged();
+            }
+        }
+        private global::System.Byte[] _tstamp;
+        partial void OntstampChanging(global::System.Byte[] value);
+        partial void OntstampChanged();
 
         #endregion
 
