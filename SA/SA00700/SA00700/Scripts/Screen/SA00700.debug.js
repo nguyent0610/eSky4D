@@ -52,6 +52,7 @@ var menuClick = function (command) {
             }
             break;
         case "new":
+            break;
         case "delete":
             if (App.slmSYS_AccessDetRights.selected.items[0] != undefined) {
                 if (HQ.isDelete) {
