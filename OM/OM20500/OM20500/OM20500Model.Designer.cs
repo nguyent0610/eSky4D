@@ -4688,7 +4688,8 @@ namespace OM20500
         /// <param name="ordQty">Initial value of the OrdQty property.</param>
         /// <param name="ordAmt">Initial value of the OrdAmt property.</param>
         /// <param name="taxTot">Initial value of the TaxTot property.</param>
-        public static OM20500_pgOrder_Result CreateOM20500_pgOrder_Result(global::System.String branchID, global::System.String orderNbr, global::System.DateTime orderDate, global::System.Double ordQty, global::System.Double ordAmt, global::System.Double taxTot)
+        /// <param name="isAddStock">Initial value of the IsAddStock property.</param>
+        public static OM20500_pgOrder_Result CreateOM20500_pgOrder_Result(global::System.String branchID, global::System.String orderNbr, global::System.DateTime orderDate, global::System.Double ordQty, global::System.Double ordAmt, global::System.Double taxTot, global::System.Boolean isAddStock)
         {
             OM20500_pgOrder_Result oM20500_pgOrder_Result = new OM20500_pgOrder_Result();
             oM20500_pgOrder_Result.BranchID = branchID;
@@ -4697,6 +4698,7 @@ namespace OM20500
             oM20500_pgOrder_Result.OrdQty = ordQty;
             oM20500_pgOrder_Result.OrdAmt = ordAmt;
             oM20500_pgOrder_Result.TaxTot = taxTot;
+            oM20500_pgOrder_Result.IsAddStock = isAddStock;
             return oM20500_pgOrder_Result;
         }
 
@@ -5015,6 +5017,30 @@ namespace OM20500
         private global::System.Double _TaxTot;
         partial void OnTaxTotChanging(global::System.Double value);
         partial void OnTaxTotChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsAddStock
+        {
+            get
+            {
+                return _IsAddStock;
+            }
+            set
+            {
+                OnIsAddStockChanging(value);
+                ReportPropertyChanging("IsAddStock");
+                _IsAddStock = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsAddStock");
+                OnIsAddStockChanged();
+            }
+        }
+        private global::System.Boolean _IsAddStock;
+        partial void OnIsAddStockChanging(global::System.Boolean value);
+        partial void OnIsAddStockChanged();
 
         #endregion
 

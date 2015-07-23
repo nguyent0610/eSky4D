@@ -169,6 +169,15 @@
                     .Handler("Event.Grid.chkSelectHeaderOrder_change")
                 )
 
+                , X.CheckColumn()
+                .HideTitleEl(true).DataIndex("IsAddStock")
+                .Align(Alignment.Center).ToolTip(Util.GetLang("IsAddStock"))
+                .Width(100).Editable(true)
+                .HeaderItems(
+                    HQ.Checkbox().ID("chkSelectHeaderIsAddStock").HQLangCode("OM205AddStock")
+                    .Handler("Event.Grid.chkSelectHeaderIsAddStock_change")
+                )
+                
                 , X.Column()
                 .Text(Util.GetLang("OrderNbr")).DataIndex("OrderNbr")
 
@@ -499,7 +508,7 @@
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
                             })
-                    ,HQ.Checkbox().ID("chkAddStock").HQLangCode("OM205AddStock").MarginSpec("0 0 0 155")   
+                    //,HQ.Checkbox().ID("chkAddStock").HQLangCode("OM205AddStock").MarginSpec("0 0 0 155")   
                 )
                 , X.Container().Layout(LayoutType.HBox)
                         .Items(

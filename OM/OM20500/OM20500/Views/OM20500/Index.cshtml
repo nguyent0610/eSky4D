@@ -28,7 +28,8 @@
             HQ.userName = '@Current.UserName';
             HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
             HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');    
+            HQ.bussinessDate = new Date('@DateTime.Now.ToDateShort()');    
         </script>
 
         <title>@ViewBag.Title</title>

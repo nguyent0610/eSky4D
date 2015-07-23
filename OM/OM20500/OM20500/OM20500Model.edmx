@@ -264,11 +264,12 @@
           <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
           <Property Type="String" Name="PriceClassID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="Addr1" Nullable="true" MaxLength="200" />
-          <Property Type="String" Name="SlsPerID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SlsPerID" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
           <Property Type="Double" Name="OrdQty" Nullable="false" />
           <Property Type="Double" Name="OrdAmt" Nullable="false" />
           <Property Type="Double" Name="TaxTot" Nullable="false" />
+          <Property Type="Boolean" Name="IsAddStock" Nullable="false" />
         </ComplexType>
         <EntityType Name="OM_PDASalesOrd">
           <Key>
@@ -475,6 +476,7 @@
                 <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
                 <ScalarProperty Name="OrdAmt" ColumnName="OrdAmt" />
                 <ScalarProperty Name="TaxTot" ColumnName="TaxTot" />
+                <ScalarProperty Name="IsAddStock" ColumnName="IsAddStock" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -621,7 +623,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="77">
+      <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="25">
         <EntityTypeShape EntityType="OM20500Model.OM_PDASalesOrd" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="OM20500Model.IN_ItemSite" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>

@@ -43,24 +43,7 @@ var Store = {
         App.slmOrder.select(0);
     },
 
-    //stoDet_update: function (sto, record, operation, modifiedFieldNames, eOpts ) {
-    //    if (modifiedFieldNames.indexOf("Selected") == 0) {
-    //        if (record.data.Selected) {
-    //            record.set("QtyShip", record.data.LineQty);
-    //        }
-    //        else {
-    //            record.set("QtyShip", 0);
-    //        }
-    //    }
-    //    else if (modifiedFieldNames.indexOf("QtyShip") == 0) {
-    //        if (record.data.QtyShip) {
-    //            record.set("Selected", true);
-    //        }
-    //        else {
-    //            record.set("Selected", false);
-    //        }
-    //    }
-    //},
+  
 
     stoHisOrd_load: function (sto, records, successful, eOpts) {
         if (sto.getCount()) {
@@ -74,8 +57,13 @@ var Event = {
         switch (command) {
             case "save":
                 var recordOrder = HQ.store.findRecord(App.stoOrder, ["Selected"], [true]);
-                if(recordOrder!=undefined)
-                App.winOrder.show();
+                if (recordOrder != undefined) {
+                    App.cboDelivery.setValue('');
+                    App.dteShipDate.setValue(HQ.bussinessDate);
+                    App.dteARDocDate.setValue(HQ.bussinessDate);
+                    //App.chkAddStock.setValue(false);
+                    App.winOrder.show();
+                }
                 break;
 
             default:
@@ -174,6 +162,14 @@ var Event = {
                         Process.processOrderDet(record.data.OrderNbr, true);
 
                     }
+                }
+            });
+            App.grdOrder.view.refresh();
+        },
+        chkSelectHeaderIsAddStock_change: function (chk, newValue, oldValue, eOpts) {
+            App.stoOrder.data.each(function (record) {
+                if (record.data.Status != 'C' && record.data.Status != 'E') {
+                    record.data.IsAddStock = chk.value;                   
                 }
             });
             App.grdOrder.view.refresh();
@@ -285,8 +281,8 @@ var save = function () {
                 lstOrder: HQ.store.getAllData(App.stoOrder, ["Selected"], [true]),
                 delivery: App.cboDelivery.getValue(),
                 shipDate: App.dteShipDate.getValue(),
-                aRDocDate: App.dteARDocDate.getValue(),
-                isAddStock: App.chkAddStock.getValue()
+                aRDocDate: App.dteARDocDate.getValue()
+                //isAddStock: App.chkAddStock.getValue()
             },
             success: function (msg, data) {
                 HQ.message.process(msg, data, true);

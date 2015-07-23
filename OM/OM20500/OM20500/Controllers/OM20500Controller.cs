@@ -38,7 +38,7 @@ namespace OM20500.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -87,7 +87,7 @@ namespace OM20500.Controllers
                 string Delivery = data["delivery"];
                 DateTime dteShipDate = data["shipDate"].ToDateShort();
                 DateTime dteARDocDate = data["aRDocDate"].ToDateShort();
-                bool isAddStock = data["isAddStock"].ToBool();
+                //bool isAddStock = data["isAddStock"].ToBool();
                 string message = "";
                 foreach (var objHeader in lstOrd)
                 {
@@ -101,7 +101,7 @@ namespace OM20500.Controllers
                     {
                         OM om = new OM(Current.UserName, _screenNbr, dal);
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!om.OM20500_Release(objHeader.BranchID, objHeader.OrderNbr, dicRef, Delivery, dteShipDate, dteARDocDate,isAddStock))
+                        if (!om.OM20500_Release(objHeader.BranchID, objHeader.OrderNbr, dicRef, Delivery, dteShipDate, dteARDocDate,objHeader.IsAddStock))
                         {
                             dal.RollbackTrans();
                         }
