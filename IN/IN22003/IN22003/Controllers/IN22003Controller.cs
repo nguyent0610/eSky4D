@@ -66,9 +66,8 @@ namespace IN22003.Controllers
 
                 if (!access.Update && !access.Insert)
                     throw new MessageException(MessageType.Message, "728");
+
                 string handle = data["cboHandle"];
-                //string date_temp = data["NewDateExp"];
-                //DateTime date = DateTime.Parse(date_temp);
                 if (handle != "N" && handle != string.Empty)
                 {
                     foreach (var item in lstIN_StockRecoveryDet)
@@ -84,34 +83,8 @@ namespace IN22003.Controllers
                                 if (handle == "A")
                                 {
                                     obj.ApproveStkQty = item.ApproveStkQty;
-                                    //obj.NewExpDate = date;
                                     obj.Status = handle;
-                                    Save_PopUp(handle);
-                                    //var obj1 = _db.IN_StockRecoveryCust.FirstOrDefault(p => p.BranchID == item.BranchID
-                                    //                                                    && p.StkRecNbr == item.StkRecNbr
-                                    //                                                    && p.InvtID == item.InvtID
-                                    //                                                    && p.SlsPerID == item.SlsperId
-                                    //                                                    && p.NewExpDate == obj.NewExpDate
-                                    //                                                    );
-                                    //if (obj1 == null)
-                                    //{
-                                    //    var record = new IN_StockRecoveryCust();
-                                    //    record.BranchID = item.BranchID;
-                                    //    record.SlsPerID = item.SlsperId;
-                                    //    record.StkRecNbr = item.StkRecNbr;
-                                    //    record.InvtID = item.InvtID;
-                                    //    record.NewExpDate = date;
-                                    //    record.Status = "H";
-                                    //    record.QtyGiveBack = 0;
-
-                                    //    record.Crtd_DateTime = DateTime.Now;
-                                    //    record.Crtd_Prog = _screenNbr;
-                                    //    record.Crtd_User = _userName;
-                                    //    record.LUpd_DateTime = DateTime.Now;
-                                    //    record.LUpd_Prog = _screenNbr;
-                                    //    record.LUpd_User = _userName;
-                                    //    _db.IN_StockRecoveryCust.AddObject(record);
-                                    //}
+                                    Save_PopUp(handle, obj);
                                 }
                                
                                 obj.LUpd_DateTime = DateTime.Now;
@@ -144,16 +117,16 @@ namespace IN22003.Controllers
             }
         }
 
-        private void Save_PopUp(string handle)
+        private void Save_PopUp(string handle,IN_StockRecoveryDet det)
         {
-            foreach(var row in _lstPopUp)
+            var lst=_lstPopUp.Where(p=>p.InvtID==det.InvtID &&p.BranchID==det.BranchID && p.StkRecNbr==det.StkRecNbr && p.ExpDate==det.ExpDate).ToList();
+            foreach (var row in lst)
             {
-                //double ApproveStkQty=0;
                 var obj=_db.IN_StockRecoveryPopUp.FirstOrDefault(p=>p.BranchID == _branchID 
                                                         && p.StkRecNbr == row.StkRecNbr
                                                         && p.ExpDate == row.ExpDate
                                                         && p.InvtID == row.InvtID
-                                                        && p.NewExpDate ==row.NewExpDate);
+                                                        && p.NewExpDate == row.NewExpDate);
 
                 if(obj==null)
                 {

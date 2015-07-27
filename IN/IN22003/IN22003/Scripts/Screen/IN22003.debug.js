@@ -181,7 +181,7 @@ var grdIN_StockRecoveryDet_BeforeEdit = function (editor, e) {
 var grdIN_StockRecoveryDet_Edit = function (item, e) {
     if (e.field == "ApproveStkQty") {
         if (e.record.data.StkQty < e.record.data.ApproveStkQty || e.record.data.ApproveStkQty < 0) {
-            e.record.set("ApproveStkQty", e.record.data.StkQty);
+            e.record.set("ApproveStkQty", e.record.data.StkQty)
             e.record.set("ApprovePriceStkQty", e.record.data.StkQty * e.record.data.Price)
         } else {
             e.record.set("ApprovePriceStkQty", e.record.data.ApproveStkQty * e.record.data.Price)
@@ -365,7 +365,7 @@ var PopupWin = {
         var objDetail = e.record.data;
         var recordTran = App.winDetail.record.data;
         if (e.field == 'NewExpDate' && !e.value) {
-            HQ.message.show(15, 'NewDateExp');
+            HQ.message.show(1000, [HQ.common.getLang('NewDateExp')], '', true);
         }
             //else if (e.field == 'NewExpDate' && e.validate == false) {
             //    HQ.message.show(1555);
