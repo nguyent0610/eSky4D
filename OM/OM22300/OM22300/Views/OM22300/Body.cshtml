@@ -12,7 +12,7 @@
 }
 
 @(
- Html.X().Viewport().Layout(LayoutType.Fit)
+ X.Viewport().Layout(LayoutType.Fit)
 .Items(
         X.FormPanel()
         .Layout(LayoutType.Anchor)
@@ -21,21 +21,20 @@
         .TrackResetOnLoad(true)
         .DefaultAnchor("100%")
         .BodyPadding(2)
-        .TopBar(Util.SetupToolbar("Print", true))
         .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar("Print,New", true, ""))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
         .Listeners(l =>
-                    {
-                        l.BoxReady.Handler = "firstLoad();";
-                        l.FieldChange.Fn = "frmChange"; 
-                                                
-                    })
+        {
+            l.BoxReady.Handler = "firstLoad();";
+            //l.FieldChange.Fn = "frmChange";                   
+        })
         .Items(
             X.Panel().ID("pnlHeader").Layout(LayoutType.VBox).Border(false).AutoScroll(true)
             .Listeners(lst =>
                 {
                     lst.Render.Handler = "HQ.common.control_render(this,'header')";
-                    lst.Resize.Handler = "App.grdMailDetail.setAnchor(\"100% -\" + App.pnlHeader.getHeight());App.grdMailDetail.view.refresh();";
+                    lst.Resize.Handler = "App.grdOM_SalesRouteDet.setAnchor(\"100% -\" + App.pnlHeader.getHeight());App.grdOM_SalesRouteDet.view.refresh();";
                 })//focus header        
             .Items(
                 X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")
@@ -44,214 +43,214 @@
                     .HQColumnShow("CustID,Name,Addr1,Addr2").DisplayField("CustID").ValueField("CustID")
                     .Width(300).HQHeightWidth(400, 400).MarginSpec("5 0 0 0").Delimiter(";")
                     .HQDBSys(false).ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserName", Current.UserName.ToString(), ParameterMode.Value),
+                        new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value),
+                        new StoreParameter("@BranchID", Current.CpnyID.ToString(), ParameterMode.Value)
+                    })
                     .LoadData()
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
-                        {
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                          
-                        })
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
 
                     , HQ.Combo().ID("cboSlsPerID").Name("cboSlsPerID").HQLangCode("SlsPerID").HQProcedure("OM22300_pcSalesPerson")
                     .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Delimiter(";")
                     .HQDBSys(false).ForceSelection(true)
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserName", Current.UserName.ToString(), ParameterMode.Value),
+                        new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value),
+                        new StoreParameter("@BranchID", Current.CpnyID.ToString(), ParameterMode.Value)
+                    })
                     .LoadData()
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
-                        {
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-
-                        })
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                        
                     , HQ.Combo().ID("cboSlsRoute").Name("cboSlsRoute").HQLangCode("RouteID").HQProcedure("OM22300_pcSalesRouteID")
                     .HQColumnShow("SalesRoute,Descr").DisplayField("SalesRoute").ValueField("SalesRoute")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Delimiter(";")
                     .HQDBSys(false).ForceSelection(true)
-                     .HQParam(new StoreParameterCollection() { 
-                                    new StoreParameter("@UserName", Current.UserName.ToString(), ParameterMode.Value),
-                                    new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value),
-                                    new StoreParameter("@BranchID", Current.CpnyID.ToString(), ParameterMode.Value)
-                            })
+                    .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserName", Current.UserName.ToString(), ParameterMode.Value),
+                        new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value),
+                        new StoreParameter("@BranchID", Current.CpnyID.ToString(), ParameterMode.Value)
+                    })
                     .LoadData()
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
-                        {
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-
-                        })
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
                 )
 
                 , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")
                 .Items(
-                       HQ.DateField().ID("dtmFromDate").Name("dtmFromDate").HQLangCode("FROMDATE").DataIndex("DateTime")
-                        .Width(300).MarginSpec("5 0 0 0").AllowBlank(false)
-                      ,  HQ.DateField().ID("dtmToDate").Name("dtmToDate").HQLangCode("TODATE").DataIndex("DateTime")
-                        .Width(300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    HQ.DateField().ID("dtmFromDate").Name("dtmFromDate").HQLangCode("FROMDATE").DataIndex("DateTime")
+                        .Width(300).MarginSpec("5 0 0 0").AllowBlank(false).Value(DateTime.Now.ToString()).Format("dd/MM/yyyy")
+                        
+                    , HQ.DateField().ID("dtmToDate").Name("dtmToDate").HQLangCode("TODATE").DataIndex("DateTime")
+                        .Width(300).MarginSpec("5 0 0 0").AllowBlank(false).Value(DateTime.Now.ToString()).Format("dd/MM/yyyy")
+                        
                     , HQ.Combo().ID("cboFreqType").Name("cboFreqType").HQLangCode("SlsFreqType").HQProcedure("OM22300_pcSalesFreq")
-                    .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Delimiter(";")
-                    .HQDBSys(false).ForceSelection(true)
-                    .LoadData()
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst =>
-                        {
-                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                       
+                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").HQValue("ALL",false)
+                        .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Delimiter(";")
+                        .HQDBSys(false).ForceSelection(true)
+                        .HQParam(new StoreParameterCollection() { 
+                            new StoreParameter("@UserName", Current.UserName.ToString(), ParameterMode.Value),
+                            new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value),
+                            new StoreParameter("@BranchID", Current.CpnyID.ToString(), ParameterMode.Value)
                         })
-                        ,HQ.Button().ID("btnLoad").HQLangCode("LoadData").Width(150).MarginSpec("5 0 0 20")
-                         .Listeners(lst =>
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                    , HQ.Button().ID("btnLoad").HQLangCode("LoadData").Width(150).MarginSpec("5 0 0 20")
+                        .Listeners(lst =>
                         {
-                          
-                            lst.Click.Fn = "btnLoad_Click";
-                           
+                            lst.Click.Fn = "btnLoad_Click"; 
                         })
-
                 )
 
             )//end header
 
-            , Html.X().GridPanel()
+            , X.GridPanel()
             .Listeners(lst =>
-                {
-                    lst.Render.Handler = "HQ.common.control_render(this,'grdMailDetail');";                     
-                })//focus grid 
+            {
+                lst.Render.Handler = "HQ.common.control_render(this,'grdOM_SalesRouteDet');";                     
+            })//focus grid 
             .Layout(LayoutType.Fit)
             .MarginSpec("5 0 0 0")
             .Anchor("100% -170")// WIDTH HEIGHT                 
             .RenderTo("contentCenter")
             .View(X.GridView().TrackOver(false))
-            .ID("grdMailDetail").SetAutoScroll(true)
+            .ID("grdOM_SalesRouteDet").SetAutoScroll(true)
             .SelectionMemory(false)
             .Store(
-                X.Store().ID("stoMailDetail")
+                X.Store().ID("stoOM_SalesRouteDet")
                 .Model(Util.GenerateModel(typeof(OM22300_pgLoadPJPDet_Result), "OM_SalesRouteDetModel", "SalesRouteID,CustID,SlsPerID,VisitDate,BranchID", true))
                 .PageSize(50)
-                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetPJPDetail", "OM22300"))).AutoLoad(false)
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_SalesRouteDet", "OM22300"))).AutoLoad(false)
                 .Parameters(ps =>
-                                {
-                                    ps.Add(new StoreParameter("SalesRouteID", "App.cboSlsRoute.value", ParameterMode.Raw));
-                                    ps.Add(new StoreParameter("CustID", "App.cboCustID.value", ParameterMode.Raw));
-                                    ps.Add(new StoreParameter("SlsPerID", "App.cboSlsPerID.value", ParameterMode.Raw));
-                                    ps.Add(new StoreParameter("FromDate", "App.dtmFromDate.value", ParameterMode.Raw));
-                                    ps.Add(new StoreParameter("ToDate", "App.dtmToDate.value", ParameterMode.Raw));
-                                    ps.Add(new StoreParameter("SlsFreqType", "App.cboFreqType.value", ParameterMode.Raw));
+                    {
+                        ps.Add(new StoreParameter("SalesRouteID", "App.cboSlsRoute.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("CustID", "App.cboCustID.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("SlsPerID", "App.cboSlsPerID.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("FromDate", "App.dtmFromDate.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("ToDate", "App.dtmToDate.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("SlsFreqType", "App.cboFreqType.getValue()", ParameterMode.Raw));
                              
-                                })
-                    .Listeners(l => { l.Load.Fn = "loadDataAutoDetail";})
-                )
+                    })
+                    .Listeners(l => {
+                        l.BeforeLoad.Fn = "stoBeforeLoad";
+                        l.Load.Fn = "stoLoad";
+                        l.Update.Fn = "stoChanged";
+                    })
+            )
             .SortableColumns(false)                     
             .ColumnModel(
-                Html.X().RowNumbererColumn()
-                   , Html.X().Column().Text(Util.GetLang("VisitDate")).Width(150).DataIndex("VisitDate")
-                    .Editor(
-                     HQ.DateField().ID("dtmVisitDate").Name("dtmVisitDate").HQLangCode("VisitDate").DataIndex("VisitDate")
-                        .Width(200).MarginSpec("5 0 0 0").AllowBlank(false)
-                        )
-                        
-                    , Html.X().Column().Text(Util.GetLang("Week")).DataIndex("WeekNbr").Width(150)
-                    .Editor(Html.X().TextField())
-
-                    , Html.X().Column().Text(Util.GetLang("DayofWeek")).DataIndex("DayofWeek").Width(150)
-                    .Editor(Html.X().TextField())
+                X.RowNumbererColumn()
+                , X.DateColumn().Text(Util.GetLang("VisitDate")).Width(80).DataIndex("VisitDate").Format("dd/MM/yyyy")
                     
-                    , Html.X().Column().Text(Util.GetLang("SlsFreqType")).DataIndex("SlsFreqType").Width(150)
-                    .Editor(Html.X().TextField())
-
-                    , Html.X().Column().Text(Util.GetLang("SlsFreq")).DataIndex("SlsFreq").Width(150)
-                    .Editor(Html.X().TextField())
+                , X.Column().Text(Util.GetLang("Week")).DataIndex("WeekNbr").Width(50).Align(Alignment.Right)
                     
-               , Html.X().Column().Text(Util.GetLang("RouteID")).Width(150).DataIndex("SalesRouteID")
+                , X.Column().Text(Util.GetLang("DayofWeek")).DataIndex("DayofWeek").Width(70).Renderer("renderDayOfWeek")
+                    
+                , X.Column().Text(Util.GetLang("SlsFreqType")).DataIndex("SlsFreqType").Width(150).Renderer("renderSlsFreqType")
+
+                , X.Column().Text(Util.GetLang("SlsFreq")).DataIndex("SlsFreq").Width(80).Renderer("renderSlsFreq")
+                    
+                , X.Column().Text(Util.GetLang("RouteID")).Width(150).DataIndex("SalesRouteID")
                     .Editor(
-                     HQ.Combo().ID("cboRoute").Name("cboRoute").HQProcedure("OM22300_pcSalesRouteID")
-                    .HQColumnShow("SalesRoute,Descr").DisplayField("SalesRoute").ValueField("SalesRoute")
-                    .Width(300).HQHeightWidth(500, 400)
-                    .HQDBSys(false)
-                     .HQParam(new StoreParameterCollection() { 
-                                    new StoreParameter("@UserName", Current.UserName.ToString(), ParameterMode.Value),
-                                    new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value),
-                                    new StoreParameter("@BranchID", Current.CpnyID.ToString(), ParameterMode.Value)
-                            })
-                    .HQParam(new StoreParameterCollection() {                     
-                        new StoreParameter("@UserName", Current.UserName.ToString(), ParameterMode.Value),
-                        new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value),
-                        new StoreParameter("@BranchID", Current.CpnyID.ToString(), ParameterMode.Value)
-                    })
-                      .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                     .Listeners(lst =>
+                        HQ.Combo().ID("cboRoute").Name("cboRoute").HQProcedure("OM22300_pcSalesRouteID")
+                        .HQColumnShow("SalesRoute,Descr").DisplayField("SalesRoute").ValueField("SalesRoute")
+                        .Width(300).HQHeightWidth(500, 400)
+                        .HQDBSys(false)
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw} 
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
                         {
                             //lst.Change.Fn = "cboReportID_Change";
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-
                         })
-                    .LoadData()
+                        .LoadData()
                     )
 
-                , Html.X().Column().Text(Util.GetLang("SlsPerID")).Width(150).DataIndex("SlsPerID")
+                , X.Column().Text(Util.GetLang("SlsPerID")).Width(150).DataIndex("SlsPerID")
                     .Editor(
-                    HQ.Combo().ID("cboGSlsPerID").Name("cboGSlsPerID").HQProcedure("OM22300_pcSalesPerson")
+                        HQ.Combo().ID("cboGSlsPerID").Name("cboGSlsPerID").HQProcedure("OM22300_pcSalesPerson")
                         .HQColumnShow("Slsperid,Name").DisplayField("Name").ValueField("Slsperid")
                         .Width(300).HQHeightWidth(500, 400)
                         .HQDBSys(false)
                         .HQParam(new StoreParameterCollection() { 
-                                    new StoreParameter("@UserName", Current.UserName.ToString(), ParameterMode.Value),
-                                    new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value),
-                                    new StoreParameter("@BranchID", Current.CpnyID.ToString(), ParameterMode.Value)
-                            })
+                            new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw} 
+                        })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                .Listeners(lst =>
-                                {
-                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
 
-                                })
+                        })
                         .LoadData()
-                        )
+                    )
                         
-                       , Html.X().Column().Text(Util.GetLang("CustID")).Width(150).DataIndex("CustID")
+                , X.Column().Text(Util.GetLang("CustID")).Width(150).DataIndex("CustID")
                     .Editor(
-                    HQ.Combo().ID("cboGCustID").Name("cboGCustID").HQProcedure("OM22300_pcCustomerActive")
+                        HQ.Combo().ID("cboGCustID").Name("cboGCustID").HQProcedure("OM22300_pcCustomerActive")
                         .HQColumnShow("CustID,Name,Addr1,Addr2").DisplayField("Name").ValueField("Slsperid")
                         .Width(300).HQHeightWidth(500, 400)
                         .HQDBSys(false)
                         .HQParam(new StoreParameterCollection() { 
-                                    new StoreParameter("@UserName", Current.UserName.ToString(), ParameterMode.Value),
-                                    new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value),
-                                    new StoreParameter("@BranchID", Current.CpnyID.ToString(), ParameterMode.Value)
-                            })
+                            new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw} 
+                        })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                                .Listeners(lst =>
-                                {
-                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
 
-                                })
+                        })
                         .LoadData()
-                        )
-                , Html.X().Column().Text(Util.GetLang("WeekofVisit")).DataIndex("WeekofVisit").Width(150)
-                    .Editor(Html.X().TextField())
+                    )
+                , X.Column().Text(Util.GetLang("WeekofVisit")).DataIndex("WeekofVisit").Width(150).Renderer("renderVisitOfWeek")
                     
-                , Html.X().NumberColumn().Format("0,000").Text(Util.GetLang("VisitSort")).DataIndex("VisitSort").Width(150).Align(Alignment.Right)
-                    .Editor(Html.X().NumberField().DecimalPrecision(0))
+                , X.NumberColumn().Format("0,000").Text(Util.GetLang("VisitSort")).DataIndex("VisitSort").Width(150).Align(Alignment.Right)
+                    .Editor(X.NumberField().DecimalPrecision(0))
 
-                //, Html.X().CommandColumn().Width(150)
-                //    .Commands(
-                //        Html.X().GridCommand()
-                //            .Text(Util.GetLang("Reject"))
-                //            .ToolTip(t =>
-                //            {
-                //                t.Text = Util.GetLang("Rejectrowchanges");
-                //            })
-                //            .CommandName("reject")
-                //            .Icon(Icon.ArrowUndo)
-                //    )
-                //    .PrepareToolbar(t =>
-                //    {
-                //        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
-                //    })
-                //    .Listeners(l =>
-                //    {
-                //        l.Command.Handler = "grdMailDetail_Reject(record);";
-                //    })
+                , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                            .Text(Util.GetLang("Reject"))
+                            .ToolTip(t =>
+                            {
+                                t.Text = Util.GetLang("Rejectrowchanges");
+                            })
+                            .CommandName("reject")
+                            .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t =>
+                    {
+                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Command.Handler = "grdOM_SalesRouteDet_Reject(record);";
+                    })
             )
-            .SelectionModel(X.RowSelectionModel().ID("slmMailDetail").Mode(SelectionMode.Multi))
+            .SelectionModel(X.RowSelectionModel().ID("slmOM_SalesRouteDet").Mode(SelectionMode.Multi))
             .BottomBar(
                 X.PagingToolbar().ID("pag")
                 .Items(
@@ -273,26 +272,25 @@
                 .ClicksToEdit(1)
                 .Listeners(ls =>
                 {
-                    ls.BeforeEdit.Fn = "grdMailDetail_BeforeEdit";
-                    ls.Edit.Fn = "grdMailDetail_Edit";
-                    ls.ValidateEdit.Fn = "grdMailDetail_ValidateEdit";
+                    ls.BeforeEdit.Fn = "grdOM_SalesRouteDet_BeforeEdit";
+                    ls.Edit.Fn = "grdOM_SalesRouteDet_Edit";
+                    ls.ValidateEdit.Fn = "grdOM_SalesRouteDet_ValidateEdit";
                 })
             )
             .Features(
                 X.GridFilters()
                     .Local(true)
                     .Filters(
-                        Html.X().DateFilter().DataIndex("VisitDate"),
-                        Html.X().StringFilter().DataIndex("WeekNbr"),
-                        Html.X().StringFilter().DataIndex("DayofWeek"),
-                        Html.X().StringFilter().DataIndex("SlsFreqType"),
-                        Html.X().StringFilter().DataIndex("SlsFreq"),
-                        Html.X().StringFilter().DataIndex("SalesRouteID"),
-                        Html.X().StringFilter().DataIndex("SlsPerID"),
-                        Html.X().StringFilter().DataIndex("CustID"),
-                        Html.X().StringFilter().DataIndex("WeekofVisit"),
-                        Html.X().NumericFilter().DataIndex("VisitSort")
-                       
+                        X.DateFilter().DataIndex("VisitDate"),
+                        X.StringFilter().DataIndex("WeekNbr"),
+                        X.StringFilter().DataIndex("DayofWeek"),
+                        X.StringFilter().DataIndex("SlsFreqType"),
+                        X.StringFilter().DataIndex("SlsFreq"),
+                        X.StringFilter().DataIndex("SalesRouteID"),
+                        X.StringFilter().DataIndex("SlsPerID"),
+                        X.StringFilter().DataIndex("CustID"),
+                        X.StringFilter().DataIndex("WeekofVisit"),
+                        X.NumericFilter().DataIndex("VisitSort")
                     )
             )
         )

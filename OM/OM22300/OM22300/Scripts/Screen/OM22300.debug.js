@@ -1,46 +1,45 @@
-////Declare//////////////////////////////////////////////////////////
-var focusrecord = 0;//biến tạm focusrecord để biết đang focus vào form hay Grid để xác định các xử lý các nút phía trên
-//khai bao dung cho kiem tra tren grid, co nhieu luoi thi dat ten theo luoi
-var keys = ['SalesRouteID', 'CustID', 'SlsPerID', 'VisitDate', 'BranchID'];
-var fieldsCheckRequire = ["ReportID", "ReportViewID", "LangID", "BeforeDateParm00", "BeforeDateParm01", "BeforeDateParm02", "BeforeDateParm03"];
-var fieldsLangCheckRequire = ["ReportID", "ReportViewID", "LangID", "BeforeDateParm00", "BeforeDateParm01", "BeforeDateParm02", "BeforeDateParm03"];
-
+//// Declare //////////////////////////////////////////////////////////
+var keys = [''];
+var fieldsCheckRequire = [""];
+var fieldsLangCheckRequire = [""];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
+
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboBranchID.getStore().load(function () {
+        App.cboEmployee.getStore().load(function () {
+            App.cboReasonCD.getStore().load(function () {
+                App.cboStatus.getStore().load(function () {
+                    App.cboEmployee_Grid.getStore().load(function () {
+                        App.cboReasonCD_Grid.getStore().load(function () {
+                            App.cboCoaching.getStore().load(function () {
+                                HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+                                App.stoOM_SalesRouteDet.reload();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+};
 ////////////////////////////////////////////////////////////////////////
 //// Event /////////////////////////////////////////////////////////////
-// Load and show binding data to the form
-// Command of the topbar on screen
+
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            if (HQ.focus == 'header') {
-                HQ.combo.first(App.cboCustID, HQ.isChange);
-            } else if (HQ.focus == 'grdMailDetail') {
-                HQ.grid.first(App.grdMailDetail);
-            }
-            break;
-        case "next":
-            if (HQ.focus == 'header') {
-                HQ.combo.next(App.cboCustID, HQ.isChange);
-            } else if (HQ.focus == 'grdMailDetail') {
-                HQ.grid.next(App.grdMailDetail);
-            }
+            HQ.grid.first(App.grdOM_SalesRouteDet);
             break;
         case "prev":
-            if (HQ.focus == 'header') {
-                HQ.combo.prev(App.cboCustID, HQ.isChange);
-            } else if (HQ.focus == 'grdMailDetail') {
-                HQ.grid.prev(App.grdMailDetail);
-            }
+            HQ.grid.prev(App.grdOM_SalesRouteDet);
             break;
-
+        case "next":
+            HQ.grid.next(App.grdOM_SalesRouteDet);
+            break;
         case "last":
-            if (HQ.focus == 'header') {
-                HQ.combo.last(App.cboCustID, HQ.isChange);
-            } else if (HQ.focus == 'grdMailDetail') {
-                HQ.grid.last(App.grdMailDetail);
-            }
+            HQ.grid.last(App.grdOM_SalesRouteDet);
             break;
         case "refresh":
             if (HQ.isChange) {
@@ -48,41 +47,25 @@ var menuClick = function (command) {
             }
             else {
                 HQ.isChange = false;
-                App.cboCustID.getStore().load();
-                //function () { App.stoMailHeader.reload(); }
+                HQ.isFirstLoad = true;
+                App.stoOM_SalesRouteDet.reload();
             }
             break;
         case "new":
             if (HQ.isInsert) {
-                if (HQ.focus == 'header') {
-                    if (HQ.isChange) {
-                        HQ.message.show(150, '', '');
-                    }
-                    else {
-                        HQ.isNew = true;
-                        App.cboCustID.setValue('');
-                        cboCustID_Change(App.cboCustID);
-                    }
-                } else if (HQ.focus == 'grdMailDetail') {
-                    HQ.grid.insert(App.grdMailDetail, keys);
-                }
+                HQ.grid.insert(App.grdOM_SalesRouteDet, keys);
             }
             break;
         case "delete":
-            if (HQ.isDelete) {
-                if (HQ.focus == 'header') {
-                    HQ.message.show(11, '', 'deleteRecordForm');
-                } else if (HQ.focus == 'grdMailDetail') {
-                    var rowindex = HQ.grid.indexSelect(App.grdMailDetail);
-                    if (rowindex != '')
-                        HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdMailDetail), ''], 'deleteRecordGrid', true)
+            if (App.slmOM_SalesRouteDet.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    HQ.message.show(11, '', 'deleteData');
                 }
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                //checkRequire để kiếm tra các field yêu cầu có rỗng hay ko
-                if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoMailDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.store.checkRequirePass(App.stoOM_SalesRouteDet, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -93,179 +76,195 @@ var menuClick = function (command) {
             HQ.common.close(this);
             break;
     }
-
-};
-
-//load lần đầu khi mở
-var firstLoad = function () {
-  //  App.stoMailHeader.reload();
-};
-var frmChange = function () {
-    //App.frmMain.getForm().updateRecord();
-    HQ.isChange = HQ.store.isChange(App.stoMailDetail) == false ? HQ.store.isChange(App.stoMailDetail) : true;
-    HQ.common.changeData(HQ.isChange, 'OM22300');//co thay doi du lieu gan * tren tab title header
-    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
-    App.cboCustID.setReadOnly(HQ.isChange);
-};
-
-//xu li su kiem tren luoi giong nhu luoi binh thuong
-var grdMailDetail_BeforeEdit = function (editor, e) {
-    return HQ.grid.checkBeforeEdit(e, keys);
-};
-var grdMailDetail_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdMailDetail, e, keys);
-    frmChange();
-};
-var grdMailDetail_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdMailDetail, e, keys);
-};
-var grdMailDetail_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdMailDetail);
-    frmChange();
-};
-
-//hàm này chạy sau khi store của form trong Controller vừa chạy xong đã load dữ liệu vào store của form
-var loadDataAutoHeader = function (sto) {
-    HQ.isFirstLoad = true;
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
-    HQ.isNew = false;
-    App.cboMailTo.forceSelection = false;
-    App.cboMailCC.forceSelection = false;
-    if (sto.data.length == 0) {
-        HQ.store.insertBlank(sto, "MailID");
-        record = sto.getAt(0);
-        //gan du lieu mac dinh ban dau
-        record.data.DateTime = HQ.bussinessDate;;
-        record.data.Time = HQ.bussinessTime;
-
-        record.data.TypeAuto = 'M';
-        HQ.isNew = true;//record la new    
-        HQ.common.setRequire(App.frmMain);  //to do cac o la require                       
-        sto.commitChanges();
-    }
-    var record = sto.getAt(0);
-    record.data.MailCC = record.data.MailCC.replace(new RegExp(';', 'g'), ',');//cat dua ve du lieu dau , de set su thay doi
-    record.data.MailTo = record.data.MailTo.replace(new RegExp(';', 'g'), ',');//cat dua ve du lieu dau , de set su thay doi
-    //sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
-    //record = sto.getAt(0);
-    App.frmMain.getForm().loadRecord(record);
-    App.stoMailDetail.reload();
-    if (Ext.isEmpty(App.cboCustID.getValue()))
-        App.cboCustID.focus(true);//focus ma khi tao moi
-};
-var loadDataAutoDetail = function (sto) {
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
-        }
-        HQ.isFirstLoad = false;
-    }
-    frmChange();
-    HQ.common.showBusy(false);
-};
-//var cboCustID_Change = function (sender, newValue, oldValue) {
-//    if ((!HQ.isNew || sender.valueModels != null) && !App.stoMailHeader.loading) {
-//        App.stoMailHeader.reload();
-//    }
-
-//};
-//var cboCustID_Select = function (sender) {
-//    if (sender.valueModels != null && !App.stoMailHeader.loading) {
-//        App.stoMailHeader.reload();
-//    }
-//};
-var chkIsAttachFile_Change = function (sender, e) {
-    if (e) {
-        App.chkIsDeleteFile.setValue(true);
-        App.chkIsDeleteFile.disable();
-    }
-    else {
-        App.chkIsDeleteFile.enable();
-    }
 };
 
 var btnLoad_Click = function (sender, e) {
-    //App.slmMailDetail.selected.items[0].set('ReportViewID', '');
-    //App.cboReportViewID.getStore().load();
-    // App.stoMailDetail.reload();
-    App.grdMailDetail.getStore().reload();
+    App.grdOM_SalesRouteDet.getStore().reload();
+};
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    //loadSourceCombo();
+};
+
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM22300');
+    //lockControl(HQ.isChange);
+    //App.cboBrandID.setReadOnly(HQ.isChange);
+    //App.cboSUP.setReadOnly(HQ.isChange);
+    //App.cboCycle.setReadOnly(HQ.isChange);
+};
+
+//var lockControl = function (value) {
+//    setTimeout(function () {
+//        //App.btnAddDetail.setDisabled(value);
+//        App.Period.setReadOnly(value);
+//        App.cboBranchID.setReadOnly(value);
+//        App.cboEmployee.setReadOnly(value);
+//        App.cboReasonCD.setReadOnly(value);
+//        App.cboStatus.setReadOnly(value);
+//    }, 300);
+//};
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isFirstLoad = true;
+    //var ReasonCD = [];
+    //var Status = [];
+    //App.cboReasonCD.getStore().data.each(function (item) {
+    //    if (ReasonCD.indexOf(item.data.Code) == -1) {
+    //        ReasonCD.push([item.data.Code, item.data.Descr]);
+    //    }
+    //});
+    //App.cboStatus.getStore().data.each(function (item) {
+    //    if (Status.indexOf(item.data.Code) == -1) {
+    //        Status.push([item.data.Code, item.data.Descr]);
+    //    }
+    //});
+    //filterFeature = App.grdOM_SalesRouteDet.filters;
+    //colAFilter = filterFeature.getFilter('ReasonCD');
+    //colAFilter.menu = colAFilter.createMenu({
+    //    options: ReasonCD
+    //});
+
+    //colAFilter = filterFeature.getFilter('IsApprove');
+    //colAFilter.menu = colAFilter.createMenu({
+    //    options: Status
+    //});
+
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM22300');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            //HQ.store.insertBlank(sto, keys);
+            //HQ.store.insertRecord(sto, keys, { DateWorking: HQ.bussinessDate, IsApprove: 'W' });
+        }
+        HQ.isFirstLoad = false;
+    }
+    stoChanged(sto);
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var grdOM_SalesRouteDet_BeforeEdit = function (editor, e) {
+    if (e.field == "VisitSort")
+        return true;
+    else
+        return false;
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdOM_SalesRouteDet_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdOM_SalesRouteDet, e, keys);
+};
+
+//var checkValidate = function (grd, e, keys) {
+//    if (keys.indexOf(e.field) != -1) {
+//        if (HQ.grid.checkDuplicate(grd, e, keys)) {
+//            HQ.message.show(1112, e.value);
+//            return false;
+//        }
+//    }
+//};
+
+var grdOM_SalesRouteDet_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdOM_SalesRouteDet, e, keys);
+    //return checkValidate(App.grdOM_SalesRouteDet, e, keys);
+};
+
+var grdOM_SalesRouteDet_Reject = function (record) {
+    //record.reject();
+    HQ.grid.checkReject(record, App.grdOM_SalesRouteDet);
 };
 
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
-// Submit the changed data (created, updated) into server side
-function save() {
-    //dòng này để bắt các thay đổi của form 
-    App.frmMain.getForm().updateRecord();
+var save = function () {
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             timeout: 1800000,
-            waitMsg: 'Submiting...',
+            waitMsg: HQ.common.getLang("SavingData"),
             url: 'OM22300/Save',
             params: {
-                //lstheader: Ext.encode(App.stoMailHeader.getChangedData({ skipIdForPhantomRecords: false })),//,
-                lstgrd: Ext.encode(App.stoMailDetail.getChangedData({ skipIdForPhantomRecords: false })),
-                isNew: HQ.isNew
-
+                lstOM_SalesRouteDet: HQ.store.getData(App.stoOM_SalesRouteDet)
             },
-            success: function (result, data) {
-                HQ.message.show(201405071, '', '');
-                var mailId = data.result.mailId;
-                App.cboCustID.getStore().load(function () {
-                    App.cboCustID.setValue(mailId);
-                    //App.stoMailHeader.reload();
-                });
-            }
-            , failure: function (errorMsg, data) {
-                if (data.result.msgCode) {
-                    if (data.result.msgCode == 2000)//loi trung key ko the add
-                        HQ.message.show(data.result.msgCode, [App.cboCustID.fieldLabel, App.cboCustID.getValue()], '', true);
-                    else HQ.message.show(data.result.msgCode, data.result.msgParam, '');
-                }
-                else {
-                    HQ.message.process(errorMsg, data, true);
-                }
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
             }
         });
     }
 };
-// Xac nhan xoa record tren grid
-var deleteRecordForm = function (item) {
-    if (item == 'yes') {
-        App.frmMain.submit({
-            clientValidation: false,
-            timeout: 1800000,
-            waitMsg: HQ.common.getLang('DeletingData'),
-            url: 'OM22300/Delete',
-            params: {
-                mailId: App.cboCustID.getValue()
-            },
-            success: function (action, data) {
-                App.cboCustID.setValue("");
-                App.cboCustID.getStore().load(function () { cboCustID_Change(App.cboCustID); });
 
-            },
-
-            failure: function (action, data) {
-                if (data.result.msgCode) {
-                    HQ.message.show(data.result.msgCode, data.result.msgParam, '');
-                }
-            }
-        });
-    }
-};
-var deleteRecordGrid = function (item) {
+var deleteData = function (item) {
     if (item == "yes") {
-        App.grdMailDetail.deleteSelected();
-        frmChange();
+        App.grdOM_SalesRouteDet.deleteSelected();
+        stoChanged(App.stoOM_SalesRouteDet);
     }
 };
+
+/////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
-        App.cboCustID.getStore().load();
-        //function () { App.stoMailHeader.reload(); }
+        HQ.isFirstLoad = true;
+        App.stoOM_SalesRouteDet.reload();
     }
 };
+
 ///////////////////////////////////
+var renderVisitOfWeek = function (value, metaData, rec, rowIndex, colIndex, store) {
+    value = value == "NA" ? "None" :
+    value == "OW" ? "OddWeek" :
+    value == "EW" ? "EvenWeek" :
+    value == "W159" ? "Weeks" :
+    value == "W2610" ? "Weeks" :
+    value == "W3711" ? "Weeks" :
+    value == "W4812" ? "Weeks" : value;
+
+    var sufstr = '';
+    if (value == "W159")
+        sufstr = " 1,5,9,...";
+    else if (value == "W2610")
+        sufstr = " 2,6,10,...";
+    else if (value == "W3711")
+        sufstr = " 3,7,11,...";
+    else if (value == "W4812")
+        sufstr = " 4,8,12,...";
+
+    return (HQ.common.getLang(value) + sufstr);
+};
+
+var renderSlsFreq = function (value, metaData, rec, rowIndex, colIndex, store) {
+    value = value == "A" ? "Arbitrary" : value;
+    return HQ.common.getLang(value);
+};
+
+var renderSlsFreqType = function (value, metaData, rec, rowIndex, colIndex, store) {
+    value = value == "A" ? "AdHoc" :
+        value == "R" ? "Recurrent" : value;
+    return HQ.common.getLang(value);
+};
+
+var renderDayOfWeek = function (value, metaData, rec, rowIndex, colIndex, store) {
+    value = value == "Sun" ? "Sun" :
+    value == "Sat" ? "Sat" :
+    value == "Fri" ? "Fri" :
+    value == "Thu" ? "Thu" :
+    value == "Wed" ? "Wed" :
+    value == "Tue" ? "Tue" :
+    value == "Mon" ? "Mon" : value;
+    return HQ.common.getLang(value);
+};

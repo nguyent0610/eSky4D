@@ -1,4 +1,4 @@
-if (!Array.prototype.indexOf) {
+﻿if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (elt /*, from*/) {
         var len = this.length >>> 0;
 
@@ -609,6 +609,16 @@ var HQ = {
 
             }
         },
+
+        checkValidateEditDG: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                    HQ.message.show(1112, e.value);
+                    return false;
+                }
+            }
+        },
+
         checkInsertKey: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 if (e.value != '')
@@ -636,6 +646,16 @@ var HQ = {
                 if (columns[index].dataIndex == dataIndex) { break; }
             }
             return index == columns.length ? -1 : index;
+        },
+
+        filterStore: function (store, field, value) {
+            store.filterBy(function (record) {
+                if (record) {
+                    if (record.data[field].toString().toLowerCase() == (HQ.util.passNull(value).toLowerCase())) {
+                        return record;
+                    }
+                }
+            });
         }
     },
     message: {
@@ -746,6 +766,12 @@ var HQ = {
                         if (itm.getTag() != "X")
                             itm.setReadOnly(lock)
 
+                    }
+                    else if (typeof (itm.disable) != "undefined" && itm.xtype == 'button') {
+                        if (itm.getTag() != "X")
+                            if (lock)
+                                itm.disable()
+                            else itm.enable()
                     }
                     HQ.common.lockItem(itm, lock);
                 });
@@ -1010,29 +1036,6 @@ function decimalAdjust(type, value, exp) {
     value = value.toString().split('e');
     return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
 }
-
-
-
-//////Example Round
-////Math.round10(55.55, -1);   // 55.6
-////Math.round10(55.549, -1);  // 55.5
-////Math.round10(55, 1);       // 60
-////Math.round10(54.9, 1);     // 50
-////Math.round10(-55.55, -1);  // -55.5
-////Math.round10(-55.551, -1); // -55.6
-////Math.round10(-55, 1);      // -50
-////Math.round10(-55.1, 1);    // -60
-////Math.round10(1.005, -2);   // 1.01 -- compare this with Math.round(1.005*100)/100 above
-////// Floor
-////Math.floor10(55.59, -1);   // 55.5
-////Math.floor10(59, 1);       // 50
-////Math.floor10(-55.51, -1);  // -55.6
-////Math.floor10(-51, 1);      // -60
-////// Ceil
-////Math.ceil10(55.51, -1);    // 55.6
-////Math.ceil10(51, 1);        // 60
-////Math.ceil10(-55.59, -1);   // -55.5
-////Math.ceil10(-59, 1);       // -50
 
 //TrungHT override control ext
 Ext.define("NumbercurrencyPrecision", {
