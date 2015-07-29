@@ -39,8 +39,7 @@
                 ,X.Container().Layout(LayoutType.VBox).Items(
                     HQ.Combo().ID("cboBranchID").Name("cboBranchID").LabelWidth(130).InputWidth(150)
                             .HQLangCode("BranchID").HQDBSys(false).HQProcedure("OM40600_pcBranchAllByUser")
-                            .HQColumnShow("BranchID,BranchName").MultiSelect(true)
-                            .HQValue("HQ.cpnyID", true)
+                            .HQColumnShow("BranchID,BranchName").MultiSelect(true)                         
                             .DisplayField("BranchID")
                             .ValueField("BranchID")
                             .HQHeightWidth(400, 300)
