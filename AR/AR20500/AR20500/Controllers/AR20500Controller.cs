@@ -52,7 +52,8 @@ namespace AR20500.Controllers
             ViewBag.ImagePath = FilePath;
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -167,16 +168,16 @@ namespace AR20500.Controllers
                                 objCust.DeliveryID = item.DeliveryID.PassNull(); ;
                                 objCust.Country = objCust.BillCountry = "VN";
                                 objCust.District = item.District.PassNull(); ;
-                                objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId).FirstOrDefault();
+                                objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull()).FirstOrDefault();
                                 objCust.DfltShipToId = "DEFAULT";
-
+                               
                                 objCust.LUpd_Datetime = DateTime.Now;
                                 objCust.LUpd_Prog = "AR20500";
                                 objCust.LUpd_User = Current.UserName;
                                 objCust.Phone = objCust.BillPhone = item.Phone.PassNull(); ;
                                 objCust.Channel = objCust.Channel.PassNull();
-                                objCust.ShopType = item.ShopType.PassNull(); ;
-                                objCust.State = item.State.PassNull(); ;
+                                objCust.ShopType = item.ShopType.PassNull();
+                                objCust.State = item.State.PassNull();
                                 objCust.Status = "A";// item.IsActive == 1 ? "A" : "I";
                                 objCust.TaxDflt = "C";
                                 objCust.TaxID00 = "OVAT10-00";
