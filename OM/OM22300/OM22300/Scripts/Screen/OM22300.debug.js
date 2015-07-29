@@ -57,11 +57,11 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
-            if (App.slmOM_SalesRouteDet.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
-                }
-            }
+            //if (App.slmOM_SalesRouteDet.selected.items[0] != undefined) {
+            //    if (HQ.isDelete) {
+            //        HQ.message.show(11, '', 'deleteData');
+            //    }
+            //}
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
@@ -226,7 +226,7 @@ function refresh(item) {
 
 ///////////////////////////////////
 var renderVisitOfWeek = function (value, metaData, rec, rowIndex, colIndex, store) {
-    value = value == "NA" ? "None" :
+    var str = value == "NA" ? "None" :
     value == "OW" ? "OddWeek" :
     value == "EW" ? "EvenWeek" :
     value == "W159" ? "Weeks" :
@@ -244,7 +244,7 @@ var renderVisitOfWeek = function (value, metaData, rec, rowIndex, colIndex, stor
     else if (value == "W4812")
         sufstr = " 4,8,12,...";
 
-    return (HQ.common.getLang(value) + sufstr);
+    return (HQ.common.getLang(str) + sufstr);
 };
 
 var renderSlsFreq = function (value, metaData, rec, rowIndex, colIndex, store) {

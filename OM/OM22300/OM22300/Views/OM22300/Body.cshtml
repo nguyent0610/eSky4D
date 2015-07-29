@@ -22,7 +22,7 @@
         .DefaultAnchor("100%")
         .BodyPadding(2)
         .KeyMap(Util.SetupKeyMap())
-        .TopBar(Util.SetupToolbar("Print,New", true, ""))
+        .TopBar(Util.SetupToolbar("Print,New,Delete", true, ""))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
         .Listeners(l =>
         {
@@ -227,8 +227,8 @@
                     )
                 , X.Column().Text(Util.GetLang("WeekofVisit")).DataIndex("WeekofVisit").Width(150).Renderer("renderVisitOfWeek")
                     
-                , X.NumberColumn().Format("0,000").Text(Util.GetLang("VisitSort")).DataIndex("VisitSort").Width(150).Align(Alignment.Right)
-                    .Editor(X.NumberField().DecimalPrecision(0))
+                , X.NumberColumn().Text(Util.GetLang("VisitSort")).DataIndex("VisitSort").Width(150).Align(Alignment.Right).Format("0,000")
+                    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0).MaxValue(2147483647).EnforceMaxLength(true))
 
                 , X.CommandColumn().Width(150)
                     .Commands(
