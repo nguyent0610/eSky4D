@@ -472,7 +472,8 @@ namespace AR20400
         /// <param name="sufFix3">No Metadata Documentation available.</param>
         /// <param name="sufFix4">No Metadata Documentation available.</param>
         /// <param name="classID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR20400_ppGetAutoCustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID)
+        /// <param name="state">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20400_ppGetAutoCustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID, global::System.String state)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -584,7 +585,17 @@ namespace AR20400
                 classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("AR20400_ppGetAutoCustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter);
+            ObjectParameter stateParameter;
+            if (state != null)
+            {
+                stateParameter = new ObjectParameter("State", state);
+            }
+            else
+            {
+                stateParameter = new ObjectParameter("State", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20400_ppGetAutoCustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter, stateParameter);
         }
 
         #endregion

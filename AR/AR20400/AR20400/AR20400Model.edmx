@@ -419,6 +419,7 @@
           <Parameter Name="SufFix3" Type="varchar" Mode="In" />
           <Parameter Name="SufFix4" Type="varchar" Mode="In" />
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
+          <Parameter Name="State" Type="varchar" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -445,6 +446,7 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
           <FunctionImport Name="AR20400_ppGetAutoCustID" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="KeyTree" Mode="In" Type="String" />
@@ -457,8 +459,8 @@
             <Parameter Name="SufFix3" Mode="In" Type="String" />
             <Parameter Name="SufFix4" Mode="In" Type="String" />
             <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="State" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
         </EntityContainer>
         <EntityType Name="SI_Hierarchy">
           <Key>
@@ -1167,7 +1169,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AR20400_ppARNumbering" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppARNumbering" />
-          <FunctionImportMapping FunctionImportName="AR20400_ppGetAutoCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetAutoCustID" />
           <EntitySetMapping Name="AR_Customer">
             <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
               <MappingFragment StoreEntitySet="AR_Customer">
@@ -1246,6 +1247,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_ppGetAutoCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetAutoCustID" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -34,7 +34,7 @@ namespace AR20400.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
@@ -240,7 +240,7 @@ namespace AR20400.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult SaveTree(FormCollection data, string custID, string handle, string nodeID, int nodeLevel, string parentRecordID,
-            int hadChild, string status, string tmpSelectedNode, string branchID, string custName, bool isNew, string lTTContractNbr)
+            int hadChild, string status, string tmpSelectedNode, string branchID, string custName, bool isNew, string lTTContractNbr, string State)
         {
             try
             {
@@ -286,7 +286,7 @@ namespace AR20400.Controllers
                                     }
                                     else
                                     {
-                                        objAR_Customer.CustId = functionAutoCustID(branchID, nodeid[0],updated.ClassId);
+                                        objAR_Customer.CustId = functionAutoCustID(branchID, nodeid[0],updated.ClassId,State);
                                         tmpCustID = objAR_Customer.CustId;
                                     }
                                     objAR_Customer.BranchID = branchID;
@@ -729,7 +729,7 @@ namespace AR20400.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult SaveNoTree(FormCollection data, string custID, string handle, string status, string tmpSelectedNode,
-            string branchID, string custName, bool isNew, string lTTContractNbr)
+            string branchID, string custName, bool isNew, string lTTContractNbr,string State)
         {
             try
             {
@@ -767,7 +767,7 @@ namespace AR20400.Controllers
                             }
                             else
                             {
-                                objAR_Customer.CustId = functionAutoCustID(branchID, "0", updated.ClassId);
+                                objAR_Customer.CustId = functionAutoCustID(branchID, "0", updated.ClassId, State);
                                 tmpCustID = objAR_Customer.CustId;
                             }
                             objAR_Customer.BranchID = branchID;
@@ -1826,9 +1826,9 @@ namespace AR20400.Controllers
         }
 
 
-        private string functionAutoCustID(string branchID,string nodeID,string classID)
+        private string functionAutoCustID(string branchID,string nodeID,string classID,string State)
         {
-            var recordLastBatNbr = _db.AR20400_ppGetAutoCustID(branchID, nodeID, "", "", "", "", "", "", "", "", classID).FirstOrDefault();
+            var recordLastBatNbr = _db.AR20400_ppGetAutoCustID(branchID, nodeID, "", "", "", "", "", "", "", "",classID, State).FirstOrDefault();
             return recordLastBatNbr;
         }
 

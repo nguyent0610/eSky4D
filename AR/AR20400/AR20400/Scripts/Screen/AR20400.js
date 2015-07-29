@@ -350,6 +350,7 @@ function Save() {
                     lstGridAdv: tmpHiddenTabAdv == false ? HQ.store.getData(App.storeGridAdv) : "",
                     lstGridSellingProd: tmpHiddenTabSellingProd == false ? HQ.store.getData(App.storeGridSellingProd) : "",
                     lstGridDispMethod: tmpHiddenTabDispMethod == false ? HQ.store.getData(App.storeGridDispMethod) : "",
+                    State: App.cboState.getValue(),
                     //tmpHiddenTree: tmpHiddenTree,
                 },
                 success: function (result, data) {
@@ -508,7 +509,7 @@ function Save() {
                     lstGridAdv: tmpHiddenTabAdv == false ? HQ.store.getData(App.storeGridAdv) : "",
                     lstGridSellingProd: tmpHiddenTabSellingProd == false ? HQ.store.getData(App.storeGridSellingProd) : "",
                     lstGridDispMethod: tmpHiddenTabDispMethod == false ? HQ.store.getData(App.storeGridDispMethod) : "",
-                    
+                    State: App.cboState.getValue(),
                     //tmpHiddenTree: tmpHiddenTree,
                 },
                 success: function (result, data) {
