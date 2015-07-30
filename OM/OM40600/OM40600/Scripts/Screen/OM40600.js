@@ -41,6 +41,13 @@ var cboPJPID_Select = function (item, newValue, oldValue) {
 var btnGenerate_click = function () {
     var recordOrder = HQ.store.findRecord(App.stoDetail, ["Selected"], [true]);
     if (App.dtpFromDate.validate() && App.dtpToDate.validate() && recordOrder != undefined) {
+            if (App.dtpFromDate.lastValue.getFullYear() != App.dtpToDate.lastValue.getFullYear()) {
+                HQ.message.show(201506111);
+                return;
+            }
+            var d = Ext.Date.parse("01/01/1990", "m/d/Y");
+            if (App.dtpFromDate.getValue() < d || App.dtpToDate.getValue() < d) return;
+
         App.frmMain.submit({
             waitMsg: HQ.common.getLang('SavingData'),
             method: 'POST',
@@ -106,6 +113,7 @@ var firstLoad = function () {
     HQ.isFirstLoad = true;
     App.dtpFromDate.setValue(HQ.bussinessDate);
     App.dtpToDate.setValue(HQ.bussinessDate);
+    App.dtpFromDate.setMinValue(new Date(1900,1,1));
 
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
