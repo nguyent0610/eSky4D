@@ -697,7 +697,6 @@ var grdLot_BeforeEdit = function (item, e) {
     var record = e.record;
 
     if (key == 'LotSerNbr' && !Ext.isEmpty(record.data.LotSerNbr)) return false;
-    if (key == 'ExpDate' && !Ext.isEmpty(record.data.tstamp)) return false;
 
     if (Ext.isEmpty(record.data.InvtID)) {
         record.data.InvtID = App.winLot.record.data.InvtID;
