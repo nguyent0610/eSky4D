@@ -50,7 +50,7 @@
   <ItemGroup>
     <Reference Include="Aspose.Cells, Version=8.3.2.1, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Aspose\Aspose.Cells for .NET\Bin\net3.5\Aspose.Cells.dll</HintPath>
+      <HintPath>bin\Aspose.Cells.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DApp">
       <HintPath>..\INProcess\INProcess\bin\Debug\eBiz4DApp.dll</HintPath>
@@ -309,7 +309,6 @@
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\hq.common.debug.js" />
     <Content Include="Scripts\hq.common.js" />
-    <Content Include="Scripts\Screen\IN10100.debug.js" />
     <Content Include="Scripts\Screen\IN10100.js" />
     <Content Include="Scripts\main.debug.js" />
     <Content Include="Scripts\main.js" />
@@ -329,6 +328,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\IN10100\Index.cshtml" />
     <Content Include="Views\IN10100\Body.cshtml" />
+    <Content Include="Views\IN10100\Popup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

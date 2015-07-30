@@ -38,9 +38,23 @@ namespace IN10100.Controllers
         private List<IN10100_pgReceiptLoad_Result> _lstTrans;
         private List<IN_LotTrans> _lstLot;
         private IN_Setup _objIN;
-        public ActionResult Index()
+        public ActionResult Index(string branchID)
         {
             Util.InitRight(_screenNbr);
+            var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
+
+            if (branchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
+            {
+                return View("Popup");
+            }
+
+            if (branchID == null) branchID = Current.CpnyID;
+
+            var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID);
+
+            ViewBag.INSite = userDft == null ? "" : userDft.INSite;
+            ViewBag.BranchID = branchID;
+
             return View();
         }
 
@@ -78,9 +92,9 @@ namespace IN10100.Controllers
             var objSite = _app.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
             return this.Store(objSite);
         }
-        public ActionResult GetUnitConversion()
+        public ActionResult GetUnitConversion(string cpnyID)
         {
-            var lstUnit = _app.IN10100_pcUnitConversion(Current.CpnyID).ToList();
+            var lstUnit = _app.IN10100_pcUnitConversion(cpnyID).ToList();
             return this.Store(lstUnit);
         }
         public ActionResult GetPrice(string invtID, string uom, DateTime effDate)
@@ -95,9 +109,8 @@ namespace IN10100.Controllers
             List<IN10100_pcUnit_Result> lstUnit = _app.IN10100_pcUnit(invt.ClassID, invt.InvtID).ToList();
             return this.Store(lstUnit, lstUnit.Count);
         }
-        public ActionResult GetSetup()
+        public ActionResult GetSetup(string cpnyID)
         {
-            string cpnyID = Current.CpnyID;
             var objSetup = _app.IN_Setup.FirstOrDefault(p => p.SetupID == "IN" && p.BranchID == cpnyID);
             return this.Store(objSetup);
         }
@@ -294,7 +307,7 @@ namespace IN10100.Controllers
             var transHandler = new StoreDataHandler(data["lstTrans"]);
             if (_lstTrans == null)
             {
-                _lstTrans = transHandler.ObjectData<IN10100_pgReceiptLoad_Result>().Where(p => Util.PassNull(p.LineRef) != string.Empty).ToList();
+                _lstTrans = transHandler.ObjectData<IN10100_pgReceiptLoad_Result>().Where(p => Util.PassNull(p.LineRef) != string.Empty && p.InvtID.PassNull()!=string.Empty).ToList();
             }
             var lotHandler = new StoreDataHandler(data["lstLot"]);
             if (_lstLot == null)
@@ -460,7 +473,7 @@ namespace IN10100.Controllers
 
                         lotQty += Math.Round(item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact, 0);
                     }
-                    double detQty = Math.Round(_lstLot[i].UnitMultDiv == "M" ? _lstTrans[i].Qty * _lstTrans[i].CnvFact : _lstTrans[i].Qty / _lstTrans[i].CnvFact, 0);
+                    double detQty = Math.Round(_lstTrans[i].UnitMultDiv == "M" ? _lstTrans[i].Qty * _lstTrans[i].CnvFact : _lstTrans[i].Qty / _lstTrans[i].CnvFact, 0);
                     if (detQty != lotQty)
                     {
                         throw new MessageException("2015040502", new[] { _lstTrans[i].InvtID });
@@ -662,9 +675,9 @@ namespace IN10100.Controllers
 
             t.ExpDate = s.ExpDate;
             t.InvtID = s.InvtID;
-            t.InvtMult = s.InvtMult;
+            t.InvtMult = tran.InvtMult;
             t.Qty = s.Qty;
-
+            t.TranType = tran.TranType;
             t.SiteID = s.SiteID;
 
             t.MfgrLotSerNbr = s.MfgrLotSerNbr.PassNull();

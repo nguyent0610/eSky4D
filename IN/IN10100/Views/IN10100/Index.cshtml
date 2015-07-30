@@ -26,14 +26,14 @@
     </style>
     <script>
 
-        HQ.cpnyID = '@Current.CpnyID';
+        HQ.cpnyID = '@ViewBag.BranchID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
         HQ.businessDate = new Date();
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-
+        HQ.inSite = '@ViewBag.INSite';
     </script>  
     <title>@ViewBag.Title</title>
 </head>
@@ -111,6 +111,10 @@
         .Url(Url.Action("GetUnitConversion", "IN10100"))
         .ActionMethods(action => { action.Read = HttpMethod.POST; })
         .Reader(X.JsonReader().Root("data")))
+    .Parameters(ps =>
+    {
+        ps.Add(new StoreParameter("BranchID", "App.BranchID.getValue()", ParameterMode.Raw));
+    })
 )
 
 @(
@@ -171,7 +175,11 @@
         .Url(Url.Action("GetSetup", "IN10100"))
         .ActionMethods(action => { action.Read = HttpMethod.POST; })
         .Reader(X.JsonReader().Root("data")))
+    .Parameters(ps => {
+        ps.Add(new StoreParameter("branchID", "App.BranchID.getValue()", ParameterMode.Raw));
+    })    
 )
+
 @(
     X.Store()
     .ID("stoLotTrans")
