@@ -137,7 +137,7 @@ var frmMain_FieldChange = function (item, field, newValue, oldValue) {
         return;
     }
     if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
-    if (Object.keys(App.stoBatch.getChangedData()).length > 0 || App.grdTrans.isChange) {
+    if (Object.keys(App.stoBatch.getChangedData()).length > 0 || Ext.isEmpty(App.cboBatNbr.getValue())) {
         setChange(true);
     } else {
         setChange(false);
@@ -148,7 +148,7 @@ var menuClick = function (command) {
     switch (command) {
         case "first":
             if (HQ.focus == 'batch') {
-                if (HQ.isChange || App.grdTrans.isChange) {
+                if (HQ.isChange) {
                     HQ.message.show(150, '', '', true);
                 } else {
                     App.frmMain.loadRecord(App.stoBatch.first());
@@ -159,7 +159,7 @@ var menuClick = function (command) {
             break;
         case "next":
             if (HQ.focus == 'batch') {
-                if (HQ.isChange || App.grdTrans.isChange) {
+                if (HQ.isChange) {
                     HQ.message.show(150, '', '', true);
                 } else {
                     var index = App.stoBatch.indexOf(App.stoBatch.getById(App.cboBatNbr.getValue()));
@@ -171,7 +171,7 @@ var menuClick = function (command) {
             break;
         case "prev":
             if (HQ.focus == 'batch') {
-                if (HQ.isChange || App.grdTrans.isChange) {
+                if (HQ.isChange) {
                     HQ.message.show(150, '', '', true);
                 } else {
                     var index = App.stoBatch.indexOf(App.stoBatch.getById(App.cboBatNbr.getValue()));
@@ -183,7 +183,7 @@ var menuClick = function (command) {
             break;
         case "last":
             if (HQ.focus == 'batch') {
-                if (HQ.isChange || App.grdTrans.isChange) {
+                if (HQ.isChange) {
                     HQ.message.show(150, '', '', true);
                 } else {
                     App.frmMain.loadRecord(App.stoBatch.last());
@@ -229,26 +229,31 @@ var menuClick = function (command) {
             break;
         case "close":
             if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
-            if (HQ.isChange || App.grdTrans.isChange) {
+            if (HQ.isChange) {
                 HQ.message.show(5, '', 'askClose');
             } else {
                 HQ.common.close(this);
             }
             break;
         case "new":
-            if ((HQ.isChange || App.grdTrans.isChange) && !Ext.isEmpty(App.cboBatNbr.getValue())) {
+            if (HQ.isChange) {
                 HQ.message.show(2015030201, '', "askNew", true);
             } else {
                 defaultOnNew();
             }
             break;
         case "refresh":
-            if (!Ext.isEmpty(App.cboBatNbr.getValue())) {
-                App.stoBatch.reload();
-            } else {
-                defaultOnNew();
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', "askRefresh", true);
             }
-
+            else {
+                if (!Ext.isEmpty(App.cboBatNbr.getValue())) {
+                    App.stoBatch.reload();
+                } else {
+                    defaultOnNew();
+                }
+            }
+            
             break;
         case "print":
             if (!Ext.isEmpty(App.cboBatNbr.getValue()) && App.cboStatus.value != "H") {
@@ -532,7 +537,6 @@ var grdTrans_Edit = function (item, e) {
     HQ.focus = 'trans';
     var key = e.field;
     if (Object.keys(e.record.modified).length > 0) {
-        App.grdTrans.isChange = true;
         if (e.record.invt == undefined) {
             e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
         }
@@ -676,7 +680,6 @@ var bindTran = function () {
 
     calculate();
 
-    App.grdTrans.isChange = false;
     HQ.common.showBusy(false, HQ.waitMsg);
     setChange(false);
 }
@@ -805,12 +808,13 @@ var save = function () {
                     if (Ext.isEmpty(HQ.recentRecord)) {
                         HQ.recentRecord = batNbr;
                     }
+                    App.stoBatch.reload();
                 }
 
-
+                setChange(false);
                 HQ.message.process(msg, data, true);
 
-                menuClick('refresh');
+              
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -1442,15 +1446,20 @@ var askNew = function (item) {
         defaultOnNew();
     }
 }
+var askRefresh = function (item) {
+    if (item == "yes" || item == "ok") {
+        if (!Ext.isEmpty(App.cboBatNbr.getValue())) {
+            App.stoBatch.reload();
+        } else {
+            defaultOnNew();
+        }
+    }
+}
 var setChange = function (isChange) {
     HQ.isChange = isChange;
     if (isChange) {
-        if (!Ext.isEmpty(App.cboBatNbr.getValue())) {
-            App.cboBatNbr.setReadOnly(true);
-        }
-
+        App.cboBatNbr.setReadOnly(true);
     } else {
-        App.grdTrans.isChange = false;
         App.cboBatNbr.setReadOnly(false);
     }
     HQ.common.changeData(isChange, 'IN10200');
