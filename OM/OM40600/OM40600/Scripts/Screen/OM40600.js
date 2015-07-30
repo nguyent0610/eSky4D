@@ -45,9 +45,7 @@ var btnGenerate_click = function () {
                 HQ.message.show(201506111);
                 return;
             }
-            var d = Ext.Date.parse("01/01/1990", "m/d/Y");
-            if (App.dtpFromDate.getValue() < d || App.dtpToDate.getValue() < d) return;
-
+          
         App.frmMain.submit({
             waitMsg: HQ.common.getLang('SavingData'),
             method: 'POST',
