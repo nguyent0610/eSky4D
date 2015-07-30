@@ -1,1 +1,1472 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('h a=["\\l\\c\\x\\c\\n\\d\\1n\\c\\x\\m\\l\\w","\\1j\\m\\x\\P\\k","\\R\\j\\d\\x\\1i","\\m\\R\\3v\\1O\\j\\d\\x\\1i","\\q\\k\\N\\l\\j\\n\\k\\1j\\c\\l","\\m\\R\\3v\\1x\\k\\c\\l","\\s\\c\\n\\1f\\d\\1i","\\q\\d\\c\\C\\k","\\w\\j\\d\\j","\\k\\d\\m\\1x\\k\\c\\l\\L\\c\\1j\\j\\P\\s\\d","\\1y\\K\\K\\2p\\C\\w\\s\\1x\\k\\c\\l\\L\\c\\1j\\j\\P\\s\\d","\\x\\l\\c\\j\\d\\c","\\n\\P\\C\\S\\m\\P\\l\\x\\c","\\k\\d\\m\\S\\c\\d\\P\\K","\\m\\R\\3v\\S\\c\\d\\P\\K","\\1y\\K\\K\\2p\\C\\w\\s\\S\\c\\d\\P\\K","\\w\\q\\k\\j\\R\\s\\c","\\s\\m\\j\\w\\2g\\j\\k\\1I","\\1e\\q\\c\\2k","\\1f\\l\\w\\N\\l\\j\\n\\k","\\1p","\\k\\c\\d\\3e\\j\\s\\P\\c","\\x\\R\\m\\3u\\j\\n\\w\\s\\c","\\1f\\c\\d\\3e\\j\\s\\P\\c","\\x\\R\\m\\1O\\j\\d\\1p\\R\\l","\\1f\\c\\d\\1O\\1q\\M\\w","\\k\\d\\m\\1O\\j\\d\\x\\1i","\\n\\P\\C\\S\\c\\s\\c\\x\\d\\N\\l\\j\\n\\k","\\C\\j\\1w\\S\\c\\s\\c\\x\\d\\N\\l\\j\\n\\k","\\1i\\q\\w\\c","\\k\\c\\d\\L\\q\\k\\j\\R\\s\\c\\w","\\l\\m\\2k","\\C\\j\\1w\\S\\m\\P\\l\\x\\c","\\n\\P\\C\\1Y\\w\\q\\d\\N\\l\\j\\n\\k","\\C\\j\\1w\\1Y\\w\\q\\d\\N\\l\\j\\n\\k","\\n\\P\\C\\L\\c\\d\\j\\q\\s","\\C\\j\\1w\\L\\c\\d\\j\\q\\s","\\n\\P\\C\\1l\\m\\d","\\C\\j\\1w\\1l\\m\\d","\\n\\P\\C\\S\\c\\s\\c\\x\\d\\1l\\m\\d","\\C\\j\\1w\\S\\c\\s\\c\\x\\d\\1l\\m\\d","\\1f\\l\\w\\1l\\m\\d","\\1I\\c\\1q","\\x\\K\\n\\1q\\M\\L","\\d\\1w\\d\\1O\\l\\j\\n\\x\\1i\\M\\L","\\s\\m\\j\\w","\\j\\w\\w\\1l\\q\\k\\d\\c\\n\\c\\l","\\1f\\c\\d\\S\\d\\m\\l\\c","\\x\\R\\m\\S\\d\\j\\d\\P\\k","\\x\\R\\m\\N\\l\\j\\n\\k\\M\\n\\1e\\d\\M\\L","\\x\\R\\m\\2o\\l\\m\\C\\N\\m\\S\\q\\d\\c\\M\\L","\\x\\R\\m\\S\\s\\k\\K\\c\\l\\M\\L","\\x\\R\\m\\S\\q\\d\\c\\M\\L","\\x\\R\\m\\1n\\c\\j\\k\\m\\n\\1F\\L","\\k\\d\\m\\1x\\n\\q\\d\\1F\\m\\n\\1e\\c\\l\\k\\q\\m\\n","\\k\\d\\m\\M\\n\\1e\\d","\\2k\\j\\q\\d\\2g\\k\\1f","\\k\\1i\\m\\2k\\1O\\P\\k\\1q","\\x\\m\\C\\C\\m\\n","\\1f\\c\\d\\1n\\c\\x\\m\\l\\w","\\1j\\l\\C\\2g\\j\\q\\n","\\P\\K\\w\\j\\d\\c\\1n\\c\\x\\m\\l\\w","\\1f\\c\\d\\1F\\1i\\j\\n\\1f\\c\\w\\L\\j\\d\\j","\\1I\\c\\1q\\k","\\q\\k\\1F\\1i\\j\\n\\1f\\c","","\\k\\1i\\m\\2k","\\C\\c\\k\\k\\j\\1f\\c","\\1j\\q\\l\\k\\d","\\s\\m\\j\\w\\1n\\c\\x\\m\\l\\w","\\d\\l\\j\\n\\k","\\1f\\l\\q\\w","\\q\\n\\w\\c\\1w\\3p\\1j","\\1O\\j\\d\\1p\\R\\l","\\1f\\c\\d","\\1f\\c\\d\\1y\\d","\\n\\c\\1w\\d","\\K\\l\\c\\1e","\\s\\j\\k\\d","\\q\\k\\3u\\q\\w\\w\\c\\n","\\k\\j\\1e\\c","\\1e\\j\\s\\P\\c","\\q\\k\\L\\c\\s\\c\\d\\c","\\3u","\\w\\c\\s\\c\\d\\c\\3u\\c\\j\\w\\c\\l","\\n\\c\\2k","\\q\\k\\1x\\K\\w\\j\\d\\c","\\q\\k\\M\\n\\k\\c\\l\\d","\\k\\c\\s\\c\\x\\d\\c\\w","\\k\\C\\s\\N\\l\\j\\n\\k","\\q\\k\\1Y\\C\\K\\d\\1q","\\M\\n\\1e\\d\\M\\L","\\w\\c\\s\\c\\d\\c\\N\\l\\j\\n\\k","\\w\\c\\s\\c\\d\\c","\\j\\k\\1I\\1F\\s\\m\\k\\c","\\x\\s\\m\\k\\c","\\j\\k\\1I\\1p\\c\\2k","\\l\\c\\s\\m\\j\\w","\\l\\c\\1j\\l\\c\\k\\1i","\\K\\l\\q\\n\\d","\\N\\l\\n\\k\\1j\\c\\l\\1p\\R\\l","\\R\\d\\n\\M\\C\\K\\m\\l\\d","\\1O\\l\\j\\n\\x\\1i\\M\\L","\\L\\j\\d\\c\\1Y\\n\\d","\\l\\c\\C\\m\\1e\\c\\1y\\s\\s","\\k\\d\\m\\N\\l\\j\\n\\k","\\1y\\K\\K\\2p\\C\\w\\s\\N\\l\\j\\n\\k\\1j\\c\\l","\\6v\\l\\n\\s\\N\\1q\\K\\c","\\1n\\c\\j\\k\\m\\n\\1F\\L","\\N\\l\\j\\n\\1y\\C\\d","\\1O\\j\\l\\1F\\m\\w\\c","\\1F\\n\\1e\\2o\\j\\x\\d","\\1Y\\1w\\d\\1F\\m\\k\\d","\\M\\n\\1e\\d\\2g\\P\\s\\d","\\1l\\q\\n\\c\\1n\\c\\1j","\\3p\\R\\3v\\M\\L","\\2I\\d\\1q","\\1n\\c\\1j\\1p\\R\\l","\\1n\\s\\k\\c\\w","\\S\\1i\\q\\K\\K\\c\\l\\M\\L","\\S\\1i\\q\\K\\K\\c\\l\\1l\\q\\n\\c\\1n\\c\\1j","\\S\\q\\d\\c\\M\\L","\\N\\m\\S\\q\\d\\c\\M\\L","\\S\\s\\k\\K\\c\\l\\M\\L","\\N\\l\\j\\n\\L\\j\\d\\c","\\N\\l\\j\\n\\L\\c\\k\\x","\\N\\l\\j\\n\\2o\\c\\c","\\N\\l\\j\\n\\N\\1q\\K\\c","\\1x\\n\\q\\d\\1F\\m\\k\\d","\\1x\\n\\q\\d\\L\\c\\k\\x","\\1x\\n\\q\\d\\2g\\P\\s\\d\\L\\q\\1e","\\1x\\n\\q\\d\\4N\\l\\q\\x\\c","\\x\\m\\C\\C\\q\\d","\\q\\n\\k\\c\\l\\d\\1n\\c\\x\\m\\l\\w","\\k\\d\\m\\l\\c","\\1j\\m\\l\\1Y\\j\\x\\1i","\\k\\d\\m\\N\\l\\j\\n\\k\\1j\\c\\l","\\2o\\l\\m\\C\\N\\m\\S\\q\\d\\c\\M\\L","\\1y\\K\\K\\2p\\C\\w\\s\\N\\l\\j\\n\\k","\\q\\n\\1e\\d","\\l\\c\\x\\m\\l\\w","\\1j\\q\\n\\w\\M\\n\\S\\d\\m\\l\\c","\\1l\\m\\d\\S\\c\\l\\N\\l\\j\\x\\1I","\\q\\k\\1l\\m\\x\\1I","\\2k\\q\\n\\1l\\m\\d","\\5Y\\d\\1q","\\1f\\c\\d\\1l\\j\\n\\1f","\\P\\n\\q\\d","\\c\\j\\x\\1i","\\k\\d\\m\\1l\\m\\d\\N\\l\\j\\n\\k","\\k\\c\\s\\c\\x\\d","\\k\\C\\s\\1l\\m\\d","\\M\\1p\\N\\l\\j\\n\\1l\\q\\n\\c\\1n\\c\\1j","\\2g","\\S\\d\\1I\\1x\\n\\q\\d","\\1x\\n\\q\\d\\1n\\j\\d\\c","\\3e\\j\\s\\2g\\d\\1i\\w","\\1y","\\1Y","\\k\\d\\m\\M\\d\\c\\C\\S\\q\\d\\c","\\1y\\1e\\1f\\1F\\m\\k\\d","\\l\\m\\P\\n\\w","\\x\\s\\c\\j\\l\\2o\\q\\s\\d\\c\\l","\\l\\c\\C\\m\\1e\\c\\1y\\d","\\2X","\\1l\\m\\d\\S\\c\\l\\1p\\R\\l","\\w\\c\\s\\c\\d\\c\\1l\\m\\d","\\1j\\q\\c\\s\\w","\\x\\1i\\c\\x\\1I\\M\\n\\K\\P\\d","\\M\\M","\\M\\1p","\\d\\1w\\d\\L\\j\\d\\c\\1Y\\n\\d","\\N","\\x\\R\\m\\N\\l\\j\\n\\k\\1x\\n\\q\\d\\L\\c\\k\\x","\\k\\d\\m\\1x\\n\\q\\d","\\k\\d\\m\\3p\\s\\w\\N\\l\\j\\n\\k","\\k\\c\\d\\N\\c\\1w\\d","\\s\\R\\s\\2I\\d\\1q\\1y\\1e\\j\\q\\s","\\C\\m\\w\\q\\1j\\q\\c\\w","\\2g\\P\\s\\d\\L\\q\\1e","\\x\\R\\m\\1l\\m\\d\\1x\\n\\q\\d\\L\\c\\k\\x","\\k\\d\\m\\M\\d\\c\\C\\1l\\m\\d","\\s\\R\\s\\1l\\m\\d\\2I\\d\\1q\\1y\\1e\\j\\q\\s","\\k\\P\\k\\K\\c\\n\\w","\\x\\1i\\j\\n\\1f\\c","\\c\\1e\\c\\n\\d\\k","\\1j\\q\\c\\s\\w\\x\\1i\\j\\n\\1f\\c","\\1j\\m\\l\\x\\c\\S\\c\\s\\c\\x\\d\\q\\m\\n","\\l\\c\\k\\P\\C\\c","\\k\\q\\d\\c\\q\\w","\\q\\k\\3e\\j\\s\\q\\w","\\4N\\3p\\S\\N","\\M\\1p\\2x\\1o\\2D\\1o\\1o\\3B\\S\\j\\1e\\c","\\1f\\c\\d\\1n\\c\\x\\m\\l\\w\\k\\3e\\j\\s\\P\\c\\k","\\c\\n\\x\\m\\w\\c","\\l\\c\\k\\P\\s\\d","\\R\\j\\d\\1p\\R\\l","\\K\\l\\m\\x\\c\\k\\k","\\k\\P\\R\\C\\q\\d","\\1q\\c\\k","\\M\\1p\\2x\\1o\\2D\\1o\\1o\\3B\\L\\c\\s\\c\\d\\c","\\l\\c\\C\\m\\1e\\c","\\M\\1p\\2x\\1o\\2D\\1o\\1o\\3B\\L\\c\\s\\c\\d\\c\\N\\l\\j\\n\\k","\\d\\k\\d\\j\\C\\K","\\w\\c\\s\\c\\d\\c\\S\\c\\s\\c\\x\\d\\c\\w","\\M\\1p\\2x\\1o\\2D\\1o\\1o\\3B\\1n\\c\\K\\m\\l\\d","\\l\\c\\K\\m\\l\\d\\M\\L","\\1n\\c\\K\\m\\l\\d\\6u\\1n\\c\\K\\m\\l\\d\\1p\\j\\C\\c\\4V","\\l\\c\\K\\m\\l\\d\\1p\\j\\C\\c","\\6t\\5x\\1n\\4N\\N\\M\\L\\4V","\\5x\\R\\s\\j\\n\\1I","\\m\\K\\c\\n","\\w\\c\\d","\\2I\\d\\1q\\1y\\1e\\j\\q\\s","\\1y\\K\\K\\2p\\C\\w\\s\\1l\\m\\d\\N\\l\\j\\n\\k","\\1Y\\1w\\K\\L\\j\\d\\c","\\1f\\c\\d\\1F\\m\\P\\n\\d","\\q\\n\\k\\c\\l\\d","\\k\\d\\m\\1F\\j\\s\\x\\1l\\m\\d","\\x\\m\\C\\C\\q\\d\\1F\\1i\\j\\n\\1f\\c\\k","\\1j\\q\\s\\d\\c\\l","\\k\\c\\d\\N\\q\\d\\s\\c","\\d\\1w\\d\\N\\m\\d\\1y\\C\\d","\\d\\1w\\d\\N\\m\\d\\2I\\d\\1q","\\1y\\K\\K\\2p\\C\\w\\s\\1O\\j\\d\\x\\1i","\\S\\d\\j\\d\\P\\k","\\R\\P\\k\\q\\n\\c\\k\\k\\L\\j\\d\\c","\\1e\\j\\s\\q\\w\\j\\d\\c","\\1o","\\1x\\n\\q\\d\\N\\1q\\K\\c","\\1F\\s\\j\\k\\k\\M\\L","\\2o\\l\\m\\C\\1x\\n\\q\\d","\\N\\m\\1x\\n\\q\\d","\\6J","\\6C","\\2D","\\2x","\\1o\\6E\\1o\\1o\\1o","\\n\\P\\C\\R\\c\\l","\\2o\\m\\l\\C\\j\\d","\\P\\d\\q\\s","\\s\\m\\x\\1I\\M\\d\\c\\C","\\k\\c\\d\\1n\\c\\j\\w\\3p\\n\\s\\1q","\\d\\1w\\d\\1n\\1e\\w\\1O\\j\\d\\1p\\R\\l","\\d\\1w\\d\\1n\\c\\1j\\1p\\R\\l","\\L\\c\\k\\x\\l","\\1y\\K\\K\\2p\\C\\w\\s\\M\\d\\c\\C\\S\\q\\d\\c","\\S\\d\\1I\\M\\d\\c\\C","\\1p\\c\\1f\\2I\\d\\1q","\\1n\\M","\\q\\w","\\2X\\6S\\2X","\\5Y\\d\\1q\\j\\1e\\j\\q\\s","\\5U","\\k\\n\\j\\K\\k\\1i\\m\\d","\\1l\\m\\d\\2X","\\5U\\2X","\\n\\m","\\m\\1I","\\M\\1p\\2x\\1o\\2D\\1o\\1o","\\x\\1i\\j\\n\\1f\\c\\L\\j\\d\\j"];e[a[0]]=2i;e[a[1]]=a[2];e[a[3]]=2i;e[a[4]]=A;e[a[5]]=2i;h 5N=o(){f(b[a[9]][a[8]][a[7]][a[6]]==0){e[a[5]]=p[a[11]](a[10])[a[8]]}H{e[a[5]]=b[a[9]][a[8]][a[7]][0][a[8]]};e[a[12]]++;3z()};h 5Q=o(){f(b[a[13]][a[8]][a[7]][a[6]]==0){e[a[14]]=p[a[11]](a[15])[a[8]]}H{e[a[14]]=b[a[13]][a[8]][a[7]][0][a[8]]};e[a[12]]++;3z()};h 6V=o(){b[a[19]][a[18]][a[17]][a[16]]()};h 5O=o(){b[a[22]][a[21]](a[20])};h 6g=o(){5P()};h 2c=o(){e[a[12]]++;3z()};h 6b=o(){h z=b[a[26]][a[25]](b[a[24]][a[23]]());f(z){3y(z)}};h 6x=o(6s,6o,6q){};h 3C=o(2E,1J,2G){e[a[27]]++;f(e[a[27]]==e[a[28]]){b[a[19]][a[18]][a[17]][a[29]]();b[a[19]][a[18]][a[17]][a[30]](A);3r(1J[a[31]])}};h 3z=o(){f(e[a[12]]==e[a[32]]){3i()}};h 2C=o(2E,1J,2G){e[a[33]]++;f(e[a[33]]==e[a[34]]){4u(1J[a[31]])}};h 5P=o(2E,1J,2G){e[a[35]]++;f(e[a[35]]==e[a[36]]){5w()}};h 5q=o(2E,1J,2G){e[a[37]]++;f(e[a[37]]==e[a[38]]){4K(1J[a[31]])}};h 4U=o(2E,1J,2G){e[a[39]]++;f(e[a[39]]==e[a[40]]){b[a[41]][a[18]][a[17]][a[29]]();b[a[41]][a[18]][a[17]][a[30]](A);3M(1J[a[31]])}};h 6k=o(){e[a[12]]=0;e[a[32]]=8;e[a[33]]=0;e[a[34]]=4;e[a[35]]=0;e[a[36]]=2;e[a[27]]=0;e[a[28]]=3;b[a[24]][a[42]]=u;b[a[44]][a[21]](e[a[43]]);b[a[22]][a[47]]()[a[46]](a[45],5O);b[a[48]][a[47]]()[a[46]](a[45],2c);b[a[49]][a[47]]()[a[46]](a[45],2c);b[a[50]][a[47]]()[a[46]](a[45],2c);b[a[51]][a[47]]()[a[46]](a[45],2c);b[a[52]][a[47]]()[a[46]](a[45],2c);b[a[53]][a[47]]()[a[46]](a[45],2c);b[a[9]][a[46]](a[45],5N);b[a[13]][a[46]](a[45],5Q);b[a[54]][a[46]](a[45],2c);b[a[13]][a[45]]();b[a[9]][a[45]]();b[a[54]][a[45]]();b[a[55]]=b[a[49]][a[47]]();e[a[58]][a[57]](u,e[a[56]])};h 6M=o(g,5G,3R,4p){f(5G[a[42]]!=2Y){I};f(b[a[60]][a[59]]()!=2Y){b[a[60]][a[61]]()};f(4i[a[63]](b[a[26]][a[62]]())[a[6]]>0||b[a[19]][a[64]]){3a(u)}H{3a(A)}};h 2V=o(5V){6R(5V){1P a[68]:f(e[a[1]]==a[2]){f(e[a[64]]||b[a[19]][a[64]]){e[a[67]][a[66]](2l,a[65],a[65],u)}H{b[a[60]][a[69]](b[a[26]][a[68]]())}}H{f(e[a[1]]==a[70]){e[a[71]][a[68]](b[a[19]])}};1Q;1P a[76]:f(e[a[1]]==a[2]){f(e[a[64]]||b[a[19]][a[64]]){e[a[67]][a[66]](2l,a[65],a[65],u)}H{h 3s=b[a[26]][a[72]](b[a[26]][a[25]](b[a[24]][a[23]]()));b[a[24]][a[21]](b[a[26]][a[75]](3s+1)[a[74]](a[73]))}}H{f(e[a[1]]==a[70]){e[a[71]][a[76]](b[a[19]])}};1Q;1P a[77]:f(e[a[1]]==a[2]){f(e[a[64]]||b[a[19]][a[64]]){e[a[67]][a[66]](2l,a[65],a[65],u)}H{h 3s=b[a[26]][a[72]](b[a[26]][a[25]](b[a[24]][a[23]]()));b[a[24]][a[21]](b[a[26]][a[75]](3s-1)[a[74]](a[73]))}}H{f(e[a[1]]==a[70]){e[a[71]][a[77]](b[a[19]])}};1Q;1P a[78]:f(e[a[1]]==a[2]){f(e[a[64]]||b[a[19]][a[64]]){e[a[67]][a[66]](2l,a[65],a[65],u)}H{b[a[60]][a[69]](b[a[26]][a[78]]())}}H{f(e[a[1]]==a[70]){e[a[71]][a[78]](b[a[19]])}};1Q;1P a[80]:f(!b[a[19]][a[18]][a[17]][a[79]]()){I};5n();1Q;1P a[6A]:f(e[a[1]]==a[2]){f(b[a[24]][a[81]]){f(e[a[82]]){f(b[a[48]][a[23]]()!=a[83]){e[a[67]][a[66]](4d,[b[a[24]][a[81]]],a[65],u)}H{e[a[67]][a[66]](11,a[65],a[84])}}H{e[a[67]][a[66]](5l,a[65],a[65],u)}}H{2V(a[85])}}H{f(e[a[1]]==a[70]){f((b[a[24]][a[81]]&&e[a[86]])||(!b[a[24]][a[81]]&&e[a[87]])){f(b[a[48]][a[23]]()!=a[83]){e[a[67]][a[66]](4d,[b[a[24]][a[81]]],a[65],u);I};f(b[a[89]][a[88]][a[7]][a[6]]!=0){f(!p[a[v]](b[a[89]][a[88]][a[7]][0][a[8]].1C)){e[a[67]][a[66]](5h,[b[a[89]][a[88]][a[7]][0][a[8]][a[r]]],a[6I],u)}}}}};1Q;1P a[4O]:f(b[a[60]][a[59]]()!=2Y){b[a[60]][a[61]]()};f(e[a[64]]||b[a[19]][a[64]]){e[a[67]][a[66]](5,a[65],a[6H])}H{e[a[58]][a[4O]](1G)};1Q;1P a[85]:f((e[a[64]]||b[a[19]][a[64]])&&!p[a[v]](b[a[24]][a[23]]())){e[a[67]][a[66]](6G,a[65],a[6N],u)}H{3i()};1Q;1P a[3x]:f(!p[a[v]](b[a[24]][a[23]]())){b[a[26]][a[3H]]()}H{3i()};1Q;1P a[6T]:f(!p[a[v]](b[a[24]][a[23]]())&&b[a[48]][a[81]]!=a[83]){5W()};1Q;6U:}};h 6Q=o(g,3R,4p){h z=b[a[26]][a[25]](3R);f(z){3y(z)}H{f(e[a[0]]!=z){}H{}};e[a[0]]=z};h 6O=o(g,3R,4p){b[a[22]][a[47]]()[a[3H]]()};h 6h=o(){f(b[a[50]][a[23]]()==b[a[52]][a[23]]()){b[a[50]][a[21]](a[65])}};h 6i=o(){f(b[a[50]][a[23]]()==b[a[52]][a[23]]()){b[a[52]][a[21]](a[65])}};h 6j=o(){f(p[a[v]](b[a[24]][a[23]]())){f(!p[a[v]](b[a[5D]][a[23]]())){b[a[4W]][a[30]](u);b[a[2t]][a[45]]({1D:{2n:b[a[2H]][a[23]](),6K:b[a[5T]][a[23]](),6w:b[a[5D]][a[23]]()},1K:o(){e[a[4]]=u;b[a[1k]][a[4S]]();b[a[2t]][a[8]][a[7]][a[6B]](o(g){h W=p[a[11]](a[6D]);W[a[8]][a[4e]]=g[a[8]][a[4e]];W[a[8]][a[3c]]=g[a[8]][a[3c]];W[a[8]][a[2a]]=g[a[8]][a[2a]];W[a[8]][a[73]]=g[a[8]][a[73]];W[a[8]][a[2H]]=g[a[8]][a[2H]];W[a[8]][a[3f]]=g[a[8]][a[3f]];W[a[8]][a[B]]=g[a[8]][a[B]];W[a[8]][a[4J]]=g[a[8]][a[4J]];W[a[8]][a[r]]=g[a[8]][a[r]];W[a[8]][a[2M]]=g[a[8]][a[2M]];W[a[8]][a[1u]]=g[a[8]][a[1u]];W[a[8]][a[5f]]=g[a[8]][a[5f]];W[a[8]][a[G]]=g[a[8]][a[G]];W[a[8]][a[5C]]=g[a[8]][a[5C]];W[a[8]][a[5j]]=g[a[8]][a[5j]];W[a[8]][a[5B]]=g[a[8]][a[5B]];W[a[8]][a[5z]]=g[a[8]][a[5z]];W[a[8]][a[E]]=g[a[8]][a[6z]];W[a[8]][a[3U]]=g[a[8]][a[3U]];W[a[8]][a[4j]]=g[a[8]][a[4j]];W[a[8]][a[4v]]=g[a[8]][a[4v]];W[a[8]][a[5s]]=g[a[8]][a[5s]];W[a[8]][a[2v]]=g[a[8]][a[2v]];W[a[8]][a[1R]]=g[a[8]][a[1R]];W[a[8]][a[1E]]=g[a[8]][a[1E]];W[a[8]][a[T]]=g[a[8]][a[T]];W[a[8]][a[1h]]=g[a[8]][a[1h]];W[a[1H]]();e[a[1g]][a[2q]](b[a[1k]],a[r],W,u)});f(b[a[2t]][a[8]][a[7]][a[6]]>0){b[a[6P]][a[21]](b[a[2t]][a[8]][a[7]][0][a[8]].2u);b[a[E]][a[21]](b[a[2t]][a[8]][a[7]][0][a[8]].6L);f(p[a[v]](b[a[3c]][a[23]]())){b[a[3c]][a[21]](b[a[2t]][a[8]][a[7]][0][a[8]].6y)};f(p[a[v]](b[a[3U]][a[81]])){b[a[3U]][a[21]](b[a[2t]][a[8]][a[7]][0][a[8]].5p)}};e[a[1g]][a[2q]](b[a[1k]],a[r],p[a[11]](a[3F]),u);3k();2f()}})}H{f(p[a[v]](b[a[24]][a[23]]())){b[a[4W]][a[30]](A)};e[a[4]]=A;b[a[1k]][a[4S]]();e[a[1g]][a[2q]](b[a[1k]],a[r],p[a[11]](a[3F]),u);3k();2f()}}};h 6f=o(){f(p[a[v]](1G[a[t]][a[Y]])){1G[a[t]][a[Y]]=e[a[1g]][a[1t]](b[a[55]],[a[r]],[1G[a[t]][a[8]][a[r]]])};f(!p[a[v]](1G[a[t]][a[Y]].4n)&&1G[a[t]][a[Y]][a[4l]]!=a[20]&&!p[a[v]](1G[a[t]][a[8]].2Q)){3w(1G[a[t]],u)}};h 6l=o(){f(!b[a[41]][a[3b]]){h O=b[a[V]][a[t]][a[8]];h 1m=2i;b[a[U]][a[8]][a[1z]](o(g){f(!p[a[v]](g[a[8]].1U)){f(g[a[8]][a[G]]==0){e[a[67]][a[66]](3m,[e[a[58]][a[2d]](a[5t])],a[65],u);1m=g;I A};f(p[a[v]](g[a[8]].2Q)){e[a[67]][a[66]](3m,[e[a[58]][a[2d]](a[6d])],a[65],u);1m=g;I A};f(p[a[v]](g[a[8]].6c)){e[a[67]][a[66]](4r,[1S],a[65],u);1m=g;I A}}});f(!p[a[v]](1m)){b[a[3h]][a[2l]](b[a[U]][a[72]](1m));I};h 1v=0;b[a[U]][a[8]][a[1z]](o(g){f(!p[a[v]](g[a[8]].1U)){f(g[a[8]][a[E]]==O[a[E]]&&g[a[8]][a[r]]==O[a[r]]&&g[a[8]][a[1V]]==O[a[1u]]){1v+=g[a[8]][a[T]]==a[1s]?g[a[8]][a[G]]*g[a[8]][a[B]]:g[a[8]][a[G]]/g[a[8]][a[B]]}}});h 4k=(O[a[T]]==a[1s]?1v/O[a[B]]:O[a[G]]*O[a[B]]);f(4k%1>0){b[a[V]][a[t]][a[8]][a[G]]=1v;b[a[V]][a[t]][a[8]][a[1E]]=b[a[V]][a[t]][a[Y]][a[3o]];b[a[V]][a[t]][a[8]][a[6e]]=1;b[a[V]][a[t]][a[8]][a[T]]=a[1s];f(b[a[V]][a[t]][a[Y]][a[1M]]==a[3q]||b[a[V]][a[t]][a[Y]][a[1M]]==a[2T]){h 1c=e[a[1g]][a[1t]](b[a[2b]],[a[r],a[E]],[O[a[r]],O[a[E]]]);4X=1c[a[2K]];b[a[V]][a[t]][a[8]][a[1h]]=4X}H{b[a[V]][a[t]][a[8]][a[1h]]=0}}H{b[a[V]][a[t]][a[8]][a[G]]=2F[a[2A]](4k)};b[a[V]][a[t]][a[8]][a[2a]]=b[a[V]][a[t]][a[8]][a[G]]*b[a[V]][a[t]][a[8]][a[1h]];b[a[V]][a[t]][a[1H]]();b[a[19]][a[18]][a[3x]]();2f();b[a[U]][a[2O]]();4P(i=b[a[U]][a[8]][a[7]][a[6]]-1;i>=0;i--){f(p[a[v]](b[a[U]][a[8]][a[7]][i][a[8]].1U)){b[a[U]][a[8]][a[5X]](i)}}};b[a[V]][a[29]]()};h 6m=o(){f((b[a[24]][a[81]]&&e[a[86]])||(!b[a[24]][a[81]]&&e[a[87]])){f(b[a[48]][a[23]]()!=a[83]){e[a[67]][a[66]](4d,[b[a[24]][a[81]]],a[65],u);I};f(b[a[3h]][a[88]][a[7]][a[6]]!=0){f(!p[a[v]](b[a[3h]][a[88]][a[7]][0][a[8]].1U)){e[a[67]][a[66]](5h,[b[a[3h]][a[88]][a[7]][0][a[8]][a[r]]+a[2Z]+b[a[3h]][a[88]][a[7]][0][a[8]][a[1a]]],a[6r],u)}}}};h 6n=o(g,F){f(b[a[19]][a[3b]]){I A};f(p[a[v]](b[a[52]][a[23]]())){e[a[67]][a[66]](3m,[e[a[58]][a[2d]](a[E])],a[65],u);I A};h Z=F[a[2R]];f(!e[a[71]][a[6p]](F,[a[r]])&&Z!=a[r]){I A};f(!p[a[v]](F[a[t]][a[8]].1C)&&Z==a[r]){I A};f(p[a[v]](F[a[t]][a[8]].2y)){F[a[t]][a[8]][a[1u]]=5S();F[a[t]][a[8]][a[2M]]=-1;F[a[t]][a[8]][a[2v]]=a[6F];F[a[t]][a[8]][a[4e]]=a[7g];F[a[t]][a[8]][a[2H]]=e[a[43]];F[a[t]][a[8]][a[73]]=e[a[3]][a[8]][a[73]];F[a[t]][a[8]][a[4j]]=b[a[8b]][a[23]]();F[a[t]][a[8]][a[E]]=b[a[52]][a[23]]();F[a[t]][a[1H]]()};f(Z==a[1h]){h X=F[a[31]][a[Y]];f(!p[a[v]](X)&&X[a[1M]]==a[8a]){I A}};b[a[7Z]][a[21]](a[65])};h 8c=o(g,1B){e[a[1]]=a[70];f(1B[a[6]]>0){f(!p[a[v]](1B[0][a[8]].1C)){e[a[27]]=0;b[a[19]][a[18]][a[17]][a[66]]();b[a[2b]][a[45]]({1D:{2s:b[a[52]][a[23]](),1S:1B[0][a[8]][a[r]]},1K:3C,1N:1B[0]});b[a[5g]][a[45]]({1D:{1S:1B[0][a[8]][a[r]]},1K:3C,1N:1B[0]});b[a[3D]][a[45]]({1D:{2P:b[a[24]][a[23]](),2n:b[a[44]][a[23]]()},1K:3C,1N:1B[0]})}H{b[a[3N]][a[2L]](a[65])}}};h 8d=o(g,F){e[a[1]]=a[70];h Z=F[a[2R]];f(4i[a[63]](F[a[t]][a[5k]])[a[6]]>0){b[a[19]][a[64]]=u;f(F[a[t]][a[Y]]==2Y){F[a[t]][a[Y]]=e[a[1g]][a[1t]](b[a[55]],[a[r]],[F[a[t]][a[8]][a[r]]])};h X=F[a[t]][a[Y]];f(!p[a[v]](X)){f(Z==a[r]&&p[a[v]](F[a[t]][a[8]].2Q)){h 1r=3g(X.1C,X.3L,X.2S,X.2S);f(!p[a[v]](1r)){F[a[t]][a[8]][a[1E]]=X[a[3o]];F[a[t]][a[8]][a[B]]=1r[a[B]]==0?1:1r[a[B]];F[a[t]][a[8]][a[T]]=1r[a[3Q]]}H{I}};f(Z==a[r]||Z==a[G]){b[a[19]][a[18]][a[17]][a[66]]();e[a[33]]=0;e[a[34]]=3;b[a[5g]][a[45]]({1D:{1S:F[a[t]][a[8]][a[r]]},1K:2C,1N:F});b[a[2b]][a[45]]({1D:{2s:b[a[52]][a[23]](),1S:F[a[t]][a[8]][a[r]]},1K:2C,1N:F});b[a[3D]][a[45]]({1D:{2P:b[a[24]][a[23]](),2n:b[a[44]][a[23]]()},1K:2C,1N:F})}H{f(Z==a[1E]){b[a[19]][a[18]][a[17]][a[66]]();e[a[33]]=0;e[a[34]]=2;b[a[2b]][a[45]]({1D:{2s:b[a[52]][a[23]](),1S:F[a[t]][a[8]][a[r]]},1K:2C,1N:F});b[a[3D]][a[45]]({1D:{2P:b[a[24]][a[23]](),2n:b[a[44]][a[23]]()},1K:2C,1N:F})}H{4u(F)}}}H{}}};h 8g=o(g,F){};h 8f=o(g,F){f(b[a[41]][a[3b]]){I A};h Z=F[a[2R]];h z=F[a[t]];f(Z!=a[1a]&&p[a[v]](F[a[t]][a[8]].1U)){I A};f(Z==a[1a]&&!p[a[v]](z[a[8]].1U)){I A};f(p[a[v]](z[a[8]].1C)){z[a[8]][a[r]]=b[a[V]][a[t]][a[8]][a[r]];z[a[8]][a[E]]=b[a[V]][a[t]][a[8]][a[E]]};z[a[1H]]();b[a[8e]][a[21]](a[65])};h 7Y=o(g,1B){f(1B[a[6]]>0){f(!p[a[v]](1B[0][a[8]].1C)){e[a[39]]=0;e[a[40]]=1;b[a[41]][a[18]][a[17]][a[66]]();b[a[3O]][a[45]]({1D:{2s:1B[0][a[8]][a[E]],1S:1B[0][a[8]][a[r]],2n:b[a[44]][a[23]](),5o:1B[0][a[8]][a[1a]],2P:b[a[24]][a[23]]()},1K:4U,1N:1B[0]})}H{b[a[5v]][a[2L]](a[65])}}};h 7X=o(g,F){h Z=F[a[2R]];h Q=F[a[t]][a[8]];h z=F[a[t]];f(4i[a[63]](F[a[t]][a[5k]])[a[6]]>0){f(Z==a[G]||Z==a[1E]){4K(F)}H{f(Z==a[1a]){b[a[41]][a[18]][a[17]][a[66]]();e[a[37]]=0;e[a[38]]=1;b[a[3O]][a[45]]({1D:{2s:Q[a[E]],1S:Q[a[r]],2n:b[a[44]][a[23]](),5o:Q[a[1a]]},1K:5q,1N:F})}}}};h 5w=o(){f(b[a[1k]][a[8]][a[7]][a[6]]>0){h 4f=b[a[1k]][a[8]][a[7]][0][a[8]];b[a[52]][a[21]](4f.2u);b[a[51]][a[21]](4f.5p)};b[a[3N]][a[2L]](a[65]);e[a[1g]][a[2q]](b[a[1k]],a[r],p[a[11]](a[3F]),u);3k();2f();b[a[19]][a[64]]=A;e[a[58]][a[57]](A,e[a[56]]);3a(A)};h 3y=o(z){e[a[3]]=z;b[a[24]][a[1T]][a[2j]][a[3l]]();b[a[52]][a[1T]][a[2j]][a[3l]]();b[a[50]][a[1T]][a[2j]][a[3l]]();b[a[60]][a[1T]][a[5r]][a[3l]]();b[a[48]][a[4h]]=A;b[a[60]][a[69]](e[a[3]]);b[a[48]][a[4h]]=A;b[a[60]][a[1T]][a[5r]][a[3d]]();b[a[24]][a[1T]][a[2j]][a[3d]]();b[a[52]][a[1T]][a[2j]][a[3d]]();b[a[50]][a[1T]][a[2j]][a[3d]]();5K();e[a[58]][a[57]](u,e[a[56]]);e[a[35]]=0;b[a[1k]][a[3H]]();b[a[U]][a[3H]]();b[a[22]][a[21]](a[20])};h 5n=o(){f((b[a[24]][a[81]]&&!e[a[86]])||(p[a[v]](b[a[24]][a[81]])&&!e[a[87]])){e[a[67]][a[66]](5l,a[65],a[65],u);I};f(b[a[48]][a[23]]()!=a[83]&&(b[a[22]][a[23]]()==a[20]||p[a[v]](b[a[22]][a[23]]()))){e[a[67]][a[66]](7R,a[65],a[65],u);I};f(b[a[1k]][a[8]][a[7]][a[6]]<=1){e[a[67]][a[66]](8i,[b[a[24]][a[81]]],a[65],u);I};h 1m=A;b[a[U]][a[2O]]();b[a[1k]][a[8]][a[1z]](o(g){f(!p[a[v]](g[a[8]].1C)){f(g[a[8]][a[G]]==0){e[a[67]][a[66]](3m,[e[a[58]][a[2d]](a[5t])],a[65],u);b[a[89]][a[2l]](b[a[1k]][a[72]](e[a[1g]][a[1t]](b[a[1k]],[a[1u]],[g[a[8]][a[1u]]])));1m=u;I A};f(g[a[8]][a[T]]==a[65]){e[a[67]][a[66]](4r,[g[a[8]][a[r]]],a[65],u);b[a[89]][a[2l]](b[a[1k]][a[72]](e[a[1g]][a[1t]](b[a[1k]],[a[1u]],[g[a[8]][a[1u]]])));1m=u;I A};f(p[a[v]](g[a[8]].2u)){e[a[67]][a[66]](3m,[e[a[58]][a[2d]](a[7P])],a[65],u);b[a[89]][a[2l]](b[a[1k]][a[72]](e[a[1g]][a[1t]](b[a[1k]],[a[1u]],[g[a[8]][a[1u]]])));1m=u;I A};f(p[a[v]](g[a[Y]])){g[a[Y]]=e[a[1g]][a[1t]](b[a[55]],[a[r]],[g[a[8]][a[r]]])};f(g[a[Y]][a[4l]]!=a[20]&&!p[a[v]](g[a[Y]].4n)){h 4q=0;h 3K=A;b[a[U]][a[8]][a[1z]](o(J){f(g[a[8]][a[1u]]==J[a[8]][a[1V]]&&!p[a[v]](J[a[8]].1U)){f(g[a[8]][a[r]]!=J[a[8]][a[r]]){e[a[67]][a[66]](5y,[g[a[8]][a[r]]],a[65],u);3K=u;I A};f(g[a[8]][a[E]]!=J[a[8]][a[E]]){e[a[67]][a[66]](5y,[g[a[8]][a[r]]],a[65],u);3K=u;I A};4q+=J[a[8]][a[T]]==a[1s]?J[a[8]][a[G]]*J[a[8]][a[B]]:J[a[8]][a[G]]/J[a[8]][a[B]];}});f(3K){1m=g;I A;};h 5u=2F[a[2A]](g[a[8]][a[T]]==a[1s]?g[a[8]][a[G]]*g[a[8]][a[B]]:g[a[8]][a[G]]/g[a[8]][a[B]]);f(5u!=4q){e[a[67]][a[66]](7O,[g[a[8]][a[r]]],a[65],u);1m=g;I A}}}});f(1m){I};f(b[a[60]][a[7S]]()){b[a[60]][a[3J]]({3I:e[a[56]],3S:a[3V],4b:a[7T],4a:3W,1D:{7W:p[a[4T]](b[a[1k]][a[4Y]]()),7V:p[a[4T]](b[a[U]][a[4Y]]())},3X:o(1A,1b){h 2W=a[65];f(1G[a[2h]][a[8]]!=2Y&&1G[a[2h]][a[8]][a[4R]]!=2i){h 2W=1G[a[2h]][a[8]][a[4R]]};f(!p[a[v]](2W)){b[a[24]][a[4h]]=A;b[a[24]][a[1T]][a[2j]][a[3l]]();b[a[24]][a[21]](2W);b[a[24]][a[1T]][a[2j]][a[3d]]();f(p[a[v]](e[a[0]])){e[a[0]]=2W}};e[a[67]][a[2w]](1A,1b,u);2V(a[3x])},3t:o(1A,1b){e[a[67]][a[2w]](1A,1b,u)}})}};h 7U=o(g){f(g==a[3Z]){f(p[a[v]](b[a[24]][a[23]]())){2V(a[85])}H{b[a[60]][a[3J]]({3I:e[a[56]],4g:A,3S:a[3V],4b:a[8h],4a:3W,3X:o(1A,1b){h z=b[a[26]][a[25]](b[a[24]][a[23]]());f(!p[a[v]](z)){b[a[26]][a[8j]](z)};3a(A);e[a[67]][a[2w]](1A,1b,u);2V(a[85])},3t:o(1A,1b){e[a[67]][a[2w]](1A,1b,u)}})}}};h 8k=o(g){f(g==a[3Z]){h O=b[a[89]][a[88]][a[7]][0][a[8]];b[a[U]][a[2O]]();4P(i=b[a[U]][a[8]][a[7]][a[6]]-1;i>=0;i--){f(O[a[1u]]==b[a[U]][a[8]][a[7]][i][a[8]][a[1V]]){b[a[U]][a[8]][a[5X]](i)}};f(b[a[24]][a[81]]){b[a[60]][a[3J]]({3I:e[a[56]],4g:A,3S:a[3V],4b:a[7Q],4a:3W,1D:{7M:b[a[89]][a[88]][a[7]][0][a[8]][a[1u]]},3X:o(1A,1b){f(!p[a[v]](1b[a[2h]][a[8]][a[4o]])){b[a[4o]][a[21]](1b[a[2h]][a[8]][a[4o]])};b[a[19]][a[4m]]();2f();e[a[67]][a[2w]](1A,1b,u)},3t:o(1A,1b){e[a[67]][a[2w]](1A,1b,u)}})}H{b[a[19]][a[4m]]();2f()}}};h 7l=o(g){f(g==a[3Z]){b[a[41]][a[4m]]()}};h 5W=o(){b[a[60]][a[3J]]({3I:e[a[56]],3S:a[3V],4g:A,4b:a[7k],4a:3W,3X:o(1A,1b){f(1G[a[2h]][a[5H]]!=2i){7j[a[7i]](a[7m]+1G[a[2h]][a[6W]]+a[7n]+1G[a[2h]][a[5H]],a[7q])};5E(1A,1b,u)},3t:o(1A,1b){5E(1A,1b,u)}})};h 4I=o(z){f(!p[a[v]](z[a[Y]])&&!p[a[v]](z[a[Y]].4n)&&z[a[Y]][a[4l]]!=a[20]&&!p[a[v]](z[a[8]].2Q)){h 1m=A;h O=z[a[8]];b[a[U]][a[2O]]();b[a[U]][a[8]][a[1z]](o(g){f(g[a[8]][a[1V]]==O[a[1u]]&&!p[a[v]](g[a[8]].1U)){1m=u}});f(!1m){e[a[58]][a[57]](u,e[a[56]]);b[a[4c]][a[45]]({1D:{2s:O[a[E]],1S:O[a[r]],2n:b[a[44]][a[23]](),2P:b[a[24]][a[23]]()},7p:z[a[8]],1N:z,1K:o(2E,1J,2G){h O=1J[a[7o]];h 2N=2F[a[2A]](O[a[T]]==a[1s]?O[a[G]]*O[a[B]]:O[a[G]]/O[a[B]]);b[a[U]][a[2O]]();b[a[4c]][a[8]][a[1z]](o(g){h 1W=0;h 2z=0;b[a[U]][a[8]][a[1z]](o(J){f(J[a[8]][a[1a]]==g[a[8]][a[1a]]&&J[a[8]][a[r]]==g[a[8]][a[r]]&&J[a[8]][a[E]]==g[a[8]][a[E]]){2z+=J[a[8]][a[T]]==a[1s]?J[a[8]][a[G]]*J[a[8]][a[B]]:J[a[8]][a[G]]*J[a[8]][a[B]]}});f(2F[a[2A]](g[a[8]][a[1Z]]-2z)==0){I u};f((g[a[8]][a[1Z]]-2z)>=2N){1W=2N;2N=0;}H {1W=(g[a[8]][a[1Z]]-2z);2N-=(g[a[8]][a[1Z]]-2z);g[a[8]][a[1Z]]=0;};f(1W!=0){h 1d=p[a[11]](a[4H]);1d[a[8]][a[2H]]=b[a[44]][a[23]]();1d[a[8]][a[73]]=b[a[24]][a[23]]();1d[a[8]][a[1a]]=g[a[8]][a[1a]];1d[a[8]][a[3P]]=g[a[8]][a[3P]];1d[a[8]][a[1V]]=O[a[1u]];1d[a[8]][a[E]]=O[a[E]];1d[a[8]][a[r]]=O[a[r]];1d[a[8]][a[2M]]= -1;f((O[a[T]]==a[1s]?1W/O[a[B]]:1W*O[a[B]])%1>0){1d[a[8]][a[B]]=1;1d[a[8]][a[T]]=a[1s];1d[a[8]][a[G]]=1W;1d[a[8]][a[1E]]=1J[a[31]][a[Y]][a[3o]];f(5R[a[1M]]==a[3q]||5R[a[1M]]==a[2T]){1d[a[8]][a[1h]]=1d[a[8]][a[1R]]=7h[a[2K]]}H{1d[a[8]][a[1h]]=1d[a[8]][a[1R]]=0}}H{1d[a[8]][a[G]]=2F[a[2A]](O[a[T]]==a[1s]?1W/O[a[B]]:1W*O[a[B]]);1d[a[8]][a[B]]=O[a[B]];1d[a[8]][a[T]]=O[a[T]];1d[a[8]][a[1h]]=O[a[1h]];1d[a[8]][a[1R]]=O[a[1h]];1d[a[8]][a[1E]]=O[a[1E]]};1d[a[1H]]();b[a[U]][a[7N]](b[a[U]][a[7a]](),1d)};f(2N==0){I A}});b[a[U]][a[5a]]();e[a[58]][a[57]](A);3w(1J[a[31]],A)}})}H{3w(z,u)}}};h 3w=o(z,5m){h 2r=!((b[a[24]][a[81]]&&e[a[86]])||(!b[a[24]][a[81]]&&e[a[87]]))||b[a[48]][a[23]]()!=a[83];b[a[41]][a[3b]]=2r;f(5m){b[a[4c]][a[45]]({1D:{2s:z[a[8]][a[E]],1S:z[a[8]][a[r]],2n:b[a[44]][a[23]](),2P:b[a[24]][a[23]]()}})};b[a[U]][a[2O]]();b[a[U]][a[6Z]](a[1V],z[a[8]].2y);h 2m=p[a[11]](a[4H]);2m[a[8]][a[1V]]=z[a[8]][a[1u]];2m[a[8]][a[2M]]=z[a[8]][a[2M]];2m[a[8]][a[2v]]=z[a[8]][a[2v]];e[a[1g]][a[2q]](b[a[U]],a[1a],2m,u);b[a[V]][a[t]]=z;b[a[41]][a[18]][a[3x]]();b[a[V]][a[6Y]](z[a[8]][a[r]]+a[2Z]+(z[a[8]][a[T]]==a[1s]?z[a[8]][a[G]]*z[a[8]][a[B]]:z[a[8]][a[G]]/z[a[8]][a[B]])+a[2Z]+z[a[Y]][a[3o]]);b[a[V]][a[66]]();};h 2f=o(){h 4Q=0;h 2J=0;b[a[1k]][a[8]][a[1z]](o(g){4Q+=g[a[8]][a[2a]];2J+=g[a[8]][a[G]];});b[a[6a]][a[21]](4Q);b[a[5Z]][a[21]](2J);};h 3i=o(){h z=p[a[11]](a[6X]);z[a[8]][a[2H]]=e[a[43]];z[a[8]][a[5J]]=a[83];z[a[8]][a[5T]]=e[a[7b]];b[a[52]][a[21]](a[65]);b[a[51]][a[21]](a[65]);b[a[60]][a[7c]]();3y(z);};h 5S=o(){h 2U=0;b[a[1k]][a[8]][a[1z]](o(g){f(!p[a[v]](g[a[8]].2y)&&5M(g[a[8]].2y)>2U){2U=5M(g[a[8]].2y)}});2U++;h 1X=2U.7f();h 5L=1X[a[6]];4P(h 4z=0;4z<5-5L;4z++){1X=a[7e]+1X};I 1X;};h 3g=o(2B,5F,3Y,3n){f(!p[a[v]](3n)){h 1b=e[a[1g]][a[1t]](b[a[54]],[a[4A],a[4x],a[r],a[4w],a[4M]],[a[7d],a[3G],2B,3n,3Y]);f(!p[a[v]](1b)){I 1b};1b=e[a[1g]][a[1t]](b[a[54]],[a[4A],a[4x],a[r],a[4w],a[4M]],[a[7r],5F,a[3G],3n,3Y]);f(!p[a[v]](1b)){I 1b};1b=e[a[1g]][a[1t]](b[a[54]],[a[4A],a[4x],a[r],a[4w],a[4M]],[a[7s],a[3G],a[3G],3n,3Y]);f(!p[a[v]](1b)){I 1b};e[a[67]][a[66]](4r,[2B],a[65],u);I 2i;};I 2i;};h 7G=o(3j){I p[a[5e]][a[5d]][a[5b]](3j,a[5I])};h 5K=o(){h 2r=u;f(!p[a[v]](e[a[3]][a[8]].7F)){f(e[a[3]][a[8]][a[5J]]==a[83]){2r=A}}H {2r=!e[a[87]]};e[a[58]][a[7E]](b[a[60]],2r);b[a[19]][a[3b]]=2r;b[a[24]][a[1L]](A);b[a[22]][a[1L]](A);b[a[7H]][a[1L]](u);b[a[48]][a[1L]](u);b[a[7I]][a[1L]](u);b[a[5Z]][a[1L]](u);b[a[6a]][a[1L]](u);};h 4u=o(D){h Z=D[a[2R]];h y=D[a[t]][a[8]];f(Z==a[r]||Z==a[3f]){y[a[3c]]=b[a[53]][a[23]]();y[a[E]]=b[a[52]][a[23]]();h X=D[a[t]][a[Y]];h 1r=3g(X.1C,X.3L,X.2S,X.2S);f(p[a[v]](1r)){y[a[T]]=a[65];y[a[1h]]=0;D[a[t]][a[1H]]();b[a[19]][a[18]][a[17]][a[29]]();b[a[19]][a[18]][a[17]][a[30]](A);I ;};y[a[1E]]=X[a[3o]];y[a[B]]=1r[a[B]]==0?1:1r[a[B]];y[a[T]]=1r[a[3Q]];y[a[4v]]=X[a[7L]];y[a[3f]]=X[a[3f]];h 1c=e[a[1g]][a[1t]](b[a[2b]],[a[r],a[E]],[y[a[r]],y[a[E]]]);f(p[a[v]](1c)){1c=p[a[11]](a[4B])[a[8]];1c[a[E]]=y[a[E]];1c[a[r]]=y[a[r]];};f(X[a[1M]]==a[3q]||X[a[1M]]==a[2T]){y[a[1h]]=1c[a[2K]]};y[a[2a]]=y[a[G]]*y[a[1h]];3r(D[a[t]]);}H {f(Z==a[1E]){h X=D[a[t]][a[Y]];h 1c=e[a[1g]][a[1t]](b[a[2b]],[a[r],a[E]],[y[a[r]],y[a[E]]]);f(p[a[v]](1c)){1c=p[a[11]](a[4B])[a[8]];1c[a[E]]=y[a[E]];1c[a[r]]=y[a[r]];};h 1r=3g(X.1C,X.3L,X.2S,y.2Q);f(p[a[v]](1r)){y[a[T]]=a[65];y[a[1h]]=y[a[1R]]=0;y[a[G]]=0;y[a[2a]]=0;D[a[t]][a[1H]]();b[a[19]][a[18]][a[17]][a[29]]();b[a[19]][a[18]][a[17]][a[30]](A);I ;};y[a[B]]=1r[a[B]];y[a[T]]=1r[a[3Q]];f(X[a[1M]]==a[3q]||X[a[1M]]==a[2T]){y[a[1h]]=2F[a[2A]]((y[a[T]]==a[1s]?1c[a[2K]]*y[a[B]]:1c[a[2K]]/y[a[B]]))};y[a[2a]]=y[a[G]]*y[a[1h]];3r(D[a[t]]);f(y[a[G]]>0){4I(D[a[t]])}}H{f(Z==a[G]){h X=D[a[t]][a[Y]];h 1c=e[a[1g]][a[1t]](b[a[2b]],[a[r],a[E]],[y[a[r]],y[a[E]]]);f(p[a[v]](1c)){1c=p[a[11]](a[4B])[a[8]];1c[a[E]]=y[a[E]];1c[a[r]]=y[a[r]]};f(X[a[7K]]==1){h 3E=0;h 2J=0;f(y[a[T]]==a[1s]){3E=y[a[G]]*(y[a[B]]==0?1:y[a[B]])}H{3E=y[a[G]]/(y[a[B]]==0?1:y[a[B]])};f(!e[a[14]][a[7J]]&&y[a[2v]]!=a[7D]){2J=3E+3T(y.1C,y.2u,y.2y);f(2J>1c[a[1Z]]){y[a[G]]=0;D[a[t]][a[1H]]();e[a[67]][a[66]](35,a[65],a[65],u);b[a[19]][a[18]][a[17]][a[29]]();b[a[19]][a[18]][a[17]][a[30]](A);I ;};};};y[a[2a]]=y[a[G]]*y[a[1h]];3r(D[a[t]]);4I(D[a[t]]);}}};y[a[4J]]=y[a[2a]];y[a[1R]]=y[a[1h]];D[a[t]][a[1H]]();f(Z==a[r]&&!p[a[v]](y.1C)){e[a[1g]][a[2q]](b[a[1k]],Z,p[a[11]](a[3F]),u)};2f();3k();b[a[19]][a[18]][a[17]][a[29]]();b[a[19]][a[18]][a[17]][a[30]](A);};h 4K=o(D){h Z=D[a[2R]];h z=D[a[t]];h Q=D[a[t]][a[8]];f(Z==a[G]){3M(z)}H {f(Z==a[1E]){h 4F=0;h 4G=0;h 4E=a[65];h 1r=3g(b[a[V]][a[t]][a[Y]].1C,b[a[V]][a[t]][a[Y]].3L,b[a[V]][a[t]][a[Y]].2S,Q.2Q);f(!p[a[v]](1r)){4G=1r[a[B]];4E=1r[a[3Q]];Q[a[B]]=4G;Q[a[T]]=4E;}H {Q[a[B]]=1;Q[a[T]]=a[65];Q[a[1h]]=0;Q[a[1E]]=a[65];z[a[1H]]();b[a[41]][a[18]][a[17]][a[29]]();b[a[41]][a[18]][a[17]][a[30]](A);I ;};f(b[a[V]][a[t]][a[Y]][a[1M]]==a[3q]||b[a[V]][a[t]][a[Y]][a[1M]]==a[2T]){h 1c=e[a[1g]][a[1t]](b[a[2b]],[a[r],a[E]],[Q[a[r]],Q[a[E]]]);4F=1c[a[2K]]*Q[a[B]];Q[a[1h]]=Q[a[1R]]=4F;}H {Q[a[1h]]=Q[a[1R]]=0};3M(z);}H {f(Z==a[1a]){h 1m=A;b[a[U]][a[8]][a[1z]](o(g){f(g[a[8]][a[1a]]==Q[a[1a]]&&g[a[5c]]!=z[a[5c]]){1m=u;I A;}});f(1m){e[a[67]][a[66]](5a,a[65],a[65],u);Q[a[1a]]=a[65];b[a[41]][a[18]][a[17]][a[29]]();b[a[41]][a[18]][a[17]][a[30]](A);z[a[1H]]();I ;};Q[a[1E]]=b[a[V]][a[t]][a[8]][a[1E]];Q[a[1h]]=Q[a[1R]]=b[a[V]][a[t]][a[8]][a[1h]];Q[a[T]]=b[a[V]][a[t]][a[8]][a[T]];Q[a[B]]=b[a[V]][a[t]][a[8]][a[B]];h 4D=e[a[1g]][a[1t]](b[a[3O]],[a[r],a[E],a[1a]],[Q[a[r]],Q[a[E]],Q[a[1a]]]);f(!p[a[v]](4D)){Q[a[3P]]=4D[a[3P]]};f(!p[a[v]](Q.1U)){h 2m=p[a[11]](a[4H]);2m[a[8]][a[1V]]=Q[a[1V]];e[a[1g]][a[2q]](b[a[U]],Z,2m,u);};}}};z[a[1H]]();b[a[41]][a[18]][a[17]][a[29]]();b[a[41]][a[18]][a[17]][a[30]](A);};h 3k=o(){h 1m=A;b[a[1k]][a[8]][a[1z]](o(g){f(!p[a[v]](g[a[8]].1C)){1m=u;I A;}});b[a[52]][a[1L]](1m);b[a[51]][a[1L]](b[a[48]][a[23]]()!=a[83]);b[a[50]][a[1L]](b[a[48]][a[23]]()!=a[83]);};h 3r=o(D){h 1c=e[a[1g]][a[1t]](b[a[2b]],[a[r],a[E]],[D[a[8]][a[r]],D[a[8]][a[E]]]);f(!p[a[v]](1c)){b[a[3N]][a[2L]](D[a[8]][a[r]]+a[4t]+e[a[58]][a[2d]](a[4s])+a[4Z]+(1c[a[1Z]]-3T(D[a[8]].1C,D[a[8]].2u,a[65])))}H {b[a[3N]][a[2L]](D[a[8]][a[r]]+a[4t]+e[a[58]][a[2d]](a[4s])+a[4Z]+(0-3T(D[a[8]].1C,D[a[8]].2u,a[65])))};};h 3M=o(D){h Q=e[a[1g]][a[1t]](b[a[3O]],[a[r],a[E],[a[1a]]],[D[a[8]][a[r]],D[a[8]][a[E]],D[a[8]][a[1a]]]);h 1v=0;h 2e=0;b[a[U]][a[4C]][a[1z]](o(J){f(J[a[8]][a[1a]]==D[a[8]][a[1a]]&&J[a[8]][a[r]]==D[a[8]][a[r]]&&J[a[8]][a[E]]==D[a[8]][a[E]]){1v+=J[a[8]][a[T]]==a[1s]?J[a[8]][a[G]]*J[a[8]][a[B]]:J[a[8]][a[G]]*J[a[8]][a[B]]}});h O=b[a[V]][a[t]];f(!p[a[v]](Q)){2e=Q[a[1Z]]-1v;f(2e<0){e[a[67]][a[66]](5i,[D[a[8]][a[r]]+a[2Z]+D[a[8]][a[1a]],D[a[8]][a[E]]],a[65],u);1v=0;D[a[8]][a[G]]=0;D[a[1H]]();b[a[U]][a[4C]][a[1z]](o(J){f(J[a[8]][a[1a]]==D[a[8]][a[1a]]&&J[a[8]][a[r]]==D[a[8]][a[r]]&&J[a[8]][a[E]]==D[a[8]][a[E]]){1v+=J[a[8]][a[T]]==a[1s]?J[a[8]][a[G]]*J[a[8]][a[B]]:J[a[8]][a[G]]*J[a[8]][a[B]]}});2e=Q[a[1Z]]-1v;};}H {2e=0-1v;f(2e<0){e[a[67]][a[66]](5i,[D[a[8]][a[r]]+a[2Z]+D[a[8]][a[1a]],D[a[8]][a[E]]],a[65],u);1v=0;D[a[8]][a[G]]=0;D[a[1H]]();b[a[U]][a[4C]][a[1z]](o(J){f(J[a[8]][a[1a]]==D[a[8]][a[1a]]&&J[a[8]][a[r]]==D[a[8]][a[r]]&&J[a[8]][a[E]]==D[a[8]][a[E]]){1v+=J[a[8]][a[T]]==a[1s]?J[a[8]][a[G]]*J[a[8]][a[B]]:J[a[8]][a[G]]*J[a[8]][a[B]]}});2e=0-1v;};};b[a[5v]][a[2L]](a[7C]+D[a[8]][a[1a]]+a[4t]+e[a[58]][a[2d]](a[4s])+a[7w]+2e);};h 3T=o(2B,4y,1X){h 1v=0;h 4L=0;b[a[1k]][a[1z]](o(g){f(g[a[8]][a[r]]==2B&&g[a[8]][a[E]]==4y&&(1X==a[65]||(1X!=a[65]&&1X!=g[a[8]][a[1u]]))){1v+=g[a[8]][a[T]]==a[1s]?g[a[8]][a[G]]*g[a[8]][a[B]]:g[a[8]][a[G]]/g[a[8]][a[B]]}});b[a[3D]][a[1z]](o(g){f(g[a[8]][a[r]]==2B&&g[a[8]][a[E]]==4y){4L+=g[a[8]][a[T]]==a[1s]?g[a[8]][a[G]]*g[a[8]][a[B]]:g[a[8]][a[G]]/g[a[8]][a[B]]}});I 1v-4L};h 7v=o(g){f(g==a[7u]||g==a[5A]){e[a[58]][a[4O]](1G)}};h 7t=o(g){f(g==a[3Z]||g==a[5A]){3i()}};h 3a=o(3A){e[a[64]]=3A;f(3A){f(!p[a[v]](b[a[24]][a[23]]())){b[a[24]][a[1L]](u)}}H{b[a[19]][a[64]]=A;b[a[24]][a[1L]](A)};e[a[58]][a[7x]](3A,a[7y])};h 7B=o(3j,7A,z){I b[a[U]][a[8]][a[72]](z)+1};h 7z=o(3j){I p[a[5e]][a[5d]][a[5b]](3j,a[5I])};', 62, 517, '||||||||||_0xf867|App|x65|x74|HQ|if|_0x4fdbx18|var||x61|x73|x72|x6F|x6E|function|Ext|x69|91|x6C|140|true|90|x64|x63|_0x4fdbx65|_0x4fdbx8|false|111|x6D|_0x4fdbx64|121|_0x4fdbx2e|116|else|return|_0x4fdbx40|x70|x44|x49|x54|_0x4fdbx27|x75|_0x4fdbx39|x62|x53|130|149|144|_0x4fdbx24|_0x4fdbx30|139|_0x4fdbx2f|||||||||||165|_0x4fdbx43|_0x4fdbx2b|_0x4fdbx4d|x76|x67|134|131|x68|x66|105|x4C|_0x4fdbx28|x52|x30|x4E|x79|_0x4fdbx34|153|141|114|_0x4fdbx29|x78|x55|x41|148|_0x4fdbx42|_0x4fdbx32|InvtID|params|129|x43|this|132|x6B|_0x4fdbxf|callback|242|156|row|x42|case|break|128|invtID|185|LotSerNbr|152|_0x4fdbx4b|_0x4fdbx58|x45|213|||||||||||109|159|store_Load|146|_0x4fdbx6f|calculate|x4D|195|null|184|x77|150|_0x4fdbx51|branchID|x46|x2E|133|_0x4fdbx50|siteID|136|SiteID|127|197|x31|LineRef|_0x4fdbx4c|161|_0x4fdbx5c|checkSourceEdit|x32|_0x4fdbxe|Math|_0x4fdbx10|102|x51|_0x4fdbx54|160|176|113|_0x4fdbx4a|162|batNbr|UnitDesc|167|StkUnit|158|_0x4fdbx57|menuClick|_0x4fdbx44|x20|undefined|164|||||||||||setChange|143|108|188|x56|110|setUOM|151|defaultOnNew|_0x4fdbx61|checkTransAdd|183|1000|_0x4fdbx5f|154|x4F|157|getQtyAvail|_0x4fdbx1e|failure|x48|x6A|showLot|98|bindBatch|checkSetDefault|_0x4fdbx76|x2F|checkSelect|175|_0x4fdbx66|138|234|97|waitMsg|198|_0x4fdbx3f|ClassID|getLotQtyAvail|177|181|215|179|_0x4fdbx1a|method|calculateInvtTotal|123|191|180000|success|_0x4fdbx5e|199|||||||||||timeout|url|218|2015020805|107|_0x4fdbx3b|clientValidation|187|Object|124|_0x4fdbx2a|142|204|LotSerTrack|203|_0x4fdbx1b|_0x4fdbx3e|2525|252|251|checkExitEdit|125|231|230|_0x4fdbx71|_0x4fdbx5a|229|246|254|_0x4fdbx6b|_0x4fdbx6a|_0x4fdbx68|_0x4fdbx69|214|calcLot|112|checkExitEditLot|_0x4fdbx72|232|x50|95|for|_0x4fdbx53|196|104|194|checkSelectLot|x3D|101|price|193|253|||||||||||219|238|250|239|240|115|174|2015020806|1043|118|178|728|_0x4fdbx4f|save|lotSerNbr|SlsperID|checkSourceEditLot|186|126|145|_0x4fdbx41|182|bindTran|x5F|2015040501|120|258|119|117|100|processMessage|_0x4fdbx5d|_0x4fdbx19|206|237|225|setStatusForm|_0x4fdbx59|parseInt|stoUserDefault_Load|stoHandle_Load|checkSourceDetail|stoSetup_Load|invt|lastLineRef|103|x3A|_0x4fdbx1d|report|163|x71|223|||||||||||222|stoBatch_Load|UnitMultDiv|147|155|btnLot_Click|stoDetail_Load|cboFromToSiteID_Change|cboSiteID_Change|cboTrnsferNbr_Change|frmMain_BoxReady|btnLotOK_Click|btnLotDel_Click|grdTrans_BeforeEdit|_0x4fdbxb|168|_0x4fdbxc|166|_0x4fdbxa|x26|x3F|x4A|trnsfrDocNbr|stoBatch_BeforeLoad|ReasonCD|122|93|135|x2A|106|x2C|169|2015030201|94|92|x33|tranDate|ToSiteID|frmMain_FieldChange|96|cboStatus_Change|137|cboBatNbr_Change|switch|x2D|99|default|stoTrans_BeforeLoad|208|224|221|220|||||||||||216|226|227|233|228|toString|170|site|211|window|205|deleteLot|207|209|212|det|210|235|236|askNew|257|askClose|256|260|259|renderQtyAmt|_0x4fdbx78|renderRowNumber|255|249|241|BatNbr|rdrTrans_QtyAmt|243|244|248|247|245|lineRef|217|2015040502|189|202|2015020803|190|192|deleteHeader|lstLot|lstTrans|grdLot_Edit|grdLot_SelectionChange|173|||||||||||172|171|grdTrans_SelectionChange|grdTrans_Edit|180|grdLot_BeforeEdit|grdTrans_ValidateEdit|200|2015020804|201|deleteTrans'.split('|'), 0, {}))
+HQ.recentRecord = null;
+HQ.focus = 'batch';
+HQ.objBatch = null;
+HQ.isTransfer = false;
+HQ.objUser = null;
+//// Store ///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+var stoUserDefault_Load = function () {
+    if (App.stoUserDefault.data.items.length == 0) {
+        HQ.objUser = Ext.create('App.mdlUserDefault').data;
+    } else {
+        HQ.objUser = App.stoUserDefault.data.items[0].data;
+    }
+    HQ.numSource++;
+    checkSetDefault();
+}
+
+var stoSetup_Load = function () {
+    if (App.stoSetup.data.items.length == 0) {
+        HQ.objSetup = Ext.create('App.mdlSetup').data;
+    } else {
+        HQ.objSetup = App.stoSetup.data.items[0].data;
+    }
+    HQ.numSource++;
+    checkSetDefault();
+}
+var stoTrans_BeforeLoad = function () {
+    App.grdTrans.view.loadMask.disable();
+}
+var stoHandle_Load = function () {
+    App.cboHandle.setValue('N');
+}
+var stoDetail_Load = function () {
+    checkSourceDetail();
+}
+var store_Load = function () {
+    HQ.numSource++;
+    checkSetDefault();
+}
+var stoBatch_Load = function () {
+    var record = App.stoBatch.getById(App.cboBatNbr.getValue());
+    if (record) {
+        bindBatch(record);
+    }
+}
+var stoBatch_BeforeLoad = function (store, operation, eOpts) {
+    //if (Ext.isEmpty(operation.params.query)) {
+    //   // operation.params.query = App.cboBatNbr.getValue();
+    //}
+
+}
+
+var checkSelect = function (records, options, success) {
+    HQ.numSelectTrans++;
+    if (HQ.numSelectTrans == HQ.maxSelectTrans) {
+        App.grdTrans.view.loadMask.hide();
+        App.grdTrans.view.loadMask.setDisabled(false)
+        getQtyAvail(options.row);
+    }
+}
+var checkSetDefault = function () {
+    if (HQ.numSource == HQ.maxSource) {
+        defaultOnNew();
+    }
+}
+var checkSourceEdit = function (records, options, success) {
+    HQ.numEditTrans++;
+    if (HQ.numEditTrans == HQ.maxEditTrans) {
+        checkExitEdit(options.row);
+    }
+}
+var checkSourceDetail = function (records, options, success) {
+    HQ.numDetail++;
+    if (HQ.numDetail == HQ.maxDetail) {
+        bindTran();
+    }
+}
+var checkSourceEditLot = function (records, options, success) {
+    HQ.numLot++;
+    if (HQ.numLot == HQ.maxLot) {
+        checkExitEditLot(options.row);
+    }
+}
+var checkSelectLot = function (records, options, success) {
+    HQ.numSelectLot++;
+    if (HQ.numSelectLot == HQ.maxSelectLot) {
+        App.grdLot.view.loadMask.hide();
+        App.grdLot.view.loadMask.setDisabled(false)
+        getLotQtyAvail(options.row);
+    }
+}
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+
+//// Event ///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+var frmMain_BoxReady = function () {
+    HQ.numSource = 0;
+    HQ.maxSource = 8;
+    HQ.numEditTrans = 0;
+    HQ.maxEditTrans = 4;
+    HQ.numDetail = 0;
+    HQ.maxDetail = 2;
+    HQ.numSelectTrans = 0;
+    HQ.maxSelectTrans = 3;
+    App.cboBatNbr.key = true;
+    App.txtBranchID.setValue(HQ.cpnyID);
+    App.cboHandle.getStore().addListener('load', stoHandle_Load);
+    App.cboStatus.getStore().addListener('load', store_Load);
+    App.cboTransInvtID.getStore().addListener('load', store_Load);
+    App.cboFromToSiteID.getStore().addListener('load', store_Load);
+    App.cboSlsperID.getStore().addListener('load', store_Load);
+    App.cboSiteID.getStore().addListener('load', store_Load);
+    App.cboReasonCD.getStore().addListener('load', store_Load);
+    App.stoUserDefault.addListener('load', stoUserDefault_Load);
+    App.stoSetup.addListener('load', stoSetup_Load);
+    App.stoUnitConversion.addListener('load', store_Load);
+
+    App.stoSetup.load();
+    App.stoUserDefault.load();
+    App.stoUnitConversion.load();
+    App.stoInvt = App.cboTransInvtID.getStore();
+
+    HQ.common.showBusy(true, HQ.waitMsg);
+}
+var frmMain_FieldChange = function (item, field, newValue, oldValue) {
+    if (field.key != undefined) {
+        return;
+    }
+    if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
+    if (Object.keys(App.stoBatch.getChangedData()).length > 0 || App.grdTrans.isChange) {
+        setChange(true);
+    } else {
+        setChange(false);
+    }
+
+}
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            if (HQ.focus == 'batch') {
+                if (HQ.isChange || App.grdTrans.isChange) {
+                    HQ.message.show(150, '', '', true);
+                } else {
+                    App.frmMain.loadRecord(App.stoBatch.first());
+                }
+            } else if (HQ.focus == 'trans') {
+                HQ.grid.first(App.grdTrans);
+            }
+            break;
+        case "next":
+            if (HQ.focus == 'batch') {
+                if (HQ.isChange || App.grdTrans.isChange) {
+                    HQ.message.show(150, '', '', true);
+                } else {
+                    var index = App.stoBatch.indexOf(App.stoBatch.getById(App.cboBatNbr.getValue()));
+                    App.cboBatNbr.setValue(App.stoBatch.getAt(index + 1).get('BatNbr'));
+                }
+            } else if (HQ.focus == 'trans') {
+                HQ.grid.next(App.grdTrans);
+            }
+            break;
+        case "prev":
+            if (HQ.focus == 'batch') {
+                if (HQ.isChange || App.grdTrans.isChange) {
+                    HQ.message.show(150, '', '', true);
+                } else {
+                    var index = App.stoBatch.indexOf(App.stoBatch.getById(App.cboBatNbr.getValue()));
+                    App.cboBatNbr.setValue(App.stoBatch.getAt(index - 1).get('BatNbr'));
+                }
+            } else if (HQ.focus == 'trans') {
+                HQ.grid.prev(App.grdTrans);
+            }
+            break;
+        case "last":
+            if (HQ.focus == 'batch') {
+                if (HQ.isChange || App.grdTrans.isChange) {
+                    HQ.message.show(150, '', '', true);
+                } else {
+                    App.frmMain.loadRecord(App.stoBatch.last());
+                }
+            } else if (HQ.focus == 'trans') {
+                HQ.grid.last(App.grdTrans);
+            }
+            break;
+        case "save":
+            if (!App.grdTrans.view.loadMask.isHidden()) {
+                return;
+            }
+            save();
+            break;
+        case "delete":
+            if (HQ.focus == 'batch') {
+                if (App.cboBatNbr.value) {
+                    if (HQ.isDelete) {
+                        if (App.cboStatus.getValue() != 'H') {
+                            HQ.message.show(2015020805, [App.cboBatNbr.value], '', true);
+                        } else {
+                            HQ.message.show(11, '', 'deleteHeader');
+                        }
+                    } else {
+                        HQ.message.show(728, '', '', true);
+                    }
+                } else {
+                    menuClick('new');
+                }
+            } else if (HQ.focus == 'trans') {
+                if ((App.cboBatNbr.value && HQ.isUpdate) || (!App.cboBatNbr.value && HQ.isInsert)) {
+                    if (App.cboStatus.getValue() != "H") {
+                        HQ.message.show(2015020805, [App.cboBatNbr.value], '', true);
+                        return;
+                    }
+                    if (App.smlTrans.selected.items.length != 0) {
+                        if (!Ext.isEmpty(App.smlTrans.selected.items[0].data.InvtID)) {
+                            HQ.message.show(2015020806, [App.smlTrans.selected.items[0].data.InvtID], 'deleteTrans', true);
+                        }
+                    }
+                }
+            }
+            break;
+        case "close":
+            if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
+            if (HQ.isChange || App.grdTrans.isChange) {
+                HQ.message.show(5, '', 'askClose');
+            } else {
+                HQ.common.close(this);
+            }
+            break;
+        case "new":
+            if ((HQ.isChange || App.grdTrans.isChange) && !Ext.isEmpty(App.cboBatNbr.getValue())) {
+                HQ.message.show(2015030201, '', "askNew", true);
+            } else {
+                defaultOnNew();
+            }
+            break;
+        case "refresh":
+            if (!Ext.isEmpty(App.cboBatNbr.getValue())) {
+                App.stoBatch.reload();
+            } else {
+                defaultOnNew();
+            }
+
+            break;
+        case "print":
+            if (!Ext.isEmpty(App.cboBatNbr.getValue()) && App.cboStatus.value != "H") {
+                report();
+            }
+            break;
+        default:
+    }
+}
+
+var cboBatNbr_Change = function (item, newValue, oldValue) {
+    var record = App.stoBatch.getById(newValue);
+    if (record) {
+        bindBatch(record);
+    } else {
+        if (HQ.recentRecord != record) {
+
+        }
+        else {
+        }
+    }
+    HQ.recentRecord = record;
+}
+var cboStatus_Change = function (item, newValue, oldValue) {
+    App.cboHandle.getStore().reload();
+}
+var cboFromToSiteID_Change = function () {
+    if (App.cboFromToSiteID.getValue() == App.cboSiteID.getValue()) {
+        App.cboFromToSiteID.setValue('');
+    }
+}
+var cboSiteID_Change = function () {
+    if (App.cboFromToSiteID.getValue() == App.cboSiteID.getValue()) {
+        App.cboSiteID.setValue('');
+    }
+}
+var cboTrnsferNbr_Change = function () {
+    if (Ext.isEmpty(App.cboBatNbr.getValue())) {
+        if (!Ext.isEmpty(App.TrnsferNbr.getValue())) {
+            App.btnImport.setDisabled(true);
+            App.stoTransfer.load({
+                params: { branchID: App.BranchID.getValue(), tranDate: App.DateEnt.getValue(), trnsfrDocNbr: App.TrnsferNbr.getValue() },
+                callback: function () {
+                    HQ.isTransfer = true;
+                    App.stoTrans.removeAll();
+                    App.stoTransfer.data.items.forEach(function (item) {
+                        var newTrans = Ext.create('App.mdlTransfer');
+                        newTrans.data.JrnlType = item.data.JrnlType;
+                        newTrans.data.ReasonCD = item.data.ReasonCD;
+                        newTrans.data.TranAmt = item.data.TranAmt;
+                        newTrans.data.BatNbr = item.data.BatNbr;
+                        newTrans.data.BranchID = item.data.BranchID;
+                        newTrans.data.BarCode = item.data.BarCode;
+                        newTrans.data.CnvFact = item.data.CnvFact;
+                        newTrans.data.ExtCost = item.data.ExtCost;
+                        newTrans.data.InvtID = item.data.InvtID;
+                        newTrans.data.InvtMult = item.data.InvtMult;
+                        newTrans.data.LineRef = item.data.LineRef;
+                        newTrans.data.ObjID = item.data.ObjID;
+                        newTrans.data.Qty = item.data.Qty;
+                        newTrans.data.RefNbr = item.data.RefNbr;
+                        newTrans.data.Rlsed = item.data.Rlsed;
+                        newTrans.data.ShipperID = item.data.ShipperID;
+                        newTrans.data.ShipperLineRef = item.data.ShipperLineRef;
+                        newTrans.data.SiteID = item.data.ToSiteID;
+                        newTrans.data.SlsperID = item.data.SlsperID;
+                        newTrans.data.TranDate = item.data.TranDate;
+                        newTrans.data.TranDesc = item.data.TranDesc;
+                        newTrans.data.TranFee = item.data.TranFee;
+                        newTrans.data.TranType = item.data.TranType;
+                        newTrans.data.UnitCost = item.data.UnitCost;
+                        newTrans.data.UnitDesc = item.data.UnitDesc;
+                        newTrans.data.UnitMultDiv = item.data.UnitMultDiv;
+                        newTrans.data.UnitPrice = item.data.UnitPrice;
+                        newTrans.commit();
+                        HQ.store.insertRecord(App.stoTrans, "InvtID", newTrans, true);
+                    });
+                    if (App.stoTransfer.data.items.length > 0) {
+                        App.FromToSiteID.setValue(App.stoTransfer.data.items[0].data.SiteID);
+                        App.SiteID.setValue(App.stoTransfer.data.items[0].data.ToSiteID);
+                        if (Ext.isEmpty(App.ReasonCD.getValue())) {
+                            App.ReasonCD.setValue(App.stoTransfer.data.items[0].data.ReasonCD);
+                        }
+                        if (Ext.isEmpty(App.SlsperID.value)) {
+                            App.SlsperID.setValue(App.stoTransfer.data.items[0].data.SlsperID);
+                        }
+                    }
+                    HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
+                    checkTransAdd();
+                    calculate();
+                }
+            });
+
+        } else {
+            if (Ext.isEmpty(App.cboBatNbr.getValue())) {
+                App.btnImport.setDisabled(false);
+            }
+            HQ.isTransfer = false;
+            App.stoTrans.removeAll();
+            HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
+            checkTransAdd();
+            calculate();
+        }
+    }
+}
+
+var btnLot_Click = function () {
+    if (Ext.isEmpty(this.record.invt)) {
+        this.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [this.record.data.InvtID]);
+    }
+
+    if (!Ext.isEmpty(this.record.invt.LotSerTrack) && this.record.invt.LotSerTrack != 'N' && !Ext.isEmpty(this.record.data.UnitDesc)) {
+        showLot(this.record, true);
+    }
+}
+var btnLotOK_Click = function () {
+    if (!App.grdLot.isLock) {
+        var det = App.winLot.record.data;
+        var flat = null;
+        App.stoLotTrans.data.each(function (item) {
+            if (!Ext.isEmpty(item.data.LotSerNbr)) {
+                if (item.data.Qty == 0) {
+                    HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
+                    flat = item;
+                    return false;
+                }
+
+                if (Ext.isEmpty(item.data.UnitDesc)) {
+                    HQ.message.show(1000, [HQ.common.getLang('unit')], '', true);
+                    flat = item;
+                    return false;
+                }
+
+                if (Ext.isEmpty(item.data.UnitMultDiv)) {
+                    HQ.message.show(2525, [invtID], '', true);
+                    flat = item;
+                    return false;
+                }
+            }
+        });
+        if (!Ext.isEmpty(flat)) {
+            App.smlLot.select(App.stoLotTrans.indexOf(flat));
+            return;
+        }
+
+        var qty = 0;
+        App.stoLotTrans.data.each(function (item) {
+            if (!Ext.isEmpty(item.data.LotSerNbr)) {
+                if (item.data.SiteID == det.SiteID && item.data.InvtID == det.InvtID && item.data.INTranLineRef == det.LineRef) {
+                    qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
+                }
+            }
+
+        });
+
+        var lineQty = (det.UnitMultDiv == "M" ? qty / det.CnvFact : det.Qty * det.CnvFact)
+        if (lineQty % 1 > 0) {
+            App.winLot.record.data.Qty = qty;
+            App.winLot.record.data.UnitDesc = App.winLot.record.invt.StkUnit;
+            App.winLot.record.data.UnitRate = 1;
+            App.winLot.record.data.UnitMultDiv = "M";
+            if (App.winLot.record.invt.ValMthd == "A" || App.winLot.record.invt.ValMthd == "E") {
+                var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [det.InvtID, det.SiteID]);
+                price = site.AvgCost;
+                App.winLot.record.data.UnitPrice = price;
+
+            } else {
+                App.winLot.record.data.UnitPrice = 0;
+            }
+        } else {
+            App.winLot.record.data.Qty = Math.round(lineQty);
+        }
+        App.winLot.record.data.TranAmt = App.winLot.record.data.Qty * App.winLot.record.data.UnitPrice;
+        App.winLot.record.commit();
+
+        App.grdTrans.view.refresh();
+
+
+        calculate();
+        App.stoLotTrans.clearFilter();
+        for (i = App.stoLotTrans.data.items.length - 1; i >= 0; i--) {
+            if (Ext.isEmpty(App.stoLotTrans.data.items[i].data.LotSerNbr)) {
+                App.stoLotTrans.data.removeAt(i);
+            }
+        }
+    }
+
+    App.winLot.hide();
+}
+var btnLotDel_Click = function () {
+    if ((App.cboBatNbr.value && HQ.isUpdate) || (!App.cboBatNbr.value && HQ.isInsert)) {
+        if (App.cboStatus.getValue() != "H") {
+            HQ.message.show(2015020805, [App.cboBatNbr.value], '', true);
+            return;
+        }
+        if (App.smlLot.selected.items.length != 0) {
+            if (!Ext.isEmpty(App.smlLot.selected.items[0].data.LotSerNbr)) {
+                HQ.message.show(2015020806, [App.smlLot.selected.items[0].data.InvtID + ' ' + App.smlLot.selected.items[0].data.LotSerNbr], 'deleteLot', true);
+            }
+        }
+    }
+}
+
+var btnPopupOk_Click = function () {
+    if (!Ext.isEmpty(App.cboPopupCpny.getValue())) {
+        App.winPopup.hide();
+        window.location.href = 'IN10200?branchID=' + App.cboPopupCpny.getValue();
+    } else {
+        HQ.message.show(1000, [HQ.common.getLang('branchid')], '', true);
+    }
+}
+
+var grdTrans_BeforeEdit = function (item, e) {
+
+    if (App.grdTrans.isLock) {
+        return false;
+    }
+
+    if (Ext.isEmpty(App.cboSiteID.getValue())) {
+        HQ.message.show(1000, [HQ.common.getLang('SiteID')], '', true);
+        return false;
+    }
+
+    var key = e.field;
+
+    if (!HQ.grid.checkInput(e, ['InvtID']) && key != 'InvtID') {
+        return false;
+    }
+    if (!Ext.isEmpty(e.record.data.InvtID) && key == 'InvtID') {
+        return false;
+    }
+
+    if (Ext.isEmpty(e.record.data.LineRef)) {
+        e.record.data.LineRef = lastLineRef();
+        e.record.data.InvtMult = -1;
+        e.record.data.TranType = 'II';
+        e.record.data.JrnlType = 'IN';
+        e.record.data.BranchID = HQ.cpnyID;
+        e.record.data.BatNbr = HQ.objBatch.data.BatNbr;
+        e.record.data.TranDate = App.txtDateEnt.getValue();
+        e.record.data.SiteID = App.cboSiteID.getValue();
+        e.record.commit();
+    }
+
+    if (key == 'UnitPrice') {
+        var invt = e.row.invt;
+        if (!Ext.isEmpty(invt) && invt.ValMthd == 'T') {
+            return false;
+        }
+    }
+
+    App.cboTransUnitDesc.setValue('');
+}
+var grdTrans_SelectionChange = function (item, selected) {
+    HQ.focus = 'trans';
+    if (selected.length > 0) {
+        if (!Ext.isEmpty(selected[0].data.InvtID)) {
+            HQ.numSelectTrans = 0;
+            App.grdTrans.view.loadMask.show();
+            App.stoItemSite.load({
+                params: { siteID: App.cboSiteID.getValue(), invtID: selected[0].data.InvtID },
+                callback: checkSelect,
+                row: selected[0]
+            });
+            App.stoUnit.load({
+                params: { invtID: selected[0].data.InvtID },
+                callback: checkSelect,
+                row: selected[0]
+            });
+            App.stoOldTrans.load({
+                params: { batNbr: App.cboBatNbr.getValue(), branchID: App.txtBranchID.getValue() },
+                callback: checkSelect,
+                row: selected[0]
+            });
+        } else {
+            App.lblQtyAvail.setText('');
+        }
+    }
+}
+var grdTrans_Edit = function (item, e) {
+    HQ.focus = 'trans';
+    var key = e.field;
+    if (Object.keys(e.record.modified).length > 0) {
+        App.grdTrans.isChange = true;
+        if (e.record.invt == undefined) {
+            e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
+        }
+        var invt = e.record.invt;
+        if (!Ext.isEmpty(invt)) {
+
+            if (key == 'InvtID' && Ext.isEmpty(e.record.data.UnitDesc)) {
+                var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
+                if (!Ext.isEmpty(cnv)) {
+                    e.record.data.UnitDesc = invt.StkUnit;
+                    e.record.data.CnvFact = cnv.CnvFact == 0 ? 1 : cnv.CnvFact;
+                    e.record.data.UnitMultDiv = cnv.MultDiv;
+                } else {
+                    return;
+                }
+            }
+
+            if (key == 'InvtID' || key == 'Qty') {
+                App.grdTrans.view.loadMask.show();
+                HQ.numEditTrans = 0;
+                HQ.maxEditTrans = 3;
+                App.stoUnit.load({
+                    params: { invtID: e.record.data.InvtID },
+                    callback: checkSourceEdit,
+                    row: e
+                });
+                App.stoItemSite.load({
+                    params: { siteID: App.cboSiteID.getValue(), invtID: e.record.data.InvtID },
+                    callback: checkSourceEdit,
+                    row: e
+                });
+                App.stoOldTrans.load({
+                    params: { batNbr: App.cboBatNbr.getValue(), branchID: App.txtBranchID.getValue() },
+                    callback: checkSourceEdit,
+                    row: e
+                });
+            } else if (key == 'UnitDesc') {
+                App.grdTrans.view.loadMask.show();
+                HQ.numEditTrans = 0;
+                HQ.maxEditTrans = 2;
+                App.stoItemSite.load({
+                    params: { siteID: App.cboSiteID.getValue(), invtID: e.record.data.InvtID },
+                    callback: checkSourceEdit,
+                    row: e
+                });
+                App.stoOldTrans.load({
+                    params: { batNbr: App.cboBatNbr.getValue(), branchID: App.txtBranchID.getValue() },
+                    callback: checkSourceEdit,
+                    row: e
+                });
+            } else {
+                checkExitEdit(e);
+            }
+
+        } else {
+
+        }
+    }
+}
+var grdTrans_ValidateEdit = function (item, e) {
+}
+
+var grdLot_BeforeEdit = function (item, e) {
+    if (App.grdLot.isLock) {
+        return false;
+    }
+
+    var key = e.field;
+    var record = e.record;
+    if (key != 'LotSerNbr' && Ext.isEmpty(e.record.data.LotSerNbr)) return false;
+    if (key == 'LotSerNbr' && !Ext.isEmpty(record.data.LotSerNbr)) return false;
+
+
+    if (Ext.isEmpty(record.data.InvtID)) {
+        record.data.InvtID = App.winLot.record.data.InvtID;
+        record.data.SiteID = App.winLot.record.data.SiteID;
+    }
+
+    record.commit();
+
+    App.cboLotUnitDesc.setValue('');
+}
+var grdLot_SelectionChange = function (item, selected) {
+    if (selected.length > 0) {
+        if (!Ext.isEmpty(selected[0].data.InvtID)) {
+            HQ.numSelectLot = 0;
+            HQ.maxSelectLot = 1;
+            App.grdLot.view.loadMask.show();
+            App.stoItemLot.load({
+                params: { siteID: selected[0].data.SiteID, invtID: selected[0].data.InvtID, branchID: App.txtBranchID.getValue(), lotSerNbr: selected[0].data.LotSerNbr, batNbr: App.cboBatNbr.getValue() },
+                callback: checkSelectLot,
+                row: selected[0]
+            });
+        } else {
+            App.lblLotQtyAvail.setText('');
+        }
+    }
+}
+var grdLot_Edit = function (item, e) {
+    var key = e.field;
+    var lot = e.record.data;
+    var record = e.record;
+    if (Object.keys(e.record.modified).length > 0) {
+        if (key == "Qty" || key == "UnitDesc") {
+            checkExitEditLot(e);
+        } else if (key == "LotSerNbr") {
+            App.grdLot.view.loadMask.show();
+            HQ.numLot = 0;
+            HQ.maxLot = 1;
+            App.stoItemLot.load({
+                params: { siteID: lot.SiteID, invtID: lot.InvtID, branchID: App.txtBranchID.getValue(), lotSerNbr: lot.LotSerNbr },
+                callback: checkSourceEditLot,
+                row: e
+            });
+        }
+    }
+}
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+//// Function ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+///// data ///////////////////////
+
+var bindTran = function () {
+    if (App.stoTrans.data.items.length > 0) {
+        var objFirst = App.stoTrans.data.items[0].data;
+        App.cboSiteID.setValue(objFirst.SiteID);
+        App.cboSlsperID.setValue(objFirst.SlsperID);
+    }
+    App.lblQtyAvail.setText('');
+
+    HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
+
+    checkTransAdd();
+
+    calculate();
+
+    App.grdTrans.isChange = false;
+    HQ.common.showBusy(false, HQ.waitMsg);
+    setChange(false);
+}
+var bindBatch = function (record) {
+    HQ.objBatch = record;
+    App.cboBatNbr.events['change'].suspend();
+    App.cboSiteID.events['change'].suspend();
+    App.cboFromToSiteID.events['change'].suspend();
+    App.frmMain.events['fieldchange'].suspend();
+    App.cboStatus.forceSelection = false;
+    App.frmMain.loadRecord(HQ.objBatch);
+    App.cboStatus.forceSelection = false;
+    App.frmMain.events['fieldchange'].resume();
+    App.cboBatNbr.events['change'].resume();
+    App.cboSiteID.events['change'].resume();
+    App.cboFromToSiteID.events['change'].resume();
+    setStatusForm();
+
+
+    HQ.common.showBusy(true, HQ.waitMsg);
+    HQ.numDetail = 0;
+    App.stoTrans.reload();
+    App.stoLotTrans.reload();
+
+    App.cboHandle.setValue('N');
+}
+
+var save = function () {
+    if ((App.cboBatNbr.value && !HQ.isUpdate) || (Ext.isEmpty(App.cboBatNbr.value) && !HQ.isInsert)) {
+        HQ.message.show(728, '', '', true);
+        return;
+    }
+    if (App.cboStatus.getValue() != "H" && (App.cboHandle.getValue() == "N" || Ext.isEmpty(App.cboHandle.getValue()))) {
+        HQ.message.show(2015020803, '', '', true);
+        return;
+    }
+
+    if (App.stoTrans.data.items.length <= 1) {
+        HQ.message.show(2015020804, [App.cboBatNbr.value], '', true);
+        return;
+    }
+    var flat = false;
+    App.stoLotTrans.clearFilter();
+    App.stoTrans.data.each(function (item) {
+        if (!Ext.isEmpty(item.data.InvtID)) {
+            if (item.data.Qty == 0) {
+                HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+                flat = true;
+                return false;
+            }
+            if (item.data.UnitMultDiv == '') {
+                HQ.message.show(2525, [item.data.InvtID], '', true);
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+                flat = true;
+                return false;
+            }
+            if (Ext.isEmpty(item.data.SiteID)) {
+                HQ.message.show(1000, [HQ.common.getLang('siteid')], '', true);
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+                flat = true;
+                return false;
+            }
+            if (Ext.isEmpty(item.invt)) {
+                item.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [item.data.InvtID]);
+            }
+            if (item.invt.LotSerTrack != "N" && !Ext.isEmpty(item.invt.LotSerTrack)) {
+                var lotQty = 0;
+                var lotFlat = false;
+                App.stoLotTrans.data.each(function (item2) {
+                    if (item.data.LineRef == item2.data.INTranLineRef && !Ext.isEmpty(item2.data.LotSerNbr)) {
+                        if (item.data.InvtID != item2.data.InvtID) {
+                            HQ.message.show(2015040501, [item.data.InvtID], "", true);
+                            lotFlat = true;
+                            return false;
+                        }
+
+                        if (item.data.SiteID != item2.data.SiteID) {
+                            HQ.message.show(2015040501, [item.data.InvtID], "", true);
+                            lotFlat = true;
+                            return false;
+                        }
+
+                        lotQty += item2.data.UnitMultDiv == "M" ? item2.data.Qty * item2.data.CnvFact : item2.data.Qty / item2.data.CnvFact;
+                    }
+                });
+                if (lotFlat) {
+                    flat = item;
+                    return false;
+                }
+
+                var detQty = Math.round(item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact);
+                if (detQty != lotQty) {
+                    HQ.message.show(2015040502, [item.data.InvtID], "", true);
+                    flat = item;
+                    return false;
+                }
+            }
+        }
+    });
+    if (flat) {
+        return;
+    }
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.waitMsg,
+            method: 'POST',
+            url: 'IN10200/Save',
+            timeout: 180000,
+            params: {
+                lstTrans: Ext.encode(App.stoTrans.getRecordsValues()),
+                lstLot: Ext.encode(App.stoLotTrans.getRecordsValues())
+            },
+            success: function (msg, data) {
+
+                var batNbr = '';
+
+                if (this.result.data != undefined && this.result.data.batNbr != null) {
+                    var batNbr = this.result.data.batNbr
+                }
+                if (!Ext.isEmpty(batNbr)) {
+                    App.cboBatNbr.forceSelection = false
+                    App.cboBatNbr.events['change'].suspend();
+                    App.cboBatNbr.setValue(batNbr);
+                    App.cboBatNbr.events['change'].resume();
+                    if (Ext.isEmpty(HQ.recentRecord)) {
+                        HQ.recentRecord = batNbr;
+                    }
+                }
+
+
+                HQ.message.process(msg, data, true);
+
+                menuClick('refresh');
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+var deleteHeader = function (item) {
+    if (item == 'yes') {
+        if (Ext.isEmpty(App.cboBatNbr.getValue())) {
+            menuClick('new');
+        } else {
+            App.frmMain.submit({
+                waitMsg: HQ.waitMsg,
+                clientValidation: false,
+                method: 'POST',
+                url: 'IN10200/Delete',
+                timeout: 180000,
+                success: function (msg, data) {
+                    var record = App.stoBatch.getById(App.cboBatNbr.getValue());
+                    if (!Ext.isEmpty(record)) {
+                        App.stoBatch.remove(record);
+                    }
+                    setChange(false);
+                    HQ.message.process(msg, data, true);
+                    menuClick('new');
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+};
+var deleteTrans = function (item) {
+    if (item == 'yes') {
+        var det = App.smlTrans.selected.items[0].data;
+        App.stoLotTrans.clearFilter();
+        for (i = App.stoLotTrans.data.items.length - 1; i >= 0; i--) {
+            if (det.LineRef == App.stoLotTrans.data.items[i].data.INTranLineRef) {
+                App.stoLotTrans.data.removeAt(i);
+            }
+        }
+        if (App.cboBatNbr.value) {
+            App.frmMain.submit({
+                waitMsg: HQ.waitMsg,
+                clientValidation: false,
+                method: 'POST',
+                url: 'IN10200/DeleteTrans',
+                timeout: 180000,
+                params: {
+                    lineRef: App.smlTrans.selected.items[0].data.LineRef,
+                },
+                success: function (msg, data) {
+                    if (!Ext.isEmpty(data.result.data.tstamp)) {
+                        App.tstamp.setValue(data.result.data.tstamp);
+                    }
+                    App.grdTrans.deleteSelected();
+                    calculate();
+                    HQ.message.process(msg, data, true);
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+        else {
+            App.grdTrans.deleteSelected();
+            calculate();
+        }
+    }
+};
+var deleteLot = function (item) {
+    if (item == 'yes') {
+        App.grdLot.deleteSelected();
+    }
+}
+var report = function () {
+    App.frmMain.submit({
+        waitMsg: HQ.waitMsg,
+        method: 'POST',
+        clientValidation: false,
+        url: 'IN10200/Report',
+        timeout: 180000,
+        success: function (msg, data) {
+            if (this.result.reportID != null) {
+                window.open('Report?ReportName=' + this.result.reportName + '&_RPTID=' + this.result.reportID, '_blank');
+            }
+            processMessage(msg, data, true);
+        },
+        failure: function (msg, data) {
+            processMessage(msg, data, true);
+        }
+    });
+}
+
+//////////////////////////////////
+var calcLot = function (record) {
+    if (!Ext.isEmpty(record.invt) && !Ext.isEmpty(record.invt.LotSerTrack) && record.invt.LotSerTrack != 'N' && !Ext.isEmpty(record.data.UnitDesc)) {
+        var flat = false;
+        var det = record.data;
+
+        App.stoLotTrans.clearFilter();
+        App.stoLotTrans.data.each(function (item) {
+            if (item.data.INTranLineRef == det.LineRef && !Ext.isEmpty(item.data.LotSerNbr)) {
+                flat = true;
+            }
+        });
+
+        if (!flat) {
+            HQ.common.showBusy(true, HQ.waitMsg);
+            App.stoCalcLot.load({
+                params: {
+                    siteID: det.SiteID,
+                    invtID: det.InvtID,
+                    branchID: App.txtBranchID.getValue(),
+                    batNbr: App.cboBatNbr.getValue()
+                },
+                det: record.data,
+                row: record,
+                callback: function (records, options, success) {
+
+                    var det = options.det;
+                    var needQty = Math.round(det.UnitMultDiv == "M" ? det.Qty * det.CnvFact : det.Qty / det.CnvFact);
+
+                    App.stoLotTrans.clearFilter();
+                    App.stoCalcLot.data.each(function (item) {
+                        var newQty = 0;
+                        var curQty = 0;
+
+                        App.stoLotTrans.data.each(function (item2) {
+                            if (item2.data.LotSerNbr == item.data.LotSerNbr && item2.data.InvtID == item.data.InvtID && item2.data.SiteID == item.data.SiteID) {
+                                curQty += item2.data.UnitMultDiv == "M" ? item2.data.Qty * item2.data.CnvFact : item2.data.Qty * item2.data.CnvFact;
+                            }
+                        });
+
+                        if (Math.round(item.data.QtyAvail - curQty) == 0) return true;
+
+                        if ((item.data.QtyAvail - curQty) >= needQty) {
+                            newQty = needQty;
+                            needQty = 0;
+                        }
+                        else {
+                            newQty = (item.data.QtyAvail - curQty);
+                            needQty -= (item.data.QtyAvail - curQty);
+                            item.data.QtyAvail = 0;
+                        }
+
+                        if (newQty != 0) {
+                            var newLot = Ext.create('App.mdlLotTrans');
+                            newLot.data.BranchID = App.txtBranchID.getValue();
+                            newLot.data.BatNbr = App.cboBatNbr.getValue();
+                            newLot.data.LotSerNbr = item.data.LotSerNbr;
+                            newLot.data.ExpDate = item.data.ExpDate;
+
+                            newLot.data.INTranLineRef = det.LineRef;
+                            newLot.data.SiteID = det.SiteID;
+                            newLot.data.InvtID = det.InvtID;
+                            newLot.data.InvtMult = -1;
+                            if ((det.UnitMultDiv == "M" ? newQty / det.CnvFact : newQty * det.CnvFact) % 1 > 0) {
+                                newLot.data.CnvFact = 1;
+                                newLot.data.UnitMultDiv = 'M';
+                                newLot.data.Qty = newQty;
+                                newLot.data.UnitDesc = options.row.invt.StkUnit;
+                                if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+                                    newLot.data.UnitPrice = newLot.data.UnitCost = site.AvgCost;
+                                } else {
+                                    newLot.data.UnitPrice = newLot.data.UnitCost = 0;
+                                }
+                            } else {
+                                newLot.data.Qty = Math.round(det.UnitMultDiv == "M" ? newQty / det.CnvFact : newQty * det.CnvFact);
+                                newLot.data.CnvFact = det.CnvFact;
+                                newLot.data.UnitMultDiv = det.UnitMultDiv;
+                                newLot.data.UnitPrice = det.UnitPrice;
+                                newLot.data.UnitCost = det.UnitPrice;
+                                newLot.data.UnitDesc = det.UnitDesc;
+                            }
+
+                            newLot.commit();
+                            App.stoLotTrans.insert(App.stoLotTrans.getCount(), newLot);
+                        }
+
+
+
+                        if (needQty == 0) return false;
+                    });
+                    App.stoLotTrans.commitChanges();
+                    HQ.common.showBusy(false);
+                    showLot(options.row, false);
+                }
+            });
+        } else {
+            showLot(record, true);
+        }
+    }
+}
+
+var showLot = function (record, loadCombo) {
+
+    var lock = !((App.cboBatNbr.value && HQ.isUpdate) || (!App.cboBatNbr.value && HQ.isInsert)) || App.cboStatus.getValue() != "H";
+    App.grdLot.isLock = lock;
+    if (loadCombo) {
+
+        App.stoCalcLot.load({
+            params: {
+                siteID: record.data.SiteID,
+                invtID: record.data.InvtID,
+                branchID: App.txtBranchID.getValue(),
+                batNbr: App.cboBatNbr.getValue()
+            }
+        });
+    }
+
+
+    App.stoLotTrans.clearFilter();
+    App.stoLotTrans.filter('INTranLineRef', record.data.LineRef);
+
+    var newRow = Ext.create('App.mdlLotTrans');
+    newRow.data.INTranLineRef = record.data.LineRef;
+    newRow.data.InvtMult = record.data.InvtMult;
+    newRow.data.TranType = record.data.TranType;
+    HQ.store.insertRecord(App.stoLotTrans, "LotSerNbr", newRow, true);
+
+    App.winLot.record = record;
+    App.grdLot.view.refresh();
+    App.winLot.setTitle(record.data.InvtID + ' ' + (record.data.UnitMultDiv == "M" ? record.data.Qty * record.data.CnvFact : record.data.Qty / record.data.CnvFact) + ' ' + record.invt.StkUnit);
+    App.winLot.show();
+}
+var calculate = function () {
+    var totAmt = 0;
+    var totQty = 0;
+
+    App.stoTrans.data.each(function (item) {
+        totAmt += item.data.TranAmt;
+        totQty += item.data.Qty;
+    });
+
+    App.txtTotAmt.setValue(totAmt);
+    App.txtTotQty.setValue(totQty);
+
+}
+
+var defaultOnNew = function () {
+    var record = Ext.create('App.mdlBatch');
+    record.data.BranchID = HQ.cpnyID;
+    record.data.Status = 'H';
+    record.data.DateEnt = HQ.businessDate;
+    App.cboSiteID.setValue(HQ.inSite);
+    App.cboSlsperID.setValue('');
+
+    App.frmMain.validate();
+
+    bindBatch(record);
+}
+
+var lastLineRef = function () {
+    var num = 0;
+
+    App.stoTrans.data.each(function (item) {
+        if (!Ext.isEmpty(item.data.LineRef) && parseInt(item.data.LineRef) > num) {
+            num = parseInt(item.data.LineRef);
+        }
+    });
+
+    num++;
+    var lineRef = num.toString();
+    var len = lineRef.length;
+    for (var i = 0; i < 5 - len; i++) {
+        lineRef = "0" + lineRef;
+    }
+    return lineRef;
+}
+
+var setUOM = function (invtID, classID, stkUnit, fromUnit) {
+    if (!Ext.isEmpty(fromUnit)) {
+        var data = HQ.store.findInStore(App.stoUnitConversion, ['UnitType', 'ClassID', 'InvtID', 'FromUnit', 'ToUnit'], ["3", "*", invtID, fromUnit, stkUnit]);
+        if (!Ext.isEmpty(data)) {
+            return data;
+        }
+
+        data = HQ.store.findInStore(App.stoUnitConversion, ['UnitType', 'ClassID', 'InvtID', 'FromUnit', 'ToUnit'], ["2", classID, "*", fromUnit, stkUnit]);
+        if (!Ext.isEmpty(data)) {
+            return data;
+        }
+
+        data = HQ.store.findInStore(App.stoUnitConversion, ['UnitType', 'ClassID', 'InvtID', 'FromUnit', 'ToUnit'], ["1", "*", "*", fromUnit, stkUnit]);
+        if (!Ext.isEmpty(data)) {
+            return data;
+        }
+        HQ.message.show(2525, [invtID], '', true);
+        return null;
+    }
+    return null;
+}
+
+var rdrTrans_QtyAmt = function (value) {
+    return Ext.util.Format.number(value, '0,000');
+}
+
+var setStatusForm = function () {
+
+    var lock = true;
+    HQ.common.lockItem(App.frmMain, true);
+    if (!Ext.isEmpty(HQ.objBatch.data.BatNbr)) {
+        if (HQ.objBatch.data.Status == 'H') {
+            lock = false;
+        }
+
+    } else {
+        lock = !HQ.isInsert;
+    }
+
+    HQ.common.lockItem(App.frmMain, lock);
+    App.grdTrans.isLock = lock;
+    App.cboBatNbr.setReadOnly(false);
+    App.cboHandle.setReadOnly(false);
+    App.txtRvdBatNbr.setReadOnly(true);
+    App.cboStatus.setReadOnly(true);
+    App.txtRefNbr.setReadOnly(true);
+    App.txtTotQty.setReadOnly(true);
+    App.txtTotAmt.setReadOnly(true);
+}
+
+var checkExitEdit = function (row) {
+    var key = row.field;
+    var trans = row.record.data;
+    if (key == 'InvtID' || key == 'BarCode') {
+
+        trans.ReasonCD = App.cboReasonCD.getValue();
+        trans.SiteID = App.cboSiteID.getValue();
+
+        var invt = row.record.invt;
+        var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
+
+        if (Ext.isEmpty(cnv)) {
+            trans.UnitMultDiv = '';
+            trans.UnitPrice = 0;
+            row.record.commit();
+            App.grdTrans.view.loadMask.hide();
+            App.grdTrans.view.loadMask.setDisabled(false)
+            return;
+        }
+
+        trans.UnitDesc = invt.StkUnit;
+        trans.CnvFact = cnv.CnvFact == 0 ? 1 : cnv.CnvFact;
+        trans.UnitMultDiv = cnv.MultDiv;
+        trans.TranDesc = invt.Descr;
+        trans.BarCode = invt.BarCode;
+
+        var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [trans.InvtID, trans.SiteID]);
+
+        if (Ext.isEmpty(site)) {
+            site = Ext.create('App.mdlItemSite').data;
+            site.SiteID = trans.SiteID;
+            site.InvtID = trans.InvtID;
+        }
+
+        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+            trans.UnitPrice = site.AvgCost;
+        }
+        trans.TranAmt = trans.Qty * trans.UnitPrice;
+
+        getQtyAvail(row.record);
+
+    } else if (key == 'UnitDesc') {
+
+        var invt = row.record.invt;
+
+        var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [trans.InvtID, trans.SiteID]);
+
+        if (Ext.isEmpty(site)) {
+            site = Ext.create('App.mdlItemSite').data;
+            site.SiteID = trans.SiteID;
+            site.InvtID = trans.InvtID;
+        }
+
+        var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, trans.UnitDesc);
+
+        if (Ext.isEmpty(cnv)) {
+            trans.UnitMultDiv = '';
+            trans.UnitPrice = trans.UnitCost = 0;
+            trans.Qty = 0;
+            trans.TranAmt = 0;
+            row.record.commit();
+            App.grdTrans.view.loadMask.hide();
+            App.grdTrans.view.loadMask.setDisabled(false)
+            return;
+        }
+
+        trans.CnvFact = cnv.CnvFact;
+        trans.UnitMultDiv = cnv.MultDiv;
+        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+            trans.UnitPrice = Math.round((trans.UnitMultDiv == "M" ? site.AvgCost * trans.CnvFact : site.AvgCost / trans.CnvFact));
+        }
+        trans.TranAmt = trans.Qty * trans.UnitPrice;
+        getQtyAvail(row.record);
+        if (trans.Qty > 0) {
+            calcLot(row.record);
+        }
+
+
+    } else if (key == "Qty") {
+
+        var invt = row.record.invt;
+        var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [trans.InvtID, trans.SiteID]);
+
+        if (Ext.isEmpty(site)) {
+            site = Ext.create('App.mdlItemSite').data;
+            site.SiteID = trans.SiteID;
+            site.InvtID = trans.InvtID;
+        }
+
+        if (invt.StkItem == 1) {
+            var editQty = 0;
+            var totQty = 0;
+
+            if (trans.UnitMultDiv == "M") {
+                editQty = trans.Qty * (trans.CnvFact == 0 ? 1 : trans.CnvFact);
+            }
+            else {
+                editQty = trans.Qty / (trans.CnvFact == 0 ? 1 : trans.CnvFact);
+            }
+
+            if (!HQ.objSetup.NegQty && trans.TranType != "RI") {
+                totQty = editQty + calculateInvtTotal(trans.InvtID, trans.SiteID, trans.LineRef);
+                if (totQty > site.QtyAvail) {
+                    trans.Qty = 0;
+                    row.record.commit();
+                    HQ.message.show(35, '', '', true);
+                    App.grdTrans.view.loadMask.hide();
+                    App.grdTrans.view.loadMask.setDisabled(false)
+                    return;
+                }
+            }
+        }
+
+        trans.TranAmt = trans.Qty * trans.UnitPrice;
+        getQtyAvail(row.record);
+
+        calcLot(row.record);
+    }
+
+
+    trans.ExtCost = trans.TranAmt;
+    trans.UnitCost = trans.UnitPrice;
+    row.record.commit();
+
+    if (key == 'InvtID' && !Ext.isEmpty(trans.InvtID)) {
+
+        HQ.store.insertRecord(App.stoTrans, key, Ext.create('App.mdlTrans'), true);
+    }
+
+    calculate();
+
+    checkTransAdd();
+
+    App.grdTrans.view.loadMask.hide();
+    App.grdTrans.view.loadMask.setDisabled(false)
+}
+var checkExitEditLot = function (row) {
+    var key = row.field;
+    var record = row.record;
+    var lot = row.record.data;
+    if (key == "Qty") {
+        getLotQtyAvail(record);
+    } else if (key == "UnitDesc") {
+        var price = 0;
+        var cnvFact = 0;
+        var unitMultDiv = "";
+        var cnv = setUOM(App.winLot.record.invt.InvtID, App.winLot.record.invt.ClassID, App.winLot.record.invt.StkUnit, lot.UnitDesc);
+        if (!Ext.isEmpty(cnv)) {
+            cnvFact = cnv.CnvFact;
+            unitMultDiv = cnv.MultDiv;
+            lot.CnvFact = cnvFact;
+            lot.UnitMultDiv = unitMultDiv;
+        } else {
+            lot.CnvFact = 1;
+            lot.UnitMultDiv = '';
+            lot.UnitPrice = 0;
+            lot.UnitDesc = '';
+            record.commit();
+            App.grdLot.view.loadMask.hide();
+            App.grdLot.view.loadMask.setDisabled(false)
+            return;
+        }
+
+        if (App.winLot.record.invt.ValMthd == "A" || App.winLot.record.invt.ValMthd == "E") {
+            var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [lot.InvtID, lot.SiteID]);
+            price = site.AvgCost * lot.CnvFact;
+            lot.UnitPrice = lot.UnitCost = price;
+
+        } else {
+            lot.UnitPrice = lot.UnitCost = 0
+        }
+
+        getLotQtyAvail(record);
+    } else if (key == "LotSerNbr") {
+        var flat = false;
+        App.stoLotTrans.data.each(function (item) {
+            if (item.data.LotSerNbr == lot.LotSerNbr && item.id != record.id) {
+                flat = true;
+                return false;
+            }
+        });
+        if (flat) {
+            HQ.message.show(219, "", "", true);
+            lot.LotSerNbr = "";
+            App.grdLot.view.loadMask.hide();
+            App.grdLot.view.loadMask.setDisabled(false)
+            record.commit();
+            return;
+        }
+        lot.UnitDesc = App.winLot.record.data.UnitDesc;
+        lot.UnitPrice = lot.UnitCost = App.winLot.record.data.UnitPrice;
+        lot.UnitMultDiv = App.winLot.record.data.UnitMultDiv;
+        lot.CnvFact = App.winLot.record.data.CnvFact;
+        var itemLot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', 'LotSerNbr'], [lot.InvtID, lot.SiteID, lot.LotSerNbr]);
+        if (!Ext.isEmpty(itemLot)) {
+            lot.ExpDate = itemLot.ExpDate;
+        }
+
+        if (!Ext.isEmpty(lot.LotSerNbr)) {
+            var newRow = Ext.create('App.mdlLotTrans');
+            newRow.data.INTranLineRef = lot.INTranLineRef;
+            HQ.store.insertRecord(App.stoLotTrans, key, newRow, true);
+        }
+    }
+    record.commit();
+    App.grdLot.view.loadMask.hide();
+    App.grdLot.view.loadMask.setDisabled(false)
+}
+
+var checkTransAdd = function () {
+    var flat = false;
+    App.stoTrans.data.each(function (item) {
+        if (!Ext.isEmpty(item.data.InvtID)) {
+            flat = true;
+            return false;
+        }
+    });
+
+    App.cboSiteID.setReadOnly(flat);
+
+    App.cboSlsperID.setReadOnly(App.cboStatus.getValue() != 'H');
+
+    App.cboFromToSiteID.setReadOnly(App.cboStatus.getValue() != 'H');
+}
+
+var getQtyAvail = function (row) {
+
+    var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [row.data.InvtID, row.data.SiteID]);
+    if (!Ext.isEmpty(site)) {
+        App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + (site.QtyAvail - calculateInvtTotal(row.data.InvtID, row.data.SiteID, "")));
+    }
+    else {
+        App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + (0 - calculateInvtTotal(row.data.InvtID, row.data.SiteID, "")));
+    }
+}
+
+var getLotQtyAvail = function (row) {
+    var lot = HQ.store.findInStore(App.stoItemLot, ['InvtID', 'SiteID', ['LotSerNbr']], [row.data.InvtID, row.data.SiteID, row.data.LotSerNbr]);
+    var qty = 0;
+    var qtyAvail = 0;
+
+    App.stoLotTrans.snapshot.each(function (item2) {
+        if (item2.data.LotSerNbr == row.data.LotSerNbr && item2.data.InvtID == row.data.InvtID && item2.data.SiteID == row.data.SiteID) {
+            qty += item2.data.UnitMultDiv == "M" ? item2.data.Qty * item2.data.CnvFact : item2.data.Qty * item2.data.CnvFact;
+        }
+    });
+    var det = App.winLot.record;
+
+    if (!Ext.isEmpty(lot)) {
+        qtyAvail = lot.QtyAvail - qty;
+        if (qtyAvail < 0) {
+            HQ.message.show(1043, [row.data.InvtID + " " + row.data.LotSerNbr, row.data.SiteID], "", true);
+            qty = 0;
+            row.data.Qty = 0;
+            row.commit();
+            App.stoLotTrans.snapshot.each(function (item2) {
+                if (item2.data.LotSerNbr == row.data.LotSerNbr && item2.data.InvtID == row.data.InvtID && item2.data.SiteID == row.data.SiteID) {
+                    qty += item2.data.UnitMultDiv == "M" ? item2.data.Qty * item2.data.CnvFact : item2.data.Qty * item2.data.CnvFact;
+                }
+            });
+            qtyAvail = lot.QtyAvail - qty;
+
+        }
+    }
+    else {
+        qtyAvail = 0 - qty;
+        if (qtyAvail < 0) {
+            HQ.message.show(1043, [row.data.InvtID + " " + row.data.LotSerNbr, row.data.SiteID], "", true);
+            qty = 0;
+            row.data.Qty = 0;
+            row.commit();
+            App.stoLotTrans.snapshot.each(function (item2) {
+                if (item2.data.LotSerNbr == row.data.LotSerNbr && item2.data.InvtID == row.data.InvtID && item2.data.SiteID == row.data.SiteID) {
+                    qty += item2.data.UnitMultDiv == "M" ? item2.data.Qty * item2.data.CnvFact : item2.data.Qty * item2.data.CnvFact;
+                }
+            });
+            qtyAvail = 0 - qty;
+        }
+    }
+    App.lblLotQtyAvail.setText("Lot " + row.data.LotSerNbr + " - " + HQ.common.getLang('qtyavail') + ": " + qtyAvail);
+
+}
+var calculateInvtTotal = function (invtID, siteID, lineRef) {
+    var qty = 0;
+    var qtyOld = 0;
+    App.stoTrans.each(function (item) {
+        if (item.data.InvtID == invtID && item.data.SiteID == siteID && (lineRef == "" || (lineRef != "" && lineRef != item.data.LineRef))) {
+            qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
+        }
+    });
+    App.stoOldTrans.each(function (item) {
+        if (item.data.InvtID == invtID && item.data.SiteID == siteID) {
+            qtyOld += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
+        }
+    });
+    return qty - qtyOld;
+}
+
+var askClose = function (item) {
+    if (item == "no" || item == "ok") {
+        HQ.common.close(this);
+    }
+}
+var askNew = function (item) {
+    if (item == "yes" || item == "ok") {
+        defaultOnNew();
+    }
+}
+var setChange = function (isChange) {
+    HQ.isChange = isChange;
+    if (isChange) {
+        if (!Ext.isEmpty(App.cboBatNbr.getValue())) {
+            App.cboBatNbr.setReadOnly(true);
+        }
+
+    } else {
+        App.grdTrans.isChange = false;
+        App.cboBatNbr.setReadOnly(false);
+    }
+    HQ.common.changeData(isChange, 'IN10200');
+}
+
+var renderRowNumber = function (value, meta, record) {
+    return App.stoLotTrans.data.indexOf(record) + 1;
+}
+var renderQtyAmt = function (value) {
+    return Ext.util.Format.number(value, '0,000');
+}
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
+
+
+
+

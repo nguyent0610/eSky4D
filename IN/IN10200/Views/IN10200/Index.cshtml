@@ -26,14 +26,14 @@
     </style>
     <script>
 
-        HQ.cpnyID = '@Current.CpnyID';
+        HQ.cpnyID = '@ViewBag.BranchID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
         HQ.businessDate = new Date();
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-
+        HQ.inSite = '@ViewBag.INSite';
     </script>  
     <title>@ViewBag.Title</title>
 </head>

@@ -40,9 +40,24 @@ namespace IN10200.Controllers
         private IN_Setup _objIN;
 
         #region Action
-        public ActionResult Index()
+        public ActionResult Index(string branchID)
         {
             Util.InitRight(_screenNbr);
+
+            var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
+
+            if (branchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
+            {
+                return View("Popup");
+            }
+
+            if (branchID == null) branchID = Current.CpnyID;
+
+            var userDft = _app.OM_UserDefault.FirstOrDefault(p => p.DfltBranchID == branchID);
+
+            ViewBag.INSite = userDft == null ? "" : userDft.INSite;
+            ViewBag.BranchID = branchID;
+
             return View();
         }
 
