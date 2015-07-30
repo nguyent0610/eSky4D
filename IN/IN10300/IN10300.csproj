@@ -311,7 +311,6 @@
     <Content Include="Scripts\hq.common.js" />
     <Content Include="Scripts\main.debug.js" />
     <Content Include="Scripts\main.js" />
-    <Content Include="Scripts\Screen\IN10300.debug.js" />
     <Content Include="Scripts\Screen\IN10300.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -329,6 +328,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\IN10300\Body.cshtml" />
     <Content Include="Views\IN10300\Index.cshtml" />
+    <Content Include="Views\IN10300\Popup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -385,7 +385,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="D:\Working Project\Cloud\MVC.nrproj" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="D:\Working Project\Cloud\MVC.nrproj" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

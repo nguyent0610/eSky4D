@@ -38,9 +38,22 @@ namespace IN10300.Controllers
         private List<IN10300_pgTransferLoad_Result> _lstTrans;
         private List<IN_LotTrans> _lstLot;
         private IN_Setup _objIN;
-        public ActionResult Index()
+      
+        public ActionResult Index(string branchID)
         {
             Util.InitRight(_screenNbr);
+
+            var user = _sys.Users.FirstOrDefault(p => p.UserName == Current.UserName);
+
+            if (branchID == null && user != null && user.CpnyID.PassNull().Split(',').Length > 1)
+            {
+                return View("Popup");
+            }
+
+            if (branchID == null) branchID = Current.CpnyID;
+
+            ViewBag.BranchID = branchID;
+
             return View();
         }
 
