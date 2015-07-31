@@ -938,6 +938,7 @@ var calcLot = function (record) {
                 callback: function (records, options, success) {
 
                     var det = options.det;
+                    var record = options.row;
                     var needQty = Math.round(det.UnitMultDiv == "M" ? det.Qty * det.CnvFact : det.Qty / det.CnvFact);
 
                     App.stoLotTrans.clearFilter();
@@ -979,8 +980,9 @@ var calcLot = function (record) {
                                 newLot.data.UnitMultDiv = 'M';
                                 newLot.data.Qty = newQty;
                                 newLot.data.UnitDesc = options.row.invt.StkUnit;
-                                if (invt.ValMthd == "A" || invt.ValMthd == "E") {
-                                    newLot.data.UnitPrice = newLot.data.UnitCost = site.AvgCost;
+
+                                if (record.invt.ValMthd == "A" || record.invt.ValMthd == "E") {
+                                    newLot.data.UnitPrice = newLot.data.UnitCost = Math.round(det.UnitMultDiv == "M" ? det.UnitPrice / det.CnvFact : det.UnitPrice * det.CnvFact); 
                                 } else {
                                     newLot.data.UnitPrice = newLot.data.UnitCost = 0;
                                 }
