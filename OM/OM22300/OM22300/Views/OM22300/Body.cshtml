@@ -156,10 +156,10 @@
             .SortableColumns(false)                     
             .ColumnModel(
                 X.RowNumbererColumn()
-                , X.DateColumn().Text(Util.GetLang("VisitDate")).Width(80).DataIndex("VisitDate").Format("dd/MM/yyyy")
-                    
-                , X.Column().Text(Util.GetLang("Week")).DataIndex("WeekNbr").Width(50).Align(Alignment.Right)
-                    
+                , X.DateColumn().Text(Util.GetLang("VisitDate")).Width(120).DataIndex("VisitDate").Format("dd/MM/yyyy")
+                
+                , X.NumberColumn().Text(Util.GetLang("Week")).DataIndex("WeekNbr").Width(50).Align(Alignment.Right).Format("0,000")
+              
                 , X.Column().Text(Util.GetLang("DayofWeek")).DataIndex("DayofWeek").Width(70).Renderer("renderDayOfWeek")
                     
                 , X.Column().Text(Util.GetLang("SlsFreqType")).DataIndex("SlsFreqType").Width(150).Renderer("renderSlsFreqType")
@@ -282,7 +282,7 @@
                     .Local(true)
                     .Filters(
                         X.DateFilter().DataIndex("VisitDate"),
-                        X.StringFilter().DataIndex("WeekNbr"),
+                        X.NumericFilter().DataIndex("WeekNbr"),
                         X.StringFilter().DataIndex("DayofWeek"),
                         X.StringFilter().DataIndex("SlsFreqType"),
                         X.StringFilter().DataIndex("SlsFreq"),
