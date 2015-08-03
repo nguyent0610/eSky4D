@@ -155,7 +155,7 @@
             )
             .SortableColumns(false)                     
             .ColumnModel(
-                X.RowNumbererColumn()
+                X.RowNumbererColumn().Width(35).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
                 , X.DateColumn().Text(Util.GetLang("VisitDate")).Width(120).DataIndex("VisitDate").Format("dd/MM/yyyy")
                 
                 , X.NumberColumn().Text(Util.GetLang("Week")).DataIndex("WeekNbr").Width(50).Align(Alignment.Right).Format("0,000")
@@ -283,13 +283,13 @@
                     .Filters(
                         X.DateFilter().DataIndex("VisitDate"),
                         X.NumericFilter().DataIndex("WeekNbr"),
-                        X.StringFilter().DataIndex("DayofWeek"),
-                        X.StringFilter().DataIndex("SlsFreqType"),
+                        X.ListFilter().DataIndex("DayofWeek"),
+                        X.ListFilter().DataIndex("SlsFreqType"),
                         X.StringFilter().DataIndex("SlsFreq"),
                         X.StringFilter().DataIndex("SalesRouteID"),
                         X.StringFilter().DataIndex("SlsPerID"),
                         X.StringFilter().DataIndex("CustID"),
-                        X.StringFilter().DataIndex("WeekofVisit"),
+                        X.ListFilter().DataIndex("WeekofVisit"),
                         X.NumericFilter().DataIndex("VisitSort")
                     )
             )

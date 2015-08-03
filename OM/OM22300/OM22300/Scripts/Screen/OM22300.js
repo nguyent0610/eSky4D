@@ -85,6 +85,46 @@ var btnLoad_Click = function (sender, e) {
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
+    //Filter khi combo hien thi Descr ma filter theo Code
+    HQ.DayofWeek = [];
+    HQ.DayofWeek.push(['Mon', HQ.common.getLang('Mon')]);
+    HQ.DayofWeek.push(['Tue', HQ.common.getLang('Tue')]);
+    HQ.DayofWeek.push(['Wed', HQ.common.getLang('Wed')]);
+    HQ.DayofWeek.push(['Thu', HQ.common.getLang('Thu')]);
+    HQ.DayofWeek.push(['Fri', HQ.common.getLang('Fri')]);
+    HQ.DayofWeek.push(['Sat', HQ.common.getLang('Sat')]);
+    HQ.DayofWeek.push(['Sun', HQ.common.getLang('Sun')]);
+
+    filterFeature = App.grdOM_SalesRouteDet.filters;
+    colAFilter = filterFeature.getFilter('DayofWeek');
+    colAFilter.menu = colAFilter.createMenu({
+        options: HQ.DayofWeek
+    });
+
+    HQ.SlsFreqType = [];
+    HQ.SlsFreqType.push(['A', HQ.common.getLang('AdHoc')]);
+    HQ.SlsFreqType.push(['R', HQ.common.getLang('Recurrent')]);
+
+    filterFeature = App.grdOM_SalesRouteDet.filters;
+    colAFilter = filterFeature.getFilter('SlsFreqType');
+    colAFilter.menu = colAFilter.createMenu({
+        options: HQ.SlsFreqType
+    });
+
+    HQ.WeekofVisit = [];
+    HQ.WeekofVisit.push(['NA', HQ.common.getLang('None')]);
+    HQ.WeekofVisit.push(['OW', HQ.common.getLang('OddWeek')]);
+    HQ.WeekofVisit.push(['EW', HQ.common.getLang('EvenWeek')]);
+    HQ.WeekofVisit.push(['W159', HQ.common.getLang('Weeks') + ' 1,5,9,...']);
+    HQ.WeekofVisit.push(['W2610', HQ.common.getLang('Weeks') + ' 2,6,10,...']);
+    HQ.WeekofVisit.push(['W3711', HQ.common.getLang('Weeks')+' 3,7,11,...']);
+    HQ.WeekofVisit.push(['W4812', HQ.common.getLang('Weeks') + ' 4,8,12,...']);
+
+    filterFeature = App.grdOM_SalesRouteDet.filters;
+    colAFilter = filterFeature.getFilter('WeekofVisit');
+    colAFilter.menu = colAFilter.createMenu({
+        options: HQ.WeekofVisit
+    });
     //loadSourceCombo();
 };
 
@@ -113,27 +153,17 @@ var stoChanged = function (sto) {
 var stoLoad = function (sto) {
     HQ.common.showBusy(false);
     HQ.isFirstLoad = true;
-    //var ReasonCD = [];
-    //var Status = [];
-    //App.cboReasonCD.getStore().data.each(function (item) {
-    //    if (ReasonCD.indexOf(item.data.Code) == -1) {
-    //        ReasonCD.push([item.data.Code, item.data.Descr]);
-    //    }
-    //});
+    
+    //var SlsFreqType = [];
     //App.cboStatus.getStore().data.each(function (item) {
     //    if (Status.indexOf(item.data.Code) == -1) {
     //        Status.push([item.data.Code, item.data.Descr]);
     //    }
     //});
-    //filterFeature = App.grdOM_SalesRouteDet.filters;
+    //filterFeature = App.grdOM_WRKSCH.filters;
     //colAFilter = filterFeature.getFilter('ReasonCD');
     //colAFilter.menu = colAFilter.createMenu({
     //    options: ReasonCD
-    //});
-
-    //colAFilter = filterFeature.getFilter('IsApprove');
-    //colAFilter.menu = colAFilter.createMenu({
-    //    options: Status
     //});
 
     HQ.isChange = HQ.store.isChange(sto);
