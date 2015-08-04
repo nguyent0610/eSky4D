@@ -39,31 +39,36 @@ var cboPJPID_Select = function (item, newValue, oldValue) {
     }
 }
 var btnGenerate_click = function () {
-    var recordOrder = HQ.store.findRecord(App.stoDetail, ["Selected"], [true]);
-    if (App.dtpFromDate.validate() && App.dtpToDate.validate() && recordOrder != undefined) {
+    if (HQ.isInsert || HQ.isUpdate) {
+        var recordOrder = HQ.store.findRecord(App.stoDetail, ["Selected"], [true]);
+        if (App.dtpFromDate.validate() && App.dtpToDate.validate() && recordOrder != undefined) {
             if (App.dtpFromDate.lastValue.getFullYear() != App.dtpToDate.lastValue.getFullYear()) {
                 HQ.message.show(201506111);
                 return;
             }
-          
-        App.frmMain.submit({
-            waitMsg: HQ.common.getLang('SavingData'),
-            method: 'POST',
-            url: 'OM40600/Save',
-            timeout: 1800000,
-            params: {
-                lstDet: HQ.store.getAllData(App.stoDetail, ["Selected"], [true]),
-                fromDate: App.dtpFromDate.getValue(),
-                toDate: App.dtpToDate.getValue()
-            },
-            success: function (msg, data) {
-                HQ.message.process(msg, data, true);
-                btnLoad_click();
-            },
-            failure: function (msg, data) {
-                HQ.message.process(msg, data, true);
-            }
-        });
+
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang('SavingData'),
+                method: 'POST',
+                url: 'OM40600/Save',
+                timeout: 1800000,
+                params: {
+                    lstDet: HQ.store.getAllData(App.stoDetail, ["Selected"], [true]),
+                    fromDate: App.dtpFromDate.getValue(),
+                    toDate: App.dtpToDate.getValue()
+                },
+                success: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                    btnLoad_click();
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+    else {
+        HQ.message.show(728);
     }
 }
 var btnLoad_click = function () {
