@@ -642,6 +642,14 @@ namespace AR20500
     
             return base.ExecuteFunction<global::System.String>("AR20500_CustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter, stateParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<Nullable<global::System.Boolean>> AR20500_pdIsShowCustHT()
+        {
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("AR20500_pdIsShowCustHT");
+        }
 
         #endregion
 
@@ -8136,6 +8144,30 @@ namespace AR20500
         private global::System.String _Color;
         partial void OnColorChanging(global::System.String value);
         partial void OnColorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CustHT
+        {
+            get
+            {
+                return _CustHT;
+            }
+            set
+            {
+                OnCustHTChanging(value);
+                ReportPropertyChanging("CustHT");
+                _CustHT = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CustHT");
+                OnCustHTChanged();
+            }
+        }
+        private global::System.String _CustHT;
+        partial void OnCustHTChanging(global::System.String value);
+        partial void OnCustHTChanged();
 
         #endregion
 

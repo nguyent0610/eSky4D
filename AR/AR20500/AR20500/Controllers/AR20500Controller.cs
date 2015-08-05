@@ -50,10 +50,11 @@ namespace AR20500.Controllers
         {
             Util.InitRight(_screenNbr);
             ViewBag.ImagePath = FilePath;
+            ViewBag.IsShowCustHT = _db.AR20500_pdIsShowCustHT().FirstOrDefault();
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -170,6 +171,8 @@ namespace AR20500.Controllers
                                 objCust.District = item.District.PassNull(); ;
                                 objCust.CustId = _db.AR20500_CustID(item.BranchID, "", objCust.Territory, objCust.District, "", "", "", "", "", "", objCust.ClassId, item.State.PassNull()).FirstOrDefault();
                                 objCust.DfltShipToId = "DEFAULT";
+                                objCust.LTTContractNbr = item.CustHT;
+
                                
                                 objCust.LUpd_Datetime = DateTime.Now;
                                 objCust.LUpd_Prog = "AR20500";

@@ -3,7 +3,8 @@ var keys = ['ID'];
 var _firstLoad = true;
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.stoAR20500_WeekofVisitAll.load(function () {
+    if (HQ.isShowCustHT) HQ.grid.show(App.grdCust,['CustHT'])
+    App.stoAR20500_pdWeekofVisitAll.load(function () {
         App.cboCpnyID.getStore().load(function () {
             App.cboSlsperId.getStore().load(function () {
                 App.cboStatus.getStore().load(function () {
@@ -206,7 +207,7 @@ var grdCust_BeforeEdit = function (item, e) {
         App.cboColWeekofVisit.getStore().reload();
     }
     if (['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].indexOf(e.field)>-1) {       
-        var objCheck = HQ.store.findRecord(App.stoAR20500_WeekofVisitAll, [ 'SlsFreq'], [ e.record.data.SlsFreq]);
+        var objCheck = HQ.store.findRecord(App.stoAR20500_pdWeekofVisitAll, [ 'SlsFreq'], [ e.record.data.SlsFreq]);
         if (objCheck) {
             return objCheck.data.IsEdit;
         }
@@ -392,7 +393,7 @@ function refresh(item) {
     }
 };
 var renderWeekofVisit = function (value) {
-    var obj = App.stoAR20500_WeekofVisitAll.findRecord("Code", value);
+    var obj = App.stoAR20500_pdWeekofVisitAll.findRecord("Code", value);
     if (obj) {
         return obj.data.Descr;
     }

@@ -330,6 +330,7 @@
           <Parameter Name="CustID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AR20500_pdIsShowCustHT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="AR20500_pgDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="StartDate" Type="smalldatetime" Mode="In" />
@@ -400,6 +401,7 @@
             <Parameter Name="ClassID" Mode="In" Type="String" />
             <Parameter Name="State" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="AR20500_pdIsShowCustHT" ReturnType="Collection(Boolean)" />
         </EntityContainer>
         <ComplexType Name="AR20500_pgDetail_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
@@ -458,6 +460,7 @@
           <Property Type="DateTime" Name="DateCust" Nullable="true" Precision="23" />
           <Property Type="String" Name="TaxCode" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="Color" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="CustHT" MaxLength="30" />
         </ComplexType>
         <EntityType Name="AR_Customer">
           <Key>
@@ -1101,6 +1104,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AR20500_CustID" FunctionName="eBiz4DWebSysModel.Store.AR20500_CustID" />
+          <FunctionImportMapping FunctionImportName="AR20500_pdIsShowCustHT" FunctionName="eBiz4DWebSysModel.Store.AR20500_pdIsShowCustHT" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
