@@ -754,6 +754,8 @@ namespace OMProcess
                         objSalesDet.UnitRate = objPDADet.UnitRate;
                         objSalesDet.UnitWeight = objPDADet.UnitWeight;
                         objSalesDet.OrderNbr = objSalesOrd.OrderNbr;
+                        objSalesDet.POSM = objPDADet.POSM;
+                        objSalesDet.POSMImg = objPDADet.POSMImg;
                       
 
                         taxAmt00 += objSalesDet.TaxAmt00;
