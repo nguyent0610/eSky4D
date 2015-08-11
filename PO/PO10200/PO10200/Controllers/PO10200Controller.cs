@@ -42,8 +42,6 @@ namespace PO10200.Controllers
         private JsonResult _logMessage;
         private List<IN_ItemSite> lstInItemsiteNew = new List<IN_ItemSite>();
         bool b235 = false;//message235
-
-
         public ActionResult Index()
         {
             Util.InitRight(ScreenNbr);
@@ -366,9 +364,7 @@ namespace PO10200.Controllers
             objIN_ItemSite.QtyAvail=objIN_ItemSite.QtyAvail + qtyold;
             return this.Direct(objIN_ItemSite);
 
-        }
-       
-
+        }       
         [DirectMethod]
         public ActionResult INNumberingLot(string invtID = "", DateTime? tranDate = null, string getType = "LotNbr")
         {
@@ -479,8 +475,24 @@ namespace PO10200.Controllers
 
 
             for (int i = 0; i < _lstPOTrans.Count; i++)
-            {
+            {               
                 var objPOT = _lstPOTrans[i];
+                var objInvtID=_db.PO10200_pdIN_Inventory(Current.UserName).Where(p=>p.InvtID==objPOT.InvtID).FirstOrDefault();
+
+                // kiem tra xem co muc lot ko, neu san pham co quan li lot ma khong co muc lot, thong bao khong cho save
+                if (objInvtID != null)
+                {
+                    var qtylot=_lstLot.Where(p => p.InvtID == objPOT.InvtID && p.SiteID == objPOT.SiteID && p.POTranLineRef == objPOT.LineRef).Sum(p => p.Qty);
+
+                    if (objInvtID.LotSerTrack.PassNull() != "N" && objInvtID.LotSerTrack.PassNull() != "" && qtylot != objPOT.RcptQty)
+                    {
+                        throw new MessageException(MessageType.Message, "201508111", parm: new[] { objPOT.InvtID, qtylot.ToString(), objPOT.RcptQty.ToString() });
+                    }
+                }
+                else
+                {                  
+                    throw new MessageException(MessageType.Message, "201508112", parm: new[] { objPOT.InvtID});
+                }
                 var obj = _db.PO_Trans.Where(p => p.BranchID == objPO_Receipt.BranchID && p.BatNbr == objPO_Receipt.BatNbr && p.RcptNbr == objPO_Receipt.RcptNbr && p.LineRef == objPOT.LineRef).FirstOrDefault();
                 if (obj != null)
                 {
@@ -586,10 +598,7 @@ namespace PO10200.Controllers
             {
                 throw ex;
             }
-        }
-
-
-         
+        }         
         private void Updating_Batch(ref Batch objBatch)
         {
 
@@ -863,11 +872,7 @@ namespace PO10200.Controllers
             objPO_LotTrans.LUpd_Prog = ScreenNbr;
             objPO_LotTrans.LUpd_User = Current.UserName;
             objPO_LotTrans.LUpd_DateTime = DateTime.Now;
-        }
-
-
-        
-
+        }        
         public void Insert_IN_ItemSite(ref IN_ItemSite objIN_ItemSite, ref PO10200_pdIN_Inventory_Result objIN_Inventory, string SiteID)
         {
             try
@@ -910,7 +915,6 @@ namespace PO10200.Controllers
                 throw (ex);
             }
         }
-
         //private void SendMail(PO_Header objHeader)
         //{
         //    try
@@ -933,50 +937,50 @@ namespace PO10200.Controllers
 
                 }
 
-                if (_poHead.VendID.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("VendID") });
-                }
+                //if (_poHead.VendID.PassNull() == "")
+                //{
+                //    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("VendID") });
+                //}
 
-                if (_poHead.RcptFrom.PassNull() == "PO" && _poHead.PONbr.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("PONbr") });
-                }
-                if (_poHead.RcptFrom.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("RcptFrom") });
-                }
-                if (_poHead.RcptType.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("RcptType") });
-                }
-                if (_poHead.DocType.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("DocType") });
-                }
-                if (_poHead.VendID.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("VendID") });
-                }
+                //if (_poHead.RcptFrom.PassNull() == "PO" && _poHead.PONbr.PassNull() == "")
+                //{
+                //    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("PONbr") });
+                //}
+                //if (_poHead.RcptFrom.PassNull() == "")
+                //{
+                //    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("RcptFrom") });
+                //}
+                //if (_poHead.RcptType.PassNull() == "")
+                //{
+                //    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("RcptType") });
+                //}
+                //if (_poHead.DocType.PassNull() == "")
+                //{
+                //    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("DocType") });
+                //}
+                //if (_poHead.VendID.PassNull() == "")
+                //{
+                //    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("VendID") });
+                //}
 
-                if (_poHead.InvcNbr.PassNull() == "" || _poHead.InvcNote.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("InvcNbr") });
-                }
-                if (_poHead.Terms.PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("Terms") });
-                }
+                //if (_poHead.InvcNbr.PassNull() == "" || _poHead.InvcNote.PassNull() == "")
+                //{
+                //    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("InvcNbr") });
+                //}
+                //if (_poHead.Terms.PassNull() == "")
+                //{
+                //    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("Terms") });
+                //}
 
-                if (_poHead.DocDate.ToString().PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("DocDate") });
-                }
+                //if (_poHead.DocDate.ToString().PassNull() == "")
+                //{
+                //    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("DocDate") });
+                //}
 
-                if (_poHead.InvcDate.ToString().PassNull() == "")
-                {
-                    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("InvcDate") });
-                }
+                //if (_poHead.InvcDate.ToString().PassNull() == "")
+                //{
+                //    throw new MessageException(MessageType.Message, "15", parm: new[] { Util.GetLang("InvcDate") });
+                //}
 
                 //Check PO has no detail data
                 if (_lstPOTrans.Count == 0)
@@ -1072,7 +1076,6 @@ namespace PO10200.Controllers
 
             return true;
         }
-
         private void Data_Release()
         {
             if (_handle != "N")
@@ -1117,7 +1120,6 @@ namespace PO10200.Controllers
                 }
             }
         }
-
         [HttpPost]
         public ActionResult Report(FormCollection data)
         {
@@ -1164,8 +1166,7 @@ namespace PO10200.Controllers
                 }
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
-        }
-  
+        }  
     }
     public class CountInvtID
     {
