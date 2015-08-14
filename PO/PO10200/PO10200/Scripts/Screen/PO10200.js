@@ -592,18 +592,15 @@ var grdPO_Trans_Edit = function (item, e) {
             }
 
         });
-
     }
     else if (e.field == "UnitVolume") {
         e.record.set("ExtVolume", objDetail.RcptQty * objDetail.UnitVolume);
-
     }
     else if (e.field == "DocDiscAmt" && objDetail.TranAmt>0) {
         e.record.set("TranAmt", objDetail.UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
         if (objDetail.RcptQty != 0) {
             e.record.set("DiscPct", HQ.util.mathRound((objDetail.DocDiscAmt / (objDetail.UnitCost * objDetail.RcptQty)) * 100, 2));//Math.round((objDetail.DocDiscAmt / (objDetail.UnitCost * objDetail.RcptQty)) * 100, 2));
-        }
-   
+        }   
     }
     else if (e.field == "DiscPct") {     
         e.record.set("DocDiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));//Math.round((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));        
@@ -656,6 +653,7 @@ var grdPO_Trans_Edit = function (item, e) {
                     success: function (result) {
                         UnitCost = result;
                         e.record.set("UnitCost", result);
+                        e.record.set("DocDiscAmt", HQ.util.mathRound((result * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));
                         e.record.set("TranAmt", result * objDetail.RcptQty - objDetail.DocDiscAmt);
                         App.stoLotTrans.clearFilter();
                         App.stoLotTrans.data.each(function (item) {
