@@ -341,6 +341,7 @@ var grdPO_Trans_BeforeEdit = function (editor, e) {
  
     var det = e.record.data;
     _purUnit = e.record.data.RcptUnitDescr;
+    if (e.field == "DocDiscAmt" && det.TranAmt == 0) return false;
     if (det.RcptQty>0 && e.field == "InvtID") return false;
     if (det.PurchaseType == "") {
         e.record.set("PurchaseType", "GI");
@@ -354,7 +355,6 @@ var grdPO_Trans_BeforeEdit = function (editor, e) {
         });
         valueTax = valueTax.length > 0 ? valueTax.substring(0, valueTax.length - 1) : '';
         e.record.set("TaxID", valueTax);
-
         e.record.set("ReqdDate", HQ.bussinessDate);
         e.record.set("PromDate", HQ.bussinessDate);
         return false;
@@ -512,21 +512,13 @@ var grdPO_Trans_ValidateEdit = function (item, e) {
                 objdet.set('RcptQty', 1);
               
             }
-        }
-        //else if (objdet.data.PurchaseType == "GI" | objdet.data.PurchaseType == "PR" | objdet.data.PurchaseType == "GS") {
-        //    if (objdet.data.UnitMultDiv == "M") {
-        //        objdet.set('Qty', Qty / objdet.data.CnvFact);
-              
-        //    }
-        //    else {
-        //        objdet.set('Qty', Qty * objdet.data.CnvFact);
-            
-        //    }
-        //}
+        }        
     }
 }
 var grdPO_Trans_Edit = function (item, e) {
+   
     var objDetail = e.record.data;
+  
     var objIN_Inventory = HQ.store.findInStore(App.stoPO10200_pdIN_Inventory, ["InvtID"], [objDetail.InvtID]);
     objIN_Inventory = objIN_Inventory == null ? "" : objIN_Inventory;
    
@@ -569,6 +561,7 @@ var grdPO_Trans_Edit = function (item, e) {
         }
 
         StkQty = Math.round((objDetail.RcptMultDiv == "D" ? (objDetail.RcptQty / objDetail.RcptConvFact) : (objDetail.RcptQty * objDetail.RcptConvFact)));
+        e.record.set("DocDiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));        
         e.record.set("TranAmt", objDetail.RcptQty * objDetail.UnitCost - objDetail.DocDiscAmt);
         objDetail.POFee = 0;// StkQty * objIN_Inventory.POFee;
       
@@ -582,6 +575,7 @@ var grdPO_Trans_Edit = function (item, e) {
 
     }
     else if (e.field == "UnitCost") {
+        e.record.set("DocDiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));
         e.record.set("TranAmt", objDetail.RcptQty * objDetail.UnitCost - objDetail.DocDiscAmt);
         //cap nhat lai don vi gia cho lot trans
         App.stoLotTrans.clearFilter();
@@ -604,17 +598,15 @@ var grdPO_Trans_Edit = function (item, e) {
         e.record.set("ExtVolume", objDetail.RcptQty * objDetail.UnitVolume);
 
     }
-    else if (e.field == "DocDiscAmt") {
+    else if (e.field == "DocDiscAmt" && objDetail.TranAmt>0) {
         e.record.set("TranAmt", objDetail.UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
         if (objDetail.RcptQty != 0) {
             e.record.set("DiscPct", HQ.util.mathRound((objDetail.DocDiscAmt / (objDetail.UnitCost * objDetail.RcptQty)) * 100, 2));//Math.round((objDetail.DocDiscAmt / (objDetail.UnitCost * objDetail.RcptQty)) * 100, 2));
         }
-
+   
     }
-    else if (e.field == "DiscPct") {
-        if (objDetail.TranAmt != 0) {
-            e.record.set("DocDiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));//Math.round((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));
-        }
+    else if (e.field == "DiscPct") {     
+        e.record.set("DocDiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));//Math.round((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));        
         e.record.set("TranAmt", objDetail.UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
     }
     else if ((e.field == "PurchaseType" || e.field == "RcptUnitDescr" || e.field == "InvtID" || e.field == "SiteID") && objDetail.PurchaseType != "PR") {
@@ -628,6 +620,7 @@ var grdPO_Trans_Edit = function (item, e) {
                        UnitCost = result == null ? 0 : (_objPO_Setup.DfltLstUnitCost == "A" ? result.AvgCost : result.LastPurchasePrice);
                        UnitCost = Math.round((objDetail.RcptMultDiv == "D" ? (UnitCost / objDetail.RcptConvFact) : (UnitCost * objDetail.RcptConvFact)));
                        e.record.set("UnitCost", UnitCost);
+                       e.record.set("DocDiscAmt", HQ.util.mathRound((UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));
                        e.record.set("TranAmt", UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
                        //cap nhat lai don vi gia cho lot trans
                        App.stoLotTrans.clearFilter();
@@ -693,6 +686,7 @@ var grdPO_Trans_Edit = function (item, e) {
             var UnitCost = objIN_Inventory.POPrice;
             UnitCost = Math.round((objDetail.RcptMultDiv == "D" ? (UnitCost / objDetail.RcptConvFact) : (UnitCost * objDetail.RcptConvFact)));
             e.record.set("UnitCost", UnitCost);
+            e.record.set("DocDiscAmt", HQ.util.mathRound((UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));
             e.record.set("TranAmt", UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
             App.stoLotTrans.clearFilter();
             App.stoLotTrans.data.each(function (item) {
@@ -715,6 +709,8 @@ var grdPO_Trans_Edit = function (item, e) {
     else if (objDetail.PurchaseType == "PR") {
         e.record.set("UnitCost", 0);
         e.record.set("TranAmt", 0);
+        e.record.set("DocDiscAmt", 0);
+        e.record.set("DiscPct", 0);
         delTax(e.record);
         calcTax(e.record);
         calcTaxTotal();
@@ -1216,8 +1212,8 @@ var deleteRecordGrid = function (item) {
                         params: {
                             lstDel: HQ.store.getData(App.stoPO10200_pgDetail),
                             lstDet: Ext.encode(App.stoPO10200_pgDetail.getRecordsValues()),
-                            lstHeader: Ext.encode(App.stoHeader.getRecordsValues())
-
+                            lstHeader: Ext.encode(App.stoHeader.getRecordsValues()),
+                            lstLot: Ext.encode(App.stoLotTrans.getRecordsValues())
                         },
                         success: function (msg, data) {
                             HQ.message.process(msg, data, true);
@@ -2083,6 +2079,8 @@ var PopupWinLot = {
                 {
                     App.winLot.record.set("UnitCost", 0);
                     App.winLot.record.set("TranAmt", 0);
+                    App.winLot.record.set("DocDiscAmt", 0);
+                    App.winLot.record.set("DiscPct", 0);
                     App.winLot.record.commit();
                     delTax(App.winLot.record);
                     calcTax(App.winLot.record);
@@ -2099,6 +2097,7 @@ var PopupWinLot = {
                                UnitCost = result == null ? 0 : (_objPO_Setup.DfltLstUnitCost == "A" ? result.AvgCost : result.LastPurchasePrice);
                                UnitCost = Math.round((recordTran.RcptMultDiv == "D" ? (UnitCost / recordTran.RcptConvFact) : (UnitCost * recordTran.RcptConvFact)));
                                App.winLot.record.set("UnitCost", UnitCost);
+                               App.winLot.record.set("DocDiscAmt", HQ.util.mathRound((UnitCost * recordTran.RcptQty * recordTran.DiscPct) / 100, 2));
                                App.winLot.record.set("TranAmt", UnitCost * recordTran.RcptQty - recordTran.DocDiscAmt);
                                
                                App.winLot.record.commit();
@@ -2121,6 +2120,7 @@ var PopupWinLot = {
                             success: function (result) {
                                 UnitCost = result;
                                 App.winLot.record.set("UnitCost", result);
+                                App.winLot.record.set("DocDiscAmt", HQ.util.mathRound((result * recordTran.RcptQty * recordTran.DiscPct) / 100, 2));
                                 App.winLot.record.set("TranAmt", result * recordTran.RcptQty - recordTran.DocDiscAmt);
                                 App.winLot.record.commit();
                                 delTax(App.winLot.record);
@@ -2139,6 +2139,7 @@ var PopupWinLot = {
                     var UnitCost = objIN_Inventory.POPrice;
                     UnitCost = Math.round((recordTran.RcptMultDiv == "D" ? (UnitCost / recordTran.RcptConvFact) : (UnitCost * recordTran.RcptConvFact)));
                     App.winLot.record.set("UnitCost", UnitCost);
+                    App.winLot.record.set("DocDiscAmt", HQ.util.mathRound((UnitCost * recordTran.RcptQty * recordTran.DiscPct) / 100, 2));
                     App.winLot.record.set("TranAmt", UnitCost * recordTran.RcptQty - recordTran.DocDiscAmt);
                     App.winLot.record.commit();
                     delTax(App.winLot.record);
@@ -2147,6 +2148,7 @@ var PopupWinLot = {
                 }
             } else {
                 App.winLot.record.data.RcptQty = Math.round(RcptQty);
+                App.winLot.record.set("DocDiscAmt", HQ.util.mathRound((App.winLot.record.data.UnitCost * recordTran.RcptQty * recordTran.DiscPct) / 100, 2));
                 App.winLot.record.set("TranAmt", App.winLot.record.data.UnitCost * recordTran.RcptQty - recordTran.DocDiscAmt);
                 App.winLot.record.commit();
                 delTax(App.winLot.record);
