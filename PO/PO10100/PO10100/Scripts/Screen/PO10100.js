@@ -337,6 +337,7 @@ var grdPO_Detail_BeforeEdit = function (editor, e) {
         return false;
     }
     var det = e.record.data;
+    if (e.field == "DiscAmt" && det.ExtCost == 0) return false;
     if (e.field == "UnitCost" && det.PurchaseType == "PR") return false;
     _purUnit = e.record.data.PurchUnit;
   
