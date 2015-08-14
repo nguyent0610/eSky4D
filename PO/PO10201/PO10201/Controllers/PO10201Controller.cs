@@ -395,8 +395,6 @@ namespace PO10201.Controllers
             return this.Direct(objIN_ItemSite);
 
         }
-
-
         [DirectMethod]
         public ActionResult INNumberingLot(string invtID = "", DateTime? tranDate = null, string getType = "LotNbr")
         {
@@ -504,8 +502,6 @@ namespace PO10201.Controllers
         }
         private void SavePO_Trans(PO_Receipt objPO_Receipt)
         {
-
-
             for (int i = 0; i < _lstPOTrans.Count; i++)
             {
                 var objPOT = _lstPOTrans[i];
@@ -907,9 +903,6 @@ namespace PO10201.Controllers
             objPO_LotTrans.LUpd_User = Current.UserName;
             objPO_LotTrans.LUpd_DateTime = DateTime.Now;
         }
-
-
-
 
         public void Insert_IN_ItemSite(ref IN_ItemSite objIN_ItemSite, ref PO10201_pdIN_Inventory_Result objIN_Inventory, string SiteID)
         {

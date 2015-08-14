@@ -1207,6 +1207,7 @@ var deleteRecordGrid = function (item) {
                 }
                 delTax(App.slmPO_Trans.selected.items[0]);
                 App.grdDetail.deleteSelected();
+                calcDet();
                 App.frmMain.getForm().updateRecord();
                 if (App.frmMain.isValid()) {
                     App.frmMain.submit({
@@ -1249,7 +1250,7 @@ var deleteRecordGrid = function (item) {
                 }
                 delTax(App.slmPO_Trans.selected.items[0]);
                 App.grdDetail.deleteSelected();
-
+                calcDet();
 
             }
         }
