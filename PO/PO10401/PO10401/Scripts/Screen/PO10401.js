@@ -1797,9 +1797,6 @@ renderTaxID = function (value) {
     //}
     //return value;
 }
-
-
-
 closeWinDetail=function (item) {
     if (item == "no" || item == "ok") {
         HQ.isChange = false;
@@ -1807,11 +1804,7 @@ closeWinDetail=function (item) {
     }
     else HQ.isChange = true;
 }
-
     ///////////////////////////////////
-
-
-
 var PopupWinLot = {
     showLot: function (record) {
         App.cbocolLotUnitDesc.getStore().reload();
