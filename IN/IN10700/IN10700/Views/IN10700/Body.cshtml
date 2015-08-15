@@ -19,7 +19,7 @@
         //.DefaultAnchor("100%")
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
-        .TopBar(Util.SetupToolbar("new,print", true, "Event.Form.menuClick"))
+        .TopBar(Util.SetupToolbar("new,print,delete", true, "Event.Form.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Items(
             X.Panel().ID("pnlHeader")
@@ -167,7 +167,7 @@
                     HQ.Combo().ID("cboInvtID")
                     .HQProcedure("IN10700_pcInvtID").HQColumnShow("InvtID,Descr")
                     .ValueField("InvtID").DisplayField("InvtID")
-                    .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false)
+                    .HQHeightWidth(400, 300).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
                         ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
@@ -181,7 +181,7 @@
                 
                 , X.DateColumn().Text(Util.GetLang("ExpireDate")).DataIndex("ExpDate").Format("dd/MM/yyyy")
                 .Hidden(true).Hideable(false)
-                .Editor(HQ.DateField().Value(DateTime.Now.Date).Format("dd/MM/yyyy"))
+                .Editor(HQ.DateField().Format("dd/MM/yyyy"))
                 
                 , X.Column().Text(Util.GetLang("Reason")).DataIndex("ReasonID")
                 .Width(150).Renderer("Process.renderDescr")
@@ -189,7 +189,7 @@
                     HQ.Combo().ID("cboReason")
                     .HQProcedure("IN10700_pcReason").HQColumnShow("Code,Descr")
                     .ValueField("Code").DisplayField("Descr")
-                    .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false)
+                    .HQHeightWidth(400, 300).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
                         ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 

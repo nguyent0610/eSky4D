@@ -189,7 +189,7 @@ namespace IN10700.Controllers
                 updatedDetail.StkOutNbr = updated.StkOutNbr;
 
                 updatedDetail.InvtID = updated.InvtID;
-                updatedDetail.ExpDate = updated.ExpDate.PassMin();
+                updatedDetail.ExpDate = updated.ExpDate.PassMin().Date;
                 updatedDetail.ReasonID = updated.ReasonID;
 
                 updatedDetail.Crtd_DateTime = DateTime.Now;

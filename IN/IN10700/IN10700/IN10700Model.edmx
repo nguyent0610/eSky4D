@@ -76,11 +76,11 @@
           <Property Name="StkQty" Type="float" />
           <Property Name="CS" Type="float" />
           <Property Name="PC" Type="float" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="ReasonID" Type="varchar" MaxLength="5" />
@@ -225,11 +225,11 @@
           <Property Type="Double" Name="StkQty" />
           <Property Type="Double" Name="CS" />
           <Property Type="Double" Name="PC" />
-          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="ReasonID" MaxLength="5" FixedLength="false" Unicode="false" />
@@ -365,9 +365,9 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram DiagramId="84e7d5a7edef4a4883119f5cc832a5e7" Name="Diagram1" ZoomLevel="89">
-        <EntityTypeShape EntityType="IN10700Model.IN_Setup" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="IN10700Model.PPC_StockOutlet" Width="1.5" PointX="11.281772279777458" PointY="30.274382054002203" />
-        <EntityTypeShape EntityType="IN10700Model.PPC_StockOutletDet" Width="1.5" PointX="8.2290003021382727" PointY="30.617931544137157" />
+        <EntityTypeShape EntityType="IN10700Model.IN_Setup" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN10700Model.PPC_StockOutlet" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN10700Model.PPC_StockOutletDet" Width="1.5" PointX="4.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

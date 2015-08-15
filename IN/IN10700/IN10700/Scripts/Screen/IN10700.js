@@ -49,6 +49,24 @@ var Process = {
         });
     },
 
+    checkInput: function (row, keys) {
+        if (keys.indexOf(row.field) == -1) {
+
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (row.record.data[keys[jkey]] == "") {
+                    return false;
+                }
+            }
+        }
+        if (keys.indexOf(row.field) != -1) {
+            for (var jkey = 0; jkey < keys.length; jkey++) {
+                if (!row.record.data[keys[jkey]]) return true;
+            }
+            return false;
+        }
+        return true;
+    },
+
     saveData: function () {
         if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
             if (HQ.form.checkRequirePass(App.frmMain)) {
@@ -113,7 +131,7 @@ var Store = {
     stoStockOutletDet_beforeLoad: function () {
         var type = App.cboStockType.getValue();
         if (type == _LOT) {
-            this.HQFieldKeys = ['InvtID', 'ExpDate'];
+            this.HQFieldKeys = ['ExpDate','InvtID'];
         }
         else {//"LOT"
             this.HQFieldKeys = ['InvtID'];
@@ -242,10 +260,15 @@ var Event = {
                 if (HQ.form.checkRequirePass(App.frmMain)) {
                     var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
 
-                    if (e.record.tstamp && e.field == "StkQty") {
-                        return true;
+                    if (e.record.data.tstamp) {
+                        if (e.field == "StkQty") {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
                     }
-                    return HQ.grid.checkInput(e, keys);
+                    return Process.checkInput(e, keys);
                 }
                 else {
                     return false;
@@ -280,7 +303,7 @@ var Event = {
 
             if (keys.indexOf(e.field) != -1) {
                 var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-                if (e.value && !e.value.match(regex)) {
+                if (e.value && e.column.xtype != "datecolumn" && !e.value.match(regex)) {
                     HQ.message.show(20140811, e.column.text);
                     return false;
                 }
