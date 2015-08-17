@@ -377,7 +377,7 @@ namespace OM23100.Controllers
             //Column LPPC
             nbc = new NumberColumn
             {
-                Text = Util.GetLang("OM23100_LPPC") + "(%)",
+                Text = Util.GetLang("OM23100_LPPC"),
                 ID = "txt_LPPC",
                 Align = Alignment.Right,
                 DataIndex = "LPPC",
