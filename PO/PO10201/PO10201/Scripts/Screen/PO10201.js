@@ -1975,15 +1975,11 @@ var PopupWinLot = {
         App.lblQtyAvail.setText('');
         var lock = !((App.cboBatNbr.value && HQ.isUpdate) || (!App.cboBatNbr.value && HQ.isInsert)) || App.cboStatus.getValue() != "H";
         App.grdLot.isLock = lock;
-
-
         App.stoLotTrans.clearFilter();
         App.stoLotTrans.filter('POTranLineRef', record.data.LineRef);
         App.winLot.record = record.data;
-
         App.winLot.record = record;
         App.grdLot.view.refresh();
-
         App.winLot.setTitle(record.data.InvtID + ' - ' + record.data.SiteID + ' - ' + record.data.RcptUnitDescr);
         var flat = false;
         if (App.cboStatus.getValue() == "H") {
