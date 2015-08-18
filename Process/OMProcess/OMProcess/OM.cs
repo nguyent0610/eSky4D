@@ -544,7 +544,7 @@ namespace OMProcess
             }
         }
 
-        public bool OM20500_Release(string branchID, string orderNbr, Dictionary<string, double> dicRef, string deliveryID, DateTime shipDate, DateTime docDate,bool isAddStock)
+        public bool OM20500_Release(string branchID, string orderNbr, Dictionary<string, double> dicRef, string deliveryID, DateTime shipDate, DateTime docDate,bool isAddStock, Dictionary<string, double> dicRefLot)
         {
 
             try
@@ -675,6 +675,7 @@ namespace OMProcess
                 DataTable lstDet = objSql.OM_GetPDASalesOrdDetByLineRef(objPDAOrd.BranchID, objPDAOrd.OrderNbr, listLineRef);
                 clsOM_PDASalesOrdDet objPDADet = new clsOM_PDASalesOrdDet(Dal);
                 clsOM_SalesOrdDet objSalesDet = new clsOM_SalesOrdDet(Dal);
+                clsOM_LotTrans objLot = new clsOM_LotTrans(Dal);
                 foreach (var item in dicRef)
                 {
                     if (objPDADet.GetByKey(branchID, orderNbr, item.Key))
@@ -1094,7 +1095,8 @@ namespace OMProcess
                                 }
                             }
                         }
-                        if (objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N")
+                        #region truong hop lay tu dong lot
+                        if (objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N" && dicRefLot.Count==0)
                         {
                             DataTable dtItemLot = objSql.OM_GetItemLot(objSalesDet.SiteID, objSalesDet.InvtID);
 
@@ -1170,7 +1172,7 @@ namespace OMProcess
                                             objLotTrans.UnitCost = objSalesDet.SlsPrice;
                                             objLotTrans.UnitDesc = objSalesDet.SlsUnit;
                                         }
-                                        objLotTrans.LUpd_DateTime = objLotTrans.Crtd_DateTime =  DateTime.Now;
+                                        objLotTrans.LUpd_DateTime = objLotTrans.Crtd_DateTime = DateTime.Now;
                                         objLotTrans.LUpd_Prog = objLotTrans.Crtd_Prog = Prog;
                                         objLotTrans.LUpd_User = objLotTrans.Crtd_User = User;
 
@@ -1179,6 +1181,62 @@ namespace OMProcess
                                 }
 
                                 if (needQty == 0) break;
+                            }
+                        }
+                        #endregion
+                        else
+                        {
+                            foreach (var lotRow in dicRefLot.Where(p => p.Key.Contains(objSalesDet.LineRef + "@" + objSalesDet.InvtID)))
+                            {
+                                double needQty = lotRow.Value;
+                                if (objItemLot.GetByKey(objSalesDet.SiteID, lotRow.Key.Split('@')[1], lotRow.Key.Split('@')[2]))
+                                {
+                                    if (objItemLot.QtyAvail >= needQty)
+                                    {
+                                        objItemLot.QtyAvail = objItemLot.QtyAvail - needQty;
+                                        objItemLot.QtyAllocSO = objItemLot.QtyAllocSO + needQty;
+                                        objItemLot.LUpd_DateTime = DateTime.Now;
+                                        objItemLot.LUpd_Prog = Prog;
+                                        objItemLot.LUpd_User = User;
+                                        objItemLot.Update();
+
+                                        objLotTrans.Reset();
+                                        objLotTrans.BranchID = objSalesDet.BranchID;
+                                        objLotTrans.OrderNbr = objSalesDet.OrderNbr;
+                                        objLotTrans.LotSerNbr = objItemLot.LotSerNbr;
+                                        objLotTrans.ExpDate = objItemLot.ExpDate;
+                                        objLotTrans.MfgrLotSerNbr = objItemLot.MfgrLotSerNbr;
+                                        objLotTrans.WarrantyDate = objItemLot.WarrantyDate;
+                                        objLotTrans.TranDate = objSalesOrd.OrderDate;
+                                        objLotTrans.INDocType = "IN";
+                                        objLotTrans.OMLineRef = objSalesDet.LineRef;
+                                        objLotTrans.SiteID = objSalesDet.SiteID;
+                                        objLotTrans.InvtID = objSalesDet.InvtID;
+                                        objLotTrans.InvtMult = -1;
+                                        objLotTrans.CnvFact = objSalesDet.UnitRate;
+                                        objLotTrans.Qty = lotRow.Value;
+                                        objLotTrans.UnitCost = objSalesDet.SlsPrice;
+                                        objLotTrans.UnitDesc = objSalesDet.SlsUnit;
+                                        objLotTrans.UnitMultDiv = objSalesDet.UnitMultDiv;
+                                        objLotTrans.UnitPrice = objSalesDet.SlsPrice;
+                                        objLotTrans.Crtd_DateTime = DateTime.Now;
+                                        objLotTrans.Crtd_Prog = Prog;
+                                        objLotTrans.Crtd_User = User;
+                                        objLotTrans.LUpd_DateTime = objLotTrans.Crtd_DateTime = DateTime.Now;
+                                        objLotTrans.LUpd_Prog = objLotTrans.Crtd_Prog = Prog;
+                                        objLotTrans.LUpd_User = objLotTrans.Crtd_User = User;
+
+                                        objLotTrans.Add();
+                                    }
+                                    else
+                                    {
+                                        throw new MessageException(MessageType.Message, "201508181", "", new[] { objSalesDet.OrderNbr, objSalesDet.InvtID, objItemLot.LotSerNbr, needQty.ToString() });
+                                    }
+                                }
+                                else
+                                {
+                                    throw new MessageException(MessageType.Message, "201508181", "", new[] { objSalesDet.OrderNbr, objSalesDet.InvtID, lotRow.Key.Split('@')[2], needQty.ToString() });
+                                }
                             }
                         }
                     }
