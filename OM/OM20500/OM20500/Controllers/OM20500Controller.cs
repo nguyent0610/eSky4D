@@ -71,7 +71,14 @@ namespace OM20500.Controllers
         {
             var objSite = _db.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);
             return this.Store(objSite);
-        }       
+        }
+        public ActionResult GetLotTrans(string branchID,
+            string slsperID, string custID, string status,
+            DateTime startDate, DateTime endDate)
+        {
+            var lot = _db.OM20500_pgLotTrans(branchID, slsperID, custID, status, startDate, endDate).ToList();
+            return this.Store(lot);
+        }
         #region DataProcess
         [HttpPost]
         public ActionResult Save(FormCollection data)
@@ -82,8 +89,13 @@ namespace OM20500.Controllers
                 _form = data;
                 var detHeader = new StoreDataHandler(data["lstOrder"]);
                 var lstOrd = detHeader.ObjectData<OM20500_pgOrder_Result>().Where(p => p.Selected == true).ToList();
+
                 var detHandler = new StoreDataHandler(data["lstDet"]);
                 var lstDet = detHandler.ObjectData<OM20500_pgDet_Result>().Where(p => p.Selected == true).ToList();
+
+                var detLot = new StoreDataHandler(data["lstLot"]);
+                var lstLot = detLot.ObjectData<OM20500_pgLotTrans_Result>().ToList();
+
                 string Delivery = data["delivery"];
                 DateTime dteShipDate = data["shipDate"].ToDateShort();
                 DateTime dteARDocDate = data["aRDocDate"].ToDateShort();
@@ -92,16 +104,25 @@ namespace OM20500.Controllers
                 foreach (var objHeader in lstOrd)
                 {
                     var lstDetOrNbr = lstDet.Where(p => p.OrderNbr == objHeader.OrderNbr).ToList();
+                    var lstLotOrNbr = lstLot.Where(p => p.OrderNbr == objHeader.OrderNbr).ToList();
+
                     Dictionary<string, double> dicRef = new Dictionary<string, double>();
                     for (int i = 0; i < lstDetOrNbr.Count; i++)
                     {
                         dicRef.Add(lstDetOrNbr[i].LineRef, lstDetOrNbr[i].QtyShip);
                     }
+
+                    Dictionary<string, double> dicRefLot = new Dictionary<string, double>();
+                    for (int i = 0; i < lstLotOrNbr.Count; i++)
+                    {
+                        dicRefLot.Add(lstLotOrNbr[i].OMLineRef + "@" + lstLotOrNbr[i].InvtID + "@" + lstLotOrNbr[i].LotSerNbr, lstLotOrNbr[i].Qty);
+                    }
+
                     try
                     {
                         OM om = new OM(Current.UserName, _screenNbr, dal);
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
-                        if (!om.OM20500_Release(objHeader.BranchID, objHeader.OrderNbr, dicRef, Delivery, dteShipDate, dteARDocDate,objHeader.IsAddStock))
+                        if (!om.OM20500_Release(objHeader.BranchID, objHeader.OrderNbr, dicRef, Delivery, dteShipDate, dteARDocDate, objHeader.IsAddStock, dicRefLot))
                         {
                             dal.RollbackTrans();
                         }

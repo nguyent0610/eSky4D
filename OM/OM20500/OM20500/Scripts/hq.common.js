@@ -31,6 +31,10 @@ if (!('forEach' in Array.prototype)) {
                 action.call(that, this[i], i, this);
     };
 }
+Date.prototype.addDays = function (days) {
+    this.setDate(this.getDate() + days);
+    return this;
+};
 var HQ = {
     store: {
         isChange: function (store) {
@@ -93,68 +97,132 @@ var HQ = {
             }
             return Ext.encode(store.getChangedData({ skipIdForPhantomRecords: skip }));
         },
-        getAllData: function (store,fields,values) {
-            var lstData =[];
-            if (store.snapshot != undefined) {
-                store.snapshot.each(function (item) {
-                    var isb = true;
-                    if (fields != null) {
-                        for (var i = 0; i < fields.length; i++) {
-                            if (item.data[fields[i]] != values[i]) {
-                                isb = false;
-                                break;
-                            }
-                        }                            
-                    }
-                    if(isb) lstData.push(item.data);
-                });
-                return Ext.encode(lstData);
-            } else {
-                store.data.each(function (item) {
-                    var isb = true;
-                    if (fields != null) {
-                        for (var i = 0; i < fields.length; i++) {
-                            if (item.data[fields[i]] != values[i]) {
-                                isb = false;
-                                break;
+        getAllData: function (store, fields, values, isEqual) {
+            var lstData = [];
+            if (isEqual == undefined || isEqual == true) {
+                if (store.snapshot != undefined) {
+                    store.snapshot.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] != values[i]) {
+                                    isb = false;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (isb) lstData.push(item.data);
-                });
-                return Ext.encode(lstData);
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                } else {
+                    store.data.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] != values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                }
+            } else {
+                if (store.snapshot != undefined) {
+                    store.snapshot.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] == values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                } else {
+                    store.data.each(function (item) {
+                        var isb = true;
+                        if (fields != null) {
+                            for (var i = 0; i < fields.length; i++) {
+                                if (item.data[fields[i]] == values[i]) {
+                                    isb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isb) lstData.push(item.data);
+                    });
+                    return Ext.encode(lstData);
+                }
             }
         },
         findInStore: function (store, fields, values) {
             var data;
-            store.data.each(function (item) {
-                var intT = 0;
-                for (var i = 0; i < fields.length; i++) {
-                    if (item.get(fields[i]) == values[i]) {
-                        intT++;
+            if (store.allData) {
+                store.allData.each(function (item) {
+                    var intT = 0;
+                    for (var i = 0; i < fields.length; i++) {
+                        if (item.get(fields[i]) == values[i]) {
+                            intT++;
+                        }
                     }
-                }
-                if (intT == fields.length) {
-                    data = item.data;
-                    return false;
-                }
-            });
+                    if (intT == fields.length) {
+                        data = item.data;
+                        return false;
+                    }
+                });
+            }
+            else {
+                store.data.each(function (item) {
+                    var intT = 0;
+                    for (var i = 0; i < fields.length; i++) {
+                        if (item.get(fields[i]) == values[i]) {
+                            intT++;
+                        }
+                    }
+                    if (intT == fields.length) {
+                        data = item.data;
+                        return false;
+                    }
+                });
+            }
             return data;
         },
         findRecord: function (store, fields, values) {
             var data;
-            store.data.each(function (item) {
-                var intT = 0;
-                for (var i = 0; i < fields.length; i++) {
-                    if (item.get(fields[i]) == values[i]) {
-                        intT++;
+            if (store.allData) {
+                store.allData.each(function (item) {
+                    var intT = 0;
+                    for (var i = 0; i < fields.length; i++) {
+                        if (item.get(fields[i]) == values[i]) {
+                            intT++;
+                        }
                     }
-                }
-                if (intT == fields.length) {
-                    data = item;
-                    return false;
-                }
-            });
+                    if (intT == fields.length) {
+                        data = item;
+                        return false;
+                    }
+                });
+            }
+            else {
+                store.data.each(function (item) {
+                    var intT = 0;
+                    for (var i = 0; i < fields.length; i++) {
+                        if (item.get(fields[i]) == values[i]) {
+                            intT++;
+                        }
+                    }
+                    if (intT == fields.length) {
+                        data = item;
+                        return false;
+                    }
+                });
+            }
             return data;
         },
         // TinhHV using for auto gen the LineRef
@@ -196,7 +264,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
+                                if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -212,7 +280,7 @@ var HQ = {
                     for (var jkey = 0; jkey < keys.length; jkey++) {
                         if (items[i][keys[jkey]]) {
                             for (var k = 0; k < fieldsCheck.length; k++) {
-                                if (items[i][fieldsCheck[k]].toString().trim() == "") {
+                                if (HQ.util.passNull(items[i][fieldsCheck[k]]).toString().trim() == "") {
                                     HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
                                     return false;
                                 }
@@ -222,6 +290,15 @@ var HQ = {
                 }
             }
             return true;
+        },
+        filterStore: function (store, field, value) {
+            store.filterBy(function (record) {
+                if (record) {
+                    if (record.data[field].toString().toLowerCase() == (HQ.util.passNull(value).toLowerCase())) {
+                        return record;
+                    }
+                }
+            });
         }
     },
     combo: {
@@ -282,6 +359,34 @@ var HQ = {
             if (cbo.getValue())
                 cbo.setValue(cbo.getValue().toString().replace(new RegExp(delimiter, 'g'), ',').split(','));
         },
+        expandScrollToItem: function (combo) {
+            var val = combo.getValue();
+            if (val !== null) {
+                var rec = combo.findRecordByValue(combo.getValue()),
+                  node = combo.picker.getNode(rec);
+                if (node != null) {
+                    combo.picker.highlightItem(node);
+                    combo.picker.listEl.scrollChildIntoView(node, false);
+                }
+                //$(combo.picker.listEl.dom).scrollTop($(combo.picker.listEl.dom).scrollTop() + $(node).position().top);
+            }
+
+        },
+
+        selectAll: function (cbo) {
+            var value = [];
+            cbo.setValue('');
+            cbo.store.data.each(function (item) {
+                value.push(item.data[cbo.valueField]);
+            })
+            cbo.setValue(value);
+        }
+    },
+    date: {
+        expand: function (dte, eOpts) {
+            //dte.picker.setHeight(300);
+            //dte.picker.monthEl.setHeight(300);
+        }
     },
     grid: {
         showBusy: function (grd, isBusy) {
@@ -293,38 +398,90 @@ var HQ = {
             var store = grd.getStore();
             var createdItems = store.getChangedData().Created;
             if (createdItems != undefined) {
-                //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                    callback: function () {
-                        //HQ.grid.last(grd);
-                        setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                if (store.currentPage != Math.ceil(store.totalCount / store.pageSize) && store.totalCount != 0) {
+                    store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                        callback: function () {
+                            HQ.grid.last(grd);
+                            setTimeout(function () {
+                                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                                if (grd.editingPlugin) {
+                                    grd.editingPlugin.startEditByPosition({
+                                        row: store.getCount() - 1,
+                                        column: 1
+                                    });
+                                }
+                                else {
+                                    grd.lockedGrid.editingPlugin.startEditByPosition({
+                                        row: store.getCount() - 1,
+                                        column: 1
+                                    });
+                                }
+                            }, 300);
+                        }
+                    });
+                }
+                else {
+                    HQ.grid.last(grd);
+                    if (grd.editingPlugin) {
+                        grd.editingPlugin.startEditByPosition({
+                            row: store.getCount() - 1,
+                            column: 1
+                        });
                     }
-                });
-                //}
-                //else {
-                //    HQ.grid.last(grd);
-                //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-                //}
+                    else {
+                        grd.lockedGrid.editingPlugin.startEditByPosition({
+                            row: store.getCount() - 1,
+                            column: 1
+                        });
+                    }
+                }
                 return;
             }
-            //if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
-            store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
-                callback: function () {
-                    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-                        HQ.store.insertBlank(store, keys);
+            if (store.currentPage != Math.ceil(store.totalCount / store.pageSize)) {
+                store.loadPage(Math.ceil(store.totalCount / store.pageSize), {
+                    callback: function () {
+                        if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                            HQ.store.insertBlank(store, keys);
+                        }
+                        HQ.grid.last(grd);
+                        setTimeout(function () {
+                            // grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+                            if (grd.editingPlugin) {
+                                grd.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                            else {
+                                grd.lockedGrid.editingPlugin.startEditByPosition({
+                                    row: store.getCount() - 1,
+                                    column: 1
+                                });
+                            }
+                        }, 300);
                     }
-                    //HQ.grid.last(grd);
-                    setTimeout(function () { grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 }); }, 300);
+                });
+            }
+            else {
+                if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
+                    HQ.store.insertBlank(store, keys);
                 }
-            });
-            //}
-            //else {
-            //    if (HQ.grid.checkRequirePass(store.getChangedData().Updated, keys)) {
-            //        HQ.store.insertBlank(store, keys);
-            //    }
-            //    HQ.grid.last(grd);
-            //    grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
-            //}
+                HQ.grid.last(grd);
+                //grd.editingPlugin.startEditByPosition({ row: store.getCount() - 1, column: 1 });
+
+                if (grd.editingPlugin) {
+                    grd.editingPlugin.startEditByPosition({
+                        row: store.getCount() - 1,
+                        column: 1
+                    });
+                }
+                else {
+                    grd.lockedGrid.editingPlugin.startEditByPosition({
+                        row: store.getCount() - 1,
+                        column: 1
+                    });
+                }
+            }
         },
         first: function (grd) {
             grd.getSelectionModel().select(0);
@@ -341,7 +498,7 @@ var HQ = {
         onPageSelect: function (combo) {
             var store = combo.up("gridpanel").getStore();
             store.pageSize = parseInt(combo.getValue(), 10);
-            store.reload();
+            store.loadPage(1);
         },
         indexSelect: function (grd) {
             var index = '';
@@ -367,7 +524,7 @@ var HQ = {
                             if (row.field == keys[jkey])
                                 rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
                             else
-                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                                rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
                         }
                     }
                     if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
@@ -386,7 +543,7 @@ var HQ = {
                             if (row.field == keys[jkey])
                                 rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
                             else
-                                rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                                rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
                         }
                     }
                     if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
@@ -433,7 +590,7 @@ var HQ = {
         checkBeforeEdit: function (e, keys) {
             if (!HQ.isUpdate) return false;
             if (keys.indexOf(e.field) != -1) {
-                if (e.record.data.tstamp != "")
+                if (e.record.data.tstamp)
                     return false;
             }
             return HQ.grid.checkInput(e, keys);
@@ -461,11 +618,53 @@ var HQ = {
 
             }
         },
+
+        checkValidateEditDG: function (grd, e, keys) {
+            if (keys.indexOf(e.field) != -1) {
+                if (HQ.grid.checkDuplicate(grd, e, keys)) {
+                    HQ.message.show(1112, e.value);
+                    return false;
+                }
+            }
+        },
+
         checkInsertKey: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 if (e.value != '')
                     HQ.store.insertBlank(grd.getStore(), keys);
             }
+        },
+        hide: function (grd, arrcolumnName) {
+            var columns = grd.columns;
+            arrcolumnName.forEach(function (itm) {
+                var index = HQ.grid.findColumnIndex(columns, itm);
+                grd.columns[index].hide();
+
+            });
+        },
+        show: function (grd, arrcolumnName) {
+            var columns = grd.columns;
+            arrcolumnName.forEach(function (itm) {
+                var index = HQ.grid.findColumnIndex(columns, itm);
+                grd.columns[index].show();
+            });
+        },
+        findColumnIndex: function (columns, dataIndex) {
+            var index;
+            for (index = 0; index < columns.length; ++index) {
+                if (columns[index].dataIndex == dataIndex) { break; }
+            }
+            return index == columns.length ? -1 : index;
+        },
+
+        filterStore: function (store, field, value) {
+            store.filterBy(function (record) {
+                if (record) {
+                    if (record.data[field].toString().toLowerCase() == (HQ.util.passNull(value).toLowerCase())) {
+                        return record;
+                    }
+                }
+            });
         }
     },
     message: {
@@ -573,8 +772,15 @@ var HQ = {
             if (typeof (ctr.items) != "undefined") {
                 ctr.items.each(function (itm) {
                     if (typeof (itm.setReadOnly) != "undefined") {
-                        itm.setReadOnly(lock)
+                        if (itm.getTag() != "X")
+                            itm.setReadOnly(lock)
 
+                    }
+                    else if (typeof (itm.disable) != "undefined" && itm.xtype == 'button') {
+                        if (itm.getTag() != "X")
+                            if (lock)
+                                itm.disable()
+                            else itm.enable()
                     }
                     HQ.common.lockItem(itm, lock);
                 });
@@ -616,6 +822,28 @@ var HQ = {
             control.getEl().on("click", function () {
                 HQ.focus = itemfocus;
             });
+        },
+        setForceSelection: function (ctr, isForceSelection, cboex) {
+            if (typeof (ctr.items) != "undefined") {
+                ctr.items.each(function (itm) {
+                    if (typeof (itm.forceSelection) != "undefined") {
+                        itm.store.clearFilter();
+                        if (cboex != undefined) {
+                            if (!HQ.common.contains(cboex.split(','), itm.id)) itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
+                        } else itm.forceSelection = isForceSelection == undefined ? false : isForceSelection;
+                    }
+
+                    HQ.common.setForceSelection(itm, isForceSelection, cboex);
+                });
+            }
+        },
+        contains: function (a, obj) {
+            for (var i = 0; i < a.length; i++) {
+                if (a[i] === obj) {
+                    return true;
+                }
+            }
+            return false;
         }
     },
     util: {
@@ -687,11 +915,21 @@ var HQ = {
                 HQ.message.show(09112014, '', null);
                 return false;
             }
+        },
+        mathRound: function (value, exp) {
+            return decimalAdjust('round', value, exp);
+        },
+        mathFloor: function (value, exp) {
+            return decimalAdjust('floor', value, exp);
+        },
+        mathCeil: function (value, exp) {
+            return decimalAdjust('ceil', value, exp);
         }
+
     },
     form: {
         checkRequirePass: function (frm) {
-            frm.updateRecord();
+            //frm.updateRecord();
             var isValid = true;
             frm.getForm().getFields().each(
                             function (item) {
@@ -742,9 +980,16 @@ var FilterCombo = function (control, stkeyFilter) {
     if (control) {
         var store = control.getStore();
         var value = HQ.util.passNull(control.getValue()).toString();
-        if (value.split(',').length > 2) value = '';//value.split(',')[value.split(',').length-1];
-        if (value.split(';').length > 2) value = '';//value.split(';')[value.split(',').length - 1];
+        if (value.split(',').length > 1) value = '';//value.split(',')[value.split(',').length-1];
+        if (value.split(';').length > 1) value = '';//value.split(';')[value.split(',').length - 1];
         if (store) {
+            var filtersAux = [];
+            // get filter
+            store.filters.items.forEach(function (item) {
+                if (item.id != control.id + '-query-filter') {
+                    filtersAux.push(item);
+                }
+            });
             store.clearFilter();
             if (control.valueModels == null || control.valueModels.length == 0) {
                 store.filterBy(function (record) {
@@ -767,6 +1012,9 @@ var FilterCombo = function (control, stkeyFilter) {
                     }
                 });
             }
+            filtersAux.forEach(function (item) {
+                store.filter(item.property, item.value);
+            });
         }
     }
 };
@@ -776,7 +1024,33 @@ var loadDefault = function (fileNameStore, cbo) {
 
     }
 };
-//TrungHT
+//MathRound 2015-03-24
+// Closure
+function decimalAdjust(type, value, exp) {
+    exp = exp * -1;
+    // If the exp is undefined or zero...
+    if (typeof exp === 'undefined' || +exp === 0) {
+        return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    // If the value is not a number or the exp is not an integer...
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+        return NaN;
+    }
+    // Shift
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    // Shift back
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+}
+
+//TrungHT override control ext
+Ext.define("NumbercurrencyPrecision", {
+    override: "Ext.util.Format.Number",
+    currencyPrecision: 0
+});
 Ext.define("ThousandSeparatorNumberField", {
     override: "Ext.form.field.Number",
 
@@ -784,13 +1058,16 @@ Ext.define("ThousandSeparatorNumberField", {
     * @cfg {Boolean} useThousandSeparator
     */
     useThousandSeparator: true,
-    //decimalPrecision: 0,
+    selectOnFocus: true,
     style: 'text-align: right',
     fieldStyle: "text-align:right;",
     /**
      * @inheritdoc
      */
+    //dung cho page
+
     toRawNumber: function (value) {
+        this.decimalPrecision = this.cls == "x-tbar-page-number" ? 0 : this.decimalPrecision;
         return String(value).replace(this.decimalSeparator, '.').replace(new RegExp(Ext.util.Format.thousandSeparator, "g"), '');
     },
 
@@ -915,6 +1192,20 @@ Ext.define("ThousandSeparatorNumberField", {
         value = parseFloat(this.toRawNumber(value));
         return isNaN(value) ? null : value;
     }
+});
+
+Ext.define("Ext.locale.vn.toolbar.Paging", {
+    override: "Ext.PagingToolbar",
+    lable: HQ.common.getLang("PageSize"),
+    beforePageText: HQ.common.getLang("Page"),
+    afterPageText: HQ.common.getLang("of") + " {0}",
+    firstText: HQ.common.getLang("PageFirst"),
+    prevText: HQ.common.getLang("PagePrev"),
+    nextText: HQ.common.getLang("PageNext"),
+    lastText: HQ.common.getLang("PageLast"),
+    refreshText: HQ.common.getLang("PageRefresh"),
+    displayMsg: HQ.common.getLang("Displaying") + " {0} - {1} " + HQ.common.getLang("of") + " {2}",
+    emptyMsg: HQ.common.getLang("DataEmpty")
 });
 //window.onresize = function () {
 //    if ((window.outerHeight - window.innerHeight) > 100) {

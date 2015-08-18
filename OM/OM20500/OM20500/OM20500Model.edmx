@@ -31,6 +31,8 @@
           <Property Name="QtyShipNotInv" Type="float" Nullable="false" />
           <Property Name="StkItem" Type="smallint" Nullable="false" />
           <Property Name="TotCost" Type="float" Nullable="false" />
+          <Property Name="LastPurchaseDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="LastPurchasePrice" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
@@ -38,7 +40,6 @@
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="QtyUncosted" Type="float" Nullable="false" />
-          <Property Name="LastPurchaseDate" Type="smalldatetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="OM_PDASalesOrd">
@@ -57,7 +58,7 @@
           <Property Name="CreditMgrID" Type="varchar" MaxLength="10" />
           <Property Name="CustID" Type="varchar" MaxLength="50" />
           <Property Name="CustOrderNbr" Type="varchar" MaxLength="15" />
-          <Property Name="DeliveryID" Type="varchar" MaxLength="10" />
+          <Property Name="DeliveryID" Type="varchar" MaxLength="30" />
           <Property Name="DoNotCalDisc" Type="smallint" Nullable="false" />
           <Property Name="ExpiryDate" Type="smalldatetime" Nullable="false" />
           <Property Name="FreightAllocAmt" Type="float" Nullable="false" />
@@ -95,7 +96,7 @@
           <Property Name="ShipDate" Type="smalldatetime" Nullable="false" />
           <Property Name="ShipPriority" Type="varchar" MaxLength="1" />
           <Property Name="ShipViaId" Type="varchar" MaxLength="15" />
-          <Property Name="SlsPerID" Type="varchar" MaxLength="10" />
+          <Property Name="SlsPerID" Type="varchar" MaxLength="30" />
           <Property Name="SOFeeTot" Type="float" Nullable="false" />
           <Property Name="StationID" Type="varchar" MaxLength="50" />
           <Property Name="Status" Type="varchar" MaxLength="1" />
@@ -130,6 +131,7 @@
           <Property Name="ClassID" Type="varchar" MaxLength="50" />
           <Property Name="CustomerPurchase" Type="varchar" MaxLength="30" />
           <Property Name="Remark" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsAddStock" Type="bit" />
         </EntityType>
         <Function Name="OM20500_pgDet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
@@ -146,6 +148,14 @@
         <Function Name="OM20500_pgHistoryOrd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="OrderNbr" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM20500_pgLotTrans" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
         </Function>
         <Function Name="OM20500_pgOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
@@ -194,6 +204,14 @@
           </FunctionImport>
           <EntitySet Name="OM_PDASalesOrd" EntityType="OM20500Model.OM_PDASalesOrd" />
           <EntitySet Name="IN_ItemSite" EntityType="OM20500Model.IN_ItemSite" />
+          <FunctionImport Name="OM20500_pgLotTrans" ReturnType="Collection(OM20500Model.OM20500_pgLotTrans_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM20500_pcCustomer_Result">
           <Property Type="Boolean" Name="Selected" Nullable="true" />
@@ -224,6 +242,8 @@
           <Property Type="String" Name="DiscCode" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="SiteID" Nullable="true" MaxLength="10" />
           <Property Type="String" Name="TaxID" Nullable="true" MaxLength="43" />
+          <Property Type="Double" Name="UnitRate" Nullable="false" />
+          <Property Type="String" Name="UnitMultDiv" Nullable="true" MaxLength="1" />
         </ComplexType>
         <ComplexType Name="OM20500_pgHisDet_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -287,7 +307,7 @@
           <Property Type="String" Name="CreditMgrID" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CustID" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CustOrderNbr" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DeliveryID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DeliveryID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Int16" Name="DoNotCalDisc" Nullable="false" />
           <Property Type="DateTime" Name="ExpiryDate" Nullable="false" Precision="0" />
           <Property Type="Double" Name="FreightAllocAmt" Nullable="false" />
@@ -325,7 +345,7 @@
           <Property Type="DateTime" Name="ShipDate" Nullable="false" Precision="0" />
           <Property Type="String" Name="ShipPriority" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ShipViaId" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SlsPerID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsPerID" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Double" Name="SOFeeTot" Nullable="false" />
           <Property Type="String" Name="StationID" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Status" MaxLength="1" FixedLength="false" Unicode="false" />
@@ -360,6 +380,7 @@
           <Property Type="String" Name="ClassID" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CustomerPurchase" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Remark" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="IsAddStock" />
         </EntityType>
         <EntityType Name="IN_ItemSite">
           <Key>
@@ -392,7 +413,26 @@
           <Property Type="Double" Name="QtyUncosted" Nullable="false" />
           <Property Type="DateTime" Name="LastPurchaseDate" Nullable="false" Precision="0" />
           <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Type="Double" Name="LastPurchasePrice" Nullable="false" />
         </EntityType>
+        <ComplexType Name="OM20500_pgLotTrans_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="LotSerNbr" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="OMLineRef" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="UnitDesc" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="Int16" Name="InvtMult" Nullable="false" />
+          <Property Type="String" Name="MfgrLotSerNbr" Nullable="true" MaxLength="25" />
+          <Property Type="Double" Name="CnvFact" Nullable="false" />
+          <Property Type="String" Name="UnitMultDiv" Nullable="true" MaxLength="1" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="String" Name="SiteID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="INDocType" Nullable="true" MaxLength="2" />
+          <Property Type="Double" Name="UnitCost" Nullable="false" />
+          <Property Type="Double" Name="UnitPrice" Nullable="false" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -419,6 +459,8 @@
                 <ScalarProperty Name="DiscCode" ColumnName="DiscCode" />
                 <ScalarProperty Name="SiteID" ColumnName="SiteID" />
                 <ScalarProperty Name="TaxID" ColumnName="TaxID" />
+                <ScalarProperty Name="UnitRate" ColumnName="UnitRate" />
+                <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -483,6 +525,7 @@
           <EntitySetMapping Name="OM_PDASalesOrd">
             <EntityTypeMapping TypeName="OM20500Model.OM_PDASalesOrd">
               <MappingFragment StoreEntitySet="OM_PDASalesOrd">
+                <ScalarProperty Name="IsAddStock" ColumnName="IsAddStock" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="CustomerPurchase" ColumnName="CustomerPurchase" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
@@ -573,6 +616,7 @@
           <EntitySetMapping Name="IN_ItemSite">
             <EntityTypeMapping TypeName="OM20500Model.IN_ItemSite">
               <MappingFragment StoreEntitySet="IN_ItemSite">
+                <ScalarProperty Name="LastPurchasePrice" ColumnName="LastPurchasePrice" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LastPurchaseDate" ColumnName="LastPurchaseDate" />
                 <ScalarProperty Name="QtyUncosted" ColumnName="QtyUncosted" />
@@ -602,6 +646,28 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM20500_pgLotTrans" FunctionName="eBiz4DWebAppModel.Store.OM20500_pgLotTrans">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20500Model.OM20500_pgLotTrans_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
+                <ScalarProperty Name="LotSerNbr" ColumnName="LotSerNbr" />
+                <ScalarProperty Name="OMLineRef" ColumnName="OMLineRef" />
+                <ScalarProperty Name="UnitDesc" ColumnName="UnitDesc" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="InvtMult" ColumnName="InvtMult" />
+                <ScalarProperty Name="MfgrLotSerNbr" ColumnName="MfgrLotSerNbr" />
+                <ScalarProperty Name="CnvFact" ColumnName="CnvFact" />
+                <ScalarProperty Name="UnitMultDiv" ColumnName="UnitMultDiv" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="INDocType" ColumnName="INDocType" />
+                <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

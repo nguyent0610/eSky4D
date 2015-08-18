@@ -1,3 +1,11 @@
+
+var _invtID = "";
+var _classID = "";
+var _stkUnit = "";
+var _purUnit = "";
+var _siteID = "";
+var _lineRef = "";
+var _branchID = "";
 var Process = {
     getCheckedOrder: function (grid) {
         var orders = [];
@@ -12,39 +20,71 @@ var Process = {
         if (!remove) {
             App.grdDet.store.snapshot.each(function (item) {
                 if (item.data.OrderNbr == orderNbr) {
-                    var qtyShip = item.data.LineQty - item.data.QtyShipped;
-                    item.set("QtyShip", qtyShip);
-                    if (qtyShip > 0) {
-                        item.set("Selected", 1);
+                    var objInvtID = HQ.store.findInStore(App.stoOM20500_pdIN_Inventory, ['InvtID'], [item.data.InvtID]);
+                    if (!Ext.isEmpty(item.data.InvtID) && !Ext.isEmpty(item.data.SlsUnit) && objInvtID.LotSerTrack != 'N' && !Ext.isEmpty(objInvtID.LotSerTrack)) {
+                        if (item.data.QtyShip > 0) {
+                            item.set("Selected", 1);
+
+                        }
+                        else
+                            item.set("Selected", 0);
 
                     }
-                    else
-                        item.set("Selected", 0);
+                    else {
+                        var qtyShip = item.data.LineQty - item.data.QtyShipped;
+                        item.set("QtyShip", qtyShip);
+                        if (qtyShip > 0) {
+                            item.set("Selected", 1);
+
+                        }
+                        else
+                            item.set("Selected", 0);
+                    }
                 }
             });
         }
         else {
             App.grdDet.store.snapshot.each(function (item) {
                 if (item.data.OrderNbr == orderNbr) {
-                    item.set("QtyShip", 0);
-                    item.set("Selected", 0);
+                    App.stoLotTrans.clearFilter();
+                    var objInvtID = HQ.store.findInStore(App.stoOM20500_pdIN_Inventory, ['InvtID'], [item.data.InvtID]);
+                    if (!Ext.isEmpty(item.data.InvtID) && !Ext.isEmpty(item.data.SlsUnit) && objInvtID.LotSerTrack != 'N' && !Ext.isEmpty(objInvtID.LotSerTrack)) {
+                        for (i = App.stoLotTrans.data.items.length - 1; i >= 0; i--) {
+                            if (!Ext.isEmpty(App.stoLotTrans.data.items[i].data.LotSerNbr) && App.stoLotTrans.data.items[i].data.OMLineRef == item.data.LineRef && App.stoLotTrans.data.items[i].data.BranchID == item.data.BranchID && App.stoLotTrans.data.items[i].data.OrderNbr == item.data.OrderNbr) {
+                                App.stoLotTrans.data.removeAt(i);
+                                item.set("QtyShip", 0);
+                                item.set("Selected", 0);
+                            }
+                        }
+
+                    }
+                    else {
+                        if (item.data.OrderNbr == orderNbr) {
+                            item.set("QtyShip", 0);
+                            item.set("Selected", 0);
+                        }
+                    }
                 }
             });
         }
+
+        var record = HQ.store.findRecord(App.stoDet, ["OrderNbr", "Selected"], [orderNbr, true]);
+        var recordOrder = HQ.store.findRecord(App.stoOrder, ["OrderNbr"], [orderNbr]);
+        if (record != undefined) {
+            recordOrder.set("Selected", true);
+        }
+        else recordOrder.set("Selected", false);
+
     }
 };
 var Store = {
     stoOrder_load: function (sto, records, successful, eOpts) {
         App.stoDet.reload();
     },
-
     stoDet_load: function (sto, records, successful, eOpts) {
         sto.filterBy(function (record) { }); // show empty
         App.slmOrder.select(0);
-    },
-
-  
-
+    },  
     stoHisOrd_load: function (sto, records, successful, eOpts) {
         if (sto.getCount()) {
             App.slmHisOrd.select(0);
@@ -69,7 +109,6 @@ var Event = {
             default:
         }
     },
-
     Form: {
         frmMain_boxReady: function (frm, width, height, eOpts) {
             App.cboCpnyID.store.load(function (records, operation, success) {
@@ -85,6 +124,7 @@ var Event = {
 
         btnLoad_click: function (btn, e) {
             App.grdOrder.store.reload();
+            App.stoLotTrans.reload();
         },
 
         btnClose_click: function (btn, e) {
@@ -210,26 +250,51 @@ var Event = {
         },
         grdDet_beforeEdit: function (editor, e) {
             var recordOrder = HQ.store.findRecord(App.stoOrder, ["OrderNbr"], [e.record.data.OrderNbr]);
-            if (recordOrder.data.Status == 'C' || recordOrder.data.Status == 'E' ) return false;
+            if (recordOrder.data.Status == 'C' || recordOrder.data.Status == 'E') return false;
+            var objInvtID = HQ.store.findInStore(App.stoOM20500_pdIN_Inventory, ['InvtID'], [e.record.data.InvtID]);
+            if (!Ext.isEmpty(e.record.data.InvtID) && !Ext.isEmpty(e.record.data.SlsUnit) && objInvtID.LotSerTrack != 'N' && !Ext.isEmpty(objInvtID.LotSerTrack)) {
+                if (e.field == "Selected") {
+                    if (!e.record.data.Selected) {
+                        return false;
+                    }
+                }
+            }
         },
         grdDet_edit: function (editor, e) {
-            if (e.field == "Selected") {
-                if (e.record.data.Selected) {
-                    e.record.set("QtyShip",e.record.data.LineQty);
+            App.stoLotTrans.clearFilter();
+            var objInvtID = HQ.store.findInStore(App.stoOM20500_pdIN_Inventory, ['InvtID'], [e.record.data.InvtID]);
+            if (!Ext.isEmpty(e.record.data.InvtID) && !Ext.isEmpty(e.record.data.SlsUnit) && objInvtID.LotSerTrack != 'N' && !Ext.isEmpty(objInvtID.LotSerTrack)) {
+                if (e.field == "Selected") {
+                    if (!e.record.data.Selected) {
+                        for (i = App.stoLotTrans.data.items.length - 1; i >= 0; i--) {
+                            if (!Ext.isEmpty(App.stoLotTrans.data.items[i].data.LotSerNbr) && App.stoLotTrans.data.items[i].data.OMLineRef == e.record.data.LineRef && App.stoLotTrans.data.items[i].data.BranchID == e.record.data.BranchID && App.stoLotTrans.data.items[i].data.OrderNbr == e.record.data.OrderNbr) {
+                                App.stoLotTrans.data.removeAt(i);
+                                e.record.set("QtyShip", 0);
+                                e.record.set("Selected", 0);
+                            }
+                        }
+                    }                   
+                }                
+            }
+            else {
+                if (e.field == "Selected") {
+                    if (e.record.data.Selected) {
+                        e.record.set("QtyShip", e.record.data.LineQty);
+                    }
+                    else {
+                        e.record.set("QtyShip", 0);
+                    }
                 }
-                else {
-                    e.record.set("QtyShip", 0);
+                else if (e.field == "QtyShip") {
+                    if (e.record.data.QtyShip != 0) {
+                        e.record.set("Selected", true);
+                    }
+                    else {
+                        e.record.set("Selected", false);
+                    }
                 }
             }
-            else if (e.field == "QtyShip") {
-                if (e.record.data.QtyShip!=0) {
-                    e.record.set("Selected",true);
-                }
-                else {
-                    e.record.set("Selected", false);
-                }
-            }
-           
+
             var record = HQ.store.findRecord(App.stoDet, ["OrderNbr", "Selected"], [e.record.data.OrderNbr, true]);
             var recordOrder = HQ.store.findRecord(App.stoOrder, ["OrderNbr"], [e.record.data.OrderNbr]);
             if (record != undefined) {              
@@ -262,6 +327,30 @@ var Event = {
             } else {
                 record.reject();
             }
+        },
+        showLot: function (record) {
+            var recordOrder = App.slmOrder.selected.items[0];
+            if (recordOrder.data.Status == 'C' || recordOrder.data.Status == 'E') return false;
+
+            App.winLot.invt = HQ.store.findInStore(App.stoOM20500_pdIN_Inventory, ['InvtID'], [record.data.InvtID]);
+            if (!Ext.isEmpty(record.data.InvtID) && !Ext.isEmpty(record.data.SlsUnit) && App.winLot.invt.LotSerTrack != 'N' && !Ext.isEmpty(App.winLot.invt.LotSerTrack)) {
+
+                _classID = App.winLot.invt.ClassID;
+                _stkUnit = App.winLot.invt.StkUnit;
+                _invtID = App.winLot.invt.InvtID;
+                _lineRef = record.data.LineRef;
+                _siteID = record.data.SiteID;
+                _branchID = record.data.BranchID;
+                PopupWinLot.showLot(record);
+            }
+
+        },
+        txtQtyShip_Change: function (sender) {
+            var record = App.slmDet.selected.items[0];
+            Event.Grid.showLot(record);
+        },
+        renderRowNumber : function (value, meta, record) {
+            return App.stoDet.data.indexOf(record) + 1;
         }
     }
 };
@@ -269,7 +358,7 @@ var Event = {
 
 
 var save = function () {
-   
+    App.stoLotTrans.clearFilter();
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
             waitMsg: HQ.common.getLang('SavingData'),
@@ -279,6 +368,7 @@ var save = function () {
             params: {
                 lstDet: HQ.store.getAllData(App.stoDet,["Selected"],[true]),
                 lstOrder: HQ.store.getAllData(App.stoOrder, ["Selected"], [true]),
+                lstLot: HQ.store.getAllData(App.stoLotTrans),
                 delivery: App.cboDelivery.getValue(),
                 shipDate: App.dteShipDate.getValue(),
                 aRDocDate: App.dteARDocDate.getValue()
@@ -294,5 +384,228 @@ var save = function () {
                 App.winOrder.hide();
             }
         });
+    }
+}
+
+
+var PopupWinLot = {
+    showLot: function (record) {
+        App.lblLotQtyAvail.setText('');// xet lai so luong co the xuat =''     
+        App.lblQtyAvail.setText('');
+
+        App.stoLotTrans.clearFilter();
+        App.stoLotTrans.filter('OMLineRef', record.data.LineRef);
+        App.stoLotTrans.filter('OrderNbr', record.data.OrderNbr);
+        App.winLot.record = record.data;
+
+        App.winLot.record = record;
+        App.grdLot.view.refresh();
+
+        App.winLot.setTitle(record.data.InvtID + ' - ' + record.data.SiteID + ' - ' + record.data.LineQty+' ' + record.data.SlsUnit);
+        var flat = false;
+        App.stoLotTrans.data.each(function (item) {
+            flat = true;
+            if (item.data.OMLineRef == App.winLot.record.LineRef && !Ext.isEmpty(item.data.LotSerNbr)) {
+                flat = true;
+            }
+        });
+        if (!flat) {
+            App.cboLotSerNbr.getStore().load(function () {
+                PopupWinLot.addNewLot(record.data, App.cboLotSerNbr.getStore().getCount() > 0 ? App.cboLotSerNbr.getStore().getAt(0).data : null);
+            })
+        } else {
+
+            App.cboLotSerNbr.getStore().reload();
+            PopupWinLot.addNewLot(record.data);
+        }
+
+
+        App.winLot.show();
+    },
+    btnLotOK_Click: function () {
+        setTimeout(function () {
+            HQ.common.showBusy(false);
+            var recordTran = App.winLot.record.data;
+            var flat = null;
+            App.stoLotTrans.data.each(function (item) {
+                if (!Ext.isEmpty(item.data.LotSerNbr)) {
+                    if (item.data.Qty == 0) {
+                        App.smlLot.select(App.stoLotTrans.indexOf(item));
+                        App.grdLot.deleteSelected();
+                    }
+
+                    if (Ext.isEmpty(item.data.UnitDesc)) {
+                        HQ.message.show(1000, [HQ.common.getLang('unitDesc')], '', true);
+                        flat = item;
+                        return false;
+                    }
+
+                    if (Ext.isEmpty(item.data.UnitMultDiv)) {
+                        HQ.message.show(2525, [item.data.InvtID], '', true);
+                        flat = item;
+                        return false;
+                    }
+                }
+                else if (item.data.Qty == 0) {
+
+                    App.smlLot.select(App.stoLotTrans.indexOf(item));
+                    App.grdLot.deleteSelected();
+                }
+                else if (item.data.Qty > 0) {
+                    return false;
+                }
+            });
+            if (!Ext.isEmpty(flat)) {
+                App.smlLot.select(App.stoLotTrans.indexOf(flat));
+                return;
+            }
+
+            var qty = 0;
+            App.stoLotTrans.data.each(function (item) {
+                if (!Ext.isEmpty(item.data.LotSerNbr)) {
+                    if (item.data.SiteID == recordTran.SiteID && item.data.InvtID == recordTran.InvtID && item.data.OMLineRef == recordTran.LineRef) {
+                        qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
+                    }
+                }
+
+            });
+            App.winLot.record.set("QtyShip", qty);
+            App.winLot.record.set("Selected", qty == 0 ? false : true);
+            var record = HQ.store.findRecord(App.stoDet, ["OrderNbr", "Selected"], [App.winLot.record.data.OrderNbr, true]);
+            var recordOrder = HQ.store.findRecord(App.stoOrder, ["OrderNbr"], [App.winLot.record.data.OrderNbr]);
+            if (record != undefined) {
+                recordOrder.set("Selected", true);
+            }
+            else recordOrder.set("Selected", false);
+            for (i = App.stoLotTrans.data.items.length - 1; i >= 0; i--) {
+                if (!Ext.isEmpty(App.stoLotTrans.data.items[i].data.LotSerNbr)) {
+                    App.stoLotTrans.data.removeAt(i);
+                }
+            }
+            App.winLot.hide();
+        }, 300);
+    },
+    btnLotDel_Click: function () {
+        if (App.smlLot.selected.items.length != 0) {
+            if (!Ext.isEmpty(App.smlLot.selected.items[0].data.LotSerNbr)) {
+                HQ.message.show(2015020806, [App.smlLot.selected.items[0].data.InvtID + ' ' + App.smlLot.selected.items[0].data.LotSerNbr], 'PopupWinLot.deleteLot', true);
+            }
+        }
+    },
+    grdLot_BeforeEdit: function (item, e) {
+     
+        var obj = e.record.data;
+        App.lblLotQtyAvail.setText('');      
+        var objLot = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [obj.LotSerNbr]);
+        if (!Ext.isEmpty(objLot)) {        
+            var Qty = obj.UnitMultDiv == "M" ? Math.floor(objLot.Qty / obj.CnvFact) : objLot.Qty * obj.CnvFact;
+            App.lblLotQtyAvail.setText(_invtID + " - " + HQ.common.getLang('qtyavail') + ":" + Qty + " " + obj.UnitDesc);
+            App.smlLot.selected.items[0].set("ExpDate", objLot.ExpDate);
+        }
+        else {
+            App.lblLotQtyAvail.setText(_invtID + " - " + HQ.common.getLang('qtyavail') + ":" + 0);
+        }       
+        if (e.field != 'LotSerNbr' && Ext.isEmpty(e.record.data.LotSerNbr)) return false;      
+    },
+    grdLot_SelectionChange: function (item, selected) {       
+    },
+    grdLot_Edit: function (item, e) {
+        HQ.common.showBusy(true);
+        var objDetail = e.record.data;
+
+        var recordTran = App.winLot.record.data;
+        var objIN_Inventory = App.winLot.invt;
+
+        if (e.field == "Qty") {
+            //if (objDetail.Qty > 1) {
+            //    HQ.message.show(58, '', '');
+            //    return false;
+            //}            
+        }
+        if (!Ext.isEmpty(objDetail.LotSerNbr)) {
+            PopupWinLot.addNewLot(recordTran);
+        }
+    },
+    grdLot_ValidateEdit: function (item, e) {
+     
+        var Qty = 0;
+        var objdet = e.record;
+        var recordTran = App.winLot.record.data;
+        if (["LotSerNbr"].indexOf(e.field) != -1) {
+            if (HQ.grid.checkDuplicate(App.grdLot, e, ["LotSerNbr"])) {
+                HQ.message.show(1112, e.value, '');
+                return false;
+            }
+        }
+        if (e.field == "Qty") {
+            var Qty = 0;
+            Qty = e.record.data.UnitMultDiv == "M" ? e.value * e.record.data.CnvFact : e.value / e.record.data.CnvFact;
+            var objLot = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [objdet.data.LotSerNbr]);
+            if (objLot) {
+                if (Qty > objLot.Qty) {
+                    HQ.message.show(35, '', '');
+                    objdet.set('Qty', 0);
+                    return false;
+                }
+            } else {
+                HQ.message.show(35, '', '');
+                objdet.set('Qty', 0);
+                return false;
+            }
+
+            var qty = 0;
+            App.stoLotTrans.data.each(function (item) {
+                if (!Ext.isEmpty(item.data.LotSerNbr)) {
+                    if (item.data.LotSerNbr!= e.record.data.LotSerNbr && item.data.SiteID == recordTran.SiteID && item.data.InvtID == recordTran.InvtID && item.data.OMLineRef == recordTran.LineRef) {
+                        qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
+                    }
+                }
+
+            });
+            if (qty + e.value > App.winLot.record.data.LineQty) {
+                
+                HQ.message.show('20150818', [qty + e.value, App.winLot.record.data.LineQty], '', true);
+                return false;
+            }
+
+        }
+    },
+    cboLotTrans_Change: function (sender) {
+        App.lblLotQtyAvail.setText('');
+        var objLot = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [sender.value]);
+        if (!Ext.isEmpty(objLot)) {
+            var obj = App.smlLot.selected.items[0].data;
+            var Qty = obj.UnitMultDiv == "M" ? Math.floor(objLot.Qty / obj.CnvFact) : objLot.Qty * obj.CnvFact;
+            App.lblLotQtyAvail.setText(_invtID + " - " + HQ.common.getLang('qtyavail') + ":" + Qty + " " + obj.UnitDesc);
+            App.smlLot.selected.items[0].set("ExpDate", objLot.ExpDate);
+        }
+        else {
+            App.lblLotQtyAvail.setText(_invtID + " - " + HQ.common.getLang('qtyavail') + ":" + 0);
+        }
+
+    },
+    deleteLot: function (item) {
+        if (item == 'yes') {
+            App.grdLot.deleteSelected();
+        }
+    },
+    addNewLot: function (record, lotSerNbr) {
+        var newRow = Ext.create('App.mdlLotTrans');
+
+        newRow.data.LotSerNbr = !Ext.isEmpty(lotSerNbr) ? lotSerNbr.LotSerNbr : '';
+        newRow.data.BranchID = App.winLot.record.data.BranchID;
+        newRow.data.OrderNbr = App.winLot.record.data.OrderNbr;
+
+        newRow.data.OMLineRef = record.LineRef;
+        newRow.data.UnitDesc = record.SlsUnit;
+        newRow.data.InvtID = record.InvtID;
+        newRow.data.SiteID = record.SiteID;
+        newRow.data.CnvFact = record.UnitRate;
+        newRow.data.UnitMultDiv = record.UnitMultDiv;
+        newRow.data.InvtMult =  -1 ;
+        newRow.data.UnitPrice = record.SlsPrice;
+        newRow.data.ExpDate = !Ext.isEmpty(lotSerNbr) ? lotSerNbr.ExpDate : '';
+
+        HQ.store.insertRecord(App.stoLotTrans, "LotSerNbr", newRow, true);
     }
 }

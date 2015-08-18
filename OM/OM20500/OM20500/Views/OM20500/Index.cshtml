@@ -149,7 +149,32 @@
                 .ActionMethods(action => { action.Read = HttpMethod.POST; })
                 .Reader(X.JsonReader().Root("data")))
         )
-
+        @(
+            X.Store()
+            .ID("stoLotTrans")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof (OM20500_pgLotTrans_Result),"mdlLotTrans","",true))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetLotTrans", "OM20500"))
+                .ActionMethods(action => action.Read = HttpMethod.POST)
+                .Reader(X.JsonReader().Root("data"))
+            )            
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custID", "App.cboCustID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("status", "App.cboStatus.getValue().join(',')", ParameterMode.Raw));
+                ps.Add(new StoreParameter("startDate", "App.dteStartDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("endDate", "App.dteEndDate.getValue()", ParameterMode.Raw));
+            })
+            
+        )
+         @HQ.Store().ID("stoOM20500_pdIN_Inventory").HQProcedure("OM20500_pdIN_Inventory").HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                                                                
+						                            }).LoadData().AutoLoad(true)
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 
