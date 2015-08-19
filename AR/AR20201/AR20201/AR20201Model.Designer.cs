@@ -68,22 +68,6 @@ namespace AR20201
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_PG> AR_PG
-        {
-            get
-            {
-                if ((_AR_PG == null))
-                {
-                    _AR_PG = base.CreateObjectSet<AR_PG>("AR_PG");
-                }
-                return _AR_PG;
-            }
-        }
-        private ObjectSet<AR_PG> _AR_PG;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<AR_PGCpnyAddr> AR_PGCpnyAddr
         {
             get
@@ -96,18 +80,26 @@ namespace AR20201
             }
         }
         private ObjectSet<AR_PGCpnyAddr> _AR_PGCpnyAddr;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_PG> AR_PG
+        {
+            get
+            {
+                if ((_AR_PG == null))
+                {
+                    _AR_PG = base.CreateObjectSet<AR_PG>("AR_PG");
+                }
+                return _AR_PG;
+            }
+        }
+        private ObjectSet<AR_PG> _AR_PG;
 
         #endregion
 
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the AR_PG EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_PG(AR_PG aR_PG)
-        {
-            base.AddObject("AR_PG", aR_PG);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the AR_PGCpnyAddr EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -115,6 +107,14 @@ namespace AR20201
         public void AddToAR_PGCpnyAddr(AR_PGCpnyAddr aR_PGCpnyAddr)
         {
             base.AddObject("AR_PGCpnyAddr", aR_PGCpnyAddr);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_PG EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_PG(AR_PG aR_PG)
+        {
+            base.AddObject("AR_PG", aR_PG);
         }
 
         #endregion
@@ -167,7 +167,8 @@ namespace AR20201
         /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
-        public ObjectResult<AR20201_ptCpnyAddr_Result> AR20201_ptCpnyAddr(global::System.String userID, global::System.String cpnyID)
+        /// <param name="channel">No Metadata Documentation available.</param>
+        public ObjectResult<AR20201_ptCpnyAddr_Result> AR20201_ptCpnyAddr(global::System.String userID, global::System.String cpnyID, global::System.String channel)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -189,7 +190,17 @@ namespace AR20201
                 cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR20201_ptCpnyAddr_Result>("AR20201_ptCpnyAddr", userIDParameter, cpnyIDParameter);
+            ObjectParameter channelParameter;
+            if (channel != null)
+            {
+                channelParameter = new ObjectParameter("Channel", channel);
+            }
+            else
+            {
+                channelParameter = new ObjectParameter("Channel", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<AR20201_ptCpnyAddr_Result>("AR20201_ptCpnyAddr", userIDParameter, cpnyIDParameter, channelParameter);
         }
     
         /// <summary>
@@ -570,6 +581,30 @@ namespace AR20201
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PGLeader
+        {
+            get
+            {
+                return _PGLeader;
+            }
+            set
+            {
+                OnPGLeaderChanging(value);
+                ReportPropertyChanging("PGLeader");
+                _PGLeader = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PGLeader");
+                OnPGLeaderChanged();
+            }
+        }
+        private global::System.String _PGLeader;
+        partial void OnPGLeaderChanging(global::System.String value);
+        partial void OnPGLeaderChanged();
 
         #endregion
 
@@ -1140,27 +1175,12 @@ namespace AR20201
     [Serializable()]
     public partial class AR20201_ptCpnyAddr_Result : ComplexObject
     {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new AR20201_ptCpnyAddr_Result object.
-        /// </summary>
-        /// <param name="addrID">Initial value of the AddrID property.</param>
-        public static AR20201_ptCpnyAddr_Result CreateAR20201_ptCpnyAddr_Result(global::System.String addrID)
-        {
-            AR20201_ptCpnyAddr_Result aR20201_ptCpnyAddr_Result = new AR20201_ptCpnyAddr_Result();
-            aR20201_ptCpnyAddr_Result.AddrID = addrID;
-            return aR20201_ptCpnyAddr_Result;
-        }
-
-        #endregion
-
         #region Primitive Properties
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String AddrID
         {
@@ -1172,7 +1192,7 @@ namespace AR20201
             {
                 OnAddrIDChanging(value);
                 ReportPropertyChanging("AddrID");
-                _AddrID = StructuralObject.SetValidValue(value, false);
+                _AddrID = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("AddrID");
                 OnAddrIDChanged();
             }

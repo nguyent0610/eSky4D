@@ -22,9 +22,6 @@ namespace AR20201.Controllers
     public class AR20201Controller : Controller
     {
         private string _screenNbr = "AR20201";
-        private string _beginStatus = "H";
-        private string _noneStatus = "N";
-        private string _mt = "MT";
         AR20201Entities _db = Util.CreateObjectContext<AR20201Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
 
@@ -55,7 +52,7 @@ namespace AR20201.Controllers
         }
 
         [DirectMethod]
-        public ActionResult GetTreeCpnyAddr(string panelID)
+        public ActionResult GetTreeCpnyAddr(string panelID, string channel)
         {
             TreePanel tree = new TreePanel();
             tree.ID = "treePanelCpnyAddr";
@@ -72,46 +69,51 @@ namespace AR20201.Controllers
             node.NodeID = "Root";
             tree.Root.Add(node);
 
-            var lstCpnyMT = _db.AR20201_ptCpnyByChannel(Current.UserName, _mt).ToList(); //danh sach tat ca cpny co MT
-
-            foreach (var item in lstCpnyMT)
+            var lstCpnyMT = _db.AR20201_ptCpnyByChannel(Current.UserName, channel).ToList(); //danh sach tat ca cpny co MT
+            if (lstCpnyMT.Count() == 0)
             {
-                var nodeCpny = new Node();
-                nodeCpny.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = item.CpnyID, Mode = ParameterMode.Value });
-                nodeCpny.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Cpny", Mode = ParameterMode.Value });
-                //nodeTerritory.Cls = "tree-node-parent";
-                nodeCpny.Text = item.CpnyName;
-                nodeCpny.Checked = false;
-                nodeCpny.NodeID = "cpny-" + item.CpnyID;
-                nodeCpny.Qtip = item.CpnyID;
-                //nodeCpny.IconCls = "tree-parent-icon";
-
-                var lstAddrsInCpny = _db.AR20201_ptCpnyAddr(Current.UserName, item.CpnyID).ToList();
-                foreach (var addr in lstAddrsInCpny)
-                {
-                    var nodeCpnyAddr = new Node();
-                    nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = addr.AddrID, Mode = ParameterMode.Value });
-                    nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Addr", Mode = ParameterMode.Value });
-                    nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "AddrName", Value = addr.Name, Mode = ParameterMode.Value });
-                    //nodeCompany.Cls = "tree-node-parent";
-                    nodeCpnyAddr.Text = addr.Addr1;
-                    nodeCpnyAddr.Checked = false;
-                    nodeCpnyAddr.Leaf = true;
-                    nodeCpnyAddr.NodeID = "cpny-addr-" + item.CpnyID + "-" + addr.AddrID;
-                    nodeCpnyAddr.Qtip = addr.AddrID;
-                    //nodeCompany.IconCls = "tree-parent-icon";
-
-                    nodeCpny.Children.Add(nodeCpnyAddr);
-
-                }
-                if (lstAddrsInCpny.Count() == 0)
-                {
-                    nodeCpny.Leaf = true;
-                    nodeCpny.Icon = Icon.Folder;
-                }
-                node.Children.Add(nodeCpny);
+                node.Leaf = true;
             }
+            else
+            {
+                foreach (var item in lstCpnyMT)
+                {
+                    var nodeCpny = new Node();
+                    nodeCpny.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = item.CpnyID, Mode = ParameterMode.Value });
+                    nodeCpny.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Cpny", Mode = ParameterMode.Value });
+                    //nodeTerritory.Cls = "tree-node-parent";
+                    nodeCpny.Text = item.CpnyName;
+                    nodeCpny.Checked = false;
+                    nodeCpny.NodeID = "cpny-" + item.CpnyID;
+                    nodeCpny.Qtip = item.CpnyID;
+                    //nodeCpny.IconCls = "tree-parent-icon";
 
+                    var lstAddrsInCpny = _db.AR20201_ptCpnyAddr(Current.UserName, item.CpnyID, channel).ToList();
+                    foreach (var addr in lstAddrsInCpny)
+                    {
+                        var nodeCpnyAddr = new Node();
+                        nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = addr.AddrID, Mode = ParameterMode.Value });
+                        nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Addr", Mode = ParameterMode.Value });
+                        nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "AddrName", Value = addr.Name, Mode = ParameterMode.Value });
+                        //nodeCompany.Cls = "tree-node-parent";
+                        nodeCpnyAddr.Text = addr.Addr1;
+                        nodeCpnyAddr.Checked = false;
+                        nodeCpnyAddr.Leaf = true;
+                        nodeCpnyAddr.NodeID = "cpny-addr-" + item.CpnyID + "-" + addr.AddrID;
+                        nodeCpnyAddr.Qtip = addr.AddrID;
+                        //nodeCompany.IconCls = "tree-parent-icon";
+
+                        nodeCpny.Children.Add(nodeCpnyAddr);
+
+                    }
+                    if (lstAddrsInCpny.Count() == 0)
+                    {
+                        nodeCpny.Leaf = true;
+                        nodeCpny.Icon = Icon.Folder;
+                    }
+                    node.Children.Add(nodeCpny);
+                }
+            }
             var treeCpnyAddr = X.GetCmp<Panel>(panelID);
 
             //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
@@ -156,7 +158,7 @@ namespace AR20201.Controllers
                             }
                             else
                             {
-                                throw new MessageException(MessageType.Message, "2000","",new string[]{
+                                throw new MessageException(MessageType.Message, "2000", "", new string[]{
                                     Util.GetLang("PGID")
                                 });
                             }
@@ -181,63 +183,60 @@ namespace AR20201.Controllers
                         #endregion
 
                         #region PG Cpny Addr
-                        if (channel == _mt)
+                        var cpnyAddrHandler = new StoreDataHandler(data["lstPGCpnyAddr"]);
+                        var lstPGCpnyAddr = cpnyAddrHandler.BatchObjectData<AR20201_pgPGCpnyAddr_Result>();
+
+                        foreach (var created in lstPGCpnyAddr.Created)
                         {
-                            var cpnyAddrHandler = new StoreDataHandler(data["lstPGCpnyAddr"]);
-                            var lstPGCpnyAddr = cpnyAddrHandler.BatchObjectData<AR20201_pgPGCpnyAddr_Result>();
-
-                            foreach (var created in lstPGCpnyAddr.Created)
+                            if (!string.IsNullOrWhiteSpace(created.AddrID) && !string.IsNullOrWhiteSpace(created.WorkingTime))
                             {
-                                if (!string.IsNullOrWhiteSpace(created.AddrID) && !string.IsNullOrWhiteSpace(created.WorkingTime))
-                                {
-                                    created.BranchID = branchID;
-                                    created.PGID = pgID;
+                                created.BranchID = branchID;
+                                created.PGID = pgID;
 
-                                    var createdCpnyAddr = _db.AR_PGCpnyAddr.FirstOrDefault(
-                                        x => x.AddrID == created.AddrID
-                                            && x.BranchID == created.BranchID
-                                            && x.PGID == created.PGID);
-                                    if (createdCpnyAddr == null)
-                                    {
-                                        updateSlsperCpnyAddr(ref createdCpnyAddr, created, true);
-                                        _db.AR_PGCpnyAddr.AddObject(createdCpnyAddr);
-                                    }
+                                var createdCpnyAddr = _db.AR_PGCpnyAddr.FirstOrDefault(
+                                    x => x.AddrID == created.AddrID
+                                        && x.BranchID == created.BranchID
+                                        && x.PGID == created.PGID);
+                                if (createdCpnyAddr == null)
+                                {
+                                    updateSlsperCpnyAddr(ref createdCpnyAddr, created, true);
+                                    _db.AR_PGCpnyAddr.AddObject(createdCpnyAddr);
                                 }
                             }
+                        }
 
-                            foreach (var updated in lstPGCpnyAddr.Updated)
+                        foreach (var updated in lstPGCpnyAddr.Updated)
+                        {
+                            if (!string.IsNullOrWhiteSpace(updated.AddrID) && !string.IsNullOrWhiteSpace(updated.WorkingTime))
                             {
-                                if (!string.IsNullOrWhiteSpace(updated.AddrID) && !string.IsNullOrWhiteSpace(updated.WorkingTime))
-                                {
-                                    updated.BranchID = branchID;
-                                    updated.PGID = pgID;
+                                updated.BranchID = branchID;
+                                updated.PGID = pgID;
 
-                                    var updatedCpnyAddr = _db.AR_PGCpnyAddr.FirstOrDefault(
-                                        x => x.AddrID == updated.AddrID
-                                            && x.BranchID == updated.BranchID
-                                            && x.PGID == updated.PGID);
-                                    if (updatedCpnyAddr != null)
-                                    {
-                                        updateSlsperCpnyAddr(ref updatedCpnyAddr, updated, false);
-                                    }
+                                var updatedCpnyAddr = _db.AR_PGCpnyAddr.FirstOrDefault(
+                                    x => x.AddrID == updated.AddrID
+                                        && x.BranchID == updated.BranchID
+                                        && x.PGID == updated.PGID);
+                                if (updatedCpnyAddr != null)
+                                {
+                                    updateSlsperCpnyAddr(ref updatedCpnyAddr, updated, false);
                                 }
                             }
+                        }
 
-                            foreach (var deleted in lstPGCpnyAddr.Deleted)
+                        foreach (var deleted in lstPGCpnyAddr.Deleted)
+                        {
+                            if (!string.IsNullOrWhiteSpace(deleted.AddrID) && !string.IsNullOrWhiteSpace(deleted.WorkingTime))
                             {
-                                if (!string.IsNullOrWhiteSpace(deleted.AddrID) && !string.IsNullOrWhiteSpace(deleted.WorkingTime))
-                                {
-                                    deleted.BranchID = branchID;
-                                    deleted.PGID = pgID;
+                                deleted.BranchID = branchID;
+                                deleted.PGID = pgID;
 
-                                    var deletedCpnyAddr = _db.AR_PGCpnyAddr.FirstOrDefault(
-                                        x => x.AddrID == deleted.AddrID
-                                            && x.BranchID == deleted.BranchID
-                                            && x.PGID == deleted.PGID);
-                                    if (deletedCpnyAddr != null)
-                                    {
-                                        _db.AR_PGCpnyAddr.DeleteObject(deletedCpnyAddr);
-                                    }
+                                var deletedCpnyAddr = _db.AR_PGCpnyAddr.FirstOrDefault(
+                                    x => x.AddrID == deleted.AddrID
+                                        && x.BranchID == deleted.BranchID
+                                        && x.PGID == deleted.PGID);
+                                if (deletedCpnyAddr != null)
+                                {
+                                    _db.AR_PGCpnyAddr.DeleteObject(deletedCpnyAddr);
                                 }
                             }
                         }
@@ -339,6 +338,7 @@ namespace AR20201.Controllers
             pg.Addr = inputPG.Addr;
             pg.PGName = inputPG.PGName;
             pg.Position = inputPG.Position;
+            pg.PGLeader = inputPG.PGLeader;
 
             pg.LUpd_DateTime = DateTime.Now;
             pg.LUpd_Prog = _screenNbr;

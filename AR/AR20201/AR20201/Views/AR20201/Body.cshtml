@@ -22,22 +22,22 @@
         .TopBar(Util.SetupToolbar("print,close", true, "Event.Form.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 120; })
         .Items(
-            X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.West)
+            X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.North)
             .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
-            .Listeners(ls=>ls.Render.Handler="HQ.common.control_render(this,'header')")
+            .Listeners(ls => ls.Render.Handler = "HQ.common.control_render(this,'header')")
             .Items(
 
                 // First Column
-                X.Container().Layout(LayoutType.VBox).MarginSpec("0 10 5 0")
-                .Flex(1).MinWidth(250)
+                X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
+        //.MinWidth(250)//.Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
-                    HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQLangCode("BranchID")
+                    HQ.Combo().ID("cboBranchID").HQLangCode("BranchID")
                     .HQProcedure("AR20201_pcBranchAllByUser")
                     .HQColumnShow("BranchID,BranchName,Channel").DisplayField("BranchID").ValueField("BranchID")
                     .AllowBlank(false).ForceSelection(true)//.HQValue("HQ.cpnyID", true)
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
-                    .AllowBlank(false)//.Editable(false)
+                    .HQAutoLoad(false)//.Editable(false)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
@@ -49,10 +49,11 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             lst.Change.Fn = "Event.Form.cboBranchID_change";
                         })
+                    
 
-                    , HQ.Combo().ID("cboPGID").Name("cboPGID").HQLangCode("PGID")
+                    , HQ.Combo().ID("cboPGID").HQLangCode("PGID")
                     .HQProcedure("AR20201_pcPGID")
-                    .HQColumnShow("PGID,Name").DisplayField("PGID").ValueField("PGID")
+                    .HQColumnShow("PGID,PGName").DisplayField("PGID").ValueField("PGID")
                     .MinWidth(250).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .AllowBlank(false).HQAutoLoad(false).MaxLength(30).EnforceMaxLength(true)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false }).Flex(4)
@@ -65,13 +66,19 @@
                         {
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             lst.Change.Fn = "Event.Form.cboPGID_change";
+                            lst.Blur.Fn = "Event.Form.cboPGID_change";
+                            lst.Select.Fn = "Event.Form.cboPGID_select";
                         })
-                    
-                    , HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("Name").DataIndex("PGName")
+
+                    , HQ.TextBox().ID("txtName").HQLangCode("Name").DataIndex("PGName")
                     .Width(300).MarginSpec("5 0 0 0")
                     .AllowBlank(false).MaxLength(100).EnforceMaxLength(true)
+                )
 
-                    , HQ.Combo().ID("cboPosition").Name("cboPosition").HQLangCode("Position").HQProcedure("AR20201_pcPosition")
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboPosition").HQLangCode("Position").HQProcedure("AR20201_pcPosition")
                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").DataIndex("Position")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .AllowBlank(false).ForceSelection(true)
@@ -81,34 +88,47 @@
                         })
                     .LoadData()
 
-                    , HQ.TextBox().ID("txtAddr").Name("txtAddr").HQLangCode("Addr").DataIndex("Addr")
+                    , HQ.TextBox().ID("txtAddr").HQLangCode("Addr").DataIndex("Addr")
                     .Width(300).MarginSpec("5 0 0 0")
                     .AllowBlank(false).MaxLength(150).EnforceMaxLength(true)
+
+                    , HQ.Combo().ID("cboPGLeader").HQLangCode("PGLeader").HQProcedure("AR20201_pcPGLeader")
+                    .HQColumnShow("UserName,Name").DisplayField("Name").ValueField("UserName").DataIndex("PGLeader")
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                    .ForceSelection(true).HQAutoLoad(false)
+                    .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                            ,new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                            ,new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
+                        })
+                    .LoadData()
                 )
             ) // pnlHeader
-            
+
             , X.Panel().ID("pnlPGCpnyAddr")
-            .Region(Region.Center).Border(false).Hidden(true)
+            .Region(Region.Center).Border(false)//.Hidden(true)
             .Layout(LayoutType.Border)
             .Title(Util.GetLang("PGCpnyAddr"))
-            .Listeners(ls=>ls.Render.Handler="HQ.common.control_render(this,'grid')")
+            .Listeners(ls => ls.Render.Handler = "HQ.common.control_render(this,'grid')")
             .Items(
                 X.Panel().ID("treeCpnyAddr")
                 .Region(Region.West).Flex(4)
                 .MinWidth(150).Split(true).AutoScroll(true)
                 .DirectEvents(de =>
                 {
-                    de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCpnyAddr"));
-                    de.AfterRender.Url = Url.Action("GetTreeCpnyAddr", "AR20201");
-                    //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
-                    de.AfterRender.CleanRequest = true;
-                    de.AfterRender.Method = HttpMethod.POST;
-                    de.AfterRender.Success = "";
-                    de.AfterRender.Timeout = 60000;
-                    de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
-                    de.AfterRender.EventMask.ShowMask = true;
-                    de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
-                    de.AfterRender.EventMask.MinDelay = 500;
+                    //de.AfterRender.ExtraParams.Add(new Parameter("panelID", "treeCpnyAddr", ParameterMode.Value));
+                    //de.AfterRender.ExtraParams.Add(new Parameter("channel", "Process.getChannel()", ParameterMode.Raw));
+                    //de.AfterRender.Url = Url.Action("GetTreeCpnyAddr", "AR20201");
+                    ////de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                    //de.AfterRender.CleanRequest = true;
+                    //de.AfterRender.Method = HttpMethod.POST;
+                    //de.AfterRender.Success = "";
+                    //de.AfterRender.Timeout = 60000;
+                    //de.AfterRender.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                    //de.AfterRender.EventMask.ShowMask = true;
+                    //de.AfterRender.EventMask.Msg = Util.GetLang("LoadingData");
+                    //de.AfterRender.EventMask.MinDelay = 500;
 
                     de.Expand.ExtraParams.Add(new Parameter("panelID", "treeCpnyAddr"));
                     de.Expand.Url = Url.Action("GetTreeCpnyAddr", "AR20201");
@@ -171,7 +191,7 @@
                     .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
                     .Handler("Event.Tree.btnDelAll_click")
                 ) // Panel
-            
+
                 , X.GridPanel().ID("grdPGCpnyAddr")
                 .Region(Region.East).Flex(8)
                 .Scroll(ScrollMode.Both)
@@ -181,15 +201,12 @@
                 .ColumnModel(
                     X.RowNumbererColumn()
 
-                    , X.Column().Text(Util.GetLang("AddrID")).DataIndex("AddrID")
-                        
+                    , X.Column().Text(Util.GetLang("CustID")).DataIndex("AddrID")
+                    , X.Column().Text(Util.GetLang("Name")).DataIndex("Name")
                     , X.Column().Text(Util.GetLang("WorkTime")).DataIndex("WorkingTime").Width(150)
                     .Editor(HQ.TextBox())
-                    
-                    , X.Column().Text(Util.GetLang("Addr1")).DataIndex("Addr1").Width(200)
-                    //.Renderer("Process.renderAddr")
-                    
-                    , X.Column().Text(Util.GetLang("Name")).DataIndex("Name")
+                    , X.Column().Text(Util.GetLang("Addr1")).DataIndex("Addr1").Width(150)
+        //.Renderer("Process.renderAddr")
 
                     , X.CommandColumn().Width(150)
                     .Commands(
@@ -215,7 +232,8 @@
                 ) // grdPGCpnyAddr
             )// pnlPGCpnyAddr
         )
-        .Listeners(lst => {
+        .Listeners(lst =>
+        {
             lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
             lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
         })// Form: frmMain

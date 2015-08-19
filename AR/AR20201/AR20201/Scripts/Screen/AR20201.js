@@ -1,5 +1,6 @@
 // Declare
 var _beginStatus = "H";
+var _pgIDLoad = "";
 
 
 // Processing Function
@@ -157,6 +158,17 @@ var Process = {
         } else {
             return false;
         }
+    },
+
+    getChannel: function () {
+        var selRec = HQ.store.findInStore(App.cboBranchID.store, ['BranchID'], [App.cboBranchID.getValue()]);
+
+        if (selRec && selRec.Channel) {
+            return selRec.Channel
+        }
+        else {
+            return "";
+        }
     }
 };
 
@@ -174,19 +186,21 @@ var Store = {
         }
         var frmRecord = sto.getAt(0);
         App.frmMain.loadRecord(frmRecord);
+        _pgIDLoad = frmRecord.data.PGID;
+
+        App.grdPGCpnyAddr.store.reload();
 
         var selRec = HQ.store.findInStore(App.cboBranchID.store,['BranchID'],[App.cboBranchID.getValue()]);
 
         if (selRec && selRec.Channel == "MT") {
-            App.pnlPGCpnyAddr.show();
-            App.grdPGCpnyAddr.store.reload();
+            //App.pnlPGCpnyAddr.show();
         }
         else {
-            App.pnlPGCpnyAddr.hide();
-            App.grdPGCpnyAddr.store.removeAll();
+            //App.pnlPGCpnyAddr.hide();
+            //App.grdPGCpnyAddr.store.removeAll();
         }
-
-        Event.Form.frmMain_fieldChange();
+        HQ.isChange = false;
+        //Event.Form.frmMain_fieldChange();
     },
 
     stoPGCpnyAddr_load: function (sto, records, successful, eOpts) {
@@ -239,15 +253,32 @@ var Event = {
         },
 
         cboBranchID_change: function (cbo, newValue, oldValue, eOpts) {
-            App.cboPGID.clearValue();
+            App.cboPGLeader.store.reload();
+            //App.cboPGID.clearValue();
             App.cboPGID.store.load(function (records, operation, success) {
                 if (records.length > 0) {
-                    App.cboPGID.setValue(records[0].data.PGID);
+                    if (records[0].data.PGID != App.cboPGID.getValue()) {
+                        App.cboPGID.setValue(records[0].data.PGID);
+                    }
+                    else {
+                        App.cboPGID.setValueAndFireSelect(records[0].data.PGID);
+                    }
+                }
+                else {
+                    App.cboPGID.clearValue();
                 }
             });
+
+            //App.treeCpnyAddr.store.reload();
         },
 
         cboPGID_change: function (cbo, newValue, oldValue, eOpts) {
+            if (_pgIDLoad != HQ.util.passNull(cbo.getValue()) && !cbo.hasFocus) {
+                App.stoPG.reload();
+            }
+        },
+
+        cboPGID_select: function (cbo, newValue, oldValue, eOpts) {
             App.stoPG.reload();
         },
 

@@ -40,7 +40,7 @@
         @(
             X.Store().ID("stoPG")
             .AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(AR_PG), "mdlAR_PG", "PGID"))       
+            .Model(Util.GenerateModel(typeof(AR_PG), "mdlAR_PG", "PGID,BranchID"))       
             .Proxy(
                 X.AjaxProxy()                
                 .Url(Url.Action("GetPGById", "AR20201"))                
@@ -56,6 +56,20 @@
                 ps.Add(new StoreParameter("pgID", "App.cboPGID.getValue()", ParameterMode.Raw));
             })      
             .Listeners(p=>p.Load.Fn="Store.stoPG_load" )
+            .DirectEvents(de => {
+                de.Load.ExtraParams.Add(new Parameter("panelID", "treeCpnyAddr", ParameterMode.Value));
+                de.Load.ExtraParams.Add(new Parameter("channel", "Process.getChannel()", ParameterMode.Raw));
+                de.Load.Url = Url.Action("GetTreeCpnyAddr", "AR20201");
+                //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                de.Load.CleanRequest = true;
+                de.Load.Method = HttpMethod.POST;
+                de.Load.Success = "";
+                de.Load.Timeout = 60000;
+                de.Load.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                de.Load.EventMask.ShowMask = true;
+                de.Load.EventMask.Msg = Util.GetLang("LoadingData");
+                de.Load.EventMask.MinDelay = 500;
+            })
             // Store: stoPG
         )
 
