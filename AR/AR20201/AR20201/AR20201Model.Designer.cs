@@ -126,8 +126,10 @@ namespace AR20201
         /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="pGID">No Metadata Documentation available.</param>
-        public ObjectResult<AR20201_pgPGCpnyAddr_Result> AR20201_pgPGCpnyAddr(global::System.String userID, global::System.String cpnyID, global::System.String pGID)
+        /// <param name="channel">No Metadata Documentation available.</param>
+        public ObjectResult<AR20201_pgPGCpnyAddr_Result> AR20201_pgPGCpnyAddr(global::System.String userID, global::System.String cpnyID, global::System.String branchID, global::System.String pGID, global::System.String channel)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -149,6 +151,16 @@ namespace AR20201
                 cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
             }
     
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
             ObjectParameter pGIDParameter;
             if (pGID != null)
             {
@@ -159,7 +171,17 @@ namespace AR20201
                 pGIDParameter = new ObjectParameter("PGID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR20201_pgPGCpnyAddr_Result>("AR20201_pgPGCpnyAddr", userIDParameter, cpnyIDParameter, pGIDParameter);
+            ObjectParameter channelParameter;
+            if (channel != null)
+            {
+                channelParameter = new ObjectParameter("Channel", channel);
+            }
+            else
+            {
+                channelParameter = new ObjectParameter("Channel", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<AR20201_pgPGCpnyAddr_Result>("AR20201_pgPGCpnyAddr", userIDParameter, cpnyIDParameter, branchIDParameter, pGIDParameter, channelParameter);
         }
     
         /// <summary>
@@ -207,8 +229,10 @@ namespace AR20201
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="channel">No Metadata Documentation available.</param>
-        public ObjectResult<AR20201_ptCpnyByChannel_Result> AR20201_ptCpnyByChannel(global::System.String userID, global::System.String channel)
+        public ObjectResult<AR20201_ptCpnyByChannel_Result> AR20201_ptCpnyByChannel(global::System.String userID, global::System.String cpnyID, global::System.String branchID, global::System.String channel)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -218,6 +242,26 @@ namespace AR20201
             else
             {
                 userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
             }
     
             ObjectParameter channelParameter;
@@ -230,7 +274,7 @@ namespace AR20201
                 channelParameter = new ObjectParameter("Channel", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<AR20201_ptCpnyByChannel_Result>("AR20201_ptCpnyByChannel", userIDParameter, channelParameter);
+            return base.ExecuteFunction<AR20201_ptCpnyByChannel_Result>("AR20201_ptCpnyByChannel", userIDParameter, cpnyIDParameter, branchIDParameter, channelParameter);
         }
 
         #endregion

@@ -45,14 +45,14 @@ namespace AR20201.Controllers
             return this.Store(pg);
         }
 
-        public ActionResult GetPGCpnyAddr(string branchId, string pgID) 
+        public ActionResult GetPGCpnyAddr(string branchId, string pgID, string channel) 
         {
-            var slsperCpnyAddrs = _db.AR20201_pgPGCpnyAddr(Current.UserName, branchId, pgID).ToList();
+            var slsperCpnyAddrs = _db.AR20201_pgPGCpnyAddr(Current.UserName, Current.CpnyID, branchId, pgID, channel).ToList();
             return this.Store(slsperCpnyAddrs);
         }
 
         [DirectMethod]
-        public ActionResult GetTreeCpnyAddr(string panelID, string channel)
+        public ActionResult GetTreeCpnyAddr(string panelID, string branchID, string channel)
         {
             TreePanel tree = new TreePanel();
             tree.ID = "treePanelCpnyAddr";
@@ -69,7 +69,7 @@ namespace AR20201.Controllers
             node.NodeID = "Root";
             tree.Root.Add(node);
 
-            var lstCpnyMT = _db.AR20201_ptCpnyByChannel(Current.UserName, channel).ToList(); //danh sach tat ca cpny co MT
+            var lstCpnyMT = _db.AR20201_ptCpnyByChannel(Current.UserName, Current.CpnyID, branchID, channel).ToList(); //danh sach tat ca cpny co MT
             if (lstCpnyMT.Count() == 0)
             {
                 node.Leaf = true;
@@ -95,12 +95,13 @@ namespace AR20201.Controllers
                         nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = addr.AddrID, Mode = ParameterMode.Value });
                         nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Addr", Mode = ParameterMode.Value });
                         nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "AddrName", Value = addr.Name, Mode = ParameterMode.Value });
+                        nodeCpnyAddr.CustomAttributes.Add(new ConfigItem() { Name = "Addr1", Value = addr.Addr1, Mode = ParameterMode.Value });
                         //nodeCompany.Cls = "tree-node-parent";
-                        nodeCpnyAddr.Text = addr.Addr1;
+                        nodeCpnyAddr.Text = addr.AddrID +" - "+ addr.Name;
                         nodeCpnyAddr.Checked = false;
                         nodeCpnyAddr.Leaf = true;
                         nodeCpnyAddr.NodeID = "cpny-addr-" + item.CpnyID + "-" + addr.AddrID;
-                        nodeCpnyAddr.Qtip = addr.AddrID;
+                        nodeCpnyAddr.Qtip = addr.Addr1;
                         //nodeCompany.IconCls = "tree-parent-icon";
 
                         nodeCpny.Children.Add(nodeCpnyAddr);
@@ -188,7 +189,7 @@ namespace AR20201.Controllers
 
                         foreach (var created in lstPGCpnyAddr.Created)
                         {
-                            if (!string.IsNullOrWhiteSpace(created.AddrID) && !string.IsNullOrWhiteSpace(created.WorkingTime))
+                            if (!string.IsNullOrWhiteSpace(created.AddrID))
                             {
                                 created.BranchID = branchID;
                                 created.PGID = pgID;
@@ -207,7 +208,7 @@ namespace AR20201.Controllers
 
                         foreach (var updated in lstPGCpnyAddr.Updated)
                         {
-                            if (!string.IsNullOrWhiteSpace(updated.AddrID) && !string.IsNullOrWhiteSpace(updated.WorkingTime))
+                            if (!string.IsNullOrWhiteSpace(updated.AddrID))
                             {
                                 updated.BranchID = branchID;
                                 updated.PGID = pgID;
@@ -225,7 +226,7 @@ namespace AR20201.Controllers
 
                         foreach (var deleted in lstPGCpnyAddr.Deleted)
                         {
-                            if (!string.IsNullOrWhiteSpace(deleted.AddrID) && !string.IsNullOrWhiteSpace(deleted.WorkingTime))
+                            if (!string.IsNullOrWhiteSpace(deleted.AddrID))
                             {
                                 deleted.BranchID = branchID;
                                 deleted.PGID = pgID;

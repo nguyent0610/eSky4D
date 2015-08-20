@@ -49,7 +49,22 @@
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             lst.Change.Fn = "Event.Form.cboBranchID_change";
                         })
-                    
+                    .DirectEvents(de => {
+                        de.Change.ExtraParams.Add(new Parameter("panelID", "treeCpnyAddr", ParameterMode.Value));
+                        de.Change.ExtraParams.Add(new Parameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                        de.Change.ExtraParams.Add(new Parameter("channel", "Process.getChannel()", ParameterMode.Raw));
+                        
+                        de.Change.Url = Url.Action("GetTreeCpnyAddr", "AR20201");
+                        //de.AfterRender.FormID = "moduleCatTree" + cat.catID;
+                        de.Change.CleanRequest = true;
+                        de.Change.Method = HttpMethod.POST;
+                        de.Change.Success = "";
+                        de.Change.Timeout = 60000;
+                        de.Change.Failure = "Ext.Msg.show({title: 'Login Error',msg: result.errorMessage,buttons: Ext.Msg.OK,icon: Ext.MessageBox.ERROR});";
+                        de.Change.EventMask.ShowMask = true;
+                        de.Change.EventMask.Msg = Util.GetLang("LoadingData");
+                        de.Change.EventMask.MinDelay = 500;
+                    })
 
                     , HQ.Combo().ID("cboPGID").HQLangCode("PGID")
                     .HQProcedure("AR20201_pcPGID")
@@ -131,6 +146,8 @@
                     //de.AfterRender.EventMask.MinDelay = 500;
 
                     de.Expand.ExtraParams.Add(new Parameter("panelID", "treeCpnyAddr"));
+                    de.Expand.ExtraParams.Add(new Parameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                    de.Expand.ExtraParams.Add(new Parameter("channel", "Process.getChannel()", ParameterMode.Raw));
                     de.Expand.Url = Url.Action("GetTreeCpnyAddr", "AR20201");
                     //de.Expand.FormID = "moduleCatTree"+cat.catID;
                     de.Expand.CleanRequest = true;

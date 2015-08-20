@@ -501,7 +501,7 @@ var Event = {
                                     if (!record) {
                                         App.grdPGCpnyAddr.store.insert(idx, Ext.create("App.mdlPGCpnyAddr", {
                                             AddrID: node.raw.RecID,
-                                            Addr1: node.raw.text,
+                                            Addr1: node.raw.Addr1,
                                             Name: node.raw.AddrName,
                                             //WorkingTime: ''
                                         }));
@@ -539,7 +539,7 @@ var Event = {
                                     if (!record) {
                                         App.grdPGCpnyAddr.store.insert(idx, Ext.create("App.mdlPGCpnyAddr", {
                                             AddrID: node.raw.RecID,
-                                            Addr1: node.raw.text,
+                                            Addr1: node.raw.Addr1,
                                             Name: node.raw.AddrName,
                                             //WorkingTime: ''
                                         }));

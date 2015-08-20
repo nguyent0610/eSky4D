@@ -49,7 +49,9 @@
         <Function Name="AR20201_pgPGCpnyAddr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="PGID" Type="varchar" Mode="In" />
+          <Parameter Name="Channel" Type="varchar" Mode="In" />
         </Function>
         <Function Name="AR20201_ptCpnyAddr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -58,6 +60,8 @@
         </Function>
         <Function Name="AR20201_ptCpnyByChannel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="Channel" Type="varchar" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
@@ -68,7 +72,9 @@
           <FunctionImport Name="AR20201_pgPGCpnyAddr" ReturnType="Collection(AR20201Model.AR20201_pgPGCpnyAddr_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="PGID" Mode="In" Type="String" />
+            <Parameter Name="Channel" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AR20201_ptCpnyAddr" ReturnType="Collection(AR20201Model.AR20201_ptCpnyAddr_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
@@ -77,6 +83,8 @@
           </FunctionImport>
           <FunctionImport Name="AR20201_ptCpnyByChannel" ReturnType="Collection(AR20201Model.AR20201_ptCpnyByChannel_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="Channel" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="AR_PGCpnyAddr" EntityType="AR20201Model.AR_PGCpnyAddr" />
