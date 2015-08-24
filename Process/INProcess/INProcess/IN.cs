@@ -829,7 +829,7 @@ namespace INProcess
                 //objTagHeader.GetByKey(tagID);
                 objTagHeader.INBatNbr = batNbr;
                 objTagHeader.Status = "C";
-          
+                objTagHeader.Update();
                 clsBatch newBatch = new clsBatch(Dal)
                 {
 
