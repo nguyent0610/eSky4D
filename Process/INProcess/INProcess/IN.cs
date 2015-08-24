@@ -13,13 +13,12 @@ using System.Threading;
 using System.Transactions;
 using HQFramework.DAL;
 using eBiz4DApp;
-using log4net;
 using HQ.eSkyFramework;
 namespace INProcess
 {
     public class IN 
     {
-        private static readonly ILog mLogger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+      
         public string Prog { get; set; }
         public string User { get; set; }
         public DataAccess Dal { get; set; }
