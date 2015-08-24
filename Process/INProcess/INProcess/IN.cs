@@ -822,11 +822,12 @@ namespace INProcess
                 objSetup.GetByKey(branchID, "IN");
 
                 clsIN_TagDetail objTagDetail = new clsIN_TagDetail(Dal);
-                DataTable lstTagDetail = objTagDetail.GetAll(tagID, siteID, "%"); //objTagDetail.GetAll(tagID, branchID, siteID, "%");
+                DataTable lstTagDetail = objTagDetail.GetAll(tagID, branchID, siteID, "%"); //objTagDetail.GetAll(tagID, siteID, "%"); 
+                
 
                 clsIN_TagHeader objTagHeader = new clsIN_TagHeader(Dal);
-               // objTagHeader.GetByKey(tagID,branchID,siteID);
-                objTagHeader.GetByKey(tagID);
+                objTagHeader.GetByKey(tagID,branchID,siteID);
+                //objTagHeader.GetByKey(tagID);
                 objTagHeader.INBatNbr = batNbr;
                 objTagHeader.Status = "C";
           
@@ -868,7 +869,7 @@ namespace INProcess
                     objInvt.GetByKey(tagDetail.String("InvtID").ToString());
                     objCnv.GetByKey("3", "*", tagDetail.String("InvtID"), "THUNG", objInvt.StkUnit);
 
-                    clsIN_Trans newTran = new clsIN_Trans()
+                    clsIN_Trans newTran = new clsIN_Trans(Dal)
                     {
                         BatNbr = batNbr,
                         BranchID = branchID,
