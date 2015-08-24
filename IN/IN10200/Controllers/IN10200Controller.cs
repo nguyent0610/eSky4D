@@ -61,7 +61,7 @@ namespace IN10200.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -287,6 +287,393 @@ namespace IN10200.Controllers
                 return Util.CreateError(ex.ToString());
             }
         }
+        [HttpPost]
+        public ActionResult Export(FormCollection data)
+        {
+            try
+            {
+                
+           
+                Stream stream = new MemoryStream();
+                Workbook workbook = new Workbook();
+                Worksheet sheetTrans = workbook.Worksheets[0];
+
+                sheetTrans.Name = "Details";
+
+                DataAccess dal = Util.Dal();
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@EffDate", DbType.DateTime, clsCommon.GetValueDBNull(data["DateEnd"].ToDateShort()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(data["SiteID"].PassNull()), ParameterDirection.Input, 30));
+                DataTable dt = dal.ExecDataTable("IN10200_pdExport", CommandType.StoredProcedure, ref pc);
+
+                List<IN10200_pgIssueLoad_Result> lstDetail = _app.IN10200_pgIssueLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(), "%", "%").ToList();
+
+                sheetTrans.Cells.ImportDataTable(dt, false, "AA2");
+
+
+
+                Style style = workbook.GetStyleInPool(0);
+                style.Font.Color = Color.Transparent;
+                style.IsLocked = true;
+                StyleFlag flag = new StyleFlag();
+                flag.FontColor = true;
+                flag.NumberFormat = true;
+                flag.Locked = true;
+
+                sheetTrans.Cells.Columns[26].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[27].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[28].ApplyStyle(style, flag);
+                sheetTrans.Cells.Columns[29].ApplyStyle(style, flag);
+
+
+                var cell = sheetTrans.Cells["B1"];
+                cell.PutValue("CHI TIẾT XUẤT KHO");
+                style = cell.GetStyle();
+                style.Font.IsBold = true;
+                style.Font.Size = 16;
+                style.Font.Color = Color.Blue;
+                style.HorizontalAlignment = TextAlignmentType.Center;
+                cell.SetStyle(style);
+                sheetTrans.Cells.Merge(0, 1, 1, 6);
+
+
+                cell = sheetTrans.Cells["B2"];
+                cell.PutValue("Tổng Tiền");
+                style = cell.GetStyle();
+                style.Font.IsBold = true;
+                style.VerticalAlignment = TextAlignmentType.Center;
+                style.HorizontalAlignment = TextAlignmentType.Right;
+                cell.SetStyle(style);
+
+                cell = sheetTrans.Cells["C2"];
+                cell.Formula = "=SUM(F5:F" + (dt.Rows.Count + 5).ToString() + ")";
+                style = cell.GetStyle();
+                style.IsLocked = true;
+                style.Custom = "#,##0";
+                cell.SetStyle(style);
+
+                style = sheetTrans.Cells["A4"].GetStyle();
+                style.Font.IsBold = true;
+
+                sheetTrans.Cells["A4"].PutValue("Mã Mặt Hàng");
+                sheetTrans.Cells["B4"].PutValue("Diễn Giải");
+                sheetTrans.Cells["C4"].PutValue("Đơn Vị Tính");
+                sheetTrans.Cells["D4"].PutValue("Số Lượng");
+                sheetTrans.Cells["E4"].PutValue("Giá Bán");
+                sheetTrans.Cells["F4"].PutValue("Tổng Tiền");
+                sheetTrans.Cells["G4"].PutValue("Số LOT");
+                sheetTrans.Cells["H4"].PutValue("Ngày Hết Hạn");
+
+                sheetTrans.Cells["A4"].SetStyle(style);
+                sheetTrans.Cells["B4"].SetStyle(style);
+                sheetTrans.Cells["C4"].SetStyle(style);
+                sheetTrans.Cells["D4"].SetStyle(style);
+                sheetTrans.Cells["E4"].SetStyle(style);
+                sheetTrans.Cells["F4"].SetStyle(style);
+                sheetTrans.Cells["G4"].SetStyle(style);
+                sheetTrans.Cells["H4"].SetStyle(style);
+
+                style = workbook.GetStyleInPool(0);
+                style.Number = 49; //Text
+                style.Font.Color = Color.Black;
+
+                sheetTrans.Cells.Columns[0].ApplyStyle(style, flag);
+
+                Validation validation = sheetTrans.Validations[sheetTrans.Validations.Add()];
+                validation.Type = Aspose.Cells.ValidationType.List;
+                validation.Operator = OperatorType.Between;
+                validation.InCellDropDown = true;
+                validation.Formula1 = "=$AA$2:$AA$" + dt.Rows.Count + 2;
+                validation.ShowError = true;
+                validation.AlertStyle = ValidationAlertType.Stop;
+                validation.ErrorTitle = "Error";
+                validation.InputMessage = "Chọn mã mặt hàng";
+                validation.ErrorMessage = "Mã mặt hàng này không tồn tại";
+
+                CellArea area;
+                area.StartRow = 4;
+                area.EndRow = dt.Rows.Count * 2 + 4;
+                area.StartColumn = 0;
+                area.EndColumn = 0;
+
+                validation.AddArea(area);
+                try
+                {
+                    string formulaInventory = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AD,2,0)),\"\",VLOOKUP({0},AA:AD,2,0))", "A5");
+                    sheetTrans.Cells["B5"].SetSharedFormula(formulaInventory, dt.Rows.Count * 2, 1);
+
+                    string formulaUnitInventory = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AD,3,0)),\"\",VLOOKUP({0},AA:AD,3,0))", "A5");
+                    sheetTrans.Cells["C5"].SetSharedFormula(formulaUnitInventory, dt.Rows.Count * 2, 1);
+
+
+                    string formulaPriceInventory = string.Format("=IF(C5<>\"\",IF(ISERROR(VLOOKUP({0},AA:AD,4,0)),\"\",VLOOKUP({0},AA:AD,4,0)),\"\")", "A5");
+                    sheetTrans.Cells["E5"].SetSharedFormula(formulaPriceInventory, dt.Rows.Count * 2, 1);
+
+                    sheetTrans.Cells["F5"].SetSharedFormula("=IF(ISERROR(D5*E5),\"\",D5*E5)", dt.Rows.Count * 2, 1);
+                }
+                catch (Exception)
+                {
+
+                }
+
+
+                style = sheetTrans.Cells["F5"].GetStyle();
+                style.Custom = "#,##0";
+                Range range = sheetTrans.Cells.CreateRange("F5", "F" + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+                range = sheetTrans.Cells.CreateRange("E5", "E" + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+                style = sheetTrans.Cells["A5"].GetStyle();
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange("A5", "A" + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+                style = sheetTrans.Cells["D5"].GetStyle();
+                style.Custom = "#,##0";
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange("D5", "D" + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+                style.Number = 49;
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange("G5", "G" + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+                style.Number = 14;
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange("H5", "H" + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+                sheetTrans.AutoFitColumns();
+
+                sheetTrans.Cells.Columns[1].Width = 30;
+                sheetTrans.Cells.Columns[2].Width = 15;
+                sheetTrans.Cells.Columns[4].Width = 15;
+                sheetTrans.Cells.Columns[5].Width = 15;
+                sheetTrans.Protect(ProtectionType.All);
+
+                int row = 5;
+                foreach (var item in lstDetail)
+                {
+                    var invt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
+                    if (invt != null && invt.LotSerTrack == "L")
+                    {
+                        var lstLot = _app.IN_LotTrans.Where(p => p.BranchID == item.BranchID && p.BatNbr == item.BatNbr && p.INTranLineRef == item.LineRef).ToList();
+                        foreach (var item2 in lstLot)
+                        {
+                            sheetTrans.Cells["A" + row].PutValue(item.InvtID);
+                            sheetTrans.Cells["D" + row].PutValue(item2.Qty);
+                            sheetTrans.Cells["C" + row].PutValue(item2.UnitDesc);
+                            sheetTrans.Cells["G" + row].PutValue(item2.LotSerNbr);
+                            sheetTrans.Cells["H" + row].PutValue(item2.ExpDate);
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        sheetTrans.Cells["A" + row].PutValue(item.InvtID);
+                        sheetTrans.Cells["D" + row].PutValue(item.Qty);
+                        sheetTrans.Cells["C" + row].PutValue(item.UnitDesc);
+                        sheetTrans.Cells["G" + row].PutValue("");
+                        sheetTrans.Cells["H" + row].PutValue("");
+                        row++;
+                    }
+                }
+
+                workbook.Save(stream, SaveFormat.Xlsx);
+                stream.Flush();
+                stream.Position = 0;
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = data["BatNbr"].PassNull() + ".xlsx" };
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
+        [HttpPost]
+        public ActionResult Import(FormCollection data)
+        {
+            try
+            {
+      
+             
+                string message = string.Empty;
+
+                List<IN_Trans> lstTrans = new List<IN_Trans>();
+                List<IN_LotTrans> lstLot = new List<IN_LotTrans>();
+
+                string siteID = data["SiteID"].PassNull();
+                string branchID = data["BranchID"].PassNull();
+                int line = data["lineRef"].ToInt();
+                List<string> lstImport= data["importData"].PassNull().Split('\n').ToList();
+                int i = 0;
+                foreach (var item in lstImport)
+                {
+                    i++;
+                    var obj = item.Split('\t');
+                    if (obj.Length == 3)
+                    {
+                        double qty = 0;
+                        if (double.TryParse(obj[2], out qty))
+                        {
+                            string invtID = obj[0];
+                            var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                            if (objInvt != null)
+                            {
+                                var uom = SetUOM(objInvt.InvtID, objInvt.ClassID, objInvt.StkUnit, obj[1]);
+                                if (uom != null)
+                                {
+                                    var newTran = new IN_Trans();
+                                    newTran.CnvFact = uom.CnvFact;
+                                    newTran.InvtID = objInvt.InvtID;
+                                    newTran.Qty = qty;
+                                    newTran.UnitDesc = obj[1];
+                                    newTran.UnitMultDiv = uom.MultDiv;
+                                    newTran.LineRef = LastLineRef(line);
+                                    newTran.SiteID = siteID;
+                                    newTran.TranDesc = objInvt.Descr;
+                                    if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
+                                    {
+                                        var itemSite = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == siteID && p.InvtID == objInvt.InvtID);
+                                        if (itemSite != null)
+                                        {
+                                            newTran.UnitPrice = Math.Round(newTran.UnitMultDiv == "M" ? itemSite.AvgCost * newTran.CnvFact : itemSite.AvgCost / newTran.CnvFact, 0);
+                                        }
+                                    }
+                                    newTran.TranAmt = newTran.ExtCost = newTran.UnitPrice * newTran.Qty;
+                                    if (objInvt.LotSerTrack == "L")
+                                    {
+                                        double needQty = Math.Round(newTran.UnitMultDiv == "M" ? newTran.Qty * newTran.CnvFact : newTran.Qty / newTran.CnvFact, 0);
+
+                                        List<IN_ItemLot> lstLotDB = _app.IN_ItemLot.Where(p => p.SiteID == siteID && p.InvtID == objInvt.InvtID && p.QtyAvail > 0).OrderBy(p => p.ExpDate).ThenBy(p => p.LotSerNbr).ToList();
+
+                                        foreach (var itemLot in lstLotDB)
+                                        {
+                                            double newQty = 0;
+                                            if (itemLot.QtyAvail >= needQty)
+                                            {
+                                                newQty = needQty;
+                                                needQty = 0;
+                                            }
+                                            else
+                                            {
+                                                newQty = itemLot.QtyAvail;
+                                                needQty -= itemLot.QtyAvail;
+                                            }
+
+                                            if (newQty != 0)
+                                            {
+                                                var newLot = new IN_LotTrans();
+                                                newLot.LotSerNbr = itemLot.LotSerNbr;
+                                                newLot.ExpDate = itemLot.ExpDate;
+                                                newLot.WarrantyDate = DateTime.Now;
+                                                newLot.INTranLineRef = LastLineRef(line);
+                                                newLot.SiteID = newTran.SiteID;
+                                                newLot.InvtID = newTran.InvtID;
+                                                newLot.InvtMult = -1;
+                                              
+                                                if ((newTran.UnitMultDiv == "M" ? newQty / newTran.CnvFact : newQty * newTran.CnvFact) % 1 > 0)
+                                                {
+                                                    newLot.CnvFact = 1;
+                                                    newLot.UnitMultDiv = "M";
+                                                    newLot.Qty = newQty;
+                                                    newLot.UnitDesc = objInvt.StkUnit;
+
+                                                    if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
+                                                    {
+                                                        newLot.UnitPrice = newLot.UnitCost = Math.Round(newTran.UnitMultDiv == "M" ? newTran.UnitPrice / newTran.CnvFact : newTran.UnitPrice * newTran.CnvFact,0);
+                                                    }
+                                                    else
+                                                    {
+                                                        newLot.UnitPrice = newLot.UnitCost = 0;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    newLot.Qty = Math.Round(newTran.UnitMultDiv == "M" ? newQty / newTran.CnvFact : newQty * newTran.CnvFact,0);
+                                                    newLot.CnvFact = newTran.CnvFact;
+                                                    newLot.UnitMultDiv = newTran.UnitMultDiv;
+                                                    newLot.UnitPrice = newTran.UnitPrice;
+                                                    newLot.UnitCost = newTran.UnitPrice;
+                                                    newLot.UnitDesc = newTran.UnitDesc;
+                                                }
+
+
+                                                lstLot.Add(newLot);
+                                            }
+
+                                            if (needQty == 0) break;
+                                        }
+
+                                        if (needQty != 0)
+                                        {
+                                            message += string.Format("Dòng {0} mặt hàng {1} không đủ số lượng LOT để xuất<br/>", i, obj[0]);
+                                        }
+                                        else
+                                        {
+                                            lstTrans.Add(newTran);
+                                            line++;
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        lstTrans.Add(newTran);
+                                        line++;
+
+                                    }
+                                }
+                                else
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} đơn vị quy đổi {2} không đúng<br/>", i, obj[0], obj[1]);
+                                }
+                            }
+                            else
+                            {
+                                message += string.Format("Dòng {0} mặt hàng {1} không tồn tại<br/>", i, obj[0]);
+                            }
+                        }
+                        else
+                        {
+                            message += string.Format("Dòng {0} không đúng định dạng<br/>", i);
+                        }
+                    }
+                    else
+                    {
+                        message += string.Format("Dòng {0} không đúng định dạng<br/>", i);
+                    }
+                }
+                Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans, lstLot });
+                return _logMessage;
+            }
+            catch (Exception ex)
+            {
+
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+            
+          
+        }
         #endregion
 
         #region Source
@@ -364,12 +751,12 @@ namespace IN10200.Controllers
             }
             lstLot = lstLot.OrderBy(p => p.ExpDate).ThenBy(p => p.LotSerNbr).ToList();
 
-            return this.Store(lstLot.OrderBy(p => p.LotSerNbr).ToList(), lstLot.Count);
+            return this.Store(lstLot, lstLot.Count);
         }
         public ActionResult GetLotTrans(string branchID, string batNbr)
         {
             List<IN_LotTrans> lstLotTrans = _app.IN_LotTrans.Where(p => p.BranchID == branchID && p.BatNbr == batNbr).ToList();
-            return this.Store(lstLotTrans.OrderBy(p => p.LotSerNbr).ToList(), lstLotTrans.Count);
+            return this.Store(lstLotTrans.OrderBy(p => p.ExpDate).ThenBy(p => p.LotSerNbr).ToList(), lstLotTrans.Count);
         }
         public ActionResult GetItemLot(string invtID, string siteID, string lotSerNbr, string branchID, string batNbr)
         {
@@ -392,6 +779,7 @@ namespace IN10200.Controllers
             List<IN_ItemLot> lstLot = new List<IN_ItemLot>() { lot };
             return this.Store(lstLot, lstLot.Count);
         }
+       
         #endregion
 
         private void CheckData()
@@ -860,5 +1248,45 @@ namespace IN10200.Controllers
             return true;
         }
 
+        private string LastLineRef(int num)
+        {
+            string lineRef = num.ToString();
+            int len = lineRef.Length;
+            for (int i = 0; i < 5 - len; i++)
+            {
+                lineRef = "0" + lineRef;
+            }
+            return lineRef;
+        }
+        private IN_UnitConversion SetUOM(string invtID, string classID, string stkUnit, string fromUnit)
+        {
+            if (!string.IsNullOrEmpty(fromUnit))
+            {
+                IN_UnitConversion data = _app.IN_UnitConversion.FirstOrDefault(p =>
+                        p.UnitType == "3" && p.ClassID == "*" && p.InvtID == invtID && p.FromUnit == fromUnit &&
+                        p.ToUnit == stkUnit);
+                if (data != null)
+                {
+                    return data;
+                }
+                data = _app.IN_UnitConversion.FirstOrDefault(p =>
+                        p.UnitType == "2" && p.ClassID == classID && p.InvtID == "*" && p.FromUnit == fromUnit &&
+                        p.ToUnit == stkUnit);
+                if (data != null)
+                {
+                    return data;
+                }
+                data = _app.IN_UnitConversion.FirstOrDefault(p =>
+                        p.UnitType == "1" && p.ClassID == "*" && p.InvtID == "*" && p.FromUnit == fromUnit &&
+                        p.ToUnit == stkUnit);
+                if (data != null)
+                {
+                    return data;
+                }
+                throw new MessageException("2525", new[] { invtID });
+                return null;
+            }
+            return null;
+        }
     }
 }

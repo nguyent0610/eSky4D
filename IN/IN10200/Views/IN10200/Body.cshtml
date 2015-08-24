@@ -15,6 +15,26 @@
     .Layout(LayoutType.Fit)
     .Items(
         X.Window()
+        .ID("winCopy")
+        .Hidden(true)
+        .Title(Util.GetLang("InvtID_Qty"))
+        .Layout(LayoutType.Fit)
+        .Height(400)
+        .Width(600)
+        .Modal(true)
+        .Closable(true)
+        .Buttons(          
+            X.Button().ID("btnCopyCancel").Text(Util.GetLang("Exit"))
+            .Listeners(p => p.Click.Fn = "btnCopyCancel_Click")
+
+            ,X.Button().ID("btnCopyOK").Text(Util.GetLang("OK"))
+            .Listeners(p => p.Click.Fn = "btnCopyOK_Click")
+        )     
+        .Items(
+            X.TextArea().ID("txtCopy")
+        )
+        
+        , X.Window()
         .ID("winLot")
         .Hidden(true)
         .Layout(LayoutType.Fit)
@@ -33,7 +53,7 @@
             X.Toolbar()
             .Border(false)
             .Items(
-                X.Label().ID("lblLotQtyAvail").Width(200).MarginSpec("0 0 0 5")
+                X.Label().ID("lblLotQtyAvail").Width(300).MarginSpec("0 0 0 5")
             )
         )
         .Items(
@@ -134,7 +154,23 @@
         .Listeners(p=>p.FieldChange.Fn="frmMain_FieldChange")
         .KeyMap(Util.SetupKeyMap())
         .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{
+            X.Button()
+            .ID("btnImport")
+            .Text(Util.GetLang("Import"))
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Click.Fn = "btnImport_Click";
+            })
+                    
+            , X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            })
             
+            , X.FileUploadField().ID("upload").ButtonOnly(true).HideMode(HideMode.Visibility).Hidden(true).Width(0).Height(0)
         }))
         .BottomBar(
             X.Toolbar()
@@ -542,7 +578,7 @@
                 .Text(Util.GetLang("Qty"))
                 .Align(Alignment.Right)
                 .Width(100)
-                .Editor(HQ.NumberField().MaxValue(100000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
+                .Editor(HQ.NumberField().ID("txtTransQty").MaxValue(100000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
                 .Renderer("rdrTrans_QtyAmt")
                 
                 , X.ComponentColumn()

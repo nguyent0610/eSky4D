@@ -1453,7 +1453,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="61" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="39" >
         <EntityTypeShape EntityType="IN10200Model.Batch" Width="1.5" PointX="7.625" PointY="0.5" />
         <EntityTypeShape EntityType="IN10200Model.IN_Inventory" Width="1.5" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="IN10200Model.IN_ItemLot" Width="1.5" PointX="5.75" PointY="0.5" />
