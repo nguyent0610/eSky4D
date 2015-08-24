@@ -676,10 +676,13 @@ namespace OMProcess
                 clsOM_PDASalesOrdDet objPDADet = new clsOM_PDASalesOrdDet(Dal);
                 clsOM_SalesOrdDet objSalesDet = new clsOM_SalesOrdDet(Dal);
                 clsOM_LotTrans objLot = new clsOM_LotTrans(Dal);
+                clsOM_PDAOrdDisc objPDAOrdDisc = new clsOM_PDAOrdDisc(Dal);
+                clsOM_OrdAddr objOrdDisc = new clsOM_OrdAddr(Dal);
                 foreach (var item in dicRef)
                 {
                     if (objPDADet.GetByKey(branchID, orderNbr, item.Key))
                     {
+                       
                         double rate = item.Value / objPDADet.LineQty;
 
                         objSalesDet.Reset();
