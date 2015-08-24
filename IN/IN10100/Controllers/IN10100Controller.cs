@@ -22,6 +22,20 @@ using System.Dynamic;
 using HQFramework.Common;
 namespace IN10100.Controllers
 {
+
+    public class InvtCompare : IEqualityComparer<IN_LotTrans>
+    {
+
+        public bool Equals(IN_LotTrans x, IN_LotTrans y)
+        {
+            return x.InvtID.Equals(y.InvtID);
+        }
+
+        public int GetHashCode(IN_LotTrans obj)
+        {
+            return obj.InvtID.GetHashCode();
+        }
+    }
     [DirectController]
     [CustomAuthorize]
     [CheckSessionOut]
@@ -31,7 +45,7 @@ namespace IN10100.Controllers
         private string _userName = Current.UserName;
         private string _handle = "";
         private IN10100Entities _app = Util.CreateObjectContext<IN10100Entities>();
-        private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);     
+        private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private FormCollection _form;
         private IN10100_pcBatch_Result _objBatch;
         private JsonResult _logMessage;
@@ -63,13 +77,13 @@ namespace IN10100.Controllers
         {
             return PartialView();
         }
-        
+
         public ActionResult GetBatch(string branchID, string query, int start, int limit, int page)
         {
             query = query ?? string.Empty;
             if (page != 1) query = string.Empty;
-            var lstBatch = _app.IN10100_pcBatch(branchID, query, start, start +20).ToList();
-            var paging = new Paging<IN10100_pcBatch_Result>(lstBatch, lstBatch.Count>0 ? lstBatch[0].TotalRecords.Value:0);
+            var lstBatch = _app.IN10100_pcBatch(branchID, query, start, start + 20).ToList();
+            var paging = new Paging<IN10100_pcBatch_Result>(lstBatch, lstBatch.Count > 0 ? lstBatch[0].TotalRecords.Value : 0);
             return this.Store(paging.Data, paging.TotalRecords);
         }
         public ActionResult GetTrans(string batNbr, string branchID)
@@ -79,7 +93,7 @@ namespace IN10100.Controllers
         }
         public ActionResult GetTransfer(string branchID, DateTime tranDate, string trnsfrDocNbr)
         {
-            var lstTransfer = _app.IN10100_pdTrnsfer( branchID,trnsfrDocNbr,tranDate).ToList();
+            var lstTransfer = _app.IN10100_pdTrnsfer(branchID, trnsfrDocNbr, tranDate).ToList();
             return this.Store(lstTransfer);
         }
         public ActionResult GetLotTransfer(string branchID, DateTime tranDate, string trnsfrDocNbr)
@@ -99,7 +113,7 @@ namespace IN10100.Controllers
         }
         public ActionResult GetPrice(string invtID, string uom, DateTime effDate)
         {
-            var lstPrice = _app.IN10100_pdPrice("",invtID,uom,DateTime.Now).ToList();
+            var lstPrice = _app.IN10100_pdPrice("", invtID, uom, DateTime.Now).ToList();
             return this.Store(lstPrice);
         }
         public ActionResult GetUnit(string invtID)
@@ -117,7 +131,7 @@ namespace IN10100.Controllers
         public ActionResult GetLot(string invtID, string siteID, string orderNbr, string branchID)
         {
             List<IN_ItemLot> lstLot = new List<IN_ItemLot>();
-          
+
             List<IN_ItemLot> lstLotDB = _app.IN_ItemLot.Where(p => p.SiteID == siteID && p.InvtID == invtID).ToList();
             foreach (var item in lstLotDB)
             {
@@ -172,7 +186,7 @@ namespace IN10100.Controllers
                 {
                     return _logMessage;
                 }
-                return Util.CreateMessage(MessageProcess.Save, new {batNbr = _objBatch.BatNbr });
+                return Util.CreateMessage(MessageProcess.Save, new { batNbr = _objBatch.BatNbr });
             }
             catch (Exception ex)
             {
@@ -195,9 +209,9 @@ namespace IN10100.Controllers
                 }
                 _objBatch = data.ConvertToObject<IN10100_pcBatch_Result>();
 
-                if (_objBatch.Status!="H")
+                if (_objBatch.Status != "H")
                 {
-                    throw new MessageException(MessageType.Message, "2015020805","",new string[]{_objBatch.BatNbr});
+                    throw new MessageException(MessageType.Message, "2015020805", "", new string[] { _objBatch.BatNbr });
                 }
 
                 var batch = _app.Batches.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr);
@@ -237,7 +251,7 @@ namespace IN10100.Controllers
             try
             {
                 var access = Session["IN10100"] as AccessRight;
-                
+
                 _objBatch = data.ConvertToObject<IN10100_pcBatch_Result>();
 
                 if (_objBatch.Status != "H")
@@ -252,7 +266,7 @@ namespace IN10100.Controllers
 
                 var lstTrans = _app.IN_Trans.Where(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr).ToList();
                 var trans = lstTrans.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.LineRef == lineRef);
-              
+
                 if (trans != null)
                 {
                     lstTrans.Remove(trans);
@@ -276,8 +290,8 @@ namespace IN10100.Controllers
                     batch.LUpd_Prog = _screenNbr;
                     batch.LUpd_User = _userName;
                 }
-               
-                
+
+
                 _app.SaveChanges();
 
                 string tstamp = "";
@@ -303,18 +317,18 @@ namespace IN10100.Controllers
         }
         private void SaveData(FormCollection data)
         {
-            
+
             var transHandler = new StoreDataHandler(data["lstTrans"]);
             if (_lstTrans == null)
             {
-                _lstTrans = transHandler.ObjectData<IN10100_pgReceiptLoad_Result>().Where(p => Util.PassNull(p.LineRef) != string.Empty && p.InvtID.PassNull()!=string.Empty).ToList();
+                _lstTrans = transHandler.ObjectData<IN10100_pgReceiptLoad_Result>().Where(p => Util.PassNull(p.LineRef) != string.Empty && p.InvtID.PassNull() != string.Empty).ToList();
             }
             var lotHandler = new StoreDataHandler(data["lstLot"]);
             if (_lstLot == null)
             {
                 _lstLot = lotHandler.ObjectData<IN_LotTrans>().Where(p => Util.PassNull(p.INTranLineRef) != string.Empty && p.InvtID.PassNull() != string.Empty && p.LotSerNbr.PassNull() != string.Empty).ToList();
             }
-         
+
             _objBatch = data.ConvertToObject<IN10100_pcBatch_Result>();
 
             _handle = data["Handle"].PassNull();
@@ -335,26 +349,26 @@ namespace IN10100.Controllers
                 }
             }
             Batch batch = _app.Batches.FirstOrDefault(p => p.BatNbr == _objBatch.BatNbr && p.BranchID == _objBatch.BranchID);
-            if (( _objBatch.Status == "U" ||  _objBatch.Status == "C") && (_handle == "C" || _handle == "V"))
+            if ((_objBatch.Status == "U" || _objBatch.Status == "C") && (_handle == "C" || _handle == "V"))
             {
-                if (batch!=null)
+                if (batch != null)
                 {
-                    if(batch.tstamp.ToHex() != data["tstamp"].ToHex())
+                    if (batch.tstamp.ToHex() != data["tstamp"].ToHex())
                     {
                         throw new MessageException(MessageType.Message, "19");
                     }
                 }
                 else
                 {
-                    throw new MessageException(MessageType.Message, "2015020802","",new []{batch.BatNbr});
+                    throw new MessageException(MessageType.Message, "2015020802", "", new[] { batch.BatNbr });
                 }
 
             }
             else
             {
-              
+
                 CheckData();
-              
+
                 Save_Batch(batch);
 
             }
@@ -371,20 +385,20 @@ namespace IN10100.Controllers
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
 
                         inventory.IN10100_Release(_objBatch.BranchID, _objBatch.BatNbr, data["isTransfer"].ToBool(), data["isTransfer"].ToBool() ? _lstTrans[0].RefNbr : "");
-                        
+
                         dal.CommitTrans();
 
                         Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _objBatch.BatNbr });
-  
+
                     }
                     else if (_handle == "C" || _handle == "V")
                     {
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
 
                         inventory.IN10100_Cancel(_objBatch.BranchID, _objBatch.BatNbr, data["isTransfer"].ToBool(), data["isTransfer"].ToBool() ? _lstTrans[0].RefNbr : "", _handle == "C");
-                        
+
                         dal.CommitTrans();
-                       
+
                         Util.AppendLog(ref _logMessage, "9999", "");
                     }
 
@@ -406,27 +420,27 @@ namespace IN10100.Controllers
         {
             var access = Session[_screenNbr] as AccessRight;
 
-            if((_objBatch.BatNbr.PassNull()!=string.Empty && !access.Update) || (_objBatch.BatNbr.PassNull()==string.Empty && !access.Insert))
+            if ((_objBatch.BatNbr.PassNull() != string.Empty && !access.Update) || (_objBatch.BatNbr.PassNull() == string.Empty && !access.Insert))
             {
-                 throw new MessageException(MessageType.Message, "728");
+                throw new MessageException(MessageType.Message, "728");
             }
 
-            if(_objBatch.Status.PassNull()!= "H"  && (!access.Update) || (_objBatch.BatNbr.PassNull()==string.Empty && !access.Insert))
+            if (_objBatch.Status.PassNull() != "H" && (!access.Update) || (_objBatch.BatNbr.PassNull() == string.Empty && !access.Insert))
             {
-                 throw new MessageException(MessageType.Message, "2015020803");
+                throw new MessageException(MessageType.Message, "2015020803");
             }
 
-            if(_objBatch.JrnlType == "PO")
+            if (_objBatch.JrnlType == "PO")
             {
-                 throw new MessageException(MessageType.Message, "2015020801","",new string[]{_objBatch.BatNbr});
+                throw new MessageException(MessageType.Message, "2015020801", "", new string[] { _objBatch.BatNbr });
             }
             if (_form["isTransfer"].ToBool())
             {
-                string refNbr=_lstTrans[0].RefNbr;
+                string refNbr = _lstTrans[0].RefNbr;
                 var transfer = _app.IN_Transfer.FirstOrDefault(p => p.BranchID == _objBatch.BranchID && p.TrnsfrDocNbr == refNbr);
                 if (transfer == null || transfer.Status != "I")
                 {
-                    throw new MessageException(MessageType.Message, "2015020901","",new []{_lstTrans[0].RefNbr});
+                    throw new MessageException(MessageType.Message, "2015020901", "", new[] { _lstTrans[0].RefNbr });
                 }
             }
             if (_lstTrans.Count == 0)
@@ -438,7 +452,7 @@ namespace IN10100.Controllers
             {
                 string invtID = _lstTrans[i].InvtID;
                 string siteID = _lstTrans[i].SiteID;
-              
+
                 if (_lstTrans[i].Qty == 0)
                 {
                     throw new MessageException("1000", new[] { Util.GetLang("Qty") });
@@ -454,7 +468,7 @@ namespace IN10100.Controllers
                     throw new MessageException("2525", new[] { _lstTrans[i].InvtID });
                 }
                 IN_Inventory objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
-                if (objInvt!=null && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack != "N")
+                if (objInvt != null && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack != "N")
                 {
                     var lstLot = _lstLot.Where(p => p.INTranLineRef == _lstTrans[i].LineRef).ToList();
                     double lotQty = 0;
@@ -565,7 +579,7 @@ namespace IN10100.Controllers
             return true;
         }
 
-        private void Update_Batch(Batch t,bool isNew)
+        private void Update_Batch(Batch t, bool isNew)
         {
             if (isNew)
             {
@@ -575,9 +589,9 @@ namespace IN10100.Controllers
                 t.RefNbr = _objBatch.RefNbr;
                 t.Module = "IN";
 
-                t.Crtd_Prog  = _screenNbr;
-                t.Crtd_User  = _userName;
-                t.Crtd_DateTime  = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+                t.Crtd_DateTime = DateTime.Now;
             }
             else
                 t.RefNbr = _objBatch.RefNbr;
@@ -603,11 +617,11 @@ namespace IN10100.Controllers
             if (isNew)
             {
                 t.ResetET();
-             
+
                 t.LineRef = s.LineRef;
                 t.BranchID = _objBatch.BranchID;
                 t.BatNbr = _objBatch.BatNbr;
-                if (_form["TrnsferNbr"].PassNull()!=string.Empty)
+                if (_form["TrnsferNbr"].PassNull() != string.Empty)
                 {
                     t.RefNbr = _form["TrnsferNbr"].PassNull();
                 }
@@ -663,16 +677,15 @@ namespace IN10100.Controllers
                 t.INTranLineRef = s.INTranLineRef;
                 t.LotSerNbr = s.LotSerNbr;
                 t.RefNbr = tran.RefNbr;
-                t.UnitDesc = s.UnitDesc;
+
                 t.Crtd_DateTime = DateTime.Now;
                 t.Crtd_Prog = _screenNbr;
                 t.Crtd_User = _userName;
-
                 t.WarrantyDate = DateTime.Now.ToDateShort();
             }
 
-          
 
+            t.UnitDesc = s.UnitDesc;
             t.ExpDate = s.ExpDate;
             t.InvtID = s.InvtID;
             t.InvtMult = tran.InvtMult;
@@ -719,13 +732,14 @@ namespace IN10100.Controllers
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(data["BranchID"].PassNull()), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@EffDate", DbType.DateTime, clsCommon.GetValueDBNull(data["DateEnd"].ToDateShort()), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(data["SiteID"].PassNull()), ParameterDirection.Input, 30));
                 DataTable dt = dal.ExecDataTable("IN10100_pdImportInventory", CommandType.StoredProcedure, ref pc);
 
-                List<IN10100_pgReceiptLoad_Result> lstDetail = _app.IN10100_pgReceiptLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(),"%","%").ToList();
+                List<IN10100_pgReceiptLoad_Result> lstDetail = _app.IN10100_pgReceiptLoad(data["BatNbr"].PassNull(), data["BranchID"].PassNull(), "%", "%").ToList();
 
                 sheetTrans.Cells.ImportDataTable(dt, false, "AA2");
-                
-            
+
+
 
                 Style style = workbook.GetStyleInPool(0);
                 style.Font.Color = Color.Transparent;
@@ -776,6 +790,8 @@ namespace IN10100.Controllers
                 sheetTrans.Cells["D4"].PutValue("Số Lượng");
                 sheetTrans.Cells["E4"].PutValue("Giá Bán");
                 sheetTrans.Cells["F4"].PutValue("Tổng Tiền");
+                sheetTrans.Cells["G4"].PutValue("Số LOT");
+                sheetTrans.Cells["H4"].PutValue("Ngày Hết Hạn");
 
                 sheetTrans.Cells["A4"].SetStyle(style);
                 sheetTrans.Cells["B4"].SetStyle(style);
@@ -783,17 +799,20 @@ namespace IN10100.Controllers
                 sheetTrans.Cells["D4"].SetStyle(style);
                 sheetTrans.Cells["E4"].SetStyle(style);
                 sheetTrans.Cells["F4"].SetStyle(style);
+                sheetTrans.Cells["G4"].SetStyle(style);
+                sheetTrans.Cells["H4"].SetStyle(style);
 
                 style = workbook.GetStyleInPool(0);
                 style.Number = 49; //Text
                 style.Font.Color = Color.Black;
+
                 sheetTrans.Cells.Columns[0].ApplyStyle(style, flag);
 
                 Validation validation = sheetTrans.Validations[sheetTrans.Validations.Add()];
                 validation.Type = Aspose.Cells.ValidationType.List;
                 validation.Operator = OperatorType.Between;
                 validation.InCellDropDown = true;
-                validation.Formula1 = "=$AA2:$AA" + dt.Rows.Count + 2;
+                validation.Formula1 = "=$AA$2:$AA$" + dt.Rows.Count + 2;
                 validation.ShowError = true;
                 validation.AlertStyle = ValidationAlertType.Stop;
                 validation.ErrorTitle = "Error";
@@ -802,45 +821,62 @@ namespace IN10100.Controllers
 
                 CellArea area;
                 area.StartRow = 4;
-                area.EndRow = dt.Rows.Count + 4;
+                area.EndRow = dt.Rows.Count * 2 + 4;
                 area.StartColumn = 0;
                 area.EndColumn = 0;
 
                 validation.AddArea(area);
+                try
+                {
+                    string formulaInventory = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AD,2,0)),\"\",VLOOKUP({0},AA:AD,2,0))", "A5");
+                    sheetTrans.Cells["B5"].SetSharedFormula(formulaInventory, dt.Rows.Count * 2, 1);
 
-                string formulaInventory = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AD,2,0)),\"\",VLOOKUP({0},AA:AD,2,0))", "A5");
-                sheetTrans.Cells["B5"].SetSharedFormula(formulaInventory, dt.Rows.Count, 1);
-
-                string formulaUnitInventory = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AD,3,0)),\"\",VLOOKUP({0},AA:AD,3,0))", "A5");
-                sheetTrans.Cells["C5"].SetSharedFormula(formulaUnitInventory, dt.Rows.Count, 1);
+                    string formulaUnitInventory = string.Format("=IF(ISERROR(VLOOKUP({0},AA:AD,3,0)),\"\",VLOOKUP({0},AA:AD,3,0))", "A5");
+                    sheetTrans.Cells["C5"].SetSharedFormula(formulaUnitInventory, dt.Rows.Count * 2, 1);
 
 
-                string formulaPriceInventory = string.Format("=IF(C5<>\"\",IF(ISERROR(VLOOKUP({0},AA:AD,4,0)),\"\",VLOOKUP({0},AA:AD,4,0)),\"\")", "A5");
-                sheetTrans.Cells["E5"].SetSharedFormula(formulaPriceInventory, dt.Rows.Count, 1);
+                    string formulaPriceInventory = string.Format("=IF(C5<>\"\",IF(ISERROR(VLOOKUP({0},AA:AD,4,0)),\"\",VLOOKUP({0},AA:AD,4,0)),\"\")", "A5");
+                    sheetTrans.Cells["E5"].SetSharedFormula(formulaPriceInventory, dt.Rows.Count * 2, 1);
 
-                sheetTrans.Cells["F5"].SetSharedFormula("=IF(ISERROR(D5*E5),\"\",D5*E5)", dt.Rows.Count, 1);
+                    sheetTrans.Cells["F5"].SetSharedFormula("=IF(ISERROR(D5*E5),\"\",D5*E5)", dt.Rows.Count * 2, 1);
+                }
+                catch (Exception)
+                {
+
+                }
+
 
                 style = sheetTrans.Cells["F5"].GetStyle();
                 style.Custom = "#,##0";
-                Range range = sheetTrans.Cells.CreateRange("F5", "F" + (dt.Rows.Count + 5));
+                Range range = sheetTrans.Cells.CreateRange("F5", "F" + (dt.Rows.Count * 2 + 5));
                 range.ApplyStyle(style, flag);
-                range = sheetTrans.Cells.CreateRange("E5", "E" + (dt.Rows.Count + 5));
+                range = sheetTrans.Cells.CreateRange("E5", "E" + (dt.Rows.Count * 2 + 5));
                 range.ApplyStyle(style, flag);
 
                 style = sheetTrans.Cells["A5"].GetStyle();
                 style.IsLocked = false;
 
-                range = sheetTrans.Cells.CreateRange("A5", "A" + (dt.Rows.Count + 5));
+                range = sheetTrans.Cells.CreateRange("A5", "A" + (dt.Rows.Count * 2 + 5));
                 range.ApplyStyle(style, flag);
 
                 style = sheetTrans.Cells["D5"].GetStyle();
                 style.Custom = "#,##0";
                 style.IsLocked = false;
 
-                range = sheetTrans.Cells.CreateRange("D5", "D" + (dt.Rows.Count + 5));
+                range = sheetTrans.Cells.CreateRange("D5", "D" + (dt.Rows.Count * 2 + 5));
                 range.ApplyStyle(style, flag);
 
+                style.Number = 49;
+                style.IsLocked = false;
 
+                range = sheetTrans.Cells.CreateRange("G5", "G" + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
+
+                style.Number = 14;
+                style.IsLocked = false;
+
+                range = sheetTrans.Cells.CreateRange("H5", "H" + (dt.Rows.Count * 2 + 5));
+                range.ApplyStyle(style, flag);
 
                 sheetTrans.AutoFitColumns();
 
@@ -853,9 +889,29 @@ namespace IN10100.Controllers
                 int row = 5;
                 foreach (var item in lstDetail)
                 {
-                    sheetTrans.Cells["A" + row].PutValue(item.InvtID);
-                    sheetTrans.Cells["D" + row].PutValue(item.Qty);
-                    row++;
+                    var invt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
+                    if (invt != null && invt.LotSerTrack == "L")
+                    {
+                        var lstLot = _app.IN_LotTrans.Where(p => p.BranchID == item.BranchID && p.BatNbr == item.BatNbr && p.INTranLineRef == item.LineRef).ToList();
+                        foreach (var item2 in lstLot)
+                        {
+                            sheetTrans.Cells["A" + row].PutValue(item.InvtID);
+                            sheetTrans.Cells["D" + row].PutValue(item2.Qty);
+                            sheetTrans.Cells["C" + row].PutValue(item2.UnitDesc);
+                            sheetTrans.Cells["G" + row].PutValue(item2.LotSerNbr);
+                            sheetTrans.Cells["H" + row].PutValue(item2.ExpDate);
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        sheetTrans.Cells["A" + row].PutValue(item.InvtID);
+                        sheetTrans.Cells["D" + row].PutValue(item.Qty);
+                        sheetTrans.Cells["C" + row].PutValue(item.UnitDesc);
+                        sheetTrans.Cells["G" + row].PutValue("");
+                        sheetTrans.Cells["H" + row].PutValue("");
+                        row++;
+                    }
                 }
 
                 workbook.Save(stream, SaveFormat.Xlsx);
@@ -884,16 +940,18 @@ namespace IN10100.Controllers
                 FileInfo fileInfo = new FileInfo(file.FileName);
                 string message = string.Empty;
                 List<object> lstTrans = new List<object>();
+                List<IN_LotTrans> lstLot = new List<IN_LotTrans>();
                 if (fileInfo.Extension == ".xls" || fileInfo.Extension == ".xlsx")
                 {
                     try
                     {
                         Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+                        int lineRef = data["lineRef"].ToInt();
                         if (workbook.Worksheets.Count > 0)
                         {
                             Worksheet workSheet = workbook.Worksheets[0];
                             string invtID = string.Empty;
-                            int lineRef = 1;
+                          
                             for (int i = 4; i < workSheet.Cells.MaxDataRow; i++)
                             {
                                 invtID = workSheet.Cells[i, 0].StringValue;
@@ -904,39 +962,114 @@ namespace IN10100.Controllers
                                     message += string.Format("Dòng {0} mặt hàng {1} không có trong hệ thống<br/>", (i + 1).ToString(), invtID);
                                     continue;
                                 }
+                                if (workSheet.Cells[i, 2].StringValue.PassNull() == string.Empty)
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} không có đơn vị<br/>", (i + 1).ToString(), invtID);
+                                    continue;
+                                }
                                 if (workSheet.Cells[i, 3].FloatValue == 0)
                                 {
                                     message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số lượng<br/>", (i + 1).ToString(), invtID);
                                     continue;
                                 }
+                                if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 6].StringValue.PassNull() == string.Empty)
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số LOT<br/>", (i + 1).ToString(), invtID);
+                                    continue;
+                                }
 
-                                var newTrans = new IN10100_pgReceiptLoad_Result();
-                                newTrans.InvtID = invtID;
-                                newTrans.LineRef = LastLineRef(lineRef);
-                                newTrans.ReasonCD = data["ReasonCD"].PassNull();
+                                if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 7].Value.PassNull() == string.Empty)
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} chưa nhập ngày hết hạn<br/>", (i + 1).ToString(), invtID);
+                                    continue;
+                                }
+
+
+                                if (objInvt.LotSerTrack == "L" && lstLot.Any(p => p.InvtID == invtID && p.LotSerNbr == workSheet.Cells[i, 6].StringValue))
+                                {
+                                    message += string.Format("Dòng {0} mặt hàng {1} trùng số lot {2}<br/>", (i + 1).ToString(), invtID, workSheet.Cells[i, 6].StringValue);
+                                    continue;
+                                }
+                               
+                                var newLot = new IN_LotTrans();
 
                                 workSheet.Cells[i, 2].Calculate(true, null);
-
-                                newTrans.UnitDesc = workSheet.Cells[i, 2].StringValue;
-                                newTrans.CnvFact = 1;
-                                newTrans.UnitMultDiv = "M";
-                                newTrans.InvtMult = 1;
-                                newTrans.TranType = "RC";
-                                newTrans.JrnlType = "IN";
-                                newTrans.TranDesc = objInvt.Descr;
-                                newTrans.Qty = workSheet.Cells[i, 3].FloatValue;
-
                                 workSheet.Cells[i, 4].Calculate(true, null);
 
-                                newTrans.UnitPrice = Math.Round(workSheet.Cells[i, 4].FloatValue, 0);
-                                newTrans.TranAmt = Math.Round(newTrans.UnitPrice * newTrans.Qty, 0);
-                                newTrans.SiteID = data["SiteID"].PassNull();
-                                lstTrans.Add(newTrans);
-                                lineRef++;
+                                newLot.CnvFact = 1;
+                                if (objInvt.LotSerTrack == "L")
+                                {
+                                    newLot.ExpDate = workSheet.Cells[i, 7].DateTimeValue.ToDateShort();
+                                    newLot.LotSerNbr = workSheet.Cells[i, 6].StringValue;
+                                }
+                             
+                                newLot.InvtID = invtID;
+                                newLot.InvtMult = 1;
+                                
+                                newLot.Qty = workSheet.Cells[i, 3].FloatValue;
+                                newLot.SiteID = data["SiteID"].PassNull();
+                                newLot.TranDate = data["DateEnt"].ToDateShort();
+                                newLot.TranType = "RC";
+                                newLot.UnitDesc = workSheet.Cells[i, 2].StringValue;
+                                newLot.UnitMultDiv = "M";
+                                newLot.WarrantyDate = DateTime.Now;
+                                if (objInvt.ValMthd == "A" || objInvt.ValMthd == "E")
+                                {
+                                    var item = _app.IN_ItemSite.FirstOrDefault(p => p.SiteID == newLot.SiteID && p.InvtID== newLot.InvtID);
+                                    if (item != null)
+                                    {
+                                        newLot.UnitCost = newLot.UnitPrice = item.AvgCost;
+                                    }
+                                }
+                                else
+                                {
+                                    newLot.UnitCost = newLot.UnitPrice = _app.IN10100_pdPrice("", invtID, newLot.UnitDesc, newLot.TranDate).FirstOrDefault().Price.Value;
+                                }
 
+                                lstLot.Add(newLot);
                             }
                         }
-                        Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans });
+
+                        var lstInvt = lstLot.Distinct(new InvtCompare()).ToList();
+                        foreach (var item in lstInvt)
+                        {
+                            var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == item.InvtID);
+                            var newTrans = new IN10100_pgReceiptLoad_Result();
+                            newTrans.InvtID = item.InvtID;
+                            newTrans.LineRef = LastLineRef(lineRef);
+                            newTrans.ReasonCD = data["ReasonCD"].PassNull();
+                            newTrans.TranDate = item.TranDate;
+                            newTrans.UnitDesc = item.UnitDesc;
+                            newTrans.CnvFact = 1;
+                            newTrans.UnitMultDiv = "M";
+                            newTrans.InvtMult = 1;
+                            newTrans.TranType = "RC";
+                            newTrans.JrnlType = "IN";
+                            newTrans.TranDesc = objInvt.Descr;
+                          
+
+                            var tmp = lstLot.Where(p => p.InvtID == item.InvtID).ToList();
+                            foreach (var lot in tmp)
+                            {
+                                newTrans.Qty += lot.Qty;
+                                lot.INTranLineRef = newTrans.LineRef;
+                                if (objInvt.LotSerTrack != "L")
+                                {
+                                    lstLot.Remove(lot);
+                                }
+                            }
+                          
+
+                            newTrans.UnitPrice = newTrans.UnitCost = item.UnitPrice;
+                            newTrans.TranAmt = Math.Round(newTrans.UnitPrice * newTrans.Qty, 0);
+                            newTrans.SiteID = item.SiteID;
+                            lstTrans.Add(newTrans);
+
+
+                            lineRef++;
+                        }
+
+                        Util.AppendLog(ref _logMessage, "20121418", "", data: new { message, lstTrans, lstLot });
                     }
                     catch (Exception ex)
                     {
@@ -987,7 +1120,7 @@ namespace IN10100.Controllers
                 rpt.UserID = Current.UserName;
                 rpt.AppPath = "Reports\\";
                 rpt.ClientName = Current.UserName;
-                rpt.LoggedCpnyID = Current.CpnyID;
+                rpt.LoggedCpnyID = data["BranchID"].PassNull();
                 rpt.CpnyID = user.CpnyID;
                 rpt.LangID = Current.LangID;
 

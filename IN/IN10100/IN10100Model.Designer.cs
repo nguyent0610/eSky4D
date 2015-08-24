@@ -4681,8 +4681,9 @@ namespace IN10100
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
+        /// <param name="unitDesc">Initial value of the UnitDesc property.</param>
         /// <param name="cnvFact">Initial value of the CnvFact property.</param>
-        public static IN_LotTrans CreateIN_LotTrans(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, global::System.String lotSerNbr, global::System.String iNTranLineRef, global::System.DateTime expDate, global::System.String invtID, global::System.Int16 invtMult, global::System.String kitID, global::System.String mfgrLotSerNbr, global::System.Double qty, global::System.String siteID, global::System.String toSiteID, global::System.DateTime tranDate, global::System.String tranType, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime warrantyDate, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.Double cnvFact)
+        public static IN_LotTrans CreateIN_LotTrans(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, global::System.String lotSerNbr, global::System.String iNTranLineRef, global::System.DateTime expDate, global::System.String invtID, global::System.Int16 invtMult, global::System.String kitID, global::System.String mfgrLotSerNbr, global::System.Double qty, global::System.String siteID, global::System.String toSiteID, global::System.DateTime tranDate, global::System.String tranType, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime warrantyDate, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String unitDesc, global::System.Double cnvFact)
         {
             IN_LotTrans iN_LotTrans = new IN_LotTrans();
             iN_LotTrans.BranchID = branchID;
@@ -4710,6 +4711,7 @@ namespace IN10100
             iN_LotTrans.LUpd_User = lUpd_User;
             iN_LotTrans.LUpd_DateTime = lUpd_DateTime;
             iN_LotTrans.tstamp = tstamp;
+            iN_LotTrans.UnitDesc = unitDesc;
             iN_LotTrans.CnvFact = cnvFact;
             return iN_LotTrans;
         }
@@ -5336,7 +5338,7 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String UnitDesc
         {
@@ -5348,7 +5350,7 @@ namespace IN10100
             {
                 OnUnitDescChanging(value);
                 ReportPropertyChanging("UnitDesc");
-                _UnitDesc = StructuralObject.SetValidValue(value, true);
+                _UnitDesc = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("UnitDesc");
                 OnUnitDescChanged();
             }
@@ -5992,6 +5994,30 @@ namespace IN10100
         private global::System.Boolean _CheckINVal;
         partial void OnCheckINValChanging(global::System.Boolean value);
         partial void OnCheckINValChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LastStkOutNbr
+        {
+            get
+            {
+                return _LastStkOutNbr;
+            }
+            set
+            {
+                OnLastStkOutNbrChanging(value);
+                ReportPropertyChanging("LastStkOutNbr");
+                _LastStkOutNbr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LastStkOutNbr");
+                OnLastStkOutNbrChanged();
+            }
+        }
+        private global::System.String _LastStkOutNbr;
+        partial void OnLastStkOutNbrChanging(global::System.String value);
+        partial void OnLastStkOutNbrChanged();
 
         #endregion
 

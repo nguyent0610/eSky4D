@@ -345,9 +345,12 @@ var btnImport_Click = function (c, e) {
             method: 'POST',
             url: 'IN10100/Import',
             timeout: 1000000,
+            params: {
+                lineRef: lastLineRef()
+            },
             success: function (msg, data) {
                 if (this.result.data.lstTrans != undefined) {
-                    App.stoTrans.removeAll();
+                    
                     this.result.data.lstTrans.forEach(function (item) {
                         var newTrans = Ext.create('App.mdlTrans');
                         newTrans.data.JrnlType = item.JrnlType;
@@ -368,11 +371,36 @@ var btnImport_Click = function (c, e) {
                         newTrans.data.UnitDesc = item.UnitDesc;
                         newTrans.data.UnitMultDiv = item.UnitMultDiv;
                         newTrans.data.UnitPrice = item.UnitPrice;
-                        newTrans.data.UnitCost = item.UnitCost;
                         newTrans.commit();
-                        HQ.store.insertRecord(App.stoTrans, 'InvtID', newTrans, true);
+                        App.stoTrans.insert(App.stoTrans.getCount() - 1, newTrans);
                     });
-                    HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true);
+
+                    App.stoLotTrans.clearFilter();
+                    App.stoLotTrans.suspendEvents();
+                    this.result.data.lstLot.forEach(function (item) {
+                        var newLot = Ext.create('App.mdlLotTrans');
+                        newLot.data.LotSerNbr = item.LotSerNbr;
+                        newLot.data.INTranLineRef = item.INTranLineRef;
+                        newLot.data.ExpDate = new Date(parseInt(item.ExpDate.substr(6)));
+                        newLot.data.InvtID = item.InvtID;
+                        newLot.data.InvtMult = item.InvtMult;
+                        newLot.data.MfgrLotSerNbr = item.MfgrLotSerNbr;
+                        newLot.data.Qty = item.Qty;
+                        newLot.data.SiteID = item.SiteID;
+                        newLot.data.SlsperID = item.SlsperID;
+                        newLot.data.TranDate = App.DateEnt.getValue();
+                        newLot.data.WarrantyDate = new Date(parseInt(item.WarrantyDate.substr(6)));
+                        newLot.data.TranType = 'RC';
+                        newLot.data.UnitCost = item.UnitCost;
+                        newLot.data.UnitDesc = item.UnitDesc;
+                        newLot.data.UnitMultDiv = item.UnitMultDiv;
+                        newLot.data.UnitPrice = item.UnitPrice;
+                        newLot.data.CnvFact = item.CnvFact;
+                        newLot.data.MfgrLotSerNbr = '';
+                        newLot.commit();
+                        App.stoLotTrans.insert(App.stoLotTrans.getCount() - 1, newLot);
+                    });
+                    App.stoLotTrans.resumeEvents();
                     calculate();
                     checkTransAdd();
 
@@ -1232,11 +1260,14 @@ var setStatusForm = function () {
         } else if (HQ.objBatch.data.Status == 'H') {
             lock = false;
         }
-        App.btnImport.setDisabled(true);
+            
     } else {
         lock = !HQ.isInsert;
         App.btnImport.setDisabled(false);
     }
+
+    
+    App.btnImport.setDisabled(App.Status.getValue() != 'H'); 
 
     HQ.common.lockItem(App.frmMain, lock);
     App.grdTrans.isLock = lock;
@@ -1415,6 +1446,17 @@ var setChange = function (isChange) {
         App.BatNbr.setReadOnly(false);
     }
     HQ.common.changeData(isChange, 'IN10100');
+}
+
+var tickToDate = function (ticks) {
+    //ticks are in nanotime; convert to microtime
+    var ticksToMicrotime = ticks / 10000;
+
+    //ticks are recorded from 1/1/1; get microtime difference from 1/1/1/ to 1/1/1970
+    var epochMicrotimeDiff = 2208988800000;
+
+    //new date is ticks, converted to microtime, minus difference from epoch microtime
+    return new Date(ticksToMicrotime - epochMicrotimeDiff);
 }
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
