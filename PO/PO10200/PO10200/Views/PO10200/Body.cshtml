@@ -416,7 +416,7 @@
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Discount")).DataIndex("DocDiscAmt").Width(150).Format("0,000,000.00").Editor(Html.X().NumberField().DecimalPrecision(2))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TranAmt")).DataIndex("TranAmt").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
 
-                                                    , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("POFee")).Hidden(true).DataIndex("RcptFee").Width(150).Format("0,000,000").Editor(HQ.NumberField())
+                                                    , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("POFee")).DataIndex("RcptFee").Width(150).Format("0,000,000").Editor(HQ.NumberField().DecimalPrecision(0))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Weight")).DataIndex("UnitWeight").Width(150).Format("0,000,000").Editor(HQ.NumberField().DecimalPrecision(0))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("ExtWeight")).DataIndex("ExtWeight").Width(150).Format("0,000,000")//.Editor(HQ.NumberField())
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Volume")).DataIndex("UnitVolume").Width(150).Format("0,000,000").Editor(HQ.NumberField().DecimalPrecision(0))

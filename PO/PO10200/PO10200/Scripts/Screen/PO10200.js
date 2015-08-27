@@ -104,10 +104,11 @@ var loadDataDetail = function (sto) {
         HQ.store.insertBlank(sto, _keys);
         HQ.isFirstLoad = false;
     }
-    calcDet();
+   
     frmChange();
     HQ.common.showBusy(false);
     App.stoLotTrans.reload();
+    calcDet();
 };
 var loadPO10200_pdSI_Tax = function () {
     if (App.stoPO10200_pdSI_Tax.getCount() > 0) {
@@ -457,6 +458,7 @@ var grdPO_Trans_ValidateEdit = function (item, e) {
             objdet.set('RcptUnitDescr', objIN_Inventory.DfltPOUnit == null ? "" : objIN_Inventory.DfltPOUnit);
             objdet.set('UnitWeight', objIN_Inventory.StkWt);
             objdet.set('UnitVolume', objIN_Inventory.StkVol);
+            objdet.set('RcptFee', objIN_Inventory.POFee);
             objdet.set('TranDesc', r.Descr);
         }
     }
@@ -563,15 +565,16 @@ var grdPO_Trans_Edit = function (item, e) {
         StkQty = Math.round((objDetail.RcptMultDiv == "D" ? (objDetail.RcptQty / objDetail.RcptConvFact) : (objDetail.RcptQty * objDetail.RcptConvFact)));
         e.record.set("DocDiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.RcptQty * objDetail.DiscPct) / 100, 2));        
         e.record.set("TranAmt", objDetail.RcptQty * objDetail.UnitCost - objDetail.DocDiscAmt);
-        objDetail.POFee = 0;// StkQty * objIN_Inventory.POFee;
       
-        e.record.set("ExtWeight", objDetail.RcptQty * objDetail.UnitWeight);
-        e.record.set("ExtVolume", objDetail.RcptQty * objDetail.UnitVolume);
-
+        e.record.set("ExtWeight", StkQty * objDetail.UnitWeight);
+        e.record.set("ExtVolume", StkQty * objDetail.UnitVolume);
+     
        
     }
     else if (e.field == "UnitWeight") {
-        e.record.set("ExtWeight", objDetail.RcptQty * objDetail.UnitWeight);
+        StkQty = Math.round((objDetail.RcptMultDiv == "D" ? (objDetail.RcptQty / objDetail.RcptConvFact) : (objDetail.RcptQty * objDetail.RcptConvFact)));
+        e.record.set("ExtWeight", StkQty * objDetail.UnitWeight);
+        calcDet();
 
     }
     else if (e.field == "UnitCost") {
@@ -594,9 +597,14 @@ var grdPO_Trans_Edit = function (item, e) {
         });
     }
     else if (e.field == "UnitVolume") {
-        e.record.set("ExtVolume", objDetail.RcptQty * objDetail.UnitVolume);
+        StkQty = Math.round((objDetail.RcptMultDiv == "D" ? (objDetail.RcptQty / objDetail.RcptConvFact) : (objDetail.RcptQty * objDetail.RcptConvFact)));
+        e.record.set("ExtVolume", StkQty * objDetail.UnitVolume);
+        calcDet();
     }
-    else if (e.field == "DocDiscAmt" && objDetail.TranAmt>0) {
+    else if (e.field == "DocDiscAmt" && objDetail.TranAmt > 0) {
+        if (e.value > objDetail.UnitCost * objDetail.RcptQty)
+            e.record.set("DocDiscAmt", 0);
+
         e.record.set("TranAmt", objDetail.UnitCost * objDetail.RcptQty - objDetail.DocDiscAmt);
         if (objDetail.RcptQty != 0) {
             e.record.set("DiscPct", HQ.util.mathRound((objDetail.DocDiscAmt / (objDetail.UnitCost * objDetail.RcptQty)) * 100, 2));//Math.round((objDetail.DocDiscAmt / (objDetail.UnitCost * objDetail.RcptQty)) * 100, 2));
@@ -1200,6 +1208,7 @@ var deleteRecordGrid = function (item) {
                 }
                 delTax(App.slmPO_Trans.selected.items[0]);
                 App.grdDetail.deleteSelected();
+                calcDet();
                 App.frmMain.getForm().updateRecord();
                 if (App.frmMain.isValid()) {
                     App.frmMain.submit({
@@ -1222,7 +1231,7 @@ var deleteRecordGrid = function (item) {
                             }
                             App.cboBatNbr.getStore().load(function () {
                                 App.cboBatNbr.setValue(batNbr);
-                                App.stoHeader.reload();
+                                refresh('yes');
                             });
                         },
                         failure: function (msg, data) {
@@ -1241,7 +1250,7 @@ var deleteRecordGrid = function (item) {
                 }
                 delTax(App.slmPO_Trans.selected.items[0]);
                 App.grdDetail.deleteSelected();
-             
+                calcDet();
              
             }
         }
@@ -1472,7 +1481,7 @@ function calcDet() {
 
 
 
-        poFee += det.data.RcptFee;     
+        poFee += Math.round((det.data.RcptMultDiv == "D" ? (det.data.RcptQty / det.data.RcptConvFact) : (det.data.RcptQty * det.data.RcptConvFact))) * det.data.RcptFee;
         extCost += det.data.TranAmt;
         discount += det.data.DocDiscAmt
         qty += det.data.RcptQty;
