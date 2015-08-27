@@ -383,7 +383,7 @@ var btnLotOK_Click = function () {
         } else {
             App.winLot.record.data.Qty = Math.round(lineQty);
         }
-        App.winLot.record.data.TranAmt = App.winLot.record.data.Qty * App.winLot.record.data.UnitPrice;
+        App.winLot.record.data.TranAmt = App.winLot.record.data.ExtCost =  App.winLot.record.data.Qty * App.winLot.record.data.UnitPrice;
         App.winLot.record.commit();
 
         App.grdTrans.view.refresh();
@@ -466,7 +466,7 @@ var btnCopyOK_Click = function () {
                         var newTrans = Ext.create('App.mdlTrans');
                         newTrans.data.JrnlType = 'IN';
                         newTrans.data.ReasonCD = App.cboReasonCD.getValue();
-                        newTrans.data.TranAmt = item.TranAmt;
+                        newTrans.data.TranAmt = newTrans.data.ExtCost = item.TranAmt;
                         newTrans.data.BranchID = HQ.cpnyID;
                         newTrans.data.CnvFact = item.CnvFact;
                         newTrans.data.ExtCost = item.TranAmt;
@@ -527,6 +527,8 @@ var btnCopyOK_Click = function () {
            
             },
             failure: function (msg, data) {
+                App.winCopy.unmask();
+                App.winCopy.hide();
                 HQ.message.process(msg, data, true);
             }
         });

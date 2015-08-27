@@ -1111,7 +1111,7 @@ namespace IN10200.Controllers
 
             t.ReasonCD = batch.ReasonCD;
             t.CnvFact = s.CnvFact;
-            t.ExtCost = Math.Round(s.ExtCost, 0);
+            t.ExtCost = Math.Round(s.TranAmt, 0);
             t.InvtID = s.InvtID;
             t.InvtMult = s.InvtMult;
             t.JrnlType = s.JrnlType;
