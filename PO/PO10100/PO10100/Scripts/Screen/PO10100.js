@@ -458,13 +458,14 @@ var grdPO_Detail_Edit = function (item, e) {
         StkQty = Math.round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
         e.record.set("DiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
         e.record.set("ExtCost", objDetail.QtyOrd * objDetail.UnitCost - objDetail.DiscAmt);
-        objDetail.POFee = 0;// StkQty * objIN_Inventory.POFee;
+        objDetail.POFee =  StkQty * objIN_Inventory.POFee;
 
-        e.record.set("ExtWeight", objDetail.QtyOrd * objDetail.UnitWeight);
-        e.record.set("ExtVolume", objDetail.QtyOrd * objDetail.UnitVolume);
+        e.record.set("ExtWeight", StkQty * objDetail.UnitWeight);
+        e.record.set("ExtVolume", StkQty * objDetail.UnitVolume);
     }
     else if (e.field == "UnitWeight") {
-        e.record.set("ExtWeight", objDetail.QtyOrd * objDetail.UnitWeight);
+        StkQty = Math.round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
+        e.record.set("ExtWeight", StkQty * objDetail.UnitWeight);
 
     }
     else if (e.field == "UnitCost") {
@@ -473,7 +474,9 @@ var grdPO_Detail_Edit = function (item, e) {
 
     }
     else if (e.field == "UnitVolume") {
-        e.record.set("ExtVolume", objDetail.QtyOrd * objDetail.UnitVolume);
+        StkQty = Math.round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
+
+        e.record.set("ExtVolume", StkQty * objDetail.UnitVolume);
 
     }
     else if (e.field == "DiscAmt") {
