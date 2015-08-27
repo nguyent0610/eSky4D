@@ -421,6 +421,7 @@ var grdPO_Detail_ValidateEdit = function (item, e) {
             objdet.set('PurchUnit', objIN_Inventory.DfltPOUnit == null ? "" : objIN_Inventory.DfltPOUnit);
             objdet.set('UnitWeight', objIN_Inventory.StkWt);
             objdet.set('UnitVolume', objIN_Inventory.StkVol);
+            objdet.set('POFee', objIN_Inventory.POFee);
             objdet.set('TranDesc', r.Descr);
         }
     }
@@ -439,6 +440,7 @@ var grdPO_Detail_Edit = function (item, e) {
             objDetail.UnitMultDiv = cnv.MultDiv;
             e.record.set('CnvFact', cnvFact);
             e.record.set('UnitMultDiv', unitMultDiv);
+           
         } else {
             e.record.set('PurchUnit', "");
             return;
@@ -459,7 +461,7 @@ var grdPO_Detail_Edit = function (item, e) {
         e.record.set("DiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
         e.record.set("ExtCost", objDetail.QtyOrd * objDetail.UnitCost - objDetail.DiscAmt);
        
-        e.record.set("POFee", objIN_Inventory.POFee);
+       
         e.record.set("ExtWeight", StkQty * objDetail.UnitWeight);
         e.record.set("ExtVolume", StkQty * objDetail.UnitVolume);
     }
