@@ -341,7 +341,7 @@
                                                                                     .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
                                                                                     .LoadData()
                                                                                     )
-                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("POFee")).DataIndex("POFee").Width(150).Format("0,000,000").Editor(HQ.NumberField())
+                                        , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("POFee")).DataIndex("POFee").Width(150).Format("0,000,000").Editor(HQ.NumberField().DecimalPrecision(0))
                                         , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("UnitWeight")).DataIndex("UnitWeight").Width(150).Format("0,000,000").Editor(HQ.NumberField().DecimalPrecision(0))
                                         , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("ExtWeight")).DataIndex("ExtWeight").Width(150).Format("0,000,000")//.Editor(HQ.NumberField())
                                         , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("UnitVolume")).DataIndex("UnitVolume").Width(150).Format("0,000,000").Editor(HQ.NumberField().DecimalPrecision(0))

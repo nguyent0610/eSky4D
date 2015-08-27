@@ -458,26 +458,28 @@ var grdPO_Detail_Edit = function (item, e) {
         StkQty = Math.round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
         e.record.set("DiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
         e.record.set("ExtCost", objDetail.QtyOrd * objDetail.UnitCost - objDetail.DiscAmt);
-        objDetail.POFee =  StkQty * objIN_Inventory.POFee;
-
+       
+        e.record.set("POFee", objIN_Inventory.POFee);
         e.record.set("ExtWeight", StkQty * objDetail.UnitWeight);
         e.record.set("ExtVolume", StkQty * objDetail.UnitVolume);
     }
     else if (e.field == "UnitWeight") {
         StkQty = Math.round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
         e.record.set("ExtWeight", StkQty * objDetail.UnitWeight);
-
+        calcDet();
     }
     else if (e.field == "UnitCost") {
         e.record.set("DiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
         e.record.set("ExtCost", objDetail.QtyOrd * objDetail.UnitCost - objDetail.DiscAmt);
-
     }
     else if (e.field == "UnitVolume") {
         StkQty = Math.round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
-
         e.record.set("ExtVolume", StkQty * objDetail.UnitVolume);
+        calcDet();
 
+    }
+    else if (e.field == "POFee") {      
+        calcDet();
     }
     else if (e.field == "DiscAmt") {
         if (e.value > objDetail.UnitCost * objDetail.QtyOrd)
@@ -1306,7 +1308,7 @@ function calcDet() {
         txblAmtTot02 += det.data.TxblAmt02;
         txblAmtTot03 += det.data.TxblAmt03;
 
-        poFee += det.data.POFee;
+        poFee += Math.round((det.data.UnitMultDiv == "D" ? (det.data.QtyOrd / det.data.CnvFact) : (det.data.QtyOrd * det.data.CnvFact))) * det.data.POFee;
         extvol += det.data.ExtVolume;
         extwei += det.data.ExtWeight;
         extCost += det.data.ExtCost;
