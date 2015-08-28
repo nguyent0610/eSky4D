@@ -26,7 +26,7 @@ namespace SA00700.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -44,7 +44,10 @@ namespace SA00700.Controllers
                 ChangeRecords<SA00700_pgAccessRightsScreen_Result> lstSYS_AccessDetRights = dataHandler.BatchObjectData<SA00700_pgAccessRightsScreen_Result>();
                 foreach (SA00700_pgAccessRightsScreen_Result deleted in lstSYS_AccessDetRights.Deleted)
                 {
-                    var del = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber == deleted.ScreenNumber && p.UserID == userID);
+                    var del = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber == deleted.ScreenNumber 
+                                                                        && p.UserID == userID
+                                                                        && p.CpnyID == cpnyID
+                                                                        && p.RecType == recType);
                     if (del != null)
                     {
                         _db.SYS_AccessDetRights.DeleteObject(del);
@@ -55,9 +58,12 @@ namespace SA00700.Controllers
 
                 foreach (SA00700_pgAccessRightsScreen_Result curLang in lstSYS_AccessDetRights.Created)
                 {
-                    if (curLang.ScreenNumber.PassNull() == "" || curLang.UserID.PassNull() == "") continue;
+                    if (curLang.ScreenNumber.PassNull() == "" || userID.PassNull() == "" || recType.PassNull()=="" ) continue;
 
-                    var lang = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber.ToLower() == curLang.ScreenNumber.ToLower() && p.UserID.ToLower() == userID.ToLower());
+                    var lang = _db.SYS_AccessDetRights.FirstOrDefault(p => p.ScreenNumber.ToLower() == curLang.ScreenNumber.ToLower() 
+                                                                        && p.UserID.ToLower() == userID.ToLower()
+                                                                        && p.CpnyID.ToLower() == cpnyID.ToLower()
+                                                                        && p.RecType.ToLower() == recType.ToLower());
 
                     if (lang != null)
                     {
