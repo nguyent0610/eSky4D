@@ -811,22 +811,21 @@ namespace INProcess
         {
             try
             {
+
                 string lineRef = string.Empty;
 
                 clsSQL objSql = new clsSQL(Dal);
-                var batNbr = objSql.INNumbering(branchID, "BatNbr");
-                var refNbr = objSql.INNumbering(branchID, "RefNbr");
+                string batNbr = objSql.INNumbering(branchID, "BatNbr");
+                string refNbr = objSql.INNumbering(branchID, "RefNbr");
 
                 clsIN_Setup objSetup = new clsIN_Setup(Dal);
                 objSetup.GetByKey(branchID, "IN");
 
                 clsIN_TagDetail objTagDetail = new clsIN_TagDetail(Dal);
-                DataTable lstTagDetail = objTagDetail.GetAll(tagID, branchID, siteID, "%"); //objTagDetail.GetAll(tagID, siteID, "%"); 
-                
+                DataTable lstTagDetail = objTagDetail.GetAll(tagID, branchID, siteID, "%");
 
                 clsIN_TagHeader objTagHeader = new clsIN_TagHeader(Dal);
-                objTagHeader.GetByKey(tagID,branchID,siteID);
-                //objTagHeader.GetByKey(tagID);
+                objTagHeader.GetByKey(tagID, branchID, siteID);
                 objTagHeader.INBatNbr = batNbr;
                 objTagHeader.Status = "C";
                 objTagHeader.Update();
@@ -836,6 +835,7 @@ namespace INProcess
                     BatNbr = batNbr,
                     Descr = objTagHeader.Descr,
                     Module1 = "IN",
+                    
                     RefNbr = refNbr,
                     ReasonCD = objTagHeader.ReasonCD,
                     Status = "C",
@@ -852,7 +852,7 @@ namespace INProcess
                     Crtd_User = objTagHeader.Crtd_User,
                 };
                 newBatch.Add();
-   
+
                 lineRef = "0";
                 lineRef = (Convert.ToInt32(lineRef) + 1).ToString();
                 for (int i = lineRef.Length; lineRef.Length < 5; )
@@ -862,59 +862,89 @@ namespace INProcess
                 clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
                 clsIN_ItemSite objItem = new clsIN_ItemSite(Dal);
                 clsIN_UnitConversion objCnv = new clsIN_UnitConversion(Dal);
-            
-                foreach (DataRow tagDetail in lstTagDetail.Rows)
+                int countDetail = 0;
+                var datarows = lstTagDetail.Select("OffetCaseQty <> 0 or OffsetEAQty <> 0");
+                foreach (DataRow tagDetail in datarows)
                 {
                     objInvt.GetByKey(tagDetail.String("InvtID").ToString());
-                    objCnv.GetByKey("3", "*", tagDetail.String("InvtID"), "THUNG", objInvt.StkUnit);
-
-                    clsIN_Trans newTran = new clsIN_Trans(Dal)
+                    //objCnv.GetByKey("3", "*", tagDetail.String("InvtID"), "THUNG", objInvt.StkUnit);
+                    if (tagDetail.Double("OffetCaseQty") != 0 || tagDetail.Double("OffsetEAQty") != 0)
                     {
-                        BatNbr = batNbr,
-                        BranchID = branchID,
-                        TranDate = DateTime.Now.Short(),
-                        Crtd_DateTime = DateTime.Now,
-                        Crtd_Prog = tagDetail.String("Crtd_Prog"),
-                        Crtd_User = tagDetail.String("Crtd_User"),
-                        InvtID = tagDetail.String("InvtID"),
-                        TranType = "AJ",
-                        JrnlType = "IN",
-                        LUpd_DateTime = DateTime.Now,
-                        LUpd_Prog = tagDetail.String("LUpd_Prog"),
-                        LUpd_User = tagDetail.String("LUpd_User"),
-                        Qty = tagDetail.Double("OffsetEAQty"),
-                        ReasonCD = tagDetail.String("ReasonCD"),
-                        RefNbr = refNbr,
-                        Rlsed = 1,
-                        SiteID = tagDetail.String("SiteID"),
-                        LineRef = lineRef
-                    };
-                    newTran.UnitDesc = objInvt.StkUnit;
-                    newTran.Qty += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
+                        countDetail++;
+                        clsIN_Trans newTran = new clsIN_Trans(Dal)
+                        {
+                            BatNbr = batNbr,
+                            BranchID = branchID,
+                            TranDate = DateTime.Now.Short(),
+                            Crtd_DateTime = DateTime.Now,
+                            Crtd_Prog = tagDetail.String("Crtd_Prog"),
+                            Crtd_User = tagDetail.String("Crtd_User"),
+                            InvtID = tagDetail.String("InvtID"),
+                            TranType = "AJ",
+                            JrnlType = "IN",
+                            LUpd_DateTime = DateTime.Now,
+                            LUpd_Prog = tagDetail.String("LUpd_Prog"),
+                            LUpd_User = tagDetail.String("LUpd_User"),
+                            Qty = tagDetail.Double("OffsetEAQty"),
+                            ReasonCD = tagDetail.String("ReasonCD"),
+                            RefNbr = refNbr,
+                            Rlsed = 1,
+                            SiteID = tagDetail.String("SiteID"),
+                            LineRef = lineRef,
+                            CnvFact = 1
+                        };
+                        newTran.UnitDesc = objInvt.StkUnit;
+                        newTran.Qty += tagDetail.Double("OffetCaseQty") * tagDetail.Double("CaseCnvFact");//objCnv.CnvFact;
+                        newTran.InvtMult = newTran.Qty < 0 ? (short)-1 : (short)1;
+                        newTran.Qty = newTran.Qty < 0 ? newTran.Qty * -1 : newTran.Qty;
+                        lineRef = (Convert.ToInt32(lineRef) + 1).ToString();
+                        for (int i = lineRef.Length; lineRef.Length < 5; )
+                            lineRef = "0" + lineRef;
 
-                    lineRef = (Convert.ToInt32(lineRef) + 1).ToString();
-                    for (int i = lineRef.Length; lineRef.Length < 5; )
-                        lineRef = "0" + lineRef;
+                        newTran.Add();
 
-                    newTran.Add();
-               
-                    if (objItem.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID")))
-                    {
-                        objItem.QtyOnHand = objItem.QtyOnHand + tagDetail.Double("OffsetEAQty");
-                        objItem.QtyAvail = objItem.QtyAvail + tagDetail.Double("OffsetEAQty");
-                        objItem.QtyOnHand += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
-                        objItem.QtyAvail += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
+                        if (objItem.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID")))
+                        {
+                            objItem.QtyOnHand = objItem.QtyOnHand + tagDetail.Double("OffsetEAQty");
+                            objItem.QtyAvail = objItem.QtyAvail + tagDetail.Double("OffsetEAQty");
+                            objItem.QtyOnHand += tagDetail.Double("OffetCaseQty") * tagDetail.Double("CaseCnvFact");
+                            objItem.QtyAvail += tagDetail.Double("OffetCaseQty") * tagDetail.Double("CaseCnvFact");
 
-                        objItem.LUpd_DateTime = System.DateTime.Now;
-                        objItem.LUpd_Prog = tagDetail.String("LUpd_Prog");
-                        objItem.LUpd_User = tagDetail.String("LUpd_User");
-                        objItem.Update();
+                            objItem.LUpd_DateTime = System.DateTime.Now;
+                            objItem.LUpd_Prog = tagDetail.String("LUpd_Prog");
+                            objItem.LUpd_User = tagDetail.String("LUpd_User");
+                            objItem.Update();
+                        }
+                        else
+                        {
+                            objItem.Reset();
+                            objItem.AvgCost = 0;
+                            objItem.InvtID = tagDetail.String("InvtID");
+                            objItem.LastPurchaseDate = DateTime.Now;
+                            objItem.SiteID = tagDetail.String("SiteID");
+
+                            objItem.QtyOnHand = objItem.QtyOnHand + tagDetail.Double("OffsetEAQty");
+                            objItem.QtyAvail = objItem.QtyAvail + tagDetail.Double("OffsetEAQty");
+                            objItem.QtyOnHand += tagDetail.Double("OffetCaseQty") * tagDetail.Double("CaseCnvFact");
+                            objItem.QtyAvail += tagDetail.Double("OffetCaseQty") * tagDetail.Double("CaseCnvFact");
+
+                            objItem.Crtd_DateTime = System.DateTime.Now;
+                            objItem.Crtd_Prog = tagDetail.String("LUpd_Prog");
+                            objItem.Crtd_User = tagDetail.String("LUpd_User");
+
+                            objItem.LUpd_DateTime = System.DateTime.Now;
+                            objItem.LUpd_Prog = tagDetail.String("LUpd_Prog");
+                            objItem.LUpd_User = tagDetail.String("LUpd_User");
+                            objItem.Add();
+                        }
                     }
+
                 }
                 return true;
             }
             catch (Exception ex)
             {
+
                 throw ex;
             }
 
@@ -1283,3 +1313,119 @@ namespace INProcess
         }
     }
 }
+
+
+#region IN10500 Old
+//public bool IN10500_Release(string tagID, string branchID, string siteID)
+//        {
+//            try
+//            {
+//                string lineRef = string.Empty;
+
+//                clsSQL objSql = new clsSQL(Dal);
+//                var batNbr = objSql.INNumbering(branchID, "BatNbr");
+//                var refNbr = objSql.INNumbering(branchID, "RefNbr");
+
+//                clsIN_Setup objSetup = new clsIN_Setup(Dal);
+//                objSetup.GetByKey(branchID, "IN");
+
+//                clsIN_TagDetail objTagDetail = new clsIN_TagDetail(Dal);
+//                DataTable lstTagDetail = objTagDetail.GetAll(tagID, branchID, siteID, "%"); //objTagDetail.GetAll(tagID, siteID, "%"); 
+
+
+//                clsIN_TagHeader objTagHeader = new clsIN_TagHeader(Dal);
+//                objTagHeader.GetByKey(tagID, branchID, siteID);
+//                //objTagHeader.GetByKey(tagID);
+//                objTagHeader.INBatNbr = batNbr;
+//                objTagHeader.Status = "C";
+//                objTagHeader.Update();
+//                clsBatch newBatch = new clsBatch(Dal)
+//                {
+
+//                    BatNbr = batNbr,
+//                    Descr = objTagHeader.Descr,
+//                    Module1 = "IN",
+//                    RefNbr = refNbr,
+//                    ReasonCD = objTagHeader.ReasonCD,
+//                    Status = "C",
+//                    Rlsed = 1,
+//                    DateEnt = DateTime.Now.Short(),
+//                    JrnlType = "IN",
+//                    EditScrnNbr = "IN10500",
+//                    BranchID = branchID,
+//                    LUpd_DateTime = objTagHeader.LUpd_DateTime,
+//                    LUpd_Prog = objTagHeader.LUpd_Prog,
+//                    LUpd_User = objTagHeader.LUpd_User,
+//                    Crtd_DateTime = objTagHeader.Crtd_DateTime,
+//                    Crtd_Prog = objTagHeader.Crtd_Prog,
+//                    Crtd_User = objTagHeader.Crtd_User,
+//                };
+//                newBatch.Add();
+
+//                lineRef = "0";
+//                lineRef = (Convert.ToInt32(lineRef) + 1).ToString();
+//                for (int i = lineRef.Length; lineRef.Length < 5; )
+//                    lineRef = "0" + lineRef;
+
+//                clsIN_Trans objTran = new clsIN_Trans(Dal);
+//                clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
+//                clsIN_ItemSite objItem = new clsIN_ItemSite(Dal);
+//                clsIN_UnitConversion objCnv = new clsIN_UnitConversion(Dal);
+
+//                foreach (DataRow tagDetail in lstTagDetail.Rows)
+//                {
+//                    objInvt.GetByKey(tagDetail.String("InvtID").ToString());
+//                    objCnv.GetByKey("3", "*", tagDetail.String("InvtID"), "THUNG", objInvt.StkUnit);
+
+//                    clsIN_Trans newTran = new clsIN_Trans(Dal)
+//                    {
+//                        BatNbr = batNbr,
+//                        BranchID = branchID,
+//                        TranDate = DateTime.Now.Short(),
+//                        Crtd_DateTime = DateTime.Now,
+//                        Crtd_Prog = tagDetail.String("Crtd_Prog"),
+//                        Crtd_User = tagDetail.String("Crtd_User"),
+//                        InvtID = tagDetail.String("InvtID"),
+//                        TranType = "AJ",
+//                        JrnlType = "IN",
+//                        LUpd_DateTime = DateTime.Now,
+//                        LUpd_Prog = tagDetail.String("LUpd_Prog"),
+//                        LUpd_User = tagDetail.String("LUpd_User"),
+//                        Qty = tagDetail.Double("OffsetEAQty"),
+//                        ReasonCD = tagDetail.String("ReasonCD"),
+//                        RefNbr = refNbr,
+//                        Rlsed = 1,
+//                        SiteID = tagDetail.String("SiteID"),
+//                        LineRef = lineRef
+//                    };
+//                    newTran.UnitDesc = objInvt.StkUnit;
+//                    newTran.Qty += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
+
+//                    lineRef = (Convert.ToInt32(lineRef) + 1).ToString();
+//                    for (int i = lineRef.Length; lineRef.Length < 5; )
+//                        lineRef = "0" + lineRef;
+
+//                    newTran.Add();
+
+//                    if (objItem.GetByKey(tagDetail.String("InvtID"), tagDetail.String("SiteID")))
+//                    {
+//                        objItem.QtyOnHand = objItem.QtyOnHand + tagDetail.Double("OffsetEAQty");
+//                        objItem.QtyAvail = objItem.QtyAvail + tagDetail.Double("OffsetEAQty");
+//                        objItem.QtyOnHand += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
+//                        objItem.QtyAvail += tagDetail.Double("OffetCaseQty") * objCnv.CnvFact;
+
+//                        objItem.LUpd_DateTime = System.DateTime.Now;
+//                        objItem.LUpd_Prog = tagDetail.String("LUpd_Prog");
+//                        objItem.LUpd_User = tagDetail.String("LUpd_User");
+//                        objItem.Update();
+//                    }
+//                }
+//                return true;
+//            }
+//            catch (Exception ex)
+//            {
+//                throw ex;
+//            }
+
+//        }
+#endregion
