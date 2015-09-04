@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer" />
+        <Function Name="IF30100_pcReportType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="IF30100_pgData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="View" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IF30100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="IF30100Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="IF30100_pcReportType" ReturnType="Collection(IF30100Model.IF30100_pcReportType_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="IF30100_pgData" ReturnType="Collection(IF30100Model.IF30100_pgData_Result)">
+            <Parameter Name="View" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="IF30100_pcReportType_Result">
+          <Property Type="String" Name="ReportName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ReportView" Nullable="false" MaxLength="11" />
+        </ComplexType>
+        <ComplexType Name="IF30100_pgData_Result">
+          <Property Type="String" Name="Column_Name" Nullable="true" MaxLength="128" />
+          <Property Type="Boolean" Name="Checked" Nullable="true" />
+          <Property Type="String" Name="Operator" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Value1" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Value2" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="Data_Type" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="MaxLenght" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="IF30100Entities" >
+          <FunctionImportMapping FunctionImportName="IF30100_pcReportType" FunctionName="eBiz4DWebSysModel.Store.IF30100_pcReportType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IF30100Model.IF30100_pcReportType_Result">
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportView" ColumnName="ReportView" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IF30100_pgData" FunctionName="eBiz4DWebSysModel.Store.IF30100_pgData">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IF30100Model.IF30100_pgData_Result">
+                <ScalarProperty Name="Column_Name" ColumnName="Column_Name" />
+                <ScalarProperty Name="Checked" ColumnName="Checked" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="Value1" ColumnName="Value1" />
+                <ScalarProperty Name="Value2" ColumnName="Value2" />
+                <ScalarProperty Name="Data_Type" ColumnName="Data_Type" />
+                <ScalarProperty Name="MaxLenght" ColumnName="MaxLenght" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="82" >
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
