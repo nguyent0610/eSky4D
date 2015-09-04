@@ -1,1 +1,527 @@
-﻿var _0xc1f2 = ["\x41\x64\x64\x72\x49\x44", "\x53\x75\x62\x43\x70\x6E\x79\x49\x44", "\x6C\x6F\x61\x64\x69\x6E\x67\x44\x61\x74\x61", "\x67\x65\x74\x4C\x61\x6E\x67", "\x63\x6F\x6D\x6D\x6F\x6E", "\x73\x68\x6F\x77\x42\x75\x73\x79", "\x72\x65\x6C\x6F\x61\x64", "\x73\x74\x6F\x53\x59\x53\x5F\x43\x6F\x6D\x70\x61\x6E\x79", "\x6C\x6F\x61\x64", "\x67\x65\x74\x53\x74\x6F\x72\x65", "\x63\x62\x6F\x54\x79\x70\x65", "\x63\x62\x6F\x43\x70\x6E\x79\x54\x79\x70\x65", "\x63\x62\x6F\x43\x6F\x75\x6E\x74\x72\x79", "\x63\x62\x6F\x43\x70\x6E\x79\x49\x44", "\x73\x74\x6F\x53\x79\x73\x5F\x43\x6F\x6D\x70\x61\x6E\x79\x41\x64\x64\x72", "\x63\x62\x6F\x53\x75\x62\x43\x70\x6E\x79\x49\x44", "\x63\x62\x6F\x53\x74\x61\x74\x65\x5F\x67\x72\x64", "\x63\x62\x6F\x43\x6F\x75\x6E\x74\x72\x79\x5F\x67\x72\x64", "\x6D\x6F\x75\x73\x65\x64\x6F\x77\x6E", "\x69\x64", "\x70\x6E\x6C\x53\x79\x73\x5F\x43\x6F\x6D\x70\x61\x6E\x79\x41\x64\x64\x72", "\x70\x6E\x6C\x53\x59\x53\x5F\x53\x75\x62\x43\x6F\x6D\x70\x61\x6E\x79", "\x6F\x6E", "\x67\x65\x74\x45\x6C", "\x69\x73\x46\x69\x72\x73\x74\x4C\x6F\x61\x64", "\x69\x73\x43\x68\x61\x6E\x67\x65", "\x66\x69\x72\x73\x74", "\x63\x6F\x6D\x62\x6F", "\x67\x72\x64\x53\x79\x73\x5F\x43\x6F\x6D\x70\x61\x6E\x79\x41\x64\x64\x72", "\x67\x72\x69\x64", "\x67\x72\x64\x53\x59\x53\x5F\x53\x75\x62\x43\x6F\x6D\x70\x61\x6E\x79", "\x70\x72\x65\x76", "\x6E\x65\x78\x74", "\x6C\x61\x73\x74", "", "\x72\x65\x66\x72\x65\x73\x68", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x76\x61\x6C\x75\x65\x4D\x6F\x64\x65\x6C\x73", "\x73\x65\x74\x56\x61\x6C\x75\x65", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x69\x6E\x73\x65\x72\x74", "\x6E\x65\x77", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x67\x65\x74\x52\x65\x63\x6F\x72\x64", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x64\x65\x6C\x65\x74\x65\x44\x61\x74\x61", "\x69\x74\x65\x6D\x73", "\x73\x65\x6C\x65\x63\x74\x65\x64", "\x73\x6C\x6D\x53\x79\x73\x5F\x43\x6F\x6D\x70\x61\x6E\x79\x41\x64\x64\x72", "\x69\x6E\x64\x65\x78\x53\x65\x6C\x65\x63\x74", "\x73\x6C\x6D\x53\x59\x53\x5F\x53\x75\x62\x43\x6F\x6D\x70\x61\x6E\x79", "\x64\x65\x6C\x65\x74\x65", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x63\x68\x65\x63\x6B\x52\x65\x71\x75\x69\x72\x65\x50\x61\x73\x73", "\x66\x6F\x72\x6D", "\x76\x61\x6C\x75\x65", "\x45\x6D\x61\x69\x6C", "\x63\x68\x65\x63\x6B\x45\x6D\x61\x69\x6C", "\x75\x74\x69\x6C", "\x73\x74\x6F\x72\x65", "\x73\x74\x6F\x53\x59\x53\x5F\x53\x75\x62\x43\x6F\x6D\x70\x61\x6E\x79", "\x73\x61\x76\x65", "\x70\x72\x69\x6E\x74", "\x63\x6C\x6F\x73\x65", "\x43\x70\x6E\x79\x49\x44", "\x64\x61\x74\x61", "\x66\x69\x6E\x64\x52\x65\x63\x6F\x72\x64", "\x63\x62\x6F\x53\x75\x62\x43\x70\x6E\x79\x49\x44\x53\x41\x30\x30\x30\x30\x30\x5F\x70\x63\x43\x6F\x6D\x70\x61\x6E\x79\x41\x6C\x6C", "\x43\x70\x6E\x79\x4E\x61\x6D\x65", "\x53\x74\x61\x74\x65", "\x63\x62\x6F\x53\x74\x61\x74\x65", "\x67\x65\x74\x56\x61\x6C\x75\x65", "\x66\x69\x6E\x64\x49\x6E\x53\x74\x6F\x72\x65", "\x43\x69\x74\x79", "\x63\x62\x6F\x43\x69\x74\x79", "\x44\x69\x73\x74\x72\x69\x63\x74", "\x63\x62\x6F\x44\x69\x73\x74\x72\x69\x63\x74", "\x2C", "\x65\x78\x70\x61\x6E\x64", "\x63\x62\x6F\x43\x69\x74\x79\x5F\x67\x72\x64", "\x75\x70\x64\x61\x74\x65\x52\x65\x63\x6F\x72\x64", "\x67\x65\x74\x46\x6F\x72\x6D", "\x53\x41\x30\x30\x30\x30\x30", "\x63\x68\x61\x6E\x67\x65\x44\x61\x74\x61", "\x69\x73\x4E\x65\x77", "\x73\x65\x74\x52\x65\x61\x64\x4F\x6E\x6C\x79", "\x63\x68\x65\x63\x6B\x42\x65\x66\x6F\x72\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x49\x6E\x73\x65\x72\x74\x4B\x65\x79", "\x63\x68\x65\x63\x6B\x56\x61\x6C\x69\x64\x61\x74\x65\x45\x64\x69\x74", "\x63\x68\x65\x63\x6B\x52\x65\x6A\x65\x63\x74", "\x66\x6F\x72\x63\x65\x53\x65\x6C\x65\x63\x74\x69\x6F\x6E", "\x63\x6C\x65\x61\x72\x46\x69\x6C\x74\x65\x72", "\x6C\x65\x6E\x67\x74\x68", "\x69\x6E\x73\x65\x72\x74\x42\x6C\x61\x6E\x6B", "\x67\x65\x74\x41\x74", "\x73\x65\x74\x52\x65\x71\x75\x69\x72\x65", "\x66\x6F\x63\x75\x73", "\x63\x6F\x6D\x6D\x69\x74\x43\x68\x61\x6E\x67\x65\x73", "\x6C\x6F\x61\x64\x52\x65\x63\x6F\x72\x64", "\x43\x6F\x75\x6E\x74\x72\x79", "\x6C\x6F\x61\x64\x69\x6E\x67\x64\x61\x74\x61", "\x6C\x6F\x61\x64\x69\x6E\x67", "\x63\x6F\x6C\x6C\x61\x70\x73\x65", "\x69\x73\x56\x61\x6C\x69\x64", "\x53\x75\x62\x6D\x69\x74\x69\x6E\x67\x2E\x2E\x2E", "\x53\x41\x30\x30\x30\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x43\x68\x61\x6E\x67\x65\x64\x44\x61\x74\x61", "\x65\x6E\x63\x6F\x64\x65", "\x72\x65\x73\x75\x6C\x74", "\x70\x72\x6F\x63\x65\x73\x73", "\x73\x75\x62\x6D\x69\x74", "\x79\x65\x73", "\x44\x65\x6C\x65\x74\x69\x6E\x67\x44\x61\x74\x61", "\x53\x41\x30\x30\x30\x30\x30\x2F\x44\x65\x6C\x65\x74\x65\x41\x6C\x6C", "\x6D\x73\x67\x43\x6F\x64\x65", "\x6D\x73\x67\x50\x61\x72\x61\x6D", "\x64\x65\x6C\x65\x74\x65\x53\x65\x6C\x65\x63\x74\x65\x64"]; var keys = [_0xc1f2[0]]; var fieldsCheckRequire = [_0xc1f2[0]]; var fieldsLangCheckRequire = [_0xc1f2[0]]; var keys1 = [_0xc1f2[1]]; var fieldsCheckRequire1 = [_0xc1f2[1]]; var fieldsLangCheckRequire1 = [_0xc1f2[1]]; var _focusNo = 0; var loadSourceCombo = function () { HQ[_0xc1f2[4]][_0xc1f2[5]](true, HQ[_0xc1f2[4]][_0xc1f2[3]](_0xc1f2[2])); App[_0xc1f2[13]][_0xc1f2[9]]()[_0xc1f2[8]](function () { App[_0xc1f2[12]][_0xc1f2[9]]()[_0xc1f2[8]](function () { App[_0xc1f2[11]][_0xc1f2[9]]()[_0xc1f2[8]](function () { App[_0xc1f2[10]][_0xc1f2[9]]()[_0xc1f2[8]](function () { App[_0xc1f2[7]][_0xc1f2[6]]() }) }) }) }); }; var loadComboGrid = function () { HQ[_0xc1f2[4]][_0xc1f2[5]](true, HQ[_0xc1f2[4]][_0xc1f2[3]](_0xc1f2[2])); App[_0xc1f2[17]][_0xc1f2[9]]()[_0xc1f2[8]](function () { App[_0xc1f2[16]][_0xc1f2[9]]()[_0xc1f2[8]](function () { App[_0xc1f2[15]][_0xc1f2[9]]()[_0xc1f2[8]](function () { App[_0xc1f2[14]][_0xc1f2[6]](); HQ[_0xc1f2[4]][_0xc1f2[5]](false, HQ[_0xc1f2[4]][_0xc1f2[3]](_0xc1f2[2])); }) }) }); }; var pnl_render = function (_0x3a6bxb) { _0x3a6bxb[_0xc1f2[23]]()[_0xc1f2[22]](_0xc1f2[18], function () { if (_0x3a6bxb[_0xc1f2[19]] == _0xc1f2[20]) { _focusNo = 1 } else { if (_0x3a6bxb[_0xc1f2[19]] == _0xc1f2[21]) { _focusNo = 2 } else { _focusNo = 0 } } }) }; var menuClick = function (_0x3a6bxd) { switch (_0x3a6bxd) { case _0xc1f2[26]: if (_focusNo == 0) { HQ[_0xc1f2[24]] = true; HQ[_0xc1f2[27]][_0xc1f2[26]](App[_0xc1f2[13]], HQ[_0xc1f2[25]]); } else { if (_focusNo == 1) { HQ[_0xc1f2[29]][_0xc1f2[26]](App[_0xc1f2[28]]) } else { if (_focusNo == 2) { HQ[_0xc1f2[29]][_0xc1f2[26]](App[_0xc1f2[30]]) } } }; break;; case _0xc1f2[31]: if (_focusNo == 0) { HQ[_0xc1f2[24]] = true; HQ[_0xc1f2[27]][_0xc1f2[31]](App[_0xc1f2[13]], HQ[_0xc1f2[25]]); } else { if (_focusNo == 1) { HQ[_0xc1f2[29]][_0xc1f2[31]](App[_0xc1f2[28]]) } else { if (_focusNo == 2) { HQ[_0xc1f2[29]][_0xc1f2[31]](App[_0xc1f2[30]]) } } }; break;; case _0xc1f2[32]: if (_focusNo == 0) { HQ[_0xc1f2[24]] = true; HQ[_0xc1f2[27]][_0xc1f2[32]](App[_0xc1f2[13]], HQ[_0xc1f2[25]]); } else { if (_focusNo == 1) { HQ[_0xc1f2[29]][_0xc1f2[32]](App[_0xc1f2[28]]) } else { if (_focusNo == 2) { HQ[_0xc1f2[29]][_0xc1f2[32]](App[_0xc1f2[30]]) } } }; break;; case _0xc1f2[33]: if (_focusNo == 0) { HQ[_0xc1f2[24]] = true; HQ[_0xc1f2[27]][_0xc1f2[33]](App[_0xc1f2[13]], HQ[_0xc1f2[25]]); } else { if (_focusNo == 1) { HQ[_0xc1f2[29]][_0xc1f2[33]](App[_0xc1f2[28]]) } else { if (_focusNo == 2) { HQ[_0xc1f2[29]][_0xc1f2[33]](App[_0xc1f2[30]]) } } }; break;; case _0xc1f2[35]: if (HQ[_0xc1f2[25]]) { HQ[_0xc1f2[37]][_0xc1f2[36]](20150303, _0xc1f2[34], _0xc1f2[35]) } else { HQ[_0xc1f2[25]] = false; if (App[_0xc1f2[13]][_0xc1f2[38]] == null) { App[_0xc1f2[13]][_0xc1f2[39]](_0xc1f2[34]) }; App[_0xc1f2[13]][_0xc1f2[9]]()[_0xc1f2[8]](function () { App[_0xc1f2[7]][_0xc1f2[6]]() }); }; break;; case _0xc1f2[42]: if (HQ[_0xc1f2[40]]) { if (_focusNo == 0) { if (HQ[_0xc1f2[25]]) { HQ[_0xc1f2[37]][_0xc1f2[36]](150, _0xc1f2[34], _0xc1f2[34]) } else { App[_0xc1f2[13]][_0xc1f2[39]](_0xc1f2[34]) } } else { if (_focusNo == 1) { HQ[_0xc1f2[29]][_0xc1f2[41]](App[_0xc1f2[28]], keys) } else { if (_focusNo == 2) { HQ[_0xc1f2[29]][_0xc1f2[41]](App[_0xc1f2[30]], keys1) } } } }; break;; case _0xc1f2[52]: if (HQ[_0xc1f2[43]]) { if (_focusNo == 0) { var _0x3a6bxe = App[_0xc1f2[45]][_0xc1f2[44]](); if (_0x3a6bxe) { HQ[_0xc1f2[37]][_0xc1f2[36]](11, _0xc1f2[34], _0xc1f2[46]) }; } else { if (_focusNo == 1) { if (App[_0xc1f2[49]][_0xc1f2[48]][_0xc1f2[47]][0] != undefined) { var _0x3a6bxf = HQ[_0xc1f2[29]][_0xc1f2[50]](App[_0xc1f2[28]]); if (_0x3a6bxf != _0xc1f2[34]) { HQ[_0xc1f2[37]][_0xc1f2[36]](2015020807, [HQ[_0xc1f2[29]][_0xc1f2[50]](App[_0xc1f2[28]]), _0xc1f2[34]], _0xc1f2[46], true) }; } } else { if (_focusNo == 2) { if (App[_0xc1f2[51]][_0xc1f2[48]][_0xc1f2[47]][0] != undefined) { var _0x3a6bxf = HQ[_0xc1f2[29]][_0xc1f2[50]](App[_0xc1f2[30]]); if (_0x3a6bxf != _0xc1f2[34]) { HQ[_0xc1f2[37]][_0xc1f2[36]](2015020807, [HQ[_0xc1f2[29]][_0xc1f2[50]](App[_0xc1f2[30]]), _0xc1f2[34]], _0xc1f2[46], true) }; } } } } }; break;; case _0xc1f2[62]: if (HQ[_0xc1f2[53]] || HQ[_0xc1f2[40]] || HQ[_0xc1f2[43]]) { if (HQ[_0xc1f2[55]][_0xc1f2[54]](App[_0xc1f2[45]]) && HQ[_0xc1f2[59]][_0xc1f2[58]](App[_0xc1f2[57]][_0xc1f2[56]]) && HQ[_0xc1f2[60]][_0xc1f2[54]](App[_0xc1f2[14]], keys, fieldsCheckRequire, fieldsLangCheckRequire) && HQ[_0xc1f2[60]][_0xc1f2[54]](App[_0xc1f2[61]], keys1, fieldsCheckRequire1, fieldsLangCheckRequire1)) { save() } }; break;; case _0xc1f2[63]: break;; case _0xc1f2[64]: HQ[_0xc1f2[4]][_0xc1f2[64]](this); break;; } }; var renderBranchName = function (_0x3a6bx11, _0x3a6bx12, _0x3a6bx13, _0x3a6bx14, _0x3a6bx15, _0x3a6bx16) { var _0x3a6bx17 = App[_0xc1f2[68]][_0xc1f2[67]](_0xc1f2[65], _0x3a6bx13[_0xc1f2[66]].SubCpnyID); if (_0x3a6bx17) { return _0x3a6bx17[_0xc1f2[66]][_0xc1f2[69]] } else { return _0x3a6bx11 }; }; var cboCountry_Change = function (_0x3a6bx19, _0x3a6bx1a) { App[_0xc1f2[71]][_0xc1f2[9]]()[_0xc1f2[8]](function () { var _0x3a6bxe = App[_0xc1f2[45]][_0xc1f2[44]](); if (_0x3a6bxe != undefined) { if (_0x3a6bxe[_0xc1f2[66]][_0xc1f2[70]]) { App[_0xc1f2[71]][_0xc1f2[39]](_0x3a6bxe[_0xc1f2[66]].State) } }; var _0x3a6bx1b = HQ[_0xc1f2[60]][_0xc1f2[73]](App[_0xc1f2[71]][_0xc1f2[9]](), [_0xc1f2[70]], [App[_0xc1f2[71]][_0xc1f2[72]]()]); if (!_0x3a6bx1b) { _0x3a6bxe[_0xc1f2[66]][_0xc1f2[70]] = _0xc1f2[34]; App[_0xc1f2[71]][_0xc1f2[39]](_0xc1f2[34]); }; if (App[_0xc1f2[71]][_0xc1f2[56]] == _0x3a6bxe[_0xc1f2[66]][_0xc1f2[70]]) { cboState_Change(App[_0xc1f2[71]], _0x3a6bxe[_0xc1f2[66]].State) }; }) }; var cboState_Change = function (_0x3a6bx19, _0x3a6bx1a) { App[_0xc1f2[75]][_0xc1f2[9]]()[_0xc1f2[8]](function () { var _0x3a6bxe = App[_0xc1f2[45]][_0xc1f2[44]](); if (_0x3a6bxe && _0x3a6bxe[_0xc1f2[66]][_0xc1f2[74]]) { App[_0xc1f2[75]][_0xc1f2[39]](_0x3a6bxe[_0xc1f2[66]].City) }; var _0x3a6bx1b = HQ[_0xc1f2[60]][_0xc1f2[73]](App[_0xc1f2[75]][_0xc1f2[9]](), [_0xc1f2[74]], [App[_0xc1f2[75]][_0xc1f2[72]]()]); if (!_0x3a6bx1b) { _0x3a6bxe[_0xc1f2[66]][_0xc1f2[74]] = _0xc1f2[34]; App[_0xc1f2[75]][_0xc1f2[39]](_0xc1f2[34]); }; App[_0xc1f2[77]][_0xc1f2[9]]()[_0xc1f2[8]](function () { var _0x3a6bxe = App[_0xc1f2[45]][_0xc1f2[44]](); if (_0x3a6bxe && _0x3a6bxe[_0xc1f2[66]][_0xc1f2[76]]) { App[_0xc1f2[77]][_0xc1f2[39]](_0x3a6bxe[_0xc1f2[66]].District); HQ[_0xc1f2[27]][_0xc1f2[79]](App[_0xc1f2[77]], _0xc1f2[78]); }; var _0x3a6bx1b = HQ[_0xc1f2[60]][_0xc1f2[73]](App[_0xc1f2[77]][_0xc1f2[9]](), [_0xc1f2[76]], App[_0xc1f2[77]][_0xc1f2[72]]()); if (!_0x3a6bx1b) { _0x3a6bxe[_0xc1f2[66]][_0xc1f2[76]] = _0xc1f2[34]; App[_0xc1f2[77]][_0xc1f2[39]](_0xc1f2[34]); } else { HQ[_0xc1f2[27]][_0xc1f2[79]](App[_0xc1f2[77]], _0xc1f2[78]) }; }); }) }; var cboCountry_grd_Change = function (_0x3a6bx19, _0x3a6bx1a) { App[_0xc1f2[16]][_0xc1f2[9]]()[_0xc1f2[8]](function () { var _0x3a6bxe = App[_0xc1f2[45]][_0xc1f2[44]](); if (_0x3a6bxe != undefined) { if (_0x3a6bxe[_0xc1f2[66]][_0xc1f2[70]]) { App[_0xc1f2[16]][_0xc1f2[39]](_0x3a6bxe[_0xc1f2[66]].State) } }; var _0x3a6bx1b = HQ[_0xc1f2[60]][_0xc1f2[73]](App[_0xc1f2[16]][_0xc1f2[9]](), [_0xc1f2[70]], [App[_0xc1f2[16]][_0xc1f2[72]]()]); if (!_0x3a6bx1b) { _0x3a6bxe[_0xc1f2[66]][_0xc1f2[70]] = _0xc1f2[34]; App[_0xc1f2[16]][_0xc1f2[39]](_0xc1f2[34]); }; }) }; var cboState_grd_Change = function (_0x3a6bx19, _0x3a6bx1a) { App[_0xc1f2[80]][_0xc1f2[9]]()[_0xc1f2[8]](function () { var _0x3a6bxe = App[_0xc1f2[45]][_0xc1f2[44]](); if (_0x3a6bxe && _0x3a6bxe[_0xc1f2[66]][_0xc1f2[74]]) { App[_0xc1f2[80]][_0xc1f2[39]](_0x3a6bxe[_0xc1f2[66]].City) }; var _0x3a6bx1b = HQ[_0xc1f2[60]][_0xc1f2[73]](App[_0xc1f2[80]][_0xc1f2[9]](), [_0xc1f2[74]], [App[_0xc1f2[80]][_0xc1f2[72]]()]); if (!_0x3a6bx1b) { _0x3a6bxe[_0xc1f2[66]][_0xc1f2[74]] = _0xc1f2[34]; App[_0xc1f2[80]][_0xc1f2[39]](_0xc1f2[34]); }; }) }; var firstLoad = function () { HQ[_0xc1f2[24]] = true; loadSourceCombo(); }; var frmChange = function () { App[_0xc1f2[45]][_0xc1f2[82]]()[_0xc1f2[81]](); HQ[_0xc1f2[25]] = (HQ[_0xc1f2[60]][_0xc1f2[25]](App[_0xc1f2[7]]) == false ? HQ[_0xc1f2[60]][_0xc1f2[25]](App[_0xc1f2[14]]) : true) || (HQ[_0xc1f2[60]][_0xc1f2[25]](App[_0xc1f2[7]]) == false ? HQ[_0xc1f2[60]][_0xc1f2[25]](App[_0xc1f2[61]]) : true); HQ[_0xc1f2[4]][_0xc1f2[84]](HQ[_0xc1f2[25]], _0xc1f2[83]); if (App[_0xc1f2[13]][_0xc1f2[38]] == null || HQ[_0xc1f2[85]] == true) { App[_0xc1f2[13]][_0xc1f2[86]](false) } else { App[_0xc1f2[13]][_0xc1f2[86]](HQ[_0xc1f2[25]]) }; }; var grdSYS_SubCompany_BeforeEdit = function (_0x3a6bx22, _0x3a6bx1a) { return HQ[_0xc1f2[29]][_0xc1f2[87]](_0x3a6bx1a, keys1) }; var grdSYS_SubCompany_Edit = function (_0x3a6bx24, _0x3a6bx1a) { HQ[_0xc1f2[29]][_0xc1f2[88]](App[_0xc1f2[30]], _0x3a6bx1a, keys1); frmChange(); }; var grdSYS_SubCompany_ValidateEdit = function (_0x3a6bx24, _0x3a6bx1a) { return HQ[_0xc1f2[29]][_0xc1f2[89]](App[_0xc1f2[30]], _0x3a6bx1a, keys1) }; var grdSYS_SubCompany_Reject = function (_0x3a6bx17) { HQ[_0xc1f2[29]][_0xc1f2[90]](_0x3a6bx17, App[_0xc1f2[30]]); frmChange(); }; var grdSys_CompanyAddr_BeforeEdit = function (_0x3a6bx22, _0x3a6bx1a) { return HQ[_0xc1f2[29]][_0xc1f2[87]](_0x3a6bx1a, keys) }; var grdSys_CompanyAddr_Edit = function (_0x3a6bx24, _0x3a6bx1a) { HQ[_0xc1f2[29]][_0xc1f2[88]](App[_0xc1f2[28]], _0x3a6bx1a, keys); frmChange(); }; var grdSys_CompanyAddr_ValidateEdit = function (_0x3a6bx24, _0x3a6bx1a) { return HQ[_0xc1f2[29]][_0xc1f2[89]](App[_0xc1f2[28]], _0x3a6bx1a, keys) }; var grdSys_CompanyAddr_Reject = function (_0x3a6bx17) { HQ[_0xc1f2[29]][_0xc1f2[90]](_0x3a6bx17, App[_0xc1f2[28]]); frmChange(); }; var stoChanged = function (_0x3a6bx2c) { HQ[_0xc1f2[25]] = HQ[_0xc1f2[60]][_0xc1f2[25]](_0x3a6bx2c); HQ[_0xc1f2[4]][_0xc1f2[84]](HQ[_0xc1f2[25]], _0xc1f2[83]); }; var stoLoad = function (_0x3a6bx2c) { HQ[_0xc1f2[24]] = true; HQ[_0xc1f2[4]][_0xc1f2[5]](false); HQ[_0xc1f2[85]] = false; App[_0xc1f2[13]][_0xc1f2[91]] = true; App[_0xc1f2[12]][_0xc1f2[91]] = false; App[_0xc1f2[71]][_0xc1f2[91]] = false; App[_0xc1f2[75]][_0xc1f2[91]] = false; App[_0xc1f2[77]][_0xc1f2[91]] = false; App[_0xc1f2[12]][_0xc1f2[60]][_0xc1f2[92]](); App[_0xc1f2[71]][_0xc1f2[60]][_0xc1f2[92]](); if (_0x3a6bx2c[_0xc1f2[66]][_0xc1f2[93]] == 0) { HQ[_0xc1f2[60]][_0xc1f2[94]](_0x3a6bx2c, _0xc1f2[65]); _0x3a6bx17 = _0x3a6bx2c[_0xc1f2[95]](0); HQ[_0xc1f2[85]] = true; App[_0xc1f2[13]][_0xc1f2[91]] = false; HQ[_0xc1f2[4]][_0xc1f2[96]](App[_0xc1f2[45]]); App[_0xc1f2[13]][_0xc1f2[97]](true); _0x3a6bx2c[_0xc1f2[98]](); }; var _0x3a6bx17 = _0x3a6bx2c[_0xc1f2[95]](0); App[_0xc1f2[45]][_0xc1f2[82]]()[_0xc1f2[99]](_0x3a6bx17); if (App[_0xc1f2[12]][_0xc1f2[56]] == _0x3a6bx17[_0xc1f2[66]][_0xc1f2[100]]) { cboCountry_Change(App[_0xc1f2[12]], _0x3a6bx17[_0xc1f2[66]].Country) } else { if (App[_0xc1f2[71]][_0xc1f2[56]] == _0x3a6bx17[_0xc1f2[66]][_0xc1f2[70]]) { cboState_Change(App[_0xc1f2[71]], _0x3a6bx17[_0xc1f2[66]].State) } }; loadComboGrid(); }; var stoLoadSys_CompanyAddr = function (_0x3a6bx2c) { if (HQ[_0xc1f2[24]]) { if (HQ[_0xc1f2[40]]) { HQ[_0xc1f2[60]][_0xc1f2[94]](_0x3a6bx2c, keys) }; App[_0xc1f2[61]][_0xc1f2[6]](); }; frmChange(); }; var stoLoadSYS_SubCompany = function (_0x3a6bx2c) { if (HQ[_0xc1f2[24]]) { if (HQ[_0xc1f2[40]]) { HQ[_0xc1f2[60]][_0xc1f2[94]](_0x3a6bx2c, keys1) }; HQ[_0xc1f2[24]] = false; }; frmChange(); }; var stoBeforeLoad = function (_0x3a6bx2c) { HQ[_0xc1f2[4]][_0xc1f2[5]](true, HQ[_0xc1f2[4]][_0xc1f2[3]](_0xc1f2[101])) }; var cboCpnyID_Change = function (_0x3a6bx19, _0x3a6bx11) { HQ[_0xc1f2[24]] = true; if ((!HQ[_0xc1f2[85]] || _0x3a6bx19[_0xc1f2[38]] != null) && !App[_0xc1f2[7]][_0xc1f2[102]]) { App[_0xc1f2[7]][_0xc1f2[6]]() }; }; var cboCpnyID_Select = function (_0x3a6bx19, _0x3a6bx11) { if (_0x3a6bx19[_0xc1f2[38]] != null && !App[_0xc1f2[7]][_0xc1f2[102]]) { App[_0xc1f2[7]][_0xc1f2[6]]() } }; var cboCpnyID_Expand = function (_0x3a6bx19, _0x3a6bx11) { if (HQ[_0xc1f2[25]]) { App[_0xc1f2[13]][_0xc1f2[103]]() } }; var cboCpnyID_TriggerClick = function (_0x3a6bx19, _0x3a6bx11) { if (HQ[_0xc1f2[25]]) { HQ[_0xc1f2[37]][_0xc1f2[36]](150, _0xc1f2[34], _0xc1f2[34]) } else { menuClick(_0xc1f2[42]) } }; var cboDistrict_Change = function (_0x3a6bx19, _0x3a6bx11) { }; function save() { App[_0xc1f2[45]][_0xc1f2[82]]()[_0xc1f2[81]](); if (App[_0xc1f2[45]][_0xc1f2[104]]()) { App[_0xc1f2[45]][_0xc1f2[111]]({ waitMsg: _0xc1f2[105], url: _0xc1f2[106], params: { lstSYS_Company: Ext[_0xc1f2[108]](App[_0xc1f2[7]][_0xc1f2[107]]({ skipIdForPhantomRecords: false })), lstSys_CompanyAddr: Ext[_0xc1f2[108]](App[_0xc1f2[14]][_0xc1f2[107]]({ skipIdForPhantomRecords: false })), lstSYS_SubCompany: Ext[_0xc1f2[108]](App[_0xc1f2[61]][_0xc1f2[107]]({ skipIdForPhantomRecords: false })), isNew: HQ[_0xc1f2[85]] }, success: function (_0x3a6bx37, _0x3a6bx38) { HQ[_0xc1f2[37]][_0xc1f2[36]](201405071, _0xc1f2[34], _0xc1f2[34]); var _0x3a6bx39 = _0x3a6bx38[_0xc1f2[109]][_0xc1f2[65]]; App[_0xc1f2[13]][_0xc1f2[9]]()[_0xc1f2[8]](function () { App[_0xc1f2[13]][_0xc1f2[39]](_0x3a6bx39); App[_0xc1f2[7]][_0xc1f2[6]](); }); }, failure: function (_0x3a6bx3a, _0x3a6bx38) { HQ[_0xc1f2[37]][_0xc1f2[110]](_0x3a6bx3a, _0x3a6bx38, true) } }) }; } function deleteData(_0x3a6bx24) { if (_0x3a6bx24 == _0xc1f2[112]) { if (_focusNo == 0) { App[_0xc1f2[45]][_0xc1f2[111]]({ waitMsg: HQ[_0xc1f2[4]][_0xc1f2[3]](_0xc1f2[113]), url: _0xc1f2[114], success: function (_0x3a6bx3c, _0x3a6bx38) { App[_0xc1f2[13]][_0xc1f2[39]](_0xc1f2[34]); App[_0xc1f2[13]][_0xc1f2[9]]()[_0xc1f2[8]](function () { cboCpnyID_Change(App[_0xc1f2[13]]) }); }, failure: function (_0x3a6bx3c, _0x3a6bx38) { if (_0x3a6bx38[_0xc1f2[109]][_0xc1f2[115]]) { HQ[_0xc1f2[37]][_0xc1f2[36]](_0x3a6bx38[_0xc1f2[109]][_0xc1f2[115]], _0x3a6bx38[_0xc1f2[109]][_0xc1f2[116]], _0xc1f2[34]) } } }) } else { if (_focusNo == 1) { App[_0xc1f2[28]][_0xc1f2[117]]() } else { if (_focusNo == 2) { App[_0xc1f2[30]][_0xc1f2[117]]() } } } } } function refresh(_0x3a6bx24) { if (_0x3a6bx24 == _0xc1f2[112]) { HQ[_0xc1f2[25]] = false; var _0x3a6bx3e = _0xc1f2[34]; if (App[_0xc1f2[13]][_0xc1f2[38]] != null) { _0x3a6bx3e = App[_0xc1f2[13]][_0xc1f2[72]]() }; App[_0xc1f2[13]][_0xc1f2[9]]()[_0xc1f2[8]](function () { App[_0xc1f2[13]][_0xc1f2[39]](_0x3a6bx3e); App[_0xc1f2[7]][_0xc1f2[6]](); }); } }
+﻿var keys = ['AddrID'];
+var fieldsCheckRequire = ["AddrID"];
+var fieldsLangCheckRequire = ["AddrID"];
+
+var keys1 = ['SubCpnyID'];
+var fieldsCheckRequire1 = ["SubCpnyID"];
+var fieldsLangCheckRequire1 = ["SubCpnyID"];
+
+var _focusNo = 0;
+
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboCpnyID.getStore().load(function () {
+        App.cboCountry.getStore().load(function () {
+            App.cboCpnyType.getStore().load(function () {
+                App.cboType.getStore().load(function () {
+                    App.stoSYS_Company.reload();
+                })
+            })
+        })
+    });
+};
+
+var loadComboGrid = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboCountry_grd.getStore().load(function () {
+        App.cboState_grd.getStore().load(function () {
+            App.cboSubCpnyID.getStore().load(function () {
+                App.stoSys_CompanyAddr.reload();
+                // App.stoSYS_SubCompany.reload();
+                HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+            })
+        })
+    });
+};
+
+var pnl_render = function (cmd) {
+    cmd.getEl().on('mousedown', function () {
+        if (cmd.id == 'pnlSys_CompanyAddr') {
+            _focusNo = 1;
+        }
+        else if (cmd.id == 'pnlSYS_SubCompany') {
+            _focusNo = 2;
+        }
+        else {//pnlHeader
+            _focusNo = 0;
+        }
+    });
+};
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            if (_focusNo == 0) {
+                HQ.isFirstLoad = true;
+                HQ.combo.first(App.cboCpnyID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.first(App.grdSys_CompanyAddr);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.first(App.grdSYS_SubCompany);
+            }
+            break;
+        case "prev":
+            if (_focusNo == 0) {
+                HQ.isFirstLoad = true;
+                HQ.combo.prev(App.cboCpnyID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.prev(App.grdSys_CompanyAddr);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.prev(App.grdSYS_SubCompany);
+            }
+            break;
+        case "next":
+            if (_focusNo == 0) {
+                HQ.isFirstLoad = true;
+                HQ.combo.next(App.cboCpnyID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.next(App.grdSys_CompanyAddr);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.next(App.grdSYS_SubCompany);
+            }
+            break;
+        case "last":
+            if (_focusNo == 0) {
+                HQ.isFirstLoad = true;
+                HQ.combo.last(App.cboCpnyID, HQ.isChange);
+            }
+            else if (_focusNo == 1) {
+                HQ.grid.last(App.grdSys_CompanyAddr);
+            }
+            else if (_focusNo == 2) {
+                HQ.grid.last(App.grdSYS_SubCompany);
+            }
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                if (App.cboCpnyID.valueModels == null) App.cboCpnyID.setValue('');
+                App.cboCpnyID.getStore().load(function () { App.stoSYS_Company.reload(); });
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (_focusNo == 0) {
+                    if (HQ.isChange) {
+                        HQ.message.show(150, '', '');
+                    }
+                    else {
+                        App.cboCpnyID.setValue('');
+                    }
+                }
+                else if (_focusNo == 1) {
+                    HQ.grid.insert(App.grdSys_CompanyAddr, keys);
+                }
+                else if (_focusNo == 2) {
+                    HQ.grid.insert(App.grdSYS_SubCompany, keys1);
+                }
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                if (_focusNo == 0) {
+                    var curRecord = App.frmMain.getRecord();
+                    if (curRecord) {
+                        HQ.message.show(11, '', 'deleteData');
+                    }
+                }
+                else if (_focusNo == 1) {
+                    if (App.slmSys_CompanyAddr.selected.items[0] != undefined) {
+                        var rowindex = HQ.grid.indexSelect(App.grdSys_CompanyAddr);
+                        if (rowindex != '')
+                            HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdSys_CompanyAddr), ''], 'deleteData', true)
+                    }
+                }
+                else if (_focusNo == 2) {
+                    if (App.slmSYS_SubCompany.selected.items[0] != undefined) {
+                        var rowindex = HQ.grid.indexSelect(App.grdSYS_SubCompany);
+                        if (rowindex != '')
+                            HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdSYS_SubCompany), ''], 'deleteData', true)
+                    }
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain)
+                    && HQ.util.checkEmail(App.Email.value)
+                    && HQ.store.checkRequirePass(App.stoSys_CompanyAddr, keys, fieldsCheckRequire, fieldsLangCheckRequire)
+                    && HQ.store.checkRequirePass(App.stoSYS_SubCompany, keys1, fieldsCheckRequire1, fieldsLangCheckRequire1)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+};
+
+var renderBranchName = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboSubCpnyIDSA00000_pcCompanyAll.findRecord("CpnyID", rec.data.SubCpnyID);
+    if (record) {
+        return record.data.CpnyName;
+    }
+    else {
+        return value;
+    }
+};
+
+var cboCountry_Change = function (sender, e) {
+    App.cboState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.State) {
+                App.cboState.setValue(curRecord.data.State);
+            }
+        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+        if (!dt) {
+            curRecord.data.State = '';
+            App.cboState.setValue("");
+        }
+        if (App.cboState.value == curRecord.data.State) {
+            cboState_Change(App.cboState, curRecord.data.State);
+        }
+    });
+};
+
+var cboState_Change = function (sender, e) {
+    App.cboCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord && curRecord.data.City) {
+            App.cboCity.setValue(curRecord.data.City);
+        }
+        var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+        if (!dt) {
+            curRecord.data.City = '';
+            App.cboCity.setValue("");
+        }
+
+        App.cboDistrict.getStore().load(function () {
+            var curRecord = App.frmMain.getRecord();
+            if (curRecord && curRecord.data.District) {
+                App.cboDistrict.setValue(curRecord.data.District);
+                HQ.combo.expand(App.cboDistrict, ',');
+            }
+            var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], App.cboDistrict.getValue());
+            if (!dt) {
+                curRecord.data.District = '';
+                App.cboDistrict.setValue("");
+            }
+            else {
+                HQ.combo.expand(App.cboDistrict, ',');
+            }
+        });
+
+    });
+};
+
+var cboCountry_grd_Change = function (sender, e) {
+    App.cboState_grd.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.State) {
+                App.cboState_grd.setValue(curRecord.data.State);
+            }
+        var dt = HQ.store.findInStore(App.cboState_grd.getStore(), ["State"], [App.cboState_grd.getValue()]);
+        if (!dt) {
+            curRecord.data.State = '';
+            App.cboState_grd.setValue("");
+        }
+    });
+};
+
+var cboState_grd_Change = function (sender, e) {
+    App.cboCity_grd.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord && curRecord.data.City) {
+            App.cboCity_grd.setValue(curRecord.data.City);
+        }
+        var dt = HQ.store.findInStore(App.cboCity_grd.getStore(), ["City"], [App.cboCity_grd.getValue()]);
+        if (!dt) {
+            //App.cboCity_grd.clearValue();
+            curRecord.data.City = '';
+            App.cboCity_grd.setValue("");
+        }
+    });
+};
+
+//load lần đầu khi mở
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    loadSourceCombo();
+};
+
+////////////Kiem tra combo chinh CpnyID
+//khi co su thay doi du lieu cua cac conttol tren form
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = (HQ.store.isChange(App.stoSYS_Company) == false ? HQ.store.isChange(App.stoSys_CompanyAddr) : true) || (HQ.store.isChange(App.stoSYS_Company) == false ? HQ.store.isChange(App.stoSYS_SubCompany) : true);
+    HQ.common.changeData(HQ.isChange, 'SA00000');//co thay doi du lieu gan * tren tab title header
+    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+    if (App.cboCpnyID.valueModels == null || HQ.isNew == true)
+        App.cboCpnyID.setReadOnly(false);
+    else App.cboCpnyID.setReadOnly(HQ.isChange);
+};
+
+var grdSYS_SubCompany_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys1);
+};
+
+var grdSYS_SubCompany_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSYS_SubCompany, e, keys1);
+    frmChange();
+};
+
+var grdSYS_SubCompany_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSYS_SubCompany, e, keys1);
+};
+var grdSYS_SubCompany_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSYS_SubCompany);
+    //stoChanged(App.stoSYS_SubCompany);
+    frmChange();
+};
+
+//xu li su kiem tren luoi giong nhu luoi binh thuong
+var grdSys_CompanyAddr_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdSys_CompanyAddr_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSys_CompanyAddr, e, keys);
+    frmChange();
+};
+
+var grdSys_CompanyAddr_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSys_CompanyAddr, e, keys);
+};
+
+var grdSys_CompanyAddr_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSys_CompanyAddr);
+    //stoChanged(App.stoSys_CompanyAddr);
+    frmChange();
+};
+
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SA00000');
+};
+
+//load store khi co su thay doi CpnyID
+var stoLoad = function (sto) {
+
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(false);
+    HQ.isNew = false;
+    App.cboCpnyID.forceSelection = true;
+    App.cboCountry.forceSelection = false;
+    App.cboState.forceSelection = false;
+    App.cboCity.forceSelection = false;
+    App.cboDistrict.forceSelection = false;
+    App.cboCountry.store.clearFilter();
+    App.cboState.store.clearFilter();
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "CpnyID");
+        record = sto.getAt(0);
+        record.data.DatabaseName = HQ.DatabaseName;
+        HQ.isNew = true;//record la new    
+        App.cboCpnyID.forceSelection = false;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboCpnyID.focus(true);//focus ma khi tao moi
+        sto.commitChanges();
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    if (App.cboCountry.value == record.data.Country) {
+        cboCountry_Change(App.cboCountry, record.data.Country);
+    }
+    else if (App.cboState.value == record.data.State) {
+        cboState_Change(App.cboState, record.data.State);
+    }
+    //App.stoSys_CompanyAddr.reload();
+    loadComboGrid();
+};
+
+var stoLoadSys_CompanyAddr = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        App.stoSYS_SubCompany.reload();
+        //HQ.isFirstLoad = false;
+    }
+    frmChange();
+};
+
+var stoLoadSYS_SubCompany = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys1);
+        }
+        HQ.isFirstLoad = false;
+    }
+    frmChange();
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+// Event when cboVendID is changed or selected item 
+var cboCpnyID_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if ((!HQ.isNew || sender.valueModels != null) && !App.stoSYS_Company.loading) {
+        App.stoSYS_Company.reload();
+    }
+};
+
+var cboCpnyID_Select = function (sender, value) {
+    if (sender.valueModels != null && !App.stoSYS_Company.loading) {
+        App.stoSYS_Company.reload();
+    }
+};
+
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboCpnyID_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboCpnyID.collapse();
+    }
+};
+
+//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
+var cboCpnyID_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
+    }
+
+};
+
+var cboDistrict_Change = function (sender, value) {
+    //var curRecord = App.frmMain.getRecord();
+    //if (curRecord && curRecord.data.District) {
+    //    App.cboDistrict.setValue(curRecord.data.District);
+    //    HQ.combo.expand(App.cboDistrict, ',');
+    //}
+    //var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], App.cboDistrict.getValue());
+    //if (!dt) {
+    //    curRecord.data.District = '';
+    //    App.cboDistrict.setValue("");
+    //}
+    //else {
+    //    HQ.combo.expand(App.cboDistrict, ',');
+    //}
+};
+
+function save() {
+    //dòng này để bắt các thay đổi của form 
+    App.frmMain.getForm().updateRecord();
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: 'Submiting...',
+            url: 'SA00000/Save',
+            params: {
+                lstSYS_Company: Ext.encode(App.stoSYS_Company.getChangedData({ skipIdForPhantomRecords: false })),
+                lstSys_CompanyAddr: Ext.encode(App.stoSys_CompanyAddr.getChangedData({ skipIdForPhantomRecords: false })),
+                lstSYS_SubCompany: Ext.encode(App.stoSYS_SubCompany.getChangedData({ skipIdForPhantomRecords: false })),
+                isNew: HQ.isNew
+            },
+            success: function (result, data) {
+                HQ.message.show(201405071, '', '');
+                var CpnyID = data.result.CpnyID;
+                App.cboCpnyID.getStore().load(function () {
+                    App.cboCpnyID.setValue(CpnyID);
+                    App.stoSYS_Company.reload();
+                });
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+// Submit the deleted data into server side
+function deleteData(item) {
+    if (item == 'yes') {
+        if (_focusNo == 0) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang('DeletingData'),
+                url: 'SA00000/DeleteAll',
+                success: function (action, data) {
+                    App.cboCpnyID.setValue("");
+                    App.cboCpnyID.getStore().load(function () { cboCpnyID_Change(App.cboCpnyID); });
+
+                },
+                failure: function (action, data) {
+                    if (data.result.msgCode) {
+                        HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                    }
+                }
+            });
+        }
+        else if (_focusNo == 1) {
+            App.grdSys_CompanyAddr.deleteSelected();
+        }
+        else if (_focusNo == 2) {
+            App.grdSYS_SubCompany.deleteSelected();
+        }
+    }
+};
+
+//var deleteData = function (item) {
+//    if (item == "yes") {
+//        if (_focusNo == 0) {
+//            if (App.frmMain.isValid()) {
+//                App.frmMain.updateRecord();
+//                App.frmMain.submit({
+//                    waitMsg: HQ.common.getLang("DeletingData"),
+//                    url: 'SA00000/DeleteAll',
+//                    timeout: 7200,
+//                    success: function (msg, data) {
+//                        App.cboUserID.getStore().load();
+//                        menuClick("new");
+//                    },
+//                    failure: function (msg, data) {
+//                        HQ.message.process(msg, data, true);
+//                    }
+//                });
+//            }
+
+//        }
+//        else if (_focusNo == 1) {
+//            App.grdSys_CompanyAddr.deleteSelected();
+//        }
+//        else if (_focusNo == 2) {
+//            App.grdSYS_SubCompany.deleteSelected();
+//        }
+//    }
+//};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        var cpnyid = '';
+        if (App.cboCpnyID.valueModels != null) cpnyid = App.cboCpnyID.getValue();
+        App.cboCpnyID.getStore().load(function () { App.cboCpnyID.setValue(cpnyid); App.stoSYS_Company.reload(); });
+
+        //App.cboCpnyID.getStore().load(function () { App.stoSYS_Company.reload(); });
+    }
+};
+///////////////////////////////////
