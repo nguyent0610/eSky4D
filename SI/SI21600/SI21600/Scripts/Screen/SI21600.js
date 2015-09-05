@@ -1,1 +1,331 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('k a=["\\1l\\j\\f\\n\\o\\v\\u\\s","","\\o\\1o\\g\\J\\g\\i\\b\\u\\s","\\m\\h\\V\\v\\f\\n\\r\\b","\\M\\m\\j\\h\\d","\\o\\g\\t\\1o\\g","\\w\\j\\b\\N","\\n\\b\\Y\\d","\\l\\f\\h\\d","\\j\\b\\M\\j\\b\\h\\v","\\h\\v\\g\\1s","\\t\\b\\h\\h\\f\\r\\b","\\N\\f\\l\\x\\b\\2q\\g\\i\\b\\l\\h","\\h\\b\\d\\1D\\f\\l\\x\\b","\\j\\b\\l\\g\\f\\i","\\h\\d\\g\\G\\u\\2x\\2D\\m\\b\\j\\f\\j\\o\\v\\P","\\l\\g\\f\\i","\\r\\b\\d\\G\\d\\g\\j\\b","\\m\\h\\u\\n\\h\\b\\j\\d","\\d\\Y\\d\\s\\b\\h\\o\\j","\\j\\g\\g\\d","\\l\\b\\n\\r\\d\\v","\\r\\b\\d\\G\\b\\l\\b\\o\\d\\b\\i\\J\\g\\i\\b\\h","\\u\\s\\1m\\j\\b\\b","\\2R","\\h\\w\\l\\m\\d","\\n\\g\\i\\b\\u\\s","\\1u\\L","\\d\\Y\\d\\J\\g\\i\\b\\X\\b\\N\\b\\l","\\d\\Y\\d\\1j\\f\\j\\b\\n\\d\\K\\b\\o\\g\\j\\i\\u\\s","\\n\\b\\1s","\\m\\h\\s\\b\\l\\b\\d\\b","\\r\\b\\d\\K\\b\\o\\g\\j\\i","\\M\\j\\t\\2q\\f\\m\\n","\\i\\b\\l\\b\\d\\b\\s\\f\\d\\f","\\i\\b\\l\\b\\d\\b","\\m\\h\\2B\\w\\i\\f\\d\\b","\\o\\v\\b\\o\\2j\\K\\b\\2l\\x\\m\\j\\b\\1j\\f\\h\\h","\\M\\g\\j\\t","\\h\\f\\N\\b","\\w\\j\\m\\n\\d","\\o\\l\\g\\h\\b","\\o\\g\\t\\t\\g\\n","\\r\\b\\d\\1D\\f\\l\\x\\b","\\o\\1o\\g\\1m\\P\\w\\b","\\M\\f\\m\\l","\\X\\g\\f\\i\\m\\n\\r\\2h\\1m\\j\\b\\b","\\i\\m\\j\\b\\o\\d","\\m\\h\\J\\b\\1s","\\m\\h\\2w\\t\\w\\d\\P","\\m\\i","\\i\\f\\d\\f","\\l\\g\\f\\i\\m\\n\\r","\\K\\b\\o\\g\\j\\i\\u\\s","\\o\\g\\l\\l\\f\\w\\h\\b","\\u","\\m\\h\\2k\\m\\j\\h\\d\\X\\g\\f\\i","\\r\\b\\d\\V\\g\\x\\n\\d","\\x\\w\\i\\f\\d\\b\\K\\b\\o\\g\\j\\i","\\r\\b\\d\\2k\\g\\j\\t","\\h\\d\\g\\j\\b","\\G\\u\\1A\\1u\\1M\\L\\L","\\o\\v\\f\\n\\r\\b\\s\\f\\d\\f","\\h\\v\\g\\1s\\1l\\x\\h\\P","\\M\\g\\j\\o\\b\\G\\b\\l\\b\\o\\d\\m\\g\\n","\\J\\g\\i\\b\\u\\s","\\m\\n\\h\\b\\j\\d\\1l\\l\\f\\n\\2j","\\r\\b\\d\\2i\\d","\\M\\g\\o\\x\\h","\\o\\g\\t\\t\\m\\d\\V\\v\\f\\n\\r\\b\\h","\\l\\g\\f\\i\\K\\b\\o\\g\\j\\i","\\h\\b\\d\\K\\b\\2l\\x\\m\\j\\b","\\l\\g\\f\\i\\m\\n\\r\\i\\f\\d\\f","\\r\\b\\d\\X\\f\\n\\r","\\m\\h\\1D\\f\\l\\m\\i","\\G\\f\\N\\m\\n\\r\\s\\f\\d\\f","\\G\\u\\1A\\1u\\1M\\L\\L\\2n\\G\\f\\N\\b","\\r\\b\\d\\V\\v\\f\\n\\r\\b\\i\\s\\f\\d\\f","\\b\\n\\o\\g\\i\\b","\\j\\b\\h\\x\\l\\d","\\w\\j\\g\\o\\b\\h\\h","\\h\\x\\1o\\t\\m\\d","\\P\\b\\h","\\s\\b\\l\\b\\d\\m\\n\\r\\s\\f\\d\\f","\\G\\u\\1A\\1u\\1M\\L\\L\\2n\\s\\b\\l\\b\\d\\b\\2i\\l\\l","\\t\\h\\r\\V\\g\\i\\b","\\t\\h\\r\\1j\\f\\j\\f\\t","\\h\\b\\f\\j\\o\\v\\m\\n\\r\\2h\\n\\g\\i\\b\\1w\\1w\\1w\\1w","\\J\\g\\i\\b\\X\\b\\N\\b\\l","\\1j\\f\\j\\b\\n\\d\\K\\b\\o\\g\\j\\i\\u\\s","\\r\\b\\d\\J\\g\\i\\b\\1l\\P\\u\\i","\\i\\b\\w\\d\\v","\\m\\d\\b\\t\\h","\\h\\b\\l\\b\\o\\d","\\h\\l\\t\\1m\\j\\b\\b","\\h\\b\\l\\b\\o\\d\\b\\i","\\w\\f\\j\\b\\n\\d\\J\\g\\i\\b","\\b\\Y\\w\\f\\n\\i"];k 2S=[a[0]];k 2N=[a[0]];k 2M=[a[0]];k R;k Z;k 1e;k F=a[1];k 2I=a[1];k T=a[1];k 2H;k 1R=p(1V){2J(1V){E a[4]:e[a[5]][a[4]](c[a[2]],e[a[3]]);B;E a[6]:e[a[5]][a[6]](c[a[2]],e[a[3]]);B;E a[7]:e[a[5]][a[7]](c[a[2]],e[a[3]]);B;E a[8]:e[a[5]][a[8]](c[a[2]],e[a[3]]);B;E a[9]:q(e[a[3]]){e[a[11]][a[10]](2P,a[1],a[9])}S{e[a[3]]=H;q(c[a[2]][a[12]]==1F){c[a[2]][a[13]](a[1])};c[a[2]][a[17]]()[a[16]](p(){c[a[15]][a[14]]()})};B;E a[30]:q(e[a[18]]){q(e[a[3]]){e[a[11]][a[10]](1X,a[1],a[1])}S{c[a[2]][a[13]](a[1]);c[a[19]][a[13]](a[1]);q(R!=a[20]){k 1H=c[a[23]][a[22]]()[a[21]]>0?c[a[23]][a[22]]()[0][a[26]][a[25]](a[24]):[a[1],0,0,0];c[a[28]][a[13]](2L(1H[1],a[27])+1);c[a[29]][a[13]](1H[3])}S{c[a[28]][a[13]](1);c[a[29]][a[13]](0)}}};B;E a[35]:q(e[a[31]]){k 1U=c[a[33]][a[32]]();q(1U){e[a[11]][a[10]](11,a[1],a[34])}};B;E a[39]:q(e[a[36]]||e[a[18]]||e[a[31]]){q(e[a[38]][a[37]](c[a[33]])){1P()}};B;E a[2K]:B;E a[1T]:e[a[z]][a[1T]](2Q);B}};p 1i(){2G{c[a[2O]].2y(c[a[1k]][a[1a]](),{1I:p(y){c[a[2]][a[17]]()[a[16]](p(){c[a[15]][a[14]]()})},1z:p(){2f(a[2v])},2F:{2E:a[2z],2C:D}})}2A(1Q){2f(1Q[a[11]])}}k 3c=p(A,W){c[a[2]][a[13]](a[1]);c[a[19]][a[13]](a[1]);c[a[28]][a[13]](0);c[a[29]][a[13]](0);1i()};k 3I=p(3H,1N,3G){q(e[a[I]]==H||1h[a[1E]](c[a[2]][a[1a]]())){F=1N[a[C]][a[1r]][a[25]](a[24]);R=F[0];Z=F[1];1e=F[2];T=F[3];c[a[2]][a[13]](R);q(R==a[20]){c[a[2]][a[13]](a[1]);c[a[28]][a[13]](0);c[a[29]][a[13]](0)}S{c[a[28]][a[13]](Z);c[a[29]][a[13]](1e)}}S{c[a[2]][a[13]](a[1]);c[a[19]][a[13]](a[1]);F=1N[a[C]][a[1r]][a[25]](a[24]);c[a[28]][a[13]](F[1]);c[a[29]][a[13]](F[2])}};k 2g=p(A,W){q((!e[a[I]]||A[a[12]]!=1F)&&!c[a[15]][a[1Z]]){T=1h[a[1E]](A[a[12]][0])?a[1]:A[a[12]][0][a[C]][a[1t]];c[a[15]][a[14]]()}};k 3J=p(A,W){q(A[a[12]]!=1F&&!c[a[15]][a[1Z]]){T=1h[a[1E]](A[a[12]][0])?a[1]:A[a[12]][0][a[C]][a[1t]];c[a[15]][a[14]]()}};k 3L=p(A,W){q(e[a[3]]){c[a[1k]][a[3M]]()}};k 3N=p(A,W){q(e[a[3]]){e[a[11]][a[10]](1X,a[1],a[1])}S{1R(a[30])}};k 3F=p(){c[a[1k]][a[17]]()[a[16]](p(){c[a[1k]][a[13]](a[3P]);e[a[1W]]=D;e[a[I]]=D})};k 1S=p(){q(c[a[15]][a[3O]]()>0){c[a[33]][a[1G]]()[a[2e]]();e[a[3]]=e[a[1y]][a[3]](c[a[15]]);e[a[z]][a[3S]](e[a[3]],a[2T])}};k 3R=p(O){e[a[z]][a[1g]](H);e[a[1W]]=D;e[a[I]]=H;c[a[2]][a[1Y]]=D;q(O[a[C]][a[21]]==0){c[a[2]][a[1Y]]=H;e[a[1y]][a[3K]](O,a[1x]);1K=O[a[1L]](0);e[a[I]]=D;c[a[2]][a[3D]](D);O[a[3g]]()};1K=O[a[1L]](0);c[a[33]][a[1G]]()[a[3f]](1K);e[a[z]][a[3e]](c[a[33]]);1S();q(!e[a[I]]){2c()}};k 3h=p(O){e[a[z]][a[1g]](D,e[a[z]][a[1v]](a[3i]))};k 1P=p(){c[a[33]][a[1G]]()[a[2e]]();q(c[a[33]][a[3k]]()){c[a[33]][a[2s]]({3j:3d,2u:e[a[z]][a[1v]](a[3E]),2o:a[2W],2V:{2U:1h[a[2X]](c[a[15]][a[2Y]]({3b:H})),3a:c[a[2]][a[1a]](),2Z:c[a[28]][a[1a]](),3l:c[a[29]][a[1a]](),3m:e[a[I]]},1I:p(3y,y){e[a[I]]=H;e[a[11]][a[10]](3x,a[1],a[1]);k 2a=y[a[1d]][a[1x]];T=y[a[1d]][a[1t]];1i();c[a[2]][a[13]](2a)},1z:p(2t,y){e[a[11]][a[3w]](2t,y,D)}})}};p 3z(1n){q(1n==a[2b]){c[a[33]][a[2s]]({2u:e[a[z]][a[1v]](a[3A]),2o:a[3C],1I:p(2p,y){c[a[2]][a[13]](a[1]);c[a[2]][a[17]]()[a[16]](p(){2g(c[a[2]])});1i()},1z:p(2p,y){q(y[a[1d]][a[2d]]){e[a[11]][a[10]](y[a[1d]][a[2d]],y[a[1d]][a[3B]],a[1])}}})}}p 3v(1n){q(1n==a[2b]){e[a[3]]=H;c[a[15]][a[14]]()}}k 2c=p(){e[a[z]][a[1g]](D,e[a[z]][a[1v]](a[3u]),c[a[33]]);k 1f=c[a[15]][a[1L]](0)[a[C]];k Q=1f[a[1x]]+a[24]+1f[a[3p]]+a[24]+1f[a[3o]]+a[24]+1f[a[1t]];k 3n=c[a[23]][a[17]]()[a[1p]](Q);q(c[a[23]][a[17]]()[a[1p]](Q)){k 1c=c[a[23]][a[17]]()[a[1p]](Q)[a[C]][a[3q]];1C(1c,c[a[23]][a[17]]()[a[1p]](Q));k 1B=c[a[23]][a[1q]][a[1q]][0][a[1y]][a[C]][a[1q]];3r(k 1b=0;1b<1B[a[21]];1b++){q(1B[1b][a[C]][a[1r]]==Q){c[a[2m]][a[3t]](1b);U=c[a[2m]][a[3s]][a[1q]][0][a[C]][a[1r]];q(U[a[25]](a[24])[a[21]]==4){R=U[a[25]](a[24])[0];Z=U[a[25]](a[24])[1];1e=U[a[25]](a[24])[2];T=U[a[25]](a[24])[3];c[a[28]][a[13]](Z);c[a[29]][a[13]](1e)};B}}};e[a[z]][a[1g]](H)};k 1C=p(1c,1J){q(1c>0){k 2r=1J[a[1O]];1C(1c-1,2r);1J[a[1O]][a[3Q]]()}};', 62, 241, '||||||||||_0x3906|x65|App|x74|HQ|x61|x6F|x73|x64|x72|var|x6C|x69|x6E|x63|function|if|x67|x44|x6D|x49|x68|x70|x75|_0xdd64x10|42|_0xdd64x12|break|51|true|case|parentRecordIDAll|x53|false|48|x4E|x52|x30|x66|x76|_0xdd64x1f|x79|_0xdd64x2b|_nodeID|else|_recordID|tmpSelectedNode|x43|_0xdd64x13|x4C|x78|_nodeLevel|||||||||||43|_0xdd64x2f|_0xdd64x2d|79|_parentRecordID|_0xdd64x2a|63|Ext|ReloadTree|x50|44|x42|x54|_0xdd64x26|x62|90|92|50|x77|53|x31|73|x2E|65|60|failure|x32|_0xdd64x2e|expandTree|x56|49|null|59|_0xdd64xd|success|_0xdd64x31|record|67|x36|_0xdd64x16|96|save|ex|menuClick|frmChange|41|_0xdd64xe|_0xdd64xc|56|150|64|52|||||||||||_0xdd64x23|82|searchNode|85|58|alert|cboNodeID_Change|x20|x41|x6B|x46|x71|94|x2F|url|_0xdd64x27|x4D|_0xdd64x32|81|_0xdd64x24|waitMsg|45|x45|x5F|ReloadTreeSI21600|46|catch|x55|showMask|x48|msg|eventMask|try|selectNode|parentRecordID|switch|40|parseInt|fieldsLangCheckRequire|fieldsCheckRequire|47|20150303|this|x2D|keys|61|lstSI_Hierarchy|params|76|78|77|NodeLevel|||||||||||NodeID|skipIdForPhantomRecords|cboType_Change|1800000|71|70|69|storeBeforeLoad|72|timeout|74|ParentRecordID|isNew|_0xdd64x2c|89|88|91|for|95|93|87|refresh|80|201405071|_0xdd64x22|deleteData|83|86|84|68|75|firstLoad|_0xdd64x17|_0xdd64x15|NodeSelected_Change|cboNodeID_Select|66|cboType_Expand|54|cboType_TriggerClick|57|55|97|stoLoadHeader|62'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['BranchID'];
+var fieldsCheckRequire = ["BranchID"];
+var fieldsLangCheckRequire = ["BranchID"];
+
+var _nodeID;
+var _nodeLevel;
+var _parentRecordID;
+var parentRecordIDAll = "";
+var parentRecordID = "";
+var _recordID = "";
+var selectNode;
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.combo.first(App.cboNodeID, HQ.isChange);
+            break;
+        case "prev":
+            HQ.combo.prev(App.cboNodeID, HQ.isChange);
+            break;
+        case "next":
+            HQ.combo.next(App.cboNodeID, HQ.isChange);
+            break;
+        case "last":
+            HQ.combo.last(App.cboNodeID, HQ.isChange);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                if (App.cboNodeID.valueModels == null) App.cboNodeID.setValue('');
+                App.cboNodeID.getStore().load(function () {
+                    App.stoSI_Hierarchy.reload();
+                });
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', '');
+                }
+                else {
+                    App.cboNodeID.setValue('');
+                    App.txtDescr.setValue('');
+                    if (_nodeID != 'root') {
+                        var obj = App.IDTree.getSelectedNodes().length > 0 ? App.IDTree.getSelectedNodes()[0].nodeID.split('-') : ['', 0, 0, 0];
+                        App.txtNodeLevel.setValue(parseInt(obj[1], "10") + 1);
+                        App.txtParentRecordID.setValue(obj[3]);
+                    }
+                    else {
+                        App.txtNodeLevel.setValue(1);
+                        App.txtParentRecordID.setValue(0);
+                    }
+                }
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                var curRecord = App.frmMain.getRecord();
+                if (curRecord) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+};
+
+function ReloadTree() {
+    try {
+        App.direct.ReloadTreeSI21600(App.cboType.getValue(), {
+            success: function (data) {
+                App.cboNodeID.getStore().load(function () {
+                    //App.cboNodeID.setValue(NodeID);
+                    App.stoSI_Hierarchy.reload();
+                });
+                // App.stoSI_Hierarchy.reload();
+            },
+            failure: function () {
+                alert("fail");
+            },
+            eventMask: { msg: 'Loading Tree', showMask: true }
+        });
+    } catch (ex) {
+        alert(ex.message);
+    }
+};
+
+
+var cboType_Change = function (sender, value) {
+    App.cboNodeID.setValue('');
+    App.txtDescr.setValue('');
+    App.txtNodeLevel.setValue(0);
+    App.txtParentRecordID.setValue(0);
+
+    ReloadTree();
+};
+
+var NodeSelected_Change = function (store, operation, options) {
+    if (HQ.isNew == false || Ext.isEmpty(App.cboNodeID.getValue())) {
+        parentRecordIDAll = operation.data.id.split("-");
+        _nodeID = parentRecordIDAll[0];
+        _nodeLevel = parentRecordIDAll[1];
+        _parentRecordID = parentRecordIDAll[2];
+        _recordID = parentRecordIDAll[3];
+
+        App.cboNodeID.setValue(_nodeID);
+        if (_nodeID == 'root') {
+            App.cboNodeID.setValue('');
+            App.txtNodeLevel.setValue(1);
+            App.txtParentRecordID.setValue(0);
+        }
+        else {
+            App.txtNodeLevel.setValue(_nodeLevel);
+            App.txtParentRecordID.setValue(_parentRecordID);
+        }
+    }
+    else {
+        App.cboNodeID.setValue("");
+        App.txtDescr.setValue("");
+        parentRecordIDAll = operation.data.id.split("-");
+        App.txtNodeLevel.setValue(parentRecordIDAll[1]);
+        App.txtParentRecordID.setValue(parentRecordIDAll[2]);
+    }
+
+};
+
+var cboNodeID_Change = function (sender, value) {
+    if ((!HQ.isNew || sender.valueModels != null) && !App.stoSI_Hierarchy.loading) {
+        _recordID = Ext.isEmpty(sender.valueModels[0]) ? '' : sender.valueModels[0].data.RecordID;
+        App.stoSI_Hierarchy.reload();
+    }
+};
+
+var cboNodeID_Select = function (sender, value) {
+    if (sender.valueModels != null && !App.stoSI_Hierarchy.loading) {
+        _recordID = Ext.isEmpty(sender.valueModels[0]) ? '' : sender.valueModels[0].data.RecordID;
+
+
+        App.stoSI_Hierarchy.reload();
+    }
+
+};
+//khi nhan combo xo ra, neu da thay doi thi ko xo ra
+var cboType_Expand = function (sender, value) {
+    if (HQ.isChange) {
+        App.cboType.collapse();
+    }
+};
+
+//khi nhan X xoa tren combo, neu du lieu thay doi thi ko cho xoa, du lieu chua thay doi thi add new
+var cboType_TriggerClick = function (sender, value) {
+    if (HQ.isChange) {
+        HQ.message.show(150, '', '');
+    }
+    else {
+        menuClick('new');
+    }
+};
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    App.cboType.getStore().load(function () {
+        App.cboType.setValue('I');
+        HQ.isFirstLoad = true;
+        HQ.isNew = true;
+
+    });
+
+};
+
+var frmChange = function () {
+    if (App.stoSI_Hierarchy.getCount() > 0) {
+        App.frmMain.getForm().updateRecord();
+        HQ.isChange = HQ.store.isChange(App.stoSI_Hierarchy);
+        HQ.common.changeData(HQ.isChange, 'SI21600');
+    }
+};
+
+var stoLoadHeader = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isFirstLoad = true;
+    HQ.isNew = false;
+    App.cboNodeID.forceSelection = true;
+    if (sto.data.length == 0) {
+        App.cboNodeID.forceSelection = false;
+        HQ.store.insertBlank(sto, "NodeID");
+        record = sto.getAt(0);
+        HQ.isNew = true;//record la new    
+        App.cboNodeID.focus(true);//focus ma khi tao moi
+        sto.commitChanges();
+    }
+    record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    HQ.common.setRequire(App.frmMain);  //to do cac o la require  
+    frmChange();
+    if (!HQ.isNew) searchNode();
+};
+
+//trước khi load trang busy la dang load data
+var storeBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    App.frmMain.getForm().updateRecord();
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SI21600/Save',
+            params: {
+                lstSI_Hierarchy: Ext.encode(App.stoSI_Hierarchy.getChangedData({ skipIdForPhantomRecords: false })),
+                NodeID: App.cboNodeID.getValue(),
+                NodeLevel: App.txtNodeLevel.getValue(),
+                ParentRecordID: App.txtParentRecordID.getValue(),
+                isNew: HQ.isNew
+
+            },
+            success: function (result, data) {
+                HQ.isNew = false;
+                HQ.message.show(201405071, '', '');
+
+                var NodeID = data.result.NodeID;
+                _recordID = data.result.RecordID;
+                ReloadTree();
+                App.cboNodeID.setValue(NodeID);
+                //App.cboNodeID.getStore().load(function () {
+
+
+                //    //App.stoSI_Hierarchy.reload();
+                //});
+
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+// Submit the deleted data into server side
+function deleteData(item) {
+    if (item == 'yes') {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang('DeletingData'),
+            url: 'SI21600/DeleteAll',
+            success: function (action, data) {
+                App.cboNodeID.setValue("");
+                App.cboNodeID.getStore().load(function () { cboNodeID_Change(App.cboNodeID); });
+                ReloadTree();
+            },
+            failure: function (action, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                }
+            }
+        });
+
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        App.stoSI_Hierarchy.reload();
+    }
+};
+
+var searchNode = function () {
+    HQ.common.showBusy(true, HQ.common.getLang('searching node....'), App.frmMain);
+    //tu dong bat node tree khi chon 1 cai tu cboInvtID
+    var inactiveHierachy = App.stoSI_Hierarchy.getAt(0).data;
+
+    var invtIDDescr = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID + "-" + inactiveHierachy.RecordID;
+    var record = App.IDTree.getStore().getNodeById(invtIDDescr);
+    if (App.IDTree.getStore().getNodeById(invtIDDescr)) {
+        var depth = App.IDTree.getStore().getNodeById(invtIDDescr).data.depth;
+
+        expandTree(depth, App.IDTree.getStore().getNodeById(invtIDDescr));
+        var findNode = App.IDTree.items.items[0].store.data.items;
+        for (var i = 0; i < findNode.length; i++) {
+            if (findNode[i].data.id == invtIDDescr) {
+                App.slmTree.select(i);
+                tmpSelectedNode = App.slmTree.selected.items[0].data.id;
+
+                if (tmpSelectedNode.split('-').length == 4) {
+                    _nodeID = tmpSelectedNode.split('-')[0];
+                    _nodeLevel = tmpSelectedNode.split('-')[1];
+                    _parentRecordID = tmpSelectedNode.split('-')[2];
+                    _recordID = tmpSelectedNode.split('-')[3];
+
+                    App.txtNodeLevel.setValue(_nodeLevel);
+                    App.txtParentRecordID.setValue(_parentRecordID);
+                }
+                break;
+            }
+        }
+    }
+    HQ.common.showBusy(false);
+};
+
+var expandTree = function (depth, tree) {
+    if (depth > 0) {
+        var treechil = tree.parentNode;
+        expandTree(depth - 1, treechil);
+        tree.parentNode.expand();
+    }
+};
