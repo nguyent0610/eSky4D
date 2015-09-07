@@ -72,7 +72,11 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain)) {
-                    save();
+                    if (App.txtNodeLevel.getValue() == "0") {
+                        HQ.message.show(2015090701, '', '');
+                    } else {
+                        save();
+                    }
                 }
             }
             break;
@@ -182,9 +186,7 @@ var firstLoad = function () {
         App.cboType.setValue('I');
         HQ.isFirstLoad = true;
         HQ.isNew = true;
-
     });
-
 };
 
 var frmChange = function () {
