@@ -153,7 +153,7 @@ namespace SI21600.Controllers
                             header.RecordID = _sys.SI21600_ppMaxRC(Type).FirstOrDefault().Value;
                             header.Crtd_Datetime = DateTime.Now;
                             header.Crtd_Prog = _screenNbr;
-                            header.Crtd_User = Current.UserName;
+                            header.Crtd_User = _userName;
                     
                             UpdatingHeader(ref header, curHeader);
                             _sys.SI_Hierarchy.AddObject(header);
