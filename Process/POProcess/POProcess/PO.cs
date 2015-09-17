@@ -1002,7 +1002,7 @@ namespace POProcess
                                 objIN_ItemLot.ExpDate = r1.ExpDate;
                                 objIN_ItemLot.MfgrLotSerNbr = r1.MfgrLotSerNbr;
                                 objIN_ItemLot.Cost = objIN_ItemLot.Cost + (dtInTrans.ExtCost / dtInTrans.Qty) * r1.Qty;
-                                objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + Qty, 0);
+                                //objIN_ItemLot.QtyAvail = Math.Round(objIN_ItemLot.QtyAvail + Qty, 0);
                                 objIN_ItemLot.QtyOnHand = Math.Round(objIN_ItemLot.QtyOnHand + Qty, 10);
                                 objIN_ItemLot.QtyAllocPORet = Math.Round(objIN_ItemLot.QtyAllocPORet + Qty, 0, MidpointRounding.AwayFromZero);
                                 //objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
@@ -1187,74 +1187,77 @@ namespace POProcess
             clsAP_Doc objAP_Doc = new clsAP_Doc(Dal);
             clsIN_Trans objIN_Trans = new clsIN_Trans(Dal);
             clsSQL objSql = new clsSQL(Dal);
-            //Checking                      
-            dtReceipt = objPO_Receipt.GetAll(BranchID, BatNbr, "%");// app.PO_Receipt.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr).ToList();
-            if (dtReceipt.Rows.Count > 0)
+            clsPO_Receipt m_objPO_Receipt = new clsPO_Receipt(Dal);   
+            //Checking   
+             try
             {
-                IList<clsPO_Receipt> ListdtReceipt = DataTableHelper.ConvertTo<clsPO_Receipt>(dtReceipt);
-                foreach (clsPO_Receipt obj in ListdtReceipt)
+                if (m_objPO_Receipt.GetByKey(BranchID, BatNbr, RcptNbr))
                 {
-                    if (obj.Rlsed != -1)
+
+                    if (m_objPO_Receipt.Rlsed != -1)
                     {
-                        if (objSql.PO_CheckForCancel(BranchID, BatNbr, obj.RcptNbr) == "1")
+                        if (objSql.PO_CheckForCancel(BranchID, BatNbr, m_objPO_Receipt.RcptNbr) == "1")
                         {
-                            throw new MessageException(MessageType.Message, "144", "", new[] { obj.RcptNbr });
+                            throw new MessageException(MessageType.Message, "144", "", new[] { m_objPO_Receipt.RcptNbr });
 
                         }
 
                     }
-                }
-            }
 
-            //Check AP
 
-            dtPOInvoice = objPO_Invoice.GetAll(BranchID, BatNbr, "%");// app.PO_Invoice.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr).ToList();
-            if (dtPOInvoice.Rows.Count > 0)
-                objPO_Invoice = DataTableHelper.ConvertTo<clsPO_Invoice>(dtPOInvoice).FirstOrDefault();// dtPOInvoice.Rows.OfType<clsPO_Invoice>().FirstOrDefault();
-            //var objInvoice = objPO_Invoice.FirstOrDefault();
-            dtAP_Doc = objAP_Doc.GetAll(BranchID, objPO_Invoice.APBatNbr, "%");// app.AP_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == objInvoice.APBatNbr).ToList();
-            if (dtAP_Doc.Rows.Count > 0)
-            {
-                IList<clsAP_Doc> ListdtAP_Doc = DataTableHelper.ConvertTo<clsAP_Doc>(dtAP_Doc);
-                foreach (clsAP_Doc obj in ListdtAP_Doc)
-                {
-                    if (obj.Rlsed != -1)
+                    //Check AP
+
+                    objPO_Invoice.GetByKey(BranchID, BatNbr, RcptNbr);// app.PO_Invoice.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr).ToList();             
+                    dtAP_Doc = objAP_Doc.GetAll(BranchID, objPO_Invoice.APBatNbr, "%");// app.AP_Doc.Where(p => p.BranchID == BranchID && p.BatNbr == objInvoice.APBatNbr).ToList();
+                    if (dtAP_Doc.Rows.Count > 0)
                     {
-                        if (objSql.AP_CheckForCancel(BranchID, objPO_Invoice.APBatNbr, obj.RefNbr) == "1")
+                        IList<clsAP_Doc> ListdtAP_Doc = DataTableHelper.ConvertTo<clsAP_Doc>(dtAP_Doc);
+                        foreach (clsAP_Doc obj in ListdtAP_Doc)
                         {
-                            throw new MessageException(MessageType.Message, "715", "", new[] { obj.RefNbr });
-                        }
+                            if (obj.Rlsed != -1)
+                            {
+                                if (objSql.AP_CheckForCancel(BranchID, objPO_Invoice.APBatNbr, obj.RefNbr) == "1")
+                                {
+                                    throw new MessageException(MessageType.Message, "715", "", new[] { obj.RefNbr });
+                                }
 
-                    }
-                }
-            }
-
-            //Check IN
-            if (!bCheck714)
-            {
-                dtIN_Trans = objIN_Trans.GetAll(BranchID, BatNbr, RcptNbr, "%");// app.IN_Trans.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.RefNbr == refNbr).ToList();
-                IList<clsIN_Trans> ListdtIN_Trans = DataTableHelper.ConvertTo<clsIN_Trans>(dtIN_Trans);
-                foreach (clsIN_Trans obj in ListdtIN_Trans)
-                {
-                    clsIN_ItemSite objIN_ItemSite = new clsIN_ItemSite(Dal);
-                    //var objIN_ItemSite = app.IN_ItemSite.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID).FirstOrDefault();
-
-                    if (objIN_ItemSite.GetByKey(obj.InvtID, obj.SiteID))
-                    {
-                        if (objIN_ItemSite.AvgCost != obj.UnitCost)
-                        {
-                            throw new MessageException(MessageType.Message, "714", "process714", new[] { obj.InvtID, obj.SiteID });
-
+                            }
                         }
                     }
-                }
-            }
-            try
-            {
-                //cancel IN
 
-                if (Receipt_Cancel(BranchID, BatNbr, RcptNbr, false))
-                {
+                    //Check IN
+                    if (!bCheck714)
+                    {
+                        dtIN_Trans = objIN_Trans.GetAll(BranchID, BatNbr, RcptNbr, "%");// app.IN_Trans.Where(p => p.BranchID == BranchID && p.BatNbr == BatNbr && p.RefNbr == refNbr).ToList();
+                        IList<clsIN_Trans> ListdtIN_Trans = DataTableHelper.ConvertTo<clsIN_Trans>(dtIN_Trans);
+                        foreach (clsIN_Trans obj in ListdtIN_Trans)
+                        {
+                            clsIN_ItemSite objIN_ItemSite = new clsIN_ItemSite(Dal);
+                            //var objIN_ItemSite = app.IN_ItemSite.Where(p => p.InvtID == obj.InvtID && p.SiteID == obj.SiteID).FirstOrDefault();
+
+                            if (objIN_ItemSite.GetByKey(obj.InvtID, obj.SiteID))
+                            {
+                                if (objIN_ItemSite.AvgCost != obj.UnitCost)
+                                {
+                                    throw new MessageException(MessageType.Message, "714", "process714", new[] { obj.InvtID, obj.SiteID });
+
+                                }
+                            }
+                        }
+                    }
+
+                    //cancel IN
+                    //Release IN
+                    if (m_objPO_Receipt.RcptType == "R")
+                    {
+                        if (!Receipt_Cancel(BranchID, BatNbr, RcptNbr, false)) return false;
+                       
+                    }
+                    else if (m_objPO_Receipt.RcptType == "X")
+                    {
+                        if (!Issue_Cancel(m_objPO_Receipt.BranchID, m_objPO_Receipt.BatNbr, m_objPO_Receipt.RcptNbr)) return false;
+                    }
+
                     //cancel PO          
                     if (POReceipt_Cancel(BranchID, BatNbr, RcptNbr))
                     {
@@ -1271,13 +1274,13 @@ namespace POProcess
                     }
                     else return false;
                 }
-                else return false;
+                return true;                
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw ex;        
+            
             }
-
         }
         private bool Receipt_Cancel(string branchID, string batNbr, string rcptNbr, bool isTransfer)
         {
@@ -1321,7 +1324,7 @@ namespace POProcess
                                         objItemSite.AvgCost, 0);
                     }
                     //Checking Qty
-                    if (objInventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objItemSite.QtyOnHand, 0, MidpointRounding.AwayFromZero) < 0)
+                    if (objInventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objItemSite.QtyAvail, 0, MidpointRounding.AwayFromZero) < 0)
                     {
                         throw new MessageException(MessageType.Message,"608","", new[] { objItemSite.InvtID, objItemSite.SiteID });   
                       
@@ -1415,6 +1418,12 @@ namespace POProcess
                                 //objIN_ItemLot.AvgCost = Math.Round((objIN_ItemLot.QtyOnHand) != 0 ? (objIN_ItemLot.Cost) / (objIN_ItemLot.QtyOnHand) : objIN_ItemLot.AvgCost, 0);
                                 objIN_ItemLot.Update();
                             }
+                            //Checking QtyLot
+                            if (objInventory.StkItem == 1 && !objIN_Setup.NegQty && Math.Round(objIN_ItemLot.QtyAvail, 0, MidpointRounding.AwayFromZero) < 0)
+                            {
+                                throw new MessageException(MessageType.Message, "608", "", new[] { objItemSite.InvtID, objItemSite.SiteID });
+
+                            }
                         }
                         #endregion
 
@@ -1454,8 +1463,8 @@ namespace POProcess
                 IList<clsIN_Trans> Listtrans = DataTableHelper.ConvertTo<clsIN_Trans>(trans);
                 string User =Listtrans.Count==0?"": Listtrans.FirstOrDefault().LUpd_User;
                 string Prog = Listtrans.Count == 0 ? "" : Listtrans.FirstOrDefault().LUpd_Prog;
-             
-                foreach (clsIN_Trans inTran in trans.Rows.OfType<clsIN_Trans>())
+
+                foreach (clsIN_Trans inTran in Listtrans)
                 {
                     objInventory.GetByKey(inTran.InvtID);
                     if (!objItemSite.GetByKey(inTran.InvtID, inTran.SiteID))
