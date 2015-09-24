@@ -1202,6 +1202,11 @@ namespace INProcess
                         objSite.QtyOnHand = Math.Round(objSite.QtyOnHand + qty, 0);
                         objSite.QtyAvail = Math.Round(objSite.QtyAvail + qty, 0);
                         objSite.AvgCost = Math.Round(objSite.QtyOnHand != 0 ? (objSite.TotCost - tran.Double("ExtCost")) / objSite.QtyOnHand : objSite.AvgCost, 0);
+
+                        if (!setup.NegQty && objSite.QtyAvail < 0)
+                        {
+                            throw new MessageException(MessageType.Message, "608", "", new[] { objSite.InvtID, objSite.SiteID });
+                        }
                     }
 
                     if (!setup.NegQty && setup.CheckINVal && Math.Round(objSite.TotCost - tran.Double("ExtCost"), 0) < 0)
