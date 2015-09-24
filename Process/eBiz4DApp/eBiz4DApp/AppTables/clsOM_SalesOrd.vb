@@ -173,13 +173,13 @@ Public Class clsOM_SalesOrd
 
     Private mvarIsAddStock As System.Boolean
 
-	Private mvarOrderNo As System.Int16
+    Private mvarOrderNo As System.Int16
 
-	Private mvarClassID As System.String
+    Private mvarClassID As System.String
 
-	Private mvarPriceClassID As System.String
+    Private mvarPriceClassID As System.String
 
-	Private mvartstamp As System.String
+    Private mvartstamp As System.String
 
     Private mvarRemark As System.String
 
