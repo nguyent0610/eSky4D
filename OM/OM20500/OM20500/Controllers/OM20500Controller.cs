@@ -124,6 +124,7 @@ namespace OM20500.Controllers
                         dal.BeginTrans(IsolationLevel.ReadCommitted);
                         if (!om.OM20500_Release(objHeader.BranchID, objHeader.OrderNbr, dicRef, Delivery, dteShipDate, dteARDocDate, objHeader.IsAddStock, dicRefLot))
                         {
+                            
                             dal.RollbackTrans();
                         }
                         else
