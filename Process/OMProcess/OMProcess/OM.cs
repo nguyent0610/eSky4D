@@ -590,6 +590,8 @@ namespace OMProcess
                     objSalesOrd.PriceClassID = objPDAOrd.PriceClassID;
                     objSalesOrd.ClassID = objPDAOrd.ClassID;
                 }
+              
+
                 objSalesOrd.IsAddStock = isAddStock;
                 objSalesOrd.BranchID = branchID;
                 objSalesOrd.OrderNbr = nbr;
@@ -678,13 +680,20 @@ namespace OMProcess
                 clsOM_LotTrans objLot = new clsOM_LotTrans(Dal);
                 clsOM_PDAOrdDisc objPDAOrdDisc = new clsOM_PDAOrdDisc(Dal);
                 clsOM_OrdAddr objOrdDisc = new clsOM_OrdAddr(Dal);
+
+                DataTable lstDetAll = objPDADet.GetAll(objPDAOrd.BranchID, objPDAOrd.OrderNbr, "%");
+                bool chkApproveAll = false;
+                if (lstDet.Rows.Count == lstDetAll.Rows.Count)
+                {
+                    chkApproveAll = true;
+                }
                 foreach (var item in dicRef)
                 {
                     if (objPDADet.GetByKey(branchID, orderNbr, item.Key))
                     {
                        
                         double rate = item.Value / objPDADet.LineQty;
-
+                        if (chkApproveAll && item.Value != objPDADet.LineQty) chkApproveAll = false;
                         objSalesDet.Reset();
                         objSalesDet.BarCode = objPDADet.BarCode;
                         objSalesDet.BOCustID = objPDADet.BOCustID;
@@ -1244,6 +1253,53 @@ namespace OMProcess
                         }
                     }
                 }
+                // day qua table OM_OrdDisc
+                if (chkApproveAll)
+                {
+
+                    clsOM_PDAOrdDisc objOM_PDAOrdDisc = new clsOM_PDAOrdDisc(Dal);
+                    DataTable dtOM_PDAOrdDisc = objOM_PDAOrdDisc.GetAll(branchID, "%", "%", orderNbr, "%");
+                    IList<clsOM_PDAOrdDisc> lstclsOM_PDAOrdDisc = DataTableHelper.ConvertTo<clsOM_PDAOrdDisc>(dtOM_PDAOrdDisc);
+                    foreach (var obj in lstclsOM_PDAOrdDisc)
+                    {
+                        clsOM_OrdDisc objOM_OrdDisc = new clsOM_OrdDisc(Dal);
+                        objOM_OrdDisc.Reset();
+                        objOM_OrdDisc.BranchID = obj.BranchID;
+                        objOM_OrdDisc.BreakBy = obj.BreakBy;
+                        objOM_OrdDisc.BudgetID = obj.BudgetID;
+                        objOM_OrdDisc.DiscAmt = obj.DiscAmt;
+                        objOM_OrdDisc.DiscBreakLineRef = obj.DiscBreakLineRef;
+                        objOM_OrdDisc.DiscFor = obj.DiscFor;
+                        objOM_OrdDisc.DiscID = obj.DiscID;
+                        objOM_OrdDisc.DiscSeq = obj.DiscSeq;
+                        objOM_OrdDisc.DisctblAmt = obj.DisctblAmt;
+                        objOM_OrdDisc.DisctblQty = obj.DisctblQty;
+                        objOM_OrdDisc.DiscType = obj.DiscType;
+                        objOM_OrdDisc.DiscUOM = obj.DiscUOM;
+                        objOM_OrdDisc.FreeItemBudgetID = obj.FreeItemBudgetID;
+                        objOM_OrdDisc.FreeItemID = obj.FreeItemID;
+                        objOM_OrdDisc.FreeItemQty = obj.FreeItemQty;
+                        objOM_OrdDisc.LineRef = obj.LineRef;
+                        objOM_OrdDisc.OrderNbr = objSalesOrd.OrderNbr;
+                        objOM_OrdDisc.OrigFreeItemQty = obj.OrigFreeItemQty;
+                        objOM_OrdDisc.SlsPerID = obj.SlsPerID;
+                        objOM_OrdDisc.SOLineRef = obj.SOLineRef;
+                        objOM_OrdDisc.UserOperationLog = obj.UserOperationLog;
+
+                        objOM_OrdDisc.Crtd_DateTime = DateTime.Now;
+                        objOM_OrdDisc.Crtd_Prog = Prog;
+                        objOM_OrdDisc.Crtd_User = User;
+                        objOM_OrdDisc.LUpd_DateTime = DateTime.Now;
+                        objOM_OrdDisc.LUpd_Prog = Prog;
+                        objOM_OrdDisc.LUpd_User = User;
+
+                        objOM_OrdDisc.Add();
+
+
+                    }
+                }
+
+
                 objSalesOrd.TaxAmtTot00 = taxAmt00;
                 objSalesOrd.TaxAmtTot01 = taxAmt01;
                 objSalesOrd.TaxAmtTot02 = taxAmt02;
@@ -1263,6 +1319,8 @@ namespace OMProcess
                 objSalesOrd.OrdQty = ordQty;
                 objSalesOrd.LineAmt = curyLineAmt;
                 objSalesOrd.LineDiscAmt = curyLineDiscAmt;
+
+               
                 double txblAmt = 0;
                 if (objType.DiscType == "B")
                     txblAmt = curyLineAmt;
@@ -1309,6 +1367,8 @@ namespace OMProcess
                         curyOrdDiscAmt, 0);
 
                 objPDAOrd.Status = "O";
+                //cap nhat objPDAOrd isAddStock 20150929
+                objPDAOrd.IsAddStock = isAddStock;
                 objPDAOrd.Update();
 
                 objSalesOrd.Add();
