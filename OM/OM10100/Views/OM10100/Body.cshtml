@@ -755,9 +755,11 @@
                     
                     , HQ.TextBox().ID("txtCustName").Name("CustName").DataIndex("CustName").HQLangCode("CustName")
                     .AllowBlank(false).BlankText(Util.GetLangPrefix("Input", "CustName"))
-                    .LabelWidth(100).Width(520)
+                    .LabelWidth(100).Width(340)
                     .HQControlFocus("txtOrderDate")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='order';")
+                    
+                    ,HQ.Checkbox().ID("chkIsAddStock").HQLangCode("IsAddStock").DataIndex("IsAddStock").MarginSpec("0 0 0 5")
                     
                 )
             )

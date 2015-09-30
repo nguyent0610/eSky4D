@@ -500,22 +500,6 @@ namespace OM10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<OM_SalesOrd> OM_SalesOrd
-        {
-            get
-            {
-                if ((_OM_SalesOrd == null))
-                {
-                    _OM_SalesOrd = base.CreateObjectSet<OM_SalesOrd>("OM_SalesOrd");
-                }
-                return _OM_SalesOrd;
-            }
-        }
-        private ObjectSet<OM_SalesOrd> _OM_SalesOrd;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<OM_OrdDisc> OM_OrdDisc
         {
             get
@@ -528,6 +512,22 @@ namespace OM10100
             }
         }
         private ObjectSet<OM_OrdDisc> _OM_OrdDisc;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OM_SalesOrd> OM_SalesOrd
+        {
+            get
+            {
+                if ((_OM_SalesOrd == null))
+                {
+                    _OM_SalesOrd = base.CreateObjectSet<OM_SalesOrd>("OM_SalesOrd");
+                }
+                return _OM_SalesOrd;
+            }
+        }
+        private ObjectSet<OM_SalesOrd> _OM_SalesOrd;
 
         #endregion
 
@@ -750,19 +750,19 @@ namespace OM10100
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the OM_SalesOrd EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToOM_SalesOrd(OM_SalesOrd oM_SalesOrd)
-        {
-            base.AddObject("OM_SalesOrd", oM_SalesOrd);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the OM_OrdDisc EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToOM_OrdDisc(OM_OrdDisc oM_OrdDisc)
         {
             base.AddObject("OM_OrdDisc", oM_OrdDisc);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OM_SalesOrd EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOM_SalesOrd(OM_SalesOrd oM_SalesOrd)
+        {
+            base.AddObject("OM_SalesOrd", oM_SalesOrd);
         }
 
         #endregion
@@ -8529,6 +8529,30 @@ namespace OM10100
         private global::System.Boolean _CheckINVal;
         partial void OnCheckINValChanging(global::System.Boolean value);
         partial void OnCheckINValChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LastStkOutNbr
+        {
+            get
+            {
+                return _LastStkOutNbr;
+            }
+            set
+            {
+                OnLastStkOutNbrChanging(value);
+                ReportPropertyChanging("LastStkOutNbr");
+                _LastStkOutNbr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LastStkOutNbr");
+                OnLastStkOutNbrChanged();
+            }
+        }
+        private global::System.String _LastStkOutNbr;
+        partial void OnLastStkOutNbrChanging(global::System.String value);
+        partial void OnLastStkOutNbrChanged();
 
         #endregion
 
@@ -19142,6 +19166,30 @@ namespace OM10100
         private global::System.String _Remark;
         partial void OnRemarkChanging(global::System.String value);
         partial void OnRemarkChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsAddStock
+        {
+            get
+            {
+                return _IsAddStock;
+            }
+            set
+            {
+                OnIsAddStockChanging(value);
+                ReportPropertyChanging("IsAddStock");
+                _IsAddStock = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsAddStock");
+                OnIsAddStockChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsAddStock;
+        partial void OnIsAddStockChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsAddStockChanged();
 
         #endregion
 
@@ -27563,6 +27611,30 @@ namespace OM10100
         private Nullable<global::System.Int32> _TotalRecords;
         partial void OnTotalRecordsChanging(Nullable<global::System.Int32> value);
         partial void OnTotalRecordsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> IsAddStock
+        {
+            get
+            {
+                return _IsAddStock;
+            }
+            set
+            {
+                OnIsAddStockChanging(value);
+                ReportPropertyChanging("IsAddStock");
+                _IsAddStock = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsAddStock");
+                OnIsAddStockChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _IsAddStock;
+        partial void OnIsAddStockChanging(Nullable<global::System.Boolean> value);
+        partial void OnIsAddStockChanged();
 
         #endregion
 

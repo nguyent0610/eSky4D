@@ -71,7 +71,7 @@ namespace OM10100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -2257,6 +2257,7 @@ namespace OM10100.Controllers
             _objOrder = data.ConvertToObject<OM10100_pcOrder_Result>(false,new string[]{"DoNotCalDisc","CreditHold"});
             _objOrder.DoNotCalDisc = (data["DoNotCalDisc"].PassNull() != string.Empty ? 1 : 0).ToShort();
             _objOrder.CreditHold = (data["CreditHold"].PassNull() != string.Empty ? 1 : 0).ToBool();
+            _objOrder.IsAddStock = (data["chkIsAddStock"].PassNull() != string.Empty ? 1 : 0).ToBool();
 
             _lstOldOrdDet = _app.OM10100_pgOrderDet(_objOrder.BranchID, _objOrder.OrderNbr, "%").ToList();
 
@@ -2840,7 +2841,7 @@ namespace OM10100.Controllers
                 t.Crtd_Prog = "OM10100";
                 t.Crtd_User = Current.UserName;
             }
-
+            t.IsAddStock = _objOrder.IsAddStock;
             t.PriceClassID = Util.PassNull(_objOrder.PriceClassID);
             t.DoNotCalDisc = _objOrder.DoNotCalDisc;
             t.CreditHold = _objOrder.CreditHold;

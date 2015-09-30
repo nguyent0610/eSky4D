@@ -78,7 +78,7 @@
       <HintPath>..\..\..\eSky Framework\HQ.eSkySys\bin\Release\HQ.eSkySys.dll</HintPath>
     </Reference>
     <Reference Include="HQFramework.Common">
-      <HintPath>..\INProcess\INProcess\bin\Debug\HQFramework.Common.DLL</HintPath>
+      <HintPath>..\..\..\Kowil\DLL\HQFramework.Common.dll</HintPath>
     </Reference>
     <Reference Include="HQFramework.DAL, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -395,7 +395,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="D:\Working Project\Cloud\MVC.nrproj" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="D:\Working Project\Cloud\MVC.nrproj" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
