@@ -171,9 +171,9 @@ namespace AR20200.Controllers
 
                                     if (!string.IsNullOrWhiteSpace(handle) && handle != _noneStatus)
                                     {
-                                        // Check pending task
-                                        var task = _db.HO_PendingTasks.FirstOrDefault(p => p.ObjectID == slsperID
-                                                    && p.EditScreenNbr == _screenNbr && p.BranchID == branchID);
+                                        //// Check pending task
+                                        //var task = _db.HO_PendingTasks.FirstOrDefault(p => p.ObjectID == slsperID
+                                        //            && p.EditScreenNbr == _screenNbr && p.BranchID == branchID);
 
                                         // Checking right of approval
                                         var roles = _sys.Users.FirstOrDefault(x => x.UserName.ToLower() == Current.UserName.ToLower()).UserTypes;
@@ -187,7 +187,7 @@ namespace AR20200.Controllers
                                                                 && arrRoles.Contains(p.RoleID));
 
                                         // If not in pending task but has right of approval, then add pending task
-                                        if (task == null && approveHandle != null)
+                                        if (approveHandle != null)
                                         {
                                             updatePendingTask(slsper, approveHandle);
                                             slsper.Status = approveHandle.ToStatus;

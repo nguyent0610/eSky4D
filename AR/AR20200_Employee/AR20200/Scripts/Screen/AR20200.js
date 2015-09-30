@@ -242,7 +242,18 @@ var Store = {
             App.pnlSlsperCpnyAddr.hide();
             App.grdSlsperCpnyAddr.store.removeAll();
         }
-
+        var isLock=frmRecord.data.Status != _beginStatus ? true : false;
+        HQ.common.lockItem(App.frmMain, isLock);
+        if (isLock) {
+            App.btnClearImage.disable();
+            App.fupImages.disable()
+        } else {
+            App.btnClearImage.enable();
+            App.fupImages.enable()
+        }
+        
+     
+        App.fupImages.setReadOnly(isLock);
         Event.Form.frmMain_fieldChange();
     },
 

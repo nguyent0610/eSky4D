@@ -34,7 +34,7 @@
                 .Flex(1).MinWidth(250)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
-                    HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQLangCode("BranchID")
+                    HQ.Combo().ID("cboBranchID").Name("cboBranchID").HQLangCode("BranchID").Tag("X")
                     .HQProcedure("AR20200_pcBranchAllByUser")
                     .HQColumnShow("BranchID,BranchName,Channel").DisplayField("BranchID").ValueField("BranchID")
                     .AllowBlank(false).ForceSelection(true)//.HQValue("HQ.cpnyID", true)
@@ -54,7 +54,7 @@
                     , X.Container().Layout(LayoutType.HBox).MarginSpec("5 0 0 0")
                     .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Middle })
                     .Items(
-                        HQ.Combo().ID("cboSlsperid").Name("cboSlsperid").HQLangCode("Slsperid")
+                        HQ.Combo().ID("cboSlsperid").Name("cboSlsperid").HQLangCode("Slsperid").Tag("X")
                         .HQProcedure("AR20200_pcSalesPersonMaster").MaxLength(30).EnforceMaxLength(true)
                         .HQColumnShow("SlsperId,Name").DisplayField("SlsperId").ValueField("SlsperId")//.DataIndex("SlsperId")
                         .HQHeightWidth(400, 300).AllowBlank(false).HQAutoLoad(false)//.ForceSelection(true)
@@ -147,7 +147,7 @@
 
                     , HQ.Combo().ID("cboHandle").Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20200_pcApproveHandle")
                     .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
-                    .HQValue("", false).ForceSelection(true)
+                    .HQValue("", false).ForceSelection(true).Tag("X")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                     .HQParam(new StoreParameterCollection() 
                         {
