@@ -876,12 +876,14 @@ namespace OM10100.Controllers
                         throw new MessageException("734");
                     }
                 }
+
                 if (_lstOrdDet[i].FreeItem && _lstOrdDet[i].LineAmt != 0)
                 {
                     throw new MessageException("703");
                 }
+
                 if (!_lstOrdDet[i].FreeItem && _lstOrdDet[i].BOType != "R" && _lstOrdDet[i].LineAmt == 0 &&
-                    _lstOrdDet[i].QtyBO == 0)
+                    _lstOrdDet[i].QtyBO == 0 && _lstOrdDet[i].POSM.PassNull()==string.Empty)
                 {
                     throw new MessageException("703");
                 }
@@ -946,7 +948,7 @@ namespace OM10100.Controllers
 
                         lotQty += Math.Round(item.UnitMultDiv == "M" ? item.Qty * item.CnvFact : item.Qty / item.CnvFact,0);
                     }
-                    double detQty = Math.Round(_lstLot[i].UnitMultDiv == "M" ? _lstOrdDet[i].LineQty * _lstOrdDet[i].UnitRate : _lstOrdDet[i].LineQty  / _lstOrdDet[i].UnitRate,0);
+                    double detQty = Math.Round(_lstOrdDet[i].UnitMultDiv == "M" ? _lstOrdDet[i].LineQty * _lstOrdDet[i].UnitRate : _lstOrdDet[i].LineQty / _lstOrdDet[i].UnitRate, 0);
                     if (detQty != lotQty)
                     {
                          throw new MessageException("2015040502", new[] { _lstOrdDet[i].InvtID });
@@ -959,10 +961,10 @@ namespace OM10100.Controllers
             {
                 string orderNbr = _objOrder.OrderNbr.PassNull();
                 string invcNbr = _objOrder.InvcNbr.PassNull();
-                OM_SalesOrd data = _app.OM_SalesOrd.FirstOrDefault(p => p.OrderNbr.ToUpper() != orderNbr && p.InvcNbr.ToUpper() == invcNbr.ToUpper());
+                OM_SalesOrd data = _app.OM_SalesOrd.FirstOrDefault(p =>p.BranchID == _objOrder.BranchID && p.OrderNbr.ToUpper() != orderNbr && p.InvcNbr.ToUpper() == invcNbr.ToUpper());
                 if (data != null)
                 {
-                    throw new MessageException("746");
+                    throw new MessageException("9911");
                 }
             }
 
@@ -1178,7 +1180,17 @@ namespace OM10100.Controllers
                 if (det.BOType == "O")
                     det.LineAmt = Math.Round((det.LineQty + det.QtyBO) * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
                 else
-                    det.LineAmt = Math.Round(det.LineQty * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
+                {
+                    if (det.POSM == string.Empty)
+                    {
+                        det.LineAmt = Math.Round(det.LineQty * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
+                    }
+                    else
+                    {
+                        det.LineAmt = 0;
+                    }
+                }
+                   
 
                 det.DiscCode = string.Empty;
                 det.OrigOrderNbr = breakLineRef1 + breakLineRef2;

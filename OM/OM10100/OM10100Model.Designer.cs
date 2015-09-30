@@ -30902,6 +30902,7 @@ namespace OM10100
         /// Create a new OM10100_pgOrderDet_Result object.
         /// </summary>
         /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="orderNbr">Initial value of the OrderNbr property.</param>
         /// <param name="lineRef">Initial value of the LineRef property.</param>
         /// <param name="taxAmt00">Initial value of the TaxAmt00 property.</param>
         /// <param name="taxAmt01">Initial value of the TaxAmt01 property.</param>
@@ -30941,10 +30942,11 @@ namespace OM10100
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="isChanged">Initial value of the IsChanged property.</param>
         /// <param name="manuDiscAmt">Initial value of the ManuDiscAmt property.</param>
-        public static OM10100_pgOrderDet_Result CreateOM10100_pgOrderDet_Result(global::System.String branchID, global::System.String lineRef, global::System.Double taxAmt00, global::System.Double taxAmt01, global::System.Double taxAmt02, global::System.Double taxAmt03, global::System.Double txblAmt00, global::System.Double txblAmt01, global::System.Double txblAmt02, global::System.Double txblAmt03, global::System.Double dumyLineQty, global::System.Boolean freeItem, global::System.Double freeItemQty1, global::System.Double freeItemQty2, global::System.Double lineQty, global::System.Double qtyOpenShip, global::System.Double qtyShip, global::System.Double qtyInvc, global::System.Double qtyBO, global::System.Double stkQty, global::System.Double unitRate, global::System.Double unitWeight, global::System.Double slsPrice, global::System.Double lineAmt, global::System.Double sOFee, global::System.Double discPct, global::System.Double discPct1, global::System.Double discPct2, global::System.Double discAmt, global::System.Double discAmt1, global::System.Double discAmt2, global::System.Double docDiscAmt, global::System.Double groupDiscPct1, global::System.Double groupDiscPct2, global::System.Double groupDiscAmt1, global::System.Double groupDiscAmt2, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Int32 isChanged, global::System.Double manuDiscAmt)
+        public static OM10100_pgOrderDet_Result CreateOM10100_pgOrderDet_Result(global::System.String branchID, global::System.String orderNbr, global::System.String lineRef, global::System.Double taxAmt00, global::System.Double taxAmt01, global::System.Double taxAmt02, global::System.Double taxAmt03, global::System.Double txblAmt00, global::System.Double txblAmt01, global::System.Double txblAmt02, global::System.Double txblAmt03, global::System.Double dumyLineQty, global::System.Boolean freeItem, global::System.Double freeItemQty1, global::System.Double freeItemQty2, global::System.Double lineQty, global::System.Double qtyOpenShip, global::System.Double qtyShip, global::System.Double qtyInvc, global::System.Double qtyBO, global::System.Double stkQty, global::System.Double unitRate, global::System.Double unitWeight, global::System.Double slsPrice, global::System.Double lineAmt, global::System.Double sOFee, global::System.Double discPct, global::System.Double discPct1, global::System.Double discPct2, global::System.Double discAmt, global::System.Double discAmt1, global::System.Double discAmt2, global::System.Double docDiscAmt, global::System.Double groupDiscPct1, global::System.Double groupDiscPct2, global::System.Double groupDiscAmt1, global::System.Double groupDiscAmt2, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Int32 isChanged, global::System.Double manuDiscAmt)
         {
             OM10100_pgOrderDet_Result oM10100_pgOrderDet_Result = new OM10100_pgOrderDet_Result();
             oM10100_pgOrderDet_Result.BranchID = branchID;
+            oM10100_pgOrderDet_Result.OrderNbr = orderNbr;
             oM10100_pgOrderDet_Result.LineRef = lineRef;
             oM10100_pgOrderDet_Result.TaxAmt00 = taxAmt00;
             oM10100_pgOrderDet_Result.TaxAmt01 = taxAmt01;
@@ -31018,7 +31020,7 @@ namespace OM10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String OrderNbr
         {
@@ -31030,7 +31032,7 @@ namespace OM10100
             {
                 OnOrderNbrChanging(value);
                 ReportPropertyChanging("OrderNbr");
-                _OrderNbr = StructuralObject.SetValidValue(value, true);
+                _OrderNbr = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("OrderNbr");
                 OnOrderNbrChanged();
             }
@@ -32814,6 +32816,54 @@ namespace OM10100
         private global::System.Double _ManuDiscAmt;
         partial void OnManuDiscAmtChanging(global::System.Double value);
         partial void OnManuDiscAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String POSM
+        {
+            get
+            {
+                return _POSM;
+            }
+            set
+            {
+                OnPOSMChanging(value);
+                ReportPropertyChanging("POSM");
+                _POSM = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("POSM");
+                OnPOSMChanged();
+            }
+        }
+        private global::System.String _POSM;
+        partial void OnPOSMChanging(global::System.String value);
+        partial void OnPOSMChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String POSMImg
+        {
+            get
+            {
+                return _POSMImg;
+            }
+            set
+            {
+                OnPOSMImgChanging(value);
+                ReportPropertyChanging("POSMImg");
+                _POSMImg = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("POSMImg");
+                OnPOSMImgChanged();
+            }
+        }
+        private global::System.String _POSMImg;
+        partial void OnPOSMImgChanging(global::System.String value);
+        partial void OnPOSMImgChanged();
 
         #endregion
 

@@ -833,6 +833,8 @@ var grdOrdDet_BeforeEdit = function (item, e) {
     var key = e.field;
     var record = e.record;
 
+    if (!Ext.isEmpty(record.data.POSM)) return false;
+
     if (key == 'BOType' && !Ext.isEmpty(record.data.BOType)) return false;
 
     if (key == 'InvtID' && !Ext.isEmpty(record.data.InvtID)) return false;
