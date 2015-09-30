@@ -22,8 +22,10 @@
         .TopBar(Util.SetupToolbar("print,close", true, "Event.Form.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Items(
-            X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).Region(Region.North)
-            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
+            X.Panel().ID("pnlHeader")
+            .Layout(LayoutType.HBox).Region(Region.North)
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })
+            .Border(false).MinWidth(750)
             .Listeners(ls=>ls.Render.Handler="HQ.common.control_render(this,'header')")
             .Items(
 
@@ -36,7 +38,7 @@
                     .HQProcedure("AR20200_pcBranchAllByUser")
                     .HQColumnShow("BranchID,BranchName,Channel").DisplayField("BranchID").ValueField("BranchID")
                     .AllowBlank(false).ForceSelection(true)//.HQValue("HQ.cpnyID", true)
-                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false).Editable(false)
+                    .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
@@ -55,7 +57,7 @@
                         HQ.Combo().ID("cboSlsperid").Name("cboSlsperid").HQLangCode("Slsperid")
                         .HQProcedure("AR20200_pcSalesPersonMaster").MaxLength(30).EnforceMaxLength(true)
                         .HQColumnShow("SlsperId,Name").DisplayField("SlsperId").ValueField("SlsperId")//.DataIndex("SlsperId")
-                        .MinWidth(250).HQHeightWidth(400, 300).AllowBlank(false).HQAutoLoad(false)//.ForceSelection(true)
+                        .HQHeightWidth(400, 300).AllowBlank(false).HQAutoLoad(false)//.ForceSelection(true)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false }).Flex(4)
                         .HQParam(new StoreParameterCollection() 
                             { 
@@ -69,7 +71,7 @@
                             })
 
                         , HQ.Checkbox().ID("chkActive").Name("chkActive").HQLangCode("ACTIVE")
-                        .MarginSpec("0 0 0 5").DataIndex("Active").Flex(1)
+                        .MarginSpec("0 0 0 5").DataIndex("Active")//.Flex(1)
                     )
 
                     , HQ.Combo().ID("cboPosition").Name("cboPosition").HQLangCode("Position").HQProcedure("AR20200_pcPosition")
@@ -94,7 +96,7 @@
                     .Width(300).MarginSpec("5 0 0 0").StandardVtype(ValidationType.Email).MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.Combo().ID("cboDeliveryMan").Name("cboDeliveryMan").HQLangCode("DeliveryMan").HQProcedure("AR20200_pcDeliveryPerson")
-                    .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid").DataIndex("DeliveryMan")
+                    .HQColumnShow("Slsperid,Name").DisplayField("Name").ValueField("Slsperid").DataIndex("DeliveryMan")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
@@ -103,7 +105,7 @@
                     .LoadData()
 
                     , HQ.Combo().ID("cboSupID").Name("cboSupID").HQLangCode("SALESSUP").HQProcedure("AR20200_pcUser")
-                    .HQColumnShow("Slsperid,Name").DisplayField("Slsperid").ValueField("Slsperid").DataIndex("SupID")
+                    .HQColumnShow("Slsperid,Name").DisplayField("Name").ValueField("Slsperid").DataIndex("SupID")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
@@ -113,10 +115,11 @@
                     .LoadData()
 
                     , HQ.NumberField().ID("txtCrLmt").Name("txtCrLmt").HQLangCode("CrLmt").DataIndex("CrLmt")
-                    .Width(300).MarginSpec("5 0 0 0").DecimalPrecision(0).SelectOnFocus(true).MinValue(0)
+                    .Width(300).MarginSpec("5 0 0 0").DecimalPrecision(0).SelectOnFocus(true)
+                    .MinValue(0).AllowExponential(false)
 
                     , HQ.Combo().ID("cboVendID").Name("cboVendID").HQLangCode("SiteID").HQProcedure("AR20200_pcVend")
-                    .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code").DataIndex("VendID")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("VendID")
                     .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
@@ -197,7 +200,7 @@
                     .Width(300).MarginSpec("5 0 0 0").MaxLength(30).EnforceMaxLength(true)
 
                     , HQ.NumberField().ID("txtCmmnPct").Name("txtCmmnPct").HQLangCode("CmmnPct").DataIndex("CmmnPct")
-                    .Width(300).MarginSpec("5 0 0 0").SelectOnFocus(true).MinValue(0)
+                    .Width(300).MarginSpec("5 0 0 0").SelectOnFocus(true).MinValue(0).AllowExponential(false)
 
                     , HQ.TextBox().ID("txtPPCPassword").Name("txtPPCPassword").HQLangCode("PPCPassword").DataIndex("PPCPassword")
                     .Width(300).MarginSpec("5 0 0 0").InputType(Ext.Net.InputType.Password).MaxLength(100).EnforceMaxLength(true)
@@ -231,7 +234,7 @@
             
             , X.Panel().ID("pnlSlsperCpnyAddr")
             .Region(Region.Center).Border(false).Hidden(true)
-            .Layout(LayoutType.Border)
+            .Layout(LayoutType.Border).MinWidth(750)
             .Title(Util.GetLang("SlsperCpnyAddr"))
             .Listeners(ls=>ls.Render.Handler="HQ.common.control_render(this,'grid')")
             .Items(
