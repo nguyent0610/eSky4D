@@ -39,15 +39,15 @@ namespace OM30100
 
             Current.Authorize = false;
             Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "eSky4DSys_Kowil";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM30100"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "eSky4DApp_Kowil";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004"; //HQHD3120 LCUS-HCM-0004
+            Session["CpnyID"] = Current.CpnyID = "KOWILN"; //HQHD3120 LCUS-HCM-0004
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] =1;
         }
