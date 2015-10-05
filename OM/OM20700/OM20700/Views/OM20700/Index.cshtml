@@ -1,0 +1,141 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM20700;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM20700";
+    var acc = Session["OM20700"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình OM20700.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.Language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/OM20700.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+       
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.bussinessDate =new Date('@DateTime.Now.ToDateShort()');
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+    
+    @(Html.X().Store().ID("stoHeader").AutoLoad(false)   
+            .Model(Util.GenerateModel(typeof(OM20700_pdHeader_Result), "OM20700_pdHeaderModel", ""))          
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetHeader", "OM20700"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "HQ.cpnyID", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("priceID", "App.cboPriceID.getValue()", ParameterMode.Raw));
+                            })  
+            .Listeners(p=>p.Load.Fn="loadDataHeader" )            
+        )
+
+
+     @(Html.X().Store().ID("stoHeaderCopy").AutoLoad(false)   
+            .Model(Util.GenerateModel(typeof(OM20700_pdHeader_Result), "OM20700_pdHeaderCopyModel", ""))          
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetHeader", "OM20700"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ) 
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "HQ.cpnyID", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("priceID", "App.cboPriceIDCopy.getValue()", ParameterMode.Raw));
+                            })  
+        )
+    @(X.Store().ID("stogrdCustCopy").AutoLoad(false)          
+            .Model(Util.GenerateModel(typeof(OM20700_pgPriceCust_Result), "mdlgrdCustCopyModel", "", true))            
+            .Proxy(
+                    X.AjaxProxy()
+                    .Url(Url.Action("GetListPriceCustomer", "OM20700"))
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+
+                )
+            .Parameters(ps =>
+                            {
+                                                                 
+                                ps.Add(new StoreParameter("priceID", "App.cboPriceIDCopy.getValue()", ParameterMode.Raw));
+                                                                  
+                            })
+                    )
+
+    @(X.Store().ID("stogrdCompanyCopy").AutoLoad(false)              
+                .Model(Util.GenerateModel(typeof(OM20700_pgCompany_Result), "mdlOM20700_pgCompanyCopy", "CpnyID"))
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("priceID", "App.cboPriceIDCopy.getValue()", ParameterMode.Raw));
+                                              
+                })
+                .Proxy(X.AjaxProxy().Url(Url.Action("GetListPriceCompany"))
+                        .ActionMethods(action =>
+                            {
+                                action.Read = HttpMethod.POST;
+                            })
+                        .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                    )
+                )
+
+    @(X.Store().ID("stogrdPriceCopy").AutoLoad(false).Model(Util.GenerateModel(typeof(OM20700_pgDetail_Result), "mdlgrdPriceCopyModel", "InvtID,SlsUnit", true))                                                
+                                                .Proxy(
+                                                        X.AjaxProxy()
+                                                        .Url(Url.Action("GetListPrice", "OM20700"))
+                                                        .ActionMethods(action =>
+                                                        {
+                                                            action.Read = HttpMethod.POST;
+                                                        })
+                                                        .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+
+                                                    )
+                                                .Parameters(ps =>
+                                                                {
+                                                                 
+                                                                    ps.Add(new StoreParameter("priceID", "App.cboPriceIDCopy.getValue()", ParameterMode.Raw));                                                                 
+                                                                    
+                                                                })
+                                                      )
+
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+        <!-- Gọi hàm Body trong OM20700Controller để dựng view Body.cshtml, mục đích tạo cache. -->            
+        @{Html.RenderAction("Body", new { lang=@Current.LangID});}   
+    
+</body>
+</html>
+ 

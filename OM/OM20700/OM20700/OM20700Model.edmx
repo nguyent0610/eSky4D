@@ -1,0 +1,561 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="OM_SalesPrice" EntityType="eBiz4DWebSysModel.Store.OM_SalesPrice" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_SalesPriceCust" EntityType="eBiz4DWebSysModel.Store.OM_SalesPriceCust" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_SalesPriceHeader" EntityType="eBiz4DWebSysModel.Store.OM_SalesPriceHeader" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="OM_SlsPriceCpny" EntityType="eBiz4DWebSysModel.Store.OM_SlsPriceCpny" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SI_ApprovalFlowHandle" EntityType="eBiz4DWebSysModel.Store.SI_ApprovalFlowHandle" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SI_ApprovalFlowStatus" EntityType="eBiz4DWebSysModel.Store.SI_ApprovalFlowStatus" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="OM_SalesPrice">
+          <Key>
+            <PropertyRef Name="PriceID" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="SlsUnit" />
+          </Key>
+          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SlsUnit" Type="nvarchar" Nullable="false" MaxLength="15" />
+          <Property Name="QtyBreak" Type="float" />
+          <Property Name="Price" Type="float" />
+          <Property Name="Crtd_DateTime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_SalesPriceCust">
+          <Key>
+            <PropertyRef Name="PriceID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="OM_SalesPriceHeader">
+          <Key>
+            <PropertyRef Name="PriceID" />
+          </Key>
+          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="CustClassID" Type="varchar" MaxLength="20" />
+          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="200" />
+          <Property Name="FromDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="PriceCat" Type="varchar" MaxLength="2" />
+          <Property Name="Prom" Type="bit" Nullable="false" />
+          <Property Name="SiteID" Type="varchar" MaxLength="10" />
+          <Property Name="ToDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="Public" Type="bit" Nullable="false" />
+          <Property Name="HOCreate" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OM_SlsPriceCpny">
+          <Key>
+            <PropertyRef Name="PriceID" />
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Name="PriceID" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="CpnyID" Type="varchar" Nullable="false" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="SI_ApprovalFlowHandle">
+          <Key>
+            <PropertyRef Name="AppFolID" />
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="Handle" />
+          </Key>
+          <Property Name="AppFolID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="RoleID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Handle" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="LangHandle" Type="varchar" MaxLength="50" />
+          <Property Name="ToStatus" Type="varchar" MaxLength="10" />
+          <Property Name="ProcName" Type="nvarchar" MaxLength="250" />
+          <Property Name="ContentApprove" Type="nvarchar" MaxLength="500" />
+          <Property Name="MailSubject" Type="nvarchar" MaxLength="250" />
+          <Property Name="MailTo" Type="nvarchar" MaxLength="400" />
+          <Property Name="MailCC" Type="nvarchar" MaxLength="400" />
+          <Property Name="Param00" Type="nvarchar" MaxLength="500" />
+          <Property Name="Param01" Type="nvarchar" MaxLength="500" />
+          <Property Name="Param02" Type="nvarchar" MaxLength="500" />
+          <Property Name="Param03" Type="nvarchar" MaxLength="500" />
+          <Property Name="Param04" Type="nvarchar" MaxLength="500" />
+          <Property Name="Param05" Type="nvarchar" MaxLength="500" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="MailApprove" Type="varchar" MaxLength="100" />
+          <Property Name="ProcContent" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="SI_ApprovalFlowStatus">
+          <Key>
+            <PropertyRef Name="AppFolID" />
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="AppFolID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="RoleID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="400" />
+          <Property Name="LangStatus" Type="varchar" MaxLength="50" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Function Name="OM20700_pcBranchAllByUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM20700_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="PriceID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM20700_pdTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM20700_pgCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="PriceID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM20700_pgDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="PriceID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM20700_pgPriceCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PriceID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM20700Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="OM20700Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="OM_SalesPrice" EntityType="OM20700Model.OM_SalesPrice" />
+          <EntitySet Name="OM_SalesPriceCust" EntityType="OM20700Model.OM_SalesPriceCust" />
+          <EntitySet Name="OM_SalesPriceHeader" EntityType="OM20700Model.OM_SalesPriceHeader" />
+          <EntitySet Name="OM_SlsPriceCpny" EntityType="OM20700Model.OM_SlsPriceCpny" />
+          <FunctionImport Name="OM20700_pcBranchAllByUser" ReturnType="Collection(OM20700Model.OM20700_pcBranchAllByUser_Result)">
+          <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM20700_pdTerritory" ReturnType="Collection(OM20700Model.OM20700_pdTerritory_Result)">
+          <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="SI_ApprovalFlowHandle" EntityType="OM20700Model.SI_ApprovalFlowHandle" />
+          <EntitySet Name="SI_ApprovalFlowStatus" EntityType="OM20700Model.SI_ApprovalFlowStatus" />
+          <FunctionImport Name="OM20700_pdHeader" ReturnType="Collection(OM20700Model.OM20700_pdHeader_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM20700_pgCompany" ReturnType="Collection(OM20700Model.OM20700_pgCompany_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM20700_pgDetail" ReturnType="Collection(OM20700Model.OM20700_pgDetail_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM20700_pgPriceCust" ReturnType="Collection(OM20700Model.OM20700_pgPriceCust_Result)">
+            <Parameter Name="PriceID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="OM_SalesPrice">
+          <Key>
+            <PropertyRef Name="PriceID" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="SlsUnit" />
+          </Key>
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsUnit" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="QtyBreak" />
+          <Property Type="Double" Name="Price" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="OM_SalesPriceCust">
+          <Key>
+            <PropertyRef Name="PriceID" />
+            <PropertyRef Name="CustID" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="OM_SalesPriceHeader">
+          <Key>
+            <PropertyRef Name="PriceID" />
+          </Key>
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustClassID" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descr" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="FromDate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="PriceCat" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Prom" Nullable="false" />
+          <Property Type="String" Name="SiteID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="ToDate" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="Boolean" Name="Public" Nullable="false" />
+          <Property Type="Boolean" Name="HOCreate" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OM_SlsPriceCpny">
+          <Key>
+            <PropertyRef Name="PriceID" />
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="OM20700_pcBranchAllByUser_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Addr" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Channel" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="OM20700_pdTerritory_Result">
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Zone" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <EntityType Name="SI_ApprovalFlowHandle">
+          <Key>
+            <PropertyRef Name="AppFolID" />
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="Handle" />
+          </Key>
+          <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Handle" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LangHandle" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ToStatus" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ProcName" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ContentApprove" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="MailSubject" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="MailTo" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="MailCC" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Param00" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Param01" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Param02" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Param03" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Param04" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Param05" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="MailApprove" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ProcContent" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SI_ApprovalFlowStatus">
+          <Key>
+            <PropertyRef Name="AppFolID" />
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Type="String" Name="AppFolID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="RoleID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descr" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LangStatus" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="OM20700_pdHeader_Result">
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="CustClassID" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="FromDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="PriceCat" Nullable="true" MaxLength="2" />
+          <Property Type="Boolean" Name="Prom" Nullable="false" />
+          <Property Type="String" Name="SiteID" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="ToDate" Nullable="false" Precision="16" />
+          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+          <Property Type="Boolean" Name="Public" Nullable="false" />
+          <Property Type="Boolean" Name="HOCreate" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="OM20700_pgCompany_Result">
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="OM20700_pgDetail_Result">
+          <Property Type="Boolean" Name="Check" Nullable="true" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="100" />
+          <Property Type="Double" Name="QtyBreak" Nullable="true" />
+          <Property Type="String" Name="SlsUnit" Nullable="false" MaxLength="15" />
+          <Property Type="Double" Name="Price" Nullable="true" />
+          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+          <Property Type="Int32" Name="IsChanged" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="OM20700_pgPriceCust_Result">
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="OM20700Entities" >
+          <EntitySetMapping Name="OM_SalesPrice">
+            <EntityTypeMapping TypeName="OM20700Model.OM_SalesPrice">
+              <MappingFragment StoreEntitySet="OM_SalesPrice">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="QtyBreak" ColumnName="QtyBreak" />
+                <ScalarProperty Name="SlsUnit" ColumnName="SlsUnit" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_SalesPriceCust">
+            <EntityTypeMapping TypeName="OM20700Model.OM_SalesPriceCust">
+              <MappingFragment StoreEntitySet="OM_SalesPriceCust">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_SalesPriceHeader">
+            <EntityTypeMapping TypeName="OM20700Model.OM_SalesPriceHeader">
+              <MappingFragment StoreEntitySet="OM_SalesPriceHeader">
+                <ScalarProperty Name="HOCreate" ColumnName="HOCreate" />
+                <ScalarProperty Name="Public" ColumnName="Public" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="Prom" ColumnName="Prom" />
+                <ScalarProperty Name="PriceCat" ColumnName="PriceCat" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CustClassID" ColumnName="CustClassID" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OM_SlsPriceCpny">
+            <EntityTypeMapping TypeName="OM20700Model.OM_SlsPriceCpny">
+              <MappingFragment StoreEntitySet="OM_SlsPriceCpny">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM20700_pcBranchAllByUser" FunctionName="eBiz4DWebSysModel.Store.OM20700_pcBranchAllByUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20700Model.OM20700_pcBranchAllByUser_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="Addr" ColumnName="Addr" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20700_pdTerritory" FunctionName="eBiz4DWebSysModel.Store.OM20700_pdTerritory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20700Model.OM20700_pdTerritory_Result">
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Zone" ColumnName="Zone" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="SI_ApprovalFlowHandle">
+            <EntityTypeMapping TypeName="OM20700Model.SI_ApprovalFlowHandle">
+              <MappingFragment StoreEntitySet="SI_ApprovalFlowHandle">
+                <ScalarProperty Name="ProcContent" ColumnName="ProcContent" />
+                <ScalarProperty Name="MailApprove" ColumnName="MailApprove" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="Param05" ColumnName="Param05" />
+                <ScalarProperty Name="Param04" ColumnName="Param04" />
+                <ScalarProperty Name="Param03" ColumnName="Param03" />
+                <ScalarProperty Name="Param02" ColumnName="Param02" />
+                <ScalarProperty Name="Param01" ColumnName="Param01" />
+                <ScalarProperty Name="Param00" ColumnName="Param00" />
+                <ScalarProperty Name="MailCC" ColumnName="MailCC" />
+                <ScalarProperty Name="MailTo" ColumnName="MailTo" />
+                <ScalarProperty Name="MailSubject" ColumnName="MailSubject" />
+                <ScalarProperty Name="ContentApprove" ColumnName="ContentApprove" />
+                <ScalarProperty Name="ProcName" ColumnName="ProcName" />
+                <ScalarProperty Name="ToStatus" ColumnName="ToStatus" />
+                <ScalarProperty Name="LangHandle" ColumnName="LangHandle" />
+                <ScalarProperty Name="Handle" ColumnName="Handle" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="AppFolID" ColumnName="AppFolID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SI_ApprovalFlowStatus">
+            <EntityTypeMapping TypeName="OM20700Model.SI_ApprovalFlowStatus">
+              <MappingFragment StoreEntitySet="SI_ApprovalFlowStatus">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="LangStatus" ColumnName="LangStatus" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="AppFolID" ColumnName="AppFolID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM20700_pdHeader" FunctionName="eBiz4DWebSysModel.Store.OM20700_pdHeader">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20700Model.OM20700_pdHeader_Result">
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="CustClassID" ColumnName="CustClassID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="PriceCat" ColumnName="PriceCat" />
+                <ScalarProperty Name="Prom" ColumnName="Prom" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Public" ColumnName="Public" />
+                <ScalarProperty Name="HOCreate" ColumnName="HOCreate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20700_pgCompany" FunctionName="eBiz4DWebSysModel.Store.OM20700_pgCompany">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20700Model.OM20700_pgCompany_Result">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20700_pgDetail" FunctionName="eBiz4DWebSysModel.Store.OM20700_pgDetail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20700Model.OM20700_pgDetail_Result">
+                <ScalarProperty Name="Check" ColumnName="Check" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="QtyBreak" ColumnName="QtyBreak" />
+                <ScalarProperty Name="SlsUnit" ColumnName="SlsUnit" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="IsChanged" ColumnName="IsChanged" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20700_pgPriceCust" FunctionName="eBiz4DWebSysModel.Store.OM20700_pgPriceCust">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20700Model.OM20700_pgPriceCust_Result">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" >
+        <EntityTypeShape EntityType="OM20700Model.OM_SalesPrice" Width="1.5" PointX="11.128148037534277" PointY="20.983890394207037" />
+        <EntityTypeShape EntityType="OM20700Model.OM_SalesPriceCust" Width="1.5" PointX="5.5132264688206964" PointY="26.987900999834714" />
+        <EntityTypeShape EntityType="OM20700Model.OM_SalesPriceHeader" Width="1.5" PointX="11.53090970568867" PointY="10.532806371586773" />
+        <EntityTypeShape EntityType="OM20700Model.OM_SlsPriceCpny" Width="1.5" PointX="4.9903040607414688" PointY="2.1978616873723742" />
+        <EntityTypeShape EntityType="OM20700Model.SI_ApprovalFlowHandle" Width="1.5" PointX="5.7577488076676371" PointY="25.010891940915442" />
+        <EntityTypeShape EntityType="OM20700Model.SI_ApprovalFlowStatus" Width="1.5" PointX="3.7691694031325955" PointY="9.4214404418233038" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
