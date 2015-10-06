@@ -505,33 +505,33 @@
                     , X.Container().Layout(LayoutType.HBox).Flex(1)
                     .Items(
                         X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
-                        .StyleSpec("background-color:#CCFF33;")
-                        , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("CheckIn")).Width(60)
+                        .StyleSpec("background-color:#CCFF33;").Hidden(true)
+                        , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("CheckIn")).Width(60).Hidden(true)
 
                         , HQ.Button().ID("btnLoadDataActual").HQLangCode("LoadData")
-                        .Icon(Icon.MapStart).Flex(1).MarginSpec("5 5 0 5")
+                        .Icon(Icon.MapStart).Flex(1).MarginSpec("5 5 0 105")
                         .Listeners(l => l.Click.Fn = "Index.btnLoadDataActual_click")
                     )
 
                     , X.Container().Layout(LayoutType.HBox).Flex(1)
                     .Items(
                         X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
-                        .StyleSpec("background-color:#FF0000;")
-                        , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("CheckOut")).Width(60)
+                        .StyleSpec("background-color:#FF0000;").Hidden(true)
+                        , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("CheckOut")).Width(60).Hidden(true)
 
                         , HQ.Button().ID("btnGetCurrentLocation").HQLangCode("CurrentLocation")
-                        .Icon(Icon.ArrowBranch).Flex(1).MarginSpec("5 5 0 5").Disabled(true)
+                        .Icon(Icon.ArrowBranch).Flex(1).MarginSpec("5 5 0 105").Disabled(true)
                         .Listeners(l => l.Click.Fn = "Index.btnGetCurrentLocation_click")
                     )
                     
                     , X.Container().Layout(LayoutType.HBox).Flex(1)
                     .Items(
                          X.Label().MarginSpec("5 5 0 5").Width(25).Height(20)
-                        .StyleSpec("background-color:#01DFD7;")
-                        , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("Profile")).Width(60)
+                        .StyleSpec("background-color:#01DFD7;").Hidden(true)
+                        , X.Label().MarginSpec("8 0 0 5").Text(Util.GetLang("Profile")).Width(60).Hidden(true)
                         
                         , HQ.Checkbox().ID("chkRealTime").HQLangCode("RealTime")
-                        .MarginSpec("5 5 0 5").Disabled(true).Flex(1)
+                        .MarginSpec("5 5 0 105").Disabled(true).Flex(1)
                         .Handler("Index.chkRealTime_change")
                         
                         , HQ.Checkbox().ID("chkShowAgent").HQLangCode("ShowProfile")
@@ -555,7 +555,7 @@
                     .Frame(false).Scroll(ScrollMode.Both).Hidden(true)
                     .View(
                         X.GridView().TrackOver(false).EnableTextSelection(true)
-                        .GetRowClass(grc => grc.Fn = "Index.grdVisitCustomerActual_viewGetRowClass")
+                        //.GetRowClass(grc => grc.Fn = "Index.grdVisitCustomerActual_viewGetRowClass")
                     )
                     .StoreID("storeGridActualVisit")
                     .SortableColumns(false)
@@ -563,17 +563,17 @@
                         X.RowNumbererColumn().Width(30)
                         .Listeners(x => x.AfterRender.Handler = "this.resizable = true")
                         
-                        , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").MinWidth(100)
-                        , X.NumberColumn().Text(Util.GetLang("Amt")).DataIndex("Amt").Align(Alignment.Right).Width(50).Format("0,000")
-                        , X.NumberColumn().Text(Util.GetLang("Distance")+"(m)")
+                        , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").MinWidth(100).Renderer("Index.renderColor")
+                        , X.NumberColumn().Text(Util.GetLang("Amt")).DataIndex("Amt").Align(Alignment.Right).Width(50).Format("0,000").Renderer("Index.renderColor")
+                        , X.NumberColumn().Text(Util.GetLang("Distance")+"(m)").Renderer("Index.renderColor")
                         .Align(Alignment.Right).Width(50).Renderer("Index.renderShopDistance")
-                        , X.Column().Text(Util.GetLang("Checkin")).DataIndex("Checkin").Width(70)//.Renderer("Index.renderColorInOut")
-                        , X.Column().Text(Util.GetLang("Checkout")).DataIndex("Checkout").Width(70)//.Renderer("Index.renderColorInOut")
-                        , X.Column().Text(Util.GetLang("Address")).DataIndex("Addr").MinWidth(100).Flex(1)
-                        , X.Column().Text(Util.GetLang("TGCICO")).DataIndex("TGCICO").Align(Alignment.Right).Width(70)
-                        , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustId")
-                        , X.Column().Text(Util.GetLang("GPSCheckin")).DataIndex("GPSCheckin")
-                        , X.Column().Text(Util.GetLang("GPSCheckout")).DataIndex("GPSCheckout")
+                        , X.Column().Text(Util.GetLang("Checkin")).DataIndex("Checkin").Width(70).Renderer("Index.renderColor")//.Renderer("Index.renderColorInOut")
+                        , X.Column().Text(Util.GetLang("Checkout")).DataIndex("Checkout").Width(70).Renderer("Index.renderColor")//.Renderer("Index.renderColorInOut")
+                        , X.Column().Text(Util.GetLang("Address")).DataIndex("Addr").MinWidth(100).Flex(1).Renderer("Index.renderColor")
+                        , X.Column().Text(Util.GetLang("TGCICO")).DataIndex("TGCICO").Align(Alignment.Right).Width(70).Renderer("Index.renderColor")
+                        , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustId").Renderer("Index.renderColor")
+                        , X.Column().Text(Util.GetLang("GPSCheckin")).DataIndex("GPSCheckin").Renderer("Index.renderColor")
+                        , X.Column().Text(Util.GetLang("GPSCheckout")).DataIndex("GPSCheckout").Renderer("Index.renderColor")
                     )
                     .SelectionModel(
                         X.RowSelectionModel().ID("SelectionModelVisitCustomerActual").Mode(SelectionMode.Single)
@@ -736,7 +736,7 @@
             .Listeners(x =>
             {
                 x.AfterRender.Handler = "PosGmap.initialize()";
-                x.Resize.Handler = "google.maps.event.trigger(map, 'resize');";
+                x.Resize.Handler = "google.maps.event.trigger(PosGmap.map, 'resize');";
             })
         // Panel: map_canvas
     )

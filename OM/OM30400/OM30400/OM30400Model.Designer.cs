@@ -3788,6 +3788,54 @@ namespace OM30400
         private Nullable<global::System.Double> _CustLng;
         partial void OnCustLngChanging(Nullable<global::System.Double> value);
         partial void OnCustLngChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PicPath
+        {
+            get
+            {
+                return _PicPath;
+            }
+            set
+            {
+                OnPicPathChanging(value);
+                ReportPropertyChanging("PicPath");
+                _PicPath = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PicPath");
+                OnPicPathChanged();
+            }
+        }
+        private global::System.String _PicPath;
+        partial void OnPicPathChanging(global::System.String value);
+        partial void OnPicPathChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Color
+        {
+            get
+            {
+                return _Color;
+            }
+            set
+            {
+                OnColorChanging(value);
+                ReportPropertyChanging("Color");
+                _Color = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Color");
+                OnColorChanged();
+            }
+        }
+        private global::System.String _Color;
+        partial void OnColorChanging(global::System.String value);
+        partial void OnColorChanged();
 
         #endregion
 
