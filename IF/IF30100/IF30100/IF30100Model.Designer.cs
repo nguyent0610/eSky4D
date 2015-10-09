@@ -68,47 +68,6 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<IF30100_pcReportType_Result> IF30100_pcReportType(global::System.String branchID, global::System.String userID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<IF30100_pcReportType_Result>("IF30100_pcReportType", branchIDParameter, userIDParameter, langIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="view">No Metadata Documentation available.</param>
         public ObjectResult<IF30100_pgData_Result> IF30100_pgData(global::System.String view)
         {

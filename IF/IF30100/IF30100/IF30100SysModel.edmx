@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="IF30100SysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="IF30100SysModelStoreContainer">
+          <EntitySet Name="SYS_ReportExport" EntityType="IF30100SysModel.Store.SYS_ReportExport" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SYS_ReportOLAPFilter" EntityType="IF30100SysModel.Store.SYS_ReportOLAPFilter" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SYS_ReportOLAPTemplate" EntityType="IF30100SysModel.Store.SYS_ReportOLAPTemplate" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="SYS_ReportExport">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="TableView" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Type" Type="varchar" Nullable="false" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="SYS_ReportOLAPFilter">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="FilterData" Type="nvarchar(max)" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="SYS_ReportOLAPTemplate">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ColumnName" />
+            <PropertyRef Name="PivotType" />
+          </Key>
+          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="ColumnName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="PivotType" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="ColumnDescr" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ParmType" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ParmData" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ParmOperator" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="FilterBy" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="MeasureFunc" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="MeasureFormat" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="PivotOrder" Type="smallint" Nullable="false" />
+          <Property Name="ParmForColumn" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IF30100SysModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="IF30100SysEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SYS_ReportOLAPTemplate" EntityType="IF30100SysModel.SYS_ReportOLAPTemplate" />
+          <EntitySet Name="SYS_ReportOLAPFilter" EntityType="IF30100SysModel.SYS_ReportOLAPFilter" />
+          <EntitySet Name="SYS_ReportExport" EntityType="IF30100SysModel.SYS_ReportExport" />
+        </EntityContainer>
+        <EntityType Name="SYS_ReportOLAPTemplate">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+            <PropertyRef Name="ColumnName" />
+            <PropertyRef Name="PivotType" />
+          </Key>
+          <Property Name="ReportNbr" Type="String" Nullable="false" MaxLength="7" Unicode="false" FixedLength="false" />
+          <Property Name="ColumnName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="PivotType" Type="String" Nullable="false" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="ColumnDescr" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="FilterBy" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Crtd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" Unicode="false" FixedLength="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="LUpd_Datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" Unicode="false" FixedLength="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="MeasureFormat" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int16" Name="PivotOrder" Nullable="false" />
+          <Property Type="String" Name="MeasureFunc" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ParmType" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ParmData" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ParmOperator" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ParmForColumn" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SYS_ReportOLAPFilter">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="FilterData" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="SYS_ReportExport">
+          <Key>
+            <PropertyRef Name="ReportNbr" />
+          </Key>
+          <Property Type="String" Name="ReportNbr" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="TableView" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IF30100SysModelStoreContainer" CdmEntityContainer="IF30100SysEntities">
+          <EntitySetMapping Name="SYS_ReportOLAPTemplate">
+            <EntityTypeMapping TypeName="IF30100SysModel.SYS_ReportOLAPTemplate">
+              <MappingFragment StoreEntitySet="SYS_ReportOLAPTemplate">
+                <ScalarProperty Name="ParmForColumn" ColumnName="ParmForColumn" />
+                <ScalarProperty Name="ParmOperator" ColumnName="ParmOperator" />
+                <ScalarProperty Name="ParmData" ColumnName="ParmData" />
+                <ScalarProperty Name="ParmType" ColumnName="ParmType" />
+                <ScalarProperty Name="MeasureFunc" ColumnName="MeasureFunc" />
+                <ScalarProperty Name="PivotOrder" ColumnName="PivotOrder" />
+                <ScalarProperty Name="MeasureFormat" ColumnName="MeasureFormat" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
+                <ScalarProperty Name="PivotType" ColumnName="PivotType" />
+                <ScalarProperty Name="ColumnDescr" ColumnName="ColumnDescr" />
+                <ScalarProperty Name="FilterBy" ColumnName="FilterBy" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ReportOLAPFilter">
+            <EntityTypeMapping TypeName="IF30100SysModel.SYS_ReportOLAPFilter">
+              <MappingFragment StoreEntitySet="SYS_ReportOLAPFilter">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="FilterData" ColumnName="FilterData" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ReportExport">
+            <EntityTypeMapping TypeName="IF30100SysModel.SYS_ReportExport">
+              <MappingFragment StoreEntitySet="SYS_ReportExport">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="TableView" ColumnName="TableView" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ReportNbr" ColumnName="ReportNbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
