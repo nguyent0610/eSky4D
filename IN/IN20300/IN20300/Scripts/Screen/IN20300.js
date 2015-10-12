@@ -1,1 +1,256 @@
-﻿var _0x9a65 = ["\x6C\x6F\x61\x64\x69\x6E\x67\x44\x61\x74\x61", "\x67\x65\x74\x4C\x61\x6E\x67", "\x63\x6F\x6D\x6D\x6F\x6E", "\x73\x68\x6F\x77\x42\x75\x73\x79", "\x72\x65\x6C\x6F\x61\x64", "\x73\x74\x6F\x49\x4E\x5F\x53\x69\x74\x65", "\x6C\x6F\x61\x64", "\x67\x65\x74\x53\x74\x6F\x72\x65", "\x63\x62\x6F\x43\x6F\x75\x6E\x74\x72\x79", "\x63\x62\x6F\x53\x69\x74\x65\x49\x64", "\x69\x73\x46\x69\x72\x73\x74\x4C\x6F\x61\x64", "\x69\x73\x43\x68\x61\x6E\x67\x65", "\x66\x69\x72\x73\x74", "\x63\x6F\x6D\x62\x6F", "\x70\x72\x65\x76", "\x6E\x65\x78\x74", "\x6C\x61\x73\x74", "", "\x72\x65\x66\x72\x65\x73\x68", "\x73\x68\x6F\x77", "\x6D\x65\x73\x73\x61\x67\x65", "\x76\x61\x6C\x75\x65\x4D\x6F\x64\x65\x6C\x73", "\x73\x65\x74\x56\x61\x6C\x75\x65", "\x69\x73\x49\x6E\x73\x65\x72\x74", "\x6E\x65\x77", "\x69\x73\x44\x65\x6C\x65\x74\x65", "\x67\x65\x74\x52\x65\x63\x6F\x72\x64", "\x66\x72\x6D\x4D\x61\x69\x6E", "\x64\x65\x6C\x65\x74\x65\x44\x61\x74\x61", "\x64\x65\x6C\x65\x74\x65", "\x69\x73\x55\x70\x64\x61\x74\x65", "\x67\x65\x74\x56\x61\x6C\x75\x65", "\x74\x78\x74\x45\x6D\x61\x69\x6C\x41\x64\x64\x72", "\x76\x61\x6C\x75\x65", "\x63\x68\x65\x63\x6B\x45\x6D\x61\x69\x6C", "\x75\x74\x69\x6C", "\x63\x68\x65\x63\x6B\x52\x65\x71\x75\x69\x72\x65\x50\x61\x73\x73", "\x66\x6F\x72\x6D", "\x73\x61\x76\x65", "\x70\x72\x69\x6E\x74", "\x63\x6C\x6F\x73\x65", "\x53\x74\x61\x74\x65", "\x64\x61\x74\x61", "\x63\x62\x6F\x53\x74\x61\x74\x65", "\x66\x69\x6E\x64\x49\x6E\x53\x74\x6F\x72\x65", "\x73\x74\x6F\x72\x65", "\x43\x69\x74\x79", "\x63\x62\x6F\x43\x69\x74\x79", "\x44\x69\x73\x74\x72\x69\x63\x74", "\x63\x62\x6F\x44\x69\x73\x74\x72\x69\x63\x74", "\x69\x73\x4E\x65\x77", "\x66\x6F\x72\x63\x65\x53\x65\x6C\x65\x63\x74\x69\x6F\x6E", "\x63\x6C\x65\x61\x72\x46\x69\x6C\x74\x65\x72", "\x6C\x65\x6E\x67\x74\x68", "\x42\x72\x61\x6E\x63\x68\x49\x44", "\x69\x6E\x73\x65\x72\x74\x42\x6C\x61\x6E\x6B", "\x67\x65\x74\x41\x74", "\x63\x6F\x6D\x6D\x69\x74\x43\x68\x61\x6E\x67\x65\x73", "\x73\x65\x74\x52\x65\x71\x75\x69\x72\x65", "\x6C\x6F\x61\x64\x52\x65\x63\x6F\x72\x64", "\x67\x65\x74\x46\x6F\x72\x6D", "\x43\x6F\x75\x6E\x74\x72\x79", "\x75\x70\x64\x61\x74\x65\x52\x65\x63\x6F\x72\x64", "\x49\x4E\x32\x30\x33\x30\x30", "\x63\x68\x61\x6E\x67\x65\x44\x61\x74\x61", "\x73\x65\x74\x52\x65\x61\x64\x4F\x6E\x6C\x79", "\x6C\x6F\x61\x64\x69\x6E\x67\x64\x61\x74\x61", "\x69\x73\x56\x61\x6C\x69\x64", "\x53\x75\x62\x6D\x69\x74\x69\x6E\x67\x2E\x2E\x2E", "\x49\x4E\x32\x30\x33\x30\x30\x2F\x53\x61\x76\x65", "\x67\x65\x74\x43\x68\x61\x6E\x67\x65\x64\x44\x61\x74\x61", "\x65\x6E\x63\x6F\x64\x65", "\x53\x69\x74\x65\x49\x64", "\x72\x65\x73\x75\x6C\x74", "\x70\x72\x6F\x63\x65\x73\x73", "\x73\x75\x62\x6D\x69\x74", "\x79\x65\x73", "\x44\x65\x6C\x65\x74\x69\x6E\x67\x44\x61\x74\x61", "\x49\x4E\x32\x30\x33\x30\x30\x2F\x44\x65\x6C\x65\x74\x65\x41\x6C\x6C", "\x6D\x73\x67\x43\x6F\x64\x65", "\x6D\x73\x67\x50\x61\x72\x61\x6D"]; var loadSourceCombo = function () { HQ[_0x9a65[2]][_0x9a65[3]](true, HQ[_0x9a65[2]][_0x9a65[1]](_0x9a65[0])); App[_0x9a65[9]][_0x9a65[7]]()[_0x9a65[6]](function () { App[_0x9a65[8]][_0x9a65[7]]()[_0x9a65[6]](function () { App[_0x9a65[5]][_0x9a65[4]]() }) }); }; var menuClick = function (_0x97f0x3) { switch (_0x97f0x3) { case _0x9a65[12]: HQ[_0x9a65[10]] = true; HQ[_0x9a65[13]][_0x9a65[12]](App[_0x9a65[9]], HQ[_0x9a65[11]]); break;; case _0x9a65[14]: HQ[_0x9a65[10]] = true; HQ[_0x9a65[13]][_0x9a65[14]](App[_0x9a65[9]], HQ[_0x9a65[11]]); break;; case _0x9a65[15]: HQ[_0x9a65[10]] = true; HQ[_0x9a65[13]][_0x9a65[15]](App[_0x9a65[9]], HQ[_0x9a65[11]]); break;; case _0x9a65[16]: HQ[_0x9a65[10]] = true; HQ[_0x9a65[13]][_0x9a65[16]](App[_0x9a65[9]], HQ[_0x9a65[11]]); break;; case _0x9a65[18]: if (HQ[_0x9a65[11]]) { HQ[_0x9a65[20]][_0x9a65[19]](20150303, _0x9a65[17], _0x9a65[18]) } else { HQ[_0x9a65[11]] = false; if (App[_0x9a65[9]][_0x9a65[21]] == null) { App[_0x9a65[9]][_0x9a65[22]](_0x9a65[17]) }; App[_0x9a65[9]][_0x9a65[7]]()[_0x9a65[6]](function () { App[_0x9a65[5]][_0x9a65[4]]() }); }; break;; case _0x9a65[24]: if (HQ[_0x9a65[23]]) { if (HQ[_0x9a65[11]]) { HQ[_0x9a65[20]][_0x9a65[19]](150, _0x9a65[17], _0x9a65[17]) } else { App[_0x9a65[9]][_0x9a65[22]](_0x9a65[17]) } }; break;; case _0x9a65[29]: if (HQ[_0x9a65[25]]) { var _0x97f0x4 = App[_0x9a65[27]][_0x9a65[26]](); if (_0x97f0x4) { HQ[_0x9a65[20]][_0x9a65[19]](11, _0x9a65[17], _0x9a65[28]) }; }; break;; case _0x9a65[38]: if (HQ[_0x9a65[30]] || HQ[_0x9a65[23]] || HQ[_0x9a65[25]]) { if (App[_0x9a65[32]][_0x9a65[31]]() != _0x9a65[17]) { if (HQ[_0x9a65[35]][_0x9a65[34]](App[_0x9a65[32]][_0x9a65[33]]) && HQ[_0x9a65[37]][_0x9a65[36]](App[_0x9a65[27]])) { save() } } else { if (HQ[_0x9a65[37]][_0x9a65[36]](App[_0x9a65[27]])) { save() } } }; break;; case _0x9a65[39]: break;; case _0x9a65[40]: HQ[_0x9a65[2]][_0x9a65[40]](this); break;; } }; var cboSiteId_Changed = function (_0x97f0x6, _0x97f0x7, _0x97f0x8) { App[_0x9a65[5]][_0x9a65[4]]() }; var cboCountry_Changed = function (_0x97f0xa, _0x97f0x7, _0x97f0x8) { App[_0x9a65[43]][_0x9a65[7]]()[_0x9a65[6]](function () { var _0x97f0x4 = App[_0x9a65[27]][_0x9a65[26]](); if (_0x97f0x4 != undefined) { if (_0x97f0x4[_0x9a65[42]][_0x9a65[41]]) { App[_0x9a65[43]][_0x9a65[22]](_0x97f0x4[_0x9a65[42]].State) } }; var _0x97f0xb = HQ[_0x9a65[45]][_0x9a65[44]](App[_0x9a65[43]][_0x9a65[7]](), [_0x9a65[41]], [App[_0x9a65[43]][_0x9a65[31]]()]); if (!_0x97f0xb) { _0x97f0x4[_0x9a65[42]][_0x9a65[41]] = _0x9a65[17]; App[_0x9a65[43]][_0x9a65[22]](_0x9a65[17]); }; if (App[_0x9a65[43]][_0x9a65[33]] == _0x97f0x4[_0x9a65[42]][_0x9a65[41]]) { cboState_Changed(App[_0x9a65[43]], _0x97f0x4[_0x9a65[42]].State) }; }) }; var cboState_Changed = function () { App[_0x9a65[47]][_0x9a65[7]]()[_0x9a65[6]](function () { var _0x97f0x4 = App[_0x9a65[27]][_0x9a65[26]](); if (_0x97f0x4 && _0x97f0x4[_0x9a65[42]][_0x9a65[46]]) { App[_0x9a65[47]][_0x9a65[22]](_0x97f0x4[_0x9a65[42]].City) }; var _0x97f0xb = HQ[_0x9a65[45]][_0x9a65[44]](App[_0x9a65[47]][_0x9a65[7]](), [_0x9a65[46]], [App[_0x9a65[47]][_0x9a65[31]]()]); if (!_0x97f0xb) { _0x97f0x4[_0x9a65[42]][_0x9a65[46]] = _0x9a65[17]; App[_0x9a65[47]][_0x9a65[22]](_0x9a65[17]); }; App[_0x9a65[49]][_0x9a65[7]]()[_0x9a65[6]](function () { var _0x97f0x4 = App[_0x9a65[27]][_0x9a65[26]](); if (_0x97f0x4 && _0x97f0x4[_0x9a65[42]][_0x9a65[48]]) { App[_0x9a65[49]][_0x9a65[22]](_0x97f0x4[_0x9a65[42]].District) }; var _0x97f0xb = HQ[_0x9a65[45]][_0x9a65[44]](App[_0x9a65[49]][_0x9a65[7]](), [_0x9a65[48]], [App[_0x9a65[49]][_0x9a65[31]]()]); if (!_0x97f0xb) { _0x97f0x4[_0x9a65[42]][_0x9a65[48]] = _0x9a65[17]; App[_0x9a65[49]][_0x9a65[22]](_0x9a65[17]); }; }); }) }; var firstLoad = function () { loadSourceCombo() }; var stoLoad = function (_0x97f0xf) { HQ[_0x9a65[2]][_0x9a65[3]](false); HQ[_0x9a65[50]] = false; App[_0x9a65[8]][_0x9a65[51]] = false; App[_0x9a65[43]][_0x9a65[51]] = false; App[_0x9a65[49]][_0x9a65[51]] = false; App[_0x9a65[47]][_0x9a65[51]] = false; App[_0x9a65[9]][_0x9a65[51]] = false; App[_0x9a65[8]][_0x9a65[45]][_0x9a65[52]](); App[_0x9a65[43]][_0x9a65[45]][_0x9a65[52]](); if (_0x97f0xf[_0x9a65[42]][_0x9a65[53]] == 0) { HQ[_0x9a65[45]][_0x9a65[55]](_0x97f0xf, _0x9a65[54]); _0x97f0x10 = _0x97f0xf[_0x9a65[56]](0); _0x97f0xf[_0x9a65[57]](); HQ[_0x9a65[50]] = true; HQ[_0x9a65[2]][_0x9a65[58]](App[_0x9a65[27]]); }; var _0x97f0x10 = _0x97f0xf[_0x9a65[56]](0); App[_0x9a65[27]][_0x9a65[60]]()[_0x9a65[59]](_0x97f0x10); if (App[_0x9a65[8]][_0x9a65[33]] == _0x97f0x10[_0x9a65[42]][_0x9a65[61]]) { cboCountry_Changed(App[_0x9a65[8]], _0x97f0x10[_0x9a65[42]].Country) } else { if (App[_0x9a65[43]][_0x9a65[33]] == _0x97f0x10[_0x9a65[42]][_0x9a65[41]]) { cboState_Changed(App[_0x9a65[43]], _0x97f0x10[_0x9a65[42]].State) } }; frmChange(); }; var frmChange = function () { App[_0x9a65[27]][_0x9a65[60]]()[_0x9a65[62]](); HQ[_0x9a65[11]] = HQ[_0x9a65[45]][_0x9a65[11]](App[_0x9a65[5]]); HQ[_0x9a65[2]][_0x9a65[64]](HQ[_0x9a65[11]], _0x9a65[63]); if (App[_0x9a65[9]][_0x9a65[21]] == null || HQ[_0x9a65[50]] == true) { App[_0x9a65[9]][_0x9a65[65]](false) } else { App[_0x9a65[9]][_0x9a65[65]](HQ[_0x9a65[11]]) }; }; var stoBeforeLoad = function (_0x97f0xf) { HQ[_0x9a65[2]][_0x9a65[3]](true, HQ[_0x9a65[2]][_0x9a65[1]](_0x9a65[66])) }; function save() { if (HQ[_0x9a65[23]] || HQ[_0x9a65[30]]) { var _0x97f0x4 = App[_0x9a65[27]][_0x9a65[26]](); App[_0x9a65[27]][_0x9a65[60]]()[_0x9a65[62]](); if (App[_0x9a65[27]][_0x9a65[67]]()) { App[_0x9a65[27]][_0x9a65[75]]({ waitMsg: HQ[_0x9a65[2]][_0x9a65[1]](_0x9a65[68]), url: _0x9a65[69], params: { lstheader: Ext[_0x9a65[71]](App[_0x9a65[5]][_0x9a65[70]]({ skipIdForPhantomRecords: false })) }, success: function (_0x97f0x14, _0x97f0x15) { HQ[_0x9a65[20]][_0x9a65[19]](201405071, _0x9a65[17], _0x9a65[17]); var _0x97f0x16 = _0x97f0x15[_0x9a65[73]][_0x9a65[72]]; App[_0x9a65[9]][_0x9a65[7]]()[_0x9a65[6]](function () { App[_0x9a65[9]][_0x9a65[22]](_0x97f0x16); App[_0x9a65[5]][_0x9a65[4]](); }); }, failure: function (_0x97f0x17, _0x97f0x15) { HQ[_0x9a65[20]][_0x9a65[74]](_0x97f0x17, _0x97f0x15, true) } }) }; } } function deleteData(_0x97f0x6) { if (_0x97f0x6 == _0x9a65[76]) { App[_0x9a65[27]][_0x9a65[75]]({ waitMsg: HQ[_0x9a65[2]][_0x9a65[1]](_0x9a65[77]), url: _0x9a65[78], success: function (_0x97f0x14, _0x97f0x15) { App[_0x9a65[9]][_0x9a65[22]](_0x9a65[17]); App[_0x9a65[9]][_0x9a65[7]]()[_0x9a65[6]](function () { cboSiteId_Change(App[_0x9a65[9]]) }); }, failure: function (_0x97f0x14, _0x97f0x15) { if (_0x97f0x15[_0x9a65[73]][_0x9a65[79]]) { HQ[_0x9a65[20]][_0x9a65[19]](_0x97f0x15[_0x9a65[73]][_0x9a65[79]], _0x97f0x15[_0x9a65[73]][_0x9a65[80]], _0x9a65[17]) } } }) } } function refresh(_0x97f0x6) { if (_0x97f0x6 == _0x9a65[76]) { HQ[_0x9a65[11]] = false; HQ[_0x9a65[10]] = true; App[_0x9a65[5]][_0x9a65[4]](); } }
+﻿var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboCountry.getStore().load(function () {
+        App.stoIN_Site.reload();
+    });
+};
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.isFirstLoad = true;
+            HQ.combo.first(App.cboSiteId, HQ.isChange);
+            break;
+        case "prev":
+            HQ.isFirstLoad = true;
+            HQ.combo.prev(App.cboSiteId, HQ.isChange);
+            break;
+        case "next":
+            HQ.isFirstLoad = true;
+            HQ.combo.next(App.cboSiteId, HQ.isChange);
+            break;
+        case "last":
+            HQ.isFirstLoad = true;
+            HQ.combo.last(App.cboSiteId, HQ.isChange);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                if (App.cboSiteId.valueModels == null) App.cboSiteId.setValue('');
+                App.cboSiteId.getStore().load(function () { App.stoIN_Site.reload(); });
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', '');
+                }
+                else {
+                    App.cboSiteId.setValue('');
+                }
+            }
+            break;
+        case "delete":
+            if (HQ.isDelete) {
+                var curRecord = App.frmMain.getRecord();
+                if (curRecord) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (App.txtEmailAddr.getValue() != "") {
+                    if (HQ.util.checkEmail(App.txtEmailAddr.value) && HQ.form.checkRequirePass(App.frmMain)) {
+                        save();
+                    }
+                }
+                else {
+                    if (HQ.form.checkRequirePass(App.frmMain)) {
+                        save();
+                    }
+                }
+
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+};
+
+var cboBranchID_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    App.cboSiteId.clearValue();
+    if (sender.valueModels != null) {
+        App.cboSiteId.store.reload();
+    }
+};
+
+var cboBranchID_Select = function (sender, value) {
+    HQ.isFirstLoad = true;
+    App.cboSiteId.clearValue();
+    if (sender.valueModels != null && !App.stoIN_Site.loading) {
+        App.cboSiteId.store.reload();
+    }
+};
+
+var cboSiteId_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null) {
+        App.stoIN_Site.reload();
+    }
+};
+
+var cboSiteId_Select = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null && !App.stoIN_Site.loading) {
+        App.stoIN_Site.reload();
+    }
+};
+
+
+var cboCountry_Changed = function (sender, newValue, oldValue) {
+    App.cboState.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord != undefined)
+            if (curRecord.data.State) {
+                App.cboState.setValue(curRecord.data.State);
+            }
+        var dt = HQ.store.findInStore(App.cboState.getStore(), ["State"], [App.cboState.getValue()]);
+        if (!dt) {
+            curRecord.data.State = '';
+            App.cboState.setValue("");
+        }
+        if (App.cboState.value == curRecord.data.State) {
+            cboState_Changed(App.cboState, curRecord.data.State);
+        }
+    });
+};
+
+var cboState_Changed = function () {
+    App.cboCity.getStore().load(function () {
+        var curRecord = App.frmMain.getRecord();
+        if (curRecord && curRecord.data.City) {
+            App.cboCity.setValue(curRecord.data.City);
+        }
+        var dt = HQ.store.findInStore(App.cboCity.getStore(), ["City"], [App.cboCity.getValue()]);
+        if (!dt) {
+            curRecord.data.City = '';
+            App.cboCity.setValue("");
+        }
+
+        App.cboDistrict.getStore().load(function () {
+            var curRecord = App.frmMain.getRecord();
+            if (curRecord && curRecord.data.District) {
+                App.cboDistrict.setValue(curRecord.data.District);
+            }
+            var dt = HQ.store.findInStore(App.cboDistrict.getStore(), ["District"], [App.cboDistrict.getValue()]);
+            if (!dt) {
+                curRecord.data.District = '';
+                App.cboDistrict.setValue("");
+            }
+        });
+    });
+};
+
+var firstLoad = function () {
+    loadSourceCombo();
+};
+
+//load store khi co su thay doi
+var stoLoad = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isNew = false;
+    App.cboCountry.forceSelection = false;
+    App.cboState.forceSelection = false;
+    App.cboDistrict.forceSelection = false;
+    App.cboCity.forceSelection = false;
+    App.cboSiteId.forceSelection = false;
+    App.cboCountry.store.clearFilter();
+    App.cboState.store.clearFilter();
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "BranchID");
+        record = sto.getAt(0);
+        sto.commitChanges();//commit cho record thanh updated muc dich de dung ham HQ.store.isChange
+        HQ.isNew = true;//record la new
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+    if (App.cboCountry.value == record.data.Country) {
+        cboCountry_Changed(App.cboCountry, record.data.Country);
+    }
+    else if (App.cboState.value == record.data.State) {
+        cboState_Changed(App.cboState, record.data.State);
+    }
+    frmChange();
+};
+
+//khi co su thay doi du lieu cua cac conttol tren form
+var frmChange = function () {
+    App.frmMain.getForm().updateRecord();
+    HQ.isChange = HQ.store.isChange(App.stoIN_Site);
+    HQ.common.changeData(HQ.isChange, 'IN20300');//co thay doi du lieu gan * tren tab title header
+    //HQ.form.lockButtonChange(HQ.isChange, App);//lock lai cac nut khi co thay doi du lieu
+    if (App.cboSiteId.valueModels == null || HQ.isNew == true)
+        App.cboSiteId.setReadOnly(false);
+    else App.cboSiteId.setReadOnly(HQ.isChange);
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+function save() {
+    if (HQ.isInsert || HQ.isUpdate) {
+        var curRecord = App.frmMain.getRecord();
+        //curRecord.data.Name = App.txtName.getValue();
+        App.frmMain.getForm().updateRecord();
+        if (App.frmMain.isValid()) {
+            App.frmMain.submit({
+                waitMsg: HQ.common.getLang('Submiting...'),
+                url: 'IN20300/Save',
+                params: {
+                    lstheader: Ext.encode(App.stoIN_Site.getChangedData({ skipIdForPhantomRecords: false }))
+                },
+                success: function (action, data) {
+                    HQ.message.show(201405071, '', '');
+                    var SiteId = data.result.SiteId;
+                    App.cboSiteId.getStore().load(function () {
+                        App.cboSiteId.setValue(SiteId);
+                        App.stoIN_Site.reload();
+                    });
+                },
+                failure: function (msg, data) {
+                    HQ.message.process(msg, data, true);
+                }
+            });
+        }
+    }
+};
+
+function deleteData(item) {
+    if (item == 'yes') {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang('DeletingData'),
+            url: 'IN20300/DeleteAll',
+            success: function (action, data) {
+                App.cboSiteId.setValue("");
+                App.cboSiteId.getStore().load(function () { cboSiteId_Change(App.cboSiteId); });
+
+            },
+            failure: function (action, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode, data.result.msgParam, '');
+                }
+            }
+        });
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoIN_Site.reload();
+    }
+};
+///////////////////////////////////

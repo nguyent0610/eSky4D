@@ -30,20 +30,37 @@
             .ID("frmLeft")
             
             .Items(
-                    HQ.Combo().ID("cboSiteId").Name("cboSiteId").HQLangCode("SiteId").HQProcedure("IN20300_pcSitebyBranch")
+                    HQ.Combo().ID("cboBranchID").Name("cboBranchID").MarginSpec("5 0 0 0").Width(350)//.AllowBlank(false)
+                    .HQLangCode("CPNYID").HQDBSys(false).HQProcedure("IN20300_pcBranchAllByUser")
+                    .HQColumnShow("BranchID,BranchName").ForceSelection(true).AllowBlank(false)
+                    .DisplayField("BranchID").ValueField("BranchID").HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.Change.Fn = "cboBranchID_Change";
+                        lst.Select.Fn = "cboBranchID_Select";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue();}";
+                    })
+                    .LoadData()
+                    
+                    , HQ.Combo().ID("cboSiteId").Name("cboSiteId").HQLangCode("SiteId").HQProcedure("IN20300_pcSitebyBranch")
                     .HQColumnShow("SiteId,Name").DisplayField("SiteId").ValueField("SiteId").MarginSpec("5 0 5 0")
                     .Width(350).HQHeightWidth(400, 500).AllowBlank(false)
                     .HQDBSys(false).MaxLength(30).EnforceMaxLength(true).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
                     {
-                        new StoreParameter() { Name = "@BranchID", Value = Current.CpnyID.ToString(), Mode = ParameterMode.Value }
+                        new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw }
                     })
                     .LoadData()
                         .Listeners(lst =>
                             {
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                                lst.Change.Fn = "cboSiteId_Changed";           
+                                lst.Change.Fn = "cboSiteId_Change";
+                                lst.Select.Fn = "cboSiteId_Select";        
                             })
                             
                     , HQ.TextBox().ID("txtName").Name("txtName").HQLangCode("Name").AllowBlank(false)

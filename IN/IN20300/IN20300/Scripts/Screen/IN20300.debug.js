@@ -1,9 +1,7 @@
 var loadSourceCombo = function () {
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.cboSiteId.getStore().load(function () {
-        App.cboCountry.getStore().load(function () {
-            App.stoIN_Site.reload();
-        })
+    App.cboCountry.getStore().load(function () {
+        App.stoIN_Site.reload();
     });
 };
 var menuClick = function (command) {
@@ -75,9 +73,36 @@ var menuClick = function (command) {
     }
 };
 
-var cboSiteId_Changed = function (item, newValue, oldValue) {
-    App.stoIN_Site.reload();
+var cboBranchID_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    App.cboSiteId.clearValue();
+    if (sender.valueModels != null) {
+        App.cboSiteId.store.reload();
+    }
 };
+
+var cboBranchID_Select = function (sender, value) {
+    HQ.isFirstLoad = true;
+    App.cboSiteId.clearValue();
+    if (sender.valueModels != null && !App.stoIN_Site.loading) {
+        App.cboSiteId.store.reload();
+    }
+};
+
+var cboSiteId_Change = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null) {
+        App.stoIN_Site.reload();
+    }
+};
+
+var cboSiteId_Select = function (sender, value) {
+    HQ.isFirstLoad = true;
+    if (sender.valueModels != null && !App.stoIN_Site.loading) {
+        App.stoIN_Site.reload();
+    }
+};
+
 
 var cboCountry_Changed = function (sender, newValue, oldValue) {
     App.cboState.getStore().load(function () {

@@ -57,6 +57,7 @@
             .Parameters(ps =>
             {
                 ps.Add(new StoreParameter("SiteId", "App.cboSiteId.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
             })      
             .Listeners(l =>
             {

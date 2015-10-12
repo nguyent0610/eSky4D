@@ -28,15 +28,16 @@ namespace IN20300.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetIN_Site(string SiteId)
+        public ActionResult GetIN_Site(string SiteId,string BranchID)
         {
-            var site = _db.IN20300_ppIN_Site(_BranchID, SiteId).FirstOrDefault();
+            var site = _db.IN20300_ppIN_Site(BranchID, SiteId).FirstOrDefault();
             return this.Store(site);
         }
 
@@ -46,6 +47,7 @@ namespace IN20300.Controllers
             bool isHo = (user != null && user.UserTypes != null && user.UserTypes.Split(',').Any(p => p.ToUpper() == "HO"));
             return isHo;
         }
+
         public ActionResult GetCpny(string SiteID)
         {
             var cpnys = _db.IN20300_pcCpnybySite(SiteID).ToList();
@@ -61,7 +63,7 @@ namespace IN20300.Controllers
                 ChangeRecords<IN20300_ppIN_Site_Result> lstheader = dataHandler1.BatchObjectData<IN20300_ppIN_Site_Result>();
                 bool isHo = GetIsHo();
                 string SiteId = data["cboSiteId"].PassNull();
-
+                string BranchID = data["cboBranchID"].PassNull();
                 #region Header
                 lstheader.Created.AddRange(lstheader.Updated);
                 foreach (IN20300_ppIN_Site_Result curHeader in lstheader.Created)
@@ -95,12 +97,12 @@ namespace IN20300.Controllers
                 }
                 #endregion
 
-                var objCpny = _db.IN_SiteCpny.FirstOrDefault(p => p.SiteId.ToLower() == SiteId.ToLower() && p.CpnyID.ToLower() == _BranchID.ToLower());
+                var objCpny = _db.IN_SiteCpny.FirstOrDefault(p => p.SiteId.ToLower() == SiteId.ToLower() && p.CpnyID.ToLower() == BranchID.ToLower());
                 if (objCpny == null)
                 {
                     objCpny = new IN_SiteCpny();
                     objCpny.SiteId = SiteId;
-                    objCpny.CpnyID = _BranchID;
+                    objCpny.CpnyID = BranchID;
                     _db.IN_SiteCpny.AddObject(objCpny);
                 }
                 //foreach (IN20300_pcCpnybySite_Result deleted in lstdetail.Deleted)
