@@ -538,9 +538,9 @@ var Index = {
                                 '<p>' +
                                     record.data.Addr +
                                 '</p>' +
-                                '<a target="_blank" href="' + record.data.PicPath + '">' +
+                                (!record.data.PicPath?'':('<a target="_blank" href="' + record.data.PicPath + '">' +
                                     '<img width="200px" src="' + record.data.PicPath + '" />' +
-                                '</a>' +
+                                '</a>')) +
                             '</div>' +
                         '</div>'
                 }
@@ -566,6 +566,9 @@ var Index = {
                                     '<p>' +
                                         record.data.Addr +
                                     '</p>' +
+                                    (!record.data.PicPath ? '' : ('<a target="_blank" href="' + record.data.PicPath + '">' +
+                                    '<img width="200px" src="' + record.data.PicPath + '" />' +
+                                '</a>')) +
                                 '</div>' +
                             '</div>'
                     }
@@ -578,7 +581,7 @@ var Index = {
                         "lng": record.data.CustLng,
                         "label": record.index + 1,
                         "type": "CC",
-                        "color": record.data.Color,
+                        "color": "01DFD7",
                         "description":
                             '<div id="content">' +
                                 '<div id="siteNotice">' +
@@ -590,6 +593,9 @@ var Index = {
                                     '<p>' +
                                         record.data.Addr +
                                     '</p>' +
+                                    (!record.data.PicPath ? '' : ('<a target="_blank" href="' + record.data.PicPath + '">' +
+                                    '<img width="200px" src="' + record.data.PicPath + '" />' +
+                                '</a>')) +
                                 '</div>' +
                             '</div>'
                     }
@@ -1365,6 +1371,7 @@ var PosGmap = {
         PosGmap.prepairMap();
 
         if (markers.length > 0) {
+            PosGmap.clearMap(PosGmap.stopMarkers);
             PosGmap.stopMarkers = [];
             // List of locations
             var lat_lng = new Array();
@@ -1392,10 +1399,10 @@ var PosGmap = {
                             //icon = Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', data.label, "FF0000");
                             visible = false;
                         }
-                        //else if (data.type == "CC") {
-                        //    icon = Ext.String.format('https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin_star|{0}|{1}|000000|FFFF00', data.label, "01DFD7");
-                        //    visible = App.chkShowAgent.value;
-                        //}
+                        else if (data.type == "CC") {
+                            icon = Ext.String.format('https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin_star|{0}|{1}|000000|FFFF00', data.label, data.color ? data.color : "01DFD7");
+                            visible = App.chkShowAgent.value;
+                        }
                     }
                     else {
                         // Push the location to list
@@ -1548,6 +1555,7 @@ var PosGmap = {
         PosGmap.prepairMap();
 
         if (markers.length > 0) {
+            PosGmap.clearMap(PosGmap.stopMarkers);
             PosGmap.stopMarkers = [];
             // List of locations
             var lat_lng = new Array();
