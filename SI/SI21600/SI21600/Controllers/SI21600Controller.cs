@@ -27,7 +27,7 @@ namespace SI21600.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -124,7 +124,11 @@ namespace SI21600.Controllers
                     if (NodeID.PassNull() == "") continue;
 
                     header = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.NodeLevel==NodeLevel && p.ParentRecordID==ParentRecordID && p.Type==Type );
-                    if (header != null && isNew == true) throw new MessageException(MessageType.Message, "19");
+                    if (header != null && isNew == true)
+                    {
+                        //throw new MessageException(MessageType.Message, "19");
+                        throw new MessageException(MessageType.Message, "1112", parm: new[] { NodeID });
+                    }
 
                     if (header != null)
                     {
@@ -141,10 +145,10 @@ namespace SI21600.Controllers
                     }
                     else
                     {
-                        var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type == Type);
+                        //var obj = _sys.SI_Hierarchy.FirstOrDefault(p => p.NodeID == NodeID && p.Type == Type);
 
-                        if (obj==null)
-                        {
+                        //if (obj==null)
+                        //{
                             header = new SI_Hierarchy();
                             header.NodeID = NodeID;
                             header.NodeLevel = NodeLevel;
@@ -157,11 +161,11 @@ namespace SI21600.Controllers
                     
                             UpdatingHeader(ref header, curHeader);
                             _sys.SI_Hierarchy.AddObject(header);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "1112", parm: new[] { NodeID });
-                        }
+                        //}
+                        //else
+                        //{
+                        //    throw new MessageException(MessageType.Message, "1112", parm: new[] { NodeID });
+                        //}
                     }
                 }
              
