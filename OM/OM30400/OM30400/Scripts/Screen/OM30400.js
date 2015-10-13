@@ -199,25 +199,24 @@ var Index = {
     grdVisitCustomerActual_cellClick: function (gridview, td, cellIndex, record, tr, rowIndex, e, eOpts) {
         var clickCol = gridview.up('grid').columns[cellIndex];
         if (clickCol) {
-            //if (clickCol.dataIndex === "Checkout") {
-            //    var id = record.data.Checkout + "_" + record.data.CoLat + "_" + record.data.CoLng;
-            //    PosGmap.navMapCenterByLocation(record.data.CoLat, record.data.CoLng, id);
-            //}
-            //else if (clickCol.dataIndex === "Checkin") {
-            //    var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
-            //    PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
-            //}
-            //else{
+            if (clickCol.dataIndex === "Checkout") {
+                var id = record.data.Checkout + "_" + record.data.CoLat + "_" + record.data.CoLng;
+                PosGmap.navMapCenterByLocation(record.data.CoLat, record.data.CoLng, id);
+            }
+            else if (clickCol.dataIndex === "Checkin") {
+                var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
+                PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
+            }
+            else {
                 if (record.data.CustId && App.chkShowAgent.value) {
-                        var id = record.data.CustId + "_" + record.data.CustLat + "_" + record.data.CustLng;
-                        PosGmap.navMapCenterByLocation(record.data.CustLat, record.data.CustLng, id);
-                    
+                    var id = record.data.CustId + "_" + record.data.CustLat + "_" + record.data.CustLng;
+                    PosGmap.navMapCenterByLocation(record.data.CustLat, record.data.CustLng, id);
                 }
                 else {
                     var id = record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng;
                     PosGmap.navMapCenterByLocation(record.data.CiLat, record.data.CiLng, id);
                 }
-            //}
+            }
         }
     },
     // tab MCL
@@ -446,6 +445,10 @@ var Index = {
     renderColor: function (value, metaData, record, rowIndex, colIndex, store) {
         metaData.style = "color:#" + record.data.Color + "!IMPORTANT;";
 
+        if (metaData.column.dataIndex == "Amt") {
+            return Ext.util.Format.number(value, '0,000');
+        }
+
         return value;
     },
 
@@ -469,7 +472,7 @@ var Index = {
         }
 
         Index.renderColor(value, metaData, record, rowIndex, colIndex, store);
-        return Math.round(distance);
+        return Ext.util.Format.number(Math.round(distance), '0,000');
     },
 
     btnGetCurrentLocation_click: function (btn, e, eOpts) {
@@ -527,6 +530,7 @@ var Index = {
                     "label": record.index + 1,
                     "type": record.data.CustId ? "IO" : "",
                     "color": record.data.Color,
+                    "isNotVisited": record.data.IsNotVisited,
                     "description":
                         '<div id="content">' +
                             '<div id="siteNotice">' +
@@ -554,7 +558,8 @@ var Index = {
                         "lng": record.data.CoLng,
                         "label": record.index + 1,
                         "type": "OO",
-                        "color": record.data.Color,
+                        "color": "C60BBF",
+                        "isNotVisited": record.data.IsNotVisited,
                         "description":
                             '<div id="content">' +
                                 '<div id="siteNotice">' +
@@ -582,6 +587,7 @@ var Index = {
                         "label": record.index + 1,
                         "type": "CC",
                         "color": "01DFD7",
+                        "isNotVisited": record.data.IsNotVisited,
                         "description":
                             '<div id="content">' +
                                 '<div id="siteNotice">' +
@@ -605,6 +611,14 @@ var Index = {
             PosGmap.drawAVC1(markers, true);
         }
         App.dataForm.getEl().unmask();
+
+        // Create the DIV to hold the control and call the CenterControl() constructor
+        // passing in this DIV.
+        var centerControlDiv = document.createElement('div');
+        var centerControl = new PosGmap.customControl(centerControlDiv, PosGmap.map, App.stoColorHint);
+
+        centerControlDiv.index = 1;
+        PosGmap.map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
     },
 
     // Store nay tam thoi ko dung toi nua
@@ -936,7 +950,7 @@ var PosGmap = {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
-        PosGmap.map = new google.maps.Map(map_canvas, myOptions);
+        PosGmap.map = new google.maps.Map(PosGmap.map_canvas, myOptions);
         PosGmap.directionsService = new google.maps.DirectionsService();
         PosGmap.directionsDisplay = new google.maps.DirectionsRenderer();
         PosGmap.infoWindow = new google.maps.InfoWindow();
@@ -947,6 +961,16 @@ var PosGmap = {
         //    title: "HQ Soft"
         //});
         PosGmap.stopMarkers = [];
+
+        App.stoColorHint.load(function () {
+            // Create the DIV to hold the control and call the CenterControl() constructor
+            // passing in this DIV.
+            var centerControlDiv = document.createElement('div');
+            var centerControl = new PosGmap.customControl(centerControlDiv, PosGmap.map, App.stoColorHint);
+
+            centerControlDiv.index = 1;
+            PosGmap.map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
+        });
     },
 
     prepairDrawing: function () {
@@ -1047,7 +1071,7 @@ var PosGmap = {
                         icon: " ",
                         position: labelPoint,
                         draggable: false,
-                        map: map,
+                        map: PosGmap.map,
                         labelContent: custIDs.length.toString(),
                         labelAnchor: new google.maps.Point(22, 0),
                         labelClass: "labels", // the CSS class for the label
@@ -1122,8 +1146,8 @@ var PosGmap = {
     navMapCenterByLocation: function (lat, lng, id) {
         var selectedMarker;
         var myLatlng = new google.maps.LatLng(lat, lng);
-        map.setCenter(myLatlng);
-        map.setZoom(map.getZoom());
+        PosGmap.map.setCenter(myLatlng);
+        PosGmap.map.setZoom(PosGmap.map.getZoom());
 
         if (id) {
             selectedMarker = PosGmap.find_marker_id(id);
@@ -1258,7 +1282,7 @@ var PosGmap = {
                     var marker = new google.maps.Marker({
                         id: data.id,
                         position: myLatlng,
-                        map: map,
+                        map: PosGmap.map,
                         title: data.title,
                         icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor)
                     });
@@ -1267,7 +1291,7 @@ var PosGmap = {
                     (function (marker, data) {
                         google.maps.event.addListener(marker, "click", function (e) {
                             PosGmap.infoWindow.setContent(data.description);
-                            PosGmap.infoWindow.open(map, marker);
+                            PosGmap.infoWindow.open(PosMap.map, marker);
 
                             // Set animation of marker
                             if (marker.getAnimation() != null) {
@@ -1325,7 +1349,7 @@ var PosGmap = {
                     var marker = new google.maps.Marker({
                         id: data.id,
                         position: myLatlng,
-                        map: map,
+                        map: PosGmap.map,
                         title: data.title,
                         icon: Ext.String.format('Images/OM30400/circle_{0}.png', data.color ? data.color : "white"),
                         //animation: google.maps.Animation.DROP,
@@ -1336,7 +1360,7 @@ var PosGmap = {
                     (function (marker, data) {
                         google.maps.event.addListener(marker, "click", function (e) {
                             PosGmap.infoWindow.setContent(data.description);
-                            PosGmap.infoWindow.open(map, marker);
+                            PosGmap.infoWindow.open(PosGmap.map, marker);
 
                             // Set animation of marker
                             if (marker.getAnimation() != null) {
@@ -1354,7 +1378,7 @@ var PosGmap = {
                 }
             }
 
-            PosGmap.directionsDisplay.setMap(map);
+            PosGmap.directionsDisplay.setMap(PosGmap.map);
             //directionsDisplay.setOptions({ suppressMarkers: true });
 
             if (showDirections) {
@@ -1387,14 +1411,15 @@ var PosGmap = {
                     var icon = Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', data.label, data.color ? data.color : "BDBDBD");
                     var visible = true;
                     if (data.type) {
-                        //if (data.type == "IO") { // Check in
+                        if (data.type == "IO") { // Check in
                         //    //pinColor = "CCFF33";
                         //    icon = Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', data.label, data.color?data.color:"CCFF33");
-                        //    // Push the location to list
-                        //    lat_lng.push(myLatlng);
-                        //}
-                        //else
-                        if (data.type == "OO") { // Check out
+                            // Push the location to list
+                            if (!data.isNotVisited) {
+                                lat_lng.push(myLatlng);
+                            }
+                        }
+                        else if (data.type == "OO") { // Check out
                             //pinColor = "FF0000";
                             //icon = Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', data.label, "FF0000");
                             visible = false;
@@ -1406,7 +1431,9 @@ var PosGmap = {
                     }
                     else {
                         // Push the location to list
-                        lat_lng.push(myLatlng);
+                        if (!data.isNotVisited) {
+                            lat_lng.push(myLatlng);
+                        }
                     }
 
                     // Maps center at the first location
@@ -1416,14 +1443,14 @@ var PosGmap = {
                             zoom: 16,
                             mapTypeId: google.maps.MapTypeId.ROADMAP
                         };
-                        map = new google.maps.Map(map_canvas, myOptions);
+                        PosGmap.map = new google.maps.Map(PosGmap.map_canvas, myOptions);
                     }
 
                     var markerLabel = data.label;
                     var marker = new google.maps.Marker({
                         id: data.id,
                         position: myLatlng,
-                        map: map,
+                        map: PosGmap.map,
                         title: data.title,
                         icon: icon,
                         type: data.type,
@@ -1435,7 +1462,7 @@ var PosGmap = {
                     (function (marker, data) {
                         google.maps.event.addListener(marker, "click", function (e) {
                             PosGmap.infoWindow.setContent(data.description);
-                            PosGmap.infoWindow.open(map, marker);
+                            PosGmap.infoWindow.open(PosGmap.map, marker);
 
                             // Set animation of marker
                             if (marker.getAnimation() != null) {
@@ -1453,7 +1480,7 @@ var PosGmap = {
                 }
             }
 
-            PosGmap.directionsDisplay.setMap(map);
+            PosGmap.directionsDisplay.setMap(PosGmap.map);
 
             if (showDirections) {
                 PosGmap.calcRoute(lat_lng);
@@ -1503,14 +1530,14 @@ var PosGmap = {
                             zoom: 16,
                             mapTypeId: google.maps.MapTypeId.ROADMAP
                         };
-                        map = new google.maps.Map(map_canvas, myOptions);
+                        PosGmap.map = new google.maps.Map(PosGmap.map_canvas, myOptions);
                     }
 
                     var markerLabel = i + 1;
                     var marker = new google.maps.Marker({
                         id: data.id,
                         position: myLatlng,
-                        map: map,
+                        map: PosGmap.map,
                         title: data.title,
                         icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor),
                         //animation: google.maps.Animation.DROP,
@@ -1521,7 +1548,7 @@ var PosGmap = {
                     (function (marker, data) {
                         google.maps.event.addListener(marker, "click", function (e) {
                             PosGmap.infoWindow.setContent(data.description);
-                            PosGmap.infoWindow.open(map, marker);
+                            PosGmap.infoWindow.open(PosGmap.map, marker);
 
                             // Set animation of marker
                             if (marker.getAnimation() != null) {
@@ -1579,7 +1606,7 @@ var PosGmap = {
                             zoom: 16,
                             mapTypeId: google.maps.MapTypeId.ROADMAP
                         };
-                        map = new google.maps.Map(map_canvas, myOptions);
+                        PosGmap.map = new google.maps.Map(PosGmap.map_canvas, myOptions);
                     }
 
                     // Make the marker at each location
@@ -1587,7 +1614,7 @@ var PosGmap = {
                     var marker = new google.maps.Marker({
                         id: data.id,
                         position: myLatlng,
-                        map: map,
+                        map: PosGmap.map,
                         title: data.title,
                         icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', markerLabel, pinColor),
                     });
@@ -1596,7 +1623,7 @@ var PosGmap = {
                     (function (marker, data) {
                         google.maps.event.addListener(marker, "click", function (e) {
                             PosGmap.infoWindow.setContent(data.description);
-                            PosGmap.infoWindow.open(map, marker);
+                            PosGmap.infoWindow.open(PosGmap.map, marker);
 
                             // Set animation of marker
                             if (marker.getAnimation() != null) {
@@ -1686,7 +1713,7 @@ var PosGmap = {
         };
         PosGmap.directionsService.route(request, function (response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
-                PosGmap.directionsDisplays[idx].setMap(map);
+                PosGmap.directionsDisplays[idx].setMap(PosGmap.map);
                 PosGmap.directionsDisplays[idx].setOptions({ preserveViewport: true, suppressMarkers: true });
                 PosGmap.directionsDisplays[idx].setDirections(response);
 
@@ -1749,7 +1776,7 @@ var PosGmap = {
             (function (marker, data) {
                 google.maps.event.addListener(marker, "click", function (e) {
                     PosGmap.infoWindow.setContent(data.description);
-                    PosGmap.infoWindow.open(map, marker);
+                    PosGmap.infoWindow.open(PosGmap.map, marker);
                 });
             })(marker, data);
         }
@@ -1773,6 +1800,79 @@ var PosGmap = {
                 });
             }
         }
+    },
+
+    customControl: function (controlDiv, map, storeColor) {
+        // Set CSS for the control border.
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';//'transparent';//#fff
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginTop = '10px';
+        controlUI.style.textAlign = 'center';
+        //controlUI.title = 'Click to recenter the map';
+        controlDiv.appendChild(controlUI);
+
+        // Set CSS for the control interior.
+        var controlTitle = document.createElement('div');
+        //controlText.style.color = '#399239';//'rgb(25,25,25)';
+        controlTitle.style.background = 'url("Images/OM30400/paint.png") no-repeat';
+        controlTitle.style.width = "24px";
+        controlTitle.style.height = "24px";
+        //controlTitle.style.textShadow = '2px 1px #ffffff';
+        //controlTitle.style.fontFamily = 'Roboto,Arial,sans-serif';
+        //controlTitle.style.fontSize = '16px';
+        //controlTitle.style.lineHeight = '28px';
+        //controlTitle.style.paddingLeft = '5px';
+        //controlTitle.style.paddingRight = '5px';
+        //controlTitle.innerHTML = HQ.common.getLang('Note');
+        controlUI.appendChild(controlTitle);
+
+        var controlTextDiv = document.createElement('div');
+        controlTextDiv.hidden = true;
+
+        storeColor.each(function (record) {
+            var controlItem = document.createElement('div');
+            controlItem.style.margin = '5px';
+            //controlItem.style.display = "inline-block";
+
+            var controlBox = document.createElement('div');
+            controlBox.style.backgroundColor = "#" + record.data.Code;
+            controlBox.style.width = "20px";
+            controlBox.style.height = "20px";
+            controlBox.style.float = "left";
+            controlBox.style.marginRight = '5px';
+            controlItem.appendChild(controlBox);
+
+            var controlText = document.createElement('div');
+            controlText.style.color = '#' + record.data.Code;
+            controlText.style.textShadow = '2px 1px #ffffff';
+            controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+            controlText.style.fontSize = '13px';
+            controlText.style.lineHeight = '20px';
+            //controlText.style.marginLeft = '15px';
+            //controlText.style.paddingRight = '5px';
+            controlText.style.textAlign = 'left';
+            controlText.innerHTML = record.data.Descr;
+            controlItem.appendChild(controlText);
+
+            controlTextDiv.appendChild(controlItem);
+        });
+
+        controlUI.appendChild(controlTextDiv);
+        
+
+        // Setup the click event listeners: simply set the map to Chicago.
+        controlUI.addEventListener('mouseover', function () {
+            controlTextDiv.hidden = false;
+        });
+
+        // Setup the click event listeners: simply set the map to Chicago.
+        controlUI.addEventListener('mouseout', function () {
+            controlTextDiv.hidden = true;
+        });
     }
 }
 

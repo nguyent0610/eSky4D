@@ -3392,12 +3392,12 @@ namespace OM30400
         /// Create a new OM30400_pgGridActualVisit_Result object.
         /// </summary>
         /// <param name="custId">Initial value of the CustId property.</param>
-        /// <param name="custName">Initial value of the CustName property.</param>
-        public static OM30400_pgGridActualVisit_Result CreateOM30400_pgGridActualVisit_Result(global::System.String custId, global::System.String custName)
+        /// <param name="isNotVisited">Initial value of the IsNotVisited property.</param>
+        public static OM30400_pgGridActualVisit_Result CreateOM30400_pgGridActualVisit_Result(global::System.String custId, global::System.Int32 isNotVisited)
         {
             OM30400_pgGridActualVisit_Result oM30400_pgGridActualVisit_Result = new OM30400_pgGridActualVisit_Result();
             oM30400_pgGridActualVisit_Result.CustId = custId;
-            oM30400_pgGridActualVisit_Result.CustName = custName;
+            oM30400_pgGridActualVisit_Result.IsNotVisited = isNotVisited;
             return oM30400_pgGridActualVisit_Result;
         }
 
@@ -3432,7 +3432,7 @@ namespace OM30400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String CustName
         {
@@ -3444,7 +3444,7 @@ namespace OM30400
             {
                 OnCustNameChanging(value);
                 ReportPropertyChanging("CustName");
-                _CustName = StructuralObject.SetValidValue(value, false);
+                _CustName = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("CustName");
                 OnCustNameChanged();
             }
@@ -3836,6 +3836,30 @@ namespace OM30400
         private global::System.String _Color;
         partial void OnColorChanging(global::System.String value);
         partial void OnColorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 IsNotVisited
+        {
+            get
+            {
+                return _IsNotVisited;
+            }
+            set
+            {
+                OnIsNotVisitedChanging(value);
+                ReportPropertyChanging("IsNotVisited");
+                _IsNotVisited = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsNotVisited");
+                OnIsNotVisitedChanged();
+            }
+        }
+        private global::System.Int32 _IsNotVisited;
+        partial void OnIsNotVisitedChanging(global::System.Int32 value);
+        partial void OnIsNotVisitedChanged();
 
         #endregion
 

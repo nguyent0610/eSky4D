@@ -564,9 +564,13 @@
                         .Listeners(x => x.AfterRender.Handler = "this.resizable = true")
                         
                         , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").MinWidth(100).Renderer("Index.renderColor")
-                        , X.NumberColumn().Text(Util.GetLang("Amt")).DataIndex("Amt").Align(Alignment.Right).Width(50).Format("0,000").Renderer("Index.renderColor")
-                        , X.NumberColumn().Text(Util.GetLang("Distance")+"(m)").Renderer("Index.renderColor")
+                        , X.NumberColumn().Text(Util.GetLang("Amt")).DataIndex("Amt").Align(Alignment.Right).Width(50)//.Format("0,000")
+                        .Renderer("Index.renderColor")
+                        
+                        , X.NumberColumn().Text(Util.GetLang("Distance")+"(m)")
+                        .Renderer("Index.renderColor")
                         .Align(Alignment.Right).Width(50).Renderer("Index.renderShopDistance")
+                        
                         , X.Column().Text(Util.GetLang("Checkin")).DataIndex("Checkin").Width(70).Renderer("Index.renderColor")//.Renderer("Index.renderColorInOut")
                         , X.Column().Text(Util.GetLang("Checkout")).DataIndex("Checkout").Width(70).Renderer("Index.renderColor")//.Renderer("Index.renderColorInOut")
                         , X.Column().Text(Util.GetLang("Address")).DataIndex("Addr").MinWidth(100).Flex(1).Renderer("Index.renderColor")

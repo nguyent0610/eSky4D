@@ -405,7 +405,7 @@
         </ComplexType>
         <ComplexType Name="OM30400_pgGridActualVisit_Result">
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="CustName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Addr" Nullable="true" MaxLength="200" />
           <Property Type="DateTime" Name="VisitDate" Nullable="true" />
           <Property Type="Time" Name="Checkin" Nullable="true" />
@@ -420,8 +420,9 @@
           <Property Type="Double" Name="CoLng" Nullable="true" />
           <Property Type="Double" Name="CustLat" Nullable="true" />
           <Property Type="Double" Name="CustLng" Nullable="true" />
-          <Property Type="String" Name="PicPath" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="PicPath" Nullable="true" MaxLength="220" />
           <Property Type="String" Name="Color" Nullable="true" MaxLength="6" />
+          <Property Type="Int32" Name="IsNotVisited" Nullable="false" />
         </ComplexType>
         <ComplexType Name="OM30400_pgVisitCustomerActual_Result">
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
@@ -636,6 +637,7 @@
                 <ScalarProperty Name="CustLng" ColumnName="CustLng" />
                 <ScalarProperty Name="PicPath" ColumnName="PicPath" />
                 <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="IsNotVisited" ColumnName="IsNotVisited" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

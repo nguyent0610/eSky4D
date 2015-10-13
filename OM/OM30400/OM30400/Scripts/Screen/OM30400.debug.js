@@ -573,7 +573,7 @@ var PosGmap = {
                 PosGmap.stopMarkers.push(marker);
             }
 
-            PosGmap.directionsDisplay.setMap(map);
+            PosGmap.directionsDisplay.setMap(PosGmap.map);
             //directionsDisplay.setOptions({ suppressMarkers: true });
 
             if (showDirections) {
@@ -591,7 +591,7 @@ var PosGmap = {
                     PosGmap.stopMarkers = [];
                 }
             }
-            PosGmap.directionsDisplay.setMap(map);
+            PosGmap.directionsDisplay.setMap(PosGmap.map);
         }
     },
 
@@ -656,7 +656,7 @@ var PosGmap = {
         };
         PosGmap.directionsService.route(request, function (response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
-                PosGmap.directionsDisplays[idx].setMap(map);
+                PosGmap.directionsDisplays[idx].setMap(PosGmap.map);
                 PosGmap.directionsDisplays[idx].setOptions({ preserveViewport: true, suppressMarkers: true });
                 PosGmap.directionsDisplays[idx].setDirections(response);
 

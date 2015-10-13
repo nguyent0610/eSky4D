@@ -247,6 +247,16 @@
             .Listeners(l=>l.Load.Fn="McpInfo.storeMcpInfo_load")
         )
 
+        @(HQ.Store().ID("stoColorHint").AutoLoad(false)
+            .HQProcedure("OM30400_plColorHint")
+            .HQParam(new StoreParameterCollection() { 
+                new StoreParameter("@UserID","HQ.userName", ParameterMode.Raw)
+                ,new StoreParameter("@CpnyID","HQ.cpnyID", ParameterMode.Raw)
+                ,new StoreParameter("@LangID","HQ.langID", ParameterMode.Raw)
+            })
+            .LoadData()
+        )
+
         @(
             X.ToolTip()
             .Target("={App.grdActualVisit.getView().el}")
