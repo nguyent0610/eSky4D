@@ -17,6 +17,13 @@
           </Key>
           <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="CpnyID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="IN_ProductClass">
           <Key>
@@ -24,10 +31,10 @@
           </Key>
           <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Descr" Type="nvarchar" MaxLength="50" />
-          <Property Name="DfltInvtType" Type="char" MaxLength="1" />
-          <Property Name="DfltSource" Type="char" MaxLength="1" />
-          <Property Name="DfltValMthd" Type="char" MaxLength="1" />
-          <Property Name="DfltLotSerTrack" Type="char" MaxLength="1" />
+          <Property Name="DfltInvtType" Type="varchar" MaxLength="1" />
+          <Property Name="DfltSource" Type="varchar" MaxLength="1" />
+          <Property Name="DfltValMthd" Type="varchar" MaxLength="1" />
+          <Property Name="DfltLotSerTrack" Type="varchar" MaxLength="1" />
           <Property Name="Buyer" Type="varchar" MaxLength="10" />
           <Property Name="DfltStkUnit" Type="nvarchar" MaxLength="15" />
           <Property Name="DfltPOUnit" Type="nvarchar" MaxLength="15" />
@@ -35,11 +42,11 @@
           <Property Name="MaterialType" Type="varchar" MaxLength="10" />
           <Property Name="DfltSlsTaxCat" Type="varchar" MaxLength="10" />
           <Property Name="DfltSite" Type="varchar" MaxLength="10" />
-          <Property Name="DfltLotSerAssign" Type="char" MaxLength="1" />
-          <Property Name="DfltLotSerFxdTyp" Type="char" MaxLength="1" />
+          <Property Name="DfltLotSerAssign" Type="varchar" MaxLength="1" />
+          <Property Name="DfltLotSerFxdTyp" Type="varchar" MaxLength="1" />
           <Property Name="DfltLotSerFxdLen" Type="smallint" />
           <Property Name="DfltLotSerFxdVal" Type="varchar" MaxLength="12" />
-          <Property Name="DfltLotSerMthd" Type="char" MaxLength="1" />
+          <Property Name="DfltLotSerMthd" Type="varchar" MaxLength="1" />
           <Property Name="DfltLotSerNumLen" Type="smallint" Nullable="false" />
           <Property Name="DfltLotSerNumVal" Type="varchar" MaxLength="25" />
           <Property Name="DfltLotSerShelfLife" Type="smallint" Nullable="false" />
@@ -71,13 +78,13 @@
           <Property Name="CnvFact" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="ppv_IN20200_getCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="IN20200_pgLoadgetCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
@@ -88,7 +95,7 @@
           <EntitySet Name="IN_ProdClassCpny" EntityType="IN20200Model.IN_ProdClassCpny" />
           <EntitySet Name="IN_ProductClass" EntityType="IN20200Model.IN_ProductClass" />
           <EntitySet Name="IN_UnitConversion" EntityType="IN20200Model.IN_UnitConversion" />
-          <FunctionImport Name="ppv_IN20200_getCompany" ReturnType="Collection(IN20200Model.ppv_IN20200_getCompany_Result)">
+          <FunctionImport Name="IN20200_pgLoadgetCompany" ReturnType="Collection(IN20200Model.IN20200_pgLoadgetCompany_Result)">
             <Parameter Name="ClassID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
@@ -99,6 +106,13 @@
           </Key>
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="IN_ProductClass">
           <Key>
@@ -106,10 +120,10 @@
           </Key>
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Descr" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="DfltInvtType" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="DfltSource" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="DfltValMthd" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="DfltLotSerTrack" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="DfltInvtType" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltSource" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltValMthd" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltLotSerTrack" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Buyer" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DfltStkUnit" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="DfltPOUnit" MaxLength="15" FixedLength="false" Unicode="true" />
@@ -117,11 +131,11 @@
           <Property Type="String" Name="MaterialType" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DfltSlsTaxCat" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DfltSite" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltLotSerAssign" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="DfltLotSerFxdTyp" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="DfltLotSerAssign" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltLotSerFxdTyp" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Int16" Name="DfltLotSerFxdLen" />
           <Property Type="String" Name="DfltLotSerFxdVal" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltLotSerMthd" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="DfltLotSerMthd" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Int16" Name="DfltLotSerNumLen" Nullable="false" />
           <Property Type="String" Name="DfltLotSerNumVal" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Type="Int16" Name="DfltLotSerShelfLife" Nullable="false" />
@@ -153,16 +167,17 @@
           <Property Type="Double" Name="CnvFact" Nullable="false" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="ppv_IN20200_getCompany_Result">
+        <ComplexType Name="IN20200_pgLoadgetCompany_Result">
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -173,6 +188,13 @@
           <EntitySetMapping Name="IN_ProdClassCpny">
             <EntityTypeMapping TypeName="IN20200Model.IN_ProdClassCpny">
               <MappingFragment StoreEntitySet="IN_ProdClassCpny">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
                 <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
               </MappingFragment>
@@ -235,12 +257,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="ppv_IN20200_getCompany" FunctionName="eBiz4DWebSysModel.Store.ppv_IN20200_getCompany">
+          <FunctionImportMapping FunctionImportName="IN20200_pgLoadgetCompany" FunctionName="eBiz4DWebSysModel.Store.IN20200_pgLoadgetCompany">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IN20200Model.ppv_IN20200_getCompany_Result">
+              <ComplexTypeMapping TypeName="IN20200Model.IN20200_pgLoadgetCompany_Result">
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
                 <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -264,7 +287,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="72" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="52" >
         <EntityTypeShape EntityType="IN20200Model.IN_ProdClassCpny" Width="2" PointX="6.75" PointY="4.375" />
         <EntityTypeShape EntityType="IN20200Model.IN_ProductClass" Width="1.875" PointX="4.625" PointY="0.5" />
         <EntityTypeShape EntityType="IN20200Model.IN_UnitConversion" Width="2" PointX="6.75" PointY="0.5" />

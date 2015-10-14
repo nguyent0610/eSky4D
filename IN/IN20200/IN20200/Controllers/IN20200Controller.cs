@@ -1,7 +1,6 @@
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +8,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
+using System.IO;
+using System.Text;
+using HQ.eSkySys;
+
 namespace IN20200.Controllers
 {
     [DirectController]
@@ -16,380 +19,193 @@ namespace IN20200.Controllers
     [CheckSessionOut]
     public class IN20200Controller : Controller
     {
-        string screenNbr = "IN20200";
+        string _screenNbr = "IN20200";
         IN20200Entities _db = Util.CreateObjectContext<IN20200Entities>(false);
-        
+        private JsonResult _logMessage;
 
         public ActionResult Index()
         {
+            Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "none")]
-        public PartialViewResult Body()
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        public ActionResult GetProductClass(String classID)
+        public ActionResult GetIN_ProductClass(string ClassID)
         {
-            var rptCtrl = _db.IN_ProductClass.FirstOrDefault(p => p.ClassID == classID);
-            return this.Store(rptCtrl);
-        }
-        public ActionResult GetCompany(String classID)
-        {
-            var lst = _db.ppv_IN20200_getCompany(classID).ToList();
-            return this.Store(lst);
+            return this.Store(_db.IN_ProductClass.FirstOrDefault(p => p.ClassID == ClassID));
         }
 
-        [DirectMethod]
+        public ActionResult GetCpny(string ClassID)
+        {
+            return this.Store(_db.IN20200_pgLoadgetCompany(ClassID).ToList());
+        }
+
         [HttpPost]
-        public ActionResult Save(FormCollection data, string classID)
+        public ActionResult Save(FormCollection data)
         {
-            StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstheader"]);
-            ChangeRecords<IN_ProductClass> lstheader = dataHandler2.BatchObjectData<IN_ProductClass>();
-            StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstgrd"]);
-            ChangeRecords<ppv_IN20200_getCompany_Result> lstgrd = dataHandler1.BatchObjectData<ppv_IN20200_getCompany_Result>();
-
-            foreach (ppv_IN20200_getCompany_Result deleted in lstgrd.Deleted)
+            try
             {
-                var del = _db.IN_ProdClassCpny.Where(p => p.ClassID == classID && p.CpnyID == deleted.CpnyID).FirstOrDefault();
-                if (del != null)
+                string ClassID = data["cboClassID"].PassNull();
+
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstIN_ProductClass"]);
+                IN_ProductClass curHeader = dataHandler.ObjectData<IN_ProductClass>().FirstOrDefault();
+
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstCpny"]);
+                ChangeRecords<IN20200_pgLoadgetCompany_Result> lstCpny = dataHandler1.BatchObjectData<IN20200_pgLoadgetCompany_Result>();
+
+                #region Save IN_ProductClass
+                var header = _db.IN_ProductClass.FirstOrDefault(p => p.ClassID == ClassID);
+                if (header != null)
                 {
-                    _db.IN_ProdClassCpny.DeleteObject(del);
-
-                }
-
-            }
-            foreach (ppv_IN20200_getCompany_Result created in lstgrd.Created)
-            {
-
-                var record = _db.IN_ProdClassCpny.Where(p => p.ClassID == classID && p.CpnyID == created.CpnyID).FirstOrDefault();
-
-               
-                    if (record == null)
+                    if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        record = new IN_ProdClassCpny();
-
-
-                        record.ClassID = classID;
-                        record.CpnyID = created.CpnyID;
-
-
-                        if (record.ClassID != "" && record.CpnyID != "")
-                        {
-                           
-                           _db.IN_ProdClassCpny.AddObject(record);
-                        }
-
-                    
-                    
-                }
-            }
-
-
-
-            foreach (ppv_IN20200_getCompany_Result updated in lstgrd.Updated)
-            {
-
-                var record = _db.IN_ProdClassCpny.Where(p => p.ClassID == classID && p.CpnyID == updated.CpnyID).FirstOrDefault();
-
-
-                if (record != null)
-                {
-
-                    
-                }
-                else
-                {
-                    
-                        record = new IN_ProdClassCpny();
-
-
-                        record.ClassID = classID;
-                        record.CpnyID = updated.CpnyID;
-
-
-                        _db.IN_ProdClassCpny.AddObject(record);
-
-                    
-
-                       
-                    
-                }
-
-            }
-
-            foreach (IN_ProductClass updated in lstheader.Updated)
-            {
-                // Get the image path
-
-
-                var objHeader = _db.IN_ProductClass.Where(p => p.ClassID == updated.ClassID).FirstOrDefault();
-                if (objHeader != null)
-                {
-                    //updating
-                    if (updated.Public == true)
-                    {
-                        var del = _db.IN_ProdClassCpny.Where(p => p.ClassID == classID).ToList();
-                        for (int i = 0; i < del.Count; i++)
-                        {
-
-                            _db.IN_ProdClassCpny.DeleteObject(del[i]);
-
-                        }
-                        //foreach (IN_ProdClassCpny proclass in del)
-                        //{
-                        //    _db.IN_ProdClassCpny.DeleteObject(proclass);
-                        //}
+                        UpdatingHeader(ref header, curHeader);
                     }
-                    
-                    
-                    
-
-                        objHeader.Public = updated.Public;
-                        objHeader.Descr = updated.Descr; // ???
-
-                        objHeader.DfltInvtType = updated.DfltInvtType;
-                        objHeader.DfltStkItem = updated.DfltStkItem;
-                        objHeader.DfltSource = updated.DfltSource;
-                        objHeader.DfltValMthd = updated.DfltValMthd;
-                        objHeader.DfltLotSerTrack = updated.DfltLotSerTrack;
-                        objHeader.Buyer = updated.Buyer;
-                        objHeader.DfltStkUnit = updated.DfltStkUnit;
-                        objHeader.DfltPOUnit = updated.DfltPOUnit;
-                        objHeader.DfltSOUnit = updated.DfltSOUnit;
-                        objHeader.MaterialType = updated.MaterialType;
-                        objHeader.DfltSite = updated.DfltSite;
-                        objHeader.DfltSlsTaxCat = updated.DfltSlsTaxCat;
-                        if (updated.DfltLotSerTrack == "N")
-                        {
-                            objHeader.DfltLotSerAssign = null;
-                            objHeader.DfltLotSerMthd = null;
-                            objHeader.DfltLotSerShelfLife = 0;
-                            objHeader.DfltWarrantyDays = 0;
-                            objHeader.DfltLotSerFxdTyp = null;
-                            objHeader.DfltLotSerFxdLen = 0;
-                            objHeader.DfltLotSerFxdVal = "";
-                            objHeader.DfltLotSerNumLen = 0;
-                            objHeader.DfltLotSerNumVal = "";
-                        }
-                        else
-                        {
-
-                            objHeader.DfltLotSerAssign = updated.DfltLotSerAssign;
-                            objHeader.DfltLotSerMthd = updated.DfltLotSerMthd;
-                            objHeader.DfltLotSerShelfLife = updated.DfltLotSerShelfLife;
-                            objHeader.DfltWarrantyDays = updated.DfltWarrantyDays;
-                            objHeader.DfltLotSerFxdTyp = updated.DfltLotSerFxdTyp;
-                            objHeader.DfltLotSerFxdLen = updated.DfltLotSerFxdLen;
-                            objHeader.DfltLotSerFxdVal = updated.DfltLotSerFxdVal;
-                            objHeader.DfltLotSerNumLen = updated.DfltLotSerNumLen;
-                            objHeader.DfltLotSerNumVal = updated.DfltLotSerNumVal;
-                        }
-                        
-                        
-                        UpdatingHeader(updated, ref objHeader);
-                        
-                        _db.SaveChanges();
-                    
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "19");
+                    }
                 }
                 else
                 {
-                    objHeader = new IN_ProductClass();
-
-                    objHeader.ClassID = classID;
-                    objHeader.Public = updated.Public;
-                    objHeader.Descr = updated.Descr; // ???
-
-                    objHeader.DfltInvtType = updated.DfltInvtType;
-                    objHeader.DfltStkItem = updated.DfltStkItem;
-                    objHeader.DfltSource = updated.DfltSource;
-                    objHeader.DfltValMthd = updated.DfltValMthd;
-                    objHeader.DfltLotSerTrack = updated.DfltLotSerTrack;
-                    objHeader.Buyer = updated.Buyer;
-                    objHeader.DfltStkUnit = updated.DfltStkUnit;
-                    objHeader.DfltPOUnit = updated.DfltPOUnit;
-                    objHeader.DfltSOUnit = updated.DfltSOUnit;
-                    objHeader.MaterialType = updated.MaterialType;
-                    objHeader.DfltSite = updated.DfltSite;
-                    objHeader.DfltSlsTaxCat = updated.DfltSlsTaxCat;
-
-
-                    objHeader.DfltLotSerAssign = updated.DfltLotSerAssign;
-                    objHeader.DfltLotSerMthd = updated.DfltLotSerMthd;
-                    objHeader.DfltLotSerShelfLife = updated.DfltLotSerShelfLife;
-                    objHeader.DfltWarrantyDays = updated.DfltWarrantyDays;
-                    objHeader.DfltLotSerFxdLen = updated.DfltLotSerFxdLen;
-                    objHeader.DfltLotSerFxdVal = updated.DfltLotSerFxdVal;
-                    objHeader.DfltLotSerNumLen = updated.DfltLotSerNumLen;
-                    objHeader.DfltLotSerNumVal = updated.DfltLotSerNumVal;
-
-                    objHeader.Crtd_DateTime = DateTime.Now;
-                    objHeader.Crtd_Prog = screenNbr;
-                    objHeader.Crtd_User = Current.UserName;
-                    objHeader.tstamp = new byte[0];
-                    UpdatingHeader(updated, ref objHeader);
-                    _db.IN_ProductClass.AddObject(objHeader);
-                    _db.SaveChanges();
-
-
-
+                    header = new IN_ProductClass();
+                    header.ResetET();
+                    header.ClassID = ClassID;
+                    header.Crtd_DateTime = DateTime.Now;
+                    header.Crtd_Prog = _screenNbr;
+                    header.Crtd_User = Current.UserName;
+                    UpdatingHeader(ref header, curHeader);
+                    _db.IN_ProductClass.AddObject(header);
                 }
+                #endregion
 
-
-
-
-
-
-                // If there is a change in handling status (keepStatus is False),
-                // add a new pending task with an approved handle.
-
-
-
-                // ===============================================================
-
-                // Get out of the loop (only update the first data)
-
-            }
-            foreach (IN_ProductClass created in lstheader.Created)
-            {
-                var objHeader = _db.IN_ProductClass.Where(p => p.ClassID == classID).FirstOrDefault();
-                if (objHeader == null)
+                #region Save Cpny
+                foreach (IN20200_pgLoadgetCompany_Result deleted in lstCpny.Deleted)
                 {
-                    objHeader = new IN_ProductClass();
-
-                    objHeader.ClassID = classID;
-                    objHeader.Public = created.Public;
-                    objHeader.Descr = created.Descr; // ???
-
-                    objHeader.DfltInvtType = created.DfltInvtType;
-                    objHeader.DfltStkItem = created.DfltStkItem;
-                    objHeader.DfltSource = created.DfltSource;
-                    objHeader.DfltValMthd = created.DfltValMthd;
-                    objHeader.DfltLotSerTrack = created.DfltLotSerTrack;
-                    objHeader.Buyer = created.Buyer;
-                    objHeader.DfltStkUnit = created.DfltStkUnit;
-                    objHeader.DfltPOUnit = created.DfltPOUnit;
-                    objHeader.DfltSOUnit = created.DfltSOUnit;
-                    objHeader.MaterialType = created.MaterialType;
-                    objHeader.DfltSite = created.DfltSite;
-                    objHeader.DfltSlsTaxCat = created.DfltSlsTaxCat;
-
-
-                    objHeader.DfltLotSerAssign = created.DfltLotSerAssign;
-                    objHeader.DfltLotSerMthd = created.DfltLotSerMthd;
-                    objHeader.DfltLotSerShelfLife = created.DfltLotSerShelfLife;
-                    objHeader.DfltWarrantyDays = created.DfltWarrantyDays;
-                    objHeader.DfltLotSerFxdLen = created.DfltLotSerFxdLen;
-                    objHeader.DfltLotSerFxdVal = created.DfltLotSerFxdVal;
-                    objHeader.DfltLotSerNumLen = created.DfltLotSerNumLen;
-                    objHeader.DfltLotSerNumVal = created.DfltLotSerNumVal;
-                    
-                  
-
-                    objHeader.Crtd_DateTime = DateTime.Now;
-                    objHeader.Crtd_Prog = screenNbr;
-                    objHeader.Crtd_User = Current.UserName;
-                    objHeader.tstamp = new byte[0];
-                    UpdatingHeader(created, ref objHeader);
-                    _db.IN_ProductClass.AddObject(objHeader);
-                    _db.SaveChanges();
-
+                    var objDelete = _db.IN_ProdClassCpny.Where(p => p.ClassID == ClassID && p.CpnyID == deleted.CpnyID).FirstOrDefault();
+                    if (objDelete != null)
+                    {
+                        _db.IN_ProdClassCpny.DeleteObject(objDelete);
+                    }
                 }
+
+                lstCpny.Created.AddRange(lstCpny.Updated);
+
+                foreach (IN20200_pgLoadgetCompany_Result curLang in lstCpny.Created)
+                {
+                    if (ClassID.PassNull() == "" || curLang.CpnyID.PassNull() == "") continue;
+
+                    var lang = _db.IN_ProdClassCpny.FirstOrDefault(p => p.ClassID.ToLower() == ClassID.ToLower() && p.CpnyID.ToLower() == curLang.CpnyID.ToLower());
+
+                    if (lang == null)
+                    {
+                        lang = new IN_ProdClassCpny();
+                        lang.ResetET();
+                        lang.ClassID = ClassID;
+                        lang.CpnyID = curLang.CpnyID;
+
+                        lang.Crtd_DateTime = DateTime.Now;
+                        lang.Crtd_Prog = _screenNbr;
+                        lang.Crtd_User = Current.UserName;
+                        lang.LUpd_DateTime = DateTime.Now;
+                        lang.LUpd_Prog = _screenNbr;
+                        lang.LUpd_User = Current.UserName;
+
+                        _db.IN_ProdClassCpny.AddObject(lang);
+                    }
+                }
+                #endregion
+
+                _db.SaveChanges();
+                return Json(new { success = true, ClassID = ClassID });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+
+        private void UpdatingHeader(ref IN_ProductClass t,IN_ProductClass s)
+        {
+            t.Public = s.Public;
+            t.Descr = s.Descr;
+            t.DfltInvtType = s.DfltInvtType;
+            t.DfltStkItem = s.DfltStkItem;
+            t.DfltSource = s.DfltSource;
+            t.DfltValMthd = s.DfltValMthd;
+            t.DfltLotSerTrack = s.DfltLotSerTrack;
+            t.Buyer = s.Buyer;
+            t.DfltStkUnit = s.DfltStkUnit;
+            t.DfltPOUnit = s.DfltPOUnit;
+            t.DfltSOUnit = s.DfltSOUnit;
+            t.MaterialType = s.MaterialType;
+            t.DfltSite = s.DfltSite;
+            t.DfltSlsTaxCat = s.DfltSlsTaxCat;
+
+            if (t.DfltLotSerTrack == "N")
+            {
+                t.DfltLotSerAssign = null;
+                t.DfltLotSerMthd = null;
+                t.DfltLotSerShelfLife = 0;
+                t.DfltWarrantyDays = 0;
+                t.DfltLotSerFxdTyp = null;
+                t.DfltLotSerFxdLen = 0;
+                t.DfltLotSerFxdVal = "";
+                t.DfltLotSerNumLen = 0;
+                t.DfltLotSerNumVal = "";
+            }
+            else
+            {
+                t.DfltLotSerAssign = s.DfltLotSerAssign;
+                t.DfltLotSerMthd = s.DfltLotSerMthd;
+                t.DfltLotSerShelfLife = s.DfltLotSerShelfLife;
+                t.DfltWarrantyDays = s.DfltWarrantyDays;
+                t.DfltLotSerFxdTyp = s.DfltLotSerFxdTyp;
+                t.DfltLotSerFxdLen = s.DfltLotSerFxdLen;
+                t.DfltLotSerFxdVal = s.DfltLotSerFxdVal;
+                t.DfltLotSerNumLen = s.DfltLotSerNumLen;
+                t.DfltLotSerNumVal = s.DfltLotSerNumVal;
             }
 
-
-            _db.SaveChanges();
-            //this.Direct();
-
-
-            return Json(new { success = true, value = classID }, JsonRequestBehavior.AllowGet);
-
-
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = Current.UserName;
         }
-        [DirectMethod]
-        public ActionResult IN20200Delete(string classID)
+
+        [HttpPost]
+        public ActionResult DeleteAll(FormCollection data)
         {
-            var cpny = _db.IN_ProductClass.FirstOrDefault(p => p.ClassID == classID);
+            try
+            {
+                string ClassID = data["cboClassID"];
 
+                var obj = _db.IN_ProductClass.FirstOrDefault(p => p.ClassID == ClassID);
+                if (obj != null)
+                {
+                    _db.IN_ProductClass.DeleteObject(obj);
+                }
 
-            _db.IN_ProductClass.DeleteObject(cpny);
+                var lstCpny = _db.IN_ProdClassCpny.Where(p => p.ClassID == ClassID).ToList();
+                foreach (var item in lstCpny)
+                {
+                    _db.IN_ProdClassCpny.DeleteObject(item);
+                }
 
-
-
-            _db.SaveChanges();
-            return this.Direct();
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
         }
 
-        //private void UpdatingDetail(SYS_ReportParm s, ref SYS_ReportParm d)
-        //{
-        //    d.ReportFormat = s.ReportFormat;
-        //    d.StringCap00 = s.StringCap00;
-        //    d.StringCap01 = s.StringCap01;
-        //    d.StringCap02 = s.StringCap02;
-        //    d.StringCap03 = s.StringCap03;
-        //    d.DateCap00 = s.DateCap00;
-        //    d.DateCap01 = s.DateCap01;
-        //    d.DateCap02 = s.DateCap02;
-        //    d.DateCap03 = s.DateCap03;
-        //    d.BooleanCap00 = s.BooleanCap00;
-        //    d.BooleanCap01 = s.BooleanCap01;
-        //    d.BooleanCap02 = s.BooleanCap02;
-        //    d.BooleanCap03 = s.BooleanCap03;
-        //    d.PPV_Proc00 = s.PPV_Proc00;
-        //    d.PPV_Proc01 = s.PPV_Proc01;
-        //    d.PPV_Proc02 = s.PPV_Proc02;
-        //    d.PPV_Proc03 = s.PPV_Proc03;
-        //    d.ListCap00 = s.ListCap00;
-        //    d.ListCap01 = s.ListCap01;
-        //    d.ListCap02 = s.ListCap02;
-        //    d.ListCap03 = s.ListCap03;
-        //    d.ListProc00 = s.ListProc00;
-        //    d.ListProc01 = s.ListProc01;
-        //    d.ListProc02 = s.ListProc02;
-        //    d.ListProc03 = s.ListProc03;
-
-
-        //    d.LUpd_DateTime = DateTime.Now;
-        //    d.LUpd_Prog = screenNbr;
-        //    d.LUpd_User = Current.UserName;
-        //}
-
-        private void UpdatingHeader(IN_ProductClass s, ref IN_ProductClass d)
-        {
-
-            d.Public = s.Public;
-            d.Descr = s.Descr; // ???
-
-            d.DfltInvtType = s.DfltInvtType;
-            d.DfltStkItem = s.DfltStkItem;
-            d.DfltSource = s.DfltSource;
-            d.DfltValMthd = s.DfltValMthd;
-            d.DfltLotSerTrack = s.DfltLotSerTrack;
-            d.Buyer = s.Buyer;
-            d.DfltStkUnit = s.DfltStkUnit;
-            d.DfltPOUnit = s.DfltPOUnit;
-            d.DfltSOUnit = s.DfltSOUnit;
-            d.MaterialType = s.MaterialType;
-            d.DfltSite = s.DfltSite;
-            d.DfltSlsTaxCat = s.DfltSlsTaxCat;
-
-
-            d.DfltLotSerAssign = s.DfltLotSerAssign;
-            d.DfltLotSerMthd = s.DfltLotSerMthd;
-            d.DfltLotSerShelfLife = s.DfltLotSerShelfLife;
-            d.DfltWarrantyDays = s.DfltWarrantyDays;
-            d.DfltLotSerFxdTyp = s.DfltLotSerFxdTyp;
-            d.DfltLotSerFxdLen = s.DfltLotSerFxdLen;
-            d.DfltLotSerFxdVal = s.DfltLotSerFxdVal;
-            d.DfltLotSerNumLen = s.DfltLotSerNumLen;
-            d.DfltLotSerNumVal = s.DfltLotSerNumVal;
-
-
-            d.LUpd_DateTime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
-        }
     }
 }

@@ -6,8 +6,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using eBiz4DWebFrame;
+using HQ.eSkyFramework;
 using System.Configuration;
+
 
 namespace IN20200
 {
@@ -39,13 +40,13 @@ namespace IN20200
 
             Current.Authorize = false;
             Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eBiz4DCloudSysMVC";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN20200"] = acc;
-            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppMVC";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "18510580";
             Session["Language"] = Current.Language = "vi";
