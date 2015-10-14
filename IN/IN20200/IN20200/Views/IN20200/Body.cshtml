@@ -373,7 +373,7 @@
                             })
                             .LoadData()
                             )
-                    , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("Descr").Width(200)//.Renderer("renderCpnyID")
+                    , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(200).Renderer("renderCpnyID")
                      
                     , X.CommandColumn().Width(150)
                     .Commands(
@@ -424,7 +424,7 @@
                         .Local(true)
                         .Filters(
                             X.StringFilter().DataIndex("CpnyID"),
-                            X.StringFilter().DataIndex("Descr")
+                            X.StringFilter().DataIndex("CpnyName")
                         )
                 )
             )//Tab CpnyID

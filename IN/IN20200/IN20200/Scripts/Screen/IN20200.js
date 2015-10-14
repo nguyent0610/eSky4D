@@ -409,3 +409,12 @@ function refresh(item) {
     }
 };
 
+var renderCpnyID = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboCpnyIDIN20200_pcClassCpnyID.findRecord("CpnyID", rec.data.CpnyID);
+    if (record) {
+        return record.data.CpnyName;
+    }
+    else {
+        return value;
+    }
+};
