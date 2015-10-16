@@ -112,6 +112,8 @@
                             ,HQ.Checkbox().ID("LoggedIn").Name("LoggedIn").HQLangCode("LoggedIn").MarginSpec("3 0 0 205").Width(500)
                             ,HQ.DateField().ID("LastLoggedIn").Name("LastLoggedIn").HQLangCode("LastLoggedIn").MarginSpec("3 0 0 0").Width(500)
                             ,HQ.DateField().ID("BeginDay").Name("BeginDay").HQLangCode("BeginDay").MarginSpec("3 0 0 0").Width(500)
+                            ,HQ.NumberField().ID("CrtLmt").Name("CrtLmt").HQLangCode("CrtLmt").MarginSpec("3 0 0 0").Width(500).MinValue(0).DecimalPrecision(0)
+                            ,HQ.NumberField().ID("CrtLmtInvoice").Name("CrtLmtInvoice").HQLangCode("CrtLmtInvoice").MarginSpec("3 0 0 0").Width(500).MinValue(0).DecimalPrecision(0)
                             ,HQ.NumberField().ID("ExpireDay").Name("ExpireDay").HQLangCode("ExpireDay").DecimalPrecision(0).MarginSpec("3 0 0 0").Width(500).AllowBlank(false)
                             ,HQ.NumberField().ID("FailedLoginCount").Name("FailedLoginCount").DecimalPrecision(0).HQLangCode("FailedLoginCount").MarginSpec("3 0 0 0").Width(500)
                             ,HQ.TextBox().ID("JobTitle").Name("JobTitle").HQLangCode("JobTitle").MarginSpec("3 0 0 0").Width(500)

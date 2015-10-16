@@ -322,6 +322,8 @@ namespace SA00300.Controllers
             t.BeginDay = s.BeginDay == null ? DateTime.Now.ToDateShort() : (s.BeginDay.Year == 1 ? DateTime.Now.ToDateShort() : s.BeginDay.ToDateShort());
             t.CheckFirstLogin = s.CheckFirstLogin;
             t.CpnyIDHand = s.CpnyIDHand;
+            t.CrtLmt = s.CrtLmt;
+            t.CrtLmtInvoice = s.CrtLmtInvoice;
 
             t.LUpd_Datetime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

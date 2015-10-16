@@ -1102,8 +1102,10 @@ namespace SA00300
         /// <param name="failedLoginCount">Initial value of the FailedLoginCount property.</param>
         /// <param name="beginDay">Initial value of the BeginDay property.</param>
         /// <param name="checkFirstLogin">Initial value of the CheckFirstLogin property.</param>
-        /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static User CreateUser(global::System.String userName, global::System.Boolean blocked, global::System.Boolean loggedIn, global::System.Int32 expireDay, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Boolean checkFirstLogin, global::System.Byte[] tstamp)
+        /// <param name="multiLogin">Initial value of the MultiLogin property.</param>
+        /// <param name="crtLmt">Initial value of the CrtLmt property.</param>
+        /// <param name="crtLmtInvoice">Initial value of the CrtLmtInvoice property.</param>
+        public static User CreateUser(global::System.String userName, global::System.Boolean blocked, global::System.Boolean loggedIn, global::System.Int32 expireDay, global::System.Int32 failedLoginCount, global::System.DateTime beginDay, global::System.Boolean checkFirstLogin, global::System.Boolean multiLogin, global::System.Double crtLmt, global::System.Double crtLmtInvoice)
         {
             User user = new User();
             user.UserName = userName;
@@ -1113,7 +1115,9 @@ namespace SA00300
             user.FailedLoginCount = failedLoginCount;
             user.BeginDay = beginDay;
             user.CheckFirstLogin = checkFirstLogin;
-            user.tstamp = tstamp;
+            user.MultiLogin = multiLogin;
+            user.CrtLmt = crtLmt;
+            user.CrtLmtInvoice = crtLmtInvoice;
             return user;
         }
 
@@ -1945,6 +1949,30 @@ namespace SA00300
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
+        public global::System.Boolean MultiLogin
+        {
+            get
+            {
+                return _MultiLogin;
+            }
+            set
+            {
+                OnMultiLoginChanging(value);
+                ReportPropertyChanging("MultiLogin");
+                _MultiLogin = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MultiLogin");
+                OnMultiLoginChanged();
+            }
+        }
+        private global::System.Boolean _MultiLogin;
+        partial void OnMultiLoginChanging(global::System.Boolean value);
+        partial void OnMultiLoginChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.Byte[] tstamp
         {
             get
@@ -1963,6 +1991,54 @@ namespace SA00300
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double CrtLmt
+        {
+            get
+            {
+                return _CrtLmt;
+            }
+            set
+            {
+                OnCrtLmtChanging(value);
+                ReportPropertyChanging("CrtLmt");
+                _CrtLmt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CrtLmt");
+                OnCrtLmtChanged();
+            }
+        }
+        private global::System.Double _CrtLmt;
+        partial void OnCrtLmtChanging(global::System.Double value);
+        partial void OnCrtLmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double CrtLmtInvoice
+        {
+            get
+            {
+                return _CrtLmtInvoice;
+            }
+            set
+            {
+                OnCrtLmtInvoiceChanging(value);
+                ReportPropertyChanging("CrtLmtInvoice");
+                _CrtLmtInvoice = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CrtLmtInvoice");
+                OnCrtLmtInvoiceChanged();
+            }
+        }
+        private global::System.Double _CrtLmtInvoice;
+        partial void OnCrtLmtInvoiceChanging(global::System.Double value);
+        partial void OnCrtLmtInvoiceChanged();
 
         #endregion
 
