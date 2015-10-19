@@ -163,6 +163,25 @@ namespace IN20200
     
             return base.ExecuteFunction<IN20200_pgLoadgetCompany_Result>("IN20200_pgLoadgetCompany", classIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="classID">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Boolean>> IN20200_ppCheckClassID(global::System.String classID)
+        {
+            ObjectParameter classIDParameter;
+            if (classID != null)
+            {
+                classIDParameter = new ObjectParameter("ClassID", classID);
+            }
+            else
+            {
+                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("IN20200_ppCheckClassID", classIDParameter);
+        }
 
         #endregion
 

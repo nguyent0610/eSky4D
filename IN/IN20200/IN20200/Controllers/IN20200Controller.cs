@@ -29,7 +29,7 @@ namespace IN20200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -184,21 +184,29 @@ namespace IN20200.Controllers
             try
             {
                 string ClassID = data["cboClassID"];
-
-                var obj = _db.IN_ProductClass.FirstOrDefault(p => p.ClassID == ClassID);
-                if (obj != null)
+                var Flag = _db.IN20200_ppCheckClassID(ClassID).FirstOrDefault();
+                if (Flag == true)
                 {
-                    _db.IN_ProductClass.DeleteObject(obj);
+                    throw new MessageException(MessageType.Message, "2015101901", "");
                 }
-
-                var lstCpny = _db.IN_ProdClassCpny.Where(p => p.ClassID == ClassID).ToList();
-                foreach (var item in lstCpny)
+                else
                 {
-                    _db.IN_ProdClassCpny.DeleteObject(item);
-                }
+                    var obj = _db.IN_ProductClass.FirstOrDefault(p => p.ClassID == ClassID);
+                    if (obj != null)
+                    {
+                        _db.IN_ProductClass.DeleteObject(obj);
+                    }
 
-                _db.SaveChanges();
+                    var lstCpny = _db.IN_ProdClassCpny.Where(p => p.ClassID == ClassID).ToList();
+                    foreach (var item in lstCpny)
+                    {
+                        _db.IN_ProdClassCpny.DeleteObject(item);
+                    }
+
+                    _db.SaveChanges();
+                }
                 return Json(new { success = true });
+
             }
             catch (Exception ex)
             {

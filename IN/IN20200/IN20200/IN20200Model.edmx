@@ -87,6 +87,9 @@
         <Function Name="IN20200_pgLoadgetCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="IN20200_ppCheckClassID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClassID" Type="varchar" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -96,6 +99,9 @@
           <EntitySet Name="IN_ProductClass" EntityType="IN20200Model.IN_ProductClass" />
           <EntitySet Name="IN_UnitConversion" EntityType="IN20200Model.IN_UnitConversion" />
           <FunctionImport Name="IN20200_pgLoadgetCompany" ReturnType="Collection(IN20200Model.IN20200_pgLoadgetCompany_Result)">
+          <Parameter Name="ClassID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN20200_ppCheckClassID" ReturnType="Collection(Boolean)">
             <Parameter Name="ClassID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
@@ -267,6 +273,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN20200_ppCheckClassID" FunctionName="eBiz4DWebSysModel.Store.IN20200_ppCheckClassID" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
