@@ -96,6 +96,12 @@ namespace OM23800.Controllers
         }
 
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult MCPCusts(string lang)
+        {
+            return PartialView();
+        }
+
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult ImportExport(string lang)
         {
             return PartialView();
@@ -104,45 +110,277 @@ namespace OM23800.Controllers
         public ActionResult LoadMCP(string channel, string territory,
             string province, string distributor, string shopType,
             string slsperId, string daysOfWeek, string weekOfVisit,
-            bool hightLight)
+            bool hightLight, string colorFor="",
+            double? amtFrom = 0, double? amtTo = 0, string brand = "", string markFor = "")
         {
             _db.CommandTimeout = 3600;
 
             var planVisits = _db.OM23800_pgMCL(Current.CpnyID, Current.UserName,
                 channel, territory, province, distributor,
-                shopType, slsperId, daysOfWeek, weekOfVisit).ToList();
+                shopType, slsperId, daysOfWeek, weekOfVisit,
+                amtFrom, amtTo, brand).ToList();
 
-            if (hightLight)
+            if (hightLight && !string.IsNullOrWhiteSpace(colorFor))
             {
-                var lstSlspers = planVisits.Select(x => x.SlsperId).Distinct().ToList();
-                var lstColors = _db.OM23800_ppListColors(Current.UserName, Current.CpnyID, Current.LangID).Select(x=>x.Code).ToList();
-                var lstSlsperColor = new Dictionary<string, string>();
-
-                if (lstSlspers.Count <= lstColors.Count)
+                if (!string.IsNullOrWhiteSpace(markFor))
                 {
-                    for (int i = 0; i < lstSlspers.Count; i++)
-                    {
-                        lstSlsperColor.Add(lstSlspers[i], lstColors[i]);
-                    }
+                    makeMarkFor(ref planVisits, colorFor, markFor);
                 }
-                else {
-                    for (int i = 0; i < lstColors.Count; i++)
-                    {
-                        lstSlsperColor.Add(lstSlspers[i], lstColors[i]);
-                    }
-                    for (int i = lstColors.Count; i < lstSlspers.Count; i++)
-                    {
-                        lstSlsperColor.Add(lstSlspers[i], lstColors[i % lstColors.Count]);
-                    }
-                }
-
-                foreach (var plan in planVisits)
+                else
                 {
-                    plan.Color = lstSlsperColor[plan.SlsperId];
+                    makeColorFor(ref planVisits, colorFor);
                 }
             }
 
             return this.Store(planVisits);
+        }
+
+        private void makeMarkFor(ref List<OM23800_pgMCL_Result> planVisits, string colorFor, string markFor)
+        {
+            var dayOfWeeks = new string[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+            var lstColorFors = new List<string>();
+
+            foreach (var plan in planVisits)
+            {
+                var property = plan.GetType().GetProperty(colorFor);
+                if (property != null)
+                {
+                    var value = (string)property.GetValue(plan, null);
+                    if (value == markFor)
+                    {
+                        if (!lstColorFors.Contains(value))
+                        {
+                            lstColorFors.Add(value);
+                        }
+                    }
+                    else
+                    {
+                        if (!lstColorFors.Contains("#"))
+                        {
+                            lstColorFors.Add("#");
+                        }
+                    }
+                }
+                else if (colorFor == "DOW")
+                {
+                    for (int i = 0; i < dayOfWeeks.Count(); i++)
+                    {
+                        var dayProperty = plan.GetType().GetProperty(dayOfWeeks[i]);
+                        if (dayProperty != null)
+                        {
+                            var dayValue = (bool)dayProperty.GetValue(plan, null);
+                            if (dayValue && dayOfWeeks[i] == markFor)
+                            {
+                                lstColorFors.Add(dayOfWeeks[i]);
+                            }
+                            else if (i == dayOfWeeks.Count() - 1)
+                            {
+                                if (!lstColorFors.Contains(dayOfWeeks[i]))
+                                {
+                                    lstColorFors.Add("#");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            var lstColors = _db.OM23800_ppListColors(Current.UserName, Current.CpnyID, Current.LangID).Select(x => x.Code).ToList();
+            var lstPropertyColor = new Dictionary<string, string>();
+
+            if (lstColorFors.Count <= lstColors.Count)
+            {
+                for (int i = 0; i < lstColorFors.Count; i++)
+                {
+                    if (!lstPropertyColor.ContainsKey(lstColorFors[i]))
+                    {
+                        lstPropertyColor.Add(lstColorFors[i], lstColors[i]);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < lstColors.Count; i++)
+                {
+                    if (!lstPropertyColor.ContainsKey(lstColorFors[i]))
+                    {
+                        lstPropertyColor.Add(lstColorFors[i], lstColors[i]);
+                    }
+                }
+                for (int i = lstColors.Count; i < lstColorFors.Count; i++)
+                {
+                    if (!lstPropertyColor.ContainsKey(lstColorFors[i]))
+                    {
+                        lstPropertyColor.Add(lstColorFors[i], lstColors[i % lstColors.Count]);
+                    }
+                }
+            }
+
+            foreach (var plan in planVisits)
+            {
+                var property = plan.GetType().GetProperty(colorFor);
+                if (property != null)
+                {
+                    var planValue = (string)property.GetValue(plan, null);
+                    if (planValue == markFor)
+                    {
+                        plan.Color = lstPropertyColor[planValue];
+                    }
+                    else
+                    {
+                        plan.Color = lstPropertyColor["#"];
+                    }
+                }
+                else if (colorFor == "DOW")
+                {
+                    for (int i = 0; i < dayOfWeeks.Count(); i++)
+                    {
+                        var dayProperty = plan.GetType().GetProperty(dayOfWeeks[i]);
+                        if (dayProperty != null)
+                        {
+                            var dayValue = (bool)dayProperty.GetValue(plan, null);
+                            if (dayValue && dayOfWeeks[i] == markFor)
+                            {
+                                plan.Color = lstPropertyColor[dayOfWeeks[i]];
+                            }
+                            else if (i == dayOfWeeks.Count() - 1)
+                            {
+                                if (!lstColorFors.Contains(dayOfWeeks[i]))
+                                {
+                                    if (lstPropertyColor.ContainsKey(dayOfWeeks[i]))
+                                    {
+                                        plan.Color = lstPropertyColor[dayOfWeeks[i]];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void makeColorFor(ref List<OM23800_pgMCL_Result> planVisits, string colorFor)
+        {
+            var dayOfWeeks = new string[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+            var lstColorFors = new List<string>();
+
+            foreach (var plan in planVisits)
+            {
+                var property = plan.GetType().GetProperty(colorFor);
+                if (property != null)
+                {
+                    var value = (string)property.GetValue(plan, null);
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        if (!lstColorFors.Contains(value))
+                        {
+                            lstColorFors.Add(value);
+                        }
+                    }
+                    else
+                    {
+                        if (!lstColorFors.Contains("#"))
+                        {
+                            lstColorFors.Add("#");
+                        }
+                    }
+                }
+                else if (colorFor == "DOW")
+                {
+                    for (int i = 0; i < dayOfWeeks.Count(); i++)
+                    {
+                        var dayProperty = plan.GetType().GetProperty(dayOfWeeks[i]);
+                        if (dayProperty != null)
+                        {
+                            var dayValue = (bool)dayProperty.GetValue(plan, null);
+                            if (dayValue)
+                            {
+                                lstColorFors.Add(dayOfWeeks[i]);
+                            }
+                            else if (i == dayOfWeeks.Count() - 1)
+                            {
+                                if (!lstColorFors.Contains(dayOfWeeks[i]))
+                                {
+                                    lstColorFors.Add("#");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            var lstColors = _db.OM23800_ppListColors(Current.UserName, Current.CpnyID, Current.LangID).Select(x => x.Code).ToList();
+            var lstSlsperColor = new Dictionary<string, string>();
+
+            if (lstColorFors.Count <= lstColors.Count)
+            {
+                for (int i = 0; i < lstColorFors.Count; i++)
+                {
+                    if (!lstSlsperColor.ContainsKey(lstColorFors[i]))
+                    {
+                        lstSlsperColor.Add(lstColorFors[i], lstColors[i]);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < lstColors.Count; i++)
+                {
+                    if (!lstSlsperColor.ContainsKey(lstColorFors[i]))
+                    {
+                        lstSlsperColor.Add(lstColorFors[i], lstColors[i]);
+                    }
+                }
+                for (int i = lstColors.Count; i < lstColorFors.Count; i++)
+                {
+                    if (!lstSlsperColor.ContainsKey(lstColorFors[i]))
+                    {
+                        lstSlsperColor.Add(lstColorFors[i], lstColors[i % lstColors.Count]);
+                    }
+                }
+            }
+
+            foreach (var plan in planVisits)
+            {
+                var property = plan.GetType().GetProperty(colorFor);
+                if (property != null)
+                {
+                    var planValue = (string)property.GetValue(plan, null);
+                    if (!string.IsNullOrWhiteSpace(planValue))
+                    {
+                        plan.Color = lstSlsperColor[planValue];
+                    }
+                    else
+                    {
+                        plan.Color = lstSlsperColor["#"];
+                    }
+                }
+                else if (colorFor == "DOW")
+                {
+                    for (int i = 0; i < dayOfWeeks.Count(); i++)
+                    {
+                        var dayProperty = plan.GetType().GetProperty(dayOfWeeks[i]);
+                        if (dayProperty != null)
+                        {
+                            var dayValue = (bool)dayProperty.GetValue(plan, null);
+                            if (dayValue)
+                            {
+                                plan.Color = lstSlsperColor[dayOfWeeks[i]];
+                            }
+                            else if (i == dayOfWeeks.Count() - 1)
+                            {
+                                if (!lstColorFors.Contains(dayOfWeeks[i]))
+                                {
+                                    if (lstSlsperColor.ContainsKey(dayOfWeeks[i]))
+                                    {
+                                        plan.Color = lstSlsperColor[dayOfWeeks[i]];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public ActionResult LoadSalesRouteMaster(string branchID, string custID, string slsPerID)
@@ -361,6 +599,109 @@ namespace OM23800.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+            }
+        }
+
+        public ActionResult SaveMcpCusts(FormCollection data)
+        {
+            try
+            {
+                var lstMcpCustsHandler = new StoreDataHandler(data["lstMcpCusts"]);
+                var lstMcpCusts = lstMcpCustsHandler.ObjectData<OM23800_pgMCL_Result>();
+
+                var routeID = data["routeID"];
+                var salesFreq = data["salesFreq"];
+                var weekOfVisit = data["weekOfVisit"];
+                var sun = data["sun"].ToLower() == "true" ? true : false;
+                var mon = data["mon"].ToLower() == "true" ? true : false;
+                var tue = data["tue"].ToLower() == "true" ? true : false;
+                var wed = data["wed"].ToLower() == "true" ? true : false;
+                var thu = data["thu"].ToLower() == "true" ? true : false;
+                var fri = data["fri"].ToLower() == "true" ? true : false;
+                var sat = data["sat"].ToLower() == "true" ? true : false;
+                DateTime startDate = DateTime.Parse(data["startDate"]);
+                DateTime endDate = DateTime.Parse(data["endDate"]);
+
+                string id = Guid.NewGuid().ToString();
+                string branchID = string.Empty;
+                string custID = string.Empty;
+                string slsperID = string.Empty;
+
+                for (int i = 0; i < lstMcpCusts.Count; i ++ )
+                {
+                    branchID = lstMcpCusts[i].BranchID;
+                    custID = lstMcpCusts[i].CustId;
+                    slsperID = lstMcpCusts[i].SlsperId;
+
+                    OM_SalesRouteMasterImport objImport = new OM_SalesRouteMasterImport();
+
+                    if (_db.OM_SalesRouteMasterImport.Where(p => p.ID == id
+                                                                    && p.BranchID == branchID
+                                                                        && p.PJPID == branchID
+                                                                        && p.SalesRouteID == routeID
+                                                                        && p.CustID == custID
+                                                                        && p.SlsPerID == slsperID).ToList().Count == 0)
+                    {
+                        objImport.ID = id;
+                        objImport.BranchID = branchID;
+                        objImport.PJPID = branchID;
+                        objImport.SalesRouteID = routeID;
+                        objImport.CustID = custID;
+                        objImport.SlsPerID = slsperID;
+                        objImport.tstamp = new byte[1];
+                        objImport.StartDate = startDate;
+                        objImport.EndDate = endDate; ;
+                        objImport.SlsFreq = salesFreq;//  dataArray.GetValue(i, 9).ToString().Trim().ToUpper();
+                        objImport.SlsFreqType = "R";
+                        objImport.WeekofVisit = weekOfVisit;// dataArray.GetValue(i, 10).ToString().Trim().ToUpper();
+                        objImport.Mon = mon;// dataArray.GetValue(i, 11) == null ? false : dataArray.GetValue(i, 11).ToString().Trim().ToUpper() == "X" ? true : false;
+                        objImport.Tue = tue;// dataArray.GetValue(i, 12) == null ? false : dataArray.GetValue(i, 12).ToString().Trim().ToUpper() == "X" ? true : false;
+                        objImport.Wed = wed;// dataArray.GetValue(i, 13) == null ? false : dataArray.GetValue(i, 13).ToString().Trim().ToUpper() == "X" ? true : false;
+                        objImport.Thu = thu;// dataArray.GetValue(i, 14) == null ? false : dataArray.GetValue(i, 14).ToString().Trim().ToUpper() == "X" ? true : false;
+                        objImport.Fri = fri;// dataArray.GetValue(i, 15) == null ? false : dataArray.GetValue(i, 15).ToString().Trim().ToUpper() == "X" ? true : false;
+                        objImport.Sat = sat;// dataArray.GetValue(i, 16) == null ? false : dataArray.GetValue(i, 16).ToString().Trim().ToUpper() == "X" ? true : false;
+                        objImport.Sun = sun;// dataArray.GetValue(i, 17) == null ? false : dataArray.GetValue(i, 17).ToString().Trim().ToUpper() == "X" ? true : false;
+
+                        objImport.VisitSort = i + 1;// dataArray.GetValue(i, 20) == null ? 0 : dataArray.GetValue(i, 20).ToString().Trim().ToUpper() == "" ? 0 : int.Parse(dataArray.GetValue(i, 20).ToString().Trim().ToUpper());
+   
+                        objImport.LUpd_DateTime = objImport.LUpd_DateTime = DateTime.Now;
+                        objImport.LUpd_Prog = objImport.LUpd_Prog = _screenName;
+                        objImport.LUpd_User = objImport.LUpd_User = Current.UserName;
+                        objImport.Crtd_DateTime = objImport.Crtd_DateTime = DateTime.Now;
+                        objImport.Crtd_Prog = objImport.Crtd_Prog = _screenName;
+                        objImport.Crtd_User = objImport.Crtd_User = Current.UserName;
+                        if (isValidSelOMSalesRouteMaster(objImport, false))
+                        {
+                            _db.OM_SalesRouteMasterImport.AddObject(objImport);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "201302071", "", new string[] { objImport.CustID });
+                            //strtmpError += "   STT: " + strESTT + "Error: Dữ liệu không hợp lệ" + "\r";
+                        }
+
+                    }
+                }
+
+                _db.SaveChanges();
+                Exec(id);
+
+                return Json(new
+                {
+                    success = true,
+                    msgCode = 201405071
+                });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
             }
         }
 
@@ -1671,7 +2012,7 @@ namespace OM23800.Controllers
 
                 var headerRowIdx = 3;
                 var maxRow = 1000;
-                var ColTexts = new List<string>() { "N0", "SlsperID", "SlsName", "ShopID", "ShopName", "Attn", "Addr", "Province", "ProvinceCode", "District", "DistrictCode", "Phone", "CustClass", "ShopID2" };
+                var ColTexts = new List<string>() { "N0", "SlsperID", "SlsName", "ShopID", "ShopName", "Attn", "Addr", "Province", "ProvinceCode", "District", "DistrictCode", "Phone", "CustClass", "Latitude", "Longitude", "ShopID2" };
 
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
@@ -1890,6 +2231,14 @@ namespace OM23800.Controllers
                     Getcell(ColTexts.IndexOf("CustClass")) + strLastRow);
                 range.SetStyle(style);
 
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("Latitude")) + strFirstRow,
+                    Getcell(ColTexts.IndexOf("Latitude")) + strLastRow);
+                range.SetStyle(style);
+
+                range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("Longitude")) + strFirstRow,
+                    Getcell(ColTexts.IndexOf("Longitude")) + strLastRow);
+                range.SetStyle(style);
+
                 range = SheetMCP.Cells.CreateRange(Getcell(ColTexts.IndexOf("ShopID2")) + strFirstRow,
                     Getcell(ColTexts.IndexOf("ShopID2")) + strLastRow);
                 range.SetStyle(style);
@@ -1950,6 +2299,7 @@ namespace OM23800.Controllers
                     var lineNoExist = new List<string>();
                     var lineSlsNoExist = new List<string>();
                     var lineInvalidDistrict = new List<string>();
+                    var lineInvalidGeo = new List<string>();
 
                     if (workbook.Worksheets.Count > 0)
                     {
@@ -1971,6 +2321,9 @@ namespace OM23800.Controllers
                         string strCity = string.Empty;
                         string strTerritory = string.Empty;
 
+                        double lat = 0;
+                        double lng = 0;
+
                         if (strEBranchID == BranchID)
                         {
                             for (int i = dataRowIdx; i <= workSheet.Cells.MaxDataRow; i++)
@@ -1984,7 +2337,11 @@ namespace OM23800.Controllers
                                 strProvince = workSheet.Cells[i, 8].StringValue.Trim();
                                 strPhone = workSheet.Cells[i, 11].StringValue.Trim();
                                 strCustClass = workSheet.Cells[i, 12].StringValue.Trim();
-                                strLocation = workSheet.Cells[i, 13].StringValue.Trim();
+
+                                double.TryParse(workSheet.Cells[i, 13].StringValue.Trim(), out lat);
+                                double.TryParse(workSheet.Cells[i, 14].StringValue.Trim(), out lng);
+
+                                strLocation = workSheet.Cells[i, 15].StringValue.Trim();
 
                                 if (!string.IsNullOrWhiteSpace(strSlsPerID)
                                     || !string.IsNullOrWhiteSpace(strShopID)
@@ -1995,7 +2352,8 @@ namespace OM23800.Controllers
                                     || !string.IsNullOrWhiteSpace(strProvince)
                                     || !string.IsNullOrWhiteSpace(strPhone)
                                     || !string.IsNullOrWhiteSpace(strCustClass)
-                                    || !string.IsNullOrWhiteSpace(strLocation))
+                                    || !string.IsNullOrWhiteSpace(strLocation)
+                                    || lat>0 || lng>0)
                                 {
                                     var slsright = true;
                                     if (!string.IsNullOrWhiteSpace(strSlsPerID))
@@ -2059,6 +2417,16 @@ namespace OM23800.Controllers
                                                     existCust.LUpd_Prog = _screenName;
                                                     existCust.LUpd_User = Current.UserName;
                                                     existCust.SlsperId = strSlsPerID;
+
+                                                    if (lat>0 && lng>0)
+                                                    {
+                                                        updateCustomerLocation(strEBranchID, strShopID, lat, lng);
+                                                    }
+                                                    else if (lat > 0 || lng > 0) 
+                                                    {
+                                                        lineInvalidGeo.Add((i - dataRowIdx + 1).ToString());
+                                                    }
+
                                                     lineSuccess.Add((i - dataRowIdx + 1).ToString());
                                                 }
                                                 else
@@ -2093,7 +2461,7 @@ namespace OM23800.Controllers
                                                 }
                                                 else
                                                 {
-                                                    var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustName == strShopName && c.Addr1 == strAddr);
+                                                    var existCust = _db.AR_Customer.FirstOrDefault(c => c.CustName == strShopName && c.Addr1 == strAddr && c.BranchID == strEBranchID);
                                                     if (existCust != null)
                                                     {
                                                         lineExist.Add((i - dataRowIdx + 1).ToString());
@@ -2142,6 +2510,16 @@ namespace OM23800.Controllers
                                                     newCust.LUpd_User = newCust.Crtd_User = Current.UserName;
                                                     newCust.SlsperId = strSlsPerID;
                                                     _db.AR_Customer.AddObject(newCust);
+
+                                                    if (lat > 0 && lng > 0)
+                                                    {
+                                                        updateCustomerLocation(strEBranchID, strShopID, lat, lng);
+                                                    }
+                                                    else if (lat > 0 || lng > 0)
+                                                    {
+                                                        lineInvalidGeo.Add((i - dataRowIdx + 1).ToString());
+                                                    }
+
                                                     _db.SaveChanges();
                                                     lineSuccess.Add((i - dataRowIdx + 1).ToString());
                                                 }
@@ -2214,6 +2592,33 @@ namespace OM23800.Controllers
                 {
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
+            }
+        }
+
+        private void updateCustomerLocation(string branchID, string custID, double lat, double lng)
+        {
+            var custLoc = _db.AR_CustomerLocation.FirstOrDefault(l => l.BranchID == branchID && l.CustID == custID);
+            if (custLoc != null)
+            {
+                custLoc.Lat = lat;
+                custLoc.Lng = lng;
+
+                custLoc.LUpd_Datetime = DateTime.Now;
+                custLoc.LUpd_Prog = _screenName;
+                custLoc.LUpd_User = Current.UserName;
+            }
+            else
+            {
+                custLoc = new AR_CustomerLocation();
+                custLoc.ResetET();
+                custLoc.CustID = custID;
+                custLoc.BranchID = branchID;
+                custLoc.Lat = lat;
+                custLoc.Lng = lng;
+                custLoc.Crtd_Datetime = custLoc.LUpd_Datetime = DateTime.Now;
+                custLoc.Crtd_Prog = custLoc.LUpd_Prog = _screenName;
+                custLoc.Crtd_User = custLoc.LUpd_User = Current.UserName;
+                _db.AR_CustomerLocation.AddObject(custLoc);
             }
         }
 

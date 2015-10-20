@@ -77,6 +77,14 @@ var Process = {
         });
     },
 
+    updateMcpCusts: function (listMcpCusts) {
+        App.winMcpCusts.show();
+        App.stoMCPCusts.removeAll();
+        listMcpCusts.forEach(function (record) {
+            App.stoMCPCusts.insert(App.stoMCPCusts.getCount(), record);
+        });
+    },
+
     passNullValue: function (combo) {
         if (combo.value) {
             return combo.value;
@@ -105,6 +113,13 @@ var Process = {
     rgbToHex: function (red, green, blue) {
         var rgb = blue | (green << 8) | (red << 16);
         return (0x1000000 + rgb).toString(16).slice(1);
+    },
+
+    renderColor: function (value, metaData, record, rowIndex, colIndex, store) {
+        if (App.chkHightLight.checked) {
+            metaData.style = "color:#" + record.data.Color + "!IMPORTANT;";
+        }
+        return value;
     }
 };
 
@@ -120,12 +135,18 @@ var Event = {
                         "lat": record.data.Lat,
                         "lng": record.data.Lng,
                         "color": record.data.Color,
-                        "description": Process.createMarkerDescription(record, App.chkHightLight.value),
-                        "custId": record.data.CustId
+                        "description": Process.createMarkerDescription(record, App.chkHightLight.checked),
+                        "custId": record.data.CustId,
+                        "record": record
                     }
                     markers.push(marker);
                 });
-                Gmap.Process.drawMCP(markers, App.chkHightLight.value);
+
+                //google.maps.event.addListener(Gmap.Declare.map, 'idle', function () {
+                    Gmap.Process.drawMCP(markers, App.chkHightLight.checked, App.radMcp.getValue());
+                //});
+
+                
                 if (markers.length) {
                     Gmap.Process.prepairDrawing();
                 }
@@ -264,11 +285,17 @@ var Event = {
         },
 
         chkHightLight_change: function (cbo, newValue, oldValue, eOpts) {
-            if (cbo.value) {
+            if (cbo.checked) {
                 App.ctnMCP.hide();
+                App.ctnHighLight.show();
+                App.cboColorFor.allowBlank = false;
+                App.cboColorFor.validate();
             }
             else {
                 App.ctnMCP.show();
+                App.ctnHighLight.hide();
+                App.cboColorFor.allowBlank = true;
+                App.cboColorFor.validate();
             }
         }
     },
@@ -281,13 +308,13 @@ var Event = {
         },
 
         grdMCL_viewGetRowClass: function (record, rowIndex, rowParams, store) {
-            if (App.chkHightLight.value) {
-                var clsName = "row-" + record.data.SlsperId,
-                    clsStyle = Ext.String.format(".{0} .x-grid-cell{ color: #{1} !important; }", clsName, record.data.Color);
+            if (App.chkHightLight.checked) {
+                //var clsName = "row-" + record.data.Color,
+                //    clsStyle = Ext.String.format(".{0} .x-grid-cell{ color: #{1} !important; }", clsName, record.data.Color);
 
-                Ext.net.ResourceMgr.registerCssClass(clsName, clsStyle);
+                //Ext.net.ResourceMgr.registerCssClass(clsName, clsStyle);
 
-                return clsName;
+                //return clsName;
             }
             else {
                 return "row-" + record.data.Color;
@@ -455,6 +482,68 @@ var McpInfo = {
                 }
             });
         }
+    }
+};
+
+var McpCusts = {
+    winMcpCusts_show: function (win, eOpts) {
+        App.cboRouteIDMcpCusts.store.reload();
+        App.cboSlsFreqMcpCusts.store.reload();
+        App.dtpStartDateMcpCusts.setValue(HQ.dateNow);
+        App.dtpEndDateMcpCusts.setValue(HQ.dateNow);
+        //App.cboWeekofVisitMcpCusts.store.reload();
+        App.frmMcpCusts.validate();
+    },
+
+    dtpStartDateMcpCusts_change: function (dtp, newValue, oldValue, eOpts) {
+        App.dtpEndDateMcpCusts.setMinValue(App.dtpStartDateMcpCusts.getValue());
+        if (App.dtpEndDateMcpCusts.getValue() < App.dtpStartDateMcpCusts.getValue()) {
+            App.dtpEndDateMcpCusts.setValue(App.dtpStartDateMcpCusts.getValue());
+        }
+    },
+
+    btnSaveMcpCusts_click: function (btn, eOpts) {
+        if (App.frmMcpCusts.isValid()) {
+            if (App.grdMCPCusts.selModel.selected.items.length) {
+                App.frmMcpCusts.submit({
+                    waitMsg: HQ.common.getLang("Submiting") + "...",
+                    url: 'OM23800/SaveMcpCusts',
+                    type: 'POST',
+                    timeout: 1000000,
+                    params: {
+                        lstMcpCusts: Ext.encode(App.grdMCPCusts.getRowsValues({ selectedOnly: true }))
+                        , routeID: App.cboRouteIDMcpCusts.getValue()
+                        , salesFreq: App.cboSlsFreqMcpCusts.getValue()
+                        , weekOfVisit: App.cboWeekofVisitMcpCusts.getValue()
+                        , sun: App.chkSunMcpCusts.value
+                        , mon: App.chkMonMcpCusts.value
+                        , tue: App.chkTueMcpCusts.value
+                        , wed: App.chkWedMcpCusts.value
+                        , thu: App.chkThuMcpCusts.value
+                        , fri: App.chkFriMcpCusts.value
+                        , sat: App.chkSatMcpCusts.value
+                        , startDate: App.dtpStartDateMcpCusts.getValue()
+                        , endDate: App.dtpEndDateMcpCusts.getValue()
+                    },
+                    success: function (msg, data) {
+                        if (data.result.msgcode) {
+                            HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
+                        }
+                        App.winMcpCusts.close();
+                    },
+                    failure: function (msg, data) {
+                        HQ.message.process(msg, data, true);
+                    }
+                });
+            }
+            else {
+                HQ.message.show(718, '', '');
+            }
+        }
+    },
+
+    btnCancelMcpCusts_click: function (btn, eOpts) {
+
     }
 };
 
@@ -707,7 +796,11 @@ var Gmap = {
         },
 
         prepairDrawing: function () {
-
+            //var triangleCoords = [
+            //    { lat: 25.774, lng: -80.190 },
+            //    { lat: 18.466, lng: -66.118 },
+            //    { lat: 32.321, lng: -64.757 }
+            //];
             Gmap.Declare.drawingManager = new google.maps.drawing.DrawingManager({
                 //drawingMode: google.maps.drawing.OverlayType.MARKER,
                 drawingControl: true,
@@ -722,13 +815,15 @@ var Gmap = {
                     ]
                 },
                 circleOptions: {
+                    //paths: triangleCoords,
                     fillColor: '#ffff00',
                     fillOpacity: 0,
                     strokeWeight: 5,
                     clickable: true,
                     editable: true,
                     zIndex: 1
-                }
+                }//,
+                //paths: triangleCoords
             });
             Gmap.Declare.drawingManager.setMap(Gmap.Declare.map);
 
@@ -790,12 +885,19 @@ var Gmap = {
                 return inPoly;
             }
 
+            // sau khi ve xong: lay ds khach hang trong khung
             google.maps.event.addListener(Gmap.Declare.drawingManager, 'overlaycomplete', function (event) {
                 if (event.type == google.maps.drawing.OverlayType.POLYGON) {
                     var custIDs = [];
+                    var listMcpCusts = [];
                     for (var i = 0; i < Gmap.Declare.stopMarkers.length; i++) {
                         if (event.overlay.containsLatLng(Gmap.Declare.stopMarkers[i].position)) {
                             custIDs.push(Gmap.Declare.stopMarkers[i].custId);
+                            var mcpCustRec = Gmap.Declare.stopMarkers[i].record;
+                            //var mcpCustData = HQ.store.findInStore(App.stoMCPCusts, ["CustId", "SlsperId", "BranchID"], [mcpCustRec.data.CustId, mcpCustRec.data.SlsperId, mcpCustRec.data.BranchID]);
+                            //if (!mcpCustData) {
+                            listMcpCusts.push(mcpCustRec);
+                            //}
                         }
                     }
                     if (custIDs.length) {
@@ -811,18 +913,19 @@ var Gmap = {
                             labelStyle: { opacity: 0.75 }
                         });
                     }
-                    Gmap.Process.showContextMenu(Gmap.Declare.map, event.overlay, label, custIDs);
+                    Gmap.Process.showContextMenu(Gmap.Declare.map, event.overlay, label, custIDs, listMcpCusts);
                 }
             });
         },
 
-        showContextMenu: function (objMap, polygon, label, custIDs) {
+        showContextMenu: function (objMap, polygon, label, custIDs, listMcpCusts) {
             //	create the ContextMenuOptions object
             var contextMenuOptions = {};
             contextMenuOptions.classNames = { menu: 'context_menu', menuSeparator: 'context_menu_separator' };
 
             //	create an array of ContextMenuItem objects
             var menuItems = [];
+            menuItems.push({ className: 'context_menu_item', eventName: 'update_mcp', label: HQ.common.getLang('UpdateMcp') });
             menuItems.push({ className: 'context_menu_item', eventName: 'export_excel', label: HQ.common.getLang('ExportExcel') });
             menuItems.push({ className: 'context_menu_item', eventName: 'clear_zone', label: HQ.common.getLang('ClearZone') });
             //	a menuItem with no properties will be rendered as a separator
@@ -849,6 +952,12 @@ var Gmap = {
                 //	latLng is the position of the ContextMenu
                 //	eventName is the eventName defined for the clicked ContextMenuItem in the ContextMenuOptions
                 switch (eventName) {
+                    case 'update_mcp':
+                        if (listMcpCusts.length) {
+                            Process.updateMcpCusts(listMcpCusts);
+                        }
+                        contextMenu.hide();
+                        break;
                     case 'export_excel':
                         if (custIDs.length) {
                             Process.exportSelectedCust(custIDs, Declare.selBranchID, Declare.selBranchName);
@@ -876,6 +985,7 @@ var Gmap = {
             });
         },
 
+        // focus toi diem dc chon tren luoi
         navMapCenterByLocation: function (lat, lng, id) {
             var selectedMarker;
             var myLatlng = new google.maps.LatLng(lat, lng);
@@ -911,7 +1021,8 @@ var Gmap = {
                 }
             }
         },
-
+        
+        // tim diem theo id (marker)
         find_marker_id: function (id) {
             for (i = 0; i < Gmap.Declare.stopMarkers.length; i++) {
                 if (Gmap.Declare.stopMarkers[i].id == id) {
@@ -921,6 +1032,7 @@ var Gmap = {
             return null;
         },
 
+        // tim diem gan nhat
         find_closest_marker: function (lat1, lon1) {
             var pi = Math.PI;
             var R = 6371; //equatorial radius
@@ -980,7 +1092,7 @@ var Gmap = {
             Gmap.Declare.directionsDisplay.setMap(Gmap.Declare.map);
         },
 
-        drawMCP: function (markers, hightLight) {
+        drawMCP: function (markers, hightLight, isMcp) {
             Gmap.Process.prepairMap();
             Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
 
@@ -1006,16 +1118,26 @@ var Gmap = {
                         if (hightLight) {
                             var marker = new google.maps.Marker({
                                 custId: data.custId,
+                                record: data.record,
                                 id: data.id,
                                 position: myLatlng,
                                 map: Gmap.Declare.map,
                                 title: data.title,
-                                icon: Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i+1, data.color)
+                                icon: isMcp?
+                                    Ext.String.format('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld={0}|{1}|000000', i+1, data.color)
+                                    : {
+                                        path: google.maps.SymbolPath.CIRCLE,
+                                        scale: 5,
+                                        fillColor: "#" + data.color,
+                                        fillOpacity: 1,
+                                        strokeWeight: 0.5
+                                    }
                             });
                         }
                         else {
                             var marker = new google.maps.Marker({
                                 custId: data.custId,
+                                record: data.record,
                                 id: data.id,
                                 position: myLatlng,
                                 map: Gmap.Declare.map,
@@ -1051,7 +1173,7 @@ var Gmap = {
                     }
                 }
 
-                Gmap.Declare.directionsDisplay.setMap(Gmap.Declare.map);
+                //Gmap.Declare.directionsDisplay.setMap(Gmap.Declare.map);
                 //directionsDisplay.setOptions({ suppressMarkers: true });
             }
             else {

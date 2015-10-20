@@ -36,6 +36,7 @@
             HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
             HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
             HQ.allowModifyCust = HQ.util.toBool('@ViewBag.AllowModifyCust');
+            HQ.dateNow = '@DateTime.Now.Date';
         </script>
         <style type="text/css">
             html {
@@ -115,15 +116,21 @@
             .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadMCP", "OM23800")).Timeout(1800000))
             .Parameters(ps =>
             {
-                ps.Add(new StoreParameter("channel", "App.cboChannelMCL.value", ParameterMode.Raw));
-                ps.Add(new StoreParameter("territory", "App.cboAreaMCL.value", ParameterMode.Raw));
-                ps.Add(new StoreParameter("province", "App.cboProvinceMCL.value", ParameterMode.Raw));
-                ps.Add(new StoreParameter("distributor", "App.cboDistributorMCL.value", ParameterMode.Raw));
-                ps.Add(new StoreParameter("shopType", "App.cboShopTypeMCL.value", ParameterMode.Raw));
-                ps.Add(new StoreParameter("slsperId", "App.cboSalesManMCL.value", ParameterMode.Raw));
-                ps.Add(new StoreParameter("daysOfWeek", "App.cboDayOfWeek.value", ParameterMode.Raw));
-                ps.Add(new StoreParameter("weekOfVisit", "App.cboWeekOfVisit.value", ParameterMode.Raw));
-                ps.Add(new StoreParameter("hightLight", "App.chkHightLight.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("channel", "App.cboChannelMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("territory", "App.cboAreaMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("province", "App.cboProvinceMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("distributor", "App.cboDistributorMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("shopType", "App.cboShopTypeMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperId", "App.cboSalesManMCL.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("daysOfWeek", "App.cboDayOfWeek.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("weekOfVisit", "App.cboWeekOfVisit.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("hightLight", "App.chkHightLight.checked", ParameterMode.Raw));
+                ps.Add(new StoreParameter("colorFor", "App.cboColorFor.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("isMcp", "App.radMcp.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("amtFrom", "App.numAmtFrom.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("amtTo", "App.numAmtTo.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("brand", "App.cboBrand.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("markFor", "App.cboMarkFor.getValue()", ParameterMode.Raw));
             })
             .Listeners(l => {
                 l.BeforeLoad.Handler = "App.frmMain.getEl().mask(HQ.common.getLang('Loading'), 'x-mask-loading');";
@@ -146,12 +153,26 @@
             .Listeners(l=>l.Load.Fn="McpInfo.storeMcpInfo_load")
         )
 
+        @(
+            X.Store().ID("stoMCPCusts")
+            //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM23800_pgMCL_Result),"mdlMcpCusts",""))
+            //.ServerProxy(X.AjaxProxy().Url(Url.Action("LoadMcpCusts")))
+            //        .Parameters(ps =>
+            //        {
+            //            ps.Add(new StoreParameter("CustIDs", "App.winMcpCusts.custIDs", ParameterMode.Raw));
+            //        })
+            //.Listeners(l=>l.Load.Fn="McpInfo.storeMcpInfo_load")
+        )
+
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 
         <!-- Gọi hàm Body trong OM22001Controller để dựng view Body.cshtml, mục đích tạo cache. -->
         @{ Html.RenderAction("Body", "OM23800", new { lang = Current.LangID }); }
         @{ Html.RenderAction("MCPInfo","OM23800", new { lang = Current.LangID }); }
+        @{ Html.RenderAction("MCPCusts","OM23800", new { lang = Current.LangID }); }
         @{ Html.RenderAction("ImportExport","OM23800", new { lang = Current.LangID }); }
     </body>
 </html>
