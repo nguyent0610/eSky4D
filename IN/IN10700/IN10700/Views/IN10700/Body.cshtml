@@ -19,7 +19,7 @@
         //.DefaultAnchor("100%")
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
-        .TopBar(Util.SetupToolbar("new,print,delete", true, "Event.Form.menuClick"))
+        .TopBar(Util.SetupToolbar("new,print", true, "Event.Form.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Items(
             X.Panel().ID("pnlHeader")
@@ -89,7 +89,10 @@
                 .MinWidth(200).Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
                 .Items(
-                     HQ.Combo().ID("cboStockType")
+                    HQ.TextBox().ID("txtStkOutNbr")
+                    .HQLangCode("StkOutNbr").DataIndex("StkOutNbr")
+                    
+                    , HQ.Combo().ID("cboStockType")
                     .HQLangCode("Type").HQProcedure("IN10700_pcType")
                     .HQColumnShow("Code,Descr").ValueField("Code").DisplayField("Descr")
                     .HQHeightWidth(400, 300).ForceSelection(true).AllowBlank(false)
@@ -113,9 +116,6 @@
                         l.TriggerClick.Handler = "this.clear()";
                         l.Change.Fn = "Event.Form.dtpStkOutDate_change";
                     })
-                    
-                    ,HQ.TextBox().ID("txtStkOutNbr")
-                    .HQLangCode("StkOutNbr").DataIndex("StkOutNbr")
                 ) // Second Column
                 
                 // Third Column

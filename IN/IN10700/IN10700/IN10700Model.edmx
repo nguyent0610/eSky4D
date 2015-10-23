@@ -101,6 +101,13 @@
           <Parameter Name="StkType" Type="varchar" Mode="In" />
           <Parameter Name="StkOutDate" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="IN10700_ppCheckForUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
+          <Parameter Name="StkOutNbr" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="IN10700_ppStkOutNbr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -127,7 +134,7 @@
             <Parameter Name="SlsperID" Mode="In" Type="String" />
             <Parameter Name="StkOutNbr" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="IN10700_ppStkOutNbr" ReturnType="Collection(String)">
+          <FunctionImport Name="IN10700_ppStkOutNbr" ReturnType="Collection(IN10700Model.IN10700_ppStkOutNbr_Result)">
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -135,6 +142,13 @@
           <EntitySet Name="IN_Setup" EntityType="IN10700Model.IN_Setup" />
           <EntitySet Name="PPC_StockOutlet" EntityType="IN10700Model.PPC_StockOutlet" />
           <EntitySet Name="PPC_StockOutletDet" EntityType="IN10700Model.PPC_StockOutletDet" />
+          <FunctionImport Name="IN10700_ppCheckForUpdate" ReturnType="Collection(Boolean)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="StkOutNbr" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IN10700_phStockOutlet_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -234,6 +248,10 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="ReasonID" MaxLength="5" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="IN10700_ppStkOutNbr_Result">
+          <Property Type="String" Name="PrefixBat" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="LastStkOutNbr" Nullable="true" MaxLength="10" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -271,7 +289,14 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN10700_ppStkOutNbr" FunctionName="eBiz4DWebAppModel.Store.IN10700_ppStkOutNbr" />
+          <FunctionImportMapping FunctionImportName="IN10700_ppStkOutNbr" FunctionName="eBiz4DWebAppModel.Store.IN10700_ppStkOutNbr" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10700Model.IN10700_ppStkOutNbr_Result">
+                <ScalarProperty Name="PrefixBat" ColumnName="PrefixBat" />
+                <ScalarProperty Name="LastStkOutNbr" ColumnName="LastStkOutNbr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="IN_Setup">
             <EntityTypeMapping TypeName="IN10700Model.IN_Setup">
               <MappingFragment StoreEntitySet="IN_Setup">
@@ -343,6 +368,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN10700_ppCheckForUpdate" FunctionName="eBiz4DWebAppModel.Store.IN10700_ppCheckForUpdate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

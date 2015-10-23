@@ -1,4 +1,5 @@
 var _LOT = "LOT";
+var _allowUpdate = false;
 
 var Process = {
     isAllValidKey: function (items, keys) {
@@ -67,6 +68,58 @@ var Process = {
         return true;
     },
 
+    checkDuplicate: function (grd, row, keys) {
+        var found = false;
+        var store = grd.getStore();
+        if (keys == undefined) keys = row.record.idProperty.split(',');
+        if (store.data) {
+            for (var i = 0; i < store.data.items.length; i++) {
+                var record = store.data.items[i];
+                var data = '';
+                var rowdata = '';
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (record.data[keys[jkey]]) {
+                        data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        if (row.field == keys[jkey])
+                            rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                        else
+                            rowdata += (!row.record.data[keys[jkey]]? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
+                    }
+                }
+                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                    break;
+                };
+            }
+        }
+        else {
+            for (var i = 0; i < store.allData.items.length; i++) {
+                var record = store.allData.items[i];
+                var data = '';
+                var rowdata = '';
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (record.data[keys[jkey]]) {
+                        data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        if (row.field == keys[jkey])
+                            rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                        else
+                            rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
+                    }
+                }
+                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                    break;
+                };
+            }
+        }
+        return found;
+    },
+
+    checkStkOutNbrFromPDA: function (stkOutNbr) {
+        if (stkOutNbr && !isNaN(stkOutNbr)) {
+            return true;
+        }
+        return false;
+    },
+
     saveData: function () {
         if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
             if (HQ.form.checkRequirePass(App.frmMain)) {
@@ -103,8 +156,13 @@ var Process = {
         else {
             HQ.message.show(4, '', '');
         }
-    }
+    },
 
+    deleteSelectedInGrid: function (item) {
+        if (item == 'yes') {
+            App.grdStockOutletDet.deleteSelected();
+        }
+    }
 };
 
 var Store = {
@@ -125,7 +183,8 @@ var Store = {
         var frmRecord = sto.getAt(0);
         App.frmMain.loadRecord(frmRecord);
 
-        App.grdStockOutletDet.store.reload();
+        App.stoCheckForUpdate.reload();
+        //App.grdStockOutletDet.store.reload();
     },
 
     stoStockOutletDet_beforeLoad: function () {
@@ -139,17 +198,29 @@ var Store = {
     },
 
     stoStockOutletDet_load: function (sto, records, successful, eOpts) {
-        var keys = sto.HQFieldKeys ? sto.HQFieldKeys : "";
-        var newData = {
-            BranchID: App.cboBranchID.getValue(),
-            SlsperID: App.cboSlsperID.getValue()//,
-            //ExpDate: HQ.dateNow
-        };
+        if (!Process.checkStkOutNbrFromPDA(App.txtStkOutNbr.value) && _allowUpdate) {
+            var keys = sto.HQFieldKeys ? sto.HQFieldKeys : "";
+            var newData = {
+                BranchID: App.cboBranchID.getValue(),
+                SlsperID: App.cboSlsperID.getValue()//,
+                //ExpDate: HQ.dateNow
+            };
 
-        var newRec = Ext.create(sto.model.modelName, newData);
-        HQ.store.insertRecord(sto, keys, newRec, false);
-
+            var newRec = Ext.create(sto.model.modelName, newData);
+            HQ.store.insertRecord(sto, keys, newRec, false);
+        }
         Event.Form.frmMain_fieldChange();
+    },
+
+    stoCheckForUpdate_load: function (sto, records, successful, eOpts) {
+        var chkRec = sto.getAt(0);
+        if (chkRec) {
+            _allowUpdate = chkRec.data.Result;
+        }
+        else {
+            _allowUpdate = false;
+        }
+        App.grdStockOutletDet.store.reload();
     }
 };
 
@@ -239,6 +310,19 @@ var Event = {
                 case "save":
                     Process.saveData();
                     break;
+                case "delete":
+                    if (HQ.isUpdate) {
+                        if (_allowUpdate) {
+                            HQ.message.show(11, '', 'Process.deleteSelectedInGrid');
+                        }
+                        else {
+                            HQ.message.show(2015012701, '', '');
+                        }
+                    }
+                    else {
+                        HQ.message.show(4, '', '');
+                    }
+                    break;
             }
         }
     },
@@ -261,8 +345,14 @@ var Event = {
                     var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
 
                     if (e.record.data.tstamp) {
-                        if (e.field == "StkQty") {
-                            return true;
+                        if (e.field == "StkQty" || e.field == "ReasonID") {
+                            if (_allowUpdate) {
+                                return true;
+                            }
+                            else {
+                                HQ.message.show(2015012701, '', '');
+                                return false;
+                            }
                         }
                         else {
                             return false;
@@ -281,19 +371,20 @@ var Event = {
 
         grdStockOutletDet_edit: function (editor, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+            if (!Process.checkStkOutNbrFromPDA(App.txtStkOutNbr.value)) {
+                if (keys.indexOf(e.field) != -1) {
+                    if (e.value != ''
+                        && Process.isAllValidKey(e.store.getChangedData().Created, keys)
+                        && Process.isAllValidKey(e.store.getChangedData().Updated, keys)) {
+                        var newData = {
+                            BranchID: App.cboBranchID.getValue(),
+                            SlsperID: App.cboSlsperID.getValue()//,
+                            //ExpDate: HQ.dateNow
+                        };
 
-            if (keys.indexOf(e.field) != -1) {
-                if (e.value != ''
-                    && Process.isAllValidKey(e.store.getChangedData().Created, keys)
-                    && Process.isAllValidKey(e.store.getChangedData().Updated, keys)) {
-                    var newData = {
-                        BranchID: App.cboBranchID.getValue(),
-                        SlsperID: App.cboSlsperID.getValue()//,
-                        //ExpDate: HQ.dateNow
-                    };
-
-                    var newRec = Ext.create(e.store.model.modelName, newData);
-                    HQ.store.insertRecord(e.store, keys, newRec, false);
+                        var newRec = Ext.create(e.store.model.modelName, newData);
+                        HQ.store.insertRecord(e.store, keys, newRec, false);
+                    }
                 }
             }
         },
@@ -307,7 +398,7 @@ var Event = {
                     HQ.message.show(20140811, e.column.text);
                     return false;
                 }
-                if (HQ.grid.checkDuplicate(e.grid, e, keys)) {
+                if (Process.checkDuplicate(e.grid, e, keys)) {
                     HQ.message.show(1112, e.value);
                     return false;
                 }

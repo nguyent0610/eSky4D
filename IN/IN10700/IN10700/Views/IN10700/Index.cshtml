@@ -64,6 +64,25 @@
             )
         )
 
+        @(Html.HQ().Store().ID("stoCheckForUpdate").AutoLoad(false)
+            .HQProcedure("IN10700_ppCheckForUpdate")
+            .HQParam(new StoreParameterCollection() { 
+                new StoreParameter("@BranchID","App.cboBranchID.getValue()",ParameterMode.Raw)
+                ,new StoreParameter("@SlsperID","App.cboSlsperID.getValue()",ParameterMode.Raw)
+                ,new StoreParameter("@CustID","App.cboCustID.getValue()",ParameterMode.Raw)
+                ,new StoreParameter("@StkType","App.cboStockType.getValue()",ParameterMode.Raw)
+                ,new StoreParameter("@StkOutDate","App.dtpStkOutDate.getValue()",ParameterMode.Raw)
+                ,new StoreParameter("@UserID","HQ.userName",ParameterMode.Raw)
+                ,new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw) 
+            })
+            .LoadData()
+            .Listeners(l =>
+                {
+                    l.Load.Fn = "Store.stoCheckForUpdate_load";                   
+                }
+            )
+        )
+
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 

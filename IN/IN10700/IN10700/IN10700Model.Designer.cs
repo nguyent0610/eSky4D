@@ -299,7 +299,7 @@ namespace IN10700
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> IN10700_ppStkOutNbr(global::System.String cpnyID, global::System.String userID, global::System.String branchID)
+        public ObjectResult<IN10700_ppStkOutNbr_Result> IN10700_ppStkOutNbr(global::System.String cpnyID, global::System.String userID, global::System.String branchID)
         {
             ObjectParameter cpnyIDParameter;
             if (cpnyID != null)
@@ -331,7 +331,70 @@ namespace IN10700
                 branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("IN10700_ppStkOutNbr", cpnyIDParameter, userIDParameter, branchIDParameter);
+            return base.ExecuteFunction<IN10700_ppStkOutNbr_Result>("IN10700_ppStkOutNbr", cpnyIDParameter, userIDParameter, branchIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="slsperID">No Metadata Documentation available.</param>
+        /// <param name="stkOutNbr">No Metadata Documentation available.</param>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Boolean>> IN10700_ppCheckForUpdate(global::System.String branchID, global::System.String slsperID, global::System.String stkOutNbr, global::System.String userID, global::System.String cpnyID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter slsperIDParameter;
+            if (slsperID != null)
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", slsperID);
+            }
+            else
+            {
+                slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
+            }
+    
+            ObjectParameter stkOutNbrParameter;
+            if (stkOutNbr != null)
+            {
+                stkOutNbrParameter = new ObjectParameter("StkOutNbr", stkOutNbr);
+            }
+            else
+            {
+                stkOutNbrParameter = new ObjectParameter("StkOutNbr", typeof(global::System.String));
+            }
+    
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("IN10700_ppCheckForUpdate", branchIDParameter, slsperIDParameter, stkOutNbrParameter, userIDParameter, cpnyIDParameter);
         }
 
         #endregion
@@ -2319,6 +2382,68 @@ namespace IN10700
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10700Model", Name="IN10700_ppStkOutNbr_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10700_ppStkOutNbr_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PrefixBat
+        {
+            get
+            {
+                return _PrefixBat;
+            }
+            set
+            {
+                OnPrefixBatChanging(value);
+                ReportPropertyChanging("PrefixBat");
+                _PrefixBat = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PrefixBat");
+                OnPrefixBatChanged();
+            }
+        }
+        private global::System.String _PrefixBat;
+        partial void OnPrefixBatChanging(global::System.String value);
+        partial void OnPrefixBatChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LastStkOutNbr
+        {
+            get
+            {
+                return _LastStkOutNbr;
+            }
+            set
+            {
+                OnLastStkOutNbrChanging(value);
+                ReportPropertyChanging("LastStkOutNbr");
+                _LastStkOutNbr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LastStkOutNbr");
+                OnLastStkOutNbrChanged();
+            }
+        }
+        private global::System.String _LastStkOutNbr;
+        partial void OnLastStkOutNbrChanging(global::System.String value);
+        partial void OnLastStkOutNbrChanged();
 
         #endregion
 

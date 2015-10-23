@@ -87,20 +87,28 @@ namespace IN10700.Controllers
                         var setup = _db.IN_Setup.FirstOrDefault(s => s.SetupID == "IN" && s.BranchID == inputStockOutlet.BranchID);
                         if (setup != null)
                         {
-                            inputStockOutlet.StkOutNbr = _db.IN10700_ppStkOutNbr(Current.CpnyID, Current.UserName, inputStockOutlet.BranchID).FirstOrDefault();
-                            var outletAuto = _db.PPC_StockOutlet.FirstOrDefault(c => c.StkOutNbr == inputStockOutlet.StkOutNbr && c.BranchID == inputStockOutlet.BranchID);
-                            if (outletAuto != null)
+                            var newStkOut = _db.IN10700_ppStkOutNbr(Current.CpnyID, Current.UserName, inputStockOutlet.BranchID).FirstOrDefault();
+                            if (newStkOut != null)
                             {
-                                throw new MessageException(MessageType.Message, "8001", "", new string[] { string.Format("{0}: {1}", Util.GetLang("StkOutNbr"), inputStockOutlet.StkOutNbr) });
-                            }
-                            //add new outlet
-                            updateStockOutlet(ref outlet, inputStockOutlet, true);
-                            _db.PPC_StockOutlet.AddObject(outlet);
+                                inputStockOutlet.StkOutNbr = newStkOut.PrefixBat + newStkOut.LastStkOutNbr;
 
-                            setup.LastStkOutNbr = outlet.StkOutNbr;
-                            setup.LUpd_DateTime = DateTime.Now;
-                            setup.LUpd_Prog = _screenNbr;
-                            setup.LUpd_User = Current.UserName;
+                                var outletAuto = _db.PPC_StockOutlet.FirstOrDefault(c => c.StkOutNbr == inputStockOutlet.StkOutNbr && c.BranchID == inputStockOutlet.BranchID);
+                                if (outletAuto != null)
+                                {
+                                    throw new MessageException(MessageType.Message, "8001", "", new string[] { string.Format("{0}: {1}", Util.GetLang("StkOutNbr"), inputStockOutlet.StkOutNbr) });
+                                }
+                                //add new outlet
+                                updateStockOutlet(ref outlet, inputStockOutlet, true);
+                                _db.PPC_StockOutlet.AddObject(outlet);
+
+                                setup.LastStkOutNbr = newStkOut.LastStkOutNbr;
+                                setup.LUpd_DateTime = DateTime.Now;
+                                setup.LUpd_Prog = _screenNbr;
+                                setup.LUpd_User = Current.UserName;
+                            }
+                            else {
+                                throw new MessageException(MessageType.Message, "89", "", new string[] { Util.GetLang("Setup") });
+                            }
                         }
                         else
                         {
@@ -190,7 +198,6 @@ namespace IN10700.Controllers
 
                 updatedDetail.InvtID = updated.InvtID;
                 updatedDetail.ExpDate = updated.ExpDate.PassMin().Date;
-                updatedDetail.ReasonID = updated.ReasonID;
 
                 updatedDetail.Crtd_DateTime = DateTime.Now;
                 updatedDetail.Crtd_Prog = _screenNbr;
@@ -201,6 +208,7 @@ namespace IN10700.Controllers
                 updatedDetail.ProdDate = new DateTime(1900, 1, 1);
             }
             updatedDetail.StkQty = updated.StkQty;
+            updatedDetail.ReasonID = updated.ReasonID;
 
             updatedDetail.LUpd_DateTime = DateTime.Now;
             updatedDetail.LUpd_Prog = _screenNbr;
