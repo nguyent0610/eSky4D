@@ -1,0 +1,92 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using IN10800;
+
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "IN10800";
+    var acc = Session["IN10800"] as AccessRight;
+    
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/IN10800.js")' type="text/javascript"></script>
+
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.dateNow = new Date('@DateTime.Now.Date');
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+
+        @(
+            X.Store().ID("stoStockOutlet").AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(IN10800_phStockOutlet_Result), "mdlStockOutlet", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetStockOutlet", "IN10800"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperID", "App.cboSlsperID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custID", "App.cboCustID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("stockType", "App.cboStockType.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("stkOutDate", "App.dtpStkOutDate.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(l =>
+                {
+                    l.Load.Fn = "Store.stoStockOutlet_load";                   
+                }
+            )
+        )
+
+        @(Html.HQ().Store().ID("stoCheckForUpdate").AutoLoad(false)
+            .HQProcedure("IN10800_ppCheckForUpdate")
+            .HQParam(new StoreParameterCollection() { 
+                new StoreParameter("@BranchID","App.cboBranchID.getValue()",ParameterMode.Raw)
+                ,new StoreParameter("@SlsperID","App.cboSlsperID.getValue()",ParameterMode.Raw)
+                ,new StoreParameter("@CustID","App.cboCustID.getValue()",ParameterMode.Raw)
+                ,new StoreParameter("@StkType","App.cboStockType.getValue()",ParameterMode.Raw)
+                ,new StoreParameter("@StkOutDate","App.dtpStkOutDate.getValue()",ParameterMode.Raw)
+                ,new StoreParameter("@UserID","HQ.userName",ParameterMode.Raw)
+                ,new StoreParameter("@CpnyID","HQ.cpnyID",ParameterMode.Raw) 
+            })
+            .LoadData()
+            .Listeners(l =>
+                {
+                    l.Load.Fn = "Store.stoCheckForUpdate_load";                   
+                }
+            )
+        )
+
+        @X.GridFilters() <!--Khi cache cho grid-->
+        @X.ProgressBarPager() <!--Khi cache cho grid -->
+
+        <!-- Gọi hàm Body trong IN10800Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>
