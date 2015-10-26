@@ -1,0 +1,86 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM24100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+X.Window().ID("winSuggest")
+.Title(Util.GetLang("Position"))
+.Icon(Icon.FlagGreen).Layout(LayoutType.Fit)
+.Hidden(true).Height(385).Width(635)
+.Modal(true).Resizable(false)
+.Items(
+    X.FormPanel().ID("frmMain_Suggest")
+    .Layout(LayoutType.Border)
+    .TrackResetOnLoad(true)
+    .DefaultAnchor("100%")
+    .BodyPadding(5).AutoScroll(true)
+    .BodyBorder(0)//.BodyStyle("BodyStyle='background: none;'")
+    .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+    .Items(
+        X.Container().Layout(LayoutType.VBox)
+        .Region(Region.North)
+        //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+        .Items(
+            X.Container().Layout(LayoutType.HBox)
+            .Items(
+                X.Container().Layout(LayoutType.VBox)
+                .Items(
+                    HQ.TextBox().ID("txtCustID_Suggest").Width(300)
+                    .HQLangCode("CustID").DataIndex("CustId").ReadOnly(true)
+            
+                    ,HQ.TextBox().ID("txtCustName_Suggest").Width(300)
+                    .HQLangCode("CustName").DataIndex("CustName").ReadOnly(true)
+                )
+            
+                ,X.TextArea().ID("txtAddr_Suggest")
+                .Width(300).Height(50).MarginSpec("0 0 0 10")
+                .DataIndex("Addr").ReadOnly(true)//.FieldLabel(Util.GetLang("Address"))
+            )
+            
+            , X.DisplayField().Text(Message.GetString("20150619",null))
+        )
+        
+        ,X.Container().Layout(LayoutType.HBox)
+        .Region(Region.Center)
+        .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top, Pack=BoxPack.Center })
+        .Items(
+            X.Panel()
+            .Title(Util.GetLang("Before"))
+            .Layout(LayoutType.Fit)
+            .Items(
+                X.Image().ID("imgMarkerOld_Suggest")
+                .Width(300).Height(200)
+                .ImageUrl("https://maps.googleapis.com/maps/api/staticmap?zoom=16&size=300x200&maptype=roadmap&markers=color:red%7Clabel:B%7C10.782526,106.65406")
+            )
+            
+            ,X.Panel().MarginSpec("0 0 0 5")
+            .Title(Util.GetLang("After"))
+            .Items(
+                X.Image().ID("imgMarkerNew_Suggest")
+                .Width(300).Height(200)
+                .ImageUrl("https://maps.googleapis.com/maps/api/staticmap?zoom=16&size=300x200&maptype=roadmap&markers=color:green%7Clabel:A%7C10.782526,106.65406")
+            )
+        )
+        
+        ,X.Container().Layout(LayoutType.HBox)
+        .Region(Region.South)
+        .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Stretch, Pack = BoxPack.Center })
+        .Items(
+            HQ.Button().ID("btnUpdate_Suggest")
+            .HQLangCode("Update").Icon(Icon.Tick)
+            .Handler("Event.Form.btnUpdate_Suggest_click")
+            
+            ,HQ.Button().ID("btnCancel_Suggest").MarginSpec("0 0 0 5")
+            .HQLangCode("Cancel").Icon(Icon.Decline)
+            .Handler("App.winSuggest.close()")
+        )
+    )
+)
+)
