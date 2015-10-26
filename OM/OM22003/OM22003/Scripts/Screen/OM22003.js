@@ -1,9 +1,9 @@
 var _beginStatus = "H";
-var _Pass = { Dat: "Dat", KhongDat: "KhongDat"};
+var _Pass = { Dat: "Dat", KhongDat: "KhongDat" };
 
 var Process = {
     renderStatus: function (value) {
-        var record = App.cboStatus.store.findRecord("Code",value);
+        var record = App.cboStatus.store.findRecord("Code", value);
         if (record) {
             return record.data.Descr;
         }
@@ -100,6 +100,20 @@ var Process = {
             });
         }
     },
+
+    joinParams: function (multiCombo) {
+        var returnValue = "";
+        if (multiCombo.value && multiCombo.value.length) {
+            returnValue = multiCombo.value.join();
+        }
+        else {
+            if (multiCombo.getValue()) {
+                returnValue = multiCombo.rawValue;
+            }
+        }
+
+        return returnValue;
+    }
 };
 
 var Store = {
@@ -113,8 +127,20 @@ var Store = {
 var Event = {
     Form: {
         frmMain_boxReady: function () {
-            //App.dtpFromDate.setValue(HQ.dateNow);
-            //App.dtpToDate.setValue(HQ.dateNow);
+            App.dtpFromDate.setValue(HQ.dateNow);
+            App.dtpToDate.setValue(HQ.dateNow);
+        },
+
+        cboZone_change: function (cbo, newValue, oldValue, eOpts) {
+            App.cboTerritory.store.reload();
+        },
+
+        cboTerritory_change: function (cbo, newValue, oldValue, eOpts) {
+            App.cboCpny.store.reload();
+        },
+
+        cboCpny_change: function (cbo, newValue, oldValue, eOpts) {
+            App.cboDisplayID.store.reload();
         },
 
         dtpFromDate_change: function (dtp, newValue, oldValue, eOpts) {
@@ -181,7 +207,7 @@ var Event = {
                     App.grdDet.store.reload();
                     break;
                 case "save":
-                    
+
                     break;
             }
         }
@@ -195,7 +221,7 @@ var Event = {
             //    grd.getView().focusRow(grd.getStore().getCount() - 1);
             //    grd.getSelectionModel().select(grd.getStore().getCount() - 1);
             //} else {
-                record.reject();
+            record.reject();
             //}
         },
 

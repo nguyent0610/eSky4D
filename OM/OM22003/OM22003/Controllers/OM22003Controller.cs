@@ -57,12 +57,13 @@ namespace OM22003.Controllers
             return PartialView();
         }
 
-        public ActionResult GetDet(string zone, string territory, string cpnyID,
-            string displayID)
+        public ActionResult GetDet(string zone, string territory, string cpnyID, string displayID, DateTime? fromDate, DateTime? toDate)
         {
-            var dets = _db.OM22003_pgAppraise(zone, territory, cpnyID, displayID).ToList();
+            var dets = _db.OM22003_pgAppraise(zone, territory, cpnyID, displayID, fromDate, toDate).ToList();
             return this.Store(dets);
         }
+
+
 
         public ActionResult GetImage(string branchID, string custID, 
             string displayID, string slsperID, int width = 150, int height = 100)
@@ -152,6 +153,23 @@ namespace OM22003.Controllers
             return lineRef;
         }
 
+        public ActionResult Download(string fileName)
+        {
+            string path = this.FilePath + @"\" + fileName;
+            if (System.IO.File.Exists(path))
+            {
+                FileStream input = new FileStream(path, FileMode.Open, FileAccess.Read);
+                BinaryReader reader = new BinaryReader(input);
+                byte[] inArray = reader.ReadBytes((int)input.Length);
+                reader.Close();
+                string str2 = Convert.ToBase64String(inArray, 0, inArray.Length);
+                return new FileContentResult(inArray, "image/jpeg");
+            }
+            return null;
+        }
+
+
+
         //private string imageToBin(string fileName)
         //{
         //    string bin = string.Empty;
@@ -170,5 +188,22 @@ namespace OM22003.Controllers
 
         //    return bin;
         //} 
+
+        private string imageToBin(string fileName)
+        {
+            string str = string.Empty;
+            string path = this.FilePath + @"\" + fileName;
+            if (System.IO.File.Exists(path))
+            {
+                FileStream input = new FileStream(path, FileMode.Open, FileAccess.Read);
+                BinaryReader reader = new BinaryReader(input);
+                byte[] inArray = reader.ReadBytes((int)input.Length);
+                reader.Close();
+                string str3 = Convert.ToBase64String(inArray, 0, inArray.Length);
+                str = "data:image/jpg;base64," + str3;
+            }
+            return str;
+        }
+
     }
 }

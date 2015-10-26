@@ -104,7 +104,9 @@ namespace OM22003
         /// <param name="territory">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="displayID">No Metadata Documentation available.</param>
-        public ObjectResult<OM22003_pgAppraise_Result> OM22003_pgAppraise(global::System.String zone, global::System.String territory, global::System.String branchID, global::System.String displayID)
+        /// <param name="fromDate">No Metadata Documentation available.</param>
+        /// <param name="toDate">No Metadata Documentation available.</param>
+        public ObjectResult<OM22003_pgAppraise_Result> OM22003_pgAppraise(global::System.String zone, global::System.String territory, global::System.String branchID, global::System.String displayID, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate)
         {
             ObjectParameter zoneParameter;
             if (zone != null)
@@ -146,7 +148,27 @@ namespace OM22003
                 displayIDParameter = new ObjectParameter("DisplayID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM22003_pgAppraise_Result>("OM22003_pgAppraise", zoneParameter, territoryParameter, branchIDParameter, displayIDParameter);
+            ObjectParameter fromDateParameter;
+            if (fromDate.HasValue)
+            {
+                fromDateParameter = new ObjectParameter("FromDate", fromDate);
+            }
+            else
+            {
+                fromDateParameter = new ObjectParameter("FromDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter toDateParameter;
+            if (toDate.HasValue)
+            {
+                toDateParameter = new ObjectParameter("ToDate", toDate);
+            }
+            else
+            {
+                toDateParameter = new ObjectParameter("ToDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<OM22003_pgAppraise_Result>("OM22003_pgAppraise", zoneParameter, territoryParameter, branchIDParameter, displayIDParameter, fromDateParameter, toDateParameter);
         }
     
         /// <summary>
@@ -804,7 +826,8 @@ namespace OM22003
         /// <param name="displayID">Initial value of the DisplayID property.</param>
         /// <param name="levelID">Initial value of the LevelID property.</param>
         /// <param name="custName">Initial value of the CustName property.</param>
-        public static OM22003_pgAppraise_Result CreateOM22003_pgAppraise_Result(global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String displayID, global::System.String levelID, global::System.String custName)
+        /// <param name="pass">Initial value of the Pass property.</param>
+        public static OM22003_pgAppraise_Result CreateOM22003_pgAppraise_Result(global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String displayID, global::System.String levelID, global::System.String custName, global::System.String pass)
         {
             OM22003_pgAppraise_Result oM22003_pgAppraise_Result = new OM22003_pgAppraise_Result();
             oM22003_pgAppraise_Result.BranchID = branchID;
@@ -813,6 +836,7 @@ namespace OM22003
             oM22003_pgAppraise_Result.DisplayID = displayID;
             oM22003_pgAppraise_Result.LevelID = levelID;
             oM22003_pgAppraise_Result.CustName = custName;
+            oM22003_pgAppraise_Result.Pass = pass;
             return oM22003_pgAppraise_Result;
         }
 
@@ -1111,7 +1135,7 @@ namespace OM22003
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Pass
         {
@@ -1123,7 +1147,7 @@ namespace OM22003
             {
                 OnPassChanging(value);
                 ReportPropertyChanging("Pass");
-                _Pass = StructuralObject.SetValidValue(value, true);
+                _Pass = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Pass");
                 OnPassChanged();
             }
@@ -1179,6 +1203,30 @@ namespace OM22003
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
 
         #endregion
 

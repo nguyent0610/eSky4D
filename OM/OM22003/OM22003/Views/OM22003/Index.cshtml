@@ -138,6 +138,8 @@
                 ps.Add(new StoreParameter("territory", "App.cboTerritory.getValue().join(',')", ParameterMode.Raw));
                 ps.Add(new StoreParameter("cpnyID", "App.cboCpny.getValue().join(',')", ParameterMode.Raw));
                 ps.Add(new StoreParameter("displayID", "App.cboDisplayID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("fromDate", "App.dtpFromDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("toDate", "App.dtpToDate.getValue()", ParameterMode.Raw));
             })      
             //.Listeners(p=>p.Load.Fn="Store.stoDet_load" )
             // Store: stoDet
@@ -172,7 +174,7 @@
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 
-        <!-- Gọi hàm Body trong OM22003Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        <!-- Gá»i hÃ m Body trong OM22003Controller Ä‘á»ƒ dá»±ng view Body.cshtml, má»¥c Ä‘Ã­ch táº¡o cache. -->
         @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
     </body>
 </html>

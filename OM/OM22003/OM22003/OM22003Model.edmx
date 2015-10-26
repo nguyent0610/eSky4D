@@ -42,6 +42,8 @@
           <Parameter Name="Territory" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="BranchID" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="DisplayID" Type="varchar" Mode="In" />
+          <Parameter Name="FromDate" Type="date" Mode="In" />
+          <Parameter Name="ToDate" Type="date" Mode="In" />
         </Function>
         <Function Name="OM22003_pgImage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -59,6 +61,8 @@
             <Parameter Name="Territory" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="DisplayID" Mode="In" Type="String" />
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="OM22003_pgImage" ReturnType="Collection(OM22003Model.OM22003_pgImage_Result)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
@@ -81,9 +85,10 @@
           <Property Type="String" Name="SoMatTB" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="DisplayType" Nullable="true" MaxLength="2" />
           <Property Type="String" Name="LocID" Nullable="true" MaxLength="2" />
-          <Property Type="String" Name="Pass" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Pass" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="Remark" Nullable="true" MaxLength="200" />
           <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="500" />
           </ComplexType>
         <ComplexType Name="OM22003_pgImage_Result">
           <Property Type="String" Name="ImageName" Nullable="true" MaxLength="500" />
@@ -143,6 +148,7 @@
                 <ScalarProperty Name="Pass" ColumnName="Pass" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
                 </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
