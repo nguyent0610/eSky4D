@@ -10,6 +10,9 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
+using System.Reflection;
+using System.Collections;
+using System.Runtime.Caching;
 namespace SA00900.Controllers
 {
     [DirectController]
@@ -28,6 +31,7 @@ namespace SA00900.Controllers
         [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
+            
             return PartialView();
         }
         public ActionResult GetSYS_Language()
@@ -37,9 +41,23 @@ namespace SA00900.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
+           
             try
             {
-
+               
+               //// Response.RemoveOutputCacheItem(Url.Action("Index", "SA00900", null));
+               //// OutputCacheAttribute.ChildActionCache = new MemoryCache("NewDefault");
+               //////OutputCacheAttribute.ChildActionCache = new MemoryCache("NewDefault")
+               // var lst = OutputCacheAttribute.ChildActionCache;
+               // foreach (var obj in lst.ToList())
+               // {
+               //     OutputCacheAttribute.ChildActionCache.Remove(obj.Key);
+               // }
+               // Response.Clear();
+               // Response.Cache.SetExpires(DateTime.Now);
+               // Response.ClearContent();
+               
+               
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Language"]);
                 ChangeRecords<SA00900_pgLoadSYS_Language_Result> lstLang = dataHandler.BatchObjectData<SA00900_pgLoadSYS_Language_Result>();
                 foreach (SA00900_pgLoadSYS_Language_Result deleted in lstLang.Deleted)
@@ -83,7 +101,7 @@ namespace SA00900.Controllers
                 ExportLangJS(1);
                 ExportLangJS(2);
                 ExportLangJS(3);
-
+              
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -150,5 +168,6 @@ namespace SA00900.Controllers
 
 
         }
+     
     }
 }

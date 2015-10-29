@@ -23,6 +23,7 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdSYS_Language);
             break;
         case "refresh":
+	
             if (HQ.isChange) {
                 HQ.message.show(20150303, '', 'refresh');
             }
