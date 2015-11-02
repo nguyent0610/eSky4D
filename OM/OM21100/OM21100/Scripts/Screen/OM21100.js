@@ -88,8 +88,8 @@ var Main = {
         },
 
         reloadAllData: function () {
-            App.cboDiscID.store.reload();
-            App.cboDiscSeq.store.reload();
+            App.cboDiscID.store.load();
+            App.cboDiscSeq.store.load();
             App.stoDiscInfo.reload();
             App.stoDiscSeqInfo.reload();
         },
@@ -406,7 +406,7 @@ var Main = {
                         else {
                             HQ.message.show(201405071);
                         }
-                        App.cboDiscSeq.store.reload();
+                        App.cboDiscSeq.store.load();
                         App.stoDiscSeqInfo.reload();
                     },
                     failure: function (msg, data) {
@@ -967,15 +967,18 @@ var DiscDefintion = {
         cboDiscID_change: function (cbo, newValue, oldValue, eOpts) {
             //var selRec = HQ.store.findInStore(cbo.store, ["DiscID"], [cbo.getValue()]);
             //if (selRec || !_isNewDisc) {
-            if (cbo.getValue() != _discLoad && !cbo.hasFocus) {
+            if (HQ.util.passNull(cbo.getValue()) != _discLoad && !cbo.hasFocus) {
                 App.stoDiscInfo.reload();
                 App.cboDiscSeq.store.load(function () {
                     if (App.cboDiscSeq.store.getCount()) {
                         var discSeqValue = App.cboDiscSeq.store.getAt(0).data.DiscSeq;
                         if (discSeqValue == App.cboDiscSeq.getValue()) {
-                            App.cboDiscSeq.clearValue();
+                            App.cboDiscSeq.setValue(discSeqValue);
+                            App.stoDiscSeqInfo.reload();
                         }
-                        App.cboDiscSeq.setValue(discSeqValue);
+                        else {
+                            App.cboDiscSeq.setValue(discSeqValue);
+                        }
                     }
                     else {
                         App.cboDiscSeq.clearValue();
@@ -983,6 +986,25 @@ var DiscDefintion = {
                 });
             }
             //}
+        },
+
+        cboDiscID_select: function (cbo, newValue, oldValue, eOpts) {
+            App.stoDiscInfo.reload();
+            App.cboDiscSeq.store.load(function () {
+                if (App.cboDiscSeq.store.getCount()) {
+                    var discSeqValue = App.cboDiscSeq.store.getAt(0).data.DiscSeq;
+                    if (discSeqValue == App.cboDiscSeq.getValue()) {
+                        App.cboDiscSeq.setValue(discSeqValue);
+                        App.stoDiscSeqInfo.reload();
+                    }
+                    else {
+                        App.cboDiscSeq.setValue(discSeqValue);
+                    }
+                }
+                else {
+                    App.cboDiscSeq.clearValue();
+                }
+            });
         },
 
         cboDiscType_change: function (cbo, newValue, oldValue, eOpts) {
@@ -1029,7 +1051,7 @@ var DiscDefintion = {
             App.cboDiscClass.clearValue();
             App.cboDiscClass.store.load(function () {
                 if (frmRec.data.tstamp) {
-                    App.cboDiscClass.setValue(frmRec.data.DiscClass);
+                    App.cboDiscClass.setValue(frmRec.raw.DiscClass);
                 }
             });
         },
@@ -1089,10 +1111,14 @@ var DiscDefintion = {
         cboDiscSeq_change: function (cbo, newValue, oldValue, eOpts) {
             //var selRec = HQ.store.findInStore(cbo.store, ["DiscSeq"], [cbo.getValue()]);
             //if (selRec || !_isNewSeq) {
-            if (cbo.getValue() != _seqLoad && !cbo.hasFocus) {
+            if (HQ.util.passNull(cbo.getValue()) != _seqLoad && !cbo.hasFocus) {
                 App.stoDiscSeqInfo.reload();
             }
             //}
+        },
+
+        cboDiscSeq_change: function (cbo, newValue, oldValue, eOpts) {
+            App.stoDiscSeqInfo.reload();
         },
 
         cboDiscFor_change: function (cbo, newValue, oldValue, eOpts) {
