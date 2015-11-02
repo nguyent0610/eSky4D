@@ -6217,8 +6217,7 @@ namespace OM10100.Controllers
         public ActionResult GetOrder(string branchID, string orderType, string query, int start, int limit, int page)
         {
             query = query ?? string.Empty;
-            if (page != 1) query = string.Empty;
-            var lstOrder = _app.OM10100_pcOrder(branchID, orderType, query, start, start + 20).ToList();
+            var lstOrder = _app.OM10100_pcOrder(branchID, orderType, query, start + 1, start + limit).ToList();
             var paging = new Paging<OM10100_pcOrder_Result>(lstOrder, lstOrder.Count > 0 ? lstOrder[0].TotalRecords.Value : 0);
             return this.Store(paging.Data, paging.TotalRecords);
         }

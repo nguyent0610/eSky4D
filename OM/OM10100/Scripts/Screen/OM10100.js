@@ -25,6 +25,12 @@ var stoOrder_Load = function () {
         bindOrder(record);
     }
 }
+var stoOrder_BeforeLoad = function (store, operation) {
+    if (operation.params != undefined) {
+        operation.params.query = App.cboOrderNbr.getValue();
+    }
+    App.cboOrderNbr.forceSelection = false;
+}
 var stoDetail_Load = function () {
     checkSourceDetail();
 }
@@ -370,6 +376,7 @@ var menuClick = function (command) {
             break;
         case "refresh":
             if (!Ext.isEmpty(App.cboOrderNbr.getValue())) {
+                App.stoOrder.forceLoad = true;
                 App.stoOrder.reload();
             } else {
                 defaultOnNew();
@@ -708,6 +715,7 @@ var cboOrderType_Change = function (item, newValue, oldValue) {
     } else {
         HQ.objType = App.create('App.mdlOrderType').data;
     }
+    App.stoOrder.forceLoad = true;
     defaultOnNew();
 }
 var cboStatus_Change = function (item, newValue, oldValue) {
@@ -1066,6 +1074,7 @@ var bindTran = function () {
     setChange(false);
 }
 var bindOrder = function (record) {
+    App.stoOrder.forceLoad = false;
     HQ.objOrder = record;
 
     App.cboOrderType.events['change'].suspend();
@@ -1110,6 +1119,7 @@ var bindOrder = function (record) {
     }
 
     App.cboHandle.setValue('N');
+    App.cboOrderNbr.forceSelection = true
 }
 var bindDetail = function () {
 
@@ -1623,7 +1633,8 @@ var deleteDet = function (item) {
 
                     HQ.message.process(msg, data, true);
                     App.grdOrdDet.deleteSelected();
-                    App.stoOrder.load();
+                    App.stoOrder.forceLoad = true;
+                    App.stoOrder.reload();
 
                 },
                 failure: function (msg, data) {
@@ -2241,8 +2252,9 @@ var updateDistPctAmt = function () {
 }
 
 var defaultOnNew = function () {
-    var record = Ext.create('App.mdlOrder');
 
+    var record = Ext.create('App.mdlOrder');
+  
     if (Ext.isEmpty(App.cboOrderType.getValue())) {
         App.cboOrderType.events['change'].suspend();
         App.cboOrderType.setValue('IN');
@@ -2269,6 +2281,8 @@ var defaultOnNew = function () {
     App.frmMain.validate();
 
     bindOrder(record);
+
+    App.stoOrder.reload();
 }
 
 var orderTypeContrainst = function () {

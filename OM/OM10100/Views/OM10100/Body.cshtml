@@ -13,6 +13,7 @@
 
 @(
     X.Store().ID("stoOrder")
+    .PageSize(20)
     .Model(Util.GenerateModel(typeof(OM10100_pcOrder_Result),"mdlOrder","OrderNbr"))
     .Proxy(
         X.AjaxProxy()
@@ -22,6 +23,7 @@
     .Listeners(p =>
     {
         p.Load.Fn = "stoOrder_Load";
+        p.BeforeLoad.Fn = "stoOrder_BeforeLoad";
     })
     .Parameters(ps => { 
         ps.Add(new StoreParameter("orderType", "App.cboOrderType.getValue()", ParameterMode.Raw));
