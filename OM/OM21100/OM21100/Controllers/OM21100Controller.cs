@@ -1236,11 +1236,11 @@ namespace OM21100.Controllers
 
             foreach (var deleted in lstDiscCustChange.Deleted)
             {
-                var deletedDiscItem = _db.OM_DiscItem.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
-                    && p.DiscSeq == inputSeq.DiscSeq && p.InvtID == deleted.CustID);
+                var deletedDiscItem = _db.OM_DiscCust.FirstOrDefault(p => p.DiscID == inputSeq.DiscID
+                    && p.DiscSeq == inputSeq.DiscSeq && p.CustID == deleted.CustID);
                 if (deletedDiscItem != null)
                 {
-                    _db.OM_DiscItem.DeleteObject(deletedDiscItem);
+                    _db.OM_DiscCust.DeleteObject(deletedDiscItem);
                 }
             }
 
