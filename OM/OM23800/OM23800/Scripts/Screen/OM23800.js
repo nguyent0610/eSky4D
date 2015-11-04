@@ -543,7 +543,7 @@ var McpCusts = {
     },
 
     btnCancelMcpCusts_click: function (btn, eOpts) {
-
+        App.winMcpCusts.close();
     }
 };
 
@@ -773,7 +773,9 @@ var Gmap = {
         directionsDisplays: [],
         infoWindow: {},
         stopMarkers: [],
-        drawingManager: {}
+        drawingManager: {},
+        overlays: [],
+        labels: []
     },
 
     Process: {
@@ -793,129 +795,138 @@ var Gmap = {
             Gmap.Declare.infoWindow = new google.maps.InfoWindow();
 
             Gmap.Declare.stopMarkers = [];
+            Gmap.Declare.overlays = [];
+            Gmap.Declare.labels = [];
         },
 
         prepairDrawing: function () {
-            //var triangleCoords = [
-            //    { lat: 25.774, lng: -80.190 },
-            //    { lat: 18.466, lng: -66.118 },
-            //    { lat: 32.321, lng: -64.757 }
-            //];
-            Gmap.Declare.drawingManager = new google.maps.drawing.DrawingManager({
-                //drawingMode: google.maps.drawing.OverlayType.MARKER,
-                drawingControl: true,
-                drawingControlOptions: {
-                    position: google.maps.ControlPosition.TOP_CENTER,
-                    drawingModes: [
-                      //google.maps.drawing.OverlayType.MARKER,
-                      //google.maps.drawing.OverlayType.CIRCLE,
-                      google.maps.drawing.OverlayType.POLYGON
-                      //google.maps.drawing.OverlayType.POLYLINE,
-                      //google.maps.drawing.OverlayType.RECTANGLE
-                    ]
-                },
-                circleOptions: {
-                    //paths: triangleCoords,
-                    fillColor: '#ffff00',
-                    fillOpacity: 0,
-                    strokeWeight: 5,
-                    clickable: true,
-                    editable: true,
-                    zIndex: 1
-                }//,
-                //paths: triangleCoords
-            });
-            Gmap.Declare.drawingManager.setMap(Gmap.Declare.map);
-
-            if (!google.maps.Polygon.prototype.getBounds) {
-                google.maps.Polygon.prototype.getBounds = function () {
-                    var bounds = new google.maps.LatLngBounds();
-                    this.getPath().forEach(function (element, index) {
-                        bounds.extend(element);
-                    });
-                    return bounds;
-                }
+            if (Gmap.Declare.drawingManager.drawingControl) {
+                Gmap.Declare.drawingManager.setMap(Gmap.Declare.map);
             }
+            else{
+                //var triangleCoords = [
+                //    { lat: 25.774, lng: -80.190 },
+                //    { lat: 18.466, lng: -66.118 },
+                //    { lat: 32.321, lng: -64.757 }
+                //];
+                Gmap.Declare.drawingManager = new google.maps.drawing.DrawingManager({
+                    //drawingMode: google.maps.drawing.OverlayType.MARKER,
+                    drawingControl: true,
+                    drawingControlOptions: {
+                        position: google.maps.ControlPosition.TOP_CENTER,
+                        drawingModes: [
+                          //google.maps.drawing.OverlayType.MARKER,
+                          //google.maps.drawing.OverlayType.CIRCLE,
+                          google.maps.drawing.OverlayType.POLYGON
+                          //google.maps.drawing.OverlayType.POLYLINE,
+                          //google.maps.drawing.OverlayType.RECTANGLE
+                        ]
+                    },
+                    circleOptions: {
+                        //paths: triangleCoords,
+                        fillColor: '#ffff00',
+                        fillOpacity: 0,
+                        strokeWeight: 5,
+                        clickable: true,
+                        editable: true,
+                        zIndex: 1
+                    }//,
+                    //paths: triangleCoords
+                });
+                Gmap.Declare.drawingManager.setMap(Gmap.Declare.map);
 
-            // Polygon containsLatLng - method to determine if a latLng is within a polygon
-            google.maps.Polygon.prototype.containsLatLng = function (latLng) {
-                // Exclude points outside of bounds as there is no way they are in the poly
-                var lat, lng;
-                //arguments are a pair of lat, lng variables
-                if (arguments.length == 2) {
-                    if (typeof arguments[0] == "number" && typeof arguments[1] == "number") {
-                        lat = arguments[0];
-                        lng = arguments[1];
+                if (!google.maps.Polygon.prototype.getBounds) {
+                    google.maps.Polygon.prototype.getBounds = function () {
+                        var bounds = new google.maps.LatLngBounds();
+                        this.getPath().forEach(function (element, index) {
+                            bounds.extend(element);
+                        });
+                        return bounds;
                     }
-                } else if (arguments.length == 1) {
-                    var bounds = this.getBounds();
-
-                    if (bounds !== null && !bounds.contains(latLng)) {
-                        return false;
-                    }
-                    lat = latLng.lat();
-                    lng = latLng.lng();
-                } else {
-                    console.log("Wrong number of inputs in google.maps.Polygon.prototype.contains.LatLng");
                 }
 
-                // Raycast point in polygon method
-                var inPoly = false;
+                // Polygon containsLatLng - method to determine if a latLng is within a polygon
+                google.maps.Polygon.prototype.containsLatLng = function (latLng) {
+                    // Exclude points outside of bounds as there is no way they are in the poly
+                    var lat, lng;
+                    //arguments are a pair of lat, lng variables
+                    if (arguments.length == 2) {
+                        if (typeof arguments[0] == "number" && typeof arguments[1] == "number") {
+                            lat = arguments[0];
+                            lng = arguments[1];
+                        }
+                    } else if (arguments.length == 1) {
+                        var bounds = this.getBounds();
 
-                var numPaths = this.getPaths().getLength();
-                for (var p = 0; p < numPaths; p++) {
-                    var path = this.getPaths().getAt(p);
-                    var numPoints = path.getLength();
-                    var j = numPoints - 1;
+                        if (bounds !== null && !bounds.contains(latLng)) {
+                            return false;
+                        }
+                        lat = latLng.lat();
+                        lng = latLng.lng();
+                    } else {
+                        console.log("Wrong number of inputs in google.maps.Polygon.prototype.contains.LatLng");
+                    }
 
-                    for (var i = 0; i < numPoints; i++) {
-                        var vertex1 = path.getAt(i);
-                        var vertex2 = path.getAt(j);
+                    // Raycast point in polygon method
+                    var inPoly = false;
 
-                        if (vertex1.lng() < lng && vertex2.lng() >= lng || vertex2.lng() < lng && vertex1.lng() >= lng) {
-                            if (vertex1.lat() + (lng - vertex1.lng()) / (vertex2.lng() - vertex1.lng()) * (vertex2.lat() - vertex1.lat()) < lat) {
-                                inPoly = !inPoly;
+                    var numPaths = this.getPaths().getLength();
+                    for (var p = 0; p < numPaths; p++) {
+                        var path = this.getPaths().getAt(p);
+                        var numPoints = path.getLength();
+                        var j = numPoints - 1;
+
+                        for (var i = 0; i < numPoints; i++) {
+                            var vertex1 = path.getAt(i);
+                            var vertex2 = path.getAt(j);
+
+                            if (vertex1.lng() < lng && vertex2.lng() >= lng || vertex2.lng() < lng && vertex1.lng() >= lng) {
+                                if (vertex1.lat() + (lng - vertex1.lng()) / (vertex2.lng() - vertex1.lng()) * (vertex2.lat() - vertex1.lat()) < lat) {
+                                    inPoly = !inPoly;
+                                }
+                            }
+
+                            j = i;
+                        }
+                    }
+
+                    return inPoly;
+                }
+
+                // sau khi ve xong: lay ds khach hang trong khung
+                google.maps.event.addListener(Gmap.Declare.drawingManager, 'overlaycomplete', function (event) {
+                    if (event.type == google.maps.drawing.OverlayType.POLYGON) {
+                        var custIDs = [];
+                        var listMcpCusts = [];
+                        for (var i = 0; i < Gmap.Declare.stopMarkers.length; i++) {
+                            if (event.overlay.containsLatLng(Gmap.Declare.stopMarkers[i].position)) {
+                                custIDs.push(Gmap.Declare.stopMarkers[i].custId);
+                                var mcpCustRec = Gmap.Declare.stopMarkers[i].record;
+                                //var mcpCustData = HQ.store.findInStore(App.stoMCPCusts, ["CustId", "SlsperId", "BranchID"], [mcpCustRec.data.CustId, mcpCustRec.data.SlsperId, mcpCustRec.data.BranchID]);
+                                //if (!mcpCustData) {
+                                listMcpCusts.push(mcpCustRec);
+                                //}
                             }
                         }
-
-                        j = i;
-                    }
-                }
-
-                return inPoly;
-            }
-
-            // sau khi ve xong: lay ds khach hang trong khung
-            google.maps.event.addListener(Gmap.Declare.drawingManager, 'overlaycomplete', function (event) {
-                if (event.type == google.maps.drawing.OverlayType.POLYGON) {
-                    var custIDs = [];
-                    var listMcpCusts = [];
-                    for (var i = 0; i < Gmap.Declare.stopMarkers.length; i++) {
-                        if (event.overlay.containsLatLng(Gmap.Declare.stopMarkers[i].position)) {
-                            custIDs.push(Gmap.Declare.stopMarkers[i].custId);
-                            var mcpCustRec = Gmap.Declare.stopMarkers[i].record;
-                            //var mcpCustData = HQ.store.findInStore(App.stoMCPCusts, ["CustId", "SlsperId", "BranchID"], [mcpCustRec.data.CustId, mcpCustRec.data.SlsperId, mcpCustRec.data.BranchID]);
-                            //if (!mcpCustData) {
-                            listMcpCusts.push(mcpCustRec);
-                            //}
+                        if (custIDs.length) {
+                            var labelPoint = event.overlay.getPath().getAt(0);
+                            var label = new MarkerWithLabel({
+                                icon: " ",
+                                position: labelPoint,
+                                draggable: false,
+                                map: Gmap.Declare.map,
+                                labelContent: custIDs.length.toString(),
+                                labelAnchor: new google.maps.Point(22, 0),
+                                labelClass: "labels", // the CSS class for the label
+                                labelStyle: { opacity: 0.75 }
+                            });
                         }
+                        Gmap.Declare.overlays.push(event.overlay);
+                        Gmap.Declare.labels.push(label);
+                        Gmap.Process.showContextMenu(Gmap.Declare.map, event.overlay, label, custIDs, listMcpCusts);
                     }
-                    if (custIDs.length) {
-                        var labelPoint = event.overlay.getPath().getAt(0);
-                        var label = new MarkerWithLabel({
-                            icon: " ",
-                            position: labelPoint,
-                            draggable: false,
-                            map: Gmap.Declare.map,
-                            labelContent: custIDs.length.toString(),
-                            labelAnchor: new google.maps.Point(22, 0),
-                            labelClass: "labels", // the CSS class for the label
-                            labelStyle: { opacity: 0.75 }
-                        });
-                    }
-                    Gmap.Process.showContextMenu(Gmap.Declare.map, event.overlay, label, custIDs, listMcpCusts);
-                }
-            });
+                });
+            }
         },
 
         showContextMenu: function (objMap, polygon, label, custIDs, listMcpCusts) {
@@ -1081,7 +1092,15 @@ var Gmap = {
             Gmap.Declare.directionsDisplay = new google.maps.DirectionsRenderer();
         },
 
-        clearMap: function (stopMarkers) {
+        clearMap: function (stopMarkers, overlays, labels) {
+            for (i = 0; i < overlays.length; i++) {
+                overlays[i].setMap(null);
+            }
+
+            for (i = 0; i < labels.length; i++) {
+                labels[i].setMap(null);
+            }
+
             for (i = 0; i < stopMarkers.length; i++) {
                 stopMarkers[i].setMap(null);
 
@@ -1094,7 +1113,7 @@ var Gmap = {
 
         drawMCP: function (markers, hightLight, isMcp) {
             Gmap.Process.prepairMap();
-            Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
+            Gmap.Process.clearMap(Gmap.Declare.stopMarkers, Gmap.Declare.overlays, Gmap.Declare.labels);
 
             if (markers.length > 0) {
                 Gmap.Declare.stopMarkers = [];
@@ -1177,7 +1196,7 @@ var Gmap = {
                 //directionsDisplay.setOptions({ suppressMarkers: true });
             }
             else {
-                Gmap.Process.clearMap(Gmap.Declare.stopMarkers);
+                Gmap.Process.clearMap(Gmap.Declare.stopMarkers, Gmap.Declare.overlays, Gmap.Declare.labels);
             }
         },
     }
