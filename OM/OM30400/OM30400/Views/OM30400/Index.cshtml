@@ -163,11 +163,11 @@
         )
 
         @(
-            X.Store().ID("storeGridActualVisit")
+            X.Store().ID("storeMapActualVisit")
             //.RemotePaging(true).PageSize(50)
             .AutoLoad(false)
             .Model(Util.GenerateModel(typeof(OM30400_pgGridActualVisit_Result),"OM30400GridActualVisit_ResultModel",""))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadGridActualVisit")))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadMapActualVisit")))
             .Parameters(ps=>{
                 ps.Add(new StoreParameter("distributor", "Index.joinParams(App.cboDistributorActual)", ParameterMode.Raw));
                 ps.Add(new StoreParameter("slsperId", "App.cboSalesManActual.value", ParameterMode.Raw));
@@ -177,6 +177,24 @@
             .Listeners(l => {
                 l.BeforeLoad.Handler = "App.dataForm.getEl().mask('Loading Maps', 'x-mask-loading');";
                 l.Load.Fn = "Index.storeGridActualVisit_load"; 
+            })
+        )
+
+         @(
+            X.Store().ID("storeGridActualVisit")
+            //.RemotePaging(true).PageSize(50)
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM30400_pgGridActualVisit_Result),"mdlGridActualVisit",""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("LoadGridActualVisit")))
+            .Parameters(ps=>{
+                ps.Add(new StoreParameter("distributor", "Index.joinParams(App.cboDistributorActual)", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperId", "App.cboSalesManActual.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("visitDate", "App.dateVisit.value", ParameterMode.Raw));
+                ps.Add(new StoreParameter("realTime", "App.chkRealTime.value", ParameterMode.Raw));
+            })
+            .Listeners(l => {
+                //l.BeforeLoad.Handler = "App.dataForm.getEl().mask('Loading Maps', 'x-mask-loading');";
+                //l.Load.Fn = "Index.storeGridActualVisit_load"; 
             })
         )
 

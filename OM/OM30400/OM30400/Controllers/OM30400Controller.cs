@@ -67,6 +67,12 @@ namespace OM30400.Controllers
             return this.Store(actualVisit);
         }
 
+        public ActionResult LoadMapActualVisit(string distributor, string slsperId, DateTime visitDate, bool realTime)
+        {
+            var actualVisit = _db.OM30400_pgGridActualVisit(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, true).ToList();
+            return this.Store(actualVisit);
+        }
+
         public ActionResult LoadVisitCustomerActual(string distributor, string slsperId, DateTime visitDate, bool realTime)
         {
             var actualVisit = _db.OM30400_pgVisitCustomerActual(Current.CpnyID, Current.UserName, distributor, slsperId, visitDate, realTime).ToList();

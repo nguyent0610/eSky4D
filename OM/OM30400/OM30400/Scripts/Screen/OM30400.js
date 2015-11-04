@@ -58,6 +58,7 @@ var Index = {
                             }
                             else {
                                 App.grdVisitCustomerActual.store.reload();
+                                App.storeMapActualVisit.reload();
                                 //App.storeVisitCustomerActual.reload();
                             }
                         }
@@ -104,6 +105,7 @@ var Index = {
                 App.grdMCL.store,
                 App.grdAllCurrentSalesman.store,
                 App.grdVisitCustomerActual.store,
+                App.storeMapActualVisit,
                 //App.storeVisitCustomerActual,
                 App.grdCustHistory.store
         ]
@@ -406,6 +408,7 @@ var Index = {
             }
             else {
                 App.grdVisitCustomerActual.store.reload();
+                App.storeMapActualVisit.reload();
                 //App.storeVisitCustomerActual.reload();
             }
         }
@@ -520,14 +523,22 @@ var Index = {
 
     storeGridActualVisit_load: function (store, records, successful, eOpts) {
         if (successful) {
+            var index = 0;
             var markers = [];
             records.forEach(function (record) {
+                if (record.data.CustId) {
+                    index = index + 1;
+                }
+                else if(App.chkRealTime.value){
+                    index = index + 1;
+                }
+
                 var markeri = {
                     "id": record.data.Checkin + "_" + record.data.CiLat + "_" + record.data.CiLng,
                     "title": record.data.CustId? (record.data.CustId + ": " + record.data.CustName) : "",
                     "lat": record.data.CiLat,
                     "lng": record.data.CiLng,
-                    "label": record.index + 1,
+                    "label": record.data.CustId ? index : (App.chkRealTime.value?index:""),
                     "type": record.data.CustId ? "IO" : "",
                     "color": record.data.Color,
                     "isNotVisited": record.data.IsNotVisited,
@@ -556,7 +567,7 @@ var Index = {
                         "title": record.data.CustId + ": " + record.data.CustName,
                         "lat": record.data.CoLat,
                         "lng": record.data.CoLng,
-                        "label": record.index + 1,
+                        "label": index,
                         "type": "OO",
                         "color": "C60BBF",
                         "isNotVisited": record.data.IsNotVisited,
@@ -584,7 +595,7 @@ var Index = {
                         "title": record.data.CustId + ": " + record.data.CustName,
                         "lat": record.data.CustLat,
                         "lng": record.data.CustLng,
-                        "label": record.index + 1,
+                        "label": index,
                         "type": "CC",
                         "color": "01DFD7",
                         "isNotVisited": record.data.IsNotVisited,
@@ -608,17 +619,9 @@ var Index = {
                     markers.push(markerc);
                 }
             });
-            PosGmap.drawAVC1(markers, true);
+            PosGmap.drawAVC1(markers, true, App.chkRealTime.value, App.chkShowAgent.value);
         }
         App.dataForm.getEl().unmask();
-
-        // Create the DIV to hold the control and call the CenterControl() constructor
-        // passing in this DIV.
-        var centerControlDiv = document.createElement('div');
-        var centerControl = new PosGmap.customControl(centerControlDiv, PosGmap.map, App.stoColorHint);
-
-        centerControlDiv.index = 1;
-        PosGmap.map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
     },
 
     // Store nay tam thoi ko dung toi nua
@@ -963,13 +966,7 @@ var PosGmap = {
         PosGmap.stopMarkers = [];
 
         App.stoColorHint.load(function () {
-            // Create the DIV to hold the control and call the CenterControl() constructor
-            // passing in this DIV.
-            var centerControlDiv = document.createElement('div');
-            var centerControl = new PosGmap.customControl(centerControlDiv, PosGmap.map, App.stoColorHint);
-
-            centerControlDiv.index = 1;
-            PosGmap.map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
+            PosGmap.showCustomControl();
         });
     },
 
@@ -1234,6 +1231,7 @@ var PosGmap = {
         }
         PosGmap.directionsService = new google.maps.DirectionsService();
         PosGmap.directionsDisplay = new google.maps.DirectionsRenderer();
+        
     },
 
     clearMap: function (stopMarkers) {
@@ -1245,6 +1243,7 @@ var PosGmap = {
             }
         }
         PosGmap.directionsDisplay.setMap(PosGmap.map);
+        
     },
 
     drawMCP: function (markers, showDirections) {
@@ -1391,7 +1390,7 @@ var PosGmap = {
         }
     },
 
-    drawAVC1: function (markers, showDirections) {
+    drawAVC1: function (markers, showDirections, realTime, showAgent) {
         PosGmap.prepairMap();
 
         if (markers.length > 0) {
@@ -1426,12 +1425,13 @@ var PosGmap = {
                         }
                         else if (data.type == "CC") {
                             icon = Ext.String.format('https://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin_star|{0}|{1}|000000|FFFF00', data.label, data.color ? data.color : "01DFD7");
-                            visible = App.chkShowAgent.value;
+                            visible = showAgent;
                         }
                     }
                     else {
                         // Push the location to list
                         if (!data.isNotVisited) {
+                            visible = realTime;
                             lat_lng.push(myLatlng);
                         }
                     }
@@ -1484,12 +1484,17 @@ var PosGmap = {
 
             if (showDirections) {
                 PosGmap.calcRoute(lat_lng);
-            }
 
+                if (lat_lng.length) {
+                    PosGmap.showCustomControl();
+                }
+            }
+            
         }
         else {
             PosGmap.clearMap(PosGmap.stopMarkers);
         }
+        
     },
 
     drawAVC: function (markers, showDirections) {
@@ -1873,6 +1878,16 @@ var PosGmap = {
         controlUI.addEventListener('mouseout', function () {
             controlTextDiv.hidden = true;
         });
+    },
+
+    showCustomControl: function () {
+        // Create the DIV to hold the control and call the CenterControl() constructor
+        // passing in this DIV.
+        var centerControlDiv = document.createElement('div');
+        var centerControl = new PosGmap.customControl(centerControlDiv, PosGmap.map, App.stoColorHint);
+
+        centerControlDiv.index = 1;
+        PosGmap.map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
     }
 }
 
