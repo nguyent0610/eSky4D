@@ -1484,17 +1484,13 @@ var PosGmap = {
 
             if (showDirections) {
                 PosGmap.calcRoute(lat_lng);
-
-                if (lat_lng.length) {
-                    PosGmap.showCustomControl();
-                }
             }
             
         }
         else {
             PosGmap.clearMap(PosGmap.stopMarkers);
         }
-        
+        PosGmap.showCustomControl();
     },
 
     drawAVC: function (markers, showDirections) {
@@ -1881,13 +1877,18 @@ var PosGmap = {
     },
 
     showCustomControl: function () {
-        // Create the DIV to hold the control and call the CenterControl() constructor
-        // passing in this DIV.
-        var centerControlDiv = document.createElement('div');
-        var centerControl = new PosGmap.customControl(centerControlDiv, PosGmap.map, App.stoColorHint);
+        var divID = 'divHint'
+        var div = document.getElementById(divID);
+        if (!div) {
+            // Create the DIV to hold the control and call the CenterControl() constructor
+            // passing in this DIV.
+            var centerControlDiv = document.createElement('div');
+            centerControlDiv.id = divID;
+            var centerControl = new PosGmap.customControl(centerControlDiv, PosGmap.map, App.stoColorHint);
 
-        centerControlDiv.index = 1;
-        PosGmap.map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
+            centerControlDiv.index = 1;
+            PosGmap.map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
+        }
     }
 }
 
