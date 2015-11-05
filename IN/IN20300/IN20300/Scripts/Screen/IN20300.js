@@ -2,6 +2,7 @@
 var _maxSource = 2;
 var _isLoadMaster = false;
 var SiteId = '';
+
 var checkLoad = function () {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -164,7 +165,7 @@ var firstLoad = function () {
 
 //load store khi co su thay doi
 var stoLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+    //HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
     HQ.isNew = false;
     App.cboCountry.forceSelection = false;
     App.cboState.forceSelection = false;
