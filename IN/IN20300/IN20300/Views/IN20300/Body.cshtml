@@ -101,7 +101,7 @@
                             , HQ.Combo().ID("cboCountry").Name("cboCountry").HQLangCode("Country").HQProcedure("IN20300_pcCountry")
                             .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID").DataIndex("Country")
                             .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
-                            .HQDBSys(false).HQAutoLoad(false)
+                            .HQDBSys(false)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .LoadData()
                             .Listeners(lst =>
