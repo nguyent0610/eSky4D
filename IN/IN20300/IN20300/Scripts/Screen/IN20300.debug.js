@@ -1,9 +1,17 @@
-var loadSourceCombo = function () {
-    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-    App.cboCountry.getStore().load(function () {
+var _Source = 0;
+var _maxSource = 2;
+var _isLoadMaster = false;
+var SiteId = '';
+var checkLoad = function () {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
         App.stoIN_Site.reload();
-    });
+        HQ.common.showBusy(false);
+    }
 };
+
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -75,7 +83,7 @@ var menuClick = function (command) {
 
 var cboBranchID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
-    App.cboSiteId.clearValue();
+    SiteId = '';
     if (sender.valueModels != null) {
         App.cboSiteId.store.reload();
     }
@@ -83,7 +91,7 @@ var cboBranchID_Change = function (sender, value) {
 
 var cboBranchID_Select = function (sender, value) {
     HQ.isFirstLoad = true;
-    App.cboSiteId.clearValue();
+    SiteId = '';
     if (sender.valueModels != null && !App.stoIN_Site.loading) {
         App.cboSiteId.store.reload();
     }
@@ -149,12 +157,14 @@ var cboState_Changed = function () {
 };
 
 var firstLoad = function () {
-    loadSourceCombo();
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboBranchID.getStore().addListener('load', checkLoad);
+    App.cboCountry.getStore().addListener('load', checkLoad);
 };
 
 //load store khi co su thay doi
 var stoLoad = function (sto) {
-    HQ.common.showBusy(false);
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
     HQ.isNew = false;
     App.cboCountry.forceSelection = false;
     App.cboState.forceSelection = false;
@@ -179,6 +189,9 @@ var stoLoad = function (sto) {
         cboState_Changed(App.cboState, record.data.State);
     }
     frmChange();
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+    }
 };
 
 //khi co su thay doi du lieu cua cac conttol tren form
@@ -194,7 +207,7 @@ var frmChange = function () {
 
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
 };
 
 function save() {
@@ -211,11 +224,11 @@ function save() {
                 },
                 success: function (action, data) {
                     HQ.message.show(201405071, '', '');
-                    var SiteId = data.result.SiteId;
+                    SiteId = data.result.SiteId;
                     App.cboSiteId.getStore().load(function () {
                         App.cboSiteId.setValue(SiteId);
-                        App.stoIN_Site.reload();
                     });
+                    App.stoIN_Site.reload();
                 },
                 failure: function (msg, data) {
                     HQ.message.process(msg, data, true);
