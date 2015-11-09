@@ -43,7 +43,7 @@
             X.Column().Text(Util.GetLang("Version")).DataIndex("Version").Width(150),
             X.Column().Text(Util.GetLang("BuildID")).DataIndex("BuildID").Width(150),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150),
-            X.Column().Text(Util.GetLang("AppliedDate")).DataIndex("AppliedDate").Width(150),
+            X.DateColumn().Text(Util.GetLang("AppliedDate")).DataIndex("AppliedDate").Width(150).Format("dd/MM/yyyy"),
            X.CommandColumn()
             .Width(150)
             .Commands(
