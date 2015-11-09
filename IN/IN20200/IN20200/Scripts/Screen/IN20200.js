@@ -116,6 +116,7 @@ var checkLoad = function () {
     _Source += 1;
     if (_Source == _maxSource) {
         _isLoadMaster = true;
+        App.stoIN_ProductClass.reload();
         HQ.common.showBusy(false);
         _Source = 0;
     }
@@ -123,6 +124,7 @@ var checkLoad = function () {
 
 var firstLoad = function () {
     HQ.isFirstLoad = true;
+    ClassID = '';
     App.frmMain.isValid();
     App.tabDetail.child('#pnlLotSerial').tab.setDisabled(true);
 
@@ -362,53 +364,66 @@ var focusControl = function (invalidField) {
 };
 
 var save = function () {
+    if (!App.chkPublic.getValue()) {
+        if (App.stoCpny.getCount() == 1) {
+            HQ.message.show(1888, '', '');
+            App.tabDetail.setActiveTab(App.pnlCpnyID);
+            return;
+        }
+    }
+
     if (App.cboDfltLotSerTrack.getValue() != 'N') {
         if (!App.cboDfltLotSerAssign.getValue()) {
             invalidField = App.cboDfltLotSerAssign.id;
             HQ.message.show(1000, App.cboDfltLotSerAssign.fieldLabel, 'HQ.util.focusControl');
+            return;
         } else if (!App.cboDfltLotSerMthd.getValue()) {
             invalidField = App.cboDfltLotSerMthd.id;
             HQ.message.show(1000, App.cboDfltLotSerMthd.fieldLabel, 'HQ.util.focusControl');
+            return;
         } else if (App.txtDfltLotSerShelfLife.getValue() < 1) {
             invalidField = App.txtDfltLotSerShelfLife.id;
             HQ.message.show(2015110901, App.txtDfltLotSerShelfLife.fieldLabel, 'HQ.util.focusControl');
+            return;
         } else if (!App.txtDfltLotSerNumLen.getValue()) {
             invalidField = App.txtDfltLotSerNumLen.id;
             HQ.message.show(1000, App.txtDfltLotSerNumLen.fieldLabel, 'HQ.util.focusControl');
+            return;
         } else if (!App.txtDfltLotSerNumVal.getValue()) {
             invalidField = App.txtDfltLotSerNumVal.id;
             HQ.message.show(1000, App.txtDfltLotSerNumVal.fieldLabel, 'HQ.util.focusControl');
+            return;
         } else if (!App.lblShowNextLotSerial.getValue()) {
             invalidField = App.lblShowNextLotSerial.id;
             HQ.message.show(1000, App.lblShowNextLotSerial.fieldLabel, 'HQ.util.focusControl');
+            return;
         }
     }
-    else {
-        if (App.frmMain.isValid()) {
-            App.frmMain.updateRecord();
-            App.frmMain.submit({
-                waitMsg: HQ.common.getLang("WaitMsg"),
-                url: 'IN20200/Save',
-                params: {
-                    lstIN_ProductClass: Ext.encode(App.stoIN_ProductClass.getRecordsValues()),
-                    lstCpny: HQ.store.getData(App.stoCpny)
+    if (App.frmMain.isValid()) {
+        App.frmMain.updateRecord();
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("WaitMsg"),
+            url: 'IN20200/Save',
+            params: {
+                lstIN_ProductClass: Ext.encode(App.stoIN_ProductClass.getRecordsValues()),
+                lstCpny: HQ.store.getData(App.stoCpny)
 
-                },
-                success: function (msg, data) {
-                    HQ.message.show(201405071);
-                    ClassID = data.result.ClassID;
-                    App.cboClassID.getStore().load(function () {
-                        App.cboClassID.setValue(ClassID);
-                    });
-                    HQ.isFirstLoad = true;
-                    App.stoIN_ProductClass.reload();
-                },
-                failure: function (msg, data) {
-                    HQ.message.process(msg, data, true);
-                }
-            });
-        }
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                ClassID = data.result.ClassID;
+                App.cboClassID.getStore().load(function () {
+                    App.cboClassID.setValue(ClassID);
+                });
+                HQ.isFirstLoad = true;
+                App.stoIN_ProductClass.reload();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
     }
+    
 };
 
 var deleteData = function (item) {

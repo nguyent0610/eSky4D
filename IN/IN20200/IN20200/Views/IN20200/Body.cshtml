@@ -436,7 +436,10 @@
                             X.StringFilter().DataIndex("CpnyName")
                         )
                 )
-            )//Tab CpnyID
+            ).Listeners(lss =>
+            {
+                lss.Render.Fn = "pnl_render";
+            })//Tab CpnyID
 
         )//Main tab
 
