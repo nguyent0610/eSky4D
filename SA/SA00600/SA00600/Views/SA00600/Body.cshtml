@@ -53,7 +53,7 @@
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40)
-            , X.Column().Text(Util.GetLang("AccessDate")).DataIndex("AccessDate").Width(195)      
+            , X.DateColumn().Text(Util.GetLang("AccessDate")).DataIndex("AccessDate").Width(195).Format("dd/MM/yyyy")
             , X.Column().Text(Util.GetLang("CompanyID")).DataIndex("CompanyID").Width(110)   
             , X.Column().Text(Util.GetLang("DatabaseName")).DataIndex("DatabaseName").Width(150)        
             , X.Column().Text(Util.GetLang("InternetAddress")).DataIndex("InternetAddress").Width(110)     
