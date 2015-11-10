@@ -68,22 +68,6 @@ namespace IF30100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<SYS_ReportOLAPTemplate> SYS_ReportOLAPTemplate
-        {
-            get
-            {
-                if ((_SYS_ReportOLAPTemplate == null))
-                {
-                    _SYS_ReportOLAPTemplate = base.CreateObjectSet<SYS_ReportOLAPTemplate>("SYS_ReportOLAPTemplate");
-                }
-                return _SYS_ReportOLAPTemplate;
-            }
-        }
-        private ObjectSet<SYS_ReportOLAPTemplate> _SYS_ReportOLAPTemplate;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SYS_ReportOLAPFilter> SYS_ReportOLAPFilter
         {
             get
@@ -112,18 +96,26 @@ namespace IF30100
             }
         }
         private ObjectSet<SYS_ReportExport> _SYS_ReportExport;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SYS_ReportOLAPTemplate> SYS_ReportOLAPTemplate
+        {
+            get
+            {
+                if ((_SYS_ReportOLAPTemplate == null))
+                {
+                    _SYS_ReportOLAPTemplate = base.CreateObjectSet<SYS_ReportOLAPTemplate>("SYS_ReportOLAPTemplate");
+                }
+                return _SYS_ReportOLAPTemplate;
+            }
+        }
+        private ObjectSet<SYS_ReportOLAPTemplate> _SYS_ReportOLAPTemplate;
 
         #endregion
 
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the SYS_ReportOLAPTemplate EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSYS_ReportOLAPTemplate(SYS_ReportOLAPTemplate sYS_ReportOLAPTemplate)
-        {
-            base.AddObject("SYS_ReportOLAPTemplate", sYS_ReportOLAPTemplate);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the SYS_ReportOLAPFilter EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -139,6 +131,14 @@ namespace IF30100
         public void AddToSYS_ReportExport(SYS_ReportExport sYS_ReportExport)
         {
             base.AddObject("SYS_ReportExport", sYS_ReportExport);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SYS_ReportOLAPTemplate EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSYS_ReportOLAPTemplate(SYS_ReportOLAPTemplate sYS_ReportOLAPTemplate)
+        {
+            base.AddObject("SYS_ReportOLAPTemplate", sYS_ReportOLAPTemplate);
         }
 
         #endregion
@@ -746,6 +746,9 @@ namespace IF30100
         /// <param name="columnName">Initial value of the ColumnName property.</param>
         /// <param name="pivotType">Initial value of the PivotType property.</param>
         /// <param name="columnDescr">Initial value of the ColumnDescr property.</param>
+        /// <param name="parmType">Initial value of the ParmType property.</param>
+        /// <param name="parmData">Initial value of the ParmData property.</param>
+        /// <param name="parmOperator">Initial value of the ParmOperator property.</param>
         /// <param name="filterBy">Initial value of the FilterBy property.</param>
         /// <param name="crtd_Datetime">Initial value of the Crtd_Datetime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
@@ -754,20 +757,19 @@ namespace IF30100
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        /// <param name="measureFormat">Initial value of the MeasureFormat property.</param>
-        /// <param name="pivotOrder">Initial value of the PivotOrder property.</param>
         /// <param name="measureFunc">Initial value of the MeasureFunc property.</param>
-        /// <param name="parmType">Initial value of the ParmType property.</param>
-        /// <param name="parmData">Initial value of the ParmData property.</param>
-        /// <param name="parmOperator">Initial value of the ParmOperator property.</param>
-        /// <param name="parmForColumn">Initial value of the ParmForColumn property.</param>
-        public static SYS_ReportOLAPTemplate CreateSYS_ReportOLAPTemplate(global::System.String reportNbr, global::System.String columnName, global::System.String pivotType, global::System.String columnDescr, global::System.String filterBy, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String measureFormat, global::System.Int16 pivotOrder, global::System.String measureFunc, global::System.String parmType, global::System.String parmData, global::System.String parmOperator, global::System.String parmForColumn)
+        /// <param name="dataFormat">Initial value of the DataFormat property.</param>
+        /// <param name="pivotOrder">Initial value of the PivotOrder property.</param>
+        public static SYS_ReportOLAPTemplate CreateSYS_ReportOLAPTemplate(global::System.String reportNbr, global::System.String columnName, global::System.String pivotType, global::System.String columnDescr, global::System.String parmType, global::System.String parmData, global::System.String parmOperator, global::System.String filterBy, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String measureFunc, global::System.String dataFormat, global::System.Int16 pivotOrder)
         {
             SYS_ReportOLAPTemplate sYS_ReportOLAPTemplate = new SYS_ReportOLAPTemplate();
             sYS_ReportOLAPTemplate.ReportNbr = reportNbr;
             sYS_ReportOLAPTemplate.ColumnName = columnName;
             sYS_ReportOLAPTemplate.PivotType = pivotType;
             sYS_ReportOLAPTemplate.ColumnDescr = columnDescr;
+            sYS_ReportOLAPTemplate.ParmType = parmType;
+            sYS_ReportOLAPTemplate.ParmData = parmData;
+            sYS_ReportOLAPTemplate.ParmOperator = parmOperator;
             sYS_ReportOLAPTemplate.FilterBy = filterBy;
             sYS_ReportOLAPTemplate.Crtd_Datetime = crtd_Datetime;
             sYS_ReportOLAPTemplate.Crtd_Prog = crtd_Prog;
@@ -776,13 +778,9 @@ namespace IF30100
             sYS_ReportOLAPTemplate.LUpd_Prog = lUpd_Prog;
             sYS_ReportOLAPTemplate.LUpd_User = lUpd_User;
             sYS_ReportOLAPTemplate.tstamp = tstamp;
-            sYS_ReportOLAPTemplate.MeasureFormat = measureFormat;
-            sYS_ReportOLAPTemplate.PivotOrder = pivotOrder;
             sYS_ReportOLAPTemplate.MeasureFunc = measureFunc;
-            sYS_ReportOLAPTemplate.ParmType = parmType;
-            sYS_ReportOLAPTemplate.ParmData = parmData;
-            sYS_ReportOLAPTemplate.ParmOperator = parmOperator;
-            sYS_ReportOLAPTemplate.ParmForColumn = parmForColumn;
+            sYS_ReportOLAPTemplate.DataFormat = dataFormat;
+            sYS_ReportOLAPTemplate.PivotOrder = pivotOrder;
             return sYS_ReportOLAPTemplate;
         }
 
@@ -894,6 +892,78 @@ namespace IF30100
         private global::System.String _ColumnDescr;
         partial void OnColumnDescrChanging(global::System.String value);
         partial void OnColumnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ParmType
+        {
+            get
+            {
+                return _ParmType;
+            }
+            set
+            {
+                OnParmTypeChanging(value);
+                ReportPropertyChanging("ParmType");
+                _ParmType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ParmType");
+                OnParmTypeChanged();
+            }
+        }
+        private global::System.String _ParmType;
+        partial void OnParmTypeChanging(global::System.String value);
+        partial void OnParmTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ParmData
+        {
+            get
+            {
+                return _ParmData;
+            }
+            set
+            {
+                OnParmDataChanging(value);
+                ReportPropertyChanging("ParmData");
+                _ParmData = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ParmData");
+                OnParmDataChanged();
+            }
+        }
+        private global::System.String _ParmData;
+        partial void OnParmDataChanging(global::System.String value);
+        partial void OnParmDataChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ParmOperator
+        {
+            get
+            {
+                return _ParmOperator;
+            }
+            set
+            {
+                OnParmOperatorChanging(value);
+                ReportPropertyChanging("ParmOperator");
+                _ParmOperator = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ParmOperator");
+                OnParmOperatorChanged();
+            }
+        }
+        private global::System.String _ParmOperator;
+        partial void OnParmOperatorChanging(global::System.String value);
+        partial void OnParmOperatorChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1092,54 +1162,6 @@ namespace IF30100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String MeasureFormat
-        {
-            get
-            {
-                return _MeasureFormat;
-            }
-            set
-            {
-                OnMeasureFormatChanging(value);
-                ReportPropertyChanging("MeasureFormat");
-                _MeasureFormat = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("MeasureFormat");
-                OnMeasureFormatChanged();
-            }
-        }
-        private global::System.String _MeasureFormat;
-        partial void OnMeasureFormatChanging(global::System.String value);
-        partial void OnMeasureFormatChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int16 PivotOrder
-        {
-            get
-            {
-                return _PivotOrder;
-            }
-            set
-            {
-                OnPivotOrderChanging(value);
-                ReportPropertyChanging("PivotOrder");
-                _PivotOrder = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("PivotOrder");
-                OnPivotOrderChanged();
-            }
-        }
-        private global::System.Int16 _PivotOrder;
-        partial void OnPivotOrderChanging(global::System.Int16 value);
-        partial void OnPivotOrderChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.String MeasureFunc
         {
             get
@@ -1164,96 +1186,48 @@ namespace IF30100
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String ParmType
+        public global::System.String DataFormat
         {
             get
             {
-                return _ParmType;
+                return _DataFormat;
             }
             set
             {
-                OnParmTypeChanging(value);
-                ReportPropertyChanging("ParmType");
-                _ParmType = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ParmType");
-                OnParmTypeChanged();
+                OnDataFormatChanging(value);
+                ReportPropertyChanging("DataFormat");
+                _DataFormat = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DataFormat");
+                OnDataFormatChanged();
             }
         }
-        private global::System.String _ParmType;
-        partial void OnParmTypeChanging(global::System.String value);
-        partial void OnParmTypeChanged();
+        private global::System.String _DataFormat;
+        partial void OnDataFormatChanging(global::System.String value);
+        partial void OnDataFormatChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String ParmData
+        public global::System.Int16 PivotOrder
         {
             get
             {
-                return _ParmData;
+                return _PivotOrder;
             }
             set
             {
-                OnParmDataChanging(value);
-                ReportPropertyChanging("ParmData");
-                _ParmData = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ParmData");
-                OnParmDataChanged();
+                OnPivotOrderChanging(value);
+                ReportPropertyChanging("PivotOrder");
+                _PivotOrder = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PivotOrder");
+                OnPivotOrderChanged();
             }
         }
-        private global::System.String _ParmData;
-        partial void OnParmDataChanging(global::System.String value);
-        partial void OnParmDataChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String ParmOperator
-        {
-            get
-            {
-                return _ParmOperator;
-            }
-            set
-            {
-                OnParmOperatorChanging(value);
-                ReportPropertyChanging("ParmOperator");
-                _ParmOperator = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ParmOperator");
-                OnParmOperatorChanged();
-            }
-        }
-        private global::System.String _ParmOperator;
-        partial void OnParmOperatorChanging(global::System.String value);
-        partial void OnParmOperatorChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String ParmForColumn
-        {
-            get
-            {
-                return _ParmForColumn;
-            }
-            set
-            {
-                OnParmForColumnChanging(value);
-                ReportPropertyChanging("ParmForColumn");
-                _ParmForColumn = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ParmForColumn");
-                OnParmForColumnChanged();
-            }
-        }
-        private global::System.String _ParmForColumn;
-        partial void OnParmForColumnChanging(global::System.String value);
-        partial void OnParmForColumnChanged();
+        private global::System.Int16 _PivotOrder;
+        partial void OnPivotOrderChanging(global::System.Int16 value);
+        partial void OnPivotOrderChanged();
 
         #endregion
 

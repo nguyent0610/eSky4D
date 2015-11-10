@@ -478,7 +478,13 @@ namespace IF30100.Controllers
                     if (col != null)
                     {
                         pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Row,col.ColumnName);
+                        var field = pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Row)[col.ColumnName];
+                        if (item.DataFormat.PassNull()!=string.Empty)
+                        {
+                            field.NumberFormat = item.DataFormat;
+                        }
                     }
+                   
                 }
 
                 var lstCol= lstColumn.Where(p => p.PivotType == "C").OrderBy(p => p.PivotOrder).ToList();
@@ -488,6 +494,11 @@ namespace IF30100.Controllers
                     if (col != null)
                     {
                         pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Column, col.ColumnName);
+                        var field = pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Column)[col.ColumnName];
+                        if (item.DataFormat.PassNull() != string.Empty)
+                        {
+                            field.NumberFormat = item.DataFormat;
+                        }
                     }
                 }
 
@@ -500,8 +511,8 @@ namespace IF30100.Controllers
                         pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Data, col.ColumnName);
                         var field = pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Data)[col.ColumnName];
                         field.Function = GetFunction(item.MeasureFunc);
-                        if(item.MeasureFormat.PassNull()!=string.Empty){
-                            field.NumberFormat = item.MeasureFormat;
+                        if(item.DataFormat.PassNull()!=string.Empty){
+                            field.NumberFormat = item.DataFormat;
                         }
                         
                     }
