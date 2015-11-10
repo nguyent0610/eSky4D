@@ -341,11 +341,11 @@ namespace IF30100.Controllers
                 
 
                 //SheetPOSuggest.Protect(ProtectionType.Objects);
-                workbook.Save(stream, SaveFormat.Excel97To2003);
+                workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Flush();
                 stream.Position = 0;
 
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xls" };
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsx" };
 
             }
             catch (Exception ex)
@@ -530,11 +530,11 @@ namespace IF30100.Controllers
                 }
            
 
-                workbook.Save(stream, SaveFormat.Excel97To2003);
+                workbook.Save(stream, SaveFormat.Xlsx);
                 stream.Flush();
                 stream.Position = 0;
 
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xls" };
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsx" };
 
             }
             catch (Exception ex)
