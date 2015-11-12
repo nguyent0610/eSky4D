@@ -190,7 +190,7 @@ var Store = {
 
         App.grdPGCpnyAddr.store.reload();
 
-        var selRec = HQ.store.findInStore(App.cboBranchID.store,['BranchID'],[App.cboBranchID.getValue()]);
+        var selRec = HQ.store.findInStore(App.cboBranchID.store, ['BranchID'], [App.cboBranchID.getValue()]);
 
         if (selRec && selRec.Channel == "MT") {
             //App.pnlPGCpnyAddr.show();
@@ -293,7 +293,7 @@ var Event = {
                     }
                     break;
 
-                case "next":         
+                case "next":
                     if (HQ.focus == 'header') {
                         HQ.combo.next(App.cboPGID, HQ.isChange);
                     }
@@ -366,7 +366,7 @@ var Event = {
                         if (HQ.isChange) {
                             HQ.message.show(150, '', '');
                         }
-                        else {    
+                        else {
                             App.cboPGID.clearValue();
                         }
                     }
@@ -566,7 +566,7 @@ var Event = {
                     if (selRecs.length > 0) {
                         var params = [];
                         selRecs.forEach(function (record) {
-                            params.push(record.data.CpnyAddrID);
+                            params.push(record.data.AddrID);
                         });
                         HQ.message.show(2015020806,
                             params.join(" & ") + "," + HQ.common.getLang("PGCpnyAddr"),
