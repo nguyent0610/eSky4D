@@ -156,7 +156,11 @@ namespace PJPProcess
 
             if (objSaleMaster.SlsFreqType == "R")
             {
-                
+                if ((objSaleMaster.SlsFreq == "F1/3") || (objSaleMaster.SlsFreq == "F1/2"))
+                {
+                    iWeekStart = Util.ToInt(objSaleMaster.WeekofVisit);
+                }
+
                 for (Int32 i = iWeekStart; i <= iWeekEnd; i++)
                 {                    
                     dMon = GetDateFromDayofWeek(Fromdate.Year, i, "Monday");
@@ -166,7 +170,41 @@ namespace PJPProcess
                     dFri = GetDateFromDayofWeek(Fromdate.Year, i, "Friday");
                     dSat = GetDateFromDayofWeek(Fromdate.Year, i, "Saturday");
                     dSun = GetDateFromDayofWeek(Fromdate.Year, i, "Sunday");
-                    if (objSaleMaster.SlsFreq == "F1")
+
+                    if ((objSaleMaster.SlsFreq == "F1/3") || (objSaleMaster.SlsFreq == "F1/2"))
+                    {
+                        clsOM_SalesRouteDet objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(this.Dal);
+                        objOM_SalesRouteDet1.Reset();
+                        objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                        objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                        objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                        objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                        objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                        objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                        objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                        objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                        objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                        objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                        objOM_SalesRouteDet1.Crtd_Prog = prog;
+                        objOM_SalesRouteDet1.Crtd_User = user;
+                        objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                        objOM_SalesRouteDet1.LUpd_Prog = prog;
+                        objOM_SalesRouteDet1.LUpd_User = user;
+                        objOM_SalesRouteDet1.VisitDate = objSaleMaster.Mon ? dMon : (objSaleMaster.Tue ? dTue : (objSaleMaster.Wed ? dWed : (objSaleMaster.Thu ? dThu : (objSaleMaster.Fri ? dFri : (objSaleMaster.Sat ? dSat : (objSaleMaster.Sun ? dSun : DateTime.Now))))));
+                        objOM_SalesRouteDet1.DayofWeek = objSaleMaster.Mon ? "Mon" : (objSaleMaster.Tue ? "Tue" : (objSaleMaster.Wed ? "Wed" : (objSaleMaster.Thu ? "Thu" : (objSaleMaster.Fri ? "Fri" : (objSaleMaster.Sat ? "Sat" : (objSaleMaster.Sun ? "Sun" : ""))))));
+                        objOM_SalesRouteDet1.WeekNbr = i;
+
+                        lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                        if (objSaleMaster.SlsFreq == "F1/3")
+                        {
+                            i += 7;
+                        }
+                        else if (objSaleMaster.SlsFreq == "F1/2")
+                        {
+                            i += 11;
+                        }
+                    }
+                    else if (objSaleMaster.SlsFreq == "F1")
                     {
                         if ((objSaleMaster.WeekofVisit == "W159" && (i % 4) == 1) || (objSaleMaster.WeekofVisit == "W2610" && (i % 4) == 2) || (objSaleMaster.WeekofVisit == "W3711" && (i % 4) == 3) || (objSaleMaster.WeekofVisit == "W4812" && (i % 4) == 0))
                         {
