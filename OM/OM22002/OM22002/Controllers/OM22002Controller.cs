@@ -293,6 +293,7 @@ namespace OM22002.Controllers
             var hiddenColumns = new string[] { "Registered", "Rate", "TradeType" };
             DataAccess dal = Util.Dal();
             var pc = new ParamCollection();
+            pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
             pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(cpnyID), ParameterDirection.Input, 30));
             pc.Add(new ParamStruct("@ObjectID", DbType.String, clsCommon.GetValueDBNull(objectID), ParameterDirection.Input, 30));
             pc.Add(new ParamStruct("@TradeType", DbType.String, clsCommon.GetValueDBNull(tradeType), ParameterDirection.Input, 30));
@@ -377,7 +378,7 @@ namespace OM22002.Controllers
                                 DataIndex = col.ColumnName,
                                 Align = Alignment.Right,
                                 Format = "0,000",
-                                Width = 50,
+                                //Width = 50,
                                 Editor = { 
                                     new HQNumberField()
                                     {
