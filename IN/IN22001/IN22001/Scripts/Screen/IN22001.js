@@ -62,7 +62,7 @@ var Process = {
     },
 
     deleteBranch: function (item) {
-        if (item == "yes"){
+        if (item == "yes") {
             App.grdDet.deleteSelected();
         }
     },
@@ -334,6 +334,16 @@ var Event = {
                 }
             }
 
+            if (e.field == "Zone") {
+                if (e.value != e.originalValue) {
+                    e.record.set("Territory", "");
+                }
+            }
+            else if (e.field == "Territory") {
+                if (e.value != e.originalValue) {
+                    e.record.set("BranchID", "");
+                }
+            }
             //Event.Form.frmMain_fieldChange();
         },
 
