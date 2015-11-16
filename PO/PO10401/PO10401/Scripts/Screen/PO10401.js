@@ -1102,7 +1102,7 @@ save =function (b714) {//mess714 khi huy
                 lstDet: Ext.encode(App.stoPO10401_pgDetail.getRecordsValues()),
                 lstHeader: Ext.encode(App.stoHeader.getRecordsValues()),
                 b714: b714 == undefined ? false : true,
-                isCancel: !Ext.isEmpty(App.cboHandle.valueModels[0].data.Code) ? (App.cboHandle.valueModels[0].data.Code == 'D' ? true : false) : false
+                isCancel: !App.cboHandle.valueModels[0] ?false: (App.cboHandle.valueModels[0].data.Code == 'D' ? true : false)
             },
             success: function (msg, data) {
                 var batNbr = '';
