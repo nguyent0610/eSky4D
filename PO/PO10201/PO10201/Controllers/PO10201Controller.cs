@@ -947,16 +947,7 @@ namespace PO10201.Controllers
             }
         }
 
-        //private void SendMail(PO_Header objHeader)
-        //{
-        //    try
-        //    {
-        //        HQSendMailApprove.Approve.SendMailApprove(objHeader.BranchID, objHeader.PONbr, ScreenNbr, Current.CpnyID, _status, _handle, Current.UserName, Current.LangID);
-        //    }
-        //    catch
-        //    {
-        //    }
-        //}
+       
         private bool Data_Checking(bool isCheckInvoicePass = false)
         {
             if (_poHead.Status == "H")
@@ -1111,47 +1102,47 @@ namespace PO10201.Controllers
 
         private void Data_Release()
         {
-            //if (_handle != "N")
-            //{
-            //    DataAccess dal = Util.Dal();
-            //    try
-            //    {
-            //        POProcess.PO po = new POProcess.PO(Current.UserName, ScreenNbr, dal);
-            //        if (_handle == "R")
-            //        {
-            //            dal.BeginTrans(IsolationLevel.ReadCommitted);
-            //            if (!po.PO10201_Release(_branchID, _batNbr, _rcptNbr))
-            //            {
-            //                dal.RollbackTrans();
-            //            }
-            //            else
-            //            {
-            //                dal.CommitTrans();
-            //            }
+            if (_handle != "N")
+            {
+                DataAccess dal = Util.Dal();
+                try
+                {
+                    POProcess.PO po = new POProcess.PO(Current.UserName, ScreenNbr, dal);
+                    if (_handle == "R")
+                    {
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                        if (!po.PO10200_Release(_branchID, _batNbr, _rcptNbr))
+                        {
+                            dal.RollbackTrans();
+                        }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
 
-            //            Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _batNbr });
-            //        }
-            //        else if (_handle == "C" || _handle == "V")
-            //        {
-            //            dal.BeginTrans(IsolationLevel.ReadCommitted);
-            //            if (!po.PO10201_Cancel(_branchID, _batNbr, _rcptNbr, _form["b714"].ToBool()))
-            //            {
-            //                dal.RollbackTrans();
-            //            }
-            //            else
-            //            {
-            //                dal.CommitTrans();
-            //            }
-            //            Util.AppendLog(ref _logMessage, "9999", data: new { success = true, batNbr = _batNbr });
-            //        }
-            //        po = null;
-            //    }
-            //    catch (Exception)
-            //    {
-            //        dal.RollbackTrans();
-            //        throw;
-            //    }
-            //}
+                        Util.AppendLog(ref _logMessage, "9999", "", data: new { success = true, batNbr = _batNbr });
+                    }
+                    else if (_handle == "C" || _handle == "V")
+                    {
+                        dal.BeginTrans(IsolationLevel.ReadCommitted);
+                        if (!po.PO10200_Cancel(_branchID, _batNbr, _rcptNbr, _form["b714"].ToBool()))
+                        {
+                            dal.RollbackTrans();
+                        }
+                        else
+                        {
+                            dal.CommitTrans();
+                        }
+                        Util.AppendLog(ref _logMessage, "9999", data: new { success = true, batNbr = _batNbr });
+                    }
+                    po = null;
+                }
+                catch (Exception)
+                {
+                    dal.RollbackTrans();
+                    throw;
+                }
+            }
         }
 
         [HttpPost]
