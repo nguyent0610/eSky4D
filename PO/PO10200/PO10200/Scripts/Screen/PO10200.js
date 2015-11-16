@@ -2191,6 +2191,8 @@ var PopupWinLot = {
         }
     },
     grdLot_BeforeEdit: function (item, e) {
+        HQ.grid.checkBeforeEdit(e, ["LotSerNbr"]);
+        
         var obj = e.record.data;
         App.lblLotQtyAvail.setText('');
         if (App.cboRcptType.getValue() == "X") {
@@ -2211,7 +2213,7 @@ var PopupWinLot = {
         if (App.grdLot.isLock || e.field == "UnitDesc") {
             return false;
         }
-        if (e.field == 'LotSerNbr' && App.winLot.invt.LotSerRcptAuto && App.cboRcptType.getValue() != 'X') return false;
+        if (e.field == 'LotSerNbr' && (App.winLot.invt.LotSerRcptAuto && App.cboRcptType.getValue() != 'X' || !Ext.isEmpty(e.record.data.LotSerNbr))) return false;
         if (e.field != 'LotSerNbr' && App.cboRcptType.getValue() == 'X' && Ext.isEmpty(e.record.data.LotSerNbr)) return false;
        
 
@@ -2324,7 +2326,7 @@ var PopupWinLot = {
         }
         if (e.field == "Qty" && e.value > 0) {
             if (App.cboRcptType.getValue() != "X") {
-                if (objIN_Inventory.LotSerRcptAuto) {
+                if (objIN_Inventory.LotSerRcptAuto || Ext.isEmpty(objDetail.LotSerNbr)) {
                     if (Ext.isEmpty(objDetail.LotSerNbr)) {
                         HQ.common.showBusy(true, '', App.winLot);
                         App.direct.INNumberingLot(
