@@ -627,3 +627,127 @@
             .Plugins(X.CellEditing().ClicksToEdit(1))
         )
 )
+
+@(X.Window()
+        .ID("winCloseOrder")
+        .Title(Util.GetLang("ClosePO"))
+        .Hidden(true)
+        .Layout(LayoutType.Fit)
+        .Height(500)
+        .Width(700)
+        .Modal(true)
+        .Closable(true)
+        .Buttons(
+            X.Button().ID("btnCloseOK").Text(Util.GetLang("OK"))
+                .Listeners(p => p.Click.Fn = "PopupWinClose.btnCloseOK_Click")
+        )       
+        .Items(
+         X.GridPanel().ID("grdCloseOrder")
+            .Region(Region.Center).Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .SortableColumns(false).Flex(1)
+            .Store(X.Store().ID("stoCloseOrder").PageSize(50)
+                .AutoLoad(false)
+                .Model(Util.GenerateModel(typeof(OM20500_pgOrder_Result), "mdlCloseOrder", ""))
+                .ServerProxy(
+                    X.AjaxProxy()
+                    .Url(Url.Action("GetCloseOrder", "OM20500"))
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("slsperID", "App.cboSlsperId.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("custID", "App.cboCustID.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("status", "App.cboStatus.getValue().join(',')", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("startDate", "App.dteStartDate.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("endDate", "App.dteEndDate.getValue()", ParameterMode.Raw));
+                })
+                .Listeners(p =>
+                        {
+                            p.Load.Fn = "Store.stoCloseOrder_load";
+                        
+                        }))
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40)
+
+                , X.CheckColumn()
+                .HideTitleEl(true).DataIndex("Selected")
+                .Align(Alignment.Center).ToolTip(Util.GetLang("Selected"))
+                .Width(50).Editable(true)
+                .HeaderItems(
+                    HQ.Checkbox().ID("chkSelectHeaderCloseOrder")
+                    .Handler("PopupWinClose.chkSelectHeaderCloseOrder_change")
+                )
+                              
+                , X.Column()
+                .Text(Util.GetLang("OrderNbr")).DataIndex("OrderNbr")
+
+                , X.Column()
+                .Text(Util.GetLang("CustID")).DataIndex("CustID")
+
+                , X.Column()
+                .Text(Util.GetLang("CustName")).DataIndex("CustName")
+
+                , X.DateColumn()
+                .Text(Util.GetLang("OrderDate")).DataIndex("OrderDate")
+
+                , X.Column()
+                .Text(Util.GetLang("ClassID")).DataIndex("PriceClassID")
+
+                , X.Column()
+                .Text(Util.GetLang("Address")).DataIndex("Addr1")
+
+                , X.Column()
+                .Text(Util.GetLang("SlsperID")).DataIndex("SlsPerID")
+
+                , X.Column()
+                .Text(Util.GetLang("Status")).DataIndex("Status")
+
+                , X.Column().Align(Alignment.Right)
+                .Text(Util.GetLang("Qty")).DataIndex("OrdQty")
+
+                , X.Column().Align(Alignment.Right)
+                .Text(Util.GetLang("LineAmt")).DataIndex("OrdAmt")
+
+                , X.Column().Align(Alignment.Right)
+                .Text(Util.GetLang("TotTax")).DataIndex("TaxTot")
+
+            )
+            .SelectionModel(
+                X.RowSelectionModel().ID("slmCloseOrder").Mode(SelectionMode.Single)               
+            )
+            .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.BooleanFilter().DataIndex("Selected"),
+                    X.StringFilter().DataIndex("OrderNbr"),
+                    X.StringFilter().DataIndex("CustID"),
+                    X.StringFilter().DataIndex("CustName"),
+                    X.DateFilter().DataIndex("OrderDate"),
+                    X.StringFilter().DataIndex("PriceClassID"),
+                    X.StringFilter().DataIndex("Addr1"),
+                    X.StringFilter().DataIndex("SlsPerID"),
+                    X.StringFilter().DataIndex("Status"),
+                    X.NumericFilter().DataIndex("OrdQty"),
+                    X.NumericFilter().DataIndex("OrdAmt"),
+                    X.NumericFilter().DataIndex("TaxTot")
+                )
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    //ls.Edit.Fn = "PopupWinClose.grdCloseOrder_edit";
+                    //ls.BeforeEdit.Fn = "PopupWinClose.grdCloseOrder_beforeEdit";
+                })
+            )// grdOrder
+        
+        )
+)

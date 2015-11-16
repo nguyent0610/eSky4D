@@ -133,6 +133,14 @@
           <Property Name="Remark" Type="nvarchar" MaxLength="200" />
           <Property Name="IsAddStock" Type="bit" />
         </EntityType>
+        <Function Name="OM20500_pgCloseOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="varchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="OM20500_pgDet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
           <Parameter Name="SlsperID" Type="varchar" Mode="In" />
@@ -205,6 +213,14 @@
           <EntitySet Name="OM_PDASalesOrd" EntityType="OM20500Model.OM_PDASalesOrd" />
           <EntitySet Name="IN_ItemSite" EntityType="OM20500Model.IN_ItemSite" />
           <FunctionImport Name="OM20500_pgLotTrans" ReturnType="Collection(OM20500Model.OM20500_pgLotTrans_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="OM20500_pgCloseOrder" ReturnType="Collection(OM20500Model.OM20500_pgCloseOrder_Result)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="SlsperID" Mode="In" Type="String" />
             <Parameter Name="CustID" Mode="In" Type="String" />
@@ -432,6 +448,22 @@
           <Property Type="String" Name="INDocType" Nullable="true" MaxLength="2" />
           <Property Type="Double" Name="UnitCost" Nullable="false" />
           <Property Type="Double" Name="UnitPrice" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="OM20500_pgCloseOrder_Result">
+          <Property Type="Boolean" Name="Selected" Nullable="true" />
+          <Property Type="Boolean" Name="IsAddStock" Nullable="false" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="OrderNbr" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
+          <Property Type="String" Name="PriceClassID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="SlsPerID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="Double" Name="OrdQty" Nullable="false" />
+          <Property Type="Double" Name="OrdAmt" Nullable="false" />
+          <Property Type="Double" Name="TaxTot" Nullable="false" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -665,6 +697,26 @@
                 <ScalarProperty Name="INDocType" ColumnName="INDocType" />
                 <ScalarProperty Name="UnitCost" ColumnName="UnitCost" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM20500_pgCloseOrder" FunctionName="eBiz4DWebAppModel.Store.OM20500_pgCloseOrder">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM20500Model.OM20500_pgCloseOrder_Result">
+                <ScalarProperty Name="Selected" ColumnName="Selected" />
+                <ScalarProperty Name="IsAddStock" ColumnName="IsAddStock" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="OrderNbr" ColumnName="OrderNbr" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
+                <ScalarProperty Name="OrdAmt" ColumnName="OrdAmt" />
+                <ScalarProperty Name="TaxTot" ColumnName="TaxTot" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

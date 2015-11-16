@@ -73,13 +73,16 @@ var Process = {
     }
 };
 var Store = {
+    stoCloseOrder_load: function (sto, records, successful, eOpts) {
+        HQ.common.showBusy(false);
+    },
     stoOrder_load: function (sto, records, successful, eOpts) {
         App.stoDet.reload();
     },
     stoDet_load: function (sto, records, successful, eOpts) {
         sto.filterBy(function (record) { }); // show empty
         App.slmOrder.select(0);
-    },  
+    },
     stoHisOrd_load: function (sto, records, successful, eOpts) {
         if (sto.getCount()) {
             App.slmHisOrd.select(0);
@@ -123,33 +126,38 @@ var Event = {
         },
 
         btnClose_click: function (btn, e) {
-            if (App.frmMain.isValid()) {
-                App.frmMain.submit({
-                    waitMsg: HQ.common.getLang('Processing')+'...',
-                    url: 'OM20500/ClosePO',
-                    timeout: 1000000,
-                    params: {
-                        lstOrderChange: HQ.store.getData(App.grdOrder.store)
-                    },
-                    success: function (action, data) {
-                        if (data.result.msgCode) {
-                            HQ.message.show(data.result.msgCode, data.result.msgParam, '', true);
-                        }
-                        else {
-                            HQ.message.show(201405071);
-                        }
-                        App.grdOrder.store.reload();
-                    },
-                    failure: function (errorMsg, data) {
-                        if (data.result.msgCode) {
-                            HQ.message.show(data.result.msgCode);
-                        }
-                        else {
-                            HQ.message.process(msg, data, true);
-                        }
-                    }
-                });
-            }
+
+            HQ.common.showBusy(true);
+            App.stoCloseOrder.reload();
+            App.winCloseOrder.show();
+            App.chkSelectHeaderCloseOrder.setValue(false);
+            //if (App.frmMain.isValid()) {
+            //    App.frmMain.submit({
+            //        waitMsg: HQ.common.getLang('Processing')+'...',
+            //        url: 'OM20500/ClosePO',
+            //        timeout: 1000000,
+            //        params: {
+            //            lstOrderChange: HQ.store.getData(App.grdOrder.store)
+            //        },
+            //        success: function (action, data) {
+            //            if (data.result.msgCode) {
+            //                HQ.message.show(data.result.msgCode, data.result.msgParam, '', true);
+            //            }
+            //            else {
+            //                HQ.message.show(201405071);
+            //            }
+            //            App.grdOrder.store.reload();
+            //        },
+            //        failure: function (errorMsg, data) {
+            //            if (data.result.msgCode) {
+            //                HQ.message.show(data.result.msgCode);
+            //            }
+            //            else {
+            //                HQ.message.process(msg, data, true);
+            //            }
+            //        }
+            //    });
+            //}
         }        
     },
     Popup:
@@ -685,5 +693,41 @@ var PopupWinLot = {
         newRow.data.ExpDate = !Ext.isEmpty(lotSerNbr) ? lotSerNbr.ExpDate : '';
 
         HQ.store.insertRecord(App.stoLotTrans, "LotSerNbr", newRow, true);
+    }
+}
+var PopupWinClose = {
+    chkSelectHeaderCloseOrder_change: function (chk, newValue, oldValue, eOpts) {
+        App.stoCloseOrder.data.each(function (record) {
+                record.data.Selected = chk.value;
+        });
+        App.grdCloseOrder.view.refresh();
+    },
+    btnCloseOK_Click: function (btn, e) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang('Processing') + '...',
+            url: 'OM20500/ClosePO',
+            timeout: 1000000,
+            clientValidation: false,
+            params: {
+                lstOrderChange: HQ.store.getData(App.grdCloseOrder.store,["Selected"],[true])
+            },
+            success: function (action, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode, data.result.msgParam, '', true);
+                }
+                else {
+                    HQ.message.show(201405071);
+                }
+                App.winCloseOrder.hide();
+            },
+            failure: function (errorMsg, data) {
+                if (data.result.msgCode) {
+                    HQ.message.show(data.result.msgCode);
+                }
+                else {
+                    HQ.message.process(msg, data, true);
+                }
+            }
+        });
     }
 }

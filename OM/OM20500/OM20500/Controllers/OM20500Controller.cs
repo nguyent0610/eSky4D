@@ -50,6 +50,13 @@ namespace OM20500.Controllers
             var orders = _db.OM20500_pgOrder(branchID, slsperID,custID, status, startDate,endDate).ToList();
             return this.Store(orders);
         }
+        public ActionResult GetCloseOrder(string branchID,
+          string slsperID, string custID, string status,
+          DateTime startDate, DateTime endDate)
+        {
+            var orders = _db.OM20500_pgCloseOrder(branchID, slsperID, custID, status, startDate, endDate).ToList();
+            return this.Store(orders);
+        }
         public ActionResult GetDet(string branchID,
             string slsperID, string custID, string status,
             DateTime startDate, DateTime endDate)
@@ -165,7 +172,7 @@ namespace OM20500.Controllers
         public ActionResult ClosePO(FormCollection data)
         {
             var lstOrderChangeHandler = new StoreDataHandler(data["lstOrderChange"]);
-            var lstOrderChange = lstOrderChangeHandler.BatchObjectData<OM20500_pgOrder_Result>();
+            var lstOrderChange = lstOrderChangeHandler.BatchObjectData<OM20500_pgCloseOrder_Result>();
             var lstOrderNbrError = new List<string>();
 
             foreach (var orderChange in lstOrderChange.Updated)
