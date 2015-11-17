@@ -79,7 +79,7 @@ var menuClick = function (command) {
         case "close":
             HQ.common.close(this);
             break;
-    }
+    }   
 };
 
 var cboBranchID_Change = function (sender, value) {

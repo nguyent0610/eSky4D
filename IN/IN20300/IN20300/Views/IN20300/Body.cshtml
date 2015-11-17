@@ -49,7 +49,7 @@
                     , HQ.Combo().ID("cboSiteId").Name("cboSiteId").HQLangCode("SiteId").HQProcedure("IN20300_pcSitebyBranch")
                     .HQColumnShow("SiteId,Name").DisplayField("SiteId").ValueField("SiteId").MarginSpec("5 0 5 0")
                     .Width(350).HQHeightWidth(400, 500).AllowBlank(false)
-                    .HQDBSys(false).MaxLength(30).EnforceMaxLength(true).HQAutoLoad(false)
+                    .HQDBSys(false).MaxLength(10).EnforceMaxLength(true).HQAutoLoad(false)
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .HQParam(new StoreParameterCollection()
                     {
@@ -99,7 +99,7 @@
                                 .Width(350).MarginSpec("5 0 0 0").MaxLength(200).EnforceMaxLength(true)
                                 
                             , HQ.Combo().ID("cboCountry").Name("cboCountry").HQLangCode("Country").HQProcedure("IN20300_pcCountry")
-                            .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID").DataIndex("Country")
+                            .HQColumnShow("CountryID,Descr").DisplayField("Descr").ValueField("CountryID").DataIndex("Country")
                             .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                             .HQDBSys(false)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -113,7 +113,7 @@
                             // cboCountry                    
 
                             , HQ.Combo().ID("cboState").Name("cboState").HQLangCode("STATE").HQProcedure("IN20300_pcStateByCountry")
-                            .HQColumnShow("State,Descr").DisplayField("State").ValueField("State").DataIndex("State")
+                            .HQColumnShow("State,Descr").DisplayField("Descr").ValueField("State").DataIndex("State")
                             .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                             .HQDBSys(false).HQAutoLoad(false)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -130,7 +130,7 @@
                                 }) // cboState
 
                                 , HQ.Combo().ID("cboCity").Name("cboCity").HQLangCode("CITY").HQProcedure("IN20300_pcCityByCountryState")
-                                .HQColumnShow("City,Name").DisplayField("City").ValueField("City").DataIndex("City")
+                                .HQColumnShow("City,Name").DisplayField("Name").ValueField("City").DataIndex("City")
                                 .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                                 .HQDBSys(false).HQAutoLoad(false)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -147,7 +147,7 @@
                                 }) // cboCity
 
                             , HQ.Combo().ID("cboDistrict").Name("cboDistrict").HQLangCode("DISTRICT").HQProcedure("IN20300_pcDistrictByCountryState")
-                            .HQColumnShow("District,Name").DisplayField("District").ValueField("District").DataIndex("District")
+                            .HQColumnShow("District,Name").DisplayField("Name").ValueField("District").DataIndex("District")
                             .Width(350).HQHeightWidth(400, 500).MarginSpec("5 0 0 0")
                             .HQDBSys(false).HQAutoLoad(false)
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -259,7 +259,7 @@
             //                    {                                    
             //                        lst.Focus.Fn = "grdCpny_focus";                                                                        
             //                    })
-        )    //// Tabpanel
+            //// Tabpanel
 
         )
     )
