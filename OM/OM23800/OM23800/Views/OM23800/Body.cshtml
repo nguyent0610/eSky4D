@@ -84,9 +84,9 @@
 
                     , X.ToolbarFill()
                     
-                    , X.Radio().ID("radCover").BoxLabel(Util.GetLang("Cover")).Name("mode").Checked(true)
+                    , X.Radio().ID("radCover").BoxLabel(Util.GetLang("Cover")).Name("mode").Checked(false).Hidden(true)
                     , X.ToolbarSpacer()
-                    , X.Radio().ID("radMcp").BoxLabel(Util.GetLang("MCP")).Name("mode")
+                    , X.Radio().ID("radMcp").BoxLabel(Util.GetLang("MCP")).Name("mode").Checked(true).Hidden(true)
                 )
             )
             .Items(
@@ -184,7 +184,7 @@
                             })
                         
                         , HQ.Combo().ID("cboBrand").HQLangCode("Brand").HQProcedure("OM23800_pcBrand")
-                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
                         .EmptyText(Util.GetLang("Select")).MarginSpec("5 5 0 0")
                         .ForceSelection(true).Flex(1)//.AllowBlank(false)
                         .HQParam(new StoreParameterCollection() 
