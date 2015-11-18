@@ -1996,7 +1996,7 @@ var PopupWinLot = {
                 });
                 if (!flat) {
                     App.cboLotSerNbr.getStore().load(function () {
-                        PopupWinLot.addNewLot(record.data, App.cboLotSerNbr.getStore().getCount()>0?App.cboLotSerNbr.getStore().getAt(0).data.LotSerNbr:"");
+                        PopupWinLot.addNewLot(record.data,"");// App.cboLotSerNbr.getStore().getCount()>0?App.cboLotSerNbr.getStore().getAt(0).data.LotSerNbr:"");
                     })
                 } else {
 
@@ -2190,11 +2190,13 @@ var PopupWinLot = {
             }
         }
     },
-    grdLot_BeforeEdit: function (item, e) {
-        HQ.grid.checkBeforeEdit(e, ["LotSerNbr"]);
-        
+    grdLot_BeforeEdit: function (item, e) {              
         var obj = e.record.data;
         App.lblLotQtyAvail.setText('');
+        
+        if (App.grdLot.isLock || e.field == "UnitDesc") {
+            return false;
+        }
         if (App.cboRcptType.getValue() == "X") {
             var objLot = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [obj.LotSerNbr]);
             if (!Ext.isEmpty(objLot)) {
@@ -2210,11 +2212,13 @@ var PopupWinLot = {
         }
      
 
-        if (App.grdLot.isLock || e.field == "UnitDesc") {
-            return false;
+        if (e.field == 'LotSerNbr') {
+            if (App.winLot.invt.LotSerRcptAuto || App.cboRcptType.getValue() == 'X') App.cboLotSerNbr.forceSelection = true;
+            else if (!App.winLot.invt.LotSerRcptAuto) App.cboLotSerNbr.forceSelection = false;
         }
-        if (e.field == 'LotSerNbr' && (App.winLot.invt.LotSerRcptAuto && App.cboRcptType.getValue() != 'X' || !Ext.isEmpty(e.record.data.LotSerNbr))) return false;
-        if (e.field != 'LotSerNbr' && App.cboRcptType.getValue() == 'X' && Ext.isEmpty(e.record.data.LotSerNbr)) return false;
+      
+        if (e.field == 'LotSerNbr' && !Ext.isEmpty(e.record.data.LotSerNbr)) return false;
+        //if (e.field != 'LotSerNbr' && App.cboRcptType.getValue() == 'X' && Ext.isEmpty(e.record.data.LotSerNbr)) return false;
        
 
        
@@ -2230,7 +2234,8 @@ var PopupWinLot = {
         if (e.field == "Qty") {
           
         }
-
+        //if (e.field == 'LotSerNbr')
+        //    return HQ.grid.checkBeforeEdit(e, ["LotSerNbr"]);
     },
     grdLot_SelectionChange: function (item, selected) {
         //HQ.focus = 'lot';
@@ -2364,7 +2369,7 @@ var PopupWinLot = {
         var objdet = e.record;
         var recordTran = App.winLot.record.data;
         if (["LotSerNbr"].indexOf(e.field) != -1) {
-            if (HQ.grid.checkDuplicate(App.grdLot, e, ["LotSerNbr"])) {
+            if (HQ.grid.checkDuplicate(App.grdLot, e, ["LotSerNbr", "POTranLineRef"])) {
                 HQ.message.show(1112, e.value, '');
                 return false;
             }

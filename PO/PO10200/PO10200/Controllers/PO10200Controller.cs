@@ -869,6 +869,7 @@ namespace PO10200.Controllers
         }
         private void Update_PO_LotTrans(PO10200_pgLotTrans_Result row, PO_LotTrans objPO_LotTrans)
         {
+           
             objPO_LotTrans.MfcDate = row.MfcDate;
             objPO_LotTrans.BranchID = _branchID;
             objPO_LotTrans.BatNbr = _batNbr;
@@ -878,7 +879,7 @@ namespace PO10200.Controllers
             objPO_LotTrans.ExpDate = row.ExpDate;
             objPO_LotTrans.POTranLineRef = row.POTranLineRef;
             objPO_LotTrans.InvtID = row.InvtID;
-            objPO_LotTrans.InvtMult = row.InvtMult;
+            objPO_LotTrans.InvtMult = (_poHead.RcptType=="X"?short.Parse("-1"):short.Parse("1"));
             objPO_LotTrans.KitID = row.KitID;
             objPO_LotTrans.MfgrLotSerNbr = row.MfgrLotSerNbr;
             objPO_LotTrans.Qty = row.Qty;
@@ -893,7 +894,6 @@ namespace PO10200.Controllers
             objPO_LotTrans.WarrantyDate = row.WarrantyDate;
             objPO_LotTrans.UnitMultDiv = row.UnitMultDiv;
             objPO_LotTrans.UnitDesc = row.UnitDesc;
-
           
             objPO_LotTrans.LUpd_Prog = ScreenNbr;
             objPO_LotTrans.LUpd_User = Current.UserName;
