@@ -621,7 +621,7 @@ var PopupWinLot = {
         var objdet = e.record;
         var recordTran = App.winLot.record.data;
         if (["LotSerNbr"].indexOf(e.field) != -1) {
-            if (HQ.grid.checkDuplicate(App.grdLot, e, ["LotSerNbr"])) {
+            if (HQ.grid.checkDuplicate(App.grdLot, e, ["LotSerNbr", "OMLineRef", "OrderNbr"])) {
                 HQ.message.show(1112, e.value, '');
                 return false;
             }

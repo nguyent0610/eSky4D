@@ -167,7 +167,12 @@ var HQ = {
                 store.allData.each(function (item) {
                     var intT = 0;
                     for (var i = 0; i < fields.length; i++) {
-                        if (item.get(fields[i]) == values[i]) {
+
+                        var tmp1 = item.get(fields[i]);
+                        var tmp2 = values[i];
+                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
+                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
+                        if (val1.toString() == val2.toString()) {
                             intT++;
                         }
                     }
@@ -181,7 +186,11 @@ var HQ = {
                 store.data.each(function (item) {
                     var intT = 0;
                     for (var i = 0; i < fields.length; i++) {
-                        if (item.get(fields[i]) == values[i]) {
+                        var tmp1 = item.get(fields[i]);
+                        var tmp2 = values[i];
+                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
+                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
+                        if (val1.toString() == val2.toString()) {
                             intT++;
                         }
                     }
@@ -199,7 +208,11 @@ var HQ = {
                 store.allData.each(function (item) {
                     var intT = 0;
                     for (var i = 0; i < fields.length; i++) {
-                        if (item.get(fields[i]) == values[i]) {
+                        var tmp1 = item.get(fields[i]);
+                        var tmp2 = values[i];
+                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
+                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
+                        if (val1.toString() == val2.toString()) {
                             intT++;
                         }
                     }
@@ -213,7 +226,11 @@ var HQ = {
                 store.data.each(function (item) {
                     var intT = 0;
                     for (var i = 0; i < fields.length; i++) {
-                        if (item.get(fields[i]) == values[i]) {
+                        var tmp1 = item.get(fields[i]);
+                        var tmp2 = values[i];
+                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
+                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
+                        if (val1.toString() == val2.toString()) {
                             intT++;
                         }
                     }
@@ -504,7 +521,8 @@ var HQ = {
             var index = '';
             var arr = grd.getSelectionModel().getSelection();
             arr.forEach(function (itm) {
-                index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
+                index += (grd.getStore().indexOf(itm) + 1) + ',';
+                //index += (itm.index == undefined ? grd.getStore().totalCount : itm.index + 1) + ',';
             });
 
             return index.substring(0, index.length - 1);
@@ -513,44 +531,62 @@ var HQ = {
             var found = false;
             var store = grd.getStore();
             if (keys == undefined) keys = row.record.idProperty.split(',');
-            if (store.data) {
-                for (var i = 0; i < store.data.items.length; i++) {
-                    var record = store.data.items[i];
-                    var data = '';
-                    var rowdata = '';
-                    for (var jkey = 0; jkey < keys.length; jkey++) {
-                        if (record.data[keys[jkey]] != undefined) {
-                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-                            if (row.field == keys[jkey])
-                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-                            else
-                                rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
-                        }
+            var allData = store.snapshot || store.allData || store.data;
+            for (var i = 0; i < allData.items.length; i++) {
+                var record = allData.items[i];
+                var data = '';
+                var rowdata = '';
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (record.data[keys[jkey]] != undefined) {
+                        data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+                        if (row.field == keys[jkey])
+                            rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+                        else
+                            rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
                     }
-                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-                        break;
-                    };
                 }
+                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                    break;
+                };
             }
-            else {
-                for (var i = 0; i < store.allData.items.length; i++) {
-                    var record = store.allData.items[i];
-                    var data = '';
-                    var rowdata = '';
-                    for (var jkey = 0; jkey < keys.length; jkey++) {
-                        if (record.data[keys[jkey]] != undefined) {
-                            data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-                            if (row.field == keys[jkey])
-                                rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-                            else
-                                rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
-                        }
-                    }
-                    if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-                        break;
-                    };
-                }
-            }
+            //if (store.data) {
+            //    for (var i = 0; i < store.data.items.length; i++) {
+            //        var record = store.data.items[i];
+            //        var data = '';
+            //        var rowdata = '';
+            //        for (var jkey = 0; jkey < keys.length; jkey++) {
+            //            if (record.data[keys[jkey]] != undefined) {
+            //                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+            //                if (row.field == keys[jkey])
+            //                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+            //                else
+            //                    rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
+            //            }
+            //        }
+            //        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+            //            break;
+            //        };
+            //    }
+            //}
+            //else {
+            //    for (var i = 0; i < store.allData.items.length; i++) {
+            //        var record = store.allData.items[i];
+            //        var data = '';
+            //        var rowdata = '';
+            //        for (var jkey = 0; jkey < keys.length; jkey++) {
+            //            if (record.data[keys[jkey]] != undefined) {
+            //                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
+            //                if (row.field == keys[jkey])
+            //                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
+            //                else
+            //                    rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
+            //            }
+            //        }
+            //        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+            //            break;
+            //        };
+            //    }
+            //}
             return found;
         },
         //TrungHT d�ng cho ph�n trang
@@ -607,10 +643,12 @@ var HQ = {
         checkValidateEdit: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
-                if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value).match(regex)) {
-                    HQ.message.show(20140811, e.column.text);
-                    return false;
-                }
+                if (e.value)
+                    if (!HQ.util.passNull(e.value) == '' && !HQ.util.passNull(e.value.toString()).match(regex)) {
+                        HQ.message.show(20140811, e.column.text);
+                        return false;
+                    }
+
                 if (HQ.grid.checkDuplicate(grd, e, keys)) {
                     HQ.message.show(1112, e.value);
                     return false;
@@ -638,7 +676,8 @@ var HQ = {
             var columns = grd.columns;
             arrcolumnName.forEach(function (itm) {
                 var index = HQ.grid.findColumnIndex(columns, itm);
-                grd.columns[index].hide();
+                if (index != -1)
+                    grd.columns[index].hide();
 
             });
         },
@@ -646,7 +685,8 @@ var HQ = {
             var columns = grd.columns;
             arrcolumnName.forEach(function (itm) {
                 var index = HQ.grid.findColumnIndex(columns, itm);
-                grd.columns[index].show();
+                if (index != -1)
+                    grd.columns[index].show();
             });
         },
         findColumnIndex: function (columns, dataIndex) {
@@ -912,7 +952,7 @@ var HQ = {
             if ((HQ.util.passNull(value)).match(regex)) {
                 return true;
             } else {
-                HQ.message.show(09112014, '', null);
+                HQ.message.show(9112014, '', null);
                 return false;
             }
         },
