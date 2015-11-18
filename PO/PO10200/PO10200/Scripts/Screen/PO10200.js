@@ -2234,6 +2234,10 @@ var PopupWinLot = {
         if (e.field == "Qty") {
           
         }
+        if (e.field == "ExpDate") {
+            var objLot = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [obj.LotSerNbr]);
+            if (objLot) return false;
+        }
         //if (e.field == 'LotSerNbr')
         //    return HQ.grid.checkBeforeEdit(e, ["LotSerNbr"]);
     },
@@ -2368,12 +2372,18 @@ var PopupWinLot = {
         var Qty = 0;
         var objdet = e.record;
         var recordTran = App.winLot.record.data;
-        if (["LotSerNbr"].indexOf(e.field) != -1) {
-            if (HQ.grid.checkDuplicate(App.grdLot, e, ["LotSerNbr", "POTranLineRef"])) {
-                HQ.message.show(1112, e.value, '');
-                return false;
+        if (e.field == "LotSerNbr") {
+            if (["LotSerNbr"].indexOf(e.field) != -1) {
+                if (HQ.grid.checkDuplicate(App.grdLot, e, ["LotSerNbr", "POTranLineRef"])) {
+                    HQ.message.show(1112, e.value, '');
+                    return false;
+                }
             }
-        }          
+            var objcboLot = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [e.value]);
+            if (objcboLot) {
+                App.smlLot.selected.items[0].set("ExpDate", objcboLot.ExpDate);
+            }
+        }
         if (e.field == "Qty") {         
             var Qty = 0;
             Qty = e.record.data.UnitMultDiv == "M" ? e.value * e.record.data.CnvFact : e.value / e.record.data.CnvFact;
