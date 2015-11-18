@@ -406,10 +406,10 @@ var PopupWinLot = {
                 if (item.data.OMLineRef == det.LineRef && !Ext.isEmpty(item.data.LotSerNbr)) {
                     flat = true;
                 }
-            });            
+            });
             if (!flat) {
                 HQ.common.showBusy(true, HQ.waitMsg);
-                App.cboLotSerNbr.getStore().load({                   
+                App.cboLotSerNbr.getStore().load({
                     det: record.data,
                     row: record,
                     callback: function (records, options, success) {
@@ -490,12 +490,14 @@ var PopupWinLot = {
         App.lblLotQtyAvail.setText('');// xet lai so luong co the xuat =''     
         App.lblQtyAvail.setText('');
         App.stoLotTrans.clearFilter();
-        App.stoLotTrans.filter('OMLineRef', record.data.LineRef);
-        App.stoLotTrans.filter('OrderNbr', record.data.OrderNbr);
+        PopupWinLot.filterStore(App.stoLotTrans, ["OMLineRef", "OrderNbr"], [record.data.LineRef, record.data.OrderNbr]);
+        //HQ.store.filterStore(App.stoLotTrans, ["OMLineRef", "OrderNbr"], [record.data.LineRef, record.data.OrderNbr]);
+        //App.stoLotTrans.filter('OMLineRef', record.data.LineRef);
+        //App.stoLotTrans.filter('OrderNbr', record.data.OrderNbr);
         App.winLot.record = record.data;
         App.winLot.record = record;
         App.grdLot.view.refresh();
-        App.winLot.setTitle(record.data.InvtID + ' - ' + record.data.SiteID + ' - ' + record.data.QtyShip+' ' + record.data.SlsUnit);
+        App.winLot.setTitle(record.data.InvtID + ' - ' + record.data.SiteID + ' - ' + record.data.QtyShip + ' ' + record.data.SlsUnit);
         var flat = false;
         //App.stoLotTrans.data.each(function (item) {
         //    flat = true;
@@ -585,19 +587,19 @@ var PopupWinLot = {
     },
     grdLot_BeforeEdit: function (item, e) {
         var obj = e.record.data;
-        App.lblLotQtyAvail.setText('');      
+        App.lblLotQtyAvail.setText('');
         var objLot = HQ.store.findInStore(App.cboLotSerNbr.getStore(), ['LotSerNbr'], [obj.LotSerNbr]);
-        if (!Ext.isEmpty(objLot)) {        
+        if (!Ext.isEmpty(objLot)) {
             var Qty = obj.UnitMultDiv == "M" ? Math.floor(objLot.Qty / obj.CnvFact) : objLot.Qty * obj.CnvFact;
             App.lblLotQtyAvail.setText(_invtID + " - " + HQ.common.getLang('qtyavail') + ":" + Qty + " " + obj.UnitDesc);
             App.smlLot.selected.items[0].set("ExpDate", objLot.ExpDate);
         }
         else {
             App.lblLotQtyAvail.setText(_invtID + " - " + HQ.common.getLang('qtyavail') + ":" + 0);
-        }       
-        if (e.field != 'LotSerNbr' && Ext.isEmpty(e.record.data.LotSerNbr)) return false;      
+        }
+        if (e.field != 'LotSerNbr' && Ext.isEmpty(e.record.data.LotSerNbr)) return false;
     },
-    grdLot_SelectionChange: function (item, selected) {       
+    grdLot_SelectionChange: function (item, selected) {
     },
     grdLot_Edit: function (item, e) {
         HQ.common.showBusy(true);
@@ -644,14 +646,14 @@ var PopupWinLot = {
             var qty = 0;
             App.stoLotTrans.data.each(function (item) {
                 if (!Ext.isEmpty(item.data.LotSerNbr)) {
-                    if (item.data.LotSerNbr!= e.record.data.LotSerNbr && item.data.SiteID == recordTran.SiteID && item.data.InvtID == recordTran.InvtID && item.data.OMLineRef == recordTran.LineRef) {
+                    if (item.data.LotSerNbr != e.record.data.LotSerNbr && item.data.SiteID == recordTran.SiteID && item.data.InvtID == recordTran.InvtID && item.data.OMLineRef == recordTran.LineRef) {
                         qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
                     }
                 }
 
             });
             if (qty + e.value > App.winLot.record.data.LineQty) {
-                
+
                 HQ.message.show('20150818', [qty + e.value, App.winLot.record.data.LineQty], '', true);
                 return false;
             }
@@ -688,12 +690,32 @@ var PopupWinLot = {
         newRow.data.SiteID = record.SiteID;
         newRow.data.CnvFact = record.UnitRate;
         newRow.data.UnitMultDiv = record.UnitMultDiv;
-        newRow.data.InvtMult =  -1 ;
+        newRow.data.InvtMult = -1;
         newRow.data.UnitPrice = record.SlsPrice;
         newRow.data.ExpDate = !Ext.isEmpty(lotSerNbr) ? lotSerNbr.ExpDate : '';
 
         HQ.store.insertRecord(App.stoLotTrans, "LotSerNbr", newRow, true);
+    },
+
+    filterStore: function (store, field, value) {
+        store.filterBy(function (record) {
+            if (record) {
+                var flat = true;
+                for (var i = 0; i < field.length; i++) {
+                    if (record.data[field[i]].toString().toLowerCase() != (HQ.util.passNull(value[i]).toLowerCase())) {
+                        flat = false;
+                        break;
+                    }
+                }
+                if (flat) return record;
+
+            }
+        });
+    },
+    renderRowNumberLot: function (value, meta, record) {
+        return App.stoLotTrans.data.indexOf(record) + 1;
     }
+
 }
 var PopupWinClose = {
     chkSelectHeaderCloseOrder_change: function (chk, newValue, oldValue, eOpts) {

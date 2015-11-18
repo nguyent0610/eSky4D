@@ -562,7 +562,7 @@
             .Border(true).BorderSpec("1 0 0 0")
             .StoreID("stoLotTrans")
             .ColumnModel(
-                X.RowNumbererColumn()//.Renderer("renderRowNumber")
+                X.RowNumbererColumn().Renderer("PopupWinLot.renderRowNumberLot")
                 , X.Column().ID("colLotSerNbr").DataIndex("LotSerNbr").Text(Util.GetLang("LotSerNbr"))
                     .Editor(HQ.Combo().ID("cboLotSerNbr").Name("cboLotSerNbr").HideLabel(true).LabelWidth(0).HQAutoLoad(false)
                                         .HQDBSys(false).HQProcedure("OM20500_pcLotSerNbr").ForceSelection(true)
