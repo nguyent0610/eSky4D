@@ -79,10 +79,12 @@ namespace OM22002.Controllers
                             #region DisplayTradeType
                             var regisObj = _db.OM_TDisplayCustomer.FirstOrDefault(p => p.BranchID == updated.BranchID
                                 && p.SlsperID == updated.SlsperID && p.CustID == updated.CustID
-                                && p.DisplayID == updated.ObjectID);// && p.LevelID != updated.LevelID);
+                                && p.DisplayID == updated.ObjectID && p.LevelID != updated.LevelID);
                             if (regisObj != null)
                             {
-                                throw new MessageException("1003", "");
+                                regisObj.LevelID = updated.LevelID;
+                                Insert_OM_TDisplayCustomerHist(regisObj);
+                                //throw new MessageException("1003", "");
                             }
                             else
                             {
@@ -115,6 +117,9 @@ namespace OM22002.Controllers
                                 regisObj.PercentImage = 0;
                                 regisObj.PercentSales = 0;
                                 _db.OM_TDisplayCustomer.AddObject(regisObj);
+
+                                Insert_OM_TDisplayCustomerHist(regisObj);
+
                             }
                             #endregion
                         }
@@ -560,6 +565,35 @@ namespace OM22002.Controllers
                 dt.Rows.Add(nr);
             }
             return dt;
+        }
+        private void Insert_OM_TDisplayCustomerHist(OM_TDisplayCustomer t)
+        {
+            OM_TDisplayCustomerHist s = new OM_TDisplayCustomerHist();
+            s.ResetET();
+            s.BranchID = t.BranchID;
+            s.CustID = t.CustID;
+            s.DisplayID = t.DisplayID;
+            s.LevelID = t.LevelID;
+     
+            s.Pass = t.Pass;
+            s.PercentImage = t.PercentImage;
+            s.PercentSales = t.PercentSales;
+            s.Rate = t.Rate;
+            s.Remark = t.Remark;
+            s.SlsperID = t.SlsperID;
+            s.Status = t.Status;
+            s.Territory = t.Territory;
+            s.Type = t.Type;
+            s.Zone = t.Zone;
+
+            s.Crtd_DateTime = DateTime.Now;
+            s.Crtd_Prog = _screenNbr;
+            s.Crtd_User = Current.UserName;
+
+            s.LUpd_DateTime = DateTime.Now;
+            s.LUpd_Prog = _screenNbr;
+            s.LUpd_User = Current.UserName;
+            _db.OM_TDisplayCustomerHist.AddObject(s);            
         }
     }
 }

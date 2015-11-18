@@ -227,11 +227,11 @@ var Event = {
 
     Grid: {
         grdDet_beforeEdit: function (editor, e) {
-            if (!e.record.data.Registered) {
+            //if (!e.record.data.Registered) {
                 if (e.field == "LevelID") {
                     App.cboColLevelID.store.reload();
                 }
-            }
+            //}
             else {
                 return false;
             }
