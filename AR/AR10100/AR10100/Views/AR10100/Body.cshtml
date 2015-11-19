@@ -97,6 +97,7 @@
                                 {
                                     lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                     lst.Focus.Handler = "this.forceSelection = true;";
+                                    lst.Change.Fn = "cboHandle_Change";
                                 })
 
                         )//ngoac ket thuc row2                              
@@ -206,10 +207,10 @@
                                                 })
 
                                         , HQ.TextBox().ID("txtInvcNbr").Name("txtInvcNbr").HQLangCode("INVCNBR").DataIndex("InvcNbr")
-                                            .LabelWidth(150).InputWidth(75).MaxLength(15).EnforceMaxLength(true).AllowBlank(false)
+                                            .LabelWidth(150).InputWidth(75).MaxLength(15).EnforceMaxLength(true).AllowBlank(true)
 
                                         , HQ.TextBox().ID("txtInvcNote").Name("txtInvcNote").DataIndex("InvcNote").HideLabel(true)
-                                            .InputWidth(75).MaxLength(10).EnforceMaxLength(true).AllowBlank(false)
+                                            .InputWidth(75).MaxLength(10).EnforceMaxLength(true).AllowBlank(true)
 
                                         , HQ.NumberField().ID("txtCuryOrigDocAmt").Name("txtCuryOrigDocAmt").HQLangCode("ORIGDOCAMT").DecimalPrecision(0).DataIndex("OrigDocAmt")
                                             .LabelWidth(150).InputWidth(150).ReadOnly(true).Tag("X")

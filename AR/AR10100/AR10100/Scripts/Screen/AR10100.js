@@ -77,7 +77,7 @@ var menuClick = function (command) {
                 }
             }
             break;
-        case "save":
+        case "save":          
             if (App.cboStatus.getValue() == "V" || ((Ext.isEmpty(App.cboHandle.getValue()) || App.cboHandle.getValue() == "N") && App.cboStatus.getValue() == "C")) return;
             if (App.txtCuryDocBal.getValue()=='0') {
                 HQ.message.show(704, '', '');
@@ -116,8 +116,7 @@ function refresh(item) {
 ////////Save////////////////
 ////////////////////////////
 function Save() {
-   
-    App.frmMain.getForm().updateRecord();
+  
     App.frmMain.getForm().updateRecord();
     if (App.frmMain.isValid()) {
         App.frmMain.submit({
@@ -316,6 +315,19 @@ var dteDocDate_Change = function (sender, e) {
     if (obj != undefined && App.dteDocDate.hasFocus) {
         App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(obj.DueIntrv) : App.dteDueDate.value);
     }
+}
+var cboHandle_Change = function (sender, e) {
+    if (App.cboHandle.getValue() == "R") {
+        App.txtInvcNbr.allowBlank = false;
+        App.txtInvcNote.allowBlank = false;
+        
+    }
+    else {
+        App.txtInvcNbr.allowBlank = true;
+        App.txtInvcNote.allowBlank = true;
+    }
+    App.txtInvcNbr.validate();
+    App.txtInvcNote.validate();
 }
 /////////Grid////////////////////////////////
 //////////////////////////////////////////////////
