@@ -80,7 +80,7 @@ var menuClick = function (command) {
         case "save":          
             if (App.cboStatus.getValue() == "V" || ((Ext.isEmpty(App.cboHandle.getValue()) || App.cboHandle.getValue() == "N") && App.cboStatus.getValue() == "C")) return;
             if (App.txtCuryDocBal.getValue()=='0') {
-                HQ.message.show(704, '', '');
+                HQ.message.show(20151111901, '', '');
                 return;
             }
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
