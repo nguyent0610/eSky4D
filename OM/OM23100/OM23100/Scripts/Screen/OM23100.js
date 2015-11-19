@@ -1,1 +1,287 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('m a=["\\v\\o\\f\\E\\b\\k\\1f\\i","\\o\\h\\g\\i\\j\\q\\t\\z\\g\\d\\g","\\t\\b\\d\\1L\\g\\q\\t","\\l\\h\\u\\u\\h\\q","\\f\\s\\h\\1h\\1y\\V\\f\\X","\\o\\h\\g\\i","\\t\\b\\d\\v\\d\\h\\k\\b","\\l\\C\\h\\z\\j\\f\\d","\\l\\C\\h\\2l\\b\\k\\k\\j\\d\\h\\k\\X","\\l\\C\\h\\1Z\\h\\q\\b","\\t\\k\\i\\G\\B\\Z\\R\\M\\v","\\H\\j\\k\\f\\d","\\t\\k\\j\\i","\\E\\k\\b\\K","\\q\\b\\2a\\d","\\o\\g\\f\\d","\\j\\f\\M\\s\\g\\q\\t\\b","","\\k\\b\\H\\k\\b\\f\\s","\\f\\s\\h\\1h","\\u\\b\\f\\f\\g\\t\\b","\\j\\f\\R\\j\\k\\f\\d\\1L\\h\\g\\i","\\k\\b\\o\\h\\g\\i","\\f\\d\\h\\G\\B\\Z\\R\\M\\v","\\j\\f\\1f\\q\\f\\b\\k\\d","\\q\\b\\1h","\\j\\d\\b\\u\\f","\\f\\b\\o\\b\\l\\d\\b\\i","\\f\\o\\u\\G\\B\\Z\\R\\M\\v","\\j\\f\\z\\b\\o\\b\\d\\b","\\i\\b\\o\\b\\d\\b\\z\\g\\d\\g","\\i\\b\\o\\b\\d\\b","\\j\\f\\2c\\E\\i\\g\\d\\b","\\l\\s\\b\\l\\I\\1c\\b\\2k\\V\\j\\k\\b\\1n\\g\\f\\f","\\f\\d\\h\\k\\b","\\f\\g\\K\\b","\\E\\k\\j\\q\\d","\\l\\o\\h\\f\\b","\\M\\h\\i\\b","\\i\\g\\d\\g","\\H\\j\\q\\i\\1c\\b\\l\\h\\k\\i","\\l\\C\\h\\1n\\h\\f\\j\\d\\j\\h\\q\\G\\B\\1l\\1j\\1o\\N\\N\\Z\\E\\l\\1n\\h\\f\\j\\d\\j\\h\\q","\\z\\b\\f\\l\\k","\\G\\B\\1l\\1j\\1o\\N\\N","\\l\\s\\g\\q\\t\\b\\z\\g\\d\\g","\\f\\b\\d\\1c\\b\\g\\i\\G\\q\\o\\X","\\i\\g\\d\\b\\R\\l\\f","\\f\\b\\d\\z\\j\\f\\g\\C\\o\\b\\i","\\C\\d\\q\\v\\b\\g\\k\\l\\s","\\o\\h\\g\\i\\j\\q\\t\\i\\g\\d\\g","\\t\\b\\d\\1k\\g\\o\\V\\b","\\t\\b\\d\\1Y\\b\\g\\k","\\l\\s\\b\\l\\I\\1y\\b\\H\\h\\k\\b\\1m\\i\\j\\d","\\t\\b\\d\\B\\h\\q\\d\\s","\\l\\s\\b\\l\\I\\1f\\q\\f\\b\\k\\d\\2d\\b\\X","\\H\\j\\b\\o\\i","\\K\\g\\o\\V\\b","\\l\\C\\h\\v\\o\\f\\E\\b\\k\\1f\\i","\\2g\\g\\u\\b","\\f\\b\\d","\\k\\b\\l\\h\\k\\i","\\l\\s\\b\\l\\I\\1k\\g\\o\\j\\i\\g\\d\\b\\1m\\i\\j\\d","\\l\\s\\b\\l\\I\\1c\\b\\2i\\b\\l\\d","\\H\\k\\u\\B\\g\\j\\q","\\H\\h\\k\\u","\\f\\b\\d\\2j\\j\\i\\d\\s","\\E\\j\\l\\I\\b\\k","\\u\\h\\q\\d\\s\\1m\\o","\\k\\b\\u\\h\\K\\b\\2b\\o\\o","\\s\\j\\i\\b","\\j\\f\\1k\\g\\o\\j\\i","\\v\\g\\K\\j\\q\\t\\z\\g\\d\\g","\\G\\B\\1l\\1j\\1o\\N\\N\\1T\\v\\g\\K\\b","\\t\\b\\d\\M\\s\\g\\q\\t\\b\\i\\z\\g\\d\\g","\\b\\q\\l\\h\\i\\b","\\E\\k\\h\\l\\b\\f\\f","\\f\\V\\C\\u\\j\\d","\\X\\b\\f","\\i\\b\\o\\b\\d\\b\\v\\b\\o\\b\\l\\d\\b\\i"];m P=[a[0]];m 1B=[a[0]];m 1z=[a[0]];m 1I=n(){c[a[3]][a[4]](D,c[a[3]][a[2]](a[1]));e[a[9]][a[6]]()[a[5]](n(){e[a[8]][a[6]]()[a[5]](n(){e[a[7]][a[6]]()[a[5]](n(){c[a[3]][a[4]](A,c[a[3]][a[2]](a[1]))})})})};m 2e=n(1w){2f(1w){x a[11]:c[a[12]][a[11]](e[a[10]]);w;x a[13]:c[a[12]][a[13]](e[a[10]]);w;x a[14]:c[a[12]][a[14]](e[a[10]]);w;x a[15]:c[a[12]][a[15]](e[a[10]]);w;x a[18]:p(c[a[16]]){c[a[20]][a[19]](T,a[17],a[18])}y{c[a[16]]=A;c[a[21]]=D;e[a[23]][a[22]]()};w;x a[25]:p(c[a[24]]){};w;x a[31]:p(e[a[28]][a[27]][a[26]][0]!=1X){p(c[a[29]]){c[a[20]][a[19]](11,a[17],a[30])}};w;x a[35]:p(c[a[32]]||c[a[24]]||c[a[29]]){p(c[a[34]][a[33]](e[a[23]],P,1B,1z)){1M()}};w;x a[36]:w;x a[37]:c[a[3]][a[37]](2h);w}};m 1V=n(1H,1O,1D,1W,1Q,1R){m S=e[a[1S]][a[1v]](a[38],1D[a[39]].1U);p(S){F S[a[39]][a[1P]]}y{F 1H}};m 2A=n(){1I()};m 3h=n(){c[a[21]]=D;e[a[23]][a[22]]()};m 1a=n(W){c[a[16]]=c[a[34]][a[16]](W);c[a[3]][a[1t]](c[a[16]],a[1s]);e[a[7]][a[1e]](c[a[16]]);e[a[8]][a[1e]](c[a[16]]);e[a[9]][a[1e]](c[a[16]]);e[a[1A]][a[1e]](c[a[16]]);e[a[3f]][a[2Z]](c[a[16]])};m 3g=n(W){c[a[16]]=c[a[34]][a[16]](W);c[a[3]][a[1t]](c[a[16]],a[1s]);p(c[a[21]]){p(c[a[24]]){};c[a[21]]=A};c[a[3]][a[4]](A);1a(e[a[23]])};m 3a=n(W){c[a[3]][a[4]](D,c[a[3]][a[2]](a[2m]))};m 3b=n(3e,r){m J=3d 3c(e[a[1A]][a[2Y]]());p(J[a[O]]()>U[a[O]]()){F c[a[12]][a[1C]](r,P)}y{p(J[a[O]]()==U[a[O]]()){p(J[a[1d]]()<U[a[1d]]()){F A}y{p(J[a[1d]]()>=U[a[1d]]()){F c[a[12]][a[1C]](r,P)}}}y{p(J[a[O]]()>U[a[O]]()){F A}}}};m 2X=n(L,r){c[a[12]][a[3j]](e[a[10]],r,P);p(r[a[1u]]==a[0]){m 1i=e[a[1x]][a[34]][a[1v]](r[a[1u]],r[a[3i]]);p(1i){r[a[1K]][a[1N]](a[1J],1i[a[39]].2V)}y{r[a[1K]][a[1N]](a[1J],a[17])}}};m 2y=n(L,r){F c[a[12]][a[2x]](e[a[10]],r,P)};m 2w=n(S){c[a[12]][a[2z]](S,e[a[10]]);1a(e[a[23]])};m 2W=n(Q,r){p(c[a[2C]][a[33]](e[a[1g]])){c[a[21]]=D;e[a[10]][a[19]]();e[a[23]][a[22]]()}};m 2B=n(1p,2v){1p[a[1E]][a[1G]](2u);1p[a[1E]][a[2p]][a[1G]](2o)};m 2n=n(Q,r){p(c[a[16]]){c[a[20]][a[19]](T,a[17],a[18])}y{e[a[10]][a[34]][a[Y]]();e[a[10]][a[1b]]();e[a[8]][a[34]][a[5]]()}};m 2q=n(Q,r){p(c[a[16]]){c[a[20]][a[19]](T,a[17],a[18])}y{e[a[10]][a[34]][a[Y]]();e[a[10]][a[1b]]();e[a[7]][a[34]][a[5]]()}};m 2r=n(Q,r){p(c[a[16]]){c[a[20]][a[19]](T,a[17],a[18])}y{e[a[10]][a[34]][a[Y]]();e[a[10]][a[1b]]();e[a[1x]][a[34]][a[22]]()}};m 2t=n(Q,r){p(c[a[16]]){c[a[20]][a[19]](T,a[17],a[18])}y{e[a[10]][a[34]][a[Y]]();e[a[10]][a[1b]]()}};m 1M=n(){p(e[a[1g]][a[2s]]()){e[a[1g]][a[2D]]({2E:c[a[3]][a[2]](a[2Q]),2P:a[2O],2R:{2S:2U[a[2T]](e[a[23]][a[2N]]({2M:A}))},2H:n(1q,1r){c[a[20]][a[19]](2G);c[a[16]]=A;c[a[21]]=D;e[a[23]][a[22]]()},2F:n(1q,1r){c[a[20]][a[2I]](1q,1r,D)}})}};m 2J=n(L){p(L==a[1F]){e[a[10]][a[2L]]();1a(e[a[23]])}};n 2K(L){p(L==a[1F]){c[a[16]]=A;c[a[21]]=D;e[a[23]][a[22]]()}}', 62, 206, '||||||||||_0x6528|x65|HQ|x74|App|x73|x61|x6F|x64|x69|x72|x63|var|function|x6C|if|x6E|_0x8a3bx17|x68|x67|x6D|x53|break|case|else|x44|false|x4D|x62|true|x70|return|x4F|x66|x6B|_0x8a3bx18|x76|_0x8a3bx1a|x43|x30|51|keys|_0x8a3bx1f|x46|_0x8a3bxe|20150303|_dateServer|x75|_0x8a3bx12|x79|68|x5F|||||||||||stoChanged|69|x52|53|45|x49|63|x77|_0x8a3bx1b|x33|x56|x32|x45|x50|x31|_0x8a3bx21|_0x8a3bx28|_0x8a3bx29|43|44|55|40|_0x8a3bx6|57|x42|fieldsLangCheckRequire|46|fieldsCheckRequire|52|_0x8a3bxa|66|77|65|_0x8a3bx8|loadSourceCombo|58|60|x4C|save|59|_0x8a3bx9|42|_0x8a3bxc|_0x8a3bxd|41|x2F|Position|renderPosition|_0x8a3bxb|undefined|x59|x5A|||||||||||x78|x41|x55|x4B|menuClick|switch|x4E|this|x6A|x57|x71|x54|49|cboZone_Change|200|67|cboTerritory_Change|cboDist_Change|70|dateFcs_Change|300|_0x8a3bx22|grdOM_FCS_Reject|61|grdOM_FCS_ValidateEdit|62|beforeSelectcombo|dateFcs_expand|64|76|waitMsg|failure|201405071|success|75|deleteData|refresh|78|skipIdForPhantomRecords|73|72|url|71|params|lstOM_FCS|74|Ext|Name|btnSearch_Click|grdOM_FCS_Edit|50|47|||||||||||stoBeforeLoad|grdOM_FCS_BeforeEdit|Date|new|_0x8a3bx16|48|stoLoad|firstLoad|56|54'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['SlsperId'];
+var fieldsCheckRequire = ["SlsperId"];
+var fieldsLangCheckRequire = ["SlsperId"];
+///////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+var loadSourceCombo = function () {
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    App.cboZone.getStore().load(function () {
+        App.cboTerritory.getStore().load(function () {
+            App.cboDist.getStore().load(function () {
+                HQ.common.showBusy(false, HQ.common.getLang("loadingData"));
+            })
+        })
+    })
+};
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdOM_FCS);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdOM_FCS);
+            break;
+        case "next":
+            HQ.grid.next(App.grdOM_FCS);
+            break;
+        case "last":
+            HQ.grid.last(App.grdOM_FCS);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoOM_FCS.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                //HQ.grid.insert(App.grdOM_FCS, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmOM_FCS.selected.items[0] != undefined) {
+                if (HQ.isDelete) {
+                    HQ.message.show(11, '', 'deleteData');
+                }
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoOM_FCS, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+
+};
+var renderPosition = function (value, metaData, rec, rowIndex, colIndex, store) {
+    var record = App.cboPositionOM23100_pcPosition.findRecord("Code", rec.data.Position);
+    if (record) {
+        return record.data.Descr;
+    }
+    else {
+        return value;
+    }
+};
+var beforeSelectcombo = function () {
+    loadSourceCombo();
+};
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoOM_FCS.reload();
+};
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM23100');
+    App.cboDist.setReadOnly(HQ.isChange);
+    App.cboTerritory.setReadOnly(HQ.isChange);
+    App.cboZone.setReadOnly(HQ.isChange);
+    App.dateFcs.setReadOnly(HQ.isChange);
+    App.btnSearch.setDisabled(HQ.isChange);
+    //App.dateFcs.setDisabled(HQ.isChange);
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'OM23100');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            //HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+    HQ.common.showBusy(false);
+    stoChanged(App.stoOM_FCS);
+};
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+var grdOM_FCS_BeforeEdit = function (editor, e) {
+    // thang nho hon thi khong cho sua
+    var d = new Date(App.dateFcs.getValue());
+
+    if (d.getYear() > _dateServer.getYear()) {
+        return HQ.grid.checkBeforeEdit(e, keys);
+    }
+    else if (d.getYear() == _dateServer.getYear()) {
+        if (d.getMonth() < _dateServer.getMonth()) {
+            return false;
+        }
+        else if (d.getMonth() >= _dateServer.getMonth()) {
+            return HQ.grid.checkBeforeEdit(e, keys);
+        }
+    }
+    else if (d.getYear() > _dateServer.getYear()) {
+        return false;
+    }
+};
+var grdOM_FCS_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdOM_FCS, e, keys);
+    if (e.field == "SlsperId") {
+        var selectedRecord = App.cboSlsperId.store.findRecord(e.field, e.value);
+        if (selectedRecord) {
+            e.record.set("Name", selectedRecord.data.Name);
+        }
+        else {
+            e.record.set("Name", "");
+        }
+    }
+};
+var grdOM_FCS_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdOM_FCS, e, keys);
+};
+var grdOM_FCS_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdOM_FCS);
+    stoChanged(App.stoOM_FCS);
+};
+var btnSearch_Click = function (sender, e) {
+    if (HQ.form.checkRequirePass(App.frmMain)) {
+        HQ.isFirstLoad = true;
+        App.grdOM_FCS.show();
+        App.stoOM_FCS.reload();
+    }
+};
+var dateFcs_expand = function (dte, eOpts) {
+    dte.picker.setWidth(300);
+    dte.picker.monthEl.setWidth(200);
+};
+var cboZone_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+        App.cboTerritory.store.load();
+    }
+};
+var cboTerritory_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+        App.cboDist.store.load();
+    }
+};
+var cboDist_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+        App.cboSlsperId.store.reload();
+    }
+};
+var dateFcs_Change = function (sender, e) {
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        App.grdOM_FCS.store.removeAll();
+        App.grdOM_FCS.hide();
+    }
+};
+var btnImport_Click = function (c, e) {
+    var fileName = c.getValue();
+    var ext = fileName.split(".").pop().toLowerCase();
+    if (ext == "xls" || ext == "xlsx") {
+        App.frmMain.submit({
+            waitMsg: HQ.waitMsg,
+            clientValidation: false,
+            method: 'POST',
+            url: 'OM23100/Import',
+            timeout: 1000000,           
+            success: function (msg, data) {
+                if (!Ext.isEmpty(this.result.message)) {
+                    HQ.message.show('2013103001', [this.result.message], '', true);
+                }
+                else {
+                    HQ.message.process(msg, data, true);                    
+                }                           
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+                App.btnImport.reset();
+            }
+        });
+    } else {
+        HQ.message.show('2014070701', [ext], '', true);
+        App.btnImport.reset();
+    }
+};
+var btnExport_Click = function () {  
+    App.frmMain.submit({
+        //waitMsg: HQ.common.getLang("Exporting"),
+        url: 'OM23100/Export',
+        type: 'POST',
+        timeout: 1000000,
+        clientValidation: false,
+        params: {
+            type: 'O',
+        },
+        success: function (msg, data) {          
+        },
+        failure: function (msg, data) {
+            HQ.message.process(msg, data, true);
+        }
+    });
+};
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    //HQ.isFirstLoad = true;
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'OM23100/Save',
+            params: {
+                //lstOM_FCS: Ext.HQ.store.getData(App.stoOM_FCS)
+                lstOM_FCS: Ext.encode(App.stoOM_FCS.getChangedData({ skipIdForPhantomRecords: false })),
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoOM_FCS.reload();
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdOM_FCS.deleteSelected();
+        stoChanged(App.stoOM_FCS);
+    }
+};
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoOM_FCS.reload();
+    }
+};
+////////////////////////////////////////////////////////////////////////
