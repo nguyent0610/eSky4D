@@ -89,7 +89,7 @@ namespace OM20700.Controllers
             }
             if ((lstAllCust.Where(p => p.CustID.PassNull() != "").Count() == 0 && data["cboPriceCat"] == "IC"))
             {
-                throw new MessageException(MessageType.Message, "201511191");
+                throw new MessageException(MessageType.Message, "201511192");
                 
             }
 
