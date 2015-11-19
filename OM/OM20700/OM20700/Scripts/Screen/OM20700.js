@@ -254,6 +254,7 @@ var grdPrice_Edit = function (item, e) {
     }
     else e.record.set("Descr", '');   
     HQ.grid.checkInsertKey(App.grdPrice, e, _keys);
+    frmChange();
 };
 
 var grdPrice_Reject = function (record) {
@@ -265,6 +266,7 @@ var grdPrice_Reject = function (record) {
     } else {   
         record.reject();
     }
+    frmChange();
 }
 
 
@@ -291,6 +293,7 @@ var grdCust_ValidateEdit = function (item, e) {
 var grdCust_Edit = function (item, e) {
     var _keys = ["CustID", "BranchID"];   
     HQ.grid.checkInsertKey(App.grdCust, e, _keys);
+    frmChange();
 };
 
 var grdCust_Reject = function (record) {
@@ -302,6 +305,7 @@ var grdCust_Reject = function (record) {
     } else {
         record.reject();
     }
+    frmChange();
 }
 
 
@@ -369,19 +373,55 @@ var stoChanged = function (sto) {
 };
 
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
-var stoLoad = function (sto) {
-    HQ.isFirstLoad = true;
-    HQ.common.showBusy(false);
-    HQ.isChange = HQ.store.isChange(sto);  
+var stogrd_Load = function (sto) {
+    if (HQ.isFirstLoad) {
+        if (sto.storeId == "stogrdPrice") {
+            if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
+                setTimeout(function () {
+                    App.stogrdPrice.insert(App.stogrdPrice.getTotalCount(), Ext.data.Record());                   
+                }, 100);
+            }
+        }
+        
+        else if (sto.storeId == "stogrdCompany") {
+            if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
+                setTimeout(function () {
+                    App.stogrdCompany.insert(App.stogrdCompany.getTotalCount(), Ext.data.Record());
+                }, 100);
+            }
+        }
+        else if (sto.storeId == "stogrdCust") {
+            if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
+                setTimeout(function () {
+                    App.stogrdCust.insert(App.stogrdCust.getTotalCount(), Ext.data.Record());
+                }, 100);
+            }
+        }
+        
+    }
+    sourcedata++;
+    if (sourcedata == 3) {
+        frmChange();
+        HQ.common.showBusy(false);
+        HQ.isFirstLoad = false;
+        App.stogrdPrice.loadPage(1);
+        App.stogrdCompany.loadPage(1);
+        App.stogrdCust.loadPage(1);
+    }
+ 
 };
+
 //trước khi load trang busy la dang load data
 var stoBeforeLoad = function (sto) {
     //HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 var loadDataHeader = function (sto) {
+    sourcedata = 0;
+    HQ.isFirstLoad = true;
+    App.cboPriceCat.setValue('');
     App.tabSalesPrice.setActiveTab(0);
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
-    HQ.common.setForceSelection(App.frmMain, false, "cboPriceID,cboHandle");
+    //HQ.common.setForceSelection(App.frmMain, false, "cboPriceID,cboHandle");
     if (sto.data.length == 0) {
         HQ.isNew = true;
         HQ.store.insertBlank(sto, "PriceID");
@@ -394,13 +434,14 @@ var loadDataHeader = function (sto) {
         sto.commitChanges();
     }
     var record = sto.getAt(0);
+    var isLock = record.data.Status == "H" ? false : true;
+    HQ.common.lockItem(App.frmMain, isLock);
+
     App.frmMain.getForm().loadRecord(record);
     App.stogrdPrice.reload();
     App.stogrdCust.reload();
     App.stogrdCompany.reload();  
-    var isLock = record.data.Status == "H" ? false : true;
-    HQ.common.lockItem(App.frmMain, isLock);
-
+ 
 };
 var chkPublic_Change = function () {
     if (App.chkPublic.checked)
@@ -425,6 +466,7 @@ var cboPriceCat_Change = function (item, newValue, oldValue) {
         App.cboClassID.allowBlank = true;
         App.tabCust.setDisabled(true);
     }
+    if (item.hasFocus) App.cboClassID.setValue('');
     App.cboClassID.validate();
 };
 var colCheck_Header_Change = function (value) {
@@ -471,7 +513,8 @@ function save() {
                 lstPrice: Ext.encode(App.stogrdPrice.getChangedData({ skipIdForPhantomRecords: false })),
                 lstCust: Ext.encode(App.stogrdCust.getChangedData({ skipIdForPhantomRecords: false })),
                 lstAllCompany: HQ.store.getAllData(App.stogrdCompany),
-                lstAllPrice: HQ.store.getAllData(App.stogrdPrice)
+                lstAllPrice: HQ.store.getAllData(App.stogrdPrice),
+                lstAllCust: HQ.store.getAllData(App.stogrdCust)
             },
             success: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -782,24 +825,6 @@ var deleteAllCompanies = function (item) {
 };
 
 /////////////////////////////// GIRD Company /////////////////////////////////
-var stogrdCompany_Load = function (sto) {
-   
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
-            HQ.store.insertBlank(sto, keyCompany);
-        }
-        HQ.isFirstLoad = false; //sto load cuoi se su dung
-    }
-    //Sto tiep theo
-    frmChange();
-    HQ.common.showBusy(false);
-};
-var stogrdPrice_Load = function (sto) {
-    if (HQ.isInsert && App.cboStatus.getValue() == _beginStatus) {
-        App.stogrdPrice.insert(App.stogrdPrice.getCount(), Ext.data.Record());
-    }
-};
-
 
 var grdCompany_BeforeEdit = function (editor, e) {
     if (App.cboStatus.getValue() != _beginStatus || (!App.cboPriceID.value && !HQ.isInsert) || (App.cboPriceID.value && !HQ.isUpdate)) {
@@ -834,3 +859,6 @@ function refresh(item) {
         });
     }
 };
+var renderNumberColumnCpny = function (value, meta, record) {
+    return App.stogrdCompany.data.indexOf(record) + 1;
+}

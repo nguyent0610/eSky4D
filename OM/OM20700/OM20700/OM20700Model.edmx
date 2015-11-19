@@ -549,12 +549,12 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="OM20700Model.OM_SalesPrice" Width="1.5" PointX="11.128148037534277" PointY="20.983890394207037" />
-        <EntityTypeShape EntityType="OM20700Model.OM_SalesPriceCust" Width="1.5" PointX="5.5132264688206964" PointY="26.987900999834714" />
-        <EntityTypeShape EntityType="OM20700Model.OM_SalesPriceHeader" Width="1.5" PointX="11.53090970568867" PointY="10.532806371586773" />
-        <EntityTypeShape EntityType="OM20700Model.OM_SlsPriceCpny" Width="1.5" PointX="4.9903040607414688" PointY="2.1978616873723742" />
-        <EntityTypeShape EntityType="OM20700Model.SI_ApprovalFlowHandle" Width="1.5" PointX="5.7577488076676371" PointY="25.010891940915442" />
-        <EntityTypeShape EntityType="OM20700Model.SI_ApprovalFlowStatus" Width="1.5" PointX="3.7691694031325955" PointY="9.4214404418233038" />
+        <EntityTypeShape EntityType="OM20700Model.OM_SalesPrice" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM20700Model.OM_SalesPriceCust" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM20700Model.OM_SalesPriceHeader" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="OM20700Model.OM_SlsPriceCpny" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OM20700Model.SI_ApprovalFlowHandle" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="OM20700Model.SI_ApprovalFlowStatus" Width="1.5" PointX="6.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

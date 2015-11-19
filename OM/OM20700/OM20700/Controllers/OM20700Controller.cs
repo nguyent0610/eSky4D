@@ -57,8 +57,8 @@ namespace OM20700.Controllers
         {
             var lstCpny = JSON.Deserialize<List<OM_SlsPriceCpny>>(data["lstAllCompany"]);
 
-            var lstPrice = JSON.Deserialize<List<OM20700_pgDetail_Result>>(data["lstAllPrice"]); 
-
+            var lstPrice = JSON.Deserialize<List<OM20700_pgDetail_Result>>(data["lstAllPrice"]);
+            var lstAllCust = JSON.Deserialize<List<OM20700_pgPriceCust_Result>>(data["lstAllCust"]); 
             string status = data["Status"].PassNull();
             string handle = data["Handle"].PassNull();
           
@@ -71,20 +71,29 @@ namespace OM20700.Controllers
             var beginStatus = begin == null ? "H" : begin.Status;
             var endStatus = end == null ? "C" : end.Status;
 
-            if (status != endStatus && status != beginStatus && data["PriceCat"] != "IC" && (handle == "N" || handle == string.Empty))
+            if ((lstCpny.Where(p => p.CpnyID.PassNull() !="" ).Count() == 0 && (data["chkPublic"] == null ? false : true) == false))
             {
-                return Json(new { success = false, fn = "", parm = "" });
-            }
-            if ((handle != "N" && handle != string.Empty) && (lstCpny.Where(p => p.CpnyID != string.Empty).Count() == 0 && (data["Public"] == null ? false : true) == false))
-            {
-                return Json(new { success = false, code = "1888", errorMsg = "abc", type = "message", fn = "", parm = "" });
+                throw new MessageException(MessageType.Message, "1888");
+                
             }
 
-            //if (objhandle != null && !objhandle.Param00.PassNull().Split(',').Any(p => p.ToLower() == "notapprove") && !lstPrice.Any(p => p.Check == true))
-            //{
-            //    return Json(new { success = false, code = "1177", errorMsg = "abc", type = "message", fn = "", parm = "" });
+            if ((lstPrice.Where(p => p.InvtID.PassNull() != "" && p.QtyBreak==0).Count()>0))
+            {
+                throw new MessageException(MessageType.Message, "97");
 
-            //}
+            }
+            if ((lstPrice.Where(p => p.InvtID.PassNull() != "" && p.Price != 0).Count() ==0))
+            {
+                throw new MessageException(MessageType.Message, "2015020804");
+
+            }
+            if ((lstAllCust.Where(p => p.CustID.PassNull() != "").Count() == 0 && data["cboPriceCat"] == "IC"))
+            {
+                throw new MessageException(MessageType.Message, "201511191");
+                
+            }
+
+            
             return null;
 
         }
@@ -94,9 +103,8 @@ namespace OM20700.Controllers
         {
             try
             {
-                var result = CheckData(data);
-                if (result != null) return result;
-
+                CheckData(data);
+ 
                 string priceID = data["cboPriceID"].PassNull();
 
                 StoreDataHandler dataHandlerHeader = new StoreDataHandler(data["lstHeader"]);
@@ -228,6 +236,10 @@ namespace OM20700.Controllers
               
             }catch(Exception ex)
             {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
