@@ -170,7 +170,7 @@ var deleteRecordFormTopBatch = function (item) {
             clientValidation: false,
             timeout: 1800000,
             waitMsg: HQ.common.getLang('DeletingData'),
-            url: 'AR10100/DeleteFormTopBatch',
+            url: 'AR10100/Delete_Batch',
             params: {
                 batNbr: App.cboBatNbr.getValue(),
                 branchID: App.txtBranchID.getValue(),
@@ -299,7 +299,7 @@ var cboCustId_Change = function (sender, e) {
     if (obj != undefined && App.cboCustId.hasFocus) {
         App.cboTerms.setValue(obj.Terms);
         var obj = HQ.store.findInStore(App.cboTerms.getStore(), ["TermsID"], [obj.Terms]);
-        if (obj != undefined && App.cboTerms.hasFocus) {
+        if (obj != undefined) {
             App.dteDueDate.setValue(App.dteDocDate.value ? App.dteDocDate.getValue().addDays(obj.DueIntrv) : App.dteDueDate.value);
         }
     }

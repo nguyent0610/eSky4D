@@ -38,7 +38,7 @@ namespace AR10100
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
@@ -47,7 +47,7 @@ namespace AR10100
             Session["AR10100"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "HQHD3110";
+            Session["CpnyID"] = Current.CpnyID = "NDMT";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }

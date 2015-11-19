@@ -376,7 +376,6 @@ namespace AR10100.Controllers
                     }
                     _db.Batches.DeleteObject(recordTopBatch);
                 }
-
                 _db.SaveChanges();
                 return Json(new { success = true });
             }
