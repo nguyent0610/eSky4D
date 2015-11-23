@@ -1,58 +1,69 @@
 @using Ext.Net;
 @using Ext.Net.MVC;
-@using eBiz4DWebFrame;
-@using eBiz4DWebFrame.HQControl;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
 @using AR00000;
 
 @model System.Collections.IEnumerable
-
 @{
     Layout = null;
     var X = Html.X();
-    var HQ = Html.HQ();
     ViewBag.Title = "AR00000";
     var acc = Session["AR00000"] as AccessRight;
-    
 }
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width" />
-<link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
-<script src='@Url.Content("Scripts/common.js")' type="text/javascript"></script>
-<script src='@Url.Content("Scripts/Screen/AR00000.js")' type="text/javascript"></script>
+ <!--Không thay đổi phần head Đổi mã màn hình AR00000.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/AR00000.js")' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+       
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
 
-<script type="text/javascript">
-    var isUpdate = strToBool('@acc.Update.ToString()');
-    var isInsert = strToBool('@acc.Insert.ToString()');
-    var isDelete = strToBool('@acc.Delete.ToString()');
-</script>
-  <title>@ViewBag.Title</title>
-    </head>
-    <body>
-@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+    
 
-@*Make the store - the binding data of the form*@
-@(Html.X().Store().ID("storeAR00000Header")   
-        .Model(Util.GenerateModel(typeof(AR_Setup), "AR00000Model", "BrandID"))       
-        .Proxy(
-            X.AjaxProxy()                
-            .Url(Url.Action("GetAR00000Header", "AR00000"))                
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        ) 
-        .Parameters(ps =>
-                        {
-                            ps.Add(new StoreParameter("branchId", Current.CpnyID, ParameterMode.Value));
-                            ps.Add(new StoreParameter("setupId", "AR", ParameterMode.Value));
-                        })      
-        .Listeners(p=>p.Load.Handler="loadDataHeader()" )
-  )
-     @{ Html.RenderAction("Body"); }
-    </body>
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid -->   
+      
+        @(Html.X().Store().ID("stoAR00000Header")   
+            .Model(Util.GenerateModel(typeof(AR_Setup), "AR00000Model", "BrandID"))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetAR00000Header", "AR00000"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            ) 
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchId", Current.CpnyID, ParameterMode.Value));
+                                ps.Add(new StoreParameter("setupID", "AR", ParameterMode.Value));
+                            })      
+            .Listeners(p=>p.Load.Handler="loadDataHeader()" )
+      )        
+      <!-- Gọi hàm Body trong AR00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->    
+        @{Html.RenderAction("Body", new { lang=@Current.LangID});}   
+    
+</body>
 </html>
-
-
+ 
