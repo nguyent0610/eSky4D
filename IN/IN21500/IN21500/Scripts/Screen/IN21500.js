@@ -102,6 +102,7 @@ var grdData_Edit = function (item, e) {
         }        
     }
     HQ.grid.checkInsertKey(App.grdData, e, ["InvtID"]);
+    frmChange();
 };
 var grdData_ValidateEdit = function (item, e) {
     if (e.field == 'Date') {
@@ -118,11 +119,9 @@ var grdData_ValidateEdit = function (item, e) {
     }       
 };
 var grdData_Reject = function (record) {
-    if (record.data.InvtID && record.data.Date) {
-        HQ.grid.checkReject(record, App.grdData);
-        stoChanged(App.stoData);
-    }
-};
+    HQ.grid.checkReject(record, App.grdData);
+    frmChange();
+}
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
 var save = function () {
