@@ -11,10 +11,10 @@
         <EntityType Name="IN_InventoryDateMaster">
           <Key>
             <PropertyRef Name="InvtID" />
-            <PropertyRef Name="ExpDate" />
+            <PropertyRef Name="Date" />
           </Key>
           <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="ExpDate" Type="datetime" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="smalldatetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
@@ -36,23 +36,27 @@
     <edmx:ConceptualModels>
       <Schema Namespace="IN21500Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="IN21500Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="IN21500_pcInvtID" ReturnType="Collection(IN21500Model.IN21500_pcInvtID_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
           <EntitySet Name="IN_InventoryDateMaster" EntityType="IN21500Model.IN_InventoryDateMaster" />
           <FunctionImport Name="IN21500_pgData" ReturnType="Collection(IN21500Model.IN21500_pgData_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="IN21500_pcInvtID" ReturnType="Collection(IN21500Model.IN21500_pcInvtID_Result)">
-            <Parameter Name="UserID" Mode="In" Type="String" />
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="IN21500_pcInvtID_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
         <EntityType Name="IN_InventoryDateMaster">
           <Key>
             <PropertyRef Name="InvtID" />
-            <PropertyRef Name="ExpDate" />
+            <PropertyRef Name="Date" />
           </Key>
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="3" />
           <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="0" />
           <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -63,13 +67,9 @@
         </EntityType>
         <ComplexType Name="IN21500_pgData_Result">
           <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
-          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
           <Property Type="String" Name="Descr" Nullable="false" MaxLength="1" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-        </ComplexType>
-        <ComplexType Name="IN21500_pcInvtID_Result">
-          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -77,6 +77,14 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="IN21500Entities" >
+          <FunctionImportMapping FunctionImportName="IN21500_pcInvtID" FunctionName="eBiz4DWebSysModel.Store.IN21500_pcInvtID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN21500Model.IN21500_pcInvtID_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="IN_InventoryDateMaster">
             <EntityTypeMapping TypeName="IN21500Model.IN_InventoryDateMaster">
               <MappingFragment StoreEntitySet="IN_InventoryDateMaster">
@@ -87,7 +95,7 @@
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
                 <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -96,17 +104,9 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN21500Model.IN21500_pgData_Result">
                 <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN21500_pcInvtID" FunctionName="eBiz4DWebSysModel.Store.IN21500_pcInvtID">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN21500Model.IN21500_pcInvtID_Result">
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -131,7 +131,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" >
-        <EntityTypeShape EntityType="IN21500Model.IN_InventoryDateMaster" Width="1.5" PointX="11.369649113793694" PointY="25.551170614339025" />
+        <EntityTypeShape EntityType="IN21500Model.IN_InventoryDateMaster" Width="1.5" PointX="9.3205593085477876" PointY="14.968555740531793" />
       </Diagram>
     </Diagrams>
   </Designer>

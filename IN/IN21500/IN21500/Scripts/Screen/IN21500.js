@@ -1,8 +1,8 @@
 //// Declare //////////////////////////////////////////////////////////
 
 var keys = ['InvtID'];
-var fieldsCheckRequire = ["InvtID", "ExpDate"];
-var fieldsLangCheckRequire = ["InvtID", "ExpDate"];
+var fieldsCheckRequire = ["InvtID", "Date"];
+var fieldsLangCheckRequire = ["InvtID", "Date"];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -70,6 +70,10 @@ var stoChanged = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'IN21500');
 };
+var frmChange = function () {
+    HQ.isChange = HQ.store.isChange(App.stoData);
+    HQ.common.changeData(HQ.isChange, 'IN21500');
+}
 //load lai trang, kiem tra neu la load lan dau thi them dong moi vao
 var stoLoad = function (sto) {
     HQ.common.showBusy(false);
@@ -87,7 +91,7 @@ var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 var grdData_BeforeEdit = function (editor, e) {
-    if (e.field == 'ExpDate' && e.record.data.ExpDate) return false;
+    if (e.field == 'Date' && e.record.data.Date) return false;
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdData_Edit = function (item, e) {
@@ -97,24 +101,24 @@ var grdData_Edit = function (item, e) {
             e.record.set('Descr', objInvtID.data.Descr);
         }        
     }
-    HQ.grid.checkInsertKey(App.grdData, e, ["InvtID","ExpDate"]);
+    HQ.grid.checkInsertKey(App.grdData, e, ["InvtID"]);
 };
 var grdData_ValidateEdit = function (item, e) {
-    if (e.field == 'ExpDate') {
+    if (e.field == 'Date') {
 
         var yyyy =  e.value.getFullYear().toString();
         var mm = ( e.value.getMonth() + 1).toString(); // getMonth() is zero-based
         var dd =  e.value.getDate().toString();
         var date = (mm[1] ? mm : "0" + mm[0]) + "/" + yyyy;
 
-        if (HQ.grid.checkDuplicate(App.grdData, e, ["InvtID","ExpDate"])) {
+        if (HQ.grid.checkDuplicate(App.grdData, e, ["InvtID","Date"])) {
             HQ.message.show(1112, datess);
             return false;
         }
     }       
 };
 var grdData_Reject = function (record) {
-    if (record.data.InvtID && record.data.ExpDate) {
+    if (record.data.InvtID && record.data.Date) {
         HQ.grid.checkReject(record, App.grdData);
         stoChanged(App.stoData);
     }

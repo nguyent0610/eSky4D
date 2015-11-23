@@ -18,6 +18,7 @@
     .KeyMap(Util.SetupKeyMap())
     .TopBar(Util.SetupToolbar("Print", true, ""))
     .Layout(LayoutType.Fit)
+    .Listeners(p=>p.FieldChange.Fn="frmChange")
     .Items(
         ////Thiet ke giao dien o day
 
@@ -41,7 +42,7 @@
         )
         .Listeners(p =>
                  {
-                     p.BoxReady.Handler = "firstLoad();";
+                     p.BoxReady.Handler = "firstLoad();";                     
                  })
         .SortableColumns(false)
         .ColumnModel(
@@ -66,8 +67,8 @@
                                 .LoadData()               
                     ),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150),
-            X.DateColumn().Text(Util.GetLang("ExpDate")).DataIndex("ExpDate").Width(150)
-                .Editor(X.DateField().AllowBlank(false).EnforceMaxLength(true)),            
+            X.DateColumn().Text(Util.GetLang("Date")).DataIndex("Date").Width(150)
+                .Editor(X.DateField().AllowBlank(false).EnforceMaxLength(true).Listeners(lst=>lst.SpecialKey.Fn="")),            
             X.CommandColumn().Width(150)
             .Commands(
                 X.GridCommand()
@@ -103,8 +104,7 @@
             {
                 ls.BeforeEdit.Fn = "grdData_BeforeEdit";
                 ls.Edit.Fn = "grdData_Edit";
-                ls.ValidateEdit.Fn = "grdData_ValidateEdit";
-
+                ls.ValidateEdit.Fn = "grdData_ValidateEdit";               
             })
         )
 
@@ -114,7 +114,7 @@
                 .Filters(
                     X.StringFilter().DataIndex("InvtID"),
                     X.StringFilter().DataIndex("Descr"),
-                    X.DateFilter().DataIndex("ExpDate")
+                    X.DateFilter().DataIndex("Date")
                 )
         )
     )

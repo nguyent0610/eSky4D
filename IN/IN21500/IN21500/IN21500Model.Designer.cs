@@ -102,36 +102,6 @@ namespace IN21500
         /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
-        public ObjectResult<IN21500_pgData_Result> IN21500_pgData(global::System.String userID, global::System.String branchID)
-        {
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<IN21500_pgData_Result>("IN21500_pgData", userIDParameter, branchIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="branchID">No Metadata Documentation available.</param>
         public ObjectResult<IN21500_pcInvtID_Result> IN21500_pcInvtID(global::System.String userID, global::System.String branchID)
         {
             ObjectParameter userIDParameter;
@@ -156,6 +126,36 @@ namespace IN21500
     
             return base.ExecuteFunction<IN21500_pcInvtID_Result>("IN21500_pcInvtID", userIDParameter, branchIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<IN21500_pgData_Result> IN21500_pgData(global::System.String userID, global::System.String branchID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN21500_pgData_Result>("IN21500_pgData", userIDParameter, branchIDParameter);
+        }
 
         #endregion
 
@@ -179,7 +179,7 @@ namespace IN21500
         /// Create a new IN_InventoryDateMaster object.
         /// </summary>
         /// <param name="invtID">Initial value of the InvtID property.</param>
-        /// <param name="expDate">Initial value of the ExpDate property.</param>
+        /// <param name="date">Initial value of the Date property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
         /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
         /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
@@ -187,11 +187,11 @@ namespace IN21500
         /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static IN_InventoryDateMaster CreateIN_InventoryDateMaster(global::System.String invtID, global::System.DateTime expDate, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
+        public static IN_InventoryDateMaster CreateIN_InventoryDateMaster(global::System.String invtID, global::System.DateTime date, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp)
         {
             IN_InventoryDateMaster iN_InventoryDateMaster = new IN_InventoryDateMaster();
             iN_InventoryDateMaster.InvtID = invtID;
-            iN_InventoryDateMaster.ExpDate = expDate;
+            iN_InventoryDateMaster.Date = date;
             iN_InventoryDateMaster.Crtd_DateTime = crtd_DateTime;
             iN_InventoryDateMaster.Crtd_Prog = crtd_Prog;
             iN_InventoryDateMaster.Crtd_User = crtd_User;
@@ -238,27 +238,27 @@ namespace IN21500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.DateTime ExpDate
+        public global::System.DateTime Date
         {
             get
             {
-                return _ExpDate;
+                return _Date;
             }
             set
             {
-                if (_ExpDate != value)
+                if (_Date != value)
                 {
-                    OnExpDateChanging(value);
-                    ReportPropertyChanging("ExpDate");
-                    _ExpDate = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("ExpDate");
-                    OnExpDateChanged();
+                    OnDateChanging(value);
+                    ReportPropertyChanging("Date");
+                    _Date = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Date");
+                    OnDateChanged();
                 }
             }
         }
-        private global::System.DateTime _ExpDate;
-        partial void OnExpDateChanging(global::System.DateTime value);
-        partial void OnExpDateChanged();
+        private global::System.DateTime _Date;
+        partial void OnDateChanging(global::System.DateTime value);
+        partial void OnDateChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -528,14 +528,14 @@ namespace IN21500
         /// Create a new IN21500_pgData_Result object.
         /// </summary>
         /// <param name="invtID">Initial value of the InvtID property.</param>
-        /// <param name="expDate">Initial value of the ExpDate property.</param>
+        /// <param name="date">Initial value of the Date property.</param>
         /// <param name="descr">Initial value of the Descr property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static IN21500_pgData_Result CreateIN21500_pgData_Result(global::System.String invtID, global::System.DateTime expDate, global::System.String descr, global::System.Byte[] tstamp)
+        public static IN21500_pgData_Result CreateIN21500_pgData_Result(global::System.String invtID, global::System.DateTime date, global::System.String descr, global::System.Byte[] tstamp)
         {
             IN21500_pgData_Result iN21500_pgData_Result = new IN21500_pgData_Result();
             iN21500_pgData_Result.InvtID = invtID;
-            iN21500_pgData_Result.ExpDate = expDate;
+            iN21500_pgData_Result.Date = date;
             iN21500_pgData_Result.Descr = descr;
             iN21500_pgData_Result.tstamp = tstamp;
             return iN21500_pgData_Result;
@@ -574,24 +574,24 @@ namespace IN21500
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.DateTime ExpDate
+        public global::System.DateTime Date
         {
             get
             {
-                return _ExpDate;
+                return _Date;
             }
             set
             {
-                OnExpDateChanging(value);
-                ReportPropertyChanging("ExpDate");
-                _ExpDate = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ExpDate");
-                OnExpDateChanged();
+                OnDateChanging(value);
+                ReportPropertyChanging("Date");
+                _Date = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Date");
+                OnDateChanged();
             }
         }
-        private global::System.DateTime _ExpDate;
-        partial void OnExpDateChanging(global::System.DateTime value);
-        partial void OnExpDateChanged();
+        private global::System.DateTime _Date;
+        partial void OnDateChanging(global::System.DateTime value);
+        partial void OnDateChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
