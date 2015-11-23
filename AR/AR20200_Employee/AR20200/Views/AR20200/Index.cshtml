@@ -9,6 +9,7 @@
 @{
     Layout = null;
     var X = Html.X();
+    var HQ = Html.HQ();
     ViewBag.Title = "AR20200";
     var acc = Session["AR20200"] as AccessRight;
     
@@ -85,7 +86,15 @@
             })
             // Store: stoSlsperCpnyAddr
         )
-
+        @(HQ.Store().ID("stoAR20200_pdCheckAutoSales").HQDBSys(false).HQProcedure("AR20200_pdCheckAutoSales").AutoLoad(false)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID.getValue()", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Listeners(lst=>lst.Load.Fn="Store.stoAR20200_pdCheckAutoSales_load")
+        )
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 

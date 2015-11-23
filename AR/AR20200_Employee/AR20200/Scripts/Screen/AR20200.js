@@ -58,7 +58,9 @@ var Process = {
                         HQ.message.show(data.result.msgCode);
                     }
                     App.cboSlsperid.store.load(function () {
+                        App.cboSlsperid.setValue(data.result.slsperID);
                         App.stoSalesPerson.reload();
+
                     });
                 },
                 failure: function (msg, data) {
@@ -207,7 +209,7 @@ var Store = {
     stoSalesPerson_load: function (sto, records, successful, eOpts) {
         //App.cboState.forceSelection = false;
         //App.cboDistrict.forceSelection = false;
-        //HQ.common.setForceSelection(App.frmMain, false, "cboBranchID,cboSlsperid")
+        HQ.common.setForceSelection(App.frmMain, false, "cboBranchID,cboSlsperid")
 
         HQ.isNew = false;
         if (sto.getCount() == 0) {
@@ -218,6 +220,7 @@ var Store = {
                 Status: _beginStatus
             });
             sto.insert(0, newSlsper);
+            sto.commitChanges();
             HQ.isNew = true;
         }
         var frmRecord = sto.getAt(0);
@@ -276,6 +279,16 @@ var Store = {
         //        }
         //    }
         //}
+    },
+    stoAR20200_pdCheckAutoSales_load: function (sto, records, successful, eOpts) {
+        if (sto.data.items[0].data.Result == "1") {
+            App.cboSlsperid.allowBlank = true;
+            App.cboSlsperid.forceSelection = true;
+        }
+        else {
+            App.cboSlsperid.allowBlank = false;
+            App.cboSlsperid.forceSelection = false;
+        }
     }
 };
 
@@ -321,6 +334,7 @@ var Event = {
             App.cboDeliveryMan.store.reload();
             App.cboSupID.store.reload();
             App.cboVendID.store.reload();
+            App.stoAR20200_pdCheckAutoSales.reload();
             //App.cboCpnyAddrID.store.reload();
         },
 

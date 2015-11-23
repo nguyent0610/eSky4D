@@ -341,6 +341,58 @@ namespace AR20200
     
             return base.ExecuteFunction<AR20200_ptCpnyByChannel_Result>("AR20200_ptCpnyByChannel", userIDParameter, channelParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="state">No Metadata Documentation available.</param>
+        /// <param name="district">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20200_pdAutoSlsperID(global::System.String branchID, global::System.String userID, global::System.String state, global::System.String district)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter stateParameter;
+            if (state != null)
+            {
+                stateParameter = new ObjectParameter("State", state);
+            }
+            else
+            {
+                stateParameter = new ObjectParameter("State", typeof(global::System.String));
+            }
+    
+            ObjectParameter districtParameter;
+            if (district != null)
+            {
+                districtParameter = new ObjectParameter("District", district);
+            }
+            else
+            {
+                districtParameter = new ObjectParameter("District", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20200_pdAutoSlsperID", branchIDParameter, userIDParameter, stateParameter, districtParameter);
+        }
 
         #endregion
 

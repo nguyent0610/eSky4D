@@ -191,6 +191,12 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <Function Name="AR20200_pdAutoSlsperID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="State" Type="varchar" Mode="In" />
+          <Parameter Name="District" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="AR20200_pgSlsperCpnyAddr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
@@ -229,6 +235,12 @@
             <Parameter Name="Channel" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="AR_Setup" EntityType="AR20200Model.AR_Setup" />
+          <FunctionImport Name="AR20200_pdAutoSlsperID" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="State" Mode="In" Type="String" />
+            <Parameter Name="District" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_SalesPerHist">
           <Key>
@@ -636,6 +648,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR20200_pdAutoSlsperID" FunctionName="eBiz4DWebAppModel.Store.AR20200_pdAutoSlsperID" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

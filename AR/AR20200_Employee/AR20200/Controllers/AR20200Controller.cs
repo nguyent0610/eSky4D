@@ -50,6 +50,7 @@ namespace AR20200.Controllers
         // GET: /AR20200/
         public ActionResult Index()
         {
+            
             Util.InitRight(_screenNbr);
             return View();
         }
@@ -149,7 +150,7 @@ namespace AR20200.Controllers
                 string slsperID = data["cboSlsperid"];
                 string branchID = data["cboBranchID"];
 
-                if (!string.IsNullOrWhiteSpace(branchID) && !string.IsNullOrWhiteSpace(slsperID))
+                if (!string.IsNullOrWhiteSpace(branchID))
                 {
                     string handle = data["cboHandle"];
                     var slsperHandler = new StoreDataHandler(data["lstSalesPerson"]);
@@ -227,6 +228,7 @@ namespace AR20200.Controllers
                         {
                             if (isNew)
                             {
+                                slsperID=slsperID.PassNull()==""?_db.AR20200_pdAutoSlsperID(branchID,Current.UserName,inputSlsper.State,inputSlsper.District).FirstOrDefault().PassNull():slsperID;
                                 // Create slsper
                                 slsper = new AR_Salesperson();
                                 slsper.BranchID = branchID;
@@ -341,7 +343,7 @@ namespace AR20200.Controllers
 
                         _db.SaveChanges();
 
-                        return Json(new { success = true, msgCode = 201405071 });
+                        return Json(new { success = true, msgCode = 201405071 ,slsperID=slsperID});
                     }
                     else
                     {
@@ -352,7 +354,7 @@ namespace AR20200.Controllers
                 {
                     throw new MessageException(MessageType.Message, "1000", "",
                         new string[]{
-                            string.Format("{0}, {1}", Util.GetLang("BranchID"), Util.GetLang("SlsperID"))
+                            string.Format("{0}", Util.GetLang("BranchID"))
                         });
                 }
             }
