@@ -64,6 +64,7 @@
           <Property Name="MeasureFunc" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="DataFormat" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="PivotOrder" Type="smallint" Nullable="false" />
+          <Property Name="PivotShow" Type="bit" Nullable="false" />
         </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -128,6 +129,7 @@
           <Property Type="String" Name="MeasureFunc" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DataFormat" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int16" Name="PivotOrder" Nullable="false" />
+          <Property Type="Boolean" Name="PivotShow" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -170,6 +172,7 @@
           <EntitySetMapping Name="SYS_ReportOLAPTemplate">
             <EntityTypeMapping TypeName="IF30100SysModel.SYS_ReportOLAPTemplate">
               <MappingFragment StoreEntitySet="SYS_ReportOLAPTemplate">
+                <ScalarProperty Name="PivotShow" ColumnName="PivotShow" />
                 <ScalarProperty Name="PivotOrder" ColumnName="PivotOrder" />
                 <ScalarProperty Name="DataFormat" ColumnName="DataFormat" />
                 <ScalarProperty Name="MeasureFunc" ColumnName="MeasureFunc" />

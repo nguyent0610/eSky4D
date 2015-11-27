@@ -10,11 +10,13 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
-using Aspose.Cells;
+
 using HQFramework.DAL;
 using HQFramework.Common;
 using HQ.eSkyFramework.HQControl;
 using System.Drawing;
+using Microsoft.Office.Interop.Excel;
+using Aspose.Cells;
 namespace IF30100.Controllers
 {
     [DirectController]
@@ -120,6 +122,7 @@ namespace IF30100.Controllers
                         HQColumnShow = settings[3],
                         LabelWidth = 150,
                         MultiSelect = true,
+                        ForceSelection = true,
                         HQParam = new StoreParameterCollection()
                     };
                     var filters = col.FilterBy.Split('#').ToList();
@@ -324,14 +327,14 @@ namespace IF30100.Controllers
                 param = param.Length > 3 ?  " Where " + param.Substring(0, param.Length - 4) : param;
                 proc="select "+select.TrimEnd(',')+" from " + view +param;
                 Stream stream = new MemoryStream();
-                Workbook workbook = new Workbook();
-                Worksheet SheetData = workbook.Worksheets[0];
+                Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook();
+                Aspose.Cells.Worksheet SheetData = workbook.Worksheets[0];
                 SheetData.Name = name;
 
 
                 DataAccess dal = Util.Dal();
                 ParamCollection pc = new ParamCollection();
-                DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.Text, ref pc);
+                System.Data.DataTable dtInvtID = dal.ExecDataTable(proc, CommandType.Text, ref pc);
                 SheetData.Cells.ImportDataTable(dtInvtID, true, "A1");// du lieu Inventory
 
                            
@@ -364,6 +367,15 @@ namespace IF30100.Controllers
         [HttpPost]
         public ActionResult ExportPivot(FormCollection data, string view, string name)
         {
+            Application excelApplication = null;
+            Microsoft.Office.Interop.Excel.Workbook excelWorkBook = null;
+            Microsoft.Office.Interop.Excel.Worksheet targetSheet = null;
+            Microsoft.Office.Interop.Excel.Worksheet dataSheet = null;
+            PivotTable pivotTable;
+            Microsoft.Office.Interop.Excel.Range pivotData;
+            Microsoft.Office.Interop.Excel.Range pivotDestination;
+            string fileName = "";
+           
             try
             {
                 string select = "";
@@ -373,30 +385,30 @@ namespace IF30100.Controllers
                 var parmHandler = new StoreDataHandler(data["data"]);
                 var lstParm = parmHandler.ObjectData<ParmData>().ToList();
 
-                IF30100SysEntities sys = new IF30100SysEntities(EntityConnectionStringHelper.Build(Current.Server,Current.DBSys, "IF30100SysModel"));
+                IF30100SysEntities sys = new IF30100SysEntities(EntityConnectionStringHelper.Build(Current.Server, Current.DBSys, "IF30100SysModel"));
                 var filter = sys.SYS_ReportOLAPFilter.FirstOrDefault(p => p.ReportNbr == reportNbr);
                 if (filter != null && filter.FilterData.PassNull() != string.Empty)
                 {
                     foreach (var item in lstParm)
                     {
-                        string parmName = item.Name.Replace("Parm_","");
-                        
-                            
-                        if (filter.FilterData.Contains("IN #"+parmName))
+                        string parmName = item.Name.Replace("Parm_", "");
+
+
+                        if (filter.FilterData.Contains("IN #" + parmName))
                         {
-                            var lstTempValue = item.Value.Split(new string[]{","},StringSplitOptions.RemoveEmptyEntries).ToList();
+                            var lstTempValue = item.Value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
                             string inValue = "IN (";
                             foreach (var itemValue in lstTempValue)
-	                        {
+                            {
                                 inValue += "N'" + itemValue + "',";
-	                        }
-                            if(inValue.Length>3)
+                            }
+                            if (inValue.Length > 3)
                             {
                                 inValue = inValue.TrimEnd(',') + ")";
-                            } 
+                            }
                             else
                             {
-                                inValue= "";
+                                inValue = "";
                             }
                             filter.FilterData = filter.FilterData.Replace("IN #" + parmName, inValue);
                         }
@@ -404,8 +416,8 @@ namespace IF30100.Controllers
                     }
                 }
 
-              
-                var lstColumn = sys.SYS_ReportOLAPTemplate.Where(p => p.ReportNbr == reportNbr && p.PivotType!="P").ToList();
+
+                var lstColumn = sys.SYS_ReportOLAPTemplate.Where(p => p.ReportNbr == reportNbr && p.PivotType != "P").ToList();
 
                 var lstTemp = new List<string>();
                 foreach (var col in lstColumn)
@@ -422,118 +434,249 @@ namespace IF30100.Controllers
                 {
                     cmd += " where " + filter.FilterData;
                 }
-                Stream stream = new MemoryStream();
-                Workbook workbook = new Workbook();
 
-                Worksheet sheetPivot = workbook.Worksheets[0];
-                Worksheet sheetData = workbook.Worksheets[workbook.Worksheets.Add()];
 
-                sheetData.Name = "Data";
-                sheetData.IsVisible = false;
+
 
                 DataAccess dal = Util.Dal();
                 ParamCollection pc = new ParamCollection();
 
-                DataTable dt = dal.ExecDataTable(cmd, CommandType.Text, ref pc);
+                System.Data.DataTable dt = dal.ExecDataTable(cmd, CommandType.Text, ref pc);
+                
                 if (dt.Rows.Count == 0)
                 {
                     Util.AppendLog(ref _logMessage, "20100101", "");
                     return _logMessage;
                 }
-                sheetData.Cells.ImportDataTable(dt, true, "A1");// du lieu Inventory
-             
-                sheetData.AutoFitColumns();
-               
-                sheetPivot.Name = name;
-                //Getting the pivottables collection in the sheet
-                Aspose.Cells.Pivot.PivotTableCollection pivotTables = sheetPivot.PivotTables;
-                sheetPivot.Cells[0, 0].Value = name;
-                var style = sheetPivot.Cells[0, 0].GetStyle();
-                style.Font.Size = 25;
-                style.Font.IsBold = true;
-                sheetPivot.Cells[0, 0].SetStyle(style);
-                
 
-                var lstFilter = lstColumn.Where(p => p.PivotType == "F").OrderBy(p => p.PivotOrder).ToList();
+                excelApplication = new Application();
 
-                int index = pivotTables.Add("=Data!A1:" + sheetData.Cells[sheetData.Cells.MaxDataRow, sheetData.Cells.MaxDataColumn].Name, "A" + (lstFilter.Count + 5).ToString(), "PivotTable1");
               
-                Aspose.Cells.Pivot.PivotTable pivotTable = pivotTables[index];
-              
-                pivotTable.RowGrand = true;
-                
-                pivotTable.ColumnGrand = true;
-              
-                pivotTable.IsAutoFormat = true;
-              
-                pivotTable.AutoFormatType = Aspose.Cells.Pivot.PivotTableAutoFormatType.None;
-              
-              
-              
-                var lstRow = lstColumn.Where(p => p.PivotType == "R").OrderBy(p => p.PivotOrder).ToList();
+                excelWorkBook = excelApplication.Workbooks.Add();
 
-                foreach (var item in lstRow)
+                string pivotTableName = "PivotTable";
+                string workSheetName = "OLAPReport";
+
+                excelWorkBook.Worksheets.Add();
+                excelWorkBook.Worksheets.Add();
+                targetSheet = excelWorkBook.Worksheets[1];
+                targetSheet.Name = workSheetName;
+                dataSheet = excelWorkBook.Worksheets[2];
+                dataSheet.Name = "Data";
+
+
+                string finalColLetter = string.Empty;
+                string colChartSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                int colChartSetLen = colChartSet.Length;
+
+                if (dt.Columns.Count > colChartSetLen)
                 {
-                    var col = dt.Columns[Util.GetLang(item.ColumnDescr)];
-                    if (col != null)
-                    {
-                        pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Row,col.ColumnName);
-                        var field = pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Row)[col.ColumnName];
-                        if (item.DataFormat.PassNull()!=string.Empty)
-                        {
-                            field.NumberFormat = item.DataFormat;
-                        }
-                    }
-                   
+                    finalColLetter = colChartSet.Substring((dt.Columns.Count - 1) / colChartSetLen - 1, 1);
                 }
+                finalColLetter += colChartSet.Substring((dt.Columns.Count - 1) % colChartSetLen, 1);
 
-                var lstCol= lstColumn.Where(p => p.PivotType == "C").OrderBy(p => p.PivotOrder).ToList();
-                foreach (var item in lstCol)
+
+                object[,] rawData = new object[1, dt.Columns.Count];
+                for (int col = 0; col < dt.Columns.Count; col++)
                 {
-                    var col = dt.Columns[Util.GetLang(item.ColumnDescr)];
-                    if (col != null)
-                    {
-                        pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Column, col.ColumnName);
-                        var field = pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Column)[col.ColumnName];
-                        if (item.DataFormat.PassNull() != string.Empty)
-                        {
-                            field.NumberFormat = item.DataFormat;
-                        }
-                    }
+                    rawData[0, col] = dt.Columns[col].ColumnName;
                 }
 
                 var lstMeasure = lstColumn.Where(p => p.PivotType == "M").OrderBy(p => p.PivotOrder).ToList();
-                foreach (var item in lstMeasure)
+
+                for (int col = 0; col < dt.Columns.Count; col++)
                 {
-                    var col = dt.Columns[Util.GetLang(item.ColumnDescr)];
-                    if (col != null)
+                    var column = (col / 25 > 0 ? colChartSet[col / 25].ToString() : "") + colChartSet[col % 25].ToString();
+                    var colData = lstColumn.FirstOrDefault(p => Util.GetLang(p.ColumnDescr) == dt.Columns[col].ColumnName);
+
+                    if (colData.DataFormat.PassNull() != string.Empty)
                     {
-                        pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Data, col.ColumnName);
-                        var field = pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Data)[col.ColumnName];
-                        field.Function = GetFunction(item.MeasureFunc);
-                        if(item.DataFormat.PassNull()!=string.Empty){
-                            field.NumberFormat = item.DataFormat;
+                        dataSheet.Range[string.Format("{0}:{0}", column), Type.Missing].NumberFormat = colData.DataFormat;
+                    }
+                    else
+                    {
+                        dataSheet.Range[string.Format("{0}:{0}", column), Type.Missing].NumberFormat = "@";
+                    }
+                }
+
+                string excelRange = String.Format("A1:{0}{1}", finalColLetter, 1);
+                dataSheet.Range[excelRange, Type.Missing].Value2 = rawData;
+                (dataSheet.Rows[1, Type.Missing] as Microsoft.Office.Interop.Excel.Range).Font.Bold = true;
+
+              
+                for (int i = 0; i < (dt.Rows.Count / 1000); i++)
+                {
+                    object[,] rawData2 = new object[1000, dt.Columns.Count];
+                    for (int col = 0; col < dt.Columns.Count; col++)
+                    {
+                        if (!lstMeasure.Any(p => Util.GetLang(p.ColumnDescr) == dt.Columns[col].ColumnName))
+                        {
+                            for (int row = 0; row < 1000; row++)
+                            {
+                                rawData2[row, col] = "'" + dt.Rows[row + (i * 1000)].ItemArray[col].ToString();
+                            }
+                            
+                        }
+                        else
+                        {
+                            for (int row = 0; row < 1000; row++)
+                            {
+                                rawData2[row, col] = dt.Rows[row + (i * 1000)].ItemArray[col];
+                            }
                         }
                         
                     }
+                    excelRange = String.Format("A{0}:{1}{2}", i * 1000 + 2, finalColLetter, (i + 1) * 1000 + 1);
+                    dataSheet.Range[excelRange, Type.Missing].Value2 = rawData2;
+
                 }
 
-             
-                foreach (var item in lstFilter)
+                if (dt.Rows.Count % 1000 > 0)
                 {
-                    var col = dt.Columns[Util.GetLang(item.ColumnDescr)];
-                    if (col != null)
+                    object[,] rawData2 = new object[dt.Rows.Count % 1000, dt.Columns.Count];
+                    for (int col = 0; col < dt.Columns.Count; col++)
                     {
-                        pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Page, col.ColumnName);
-                        pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Page)[col.ColumnName].IsMultipleItemSelectionAllowed = true;
+                        if (!lstMeasure.Any(p => Util.GetLang(p.ColumnDescr) == dt.Columns[col].ColumnName))
+                        {
+                            for (int row = 0; row < (dt.Rows.Count % 1000); row++)
+                            {
+                                rawData2[row, col] = "'" + dt.Rows[(dt.Rows.Count / 1000) * 1000 + row].ItemArray[col].ToString();
+                            }
+                          
+                        }
+                            
+                        else
+                        {
+                            for (int row = 0; row < (dt.Rows.Count % 1000); row++)
+                            {
+                                rawData2[row, col] = dt.Rows[(dt.Rows.Count / 1000) * 1000 + row].ItemArray[col];
+                            }
+                        }
+                           
+
+                       
                     }
+                    excelRange = String.Format("A{0}:{1}{2}", (dt.Rows.Count / 1000) * 1000 + 2, finalColLetter, (dt.Rows.Count / 1000) * 1000 + dt.Rows.Count % 1000 + 1);
+                    dataSheet.Range[excelRange, Type.Missing].Value2 = rawData2;
+
                 }
-           
 
-                workbook.Save(stream, SaveFormat.Xlsx);
-                stream.Flush();
-                stream.Position = 0;
+                var lstFilter = lstColumn.Where(p => p.PivotType == "F").OrderBy(p => p.PivotOrder).ToList();
 
+                dataSheet.Columns.AutoFit();
+                dataSheet.Protect("Hqs0ft20062099", true, true, true, true, true, true);
+                dataSheet.Visible = XlSheetVisibility.xlSheetHidden;
+
+                pivotData = dataSheet.Range[dataSheet.Cells[1, 1], dataSheet.Cells[dt.Rows.Count + 1, dt.Columns.Count]];
+
+
+              
+
+                pivotDestination = targetSheet.Range["A" + (7 + lstFilter.Count() / 2).ToString()];
+
+                excelWorkBook.PivotTableWizard(XlPivotTableSourceType.xlDatabase, pivotData, pivotDestination, pivotTableName, true, true, true, true, Type.Missing, Type.Missing, false, false, XlOrder.xlOverThenDown, 2);
+                pivotTable = targetSheet.PivotTables(pivotTableName);
+
+
+
+                var lstRow = lstColumn.Where(p => p.PivotType == "R").OrderBy(p => p.PivotOrder).ToList();
+
+                foreach (var row in lstRow)
+                {
+                    PivotField pvf = pivotTable.PivotFields(Util.GetLang(row.ColumnDescr));
+                    if (row.PivotShow)
+                    {
+                        pvf.Orientation = XlPivotFieldOrientation.xlRowField;
+                        pvf.Subtotals[1] = true;
+                        pvf.Subtotals[1] = false;
+                    }
+                  
+                    //foreach (var item in pvf.PivotItems())
+                    //{
+                    //    item.ShowDetail = false;
+                    //}
+
+                }
+
+                var lstCol = lstColumn.Where(p => p.PivotType == "C").OrderBy(p => p.PivotOrder).ToList();
+                foreach (var col in lstCol)
+                {
+
+                    PivotField pvf = pivotTable.PivotFields(Util.GetLang(col.ColumnDescr));
+                    if (col.PivotShow)
+                    {
+                        pvf.Orientation = XlPivotFieldOrientation.xlColumnField;
+                        pvf.Subtotals[1] = true;
+                        pvf.Subtotals[1] = false;
+                    }
+                  
+                    //foreach (var item in pvf.PivotItems())
+                    //{
+                    //    item.ShowDetail = false;
+                    //}
+                }
+
+              
+                foreach (var measure in lstMeasure)
+                {
+                    PivotField pvf = pivotTable.PivotFields(Util.GetLang(measure.ColumnDescr));
+                    if (measure.PivotShow)
+                    {
+                        pvf.Orientation = XlPivotFieldOrientation.xlDataField;
+                        pvf.Function = GetFunction(measure.MeasureFunc);
+                        if (measure.DataFormat.PassNull()!=string.Empty)
+                            pvf.NumberFormat = measure.DataFormat;
+                        else
+                            pvf.NumberFormat = "#,##";
+                    }
+                  
+               
+                    //foreach (var item in pvf.PivotItems())
+                    //{
+                    //    item.ShowDetail = false;
+                    //}
+                }
+
+
+                foreach (var colFilter in lstFilter)
+                {
+                    PivotField pvf = pivotTable.PivotFields(Util.GetLang(colFilter.ColumnDescr));
+                    
+                    pvf.Orientation = XlPivotFieldOrientation.xlPageField;
+                    pvf.CurrentPage = "(All)";
+                    pvf.Subtotals[1] = true;
+                    pvf.Subtotals[1] = false;
+                }
+
+              
+                //pivotTable.CalculateData();
+                string path = Server.MapPath("~/ExportPivot");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                fileName = path + @"\" + Guid.NewGuid().ToString() + ".xlsx";
+
+                targetSheet.Protect("Hqs0ft20062099", true, false, true, true, true, true, true, true, true, true, true, true, true, true, true);
+                excelApplication.DisplayAlerts = false;
+
+
+                excelWorkBook.SaveAs(fileName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange);
+                excelWorkBook.Close(true, Type.Missing, Type.Missing);
+                excelApplication.Quit();
+                excelApplication = null;
+
+                byte[] buffer = new byte[1];
+                using (FileStream fs = new FileStream(fileName, FileMode.Open,
+                                   FileAccess.Read, FileShare.Read))
+                {
+                    buffer = new byte[fs.Length];
+                    fs.Read(buffer, 0, (int)fs.Length);
+
+                }
+
+                Stream stream = new MemoryStream(buffer);
                 return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsx" };
 
             }
@@ -549,7 +692,215 @@ namespace IF30100.Controllers
                     return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
                 }
             }
+            finally
+            {
+
+                if (System.IO.File.Exists(fileName))
+                    System.IO.File.Delete(fileName);
+
+                pivotDestination = null;
+                pivotData = null;
+                pivotTable = null;
+                targetSheet = null;
+                if (excelWorkBook != null)
+                    excelWorkBook = null;
+                if (excelApplication != null)
+                {
+                    excelApplication.Quit();
+                    excelApplication = null;
+                }
+            }
         }
+        //public ActionResult ExportPivot(FormCollection data, string view, string name)
+        //{
+        //    try
+        //    {
+        //        string select = "";
+        //        string param = "";
+        //        string cmd = "";
+        //        string reportNbr = data["report"].PassNull();
+        //        var parmHandler = new StoreDataHandler(data["data"]);
+        //        var lstParm = parmHandler.ObjectData<ParmData>().ToList();
+
+        //        IF30100SysEntities sys = new IF30100SysEntities(EntityConnectionStringHelper.Build(Current.Server,Current.DBSys, "IF30100SysModel"));
+        //        var filter = sys.SYS_ReportOLAPFilter.FirstOrDefault(p => p.ReportNbr == reportNbr);
+        //        if (filter != null && filter.FilterData.PassNull() != string.Empty)
+        //        {
+        //            foreach (var item in lstParm)
+        //            {
+        //                string parmName = item.Name.Replace("Parm_","");
+                        
+                            
+        //                if (filter.FilterData.Contains("IN #"+parmName))
+        //                {
+        //                    var lstTempValue = item.Value.Split(new string[]{","},StringSplitOptions.RemoveEmptyEntries).ToList();
+        //                    string inValue = "IN (";
+        //                    foreach (var itemValue in lstTempValue)
+        //                    {
+        //                        inValue += "N'" + itemValue + "',";
+        //                    }
+        //                    if(inValue.Length>3)
+        //                    {
+        //                        inValue = inValue.TrimEnd(',') + ")";
+        //                    } 
+        //                    else
+        //                    {
+        //                        inValue= "";
+        //                    }
+        //                    filter.FilterData = filter.FilterData.Replace("IN #" + parmName, inValue);
+        //                }
+        //                filter.FilterData = filter.FilterData.Replace("#" + parmName, "N'" + item.Value + "'");
+        //            }
+        //        }
+
+              
+        //        var lstColumn = sys.SYS_ReportOLAPTemplate.Where(p => p.ReportNbr == reportNbr && p.PivotType!="P").ToList();
+
+        //        var lstTemp = new List<string>();
+        //        foreach (var col in lstColumn)
+        //        {
+        //            if (!lstTemp.Any(p => p == col.ColumnName))
+        //            {
+        //                lstTemp.Add(col.ColumnName);
+        //                select += string.Format("N'{0}' = {1},", Util.GetLang(col.ColumnDescr), col.ColumnName);
+        //            }
+        //        }
+
+        //        cmd = "select " + select.TrimEnd(',') + " from " + view;
+        //        if (filter.FilterData.PassNull().Length > 0)
+        //        {
+        //            cmd += " where " + filter.FilterData;
+        //        }
+        //        Stream stream = new MemoryStream();
+        //        Workbook workbook = new Workbook();
+
+        //        Worksheet sheetPivot = workbook.Worksheets[0];
+        //        Worksheet sheetData = workbook.Worksheets[workbook.Worksheets.Add()];
+
+        //        sheetData.Name = "Data";
+        //        sheetData.IsVisible = false;
+
+        //        DataAccess dal = Util.Dal();
+        //        ParamCollection pc = new ParamCollection();
+
+        //        DataTable dt = dal.ExecDataTable(cmd, CommandType.Text, ref pc);
+        //        if (dt.Rows.Count == 0)
+        //        {
+        //            Util.AppendLog(ref _logMessage, "20100101", "");
+        //            return _logMessage;
+        //        }
+        //        sheetData.Cells.ImportDataTable(dt, true, "A1");// du lieu Inventory
+             
+        //        sheetData.AutoFitColumns();
+               
+        //        sheetPivot.Name = name;
+        //        //Getting the pivottables collection in the sheet
+        //        Aspose.Cells.Pivot.PivotTableCollection pivotTables = sheetPivot.PivotTables;
+        //        sheetPivot.Cells[0, 0].Value = name;
+        //        var style = sheetPivot.Cells[0, 0].GetStyle();
+        //        style.Font.Size = 25;
+        //        style.Font.IsBold = true;
+        //        sheetPivot.Cells[0, 0].SetStyle(style);
+                
+
+        //        var lstFilter = lstColumn.Where(p => p.PivotType == "F").OrderBy(p => p.PivotOrder).ToList();
+
+        //        int index = pivotTables.Add("=Data!A1:" + sheetData.Cells[sheetData.Cells.MaxDataRow, sheetData.Cells.MaxDataColumn].Name, "A" + (lstFilter.Count + 5).ToString(), "PivotTable1");
+              
+        //        Aspose.Cells.Pivot.PivotTable pivotTable = pivotTables[index];
+              
+        //        pivotTable.RowGrand = true;
+                
+        //        pivotTable.ColumnGrand = true;
+              
+        //        pivotTable.IsAutoFormat = true;
+              
+        //        pivotTable.AutoFormatType = Aspose.Cells.Pivot.PivotTableAutoFormatType.None;
+              
+              
+              
+        //        var lstRow = lstColumn.Where(p => p.PivotType == "R").OrderBy(p => p.PivotOrder).ToList();
+
+        //        foreach (var item in lstRow)
+        //        {
+        //            var col = dt.Columns[Util.GetLang(item.ColumnDescr)];
+        //            if (col != null)
+        //            {
+        //                pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Row,col.ColumnName);
+        //                var field = pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Row)[col.ColumnName];
+        //                if (item.DataFormat.PassNull()!=string.Empty)
+        //                {
+        //                    field.NumberFormat = item.DataFormat;
+        //                }
+        //            }
+                   
+        //        }
+
+        //        var lstCol= lstColumn.Where(p => p.PivotType == "C").OrderBy(p => p.PivotOrder).ToList();
+        //        foreach (var item in lstCol)
+        //        {
+        //            var col = dt.Columns[Util.GetLang(item.ColumnDescr)];
+        //            if (col != null)
+        //            {
+        //                pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Column, col.ColumnName);
+        //                var field = pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Column)[col.ColumnName];
+        //                if (item.DataFormat.PassNull() != string.Empty)
+        //                {
+        //                    field.NumberFormat = item.DataFormat;
+        //                }
+        //            }
+        //        }
+
+        //        var lstMeasure = lstColumn.Where(p => p.PivotType == "M").OrderBy(p => p.PivotOrder).ToList();
+        //        foreach (var item in lstMeasure)
+        //        {
+        //            var col = dt.Columns[Util.GetLang(item.ColumnDescr)];
+        //            if (col != null)
+        //            {
+        //                pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Data, col.ColumnName);
+        //                var field = pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Data)[col.ColumnName];
+        //                field.Function = GetFunction(item.MeasureFunc);
+        //                if(item.DataFormat.PassNull()!=string.Empty){
+        //                    field.NumberFormat = item.DataFormat;
+        //                }
+                        
+        //            }
+        //        }
+
+             
+        //        foreach (var item in lstFilter)
+        //        {
+        //            var col = dt.Columns[Util.GetLang(item.ColumnDescr)];
+        //            if (col != null)
+        //            {
+        //                pivotTable.AddFieldToArea(Aspose.Cells.Pivot.PivotFieldType.Page, col.ColumnName);
+        //                pivotTable.Fields(Aspose.Cells.Pivot.PivotFieldType.Page)[col.ColumnName].IsMultipleItemSelectionAllowed = true;
+        //            }
+        //        }
+
+        //        //pivotTable.CalculateData();
+        //        string fileName = Server.MapPath("~/Export") + @"\" +  Guid.NewGuid().ToString() + ".xlsx";
+        //        workbook.Save(fileName, SaveFormat.Xlsx);
+        //        workbook.Save(stream, SaveFormat.Xlsx);
+        //        stream.Flush();
+        //        stream.Position = 0;
+
+        //        return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsx" };
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        if (ex is MessageException)
+        //        {
+        //            return (ex as MessageException).ToMessage();
+        //        }
+        //        else
+        //        {
+        //            return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+        //        }
+        //    }
+        //}
         private string GetHandle(List<SYS_ReportOLAPTemplate> lstColumn, SYS_ReportOLAPTemplate col)
         {
             string handler = "";
@@ -569,16 +920,28 @@ namespace IF30100.Controllers
             }
             return handler;
         }
-        private ConsolidationFunction GetFunction(string func)
+        //private ConsolidationFunction GetFunction(string func)
+        //{
+        //    switch (func.ToUpper())
+        //    {
+        //        case "SUM": return ConsolidationFunction.Sum;
+        //        case "COUNT": return ConsolidationFunction.Count;
+        //        case "AVG": return ConsolidationFunction.Average;
+        //        case "MIN": return ConsolidationFunction.Min;
+        //        case "MAX": return ConsolidationFunction.Max;
+        //        default: return ConsolidationFunction.Sum;
+        //    }
+        //}
+        private XlConsolidationFunction GetFunction(string func)
         {
             switch (func.ToUpper())
             {
-                case "SUM": return ConsolidationFunction.Sum;
-                case "COUNT": return ConsolidationFunction.Count;
-                case "AVG": return ConsolidationFunction.Average;
-                case "MIN": return ConsolidationFunction.Min;
-                case "MAX": return ConsolidationFunction.Max;
-                default: return ConsolidationFunction.Sum;
+                case "SUM": return XlConsolidationFunction.xlSum;
+                case "COUNT": return XlConsolidationFunction.xlCount;
+                case "AVG": return XlConsolidationFunction.xlAverage;
+                case "MIN": return XlConsolidationFunction.xlMin;
+                case "MAX": return XlConsolidationFunction.xlMax;
+                default: return XlConsolidationFunction.xlSum;
             }
         }
     }

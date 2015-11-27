@@ -63,7 +63,7 @@ var getParm = function () {
         if (item.type == 'text') {
             result.push({ Name: item.id, Value: App[item.id].getValue() });
         } else if (item.type == 'combo') {
-            result.push({ Name: item.id, Value: Ext.isEmpty(App[item.id].getValue()) ? '' : App[item.id].getValue().join() });
+            result.push({ Name: item.id, Value: Ext.isEmpty(App[item.id].getValue()) ? '' : (typeof App[item.id].getValue() === 'string' ? App[item.id].getValue() : App[item.id].getValue().join()) });
         } else if (item.type == 'date') {
             result.push({ Name: item.id, Value: App[item.id].getValue() });
         } else if (item.type == 'grid') {

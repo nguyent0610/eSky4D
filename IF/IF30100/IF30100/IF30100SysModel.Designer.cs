@@ -760,7 +760,8 @@ namespace IF30100
         /// <param name="measureFunc">Initial value of the MeasureFunc property.</param>
         /// <param name="dataFormat">Initial value of the DataFormat property.</param>
         /// <param name="pivotOrder">Initial value of the PivotOrder property.</param>
-        public static SYS_ReportOLAPTemplate CreateSYS_ReportOLAPTemplate(global::System.String reportNbr, global::System.String columnName, global::System.String pivotType, global::System.String columnDescr, global::System.String parmType, global::System.String parmData, global::System.String parmOperator, global::System.String filterBy, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String measureFunc, global::System.String dataFormat, global::System.Int16 pivotOrder)
+        /// <param name="pivotShow">Initial value of the PivotShow property.</param>
+        public static SYS_ReportOLAPTemplate CreateSYS_ReportOLAPTemplate(global::System.String reportNbr, global::System.String columnName, global::System.String pivotType, global::System.String columnDescr, global::System.String parmType, global::System.String parmData, global::System.String parmOperator, global::System.String filterBy, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String measureFunc, global::System.String dataFormat, global::System.Int16 pivotOrder, global::System.Boolean pivotShow)
         {
             SYS_ReportOLAPTemplate sYS_ReportOLAPTemplate = new SYS_ReportOLAPTemplate();
             sYS_ReportOLAPTemplate.ReportNbr = reportNbr;
@@ -781,6 +782,7 @@ namespace IF30100
             sYS_ReportOLAPTemplate.MeasureFunc = measureFunc;
             sYS_ReportOLAPTemplate.DataFormat = dataFormat;
             sYS_ReportOLAPTemplate.PivotOrder = pivotOrder;
+            sYS_ReportOLAPTemplate.PivotShow = pivotShow;
             return sYS_ReportOLAPTemplate;
         }
 
@@ -1228,6 +1230,30 @@ namespace IF30100
         private global::System.Int16 _PivotOrder;
         partial void OnPivotOrderChanging(global::System.Int16 value);
         partial void OnPivotOrderChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean PivotShow
+        {
+            get
+            {
+                return _PivotShow;
+            }
+            set
+            {
+                OnPivotShowChanging(value);
+                ReportPropertyChanging("PivotShow");
+                _PivotShow = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PivotShow");
+                OnPivotShowChanged();
+            }
+        }
+        private global::System.Boolean _PivotShow;
+        partial void OnPivotShowChanging(global::System.Boolean value);
+        partial void OnPivotShowChanged();
 
         #endregion
 
