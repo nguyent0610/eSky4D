@@ -35,7 +35,7 @@ namespace HQSendMailApprove
       
         public static void SendMail(string mailTo, string mailCC, string subject, string content,string[] fullPathAttach =null)
         {
-            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>();
+            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             try
             {
                 if (mailTo == string.Empty && mailCC == string.Empty) return;
@@ -109,7 +109,7 @@ namespace HQSendMailApprove
         public static List<GetMailResult> GetMail(string procName, Dictionary<string, string> parameter)
         {
 
-            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>();
+            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             EntityConnectionStringBuilder entityBuilder = new EntityConnectionStringBuilder(app.Connection.ConnectionString);
 
 
@@ -156,7 +156,7 @@ namespace HQSendMailApprove
      
         public static string Approve_Content(string procName, Dictionary<string, string> parameter)
         {
-            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>();
+            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             EntityConnectionStringBuilder entityBuilder = new EntityConnectionStringBuilder(app.Connection.ConnectionString);
 
             SqlCommand cmd = new SqlCommand();
@@ -189,7 +189,7 @@ namespace HQSendMailApprove
       
         public static void InsertHOPendingTask(string procName, Dictionary<string, string> parameter)
         {
-            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>();
+            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             EntityConnectionStringBuilder entityBuilder = new EntityConnectionStringBuilder(app.Connection.ConnectionString);
 
             SqlCommand cmd = new SqlCommand();
@@ -247,7 +247,7 @@ namespace HQSendMailApprove
 
         public static  void SendMailApprove(string lstBranchID, string lstObj, string ScreenNbr, string CurrentBranch, string Status, string Handle, string[] _roles, string User, short LangID)
         {
-            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>();
+            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             var objhandle = new SI_ApprovalFlowHandle();
             var lstobjhandle = app.SI_ApprovalFlowHandle.Where(p => p.AppFolID.ToUpper().Trim() == ScreenNbr.ToUpper().Trim() && p.Status.ToUpper().Trim() == Status.ToUpper().Trim() && p.Handle.ToUpper().Trim() == Handle.ToUpper().Trim()).ToList();
             objhandle = lstobjhandle.Where(p => _roles.Any(d => d.ToUpper().Trim() == p.RoleID.ToUpper().ToUpper().Trim())).FirstOrDefault();
@@ -286,7 +286,7 @@ namespace HQSendMailApprove
 
         public static void SendMailApprove(string lstBranchID, string lstObj, string ScreenNbr, string CurrentBranch, string Status, string ToStatus, string User, short LangID)
         {
-            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>();
+            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
             var objhandle = new SI_ApprovalFlowHandle();
             var _roles = _sys.Users.Where(p => p.UserName.ToUpper() == User.ToUpper()).FirstOrDefault().UserTypes.PassNull().Split(',');
@@ -324,13 +324,111 @@ namespace HQSendMailApprove
             }
 
         }
-   
 
+        public static void SendMailFile(string mailTo, string mailCC, string subject, string content, string EmailID, string[] FileAttach)
+        {
+            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
+            try
+            {
+                if (mailTo == string.Empty && mailCC == string.Empty) return;
+                var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == "Approve".ToUpper()).FirstOrDefault();
+                if (email != null)
+                    SendMailEndFile(email.SMTPServer, email.Port, email.SSL, email.UserName, email.Pass, email.MailBox, email.Name, mailTo, mailCC, subject, content, FileAttach);
+                else
+                    throw new Exception("No email config");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void SendMailFileProc(string procName, Dictionary<string, string> parameter, string subject, string EmailID, string[] FileAttach)
+        {
+
+            try
+            {
+                List<GetMailResult> lst = GetMail(procName, parameter);
+                HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
+                var email = app.HO_EmailConfig.Where(p => p.EmailID.ToUpper() == "Approve".ToUpper()).FirstOrDefault();
+                if (email != null)
+                    foreach (var obj in lst)
+                    {
+                        SendMailEndFile(email.SMTPServer, email.Port, email.SSL, email.UserName, email.Pass, email.MailBox, email.Name, obj.To, obj.CC, subject, obj.Content, FileAttach);
+                    }
+                else
+                    throw new Exception("No email config");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void SendMailEndFile(string SMTPServer, int Port, bool SSL, string UserName, string Pass, string MailBox, string fromName, string toMail, string ccMail, string subject, string content, string[] FileAttach)
+        {
+            try
+            {
+
+
+                if (toMail == string.Empty && ccMail == string.Empty) return;
+
+                string regexEmail = @"\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b";
+                using (SmtpClient smtpClient = new SmtpClient(SMTPServer, Port))
+                {
+
+
+                    Regex regex = new Regex(regexEmail);
+                    if (!regex.IsMatch(MailBox) || !regex.IsMatch(toMail)) throw new Exception("Wrong email address");
+
+                    NetworkCredential auth = new NetworkCredential(UserName, Encryption.Decrypt(Pass, "1210Hq10s081f359t"));
+                    smtpClient.Credentials = auth;
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+                    if (SSL) smtpClient.EnableSsl = true;
+
+                    MailAddress from = new MailAddress(MailBox, fromName);
+                    using (MailMessage mail = new MailMessage())
+                    {
+
+                        string[] cc = ccMail.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var item in cc)
+                            mail.CC.Add(item);
+
+                        string[] to = toMail.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var item in to)
+                            mail.To.Add(item);
+
+                        mail.From = from;
+                        mail.Subject = subject;
+                        mail.SubjectEncoding = Encoding.UTF8;
+
+                        mail.Body = content;
+                        mail.BodyEncoding = Encoding.UTF8;
+                        mail.IsBodyHtml = true;
+                        if (FileAttach != null)
+                        {
+                            for (var i = 0; i < FileAttach.Length; i++)
+                            {
+                                mail.Attachments.Add(new Attachment(FileAttach[i]));
+                            }
+                        }
+                        smtpClient.Send(mail);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+      
         public static void SendMailApproveAR21600(string ScreenNbr, string User, string ObjectValue, string Task, string FromBranch, string ToBranch, string FromStatus, string ToStatus, string lstObj, string Reason, string Handle, string[] _roles, short LangID)
         {
             try
             {
-                HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>();
+                HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
                 var objhandle = new SI_ApprovalFlowHandle();
                 if (Task.ToUpper().Trim() == "CB")
                 {
@@ -394,7 +492,7 @@ namespace HQSendMailApprove
         
         public static void Mail_Approve(string screenNbr, string objID, string role, string status, string handle, string langID, string userName, string lstBranch, string currentBranch, string parm00, string parm01, string parm02)
         {
-            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>();
+            HQSendMailApproveEntities app = Util.CreateObjectContext<HQSendMailApproveEntities>(false);
             var approvehandle = app.SI_ApprovalFlowHandle.Where(p => p.AppFolID == screenNbr && p.RoleID == role && p.Status == status && p.Handle == handle).FirstOrDefault();
             if (approvehandle != null && approvehandle.MailSubject.PassNull() != string.Empty)
             {
