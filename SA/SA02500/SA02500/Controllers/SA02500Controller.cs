@@ -44,67 +44,74 @@ namespace SA02500.Controllers
         [HttpPost]
         public ActionResult SA02500Save(FormCollection data)
         {
-            string oldPassword = data["txtOldPassword"];
-            string newPassword = data["txtNewPassword"];
-            string reNewPassword = data["txtReNewPassword"];
-            string username = Current.UserName.ToString();
-
-            // Kiem tra pass trung 5 lan gan nhat
-            var flag = _db.SA02500_ppCheckPass(username, Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t")).FirstOrDefault();
-
-            if(flag.ToString()=="0")
+            try
             {
-                if (newPassword == reNewPassword)
+                string oldPassword = data["txtOldPassword"];
+                string newPassword = data["txtNewPassword"];
+                string reNewPassword = data["txtReNewPassword"];
+                string username = Current.UserName.ToString();
+
+                // Kiem tra pass trung 5 lan gan nhat
+                var flag = _db.SA02500_ppCheckPass(username, Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t")).FirstOrDefault();
+
+                if (flag.ToString() == "0")
                 {
-                    var objUser = _db.Users.Where(p => p.UserName == Current.UserName).FirstOrDefault();
-                    var objHeader = _db.SYS_PassHistory.FirstOrDefault();
-                    objUser.Password = Encryption.Decrypt(objUser.Password, "1210Hq10s081f359t");
-                    if (oldPassword != objUser.Password)
+                    if (newPassword == reNewPassword)
                     {
-                        return Json(new { success = false, code = "20140408" }, JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    {
-                        if (reNewPassword == objUser.Password)
+                        var objUser = _db.Users.Where(p => p.UserName == Current.UserName).FirstOrDefault();
+                        var objHeader = _db.SYS_PassHistory.FirstOrDefault();
+                        objUser.Password = Encryption.Decrypt(objUser.Password, "1210Hq10s081f359t");
+                        if (oldPassword != objUser.Password)
                         {
-                            return Json(new { success = false, code = "201303073" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { success = false, code = "20140408" }, JsonRequestBehavior.AllowGet);
                         }
                         else
                         {
-                            try
+                            if (reNewPassword == objUser.Password)
                             {
-                                objUser.Password = Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t");
-                                objHeader = new SYS_PassHistory();
-                                objHeader.ResetET();
-                                objHeader.UserName = Current.UserName.ToString();
-                                objHeader.Password = Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t");
-                                objHeader.Crtd_Datetime = DateTime.Now;
-                                objHeader.Crtd_Prog = _screenNbr;
-                                objHeader.Crtd_User = Current.UserName;
-                                objHeader.LUpd_Datetime = DateTime.Now;
-                                objHeader.LUpd_Prog = _screenNbr;
-                                objHeader.LUpd_User = Current.UserName;
+                                return Json(new { success = false, code = "201303073" }, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    objUser.Password = Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t");
+                                    objHeader = new SYS_PassHistory();
+                                    objHeader.ResetET();
+                                    objHeader.UserName = Current.UserName.ToString();
+                                    objHeader.Password = Encryption.Encrypt(reNewPassword, "1210Hq10s081f359t");
+                                    objHeader.Crtd_Datetime = DateTime.Now;
+                                    objHeader.Crtd_Prog = _screenNbr;
+                                    objHeader.Crtd_User = Current.UserName;
+                                    objHeader.LUpd_Datetime = DateTime.Now;
+                                    objHeader.LUpd_Prog = _screenNbr;
+                                    objHeader.LUpd_User = Current.UserName;
 
+                                }
+                                catch
+                                {
+                                    objUser.Password = string.Empty;
+                                }
                             }
-                            catch
-                            {
-                                objUser.Password = string.Empty;
-                            }
+                            _db.SYS_PassHistory.AddObject(objHeader);
                         }
-                        _db.SYS_PassHistory.AddObject(objHeader);
+                        objUser.LoggedIn = true;
+                        _db.SaveChanges();
+                        return Json(new { success = true });
                     }
-                    objUser.LoggedIn = true;
-                    _db.SaveChanges();
-                    return Json(new { success = true });
+                    else
+                    {
+                        return Json(new { success = false, code = "1503" }, JsonRequestBehavior.AllowGet);
+                    }
                 }
                 else
                 {
-                    return Json(new { success = false, code = "1503" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = false, code = "201303072" }, JsonRequestBehavior.AllowGet);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return Json(new { success = false, code = "201303072" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
 
