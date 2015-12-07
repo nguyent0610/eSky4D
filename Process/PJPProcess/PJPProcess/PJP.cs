@@ -158,7 +158,7 @@ namespace PJPProcess
             {
                 if ((objSaleMaster.SlsFreq == "F1/3") || (objSaleMaster.SlsFreq == "F1/2"))
                 {
-                    iWeekStart = Util.ToInt(objSaleMaster.WeekofVisit);
+                    iWeekStart = Util.ToInt(objSaleMaster.WeekofVisit.Replace("W",""));
                 }
 
                 for (Int32 i = iWeekStart; i <= iWeekEnd; i++)
@@ -190,7 +190,7 @@ namespace PJPProcess
                         objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
                         objOM_SalesRouteDet1.LUpd_Prog = prog;
                         objOM_SalesRouteDet1.LUpd_User = user;
-                        objOM_SalesRouteDet1.VisitDate = objSaleMaster.Mon ? dMon : (objSaleMaster.Tue ? dTue : (objSaleMaster.Wed ? dWed : (objSaleMaster.Thu ? dThu : (objSaleMaster.Fri ? dFri : (objSaleMaster.Sat ? dSat : (objSaleMaster.Sun ? dSun : DateTime.Now))))));
+                        objOM_SalesRouteDet1.VisitDate = objSaleMaster.Mon ? dMon : (objSaleMaster.Tue ? dTue : (objSaleMaster.Wed ? dWed : (objSaleMaster.Thu ? dThu : (objSaleMaster.Fri ? dFri : (objSaleMaster.Sat ? dSat : (objSaleMaster.Sun ? dSun : DateTime.Now.ToDateShort()))))));
                         objOM_SalesRouteDet1.DayofWeek = objSaleMaster.Mon ? "Mon" : (objSaleMaster.Tue ? "Tue" : (objSaleMaster.Wed ? "Wed" : (objSaleMaster.Thu ? "Thu" : (objSaleMaster.Fri ? "Fri" : (objSaleMaster.Sat ? "Sat" : (objSaleMaster.Sun ? "Sun" : ""))))));
                         objOM_SalesRouteDet1.WeekNbr = i;
 
