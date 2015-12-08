@@ -197,11 +197,11 @@ namespace PJPProcess
                         lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                         if (objSaleMaster.SlsFreq == "F1/3")
                         {
-                            i += 7;
+                            i += 11;
                         }
                         else if (objSaleMaster.SlsFreq == "F1/2")
                         {
-                            i += 11;
+                            i += 7;
                         }
                     }
                     else if (objSaleMaster.SlsFreq == "F1")
