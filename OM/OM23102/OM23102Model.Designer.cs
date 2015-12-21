@@ -202,6 +202,25 @@ namespace OM23102
     
             return base.ExecuteFunction<OM23102_peSale_Result>("OM23102_peSale", userIDParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        public ObjectResult<OM23102_peCust_Result> OM23102_peCust(global::System.String userID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM23102_peCust_Result>("OM23102_peCust", userIDParameter);
+        }
 
         #endregion
 
@@ -911,6 +930,133 @@ namespace OM23102
         private global::System.String _CpnyName;
         partial void OnCpnyNameChanging(global::System.String value);
         partial void OnCpnyNameChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM23102Model", Name="OM23102_peCust_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM23102_peCust_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM23102_peCust_Result object.
+        /// </summary>
+        /// <param name="custID">Initial value of the CustID property.</param>
+        /// <param name="custName">Initial value of the CustName property.</param>
+        public static OM23102_peCust_Result CreateOM23102_peCust_Result(global::System.String custID, global::System.String custName)
+        {
+            OM23102_peCust_Result oM23102_peCust_Result = new OM23102_peCust_Result();
+            oM23102_peCust_Result.CustID = custID;
+            oM23102_peCust_Result.CustName = custName;
+            return oM23102_peCust_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BranchIDSlsperId
+        {
+            get
+            {
+                return _BranchIDSlsperId;
+            }
+            set
+            {
+                OnBranchIDSlsperIdChanging(value);
+                ReportPropertyChanging("BranchIDSlsperId");
+                _BranchIDSlsperId = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchIDSlsperId");
+                OnBranchIDSlsperIdChanged();
+            }
+        }
+        private global::System.String _BranchIDSlsperId;
+        partial void OnBranchIDSlsperIdChanging(global::System.String value);
+        partial void OnBranchIDSlsperIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BranchIDSlsperIdCustID
+        {
+            get
+            {
+                return _BranchIDSlsperIdCustID;
+            }
+            set
+            {
+                OnBranchIDSlsperIdCustIDChanging(value);
+                ReportPropertyChanging("BranchIDSlsperIdCustID");
+                _BranchIDSlsperIdCustID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchIDSlsperIdCustID");
+                OnBranchIDSlsperIdCustIDChanged();
+            }
+        }
+        private global::System.String _BranchIDSlsperIdCustID;
+        partial void OnBranchIDSlsperIdCustIDChanging(global::System.String value);
+        partial void OnBranchIDSlsperIdCustIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CustID
+        {
+            get
+            {
+                return _CustID;
+            }
+            set
+            {
+                OnCustIDChanging(value);
+                ReportPropertyChanging("CustID");
+                _CustID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CustID");
+                OnCustIDChanged();
+            }
+        }
+        private global::System.String _CustID;
+        partial void OnCustIDChanging(global::System.String value);
+        partial void OnCustIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CustName
+        {
+            get
+            {
+                return _CustName;
+            }
+            set
+            {
+                OnCustNameChanging(value);
+                ReportPropertyChanging("CustName");
+                _CustName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CustName");
+                OnCustNameChanged();
+            }
+        }
+        private global::System.String _CustName;
+        partial void OnCustNameChanging(global::System.String value);
+        partial void OnCustNameChanged();
 
         #endregion
 

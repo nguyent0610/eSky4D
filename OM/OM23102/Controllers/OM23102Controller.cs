@@ -487,7 +487,10 @@ namespace OM23102.Controllers
                 SheetDataMaster.Cells.ImportDataTable(dtClass, true, 0, 6, false);// du lieu Inventory
 
 
-
+                pc = new ParamCollection();
+                pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                DataTable dtCust = dal.ExecDataTable("OM23102_peCust", CommandType.StoredProcedure, ref pc);
+                SheetDataMaster.Cells.ImportDataTable(dtCust, true, 0, 7, false);// du lieu Inventory
 
                 Style style = workbook.GetStyleInPool(0);
                 StyleFlag flag = new StyleFlag();
@@ -504,18 +507,19 @@ namespace OM23102.Controllers
 
                 #region template
 
-                SetCellValueHeader(SheetTarget.Cells["D1"], Util.GetLang("OM231EHeader"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["D1"], Util.GetLang("OM23102EHeader"), TextAlignmentType.Center, TextAlignmentType.Center);
                 SheetTarget.Cells.Merge(0, 1, 2, 4);
                 
-                SetCellValueHeader(SheetTarget.Cells["A4"], Util.GetLang("OM231ESTT"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["B4"], Util.GetLang("OM231BranchID"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["C4"], Util.GetLang("OM231SlsPerID"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["D4"], Util.GetLang("OM231SlsName"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["E4"], Util.GetLang("OM231Month"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["F4"], Util.GetLang("OM231Class"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["G4"], Util.GetLang("OM231SellIN"), TextAlignmentType.Center, TextAlignmentType.Center);
-                SetCellValueHeader(SheetTarget.Cells["H4"], Util.GetLang("OM231SellOut"), TextAlignmentType.Center, TextAlignmentType.Center);
-           
+                SetCellValueHeader(SheetTarget.Cells["A4"], Util.GetLang("OM23102ESTT"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["B4"], Util.GetLang("OM23102BranchID"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["C4"], Util.GetLang("OM23102SlsPerID"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["D4"], Util.GetLang("OM23102SlsName"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["E4"], Util.GetLang("OM23102Month"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["F4"], Util.GetLang("OM23102Class"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["G4"], Util.GetLang("OM23102SellOut"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["H4"], Util.GetLang("OM23102CustID"), TextAlignmentType.Center, TextAlignmentType.Center);
+                SetCellValueHeader(SheetTarget.Cells["I4"], Util.GetLang("OM23102CustName"), TextAlignmentType.Center, TextAlignmentType.Center);
+                
                 #endregion
 
                 #region formular
@@ -564,7 +568,29 @@ namespace OM23102.Controllers
                 string formulaSlsName = "=IFERROR(VLOOKUP(B5&C5,Master! $D$1:$F$" + (dtSale.Rows.Count + 2) + ",3,FALSE),\"\")";
                 SheetTarget.Cells["D5"].SetSharedFormula(formulaSlsName, 1000, 1);
 
-               
+                //CustID
+                string formulaCust = "=OFFSET(Master! $H$1,IFERROR(MATCH(B5&C5,Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",0)-1," + (dtCust.Rows.Count + 1) + "),2,IF(COUNTIF(Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",B5&C5)=0,1,COUNTIF(Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",B5&C5)),1)";
+                validation = SheetTarget.Validations[SheetTarget.Validations.Add()];
+                validation.IgnoreBlank = true;
+                validation.Type = Aspose.Cells.ValidationType.List;
+                validation.AlertStyle = Aspose.Cells.ValidationAlertType.Stop;
+                validation.Operator = OperatorType.Between;
+                validation.Formula1 = formulaCust;
+                validation.InputTitle = "";
+                validation.InputMessage = "Please choose CustID";
+                validation.ErrorMessage = "CustID does not exist";
+
+                area = new CellArea();
+                area.StartRow = 4;
+                area.EndRow = 1000;
+                area.StartColumn = 7;
+                area.EndColumn = 7;
+                validation.AddArea(area);
+
+                //SlsName
+                string formulaCustName = "=IFERROR(VLOOKUP(B5&C5&H5,Master! $I$1:$K$" + (dtCust.Rows.Count + 2) + ",3,FALSE),\"\")";
+                SheetTarget.Cells["I5"].SetSharedFormula(formulaCustName, 1000, 1);
+
                 // Date
                 validation = SheetTarget.Validations[SheetTarget.Validations.Add()];
                 validation.IgnoreBlank = true;
@@ -626,10 +652,7 @@ namespace OM23102.Controllers
                 var range2 = SheetTarget.Cells.CreateRange("G5", "G1000");
                 cell = SheetTarget.Cells["G5"];
                 range2.SetStyle(style);
-
-                var range3 = SheetTarget.Cells.CreateRange("H5", "H1000");
-                cell = SheetTarget.Cells["H5"];
-                range3.SetStyle(style);
+              
 
                 cell = SheetTarget.Cells["E5"];
                 style = cell.GetStyle();
@@ -656,7 +679,7 @@ namespace OM23102.Controllers
                 stream.Flush();
                 stream.Position = 0;
 
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = Util.GetLang("OM231NameEx")+".xlsx" };
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = Util.GetLang("OM23102NameEx")+".xlsx" };
 
             }
             catch (Exception ex)
@@ -682,6 +705,7 @@ namespace OM23102.Controllers
                 var lsterrDuplicate = new List<string>();
                 var lsterrBranch =new List<string>();
                 var lsterrSls =new List<string>();
+                var lsterrCust = new List<string>();
                 var lsterrClass =new List<string>();
                 var lsterrEmpty = new List<string>();
                 var lsterrStruct = new List<string>();
@@ -695,12 +719,13 @@ namespace OM23102.Controllers
                         if (workbook.Worksheets.Count > 0)
                         {
                             Worksheet workSheet = workbook.Worksheets[0];
-                            string stt,branchid,slsperid,classid = string.Empty;
+                            string stt,branchid,slsperid,classid,custid = string.Empty;
                             double sellin, sellout = 0;
                             DateTime month;                           
                             int lineRef = 1;
                             var lstBranch=_db.OM23102_peBranch(Current.UserName).ToList();
                             var lstSlsper=_db.OM23102_peSale(Current.UserName).ToList();
+                            var lstCust = _db.OM23102_peCust(Current.UserName).ToList();
                             var lstClass=_db.OM23102_peProductClass(Current.UserName).ToList();
                             for (int i = 4; i < workSheet.Cells.MaxDataRow; i++)
                             {
@@ -714,15 +739,16 @@ namespace OM23102.Controllers
                                     slsperid = workSheet.Cells[i, 2].StringValue.PassNull().ToUpper().Trim();
                                     month = workSheet.Cells[i, 4].DateTimeValue.AddMonths(1).AddDays(-1);
                                     classid = workSheet.Cells[i, 5].StringValue.PassNull().ToUpper().Trim();
-                                    sellin = workSheet.Cells[i, 6].DoubleValue;
-                                    sellout = workSheet.Cells[i, 7].DoubleValue;
+                                    custid = workSheet.Cells[i, 7].StringValue.PassNull().ToUpper().Trim();
+                                    sellout = workSheet.Cells[i, 6].DoubleValue;
+                                    sellin = 0;
                                 }
                                 catch
                                 {
                                     lsterrStruct.Add((i + 1) + "");
                                     continue;
                                 }
-                                if (branchid == "" || slsperid == "" || classid == "")
+                                if (branchid == "" || slsperid == "" || classid == "" || custid == "")
                                 {
                                     lsterrEmpty.Add((i + 1) + "");
                                     continue;
@@ -743,6 +769,14 @@ namespace OM23102.Controllers
                                     }
                                     //continue;
                                 }
+                                if (lstCust.Where(p => p.BranchIDSlsperIdCustID.PassNull().ToUpper().Trim() == branchid+slsperid+custid).Count() == 0)
+                                {
+                                    if (!lsterrCust.Contains(custid))
+                                    {
+                                        lsterrCust.Add(custid);
+                                    }
+                                    //continue;
+                                }
                                 if (lstClass.Where(p => p.PassNull().ToUpper().Trim() == classid).Count() == 0)
                                 {
                                     if (!lsterrClass.Contains(classid))
@@ -752,19 +786,22 @@ namespace OM23102.Controllers
                                     //continue;
                                 }
 
-                                if (lsterrBranch.Count != 0 || lsterrSls.Count != 0 || lsterrClass.Count != 0) continue;
-                                if (lstImport.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.ClassID == classid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Month).Count() != 0) 
+                                if (lsterrBranch.Count != 0 || lsterrSls.Count != 0 || lsterrClass.Count != 0 || lsterrCust.Count != 0) continue;
+                                if (lstImport.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.ClassID == classid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Month).Count() != 0) 
                                 {
-                                    lsterrDuplicate.Add("("+branchid + "," + slsperid + "," + classid + "," + month.Month + "/" + month.Year+")");
+                                    lsterrDuplicate.Add("(" + branchid + "," + slsperid + "," + custid + "," + classid + "," + month.Month + "/" + month.Year + ")");
                                     continue;
                                 }
-                                var objFCS = _db.OM_PG_FCS.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.ClassID == classid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Year).FirstOrDefault();
+                                var objFCS = _db.OM_PG_FCS.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.ClassID == classid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Year).FirstOrDefault();
+                                var objFCS1 = _db.OM_PG_FCS.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Year).FirstOrDefault();
+                                  
                                 if (objFCS == null)
                                 {
                                     objFCS = new OM_PG_FCS();
                                     objFCS.ResetET();
                                     objFCS.BranchID = branchid;
                                     objFCS.ClassID = classid;
+                                    objFCS.CustID = custid;
                                     objFCS.SlsperId = slsperid;
                                     objFCS.FCSDate = month;
 
@@ -774,14 +811,14 @@ namespace OM23102.Controllers
                                     objFCS.Crtd_User = _userName;
                                     objFCS.DNA = 0;
                                     objFCS.ForcusedSKU = 0;
-                                    objFCS.LPPC = 0;
+                                    objFCS.LPPC = objFCS1 == null ? 0 : objFCS1.LPPC;
                                     objFCS.LUpd_DateTime = DateTime.Now;
                                     objFCS.LUpd_Prog = _screenNbr;
                                     objFCS.LUpd_User = _userName;
                                     objFCS.SellIn = sellin;
                                     objFCS.SellOut = sellout;
-                                    objFCS.Visit = 0;
-                                    objFCS.VisitTime = 0;
+                                    objFCS.Visit = objFCS1 == null ? 0 : objFCS1.Visit;
+                                    objFCS.VisitTime = objFCS1 == null ? 0 : objFCS1.VisitTime;
 
                                     _db.OM_PG_FCS.AddObject(objFCS);
                                     lstImport.Add(objFCS);
@@ -792,13 +829,13 @@ namespace OM23102.Controllers
                                     objFCS.LUpd_DateTime = DateTime.Now;
                                     objFCS.LUpd_Prog = _screenNbr;
                                     objFCS.LUpd_User = _userName;
-                                    objFCS.SellIn = sellin;
+                                    //objFCS.SellIn = sellin;
                                     objFCS.SellOut = sellout;
                                 }
                             }
                         }
 
-                        if (lsterrBranch.Count == 0 && lsterrClass.Count == 0 && lsterrDuplicate.Count == 0 && lsterrSls.Count == 0 && lsterrEmpty.Count == 0 && lsterrStruct.Count == 0)
+                        if (lsterrCust.Count == 0 && lsterrBranch.Count == 0 && lsterrClass.Count == 0 && lsterrDuplicate.Count == 0 && lsterrSls.Count == 0 && lsterrEmpty.Count == 0 && lsterrStruct.Count == 0)
                         {
                             _db.SaveChanges();                          
                         }
@@ -812,7 +849,7 @@ namespace OM23102.Controllers
                             }
                             if (lsterrEmpty.Count > 0)
                             {
-                                message += string.Format(Util.GetLang("OM231ErrEtyPre") + "<br/>", lsterrEmpty.Count > 5 ? string.Join(", ", lsterrEmpty.Take(5)) + ", ..." : string.Join(", ", lsterrEmpty));
+                                message += string.Format(Util.GetLang("OM23102ErrEtyPre") + "<br/>", lsterrEmpty.Count > 5 ? string.Join(", ", lsterrEmpty.Take(5)) + ", ..." : string.Join(", ", lsterrEmpty));
                             }
                             if (lsterrBranch.Count > 0)
                             {
@@ -823,6 +860,11 @@ namespace OM23102.Controllers
                             {
                                 message += string.Format(Util.GetLang("ErrNExistSales") + "<br/>",
                                     lsterrSls.Count > 5 ? string.Join(", ", lsterrSls.Take(5)) + ", ..." : string.Join(", ", lsterrSls));
+                            }
+                            if (lsterrCust.Count > 0)
+                            {
+                                message += string.Format(Util.GetLang("ErrNExistCust") + "<br/>",
+                                    lsterrCust.Count > 5 ? string.Join(", ", lsterrCust.Take(5)) + ", ..." : string.Join(", ", lsterrCust));
                             }
                             if (lsterrClass.Count > 0)
                             {
