@@ -1,0 +1,265 @@
+@using System.Globalization;
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM23102;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(
+ X.Viewport()   
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("ImportTemplate")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";
+              
+            }),
+                    
+            X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("ExportTemplate"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            })
+        },"Print", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(lst =>
+    {
+        lst.BoxReady.Fn = "beforeSelectcombo";
+    })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+            .Region(Region.North)
+            .Items(
+                HQ.DateField().ID("dateFcs").MarginSpec("5 0 0 0").HQLangCode("OM23102_Date").Width(400)
+                .Type(DatePickerType.Month).Format("yyyy/MM").Value(DateTime.Now.ToString("yyyy/MM"))
+                .Listeners(p =>
+                {
+                    p.Change.Fn = "dateFcs_Change";
+                    p.Expand.Fn = "dateFcs_expand";
+                })
+                
+                , HQ.Combo().ID("cboZone")
+                    .Name("cboZone").HQLangCode("OM23102_Zone").HQProcedure("OM23102_pcZone")
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").HQAutoLoad(false)
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                    .ForceSelection(true).MaxLength(50).EnforceMaxLength(true)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboZone_Change";
+                    })
+
+                , HQ.Combo().ID("cboTerritory")
+                    .Name("cboTerritory").HQLangCode("Area").HQProcedure("OM23102_pcTerritory")
+                    .HQColumnShow("Territory,Descr,Zone").DisplayField("Descr").ValueField("Territory")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
+                    .ForceSelection(true).EnforceMaxLength(true).AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@Zone", Value = "App.cboZone.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw } 
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboTerritory_Change";
+                    })
+
+                , HQ.Combo().ID("cboDist")
+                    .Name("cboDist").HQLangCode("Dist").HQProcedure("OM23102_pcCompany")
+                    .HQColumnShow("CpnyID,CpnyName").DisplayField("CpnyName").ValueField("CpnyID")
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").HQAutoLoad(false)
+                    .ForceSelection(true).EnforceMaxLength(true).AllowBlank(false)
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@Territory", Value = "App.cboTerritory.getValue()", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw } 
+                    })
+                    .LoadData()
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "cboDist_Change";
+                    }).DirectEvents(de =>
+                            {
+                                de.Change.EventMask.ShowMask = true;
+                                de.Change.EventMask.Msg = Util.GetLang("LoadingData");
+                                de.Change.EventMask.MinDelay = 500;
+
+                                de.Change.Url = Url.Action("OM23102_LoadParm");
+                                de.Change.ExtraParams.Add(new Parameter
+                                {
+                                    Name = "BranchID",
+                                    Value = "App.cboDist.getValue()",
+                                    Mode = ParameterMode.Raw
+                                });                                                       
+
+                            }
+                        )
+
+                , X.Button().ID("btnSearch").MarginSpec("5 0 5 160").Width(180)
+                    .Text(Util.GetLang("OM23102_Search")).Listeners(p =>
+                    {
+                        p.Click.Fn = "btnSearch_Click";
+                    })
+            )//pnl Header
+
+            ,
+            X.Panel().ID("pnlgrd")
+            .Region(Region.Center)
+            .Layout(LayoutType.Border)
+            //.Loader(
+            //    X.ComponentLoader()
+            //    .Url(Url.Action("RenderChild"))
+            //    .Mode(LoadMode.Html)
+            //    .LoadMask(lm=>lm.ShowMask=true)
+            //)
+            .Items(
+                X.GridPanel().ID("grdOM_PG_FCS")
+                .Hidden(true)
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false).LoadMask(true))
+                .Region(Region.Center).Flex(1)
+                .SelectionMemory(false)
+                .StoreID("stoOM_PG_FCS")
+                //.Store(
+                //    X.Store()
+                //    .ID("stoOM_PG_FCS")
+                //    .PageSize(50)
+                //    .Model(Util.GenerateModel(typeof(), "mdlOM23102_pgOM_PG_FCS", "SlsperId"))
+                //    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_PG_FCS"))).AutoLoad(false)
+                //    .Parameters(ps =>
+                //    {
+                //        ps.Add(new StoreParameter("BranchID", "App.cboDist.value", ParameterMode.Raw));
+                //        ps.Add(new StoreParameter("FCSDate", "App.dateFcs.value", ParameterMode.Raw));
+                //    })
+                //    .Listeners(l =>
+                //    {
+                //        l.BeforeLoad.Fn = "stoBeforeLoad";
+                //        l.Load.Fn = "stoLoad";
+                //        l.Update.Fn = "stoChanged";
+                //    })
+                //)
+                //.Listeners(p =>
+                //{
+                //    p.BoxReady.Handler = "firstLoad();";
+                //})
+                .SortableColumns(false)
+                .ColumnModel(
+                    X.RowNumbererColumn().Width(40)
+
+                    , X.Column().DataIndex("SlsperId").Text(Util.GetLang("SlsperId")).Width(80).Locked(true)
+                    .Editor(
+                        HQ.Combo().ID("cboSlsperId")
+                        .Name("cboSlsperId").HQProcedure("OM23102_pcSalesPerson")
+                        .HQColumnShow("SlsperId,Name,BranchID").DisplayField("SlsperId").ValueField("SlsperId")
+                        .Width(300).HQHeightWidth(500, 400).ForceSelection(true)
+                    
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboDist.getValue()", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                    )
+                    , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(150).Locked(true)
+                    , X.Column().DataIndex("Position").Text(Util.GetLang("Position")).Width(120).Locked(true).Renderer("renderPosition")
+                    .Editor(
+                        HQ.Combo().ID("cboPosition").ReadOnly(true)
+                        .Name("cboPosition").HQProcedure("OM23102_pcPosition")
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                        .Width(300).HQHeightWidth(500, 400).ForceSelection(true)
+                    
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                    )
+                    , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150).Locked(true)
+                    , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(150).Locked(true)
+                    //, X.NumberColumn().Text(Util.GetLang("OM23102_SellIn")).DataIndex("SellIn").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    //, X.NumberColumn().Text(Util.GetLang("OM23102_Coverage")).DataIndex("Coverage").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    //, X.NumberColumn().Text(Util.GetLang("OM23102_DNA")).DataIndex("DNA").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    //, X.NumberColumn().Text(Util.GetLang("OM23102_Visit")).DataIndex("Visit").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    //, X.NumberColumn().Text(Util.GetLang("OM23102_LPPC")).DataIndex("LPPC").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    //, X.NumberColumn().Text(Util.GetLang("OM23102_ForcusedSKU")).DataIndex("ForcusedSKU").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                    //, X.NumberColumn().Text(Util.GetLang("OM23102_VisitTime")).DataIndex("VisitTime").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
+                        
+                //    , X.CommandColumn().Width(150)
+                //    .Commands(
+                //        X.GridCommand()
+                //        .Text(Util.GetLang("Reject"))
+                //        .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                //        .CommandName("reject")
+                //        .Icon(Icon.ArrowUndo)
+                //    )
+                //    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                //    .Listeners(l => l.Command.Handler = "grdOM_PG_FCS_Reject(record);")
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmOM_PG_FCS").Mode(SelectionMode.Multi))
+            //.BottomBar(
+            //    X.PagingToolbar()
+            //    .Items(
+            //        X.Label("Page size:"),
+            //        X.ToolbarSpacer(10),
+            //        X.ComboBox()
+            //        .Width(80)
+            //        .Items("1", "2", "10", "20", "30", "50")
+            //        .SelectedItems("50")
+            //        .Listeners(l =>
+            //            {
+            //                l.Select.Fn = "HQ.grid.onPageSelect";
+            //            })
+            //    )
+            //    .Plugins(X.ProgressBarPager())
+            //)
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdOM_PG_FCS_BeforeEdit";
+                        ls.Edit.Fn = "grdOM_PG_FCS_Edit";
+                        ls.ValidateEdit.Fn = "grdOM_PG_FCS_ValidateEdit";
+
+                    })
+                )
+
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("SlsperId"),
+                            X.StringFilter().DataIndex("Name"),
+                            X.StringFilter().DataIndex("Position"),
+                            X.StringFilter().DataIndex("CustID"),
+                            X.StringFilter().DataIndex("CustName")
+                        )
+                )
+            )// pnl Grid
+
+    )//frm Main
+)//View port
+)
