@@ -19,10 +19,11 @@
         //.DefaultAnchor("100%")
         .BodyPadding(10)
         .BodyBorder(0).AutoScroll(true)
-        .TopBar(Util.SetupToolbar("new,print", true, "Event.Form.menuClick"))
+        .TopBar(Util.SetupToolbar("print", true, "Event.Form.menuClick"))
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
         .Items(
             X.Panel().ID("pnlHeader")
+            .Listeners(lst=>lst.Render.Handler = "HQ.common.control_render(this,'header')")
             .Layout(LayoutType.HBox).Region(Region.North).MinWidth(1005)
             .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
             .Items(
@@ -127,7 +128,8 @@
                 ) // Third Column
             ) // pnlHeader
 
-            , X.GridPanel().ID("grdStockOutletDet")
+            , X.GridPanel().ID("grdStockOutletDet") 
+            .Listeners(lst=>lst.Render.Handler = "HQ.common.control_render(this,'grdStockOutletDet')")
             .Region(Region.Center)
             .Scroll(ScrollMode.Both).MinWidth(1005)
             .View(X.GridView().TrackOver(false))
@@ -197,7 +199,7 @@
                     .LoadData()
                 )
                 
-                , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("StkQty").Format("0,000")
+                , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Qty")).DataIndex("StkQty").Format("0,000")
                 .Editor(
                     X.NumberField().SelectOnFocus(true).DecimalPrecision(0).MinValue(0)
                 )

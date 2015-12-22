@@ -111,7 +111,7 @@ var Process = {
             }
         }
         return found;
-    },
+    }, 
 
     checkStkOutNbrFromPDA: function (stkOutNbr) {
         if (stkOutNbr && !isNaN(stkOutNbr)) {
@@ -162,7 +162,32 @@ var Process = {
         if (item == 'yes') {
             App.grdStockOutletDet.deleteSelected();
         }
+    },
+    deleteHeader: function (item) {
+        if (item == 'yes') {
+            if (App.frmMain.isValid()) {
+                App.frmMain.submit({
+                    waitMsg: HQ.common.getLang('DeletingData'),
+                    method: 'POST',
+                    url: 'IN10700/DeleteHeader',
+                    timeout: 180000,
+                    params: {
+                        lstStockOutlet: Ext.encode(App.stoStockOutlet.getRecordsValues())
+                    },
+                    success: function (msg, data) {
+                        if (App.frmMain.isValid()) {
+                            App.stoStockOutlet.reload();
+                        }
+                    },
+                    failure: function (msg, data) {
+                        HQ.message.process(msg, data, true);
+                    }
+                });
+            }
+        }
     }
+
+
 };
 
 var Store = {
@@ -198,7 +223,7 @@ var Store = {
     },
 
     stoStockOutletDet_load: function (sto, records, successful, eOpts) {
-        if (!Process.checkStkOutNbrFromPDA(App.txtStkOutNbr.value) && _allowUpdate) {
+        //if (!Process.checkStkOutNbrFromPDA(App.txtStkOutNbr.value) && _allowUpdate) {
             var keys = sto.HQFieldKeys ? sto.HQFieldKeys : "";
             var newData = {
                 BranchID: App.cboBranchID.getValue(),
@@ -208,7 +233,7 @@ var Store = {
 
             var newRec = Ext.create(sto.model.modelName, newData);
             HQ.store.insertRecord(sto, keys, newRec, false);
-        }
+        //}
         Event.Form.frmMain_fieldChange();
     },
 
@@ -307,13 +332,26 @@ var Event = {
                 case "refresh":
                     App.grdStockOutletDet.store.reload();
                     break;
+                case "new":
+                    if (HQ.isUpdate) {
+                        if (_allowUpdate) {
+                            HQ.grid.insert(App.grdStockOutletDet, App.grdStockOutletDet.store.HQFieldKeys);
+                        }
+                    }
+                    break;
                 case "save":
                     Process.saveData();
                     break;
                 case "delete":
                     if (HQ.isUpdate) {
                         if (_allowUpdate) {
-                            HQ.message.show(11, '', 'Process.deleteSelectedInGrid');
+                            if (HQ.focus == 'grdStockOutletDet') {
+                                var rowindex = HQ.grid.indexSelect(App.grdStockOutletDet);
+                                if (rowindex != '')
+                                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdStockOutletDet), ''], 'Process.deleteSelectedInGrid', true);
+                            } else {
+                                HQ.message.show(11, '', 'Process.deleteHeader');
+                            }
                         }
                         else {
                             HQ.message.show(2015012701, '', '');
@@ -343,7 +381,6 @@ var Event = {
             if (HQ.isUpdate) {
                 if (HQ.form.checkRequirePass(App.frmMain)) {
                     var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-
                     if (e.record.data.tstamp) {
                         if (e.field == "StkQty" || e.field == "ReasonID") {
                             if (_allowUpdate) {
@@ -371,22 +408,24 @@ var Event = {
 
         grdStockOutletDet_edit: function (editor, e) {
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-            if (!Process.checkStkOutNbrFromPDA(App.txtStkOutNbr.value)) {
-                if (keys.indexOf(e.field) != -1) {
-                    if (e.value != ''
-                        && Process.isAllValidKey(e.store.getChangedData().Created, keys)
-                        && Process.isAllValidKey(e.store.getChangedData().Updated, keys)) {
-                        var newData = {
-                            BranchID: App.cboBranchID.getValue(),
-                            SlsperID: App.cboSlsperID.getValue()//,
-                            //ExpDate: HQ.dateNow
-                        };
+            HQ.grid.checkInsertKey(App.grdStockOutletDet, e, keys);
+          
+            //if (!Process.checkStkOutNbrFromPDA(App.txtStkOutNbr.value)) {
+                //if (keys.indexOf(e.field) != -1) {
+                //    if (e.value != ''
+                //        && Process.isAllValidKey(e.store.getChangedData().Created, keys)
+                //        && Process.isAllValidKey(e.store.getChangedData().Updated, keys)) {
+                //        var newData = {
+                //            BranchID: App.cboBranchID.getValue(),
+                //            SlsperID: App.cboSlsperID.getValue()//,
+                //            //ExpDate: HQ.dateNow
+                //        };
 
-                        var newRec = Ext.create(e.store.model.modelName, newData);
-                        HQ.store.insertRecord(e.store, keys, newRec, false);
-                    }
-                }
-            }
+                //        var newRec = Ext.create(e.store.model.modelName, newData);
+                //        HQ.store.insertRecord(e.store, keys, newRec, false);
+                //    }
+                //}
+            //}
         },
 
         grdStockOutletDet_validateEdit: function(editor, e){

@@ -130,6 +130,8 @@ namespace IN10700.Controllers
                     if (!string.IsNullOrWhiteSpace(updated.InvtID))
                     {
                         updated.StkOutNbr = outlet.StkOutNbr;
+                        updated.BranchID = outlet.BranchID;
+                        updated.SlsperID = outlet.SlsPerID;
 
                         var updatedDetail = _db.PPC_StockOutletDet.FirstOrDefault(
                             x => x.BranchID == updated.BranchID
@@ -154,6 +156,8 @@ namespace IN10700.Controllers
                     if (!string.IsNullOrWhiteSpace(deleted.InvtID))
                     {
                         deleted.StkOutNbr = outlet.StkOutNbr;
+                        deleted.BranchID = outlet.BranchID;
+                        deleted.SlsperID = outlet.SlsPerID;
 
                         var deletedDetail = _db.PPC_StockOutletDet.FirstOrDefault(
                            x => x.BranchID == deleted.BranchID
@@ -236,6 +240,44 @@ namespace IN10700.Controllers
                 outlet.LUpd_User = Current.UserName;
             }
             
+        }
+
+        [HttpPost]
+        public ActionResult DeleteHeader(FormCollection data)
+        {
+            try
+            {
+                var lstStockOutletHandler = new StoreDataHandler(data["lstStockOutlet"]);
+                var inputStockOutlet = lstStockOutletHandler.ObjectData<IN10700_phStockOutlet_Result>().FirstOrDefault();
+                var objHeader = _db.PPC_StockOutlet.Where(p => p.BranchID == inputStockOutlet.BranchID && p.SlsPerID == inputStockOutlet.SlsPerID && p.StkOutNbr == inputStockOutlet.StkOutNbr).FirstOrDefault();
+                if (objHeader == null)
+                {
+                }
+                else
+                {
+
+
+                    _db.PPC_StockOutlet.DeleteObject(objHeader);
+                    var lstdel = _db.PPC_StockOutletDet.Where(p => p.BranchID == inputStockOutlet.BranchID && p.SlsPerID == inputStockOutlet.SlsPerID && p.StkOutNbr == inputStockOutlet.StkOutNbr).ToList();
+                    while (lstdel.FirstOrDefault() != null)
+                    {
+
+                        _db.PPC_StockOutletDet.DeleteObject(lstdel.FirstOrDefault());
+                        lstdel.Remove(lstdel.FirstOrDefault());
+                    }
+                }
+                _db.SaveChanges();
+                return Util.CreateMessage(MessageProcess.Delete);
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+
         }
     }
 }
