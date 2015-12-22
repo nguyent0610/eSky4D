@@ -192,6 +192,7 @@
             .Border(true)
             .BorderSpec("1 0 0 0")
             .StoreID("stoOrder")
+            .SortableColumns(false)
             .ColumnModel(
                 X.RowNumbererColumn(),
 
@@ -266,15 +267,15 @@
                 
             )
             .ColumnModel(act => { act.Listeners.HeaderClick.Fn = "grdOrder_HeaderClick"; })
-            //.Listeners(lst =>
-            //{
-            //    lst.SelectionChange.Fn = "grdTrans_SelectionChange";
-            //    lst.Edit.Fn = "grdTrans_Edit";
-            //    lst.ValidateEdit.Fn = "grdTrans_ValidateEdit";
-            //    lst.BeforeEdit.Fn = "grdTrans_BeforeEdit";
-            //})
+                .Listeners(lst =>
+                {
+                    //lst.SelectionChange.Fn = "grdTrans_SelectionChange";
+                    //lst.Edit.Fn = "grdTrans_Edit";
+                    //lst.ValidateEdit.Fn = "grdTrans_ValidateEdit";
+                    lst.BeforeEdit.Fn = "grdOrder_BeforeEdit";
+                })
             .SelectionModel(X.RowSelectionModel().ID("smlOrder").Mode(SelectionMode.Single))
-            .View(X.GridView().TrackOver(false))
+            .View(X.GridView().TrackOver(false).GetRowClass(p=>p.Fn="grdOrder_RowClass"))
             .Plugins(X.CellEditing().ClicksToEdit(1))
         )
     )
