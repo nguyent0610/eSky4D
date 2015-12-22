@@ -218,10 +218,11 @@ namespace OM23102.Controllers
         {
             Ext.Net.Column clm;
             NumberColumn nbc;
-            var grid = this.GetCmp<GridPanel>("grdOM_PG_FCS");
+            var grid = this.GetCmp<HQGridPanel>("grdOM_PG_FCS");
             DataSource ds = new DataSource();
             var lstIN_ProductClass = _db.OM23102_getIN_ProductClass(BranchID).ToList();
-
+            grid.HQisPaging = true;
+            grid.HQPageSize = 50;
             //Column Sell In
             clm = new Ext.Net.Column
             {
@@ -787,7 +788,7 @@ namespace OM23102.Controllers
                                 }
 
                                 if (lsterrBranch.Count != 0 || lsterrSls.Count != 0 || lsterrClass.Count != 0 || lsterrCust.Count != 0) continue;
-                                if (lstImport.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.ClassID == classid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Month).Count() != 0) 
+                                if (lstImport.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.ClassID == classid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Year).Count() != 0) 
                                 {
                                     lsterrDuplicate.Add("(" + branchid + "," + slsperid + "," + custid + "," + classid + "," + month.Month + "/" + month.Year + ")");
                                     continue;
@@ -821,7 +822,6 @@ namespace OM23102.Controllers
                                     objFCS.VisitTime = objFCS1 == null ? 0 : objFCS1.VisitTime;
 
                                     _db.OM_PG_FCS.AddObject(objFCS);
-                                    lstImport.Add(objFCS);
 
                                 }
                                 else
@@ -832,6 +832,8 @@ namespace OM23102.Controllers
                                     //objFCS.SellIn = sellin;
                                     objFCS.SellOut = sellout;
                                 }
+                                lstImport.Add(objFCS);
+
                             }
                         }
 

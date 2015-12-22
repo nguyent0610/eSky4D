@@ -117,14 +117,16 @@ var grdOM_PG_FCS_BeforeEdit = function (editor, e) {
     var d = new Date(App.dateFcs.getValue());
 
     if (d.getYear() > _dateServer.getYear()) {
-        return HQ.grid.checkBeforeEdit(e, keys);
+        //return HQ.grid.checkBeforeEdit(e, keys);
+        return true;
     }
     else if (d.getYear() == _dateServer.getYear()) {
         if (d.getMonth() < _dateServer.getMonth()) {
             return false;
         }
         else if (d.getMonth() >= _dateServer.getMonth()) {
-            return HQ.grid.checkBeforeEdit(e, keys);
+            //return HQ.grid.checkBeforeEdit(e, keys);
+            return true;
         }
     }
     else if (d.getYear() > _dateServer.getYear()) {
@@ -132,23 +134,23 @@ var grdOM_PG_FCS_BeforeEdit = function (editor, e) {
     }
 };
 var grdOM_PG_FCS_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdOM_PG_FCS, e, keys);
-    if (e.field == "SlsperId") {
-        var selectedRecord = App.cboSlsperId.store.findRecord(e.field, e.value);
-        if (selectedRecord) {
-            e.record.set("Name", selectedRecord.data.Name);
-        }
-        else {
-            e.record.set("Name", "");
-        }
-    }
+    //HQ.grid.checkInsertKey(App.grdOM_PG_FCS, e, keys);
+    //if (e.field == "SlsperId") {
+    //    var selectedRecord = App.cboSlsperId.store.findRecord(e.field, e.value);
+    //    if (selectedRecord) {
+    //        e.record.set("Name", selectedRecord.data.Name);
+    //    }
+    //    else {
+    //        e.record.set("Name", "");
+    //    }
+    //}
 };
 var grdOM_PG_FCS_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdOM_PG_FCS, e, keys);
+    //return HQ.grid.checkValidateEdit(App.grdOM_PG_FCS, e, keys);
 };
 var grdOM_PG_FCS_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdOM_PG_FCS);
-    stoChanged(App.stoOM_PG_FCS);
+    //HQ.grid.checkReject(record, App.grdOM_PG_FCS);
+    //stoChanged(App.stoOM_PG_FCS);
 };
 var btnSearch_Click = function (sender, e) {
     if (HQ.form.checkRequirePass(App.frmMain)) {
@@ -186,9 +188,9 @@ var cboDist_Change = function (sender, e) {
         HQ.message.show(20150303, '', 'refresh');
     }
     else {
-        App.grdOM_PG_FCS.store.removeAll();
+        //App.grdOM_PG_FCS.store.removeAll();
         App.grdOM_PG_FCS.hide();
-        App.cboSlsperId.store.reload();
+        //App.cboSlsperId.store.reload();
     }
 };
 var dateFcs_Change = function (sender, e) {

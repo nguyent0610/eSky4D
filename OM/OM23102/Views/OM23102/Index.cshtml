@@ -42,7 +42,7 @@
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
 
-        @(HQ.Builder.Store().ID("stoOM_PG_FCS").HQDBSys(false).HQProcedure("OM23102_pgLoadGrid").HQParam(new StoreParameterCollection()
+        @(HQ.Builder.Store().ID("stoOM_PG_FCS").HQDBSys(false).PageSize(20).IsPagingStore(true).HQProcedure("OM23102_pgLoadGrid").HQParam(new StoreParameterCollection()
         {      
             new StoreParameter("@BranchID", "App.cboDist.value", ParameterMode.Raw),
             new StoreParameter("@FCSDate", "App.dateFcs.value", ParameterMode.Raw)           

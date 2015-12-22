@@ -219,22 +219,22 @@
                 //    .Listeners(l => l.Command.Handler = "grdOM_PG_FCS_Reject(record);")
                 )
                 .SelectionModel(X.RowSelectionModel().ID("slmOM_PG_FCS").Mode(SelectionMode.Multi))
-            //.BottomBar(
-            //    X.PagingToolbar()
-            //    .Items(
-            //        X.Label("Page size:"),
-            //        X.ToolbarSpacer(10),
-            //        X.ComboBox()
-            //        .Width(80)
-            //        .Items("1", "2", "10", "20", "30", "50")
-            //        .SelectedItems("50")
-            //        .Listeners(l =>
-            //            {
-            //                l.Select.Fn = "HQ.grid.onPageSelect";
-            //            })
-            //    )
-            //    .Plugins(X.ProgressBarPager())
-            //)
+                .BottomBar(
+                    X.PagingToolbar()
+                    .Items(
+                        X.Label("Page size:"),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("20")
+                        .Listeners(l =>
+                            {
+                                l.Select.Fn = "HQ.grid.onPageSelect";
+                            })
+                    )
+                    .Plugins(X.ProgressBarPager())
+                )
                 .Plugins(
                     X.CellEditing()
                     .ClicksToEdit(1)
