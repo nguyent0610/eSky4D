@@ -8,7 +8,7 @@ using Ext.Net.MVC;
 using HQ.eSkyFramework;
 using HQ.eSkySys;
 using System.Xml;
-using System.Xml.Linq;
+//using System.Xml.Linq;
 using System.Data.Objects;
 using Aspose.Cells;
 using System.IO;
@@ -30,7 +30,7 @@ namespace IN10200.Controllers
         private string _screenNbr = "IN10200";
         private string _userName = Current.UserName;
         private string _handle = "";
-        private IN10200Entities _app = Util.CreateObjectContext<IN10200Entities>();
+        private IN10200Entities _app = Util.CreateObjectContext<IN10200Entities>(false);
         private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);     
         private FormCollection _form;
         private IN10200_pcBatch_Result _objBatch;
@@ -508,8 +508,11 @@ namespace IN10200.Controllers
         {
             try
             {
-      
-             
+
+                FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
+                HttpPostedFile file = fileUploadField.PostedFile; // or: HttpPostedFileBase file = this.HttpContext.Request.Files[0];
+                FileInfo fileInfo = new FileInfo(file.FileName);
+
                 string message = string.Empty;
 
                 List<IN_Trans> lstTrans = new List<IN_Trans>();
@@ -518,7 +521,46 @@ namespace IN10200.Controllers
                 string siteID = data["SiteID"].PassNull();
                 string branchID = data["BranchID"].PassNull();
                 int line = data["lineRef"].ToInt();
-                List<string> lstImport= data["importData"].PassNull().Split('\n').ToList();
+                List<string> lstImport = new List<string>();
+                if (fileInfo.Extension.ToLower() == ".csv" || fileInfo.Extension.ToLower() == ".xls" || fileInfo.Extension.ToLower() == ".xlsx")
+                {
+                    try
+                    {
+                        
+                        Workbook workbook = new Workbook(fileUploadField.PostedFile.InputStream);
+                        if (workbook.Worksheets.Count > 0)
+                        {
+                            Worksheet workSheet = workbook.Worksheets[0];                          
+                            for (int j = 1; j <= workSheet.Cells.MaxDataRow; j++)
+                            {
+                                string InvtID = workSheet.Cells[j, 0].Value.PassNull().Trim();
+                                string Unit = workSheet.Cells[j, 1].Value.PassNull().Trim();
+                                string Qty = workSheet.Cells[j, 2].Value.PassNull().Trim();
+                                if (InvtID.PassNull() != "")
+                                {
+                                    lstImport.Add(InvtID + "\t" + Unit + "\t" + Qty);
+                                }
+                            }
+                        }                       
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is MessageException)
+                        {
+                            return (ex as MessageException).ToMessage();
+                        }
+                        else
+                        {
+                            return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                        }
+                    }
+                }
+                else
+                {
+                    Util.AppendLog(ref _logMessage, "2014070701", parm: new[] { fileInfo.Extension.Replace(".", "") });
+                    return _logMessage;
+                }
+               
                 int i = 0;
                 foreach (var item in lstImport)
                 {
@@ -1288,5 +1330,7 @@ namespace IN10200.Controllers
             }
             return null;
         }
+
+      
     }
 }

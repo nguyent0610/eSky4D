@@ -599,8 +599,108 @@ var btnImport_Click = function (c, e) {
         App.btnImport.reset();
         return;
     }
-    App.txtCopy.setValue('');
-    App.winCopy.show();
+    if (HQ.isInsert || HQ.isUpdate) {
+        var files = c.fileInputEl.dom.files;
+        var fileName = c.getValue();
+        var ext = fileName.split(".").pop().toLowerCase();
+        if (ext == "csv" || ext == "xls" || ext == "xlsx") {
+            App.frmMain.submit({
+                waitMsg: HQ.waitMsg,
+                url: 'IN10200/Import',
+                timeout: 1800000,
+                type: 'POST',
+                clientValidation: false,
+                params: {
+                    lineRef: lastLineRef()
+                },
+                success: function (msg, data) {
+                    if (this.result.data.lstTrans != undefined) {
+
+                        this.result.data.lstTrans.forEach(function (item) {
+                            var obj = HQ.store.findInStore(App.stoTrans, ["InvtID"], [item.InvtID]);
+                            if (!obj) {
+                                var newTrans = Ext.create('App.mdlTrans');
+                                newTrans.data.JrnlType = 'IN';
+                                newTrans.data.ReasonCD = App.cboReasonCD.getValue();
+                                newTrans.data.TranAmt = newTrans.data.ExtCost = item.TranAmt;
+                                newTrans.data.BranchID = HQ.cpnyID;
+                                newTrans.data.CnvFact = item.CnvFact;
+                                newTrans.data.ExtCost = item.TranAmt;
+                                newTrans.data.InvtID = item.InvtID;
+                                newTrans.data.InvtMult = -1;
+                                newTrans.data.LineRef = item.LineRef;
+                                newTrans.data.Qty = item.Qty;
+                                newTrans.data.SiteID = item.SiteID;
+                                newTrans.data.TranDate = App.txtDateEnt.getValue();
+                                newTrans.data.TranDesc = item.TranDesc;
+                                newTrans.data.TranType = 'II';
+                                newTrans.data.UnitDesc = item.UnitDesc;
+                                newTrans.data.UnitMultDiv = item.UnitMultDiv;
+                                newTrans.data.UnitPrice = newTrans.data.UnitCost = item.UnitPrice;
+                                newTrans.commit();
+                                App.stoTrans.insert(App.stoTrans.getCount() - 1, newTrans);
+                            }
+                        });
+
+                        App.stoLotTrans.clearFilter();
+                        App.stoLotTrans.suspendEvents();
+                        this.result.data.lstLot.forEach(function (item) {
+                            var obj = HQ.store.findInStore(App.stoLotTrans, ["InvtID"], [item.InvtID]);
+                            if (!obj) {
+                                var newLot = Ext.create('App.mdlLotTrans');
+                                newLot.data.LotSerNbr = item.LotSerNbr;
+                                newLot.data.BranchID = HQ.cpnyID;
+                                newLot.data.INTranLineRef = item.INTranLineRef;
+                                newLot.data.ExpDate = new Date(parseInt(item.ExpDate.substr(6)));
+                                newLot.data.InvtID = item.InvtID;
+                                newLot.data.InvtMult = -1;
+                                newLot.data.MfgrLotSerNbr = '';
+                                newLot.data.Qty = item.Qty;
+                                newLot.data.SiteID = item.SiteID;
+                                newLot.data.SlsperID = '';
+                                newLot.data.TranDate = App.txtDateEnt.getValue();
+                                newLot.data.WarrantyDate = new Date(parseInt(item.WarrantyDate.substr(6)));
+                                newLot.data.TranType = 'II';
+                                newLot.data.UnitDesc = item.UnitDesc;
+                                newLot.data.UnitMultDiv = item.UnitMultDiv;
+                                newLot.data.UnitPrice = newLot.data.UnitCost = item.UnitPrice;
+                                newLot.data.CnvFact = item.CnvFact;
+                                newLot.commit();
+                                App.stoLotTrans.insert(App.stoLotTrans.getCount() - 1, newLot);
+                            }
+                        });
+                        App.stoLotTrans.resumeEvents();
+                        calculate();
+                        checkTransAdd();
+
+                        if (!Ext.isEmpty(this.result.data.message)) {
+                            HQ.message.show('2013103001', [this.result.data.message], '', true);
+                        } else {
+                            HQ.message.process(msg, data, true);
+                        }
+                    } else {
+                        HQ.message.process(msg, data, true);
+                    }
+
+                    App.winCopy.unmask();
+                    App.winCopy.hide();
+
+                },
+                failure: function (msg, data) {
+                    App.winCopy.unmask();
+                    App.winCopy.hide();
+                    HQ.message.process(msg, data, true);
+                }
+            });
+
+        } else {
+            HQ.message.show('2014070701', [ext], '', true);
+            App.btnImport.reset();
+        }
+    }
+    //thay the import text thanh import excel
+    //App.txtCopy.setValue('');
+    //App.winCopy.show();
 
 }
 
