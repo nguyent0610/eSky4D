@@ -29,7 +29,7 @@ namespace OM40200.Controllers
     {
         private string _screenNbr = "OM40200";
         private string _userName = Current.UserName;
-        private OM40200Entities _app = Util.CreateObjectContext<OM40200Entities>();
+        private OM40200Entities _app = Util.CreateObjectContext<OM40200Entities>(false);
         private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);     
         private FormCollection _form;
         private JsonResult _logMessage;
@@ -76,35 +76,49 @@ namespace OM40200.Controllers
                     DataAccess dal = Util.Dal();
 
                     string message = "";
+                    string errorOrderNbr = "";
                     foreach (var item in _lstOrder)
                     {
-                         OMProcess.OM order = new OMProcess.OM(_userName, _screenNbr, dal);
-                        try
-                        {
-                          
-                            dal.BeginTrans(IsolationLevel.ReadCommitted);
 
-                            order.OM10100_PrintInvoice(item.BranchID, item.OrderNbr);
-                            
-                            dal.CommitTrans();
-                            
-                        }
-                        catch (Exception ex)
+                        if (_app.OM40200_ppCheckCloseDate(item.BranchID, item.OrderDate.ToDateShort()).FirstOrDefault() == "0")
                         {
-                            dal.RollbackTrans();
-                            if (ex is MessageException)
+                            errorOrderNbr += item.OrderNbr + ",";
+                            // new MessageException(MessageType.Message, "301");
+
+                        }
+                        else
+                        {
+                            OMProcess.OM order = new OMProcess.OM(_userName, _screenNbr, dal);
+                            try
                             {
-                                var msg = ex as MessageException;
-                                message += "Đơn hàng " + item.OrderNbr + ":" + Message.GetString(msg.Code, msg.Parm) + "</br>";
+
+                                dal.BeginTrans(IsolationLevel.ReadCommitted);
+
+                                order.OM10100_PrintInvoice(item.BranchID, item.OrderNbr);
+
+                                dal.CommitTrans();
 
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                message += "Đơn hàng " + item.OrderNbr + " bị lỗi: " + ex.ToString() + "</br>";
+                                dal.RollbackTrans();
+                                if (ex is MessageException)
+                                {
+                                    var msg = ex as MessageException;
+                                    message += "Đơn hàng " + item.OrderNbr + ":" + Message.GetString(msg.Code, msg.Parm) + "</br>";
+
+                                }
+                                else
+                                {
+                                    message += "Đơn hàng " + item.OrderNbr + " bị lỗi: " + ex.ToString() + "</br>";
+                                }
                             }
                         }
                     }
-
+                    if (errorOrderNbr != "")
+                    {
+                        message += "Đơn hàng " + errorOrderNbr.TrimEnd(',') +" "+ Util.GetLang("OM40200CloseDate") + "</br>";
+                    }
                     if (message != string.Empty)
                     {
                         Util.AppendLog(ref _logMessage, "20410", parm: new[] { message });

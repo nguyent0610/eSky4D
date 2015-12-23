@@ -16,6 +16,10 @@
           <Parameter Name="Type" Type="varchar" Mode="In" />
           <Parameter Name="CrtdUser" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="OM40200_ppCheckCloseDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="date" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -30,6 +34,10 @@
             <Parameter Name="ToDate" Mode="In" Type="DateTime" />
             <Parameter Name="Type" Mode="In" Type="String" />
             <Parameter Name="CrtdUser" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM40200_ppCheckCloseDate" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="OM40200_pgOrder_Result">
@@ -78,6 +86,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM40200_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.OM40200_ppCheckCloseDate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
