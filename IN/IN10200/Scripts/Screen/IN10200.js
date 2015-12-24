@@ -615,9 +615,9 @@ var btnImport_Click = function (c, e) {
                 },
                 success: function (msg, data) {
                     if (this.result.data.lstTrans != undefined) {
-
+                        var errorInvtID = [];
                         this.result.data.lstTrans.forEach(function (item) {
-                            var obj = HQ.store.findInStore(App.stoTrans, ["InvtID"], [item.InvtID]);
+                            var obj = HQ.store.findRecord(App.stoTrans, ["InvtID"], [item.InvtID]);
                             if (!obj) {
                                 var newTrans = Ext.create('App.mdlTrans');
                                 newTrans.data.JrnlType = 'IN';
@@ -640,13 +640,37 @@ var btnImport_Click = function (c, e) {
                                 newTrans.commit();
                                 App.stoTrans.insert(App.stoTrans.getCount() - 1, newTrans);
                             }
+                            else {
+                                errorInvtID.push(item.InvtID);
+                                //if (item.CnvFact == obj.data.CnvFact) {
+                                //    obj.set("Qty", obj.data.Qty + item.Qty);
+                                //    obj.set("TranAmt", obj.data.UnitPrice * obj.data.Qty);
+                                //    obj.set("ExtCost", obj.data.TranAmt);
+                                //}
+                                //else if (item.CnvFact == 1) {
+
+                                //    obj.set("Qty", obj.data.Qty * obj.data.CnvFact + item.Qty);
+                                //    obj.set("CnvFact", 1);
+                                //    obj.set("UnitDesc", item.UnitDesc);
+                                //    obj.set("UnitPrice", item.UnitPrice);
+                                //    obj.set("UnitCost", item.UnitPrice);
+                                //    obj.set("TranAmt", item.UnitPrice * obj.data.Qty);
+                                //    obj.set("ExtCost", obj.data.TranAmt);
+
+                                //}
+                                //else if (obj.data.CnvFact == 1) {
+                                //    obj.set("Qty", obj.data.Qty + item.Qty * item.CnvFact);
+                                //    obj.set("TranAmt", obj.data.UnitPrice * obj.data.Qty);
+                                //    obj.set("ExtCost", obj.data.TranAmt);
+                                //}
+                            }
                         });
 
                         App.stoLotTrans.clearFilter();
                         App.stoLotTrans.suspendEvents();
                         this.result.data.lstLot.forEach(function (item) {
-                            var obj = HQ.store.findInStore(App.stoLotTrans, ["InvtID"], [item.InvtID]);
-                            if (!obj) {
+                            var objLot = HQ.store.findRecord(App.stoLotTrans, ["InvtID", "LotSerNbr"], [item.InvtID, item.LotSerNbr]);
+                            if (!objLot) {
                                 var newLot = Ext.create('App.mdlLotTrans');
                                 newLot.data.LotSerNbr = item.LotSerNbr;
                                 newLot.data.BranchID = HQ.cpnyID;
@@ -668,12 +692,31 @@ var btnImport_Click = function (c, e) {
                                 newLot.commit();
                                 App.stoLotTrans.insert(App.stoLotTrans.getCount() - 1, newLot);
                             }
+                            else {
+                                //if (item.CnvFact == objLot.data.CnvFact) {
+                                //    objLot.set("Qty", objLot.data.Qty + item.Qty);
+                                //}
+                                //else if (item.CnvFact == 1) {
+
+                                //    objLot.set("Qty", objLot.data.Qty * objLot.data.CnvFact + item.Qty);
+                                //    objLot.set("CnvFact", 1);
+                                //    objLot.set("UnitDesc", item.UnitDesc);
+                                //    objLot.set("UnitPrice", item.UnitPrice);
+                                //    objLot.set("UnitCost", item.UnitPrice);
+
+                                //}
+                                //else if (objLot.data.CnvFact == 1) {
+                                //    objLot.set("Qty", objLot.data.Qty + item.Qty * item.CnvFact);
+                                //}
+                            }
                         });
                         App.stoLotTrans.resumeEvents();
                         calculate();
                         checkTransAdd();
-
-                        if (!Ext.isEmpty(this.result.data.message)) {
+                        if (errorInvtID.length >0) {
+                            HQ.message.show('201512241', [errorInvtID.join(',')], '', true);
+                        }
+                        else if (!Ext.isEmpty(this.result.data.message)) {
                             HQ.message.show('2013103001', [this.result.data.message], '', true);
                         } else {
                             HQ.message.process(msg, data, true);
@@ -682,13 +725,13 @@ var btnImport_Click = function (c, e) {
                         HQ.message.process(msg, data, true);
                     }
 
-                    App.winCopy.unmask();
-                    App.winCopy.hide();
+                    //App.winCopy.unmask();
+                    //App.winCopy.hide();
 
                 },
                 failure: function (msg, data) {
-                    App.winCopy.unmask();
-                    App.winCopy.hide();
+                    //App.winCopy.unmask();
+                    //App.winCopy.hide();
                     HQ.message.process(msg, data, true);
                 }
             });
