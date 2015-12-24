@@ -205,6 +205,36 @@ namespace OM40100
     
             return base.ExecuteFunction<OM40100_pgInvoice_Result>("OM40100_pgInvoice", branchIDParameter, custIDParameter, slsPerIDParameter, deliveryIDParameter, fromDateParameter, toDateParameter, crtdUserParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="orderDate">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> OM40100_ppCheckCloseDate(global::System.String branchID, Nullable<global::System.DateTime> orderDate)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter orderDateParameter;
+            if (orderDate.HasValue)
+            {
+                orderDateParameter = new ObjectParameter("OrderDate", orderDate);
+            }
+            else
+            {
+                orderDateParameter = new ObjectParameter("OrderDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("OM40100_ppCheckCloseDate", branchIDParameter, orderDateParameter);
+        }
 
         #endregion
 

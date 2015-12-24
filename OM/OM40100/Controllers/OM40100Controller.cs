@@ -29,7 +29,7 @@ namespace OM40100.Controllers
     {
         private string _screenNbr = "OM40100";
         private string _userName = Current.UserName;
-        private OM40100Entities _app = Util.CreateObjectContext<OM40100Entities>();
+        private OM40100Entities _app = Util.CreateObjectContext<OM40100Entities>(false);
         private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);     
         private FormCollection _form;
         private JsonResult _logMessage;
@@ -74,49 +74,62 @@ namespace OM40100.Controllers
                 if (type != "N")
                 {
                     DataAccess dal = Util.Dal();
-                   
+
                     if (type == "R")
                     {
                         string message = "";
+                        string errorOrderNbr = "";
                         foreach (var item in _lstOrder)
                         {
-                            OMProcess.OM order = new OMProcess.OM(_userName, _screenNbr, dal);
-                            try
+                            if (_app.OM40100_ppCheckCloseDate(item.BranchID, item.OrderDate.ToDateShort()).FirstOrDefault() == "0")
                             {
-                           
-                                dal.BeginTrans(IsolationLevel.ReadCommitted);
-                                
-                                order.OM10100_InvoiceRelease(item.BranchID, item.OrderNbr, "R", DateTime.Now.ToDateShort());
+                                errorOrderNbr += item.OrderNbr + ",";
+                                // new MessageException(MessageType.Message, "301");
 
-                                dal.CommitTrans();
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                dal.RollbackTrans();
-                                if (ex is MessageException)
+                                OMProcess.OM order = new OMProcess.OM(_userName, _screenNbr, dal);
+                                try
                                 {
-                                    var msg = ex as MessageException;
-                                    message += "Đơn hàng " + item.OrderNbr + ":" + Message.GetString(msg.Code, msg.Parm) + "</br>";
+
+                                    dal.BeginTrans(IsolationLevel.ReadCommitted);
+
+                                    order.OM10100_InvoiceRelease(item.BranchID, item.OrderNbr, "R", DateTime.Now.ToDateShort());
+
+                                    dal.CommitTrans();
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    message += "Đơn hàng " + item.OrderNbr + " bị lỗi: " + ex.ToString() + "</br>";
+                                    dal.RollbackTrans();
+                                    if (ex is MessageException)
+                                    {
+                                        var msg = ex as MessageException;
+                                        message += "Đơn hàng " + item.OrderNbr + ":" + Message.GetString(msg.Code, msg.Parm) + "</br>";
+                                    }
+                                    else
+                                    {
+                                        message += "Đơn hàng " + item.OrderNbr + " bị lỗi: " + ex.ToString() + "</br>";
+                                    }
                                 }
-                            }
-                            finally
-                            {
-                                order = null;
+                                finally
+                                {
+                                    order = null;
+                                }
                             }
                         }
-
+                        if (errorOrderNbr != "")
+                        {
+                            message += "Đơn hàng " + errorOrderNbr.TrimEnd(',') + " " + Util.GetLang("OM40100CloseDate") + "</br>";
+                        }
                         if (message != string.Empty)
                         {
-                            Util.AppendLog(ref _logMessage, "20410", parm: new []{message});
+                            Util.AppendLog(ref _logMessage, "20410", parm: new[] { message });
                         }
                         else
                             Util.AppendLog(ref _logMessage, "9999");
-                    } 
-                    else if (type=="L")
+                    }
+                    else if (type == "L")
                     {
                         string message = "";
                         foreach (var item in _lstOrder)
@@ -127,7 +140,7 @@ namespace OM40100.Controllers
                                 dal.BeginTrans(IsolationLevel.ReadCommitted);
 
                                 order.OM10100_InvoiceRelease(item.BranchID, item.OrderNbr, "L", DateTime.Now.ToDateShort());
-                                
+
                                 dal.CommitTrans();
                             }
                             catch (Exception ex)
@@ -151,7 +164,7 @@ namespace OM40100.Controllers
 
                         if (message != string.Empty)
                         {
-                            Util.AppendLog(ref _logMessage, "20410", parm: new []{message});
+                            Util.AppendLog(ref _logMessage, "20410", parm: new[] { message });
                         }
                         else
                             Util.AppendLog(ref _logMessage, "9999");
