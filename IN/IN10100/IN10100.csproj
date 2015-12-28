@@ -50,7 +50,7 @@
   <ItemGroup>
     <Reference Include="Aspose.Cells, Version=8.3.2.1, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Aspose.Cells.dll</HintPath>
+      <HintPath>..\..\..\Kowil\IN\IN10100\bin\Aspose.Cells.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DApp">
       <HintPath>..\INProcess\INProcess\bin\Debug\eBiz4DApp.dll</HintPath>
