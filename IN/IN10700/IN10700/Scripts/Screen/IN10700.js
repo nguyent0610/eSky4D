@@ -340,7 +340,12 @@ var Event = {
                     }
                     break;
                 case "save":
-                    Process.saveData();
+                    if (HQ.isUpdate && _allowUpdate) {
+                        Process.saveData();
+                    }
+                    else {
+                        HQ.message.show(2015012701, '', '');
+                    }
                     break;
                 case "delete":
                     if (HQ.isUpdate) {
@@ -379,25 +384,31 @@ var Event = {
 
         grdStockOutletDet_beforeEdit: function (editor, e) {
             if (HQ.isUpdate) {
-                if (HQ.form.checkRequirePass(App.frmMain)) {
-                    var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-                    if (e.record.data.tstamp) {
-                        if (e.field == "StkQty" || e.field == "ReasonID") {
-                            if (_allowUpdate) {
-                                return true;
+                if (_allowUpdate) {
+                    if (HQ.form.checkRequirePass(App.frmMain)) {
+                        var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
+                        if (e.record.data.tstamp) {
+                            if (e.field == "StkQty" || e.field == "ReasonID") {
+                                if (_allowUpdate) {
+                                    return true;
+                                }
+                                else {
+                                    HQ.message.show(2015012701, '', '');
+                                    return false;
+                                }
                             }
                             else {
-                                HQ.message.show(2015012701, '', '');
                                 return false;
                             }
                         }
-                        else {
-                            return false;
-                        }
+                        return Process.checkInput(e, keys);
                     }
-                    return Process.checkInput(e, keys);
+                    else {
+                        return false;
+                    }
                 }
                 else {
+                    HQ.message.show(2015012701, '', '');
                     return false;
                 }
             }
