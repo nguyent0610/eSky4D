@@ -24,18 +24,18 @@
         X.GridPanel()
         .Scroll(ScrollMode.Both)
         .View(X.GridView().TrackOver(false))
-        .ID("grdCountry")
+        .ID("grdDet")
         .Store(
             X.Store()
-            .ID("stoCountry")
+            .ID("stoData")
             .PageSize(50)
-            .Model(Util.GenerateModel(typeof(SI20600_pgLoadCountry_Result), "mdlSI20600_pgLoadCountry", "CountryID"))
-            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetCountry"))).AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(SI20600_pgLoadCountry_Result), "mdlSI20600_pgLoadCountry", ""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
             .Listeners(l =>
             {
-                l.BeforeLoad.Fn = "stoBeforeLoad";
-                l.Load.Fn = "stoLoad";
-                l.Update.Fn = "stoChanged";                 
+                l.BeforeLoad.Fn = "stoData_beforeLoad";
+                l.Load.Fn = "stoData_load";
+                l.Update.Fn = "stoData_changed";                 
             })
         )
         .Listeners(p =>
@@ -59,9 +59,9 @@
                 .Icon(Icon.ArrowUndo)
             )
             .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-            .Listeners(l => l.Command.Handler = "grdCountry_Reject(record);")
+            .Listeners(l => l.Command.Handler = "grdDet_Reject(record);")
         )
-        .SelectionModel(X.RowSelectionModel().ID("slmCountry").Mode(SelectionMode.Multi))
+        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
         .BottomBar(
             X.PagingToolbar()
             .Items(
@@ -83,9 +83,9 @@
             .ClicksToEdit(1)
             .Listeners(ls =>
             {
-                ls.BeforeEdit.Fn = "grdCountry_BeforeEdit";
-                ls.Edit.Fn = "grdCountry_Edit";
-                ls.ValidateEdit.Fn = "grdCountry_ValidateEdit";
+                ls.BeforeEdit.Fn = "grdDet_BeforeEdit";
+                ls.Edit.Fn = "grdDet_Edit";
+                ls.ValidateEdit.Fn = "grdDet_ValidateEdit";
 
             })
         )

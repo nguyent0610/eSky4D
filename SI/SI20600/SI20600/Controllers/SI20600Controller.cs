@@ -26,12 +26,12 @@ namespace SI20600.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-        public ActionResult GetCountry()
+        public ActionResult GetData()
         {           
             return this.Store(_db.SI20600_pgLoadCountry().ToList());
         }
@@ -40,20 +40,28 @@ namespace SI20600.Controllers
             try
             {
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstCountry"]);
-                ChangeRecords<SI20600_pgLoadCountry_Result> lstCountry = dataHandler.BatchObjectData<SI20600_pgLoadCountry_Result>();
-                foreach (SI20600_pgLoadCountry_Result deleted in lstCountry.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
+                ChangeRecords<SI20600_pgLoadCountry_Result> lstData = dataHandler.BatchObjectData<SI20600_pgLoadCountry_Result>();
+                lstData.Created.AddRange(lstData.Updated);
+                foreach (SI20600_pgLoadCountry_Result deleted in lstData.Deleted)
                 {
-                    var del = _db.SI_Country.Where(p => p.CountryID == deleted.CountryID).FirstOrDefault();
-                    if (del != null)
+                    if (lstData.Created.Where(p => p.CountryID.ToUpper() == deleted.CountryID.ToUpper()).Count() > 0)
                     {
-                        _db.SI_Country.DeleteObject(del);
+                        lstData.Created.Where(p => p.CountryID.ToUpper() == deleted.CountryID.ToUpper()).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var del = _db.SI_Country.Where(p => p.CountryID == deleted.CountryID).FirstOrDefault();
+                        if (del != null)
+                        {
+                            _db.SI_Country.DeleteObject(del);
+                        }
                     }
                 }
 
-                lstCountry.Created.AddRange(lstCountry.Updated);
+             
 
-                foreach (SI20600_pgLoadCountry_Result curCountry in lstCountry.Created)
+                foreach (SI20600_pgLoadCountry_Result curCountry in lstData.Created)
                 {
                     if (curCountry.CountryID.PassNull() == "") continue;
 
