@@ -45,13 +45,13 @@ namespace SI20600.Controllers
                 lstData.Created.AddRange(lstData.Updated);
                 foreach (SI20600_pgLoadCountry_Result deleted in lstData.Deleted)
                 {
-                    if (lstData.Created.Where(p => p.CountryID.ToUpper() == deleted.CountryID.ToUpper()).Count() > 0)
+                    if (lstData.Created.Where(p => p.CountryID.ToLower() == deleted.CountryID.ToLower()).Count() > 0)
                     {
-                        lstData.Created.Where(p => p.CountryID.ToUpper() == deleted.CountryID.ToUpper()).FirstOrDefault().tstamp = deleted.tstamp;
+                        lstData.Created.Where(p => p.CountryID.ToLower() == deleted.CountryID.ToLower()).FirstOrDefault().tstamp = deleted.tstamp;
                     }
                     else
                     {
-                        var del = _db.SI_Country.Where(p => p.CountryID == deleted.CountryID).FirstOrDefault();
+                        var del = _db.SI_Country.ToList().Where(p => p.CountryID.ToLower() == deleted.CountryID.ToLower()).FirstOrDefault();
                         if (del != null)
                         {
                             _db.SI_Country.DeleteObject(del);

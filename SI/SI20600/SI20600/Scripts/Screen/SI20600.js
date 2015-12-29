@@ -29,9 +29,11 @@ var menuClick = function (command) {
             }
             break;
         case "delete":
-            if (App.slmData.selected.items[0] != undefined) {
-                if (HQ.isDelete) {
-                    HQ.message.show(11, '', 'deleteData');
+            if (HQ.isDelete) {
+                if (App.slmData.selected.items[0] != undefined) {
+                    var rowindex = HQ.grid.indexSelect(App.grdDet);
+                    if (rowindex != '')
+                        HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdDet), ''], 'deleteData', true)
                 }
             }
             break;
@@ -84,7 +86,7 @@ var grdDet_ValidateEdit = function (item, e) {
 };
 var grdDet_Reject = function (record) {
     HQ.grid.checkReject(record, App.grdDet);
-    stoChanged(App.stoData);
+    stoData_changed(App.stoData);
 };
 /////////////////////////////////////////////////////////////////////////
 //// Process Data ///////////////////////////////////////////////////////
@@ -111,7 +113,7 @@ var save = function () {
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdDet.deleteSelected();
-        stoChanged(App.stoData);
+        stoData_changed(App.stoData);
     }
 };
 //// Other Functions ////////////////////////////////////////////////////
