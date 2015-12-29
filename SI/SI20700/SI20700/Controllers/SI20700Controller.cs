@@ -32,7 +32,7 @@ namespace SI20700.Controllers
         {
             return PartialView();
         }
-        public ActionResult GetState()
+        public ActionResult GetData()
         {           
             return this.Store(_db.SI20700_pgLoadState().ToList());
         }
@@ -40,20 +40,28 @@ namespace SI20700.Controllers
         {
             try
             {
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstState"]);
-                ChangeRecords<SI20700_pgLoadState_Result> lstState = dataHandler.BatchObjectData<SI20700_pgLoadState_Result>();
-                foreach (SI20700_pgLoadState_Result deleted in lstState.Deleted)
+                StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
+                ChangeRecords<SI20700_pgLoadState_Result> lstData = dataHandler.BatchObjectData<SI20700_pgLoadState_Result>();
+
+                lstData.Created.AddRange(lstData.Updated);
+                foreach (SI20700_pgLoadState_Result deleted in lstData.Deleted)
                 {
-                    var del = _db.SI_State.Where(p => p.Country == deleted.Country && p.State == deleted.State).FirstOrDefault();
-                    if (del != null)
+                    if (lstData.Created.Where(p => p.Country.ToLower().Trim() == deleted.Country.ToLower().Trim() && p.State.ToLower().Trim() == deleted.State.ToLower().Trim()).Count() > 0)
                     {
-                        _db.SI_State.DeleteObject(del);
+                        lstData.Created.Where(p => p.Country.ToLower().Trim() == deleted.Country.ToLower().Trim() && p.State.ToLower().Trim() == deleted.State.ToLower().Trim()).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var del = _db.SI_State.ToList().Where(p => p.Country.ToLower().Trim() == deleted.Country.ToLower().Trim() && p.State.ToLower().Trim() == deleted.State.ToLower().Trim()).FirstOrDefault();
+                        if (del != null)
+                        {
+                            _db.SI_State.DeleteObject(del);
+                        }
                     }
                 }
 
-                lstState.Created.AddRange(lstState.Updated);
 
-                foreach (SI20700_pgLoadState_Result curState in lstState.Created)
+                foreach (SI20700_pgLoadState_Result curState in lstData.Created)
                 {
                     if (curState.Country.PassNull() == "" && curState.State.PassNull() == "") continue;
 

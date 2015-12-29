@@ -6,16 +6,16 @@ var fieldsLangCheckRequire = ["Country", "State"];
 var menuClick = function (command) {
     switch (command) {
         case "first":
-            HQ.grid.first(App.grdState);
+            HQ.grid.first(App.grdDet);
             break;
         case "prev":
-            HQ.grid.prev(App.grdState);
+            HQ.grid.prev(App.grdDet);
             break;
         case "next":
-            HQ.grid.next(App.grdState);
+            HQ.grid.next(App.grdDet);
             break;
         case "last":
-            HQ.grid.last(App.grdState);
+            HQ.grid.last(App.grdDet);
             break;
         case "refresh":
             if (HQ.isChange) {
@@ -24,24 +24,24 @@ var menuClick = function (command) {
             else {
                 HQ.isChange = false;
                 HQ.isFirstLoad = true;
-                App.stoState.reload();
+                App.stoData.reload();
             }
             break;
         case "new":
             if (HQ.isInsert) {
-                HQ.grid.insert(App.grdState, keys);
+                HQ.grid.insert(App.grdDet, keys);
             }
             break;
         case "delete":
-            if (App.slmState.selected.items[0] != undefined) {
-                var rowindex = HQ.grid.indexSelect(App.grdState);
+            if (App.slmData.selected.items[0] != undefined) {
+                var rowindex = HQ.grid.indexSelect(App.grdDet);
                 if (rowindex != '')
-                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdState), ''], 'deleteData', true)
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdDet), ''], 'deleteData', true)
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.checkRequirePass(App.stoState, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.store.checkRequirePass(App.stoData, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -58,11 +58,11 @@ var menuClick = function (command) {
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
     HQ.isFirstLoad = true;
-    App.stoState.reload();
+    App.stoData.reload();
 };
 
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
-var stoChanged = function (sto) {
+var stoData_changed = function (sto) {
     HQ.isChange = HQ.store.isChange(sto);
     HQ.common.changeData(HQ.isChange, 'SI20700');
 };
@@ -86,21 +86,21 @@ var stoBeforeLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
 };
 
-var grdState_BeforeEdit = function (editor, e) {
+var grdDet_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
 
-var grdState_Edit = function (item, e) {
-    HQ.grid.checkInsertKey(App.grdState, e, keys);
+var grdDet_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdDet, e, keys);
 };
 
-var grdState_ValidateEdit = function (item, e) {
-    return HQ.grid.checkValidateEdit(App.grdState, e, keys);
+var grdDet_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdDet, e, keys);
 };
 
-var grdState_Reject = function (record) {
-    HQ.grid.checkReject(record, App.grdState);
-    stoChanged(App.stoState);
+var grdDet_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdDet);
+    stoData_changed(App.stoData);
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ var save = function () {
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'SI20700/Save',
             params: {
-                lstState: HQ.store.getData(App.stoState)
+                lstState: HQ.store.getData(App.stoData)
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
@@ -128,8 +128,8 @@ var save = function () {
 
 var deleteData = function (item) {
     if (item == "yes") {
-        App.grdState.deleteSelected();
-        stoChanged(App.stoState);
+        App.grdDet.deleteSelected();
+        stoData_changed(App.stoData);
     }
 };
 
@@ -139,7 +139,7 @@ function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
         HQ.isFirstLoad = true;
-        App.stoState.reload();
+        App.stoData.reload();
     }
 };
 ///////////////////////////////////

@@ -1,1 +1,149 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('m a=["\\1c\\p\\M\\l\\d\\i\\J","\\u\\d\\e\\d\\b","\\r\\i\\k\\u\\d\\e\\d\\b","\\L\\g\\i\\f\\d","\\r\\i\\g\\k","\\K\\i\\b\\H","\\l\\b\\1l\\d","\\n\\e\\f\\d","\\g\\f\\1c\\s\\e\\l\\r\\b","","\\i\\b\\L\\i\\b\\f\\s","\\f\\s\\p\\R","\\z\\b\\f\\f\\e\\r\\b","\\g\\f\\1p\\g\\i\\f\\d\\1f\\p\\e\\k","\\i\\b\\n\\p\\e\\k","\\f\\d\\p\\u\\d\\e\\d\\b","\\g\\f\\I\\l\\f\\b\\i\\d","\\g\\l\\f\\b\\i\\d","\\l\\b\\R","\\g\\d\\b\\z\\f","\\f\\b\\n\\b\\j\\d\\b\\k","\\f\\n\\z\\u\\d\\e\\d\\b","\\g\\l\\k\\b\\1l\\u\\b\\n\\b\\j\\d","\\k\\b\\n\\b\\d\\b\\G\\e\\d\\e","\\k\\b\\n\\b\\d\\b","\\g\\f\\1u\\K\\k\\e\\d\\b","\\g\\f\\G\\b\\n\\b\\d\\b","\\j\\s\\b\\j\\A\\1b\\b\\1C\\M\\g\\i\\b\\1D\\e\\f\\f","\\f\\d\\p\\i\\b","\\f\\e\\H\\b","\\K\\i\\g\\l\\d","\\j\\n\\p\\f\\b","\\j\\p\\z\\z\\p\\l","\\u\\I\\1j\\B\\1k\\B\\B","\\j\\s\\e\\l\\r\\b\\G\\e\\d\\e","\\f\\s\\p\\R\\N\\M\\f\\J","\\g\\l\\f\\b\\i\\d\\N\\n\\e\\l\\A","\\n\\p\\e\\k\\g\\l\\r\\k\\e\\d\\e","\\r\\b\\d\\1f\\e\\l\\r","\\j\\s\\b\\j\\A\\N\\b\\L\\p\\i\\b\\1e\\k\\g\\d","\\j\\s\\b\\j\\A\\I\\l\\f\\b\\i\\d\\1v\\b\\J","\\j\\s\\b\\j\\A\\1h\\e\\n\\g\\k\\e\\d\\b\\1e\\k\\g\\d","\\j\\s\\b\\j\\A\\1b\\b\\1w\\b\\j\\d","\\g\\f\\1h\\e\\n\\g\\k","\\L\\i\\z\\1x\\e\\g\\l","\\u\\e\\H\\g\\l\\r\\G\\e\\d\\e","\\u\\I\\1j\\B\\1k\\B\\B\\1y\\u\\e\\H\\b","\\r\\b\\d\\G\\e\\d\\e","\\K\\i\\p\\j\\b\\f\\f","\\f\\M\\1z\\z\\g\\d","\\J\\b\\f","\\k\\b\\n\\b\\d\\b\\u\\b\\n\\b\\j\\d\\b\\k"];m w=[a[0],a[1]];m T=[a[0],a[1]];m V=[a[0],a[1]];m 1o=o(U){1q(U){v a[3]:c[a[4]][a[3]](h[a[2]]);t;v a[5]:c[a[4]][a[5]](h[a[2]]);t;v a[6]:c[a[4]][a[6]](h[a[2]]);t;v a[7]:c[a[4]][a[7]](h[a[2]]);t;v a[10]:q(c[a[8]]){c[a[12]][a[11]](1r,a[9],a[10])}1t{c[a[8]]=F;c[a[13]]=y;h[a[15]][a[14]]()};t;v a[18]:q(c[a[16]]){c[a[4]][a[17]](h[a[2]],w)};t;v a[24]:q(h[a[21]][a[20]][a[19]][0]!=1s){m 1g=c[a[4]][a[22]](h[a[2]]);q(1g!=a[9]){c[a[12]][a[11]](1F,[c[a[4]][a[22]](h[a[2]]),a[9]],a[23],y)}};t;v a[29]:q(c[a[25]]||c[a[16]]||c[a[26]]){q(c[a[28]][a[27]](h[a[15]],w,T,V)){1n()}};t;v a[2j]:t;v a[W]:c[a[x]][a[W]](2h);t}};m 2k=o(){c[a[13]]=y;h[a[15]][a[14]]()};m Q=o(D){c[a[8]]=c[a[28]][a[8]](D);c[a[x]][a[Y]](c[a[8]],a[S])};m 2f=o(D){c[a[13]]=y;c[a[x]][a[X]](F);c[a[8]]=c[a[28]][a[8]](D);c[a[x]][a[Y]](c[a[8]],a[S]);q(c[a[13]]){q(c[a[16]]){c[a[28]][a[1O]](D,w)};c[a[13]]=F}};m 1N=o(D){c[a[x]][a[X]](y,c[a[x]][a[1d]](a[2g]))};m 1P=o(1Q,E){1a c[a[4]][a[1R]](E,w)};m 1M=o(C,E){c[a[4]][a[1L]](h[a[2]],E,w)};m 1H=o(C,E){1a c[a[4]][a[1G]](h[a[2]],E,w)};m 1I=o(1m){c[a[4]][a[1J]](1m,h[a[2]]);Q(h[a[15]])};m 1n=o(){q(h[a[1i]][a[1K]]()){h[a[1i]][a[1S]]({1T:2b,2c:c[a[x]][a[1d]](a[2d]),2e:a[2a],1Z:{1V:c[a[28]][a[1U]](h[a[15]])},1W:o(O,P){c[a[12]][a[11]](1X);c[a[8]]=F;1o(a[10])},1Y:o(O,P){c[a[12]][a[2i]](O,P,y)}})}};m 1E=o(C){q(C==a[Z]){h[a[2]][a[1B]]();Q(h[a[15]])}};o 1A(C){q(C==a[Z]){c[a[8]]=F;c[a[13]]=y;h[a[15]][a[14]]()}}', 62, 145, '||||||||||_0xe29c|x65|HQ|x74|x61|x73|x69|App|x72|x63|x64|x6E|var|x6C|function|x6F|if|x67|x68|break|x53|case|keys|32|true|x6D|x6B|x30|_0xcc56x10|_0xcc56x9|_0xcc56xe|false|x44|x76|x49|x79|x70|x66|x75|x42|_0xcc56x15|_0xcc56x16|stoChanged|x77|33|fieldsCheckRequire|_0xcc56x5|fieldsLangCheckRequire|31|35|34|50|||||||||||return|x52|x43|38|x45|x4C|_0xcc56x6|x56|44|x32|x37|x78|_0xcc56x13|save|menuClick|x46|switch|20150303|undefined|else|x55|x4B|x6A|x4D|x2F|x62|refresh|51|x71|x50|deleteData|2015020807|41|grdState_ValidateEdit|grdState_Reject|42|43|40|grdState_Edit|stoBeforeLoad|36|grdState_BeforeEdit|_0xcc56xd|39|49|timeout|47|lstState|success|201405071|failure|params|||||||||||46|1800000|waitMsg|45|url|stoLoad|37|this|48|30|firstLoad'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['Country', 'State'];
+var fieldsCheckRequire = ["Country", "State","Descr"];
+var fieldsLangCheckRequire = ["Country", "State", "Descr"];
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdDet);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdDet);
+            break;
+        case "next":
+            HQ.grid.next(App.grdDet);
+            break;
+        case "last":
+            HQ.grid.last(App.grdDet);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoData.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdDet, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmData.selected.items[0] != undefined) {
+                var rowindex = HQ.grid.indexSelect(App.grdDet);
+                if (rowindex != '')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdDet), ''], 'deleteData', true)
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoData, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+
+};
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoData.reload();
+};
+
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoData_changed = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SI20700');
+};
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoData_load = function (sto) {
+   
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SI20700');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+
+//trước khi load trang busy la dang load data
+var stoData_beforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var grdDet_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdDet_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdDet, e, keys);
+};
+
+var grdDet_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdDet, e, keys);
+};
+
+var grdDet_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdDet);
+    stoData_changed(App.stoData);
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'SI20700/Save',
+            params: {
+                lstData: HQ.store.getData(App.stoData)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdDet.deleteSelected();
+        stoData_changed(App.stoData);
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoData.reload();
+    }
+};
+///////////////////////////////////
+
+
+
+
