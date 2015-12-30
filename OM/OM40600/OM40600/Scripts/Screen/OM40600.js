@@ -1,8 +1,11 @@
 
 var chkSelectHeader_change = function (chk, newValue, oldValue, eOpts) {
-    App.stoDetail.data.each(function (record) {
-        record.data.Selected = chk.value;
+    App.stoDetail.suspendEvents();
+    var allData = App.stoDetail.snapshot || App.stoDetail.allData || App.stoDetail.data;
+    allData.each(function (record) {
+        record.set('Selected',chk.value);
     });
+    App.stoDetail.resumeEvents();
     App.grdDetail.view.refresh();
 }
 var dtpFromDate_change = function (dtp, newValue, oldValue, eOpts) {
@@ -42,10 +45,10 @@ var btnGenerate_click = function () {
     if (HQ.isInsert || HQ.isUpdate) {
         var recordOrder = HQ.store.findRecord(App.stoDetail, ["Selected"], [true]);
         if (App.dtpFromDate.validate() && App.dtpToDate.validate() && recordOrder != undefined) {
-            if (App.dtpFromDate.lastValue.getFullYear() != App.dtpToDate.lastValue.getFullYear()) {
-                HQ.message.show(201506111);
-                return;
-            }
+            //if (App.dtpFromDate.lastValue.getFullYear() != App.dtpToDate.lastValue.getFullYear()) {
+            //    HQ.message.show(201506111);
+            //    return;
+            //}
 
             App.frmMain.submit({
                 waitMsg: HQ.common.getLang('SavingData'),
@@ -116,7 +119,7 @@ var firstLoad = function () {
     HQ.isFirstLoad = true;
     App.dtpFromDate.setValue(HQ.bussinessDate);
     App.dtpToDate.setValue(HQ.bussinessDate);
-    App.dtpFromDate.setMinValue(new Date(1900,1,1));
+    App.dtpFromDate.setMinValue(HQ.bussinessDate);
 
 }
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
