@@ -503,45 +503,55 @@ var McpCusts = {
     },
 
     btnSaveMcpCusts_click: function (btn, eOpts) {
-        if (App.frmMcpCusts.isValid()) {
-            if (App.grdMCPCusts.selModel.selected.items.length) {
-                App.frmMcpCusts.submit({
-                    waitMsg: HQ.common.getLang("Submiting") + "...",
-                    url: 'OM23800/SaveMcpCusts',
-                    type: 'POST',
-                    timeout: 1000000,
-                    params: {
-                        lstMcpCusts: Ext.encode(App.grdMCPCusts.getRowsValues({ selectedOnly: true }))
-                        , routeID: App.cboRouteIDMcpCusts.getValue()
-                        , salesFreq: App.cboSlsFreqMcpCusts.getValue()
-                        , weekOfVisit: App.cboWeekofVisitMcpCusts.getValue()
-                        , sun: App.chkSunMcpCusts.value
-                        , mon: App.chkMonMcpCusts.value
-                        , tue: App.chkTueMcpCusts.value
-                        , wed: App.chkWedMcpCusts.value
-                        , thu: App.chkThuMcpCusts.value
-                        , fri: App.chkFriMcpCusts.value
-                        , sat: App.chkSatMcpCusts.value
-                        , startDate: App.dtpStartDateMcpCusts.getValue()
-                        , endDate: App.dtpEndDateMcpCusts.getValue()
-                    },
-                    success: function (msg, data) {
-                        if (data.result.msgcode) {
-                            HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
+        if (App.grdMCPCusts.selModel.selected.items.length > HQ.CountCust) {
+            HQ.message.show(201512301, HQ.CountCust, 'McpCusts.saveMcpCust');
+        } else {
+            McpCusts.saveMcpCust('yes');
+        }
+      
+    },
+    saveMcpCust:function(item)
+    {
+        if (item == 'yes') {
+            if (App.frmMcpCusts.isValid()) {
+                if (App.grdMCPCusts.selModel.selected.items.length) {
+                    App.frmMcpCusts.submit({
+                        waitMsg: HQ.common.getLang("Submiting") + "...",
+                        url: 'OM23800/SaveMcpCusts',
+                        type: 'POST',
+                        timeout: 1000000,
+                        params: {
+                            lstMcpCusts: Ext.encode(App.grdMCPCusts.getRowsValues({ selectedOnly: true }))
+                            , routeID: App.cboRouteIDMcpCusts.getValue()
+                            , salesFreq: App.cboSlsFreqMcpCusts.getValue()
+                            , weekOfVisit: App.cboWeekofVisitMcpCusts.getValue()
+                            , sun: App.chkSunMcpCusts.value
+                            , mon: App.chkMonMcpCusts.value
+                            , tue: App.chkTueMcpCusts.value
+                            , wed: App.chkWedMcpCusts.value
+                            , thu: App.chkThuMcpCusts.value
+                            , fri: App.chkFriMcpCusts.value
+                            , sat: App.chkSatMcpCusts.value
+                            , startDate: App.dtpStartDateMcpCusts.getValue()
+                            , endDate: App.dtpEndDateMcpCusts.getValue()
+                        },
+                        success: function (msg, data) {
+                            if (data.result.msgCode) {
+                                HQ.message.show(data.result.msgCode, (data.result.msgParam ? data.result.msgParam : ''), '');
+                            }
+                            App.winMcpCusts.close();
+                        },
+                        failure: function (msg, data) {
+                            HQ.message.process(msg, data, true);
                         }
-                        App.winMcpCusts.close();
-                    },
-                    failure: function (msg, data) {
-                        HQ.message.process(msg, data, true);
-                    }
-                });
-            }
-            else {
-                HQ.message.show(718, '', '');
+                    });
+                }
+                else {
+                    HQ.message.show(718, '', '');
+                }
             }
         }
     },
-
     btnCancelMcpCusts_click: function (btn, eOpts) {
         App.winMcpCusts.close();
     }
