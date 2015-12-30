@@ -128,7 +128,37 @@ namespace PJPProcess
         //        throw ex;
         //    }
         //}
-        
+        public void OM23800_CoppyMCP(string ID, DateTime StartDate, DateTime EndDate, string Type)
+        {
+            try
+            {
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@ID", DbType.String, clsCommon.GetValueDBNull(ID), ParameterDirection.Input, 2147483647));
+                pc.Add(new ParamStruct("@StartDate", DbType.DateTime, clsCommon.GetValueDBNull(StartDate), ParameterDirection.Input, 1000));
+                pc.Add(new ParamStruct("@EndDate", DbType.DateTime, clsCommon.GetValueDBNull(EndDate), ParameterDirection.Input, 1000));
+                pc.Add(new ParamStruct("@Type", DbType.String, clsCommon.GetValueDBNull(Type), ParameterDirection.Input, 1000));
+                _da.ExecNonQuery("OM23800_CoppyMCP", CommandType.StoredProcedure, ref pc, "");
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        public DataTable GetListNewOM_SalesRouteMaster(string ID)
+        {
+            try
+            {
+                ParamCollection pc = new ParamCollection();
+                pc.Add(new ParamStruct("@ID", DbType.String, clsCommon.GetValueDBNull(ID), ParameterDirection.Input, 2147483647));
+                return (_da.ExecDataTable("OM23800_GetNewOM_ImportMCP", CommandType.StoredProcedure, ref pc, ""));
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
         public DataTable ExcuteSQL(string proc)
         {
             try

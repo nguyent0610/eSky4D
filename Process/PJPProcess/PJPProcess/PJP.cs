@@ -131,7 +131,119 @@ namespace PJPProcess
             }
 
         }
-      
+        public bool OM23800CreateMCP(string id)
+        {
+            try
+            {
+                DateTime Todate = DateTime.Now;
+                DateTime Fromdate = DateTime.Now;
+                string ID = Guid.NewGuid().ToString();
+
+                clsSQL objSql = new clsSQL(Dal);
+                #region insert Bulk BANG TAM
+                string strOM_Dettmp = "select * from OM_SalesRouteDetTmp where 'A'='B'";
+                System.Data.DataTable dtOm_SalesRouteDet = new System.Data.DataTable() { TableName = "OM_SalesRouteDetTmp" };
+                dtOm_SalesRouteDet = objSql.ExcuteSQLProcText(strOM_Dettmp);
+                dtOm_SalesRouteDet.TableName = "OM_SalesRouteDetTmp";
+
+                #endregion
+
+                try
+                {
+                 
+                    System.Data.DataTable dt = objSql.GetListNewOM_SalesRouteMaster(id);//, "%", "%", "%", "%", "%");
+
+                    foreach (DataRow r in dt.Rows)
+                    {
+                        Fromdate = Convert.ToDateTime(r["StartDate"], CultureInfo.InvariantCulture);
+                        Todate = Convert.ToDateTime(r["EndDate"], CultureInfo.InvariantCulture);
+                    
+                        clsOM_SalesRouteMaster objmaster = new clsOM_SalesRouteMaster();
+                        objmaster.Reset();
+                        objmaster.BranchID = r["BranchID"].ToString();
+                        objmaster.CustID = r["CustID"].ToString();
+                        objmaster.Fri = r["Fri"].ToString() == "1" ? true : false;
+                        objmaster.Mon = r["Mon"].ToString() == "1" ? true : false;
+                        objmaster.PJPID = r["PJPID"].ToString();
+                        objmaster.SalesRouteID = r["SalesRouteID"].ToString();
+                        objmaster.Sat = r["Sat"].ToString() == "1" ? true : false;
+                        objmaster.SlsFreq = r["SlsFreq"].ToString();
+                        objmaster.SlsFreqType = r["SlsFreqType"].ToString();
+                        objmaster.SlsPerID = r["SlsPerID"].ToString();
+                        objmaster.Sun = r["Sun"].ToString() == "1" ? true : false;
+                        objmaster.Thu = r["Thu"].ToString() == "1" ? true : false;
+                        objmaster.Tue = r["Tue"].ToString() == "1" ? true : false;
+                        objmaster.VisitSort = r["VisitSort"].ToString() != "" ? int.Parse(r["VisitSort"].ToString()) : 0;
+                        objmaster.Wed = r["Wed"].ToString() == "1" ? true : false;
+                        objmaster.WeekofVisit = r["WeekofVisit"].ToString();
+                        objmaster.Crtd_User = Current.UserName;
+                        objmaster.Crtd_Prog = "OM23800";
+                        if (Convert.ToBoolean(r["Del"]))
+                        {
+                           
+                        }
+                        else
+                        {
+                            var lstobjdetail = CreateItemNotCommit(objmaster, Fromdate, Todate);
+                            if (lstobjdetail.Count > 0)
+                            {
+                                foreach (var objdetail in lstobjdetail)
+                                {
+                                    DataRow dtRow = dtOm_SalesRouteDet.NewRow();
+                                    dtRow["ID"] = ID;
+                                    dtRow["BranchID"] = objdetail.BranchID;
+                                    dtRow["SalesRouteID"] = objdetail.SalesRouteID;
+                                    dtRow["CustID"] = objdetail.CustID;
+                                    dtRow["SlsPerID"] = objdetail.SlsPerID;
+                                    dtRow["PJPID"] = objdetail.PJPID;
+                                    dtRow["SlsFreq"] = objdetail.SlsFreq;
+                                    dtRow["SlsFreqType"] = objdetail.SlsFreqType;
+                                    dtRow["WeekofVisit"] = objdetail.WeekofVisit;
+                                    dtRow["VisitSort"] = objdetail.VisitSort;
+                                    dtRow["Crtd_Datetime"] = objdetail.Crtd_Datetime;
+                                    dtRow["Crtd_Prog"] = objdetail.Crtd_Prog;
+                                    dtRow["Crtd_User"] = objdetail.Crtd_User;
+                                    dtRow["LUpd_Datetime"] = objdetail.LUpd_Datetime;
+                                    dtRow["LUpd_Prog"] = objdetail.Crtd_Prog;
+                                    dtRow["LUpd_User"] = objdetail.Crtd_User;
+                                    dtRow["VisitDate"] = objdetail.VisitDate; ;
+                                    dtRow["DayofWeek"] = objdetail.DayofWeek;
+                                    dtRow["WeekNbr"] = objdetail.WeekNbr;
+                                    dtOm_SalesRouteDet.Rows.Add(dtRow);
+                                }
+                            }
+                        
+                        }
+                    }
+                    //CreateItem(p);
+
+                    if (dtOm_SalesRouteDet.Rows.Count > 0)
+                    {
+                        using (SqlConnection dbConnection = new SqlConnection(Dal.ConnectionString))
+                        {
+                            dbConnection.Open();
+                            using (SqlBulkCopy s1 = new SqlBulkCopy(dbConnection))
+                            {
+                                s1.DestinationTableName = dtOm_SalesRouteDet.TableName;
+                                foreach (var column in dtOm_SalesRouteDet.Columns)
+                                    s1.ColumnMappings.Add(column.ToString(), column.ToString());
+                                s1.WriteToServer(dtOm_SalesRouteDet, DataRowState.Added);
+                                objSql.OM23800_CoppyMCP(ID, DateTime.Now, DateTime.Now, "IMPOM23800");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         private List<clsOM_SalesRouteDet> CreateItemNotCommit(clsOM_SalesRouteMaster objSaleMaster, DateTime Fromdate, DateTime Todate)
         {
             string prog = objSaleMaster.Crtd_Prog;
