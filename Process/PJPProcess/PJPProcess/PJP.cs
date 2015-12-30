@@ -149,75 +149,463 @@ namespace PJPProcess
             DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
             DateTime date1 = new DateTime(2011, 1, 1);
             Calendar cal = dfi.Calendar;
-            int iWeekStart = cal.GetWeekOfYear(Fromdate, dfi.CalendarWeekRule,
-                                          dfi.FirstDayOfWeek);
-
-            int iWeekStartStart = cal.GetWeekOfYear(Fromdate, dfi.CalendarWeekRule,
-                                          dfi.FirstDayOfWeek);
-
-            int iWeekEnd = cal.GetWeekOfYear(Todate, dfi.CalendarWeekRule,
-                                          dfi.FirstDayOfWeek);
-
-            if (objSaleMaster.SlsFreqType == "R")
+            int subYear = Todate.Year-Fromdate.Year  ;
+            DateTime TodateTmp=Todate;
+            for (int y = 0; y <= subYear; y++)
             {
-                if ((objSaleMaster.SlsFreq == "F1/3") || (objSaleMaster.SlsFreq == "F1/2"))
+                Fromdate = y == 0 ? Fromdate : new DateTime(Fromdate.Year+y, 1, 1);
+                Todate = y == subYear ? TodateTmp : new DateTime(Fromdate.Year, 12, 31);
+                int iWeekStart = cal.GetWeekOfYear(Fromdate, dfi.CalendarWeekRule,
+                                              dfi.FirstDayOfWeek);
+
+                int iWeekStartStart = cal.GetWeekOfYear(Fromdate, dfi.CalendarWeekRule,
+                                              dfi.FirstDayOfWeek);
+
+                int iWeekEnd = cal.GetWeekOfYear(Todate, dfi.CalendarWeekRule,
+                                              dfi.FirstDayOfWeek);
+
+                if (objSaleMaster.SlsFreqType == "R")
                 {
-                    iWeekStart = Util.ToInt(objSaleMaster.WeekofVisit.Replace("W",""));
-                }
-
-                for (Int32 i = iWeekStart; i <= iWeekEnd; i++)
-                {                    
-                    dMon = GetDateFromDayofWeek(Fromdate.Year, i, "Monday");
-                    dTue = GetDateFromDayofWeek(Fromdate.Year, i, "Tuesday");
-                    dWed = GetDateFromDayofWeek(Fromdate.Year, i, "Wednesday");
-                    dThu = GetDateFromDayofWeek(Fromdate.Year, i, "Thursday");
-                    dFri = GetDateFromDayofWeek(Fromdate.Year, i, "Friday");
-                    dSat = GetDateFromDayofWeek(Fromdate.Year, i, "Saturday");
-                    dSun = GetDateFromDayofWeek(Fromdate.Year, i, "Sunday");
-
                     if ((objSaleMaster.SlsFreq == "F1/3") || (objSaleMaster.SlsFreq == "F1/2"))
                     {
-                        if (i >= iWeekStartStart)
-                        {
-                            clsOM_SalesRouteDet objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(this.Dal);
-                            objOM_SalesRouteDet1.Reset();
-                            objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                            objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                            objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                            objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                            objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                            objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                            objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                            objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                            objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                            objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                            objOM_SalesRouteDet1.Crtd_Prog = prog;
-                            objOM_SalesRouteDet1.Crtd_User = user;
-                            objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                            objOM_SalesRouteDet1.LUpd_Prog = prog;
-                            objOM_SalesRouteDet1.LUpd_User = user;
-                            objOM_SalesRouteDet1.VisitDate = objSaleMaster.Mon ? dMon : (objSaleMaster.Tue ? dTue : (objSaleMaster.Wed ? dWed : (objSaleMaster.Thu ? dThu : (objSaleMaster.Fri ? dFri : (objSaleMaster.Sat ? dSat : (objSaleMaster.Sun ? dSun : DateTime.Now.ToDateShort()))))));
-                            objOM_SalesRouteDet1.DayofWeek = objSaleMaster.Mon ? "Mon" : (objSaleMaster.Tue ? "Tue" : (objSaleMaster.Wed ? "Wed" : (objSaleMaster.Thu ? "Thu" : (objSaleMaster.Fri ? "Fri" : (objSaleMaster.Sat ? "Sat" : (objSaleMaster.Sun ? "Sun" : ""))))));
-                            objOM_SalesRouteDet1.WeekNbr = i;
-
-                            lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        }
-                        if (objSaleMaster.SlsFreq == "F1/3")
-                        {
-                            i += 11;
-                        }
-                        else if (objSaleMaster.SlsFreq == "F1/2")
-                        {
-                            i += 7;
-                        }
+                        iWeekStart = Util.ToInt(objSaleMaster.WeekofVisit.Replace("W", ""));
                     }
-                    else if (objSaleMaster.SlsFreq == "F1")
+
+                    for (Int32 i = iWeekStart; i <= iWeekEnd; i++)
                     {
-                        if ((objSaleMaster.WeekofVisit == "W159" && (i % 4) == 1) || (objSaleMaster.WeekofVisit == "W2610" && (i % 4) == 2) || (objSaleMaster.WeekofVisit == "W3711" && (i % 4) == 3) || (objSaleMaster.WeekofVisit == "W4812" && (i % 4) == 0))
+                        dMon = GetDateFromDayofWeek(Fromdate.Year, i, "Monday");
+                        dTue = GetDateFromDayofWeek(Fromdate.Year, i, "Tuesday");
+                        dWed = GetDateFromDayofWeek(Fromdate.Year, i, "Wednesday");
+                        dThu = GetDateFromDayofWeek(Fromdate.Year, i, "Thursday");
+                        dFri = GetDateFromDayofWeek(Fromdate.Year, i, "Friday");
+                        dSat = GetDateFromDayofWeek(Fromdate.Year, i, "Saturday");
+                        dSun = GetDateFromDayofWeek(Fromdate.Year, i, "Sunday");
+
+                        if ((objSaleMaster.SlsFreq == "F1/3") || (objSaleMaster.SlsFreq == "F1/2"))
                         {
+                            if (i >= iWeekStartStart)
+                            {
+                                clsOM_SalesRouteDet objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(this.Dal);
+                                objOM_SalesRouteDet1.Reset();
+                                objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                objOM_SalesRouteDet1.Crtd_User = user;
+                                objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                objOM_SalesRouteDet1.LUpd_User = user;
+                                objOM_SalesRouteDet1.VisitDate = objSaleMaster.Mon ? dMon : (objSaleMaster.Tue ? dTue : (objSaleMaster.Wed ? dWed : (objSaleMaster.Thu ? dThu : (objSaleMaster.Fri ? dFri : (objSaleMaster.Sat ? dSat : (objSaleMaster.Sun ? dSun : DateTime.Now.ToDateShort()))))));
+                                objOM_SalesRouteDet1.DayofWeek = objSaleMaster.Mon ? "Mon" : (objSaleMaster.Tue ? "Tue" : (objSaleMaster.Wed ? "Wed" : (objSaleMaster.Thu ? "Thu" : (objSaleMaster.Fri ? "Fri" : (objSaleMaster.Sat ? "Sat" : (objSaleMaster.Sun ? "Sun" : ""))))));
+                                objOM_SalesRouteDet1.WeekNbr = i;
+
+                                lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                            }
+                            if (objSaleMaster.SlsFreq == "F1/3")
+                            {
+                                i += 11;
+                            }
+                            else if (objSaleMaster.SlsFreq == "F1/2")
+                            {
+                                i += 7;
+                            }
+                        }
+                        else if (objSaleMaster.SlsFreq == "F1")
+                        {
+                            if ((objSaleMaster.WeekofVisit == "W159" && (i % 4) == 1) || (objSaleMaster.WeekofVisit == "W2610" && (i % 4) == 2) || (objSaleMaster.WeekofVisit == "W3711" && (i % 4) == 3) || (objSaleMaster.WeekofVisit == "W4812" && (i % 4) == 0))
+                            {
+                                if (objSaleMaster.Mon && dMon <= Todate && dMon >= Fromdate)
+                                {
+
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dMon;
+                                    objOM_SalesRouteDet1.DayofWeek = "Mon";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Tue && dTue <= Todate && dTue >= Fromdate)
+                                {
+
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dTue;
+                                    objOM_SalesRouteDet1.DayofWeek = "Tue";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Wed && dWed <= Todate && dWed >= Fromdate)
+                                {
+
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dWed;
+                                    objOM_SalesRouteDet1.DayofWeek = "Wed";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Thu && dThu <= Todate && dThu >= Fromdate)
+                                {
+
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dThu;
+                                    objOM_SalesRouteDet1.DayofWeek = "Thu";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Fri && dFri <= Todate && dFri >= Fromdate)
+                                {
+
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dFri;
+                                    objOM_SalesRouteDet1.DayofWeek = "Fri";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Sat && dSat <= Todate && dSat >= Fromdate)
+                                {
+
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dSat;
+                                    objOM_SalesRouteDet1.DayofWeek = "Sat";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Sun && dSun <= Todate && dSun >= Fromdate)
+                                {
+
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dSun;
+                                    objOM_SalesRouteDet1.DayofWeek = "Sun";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                            }
+                        }
+                        else if (objSaleMaster.SlsFreq == "F2")
+                        {
+                            if ((objSaleMaster.WeekofVisit == "OW" && (i % 2) != 0) || (objSaleMaster.WeekofVisit == "EW" && (i % 2) == 0))
+                            {
+                                if (objSaleMaster.Mon && dMon <= Todate && dMon >= Fromdate)
+                                {
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dMon;
+                                    objOM_SalesRouteDet1.DayofWeek = "Mon";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Tue && dTue <= Todate && dTue >= Fromdate)
+                                {
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dTue;
+                                    objOM_SalesRouteDet1.DayofWeek = "Tue";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Wed && dWed <= Todate && dWed >= Fromdate)
+                                {
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dWed;
+                                    objOM_SalesRouteDet1.DayofWeek = "Wed";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Thu && dThu <= Todate && dThu >= Fromdate)
+                                {
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dThu;
+                                    objOM_SalesRouteDet1.DayofWeek = "Thu";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Fri && dFri <= Todate && dFri >= Fromdate)
+                                {
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dFri;
+                                    objOM_SalesRouteDet1.DayofWeek = "Fri";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Sat && dSat <= Todate && dSat >= Fromdate)
+                                {
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dSat;
+                                    objOM_SalesRouteDet1.DayofWeek = "Sat";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                                if (objSaleMaster.Sun && dSun <= Todate && dSun >= Fromdate)
+                                {
+                                    var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
+                                    objOM_SalesRouteDet1.Reset();
+                                    objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
+                                    objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
+                                    objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
+                                    objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
+                                    objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
+                                    objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
+                                    objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
+                                    objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
+                                    objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
+                                    objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.Crtd_Prog = prog;
+                                    objOM_SalesRouteDet1.Crtd_User = user;
+                                    objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
+                                    objOM_SalesRouteDet1.LUpd_Prog = prog;
+                                    objOM_SalesRouteDet1.LUpd_User = user;
+
+                                    objOM_SalesRouteDet1.VisitDate = dSun;
+                                    objOM_SalesRouteDet1.DayofWeek = "Sun";
+                                    objOM_SalesRouteDet1.WeekNbr = i;
+                                    //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                    lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                }
+                            }
+                        }
+                        else if (objSaleMaster.SlsFreq == "F4" || objSaleMaster.SlsFreq == "F8" || objSaleMaster.SlsFreq == "F12" || objSaleMaster.SlsFreq == "A")
+                        {
+
                             if (objSaleMaster.Mon && dMon <= Todate && dMon >= Fromdate)
                             {
-
                                 var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
                                 objOM_SalesRouteDet1.Reset();
                                 objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
@@ -240,12 +628,10 @@ namespace PJPProcess
                                 objOM_SalesRouteDet1.DayofWeek = "Mon";
                                 objOM_SalesRouteDet1.WeekNbr = i;
                                 //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-
                                 lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             }
                             if (objSaleMaster.Tue && dTue <= Todate && dTue >= Fromdate)
                             {
-
                                 var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
                                 objOM_SalesRouteDet1.Reset();
                                 objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
@@ -267,12 +653,11 @@ namespace PJPProcess
                                 objOM_SalesRouteDet1.VisitDate = dTue;
                                 objOM_SalesRouteDet1.DayofWeek = "Tue";
                                 objOM_SalesRouteDet1.WeekNbr = i;
-                             
-                                lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1); 
+                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+                                lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             }
                             if (objSaleMaster.Wed && dWed <= Todate && dWed >= Fromdate)
                             {
-
                                 var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
                                 objOM_SalesRouteDet1.Reset();
                                 objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
@@ -299,198 +684,6 @@ namespace PJPProcess
                             }
                             if (objSaleMaster.Thu && dThu <= Todate && dThu >= Fromdate)
                             {
-
-                                var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                                objOM_SalesRouteDet1.Reset();
-                                objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                                objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                                objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                                objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                                objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                                objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                                objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                                objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                                objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                                objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.Crtd_Prog = prog;
-                                objOM_SalesRouteDet1.Crtd_User = user;
-                                objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.LUpd_Prog = prog;
-                                objOM_SalesRouteDet1.LUpd_User = user;
-
-                                objOM_SalesRouteDet1.VisitDate = dThu;
-                                objOM_SalesRouteDet1.DayofWeek = "Thu";
-                                objOM_SalesRouteDet1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                            }
-                            if (objSaleMaster.Fri && dFri <= Todate && dFri >= Fromdate)
-                            {
-
-                                var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                                objOM_SalesRouteDet1.Reset();
-                                objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                                objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                                objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                                objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                                objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                                objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                                objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                                objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                                objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                                objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.Crtd_Prog = prog;
-                                objOM_SalesRouteDet1.Crtd_User = user;
-                                objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.LUpd_Prog = prog;
-                                objOM_SalesRouteDet1.LUpd_User = user;
-
-                                objOM_SalesRouteDet1.VisitDate = dFri;
-                                objOM_SalesRouteDet1.DayofWeek = "Fri";
-                                objOM_SalesRouteDet1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                            }
-                            if (objSaleMaster.Sat && dSat <= Todate && dSat >= Fromdate)
-                            {
-
-                                var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                                objOM_SalesRouteDet1.Reset();
-                                objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                                objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                                objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                                objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                                objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                                objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                                objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                                objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                                objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                                objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.Crtd_Prog = prog;
-                                objOM_SalesRouteDet1.Crtd_User = user;
-                                objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.LUpd_Prog = prog;
-                                objOM_SalesRouteDet1.LUpd_User = user;
-
-                                objOM_SalesRouteDet1.VisitDate = dSat;
-                                objOM_SalesRouteDet1.DayofWeek = "Sat";
-                                objOM_SalesRouteDet1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                            }
-                            if (objSaleMaster.Sun && dSun <= Todate && dSun >= Fromdate)
-                            {
-
-                                var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                                objOM_SalesRouteDet1.Reset();
-                                objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                                objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                                objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                                objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                                objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                                objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                                objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                                objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                                objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                                objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.Crtd_Prog = prog;
-                                objOM_SalesRouteDet1.Crtd_User = user;
-                                objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.LUpd_Prog = prog;
-                                objOM_SalesRouteDet1.LUpd_User = user;
-
-                                objOM_SalesRouteDet1.VisitDate = dSun;
-                                objOM_SalesRouteDet1.DayofWeek = "Sun";
-                                objOM_SalesRouteDet1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                            }
-                        }
-                    }
-                    else if (objSaleMaster.SlsFreq == "F2")
-                    {
-                        if ((objSaleMaster.WeekofVisit == "OW" && (i % 2) != 0) || (objSaleMaster.WeekofVisit == "EW" && (i % 2) == 0))
-                        {
-                            if (objSaleMaster.Mon && dMon <= Todate && dMon >= Fromdate)
-                            {
-                                var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                                objOM_SalesRouteDet1.Reset();
-                                objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                                objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                                objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                                objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                                objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                                objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                                objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                                objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                                objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                                objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.Crtd_Prog = prog;
-                                objOM_SalesRouteDet1.Crtd_User = user;
-                                objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.LUpd_Prog = prog;
-                                objOM_SalesRouteDet1.LUpd_User = user;
-
-                                objOM_SalesRouteDet1.VisitDate = dMon;
-                                objOM_SalesRouteDet1.DayofWeek = "Mon";
-                                objOM_SalesRouteDet1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                            }
-                            if (objSaleMaster.Tue && dTue <= Todate && dTue >= Fromdate)
-                            {
-                                var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                                objOM_SalesRouteDet1.Reset();
-                                objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                                objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                                objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                                objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                                objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                                objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                                objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                                objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                                objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                                objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.Crtd_Prog = prog;
-                                objOM_SalesRouteDet1.Crtd_User = user;
-                                objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.LUpd_Prog = prog;
-                                objOM_SalesRouteDet1.LUpd_User = user;
-
-                                objOM_SalesRouteDet1.VisitDate = dTue;
-                                objOM_SalesRouteDet1.DayofWeek = "Tue";
-                                objOM_SalesRouteDet1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                            }
-                            if (objSaleMaster.Wed && dWed <= Todate && dWed >= Fromdate)
-                            {
-                                var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                                objOM_SalesRouteDet1.Reset();
-                                objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                                objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                                objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                                objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                                objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                                objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                                objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                                objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                                objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                                objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.Crtd_Prog = prog;
-                                objOM_SalesRouteDet1.Crtd_User = user;
-                                objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                                objOM_SalesRouteDet1.LUpd_Prog = prog;
-                                objOM_SalesRouteDet1.LUpd_User = user;
-
-                                objOM_SalesRouteDet1.VisitDate = dWed;
-                                objOM_SalesRouteDet1.DayofWeek = "Wed";
-                                objOM_SalesRouteDet1.WeekNbr = i;
-                                //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                                lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                            }
-                            if (objSaleMaster.Thu && dThu <= Todate && dThu >= Fromdate)
-                            {
                                 var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
                                 objOM_SalesRouteDet1.Reset();
                                 objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
@@ -594,10 +787,37 @@ namespace PJPProcess
                                 lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                             }
                         }
+                        //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
                     }
-                    else if (objSaleMaster.SlsFreq == "F4" || objSaleMaster.SlsFreq == "F8" || objSaleMaster.SlsFreq == "F12" || objSaleMaster.SlsFreq == "A")
-                    {
+                }
+                else
+                {
 
+                    for (Int32 i = iWeekStart; i <= iWeekEnd; i++)
+                    {
+                        clsOM_SalesRouteDet objOM_SalesRouteDet = new clsOM_SalesRouteDet(Dal);
+                        objOM_SalesRouteDet.BranchID = objSaleMaster.BranchID;
+                        objOM_SalesRouteDet.SalesRouteID = objSaleMaster.SalesRouteID;
+                        objOM_SalesRouteDet.CustID = objSaleMaster.CustID;
+                        objOM_SalesRouteDet.SlsPerID = objSaleMaster.SlsPerID;
+                        objOM_SalesRouteDet.PJPID = objSaleMaster.PJPID;
+                        objOM_SalesRouteDet.SlsFreq = objSaleMaster.SlsFreq;
+                        objOM_SalesRouteDet.SlsFreqType = objSaleMaster.SlsFreqType;
+                        objOM_SalesRouteDet.WeekofVisit = objSaleMaster.WeekofVisit;
+                        objOM_SalesRouteDet.VisitSort = objSaleMaster.VisitSort;
+                        objOM_SalesRouteDet.Crtd_Datetime = DateTime.Now;
+                        objOM_SalesRouteDet.Crtd_Prog = prog;
+                        objOM_SalesRouteDet.Crtd_User = user;
+                        objOM_SalesRouteDet.LUpd_Datetime = DateTime.Now;
+                        objOM_SalesRouteDet.LUpd_Prog = user;
+                        objOM_SalesRouteDet.LUpd_User = user;
+                        dMon = GetDateFromDayofWeek(Fromdate.Year, i, "Monday");
+                        dTue = GetDateFromDayofWeek(Fromdate.Year, i, "Tuesday");
+                        dWed = GetDateFromDayofWeek(Fromdate.Year, i, "Wednesday");
+                        dThu = GetDateFromDayofWeek(Fromdate.Year, i, "Thursday");
+                        dFri = GetDateFromDayofWeek(Fromdate.Year, i, "Friday");
+                        dSat = GetDateFromDayofWeek(Fromdate.Year, i, "Saturday");
+                        dSun = GetDateFromDayofWeek(Fromdate.Year, i, "Sunday");
                         if (objSaleMaster.Mon && dMon <= Todate && dMon >= Fromdate)
                         {
                             var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
@@ -622,6 +842,7 @@ namespace PJPProcess
                             objOM_SalesRouteDet1.DayofWeek = "Mon";
                             objOM_SalesRouteDet1.WeekNbr = i;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+
                             lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                         }
                         if (objSaleMaster.Tue && dTue <= Todate && dTue >= Fromdate)
@@ -648,6 +869,7 @@ namespace PJPProcess
                             objOM_SalesRouteDet1.DayofWeek = "Tue";
                             objOM_SalesRouteDet1.WeekNbr = i;
                             //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
+
                             lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                         }
                         if (objSaleMaster.Wed && dWed <= Todate && dWed >= Fromdate)
@@ -781,223 +1003,7 @@ namespace PJPProcess
                             lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
                         }
                     }
-                    //lstOM_SalesRouteDet = lstOM_SalesRouteDet.ToList();
                 }
-            }
-            else
-            {
-
-                for (Int32 i = iWeekStart; i <= iWeekEnd; i++)
-                {
-                    clsOM_SalesRouteDet objOM_SalesRouteDet = new clsOM_SalesRouteDet(Dal);
-                    objOM_SalesRouteDet.BranchID = objSaleMaster.BranchID;
-                    objOM_SalesRouteDet.SalesRouteID = objSaleMaster.SalesRouteID;
-                    objOM_SalesRouteDet.CustID = objSaleMaster.CustID;
-                    objOM_SalesRouteDet.SlsPerID = objSaleMaster.SlsPerID;
-                    objOM_SalesRouteDet.PJPID = objSaleMaster.PJPID;
-                    objOM_SalesRouteDet.SlsFreq = objSaleMaster.SlsFreq;
-                    objOM_SalesRouteDet.SlsFreqType = objSaleMaster.SlsFreqType;
-                    objOM_SalesRouteDet.WeekofVisit = objSaleMaster.WeekofVisit;
-                    objOM_SalesRouteDet.VisitSort = objSaleMaster.VisitSort;
-                    objOM_SalesRouteDet.Crtd_Datetime = DateTime.Now;
-                    objOM_SalesRouteDet.Crtd_Prog = prog;
-                    objOM_SalesRouteDet.Crtd_User = user;
-                    objOM_SalesRouteDet.LUpd_Datetime = DateTime.Now;
-                    objOM_SalesRouteDet.LUpd_Prog = user;
-                    objOM_SalesRouteDet.LUpd_User = user;
-                    dMon = GetDateFromDayofWeek(Fromdate.Year, i, "Monday");
-                    dTue = GetDateFromDayofWeek(Fromdate.Year, i, "Tuesday");
-                    dWed = GetDateFromDayofWeek(Fromdate.Year, i, "Wednesday");
-                    dThu = GetDateFromDayofWeek(Fromdate.Year, i, "Thursday");
-                    dFri = GetDateFromDayofWeek(Fromdate.Year, i, "Friday");
-                    dSat = GetDateFromDayofWeek(Fromdate.Year, i, "Saturday");
-                    dSun = GetDateFromDayofWeek(Fromdate.Year, i, "Sunday");
-                    if (objSaleMaster.Mon && dMon <= Todate && dMon >= Fromdate)
-                    {
-                        var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                        objOM_SalesRouteDet1.Reset();
-                        objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                        objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                        objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                        objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                        objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                        objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                        objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                        objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                        objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                        objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.Crtd_Prog = prog;
-                        objOM_SalesRouteDet1.Crtd_User = user;
-                        objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.LUpd_Prog = prog;
-                        objOM_SalesRouteDet1.LUpd_User = user;
-
-                        objOM_SalesRouteDet1.VisitDate = dMon;
-                        objOM_SalesRouteDet1.DayofWeek = "Mon";
-                        objOM_SalesRouteDet1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-
-                        lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                    }
-                    if (objSaleMaster.Tue && dTue <= Todate && dTue >= Fromdate)
-                    {
-                        var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                        objOM_SalesRouteDet1.Reset();
-                        objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                        objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                        objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                        objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                        objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                        objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                        objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                        objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                        objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                        objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.Crtd_Prog = prog;
-                        objOM_SalesRouteDet1.Crtd_User = user;
-                        objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.LUpd_Prog = prog;
-                        objOM_SalesRouteDet1.LUpd_User = user;
-
-                        objOM_SalesRouteDet1.VisitDate = dTue;
-                        objOM_SalesRouteDet1.DayofWeek = "Tue";
-                        objOM_SalesRouteDet1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-
-                        lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                    }
-                    if (objSaleMaster.Wed && dWed <= Todate && dWed >= Fromdate)
-                    {
-                        var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                        objOM_SalesRouteDet1.Reset();
-                        objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                        objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                        objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                        objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                        objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                        objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                        objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                        objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                        objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                        objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.Crtd_Prog = prog;
-                        objOM_SalesRouteDet1.Crtd_User = user;
-                        objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.LUpd_Prog = prog;
-                        objOM_SalesRouteDet1.LUpd_User = user;
-
-                        objOM_SalesRouteDet1.VisitDate = dWed;
-                        objOM_SalesRouteDet1.DayofWeek = "Wed";
-                        objOM_SalesRouteDet1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                    }
-                    if (objSaleMaster.Thu && dThu <= Todate && dThu >= Fromdate)
-                    {
-                        var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                        objOM_SalesRouteDet1.Reset();
-                        objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                        objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                        objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                        objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                        objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                        objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                        objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                        objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                        objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                        objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.Crtd_Prog = prog;
-                        objOM_SalesRouteDet1.Crtd_User = user;
-                        objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.LUpd_Prog = prog;
-                        objOM_SalesRouteDet1.LUpd_User = user;
-
-                        objOM_SalesRouteDet1.VisitDate = dThu;
-                        objOM_SalesRouteDet1.DayofWeek = "Thu";
-                        objOM_SalesRouteDet1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                    }
-                    if (objSaleMaster.Fri && dFri <= Todate && dFri >= Fromdate)
-                    {
-                        var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                        objOM_SalesRouteDet1.Reset();
-                        objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                        objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                        objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                        objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                        objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                        objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                        objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                        objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                        objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                        objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.Crtd_Prog = prog;
-                        objOM_SalesRouteDet1.Crtd_User = user;
-                        objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.LUpd_Prog = prog;
-                        objOM_SalesRouteDet1.LUpd_User = user;
-
-                        objOM_SalesRouteDet1.VisitDate = dFri;
-                        objOM_SalesRouteDet1.DayofWeek = "Fri";
-                        objOM_SalesRouteDet1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                    }
-                    if (objSaleMaster.Sat && dSat <= Todate && dSat >= Fromdate)
-                    {
-                        var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                        objOM_SalesRouteDet1.Reset();
-                        objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                        objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                        objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                        objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                        objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                        objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                        objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                        objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                        objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                        objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.Crtd_Prog = prog;
-                        objOM_SalesRouteDet1.Crtd_User = user;
-                        objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.LUpd_Prog = prog;
-                        objOM_SalesRouteDet1.LUpd_User = user;
-
-                        objOM_SalesRouteDet1.VisitDate = dSat;
-                        objOM_SalesRouteDet1.DayofWeek = "Sat";
-                        objOM_SalesRouteDet1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                    }
-                    if (objSaleMaster.Sun && dSun <= Todate && dSun >= Fromdate)
-                    {
-                        var objOM_SalesRouteDet1 = new clsOM_SalesRouteDet(Dal);
-                        objOM_SalesRouteDet1.Reset();
-                        objOM_SalesRouteDet1.BranchID = objSaleMaster.BranchID;
-                        objOM_SalesRouteDet1.SalesRouteID = objSaleMaster.SalesRouteID;
-                        objOM_SalesRouteDet1.CustID = objSaleMaster.CustID;
-                        objOM_SalesRouteDet1.SlsPerID = objSaleMaster.SlsPerID;
-                        objOM_SalesRouteDet1.PJPID = objSaleMaster.PJPID;
-                        objOM_SalesRouteDet1.SlsFreq = objSaleMaster.SlsFreq;
-                        objOM_SalesRouteDet1.SlsFreqType = objSaleMaster.SlsFreqType;
-                        objOM_SalesRouteDet1.WeekofVisit = objSaleMaster.WeekofVisit;
-                        objOM_SalesRouteDet1.VisitSort = objSaleMaster.VisitSort;
-                        objOM_SalesRouteDet1.Crtd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.Crtd_Prog = prog;
-                        objOM_SalesRouteDet1.Crtd_User = user;
-                        objOM_SalesRouteDet1.LUpd_Datetime = DateTime.Now;
-                        objOM_SalesRouteDet1.LUpd_Prog = prog;
-                        objOM_SalesRouteDet1.LUpd_User = user;
-
-                        objOM_SalesRouteDet1.VisitDate = dSun;
-                        objOM_SalesRouteDet1.DayofWeek = "Sun";
-                        objOM_SalesRouteDet1.WeekNbr = i;
-                        //lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                        lstOM_SalesRouteDet.Add(objOM_SalesRouteDet1);
-                    }
-                }
-
             }
             //lognet.Info("lstOM_SalesRouteDet COUNT:" + lstOM_SalesRouteDet.Count);
             return lstOM_SalesRouteDet;
