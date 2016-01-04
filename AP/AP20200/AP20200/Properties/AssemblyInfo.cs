@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Han Quang Software Solution")]
 [assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
-[assembly: AssemblyTrademark("Han Quang Software Solution. All rights Reserved.")]
+[assembly: AssemblyCopyright("Han Quang Software Solution. All rights Reserved.")]
+[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

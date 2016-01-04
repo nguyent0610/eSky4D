@@ -84,7 +84,7 @@ var menuClick = function (command) {
             else {
                 HQ.isChange = false;
                 var vendID = '';
-                if (App.cboVendID.valueModels != null) vendID = App.cboVendID.getValue();
+                if (App.cboVendID.valueModels != null) vendID = App.cboVendID.getValue();             
                 App.cboVendID.getStore().load(function () { App.cboVendID.setValue(vendID); App.stoVendor.reload(); });                
             }
            
@@ -98,11 +98,14 @@ var firstLoad = function () {
 };
 //load store khi co su thay doi vendid
 var stoLoad = function (sto) {
-    
-
+   
     HQ.common.showBusy(false);
     HQ.isNew = false;
     App.cboVendID.forceSelection = true;
+    App.cboBillCity.forceSelection = false;
+    App.cboBillState.forceSelection = false;
+    App.cboCity.forceSelection = false;
+    App.cboState.forceSelection = false;
     if (sto.data.length == 0) {
         HQ.store.insertBlank(sto, "VendID");
         record = sto.getAt(0);
@@ -123,10 +126,7 @@ var stoLoad = function (sto) {
     frmChange();
     HQ.common.showBusy(false);
 
-    App.cboBillCity.forceSelection=false;
-    App.cboBillState.forceSelection=false;
-    App.cboCity.forceSelection=false;
-    App.cboState.forceSelection=false;
+  
     if (Ext.isEmpty(App.cboVendID.getValue()))
         App.cboVendID.focus(true);//focus ma khi tao moi
 };
@@ -138,7 +138,7 @@ var stoBeforeLoad = function (sto) {
 ////////////Kiem tra combo chinh VendID
 //khi co su thay doi du lieu cua cac conttol tren form
 var frmChange = function () {
-    if (App.stoVendor.data.length > 0) {
+    if (App.stoVendor.data.length > 0 ) {
         App.frmMain.getForm().updateRecord();
         HQ.isChange = HQ.store.isChange(App.stoVendor);
         HQ.common.changeData(HQ.isChange, 'AP20200');//co thay doi du lieu gan * tren tab title header
