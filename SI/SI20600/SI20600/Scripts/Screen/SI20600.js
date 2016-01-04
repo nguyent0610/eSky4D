@@ -1,6 +1,31 @@
-﻿var keys = ['CountryID'];
+﻿//////////Declare/////////////////
+var keys = ['CountryID'];
 var fieldsCheckRequire = ["CountryID", "Descr"];
 var fieldsLangCheckRequire = ["CountryID", "Descr"];
+///////////Store/////////////////
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoData_changed = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SI20600');
+};
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoData_load = function (sto) {
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'SI20600');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+//trước khi load trang busy la dang load data
+var stoData_beforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+/////////////////////////////////
+////////////Event/////////////////
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -51,30 +76,10 @@ var menuClick = function (command) {
 };
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
+    HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     App.stoData.reload();
 }
-//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
-var stoData_changed = function (sto) {
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SI20600');
-};
-//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
-var stoData_load = function (sto) {
-    HQ.common.showBusy(false);
-    HQ.isChange = HQ.store.isChange(sto);
-    HQ.common.changeData(HQ.isChange, 'SI20600');
-    if (HQ.isFirstLoad) {
-        if (HQ.isInsert) {
-            HQ.store.insertBlank(sto, keys);
-        }
-        HQ.isFirstLoad = false;
-    }
-};
-//trước khi load trang busy la dang load data
-var stoData_beforeLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
-};
 var grdDet_BeforeEdit = function (editor, e) {
     return HQ.grid.checkBeforeEdit(e, keys);
 };
@@ -100,7 +105,7 @@ var save = function () {
                 lstData: HQ.store.getData(App.stoData)
             },
             success: function (msg, data) {
-                HQ.message.show(201405071);
+                HQ.message.process(msg, data, true);
                 refresh('yes');
             },
             failure: function (msg, data) {
@@ -109,14 +114,12 @@ var save = function () {
         });
     }
 };
-
 var deleteData = function (item) {
     if (item == "yes") {
         App.grdDet.deleteSelected();
         stoData_changed(App.stoData);
     }
 };
-//// Other Functions ////////////////////////////////////////////////////
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
@@ -124,4 +127,3 @@ function refresh(item) {
         App.stoData.reload();
     }
 };
-///////////////////////////////////

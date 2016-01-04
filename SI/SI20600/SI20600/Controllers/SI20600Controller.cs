@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -22,11 +22,11 @@ namespace SI20600.Controllers
         SI20600Entities _db = Util.CreateObjectContext<SI20600Entities>(false);
         public ActionResult Index()
         {
-            
-            Util.InitRight(_screenNbr);
+
+            Util.InitRight(_screenNbr);// lấy quyền cho user khi truy cập màn hình này
             return View();
         }
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]//cache lại giao diện chi sinh lần đầu
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -42,36 +42,36 @@ namespace SI20600.Controllers
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstData"]);
                 ChangeRecords<SI20600_pgLoadCountry_Result> lstData = dataHandler.BatchObjectData<SI20600_pgLoadCountry_Result>();
-                lstData.Created.AddRange(lstData.Updated);
-                foreach (SI20600_pgLoadCountry_Result deleted in lstData.Deleted)
+                lstData.Created.AddRange(lstData.Updated);// Dua danh sach update chung vao danh sach tao moi
+                foreach (SI20600_pgLoadCountry_Result del in lstData.Deleted)
                 {
-                    if (lstData.Created.Where(p => p.CountryID.ToLower() == deleted.CountryID.ToLower()).Count() > 0)
+                    if (lstData.Created.Where(p => p.CountryID.ToLower() == del.CountryID.ToLower()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        lstData.Created.Where(p => p.CountryID.ToLower() == deleted.CountryID.ToLower()).FirstOrDefault().tstamp = deleted.tstamp;
+                        lstData.Created.Where(p => p.CountryID.ToLower() == del.CountryID.ToLower()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var del = _db.SI_Country.ToList().Where(p => p.CountryID.ToLower() == deleted.CountryID.ToLower()).FirstOrDefault();
-                        if (del != null)
+                        var objDel = _db.SI_Country.ToList().Where(p => p.CountryID.ToLower() == del.CountryID.ToLower()).FirstOrDefault();
+                        if (objDel != null)
                         {
-                            _db.SI_Country.DeleteObject(del);
+                            _db.SI_Country.DeleteObject(objDel);
                         }
                     }
                 }
 
              
 
-                foreach (SI20600_pgLoadCountry_Result curCountry in lstData.Created)
+                foreach (SI20600_pgLoadCountry_Result curItem in lstData.Created)
                 {
-                    if (curCountry.CountryID.PassNull() == "") continue;
+                    if (curItem.CountryID.PassNull() == "") continue;
 
-                    var Country = _db.SI_Country.Where(p => p.CountryID.ToLower() == curCountry.CountryID.ToLower()).FirstOrDefault();
+                    var objCountry = _db.SI_Country.Where(p => p.CountryID.ToLower() == curItem.CountryID.ToLower()).FirstOrDefault();
 
-                    if (Country != null)
+                    if (objCountry != null)
                     {
-                        if (Country.tstamp.ToHex() == curCountry.tstamp.ToHex())
+                        if (objCountry.tstamp.ToHex() == curItem.tstamp.ToHex())//check tstamp xem co ai cap nhat chua
                         {
-                            Update_SI_Country(Country, curCountry, false);
+                            Update_SI_Country(objCountry, curItem, false);
                         }
                         else
                         {
@@ -80,23 +80,22 @@ namespace SI20600.Controllers
                     }
                     else
                     {
-                        Country = new SI_Country();
-                        Update_SI_Country(Country, curCountry, true);
-                        _db.SI_Country.AddObject(Country);
+                        objCountry = new SI_Country();
+                        Update_SI_Country(objCountry, curItem, true);
+                        _db.SI_Country.AddObject(objCountry);
                     }
                 }
 
                 _db.SaveChanges();
 
-                return Json(new { success = true });
+                return Util.CreateMessage(MessageProcess.Save);
             }
             catch (Exception ex)
             {
                 if (ex is MessageException) return (ex as MessageException).ToMessage();
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() }, "text/html");
             }
         }
-
         private void Update_SI_Country(SI_Country t, SI20600_pgLoadCountry_Result s, bool isNew)
         {
             if (isNew)
