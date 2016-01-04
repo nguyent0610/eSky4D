@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -44,34 +44,34 @@ namespace SI20700.Controllers
                 ChangeRecords<SI20700_pgLoadState_Result> lstData = dataHandler.BatchObjectData<SI20700_pgLoadState_Result>();
 
                 lstData.Created.AddRange(lstData.Updated);
-                foreach (SI20700_pgLoadState_Result deleted in lstData.Deleted)
+                foreach (SI20700_pgLoadState_Result del in lstData.Deleted)
                 {
-                    if (lstData.Created.Where(p => p.Country.ToLower().Trim() == deleted.Country.ToLower().Trim() && p.State.ToLower().Trim() == deleted.State.ToLower().Trim()).Count() > 0)
+                    if (lstData.Created.Where(p => p.Country.ToLower().Trim() == del.Country.ToLower().Trim() && p.State.ToLower().Trim() == del.State.ToLower().Trim()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        lstData.Created.Where(p => p.Country.ToLower().Trim() == deleted.Country.ToLower().Trim() && p.State.ToLower().Trim() == deleted.State.ToLower().Trim()).FirstOrDefault().tstamp = deleted.tstamp;
+                        lstData.Created.Where(p => p.Country.ToLower().Trim() == del.Country.ToLower().Trim() && p.State.ToLower().Trim() == del.State.ToLower().Trim()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var del = _db.SI_State.ToList().Where(p => p.Country.ToLower().Trim() == deleted.Country.ToLower().Trim() && p.State.ToLower().Trim() == deleted.State.ToLower().Trim()).FirstOrDefault();
-                        if (del != null)
+                        var objDel = _db.SI_State.ToList().Where(p => p.Country.ToLower().Trim() == del.Country.ToLower().Trim() && p.State.ToLower().Trim() == del.State.ToLower().Trim()).FirstOrDefault();
+                        if (objDel != null)
                         {
-                            _db.SI_State.DeleteObject(del);
+                            _db.SI_State.DeleteObject(objDel);
                         }
                     }
                 }
 
 
-                foreach (SI20700_pgLoadState_Result curState in lstData.Created)
+                foreach (SI20700_pgLoadState_Result curItem in lstData.Created)
                 {
-                    if (curState.Country.PassNull() == "" && curState.State.PassNull() == "") continue;
+                    if (curItem.Country.PassNull() == "" && curItem.State.PassNull() == "") continue;
 
-                    var State = _db.SI_State.Where(p => p.Country.ToLower() == curState.Country.ToLower() && p.State.ToLower() == curState.State.ToLower()).FirstOrDefault();
+                    var State = _db.SI_State.Where(p => p.Country.ToLower() == curItem.Country.ToLower() && p.State.ToLower() == curItem.State.ToLower()).FirstOrDefault();
 
                     if (State != null)
                     {
-                        if (State.tstamp.ToHex() == curState.tstamp.ToHex())
+                        if (State.tstamp.ToHex() == curItem.tstamp.ToHex())
                         {
-                            Update_SI_State(State, curState, false);
+                            Update_SI_State(State, curItem, false);
                         }
                         else
                         {
@@ -81,19 +81,19 @@ namespace SI20700.Controllers
                     else
                     {
                         State = new SI_State();
-                        Update_SI_State(State, curState, true);
+                        Update_SI_State(State, curItem, true);
                         _db.SI_State.AddObject(State);
                     }
                 }
 
                 _db.SaveChanges();
 
-                return Json(new { success = true });
+                return Util.CreateMessage(MessageProcess.Save);
             }
             catch (Exception ex)
             {
                 if (ex is MessageException) return (ex as MessageException).ToMessage();
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() }, "text/html");
             }
         }
 
