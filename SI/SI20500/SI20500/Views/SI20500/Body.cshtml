@@ -26,7 +26,7 @@
         .ID("grdSI_City")
         .Store(
              X.Store()
-            .ID("stoSI_City")
+            .ID("stoData")
             .PageSize(50)
             .Model(Util.GenerateModel(typeof(SI20500_pgLoadGrid_Result), "mdlSI_City", "City"))
             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSI_City"))).AutoLoad(false)
@@ -40,14 +40,12 @@
         .Listeners(p => p.BoxReady.Handler = "firstLoad();")
         .SortableColumns(false)
         .ColumnModel(
-
          X.RowNumbererColumn()
-
                     , X.Column().Text(Util.GetLang("Country")).DataIndex("Country").Width(150)
                     .Editor(
                         HQ.Combo().ID("cboCountryID").Name("cboCountryID").HQProcedure("SI20500_pcCountryAll")
                         .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID")
-                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .Width(300).HQHeightWidth(500, 400)
                         .AllowBlank(true).ForceSelection(true).HQDBSys(false)                        
                         .LoadData()
                         .Listeners(
@@ -88,7 +86,6 @@
                     {
                         l.Command.Handler = "grdSI_City_Reject(record);";
                     })
-
         )
         .SelectionModel(X.RowSelectionModel().ID("slmSI_City").Mode(SelectionMode.Multi))
         .BottomBar(
@@ -114,7 +111,6 @@
                 ls.ValidateEdit.Fn = "grdSI_City_ValidateEdit";
             })
         )
-
         .Features(
             X.GridFilters()
                 .Local(true)
