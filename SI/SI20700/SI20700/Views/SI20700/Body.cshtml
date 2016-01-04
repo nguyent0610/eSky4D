@@ -49,7 +49,7 @@
                             .Editor(
                                 HQ.Combo().ID("cboCountry").Name("cboCountry").HQProcedure("SI20700_pcLoadCountryAll")
                                 .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID")
-                                .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                                .Width(300).HQHeightWidth(500, 400)
                                 .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                                 .LoadData()
                             ),
@@ -61,7 +61,7 @@
                     .Editor(
                         HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQProcedure("SI20700_pcLoadTerritory")
                         .HQColumnShow("Territory,Descr").DisplayField("Territory").ValueField("Territory")
-                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                        .Width(300).HQHeightWidth(500, 400)
                         .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                         .LoadData()
                     ),
