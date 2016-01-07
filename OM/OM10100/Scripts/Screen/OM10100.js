@@ -1670,6 +1670,7 @@ var report = function () {
 
 //////////////////////////////////
 var checkExitEdit = function (row) {
+    App.stoInvt.clearFilter();
     var key = row.field;
     var det = row.record.data;
     var invt = row.record.invt;
@@ -1771,7 +1772,7 @@ var checkExitEdit = function (row) {
                     det.DiscAmt2 = Math.round((soFee + det.LineQty * det.SlsPrice) * (det.DiscPct / 100));
                     det.LineAmt = Math.round(det.LineQty * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
                 }
-                if (det.InvtID.indexOf('POSM') != -1) {
+                if (!det.POSM) {
                     det.LineAmt = 0;
                     det.DiscPct = 0;
                     det.DiscAmt = 0;
@@ -2007,7 +2008,7 @@ var checkExitEdit = function (row) {
             det.BarCode = invt.BarCode;
         }
 
-        if (det.InvtID.indexOf('POSM') != -1) {
+        if (invt.ClassID == 'POSM' ) {
             det.POSM = 'POSM';
         }
         var site = HQ.store.findInStore(App.stoItemSite, ['SiteID', 'InvtID'], [HQ.objUser.OMSite, det.InvtID]);
@@ -2178,7 +2179,7 @@ var checkSubDisc = function (record) {
             det.DiscAmt = Math.round(det.LineQty * det.SlsPrice * (det.DiscPct / 100));
             det.LineAmt = Math.round(det.LineQty * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
         }
-        if (det.InvtID.indexOf('POSM') != -1) {
+        if (!det.POSM) {
             det.LineAmt = 0;
             det.DiscPct = 0;
             det.DiscAmt = 0;
