@@ -901,7 +901,7 @@ namespace OM10100.Controllers
                         throw new MessageException("233");
                     }
                 }
-                if (_lstOrdDet[i].SlsPrice == 0 && !_lstOrdDet[i].FreeItem)
+                if (_lstOrdDet[i].SlsPrice == 0 && !_lstOrdDet[i].FreeItem && _lstOrdDet[i].POSM.PassNull()==string.Empty)
                 {
                     throw new MessageException("726");
                 }
@@ -3457,7 +3457,7 @@ namespace OM10100.Controllers
                 t.Crtd_Prog = "OM10100";
                 t.Crtd_User = Current.UserName;
             }
-
+            t.POSM = s.POSM.PassNull();
             t.BudgetID1 = Util.PassNull(s.BudgetID1);
             t.BudgetID2 = Util.PassNull(s.BudgetID2);
             t.CostID = Util.PassNull(s.CostID);

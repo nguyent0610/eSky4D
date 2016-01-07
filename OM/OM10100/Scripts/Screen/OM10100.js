@@ -841,7 +841,7 @@ var grdOrdDet_BeforeEdit = function (item, e) {
     var key = e.field;
     var record = e.record;
 
-    if (!Ext.isEmpty(record.data.POSM)) return false;
+    if (!Ext.isEmpty(record.data.POSM) && (key == 'FreeItem' || key == 'DiscPct' || key == 'SlsPrice' || key == 'SlsUnit' || key == 'DiscAmt' || key == 'ManuDiscAmt')) return false;
 
     if (key == 'BOType' && !Ext.isEmpty(record.data.BOType)) return false;
 
@@ -1257,7 +1257,7 @@ var bindAddress = function () {
 }
 
 var save = function () {
-
+    App.stoInvt.clearFilter();
     if ((App.cboOrderNbr.getValue() && !HQ.isUpdate) || (Ext.isEmpty(App.cboOrderNbr.getValue()) && !HQ.isInsert)) {
         HQ.message.show(728, '', '', true);
         return;
@@ -1328,7 +1328,7 @@ var save = function () {
                     return false;
                 }
             }
-            if (item.data.SlsPrice == 0 && !item.data.FreeItem) {
+            if (item.data.SlsPrice == 0 && !item.data.FreeItem && !item.data.POSM) {
                 HQ.message.show(726, '', '', true);
                 flat = item;
                 return false;
@@ -1771,6 +1771,12 @@ var checkExitEdit = function (row) {
                     det.DiscAmt2 = Math.round((soFee + det.LineQty * det.SlsPrice) * (det.DiscPct / 100));
                     det.LineAmt = Math.round(det.LineQty * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
                 }
+                if (det.InvtID.indexOf('POSM') != -1) {
+                    det.LineAmt = 0;
+                    det.DiscPct = 0;
+                    det.DiscAmt = 0;
+                    det.ManuDiscAmt = 0;
+                }
 
             }
         } else if (key == "QtyBO") {
@@ -2001,6 +2007,9 @@ var checkExitEdit = function (row) {
             det.BarCode = invt.BarCode;
         }
 
+        if (det.InvtID.indexOf('POSM') != -1) {
+            det.POSM = 'POSM';
+        }
         var site = HQ.store.findInStore(App.stoItemSite, ['SiteID', 'InvtID'], [HQ.objUser.OMSite, det.InvtID]);
 
         if (!Ext.isEmpty(site)) {
@@ -2012,7 +2021,7 @@ var checkExitEdit = function (row) {
                 site = Ext.create('App.mdlItemSite');
             }
         }
-
+        
         var cnvFact = 0;
         var unitMultDiv = "";
 
@@ -2077,6 +2086,7 @@ var checkExitEdit = function (row) {
 
 
     }
+    
     App.grdOrdDet.view.loadMask.hide();
     App.grdOrdDet.view.loadMask.setDisabled(false)
 }
@@ -2167,6 +2177,12 @@ var checkSubDisc = function (record) {
         else {
             det.DiscAmt = Math.round(det.LineQty * det.SlsPrice * (det.DiscPct / 100));
             det.LineAmt = Math.round(det.LineQty * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
+        }
+        if (det.InvtID.indexOf('POSM') != -1) {
+            det.LineAmt = 0;
+            det.DiscPct = 0;
+            det.DiscAmt = 0;
+            det.ManuDiscAmt = 0;
         }
     }
     App.stoOrdDisc.data.each(function (item) {
