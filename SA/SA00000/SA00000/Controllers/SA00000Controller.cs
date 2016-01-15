@@ -1,4 +1,4 @@
-using HQ.eSkyFramework;
+﻿using HQ.eSkyFramework;
 using Ext.Net;
 using Ext.Net.MVC;
 using System;
@@ -62,10 +62,10 @@ namespace SA00000.Controllers
         {
             try
             {
-                string CpnyID = data["cboCpnyID"];
+                string CpnyID = data["cboCpnyID"].PassNull();
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstSYS_Company"]);
-                ChangeRecords<SYS_Company> lstSYS_Company = dataHandler.BatchObjectData<SYS_Company>();
+                var curHeader = dataHandler.ObjectData<SYS_Company>().FirstOrDefault();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSys_CompanyAddr"]);
                 ChangeRecords<SA00000_pgCompanyAddr_Result> lstSys_CompanyAddr = dataHandler1.BatchObjectData<SA00000_pgCompanyAddr_Result>();
@@ -74,45 +74,46 @@ namespace SA00000.Controllers
                 ChangeRecords<SA00000_pgSubCompany_Result> lstSYS_SubCompany = dataHandler2.BatchObjectData<SA00000_pgSubCompany_Result>();
 
                 #region Save Header Company
-                lstSYS_Company.Created.AddRange(lstSYS_Company.Updated);
-                foreach (SYS_Company curHeader in lstSYS_Company.Created)
+                var header = _db.SYS_Company.FirstOrDefault(p => p.CpnyID == CpnyID);
+                if (header != null)
                 {
-                    if (CpnyID.PassNull() == "") continue;
-
-                    var header = _db.SYS_Company.FirstOrDefault(p => p.CpnyID == CpnyID);
-                    if (header != null)
+                    if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
-                        {
-                            UpdatingHeader(ref header, curHeader);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
+                        UpdatingHeader(ref header, curHeader);
                     }
                     else
                     {
-                        //string images = getPathThenUploadImage(curHeader, UserID);
-                        header = new SYS_Company();
-                        header.CpnyID = CpnyID;
-                        header.Crtd_DateTime = DateTime.Now;
-                        header.Crtd_Prog = _screenNbr;
-                        header.Crtd_User = Current.UserName;
-                        header.tstamp = new byte[0];
-                        UpdatingHeader(ref header, curHeader);
-                        _db.SYS_Company.AddObject(header);
+                        throw new MessageException(MessageType.Message, "19");
                     }
+                }
+                else
+                {
+                    header = new SYS_Company();
+                    header.ResetET();
+                    header.CpnyID = CpnyID;
+                    header.Crtd_DateTime = DateTime.Now;
+                    header.Crtd_Prog = _screenNbr;
+                    header.Crtd_User = Current.UserName;
+                    UpdatingHeader(ref header, curHeader);
+                    _db.SYS_Company.AddObject(header);
                 }
                 #endregion
 
                 #region Save Sys_CompanyAddr
                 foreach (SA00000_pgCompanyAddr_Result deleted in lstSys_CompanyAddr.Deleted)
                 {
-                    var objDelete = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID == CpnyID && p.AddrID == deleted.AddrID);
-                    if (objDelete != null)
+                    if (lstSys_CompanyAddr.Created.Where(p => p.CpnyID.ToLower() == deleted.CpnyID.ToLower()
+                                                            && p.AddrID.ToLower() == deleted.AddrID.ToLower()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        _db.Sys_CompanyAddr.DeleteObject(objDelete);
+                        lstSys_CompanyAddr.Created.Where(p => p.CpnyID.ToLower() == deleted.CpnyID.ToLower()).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var objDelete = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID == CpnyID && p.AddrID == deleted.AddrID);
+                        if (objDelete != null)
+                        {
+                            _db.Sys_CompanyAddr.DeleteObject(objDelete);
+                        }
                     }
                 }
 
@@ -148,10 +149,19 @@ namespace SA00000.Controllers
                 #region Save SYS_SubCompany
                 foreach (SA00000_pgSubCompany_Result deleted in lstSYS_SubCompany.Deleted)
                 {
-                    var del = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID == CpnyID && p.SubCpnyID == deleted.SubCpnyID);
-                    if (del != null)
+                    if (lstSYS_SubCompany.Created.Where(p => p.CpnyID.ToLower() == deleted.CpnyID.ToLower()
+                                                        && p.SubCpnyID.ToLower() == deleted.SubCpnyID.ToLower()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        _db.SYS_SubCompany.DeleteObject(del);
+                        lstSYS_SubCompany.Created.Where(p => p.CpnyID.ToLower() == deleted.CpnyID.ToLower()
+                                                        && p.SubCpnyID.ToLower() == deleted.SubCpnyID.ToLower()).FirstOrDefault().tstamp = deleted.tstamp;
+                    }
+                    else
+                    {
+                        var del = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID == CpnyID && p.SubCpnyID == deleted.SubCpnyID);
+                        if (del != null)
+                        {
+                            _db.SYS_SubCompany.DeleteObject(del);
+                        }
                     }
                 }
 
@@ -186,7 +196,7 @@ namespace SA00000.Controllers
                 #endregion
 
                 _db.SaveChanges();
-                return Json(new { success = true, CpnyID = CpnyID });
+                return Json(new { success = true, CpnyID = CpnyID }, "text/html");
             }
             catch (Exception ex)
             {
@@ -290,7 +300,7 @@ namespace SA00000.Controllers
         {
             try
             {
-                string CpnyID = data["cboCpnyID"];
+                string CpnyID = data["cboCpnyID"].PassNull();
                 var cpny = _db.SYS_Company.FirstOrDefault(p => p.CpnyID == CpnyID);
                 if (cpny != null)
                 {
@@ -310,7 +320,7 @@ namespace SA00000.Controllers
                 }
 
                 _db.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true }, "text/html");
             }
             catch (Exception ex)
             {
