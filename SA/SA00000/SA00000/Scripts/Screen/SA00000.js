@@ -128,14 +128,14 @@ var menuClick = function (command) {
                 }
                 else if (HQ.focus == 'grdSys_CompanyAddr') {
                     if (App.slmSys_CompanyAddr.selected.items[0] != undefined) {
-                        if (App.slmSys_CompanyAddr.selected.items[0].data.CateID != "") {
+                        if (App.slmSys_CompanyAddr.selected.items[0].data.AddrID != "") {
                             HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSys_CompanyAddr)], 'deleteData', true);
                         }
                     }
                 }
                 else if (HQ.focus == 'grdSYS_SubCompany') {
                     if (App.slmSYS_SubCompany.selected.items[0] != undefined) {
-                        if (App.slmSYS_SubCompany.selected.items[0].data.CateID != "") {
+                        if (App.slmSYS_SubCompany.selected.items[0].data.SubCpnyID != "") {
                             HQ.message.show(2015020806, [HQ.grid.indexSelect(App.grdSYS_SubCompany)], 'deleteData', true);
                         }
                     }
@@ -152,9 +152,9 @@ var menuClick = function (command) {
                         save();
                     }
                     else {
-                        HQ.message.show(2015123111, App.cboPONbr.fieldLabel);
-                        App.cboPONbr.focus();
-                        App.cboPONbr.selectText();
+                        HQ.message.show(2015123111, App.cboCpnyID.fieldLabel);
+                        App.cboCpnyID.focus();
+                        App.cboCpnyID.selectText();
                     }
                 }
             }
@@ -299,7 +299,7 @@ var frmChange = function () {
     if (App.stoSYS_Company.getCount() > 0) {
         App.frmMain.getForm().updateRecord();
     }
-    HQ.isChange = HQ.store.isChange(App.stoOM_InvestHeader) == false ? (HQ.store.isChange(App.stoSys_CompanyAddr)
+    HQ.isChange = HQ.store.isChange(App.stoSYS_Company) == false ? (HQ.store.isChange(App.stoSys_CompanyAddr)
                                                             == false ? (HQ.store.isChange(App.stoSYS_SubCompany)):true ): true;
     HQ.common.changeData(HQ.isChange, 'SA00000');
     if (App.cboCpnyID.valueModels == null || HQ.isNew == true) {
