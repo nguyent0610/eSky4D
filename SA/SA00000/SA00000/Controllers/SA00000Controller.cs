@@ -119,17 +119,17 @@ namespace SA00000.Controllers
 
                 lstSys_CompanyAddr.Created.AddRange(lstSys_CompanyAddr.Updated);
 
-                foreach (SA00000_pgCompanyAddr_Result curLang in lstSys_CompanyAddr.Created)
+                foreach (SA00000_pgCompanyAddr_Result curRow in lstSys_CompanyAddr.Created)
                 {
-                    if (curLang.AddrID.PassNull() == "") continue;
+                    if (curRow.AddrID.PassNull() == "") continue;
 
-                    var lang = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.AddrID.ToLower() == curLang.AddrID.ToLower());
+                    var RowDB = _db.Sys_CompanyAddr.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.AddrID.ToLower() == curRow.AddrID.ToLower());
 
-                    if (lang != null)
+                    if (RowDB != null)
                     {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        if (RowDB.tstamp.ToHex() == curRow.tstamp.ToHex())
                         {
-                            UpdatingSys_CompanyAddr(lang, curLang, false);
+                            UpdatingSys_CompanyAddr(RowDB, curRow, false);
                         }
                         else
                         {
@@ -138,10 +138,11 @@ namespace SA00000.Controllers
                     }
                     else
                     {
-                        lang = new Sys_CompanyAddr();
-                        lang.CpnyID = CpnyID;
-                        UpdatingSys_CompanyAddr(lang, curLang, true);
-                        _db.Sys_CompanyAddr.AddObject(lang);
+                        RowDB = new Sys_CompanyAddr();
+                        RowDB.ResetET();
+                        RowDB.CpnyID = CpnyID;
+                        UpdatingSys_CompanyAddr(RowDB, curRow, true);
+                        _db.Sys_CompanyAddr.AddObject(RowDB);
                     }
                 }
                 #endregion
@@ -167,17 +168,17 @@ namespace SA00000.Controllers
 
                 lstSYS_SubCompany.Created.AddRange(lstSYS_SubCompany.Updated);
 
-                foreach (SA00000_pgSubCompany_Result curLang in lstSYS_SubCompany.Created)
+                foreach (SA00000_pgSubCompany_Result curRow in lstSYS_SubCompany.Created)
                 {
-                    if (curLang.SubCpnyID.PassNull() == "") continue;
+                    if (curRow.SubCpnyID.PassNull() == "") continue;
 
-                    var lang = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.SubCpnyID.ToLower() == curLang.SubCpnyID.ToLower());
+                    var RowDB = _db.SYS_SubCompany.FirstOrDefault(p => p.CpnyID.ToLower() == CpnyID.ToLower() && p.SubCpnyID.ToLower() == curRow.SubCpnyID.ToLower());
 
-                    if (lang != null)
+                    if (RowDB != null)
                     {
-                        if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                        if (RowDB.tstamp.ToHex() == curRow.tstamp.ToHex())
                         {
-                            UpdatingSYS_SubCompany(lang, curLang, false);
+                            UpdatingSYS_SubCompany(RowDB, curRow, false);
                         }
                         else
                         {
@@ -186,11 +187,12 @@ namespace SA00000.Controllers
                     }
                     else
                     {
-                        lang = new SYS_SubCompany();
-                        lang.CpnyID = CpnyID;
-                        lang.SubCpnyID = curLang.SubCpnyID;
-                        UpdatingSYS_SubCompany(lang, curLang, true);
-                        _db.SYS_SubCompany.AddObject(lang);
+                        RowDB = new SYS_SubCompany();
+                        RowDB.ResetET();
+                        RowDB.CpnyID = CpnyID;
+                        RowDB.SubCpnyID = curRow.SubCpnyID;
+                        UpdatingSYS_SubCompany(RowDB, curRow, true);
+                        _db.SYS_SubCompany.AddObject(RowDB);
                     }
                 }
                 #endregion
