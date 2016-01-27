@@ -106,7 +106,6 @@ namespace SI20600.Controllers
                 t.Crtd_User = _userName;
             }
             t.Descr = s.Descr;
-
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;
             t.LUpd_User = _userName;
