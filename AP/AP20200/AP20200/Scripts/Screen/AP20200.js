@@ -6,7 +6,7 @@ var _isLoadMaster = false;
 var VendID = '';
 
 ////////////////////////////////////////////////////////////////////////
-//// Store /////////////////////////////////////////////////////////////
+//// Data Source ///////////////////////////////////////////////////////
 var checkLoad = function (sto) {
     _Source += 1;
     if (_Source == _maxSource) {
@@ -16,16 +16,56 @@ var checkLoad = function (sto) {
         HQ.common.showBusy(false);
     }
 };
+//Truoc khi load store se hien Busy
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+var stoLoad = function (sto) {
+    HQ.isNew = false;
+    HQ.common.lockItem(App.frmMain, false);
+    App.cboVendID.forceSelection = true;
+    App.cboBillCity.forceSelection = false;
+    App.cboBillState.forceSelection = false;
+    App.cboCity.forceSelection = false;
+    App.cboState.forceSelection = false;
 
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "VendID");
+        record = sto.getAt(0);
+        record.set('Status', 'A');
+        record.set('TaxDflt', 'A');
+        record.set('MOQType', 'Q');
+        HQ.isNew = true; //record la new 
+        HQ.isFirstLoad = true;
+        App.cboVendID.forceSelection = false;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
+        App.cboVendID.focus(true); //focus ma khi tao moi
+        sto.commitChanges();
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+
+    if (!HQ.isInsert && HQ.isNew) {
+        App.cboVendID.forceSelection = true;
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+        frmChange();
+    }
+};
 ////////////////////////////////////////////////////////////////////////
-//// First Load ////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+
 var firstLoad = function () {
     HQ.util.checkAccessRight(); // Kiem tra quyen Insert Update Delete de disable button tren top bar
     HQ.isFirstLoad = true;
     App.frmMain.isValid(); // Require cac field yeu cau tren from
-
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
-
     App.cboVendID.getStore().addListener('load', checkLoad);
     App.cboCountry.getStore().addListener('load', checkLoad);
     App.cboBillCountry.getStore().addListener('load', checkLoad);
@@ -40,10 +80,6 @@ var firstLoad = function () {
     App.cboMOQType.getStore().addListener('load', checkLoad);
 };
 
-////////////////////////////////////////////////////////////////////////
-//// Event /////////////////////////////////////////////////////////////
-// Load and show binding data to the form
-// Command of the topbar on screen
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -111,50 +147,6 @@ var frmChange = function () {
         App.cboVendID.setReadOnly(false);
     else 
         App.cboVendID.setReadOnly(HQ.isChange);
-};
-
-var stoLoad = function (sto) {
-    HQ.isNew = false;
-    HQ.common.lockItem(App.frmMain, false);
-    App.cboVendID.forceSelection = true;
-    App.cboBillCity.forceSelection = false;
-    App.cboBillState.forceSelection = false;
-    App.cboCity.forceSelection = false;
-    App.cboState.forceSelection = false;
-
-    if (sto.data.length == 0) {
-        HQ.store.insertBlank(sto, "VendID");
-        record = sto.getAt(0);
-        record.set('Status', 'A');
-        record.set('TaxDflt', 'A');
-        record.set('MOQType', 'Q');
-        HQ.isNew = true; //record la new 
-        HQ.isFirstLoad = true;
-        App.cboVendID.forceSelection = false;
-        HQ.common.setRequire(App.frmMain);  //to do cac o la require            
-        App.cboVendID.focus(true); //focus ma khi tao moi
-        sto.commitChanges();
-    }
-    var record = sto.getAt(0);
-    App.frmMain.getForm().loadRecord(record);
-
-    if (!HQ.isInsert && HQ.isNew) {
-        App.cboVendID.forceSelection = true;
-        HQ.common.lockItem(App.frmMain, true);
-    }
-    else if (!HQ.isUpdate && !HQ.isNew) {
-        HQ.common.lockItem(App.frmMain, true);
-    }
-
-    if (_isLoadMaster) {
-        HQ.common.showBusy(false);
-        frmChange();
-    }
-};
-
-//Truoc khi load store se hien Busy
-var stoBeforeLoad = function (sto) {
-    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
 };
 
 var cboVendID_Change = function (sender, value) {
@@ -309,7 +301,6 @@ var save = function () {
         });
     }
 };
-
 // Submit the deleted data into server side
 var deleteData = function (item) {
     if (item == "yes") {
@@ -330,11 +321,7 @@ var deleteData = function (item) {
         }
     }
 };
-
-    
-/////////////////////////////////////////////////////////////////////////
-//// Other Functions ////////////////////////////////////////////////////
-function refresh(item) {
+var refresh= function (item) {
     if (item == 'yes') {
         if (HQ.isNew)
             App.cboVendID.setValue('');
@@ -343,4 +330,7 @@ function refresh(item) {
         App.stoVendor.reload();
     }
 };
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+
 ///////////////////////////////////

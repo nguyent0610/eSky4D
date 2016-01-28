@@ -28,32 +28,29 @@ namespace AP20200.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-
         //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
-
         // Get collection of Vendor for binding data (Ajax)
-        public ActionResult GetAPVendorHeader(string VendID)
+        public ActionResult GetAPVendorHeader(string vendID)
         {
-            var vendor = _db.AP_Vendor.FirstOrDefault(p => p.VendID == VendID);
+            var vendor = _db.AP_Vendor.FirstOrDefault(p => p.VendID == vendID);
             return this.Store(vendor);
         }
-
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
             try
             {
-                string VendID = data["cboVendID"].PassNull();
+                string vendID = data["cboVendID"].PassNull();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstVendor"]);
                 var curHeader = dataHandler1.ObjectData<AP_Vendor>().FirstOrDefault();
 
                 #region Save AP_Vendor
-                var header = _db.AP_Vendor.FirstOrDefault(p => p.VendID == VendID);
+                var header = _db.AP_Vendor.FirstOrDefault(p => p.VendID == vendID);
                 if (header != null)
                 {
                     if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
@@ -69,7 +66,7 @@ namespace AP20200.Controllers
                 {
                     header = new AP_Vendor();
                     header.ResetET();
-                    header.VendID = VendID;
+                    header.VendID = vendID;
                     header.Crtd_DateTime = DateTime.Now;
                     header.Crtd_Prog = _screenNbr;
                     header.Crtd_User = Current.UserName;
@@ -79,7 +76,7 @@ namespace AP20200.Controllers
                 #endregion
 
                 _db.SaveChanges();
-                return Json(new { success = true , VendID = VendID }, "text/html");
+                return Json(new { success = true , VendID = vendID }, "text/html");
             }
             catch (Exception ex)
             {
@@ -87,12 +84,12 @@ namespace AP20200.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-
         [HttpPost]
         public ActionResult DeleteAll(FormCollection data)
         {
             try
             {
+             
                 string VendID = data["cboVendID"].PassNull();
 
                 var obj = _db.AP_Vendor.FirstOrDefault(p => p.VendID == VendID);
@@ -110,7 +107,6 @@ namespace AP20200.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-
         private void UpdatingHeader(ref AP_Vendor t, AP_Vendor s)
         {
             t.Addr1 = s.Addr1;
