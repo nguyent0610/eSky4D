@@ -13,7 +13,7 @@ namespace AR20500
         public static int WeeksInYear(DateTime date)
         {
             GregorianCalendar cal = new GregorianCalendar(GregorianCalendarTypes.Localized);
-            return cal.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+            return cal.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
         }
         public static Model GenerateModel(this Type type,string modelName,string key)
         {
