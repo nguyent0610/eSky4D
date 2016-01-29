@@ -38,16 +38,16 @@ namespace SA00300
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";
-            Current.DBSys = "eSky4DSys";
+            Current.Server = "EARTHSVR\\SQL2012";
+            Current.DBSys = "JJVN_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["SA00300"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "JJVN_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "LCUS-HCM-0004";
+            Session["CpnyID"] = Current.CpnyID = "JNJ";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
         }

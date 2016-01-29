@@ -99,8 +99,8 @@ namespace SA00300.Controllers
                     string strID = "";
                     while (b)
                     {
-                        strID = (DateTime.Now.ToString("yyyyMMddhhmmssff") + data["FirstName"]).GetHashCode().ToString().ToHex() + "000000000";
-                        strID = strID.Substring(0, 6);
+                        strID = (DateTime.Now.ToString("yyyyMMddhhmmssff") + data["FirstName"]).GetHashCode().ToString().ToHex() + "000000";
+                        strID = strID.Substring(1, 6);
                         UserID = strID;
                         var obj = (from p in _db.Users select p).Where(p => p.UserName.ToUpper().Trim() == UserID.ToUpper().Trim()).FirstOrDefault();
                         if (obj == null) b = false;
