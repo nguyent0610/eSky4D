@@ -26,7 +26,7 @@ namespace OM21500.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+       // [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -42,7 +42,6 @@ namespace OM21500.Controllers
         {
             try
             {
-
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstOM_DiscDescr"]);
                 ChangeRecords<OM21500_pgLoadGrid_Result> lstLang = dataHandler.BatchObjectData<OM21500_pgLoadGrid_Result>();
                 foreach (OM21500_pgLoadGrid_Result deleted in lstLang.Deleted)
@@ -83,12 +82,12 @@ namespace OM21500.Controllers
 
                 _db.SaveChanges();
 
-                return Json(new { success = true });
+                return Json(new { success = true }, "text/html");
             }
             catch (Exception ex)
             {
                 if (ex is MessageException) return (ex as MessageException).ToMessage();
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() }, "text/html");
             }
         }
         private void Update_Language(OM_DiscDescr t, OM21500_pgLoadGrid_Result s, bool isNew)
