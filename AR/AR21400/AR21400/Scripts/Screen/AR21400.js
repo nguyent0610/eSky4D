@@ -1,1 +1,145 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('n a=["\\1i\\o\\i\\b","\\q\\j\\i\\y\\b\\l\\l\\g\\m\\q\\I\\j\\o\\i\\B\\h\\d\\e","\\M\\g\\j\\e\\d","\\q\\j\\g\\i","\\L\\j\\b\\K","\\m\\b\\1j\\d","\\l\\f\\e\\d","\\g\\e\\1i\\s\\f\\m\\q\\b","","\\j\\b\\M\\j\\b\\e\\s","\\e\\s\\o\\N","\\v\\b\\e\\e\\f\\q\\b","\\g\\e\\1u\\g\\j\\e\\d\\1g\\o\\f\\i","\\j\\b\\l\\o\\f\\i","\\e\\d\\o\\y\\b\\l\\l\\g\\m\\q\\I\\j\\o\\i\\B\\h\\d\\e","\\g\\e\\1d\\m\\e\\b\\j\\d","\\g\\m\\e\\b\\j\\d","\\m\\b\\N","\\g\\d\\b\\v\\e","\\e\\b\\l\\b\\h\\d\\b\\i","\\e\\l\\v\\y\\b\\l\\l\\g\\m\\q\\I\\j\\o\\i\\B\\h\\d\\e","\\g\\m\\i\\b\\1j\\y\\b\\l\\b\\h\\d","\\i\\b\\l\\b\\d\\b\\G\\f\\d\\f","\\i\\b\\l\\b\\d\\b","\\g\\e\\1G\\L\\i\\f\\d\\b","\\g\\e\\G\\b\\l\\b\\d\\b","\\h\\s\\b\\h\\E\\J\\b\\1z\\B\\g\\j\\b\\I\\f\\e\\e","\\e\\d\\o\\j\\b","\\e\\f\\K\\b","\\L\\j\\g\\m\\d","\\h\\l\\o\\e\\b","\\h\\o\\v\\v\\o\\m","\\1n\\J\\1o\\1p\\1r\\H\\H","\\h\\s\\f\\m\\q\\b\\G\\f\\d\\f","\\e\\s\\o\\N\\Q\\B\\e\\S","\\g\\m\\e\\b\\j\\d\\Q\\l\\f\\m\\E","\\l\\o\\f\\i\\g\\m\\q\\i\\f\\d\\f","\\q\\b\\d\\1g\\f\\m\\q","\\h\\s\\b\\h\\E\\Q\\b\\M\\o\\j\\b\\1l\\i\\g\\d","\\h\\s\\b\\h\\E\\1d\\m\\e\\b\\j\\d\\1D\\b\\S","\\h\\s\\b\\h\\E\\1f\\f\\l\\g\\i\\f\\d\\b\\1l\\i\\g\\d","\\h\\s\\b\\h\\E\\J\\b\\1A\\b\\h\\d","\\g\\e\\1f\\f\\l\\g\\i","\\M\\j\\v\\1B\\f\\g\\m","\\y\\f\\K\\g\\m\\q\\G\\f\\d\\f","\\1n\\J\\1o\\1p\\1r\\H\\H\\1C\\y\\f\\K\\b","\\q\\b\\d\\G\\f\\d\\f","\\L\\j\\o\\h\\b\\e\\e","\\e\\B\\1E\\v\\g\\d","\\S\\b\\e","\\i\\b\\l\\b\\d\\b\\y\\b\\l\\b\\h\\d\\b\\i"];n x=[a[0]];n X=[a[0]];n W=[a[0]];n 1h=p(1a){1y(1a){u a[2]:c[a[3]][a[2]](k[a[1]]);t;u a[4]:c[a[3]][a[4]](k[a[1]]);t;u a[5]:c[a[3]][a[5]](k[a[1]]);t;u a[6]:c[a[3]][a[6]](k[a[1]]);t;u a[9]:r(c[a[7]]){c[a[11]][a[10]](1w,a[8],a[9])}1v{c[a[7]]=F;c[a[12]]=w;k[a[14]][a[13]]()};t;u a[17]:r(c[a[15]]){c[a[3]][a[16]](k[a[1]],x)};t;u a[23]:r(k[a[20]][a[19]][a[18]][0]!=1t){n T=c[a[3]][a[21]](k[a[1]]);r(T!=a[8]){c[a[11]][a[10]](1H,[c[a[3]][a[21]](k[a[1]]),a[8]],a[22],w)}};t;u a[28]:r(c[a[24]]||c[a[15]]||c[a[25]]){r(c[a[27]][a[26]](k[a[14]],x,X,W)){1q()}};t;u a[29]:t;u a[V]:c[a[z]][a[V]](2j);t}};n 2k=p(){c[a[12]]=w;k[a[14]][a[13]]()};n R=p(C){c[a[7]]=c[a[27]][a[7]](C);c[a[z]][a[U]](c[a[7]],a[Y])};n 2l=p(C){c[a[12]]=w;c[a[z]][a[1b]](F);c[a[7]]=c[a[27]][a[7]](C);c[a[z]][a[U]](c[a[7]],a[Y]);r(c[a[12]]){r(c[a[15]]){c[a[27]][a[2g]](C,x)};c[a[12]]=F}};n 1P=p(C){c[a[z]][a[1b]](w,c[a[z]][a[1e]](a[2h]))};n 1Q=p(1R,A){1c c[a[3]][a[1S]](A,x)};n 1O=p(D,A){c[a[3]][a[1N]](k[a[1]],A,x)};n 1J=p(D,A){1c c[a[3]][a[1I]](k[a[1]],A,x)};n 1K=p(1m){c[a[3]][a[1L]](1m,k[a[1]]);R(k[a[14]])};n 1q=p(){r(k[a[1k]][a[1M]]()){k[a[1k]][a[1T]]({1U:2c,2d:c[a[z]][a[1e]](a[2e]),2f:a[2b],2a:{1W:c[a[27]][a[1V]](k[a[14]])},1X:p(P,O){c[a[11]][a[10]](1Y);c[a[7]]=F;1h(a[9])},1Z:p(P,O){c[a[11]][a[2i]](P,O,w)}})}};n 1s=p(D){r(D==a[Z]){k[a[1]][a[1x]]();R(k[a[14]])}};p 1F(D){r(D==a[Z]){c[a[7]]=F;c[a[12]]=w;k[a[14]][a[13]]()}}', 62, 146, '||||||||||_0xc54d|x65|HQ|x74|x73|x61|x69|x63|x64|x72|App|x6C|x6E|var|x6F|function|x67|if|x68|break|case|x6D|true|keys|x53|31|_0x659axe|x75|_0x659ax9|_0x659ax10|x6B|false|x44|x30|x50|x52|x76|x70|x66|x77|_0x659ax16|_0x659ax15|x42|stoChanged|x79|_0x659ax6|33|30|fieldsLangCheckRequire|fieldsCheckRequire|32|49|||||||||||_0x659ax5|34|return|x49|37|x56|x4C|menuClick|x43|x78|43|x45|_0x659ax13|x41|x32|x31|save|x34|deleteData|undefined|x46|else|20150303|50|switch|x71|x6A|x4D|x2F|x4B|x62|refresh|x55|2015020807|40|grdSellingProducts_ValidateEdit|grdSellingProducts_Reject|41|42|39|grdSellingProducts_Edit|stoBeforeLoad|grdSellingProducts_BeforeEdit|_0x659axd|38|48|timeout|46|lstAR_SellingProducts|success|201405071|failure|||||||||||params|45|1800000|waitMsg|44|url|35|36|47|this|firstLoad|stoLoad'.split('|'), 0, {}))
+﻿//// Declare //////////////////////////////////////////////////////////
+var keys = ['Code'];
+var fieldsCheckRequire = ["Code"];
+var fieldsLangCheckRequire = ["Code"];
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdSellingProducts);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdSellingProducts);
+            break;
+        case "next":
+            HQ.grid.next(App.grdSellingProducts);
+            break;
+        case "last":
+            HQ.grid.last(App.grdSellingProducts);
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                HQ.isChange = false;
+                HQ.isFirstLoad = true;
+                App.stoSellingProducts.reload();
+            }
+            break;
+        case "new":
+            if (HQ.isInsert) {
+                HQ.grid.insert(App.grdSellingProducts, keys);
+            }
+            break;
+        case "delete":
+            if (App.slmSellingProducts.selected.items[0] != undefined) {
+                var rowindex = HQ.grid.indexSelect(App.grdSellingProducts);
+                if (rowindex != '')
+                    HQ.message.show(2015020807, [HQ.grid.indexSelect(App.grdSellingProducts), ''], 'deleteData', true)
+            }
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.store.checkRequirePass(App.stoSellingProducts, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                    save();
+                }
+            }
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+
+};
+
+//load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
+var firstLoad = function () {
+    HQ.isFirstLoad = true;
+    App.stoSellingProducts.reload();
+};
+
+//khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
+var stoChanged = function (sto) {
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'AR21400');
+};
+
+//load lai trang, kiem tra neu la load lan dau thi them dong moi vao
+var stoLoad = function (sto) {
+    HQ.isFirstLoad = true;
+    HQ.common.showBusy(false);
+    HQ.isChange = HQ.store.isChange(sto);
+    HQ.common.changeData(HQ.isChange, 'AR21400');
+    if (HQ.isFirstLoad) {
+        if (HQ.isInsert) {
+            HQ.store.insertBlank(sto, keys);
+        }
+        HQ.isFirstLoad = false;
+    }
+};
+
+//trước khi load trang busy la dang load data
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingdata'));
+};
+
+var grdSellingProducts_BeforeEdit = function (editor, e) {
+    return HQ.grid.checkBeforeEdit(e, keys);
+};
+
+var grdSellingProducts_Edit = function (item, e) {
+    HQ.grid.checkInsertKey(App.grdSellingProducts, e, keys);
+};
+
+var grdSellingProducts_ValidateEdit = function (item, e) {
+    return HQ.grid.checkValidateEdit(App.grdSellingProducts, e, keys);
+};
+
+var grdSellingProducts_Reject = function (record) {
+    HQ.grid.checkReject(record, App.grdSellingProducts);
+    stoChanged(App.stoSellingProducts);
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+var save = function () {
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            timeout: 1800000,
+            waitMsg: HQ.common.getLang("SavingData"),
+            url: 'AR21400/Save',
+            params: {
+                lstAR_SellingProducts: HQ.store.getData(App.stoSellingProducts)
+            },
+            success: function (msg, data) {
+                HQ.message.show(201405071);
+                HQ.isChange = false;
+                menuClick("refresh");
+            },
+            failure: function (msg, data) {
+                HQ.message.process(msg, data, true);
+            }
+        });
+    }
+};
+
+var deleteData = function (item) {
+    if (item == "yes") {
+        App.grdSellingProducts.deleteSelected();
+        stoChanged(App.stoSellingProducts);
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        HQ.isFirstLoad = true;
+        App.stoSellingProducts.reload();
+    }
+};
+///////////////////////////////////
