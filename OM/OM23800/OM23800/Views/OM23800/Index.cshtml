@@ -132,6 +132,7 @@
                 ps.Add(new StoreParameter("amtTo", "App.numAmtTo.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("brand", "App.cboBrand.getValue()", ParameterMode.Raw));
                 ps.Add(new StoreParameter("markFor", "App.cboMarkFor.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("pJPID", "App.cboPJPIDMCL.getValue()", ParameterMode.Raw));
             })
             .Listeners(l => {
                 l.BeforeLoad.Handler = "App.frmMain.getEl().mask(HQ.common.getLang('Loading'), 'x-mask-loading');";

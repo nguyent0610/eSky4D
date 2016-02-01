@@ -48,7 +48,10 @@ X.Window().ID("winMcpInfo")
 
                     , HQ.TextBox().ID("txtDistributorMcpInfo")
                     .HQLangCode("Distributor").ReadOnly(true).DataIndex("Distributor")
-                            
+                          
+                     , HQ.TextBox().ID("txtPJPMcpInfo")
+                    .HQLangCode("PJPID").ReadOnly(true).DataIndex("PJPID")
+                      
                     , HQ.Checkbox().ID("chkCustStatusMcpInfo")
                     .HQLangCode("Active").FieldLabel(Util.GetLang("Status"))
                     .Handler("McpInfo.chkCustStatusMcpInfo_change")
@@ -64,6 +67,7 @@ X.Window().ID("winMcpInfo")
                     ,X.TextArea().ID("txtAddressMcpInfo")
                     .FieldLabel(Util.GetLang("Address"))
                     .Height(50).ReadOnly(true).DataIndex("Addr1")
+                     
                 )
             ) // fdsHeaderMcp
         )

@@ -110,7 +110,7 @@ namespace OM23800.Controllers
             return PartialView();
         }
 
-        public ActionResult LoadMCP(string channel, string territory,
+        public ActionResult LoadMCP(string pJPID, string channel, string territory,
             string province, string distributor, string shopType,
             string slsperId, string daysOfWeek, string weekOfVisit,
             bool hightLight, string colorFor="",
@@ -118,7 +118,7 @@ namespace OM23800.Controllers
         {
             _db.CommandTimeout = 3600;
 
-            var planVisits = _db.OM23800_pgMCL(Current.CpnyID, Current.UserName,
+            var planVisits = _db.OM23800_pgMCL(pJPID,Current.CpnyID, Current.UserName,
                 channel, territory, province, distributor,
                 shopType, slsperId, daysOfWeek, weekOfVisit,
                 amtFrom, amtTo, brand).ToList();
@@ -386,19 +386,19 @@ namespace OM23800.Controllers
             }
         }
 
-        public ActionResult LoadSalesRouteMaster(string branchID, string custID, string slsPerID)
+        public ActionResult LoadSalesRouteMaster(string branchID, string custID, string slsPerID, string pJPID)
         {
             var slsRouteMster = _db.OM_SalesRouteMaster.FirstOrDefault(
                                     x => x.BranchID == branchID
                                     && x.CustID == custID
                                     && x.SlsPerID == slsPerID
                                     && x.SalesRouteID == branchID
-                                    && x.PJPID == branchID);
+                                    && x.PJPID == pJPID);
             return this.Store(slsRouteMster);
         }
 
-        public ActionResult SaveMcp(FormCollection data, 
-            bool custActive, string custID, string slsperID, string branchID)
+        public ActionResult SaveMcp(FormCollection data,
+            bool custActive, string custID, string slsperID, string branchID, string pJPID)
         {
             try
             {
@@ -428,7 +428,7 @@ namespace OM23800.Controllers
 
                             foreach (var deleted in lstMcpInfo.Deleted)
                             {
-                                var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == branchID
+                                var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
                                     && x.SalesRouteID == branchID
                                     && x.BranchID == branchID
                                     && x.SlsPerID == slsperID
@@ -468,7 +468,7 @@ namespace OM23800.Controllers
 
                             foreach (var updated in lstMcpInfo.Updated)
                             {
-                                var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == branchID
+                                var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
                                     && x.SalesRouteID == branchID
                                     && x.BranchID == branchID
                                     && x.SlsPerID == slsperID
@@ -528,7 +528,7 @@ namespace OM23800.Controllers
 
                             foreach (var created in lstMcpInfo.Created)
                             {
-                                var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == branchID
+                                var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
                                     && x.SalesRouteID == branchID
                                     && x.BranchID == branchID
                                     && x.SlsPerID == slsperID
@@ -539,7 +539,7 @@ namespace OM23800.Controllers
                                     // insert moi
                                     var newObj = new OM_SalesRouteMaster()
                                     {
-                                        PJPID = branchID,
+                                        PJPID = pJPID,
                                         SalesRouteID = branchID,
                                         CustID = custID,
                                         SlsPerID = slsperID,
@@ -629,25 +629,26 @@ namespace OM23800.Controllers
                 string branchID = string.Empty;
                 string custID = string.Empty;
                 string slsperID = string.Empty;
-
+                string pJPID = string.Empty;
                 for (int i = 0; i < lstMcpCusts.Count; i ++ )
                 {
                     branchID = lstMcpCusts[i].BranchID;
                     custID = lstMcpCusts[i].CustId;
                     slsperID = lstMcpCusts[i].SlsperId;
+                    pJPID = lstMcpCusts[i].PJPID;
 
                     OM_SalesRouteMasterImport objImport = new OM_SalesRouteMasterImport();
 
                     if (_db.OM_SalesRouteMasterImport.Where(p => p.ID == id
                                                                     && p.BranchID == branchID
-                                                                        && p.PJPID == branchID
+                                                                        && p.PJPID == pJPID
                                                                         && p.SalesRouteID == routeID
                                                                         && p.CustID == custID
                                                                         && p.SlsPerID == slsperID).ToList().Count == 0)
                     {
                         objImport.ID = id;
                         objImport.BranchID = branchID;
-                        objImport.PJPID = branchID;
+                        objImport.PJPID = pJPID;
                         objImport.SalesRouteID = routeID;
                         objImport.CustID = custID;
                         objImport.SlsPerID = slsperID;
@@ -829,7 +830,7 @@ namespace OM23800.Controllers
         }
 
         [DirectMethod]
-        public ActionResult ExportSelectedCust(string custIDs, string pBranchID, string pBranchName)
+        public ActionResult ExportSelectedCust(string custIDs, string pBranchID, string pBranchName, string pJPID)
         {
             try
             {
@@ -838,8 +839,7 @@ namespace OM23800.Controllers
                 if (paraStringsD.Length > 0)
                 {
                     //string branchID = data["BranchID"].PassNull();
-                    string branchID = pBranchID;
-                    string pjp = pBranchID;
+                    string branchID = pBranchID;                  
                     string branchName = pBranchName;
                     string routeID = string.Empty;
                     string slsperID = string.Empty;
@@ -857,7 +857,7 @@ namespace OM23800.Controllers
                     #region master data
                     ParamCollection pc = new ParamCollection();
                     pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
-                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pJPID), ParameterDirection.Input, 30));
                     pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
                     pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
 
@@ -867,7 +867,7 @@ namespace OM23800.Controllers
 
                     pc = new ParamCollection();
                     pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
-                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pJPID), ParameterDirection.Input, 30));
                     pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
                     pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
 
@@ -877,7 +877,7 @@ namespace OM23800.Controllers
 
                     pc = new ParamCollection();
                     pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
-                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pJPID), ParameterDirection.Input, 30));
                     pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
                     pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
 
@@ -1128,7 +1128,7 @@ namespace OM23800.Controllers
                     #region export data
                     pc = new ParamCollection();
                     pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
-                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                    pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pJPID), ParameterDirection.Input, 30));
                     pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
                     pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
                     pc.Add(new ParamStruct("@SelectedCusts", DbType.String, clsCommon.GetValueDBNull(string.Join(",",paraStringsD)), ParameterDirection.Input, int.MaxValue));
@@ -1373,7 +1373,7 @@ namespace OM23800.Controllers
 
                 //string branchID = data["BranchID"].PassNull();
                 string branchID = data["BranchID"].PassNull();
-                string pjp = data["BranchID"].PassNull();
+                string pJPID = data["PJPID"].PassNull();
                 string branchName = data["BranchName"].PassNull();
                 string routeID = data["RouteID"].PassNull();
                 string slsperID = data["SlsperID"].PassNull();
@@ -1391,7 +1391,7 @@ namespace OM23800.Controllers
                 #region master data
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
-                pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pJPID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
 
@@ -1401,7 +1401,7 @@ namespace OM23800.Controllers
 
                 pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
-                pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pJPID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
 
@@ -1411,7 +1411,7 @@ namespace OM23800.Controllers
 
                 pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
-                pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pJPID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
 
@@ -1432,7 +1432,7 @@ namespace OM23800.Controllers
                 #region header info
                 // Title header
                 SetCellValue(SheetMCP.Cells["B1"],
-                    string.Format("{0} {1}", Util.GetLang("OM23800EHeaderMCP") + "(" + pjp + ")", (string.IsNullOrWhiteSpace(branchID) ? string.Format("({0})", branchID) : string.Empty)),
+                    string.Format("{0} {1}", Util.GetLang("OM23800EHeaderMCP") + "(" + pJPID + ")", (string.IsNullOrWhiteSpace(branchID) ? string.Format("({0})", branchID) : string.Empty)),
                     TextAlignmentType.Center, TextAlignmentType.Center, true, 16, true);
                 SheetMCP.Cells.Merge(0, 1, 1, 6);
 
@@ -1442,6 +1442,8 @@ namespace OM23800.Controllers
                 SetCellValue(SheetMCP.Cells["C2"], branchID, TextAlignmentType.Center, TextAlignmentType.Left, false, 10, true);
                 SetCellValue(SheetMCP.Cells["C3"], branchName, TextAlignmentType.Center, TextAlignmentType.Left, false, 10, true);
 
+                SetCellValue(SheetMCP.Cells["D2"], Util.GetLang("PJPID"), TextAlignmentType.Center, TextAlignmentType.Right, true, 10, true);
+                SetCellValue(SheetMCP.Cells["E2"], pJPID, TextAlignmentType.Center, TextAlignmentType.Left, false, 10, true);
                 // Header text columns
                 // before of Route column
                 var beforeColTexts = new string[] { "N0", "CustID", "CustName", "Address", "SlsperID", "SlsName", "StartDate", "EndDate", "SlsFreq", "WeekofVisit" };
@@ -1663,7 +1665,7 @@ namespace OM23800.Controllers
                 #region export data
                 pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
-                pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@PJPID", DbType.String, clsCommon.GetValueDBNull(pJPID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@RouteID", DbType.String, clsCommon.GetValueDBNull(routeID), ParameterDirection.Input, 30));
                 pc.Add(new ParamStruct("@SlsperID", DbType.String, clsCommon.GetValueDBNull(slsperID), ParameterDirection.Input, 30));
 
@@ -1761,7 +1763,7 @@ namespace OM23800.Controllers
                 string routeID = data["cboRouteID_ImExMcp"].PassNull();
 
                  //string slsPerID = data["slsPer"].PassNull();
-                string PJP = BranchID;
+                string pJPID = data["cboPJPID_ImExMcp"].PassNull(); //BranchID;
                 var date = DateTime.Now.Date;
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("fupImport_ImExMcp");
                 HttpPostedFile file = fileUploadField.PostedFile;
@@ -1789,7 +1791,7 @@ namespace OM23800.Controllers
                         Worksheet workSheet = workbook.Worksheets[0];
 
                         string strEBanchID = workSheet.Cells[1, 2].StringValue;//dataArray.GetValue(2, 3).PassNull();// w1.Rows[1].Cells[2).PassNull();
-                        string strEPJP = workSheet.Cells[1, 2].StringValue;// dataArray.GetValue(2, 3).PassNull();
+                        string strEPJP = workSheet.Cells[1, 4].StringValue;// dataArray.GetValue(2, 3).PassNull();
                         string strERouteID = "";
                         string strECustID = "";
                         string strESlsperID = "";
@@ -1801,15 +1803,15 @@ namespace OM23800.Controllers
                         DateTime startDate = DateTime.Now;
                         DateTime endDate = DateTime.Now;
                        
-                        if (strEPJP.ToUpper().Trim() != PJP.ToUpper().Trim() || BranchID != strEBanchID.ToUpper().Trim())
+                        if (strEPJP.ToUpper().Trim() != pJPID.ToUpper().Trim() || BranchID != strEBanchID.ToUpper().Trim())
                         {
-                            throw new MessageException(MessageType.Message, "201401221", "", new string[] { strEPJP, strEBanchID, PJP, BranchID });
+                            throw new MessageException(MessageType.Message, "201401221", "", new string[] { strEPJP, strEBanchID, pJPID, BranchID });
                         }
-                        var objPJP = _db.OM_PJP.Where(p => p.PJPID == PJP).FirstOrDefault();
+                        var objPJP = _db.OM_PJP.Where(p => p.PJPID == pJPID).FirstOrDefault();
                         if (objPJP == null)
                         {
                             objPJP = new OM_PJP();
-                            objPJP.PJPID = PJP;
+                            objPJP.PJPID = pJPID;
                             objPJP.BranchID = BranchID;
                             objPJP.Descr = "Kế hoạch viếng thăm " + BranchID;
                             objPJP.LUpd_DateTime = DateTime.Today;
@@ -1926,14 +1928,14 @@ namespace OM23800.Controllers
                                 lstCustomer += strECustID + ";";
                                 if (_db.OM_SalesRouteMasterImport.Where(p => p.ID == id
                                                                                     && p.BranchID == BranchID
-                                                                                     && p.PJPID == BranchID
+                                                                                     && p.PJPID == pJPID
                                                                                       && p.SalesRouteID == strERouteID
                                                                                       && p.CustID == strECustID
                                                                                        && p.SlsPerID == strESlsperID).ToList().Count == 0)
                                 {
                                     objImport.ID = id;
                                     objImport.BranchID = BranchID;
-                                    objImport.PJPID = BranchID;
+                                    objImport.PJPID = pJPID;
                                     objImport.SalesRouteID = strERouteID;
                                     objImport.CustID = strECustID;
                                     objImport.SlsPerID = strESlsperID;

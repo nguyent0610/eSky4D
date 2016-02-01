@@ -297,6 +297,7 @@
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="OM23800_pgMCL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PJPID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="Channel" Type="varchar(max)" Mode="In" />
@@ -325,21 +326,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="OM23800Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
         <EntityContainer Name="OM23800Entities" p1:LazyLoadingEnabled="true">
-          <FunctionImport Name="OM23800_pgMCL" ReturnType="Collection(OM23800Model.OM23800_pgMCL_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="UserID" Mode="In" Type="String" />
-            <Parameter Name="Channel" Mode="In" Type="String" />
-            <Parameter Name="Territory" Mode="In" Type="String" />
-            <Parameter Name="Province" Mode="In" Type="String" />
-            <Parameter Name="Distributor" Mode="In" Type="String" />
-            <Parameter Name="ShopType" Mode="In" Type="String" />
-            <Parameter Name="SlsperId" Mode="In" Type="String" />
-            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
-            <Parameter Name="WeekEO" Mode="In" Type="String" />
-            <Parameter Name="AmtFrom" Mode="In" Type="Double" />
-            <Parameter Name="AmtTo" Mode="In" Type="Double" />
-            <Parameter Name="BrandID" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="OM_SalesRouteMaster" EntityType="OM23800Model.OM_SalesRouteMaster" />
           <EntitySet Name="AR_Customer" EntityType="OM23800Model.AR_Customer" />
           <EntitySet Name="OM_PJP" EntityType="OM23800Model.OM_PJP" />
@@ -364,31 +350,23 @@
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
           <EntitySet Name="AR_CustomerLocation" EntityType="OM23800Model.AR_CustomerLocation" />
+          <FunctionImport Name="OM23800_pgMCL" ReturnType="Collection(OM23800Model.OM23800_pgMCL_Result)">
+            <Parameter Name="PJPID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="Channel" Mode="In" Type="String" />
+            <Parameter Name="Territory" Mode="In" Type="String" />
+            <Parameter Name="Province" Mode="In" Type="String" />
+            <Parameter Name="Distributor" Mode="In" Type="String" />
+            <Parameter Name="ShopType" Mode="In" Type="String" />
+            <Parameter Name="SlsperId" Mode="In" Type="String" />
+            <Parameter Name="DaysOfWeek" Mode="In" Type="String" />
+            <Parameter Name="WeekEO" Mode="In" Type="String" />
+            <Parameter Name="AmtFrom" Mode="In" Type="Double" />
+            <Parameter Name="AmtTo" Mode="In" Type="Double" />
+            <Parameter Name="BrandID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
-        <ComplexType Name="OM23800_pgMCL_Result">
-          <Property Type="String" Name="CustId" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="CustName" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="300" />
-          <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="BranchID" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="Distributor" Nullable="true" MaxLength="100" />
-          <Property Type="Double" Name="Lat" Nullable="true" />
-          <Property Type="Double" Name="Lng" Nullable="true" />
-          <Property Type="String" Name="Color" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="SlsFreq" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="WeekofVisit" Nullable="true" MaxLength="10" />
-          <Property Type="Int16" Name="VisitSort" Nullable="true" />
-          <Property Type="Boolean" Name="Sun" Nullable="true" />
-          <Property Type="Boolean" Name="Mon" Nullable="true" />
-          <Property Type="Boolean" Name="Tue" Nullable="true" />
-          <Property Type="Boolean" Name="Wed" Nullable="true" />
-          <Property Type="Boolean" Name="Thu" Nullable="true" />
-          <Property Type="Boolean" Name="Fri" Nullable="true" />
-          <Property Type="Boolean" Name="Sat" Nullable="true" />
-          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
-          <Property Type="String" Name="ClassID" Nullable="true" MaxLength="6" />
-        </ComplexType>
         <EntityType Name="OM_SalesRouteMaster">
           <Key>
             <PropertyRef Name="PJPID" />
@@ -667,40 +645,37 @@
           <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="OM23800_pgMCL_Result">
+          <Property Type="String" Name="PJPID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustId" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Addr1" Nullable="true" MaxLength="300" />
+          <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="BranchID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Distributor" Nullable="true" MaxLength="100" />
+          <Property Type="Double" Name="Lat" Nullable="true" />
+          <Property Type="Double" Name="Lng" Nullable="true" />
+          <Property Type="String" Name="Color" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SlsFreq" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="WeekofVisit" Nullable="true" MaxLength="10" />
+          <Property Type="Int16" Name="VisitSort" Nullable="true" />
+          <Property Type="Boolean" Name="Sun" Nullable="true" />
+          <Property Type="Boolean" Name="Mon" Nullable="true" />
+          <Property Type="Boolean" Name="Tue" Nullable="true" />
+          <Property Type="Boolean" Name="Wed" Nullable="true" />
+          <Property Type="Boolean" Name="Thu" Nullable="true" />
+          <Property Type="Boolean" Name="Fri" Nullable="true" />
+          <Property Type="Boolean" Name="Sat" Nullable="true" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="ClassID" Nullable="true" MaxLength="6" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebAppModelStoreContainer" CdmEntityContainer="OM23800Entities">
-          <FunctionImportMapping FunctionImportName="OM23800_pgMCL" FunctionName="eBiz4DWebAppModel.Store.OM23800_pgMCL">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM23800Model.OM23800_pgMCL_Result">
-                <ScalarProperty Name="CustId" ColumnName="CustId" />
-                <ScalarProperty Name="CustName" ColumnName="CustName" />
-                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
-                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="Distributor" ColumnName="Distributor" />
-                <ScalarProperty Name="Lat" ColumnName="Lat" />
-                <ScalarProperty Name="Lng" ColumnName="Lng" />
-                <ScalarProperty Name="Color" ColumnName="Color" />
-                <ScalarProperty Name="SlsFreq" ColumnName="SlsFreq" />
-                <ScalarProperty Name="WeekofVisit" ColumnName="WeekofVisit" />
-                <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
-                <ScalarProperty Name="Sun" ColumnName="Sun" />
-                <ScalarProperty Name="Mon" ColumnName="Mon" />
-                <ScalarProperty Name="Tue" ColumnName="Tue" />
-                <ScalarProperty Name="Wed" ColumnName="Wed" />
-                <ScalarProperty Name="Thu" ColumnName="Thu" />
-                <ScalarProperty Name="Fri" ColumnName="Fri" />
-                <ScalarProperty Name="Sat" ColumnName="Sat" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="OM_SalesRouteMaster">
             <EntityTypeMapping TypeName="OM23800Model.OM_SalesRouteMaster">
               <MappingFragment StoreEntitySet="OM_SalesRouteMaster">
@@ -976,6 +951,35 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM23800_pgMCL" FunctionName="eBiz4DWebAppModel.Store.OM23800_pgMCL">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23800Model.OM23800_pgMCL_Result">
+                <ScalarProperty Name="PJPID" ColumnName="PJPID" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Distributor" ColumnName="Distributor" />
+                <ScalarProperty Name="Lat" ColumnName="Lat" />
+                <ScalarProperty Name="Lng" ColumnName="Lng" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="SlsFreq" ColumnName="SlsFreq" />
+                <ScalarProperty Name="WeekofVisit" ColumnName="WeekofVisit" />
+                <ScalarProperty Name="VisitSort" ColumnName="VisitSort" />
+                <ScalarProperty Name="Sun" ColumnName="Sun" />
+                <ScalarProperty Name="Mon" ColumnName="Mon" />
+                <ScalarProperty Name="Tue" ColumnName="Tue" />
+                <ScalarProperty Name="Wed" ColumnName="Wed" />
+                <ScalarProperty Name="Thu" ColumnName="Thu" />
+                <ScalarProperty Name="Fri" ColumnName="Fri" />
+                <ScalarProperty Name="Sat" ColumnName="Sat" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

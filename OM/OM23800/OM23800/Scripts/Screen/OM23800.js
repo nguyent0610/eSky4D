@@ -59,7 +59,7 @@ var Process = {
         return totalStrs.join(", ");
     },
 
-    exportSelectedCust: function (custIDs, branchID, branchName) {
+    exportSelectedCust: function (custIDs, branchID, branchName,pJPID) {
         Ext.net.DirectMethod.request({
             url: "OM23800/ExportSelectedCust",
             isUpload: true,
@@ -69,7 +69,8 @@ var Process = {
             params: {
                 custIDs: custIDs,
                 pBranchID: branchID,
-                pBranchName: branchName
+                pBranchName: branchName,
+                pJPID: pJPID
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -182,12 +183,14 @@ var Event = {
 
         cboDistributorMCL_change: function (cbo, newValue, oldValue, eOpts) {
             App.cboSalesManMCL.store.reload();
+            App.cboPJPIDMCL.store.reload();
         },
 
         btnLoadDataPlan_click: function (btn, e, eOpts) {
             if (App.pnlMCL.isValid()) {
                 Declare.selBranchID = App.cboDistributorMCL.value;
                 Declare.selBranchName = App.cboDistributorMCL.rawValue;
+                Declare.selPJPID = App.cboPJPIDMCL.value;
                 App.grdMCL.store.reload();
             }
             else {
@@ -335,7 +338,7 @@ var Event = {
                     App.chkCustStatusMcpInfo.setValue(record.data.Status == "A" ? true : false);
 
                     App.storeMcpInfo.serverProxy.url =
-                        Ext.String.format("OM23800/LoadSalesRouteMaster?branchID={0}&custID={1}&slsPerID={2}", record.data.BranchID, record.data.CustId, record.data.SlsperId);
+                        Ext.String.format("OM23800/LoadSalesRouteMaster?branchID={0}&custID={1}&slsPerID={2}&pJPID={3}", record.data.BranchID, record.data.CustId, record.data.SlsperId, record.data.PJPID);
                     App.storeMcpInfo.reload();
                 }
             }
@@ -428,6 +431,7 @@ var McpInfo = {
                     custID: frmHeaderMcpRec.data.CustId,
                     slsperID: frmHeaderMcpRec.data.SlsperId,
                     branchID: frmHeaderMcpRec.data.BranchID,
+                    pJPID: frmHeaderMcpRec.data.PJPID,
                     lstMcpInfo: Ext.encode(App.storeMcpInfo.getChangedData({ skipIdForPhantomRecords: false }))
                 },
                 success: function (action, data) {
@@ -562,13 +566,16 @@ var ImExMcp = {
     cboBranchID_Change: function (cbo, newValue, oldValue, eOpts) {
         App.cboSlsPerID_ImExMcp.store.reload();
         App.cboRouteID_ImExMcp.store.reload();
+        App.cboPJPID_ImExMcp.store.reload();
     },
-
+    cboPJPID_Change: function (cbo, newValue, oldValue, eOpts) {      
+    },
     winImExMcp_show: function (win, eOpts) {
         HQ.common.setRequire(App.frmMain_ImExMcp);
         App.cboBranchID_ImExMcp.setValue(App.cboDistributorMCL.value);
         App.cboSlsPerID_ImExMcp.setValue(App.cboSalesManMCL.value);
         App.cboRouteID_ImExMcp.clearValue();
+        App.cboPJPID_ImExMcp.clearValue();
         if (win.isImport) {
             App.fupImport_ImExMcp.show();
             App.btnExport_ImExMcp.hide();
@@ -608,7 +615,8 @@ var ImExMcp = {
                     BranchID: App.cboBranchID_ImExMcp.getValue(),//,
                     BranchName: App.cboBranchID_ImExMcp.getRawValue(),
                     SlsPerID: App.cboSlsPerID_ImExMcp.getValue(),
-                    RouteID: App.cboRouteID_ImExMcp.getValue()
+                    RouteID: App.cboRouteID_ImExMcp.getValue(),
+                    PJPID: App.cboPJPID_ImExMcp.getValue()
                 },
                 success: function (msg, data) {
                     //processMessage(msg, data, true);
@@ -981,7 +989,7 @@ var Gmap = {
                         break;
                     case 'export_excel':
                         if (custIDs.length) {
-                            Process.exportSelectedCust(custIDs, Declare.selBranchID, Declare.selBranchName);
+                            Process.exportSelectedCust(custIDs, Declare.selBranchID, Declare.selBranchName, Declare.selPJPID);
                         }
                         contextMenu.hide();
                         break;

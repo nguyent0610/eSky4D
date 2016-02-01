@@ -13,7 +13,7 @@
  X.Window().ID("winImExMcp")
 .Title(Util.GetLang("Choose"))
 .Icon(Icon.PageExcel).Layout(LayoutType.Fit)
-.Hidden(true).Height(150).Width(330)
+.Hidden(true).Height(170).Width(330)
 .Modal(true).Resizable(false)
 .Items(
     X.FormPanel().ID("frmMain_ImExMcp")
@@ -43,6 +43,23 @@
             {
                 lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                 lst.Change.Fn = "ImExMcp.cboBranchID_Change";
+            })
+            ,HQ.Combo().ID("cboPJPID_ImExMcp").Name("cboPJPID_ImExMcp").HQLangCode("PJPID")
+            .HQProcedure("OM23800_pcPJPID_ImExMcp")
+            .HQColumnShow("PJPID,Descr").DisplayField("PJPID").ValueField("PJPID")
+            .Width(300).HQHeightWidth(400, 300).MarginSpec("3 0 0 0").InputWidth(200).AllowBlank(false)
+            .HQDBSys(false)
+            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                new StoreParameter() { Name = "@BranchID", Value = "App.cboBranchID_ImExMcp.getValue()", Mode = ParameterMode.Raw }
+            })
+            .LoadData()
+            .Listeners(lst =>
+            {
+                lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
+                lst.Change.Fn = "ImExMcp.cboPJPID_Change";
             })
 
             , HQ.Combo().ID("cboSlsPerID_ImExMcp").Name("cboSlsPerID_ImExMcp")

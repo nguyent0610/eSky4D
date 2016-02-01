@@ -151,7 +151,20 @@
                             lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";
                             lst.Change.Fn = "Event.Form.cboDistributorMCL_change";
                         })
-                        
+                   , HQ.Combo().ID("cboPJPIDMCL").HQLangCode("PJPID").HQProcedure("OM23800_pcPJPID")
+                    .HQColumnShow("PJPID,Descr").DisplayField("PJPID").ValueField("PJPID").EmptyText(Util.GetLang("Select"))
+                    .HQHeightWidth(400, 300).MarginSpec("5 5 0 0").ForceSelection(true).Flex(1).AllowBlank(false)
+                     .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@BranchID", Value = "App.cboDistributorMCL.getValue()", Mode = ParameterMode.Raw }                      
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Fn = "Event.Form.btnHideTrigger_click";                        
+                        })   
                     , X.Container().Flex(1).Layout(LayoutType.HBox).MarginSpec("5 5 0 0")
                     .LayoutConfig(new HBoxLayoutConfig() { Align = HBoxAlign.Stretch })
                     .Items(

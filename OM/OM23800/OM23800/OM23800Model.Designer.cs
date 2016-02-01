@@ -293,6 +293,130 @@ namespace OM23800
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="state">No Metadata Documentation available.</param>
+        /// <param name="district">No Metadata Documentation available.</param>
+        /// <param name="classID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> OM23800_CustID(global::System.String branchID, global::System.String state, global::System.String district, global::System.String classID)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter stateParameter;
+            if (state != null)
+            {
+                stateParameter = new ObjectParameter("State", state);
+            }
+            else
+            {
+                stateParameter = new ObjectParameter("State", typeof(global::System.String));
+            }
+    
+            ObjectParameter districtParameter;
+            if (district != null)
+            {
+                districtParameter = new ObjectParameter("District", district);
+            }
+            else
+            {
+                districtParameter = new ObjectParameter("District", typeof(global::System.String));
+            }
+    
+            ObjectParameter classIDParameter;
+            if (classID != null)
+            {
+                classIDParameter = new ObjectParameter("ClassID", classID);
+            }
+            else
+            {
+                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("OM23800_CustID", branchIDParameter, stateParameter, districtParameter, classIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Boolean>> OM23800_ppAllowModifyCust(global::System.String userID, global::System.String cpnyID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("OM23800_ppAllowModifyCust", userIDParameter, cpnyIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        public ObjectResult<OM23800_ppListColors_Result> OM23800_ppListColors(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            return base.ExecuteFunction<OM23800_ppListColors_Result>("OM23800_ppListColors", userIDParameter, cpnyIDParameter, langIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="pJPID">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="channel">No Metadata Documentation available.</param>
         /// <param name="territory">No Metadata Documentation available.</param>
@@ -305,8 +429,18 @@ namespace OM23800
         /// <param name="amtFrom">No Metadata Documentation available.</param>
         /// <param name="amtTo">No Metadata Documentation available.</param>
         /// <param name="brandID">No Metadata Documentation available.</param>
-        public ObjectResult<OM23800_pgMCL_Result> OM23800_pgMCL(global::System.String branchID, global::System.String userID, global::System.String channel, global::System.String territory, global::System.String province, global::System.String distributor, global::System.String shopType, global::System.String slsperId, global::System.String daysOfWeek, global::System.String weekEO, Nullable<global::System.Double> amtFrom, Nullable<global::System.Double> amtTo, global::System.String brandID)
+        public ObjectResult<OM23800_pgMCL_Result> OM23800_pgMCL(global::System.String pJPID, global::System.String branchID, global::System.String userID, global::System.String channel, global::System.String territory, global::System.String province, global::System.String distributor, global::System.String shopType, global::System.String slsperId, global::System.String daysOfWeek, global::System.String weekEO, Nullable<global::System.Double> amtFrom, Nullable<global::System.Double> amtTo, global::System.String brandID)
         {
+            ObjectParameter pJPIDParameter;
+            if (pJPID != null)
+            {
+                pJPIDParameter = new ObjectParameter("PJPID", pJPID);
+            }
+            else
+            {
+                pJPIDParameter = new ObjectParameter("PJPID", typeof(global::System.String));
+            }
+    
             ObjectParameter branchIDParameter;
             if (branchID != null)
             {
@@ -437,130 +571,7 @@ namespace OM23800
                 brandIDParameter = new ObjectParameter("BrandID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM23800_pgMCL_Result>("OM23800_pgMCL", branchIDParameter, userIDParameter, channelParameter, territoryParameter, provinceParameter, distributorParameter, shopTypeParameter, slsperIdParameter, daysOfWeekParameter, weekEOParameter, amtFromParameter, amtToParameter, brandIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="state">No Metadata Documentation available.</param>
-        /// <param name="district">No Metadata Documentation available.</param>
-        /// <param name="classID">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> OM23800_CustID(global::System.String branchID, global::System.String state, global::System.String district, global::System.String classID)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter stateParameter;
-            if (state != null)
-            {
-                stateParameter = new ObjectParameter("State", state);
-            }
-            else
-            {
-                stateParameter = new ObjectParameter("State", typeof(global::System.String));
-            }
-    
-            ObjectParameter districtParameter;
-            if (district != null)
-            {
-                districtParameter = new ObjectParameter("District", district);
-            }
-            else
-            {
-                districtParameter = new ObjectParameter("District", typeof(global::System.String));
-            }
-    
-            ObjectParameter classIDParameter;
-            if (classID != null)
-            {
-                classIDParameter = new ObjectParameter("ClassID", classID);
-            }
-            else
-            {
-                classIDParameter = new ObjectParameter("ClassID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<global::System.String>("OM23800_CustID", branchIDParameter, stateParameter, districtParameter, classIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Boolean>> OM23800_ppAllowModifyCust(global::System.String userID, global::System.String cpnyID)
-        {
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<Nullable<global::System.Boolean>>("OM23800_ppAllowModifyCust", userIDParameter, cpnyIDParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="userID">No Metadata Documentation available.</param>
-        /// <param name="cpnyID">No Metadata Documentation available.</param>
-        /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<OM23800_ppListColors_Result> OM23800_ppListColors(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
-        {
-            ObjectParameter userIDParameter;
-            if (userID != null)
-            {
-                userIDParameter = new ObjectParameter("UserID", userID);
-            }
-            else
-            {
-                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
-            }
-    
-            ObjectParameter cpnyIDParameter;
-            if (cpnyID != null)
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
-            }
-            else
-            {
-                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
-            }
-    
-            ObjectParameter langIDParameter;
-            if (langID.HasValue)
-            {
-                langIDParameter = new ObjectParameter("LangID", langID);
-            }
-            else
-            {
-                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
-            }
-    
-            return base.ExecuteFunction<OM23800_ppListColors_Result>("OM23800_ppListColors", userIDParameter, cpnyIDParameter, langIDParameter);
+            return base.ExecuteFunction<OM23800_pgMCL_Result>("OM23800_pgMCL", pJPIDParameter, branchIDParameter, userIDParameter, channelParameter, territoryParameter, provinceParameter, distributorParameter, shopTypeParameter, slsperIdParameter, daysOfWeekParameter, weekEOParameter, amtFromParameter, amtToParameter, brandIDParameter);
         }
 
         #endregion
@@ -6239,6 +6250,30 @@ namespace OM23800
     public partial class OM23800_pgMCL_Result : ComplexObject
     {
         #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PJPID
+        {
+            get
+            {
+                return _PJPID;
+            }
+            set
+            {
+                OnPJPIDChanging(value);
+                ReportPropertyChanging("PJPID");
+                _PJPID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PJPID");
+                OnPJPIDChanged();
+            }
+        }
+        private global::System.String _PJPID;
+        partial void OnPJPIDChanging(global::System.String value);
+        partial void OnPJPIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
