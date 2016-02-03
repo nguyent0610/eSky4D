@@ -110,7 +110,7 @@ namespace OM23800.Controllers
             return PartialView();
         }
 
-        public ActionResult LoadMCP(string pJPID, string channel, string territory,
+        public ActionResult LoadMCP(string routeID,string pJPID, string channel, string territory,
             string province, string distributor, string shopType,
             string slsperId, string daysOfWeek, string weekOfVisit,
             bool hightLight, string colorFor="",
@@ -118,7 +118,7 @@ namespace OM23800.Controllers
         {
             _db.CommandTimeout = 3600;
 
-            var planVisits = _db.OM23800_pgMCL(pJPID,Current.CpnyID, Current.UserName,
+            var planVisits = _db.OM23800_pgMCL( routeID, pJPID,Current.CpnyID, Current.UserName,
                 channel, territory, province, distributor,
                 shopType, slsperId, daysOfWeek, weekOfVisit,
                 amtFrom, amtTo, brand).ToList();
@@ -398,7 +398,7 @@ namespace OM23800.Controllers
         }
 
         public ActionResult SaveMcp(FormCollection data,
-            bool custActive, string custID, string slsperID, string branchID, string pJPID)
+            bool custActive, string custID, string slsperID, string branchID, string pJPID,string routeID)
         {
             try
             {
@@ -406,6 +406,7 @@ namespace OM23800.Controllers
                     && !string.IsNullOrWhiteSpace(slsperID)
                     && !string.IsNullOrWhiteSpace(branchID))
                 {
+                 
                     var cust = _db.AR_Customer.FirstOrDefault(c => c.CustId == custID && c.BranchID == branchID);
                     if (cust != null)
                     {
@@ -429,7 +430,7 @@ namespace OM23800.Controllers
                             foreach (var deleted in lstMcpInfo.Deleted)
                             {
                                 var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
-                                    && x.SalesRouteID == branchID
+                                    && x.SalesRouteID == routeID
                                     && x.BranchID == branchID
                                     && x.SlsPerID == slsperID
                                     && x.CustID == custID);
@@ -446,6 +447,7 @@ namespace OM23800.Controllers
                                         CustID = custID,
                                         SlsPerID = slsperID,
                                         BranchID = branchID,
+                                        RouteID = routeID,
                                         Color = "CCFF33",
                                         SlsFreq = "",
                                         WeekofVisit = "",
@@ -466,10 +468,11 @@ namespace OM23800.Controllers
                                 }
                             }
 
+                            lstMcpInfo.Updated.AddRange(lstMcpInfo.Created);
                             foreach (var updated in lstMcpInfo.Updated)
                             {
                                 var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
-                                    && x.SalesRouteID == branchID
+                                    && x.SalesRouteID == routeID
                                     && x.BranchID == branchID
                                     && x.SlsPerID == slsperID
                                     && x.CustID == custID);
@@ -479,21 +482,25 @@ namespace OM23800.Controllers
                                     if (obj.tstamp.ToHex() == updated.tstamp.ToHex())
                                     {
                                         // xoa cu, insert moi
-                                        var newObj = new OM_SalesRouteMaster()
+                                        //var newObj = new OM_SalesRouteMaster()
+                                        //{
+                                        //    PJPID = obj.PJPID,
+                                        //    SalesRouteID = obj.SalesRouteID,
+                                        //    CustID = obj.CustID,
+                                        //    SlsPerID = obj.SlsPerID,
+                                        //    BranchID = obj.BranchID
+                                        //};
+
+                                        //_db.OM_SalesRouteMaster.DeleteObject(obj);
+                                        //_db.SaveChanges();
+
+                                        updateSaleRoutesMaster(ref obj, updated);
+                                        if (isValidSelOMSalesRouteMaster(obj))                                        
+                                            _db.SaveChanges();
+                                        else
                                         {
-                                            PJPID = obj.PJPID,
-                                            SalesRouteID = obj.SalesRouteID,
-                                            CustID = obj.CustID,
-                                            SlsPerID = obj.SlsPerID,
-                                            BranchID = obj.BranchID
-                                        };
-
-                                        _db.OM_SalesRouteMaster.DeleteObject(obj);
-                                        _db.SaveChanges();
-
-                                        updateSaleRoutesMaster(ref newObj, updated);
-                                        _db.OM_SalesRouteMaster.AddObject(newObj);
-                                        _db.SaveChanges();
+                                            throw new MessageException(MessageType.Message, "201302071", "", new string[] { obj.CustID });
+                                        }
 
                                         return Json(new
                                         {
@@ -501,17 +508,18 @@ namespace OM23800.Controllers
                                             CustID = custID,
                                             SlsPerID = slsperID,
                                             BranchID = branchID,
+                                            RouteID = routeID,
                                             Color = "FF0000",
-                                            SlsFreq = newObj.SlsFreq,
-                                            WeekofVisit = newObj.WeekofVisit,
-                                            VisitSort = newObj.VisitSort,
-                                            Sun = newObj.Sun ? 1 : 0,
-                                            Mon = newObj.Mon ? 1 : 0,
-                                            Tue = newObj.Tue ? 1 : 0,
-                                            Wed = newObj.Wed ? 1 : 0,
-                                            Thu = newObj.Thu ? 1 : 0,
-                                            Fri = newObj.Fri ? 1 : 0,
-                                            Sat = newObj.Sat ? 1 : 0,
+                                            SlsFreq = obj.SlsFreq,
+                                            WeekofVisit = obj.WeekofVisit,
+                                            VisitSort = obj.VisitSort,
+                                            Sun = obj.Sun ? 1 : 0,
+                                            Mon = obj.Mon ? 1 : 0,
+                                            Tue = obj.Tue ? 1 : 0,
+                                            Wed = obj.Wed ? 1 : 0,
+                                            Thu = obj.Thu ? 1 : 0,
+                                            Fri = obj.Fri ? 1 : 0,
+                                            Sat = obj.Sat ? 1 : 0,
                                             Status = cust.Status
                                         });
                                     }
@@ -522,31 +530,23 @@ namespace OM23800.Controllers
                                 }
                                 else
                                 {
-                                    throw new MessageException(MessageType.Message, "8");
-                                }
-                            }
-
-                            foreach (var created in lstMcpInfo.Created)
-                            {
-                                var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
-                                    && x.SalesRouteID == branchID
-                                    && x.BranchID == branchID
-                                    && x.SlsPerID == slsperID
-                                    && x.CustID == custID);
-
-                                if (obj == null)
-                                {
                                     // insert moi
                                     var newObj = new OM_SalesRouteMaster()
                                     {
                                         PJPID = pJPID,
-                                        SalesRouteID = branchID,
+                                        SalesRouteID = routeID,
                                         CustID = custID,
                                         SlsPerID = slsperID,
                                         BranchID = branchID
                                     };
 
-                                    updateSaleRoutesMaster(ref newObj, created);
+                                    updateSaleRoutesMaster(ref newObj, updated);
+                                    if (isValidSelOMSalesRouteMaster(newObj))
+                                        _db.SaveChanges();
+                                    else
+                                    {
+                                        throw new MessageException(MessageType.Message, "22701", "", new string[] { newObj.CustID });
+                                    }
                                     _db.OM_SalesRouteMaster.AddObject(newObj);
                                     _db.SaveChanges();
 
@@ -556,6 +556,7 @@ namespace OM23800.Controllers
                                         CustID = custID,
                                         SlsPerID = slsperID,
                                         BranchID = branchID,
+                                        RouteID = routeID,
                                         Color = "FF0000",
                                         SlsFreq = newObj.SlsFreq,
                                         WeekofVisit = newObj.WeekofVisit,
@@ -570,12 +571,65 @@ namespace OM23800.Controllers
                                         Status = cust.Status
                                     });
                                 }
-                                else
-                                {
-                                    //return Json(new { success = false, msgCode = 2000, msgParam = Util.GetLang("MCP") });
-                                    throw new MessageException(MessageType.Message, "2000", "", new string[] { Util.GetLang("MCP") });
-                                }
                             }
+
+                            //foreach (var created in lstMcpInfo.Created)
+                            //{
+                            //    var obj = _db.OM_SalesRouteMaster.FirstOrDefault(x => x.PJPID == pJPID
+                            //        && x.SalesRouteID == routeID
+                            //        && x.BranchID == branchID
+                            //        && x.SlsPerID == slsperID
+                            //        && x.CustID == custID);
+
+                            //    if (obj == null)
+                            //    {
+                            //        // insert moi
+                            //        var newObj = new OM_SalesRouteMaster()
+                            //        {
+                            //            PJPID = pJPID,
+                            //            SalesRouteID = routeID,
+                            //            CustID = custID,
+                            //            SlsPerID = slsperID,
+                            //            BranchID = branchID
+                            //        };
+
+                            //        updateSaleRoutesMaster(ref newObj, created);
+                            //        if (isValidSelOMSalesRouteMaster(newObj))
+                            //            _db.SaveChanges();
+                            //        else
+                            //        {
+                            //            throw new MessageException(MessageType.Message, "22701", "", new string[] { newObj.CustID });
+                            //        }
+                            //        _db.OM_SalesRouteMaster.AddObject(newObj);
+                            //        _db.SaveChanges();
+
+                            //        return Json(new
+                            //        {
+                            //            success = true,
+                            //            CustID = custID,
+                            //            SlsPerID = slsperID,
+                            //            BranchID = branchID,
+                            //            RouteID = routeID,
+                            //            Color = "FF0000",
+                            //            SlsFreq = newObj.SlsFreq,
+                            //            WeekofVisit = newObj.WeekofVisit,
+                            //            VisitSort = newObj.VisitSort,
+                            //            Sun = newObj.Sun ? 1 : 0,
+                            //            Mon = newObj.Mon ? 1 : 0,
+                            //            Tue = newObj.Tue ? 1 : 0,
+                            //            Wed = newObj.Wed ? 1 : 0,
+                            //            Thu = newObj.Thu ? 1 : 0,
+                            //            Fri = newObj.Fri ? 1 : 0,
+                            //            Sat = newObj.Sat ? 1 : 0,
+                            //            Status = cust.Status
+                            //        });
+                            //    }
+                            //    else
+                            //    {
+                            //        //return Json(new { success = false, msgCode = 2000, msgParam = Util.GetLang("MCP") });
+                            //        throw new MessageException(MessageType.Message, "2000", "", new string[] { Util.GetLang("MCP"),pJPID });
+                            //    }
+                            //}
                             #endregion
                         }
 
@@ -585,6 +639,7 @@ namespace OM23800.Controllers
                             CustID = custID,
                             SlsPerID = slsperID,
                             BranchID = branchID,
+                            RouteID = routeID,
                             Status = cust.Status,
                             Color = (cust.Status == "I" ? "000000" : "undefined")
                         });
@@ -601,7 +656,14 @@ namespace OM23800.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
+                }
             }
         }
 
@@ -830,7 +892,7 @@ namespace OM23800.Controllers
         }
 
         [DirectMethod]
-        public ActionResult ExportSelectedCust(string custIDs, string pBranchID, string pBranchName, string pJPID)
+        public ActionResult ExportSelectedCust(string custIDs, string pBranchID, string pBranchName, string pJPID, string routeID)
         {
             try
             {
@@ -841,7 +903,7 @@ namespace OM23800.Controllers
                     //string branchID = data["BranchID"].PassNull();
                     string branchID = pBranchID;                  
                     string branchName = pBranchName;
-                    string routeID = string.Empty;
+                  
                     string slsperID = string.Empty;
                     var headerRowIdx = 3;
 
@@ -2790,7 +2852,102 @@ namespace OM23800.Controllers
                 return false;
             }
         }
+        private bool isValidSelOMSalesRouteMaster(OM_SalesRouteMaster OM)
+        {
+            int iVisit = 0;
+            try
+            {
+                if (OM.Mon == true)
+                {
+                    iVisit = iVisit + 1;
+                }
+                if (OM.Sat == true)
+                {
+                    iVisit = iVisit + 1;
+                }
+                if (OM.Sun == true)
+                {
+                    iVisit = iVisit + 1;
+                }
+                if (OM.Fri == true)
+                {
+                    iVisit = iVisit + 1;
+                }
+                if (OM.Thu == true)
+                {
+                    iVisit = iVisit + 1;
+                }
+                if (OM.Tue == true)
+                {
+                    iVisit = iVisit + 1;
+                }
+                if (OM.Wed == true)
+                {
+                    iVisit = iVisit + 1;
+                }
 
+                switch (OM.SlsFreq)
+                {
+                    case "F1":
+                    case "F2":
+                    case "F4":
+                    case "F4A":
+                        if (iVisit != 1)
+                        {
+                            //if (_complete)
+                            //    HQMessageBox.Show(53, hqSys.LangID, null, HQmesscomplete);
+                            //_complete = false;
+                            return false;
+                        }
+                        break;
+                    case "F8":
+                    case "F8A":
+                        if (iVisit != 2)
+                        {
+                            return false;
+                        }
+                        break;
+                    case "F12":
+                        if (iVisit != 3)
+                        {
+                            return false;
+                        }
+                        break;
+                    case "F16":
+                        if (iVisit != 4)
+                        {
+                            return false;
+                        }
+                        break;
+                    case "F20":
+                        if (iVisit != 5)
+                        {
+                            return false;
+                        }
+                        break;
+                    case "F24":
+                        if (iVisit != 6)
+                        {
+                            return false;
+                        }
+                        break;
+                    case "A":
+                        if (iVisit == 0)
+                        {
+                            return false;
+                        }
+                        break;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+                return false;
+            }
+        }
     
         private void SetCellValue(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH, bool isBold, int size, bool isTitle = false)
         {

@@ -59,7 +59,7 @@ var Process = {
         return totalStrs.join(", ");
     },
 
-    exportSelectedCust: function (custIDs, branchID, branchName,pJPID) {
+    exportSelectedCust: function (custIDs, branchID, branchName,pJPID,routeID) {
         Ext.net.DirectMethod.request({
             url: "OM23800/ExportSelectedCust",
             isUpload: true,
@@ -70,7 +70,8 @@ var Process = {
                 custIDs: custIDs,
                 pBranchID: branchID,
                 pBranchName: branchName,
-                pJPID: pJPID
+                pJPID: pJPID,
+                routeID: routeID
             },
             failure: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -184,6 +185,7 @@ var Event = {
         cboDistributorMCL_change: function (cbo, newValue, oldValue, eOpts) {
             App.cboSalesManMCL.store.reload();
             App.cboPJPIDMCL.store.reload();
+            App.cboRouteIDMCL.store.reload();
         },
 
         btnLoadDataPlan_click: function (btn, e, eOpts) {
@@ -191,6 +193,7 @@ var Event = {
                 Declare.selBranchID = App.cboDistributorMCL.value;
                 Declare.selBranchName = App.cboDistributorMCL.rawValue;
                 Declare.selPJPID = App.cboPJPIDMCL.value;
+                Declare.selRouteID = App.cboRouteIDMCL.value;
                 App.grdMCL.store.reload();
             }
             else {
@@ -361,6 +364,7 @@ var McpInfo = {
     },
 
     storeMcpInfo_load: function (store, records, successful, eOpts) {
+        App.cboRouteIDMcpInfo.store.reload();
         App.winMcpInfo.show();
         var frmHeaderMcpRec = App.frmHeaderMcp.getRecord();
         var record;
@@ -432,6 +436,7 @@ var McpInfo = {
                     slsperID: frmHeaderMcpRec.data.SlsperId,
                     branchID: frmHeaderMcpRec.data.BranchID,
                     pJPID: frmHeaderMcpRec.data.PJPID,
+                    routeID: App.cboRouteIDMcpInfo.getValue(),
                     lstMcpInfo: Ext.encode(App.storeMcpInfo.getChangedData({ skipIdForPhantomRecords: false }))
                 },
                 success: function (action, data) {
@@ -989,7 +994,7 @@ var Gmap = {
                         break;
                     case 'export_excel':
                         if (custIDs.length) {
-                            Process.exportSelectedCust(custIDs, Declare.selBranchID, Declare.selBranchName, Declare.selPJPID);
+                            Process.exportSelectedCust(custIDs, Declare.selBranchID, Declare.selBranchName, Declare.selPJPID, Declare.selRouteID);
                         }
                         contextMenu.hide();
                         break;
@@ -1116,7 +1121,12 @@ var Gmap = {
             }
 
             for (i = 0; i < labels.length; i++) {
-                labels[i].setMap(null);
+                try
+                {
+                    labels[i].setMap(null);
+                }catch(ex)
+                {
+                }
             }
 
             for (i = 0; i < stopMarkers.length; i++) {

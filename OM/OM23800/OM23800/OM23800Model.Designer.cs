@@ -415,6 +415,7 @@ namespace OM23800
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="routeID">No Metadata Documentation available.</param>
         /// <param name="pJPID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="userID">No Metadata Documentation available.</param>
@@ -429,8 +430,18 @@ namespace OM23800
         /// <param name="amtFrom">No Metadata Documentation available.</param>
         /// <param name="amtTo">No Metadata Documentation available.</param>
         /// <param name="brandID">No Metadata Documentation available.</param>
-        public ObjectResult<OM23800_pgMCL_Result> OM23800_pgMCL(global::System.String pJPID, global::System.String branchID, global::System.String userID, global::System.String channel, global::System.String territory, global::System.String province, global::System.String distributor, global::System.String shopType, global::System.String slsperId, global::System.String daysOfWeek, global::System.String weekEO, Nullable<global::System.Double> amtFrom, Nullable<global::System.Double> amtTo, global::System.String brandID)
+        public ObjectResult<OM23800_pgMCL_Result> OM23800_pgMCL(global::System.String routeID, global::System.String pJPID, global::System.String branchID, global::System.String userID, global::System.String channel, global::System.String territory, global::System.String province, global::System.String distributor, global::System.String shopType, global::System.String slsperId, global::System.String daysOfWeek, global::System.String weekEO, Nullable<global::System.Double> amtFrom, Nullable<global::System.Double> amtTo, global::System.String brandID)
         {
+            ObjectParameter routeIDParameter;
+            if (routeID != null)
+            {
+                routeIDParameter = new ObjectParameter("RouteID", routeID);
+            }
+            else
+            {
+                routeIDParameter = new ObjectParameter("RouteID", typeof(global::System.String));
+            }
+    
             ObjectParameter pJPIDParameter;
             if (pJPID != null)
             {
@@ -571,7 +582,7 @@ namespace OM23800
                 brandIDParameter = new ObjectParameter("BrandID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM23800_pgMCL_Result>("OM23800_pgMCL", pJPIDParameter, branchIDParameter, userIDParameter, channelParameter, territoryParameter, provinceParameter, distributorParameter, shopTypeParameter, slsperIdParameter, daysOfWeekParameter, weekEOParameter, amtFromParameter, amtToParameter, brandIDParameter);
+            return base.ExecuteFunction<OM23800_pgMCL_Result>("OM23800_pgMCL", routeIDParameter, pJPIDParameter, branchIDParameter, userIDParameter, channelParameter, territoryParameter, provinceParameter, distributorParameter, shopTypeParameter, slsperIdParameter, daysOfWeekParameter, weekEOParameter, amtFromParameter, amtToParameter, brandIDParameter);
         }
 
         #endregion
@@ -6250,6 +6261,30 @@ namespace OM23800
     public partial class OM23800_pgMCL_Result : ComplexObject
     {
         #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String RouteID
+        {
+            get
+            {
+                return _RouteID;
+            }
+            set
+            {
+                OnRouteIDChanging(value);
+                ReportPropertyChanging("RouteID");
+                _RouteID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("RouteID");
+                OnRouteIDChanged();
+            }
+        }
+        private global::System.String _RouteID;
+        partial void OnRouteIDChanging(global::System.String value);
+        partial void OnRouteIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

@@ -297,6 +297,7 @@
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="OM23800_pgMCL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RouteID" Type="varchar" Mode="In" />
           <Parameter Name="PJPID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -351,6 +352,7 @@
           </FunctionImport>
           <EntitySet Name="AR_CustomerLocation" EntityType="OM23800Model.AR_CustomerLocation" />
           <FunctionImport Name="OM23800_pgMCL" ReturnType="Collection(OM23800Model.OM23800_pgMCL_Result)">
+            <Parameter Name="RouteID" Mode="In" Type="String" />
             <Parameter Name="PJPID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="UserID" Mode="In" Type="String" />
@@ -646,6 +648,7 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
         <ComplexType Name="OM23800_pgMCL_Result">
+          <Property Type="String" Name="RouteID" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="PJPID" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="CustId" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="CustName" Nullable="true" MaxLength="100" />
@@ -954,6 +957,7 @@
           <FunctionImportMapping FunctionImportName="OM23800_pgMCL" FunctionName="eBiz4DWebAppModel.Store.OM23800_pgMCL">
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM23800Model.OM23800_pgMCL_Result">
+                <ScalarProperty Name="RouteID" ColumnName="RouteID" />
                 <ScalarProperty Name="PJPID" ColumnName="PJPID" />
                 <ScalarProperty Name="CustId" ColumnName="CustId" />
                 <ScalarProperty Name="CustName" ColumnName="CustName" />
