@@ -479,8 +479,8 @@ namespace OM23800.Controllers
 
                                 if (obj != null)
                                 {
-                                    if (obj.tstamp.ToHex() == updated.tstamp.ToHex())
-                                    {
+                                    //if (obj.tstamp.ToHex() == updated.tstamp.ToHex())
+                                    //{
                                         // xoa cu, insert moi
                                         //var newObj = new OM_SalesRouteMaster()
                                         //{
@@ -522,11 +522,11 @@ namespace OM23800.Controllers
                                             Sat = obj.Sat ? 1 : 0,
                                             Status = cust.Status
                                         });
-                                    }
-                                    else
-                                    {
-                                        throw new MessageException(MessageType.Message, "19");
-                                    }
+                                    //}
+                                    //else
+                                    //{
+                                    //    throw new MessageException(MessageType.Message, "19");
+                                    //}
                                 }
                                 else
                                 {
@@ -954,6 +954,10 @@ namespace OM23800.Controllers
                     SheetMCP.Cells["Z5"].PutValue("OW");
                     SheetMCP.Cells["Z6"].PutValue("EW");
                     SheetMCP.Cells["Z7"].PutValue("NA");
+                    for (int i = 0; i < 53; i++)
+                    {
+                        SheetMCP.Cells["Z" + (i + 8)].PutValue("W" + (i + 1));
+                    }
 
                     #endregion
 
@@ -1106,7 +1110,7 @@ namespace OM23800.Controllers
                     area.EndColumn = allColumns.IndexOf("SalesRouteID");
                     validation.AddArea(area);
                     //Requency LIST
-                    string formulaRequenc = "F1,F2,F4,F4A,F8,F8A,F12,F16,F20,F24,A";
+                    string formulaRequenc = "F1,F2,F4,F4A,F8,F12,F1/2,F1/3,A";
                     validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
                     validation.IgnoreBlank = true;
                     validation.Type = Aspose.Cells.ValidationType.List;
@@ -1125,7 +1129,8 @@ namespace OM23800.Controllers
                     validation.AddArea(area);
 
 
-                    string formula = "=IF(I6=\"F1\",$Z$1:$Z$4,IF(OR(I6=\"F2\",I6=\"F4A\",I6=\"F8A\"),$Z$5:$Z$6,$Z$7:$Z$7))";// + dtOMRoute.Rows.Count + 2;               
+                    //string formula = "=IF(I6=\"F1\",$Z$1:$Z$4,IF(OR(I6=\"F2\",I6=\"F4A\",I6=\"F8A\"),$Z$5:$Z$6,$Z$7:$Z$7))";// + dtOMRoute.Rows.Count + 2;        
+                    string formula = "=IF(I6=\"F1\",$Z$1:$Z$4,IF(OR(I6=\"F1/2\",I6=\"F1/3\"),$Z$8:$Z$61,IF(OR(I6=\"F2\",I6=\"F4A\",I6=\"F8A\"),$Z$5:$Z$6,$Z$7:$Z$7)))";// + dtOMRoute.Rows.Count + 2;                              
                     validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
                     validation.IgnoreBlank = true;
                     validation.Type = Aspose.Cells.ValidationType.List;
@@ -1489,6 +1494,11 @@ namespace OM23800.Controllers
                 SheetMCP.Cells["Z6"].PutValue("EW");
                 SheetMCP.Cells["Z7"].PutValue("NA");
 
+                for (int i = 0; i < 53; i++)
+                {
+                    SheetMCP.Cells["Z"+(i+8)].PutValue("W"+(i+1));
+                }
+
                 #endregion
 
                 #region header info
@@ -1643,7 +1653,7 @@ namespace OM23800.Controllers
                 area.EndColumn = allColumns.IndexOf("SalesRouteID");
                 validation.AddArea(area);
                 //Requency LIST
-                string formulaRequenc = "F1,F2,F4,F4A,F8,F8A,F12,F16,F20,F24,A";
+                string formulaRequenc = "F1,F2,F4,F4A,F8,F12,F1/2,F1/3,A";
                 validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
                 validation.IgnoreBlank = true;
                 validation.Type = Aspose.Cells.ValidationType.List;
@@ -1662,7 +1672,7 @@ namespace OM23800.Controllers
                 validation.AddArea(area);
 
 
-                string formula = "=IF(I6=\"F1\",$Z$1:$Z$4,IF(OR(I6=\"F2\",I6=\"F4A\",I6=\"F8A\"),$Z$5:$Z$6,$Z$7:$Z$7))";// + dtOMRoute.Rows.Count + 2;               
+                string formula = "=IF(I6=\"F1\",$Z$1:$Z$4,IF(OR(I6=\"F1/2\",I6=\"F1/3\"),$Z$8:$Z$61,IF(OR(I6=\"F2\",I6=\"F4A\",I6=\"F8A\"),$Z$5:$Z$6,$Z$7:$Z$7)))";// + dtOMRoute.Rows.Count + 2;               
                 validation = SheetMCP.Validations[SheetMCP.Validations.Add()];
                 validation.IgnoreBlank = true;
                 validation.Type = Aspose.Cells.ValidationType.List;
