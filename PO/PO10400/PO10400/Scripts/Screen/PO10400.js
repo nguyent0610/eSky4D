@@ -10,7 +10,7 @@ var Process = {
         else {
             return value;
         }
-    },
+    },  
     renderPOType: function (value) {
         var record = App.stoPOType.findRecord("Code", value);
         if (record) {
@@ -713,6 +713,7 @@ var Popup = {
         }
         if (objDetail.PurchaseType == "PR") {
             e.record.set("UnitCost", 0);
+            HQ.common.showBusy(false, '', App.frmDetail);
         }
         if (e.field == "QtyOrd" || e.field == "DiscPct" || e.field == "DiscAmt" || e.field == "UnitCost") {
             Popup.delTax(e.rowIdx);
@@ -722,7 +723,7 @@ var Popup = {
         }
        
         //calcDet();
-
+        HQ.common.showBusy(false, '', App.frmDetail);
     },
     grdPO_Detail_Deselect: function (item, e) {
         Popup.calcDet();
