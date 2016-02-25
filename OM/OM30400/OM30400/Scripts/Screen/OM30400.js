@@ -1399,7 +1399,7 @@ var PosGmap = {
             // List of locations
             var lat_lng = new Array();
 
-            // For each marker in lisr
+            // For each marker in list
             for (i = 0; i < markers.length; i++) {
                 var data = markers[i];
                 if (data.lat && data.lng) {
