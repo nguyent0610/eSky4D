@@ -35,7 +35,7 @@ namespace OM23100.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -219,12 +219,14 @@ namespace OM23100.Controllers
             var grid = this.GetCmp<GridPanel>("grdOM_FCS");
             DataSource ds = new DataSource();
             var lstIN_ProductClass = _db.OM23100_getIN_ProductClass(BranchID).ToList();
-
+            
             //Column Sell In
             clm = new Ext.Net.Column
             {
                 Text = Util.GetLang("OM23100_SellIn"),
-                ID = "txt_SellIn"
+                ID = "txt_SellIn",
+                Cls = "SellIN-color"
+
             };
 
             for (int i = 0; i < lstIN_ProductClass.Count; i++)
@@ -252,7 +254,8 @@ namespace OM23100.Controllers
             clm = new Ext.Net.Column
             {
                 Text = Util.GetLang("OM23100_SellOut"),
-                ID = "txt_SellOut"
+                ID = "txt_SellOut",
+                Cls = "SellOut-color"
             };
 
             for (int i = 0; i < lstIN_ProductClass.Count; i++)
@@ -280,7 +283,8 @@ namespace OM23100.Controllers
             clm = new Ext.Net.Column
             {
                 Text = Util.GetLang("OM23100_Coverage"),
-                ID = "txt_Coverage"
+                ID = "txt_Coverage",
+                Cls = "Coverage-color"
             };
 
             for (int i = 0; i < lstIN_ProductClass.Count; i++)
@@ -308,7 +312,8 @@ namespace OM23100.Controllers
             clm = new Ext.Net.Column
             {
                 Text = Util.GetLang("OM23100_DNA"),
-                ID = "txt_DNA"
+                ID = "txt_DNA",
+                Cls = "DNA-color"
             };
 
             for (int i = 0; i < lstIN_ProductClass.Count; i++)
@@ -336,7 +341,8 @@ namespace OM23100.Controllers
             clm = new Ext.Net.Column
             {
                 Text = Util.GetLang("OM23100_ForcusedSKU"),
-                ID = "txt_ForcusedSKU"
+                ID = "txt_ForcusedSKU",
+                Cls = "ForcusedSKU-color"
             };
 
             for (int i = 0; i < lstIN_ProductClass.Count; i++)
@@ -375,7 +381,8 @@ namespace OM23100.Controllers
                         DecimalPrecision=0,
                         MinValue=0
                     }
-                }
+                },
+                Cls = "Visit-color"
             };
             grid.AddColumn(nbc);
 
@@ -394,7 +401,8 @@ namespace OM23100.Controllers
                         MinValue=0,
                         MaxValue=100
                     }
-                }
+                },
+                Cls = "LPPC-color"
             };
             grid.AddColumn(nbc);
 
