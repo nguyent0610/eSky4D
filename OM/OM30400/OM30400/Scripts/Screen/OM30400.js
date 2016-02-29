@@ -1724,7 +1724,7 @@ var PosGmap = {
                 if (lat_lngCol && lat_lngCol.length > 0) {
                     setTimeout(function () {
                         PosGmap.requestForWaysRoute(lat_lngCols, idx);
-                    }, 850);
+                    }, 1000);
                 }
             }
             else if (status == google.maps.DirectionsStatus.NOT_FOUND) {
