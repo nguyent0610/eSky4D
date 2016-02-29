@@ -19,37 +19,40 @@ namespace IN20700
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-
         }
         protected void Session_Start(object sender, EventArgs e)
         {
-            //Current.Server = ConfigurationManager.AppSettings["Server"].ToString();
-            //Current.DBSys = ConfigurationManager.AppSettings["DBSys"].ToString();
-            //Session["DBApp"] = Current.DBApp = "eBiz4DWebApp";
-            //Session["UserName"] = Current.UserName = "admin";
-            //Session["CpnyID"] = Current.CpnyID = "HQH00000";
-            //Session["Language"] = Current.Language = "vi";
-            //Session["LangID"] = 1;
-
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";
-            Current.DBSys = "eSky4DSys";
+            Current.Server = "EARTHSVR\\SQL2012";
+            Current.DBSys = "eBiz4DCloudSysKAO";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
-            acc.Update = true;
+            acc.Update = false;
             Session["IN20700"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppKAO";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "HQHD1120";
-            Session["Language"] = Current.Language = "en";
-            Session["LangID"] = 0;
+            //Session["CpnyID"] = Current.CpnyID = "HQHD3110";
+            Session["CpnyID"] = Current.CpnyID = "18510574";
+            Session["Language"] = Current.Language = "vi";
+            Session["LangID"] = 1;
+
+            //Current.Server = "TRUONGTHINHUHAO\\NHUHAO";
+            //Current.DBSys = "Training_Sys";
+            //AccessRight acc = new AccessRight();
+            //acc.Delete = true;
+            //acc.Insert = true;
+            //acc.Update = false;
+            //Session["IN20700"] = acc;
+            //Session["DBApp"] = Current.DBApp = "Training_App";
+            //Session["UserName"] = Current.UserName = "admin";
+            //Session["CpnyID"] = Current.CpnyID = "HQHD3110";
+            //Session["Language"] = Current.Language = "vi";
+            //Session["LangID"] = 1;
         }
     }
 }
