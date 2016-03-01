@@ -1,0 +1,173 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM21800;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad()";
+    })
+    .Items(
+
+        X.Panel().ID("pnlGrid")
+        .Region(Region.Center)
+        .Layout(LayoutType.Border)
+        .Items(
+            X.GridPanel()
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .ID("grdOM_DiscountInfor")
+            //.SelectionMemory(false)
+            .Region(Region.Center).Flex(1)
+            .Border(true)
+            .RowLines(true)
+            .ColumnLines(true)
+            .Store(
+                X.Store()
+                .ID("stoOM_DiscountInfor").AutoLoad(false)
+                .PageSize(50)
+                .Model(Util.GenerateModel(typeof(OM21800_pgOM_DiscountInfor_Result), "mdlOM21800_pgOM_DiscountInfor", ""))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_DiscountInfor")))
+                .Listeners(l =>
+                {
+                    l.Load.Fn = "stoOM_DiscountInfor_Load";
+                    l.Update.Fn = "frmChange";
+                })
+            )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdOM_DiscountInfor');")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40)
+                
+                , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(120).Renderer("renderTerritory")
+                    .Editor(
+                        HQ.Combo().ID("cboTerritory").Name("cboTerritory").ForceSelection(true).AllowBlank(false)
+                        .HQDBSys(false).HQProcedure("OM21800_pcTerritory").HQHeightWidth(400, 300)
+                        .HQColumnShow("Territory,Descr").DisplayField("Descr").ValueField("Territory")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .LoadData()
+                    )
+                    
+                , X.Column().Text(Util.GetLang("DescrTerr")).DataIndex("DescrTerr").Width(200).Hidden(true)
+                    .Editor(X.TextField().AllowBlank(true).MaxLength(200).EnforceMaxLength(true))
+                
+                , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID").Width(200)
+				    .Editor(X.TextField().AllowBlank(false).MaxLength(50).EnforceMaxLength(true))
+
+                , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq").Width(200)
+				    .Editor(X.TextField().AllowBlank(false).MaxLength(50).EnforceMaxLength(true))
+
+                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
+				    .Editor(X.TextField().AllowBlank(true))
+
+                
+                , X.Column().Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(120).Renderer("renderClassID")
+                    .Editor(
+                        HQ.Combo().ID("cboClassID").Name("cboClassID").ForceSelection(true)
+                        .HQDBSys(false).HQProcedure("OM21800_pcClassID").HQHeightWidth(400, 300)
+                        .HQColumnShow("ClassID,Descr").DisplayField("Descr").ValueField("ClassID")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .LoadData()
+                    )
+                
+                , X.Column().Text(Util.GetLang("DescrClass")).DataIndex("DescrClass").Width(200).Hidden(true)
+				    .Editor(X.TextField().AllowBlank(true).MaxLength(50).EnforceMaxLength(true))
+    
+                , X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDate").Width(150).Format("MM/dd/yyyy")
+				    .Editor(HQ.DateField().Format("MM/dd/yyyy"))
+
+                , X.DateColumn().Text(Util.GetLang("EndDate")).DataIndex("EndDate").Width(150).Format("MM/dd/yyyy")
+				    .Editor(HQ.DateField().Format("MM/dd/yyyy"))
+
+                , X.Column().Text(Util.GetLang("Poster")).DataIndex("Poster").Width(200)
+				    .Editor(X.TextField().AllowBlank(true).MaxLength(200).EnforceMaxLength(true))
+                    
+                , X.CheckColumn().ID("chkStatus").DataIndex("Status").Width(70).Editable(true).HideTitleEl(false).Text(Util.GetLang("Status"))
+                    
+                , X.CommandColumn().Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdOM_DiscountInfor_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmOM_DiscountInfor").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdOM_DiscountInfor_BeforeEdit";
+                    ls.Edit.Fn = "grdOM_DiscountInfor_Edit";
+                    ls.ValidateEdit.Fn = "grdOM_DiscountInfor_ValidateEdit";
+                })
+            )
+
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.ListFilter().DataIndex("Territory"),
+                        X.StringFilter().DataIndex("DiscID"),
+                        X.StringFilter().DataIndex("DiscSeq"),
+                        X.StringFilter().DataIndex("Descr"),
+                        X.ListFilter().DataIndex("ClassID"),
+                        X.DateFilter().DataIndex("StartDate"),
+                        X.DateFilter().DataIndex("EndDate"),
+                        X.StringFilter().DataIndex("Poster"),
+                        X.BooleanFilter().DataIndex("Status")
+                    )
+            )
+                
+
+        ).Listeners(lst =>
+        {
+            lst.Render.Handler = "HQ.common.control_render(this,'grdOM_DiscountInfor')";
+        })
+
+
+    )
+))
