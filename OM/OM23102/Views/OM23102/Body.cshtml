@@ -102,6 +102,7 @@
                     {
                         lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                         lst.Change.Fn = "cboDist_Change";
+                        lst.Select.Fn = "cboDist_Select";
                     }).DirectEvents(de =>
                             {
                                 de.Change.EventMask.ShowMask = true;
@@ -170,19 +171,24 @@
                 .ColumnModel(
                     X.RowNumbererColumn().Width(40)
 
-                    , X.Column().DataIndex("SlsperId").Text(Util.GetLang("SlsperId")).Width(80).Locked(true)
+                    , X.Column().Text(Util.GetLang("SlsperId")).DataIndex("SlsperId").Width(120).Locked(true)
                     .Editor(
-                        HQ.Combo().ID("cboSlsperId")
-                        .Name("cboSlsperId").HQProcedure("OM23102_pcSalesPerson")
-                        .HQColumnShow("SlsperId,Name,BranchID").DisplayField("SlsperId").ValueField("SlsperId")
-                        .Width(300).HQHeightWidth(500, 400).ForceSelection(true)
+	                    HQ.Combo().ID("cboSlsperId").Name("cboSlsperId")
+		                    .HQDBSys(false).HQProcedure("OM23102_pcSalesPerson").HQHeightWidth(400, 300)
+		                    .HQColumnShow("SlsperId,Name,BranchID").DisplayField("SlsperId").ValueField("SlsperId")
+		                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+		                    .HQParam(new StoreParameterCollection()
+		                    {
+			                    new StoreParameter() { Name = "@BranchID", Value = "App.cboDist.getValue()", Mode = ParameterMode.Raw }
+		                    })
+		                    .Listeners(lst =>
+		                    {
+			                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+		                    })
+		                    .LoadData()
+			        )
+
                     
-                        .HQParam(new StoreParameterCollection() 
-                        { 
-                            new StoreParameter() { Name = "@BranchID", Value = "App.cboDist.getValue()", Mode = ParameterMode.Raw }
-                        })
-                        .LoadData()
-                    )
                     , X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(150).Locked(true)
                     , X.Column().DataIndex("Position").Text(Util.GetLang("Position")).Width(120).Locked(true).Renderer("renderPosition")
                     .Editor(
@@ -197,7 +203,23 @@
                         })
                         .LoadData()
                     )
-                    , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID").Width(150).Locked(true)
+                    , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID").Width(120).Locked(true)
+                    .Editor(
+	                    HQ.Combo().ID("cboCustID").Name("cboCustID")
+		                    .HQDBSys(false).HQProcedure("OM23102_pcCustID").HQHeightWidth(400, 300)
+		                    .HQColumnShow("CustId,CustName,BranchID").DisplayField("CustId").ValueField("CustId")
+		                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+		                    .HQParam(new StoreParameterCollection()
+		                    {
+			                    new StoreParameter() { Name = "@BranchID", Value = "App.cboDist.getValue()", Mode = ParameterMode.Raw }
+		                    })
+		                    .Listeners(lst =>
+		                    {
+			                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+		                    })
+		                    .LoadData()
+			        )
+                    
                     , X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(150).Locked(true)
                     //, X.NumberColumn().Text(Util.GetLang("OM23102_SellIn")).DataIndex("SellIn").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))
                     //, X.NumberColumn().Text(Util.GetLang("OM23102_Coverage")).DataIndex("Coverage").Width(150).Align(Alignment.Right).Editor(X.NumberField().DecimalPrecision(0).MaxLength(10).EnforceMaxLength(true).MinValue(0))

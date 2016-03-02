@@ -1,7 +1,7 @@
 //// Declare //////////////////////////////////////////////////////////
-var keys = ['SlsperId'];
-var fieldsCheckRequire = ["SlsperId"];
-var fieldsLangCheckRequire = ["SlsperId"];
+var keys = ['SlsperId', 'CustID'];
+var fieldsCheckRequire = ["SlsperId", 'CustID'];
+var fieldsLangCheckRequire = ["SlsperId", 'CustID'];
 ///////////////////////////////////////////////////////////////////////
 //// Store /////////////////////////////////////////////////////////////
 var loadSourceCombo = function () {
@@ -42,7 +42,7 @@ var menuClick = function (command) {
             break;
         case "new":
             if (HQ.isInsert) {
-                //HQ.grid.insert(App.grdOM_PG_FCS, keys);
+                HQ.grid.insert(App.grdOM_PG_FCS, keys);
             }
             break;
         case "delete":
@@ -101,7 +101,7 @@ var stoLoad = function (sto) {
     HQ.common.changeData(HQ.isChange, 'OM23102');
     if (HQ.isFirstLoad) {
         if (HQ.isInsert) {
-            //HQ.store.insertBlank(sto, keys);
+            HQ.store.insertBlank(sto, keys);
         }
         HQ.isFirstLoad = false;
     }
@@ -114,19 +114,21 @@ var stoBeforeLoad = function (sto) {
 };
 var grdOM_PG_FCS_BeforeEdit = function (editor, e) {
     // thang nho hon thi khong cho sua
+    if (e.field =='Position')
+        return false;
     var d = new Date(App.dateFcs.getValue());
 
     if (d.getYear() > _dateServer.getYear()) {
-        //return HQ.grid.checkBeforeEdit(e, keys);
-        return true;
+        if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
+        //return true;
     }
     else if (d.getYear() == _dateServer.getYear()) {
         if (d.getMonth() < _dateServer.getMonth()) {
             return false;
         }
         else if (d.getMonth() >= _dateServer.getMonth()) {
-            //return HQ.grid.checkBeforeEdit(e, keys);
-            return true;
+            if (!HQ.grid.checkBeforeEdit(e, keys)) return false;
+            //return true;
         }
     }
     else if (d.getYear() > _dateServer.getYear()) {
@@ -134,7 +136,31 @@ var grdOM_PG_FCS_BeforeEdit = function (editor, e) {
     }
 };
 var grdOM_PG_FCS_Edit = function (item, e) {
-    //HQ.grid.checkInsertKey(App.grdOM_PG_FCS, e, keys);
+    if (e.field == 'SlsperId') {
+        if (e.value) {
+            var recordT = App.cboSlsperIdOM23102_pcSalesPerson.findRecord("SlsperId", e.value);
+            if (recordT) {
+                e.record.set('Name', recordT.data.Name);
+                e.record.set('Position', recordT.data.Position);
+            }
+            else {
+                e.record.set('Name', '');
+                e.record.set('Position', '');
+            }
+        }
+    }
+    else if (e.field == 'CustID') {
+        if (e.value) {
+            var recordT = App.cboCustIDOM23102_pcCustID.findRecord("CustId", e.value);
+            if (recordT) {
+                e.record.set('CustName', recordT.data.CustName);
+            }
+            else {
+                e.record.set('CustName', '');
+            }
+        }
+    }
+    HQ.grid.checkInsertKey(App.grdOM_PG_FCS, e, keys);
     //if (e.field == "SlsperId") {
     //    var selectedRecord = App.cboSlsperId.store.findRecord(e.field, e.value);
     //    if (selectedRecord) {
@@ -146,8 +172,18 @@ var grdOM_PG_FCS_Edit = function (item, e) {
     //}
 };
 var grdOM_PG_FCS_ValidateEdit = function (item, e) {
-    //return HQ.grid.checkValidateEdit(App.grdOM_PG_FCS, e, keys);
+    return checkValidateEdit(App.grdOM_PG_FCS, e, keys);
 };
+
+var checkValidateEdit = function (grd, e, keys) {
+    if (keys.indexOf(e.field) != -1) {
+        if (HQ.grid.checkDuplicate(grd, e, keys)) {
+            HQ.message.show(1112, e.value);
+            return false;
+        }
+    }
+};
+
 var grdOM_PG_FCS_Reject = function (record) {
     //HQ.grid.checkReject(record, App.grdOM_PG_FCS);
     //stoChanged(App.stoOM_PG_FCS);
@@ -184,6 +220,10 @@ var cboTerritory_Change = function (sender, e) {
     }
 };
 var cboDist_Change = function (sender, e) {
+    if (e) {
+        App.cboSlsperId.store.reload();
+        App.cboCustID.store.reload();
+    }
     if (HQ.isChange) {
         HQ.message.show(20150303, '', 'refresh');
     }
@@ -193,6 +233,21 @@ var cboDist_Change = function (sender, e) {
         //App.cboSlsperId.store.reload();
     }
 };
+var cboDist_Select = function (sender, e) {
+    if (e) {
+        App.cboSlsperId.store.reload();
+        App.cboCustID.store.reload();
+    }
+    if (HQ.isChange) {
+        HQ.message.show(20150303, '', 'refresh');
+    }
+    else {
+        //App.grdOM_PG_FCS.store.removeAll();
+        App.grdOM_PG_FCS.hide();
+        //App.cboSlsperId.store.reload();
+    }
+};
+
 var dateFcs_Change = function (sender, e) {
     if (HQ.isChange) {
         HQ.message.show(20150303, '', 'refresh');

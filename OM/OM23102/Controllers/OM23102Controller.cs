@@ -48,8 +48,8 @@ namespace OM23102.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-            string BranchID = data["cboDist"];
-            string FCSDate_temp = data["dateFcs"];
+            string BranchID = data["cboDist"].PassNull();
+            string FCSDate_temp = data["dateFcs"].PassNull();
             DateTime FCSDate = DateTime.Parse(FCSDate_temp);
             DataTable dtUpdated = data["lstOM_PG_FCS"] == "{}" ? new DataTable() : ConvertJSONToDataTable(data["lstOM_PG_FCS"].Replace("{\"Updated\":[{", "{\"Status\":\"Updated\",").Replace("\"Created\":[{", "{\"Status\":\"Created\",").Replace("\"Deleted\":[{", "{\"Status\":\"Deleted\",").Replace("}]}", ""));
             try
@@ -454,6 +454,7 @@ namespace OM23102.Controllers
             grid.AddColumn(commentclm);
             return this.Direct();
         }
+
         #region import,export, report
         [HttpPost]
         public ActionResult Export(FormCollection data, string type)
@@ -794,7 +795,7 @@ namespace OM23102.Controllers
                                     continue;
                                 }
                                 var objFCS = _db.OM_PG_FCS.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.ClassID == classid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Year).FirstOrDefault();
-                                var objFCS1 = _db.OM_PG_FCS.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Year).FirstOrDefault();
+                                //var objFCS1 = _db.OM_PG_FCS.Where(p => p.BranchID == branchid && p.SlsperId == slsperid && p.CustID == custid && p.FCSDate.Month == month.Month && p.FCSDate.Year == month.Year).FirstOrDefault();
                                   
                                 if (objFCS == null)
                                 {
@@ -812,14 +813,14 @@ namespace OM23102.Controllers
                                     objFCS.Crtd_User = _userName;
                                     objFCS.DNA = 0;
                                     objFCS.ForcusedSKU = 0;
-                                    objFCS.LPPC = objFCS1 == null ? 0 : objFCS1.LPPC;
+                                    objFCS.LPPC = 0; //objFCS1 == null ? 0 : objFCS1.LPPC;
                                     objFCS.LUpd_DateTime = DateTime.Now;
                                     objFCS.LUpd_Prog = _screenNbr;
                                     objFCS.LUpd_User = _userName;
                                     objFCS.SellIn = sellin;
                                     objFCS.SellOut = sellout;
-                                    objFCS.Visit = objFCS1 == null ? 0 : objFCS1.Visit;
-                                    objFCS.VisitTime = objFCS1 == null ? 0 : objFCS1.VisitTime;
+                                    objFCS.Visit = 0; //objFCS1 == null ? 0 : objFCS1.Visit;
+                                    objFCS.VisitTime = 0; //objFCS1 == null ? 0 : objFCS1.VisitTime;
 
                                     _db.OM_PG_FCS.AddObject(objFCS);
 
@@ -905,8 +906,8 @@ namespace OM23102.Controllers
                 }
             }
         }
-   
         #endregion
+
         private void SetCellValueHeader(Cell c, string lang, TextAlignmentType alignV, TextAlignmentType alignH)
         {
             c.PutValue(" " + lang);
