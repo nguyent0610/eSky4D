@@ -56,7 +56,7 @@
                 
                 , X.Column().Text(Util.GetLang("Territory")).DataIndex("Territory").Width(120).Renderer("renderTerritory")
                     .Editor(
-                        HQ.Combo().ID("cboTerritory").Name("cboTerritory").ForceSelection(true).AllowBlank(false)
+                        HQ.Combo().ID("cboTerritory").Name("cboTerritory").ForceSelection(true)
                         .HQDBSys(false).HQProcedure("OM21800_pcTerritory").HQHeightWidth(400, 300)
                         .HQColumnShow("Territory,Descr").DisplayField("Descr").ValueField("Territory")
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -68,16 +68,16 @@
                     )
                     
                 , X.Column().Text(Util.GetLang("DescrTerr")).DataIndex("DescrTerr").Width(200).Hidden(true)
-                    .Editor(X.TextField().AllowBlank(true).MaxLength(200).EnforceMaxLength(true))
+                    .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
                 
                 , X.Column().Text(Util.GetLang("DiscID")).DataIndex("DiscID").Width(200)
-				    .Editor(X.TextField().AllowBlank(false).MaxLength(50).EnforceMaxLength(true))
+				    .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
                 , X.Column().Text(Util.GetLang("DiscSeq")).DataIndex("DiscSeq").Width(200)
-				    .Editor(X.TextField().AllowBlank(false).MaxLength(50).EnforceMaxLength(true))
+				    .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
 
                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
-				    .Editor(X.TextField().AllowBlank(false))
+				    .Editor(X.TextField())
 
                 
                 , X.Column().Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(120).Renderer("renderClassID")
@@ -94,16 +94,16 @@
                     )
                 
                 , X.Column().Text(Util.GetLang("DescrClass")).DataIndex("DescrClass").Width(200).Hidden(true)
-				    .Editor(X.TextField().AllowBlank(true).MaxLength(50).EnforceMaxLength(true))
+				    .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
     
                 , X.DateColumn().Text(Util.GetLang("StartDate")).DataIndex("StartDate").Width(150).Format("MM/dd/yyyy")
-				    .Editor(HQ.DateField().Format("MM/dd/yyyy").AllowBlank(false))
+				    .Editor(HQ.DateField().Format("MM/dd/yyyy"))
 
                 , X.DateColumn().Text(Util.GetLang("EndDate")).DataIndex("EndDate").Width(150).Format("MM/dd/yyyy")
-				    .Editor(HQ.DateField().Format("MM/dd/yyyy").AllowBlank(false))
+				    .Editor(HQ.DateField().Format("MM/dd/yyyy"))
 
                 , X.Column().Text(Util.GetLang("Poster")).DataIndex("Poster").Width(200)
-				    .Editor(X.TextField().AllowBlank(false).MaxLength(200).EnforceMaxLength(true))
+				    .Editor(X.TextField().MaxLength(200).EnforceMaxLength(true))
                     
                 , X.CheckColumn().ID("chkStatus").DataIndex("Status").Width(70).Editable(true).HideTitleEl(false).Text(Util.GetLang("Status"))
                     
