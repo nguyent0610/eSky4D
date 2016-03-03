@@ -311,8 +311,8 @@ var save = function () {
             waitMsg: HQ.common.getLang("SavingData"),
             url: 'OM23102/Save',
             params: {
-                //lstOM_PG_FCS: Ext.HQ.store.getData(App.stoOM_PG_FCS)
-                lstOM_PG_FCS: Ext.encode(App.stoOM_PG_FCS.getChangedData({ skipIdForPhantomRecords: false })),
+                lstOM_PG_FCS: HQ.store.getData(App.stoOM_PG_FCS)
+                //lstOM_PG_FCS: Ext.encode(App.stoOM_PG_FCS.getChangedData({ skipIdForPhantomRecords: false })),
             },
             success: function (msg, data) {
                 HQ.message.show(201405071);
