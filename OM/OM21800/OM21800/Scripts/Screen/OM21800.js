@@ -1,7 +1,7 @@
 //// Declare //////////////////////////////////////////////////////////
 var keys = ['Territory', 'DiscID', 'DiscSeq'];
-var fieldsCheckRequire = ['Territory', 'DiscID', 'DiscSeq'];
-var fieldsLangCheckRequire = ['Territory', 'DiscID', 'DiscSeq'];
+var fieldsCheckRequire = ['Territory', 'DiscID', 'DiscSeq', 'StartDate', 'EndDate','Descr','Poster'];
+var fieldsLangCheckRequire = ['Territory', 'DiscID', 'DiscSeq', 'StartDate', 'EndDate', 'Descr', 'Poster'];
 
 var _Source = 0;
 var _maxSource = 2;
@@ -62,8 +62,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.form.checkRequirePass(App.frmMain)
-                    && HQ.store.checkRequirePass(App.stoOM_DiscountInfor, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.store.checkRequirePass(App.stoOM_DiscountInfor, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
@@ -141,7 +140,7 @@ var grdOM_DiscountInfor_Edit = function (item, e) {
     if (e.field == 'Territory') {
         if (e.value) {
             var recordT = App.cboTerritoryOM21800_pcTerritory.findRecord("Territory", e.value);
-            if (record)
+            if (recordT)
                 e.record.set('DescrTerr', recordT.data.Descr);
             else
                 e.record.set('DescrTerr', '');
@@ -149,11 +148,18 @@ var grdOM_DiscountInfor_Edit = function (item, e) {
     }
     else if (e.field == 'ClassID') {
         if (e.value) {
-            var recordT = App.cboClassIDOM21800_pcClassID.findRecord("ClassID", e.value);
-            if (record)
-                e.record.set('DescrClass', recordT.data.Descr);
+            var recordTT = App.cboClassIDOM21800_pcClassID.findRecord("ClassID", e.value);
+            if (recordTT)
+                e.record.set('DescrClass', recordTT.data.Descr);
             else
                 e.record.set('DescrClass', '');
+        }
+    }
+    else if (e.field == 'StartDate' || e.field == 'EndDate') {
+        if (dates.compare(e.record.data.StartDate, e.record.data.EndDate) == 1) {
+            HQ.message.show(201312203, e.value);
+            e.record.set(e.field, e.originalValue);
+            return false;
         }
     }
     //Kiem tra cac key da duoc nhap se insert them dong moi
@@ -244,4 +250,26 @@ var renderClassID = function (value, metaData, rec, rowIndex, colIndex, store) {
         return value;
     }
 };
+
+var dates = {
+    convert: function (d) {
+        return (
+            d.constructor === Date ? d :
+            d.constructor === Array ? new Date(d[0], d[1], d[2]) :
+            d.constructor === Number ? new Date(d) :
+            d.constructor === String ? new Date(d) :
+            typeof d === "object" ? new Date(d.year, d.month, d.date) :
+            NaN
+        );
+    },
+    compare: function (a, b) {
+        return (
+            isFinite(a = this.convert(a).valueOf()) &&
+            isFinite(b = this.convert(b).valueOf()) ?
+            (a > b) - (a < b) :
+            NaN
+        );
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
