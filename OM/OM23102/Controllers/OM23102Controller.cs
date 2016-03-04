@@ -476,6 +476,7 @@ namespace OM23102.Controllers
         {
             try
             {
+                string BranchID = data["cboDist"].PassNull();
                 Stream stream = new MemoryStream();
                 Workbook workbook = new Workbook();
                 workbook.Worksheets.Add();
@@ -495,6 +496,7 @@ namespace OM23102.Controllers
 
                 pc = new ParamCollection();
                 pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(BranchID), ParameterDirection.Input, 30));
                 DataTable dtSale = dal.ExecDataTable("OM23102_peSale", CommandType.StoredProcedure, ref pc);
                 SheetDataMaster.Cells.ImportDataTable(dtSale, true, 0, 2, false);// du lieu Inventory
 
@@ -506,6 +508,7 @@ namespace OM23102.Controllers
 
                 pc = new ParamCollection();
                 pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(Current.UserName), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(BranchID), ParameterDirection.Input, 30));
                 DataTable dtCust = dal.ExecDataTable("OM23102_peCust", CommandType.StoredProcedure, ref pc);
                 SheetDataMaster.Cells.ImportDataTable(dtCust, true, 0, 7, false);// du lieu Inventory
 
@@ -674,6 +677,7 @@ namespace OM23102.Controllers
                 range.SetStyle(style);
 
                 #endregion
+
                 #region template
                 SetCellValue(SheetTarget.Cells["D1"], Util.GetLang("OM23102EHeader"), TextAlignmentType.Center, TextAlignmentType.Center);
                 SheetTarget.Cells.Merge(0, 3, 2, 5);
