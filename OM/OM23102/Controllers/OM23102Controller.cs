@@ -525,11 +525,7 @@ namespace OM23102.Controllers
                 comment.Note = "Input Month(MM/yyyy)";
                 comment.WidthCM = 5;
 
-                
-
                 #region formular
-
-
                 //BranchID
                 string formulaBranch = "=Master! $A$2:$A$" + (dtBranch.Rows.Count + 2);
                 validation = SheetTarget.Validations[SheetTarget.Validations.Add()];
@@ -693,6 +689,7 @@ namespace OM23102.Controllers
                 SetCellValueHeader(SheetTarget.Cells["I4"], Util.GetLang("OM23102CustID"), TextAlignmentType.Center, TextAlignmentType.Center);
                 //SetCellValueHeader(SheetTarget.Cells["I4"], Util.GetLang("OM23102CustName"), TextAlignmentType.Center, TextAlignmentType.Center);
                 #endregion
+
                 SheetTarget.AutoFitColumns();
 
                 workbook.Save(stream, SaveFormat.Xlsx);
@@ -700,7 +697,6 @@ namespace OM23102.Controllers
                 stream.Position = 0;
 
                 return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = Util.GetLang("OM23102NameEx")+".xlsx" };
-
             }
             catch (Exception ex)
             {
