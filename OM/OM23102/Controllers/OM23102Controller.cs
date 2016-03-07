@@ -570,7 +570,9 @@ namespace OM23102.Controllers
                 SheetTarget.Cells["D5"].SetSharedFormula(formulaSlsName, 1000, 1);
 
                 //CustID
-                string formulaCust = "=OFFSET(Master! $H$1,IFERROR(MATCH(B5&C5,Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",0)-1," + (dtCust.Rows.Count + 1) + "),2,IF(COUNTIF(Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",B5&C5)=0,1,COUNTIF(Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",B5&C5)),1)";
+                //Sua lai theo yeu cau 2016/03/07 chi loc cust theo branch
+                string formulaCust = "=OFFSET(Master! $H$1,IFERROR(MATCH(B5,Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",0)-1," + (dtCust.Rows.Count + 1) + "),2,IF(COUNTIF(Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",B5)=0,1,COUNTIF(Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",B5)),1)";
+                //string formulaCust = "=OFFSET(Master! $H$1,IFERROR(MATCH(B5&C5,Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",0)-1," + (dtCust.Rows.Count + 1) + "),2,IF(COUNTIF(Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",B5&C5)=0,1,COUNTIF(Master! $H$1:$H$" + (dtCust.Rows.Count + 1) + ",B5&C5)),1)";
                 validation = SheetTarget.Validations[SheetTarget.Validations.Add()];
                 validation.IgnoreBlank = true;
                 validation.Type = Aspose.Cells.ValidationType.List;
