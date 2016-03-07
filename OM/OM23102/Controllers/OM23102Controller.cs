@@ -716,7 +716,8 @@ namespace OM23102.Controllers
         public ActionResult Import(FormCollection data)
         {
             try
-            {               
+            {
+                string BranchID = data["cboDist"].PassNull();
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
                 HttpPostedFile file = fileUploadField.PostedFile; 
                 FileInfo fileInfo = new FileInfo(file.FileName);
@@ -742,8 +743,8 @@ namespace OM23102.Controllers
                             DateTime month;                           
                             int lineRef = 1;
                             var lstBranch=_db.OM23102_peBranch(Current.UserName).ToList();
-                            var lstSlsper=_db.OM23102_peSale(Current.UserName).ToList();
-                            var lstCust = _db.OM23102_peCust(Current.UserName).ToList();
+                            var lstSlsper = _db.OM23102_peSale(Current.UserName, BranchID).ToList();
+                            var lstCust = _db.OM23102_peCust(Current.UserName, BranchID).ToList();
                             var lstClass=_db.OM23102_peProductClass(Current.UserName).ToList();
                             for (int i = 4; i < workSheet.Cells.MaxDataRow; i++)
                             {

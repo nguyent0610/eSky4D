@@ -188,7 +188,8 @@ namespace OM23102
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
-        public ObjectResult<OM23102_peSale_Result> OM23102_peSale(global::System.String userID)
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<OM23102_peSale_Result> OM23102_peSale(global::System.String userID, global::System.String branchID)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -200,14 +201,25 @@ namespace OM23102
                 userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM23102_peSale_Result>("OM23102_peSale", userIDParameter);
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM23102_peSale_Result>("OM23102_peSale", userIDParameter, branchIDParameter);
         }
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
-        public ObjectResult<OM23102_peCust_Result> OM23102_peCust(global::System.String userID)
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<OM23102_peCust_Result> OM23102_peCust(global::System.String userID, global::System.String branchID)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -219,7 +231,17 @@ namespace OM23102
                 userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM23102_peCust_Result>("OM23102_peCust", userIDParameter);
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM23102_peCust_Result>("OM23102_peCust", userIDParameter, branchIDParameter);
         }
 
         #endregion
@@ -948,11 +970,13 @@ namespace OM23102
         /// <summary>
         /// Create a new OM23102_peCust_Result object.
         /// </summary>
+        /// <param name="branchID">Initial value of the BranchID property.</param>
         /// <param name="custID">Initial value of the CustID property.</param>
         /// <param name="custName">Initial value of the CustName property.</param>
-        public static OM23102_peCust_Result CreateOM23102_peCust_Result(global::System.String custID, global::System.String custName)
+        public static OM23102_peCust_Result CreateOM23102_peCust_Result(global::System.String branchID, global::System.String custID, global::System.String custName)
         {
             OM23102_peCust_Result oM23102_peCust_Result = new OM23102_peCust_Result();
+            oM23102_peCust_Result.BranchID = branchID;
             oM23102_peCust_Result.CustID = custID;
             oM23102_peCust_Result.CustName = custName;
             return oM23102_peCust_Result;
@@ -965,26 +989,26 @@ namespace OM23102
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String BranchIDSlsperId
+        public global::System.String BranchID
         {
             get
             {
-                return _BranchIDSlsperId;
+                return _BranchID;
             }
             set
             {
-                OnBranchIDSlsperIdChanging(value);
-                ReportPropertyChanging("BranchIDSlsperId");
-                _BranchIDSlsperId = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("BranchIDSlsperId");
-                OnBranchIDSlsperIdChanged();
+                OnBranchIDChanging(value);
+                ReportPropertyChanging("BranchID");
+                _BranchID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("BranchID");
+                OnBranchIDChanged();
             }
         }
-        private global::System.String _BranchIDSlsperId;
-        partial void OnBranchIDSlsperIdChanging(global::System.String value);
-        partial void OnBranchIDSlsperIdChanged();
+        private global::System.String _BranchID;
+        partial void OnBranchIDChanging(global::System.String value);
+        partial void OnBranchIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
