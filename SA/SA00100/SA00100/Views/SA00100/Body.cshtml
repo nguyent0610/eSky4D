@@ -47,40 +47,90 @@
          X.RowNumbererColumn()
             , X.Column().Text(Util.GetLang("ScreenNumber")).DataIndex("ScreenNumber").Width(150).Editor(X.TextField().MaxLength(7).EnforceMaxLength(true))
             , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250).Editor(X.TextField().MaxLength(100).EnforceMaxLength(true))
-            , X.Column().Text(Util.GetLang("ModuleID")).Width(150).DataIndex("ModuleID")
-                .Editor(
-                    HQ.Combo().ID("cboModuleID").Name("cboModuleID").HQProcedure("SA00100_pcGetScreenModuleIDName")
-                    .HQColumnShow("ModuleID,ModuleName").DisplayField("ModuleID").ValueField("ModuleID")
-                    .HQHeightWidth(500, 400)
-                    .HQParam(new StoreParameterCollection() { 
-                    new StoreParameter("@UserID", Current.UserName, ParameterMode.Value)
-                    }).HQDBSys(true).Editable(false)
+            //, X.Column().Text(Util.GetLang("ModuleID")).Width(150).DataIndex("ModuleID")
+            //    .Editor(
+            //        HQ.Combo().ID("cboModuleID").Name("cboModuleID").HQProcedure("SA00100_pcGetScreenModuleIDName")
+            //        .HQColumnShow("ModuleID,ModuleName").DisplayField("ModuleID").ValueField("ModuleID")
+            //        .HQHeightWidth(500, 400)
+            //        .HQParam(new StoreParameterCollection() { 
+            //    new StoreParameter("@UserID", Current.UserName, ParameterMode.Value)
+            //    }).HQDBSys(true).Editable(false)
+            //        .LoadData()
+            //    )
+            , X.Column().Text(Util.GetLang("ModuleID")).DataIndex("ModuleID")
+                    .Editor(
+                        HQ.Combo().ID("cboModuleID").Name("cboModuleID").HQProcedure("SA00100_pcGetScreenModuleIDName").HQAutoLoad(true)
+                        .HQColumnShow("ModuleID,ModuleName").DisplayField("ModuleID").ValueField("ModuleID")
+                        .Width(300).HQHeightWidth(500, 400)
+                        .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@UserID", Current.UserName, ParameterMode.Value)
+                        })
+                        .HQDBSys(true).ForceSelection(true)
+                        .DataIndex("ModuleID")
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                                    )
+            //, X.Column().Text(Util.GetLang("ScreenType")).Width(150).DataIndex("ScreenType")
+            //    .Editor(
+            //        HQ.Combo().ID("cboScreenType").Name("cboScreenType").HQProcedure("SA00100_pcGetScreenType")
+            //        .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+            //        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+            //        .HQParam(new StoreParameterCollection() {                   
+            //        new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value)
+            //        }).HQDBSys(true).Editable(false)
+            //        .LoadData()
+            //    )
+            , X.Column().Text(Util.GetLang("ScreenType")).DataIndex("ScreenType")
+                  .Editor(
+                       HQ.Combo().ID("cboScreenType").Name("cboScreenType").HQProcedure("SA00100_pcGetScreenType").HQAutoLoad(true)
+                      .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
+                      .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+                      .HQParam(new StoreParameterCollection() { 
+                        new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value)
+                        })
+                    .HQDBSys(true).ForceSelection(true)
+                        .DataIndex("ScreenType")
                     .LoadData()
-                )
-            , X.Column().Text(Util.GetLang("ScreenType")).Width(150).DataIndex("ScreenType")
-                .Editor(
-                    HQ.Combo().ID("cboScreenType").Name("cboScreenType").HQProcedure("SA00100_pcGetScreenType")
-                    .HQColumnShow("Code,Descr").DisplayField("Code").ValueField("Code")
-                    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                    .HQParam(new StoreParameterCollection() {                   
-                    new StoreParameter("@LangID", Current.LangID.ToString(), ParameterMode.Value)
-                    }).HQDBSys(true).Editable(false)
-                    .LoadData()
-                )
-            
-            , X.NumberColumn().ID("SortNbr").Text(Util.GetLang("SortNbr")).DataIndex("SortNbr").Format("0,000").Width(150).Align(Alignment.Right)
-                    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                        )
+              , X.NumberColumn().ID("SortNbr").StyleSpec("text-align:left").Text(Util.GetLang("SortNbr")).DataIndex("SortNbr").Format("0,000").Width(150).Align(Alignment.Right)
+                        .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
                     
-            , X.Column().Text(Util.GetLang("CatID")).Width(150).DataIndex("CatID")
+            //, X.Column().Text(Util.GetLang("CatID")).Width(150).DataIndex("CatID")
+            //    .Editor(
+            //        HQ.Combo().ID("cboCatID").Name("cboCatID").HQProcedure("SA00100_pcGetScreenCatIDDescr")
+            //        .HQColumnShow("CatID,Descr").DisplayField("CatID").ValueField("CatID")
+            //        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
+            //        .HQParam(new StoreParameterCollection() {                       
+            //        new StoreParameter("@UserID", Current.UserName, ParameterMode.Value)
+            //        }).HQDBSys(true).Editable(false)
+            //        .LoadData()
+            //    )                         
+            , X.Column().Text(Util.GetLang("CatID")).DataIndex("CatID")
                 .Editor(
-                    HQ.Combo().ID("cboCatID").Name("cboCatID").HQProcedure("SA00100_pcGetScreenCatIDDescr")
+                    HQ.Combo().ID("cboCatID").Name("cboCatID").HQProcedure("SA00100_pcGetScreenCatIDDescr").HQAutoLoad(true)
                     .HQColumnShow("CatID,Descr").DisplayField("CatID").ValueField("CatID")
-                    .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0")
-                    .HQParam(new StoreParameterCollection() {                       
-                    new StoreParameter("@UserID", Current.UserName, ParameterMode.Value)
-                    }).HQDBSys(true).Editable(false)
-                    .LoadData()
-                )                         
+                    .Width(300).HQHeightWidth(500, 400)
+                    .HQParam(new StoreParameterCollection() { 
+                new StoreParameter("@UserID", Current.UserName, ParameterMode.Value)
+                })
+                .HQDBSys(true).ForceSelection(true)
+                .DataIndex("CatID")
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+                    )
             , X.Column().Text(Util.GetLang("ExecPath")).DataIndex("ExecPath").Width(150).Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
             , X.CommandColumn().Width(150)
             .Commands(
@@ -136,7 +186,7 @@
                     X.StringFilter().DataIndex("Descr"),
                     X.StringFilter().DataIndex("ModuleID"),
                     X.StringFilter().DataIndex("ScreenType"),
-                    X.StringFilter().DataIndex("SortNbr"),
+                    X.NumericFilter().DataIndex("SortNbr"),
                     X.StringFilter().DataIndex("CatID"),
                     X.StringFilter().DataIndex("ExecPath")
                 )
