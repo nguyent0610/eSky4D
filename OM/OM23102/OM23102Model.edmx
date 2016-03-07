@@ -77,7 +77,7 @@
           <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="OM23102_peSale" ReturnType="Collection(OM23102Model.OM23102_peSale_Result)">
-          <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="OM_PG_FCS" EntityType="OM23102Model.OM_PG_FCS" />
@@ -131,7 +131,7 @@
         </EntityType>
         <ComplexType Name="OM23102_peCust_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="BranchIDSlsperIdCustID" Nullable="true" MaxLength="110" />
+          <Property Type="String" Name="BranchIDCustID" Nullable="false" MaxLength="80" />
           <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
         </ComplexType>
@@ -199,7 +199,7 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="OM23102Model.OM23102_peCust_Result">
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="BranchIDSlsperIdCustID" ColumnName="BranchIDSlsperIdCustID" />
+                <ScalarProperty Name="BranchIDCustID" ColumnName="BranchIDCustID" />
                 <ScalarProperty Name="CustID" ColumnName="CustID" />
                 <ScalarProperty Name="CustName" ColumnName="CustName" />
               </ComplexTypeMapping>

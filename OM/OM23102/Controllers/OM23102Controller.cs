@@ -788,7 +788,7 @@ namespace OM23102.Controllers
                                     }
                                     //continue;
                                 }
-                                if (lstCust.Where(p => p.BranchIDSlsperIdCustID.PassNull().ToUpper().Trim() == branchid+slsperid+custid).Count() == 0)
+                                if (lstCust.Where(p => p.BranchIDCustID.PassNull().ToUpper().Trim() == branchid+custid).Count() == 0)
                                 {
                                     if (!lsterrCust.Contains(custid))
                                     {
