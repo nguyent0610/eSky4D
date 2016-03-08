@@ -171,6 +171,12 @@ var Event = {
             },
         },
     Grid: {
+        grdOrder_RowClass: function (record) {
+            if (record.data.isHighlight == '1')
+                return 'hightlight-row'
+          
+        },
+
         slmOrder_select: function (slm, selRec, idx, eOpts) {
             App.grdHisOrd.store.reload();
             App.grdDet.store.filterBy(function (record) {

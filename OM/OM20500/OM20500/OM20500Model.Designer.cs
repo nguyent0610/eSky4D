@@ -5747,7 +5747,9 @@ namespace OM20500
         /// <param name="ordAmt">Initial value of the OrdAmt property.</param>
         /// <param name="taxTot">Initial value of the TaxTot property.</param>
         /// <param name="isAddStock">Initial value of the IsAddStock property.</param>
-        public static OM20500_pgOrder_Result CreateOM20500_pgOrder_Result(global::System.String branchID, global::System.String orderNbr, global::System.DateTime orderDate, global::System.Double ordQty, global::System.Double ordAmt, global::System.Double taxTot, global::System.Boolean isAddStock)
+        /// <param name="custOrderNbr">Initial value of the CustOrderNbr property.</param>
+        /// <param name="isHighlight">Initial value of the isHighlight property.</param>
+        public static OM20500_pgOrder_Result CreateOM20500_pgOrder_Result(global::System.String branchID, global::System.String orderNbr, global::System.DateTime orderDate, global::System.Double ordQty, global::System.Double ordAmt, global::System.Double taxTot, global::System.Boolean isAddStock, global::System.String custOrderNbr, global::System.String isHighlight)
         {
             OM20500_pgOrder_Result oM20500_pgOrder_Result = new OM20500_pgOrder_Result();
             oM20500_pgOrder_Result.BranchID = branchID;
@@ -5757,6 +5759,8 @@ namespace OM20500
             oM20500_pgOrder_Result.OrdAmt = ordAmt;
             oM20500_pgOrder_Result.TaxTot = taxTot;
             oM20500_pgOrder_Result.IsAddStock = isAddStock;
+            oM20500_pgOrder_Result.CustOrderNbr = custOrderNbr;
+            oM20500_pgOrder_Result.isHighlight = isHighlight;
             return oM20500_pgOrder_Result;
         }
 
@@ -6099,6 +6103,54 @@ namespace OM20500
         private global::System.Boolean _IsAddStock;
         partial void OnIsAddStockChanging(global::System.Boolean value);
         partial void OnIsAddStockChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CustOrderNbr
+        {
+            get
+            {
+                return _CustOrderNbr;
+            }
+            set
+            {
+                OnCustOrderNbrChanging(value);
+                ReportPropertyChanging("CustOrderNbr");
+                _CustOrderNbr = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CustOrderNbr");
+                OnCustOrderNbrChanged();
+            }
+        }
+        private global::System.String _CustOrderNbr;
+        partial void OnCustOrderNbrChanging(global::System.String value);
+        partial void OnCustOrderNbrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String isHighlight
+        {
+            get
+            {
+                return _isHighlight;
+            }
+            set
+            {
+                OnisHighlightChanging(value);
+                ReportPropertyChanging("isHighlight");
+                _isHighlight = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("isHighlight");
+                OnisHighlightChanged();
+            }
+        }
+        private global::System.String _isHighlight;
+        partial void OnisHighlightChanging(global::System.String value);
+        partial void OnisHighlightChanged();
 
         #endregion
 

@@ -306,6 +306,8 @@
           <Property Type="Double" Name="OrdAmt" Nullable="false" />
           <Property Type="Double" Name="TaxTot" Nullable="false" />
           <Property Type="Boolean" Name="IsAddStock" Nullable="false" />
+          <Property Type="String" Name="CustOrderNbr" Nullable="false" />
+          <Property Type="String" Name="isHighlight" Nullable="false" />
         </ComplexType>
         <EntityType Name="OM_PDASalesOrd">
           <Key>

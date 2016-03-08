@@ -154,7 +154,7 @@
 
             , X.GridPanel().ID("grdOrder")
             .Region(Region.Center).Scroll(ScrollMode.Both)
-            .View(X.GridView().TrackOver(false))
+            .View(X.GridView().TrackOver(false).GetRowClass(function => function.Fn = "Event.Grid.grdOrder_RowClass"))
             .SortableColumns(false).Flex(1)
             .StoreID("stoOrder")
             .ColumnModel(
@@ -181,6 +181,9 @@
                 , X.Column()
                 .Text(Util.GetLang("OrderNbr")).DataIndex("OrderNbr")
 
+                 , X.Column()
+                .Text(Util.GetLang("CustOrderNbr")).DataIndex("CustOrderNbr")
+                
                 , X.Column()
                 .Text(Util.GetLang("CustID")).DataIndex("CustID")
 
