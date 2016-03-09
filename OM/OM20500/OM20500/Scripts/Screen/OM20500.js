@@ -17,8 +17,10 @@ var Process = {
         return orders.join(",");
     },
     processOrderDet: function (orderNbr, remove) {
+      
+        var allData = App.grdDet.store.snapshot || App.grdDet.store.allData || App.grdDet.store.data;
         if (!remove) {
-            App.grdDet.store.snapshot.each(function (item) {
+            allData.each(function (item) {
                 if (item.data.OrderNbr == orderNbr) {
                     var objInvtID = HQ.store.findInStore(App.stoOM20500_pdIN_Inventory, ['InvtID'], [item.data.InvtID]);
                     if (!Ext.isEmpty(item.data.InvtID) && !Ext.isEmpty(item.data.SlsUnit) && objInvtID.LotSerTrack != 'N' && !Ext.isEmpty(objInvtID.LotSerTrack)) {
@@ -41,7 +43,7 @@ var Process = {
             });
         }
         else {
-            App.grdDet.store.snapshot.each(function (item) {
+            allData.each(function (item) {
                 if (item.data.OrderNbr == orderNbr) {
                     App.stoLotTrans.clearFilter();
                     var objInvtID = HQ.store.findInStore(App.stoOM20500_pdIN_Inventory, ['InvtID'], [item.data.InvtID]);
@@ -69,6 +71,7 @@ var Process = {
             recordOrder.set("Selected", true);
         }
         else recordOrder.set("Selected", false);
+      
 
     }
 };
@@ -201,7 +204,10 @@ var Event = {
             });
         },
         chkSelectHeaderOrder_change: function (chk, newValue, oldValue, eOpts) {
-            App.stoOrder.data.each(function (record) {             
+            App.stoOrder.suspendEvents();
+            App.grdDet.store.suspendEvents();
+            var allData = App.stoOrder.snapshot || App.stoOrder.allData || App.stoOrder.data;
+            allData.each(function (record) {
                 if (record.data.Status != 'C' && record.data.Status != 'E') {
                     record.data.Selected = chk.value;
                     if (record.data.Selected == true) {
@@ -213,6 +219,9 @@ var Event = {
                     }
                 }
             });
+            App.stoOrder.resumeEvents();
+            App.grdDet.store.resumeEvents();
+            App.grdDet.view.refresh();
             App.grdOrder.view.refresh();
         },
         chkSelectHeaderIsAddStock_change: function (chk, newValue, oldValue, eOpts) {

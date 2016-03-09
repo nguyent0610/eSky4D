@@ -30,13 +30,13 @@ namespace OM20500
         {
             Current.Authorize = false;
             Current.Server = "EARTHSVR\\SQL2012";
-            Current.DBSys = "ND_eSky4DSys";
+            Current.DBSys = "eBiz4DCloudSysJFV";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["OM20500"] = acc;
-            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
+            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppJFV";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
