@@ -68,10 +68,10 @@ namespace SA40000.Controllers
             node.NodeID = "Root";
          
             tree.Root.Add(node);
-           
 
-            var lstTerritories = _sys.SA40000_ptTerritory().ToList();//tam thoi
-            var companies = _sys.SA40000_ptCompany(Current.UserName).ToList();
+
+			var lstTerritories = _sys.SA40000_pdTerritory(Current.UserName).ToList();//tam thoi
+            var companies = _sys.SA40000_pdCompany(Current.UserName).ToList();
 
             foreach (var item in lstTerritories)
             {

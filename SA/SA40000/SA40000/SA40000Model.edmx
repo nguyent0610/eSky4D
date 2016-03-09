@@ -26,11 +26,13 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="SA40000_pgSYS_CloseDateSetUp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="SA40000_ptCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="SA40000_pdCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="SA40000_ptTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SA40000_pdTerritory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SA40000_pgSYS_CloseDateSetUp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -38,8 +40,10 @@
         <EntityContainer Name="SA40000Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="SYS_CloseDateSetUp" EntityType="SA40000Model.SYS_CloseDateSetUp" />
           <FunctionImport Name="SA40000_pgSYS_CloseDateSetUp" ReturnType="Collection(SA40000Model.SA40000_pgSYS_CloseDateSetUp_Result)" />
-          <FunctionImport Name="SA40000_ptTerritory" ReturnType="Collection(SA40000Model.SA40000_ptTerritory_Result)" />
-          <FunctionImport Name="SA40000_ptCompany" ReturnType="Collection(SA40000Model.SA40000_ptCompany_Result)">
+          <FunctionImport Name="SA40000_pdCompany" ReturnType="Collection(SA40000Model.SA40000_pdCompany_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SA40000_pdTerritory" ReturnType="Collection(SA40000Model.SA40000_pdTerritory_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
@@ -74,14 +78,14 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="Boolean" Name="isChange" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="SA40000_ptTerritory_Result">
-          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
-        </ComplexType>
-        <ComplexType Name="SA40000_ptCompany_Result">
+        <ComplexType Name="SA40000_pdCompany_Result">
           <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="SA40000_pdTerritory_Result">
+          <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -125,20 +129,20 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SA40000_ptTerritory" FunctionName="eBiz4DWebSysModel.Store.SA40000_ptTerritory">
+          <FunctionImportMapping FunctionImportName="SA40000_pdCompany" FunctionName="eBiz4DWebSysModel.Store.SA40000_pdCompany">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="SA40000Model.SA40000_ptTerritory_Result">
-                <ScalarProperty Name="Territory" ColumnName="Territory" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SA40000_ptCompany" FunctionName="eBiz4DWebSysModel.Store.SA40000_ptCompany">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA40000Model.SA40000_ptCompany_Result">
+              <ComplexTypeMapping TypeName="SA40000Model.SA40000_pdCompany_Result">
                 <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
                 <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
                 <ScalarProperty Name="Territory" ColumnName="Territory" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA40000_pdTerritory" FunctionName="eBiz4DWebSysModel.Store.SA40000_pdTerritory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA40000Model.SA40000_pdTerritory_Result">
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

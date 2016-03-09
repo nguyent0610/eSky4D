@@ -108,16 +108,8 @@ namespace SA40000
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectResult<SA40000_ptTerritory_Result> SA40000_ptTerritory()
-        {
-            return base.ExecuteFunction<SA40000_ptTerritory_Result>("SA40000_ptTerritory");
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
-        public ObjectResult<SA40000_ptCompany_Result> SA40000_ptCompany(global::System.String userID)
+        public ObjectResult<SA40000_pdCompany_Result> SA40000_pdCompany(global::System.String userID)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -129,7 +121,26 @@ namespace SA40000
                 userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<SA40000_ptCompany_Result>("SA40000_ptCompany", userIDParameter);
+            return base.ExecuteFunction<SA40000_pdCompany_Result>("SA40000_pdCompany", userIDParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        public ObjectResult<SA40000_pdTerritory_Result> SA40000_pdTerritory(global::System.String userID)
+        {
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<SA40000_pdTerritory_Result>("SA40000_pdTerritory", userIDParameter);
         }
 
         #endregion
@@ -516,6 +527,184 @@ namespace SA40000
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA40000Model", Name="SA40000_pdCompany_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA40000_pdCompany_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA40000_pdCompany_Result object.
+        /// </summary>
+        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
+        public static SA40000_pdCompany_Result CreateSA40000_pdCompany_Result(global::System.String cpnyID)
+        {
+            SA40000_pdCompany_Result sA40000_pdCompany_Result = new SA40000_pdCompany_Result();
+            sA40000_pdCompany_Result.CpnyID = cpnyID;
+            return sA40000_pdCompany_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyID
+        {
+            get
+            {
+                return _CpnyID;
+            }
+            set
+            {
+                OnCpnyIDChanging(value);
+                ReportPropertyChanging("CpnyID");
+                _CpnyID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CpnyID");
+                OnCpnyIDChanged();
+            }
+        }
+        private global::System.String _CpnyID;
+        partial void OnCpnyIDChanging(global::System.String value);
+        partial void OnCpnyIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CpnyName
+        {
+            get
+            {
+                return _CpnyName;
+            }
+            set
+            {
+                OnCpnyNameChanging(value);
+                ReportPropertyChanging("CpnyName");
+                _CpnyName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CpnyName");
+                OnCpnyNameChanged();
+            }
+        }
+        private global::System.String _CpnyName;
+        partial void OnCpnyNameChanging(global::System.String value);
+        partial void OnCpnyNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="SA40000Model", Name="SA40000_pdTerritory_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SA40000_pdTerritory_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SA40000_pdTerritory_Result object.
+        /// </summary>
+        /// <param name="territory">Initial value of the Territory property.</param>
+        public static SA40000_pdTerritory_Result CreateSA40000_pdTerritory_Result(global::System.String territory)
+        {
+            SA40000_pdTerritory_Result sA40000_pdTerritory_Result = new SA40000_pdTerritory_Result();
+            sA40000_pdTerritory_Result.Territory = territory;
+            return sA40000_pdTerritory_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Territory
+        {
+            get
+            {
+                return _Territory;
+            }
+            set
+            {
+                OnTerritoryChanging(value);
+                ReportPropertyChanging("Territory");
+                _Territory = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Territory");
+                OnTerritoryChanged();
+            }
+        }
+        private global::System.String _Territory;
+        partial void OnTerritoryChanging(global::System.String value);
+        partial void OnTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Descr
+        {
+            get
+            {
+                return _Descr;
+            }
+            set
+            {
+                OnDescrChanging(value);
+                ReportPropertyChanging("Descr");
+                _Descr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Descr");
+                OnDescrChanged();
+            }
+        }
+        private global::System.String _Descr;
+        partial void OnDescrChanging(global::System.String value);
+        partial void OnDescrChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmComplexTypeAttribute(NamespaceName="SA40000Model", Name="SA40000_pgSYS_CloseDateSetUp_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
@@ -813,184 +1002,6 @@ namespace SA40000
         private Nullable<global::System.Boolean> _isChange;
         partial void OnisChangeChanging(Nullable<global::System.Boolean> value);
         partial void OnisChangeChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="SA40000Model", Name="SA40000_ptCompany_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class SA40000_ptCompany_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new SA40000_ptCompany_Result object.
-        /// </summary>
-        /// <param name="cpnyID">Initial value of the CpnyID property.</param>
-        public static SA40000_ptCompany_Result CreateSA40000_ptCompany_Result(global::System.String cpnyID)
-        {
-            SA40000_ptCompany_Result sA40000_ptCompany_Result = new SA40000_ptCompany_Result();
-            sA40000_ptCompany_Result.CpnyID = cpnyID;
-            return sA40000_ptCompany_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyID
-        {
-            get
-            {
-                return _CpnyID;
-            }
-            set
-            {
-                OnCpnyIDChanging(value);
-                ReportPropertyChanging("CpnyID");
-                _CpnyID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CpnyID");
-                OnCpnyIDChanged();
-            }
-        }
-        private global::System.String _CpnyID;
-        partial void OnCpnyIDChanging(global::System.String value);
-        partial void OnCpnyIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CpnyName
-        {
-            get
-            {
-                return _CpnyName;
-            }
-            set
-            {
-                OnCpnyNameChanging(value);
-                ReportPropertyChanging("CpnyName");
-                _CpnyName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CpnyName");
-                OnCpnyNameChanged();
-            }
-        }
-        private global::System.String _CpnyName;
-        partial void OnCpnyNameChanging(global::System.String value);
-        partial void OnCpnyNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Territory
-        {
-            get
-            {
-                return _Territory;
-            }
-            set
-            {
-                OnTerritoryChanging(value);
-                ReportPropertyChanging("Territory");
-                _Territory = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Territory");
-                OnTerritoryChanged();
-            }
-        }
-        private global::System.String _Territory;
-        partial void OnTerritoryChanging(global::System.String value);
-        partial void OnTerritoryChanged();
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="SA40000Model", Name="SA40000_ptTerritory_Result")]
-    [DataContractAttribute(IsReference=true)]
-    [Serializable()]
-    public partial class SA40000_ptTerritory_Result : ComplexObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new SA40000_ptTerritory_Result object.
-        /// </summary>
-        /// <param name="territory">Initial value of the Territory property.</param>
-        public static SA40000_ptTerritory_Result CreateSA40000_ptTerritory_Result(global::System.String territory)
-        {
-            SA40000_ptTerritory_Result sA40000_ptTerritory_Result = new SA40000_ptTerritory_Result();
-            sA40000_ptTerritory_Result.Territory = territory;
-            return sA40000_ptTerritory_Result;
-        }
-
-        #endregion
-
-        #region Primitive Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Territory
-        {
-            get
-            {
-                return _Territory;
-            }
-            set
-            {
-                OnTerritoryChanging(value);
-                ReportPropertyChanging("Territory");
-                _Territory = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Territory");
-                OnTerritoryChanged();
-            }
-        }
-        private global::System.String _Territory;
-        partial void OnTerritoryChanging(global::System.String value);
-        partial void OnTerritoryChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Descr
-        {
-            get
-            {
-                return _Descr;
-            }
-            set
-            {
-                OnDescrChanging(value);
-                ReportPropertyChanging("Descr");
-                _Descr = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Descr");
-                OnDescrChanged();
-            }
-        }
-        private global::System.String _Descr;
-        partial void OnDescrChanging(global::System.String value);
-        partial void OnDescrChanged();
 
         #endregion
 
