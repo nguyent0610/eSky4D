@@ -1,17 +1,19 @@
-﻿using Ext.Net;
+﻿using HQ.eSkyFramework;
+using Ext.Net;
 using Ext.Net.MVC;
-using HQ.eSkyFramework;
-using HQ.eSkySys;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Text;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
-using SendMailService.Web;
+using System.IO;
+using System.Text;
+using System.Drawing;
+using HQ.eSkySys;
 using HQSendMailApprove;
+
 namespace AR20400.Controllers
 {
     [DirectController]
@@ -19,51 +21,768 @@ namespace AR20400.Controllers
     [CheckSessionOut]
     public class AR20400Controller : Controller
     {
-        string screenNbr = "AR20400";
+        private string _screenNbr = "AR20400";
+        private string _userName = Current.UserName;
         AR20400Entities _db = Util.CreateObjectContext<AR20400Entities>(false);
         eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
-        string tmpChangeTreeDic = "0";
-        string brandID = Current.CpnyID;
-        string lang = Current.LangID.ToString();
-        string userNameLogin = Current.UserName;
+        private JsonResult _logMessage;
 
         public ActionResult Index()
         {
-            ViewBag.BusinessDate = DateTime.Now.ToDateShort();
-        
+            var tabContract = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabContract");
+            var tabAdvTool = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabAdvTool");
+            var tabSellingProduct = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabSellingProduct");
+            var tabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
+
+            if (tabContract == null)
+                ViewBag.Contract = "false";
+            else
+            {
+                if (tabContract.IntVal == 0)
+                    ViewBag.Contract = "true";
+                else
+                    ViewBag.Contract = "false";
+            }
+
+            if (tabAdvTool == null)
+                ViewBag.AdvTool = "false";
+            else
+            {
+                if (tabAdvTool.IntVal == 0)
+                    ViewBag.AdvTool = "true";
+                else
+                    ViewBag.AdvTool = "false";
+            }
+
+            if (tabSellingProduct == null)
+                ViewBag.SellingProduct = "false";
+            else
+            {
+                if (tabSellingProduct.IntVal == 0)
+                    ViewBag.SellingProduct = "true";
+                else
+                    ViewBag.SellingProduct = "false";
+            }
+
+            if (tabDisplayMethod == null)
+                ViewBag.DisplayMethod = "false";
+            else
+            {
+                if (tabDisplayMethod.IntVal == 0)
+                    ViewBag.DisplayMethod = "true";
+                else
+                    ViewBag.DisplayMethod = "false";
+            }
+
+            Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
-            var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
-            ViewBag.Roles = user.UserTypes;
-            ViewBag.BusinessDate = DateTime.Now.ToDateShort();
-            //var root = new Node() { };
-            //var nodeType = "C";
-
-            //var hierarchy = new SI_Hierarchy()
-            //{
-            //    RecordID = 0,
-            //    NodeID = "",
-            //    ParentRecordID = 0,
-            //    NodeLevel = 1,
-            //    Descr = "root",
-            //    Type = nodeType
-            //};
-            //var z = 0;
-            //ViewData["resultRoot"] = createNode(root, hierarchy, hierarchy.NodeLevel, z);
             return PartialView();
         }
 
+        public ActionResult GetAR_Customer(string CpnyID, string CustId)
+        {
+            return this.Store(_db.AR20400_pdHeader(CpnyID, CustId).FirstOrDefault());
+        }
+
+        public ActionResult GetAR_CustAdvTool(string CustId)
+        {
+            return this.Store(_db.AR20400_pgAR_CustAdvTool(CustId).ToList());
+        }
+
+        public ActionResult GetAR_CustSellingProducts(string CustId)
+        {
+            return this.Store(_db.AR20400_pgAR_CustSellingProducts(CustId).ToList());
+        }
+
+        public ActionResult GetAR_CustDisplayMethod(string CustId)
+        {
+            return this.Store(_db.AR20400_pgAR_CustDisplayMethod(CustId).ToList());
+        }
+
+        public ActionResult GetAR_LTTContract(string CustId)
+        {
+            return this.Store(_db.AR20400_pgAR_LTTContract(CustId).ToList());
+        }
+
+        public ActionResult GetAR_LTTContractDetail(string CustId)
+        {
+            return this.Store(_db.AR20400_pgAR_LTTContractDetail(CustId).ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Save(FormCollection data, string NodeID, string NodeLevel, string ParentRecordID, string HiddenTree)
+        {
+            try
+            {
+                string CustId = data["cboCustId"].PassNull();
+                string BranchID = data["cboCpnyID"].PassNull();
+                string ClassId = data["cboClassId"].PassNull();
+                string Status = data["cboStatus"].PassNull();
+                string Handle = data["cboHandle"].PassNull();
+                bool checkFlag = false;
+                string LineRef_tmp = string.Empty;
+
+                //strRefix = _db.AR20400_ppRefixCustomer(_userName, BranchID).FirstOrDefault();
+
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstAR_Customer"]);
+                var curHeader = dataHandler1.ObjectData<AR20400_pdHeader_Result>().FirstOrDefault();
+
+                StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstAR_CustAdvTool"]);
+                ChangeRecords<AR20400_pgAR_CustAdvTool_Result> lstAR_CustAdvTool = dataHandler2.BatchObjectData<AR20400_pgAR_CustAdvTool_Result>();
+
+                StoreDataHandler dataHandler3 = new StoreDataHandler(data["lstAR_CustDisplayMethod"]);
+                ChangeRecords<AR20400_pgAR_CustDisplayMethod_Result> lstAR_CustDisplayMethod = dataHandler3.BatchObjectData<AR20400_pgAR_CustDisplayMethod_Result>();
+
+                StoreDataHandler dataHandler6 = new StoreDataHandler(data["lstAR_CustSellingProducts"]);
+                ChangeRecords<AR20400_pgAR_CustSellingProducts_Result> lstAR_CustSellingProducts = dataHandler6.BatchObjectData<AR20400_pgAR_CustSellingProducts_Result>();
+
+                StoreDataHandler dataHandler4 = new StoreDataHandler(data["lstAR_LTTContract"]);
+                var lstAR_LTTContract = dataHandler4.ObjectData<AR20400_pgAR_LTTContract_Result>() == null ? new List<AR20400_pgAR_LTTContract_Result>() : dataHandler4.ObjectData<AR20400_pgAR_LTTContract_Result>().Where(p => p.LTTContractNbr != "");
+
+                StoreDataHandler dataHandler5 = new StoreDataHandler(data["lstAR_LTTContractDetail"]);
+                var lstAR_LTTContractDetail = dataHandler5.ObjectData<AR20400_pgAR_LTTContractDetail_Result>() == null ? new List<AR20400_pgAR_LTTContractDetail_Result>() : dataHandler5.ObjectData<AR20400_pgAR_LTTContractDetail_Result>().Where(p => p.Type != "");
+
+                var objAR_Setup = _db.AR_Setup.FirstOrDefault(p => p.BranchID == BranchID && p.SetupId == "AR");
+                if (objAR_Setup != null)
+                {
+                    if (!objAR_Setup.AutoCustID && CustId == "")
+                    {
+                        throw new MessageException(MessageType.Message, "15", "", parm: new string[] { "CustId" });
+                    }
+
+                    #region Save AR_Customer
+                    var header = _db.AR_Customer.FirstOrDefault(p => p.BranchID == BranchID && p.CustId == CustId);
+                    if (header == null)
+                    {
+                        if (objAR_Setup.AutoCustID == true)
+                        {
+                            var objCustID = _db.AR20400_ppCustID(BranchID, "", "", "", "", "", "", "", "", "", ClassId).FirstOrDefault();
+
+                            header = new AR_Customer();
+                            header.ResetET();
+                            header.CustId = objCustID.PassNull();
+                            header.BranchID = BranchID;
+                            header.Crtd_Datetime = DateTime.Now;
+                            header.Crtd_Prog = _screenNbr;
+                            header.Crtd_User = Current.UserName;
+                            UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, HiddenTree, Status, Handle);
+                            _db.AR_Customer.AddObject(header);
+
+                            AR_CustHist objAR_CustHist = new AR_CustHist();
+                            objAR_CustHist.ResetET();
+                            Update_AR_CustHist(ref objAR_CustHist, header);
+                            _db.AR_CustHist.AddObject(objAR_CustHist);
+                        }
+                        else
+                        {
+                            header = new AR_Customer();
+                            header.ResetET();
+                            header.CustId = CustId;
+                            header.BranchID = BranchID;
+                            header.Crtd_Datetime = DateTime.Now;
+                            header.Crtd_Prog = _screenNbr;
+                            header.Crtd_User = Current.UserName;
+                            UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, HiddenTree, Status, Handle);
+                            _db.AR_Customer.AddObject(header);
+
+                            AR_CustHist objAR_CustHist = new AR_CustHist();
+                            objAR_CustHist.ResetET();
+                            Update_AR_CustHist(ref objAR_CustHist, header);
+                            _db.AR_CustHist.AddObject(objAR_CustHist);
+                        }
+                    }
+                    else
+                    {
+                        if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
+                        {
+                            UpdatingHeader(ref header, curHeader, NodeID, NodeLevel, ParentRecordID, HiddenTree, Status, Handle);
+                        }
+                        else
+                        {
+                            throw new MessageException(MessageType.Message, "19");
+                        }
+                    }
+
+                    CustId = header.CustId;
+
+                    #endregion
+
+                    #region Save AR_SOAddress
+                    var objAR_SOAddress = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == BranchID
+                                                                            && p.CustId == CustId
+                                                                            && p.ShipToId == (curHeader.DfltShipToId == "" ? "DEFAULT" : curHeader.DfltShipToId));
+                    if (objAR_SOAddress == null)
+                    {
+                        objAR_SOAddress = new AR_SOAddress();
+                        objAR_SOAddress.ResetET();
+                        objAR_SOAddress.BranchID = BranchID;
+                        objAR_SOAddress.CustId = CustId;
+                        objAR_SOAddress.ShipToId = curHeader.DfltShipToId == "" ? "DEFAULT" : curHeader.DfltShipToId;
+                        objAR_SOAddress.Crtd_DateTime = DateTime.Now;
+                        objAR_SOAddress.Crtd_Prog = _screenNbr;
+                        objAR_SOAddress.Crtd_User = Current.UserName;
+                        UpdatingAR_SOAddress(ref objAR_SOAddress, curHeader);
+                        _db.AR_SOAddress.AddObject(objAR_SOAddress);
+                    }
+                    else
+                    {
+                        UpdatingAR_SOAddress(ref objAR_SOAddress, curHeader);
+                    }
+                    #endregion
+
+                    #region Save AR_CustAdvTool
+
+                    checkFlag = false;
+                    LineRef_tmp = string.Empty;
+
+                    foreach (AR20400_pgAR_CustAdvTool_Result deleted in lstAR_CustAdvTool.Deleted)
+                    {
+                        var objDelete = _db.AR_CustAdvTool.Where(p => p.CustID == CustId
+                                                                      && p.LineRef == deleted.LineRef).FirstOrDefault();
+                        if (objDelete != null)
+                        {
+                            _db.AR_CustAdvTool.DeleteObject(objDelete);
+                        }
+                    }
+
+                    lstAR_CustAdvTool.Created.AddRange(lstAR_CustAdvTool.Updated);
+
+                    foreach (AR20400_pgAR_CustAdvTool_Result curLang in lstAR_CustAdvTool.Created)
+                    {
+                        if (CustId.PassNull() == "" || curLang.Type.PassNull() == "") continue;
+
+                        var lang = _db.AR_CustAdvTool.FirstOrDefault(p => p.CustID.ToLower() == CustId.ToLower()
+                                                                      && p.LineRef.ToLower() == curLang.LineRef.ToLower());
+
+                        if (lang != null)
+                        {
+                            if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                            {
+                                UpdatingAR_CustAdvTool(lang, curLang, false);
+                            }
+                            else
+                            {
+                                throw new MessageException(MessageType.Message, "19");
+                            }
+                        }
+                        else
+                        {
+                            lang = new AR_CustAdvTool();
+                            lang.ResetET();
+                            lang.CustID = CustId;
+
+                            if (checkFlag == false)
+                            {
+                                lang.LineRef = _db.AR20400_ppGetLineRefAR_CustAdvTool(CustId).FirstOrDefault().PassNull();
+                            }
+                            else
+                            {
+                                int sub = int.Parse(LineRef_tmp.Substring(LineRef_tmp.Length - 3, 3)) + 1;
+                                string strtemp = "000" + sub.ToString();
+                                lang.LineRef = LineRef_tmp.Substring(0, LineRef_tmp.Length - 3) + strtemp.Substring(strtemp.Length - 3, 3);
+                            }
+                            LineRef_tmp = lang.LineRef;
 
 
-        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, int z)
+                            UpdatingAR_CustAdvTool(lang, curLang, true);
+                            _db.AR_CustAdvTool.AddObject(lang);
+                            checkFlag = true;
+                        }
+                    }
+                    #endregion
+
+                    #region Save AR_CustSellingProducts
+
+                    foreach (AR20400_pgAR_CustSellingProducts_Result deleted in lstAR_CustSellingProducts.Deleted)
+                    {
+                        var objDelete = _db.AR_CustSellingProducts.Where(p => p.CustID == CustId
+                                                                      && p.Code == deleted.Code).FirstOrDefault();
+                        if (objDelete != null)
+                        {
+                            _db.AR_CustSellingProducts.DeleteObject(objDelete);
+                        }
+                    }
+
+                    lstAR_CustSellingProducts.Created.AddRange(lstAR_CustSellingProducts.Updated);
+
+                    foreach (AR20400_pgAR_CustSellingProducts_Result curLang in lstAR_CustSellingProducts.Created)
+                    {
+                        if (CustId.PassNull() == "" || curLang.Code.PassNull() == "") continue;
+
+                        var lang = _db.AR_CustSellingProducts.FirstOrDefault(p => p.CustID.ToLower() == CustId.ToLower()
+                                                                      && p.Code.ToLower() == curLang.Code.ToLower());
+
+                        if (lang != null)
+                        {
+                            if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                            {
+                                UpdatingAR_CustSellingProducts(lang, curLang, false);
+                            }
+                            else
+                            {
+                                throw new MessageException(MessageType.Message, "19");
+                            }
+                        }
+                        else
+                        {
+                            lang = new AR_CustSellingProducts();
+                            lang.ResetET();
+                            lang.CustID = CustId;
+                            lang.Code = curLang.Code;
+                            UpdatingAR_CustSellingProducts(lang, curLang, true);
+                            _db.AR_CustSellingProducts.AddObject(lang);
+                        }
+                    }
+                    #endregion
+
+                    #region Save AR_CustDisplayMethod
+
+                    foreach (AR20400_pgAR_CustDisplayMethod_Result deleted in lstAR_CustDisplayMethod.Deleted)
+                    {
+                        var objDelete = _db.AR_CustDisplayMethod.Where(p => p.CustID == CustId
+                                                                      && p.DispMethod == deleted.DispMethod).FirstOrDefault();
+                        if (objDelete != null)
+                        {
+                            _db.AR_CustDisplayMethod.DeleteObject(objDelete);
+                        }
+                    }
+
+                    lstAR_CustDisplayMethod.Created.AddRange(lstAR_CustDisplayMethod.Updated);
+
+                    foreach (AR20400_pgAR_CustDisplayMethod_Result curLang in lstAR_CustDisplayMethod.Created)
+                    {
+                        if (CustId.PassNull() == "" || curLang.DispMethod.PassNull() == "") continue;
+
+                        var lang = _db.AR_CustDisplayMethod.FirstOrDefault(p => p.CustID.ToLower() == CustId.ToLower()
+                                                                      && p.DispMethod.ToLower() == curLang.DispMethod.ToLower());
+
+                        if (lang != null)
+                        {
+                            if (lang.tstamp.ToHex() == curLang.tstamp.ToHex())
+                            {
+                                UpdatingAR_CustDisplayMethod(lang, curLang, false);
+                            }
+                            else
+                            {
+                                throw new MessageException(MessageType.Message, "19");
+                            }
+                        }
+                        else
+                        {
+                            lang = new AR_CustDisplayMethod();
+                            lang.ResetET();
+                            lang.CustID = CustId;
+                            lang.DispMethod = curLang.DispMethod;
+                            UpdatingAR_CustDisplayMethod(lang, curLang, true);
+                            _db.AR_CustDisplayMethod.AddObject(lang);
+                        }
+                    }
+                    #endregion
+
+                    #region Save AR_LTTContract
+                    var lstOld_AR_LTTContract = _db.AR_LTTContract.Where(p => p.CustID.ToLower() == CustId.ToLower()).ToList();
+
+                    foreach (var objold in lstOld_AR_LTTContract)
+                    {
+                        if (lstAR_LTTContract.Where(p => p.LTTContractNbr == objold.LTTContractNbr).FirstOrDefault() == null)
+                        {
+                            _db.AR_LTTContract.DeleteObject(objold);
+                        }
+                    }
+
+                    foreach (var item in lstAR_LTTContract)
+                    {
+                        if (item.LTTContractNbr.PassNull() == "") continue;
+                        var obj = _db.AR_LTTContract.FirstOrDefault(p => p.LTTContractNbr.ToLower() == item.LTTContractNbr.ToLower());
+                        if (obj != null)
+                        {
+                            UpdatingAR_LTTContract(obj, item, false);
+                        }
+                        else
+                        {
+                            obj = new AR_LTTContract();
+                            obj.ResetET();
+                            obj.CustID = CustId;
+                            UpdatingAR_LTTContract(obj, item, true);
+                            _db.AR_LTTContract.AddObject(obj);
+                        }
+                    }
+                    #endregion
+
+                    #region Save AR_LTTContractDetail
+                    checkFlag = false;
+                    LineRef_tmp = string.Empty;
+
+                    var lstOld_AR_LTTContractDetail = _db.AR_LTTContractDetail.ToList();
+
+                    foreach (var objold in lstOld_AR_LTTContractDetail)
+                    {
+                        if (lstAR_LTTContractDetail.Where(p => p.LTTContractNbr == objold.LTTContractNbr
+                                                        && p.LineRef == objold.LineRef).FirstOrDefault() == null)
+                        {
+                            _db.AR_LTTContractDetail.DeleteObject(objold);
+                        }
+                    }
+
+                    foreach (var item in lstAR_LTTContractDetail)
+                    {
+                        if (item.LTTContractNbr.PassNull() == "" || item.Type.PassNull() == "") continue;
+                        var obj = _db.AR_LTTContractDetail.FirstOrDefault(p => p.LTTContractNbr.ToLower() == item.LTTContractNbr.ToLower()
+                                                                        && p.Type.ToLower() == item.Type.ToLower());
+                        if (obj != null)
+                        {
+                            UpdatingAR_LTTContractDetail(obj, item, false);
+                        }
+                        else
+                        {
+                            obj = new AR_LTTContractDetail();
+                            obj.ResetET();
+
+                            if (checkFlag == false)
+                            {
+                                obj.LineRef = _db.AR20400_ppGetLineRefAR_LTTContractDetail(item.LTTContractNbr).FirstOrDefault().PassNull();
+                            }
+                            else
+                            {
+                                int sub = int.Parse(LineRef_tmp.Substring(LineRef_tmp.Length - 3, 3)) + 1;
+                                string strtemp = "000" + sub.ToString();
+                                obj.LineRef = LineRef_tmp.Substring(0, LineRef_tmp.Length - 3) + strtemp.Substring(strtemp.Length - 3, 3);
+                            }
+                            LineRef_tmp = obj.LineRef;
+
+                            UpdatingAR_LTTContractDetail(obj, item, true);
+                            _db.AR_LTTContractDetail.AddObject(obj);
+
+                            checkFlag = true;
+                        }
+                    }
+                    #endregion
+                }
+                else
+                {
+                    throw new MessageException(MessageType.Message, "2016030901");
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true, CustId = CustId });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+
+        private void UpdatingHeader(ref AR_Customer t, AR20400_pdHeader_Result s, string NodeID, string NodeLevel, string ParentRecordID, string HiddenTree, string Status, string Handle)
+        {
+            if (HiddenTree != "true")
+            {
+                t.NodeID = NodeID;
+                t.NodeLevel = short.Parse(NodeLevel.PassNull() == "" ? "0" : NodeLevel);
+                t.ParentRecordID = short.Parse(ParentRecordID.PassNull() == "" ? "0" : ParentRecordID);
+            }
+            else
+            {
+                t.NodeID = "DF";
+                t.NodeLevel = 1;
+                t.ParentRecordID = 0;
+            }
+
+            if (Handle == string.Empty || Handle == "N")
+                t.Status = Status;
+            else
+                t.Status = Handle;
+
+            if (t.Status == "O")
+            {
+                X.Msg.Show(new MessageBoxConfig()
+                {
+                    Message = "Email sent!"
+                });
+                var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
+                Approve.Mail_Approve(_screenNbr, t.CustId, user.UserTypes, t.Status, Handle, Current.LangID.ToString()
+                             , _userName, t.BranchID, Current.CpnyID, string.Empty, string.Empty, string.Empty);
+            }
+
+            t.ClassId = s.ClassId;
+            t.CustType = s.CustType;
+            t.CustName = s.CustName;
+            t.PriceClassID = s.PriceClassID;
+            t.Terms = s.Terms;
+            t.TradeDisc = s.TradeDisc;
+            t.CrRule = s.CrRule;
+            t.CrLmt = s.CrLmt;
+            t.GracePer = s.GracePer;
+            t.Territory = s.Territory;
+            t.Area = s.Area;
+            t.Location = s.Location;
+            t.Channel = s.Channel;
+            t.ShopType = s.ShopType;
+            t.GiftExchange = s.GiftExchange;
+            t.HasPG = s.HasPG;
+            t.SlsperId = s.SlsperId;
+            t.DeliveryID = s.DeliveryID;
+            t.SupID = s.SupID;
+            t.SiteId = s.SiteId;
+            t.DfltShipToId = s.DfltShipToId;
+            t.CustFillPriority = s.CustFillPriority;
+            t.LTTContractNbr = s.LTTContractNbr;
+            t.DflSaleRouteID = s.DflSaleRouteID;
+            t.EmpNum = s.EmpNum;
+            t.ExpiryDate = s.ExpiryDate.ToDateShort();
+            t.EstablishDate = s.EstablishDate.ToDateShort();
+            t.Birthdate = s.Birthdate.ToDateShort();
+            t.CustName = s.CustName;
+            t.Attn = s.Attn;
+            t.Salut = s.Salut;
+            t.Addr1 = s.Addr1;
+            t.Addr2 = s.Addr2;
+            t.Country = s.Country;
+            t.State = s.State;
+            t.City = s.City;
+            t.District = s.District;
+            t.Zip = s.Zip;
+            t.Phone = s.Phone;
+            t.Fax = s.Fax;
+            t.EMailAddr = s.EMailAddr;
+            t.BillName = s.BillName;
+            t.BillAttn = s.BillAttn;
+            t.BillSalut = s.BillSalut;
+            t.BillAddr1 = s.BillAddr1;
+            t.BillAddr2 = s.BillAddr2;
+            t.BillCountry = s.BillCountry;
+            t.BillState = s.BillState;
+            t.BillCity = s.BillCity;
+            t.BillZip = s.BillZip;
+            t.BillPhone = s.BillPhone;
+            t.BillFax = s.BillFax;
+            t.TaxDflt = s.TaxDflt;
+            t.TaxRegNbr = s.TaxRegNbr;
+            t.TaxLocId = s.TaxLocId;
+            t.TaxID00 = s.TaxID00;
+            t.TaxID01 = s.TaxID01;
+            t.TaxID02 = s.TaxID02;
+            t.TaxID03 = s.TaxID03;
+
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
+
+        private void Update_AR_CustHist(ref AR_CustHist t, AR_Customer s)
+        {
+            var objCustHist1 = _db.AR_CustHist.Where(p => p.BranchID == s.BranchID && p.CustID == s.CustId).OrderByDescending(p => p.Seq).FirstOrDefault();
+            string strSeq = objCustHist1 == null ? "0000000001" : ("0000000000" + (double.Parse(objCustHist1.Seq) + 1));
+            strSeq = strSeq.Substring(strSeq.Length - 10, 10);
+            t.Seq = strSeq;
+            t.BranchID = s.BranchID;
+            t.CustID = s.CustId;
+            t.Note = "Tạo mới khách hàng";
+            t.FromDate = DateTime.Now.Short();
+            t.ToDate = DateTime.Now.Short().AddYears(100);
+
+            t.Crtd_DateTime = DateTime.Now;
+            t.Crtd_Prog = _screenNbr;
+            t.Crtd_User = _userName;
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
+
+        private void UpdatingAR_SOAddress(ref AR_SOAddress t, AR20400_pdHeader_Result s)
+        {
+            t.SOName = s.CustName;
+            t.Attn = s.Attn;
+            t.Addr1 = s.Addr1;
+            t.Addr2 = s.Addr2;
+            t.City = s.City;
+            t.State = s.State;
+            t.District = s.District;
+            t.Zip = s.Zip;
+            t.Country = s.Country;
+            t.Phone = s.Phone;
+            t.Fax = s.Fax;
+            t.TaxRegNbr = s.TaxRegNbr;
+            t.TaxLocId = s.TaxLocId;
+            t.TaxId00 = s.TaxID00;
+            t.TaxId01 = s.TaxID01;
+            t.TaxId02 = s.TaxID02;
+            t.TaxId03 = s.TaxID03;
+            t.Country = s.Country;
+
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
+
+        private void UpdatingAR_CustAdvTool(AR_CustAdvTool t, AR20400_pgAR_CustAdvTool_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.Active = s.Active;
+            t.Amt = s.Amt;
+            t.Descr = s.Descr;
+            t.FitupDate = s.FitupDate;
+            t.Status = s.Status;
+            t.Qty = s.Qty;
+            t.Type = s.Type;
+
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+
+        }
+
+        private void UpdatingAR_CustSellingProducts(AR_CustSellingProducts t, AR20400_pgAR_CustSellingProducts_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.Descr = s.Descr;
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
+
+        private void UpdatingAR_CustDisplayMethod(AR_CustDisplayMethod t, AR20400_pgAR_CustDisplayMethod_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.Descr = s.Descr;
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
+
+        private void UpdatingAR_LTTContract(AR_LTTContract t, AR20400_pgAR_LTTContract_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.LTTContractNbr = s.LTTContractNbr;
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.Active = s.Active;
+            t.MonthNum = s.MonthNum;
+            t.ExtDate = s.ExtDate;
+            t.FromDate = s.FromDate;
+            t.AmtCommit = s.AmtCommit;
+            t.QtyCommit = s.QtyCommit;
+            t.Status = s.Status;
+            t.ToDate = s.ToDate;
+            t.TotAmt = s.TotAmt;
+            t.TotQty = s.TotQty;
+            t.UnitCommit = s.UnitCommit;
+            t.ActualQty = s.ActualQty;
+            t.ActualAmt = s.ActualAmt;
+
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
+
+        private void UpdatingAR_LTTContractDetail(AR_LTTContractDetail t, AR20400_pgAR_LTTContractDetail_Result s, bool isNew)
+        {
+            if (isNew)
+            {
+                t.LTTContractNbr = s.LTTContractNbr;
+                t.Crtd_Datetime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
+            }
+            t.Amt = (double)s.Amt;
+            t.Descr = s.Descr;
+            t.Status = s.Status;
+            t.Type = s.Type;
+
+            t.LUpd_Datetime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAll(FormCollection data)
+        {
+            try
+            {
+                string CustId = data["cboCustId"].PassNull();
+                string BranchID = data["cboCpnyID"].PassNull();
+
+                var objAR_Customer = _db.AR_Customer.FirstOrDefault(p => p.BranchID == BranchID
+                                                           && p.CustId == CustId);
+                if (objAR_Customer != null)
+                {
+                    _db.AR_Customer.DeleteObject(objAR_Customer);
+                }
+
+                var objAR_SOAddress = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == BranchID
+                                                           && p.CustId == CustId);
+                if (objAR_SOAddress != null)
+                {
+                    _db.AR_SOAddress.DeleteObject(objAR_SOAddress);
+                }
+
+                var lstAR_CustAdvTool = _db.AR_CustAdvTool.Where(p => p.CustID == CustId).ToList();
+                foreach (var item in lstAR_CustAdvTool)
+                {
+                    _db.AR_CustAdvTool.DeleteObject(item);
+                }
+
+                var lstAR_CustSellingProducts = _db.AR_CustSellingProducts.Where(p => p.CustID == CustId).ToList();
+                foreach (var item in lstAR_CustSellingProducts)
+                {
+                    _db.AR_CustSellingProducts.DeleteObject(item);
+                }
+
+                var lstAR_CustDisplayMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == CustId).ToList();
+                foreach (var item in lstAR_CustDisplayMethod)
+                {
+                    _db.AR_CustDisplayMethod.DeleteObject(item);
+                }
+
+                var lstAR_LTTContract = _db.AR_LTTContract.Where(p => p.CustID == CustId).ToList();
+                foreach (var item in lstAR_LTTContract)
+                {
+                    var lstAR_LTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == item.LTTContractNbr).ToList();
+                    foreach (var item1 in lstAR_LTTContractDetail)
+                    {
+                        _db.AR_LTTContractDetail.DeleteObject(item1);
+                    }
+
+                    _db.AR_LTTContract.DeleteObject(item);
+                }
+
+                _db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException) return (ex as MessageException).ToMessage();
+                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+            }
+        }
+
+        private Node createNode(Node root, SI_Hierarchy inactiveHierachy, int level, string nodeType, string CpnyID)
         {
             var node = new Node();
             var k = -1;
-            //GetNodeItem(root, inactiveHierachy, level);
             if (inactiveHierachy.Descr == "root")
             {
                 node.Text = inactiveHierachy.Descr;
@@ -71,33 +790,30 @@ namespace AR20400.Controllers
             else
             {
                 node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
-                node.NodeID = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
+                node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
+
             }
 
-            var tmps = _db.AR20400_pcCustomer(brandID)
+            var tmps = _db.AR20400_ptCustomer(CpnyID)
                 .Where(p => p.NodeID == inactiveHierachy.NodeID
                     && p.ParentRecordID == inactiveHierachy.ParentRecordID
                     && p.NodeLevel == level - 1).ToList();
+
             var childrenInactiveHierachies = _db.SI_Hierarchy
                 .Where(p => p.ParentRecordID == inactiveHierachy.RecordID
-                    && p.Type == inactiveHierachy.Type
+                    && p.Type == nodeType
                     && p.NodeLevel == level).ToList();
 
             if (tmps != null && tmps.Count > 0)
             {
-                foreach (AR20400_pcCustomer_Result tmp in tmps)
+                foreach (AR20400_ptCustomer_Result tmp in tmps)
                 {
-
                     k++;
-
                     Node nodetmp = new Node();
                     nodetmp.Text = tmp.CustId + "-" + tmp.CustName;
-                    nodetmp.NodeID = tmp.CustId + "-" + tmp.CustName;
+                    nodetmp.NodeID = tmp.CustId + "-" + "|";
                     nodetmp.Leaf = true;
-
                     node.Children.Add(nodetmp);
-                    //System.Diagnostics.Debug.WriteLine(nodetmp.Text);
-
                 }
             }
 
@@ -105,39 +821,27 @@ namespace AR20400.Controllers
             {
                 foreach (SI_Hierarchy childrenInactiveNode in childrenInactiveHierachies)
                 {
-
-                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, z++));
-
+                    node.Children.Add(createNode(node, childrenInactiveNode, level + 1, nodeType, CpnyID));
                 }
             }
             else
             {
                 if (tmps.Count == 0 && childrenInactiveHierachies.Count == 0)
                 {
-
                     node.Leaf = true;
-                    //node.NodeID = Convert.ToString(level) + Convert.ToString(z);
                 }
                 else
                 {
-
                     node.Leaf = false;
                 }
             }
             System.Diagnostics.Debug.WriteLine(node.Text);
-
             return node;
         }
 
-      
-        //dang method co the load duoc node root slmTree
         [DirectMethod]
-        public ActionResult ReloadTreeAR20400(string cpnyID)
+        public ActionResult ReloadTreeAR20400(string CpnyID)
         {
-            brandID = cpnyID;
-
-            var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
-            ViewBag.Roles = user.UserTypes;
             var root = new Node() { };
             var nodeType = "C";
 
@@ -151,1969 +855,165 @@ namespace AR20400.Controllers
                 Type = nodeType
             };
             var z = 0;
-            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, z);
-            //var m = ViewData["resultRoot2"];
-
+            Node node = createNode(root, hierarchy, hierarchy.NodeLevel, nodeType, CpnyID);
 
             //quan trong dung de refresh slmTree
-            this.GetCmp<TreePanel>("IDTree").SetRootNode(node);
+            this.GetCmp<TreePanel>("treeCust").SetRootNode(node);
 
             return this.Direct();
-
         }
 
-
-
-        public StoreResult GetNodes(string cpnyID)
-        {
-            NodeCollection nodes = new NodeCollection(false);
-            if (cpnyID != "")
-            {
-                brandID = cpnyID;
-            }
-
-            var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
-            ViewBag.Roles = user.UserTypes;
-            var root = new Node() { };
-            var nodeType = "C";
-
-            var hierarchy = new SI_Hierarchy()
-            {
-                RecordID = 0,
-                NodeID = "",
-                ParentRecordID = 0,
-                NodeLevel = 1,
-                Descr = "root",
-                Type = nodeType
-            };
-            var z = 0;
-            Node nodeRoot = new Node();
-            nodeRoot = createNode(root, hierarchy, hierarchy.NodeLevel, z);
-            //nodeRoot.NodeID = "Root";
-            //ViewData["resultRoot2"] = nodeRoot;
-            return this.Store(nodeRoot);
-        }
-
-        public ActionResult GetCustomer(String custId, String branchID)
-        {
-            ViewBag.BusinessDate = DateTime.Now.ToDateShort();
-            var rptCustomer = _db.AR_Customer.FirstOrDefault(p => p.CustId == custId && p.BranchID == branchID);
-            return this.Store(rptCustomer);
-        }
-
-        public ActionResult GetDataGridLTTContract(String custId)
-        {
-
-            var lstLTTContract = _db.AR_LTTContract.Where(p => p.CustID == custId).ToList();
-            return this.Store(lstLTTContract);
-        }
-
-        public ActionResult GetDataGridLTTContractDetail(String lTTContractNbr)
-        {
-
-            var lstLTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == lTTContractNbr).ToList();
-            return this.Store(lstLTTContractDetail);
-        }
-
-        public ActionResult GetDataGridAdv(String custId)
-        {
-
-            var lstAR_CustAdvTool = _db.AR_CustAdvTool.Where(p => p.CustID == custId).ToList();
-            return this.Store(lstAR_CustAdvTool);
-        }
-
-        public ActionResult GetDataGridSellingProd(String custId)
-        {
-
-            var lstAR_CustSellingProducts = _db.AR_CustSellingProducts.Where(p => p.CustID == custId).ToList();
-            return this.Store(lstAR_CustSellingProducts);
-        }
-
-        public ActionResult GetDataGridDispMethod(String custId)
-        {
-
-            var lstAR_CustDisplayMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == custId).ToList();
-            return this.Store(lstAR_CustDisplayMethod);
-        }
-
-        [DirectMethod]
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult SaveTree(FormCollection data, string custID, string handle, string nodeID, int nodeLevel, string parentRecordID,
-            int hadChild, string status, string tmpSelectedNode, string branchID, string custName, bool isNew, string lTTContractNbr, string State)
-        {
-            try
-            {
-                StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstheader"]);
-                ChangeRecords<AR_Customer> lstheader = dataHandler2.BatchObjectData<AR_Customer>();
-                var approveHandle = _db.SI_ApprovalFlowHandle
-                           .FirstOrDefault(p => p.AppFolID == screenNbr
-                                               && p.Status == status
-                                               && p.Handle == handle);
-                var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
-                var Role = user.UserTypes;
-                //var custName = data["txtCustName"];
-                var tmpCustID = "";
-                //var statusAfterAll = "";
-                foreach (AR_Customer updated in lstheader.Updated)
-                {
-                    // Get the image path
-
-
-                    var objAR_Customer = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
-                    var cpny = _db.AR_Setup.FirstOrDefault(p => p.BranchID == branchID && p.SetupId == "AR");
-                    //bien tam dung de xai khi co autoCustID xay ra
-                    
-                    //if (tmpHiddenTree == false)
-                    //{
-                        if (isNew)//new record
-                        {
-                            if (objAR_Customer != null)
-                            {
-                                return Json(new { success = false, msgCode = 2000, msgParam = custID });//quang message ma nha cung cap da ton tai ko the them
-
-                            }
-                            else
-                            {
-                                if (hadChild != 0)
-                                {
-                                    objAR_Customer = new AR_Customer();
-                                    String[] nodeid = nodeID.Split('-');
-                                    if (cpny.AutoCustID == false)
-                                    {
-                                        objAR_Customer.CustId = custID;
-                                        tmpCustID = objAR_Customer.CustId;
-                                    }
-                                    else
-                                    {
-                                        objAR_Customer.CustId = functionAutoCustID(branchID, nodeid[0],updated.ClassId,State);
-                                        tmpCustID = objAR_Customer.CustId;
-                                    }
-                                    objAR_Customer.BranchID = branchID;
-
-                                    if (handle == "N" || handle == "")
-                                    {
-                                        objAR_Customer.Status = status;
-                                    }
-                                    else
-                                    {
-                                        objAR_Customer.Status = approveHandle.ToStatus;
-
-                                    }
-                                    if (objAR_Customer.Status == "O")
-                                    {
-                                        X.Msg.Show(new MessageBoxConfig()
-                                        {
-                                            Message = "Email sent!"
-                                        });
-                                        Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-                                                     lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                                    }
-                                    //statusAfterAll = objAR_Customer.Status;
-
-                                    
-                                    objAR_Customer.NodeID = nodeid[0];
-                                    objAR_Customer.NodeLevel = Convert.ToInt16(nodeLevel);
-                                    var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-                                    objAR_Customer.ParentRecordID = searchparentRecordID.ParentRecordID;
-
-                                    objAR_Customer.Crtd_Datetime = DateTime.Now;
-                                    objAR_Customer.Crtd_Prog = screenNbr;
-                                    objAR_Customer.Crtd_User = Current.UserName;
-                                    objAR_Customer.tstamp = new byte[0];
-
-                                    UpdatingHeader(updated, ref objAR_Customer);
-                                    if (data["cboEstablishDate"] == "")
-                                    {
-                                        objAR_Customer.EstablishDate = null;
-                                    }
-                                    if (objAR_Customer.CustId != "" && objAR_Customer.BranchID != "")
-                                    {
-                                        _db.AR_Customer.AddObject(objAR_Customer);
-                                        //_db.SaveChanges();
-                                    }
-
-                                    //save may bang khac
-                                    var objAR_Setup = _db.AR_Setup.Where(p => p.BranchID == brandID && p.SetupId == "AR").FirstOrDefault();
-                                    if (objAR_Setup.AutoCustID)
-                                    {
-                                        var objCustHist = new AR_CustHist();
-                                        var objCustHist1 = _db.AR_CustHist.Where(p => p.BranchID == objAR_Customer.BranchID &&
-                                             p.CustID == objAR_Customer.CustId).OrderByDescending(p => p.Seq).FirstOrDefault();
-                                        string strSeq = objCustHist1 == null ? "0000000001" : ("0000000000" + (double.Parse(objCustHist1.Seq) + 1));
-                                        strSeq = strSeq.Substring(strSeq.Length - 10, 10);
-                                        objCustHist.Seq = strSeq;
-                                        objCustHist.BranchID = objAR_Customer.BranchID;
-                                        objCustHist.Crtd_DateTime = DateTime.Now;
-                                        objCustHist.Crtd_Prog = screenNbr;
-                                        objCustHist.Crtd_User = Current.UserName;
-                                        objCustHist.CustID = objAR_Customer.CustId;
-                                        objCustHist.LUpd_DateTime = DateTime.Now;
-                                        objCustHist.LUpd_Prog = screenNbr;
-                                        objCustHist.LUpd_User = Current.UserName;
-                                        objCustHist.tstamp = new byte[0];
-                                        objCustHist.Note = "Tạo mới khách hàng";
-                                        objCustHist.FromDate = DateTime.Now.ToDateShort();
-                                        objCustHist.ToDate = DateTime.Now.ToDateShort().AddYears(100);
-                                        _db.AR_CustHist.AddObject(objCustHist);
-                                        // SubmitchangeAR_Customer();
-                                        //_db.SaveChanges();
-                                        SaveAR_SOAddress(data, isNew);
-                                        //_db.SaveChanges();
-                                    }
-                                    else
-                                    {
-                                        var objCustHist = new AR_CustHist();
-                                        var objCustHist1 = _db.AR_CustHist.Where(p => p.BranchID == objAR_Customer.BranchID &&
-                                             p.CustID == objAR_Customer.CustId).OrderByDescending(p => p.Seq).FirstOrDefault();
-                                        string strSeq = objCustHist1 == null ? "0000000001" : ("0000000000" + (double.Parse(objCustHist1.Seq) + 1));
-                                        strSeq = strSeq.Substring(strSeq.Length - 10, 10);
-                                        objCustHist.Seq = strSeq;
-                                        objCustHist.BranchID = objAR_Customer.BranchID;
-                                        objCustHist.Crtd_DateTime = DateTime.Now;
-                                        objCustHist.Crtd_Prog = screenNbr;
-                                        objCustHist.Crtd_User = Current.UserName;
-                                        objCustHist.CustID = objAR_Customer.CustId;
-                                        objCustHist.LUpd_DateTime = DateTime.Now;
-                                        objCustHist.LUpd_Prog = screenNbr;
-                                        objCustHist.LUpd_User = Current.UserName;
-                                        objCustHist.tstamp = new byte[0];
-                                        objCustHist.Note = "Tạo mới khách hàng";
-                                        objCustHist.FromDate = DateTime.Now.ToDateShort();
-                                        objCustHist.ToDate = DateTime.Now.ToDateShort().AddYears(100);
-                                        _db.AR_CustHist.AddObject(objCustHist);
-                                        // SubmitchangeAR_Customer();
-                                       // _db.SaveChanges();
-                                        SaveAR_SOAddress(data, isNew);
-                                        //_db.SaveChanges();
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (objAR_Customer != null)
-                            {
-                                if (hadChild == 0) // nếu selection tree ko có con
-                                {
-                                    if (objAR_Customer.tstamp.ToHex() == updated.tstamp.ToHex())
-                                    {
-                                        tmpCustID = objAR_Customer.CustId;
-                                        if (handle == "N" || handle == "")
-                                        {
-                                            objAR_Customer.Status = status;
-                                        }
-                                        else
-                                        {
-                                            objAR_Customer.Status = approveHandle.ToStatus;
-
-                                        }
-                                        if (objAR_Customer.Status == "O")
-                                        {
-                                            X.Msg.Show(new MessageBoxConfig()
-                                            {
-                                                Message = "Email sent!"
-                                            });
-                                            Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-                                                         lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                                        }
-                                        //Node
-
-
-                                        //String[] nodeid = nodeID.Split('-');
-                                        //objAR_Customer.NodeID = nodeid[0];
-                                        //objAR_Customer.NodeLevel = Convert.ToInt16(nodeLevel);
-                                        UpdatingHeader(updated, ref objAR_Customer);
-                                    }
-                                    else
-                                    {
-                                        throw new MessageException(MessageType.Message, "19");
-                                    }
-                                   // _db.SaveChanges();
-
-
-                                }
-                                else // nếu selection tree có con
-                                {
-                                    if (objAR_Customer.tstamp.ToHex() == updated.tstamp.ToHex())
-                                    {
-                                        if (handle == "N" || handle == "")
-                                        {
-                                            objAR_Customer.Status = status;
-                                        }
-                                        else
-                                        {
-                                            objAR_Customer.Status = approveHandle.ToStatus;
-
-                                        }
-                                        if (objAR_Customer.Status == "O")
-                                        {
-                                            X.Msg.Show(new MessageBoxConfig()
-                                            {
-                                                Message = "Email sent!"
-                                            });
-                                            Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-                                                         lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                                        }
-                                        //Node
-
-
-                                        String[] nodeid = nodeID.Split('-');
-                                        if (objAR_Customer.NodeID != nodeid[0])
-                                        {
-                                            tmpChangeTreeDic = "1";
-                                        }
-                                        else
-                                        {
-                                            tmpChangeTreeDic = "0";
-                                        }
-                                        objAR_Customer.NodeID = nodeid[0];
-                                        objAR_Customer.NodeLevel = Convert.ToInt16(nodeLevel);
-                                        var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-                                        objAR_Customer.ParentRecordID = searchparentRecordID.ParentRecordID;
-                                        UpdatingHeader(updated, ref objAR_Customer);
-                                    }
-                                    else
-                                    {
-                                        throw new MessageException(MessageType.Message, "19");
-                                    }
-                                    //_db.SaveChanges();
-                                }
-
-                            }
-                        }
-
-
-
-
-                        var objtmp = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
-                        if (objtmp != null)
-                        {
-
-                            if (handle == "N" || handle == "")
-                            {
-                                objtmp.Status = status;
-                            }
-                            else
-                            {
-                                objtmp.Status = approveHandle.ToStatus;
-
-                            }
-                            if (objtmp.Status == "O" && lstheader.Updated.Count == 0 && lstheader.Created.Count == 0)
-                            {
-                                X.Msg.Show(new MessageBoxConfig()
-                                {
-                                    Message = "Email sent!"
-                                });
-                                Approve.Mail_Approve(screenNbr, custID, Role, objtmp.Status, handle,
-                                             lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                            }
-
-                            //statusAfterAll = objtmp.Status;
-                            //loc ra la insert du lieu moi hay chuyen cay cho du lieu
-                            if (lstheader.Updated.Count == 0 && hadChild != 0)
-                            {
-                                String[] nodeid = nodeID.Split('-');
-                                if (objtmp.NodeID != nodeid[0])
-                                {
-                                    //chuyen cay du lieu
-                                    tmpChangeTreeDic = "1";
-                                }
-                                else
-                                {
-                                    tmpChangeTreeDic = "0";
-                                }
-                                objtmp.NodeID = nodeid[0];
-
-                                objtmp.NodeLevel = Convert.ToInt16(nodeLevel);
-                                var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-                                objtmp.ParentRecordID = searchparentRecordID.ParentRecordID;
-                                //tmpChangeTreeDic = "1";
-                            }
-
-                            //_db.SaveChanges();
-                        }
-
-
-
-                        _db.SaveChanges();
-                        //this.Direct();
-
-
-                 
-                    //}
-                    //else //truong hop ko co tree
-                    //{
-
-                    //    if (isNew)//new record
-                    //    {
-                    //        if (objAR_Customer != null)
-                    //        {
-                    //            return Json(new { success = false, msgCode = 2000, msgParam = custID });//quang message ma nha cung cap da ton tai ko the them
-
-                    //        }
-                    //        else
-                    //        {
-                             
-                    //                objAR_Customer = new AR_Customer();
-                    //                objAR_Customer.CustId = custID;
-                    //                objAR_Customer.BranchID = branchID;
-
-                    //                if (handle == "N" || handle == "")
-                    //                {
-                    //                    objAR_Customer.Status = status;
-                    //                }
-                    //                else
-                    //                {
-                    //                    objAR_Customer.Status = approveHandle.ToStatus;
-
-                    //                }
-                    //                if (objAR_Customer.Status == "O")
-                    //                {
-                    //                    X.Msg.Show(new MessageBoxConfig()
-                    //                    {
-                    //                        Message = "Email sent!"
-                    //                    });
-                    //                    Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-                    //                                 lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                    //                }
-                    //                //statusAfterAll = objAR_Customer.Status;
-
-                    //                String[] nodeid = nodeID.Split('-');
-                    //                objAR_Customer.NodeID = nodeid[0];
-                    //                objAR_Customer.NodeLevel = Convert.ToInt16("0");
-                    //                //var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-                    //                objAR_Customer.ParentRecordID = 0;
-
-                    //                objAR_Customer.Crtd_Datetime = DateTime.Now;
-                    //                objAR_Customer.Crtd_Prog = screenNbr;
-                    //                objAR_Customer.Crtd_User = Current.UserName;
-                    //                objAR_Customer.tstamp = new byte[0];
-
-                    //                UpdatingHeader(updated, ref objAR_Customer);
-                    //                _db.AR_Customer.AddObject(objAR_Customer);
-                    //                _db.SaveChanges();
-                                
-                    //        }
-                    //     //ngoac dong isNew
-                    //     }
-                    //     else
-                    //     {
-                    //        if (objAR_Customer != null)
-                    //        {
-                               
-                    //                if (objAR_Customer.tstamp.ToHex() == updated.tstamp.ToHex())
-                    //                {
-                    //                    if (handle == "N" || handle == "")
-                    //                    {
-                    //                        objAR_Customer.Status = status;
-                    //                    }
-                    //                    else
-                    //                    {
-                    //                        objAR_Customer.Status = approveHandle.ToStatus;
-
-                    //                    }
-                    //                    if (objAR_Customer.Status == "O")
-                    //                    {
-                    //                        X.Msg.Show(new MessageBoxConfig()
-                    //                        {
-                    //                            Message = "Email sent!"
-                    //                        });
-                    //                        Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-                    //                                     lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                    //                    }
-                    //                    //Node
-
-
-                    //                    //String[] nodeid = nodeID.Split('-');
-                    //                    //objAR_Customer.NodeID = nodeid[0];
-                    //                    //objAR_Customer.NodeLevel = Convert.ToInt16(nodeLevel);
-                    //                    UpdatingHeader(updated, ref objAR_Customer);
-                    //                }
-                    //                else
-                    //                {
-                    //                    throw new MessageException(MessageType.Message, "19");
-                    //                }
-                    //                _db.SaveChanges();
-
-                    //            }
-
-                    //        }
-
-
-                    //    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-                    //}
-                        if (hadChild != 0)
-                        {
-                            return Json(new { success = true, custID = tmpCustID, custName = custName, addNewOrUpdate = "addNew", changeTreeBranch = tmpChangeTreeDic, selectedNode = tmpSelectedNode }, JsonRequestBehavior.AllowGet);
-                            //return Json(new { success = true });
-                        }
-                        else
-                        {
-                            //return Json(new { success = true });
-                            Json(new { success = true, custID = tmpCustID, custName = custName, addNewOrUpdate = "update" }, JsonRequestBehavior.AllowGet);
-                        }
-                //dong ngoac foreach Customer        
-                }
-
-                //de bat su thay doi chi handle thoi
-                var objAR_CustomerNoChange = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
-                if (objAR_CustomerNoChange != null)
-                {
-                    if (handle == "N" || handle == "")
-                    {
-                        objAR_CustomerNoChange.Status = status;
-                    }
-                    else
-                    {
-                        objAR_CustomerNoChange.Status = approveHandle.ToStatus;
-
-                    }
-                    if (objAR_CustomerNoChange.Status == "O")
-                    {
-                        X.Msg.Show(new MessageBoxConfig()
-                        {
-                            Message = "Email sent!"
-                        });
-                        Approve.Mail_Approve(screenNbr, custID, Role, objAR_CustomerNoChange.Status, handle,
-                                        lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                    }
-                    _db.SaveChanges();
-
-                }
-
-
-                //xet cac tab co the an xem co thay doi gi ko
-                var TabContract = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabContract");
-                if (TabContract.IntVal == 1)
-                {
-                    SaveAR_LTTContract(data, custID);
-                    SaveAR_LTTContractDetail(data, lTTContractNbr);
-                }
-
-                var TabAdvTool = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabAdvTool");
-
-                if (TabAdvTool.IntVal == 1)
-                {
-                    SaveAR_CustAdvTool(data, custID);
-
-                }
-
-                var TabSellingProduct = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabSellingProduct");
-                if (TabSellingProduct.IntVal == 1)
-                {
-                    SaveAR_CustSellingProducts(data, custID);
-
-                }
-
-
-                var TabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
-                if (TabDisplayMethod.IntVal == 1)
-                {
-                    SaveAR_CustDisplayMethod(data, custID);
-
-                }
-                return Json(new { success = true});
-                
-            //dong ngoac try
-            }
-            catch (Exception ex)
-            {
-                if (ex is MessageException) return (ex as MessageException).ToMessage();
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-            }
-        }
-
-        //Save no Tree
-        [DirectMethod]
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult SaveNoTree(FormCollection data, string custID, string handle, string status, string tmpSelectedNode,
-            string branchID, string custName, bool isNew, string lTTContractNbr,string State)
-        {
-            try
-            {
-                StoreDataHandler dataHandler2 = new StoreDataHandler(data["lstheader"]);
-                ChangeRecords<AR_Customer> lstheader = dataHandler2.BatchObjectData<AR_Customer>();
-                var approveHandle = _db.SI_ApprovalFlowHandle
-                           .FirstOrDefault(p => p.AppFolID == screenNbr
-                                               && p.Status == status
-                                               && p.Handle == handle);
-                var user = _sys.Users.Where(p => p.UserName.ToUpper() == Current.UserName.ToUpper()).FirstOrDefault();
-                var Role = user.UserTypes;
-
-                var cpny = _db.AR_Setup.FirstOrDefault(p => p.BranchID == branchID && p.SetupId == "AR");
-
-                var tmpCustID = "";
-                foreach (AR_Customer updated in lstheader.Updated)
-                {
-                    //Save AR_Customer
-                    var objAR_Customer = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
-                    if (isNew)//new record
-                    {
-                        if (objAR_Customer != null)
-                        {
-                            return Json(new { success = false, msgCode = 2000, msgParam = custID });//quang message ma nha cung cap da ton tai ko the them
-
-                        }
-                        else
-                        {
-
-                            objAR_Customer = new AR_Customer();
-                            if (cpny.AutoCustID == false)
-                            {
-                                objAR_Customer.CustId = custID;
-                                tmpCustID = objAR_Customer.CustId;
-                            }
-                            else
-                            {
-                                objAR_Customer.CustId = functionAutoCustID(branchID, "0", updated.ClassId, State);
-                                tmpCustID = objAR_Customer.CustId;
-                            }
-                            objAR_Customer.BranchID = branchID;
-
-                            if (handle == "N" || handle == "")
-                            {
-                                objAR_Customer.Status = status;
-                            }
-                            else
-                            {
-                                objAR_Customer.Status = approveHandle.ToStatus;
-
-                            }
-                            if (objAR_Customer.Status == "O")
-                            {
-                                X.Msg.Show(new MessageBoxConfig()
-                                {
-                                    Message = "Email sent!"
-                                });
-                                Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-                                                lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                            }
-                            //statusAfterAll = objAR_Customer.Status;
-
-                            //String[] nodeid = nodeID.Split('-');
-                            objAR_Customer.NodeID = "DF";
-                            objAR_Customer.NodeLevel = 1;
-                            //var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-                            objAR_Customer.ParentRecordID = 0;
-
-                            objAR_Customer.Crtd_Datetime = DateTime.Now;
-                            objAR_Customer.Crtd_Prog = screenNbr;
-                            objAR_Customer.Crtd_User = Current.UserName;
-                            objAR_Customer.tstamp = new byte[0];
-
-                            UpdatingHeader(updated, ref objAR_Customer);
-                            if (data["cboEstablishDate"] == "")
-                            {
-                                objAR_Customer.EstablishDate = null;
-                            }
-                            if (objAR_Customer.CustId != "" && objAR_Customer.BranchID != "")
-                            {
-                                _db.AR_Customer.AddObject(objAR_Customer);
-                                _db.SaveChanges();
-                            }
-
-                            //save may bang khac
-                            var objAR_Setup = _db.AR_Setup.Where(p => p.BranchID == brandID && p.SetupId == "AR").FirstOrDefault();
-                            if (objAR_Setup.AutoCustID)
-                            {
-                                var objCustHist = new AR_CustHist();
-                                var objCustHist1 = _db.AR_CustHist.Where(p => p.BranchID == objAR_Customer.BranchID &&
-                                     p.CustID == objAR_Customer.CustId).OrderByDescending(p => p.Seq).FirstOrDefault();                                
-                                string strSeq = objCustHist1 == null ? "0000000001" : ("0000000000" + (double.Parse(objCustHist1.Seq) + 1));
-                                strSeq = strSeq.Substring(strSeq.Length - 10, 10);
-                                objCustHist.Seq = strSeq;
-                                objCustHist.BranchID = objAR_Customer.BranchID;
-                                objCustHist.Crtd_DateTime = DateTime.Now;
-                                objCustHist.Crtd_Prog = screenNbr;
-                                objCustHist.Crtd_User = Current.UserName;
-                                objCustHist.CustID = objAR_Customer.CustId;
-                                objCustHist.LUpd_DateTime = DateTime.Now;
-                                objCustHist.LUpd_Prog = screenNbr;
-                                objCustHist.LUpd_User = Current.UserName;
-                                objCustHist.tstamp = new byte[0];
-                                objCustHist.Note = "Tạo mới khách hàng";
-                                objCustHist.FromDate = DateTime.Now.ToDateShort();
-                                objCustHist.ToDate = DateTime.Now.ToDateShort().AddYears(100);
-                                _db.AR_CustHist.AddObject(objCustHist);
-                                // SubmitchangeAR_Customer();
-                                _db.SaveChanges();
-                                SaveAR_SOAddress(data, isNew);
-                                _db.SaveChanges();
-                            }
-                            else
-                            {
-                                var objCustHist = new AR_CustHist();
-                                var objCustHist1 = _db.AR_CustHist.Where(p => p.BranchID == objAR_Customer.BranchID &&
-                                     p.CustID == objAR_Customer.CustId).OrderByDescending(p => p.Seq).FirstOrDefault();
-                                string strSeq = objCustHist1 == null ? "0000000001" : ("0000000000" + (double.Parse(objCustHist1.Seq) + 1));
-                                strSeq = strSeq.Substring(strSeq.Length - 10, 10);
-                                objCustHist.Seq = strSeq;
-                                objCustHist.BranchID = objAR_Customer.BranchID;
-                                objCustHist.Crtd_DateTime = DateTime.Now;
-                                objCustHist.Crtd_Prog = screenNbr;
-                                objCustHist.Crtd_User = Current.UserName;
-                                objCustHist.CustID = objAR_Customer.CustId;
-                                objCustHist.LUpd_DateTime = DateTime.Now;
-                                objCustHist.LUpd_Prog = screenNbr;
-                                objCustHist.LUpd_User = Current.UserName;
-                                objCustHist.tstamp = new byte[0];
-                                objCustHist.Note = "Tạo mới khách hàng";
-                                objCustHist.FromDate = DateTime.Now.ToDateShort();
-                                objCustHist.ToDate = DateTime.Now.ToDateShort().AddYears(100);
-                                _db.AR_CustHist.AddObject(objCustHist);
-                                // SubmitchangeAR_Customer();
-                                _db.SaveChanges();
-                                SaveAR_SOAddress(data, isNew);
-                                _db.SaveChanges();
-                            }
-
-
-
-
-
-
-                        }
-                    //ngoac dong isNew
-                    }
-                    else // else nay la update
-                    {
-                        if (objAR_Customer != null)
-                        {
-
-                            if (objAR_Customer.tstamp.ToHex() == updated.tstamp.ToHex())
-                            {
-                                tmpCustID = objAR_Customer.CustId;
-                                if (handle == "N" || handle == "")
-                                {
-                                    objAR_Customer.Status = status;
-                                }
-                                else
-                                {
-                                    objAR_Customer.Status = approveHandle.ToStatus;
-
-                                }
-                                if (objAR_Customer.Status == "O")
-                                {
-                                    X.Msg.Show(new MessageBoxConfig()
-                                    {
-                                        Message = "Email sent!"
-                                    });
-                                    Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-                                                    lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                                }
-
-                                UpdatingHeader(updated, ref objAR_Customer);
-                                if (data["cboEstablishDate"] == "")
-                                {
-                                    objAR_Customer.EstablishDate = null;
-                                }
-                                _db.SaveChanges();
-                                //save may bang khac 
-                                SaveAR_SOAddress(data, isNew);
-                                _db.SaveChanges();
-                            }
-                            else
-                            {
-                                throw new MessageException(MessageType.Message, "19");
-                            }
-                            _db.SaveChanges();
-                        }
-
-                    }
-
-  
-                   
-
-
-                } //dong ngoac foreach Customer  
-
-                //de bat su thay doi chi handle thoi
-                var objAR_CustomerNoChange = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
-                if (objAR_CustomerNoChange != null)
-                {
-                    if (handle == "N" || handle == "")
-                    {
-                        objAR_CustomerNoChange.Status = status;
-                    }
-                    else
-                    {
-                        objAR_CustomerNoChange.Status = approveHandle.ToStatus;
-
-                    }
-                    if (objAR_CustomerNoChange.Status == "O")
-                    {
-                        X.Msg.Show(new MessageBoxConfig()
-                        {
-                            Message = "Email sent!"
-                        });
-                        Approve.Mail_Approve(screenNbr, custID, Role, objAR_CustomerNoChange.Status, handle,
-                                        lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-                    }
-                    _db.SaveChanges();
-
-                }
-
-
-
-                //xet cac tab co the an xem co thay doi gi ko
-                var TabContract = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabContract");
-                if (TabContract.IntVal == 1)
-                {
-                    SaveAR_LTTContract(data,custID);
-                    SaveAR_LTTContractDetail(data, lTTContractNbr);
-                }
-
-                var TabAdvTool = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabAdvTool");
-
-                if (TabAdvTool.IntVal == 1)
-                {
-                    SaveAR_CustAdvTool(data, custID);
-                   
-                }
-
-                var TabSellingProduct = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabSellingProduct");
-                if (TabSellingProduct.IntVal == 1)
-                {
-                    SaveAR_CustSellingProducts(data, custID);
-
-                }
-
-                
-                var TabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
-                if (TabDisplayMethod.IntVal == 1)
-                {
-                    SaveAR_CustDisplayMethod(data, custID);
-
-                }
-
-
-                return Json(new { success = true, custID = tmpCustID }, JsonRequestBehavior.AllowGet);
-
-
-
-
-            }//dong ngoac try
-            catch (Exception ex)
-            {
-                if (ex is MessageException) return (ex as MessageException).ToMessage();
-                return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-            }
-        }
-
-
-
-
-
-        [HttpPost]
-        public ActionResult AR20400DeleteHeader(string custID, string branchID, string status)
-        {
-
-            
-            try
-            {
-                var delHeaderAR_Customer = _db.AR_Customer.FirstOrDefault(p => p.CustId == custID && p.BranchID == branchID);
-                if (delHeaderAR_Customer != null)
-                {
-                    //delete SOAddress
-                    var delAR_SOAddress = _db.AR_SOAddress.Where(p => p.CustId == custID && p.BranchID == branchID).ToList();
-                    if(delAR_SOAddress != null){
-                        foreach (var del in delAR_SOAddress)
-                        {
-                            _db.AR_SOAddress.DeleteObject(del);
-                            //_db.SaveChanges();
-                        }
-
-                    }
-
-                    var delLTTContract = _db.AR_LTTContract.Where(p => p.LTTContractNbr == delHeaderAR_Customer.LTTContractNbr).ToList();
-                    if (delLTTContract != null)
-                    {
-                        foreach (var delContract in delLTTContract)
-                        {
-                            var delLTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == delContract.LTTContractNbr).ToList();
-                            if (delLTTContractDetail != null)
-                            {
-                                foreach (var delDetail in delLTTContractDetail)
-                                {
-                                    _db.AR_LTTContractDetail.DeleteObject(delDetail);
-                                    //_db.SaveChanges();
-                                }
-                            }
-
-                            _db.AR_LTTContract.DeleteObject(delContract);
-                            //_db.SaveChanges();
-                        }
-                      
-                    }
-
-                    var delAR_CustAdvTool = _db.AR_CustAdvTool.Where(p => p.CustID == custID).ToList();
-                    if (delAR_CustAdvTool != null)
-                    {
-                        foreach (var delAdv in delAR_CustAdvTool)
-                        {
-                            _db.AR_CustAdvTool.DeleteObject(delAdv);
-                            //_db.SaveChanges();
-                        }
-                    }
-
-                    var delCustSellingProducts = _db.AR_CustSellingProducts.Where(p => p.CustID == custID).ToList();
-                    if (delCustSellingProducts != null)
-                    {
-                        foreach (var delSellingProd in delCustSellingProducts)
-                        {
-                            _db.AR_CustSellingProducts.DeleteObject(delSellingProd);
-                            //_db.SaveChanges();
-                        }
-                    }
-
-                    var delCustDisplayMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == custID).ToList();
-                    if (delCustDisplayMethod != null)
-                    {
-                        foreach (var delDispMethod in delCustDisplayMethod)
-                        {
-                            _db.AR_CustDisplayMethod.DeleteObject(delDispMethod);
-                            //_db.SaveChanges();
-                        }
-                    }
-
-
-
-
-                    _db.AR_Customer.DeleteObject(delHeaderAR_Customer);
-                    _db.SaveChanges();
-                }
-               
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
-            }
-
-        }
-
-        [HttpPost]
-        public ActionResult checkTreeAndHiddenTab(string cpnyID)// kiem tra xem voi branchID nay co Tree hay ko
-        {
-            try
-            {
-                var tmpHiddenTabContract = false;
-                var tmpHiddenTabAdvTool = false;
-                var tmpHiddenTabSellingProduct = false;
-                var tmpHiddenTabDisplayMethod = false;
-                var tmpAutoCustID = false;
-                var cpny = _db.AR_Setup.FirstOrDefault(p => p.BranchID == cpnyID && p.SetupId == "AR");
-
-                var TabContract = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabContract");
-                var TabAdvTool = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabAdvTool");
-                var TabSellingProduct = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabSellingProduct");
-                var TabDisplayMethod = _sys.SYS_Configurations.FirstOrDefault(p => p.Code == "TabDisplayMethod");
-
-                //autoCustID
-                if (cpny.AutoCustID == true)
-                {
-                    tmpAutoCustID = true;
-                }
-                else
-                {
-                    tmpAutoCustID = false;
-                }
-
-
-                //Contract
-                if (TabContract.IntVal == 1)
-                {
-                    tmpHiddenTabContract = false;
-                }
-                else
-                {
-                    tmpHiddenTabContract = true;
-                }
-                //AdvTool
-                if (TabAdvTool.IntVal == 1)
-                {
-                    tmpHiddenTabAdvTool = false;
-                }
-                else
-                {
-                    tmpHiddenTabAdvTool = true;
-                }
-                //SellingProduct
-                if (TabSellingProduct.IntVal == 1)
-                {
-                    tmpHiddenTabSellingProduct = false;
-                }
-                else
-                {
-                    tmpHiddenTabSellingProduct = true;
-                }
-                //DisplayMethod
-                if (TabDisplayMethod.IntVal == 1)
-                {
-                    tmpHiddenTabDisplayMethod = false;
-                }
-                else
-                {
-                    tmpHiddenTabDisplayMethod = true;
-                }
-
-                if (cpny.HiddenHierarchy == true)
-                {
-                    //nếu có thì xóa Tree
-                    return Json(new 
-                    { 
-                        success = false, tmpHiddenTabContract = tmpHiddenTabContract, 
-                        tmpHiddenTabAdvTool = tmpHiddenTabAdvTool,
-                        tmpHiddenTabSellingProduct = tmpHiddenTabSellingProduct,
-                        tmpHiddenTabDisplayMethod = tmpHiddenTabDisplayMethod,
-                        tmpAutoCustID = tmpAutoCustID
-                     });
-                }
-                else
-                {
-                    //nếu ko có thì để tree
-                    return Json(new
-                    {
-                        success = true,
-                        tmpHiddenTabContract = tmpHiddenTabContract,
-                        tmpHiddenTabAdvTool = tmpHiddenTabAdvTool,
-                        tmpHiddenTabSellingProduct = tmpHiddenTabSellingProduct,
-                        tmpHiddenTabDisplayMethod = tmpHiddenTabDisplayMethod,
-                        tmpAutoCustID = tmpAutoCustID
-
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, errorMsg = ex.ToString(), type = "error", fn = "", parm = "" });
-            }
-
-        }
-
-        private void UpdatingHeader(AR_Customer s, ref AR_Customer d)
-        {
-            d.ClassId = s.ClassId;
-            d.CustType = s.CustType;
-            d.CustName = s.CustName;
-            d.PriceClassID = s.PriceClassID;
-            d.Terms = s.Terms;
-            d.TradeDisc = s.TradeDisc;
-            d.CrRule = s.CrRule;
-            d.CrLmt = s.CrLmt;
-            d.GracePer = s.GracePer;
-            d.Territory = s.Territory;
-            d.Area = s.Area;
-            d.Location = s.Location;
-            d.Channel = s.Channel;
-            d.ShopType = s.ShopType;
-            d.GiftExchange = s.GiftExchange;
-            d.HasPG = s.HasPG;
-            d.SlsperId = s.SlsperId;
-            d.DeliveryID = s.DeliveryID;
-            d.SupID = s.SupID;
-            d.SiteId = s.SiteId;
-            d.DfltShipToId = s.DfltShipToId;
-            d.CustFillPriority = s.CustFillPriority;
-            d.LTTContractNbr = s.LTTContractNbr;
-            d.DflSaleRouteID = s.DflSaleRouteID;
-            d.EmpNum = s.EmpNum;
-            d.ExpiryDate = s.ExpiryDate;
-            d.EstablishDate = Convert.ToDateTime(s.EstablishDate).ToDateShort();
-            d.Birthdate = s.Birthdate;
-            d.CustName = s.CustName;
-            d.Attn = s.Attn;
-            d.Salut = s.Salut;
-            d.Addr1 = s.Addr1;
-            d.Addr2 = s.Addr2;
-            d.Country = s.Country;
-            d.State = s.State;
-            d.City = s.City;
-            d.District = s.District;
-            d.Zip = s.Zip;
-            d.Phone = s.Phone;
-            d.Fax = s.Fax;
-            d.EMailAddr = s.EMailAddr;
-            d.BillName = s.BillName;
-            d.BillAttn = s.BillAttn;
-            d.BillSalut = s.BillSalut;
-            d.BillAddr1 = s.BillAddr1;
-            d.BillAddr2 = s.BillAddr2;
-            d.BillCountry = s.BillCountry;
-            d.BillState = s.BillState;
-            d.BillCity = s.BillCity;
-            d.BillZip = s.BillZip;
-            d.BillPhone = s.BillPhone;
-            d.BillFax = s.BillFax;
-            d.TaxDflt = s.TaxDflt;
-            d.TaxRegNbr = s.TaxRegNbr;
-            d.TaxLocId = s.TaxLocId;
-            d.TaxID00 = s.TaxID00;
-            d.TaxID01 = s.TaxID01;
-            d.TaxID02 = s.TaxID02;
-            d.TaxID03 = s.TaxID03;
-
-
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
-        }
-
-        private bool SaveAR_SOAddress(FormCollection data, bool isNew)
-        {
-            //var objAr_SOAddr = new AR_SOAddress();
-
-            var custId = data["cboCustId"];
-            var branchID = data["cboCpnyID"];
-            var dfltShipToId = data["cboDfltShipToId"];
-            var objAr_SOAddr = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == branchID && p.CustId == custId && p.ShipToId == dfltShipToId);
-            var objAR_Customer = _db.AR_Customer.FirstOrDefault(p => p.BranchID == branchID && p.CustId == custId);
-            //UpdatingAR_SOAddress();
-            try
-            {
-                if (objAr_SOAddr != null)
-                {
-                    if (isNew)
-                    {
-                        objAr_SOAddr = new AR_SOAddress();
-                        objAr_SOAddr.CustId = data["cboCustId"];
-                        objAr_SOAddr.ShipToId = (data["cboDfltShipToId"] == "" ? "DEFAULT" : data["cboDfltShipToId"]);
-
-                        objAr_SOAddr.BranchID = data["cboCpnyID"];
-                        objAr_SOAddr.SOName = data["txtCustName"];
-                        objAr_SOAddr.Attn = data["txtAttn"];
-                        objAr_SOAddr.Addr1 = data["txtAddr1"];
-                        objAr_SOAddr.Addr2 = data["txtAddr2"];
-                        objAr_SOAddr.City = objAR_Customer.City;
-                        objAr_SOAddr.State = objAR_Customer.State;
-                        objAr_SOAddr.District = objAR_Customer.District;
-                        objAr_SOAddr.Zip = data["txtZip"];
-                        objAr_SOAddr.Country = objAR_Customer.Country;
-                        objAr_SOAddr.Phone = data["txtPhone"];
-                        objAr_SOAddr.Fax = data["txtFax"];
-                        objAr_SOAddr.TaxRegNbr = data["txtTaxRegNbr"];
-                        objAr_SOAddr.TaxLocId = data["txtTaxLocId"];
-                        objAr_SOAddr.TaxId00 = objAR_Customer.TaxID00;
-                        objAr_SOAddr.TaxId01 = objAR_Customer.TaxID01;
-                        objAr_SOAddr.TaxId02 = objAR_Customer.TaxID02;
-                        objAr_SOAddr.TaxId03 = objAR_Customer.TaxID03;
-                        objAr_SOAddr.Crtd_DateTime = objAR_Customer.Crtd_Datetime;
-                        objAr_SOAddr.Crtd_Prog = objAR_Customer.Crtd_Prog;
-                        objAr_SOAddr.Crtd_User = objAR_Customer.Crtd_User;
-                        objAr_SOAddr.LUpd_DateTime = objAR_Customer.LUpd_Datetime;
-                        objAr_SOAddr.LUpd_Prog = objAR_Customer.LUpd_Prog;
-                        objAr_SOAddr.LUpd_User = objAR_Customer.LUpd_User;
-                        objAr_SOAddr.tstamp = objAR_Customer.tstamp;
-                        _db.AR_SOAddress.AddObject(objAr_SOAddr);
-                        _db.SaveChanges();
-
-                    }
-                    else
-                    {
-
-                        objAr_SOAddr.BranchID = data["cboCpnyID"];
-                        objAr_SOAddr.SOName = data["txtCustName"];
-                        objAr_SOAddr.Attn = data["txtAttn"];
-                        objAr_SOAddr.Addr1 = data["txtAddr1"];
-                        objAr_SOAddr.Addr2 = data["txtAddr2"];
-                        objAr_SOAddr.City = objAR_Customer.City;
-                        objAr_SOAddr.State = objAR_Customer.State;
-                        objAr_SOAddr.District = objAR_Customer.District;
-                        objAr_SOAddr.Zip = data["txtZip"];
-                        objAr_SOAddr.Country = objAR_Customer.Country;
-                        objAr_SOAddr.Phone = data["txtPhone"];
-                        objAr_SOAddr.Fax = data["txtFax"];
-                        objAr_SOAddr.TaxRegNbr = data["txtTaxRegNbr"];
-                        objAr_SOAddr.TaxLocId = data["txtTaxLocId"];
-                        objAr_SOAddr.TaxId00 = objAR_Customer.TaxID00;
-                        objAr_SOAddr.TaxId01 = objAR_Customer.TaxID01;
-                        objAr_SOAddr.TaxId02 = objAR_Customer.TaxID02;
-                        objAr_SOAddr.TaxId03 = objAR_Customer.TaxID03;
-                        objAr_SOAddr.Crtd_DateTime = objAR_Customer.Crtd_Datetime;
-                        objAr_SOAddr.Crtd_Prog = objAR_Customer.Crtd_Prog;
-                        objAr_SOAddr.Crtd_User = objAR_Customer.Crtd_User;
-                        objAr_SOAddr.LUpd_DateTime = objAR_Customer.LUpd_Datetime;
-                        objAr_SOAddr.LUpd_Prog = objAR_Customer.LUpd_Prog;
-                        objAr_SOAddr.LUpd_User = objAR_Customer.LUpd_User;
-                        objAr_SOAddr.tstamp = objAR_Customer.tstamp;
-                        _db.SaveChanges();
-
-                    }
-
-         
-                }
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-
-            return true;
-        }
-
-        private bool SaveAR_LTTContract(FormCollection data, string custID)
-        {
-            StoreDataHandler dataLTTContract = new StoreDataHandler(data["lstGridLTTContract"]);
-            ChangeRecords<AR_LTTContract> lstGridLTTContract = dataLTTContract.BatchObjectData<AR_LTTContract>();
-
-            foreach (AR_LTTContract deleted in lstGridLTTContract.Deleted)
-            {
-                var delLTTContract = _db.AR_LTTContract.Where(p => p.LTTContractNbr == deleted.LTTContractNbr).FirstOrDefault();
-                if (delLTTContract != null)
-                {
-                    var delLTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == delLTTContract.LTTContractNbr).ToList();
-                    if (delLTTContractDetail != null)
-                    {
-                        foreach (var del in delLTTContractDetail)
-                        {
-                            _db.AR_LTTContractDetail.DeleteObject(del);
-                            _db.SaveChanges();
-                        }
-                    }
-
-                    _db.AR_LTTContract.DeleteObject(delLTTContract);
-                    _db.SaveChanges();
-                }
-            }
-
-            lstGridLTTContract.Created.AddRange(lstGridLTTContract.Updated);// bo cai Update vao Created luon cho gon
-            foreach (AR_LTTContract created in lstGridLTTContract.Created)
-            {
-
-                var recordLTTContract = _db.AR_LTTContract.Where(p => p.LTTContractNbr == created.LTTContractNbr).FirstOrDefault();
-                if (created.tstamp.ToHex() == "")//dong nay la dong them moi
-                {
-                    if (recordLTTContract == null)
-                    {
-                        recordLTTContract = new AR_LTTContract();
-                        recordLTTContract.LTTContractNbr = created.LTTContractNbr;
-                        recordLTTContract.CustID = custID;
-                        recordLTTContract.Crtd_Datetime = DateTime.Now;
-                        recordLTTContract.Crtd_Prog = screenNbr;
-                        recordLTTContract.Crtd_User = Current.UserName;
-                        recordLTTContract.tstamp = new byte[0];
-
-                        UpdatingAR_LTTContract(created, ref recordLTTContract);
-                        if (recordLTTContract.LTTContractNbr != "" && recordLTTContract.CustID != "")
-                        {
-                            _db.AR_LTTContract.AddObject(recordLTTContract);
-                        }
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "19");//da co ung dung them record nay
-                    }
-                }
-                else //update
-                {
-                    if (created.tstamp.ToHex() == recordLTTContract.tstamp.ToHex())
-                    {
-                        UpdatingAR_LTTContract(created, ref recordLTTContract);
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "19");
-                    }
-                }
-            }
-          
-            //
-            _db.SaveChanges();
-            return true;
-        }
-
-        private void UpdatingAR_LTTContract(AR_LTTContract s, ref AR_LTTContract d)
-        {
-            d.Active = s.Active;
-            d.ActualAmt = s.ActualAmt;
-            d.ActualQty = s.ActualQty;
-            d.AmtCommit = s.AmtCommit;
-           
-            d.ExtDate = s.ExtDate;
-            d.FromDate = s.FromDate;
-            d.MonthNum = s.MonthNum;
-            d.QtyCommit = s.QtyCommit;
-            d.Status = s.Status;
-            d.ToDate = s.ToDate;
-            d.TotAmt = s.TotAmt;
-            d.TotQty = s.TotQty;
-            d.tstamp = new byte[0];
-            d.UnitCommit = s.UnitCommit;
-
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
-        }
-
-        private bool SaveAR_LTTContractDetail(FormCollection data, string lTTContractNbr)
-        {
-            StoreDataHandler dataLTTContractDetail = new StoreDataHandler(data["lstGridLTTContractDetail"]);
-            ChangeRecords<AR_LTTContractDetail> lstGridLTTContractDetail = dataLTTContractDetail.BatchObjectData<AR_LTTContractDetail>();
-
-            foreach (AR_LTTContractDetail deleted in lstGridLTTContractDetail.Deleted)
-            {
-                var del = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == deleted.LTTContractNbr && p.LineRef == deleted.LineRef && p.Type == deleted.Type).FirstOrDefault();
-                if (del != null)
-                {
-                    _db.AR_LTTContractDetail.DeleteObject(del);
-                    _db.SaveChanges();
-                }
-            }
-
-
-            lstGridLTTContractDetail.Created.AddRange(lstGridLTTContractDetail.Updated);// bo cai Update vao Created luon cho gon
-            foreach (AR_LTTContractDetail created in lstGridLTTContractDetail.Created)
-            {
-
-                var recordLTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == created.LTTContractNbr && p.LineRef == created.LineRef && p.Type == created.Type).FirstOrDefault();
-                if (created.tstamp.ToHex() == "")//dong nay la dong them moi
-                {
-                    if (recordLTTContractDetail == null)
-                    {
-                        recordLTTContractDetail = new AR_LTTContractDetail();
-                        recordLTTContractDetail.LTTContractNbr = lTTContractNbr;
-                        //lấy LineRef tu dong
-                        var lastRecordLTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == created.LTTContractNbr).LastOrDefault();
-                        if (lastRecordLTTContractDetail != null)
-                        {
-                            var numberLineRefLTTBot = Convert.ToInt16(lastRecordLTTContractDetail.LineRef) + 1;
-                            if (numberLineRefLTTBot < 10)
-                            {
-                                recordLTTContractDetail.LineRef = "0000" + Convert.ToString(numberLineRefLTTBot);
-                            }
-                            else if (numberLineRefLTTBot >= 10 && (numberLineRefLTTBot) < 100)
-                            {
-                                recordLTTContractDetail.LineRef = "000" + Convert.ToString(numberLineRefLTTBot);
-                            }
-                            else if (numberLineRefLTTBot >= 100 && (numberLineRefLTTBot) < 1000)
-                            {
-                                recordLTTContractDetail.LineRef = "00" + Convert.ToString(numberLineRefLTTBot);
-                            }
-                            else if (numberLineRefLTTBot >= 1000 && (numberLineRefLTTBot) < 10000)
-                            {
-                                recordLTTContractDetail.LineRef = "0" + Convert.ToString(numberLineRefLTTBot);
-                            }
-                            else if (numberLineRefLTTBot >= 10000 && (numberLineRefLTTBot) < 100000)
-                            {
-                                recordLTTContractDetail.LineRef = Convert.ToString(numberLineRefLTTBot);
-                            }
-                              
-                        }
-                        else
-                        {
-                            recordLTTContractDetail.LineRef = "00001";
-                        }
-
-                        recordLTTContractDetail.Crtd_Datetime = DateTime.Now;
-                        recordLTTContractDetail.Crtd_Prog = screenNbr;
-                        recordLTTContractDetail.Crtd_User = Current.UserName;
-                        recordLTTContractDetail.tstamp = new byte[0];
-
-                        UpdatingAR_LTTContractDetail(created, ref recordLTTContractDetail);
-                        if (recordLTTContractDetail.LTTContractNbr != "" && recordLTTContractDetail.LineRef != "" && recordLTTContractDetail.Type != "")
-                        {
-                            _db.AR_LTTContractDetail.AddObject(recordLTTContractDetail);
-                        }
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "19");//da co ung dung them record nay
-                    }
-                }
-                else //update
-                {
-                    if (created.tstamp.ToHex() == recordLTTContractDetail.tstamp.ToHex())
-                    {
-                        UpdatingAR_LTTContractDetail(created, ref recordLTTContractDetail);
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "19");
-                    }
-                }
-            }
-
-
-
-
-
-
-            //
-            _db.SaveChanges();
-            return true;
-        }
-
-        private void UpdatingAR_LTTContractDetail(AR_LTTContractDetail s, ref AR_LTTContractDetail d)
-        {
-            d.Amt = s.Amt;
-            d.Descr = s.Descr;
-            d.Status = s.Status;
-            d.Type = s.Type;
-            //d.LineRef = s.LineRef;
-
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
-        }
-
-        private bool SaveAR_CustAdvTool(FormCollection data,string custID)
-        {
-            StoreDataHandler dataCustAdvTool = new StoreDataHandler(data["lstGridAdv"]);
-            ChangeRecords<AR_CustAdvTool> lstGridAdv = dataCustAdvTool.BatchObjectData<AR_CustAdvTool>();
-
-            foreach (AR_CustAdvTool deleted in lstGridAdv.Deleted)
-            {
-                var delAR_CustAdvTool = _db.AR_CustAdvTool.Where(p => p.CustID == custID && p.LineRef == deleted.LineRef && p.Type == deleted.Type).FirstOrDefault();
-                if (delAR_CustAdvTool != null)
-                {
-                    _db.AR_CustAdvTool.DeleteObject(delAR_CustAdvTool);
-                    _db.SaveChanges();
-                }
-            }
-
-            lstGridAdv.Created.AddRange(lstGridAdv.Updated);// bo cai Update vao Created luon cho gon
-            foreach (AR_CustAdvTool created in lstGridAdv.Created)
-            {
-
-                var recordAdv = _db.AR_CustAdvTool.Where(p => p.CustID == custID && p.LineRef == created.LineRef && p.Type == created.Type).FirstOrDefault();
-                if (created.tstamp.ToHex() == "")//dong nay la dong them moi
-                {
-                    if (recordAdv == null)
-                    {
-                        recordAdv = new AR_CustAdvTool();
-                        recordAdv.CustID = custID;
-
-                        //lấy LineRef tu dong
-                        var lastRecordAdv = _db.AR_CustAdvTool.Where(p => p.CustID == custID).LastOrDefault();
-                        if (lastRecordAdv != null)
-                        {
-                            var numberLineRefAdv = Convert.ToInt16(lastRecordAdv.LineRef) + 1;
-                            if (numberLineRefAdv < 10)
-                            {
-                                recordAdv.LineRef = "0000" + Convert.ToString(numberLineRefAdv);
-                            }
-                            else if (numberLineRefAdv >= 10 && (numberLineRefAdv) < 100)
-                            {
-                                recordAdv.LineRef = "000" + Convert.ToString(numberLineRefAdv);
-                            }
-                            else if (numberLineRefAdv >= 100 && (numberLineRefAdv) < 1000)
-                            {
-                                recordAdv.LineRef = "00" + Convert.ToString(numberLineRefAdv);
-                            }
-                            else if (numberLineRefAdv >= 1000 && (numberLineRefAdv) < 10000)
-                            {
-                                recordAdv.LineRef = "0" + Convert.ToString(numberLineRefAdv);
-                            }
-                            else if (numberLineRefAdv >= 10000 && (numberLineRefAdv) < 100000)
-                            {
-                                recordAdv.LineRef = Convert.ToString(numberLineRefAdv);
-                            }
-
-                        }
-                        else
-                        {
-                            recordAdv.LineRef = "00001";
-                        }
-
-
-
-                        recordAdv.Crtd_Datetime = DateTime.Now;
-                        recordAdv.Crtd_Prog = screenNbr;
-                        recordAdv.Crtd_User = Current.UserName;
-                        recordAdv.tstamp = new byte[0];
-
-                        UpdatingAR_CustAdvTool(created, ref recordAdv);
-                        if (recordAdv.CustID != "" && recordAdv.LineRef != "" && recordAdv.Type != "")
-                        {
-                            _db.AR_CustAdvTool.AddObject(recordAdv);
-                        }
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "19");//da co ung dung them record nay
-                    }
-                }
-                else //update
-                {
-                    if (created.tstamp.ToHex() == recordAdv.tstamp.ToHex())
-                    {
-                        UpdatingAR_CustAdvTool(created, ref recordAdv);
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "19");
-                    }
-                }
-            }
-
-            //
-            _db.SaveChanges();
-            return true;
-        }
-
-        private void UpdatingAR_CustAdvTool(AR_CustAdvTool s, ref AR_CustAdvTool d)
-        {
-            d.Active = s.Active;
-            d.Type = s.Type;
-            d.Descr = s.Descr;
-            d.Qty = s.Qty;
-            d.Amt = s.Amt;
-            d.FitupDate = s.FitupDate;
-            
-            d.Status = s.Status;
-            //d.LineRef = s.LineRef;
-            
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
-        }
-
-
-        private bool SaveAR_CustSellingProducts(FormCollection data, string custID)
-        {
-            StoreDataHandler dataSellingProd = new StoreDataHandler(data["lstGridSellingProd"]);
-            ChangeRecords<AR_CustSellingProducts> lstGridSellingProd = dataSellingProd.BatchObjectData<AR_CustSellingProducts>();
-
-            foreach (AR_CustSellingProducts deleted in lstGridSellingProd.Deleted)
-            {
-                var delCustSellingProducts = _db.AR_CustSellingProducts.Where(p => p.CustID == custID && p.Code == deleted.Code).FirstOrDefault();
-                if (delCustSellingProducts != null)
-                {
-                    _db.AR_CustSellingProducts.DeleteObject(delCustSellingProducts);
-                    _db.SaveChanges();
-                }
-            }
-
-            lstGridSellingProd.Created.AddRange(lstGridSellingProd.Updated);// bo cai Update vao Created luon cho gon
-            foreach (AR_CustSellingProducts created in lstGridSellingProd.Created)
-            {
-
-                var recordSellingProd = _db.AR_CustSellingProducts.Where(p => p.CustID == custID && p.Code == created.Code).FirstOrDefault();
-                if (created.tstamp.ToHex() == "")//dong nay la dong them moi
-                {
-                    if (recordSellingProd == null)
-                    {
-                        recordSellingProd = new AR_CustSellingProducts();
-                        recordSellingProd.CustID = custID;
-                        recordSellingProd.Code = created.Code;
-                        recordSellingProd.Crtd_Datetime = DateTime.Now;
-                        recordSellingProd.Crtd_Prog = screenNbr;
-                        recordSellingProd.Crtd_User = Current.UserName;
-                        recordSellingProd.tstamp = new byte[0];
-
-                        UpdatingAR_CustSellingProducts(created, ref recordSellingProd);
-                        if (recordSellingProd.CustID != "" && recordSellingProd.Code != "" )
-                        {
-                            _db.AR_CustSellingProducts.AddObject(recordSellingProd);
-                        }
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "19");//da co ung dung them record nay
-                    }
-                }
-                else //update
-                {
-                    if (created.tstamp.ToHex() == recordSellingProd.tstamp.ToHex())
-                    {
-                        UpdatingAR_CustSellingProducts(created, ref recordSellingProd);
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "19");
-                    }
-                }
-            }
-
-            //
-            _db.SaveChanges();
-            return true;
-        }
-
-        private void UpdatingAR_CustSellingProducts(AR_CustSellingProducts s, ref AR_CustSellingProducts d)
-        {
-           
-            d.Descr = s.Descr;
-
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
-        }
-
-        private bool SaveAR_CustDisplayMethod(FormCollection data, string custID)
-        {
-            StoreDataHandler dataDispMethod = new StoreDataHandler(data["lstGridDispMethod"]);
-            ChangeRecords<AR_CustDisplayMethod> lstGridDispMethod = dataDispMethod.BatchObjectData<AR_CustDisplayMethod>();
-
-            foreach (AR_CustDisplayMethod deleted in lstGridDispMethod.Deleted)
-            {
-                var delCustDisplayMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == custID && p.DispMethod == deleted.DispMethod).FirstOrDefault();
-                if (delCustDisplayMethod != null)
-                {
-                    _db.AR_CustDisplayMethod.DeleteObject(delCustDisplayMethod);
-                    _db.SaveChanges();
-                }
-            }
-
-
-            lstGridDispMethod.Created.AddRange(lstGridDispMethod.Updated);// bo cai Update vao Created luon cho gon
-            foreach (AR_CustDisplayMethod created in lstGridDispMethod.Created)
-            {
-
-                var recordDispMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == custID && p.DispMethod == created.DispMethod).FirstOrDefault();
-                if (created.tstamp.ToHex() == "")//dong nay la dong them moi
-                {
-                    if (recordDispMethod == null)
-                    {
-                        recordDispMethod = new AR_CustDisplayMethod();
-                        recordDispMethod.CustID = custID;
-                        recordDispMethod.DispMethod = created.DispMethod;
-                        recordDispMethod.Crtd_Datetime = DateTime.Now;
-                        recordDispMethod.Crtd_Prog = screenNbr;
-                        recordDispMethod.Crtd_User = Current.UserName;
-                        recordDispMethod.tstamp = new byte[0];
-
-                        UpdatingAR_CustDisplayMethod(created, ref recordDispMethod);
-                        if (recordDispMethod.CustID != "" && recordDispMethod.DispMethod != "")
-                        {
-                            _db.AR_CustDisplayMethod.AddObject(recordDispMethod);
-                        }
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "19");//da co ung dung them record nay
-                    }
-                }
-                else //update
-                {
-                    if (created.tstamp.ToHex() == recordDispMethod.tstamp.ToHex())
-                    {
-                        UpdatingAR_CustDisplayMethod(created, ref recordDispMethod);
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        throw new MessageException(MessageType.Message, "19");
-                    }
-                }
-            }
-
-            //
-            _db.SaveChanges();
-            return true;
-        }
-
-        private void UpdatingAR_CustDisplayMethod(AR_CustDisplayMethod s, ref AR_CustDisplayMethod d)
-        {
-
-            d.Descr = s.Descr;
-
-            d.LUpd_Datetime = DateTime.Now;
-            d.LUpd_Prog = screenNbr;
-            d.LUpd_User = Current.UserName;
-        }
-
-
-        private string functionAutoCustID(string branchID,string nodeID,string classID,string State)
-        {
-            var recordLastBatNbr = _db.AR20400_ppGetAutoCustID(branchID, nodeID, "", "", "", "", "", "", "", "",classID, State).FirstOrDefault();
-            return recordLastBatNbr;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //private void UpdatingAR_SOAddress()
+        //[DirectMethod]
+        //public ActionResult AR20400GetTreeBranch(string panelID)
+        //{
+        //var a = new ItemsCollection<Plugin>();
+        //a.Add(Html.X().TreeViewDragDrop().DDGroup("CpnyID").EnableDrop(false));
+
+        //TreeView v = new TreeView();
+        //v.Plugins.Add(a);
+        //v.Copy = true;
+        //TreePanel tree = new TreePanel()
+        //{
+        //    ViewConfig = v
+        //};
+        //tree.ID = "treePanelBranch";
+        //tree.ItemID = "treePanelBranch";
+        //tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
+        //tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
+        //tree.Fields.Add(new ModelField("State", ModelFieldType.String));
+        //tree.Fields.Add(new ModelField("Territory", ModelFieldType.String));
+        //tree.Border = false;
+        //tree.RootVisible = true;
+        //tree.Animate = true;
+
+        //Node node = new Node();
+        //node.NodeID = "Root";
+
+        //tree.Root.Add(node);
+
+        //var lstTerritories = _db.AR20400_ptTerritory().ToList();//tam thoi
+        //var lstState = _db.AR20400_ptState().ToList();
+        //var companies = _db.AR20400_ptCompany().ToList();
+
+        //foreach (var itemTerritory in lstTerritories)
+        //{
+        //    var nodeTerritory = new Node();
+        //    nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = itemTerritory.Territory, Mode = ParameterMode.Value });
+        //    nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Territory", Mode = ParameterMode.Value });
+        //    //nodeTerritory.Cls = "tree-node-parent";
+        //    nodeTerritory.Text = itemTerritory.Descr;
+        //    //nodeTerritory.Checked = false;
+        //    nodeTerritory.NodeID = "territory-" + itemTerritory.Territory;
+        //    //nodeTerritory.IconCls = "tree-parent-icon";
+
+        //    var lstStateInTerr = lstState.Where(x => x.Territory == itemTerritory.Territory);
+        //    foreach (var itemState in lstStateInTerr)
+        //    {
+        //        var nodeState = new Node();
+        //        nodeState.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = itemState.State, Mode = ParameterMode.Value });
+        //        nodeState.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "State", Mode = ParameterMode.Value });
+        //        //nodeTerritory.Cls = "tree-node-parent";
+        //        nodeState.Text = itemState.Descr;
+        //        //nodeState.Checked = false;
+        //        nodeState.NodeID = "territory-state-" + itemTerritory.Territory + "-" + itemState.State;
+        //        //nodeTerritory.IconCls = "tree-parent-icon";
+
+        //        nodeTerritory.Children.Add(nodeState);
+
+        //        var lstCompaniesInState = companies.Where(x => x.State == itemState.State);
+        //        foreach (var company in lstCompaniesInState)
+        //        {
+        //            var nodeCompany = new Node();
+        //            nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = company.CpnyID, Mode = ParameterMode.Value });
+        //            nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Company", Mode = ParameterMode.Value });
+        //            nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "State", Value = itemState.State, Mode = ParameterMode.Value });
+        //            nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "Territory", Value = itemTerritory.Territory, Mode = ParameterMode.Value });
+
+        //            //nodeCompany.Cls = "tree-node-parent";
+        //            nodeCompany.Text = company.CpnyName;
+        //            //nodeCompany.Checked = false;
+        //            nodeCompany.Leaf = true;
+        //            nodeCompany.NodeID = "territory-state-company-" + itemTerritory.Territory + "-" + itemState.State + "-" + company.CpnyID;
+        //            //nodeCompany.IconCls = "tree-parent-icon";
+
+        //            nodeState.Children.Add(nodeCompany);
+
+        //        }
+        //        if (lstCompaniesInState.Count() == 0)
+        //        {
+        //            nodeState.Leaf = true;
+        //        }
+        //    }
+        //    if (lstStateInTerr.Count() == 0)
+        //    {
+        //        nodeTerritory.Leaf = true;
+        //    }
+        //    node.Children.Add(nodeTerritory);
+        //}
+        //var treeBranch = X.GetCmp<Panel>(panelID);
+
+        ////tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
+        //tree.Listeners.CheckChange.Fn = "treePanelBranch_checkChange";
+        //tree.Listeners.BeforeItemExpand.Handler = "App.treePanelBranch.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
+        //tree.Listeners.AfterItemExpand.Handler = "App.treePanelBranch.el.unmask();Ext.resumeLayouts(true);";
+        //tree.AddTo(treeBranch);
+
+        //return this.Direct();
+        //}
+
+
+        //[HttpPost]
+        //public ActionResult Report(FormCollection data)
         //{
         //    try
         //    {
-              
-        //        if (objAr_SOAddr != null)
-        //        {
-        //            _isNew = false;
 
-        //        }
-        //        else
-        //        {
-        //            _isNew = true;
-        //            objAr_SOAddr = new AR_SOAddress();
-        //            objAr_SOAddr.CustId = this.objAR_Customer.CustId;
-        //            objAr_SOAddr.ShipToId = (cboDfltShipToId.SelectedItem == null ? "DEFAULT" : (cboDfltShipToId.SelectedItem as ppv_ShipToId_Result).ShipToId);
-        //        }
-        //        if (this.cboDfltShipToId.SelectedItem == null)
-        //        {
-        //            this.cboDfltShipToId.SelectedItem = lstppv_ShipToId_Result.Where(p => p.ShipToId.ToUpper() == "DEFAULT").FirstOrDefault();
-        //        }
-        //        //objAr_SOAddr.BranchID = this.txtBranchID.Text;
-        //        objAr_SOAddr.BranchID = cboCpnyID.SelectedItem == null ? "" : (cboCpnyID.SelectedItem as SYS_Company).CpnyID;
-        //        objAr_SOAddr.SOName = this.txtCustName.Text;
-        //        objAr_SOAddr.Attn = this.txtAttn.Text;
-        //        objAr_SOAddr.Addr1 = this.txtAddr1.Text;
-        //        objAr_SOAddr.Addr2 = this.txtAddr2.Text;
-        //        objAr_SOAddr.City = this.objAR_Customer.City;
-        //        objAr_SOAddr.State = this.objAR_Customer.State;
-        //        objAr_SOAddr.District = this.objAR_Customer.District;
-        //        objAr_SOAddr.Zip = this.txtZip.Text;
-        //        objAr_SOAddr.Country = this.objAR_Customer.Country;
-        //        objAr_SOAddr.Phone = this.txtPhone.Text;
-        //        objAr_SOAddr.Fax = this.txtFax.Text;
-        //        objAr_SOAddr.TaxRegNbr = this.txtTaxRegNbr.Text;
-        //        objAr_SOAddr.TaxLocId = this.txtTaxLocId.Text;
-        //        objAr_SOAddr.TaxId00 = this.objAR_Customer.TaxID00;
-        //        objAr_SOAddr.TaxId01 = this.objAR_Customer.TaxID01;
-        //        objAr_SOAddr.TaxId02 = this.objAR_Customer.TaxID02;
-        //        objAr_SOAddr.TaxId03 = this.objAR_Customer.TaxID03;
-        //        objAr_SOAddr.Crtd_DateTime = objAR_Customer.Crtd_Datetime;
-        //        objAr_SOAddr.Crtd_Prog = objAR_Customer.Crtd_Prog;
-        //        objAr_SOAddr.Crtd_User = objAR_Customer.Crtd_User;
-        //        objAr_SOAddr.LUpd_DateTime = objAR_Customer.LUpd_Datetime;
-        //        objAr_SOAddr.LUpd_Prog = objAR_Customer.LUpd_Prog;
-        //        objAr_SOAddr.LUpd_User = objAR_Customer.LUpd_User;
-        //        objAr_SOAddr.tstamp = objAR_Customer.tstamp;
+        //        User user = _sys.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
+        //        string reportName = "";
+        //        string reportNbr = "";
+        //        var rpt = new RPTRunning();
+        //        rpt.ResetET();
 
+        //        reportName = data["reportName"];
+        //        reportNbr = data["reportNbr"];
+
+        //        rpt.ReportNbr = reportNbr;
+        //        rpt.MachineName = "Web";
+        //        rpt.ReportCap = "ReportName";
+        //        rpt.ReportName = reportName;
+
+        //        rpt.ReportDate = DateTime.Now;
+        //        rpt.DateParm00 = DateTime.Now;
+        //        rpt.DateParm01 = DateTime.Now;
+        //        rpt.DateParm02 = DateTime.Now;
+        //        rpt.DateParm03 = DateTime.Now;
+        //        rpt.StringParm00 = data["cboBranchID_Header"];
+        //        rpt.StringParm01 = data["cboContract"];
+        //        rpt.UserID = Current.UserName;
+        //        rpt.AppPath = "Reports\\";
+        //        rpt.ClientName = Current.UserName;
+        //        rpt.LoggedCpnyID = Current.CpnyID;
+        //        rpt.CpnyID = user.CpnyID;
+        //        rpt.LangID = Current.LangID;
+
+        //        _db.RPTRunnings.AddObject(rpt);
+        //        _db.SaveChanges();
+
+        //        if (_logMessage != null)
+        //        {
+        //            return _logMessage;
+        //        }
+        //        return Json(new { success = true, reportID = rpt.ReportID, reportName = rpt.ReportName });
         //    }
         //    catch (Exception ex)
         //    {
-        //        throw (ex);
-        //    }
-
-
-        //}  
-
-
-        //if (objAR_Customer != null)
-        // {
-
-        ////updating
-        //if (hadChild == 0)
-        //{
-
-
-        //    if (handle == "N" || handle == "")
-        //    {
-        //        objAR_Customer.Status = status;
-        //    }
-        //    else
-        //    {
-        //        objAR_Customer.Status = approveHandle.ToStatus;
-
-        //    }
-        //    if (objAR_Customer.Status == "O")
-        //    {
-        //        X.Msg.Show(new MessageBoxConfig()
+        //        if (ex is MessageException)
         //        {
-        //            Message = "Email sent!"
-        //        });
-        //        Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-        //                     lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-        //    }
-        //    //Node
-
-
-        //    //String[] nodeid = nodeID.Split('-');
-        //    //objAR_Customer.NodeID = nodeid[0];
-        //    //objAR_Customer.NodeLevel = Convert.ToInt16(nodeLevel);
-
-        //    UpdatingHeader(updated, ref objAR_Customer);
-
-        //    _db.SaveChanges();
-        //}
-        //    else
-        //    {
-        //        if (handle == "N" || handle == "")
-        //        {
-        //            objAR_Customer.Status = status;
+        //            return (ex as MessageException).ToMessage();
         //        }
-        //        else
-        //        {
-        //            objAR_Customer.Status = approveHandle.ToStatus;
-
-        //        }
-        //        if (objAR_Customer.Status == "O")
-        //        {
-        //            X.Msg.Show(new MessageBoxConfig()
-        //            {
-        //                Message = "Email sent!"
-        //            });
-        //            Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-        //                         lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-        //        }
-
-        //        String[] nodeid = nodeID.Split('-');
-        //        if (objAR_Customer.NodeID != nodeid[0])
-        //        {
-        //            tmpChangeTreeDic = "1";
-        //        }
-        //        else
-        //        {
-        //            tmpChangeTreeDic = "0";
-        //        }
-        //        objAR_Customer.NodeID = nodeid[0];
-        //        objAR_Customer.NodeLevel = Convert.ToInt16(nodeLevel);
-        //        var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-        //        objAR_Customer.ParentRecordID = searchparentRecordID.ParentRecordID;
-
-        //        //Image and Media
-
-        //        //String[] nodeid = nodeID.Split('-');
-        //        //objAR_Customer.NodeID = nodeid[0];
-        //        //objAR_Customer.NodeLevel = Convert.ToInt16(nodeLevel);
-
-        //        UpdatingHeader(updated, ref objAR_Customer);
-
-        //        _db.SaveChanges();
-        //    }
-
-        //}
-        //else
-        //{
-        //    //bo sung code add new copyForm neu update
-        //    objAR_Customer = new AR_Customer();
-        //    objAR_Customer.CustId = custID;
-        //    objAR_Customer.BranchID = branchID;
-
-        //    if (handle == "N" || handle == "")
-        //    {
-        //        objAR_Customer.Status = status;
-        //    }
-        //    else
-        //    {
-        //        objAR_Customer.Status = approveHandle.ToStatus;
-
-        //    }
-        //    if (objAR_Customer.Status == "O")
-        //    {
-        //        X.Msg.Show(new MessageBoxConfig()
-        //        {
-        //            Message = "Email sent!"
-        //        });
-        //        Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-        //                     lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-        //    }
-        //    //statusAfterAll = objAR_Customer.Status;
-
-        //    String[] nodeid = nodeID.Split('-');
-        //    objAR_Customer.NodeID = nodeid[0];
-        //    objAR_Customer.NodeLevel = Convert.ToInt16(nodeLevel);
-        //    var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-        //    objAR_Customer.ParentRecordID = searchparentRecordID.ParentRecordID;
-
-        //    objAR_Customer.Crtd_Datetime = DateTime.Now;
-        //    objAR_Customer.Crtd_Prog = screenNbr;
-        //    objAR_Customer.Crtd_User = Current.UserName;
-        //    objAR_Customer.tstamp = new byte[0];
-
-        //    UpdatingHeader(updated, ref objAR_Customer);
-        //    _db.AR_Customer.AddObject(objAR_Customer);
-        //    _db.SaveChanges();
-
-
-
-
-        //}
-
-        //foreach (AR_Customer created in lstheader.Created)
-        //{
-
-        //    var objAR_Customer = _db.AR_Customer.Where(p => p.CustId == custID && p.BranchID == branchID).FirstOrDefault();
-        //    if (objAR_Customer == null)
-        //    {
-        //        if (hadChild != 0)
-        //        {
-
-        //            objAR_Customer = new AR_Customer();
-        //            objAR_Customer.CustId = custID;
-        //            objAR_Customer.BranchID = branchID;
-
-        //            if (handle == "N" || handle == "")
-        //            {
-        //                objAR_Customer.Status = status;
-        //            }
-        //            else
-        //            {
-        //                objAR_Customer.Status = approveHandle.ToStatus;
-
-        //            }
-        //            if (objAR_Customer.Status == "O")
-        //            {
-        //                X.Msg.Show(new MessageBoxConfig()
-        //                {
-        //                    Message = "Email sent!"
-        //                });
-        //                Approve.Mail_Approve(screenNbr, custID, Role, objAR_Customer.Status, handle,
-        //                             lang, userNameLogin, branchID, brandID, string.Empty, string.Empty, string.Empty);
-        //            }
-
-        //            String[] nodeid = nodeID.Split('-');
-        //            objAR_Customer.NodeID = nodeid[0];
-        //            objAR_Customer.NodeLevel = Convert.ToInt16(nodeLevel);
-        //            var searchparentRecordID = _db.SI_Hierarchy.Where(p => p.NodeID == parentRecordID && p.Type == "C").FirstOrDefault();
-        //            objAR_Customer.ParentRecordID = searchparentRecordID.ParentRecordID;
-
-        //            objAR_Customer.Crtd_Datetime = DateTime.Now;
-        //            objAR_Customer.Crtd_Prog = screenNbr;
-        //            objAR_Customer.Crtd_User = Current.UserName;
-        //            objAR_Customer.tstamp = new byte[0];
-
-        //            UpdatingHeader(created, ref objAR_Customer);
-        //            _db.AR_Customer.AddObject(objAR_Customer);
-        //            _db.SaveChanges();
-
-        //        }
-        //        else
-        //        {
-        //            return Json(new { success = false, code = "213" }, JsonRequestBehavior.AllowGet);
-        //        }
-
+        //        return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
         //    }
         //}
-
-        // If there is a change in handling status (keepStatus is False),
-        // add a new pending task with an approved handle.
-
-
-
-        // ===============================================================
-
-        // Get out of the loop (only update the first data)
 
     }
 }

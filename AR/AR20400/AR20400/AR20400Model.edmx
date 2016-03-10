@@ -307,6 +307,7 @@
           <Property Name="AddressLevel" Type="varchar" MaxLength="1" />
           <Property Name="AutoSlsperID" Type="bit" />
           <Property Name="HiddenHierarchy" Type="bit" />
+          <Property Name="LastSlsID" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -400,12 +401,44 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
-        <Function Name="AR20400_pcCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+        <Function Name="AR20400_pdHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="CustId" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_pgAR_CustAdvTool" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustId" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_pgAR_CustDisplayMethod" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustId" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_pgAR_CustSellingProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_pgAR_LTTContract" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustId" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_pgAR_LTTContractDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustId" Type="varchar" Mode="In" />
         </Function>
         <Function Name="AR20400_ppARNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="GetType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_ppCheckAutoCustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_ppCustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="KeyTree" Type="varchar" Mode="In" />
+          <Parameter Name="PreFix1" Type="varchar" Mode="In" />
+          <Parameter Name="PreFix2" Type="varchar" Mode="In" />
+          <Parameter Name="PreFix3" Type="varchar" Mode="In" />
+          <Parameter Name="PreFix4" Type="varchar" Mode="In" />
+          <Parameter Name="SufFix1" Type="varchar" Mode="In" />
+          <Parameter Name="SufFix2" Type="varchar" Mode="In" />
+          <Parameter Name="SufFix3" Type="varchar" Mode="In" />
+          <Parameter Name="SufFix4" Type="varchar" Mode="In" />
+          <Parameter Name="ClassID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="AR20400_ppGetAutoCustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -421,16 +454,28 @@
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
           <Parameter Name="State" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="AR20400_ppGetLineRefAR_CustAdvTool" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustId" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_ppGetLineRefAR_LTTContractDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LTTContractNbr" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_ppGetMaxHierarchyLevel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Type" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="AR20400_ptCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AR20400Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="AR20400Entities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="SI_Hierarchy" EntityType="AR20400Model.SI_Hierarchy" />
           <EntitySet Name="AR_CustAdvTool" EntityType="AR20400Model.AR_CustAdvTool" />
           <EntitySet Name="AR_CustClass" EntityType="AR20400Model.AR_CustClass" />
           <EntitySet Name="AR_CustDisplayMethod" EntityType="AR20400Model.AR_CustDisplayMethod" />
           <EntitySet Name="AR_CustHist" EntityType="AR20400Model.AR_CustHist" />
+          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
           <EntitySet Name="AR_CustSellingProducts" EntityType="AR20400Model.AR_CustSellingProducts" />
           <EntitySet Name="AR_DisplayMethod" EntityType="AR20400Model.AR_DisplayMethod" />
           <EntitySet Name="AR_LTTContract" EntityType="AR20400Model.AR_LTTContract" />
@@ -439,14 +484,33 @@
           <EntitySet Name="AR_Setup" EntityType="AR20400Model.AR_Setup" />
           <EntitySet Name="AR_SOAddress" EntityType="AR20400Model.AR_SOAddress" />
           <EntitySet Name="SI_ApprovalFlowHandle" EntityType="AR20400Model.SI_ApprovalFlowHandle" />
-          <FunctionImport Name="AR20400_pcCustomer" ReturnType="Collection(AR20400Model.AR20400_pcCustomer_Result)">
-          <Parameter Name="BranchID" Mode="In" Type="String" />
+          <EntitySet Name="SI_Hierarchy" EntityType="AR20400Model.SI_Hierarchy" />
+          <FunctionImport Name="AR20400_pdHeader" ReturnType="Collection(AR20400Model.AR20400_pdHeader_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="CustId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_pgAR_CustAdvTool" ReturnType="Collection(AR20400Model.AR20400_pgAR_CustAdvTool_Result)">
+          <Parameter Name="CustId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_pgAR_CustDisplayMethod" ReturnType="Collection(AR20400Model.AR20400_pgAR_CustDisplayMethod_Result)">
+          <Parameter Name="CustId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_pgAR_CustSellingProducts" ReturnType="Collection(AR20400Model.AR20400_pgAR_CustSellingProducts_Result)">
+          <Parameter Name="CustID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_pgAR_LTTContract" ReturnType="Collection(AR20400Model.AR20400_pgAR_LTTContract_Result)">
+          <Parameter Name="CustId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_pgAR_LTTContractDetail" ReturnType="Collection(AR20400Model.AR20400_pgAR_LTTContractDetail_Result)">
+          <Parameter Name="CustId" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AR20400_ppARNumbering" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
+          <FunctionImport Name="AR20400_ppCheckAutoCustID" ReturnType="Collection(String)">
+          <Parameter Name="CpnyID" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="AR20400_ppGetAutoCustID" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="KeyTree" Mode="In" Type="String" />
@@ -461,28 +525,32 @@
             <Parameter Name="ClassID" Mode="In" Type="String" />
             <Parameter Name="State" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="AR20400_ppGetLineRefAR_CustAdvTool" ReturnType="Collection(String)">
+          <Parameter Name="CustId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_ppGetLineRefAR_LTTContractDetail" ReturnType="Collection(String)">
+          <Parameter Name="LTTContractNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_ppCustID" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="KeyTree" Mode="In" Type="String" />
+            <Parameter Name="PreFix1" Mode="In" Type="String" />
+            <Parameter Name="PreFix2" Mode="In" Type="String" />
+            <Parameter Name="PreFix3" Mode="In" Type="String" />
+            <Parameter Name="PreFix4" Mode="In" Type="String" />
+            <Parameter Name="SufFix1" Mode="In" Type="String" />
+            <Parameter Name="SufFix2" Mode="In" Type="String" />
+            <Parameter Name="SufFix3" Mode="In" Type="String" />
+            <Parameter Name="SufFix4" Mode="In" Type="String" />
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_ptCustomer" ReturnType="Collection(AR20400Model.AR20400_ptCustomer_Result)">
+          <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AR20400_ppGetMaxHierarchyLevel" ReturnType="Collection(Int16)">
+            <Parameter Name="Type" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
-        <EntityType Name="SI_Hierarchy">
-          <Key>
-            <PropertyRef Name="NodeID" />
-            <PropertyRef Name="NodeLevel" />
-            <PropertyRef Name="Type" />
-            <PropertyRef Name="ParentRecordID" />
-          </Key>
-          <Property Type="String" Name="NodeID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
-          <Property Type="String" Name="Type" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
-          <Property Type="String" Name="Descr" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="RecordID" Nullable="false" />
-          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-        </EntityType>
         <EntityType Name="AR_CustAdvTool">
           <Key>
             <PropertyRef Name="CustID" />
@@ -567,6 +635,84 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="AR_Customer">
+          <Key>
+            <PropertyRef Name="CustId" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr1" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Attn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAddr1" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAddr2" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillAttn" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillCity" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillCountry" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillFax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillName" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillPhone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillSalut" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BillState" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="BillZip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Channel" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="City" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ClassId" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="CrLmt" Nullable="false" />
+          <Property Type="String" Name="CrRule" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="CustFillPriority" Nullable="false" />
+          <Property Type="String" Name="CustType" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DeliveryID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DflSaleRouteID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DfltShipToId" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="District" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EMailAddr" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="EmpNum" Nullable="false" />
+          <Property Type="DateTime" Name="ExpiryDate" Nullable="false" Precision="0" />
+          <Property Type="Int16" Name="Exported" Nullable="false" />
+          <Property Type="String" Name="Fax" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="GracePer" Nullable="false" />
+          <Property Type="String" Name="LTTContractNbr" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="NodeID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
+          <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
+          <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PriceClassID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Salut" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ShopType" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SiteId" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsperId" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Status" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SupID" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxDflt" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxID00" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxID01" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxID02" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxID03" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxLocId" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TaxRegNbr" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Terms" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Territory" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Double" Name="TradeDisc" Nullable="false" />
+          <Property Type="String" Name="Zip" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Location" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Area" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="GiftExchange" Nullable="false" />
+          <Property Type="Boolean" Name="HasPG" Nullable="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="EstablishDate" Precision="0" />
+          <Property Type="DateTime" Name="Birthdate" Precision="0" />
         </EntityType>
         <EntityType Name="AR_CustSellingProducts">
           <Key>
@@ -691,6 +837,7 @@
           <Property Type="String" Name="AddressLevel" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="AutoSlsperID" />
           <Property Type="Boolean" Name="HiddenHierarchy" />
+          <Property Type="String" Name="LastSlsID" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AR_SOAddress">
           <Key>
@@ -763,118 +910,158 @@
           <Property Type="String" Name="MailApprove" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProcContent" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="AR20400_pcCustomer_Result">
+        <EntityType Name="SI_Hierarchy">
+          <Key>
+            <PropertyRef Name="NodeID" />
+            <PropertyRef Name="NodeLevel" />
+            <PropertyRef Name="Type" />
+            <PropertyRef Name="ParentRecordID" />
+          </Key>
+          <Property Type="String" Name="NodeID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
+          <Property Type="String" Name="Descr" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="RecordID" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="AR20400_pdHeader_Result">
           <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
           <Property Type="String" Name="Addr1" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="Addr2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Attn" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="BillAddr1" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="BillAddr2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BillAttn" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="BillCity" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="BillCountry" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="BillFax" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BillName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="BillPhone" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="BillSalut" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BillState" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="BillZip" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Channel" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ClassId" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="3" />
+          <Property Type="Double" Name="CrLmt" Nullable="false" />
+          <Property Type="String" Name="CrRule" Nullable="true" MaxLength="1" />
+          <Property Type="Int16" Name="CustFillPriority" Nullable="false" />
+          <Property Type="String" Name="CustType" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="DeliveryID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="DflSaleRouteID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DfltShipToId" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="District" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="EMailAddr" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="EmpNum" Nullable="false" />
+          <Property Type="DateTime" Name="ExpiryDate" Nullable="false" Precision="16" />
+          <Property Type="Int16" Name="Exported" Nullable="false" />
+          <Property Type="String" Name="Fax" Nullable="true" MaxLength="30" />
+          <Property Type="Int16" Name="GracePer" Nullable="false" />
+          <Property Type="String" Name="LTTContractNbr" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="NodeID" Nullable="true" MaxLength="10" />
+          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
+          <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="PriceClassID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Salut" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="ShopType" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SiteId" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SlsperId" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="SupID" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="TaxDflt" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="TaxID00" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxID01" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxID02" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxID03" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxLocId" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="TaxRegNbr" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="Terms" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Territory" Nullable="true" MaxLength="10" />
+          <Property Type="Double" Name="TradeDisc" Nullable="false" />
+          <Property Type="String" Name="Zip" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Location" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Area" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="GiftExchange" Nullable="false" />
+          <Property Type="Boolean" Name="HasPG" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="EstablishDate" Nullable="true" />
+          <Property Type="DateTime" Name="Birthdate" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="AR20400_pgAR_CustAdvTool_Result">
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="LineRef" Nullable="false" MaxLength="5" />
+          <Property Type="Boolean" Name="Active" Nullable="false" />
+          <Property Type="Double" Name="Amt" Nullable="false" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="FitupDate" Nullable="false" Precision="16" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="AR20400_pgAR_CustDisplayMethod_Result">
+          <Property Type="String" Name="CustID" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="DispMethod" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="AR20400_pgAR_CustSellingProducts_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="AR20400_pgAR_LTTContract_Result">
+          <Property Type="String" Name="LTTContractNbr" Nullable="false" MaxLength="30" />
+          <Property Type="Boolean" Name="Active" Nullable="false" />
+          <Property Type="Int32" Name="MonthNum" Nullable="false" />
+          <Property Type="String" Name="CustID" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="ExtDate" Nullable="false" Precision="16" />
+          <Property Type="DateTime" Name="FromDate" Nullable="false" Precision="16" />
+          <Property Type="Double" Name="AmtCommit" Nullable="false" />
+          <Property Type="Double" Name="QtyCommit" Nullable="false" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="ToDate" Nullable="false" Precision="16" />
+          <Property Type="Double" Name="TotAmt" Nullable="false" />
+          <Property Type="Double" Name="TotQty" Nullable="false" />
+          <Property Type="String" Name="UnitCommit" Nullable="true" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Double" Name="ActualQty" Nullable="false" />
+          <Property Type="Double" Name="ActualAmt" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="AR20400_pgAR_LTTContractDetail_Result">
+          <Property Type="String" Name="LTTContractNbr" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="LineRef" Nullable="true" MaxLength="5" />
+          <Property Type="Double" Name="Amt" Nullable="true" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="10" />
+          <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="AR20400_ptCustomer_Result">
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
           <Property Type="String" Name="NodeID" Nullable="true" MaxLength="10" />
           <Property Type="Int16" Name="NodeLevel" Nullable="false" />
           <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
         </ComplexType>
-        <EntityType Name="AR_Customer">
-          <Key>
-            <PropertyRef Name="CustId" />
-            <PropertyRef Name="BranchID" />
-          </Key>
-          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr1" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Addr2" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Attn" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillAddr1" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillAddr2" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillAttn" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillCity" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillCountry" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillFax" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillName" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillPhone" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillSalut" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="BillState" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="BillZip" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Channel" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="City" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ClassId" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Country" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="CrLmt" Nullable="false" />
-          <Property Type="String" Name="CrRule" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="CustFillPriority" Nullable="false" />
-          <Property Type="String" Name="CustType" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DeliveryID" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DflSaleRouteID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltShipToId" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="District" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="EMailAddr" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="EmpNum" Nullable="false" />
-          <Property Type="DateTime" Name="ExpiryDate" Nullable="false" Precision="0" />
-          <Property Type="Int16" Name="Exported" Nullable="false" />
-          <Property Type="String" Name="Fax" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="GracePer" Nullable="false" />
-          <Property Type="String" Name="LTTContractNbr" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="NodeID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Int16" Name="NodeLevel" Nullable="false" />
-          <Property Type="Int32" Name="ParentRecordID" Nullable="false" />
-          <Property Type="String" Name="Phone" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="PriceClassID" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Salut" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ShopType" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SiteId" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SlsperId" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="State" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Status" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="SupID" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxDflt" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxID00" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxID01" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxID02" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxID03" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxLocId" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TaxRegNbr" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Terms" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Territory" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="TradeDisc" Nullable="false" />
-          <Property Type="String" Name="Zip" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Location" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Area" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Boolean" Name="GiftExchange" Nullable="false" />
-          <Property Type="Boolean" Name="HasPG" Nullable="false" />
-          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="EstablishDate" Precision="0" />
-          <Property Type="DateTime" Name="Birthdate" Precision="0" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="AR20400Entities" >
-          <EntitySetMapping Name="SI_Hierarchy">
-            <EntityTypeMapping TypeName="AR20400Model.SI_Hierarchy">
-              <MappingFragment StoreEntitySet="SI_Hierarchy">
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
-                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
-                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AR_CustAdvTool">
             <EntityTypeMapping TypeName="AR20400Model.AR_CustAdvTool">
               <MappingFragment StoreEntitySet="AR_CustAdvTool">
@@ -957,6 +1144,84 @@
                 <ScalarProperty Name="CustID" ColumnName="CustID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="Seq" ColumnName="Seq" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AR_Customer">
+            <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
+              <MappingFragment StoreEntitySet="AR_Customer">
+                <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
+                <ScalarProperty Name="EstablishDate" ColumnName="EstablishDate" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="HasPG" ColumnName="HasPG" />
+                <ScalarProperty Name="GiftExchange" ColumnName="GiftExchange" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="TradeDisc" ColumnName="TradeDisc" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="TaxLocId" ColumnName="TaxLocId" />
+                <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
+                <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
+                <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />
+                <ScalarProperty Name="TaxID00" ColumnName="TaxID00" />
+                <ScalarProperty Name="TaxDflt" ColumnName="TaxDflt" />
+                <ScalarProperty Name="SupID" ColumnName="SupID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="ShopType" ColumnName="ShopType" />
+                <ScalarProperty Name="Salut" ColumnName="Salut" />
+                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
+                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
+                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
+                <ScalarProperty Name="LTTContractNbr" ColumnName="LTTContractNbr" />
+                <ScalarProperty Name="GracePer" ColumnName="GracePer" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Exported" ColumnName="Exported" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="EmpNum" ColumnName="EmpNum" />
+                <ScalarProperty Name="EMailAddr" ColumnName="EMailAddr" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="DfltShipToId" ColumnName="DfltShipToId" />
+                <ScalarProperty Name="DflSaleRouteID" ColumnName="DflSaleRouteID" />
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+                <ScalarProperty Name="CustType" ColumnName="CustType" />
+                <ScalarProperty Name="CustFillPriority" ColumnName="CustFillPriority" />
+                <ScalarProperty Name="CrRule" ColumnName="CrRule" />
+                <ScalarProperty Name="CrLmt" ColumnName="CrLmt" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="BillZip" ColumnName="BillZip" />
+                <ScalarProperty Name="BillState" ColumnName="BillState" />
+                <ScalarProperty Name="BillSalut" ColumnName="BillSalut" />
+                <ScalarProperty Name="BillPhone" ColumnName="BillPhone" />
+                <ScalarProperty Name="BillName" ColumnName="BillName" />
+                <ScalarProperty Name="BillFax" ColumnName="BillFax" />
+                <ScalarProperty Name="BillCountry" ColumnName="BillCountry" />
+                <ScalarProperty Name="BillCity" ColumnName="BillCity" />
+                <ScalarProperty Name="BillAttn" ColumnName="BillAttn" />
+                <ScalarProperty Name="BillAddr2" ColumnName="BillAddr2" />
+                <ScalarProperty Name="BillAddr1" ColumnName="BillAddr1" />
+                <ScalarProperty Name="Attn" ColumnName="Attn" />
+                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1063,6 +1328,7 @@
           <EntitySetMapping Name="AR_Setup">
             <EntityTypeMapping TypeName="AR20400Model.AR_Setup">
               <MappingFragment StoreEntitySet="AR_Setup">
+                <ScalarProperty Name="LastSlsID" ColumnName="LastSlsID" />
                 <ScalarProperty Name="HiddenHierarchy" ColumnName="HiddenHierarchy" />
                 <ScalarProperty Name="AutoSlsperID" ColumnName="AutoSlsperID" />
                 <ScalarProperty Name="AddressLevel" ColumnName="AddressLevel" />
@@ -1155,100 +1421,186 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AR20400_pcCustomer" FunctionName="eBiz4DWebSysModel.Store.AR20400_pcCustomer">
+          <EntitySetMapping Name="SI_Hierarchy">
+            <EntityTypeMapping TypeName="AR20400Model.SI_Hierarchy">
+              <MappingFragment StoreEntitySet="SI_Hierarchy">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
+                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pdHeader" FunctionName="eBiz4DWebSysModel.Store.AR20400_pdHeader">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pcCustomer_Result">
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pdHeader_Result">
                 <ScalarProperty Name="CustId" ColumnName="CustId" />
                 <ScalarProperty Name="CustName" ColumnName="CustName" />
                 <ScalarProperty Name="Addr1" ColumnName="Addr1" />
                 <ScalarProperty Name="Addr2" ColumnName="Addr2" />
+                <ScalarProperty Name="Attn" ColumnName="Attn" />
+                <ScalarProperty Name="BillAddr1" ColumnName="BillAddr1" />
+                <ScalarProperty Name="BillAddr2" ColumnName="BillAddr2" />
+                <ScalarProperty Name="BillAttn" ColumnName="BillAttn" />
+                <ScalarProperty Name="BillCity" ColumnName="BillCity" />
+                <ScalarProperty Name="BillCountry" ColumnName="BillCountry" />
+                <ScalarProperty Name="BillFax" ColumnName="BillFax" />
+                <ScalarProperty Name="BillName" ColumnName="BillName" />
+                <ScalarProperty Name="BillPhone" ColumnName="BillPhone" />
+                <ScalarProperty Name="BillSalut" ColumnName="BillSalut" />
+                <ScalarProperty Name="BillState" ColumnName="BillState" />
+                <ScalarProperty Name="BillZip" ColumnName="BillZip" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="CrLmt" ColumnName="CrLmt" />
+                <ScalarProperty Name="CrRule" ColumnName="CrRule" />
+                <ScalarProperty Name="CustFillPriority" ColumnName="CustFillPriority" />
+                <ScalarProperty Name="CustType" ColumnName="CustType" />
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+                <ScalarProperty Name="DflSaleRouteID" ColumnName="DflSaleRouteID" />
+                <ScalarProperty Name="DfltShipToId" ColumnName="DfltShipToId" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="EMailAddr" ColumnName="EMailAddr" />
+                <ScalarProperty Name="EmpNum" ColumnName="EmpNum" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="Exported" ColumnName="Exported" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="GracePer" ColumnName="GracePer" />
+                <ScalarProperty Name="LTTContractNbr" ColumnName="LTTContractNbr" />
+                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
+                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
+                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
+                <ScalarProperty Name="Salut" ColumnName="Salut" />
+                <ScalarProperty Name="ShopType" ColumnName="ShopType" />
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="SupID" ColumnName="SupID" />
+                <ScalarProperty Name="TaxDflt" ColumnName="TaxDflt" />
+                <ScalarProperty Name="TaxID00" ColumnName="TaxID00" />
+                <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />
+                <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
+                <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
+                <ScalarProperty Name="TaxLocId" ColumnName="TaxLocId" />
+                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="TradeDisc" ColumnName="TradeDisc" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="GiftExchange" ColumnName="GiftExchange" />
+                <ScalarProperty Name="HasPG" ColumnName="HasPG" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="EstablishDate" ColumnName="EstablishDate" />
+                <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pgAR_CustAdvTool" FunctionName="eBiz4DWebSysModel.Store.AR20400_pgAR_CustAdvTool">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pgAR_CustAdvTool_Result">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Amt" ColumnName="Amt" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="FitupDate" ColumnName="FitupDate" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pgAR_CustDisplayMethod" FunctionName="eBiz4DWebSysModel.Store.AR20400_pgAR_CustDisplayMethod">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pgAR_CustDisplayMethod_Result">
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="DispMethod" ColumnName="DispMethod" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pgAR_CustSellingProducts" FunctionName="eBiz4DWebSysModel.Store.AR20400_pgAR_CustSellingProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pgAR_CustSellingProducts_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pgAR_LTTContract" FunctionName="eBiz4DWebSysModel.Store.AR20400_pgAR_LTTContract">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pgAR_LTTContract_Result">
+                <ScalarProperty Name="LTTContractNbr" ColumnName="LTTContractNbr" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="MonthNum" ColumnName="MonthNum" />
+                <ScalarProperty Name="CustID" ColumnName="CustID" />
+                <ScalarProperty Name="ExtDate" ColumnName="ExtDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="AmtCommit" ColumnName="AmtCommit" />
+                <ScalarProperty Name="QtyCommit" ColumnName="QtyCommit" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="TotAmt" ColumnName="TotAmt" />
+                <ScalarProperty Name="TotQty" ColumnName="TotQty" />
+                <ScalarProperty Name="UnitCommit" ColumnName="UnitCommit" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="ActualQty" ColumnName="ActualQty" />
+                <ScalarProperty Name="ActualAmt" ColumnName="ActualAmt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_pgAR_LTTContractDetail" FunctionName="eBiz4DWebSysModel.Store.AR20400_pgAR_LTTContractDetail">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_pgAR_LTTContractDetail_Result">
+                <ScalarProperty Name="LTTContractNbr" ColumnName="LTTContractNbr" />
+                <ScalarProperty Name="LineRef" ColumnName="LineRef" />
+                <ScalarProperty Name="Amt" ColumnName="Amt" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_ppARNumbering" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppARNumbering" />
+          <FunctionImportMapping FunctionImportName="AR20400_ppCheckAutoCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCheckAutoCustID" />
+          <FunctionImportMapping FunctionImportName="AR20400_ppGetAutoCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetAutoCustID" />
+          <FunctionImportMapping FunctionImportName="AR20400_ppGetLineRefAR_CustAdvTool" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetLineRefAR_CustAdvTool" />
+          <FunctionImportMapping FunctionImportName="AR20400_ppGetLineRefAR_LTTContractDetail" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetLineRefAR_LTTContractDetail" />
+          <FunctionImportMapping FunctionImportName="AR20400_ppCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCustID" />
+          <FunctionImportMapping FunctionImportName="AR20400_ptCustomer" FunctionName="eBiz4DWebSysModel.Store.AR20400_ptCustomer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AR20400Model.AR20400_ptCustomer_Result">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
                 <ScalarProperty Name="NodeID" ColumnName="NodeID" />
                 <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
                 <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="AR20400_ppARNumbering" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppARNumbering" />
-          <EntitySetMapping Name="AR_Customer">
-            <EntityTypeMapping TypeName="AR20400Model.AR_Customer">
-              <MappingFragment StoreEntitySet="AR_Customer">
-                <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
-                <ScalarProperty Name="EstablishDate" ColumnName="EstablishDate" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
-                <ScalarProperty Name="HasPG" ColumnName="HasPG" />
-                <ScalarProperty Name="GiftExchange" ColumnName="GiftExchange" />
-                <ScalarProperty Name="Area" ColumnName="Area" />
-                <ScalarProperty Name="Location" ColumnName="Location" />
-                <ScalarProperty Name="Zip" ColumnName="Zip" />
-                <ScalarProperty Name="TradeDisc" ColumnName="TradeDisc" />
-                <ScalarProperty Name="Territory" ColumnName="Territory" />
-                <ScalarProperty Name="Terms" ColumnName="Terms" />
-                <ScalarProperty Name="TaxRegNbr" ColumnName="TaxRegNbr" />
-                <ScalarProperty Name="TaxLocId" ColumnName="TaxLocId" />
-                <ScalarProperty Name="TaxID03" ColumnName="TaxID03" />
-                <ScalarProperty Name="TaxID02" ColumnName="TaxID02" />
-                <ScalarProperty Name="TaxID01" ColumnName="TaxID01" />
-                <ScalarProperty Name="TaxID00" ColumnName="TaxID00" />
-                <ScalarProperty Name="TaxDflt" ColumnName="TaxDflt" />
-                <ScalarProperty Name="SupID" ColumnName="SupID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="SlsperId" ColumnName="SlsperId" />
-                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
-                <ScalarProperty Name="ShopType" ColumnName="ShopType" />
-                <ScalarProperty Name="Salut" ColumnName="Salut" />
-                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="ParentRecordID" ColumnName="ParentRecordID" />
-                <ScalarProperty Name="NodeLevel" ColumnName="NodeLevel" />
-                <ScalarProperty Name="NodeID" ColumnName="NodeID" />
-                <ScalarProperty Name="LTTContractNbr" ColumnName="LTTContractNbr" />
-                <ScalarProperty Name="GracePer" ColumnName="GracePer" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="Exported" ColumnName="Exported" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-                <ScalarProperty Name="EmpNum" ColumnName="EmpNum" />
-                <ScalarProperty Name="EMailAddr" ColumnName="EMailAddr" />
-                <ScalarProperty Name="District" ColumnName="District" />
-                <ScalarProperty Name="DfltShipToId" ColumnName="DfltShipToId" />
-                <ScalarProperty Name="DflSaleRouteID" ColumnName="DflSaleRouteID" />
-                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
-                <ScalarProperty Name="CustType" ColumnName="CustType" />
-                <ScalarProperty Name="CustFillPriority" ColumnName="CustFillPriority" />
-                <ScalarProperty Name="CrRule" ColumnName="CrRule" />
-                <ScalarProperty Name="CrLmt" ColumnName="CrLmt" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Channel" ColumnName="Channel" />
-                <ScalarProperty Name="BillZip" ColumnName="BillZip" />
-                <ScalarProperty Name="BillState" ColumnName="BillState" />
-                <ScalarProperty Name="BillSalut" ColumnName="BillSalut" />
-                <ScalarProperty Name="BillPhone" ColumnName="BillPhone" />
-                <ScalarProperty Name="BillName" ColumnName="BillName" />
-                <ScalarProperty Name="BillFax" ColumnName="BillFax" />
-                <ScalarProperty Name="BillCountry" ColumnName="BillCountry" />
-                <ScalarProperty Name="BillCity" ColumnName="BillCity" />
-                <ScalarProperty Name="BillAttn" ColumnName="BillAttn" />
-                <ScalarProperty Name="BillAddr2" ColumnName="BillAddr2" />
-                <ScalarProperty Name="BillAddr1" ColumnName="BillAddr1" />
-                <ScalarProperty Name="Attn" ColumnName="Attn" />
-                <ScalarProperty Name="Addr2" ColumnName="Addr2" />
-                <ScalarProperty Name="Addr1" ColumnName="Addr1" />
-                <ScalarProperty Name="CustName" ColumnName="CustName" />
-                <ScalarProperty Name="CustId" ColumnName="CustId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AR20400_ppGetAutoCustID" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetAutoCustID" />
-        </EntityContainerMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_ppGetMaxHierarchyLevel" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppGetMaxHierarchyLevel" />
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
@@ -1268,21 +1620,21 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="94" >
-        <EntityTypeShape EntityType="AR20400Model.SI_Hierarchy" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_CustAdvTool" Width="1.75" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_CustClass" Width="1.5" PointX="5.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_CustDisplayMethod" Width="2.125" PointX="0.75" PointY="5.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_CustHist" Width="1.5" PointX="3.75" PointY="6.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_CustSellingProducts" Width="2.125" PointX="5.75" PointY="6.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_DisplayMethod" Width="1.75" PointX="7.75" PointY="0.75" />
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="75" >
+        <EntityTypeShape EntityType="AR20400Model.AR_CustAdvTool" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_CustClass" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_CustDisplayMethod" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_CustHist" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_Customer" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_CustSellingProducts" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_DisplayMethod" Width="1.5" PointX="8.75" PointY="0.75" />
         <EntityTypeShape EntityType="AR20400Model.AR_LTTContract" Width="1.5" PointX="8.75" PointY="5.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_LTTContractDetail" Width="2" PointX="10.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_SellingProducts" Width="2.125" PointX="10.75" PointY="5.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_Setup" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AR20400Model.AR_SOAddress" Width="1.5" PointX="5.75" PointY="10.75" />
-        <EntityTypeShape EntityType="AR20400Model.SI_ApprovalFlowHandle" Width="2.125" PointX="10.75" PointY="9.75" />
-        <EntityTypeShape EntityType="AR20400Model.AR_Customer" Width="1.5" PointX="2.75" PointY="11.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_LTTContractDetail" Width="1.5" PointX="2.75" PointY="9.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_SellingProducts" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_Setup" Width="1.5" PointX="10.75" PointY="4.75" />
+        <EntityTypeShape EntityType="AR20400Model.AR_SOAddress" Width="1.5" PointX="10.75" PointY="10.75" />
+        <EntityTypeShape EntityType="AR20400Model.SI_ApprovalFlowHandle" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AR20400Model.SI_Hierarchy" Width="1.5" PointX="12.75" PointY="7.75" />
       </Diagram>
     </Diagrams>
   </Designer>

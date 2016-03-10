@@ -1,5 +1,4 @@
-
-@using Ext.Net;
+﻿@using Ext.Net;
 @using Ext.Net.MVC;
 @using HQ.eSkyFramework;
 @using HQ.eSkyFramework.HQControl;
@@ -9,208 +8,104 @@
 @{
     Layout = null;
     var X = Html.X();
-    var HQ = Html.HQ();
     ViewBag.Title = "AR20400";
     var acc = Session["AR20400"] as AccessRight;
 }
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width" />
-    <script src='@Url.Content("Scripts/hq.language"+ Current.LangID + ".js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/AR20400.js")' type="text/javascript"></script>
-
-<style type="text/css"> @*Thuoc tinh hover tren grid *@
-    .x-grid-row-over .x-grid-cell-inner {
-        font-weight : bold;
-    }
-</style>
-
-
-
-@*<script type="text/javascript">
-    jwplayer("myElement").setup({
-        file: "https://www.youtube.com/watch?v=IvohXgIKTgU",
-        image: "http://example.com/uploads/myPoster.jpg",
-        width: 640,
-        height: 360
-    });
-</script>*@
-<script>
-
-
-
-
-
-
-</script>
-<script>
-    HQ.cpnyID = '@Current.CpnyID';
-    HQ.langID = '@Current.LangID';
-    HQ.userName = '@Current.UserName';
-    HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
-    HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
-    HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-    HQ.businessDate = new Date('@ViewBag.BusinessDate');//lay ngay server trong controller
-</script>
-<title>@ViewBag.Title</title>
+ <!--Không thay đổi phần head Đổi mã màn hình AR20400.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/AR20400.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');
+        hideContract = '@ViewBag.Contract';
+        hideAdvTool = '@ViewBag.AdvTool';
+        hideSellingProduct = '@ViewBag.SellingProduct';
+        hideDisplayMethod = '@ViewBag.DisplayMethod';
+    </script>  
+    <title>@ViewBag.Title</title>
 </head>
-    <body>
-@(Html.X().ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme), Current.Theme.PassNull() == "" ? "Gray" : Current.Theme.PassNull())))
-
+<body>   
+    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
 
-@(Html.X().Store().ID("storeFormBig").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR_Customer), "AR_CustomerModel", "CustId,BranchID"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetCustomer", "AR20400"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-        .Parameters(ps =>
-        {
-            ps.Add(new StoreParameter("CustId", "App.cboCustId.value", ParameterMode.Raw));
-            ps.Add(new StoreParameter("BranchID", "App.cboCpnyID.value", ParameterMode.Raw));
-        })
-        .Listeners(p => 
-            {
-                p.BeforeLoad.Fn = "storeBeforeLoad";    
-                p.Load.Fn = "storeLoad";
-                
-                
-            })
-  )
-
-@(Html.X().Store().ID("storeGridLTTTop").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR_LTTContract), "AR_LTTContract_ResultModel", "LTTContractNbr"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataGridLTTContract", "AR20400"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-            .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("CustID", "App.cboCustId.getValue()", ParameterMode.Raw));
-                            })
-        .Listeners(l =>
-        {
-            //l.BeforeLoad.Fn = "stoBeforeLoadTop";
-            //l.Load.Fn = "stoLoadTop";
-            //l.Update.Fn = "stoChangedTop";
-        })
-        .Listeners(p=>p.Load.Fn="loadDataGridLTTContract" )
-  )
-
-@(Html.X().Store().ID("storeGridLTTBot").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR_LTTContractDetail), "AR_LTTContractDetail_ResultModel", "Type"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataGridLTTContractDetail", "AR20400"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
+        @(X.Store().ID("stoAR_Customer").AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AR20400_pdHeader_Result), "mdlAR20400_pdHeader", ""))       
+            .Proxy(
+                    X.AjaxProxy()                
+                    .Url(Url.Action("GetAR_Customer", "AR20400"))                
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )
             .Parameters(ps =>
             {
-                ps.Add(new StoreParameter("LTTContractNbr", "App.slmTopGrid.selected.items[0] != undefined ? App.slmTopGrid.selected.items[0].data.LTTContractNbr : ''", ParameterMode.Raw));
-            })
-        .Listeners(l =>
-        {
-            //l.BeforeLoad.Fn = "stoBeforeLoadTop";
-            //l.Load.Fn = "stoLoadTop";
-            //l.Update.Fn = "stoChangedTop";
-        })
-       .Listeners(p=>p.Load.Fn="loadDataGridLTTContractDetail" )
-  )
-
-
-
-@(Html.X().Store().ID("storeGridAdv").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR_CustAdvTool), "AR_CustAdvTool_ResultModel", "Type"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataGridAdv", "AR20400"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
-            })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                ps.Add(new StoreParameter("CpnyID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("CustId", "App.cboCustId.getValue()", ParameterMode.Raw));
+            })      
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";                   
+                }
+            )
         )
-            .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("CustID", "App.cboCustId.getValue()", ParameterMode.Raw));
-                            })
-        .Listeners(l =>
-        {
-            //l.BeforeLoad.Fn = "stoBeforeLoadTop";
-            //l.Load.Fn = "stoLoadTop";
-            //l.Update.Fn = "stoChangedTop";
-        })
-        .Listeners(p=>p.Load.Fn="loadDataGridAdv" )
-  )
 
- @(Html.X().Store().ID("storeGridSellingProd").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR_CustSellingProducts), "AR_CustSellingProducts_ResultModel", "Code"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataGridSellingProd", "AR20400"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
+        @(Html.HQ().Store().ID("stoCheckAutoCustID").AutoLoad(false)
+            .HQProcedure("AR20400_ppCheckAutoCustID")
+            .HQParam(new StoreParameterCollection() {
+                new StoreParameter() { Name = "@CpnyID", Value ="App.cboCpnyID.getValue()", Mode = ParameterMode.Raw}
             })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-        )
-            .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("CustID", "App.cboCustId.getValue()", ParameterMode.Raw));
-                            })
-        .Listeners(l =>
-        {
-            //l.BeforeLoad.Fn = "stoBeforeLoadTop";
-            //l.Load.Fn = "stoLoadTop";
-            //l.Update.Fn = "stoChangedTop";
-        })
-        .Listeners(p=>p.Load.Fn="loadDataGridSellingProd" )
-  )
-
- @(Html.X().Store().ID("storeGridDispMethod").AutoLoad(false)
-        .Model(Util.GenerateModel(typeof(AR_CustDisplayMethod), "AR_CustDisplayMethod_ResultModel", "DispMethod"))
-        .Proxy(
-            X.AjaxProxy()
-            .Url(Url.Action("GetDataGridDispMethod", "AR20400"))
-            .ActionMethods(action =>
-            {
-                action.Read = HttpMethod.POST;
+            .Listeners(p=>{
+                //p.BeforeLoad.Fn = "stoBeforeLoad";
+                p.Load.Fn = "stoCheckAutoCustID_Load";
             })
-            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            .LoadData()
         )
-            .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("CustID", "App.cboCustId.getValue()", ParameterMode.Raw));
-                            })
-        .Listeners(l =>
-        {
-            //l.BeforeLoad.Fn = "stoBeforeLoadTop";
-            //l.Load.Fn = "stoLoadTop";
-            //l.Update.Fn = "stoChangedTop";
-        })
-        .Listeners(p=>p.Load.Fn="loadDataGridDispMethod" )
-  )
 
+        @(Html.HQ().Store().ID("stoGetMaxHierarchyLevel").AutoLoad(false)
+                .HQProcedure("AR20400_ppGetMaxHierarchyLevel")
+                .HQParam(new StoreParameterCollection() {
+                    new StoreParameter() { Name = "@Type", Value ="C", Mode = ParameterMode.Value}
+                })
+                .Listeners(p=>{
+                    //p.BeforeLoad.Fn = "stoBeforeLoad";
+                    p.Load.Fn = "stoGetMaxHierarchyLevel_Load";
+                })
+                .LoadData()
+        )
 
+        @(Html.HQ().Store().ID("stoCheckHiddenTree").AutoLoad(false)
+            .HQProcedure("AR20400_ppCheckHiddenTree")
+            .HQParam(new StoreParameterCollection() {
+                new StoreParameter() { Name = "@CpnyID", Value ="App.cboCpnyID.getValue()", Mode = ParameterMode.Raw}
+            })
+            .Listeners(p=>{
+                //p.BeforeLoad.Fn = "stoBeforeLoad";
+                p.Load.Fn = "stoCheckHiddenTree_Load";
+            })
+            .LoadData()
+        )
 
-        @{Html.RenderAction("Body", new { lang=@Current.LangID});}
-    </body>
+        <!-- Gọi hàm Body trong AR20400Controller để dựng view Body.cshtml, mục đích tạo cache. -->  
+        @{Html.RenderAction("Body", new {lang=Current.LangID});}
+</body>
 </html>
+ 
