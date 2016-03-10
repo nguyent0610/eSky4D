@@ -1914,6 +1914,7 @@ namespace OM23800.Controllers
                             strEEndDate = workSheet.Cells[i, 7].StringValue;//dataArray.GetValue(i, 8).PassNull();
                             strETS = workSheet.Cells[i, 8].StringValue;//dataArray.GetValue(i, 9).PassNull();
                             strETBH = workSheet.Cells[i, 9].StringValue;//dataArray.GetValue(i, 10).PassNull();
+                            if (strESTT.PassNull().Trim() == "") break;
                             if (strESlsperID != slsperID && slsperID != "")
                             {
                                 errorESlsperID += (i + 1).ToString() + ",";

@@ -653,7 +653,7 @@ var ImExMcp = {
         App.frmMain_ImExMcp.submit({
             waitMsg: HQ.common.getLang("Importing"),
             url: 'OM23800/ImportMCP',
-            timeout: 1800,
+            timeout: 18000,
             clientValidation: false,
             method: 'POST',
             params: {
