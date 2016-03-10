@@ -812,6 +812,14 @@ var HQ = {
                 }
             }
         },
+        checkAccessRight: function () {
+            if (HQ.isInsert == false)
+                App.menuClickbtnNew.disable();
+            if (HQ.isDelete == false)
+                App.menuClickbtnDelete.disable();
+            if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false)
+                App.menuClickbtnSave.disable();
+        },
         focusControlInTab: function (ctr, field) {
             if (typeof (ctr.items) != "undefined") {
                 ctr.items.each(function (itm) {

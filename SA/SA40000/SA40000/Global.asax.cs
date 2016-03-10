@@ -46,7 +46,7 @@ namespace SA40000
             acc.Update = true;
             Session["SA40000"] = acc;
             Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
-            Session["UserName"] = Current.UserName = "admin";
+			Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "en";
             Session["LangID"] = 0;
