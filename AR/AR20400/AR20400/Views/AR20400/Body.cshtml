@@ -145,6 +145,8 @@
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .Listeners(lst =>
                             {
+                                lst.Change.Fn = "cboClassId_Change";
+                                lst.Select.Fn = "cboClassId_Select";
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                                 lst.Focus.Handler = "this.forceSelection = true;";  
                             })
@@ -204,6 +206,7 @@
                         HQ.TextBox().ID("txtCustName").Name("txtCustName").HQLangCode("CUSTNAME").DataIndex("CustName")
                             .AllowBlank(false).EnforceMaxLength(true).MaxLength(200)
                             .Width(600).MarginSpec("5 0 0 0")
+                            .Listeners(p=>p.Change.Handler ="App.lblName.setValue(this.getValue());")
                     )
 
                     , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
@@ -277,7 +280,7 @@
                             .Items(
                                 HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQLangCode("TERRITORY").DataIndex("Territory")
                                     .HQProcedure("AR20400_pcTerritory").HQColumnShow("Territory,Descr")
-                                    .DisplayField("Territory").ValueField("Territory")
+                                    .DisplayField("Territory").ValueField("Territory").AllowBlank(false)
                                     .Width(260).LabelWidth(140).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                     .LoadData()
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -481,15 +484,15 @@
                                     .DecimalPrecision(0).MinValue(0).MaxValue(2147483647)
 
                                 , HQ.DateField().ID("calExpiryDate").HQLangCode("CUSTEXPD").DataIndex("ExpiryDate")
-                                    .Format("MM/dd/yyyy")
+                                    .Format("MM/dd/yyyy").AllowBlank(false)
                                     .Width(320).LabelWidth(150).MarginSpec("5 0 0 0")
 
                                 , HQ.DateField().ID("calEstablishDate").HQLangCode("ESTABLISHDATE").DataIndex("EstablishDate")
-                                    .Format("MM/dd/yyyy")
+                                    .Format("MM/dd/yyyy").AllowBlank(false)
                                     .Width(320).LabelWidth(150).MarginSpec("5 0 0 0")
                                     
                                 , HQ.DateField().ID("calBirthday").HQLangCode("BIRTHDAY").DataIndex("Birthdate")
-                                    .Format("MM/dd/yyyy")
+                                    .Format("MM/dd/yyyy").AllowBlank(false)
                                     .Width(320).LabelWidth(150).MarginSpec("5 0 5 0")
                             )
                     )
@@ -544,7 +547,7 @@
 
                             , HQ.Combo().ID("cboCountry").Name("cboCountry").DataIndex("Country")
                                 .HQProcedure("AR20400_pcCountryID").HQColumnShow("CountryID,Descr")
-                                .DisplayField("CountryID").ValueField("CountryID")
+                                .DisplayField("CountryID").ValueField("CountryID").AllowBlank(false)
                                 .Width(200).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                 .LoadData()
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -559,7 +562,7 @@
 
                             , HQ.Combo().ID("cboState").Name("cboState").DataIndex("State")
                                 .HQProcedure("AR20400_pcStateByCountry").HQColumnShow("State,Descr")
-                                .DisplayField("State").ValueField("State")
+                                .DisplayField("State").ValueField("State").AllowBlank(false)
                                 .Width(200).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                 .HQParam(new StoreParameterCollection() 
                                 {
@@ -596,7 +599,7 @@
 
                             , HQ.Combo().ID("cboDistrict").Name("cboDistrict").DataIndex("District")
                                 .HQProcedure("AR20400_pcDistrictByCountryState").HQColumnShow("District,Name")
-                                .DisplayField("District").ValueField("District")
+                                .DisplayField("District").ValueField("District").AllowBlank(false)
                                 .Width(200).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                 .HQParam(new StoreParameterCollection() 
                                 {
@@ -737,7 +740,7 @@
                         .Items(
                             HQ.Combo().ID("cboTaxDflt").Name("cboTaxDflt").HQLangCode("TAXDEFAULT").DataIndex("TaxDflt")
                                 .HQProcedure("AR20400_pcTaxDf").HQColumnShow("Code,Descr")
-                                .DisplayField("Descr").ValueField("Code")
+                                .DisplayField("Descr").ValueField("Code").AllowBlank(false)
                                 .Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
                                 .HQParam(new StoreParameterCollection() 
                                 {

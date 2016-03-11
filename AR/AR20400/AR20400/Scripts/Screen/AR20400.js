@@ -275,17 +275,6 @@ var menuClick = function (command) {
 };
 
 var slmAR_LTTContract_Select = function (sender, e) {
-    //App.stoAR_LTTContractDetail.clearFilter();
-    //var LTTContractNbr = App.slmAR_LTTContract.selected.items[0] == undefined ? '@@@' : App.slmAR_LTTContract.selected.items[0].data.LTTContractNbr;
-    //App.grdAR_LTTContractDetail.getFilterPlugin().getFilter('LTTContractNbr').setValue([!App.cboCpnyID.getValue() ? "@" : App.cboCpnyID.getValue(), '']); //string filter
-    //App.grdAR_LTTContractDetail.getFilterPlugin().getFilter('LTTContractNbr').setActive(true);
-
-
-    //filterStore(App.stoAR_LTTContractDetail, 'LTTContractNbr', LTTContractNbr);
-
-    //var newRow = Ext.create('App.mdlAR20400_pgAR_LTTContractDetail');
-    //newRow.data.LTTContractNbr = LTTContractNbr;
-    //HQ.store.insertRecord(App.stoAR_LTTContractDetail, ['LTTContractNbr'], newRow, false);
     App.grdAR_LTTContractDetail.getFilterPlugin().clearFilters();
     App.grdAR_LTTContractDetail.getFilterPlugin().getFilter('LTTContractNbr').setValue([e.data.LTTContractNbr, '']);
     App.grdAR_LTTContractDetail.getFilterPlugin().getFilter('LTTContractNbr').setActive(true);
@@ -328,6 +317,8 @@ var stoBeforeLoad = function (sto) {
 var stoLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
     HQ.common.setForceSelection(App.frmMain, false, "cboCpnyID,cboCustId");
+    App.cboCpnyID.forceSelection = true;
+    App.cboCustId.forceSelection = true;
     HQ.isNew = false;
 
     if (sto.data.length == 0) {
@@ -341,6 +332,7 @@ var stoLoad = function (sto) {
         record.set('EstablishDate', HQ.bussinessDate);
         record.set('Birthdate', HQ.bussinessDate);
         HQ.isNew = true;
+        App.cboCustId.forceSelection = false;
         HQ.common.setRequire(App.frmMain);
         sto.commitChanges();
     }
@@ -361,7 +353,7 @@ var stoLoad = function (sto) {
     else if (!HQ.isUpdate && !HQ.isNew) {
         HQ.common.lockItem(App.frmMain, true);
     }
-    if (!HQ.isNew) searchNode();
+    if (!HQ.isNew && _hiddenTree == 'false') searchNode();
 };
 
 /////////////////////////////// GIRD AR_LTTContract /////////////////////////////////
@@ -777,7 +769,8 @@ var cboCustId_Change = function (sender, value) {
         App.cboDfltShipToId.store.reload();
         App.cboLTTContract.setValue('');
         App.cboLTTContract.store.reload();
-        searchNode();
+        if(_hiddenTree == 'false')
+            searchNode();
     }
 };
 
@@ -789,12 +782,14 @@ var cboCustId_Select = function (sender, value) {
         App.cboDfltShipToId.store.reload();
         App.cboLTTContract.setValue('');
         App.cboLTTContract.store.reload();
-        searchNode();
+        if (_hiddenTree == 'false')
+            searchNode();
     }
 };
 
 var cboCpnyID_Change = function (sender, value) {
     HQ.isFirstLoad = true;
+    CustId = '';
     if (sender.valueModels != null && !App.stoAR_Customer.loading) {
         App.cboCustId.setValue('');
         App.cboCustId.store.reload();
@@ -816,6 +811,7 @@ var cboCpnyID_Change = function (sender, value) {
 
 var cboCpnyID_Select = function (sender, value) {
     HQ.isFirstLoad = true;
+    CustId = '';
     if (sender.valueModels != null && !App.stoAR_Customer.loading) {
         App.cboCustId.setValue('');
         App.cboCustId.store.reload();
@@ -868,6 +864,45 @@ var btnCopytoDiffDB_Click = function () {
 var btnCopy = function () {
 
 };
+
+var cboClassId_Change = function (sender,e) {
+    if (sender.valueModels != null && sender.hasFocus) {
+        var objTmp = sender.valueModels[0].data;
+        App.cboCountry.setValue(objTmp.Country);
+        App.cboState.setValue(objTmp.State);
+        App.cboCity.setValue(objTmp.City);
+        App.cboDistrict.setValue(objTmp.District);
+        App.cboPriceClassID.setValue(objTmp.PriceClass);
+        App.cboTerms.setValue(objTmp.Terms);
+        App.cboTerritory.setValue(objTmp.Territory);
+        App.txtTradeDisc.setValue(objTmp.TradeDisc);
+        App.cboTaxDflt.setValue(objTmp.TaxDflt);
+        App.cboTaxID00.setValue(objTmp.TaxID00);
+        App.cboTaxID01.setValue(objTmp.TaxID01);
+        App.cboTaxID02.setValue(objTmp.TaxID02);
+        App.cboTaxID03.setValue(objTmp.TaxID03);
+    }
+};
+
+var cboClassId_Select = function (sender, e) {
+    if (sender.valueModels != null && sender.hasFocus) {
+        var objTmp = sender.valueModels[0].data;
+        App.cboCountry.setValue(objTmp.Country);
+        App.cboState.setValue(objTmp.State);
+        App.cboCity.setValue(objTmp.City);
+        App.cboDistrict.setValue(objTmp.District);
+        App.cboPriceClassID.setValue(objTmp.PriceClass);
+        App.cboTerms.setValue(objTmp.Terms);
+        App.cboTerritory.setValue(objTmp.Territory);
+        App.txtTradeDisc.setValue(objTmp.TradeDisc);
+        App.cboTaxDflt.setValue(objTmp.TaxDflt);
+        App.cboTaxID00.setValue(objTmp.TaxID00);
+        App.cboTaxID01.setValue(objTmp.TaxID01);
+        App.cboTaxID02.setValue(objTmp.TaxID02);
+        App.cboTaxID03.setValue(objTmp.TaxID03);
+    }
+};
+
 
 var filterComboSate = function (sender, e) {
     if (sender.hasfocus) {
@@ -949,18 +984,25 @@ var btnCollapse_click = function (btn, e, eOpts) {
 };
 
 var nodeSelected_Change = function (store, operation, options) {
-    parentRecordIDAll = operation.internalId.split("-");
-    if (parentRecordIDAll[1] != '|') {
-        _nodeID = parentRecordIDAll[0];
-        _nodeLevel = parentRecordIDAll[1];
-        _parentRecordID = parentRecordIDAll[2];
-        _recordID = parentRecordIDAll[3];
+    if (operation.internalId != 'root') {
+        parentRecordIDAll = operation.internalId.split("-");
+        if (parentRecordIDAll[1] != '|') {
+            _nodeID = parentRecordIDAll[0];
+            _nodeLevel = parentRecordIDAll[1];
+            _parentRecordID = parentRecordIDAll[2];
+            _recordID = parentRecordIDAll[3];
+        } else {
+            parentRecordIDAll = operation.data.parentId.split("-");
+            _nodeID = parentRecordIDAll[0];
+            _nodeLevel = parentRecordIDAll[1];
+            _parentRecordID = parentRecordIDAll[2];
+            _recordID = parentRecordIDAll[3];
+        }
     } else {
-        parentRecordIDAll = operation.data.parentId.split("-");
-        _nodeID = parentRecordIDAll[0];
-        _nodeLevel = parentRecordIDAll[1];
-        _parentRecordID = parentRecordIDAll[2];
-        _recordID = parentRecordIDAll[3];
+        _nodeID = '';
+        _nodeLevel = '1';
+        _parentRecordID ='0';
+        _recordID = '0';
     }
 
     if (operation.data.parentId != 'root' && operation.data.leaf == true) {
