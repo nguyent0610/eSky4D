@@ -353,7 +353,7 @@ var stoLoad = function (sto) {
     else if (!HQ.isUpdate && !HQ.isNew) {
         HQ.common.lockItem(App.frmMain, true);
     }
-    if (!HQ.isNew && _hiddenTree == 'false' && CustId) searchNode();
+    if (!HQ.isNew && _hiddenTree == 'false') searchNode();
 };
 
 /////////////////////////////// GIRD AR_LTTContract /////////////////////////////////
@@ -628,14 +628,23 @@ var save = function () {
                 App.cboCustId.getStore().load({
                     callback: function () {
                         if (Ext.isEmpty(App.cboCustId.getValue())) {
-                            App.cboCustId.setValue(CustId);
-                            App.stoCheckHiddenTree.reload();
-                            App.stoAR_Customer.reload();
+                            if (_hiddenTree == 'false')
+                                ReloadTree('save');
+                            else
+                            {
+                                App.cboCustId.setValue(CustId);
+                                App.stoAR_Customer.reload();
+                            }
+                           
                         }
                         else {
-                            App.cboCustId.setValue(CustId);
-                            App.stoCheckHiddenTree.reload();
-                            App.stoAR_Customer.reload();
+                            if (_hiddenTree == 'false')
+                                ReloadTree('save');
+                            else
+                            {
+                                App.cboCustId.setValue(CustId);
+                                App.stoAR_Customer.reload();
+                            }
                         }
                     }
                 });
@@ -1005,6 +1014,7 @@ var nodeSelected_Change = function (store, operation, options) {
             _parentRecordID = parentRecordIDAll[2];
             _recordID = parentRecordIDAll[3];
             var custIDall = operation.data.id.split("-");
+            CustID1 = custIDall[0];
             CustId = custIDall[0];
         }
     } else {
@@ -1014,16 +1024,19 @@ var nodeSelected_Change = function (store, operation, options) {
         _recordID = '0';
     }
 
-    if (CustId) {
-        App.cboCustId.setValue(CustId);
+    if (CustID1) {
+        App.cboCustId.setValue(CustID1);
     }
 };
 
-var ReloadTree = function () {
+var ReloadTree = function (type) {
     try {
         App.direct.ReloadTreeAR20400(App.cboCpnyID.getValue(), {
             success: function (data) {
-
+                if (type == 'save') {
+                    App.cboCustId.setValue(CustId);
+                    App.stoAR_Customer.reload();
+                }
             },
             failure: function () {
                 alert("fail");
