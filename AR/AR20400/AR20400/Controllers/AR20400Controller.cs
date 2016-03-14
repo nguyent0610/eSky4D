@@ -38,7 +38,7 @@ namespace AR20400.Controllers
                 ViewBag.Contract = "false";
             else
             {
-                if (tabContract.IntVal == 0)
+                if (tabContract.IntVal == 1)
                     ViewBag.Contract = "true";
                 else
                     ViewBag.Contract = "false";
@@ -48,7 +48,7 @@ namespace AR20400.Controllers
                 ViewBag.AdvTool = "false";
             else
             {
-                if (tabAdvTool.IntVal == 0)
+                if (tabAdvTool.IntVal == 1)
                     ViewBag.AdvTool = "true";
                 else
                     ViewBag.AdvTool = "false";
@@ -58,7 +58,7 @@ namespace AR20400.Controllers
                 ViewBag.SellingProduct = "false";
             else
             {
-                if (tabSellingProduct.IntVal == 0)
+                if (tabSellingProduct.IntVal == 1)
                     ViewBag.SellingProduct = "true";
                 else
                     ViewBag.SellingProduct = "false";
@@ -68,7 +68,7 @@ namespace AR20400.Controllers
                 ViewBag.DisplayMethod = "false";
             else
             {
-                if (tabDisplayMethod.IntVal == 0)
+                if (tabDisplayMethod.IntVal == 1)
                     ViewBag.DisplayMethod = "true";
                 else
                     ViewBag.DisplayMethod = "false";
