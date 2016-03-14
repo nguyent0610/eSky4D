@@ -545,7 +545,7 @@
                                 .EnforceMaxLength(true).MaxLength(200)
                                 .Width(200).MarginSpec("5 0 0 0")
 
-                            , HQ.Combo().ID("cboCountry").Name("cboCountry").DataIndex("Country")
+                            , HQ.Combo().ID("cboCountry").Name("cboCountry").DataIndex("Country").HQLangCode("COUNTRY").HideLabel(true)
                                 .HQProcedure("AR20400_pcCountryID").HQColumnShow("CountryID,Descr")
                                 .DisplayField("CountryID").ValueField("CountryID").AllowBlank(false)
                                 .Width(200).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
@@ -560,7 +560,7 @@
                                     
                                 })
 
-                            , HQ.Combo().ID("cboState").Name("cboState").DataIndex("State")
+                            , HQ.Combo().ID("cboState").Name("cboState").DataIndex("State").HQLangCode("STATE").HideLabel(true)
                                 .HQProcedure("AR20400_pcStateByCountry").HQColumnShow("State,Descr")
                                 .DisplayField("State").ValueField("State").AllowBlank(false)
                                 .Width(200).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
@@ -597,7 +597,7 @@
                                     //lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
 
-                            , HQ.Combo().ID("cboDistrict").Name("cboDistrict").DataIndex("District")
+                            , HQ.Combo().ID("cboDistrict").Name("cboDistrict").DataIndex("District").HQLangCode("DISTRICT").HideLabel(true)
                                 .HQProcedure("AR20400_pcDistrictByCountryState").HQColumnShow("District,Name")
                                 .DisplayField("District").ValueField("District").AllowBlank(false)
                                 .Width(200).HQHeightWidth(400, 300).MarginSpec("5 0 0 0")

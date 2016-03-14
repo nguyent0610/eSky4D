@@ -32,6 +32,7 @@ var _nodeID = '';
 var _nodeLevel = '';
 var _parentRecordID = '';
 var _recordID = '';
+var _leaf;
 var parentRecordIDAll = '';
 var parentRecordID = '';
 
@@ -253,7 +254,7 @@ var menuClick = function (command) {
                     && HQ.store.checkRequirePass(App.stoAR_CustSellingProducts, keysTab_7, fieldsCheckRequireTab_7, fieldsLangCheckRequireTab_7)
                     && HQ.store.checkRequirePass(App.stoAR_CustDisplayMethod, keysTab_6, fieldsCheckRequireTab_6, fieldsLangCheckRequireTab_6)) {
                     if (_hiddenTree == 'false') {
-                        if (_maxLevel > _nodeLevel && !App.cboCustId.getValue()) {
+                        if (_leaf == false && _maxLevel > _nodeLevel && !App.cboCustId.getValue()) {
                             HQ.message.show(213, '', '');
                             return false;
                         }
@@ -985,6 +986,8 @@ var btnCollapse_click = function (btn, e, eOpts) {
 
 var nodeSelected_Change = function (store, operation, options) {
     if (operation.internalId != 'root') {
+        var CustID1 = '';
+        _leaf = operation.data.leaf;
         parentRecordIDAll = operation.internalId.split("-");
         if (parentRecordIDAll[1] != '|') {
             _nodeID = parentRecordIDAll[0];
@@ -997,6 +1000,8 @@ var nodeSelected_Change = function (store, operation, options) {
             _nodeLevel = parentRecordIDAll[1];
             _parentRecordID = parentRecordIDAll[2];
             _recordID = parentRecordIDAll[3];
+            var custIDall = operation.data.id.split("-");
+            CustID1 = custIDall[0];
         }
     } else {
         _nodeID = '';
@@ -1005,10 +1010,8 @@ var nodeSelected_Change = function (store, operation, options) {
         _recordID = '0';
     }
 
-    if (operation.data.parentId != 'root' && operation.data.leaf == true) {
-        var custIDall = operation.data.id.split("-");
-        var custID1 = custIDall[0];
-        App.cboCustId.setValue(custID1);
+    if (CustID1) {
+        App.cboCustId.setValue(CustID1);
     }
 };
 

@@ -786,12 +786,13 @@ namespace AR20400.Controllers
             if (inactiveHierachy.Descr == "root")
             {
                 node.Text = inactiveHierachy.Descr;
+        
             }
             else
             {
                 node.Text = inactiveHierachy.NodeID.ToString() + "-" + inactiveHierachy.Descr.ToString();
                 node.NodeID = inactiveHierachy.NodeID + "-" + inactiveHierachy.NodeLevel + "-" + inactiveHierachy.ParentRecordID.ToString() + "-" + inactiveHierachy.RecordID;
-
+   
             }
 
             var tmps = _db.AR20400_ptCustomer(CpnyID)
@@ -826,6 +827,7 @@ namespace AR20400.Controllers
             }
             else
             {
+                node.Leaf = false;
                 if (tmps.Count == 0 && childrenInactiveHierachies.Count == 0)
                 {
                     node.Leaf = true;
@@ -834,6 +836,7 @@ namespace AR20400.Controllers
                 {
                     node.Leaf = false;
                 }
+                
             }
             System.Diagnostics.Debug.WriteLine(node.Text);
             return node;
