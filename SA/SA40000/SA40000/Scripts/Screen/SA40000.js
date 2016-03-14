@@ -40,8 +40,23 @@ var menuClick = function (command) {
         case "delete":
            
                 if (App.slmSYS_CloseDateSetUp.selected.items[0] != undefined) {
+                    //if (HQ.isDelete) {
+                    //    HQ.message.show(11, '', 'deleteData');
+                    //}
                     if (HQ.isDelete) {
-                        HQ.message.show(11, '', 'deleteData');
+                        var selRecs = App.grdSYS_CloseDateSetUp.selModel.selected.items;
+                        if (selRecs.length > 0) {
+                            var params = [];
+                            selRecs.forEach(function (record) {
+                                params.push(record.data.BranchID);
+                            });
+                            HQ.message.show(2015020806,
+                                params.join(" & ") + "," + HQ.common.getLang("AppComp"),
+                                'deleteSelectedCompanies');
+                        }
+                    }
+                    else {
+                        HQ.message.show(4, '', '');
                     }
                 }
             
@@ -63,13 +78,23 @@ var menuClick = function (command) {
 };
 
 var btnUpdate_Click = function (sender, e) {
-    App.grdSYS_CloseDateSetUp.getStore().each(function (item) {
-        item.set("WrkDateChk", App.chkWrkDateChk.checked);
-        item.set("WrkUpperDays", App.lblWrkUpperDays.getValue());
-        item.set("WrkLowerDays", App.lblWrkLowerDays.getValue());
-        item.set("WrkOpenDate", App.lblWrkOpenDate.getValue());
-        item.set("WrkAdjDate", App.lblWrkAdjDate.getValue());
-    });
+    if (App.frmMain.isValid()) {
+        App.grdSYS_CloseDateSetUp.getStore().each(function (item) {
+            item.set("WrkDateChk", App.chkWrkDateChk.checked);
+            item.set("WrkUpperDays", App.lblWrkUpperDays.getValue());
+            item.set("WrkLowerDays", App.lblWrkLowerDays.getValue());
+            item.set("WrkOpenDate", App.lblWrkOpenDate.getValue());
+            item.set("WrkAdjDate", App.lblWrkAdjDate.getValue());
+        });
+    }
+    else if (!App.lblWrkAdjDate.isValid()) {
+
+        HQ.message.show(15, HQ.common.getLang("WRKADJDATE"), '');
+    }
+    else if (!App.lblWrkOpenDate.isValid()) {
+
+        HQ.message.show(15, HQ.common.getLang("WRKOPENDATE"), '');
+    };
 };
 
 var beforenodedrop = function (node, data, overModel, dropPosition, dropFn) {
@@ -97,7 +122,7 @@ var btnCollapse_click = function (btn, e, eOpts) {
 };
 
 var btnAddAll_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
+    if (HQ.isInsert) {
         var allNodes = getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
         if (allNodes && allNodes.length > 0) {
             allNodes.forEach(function (node) {
@@ -150,7 +175,7 @@ var addNode = function (node) {
     }
 }
 var btnAdd_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
+    if (HQ.isInsert) {
         var allNodes = App.treePanelBranch.getCheckedNodes();
         if (allNodes && allNodes.length > 0) {
             allNodes.forEach(function (node) {
@@ -181,7 +206,7 @@ var btnAdd_click = function (btn, e, eOpts) {
 };
 
 var btnDel_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
+    if (HQ.isDelete) {
         var selRecs = App.grdSYS_CloseDateSetUp.selModel.selected.items;
         if (selRecs.length > 0) {
             var params = [];
@@ -199,7 +224,7 @@ var btnDel_click = function (btn, e, eOpts) {
 };
 
 var btnDelAll_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
+    if (HQ.isDelete) {
         HQ.message.show(20160310, '', 'deleteAllCompanies');
     }
     else {
@@ -269,6 +294,9 @@ var renderAddress = function (value, metaData, rec, rowIndex, colIndex, store) {
 var firstLoad = function () {
     HQ.isFirstLoad = true;
     HQ.util.checkAccessRight();
+    if (!HQ.isUpdate) {
+        App.btnUpdate.disable();
+    }
     App.cboBranchID.store.load(function () {
         App.stoSYS_CloseDateSetUp.reload();
 
