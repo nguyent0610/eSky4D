@@ -529,7 +529,7 @@ namespace AR20400.Controllers
             t.DeliveryID = s.DeliveryID;
             t.SupID = s.SupID;
             t.SiteId = s.SiteId;
-            t.DfltShipToId = s.DfltShipToId;
+            t.DfltShipToId = s.DfltShipToId == "" ? "DEFAULT" : s.DfltShipToId;
             t.CustFillPriority = s.CustFillPriority;
             t.LTTContractNbr = s.LTTContractNbr;
             t.DflSaleRouteID = s.DflSaleRouteID;

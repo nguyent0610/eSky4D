@@ -525,20 +525,20 @@
 
                     , X.FieldSet().Title(Util.GetLang("MAINADDRESS")).Layout(LayoutType.VBox).MarginSpec("0 10 0 10")
                         .Items(
-                            HQ.TextBox().ID("lblName").Name("lblName")
-                                .EnforceMaxLength(true).MaxLength(200).ReadOnly(true).Tag("X")
+                            HQ.TextBox().ID("lblName").Name("lblName").HQLangCode("CUSTNAME")
+                                .EnforceMaxLength(true).MaxLength(200).ReadOnly(true).Tag("X").AllowBlank(false).HideLabel(true)
                                 .Width(200).MarginSpec("5 0 0 0")
 
-                            , HQ.TextBox().ID("txtAttn").Name("txtAttn").DataIndex("Attn")
-                                .EnforceMaxLength(true).MaxLength(200)
+                            , HQ.TextBox().ID("txtAttn").Name("txtAttn").DataIndex("Attn").HQLangCode("ATTN")
+                                .EnforceMaxLength(true).MaxLength(200).AllowBlank(false).HideLabel(true)
                                 .Width(200).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtSalut").Name("txtSalut").DataIndex("Salut")
                                 .EnforceMaxLength(true).MaxLength(30)
                                 .Width(200).MarginSpec("5 0 0 0")
 
-                            , HQ.TextBox().ID("txtAddr1").Name("txtAddr1").DataIndex("Addr1")
-                                .EnforceMaxLength(true).MaxLength(200)
+                            , HQ.TextBox().ID("txtAddr1").Name("txtAddr1").DataIndex("Addr1").HQLangCode("ADDR1")
+                                .EnforceMaxLength(true).MaxLength(200).AllowBlank(false).HideLabel(true)
                                 .Width(200).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtAddr2").Name("txtAddr2").DataIndex("Addr2")
@@ -642,20 +642,20 @@
 
                     , X.FieldSet().Title(Util.GetLang("ADDRBILL")).Layout(LayoutType.VBox).MarginSpec("0 0 0 0")
                         .Items(
-                            HQ.TextBox().ID("txtBillName").Name("txtBillName").DataIndex("BillName")
-                                .EnforceMaxLength(true).MaxLength(200)
+                            HQ.TextBox().ID("txtBillName").Name("txtBillName").DataIndex("BillName").HQLangCode("CUSTNAME")
+                                .EnforceMaxLength(true).MaxLength(200).AllowBlank(false).HideLabel(true)
                                 .Width(200).MarginSpec("5 0 0 0")
 
-                            , HQ.TextBox().ID("txtBillAttn").Name("txtBillAttn").DataIndex("BillAttn")
-                                .EnforceMaxLength(true).MaxLength(200)
+                            , HQ.TextBox().ID("txtBillAttn").Name("txtBillAttn").DataIndex("BillAttn").HQLangCode("ATTN")
+                                .EnforceMaxLength(true).MaxLength(200).AllowBlank(false).HideLabel(true)
                                 .Width(200).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtBillSalut").Name("txtBillSalut").DataIndex("BillSalut")
                                 .EnforceMaxLength(true).MaxLength(30)
                                 .Width(200).MarginSpec("5 0 0 0")
 
-                            , HQ.TextBox().ID("txtBillAddr1").Name("txtBillAddr1").DataIndex("BillAddr1")
-                                .EnforceMaxLength(true).MaxLength(200)
+                            , HQ.TextBox().ID("txtBillAddr1").Name("txtBillAddr1").DataIndex("BillAddr1").HQLangCode("ADDR1")
+                                .EnforceMaxLength(true).MaxLength(200).AllowBlank(false).HideLabel(true)
                                 .Width(200).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtBillAddr2").Name("txtBillAddr2").DataIndex("BillAddr2")
