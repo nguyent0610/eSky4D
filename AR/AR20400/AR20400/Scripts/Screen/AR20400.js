@@ -54,6 +54,8 @@ var checkLoad = function (sto) {
             App.tabDetail.child('#pnlAR_CustSellingProducts').tab.hide();
         if (hideDisplayMethod == 'true')
             App.tabDetail.child('#pnlDispMethod').tab.hide();
+
+        
     }
 };
 
@@ -1064,4 +1066,8 @@ var searchNode = function () {
     var objRecord = App.treeCust.getRootNode().findChild('id', App.cboCustId.getValue() + '-|', true);
     if (objRecord)
         App.treeCust.getSelectionModel().select(objRecord);
+};
+
+var tabDetail_Change = function (tabPanel, newCard, oldCard, eOpts) {
+    HQ.focus = tabPanel.activeTab.id;
 };

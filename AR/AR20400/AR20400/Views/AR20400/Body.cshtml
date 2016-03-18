@@ -195,6 +195,7 @@
 
             , X.TabPanel().ID("tabDetail")
             .Region(Region.Center)
+            .Listeners(p=>p.TabChange.Fn="tabDetail_Change")
             .Items(
 
                 X.Panel().ID("pnlInfo")         //////////////Tab thong tin khach hang//////////////
