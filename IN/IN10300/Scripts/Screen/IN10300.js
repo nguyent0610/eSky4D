@@ -416,7 +416,7 @@ var cboTrnsferNbr_Change = function () {
         if (!Ext.isEmpty(App.TrnsferNbr.getValue())) {
             App.btnImport.setDisabled(true);
             App.stoTransfer.load({
-                params: { branchID: App.BranchID.getValue(), tranDate: App.DateEnt.getValue(), trnsfrDocNbr: App.TrnsferNbr.getValue() },
+                params: { branchID: App.BranchID.getValue(), tranDate: App.txtTranDate.getValue(), trnsfrDocNbr: App.TrnsferNbr.getValue() },
                 callback: function () {
                     HQ.isTransfer = true;
                     App.stoTrans.removeAll();
@@ -569,10 +569,10 @@ var grdTrans_Edit = function (item, e) {
                 }
             }
 
-            if (key == 'InvtID' || key == 'Qty') {
+            if (key == 'InvtID') {
                 App.grdTrans.view.loadMask.show();
                 HQ.numEditTrans = 0;
-                HQ.maxEditTrans = 3;
+                HQ.maxEditTrans = 4;
                 App.stoUnit.load({
                     params: { invtID: e.record.data.InvtID },
                     callback: checkSourceEdit,
@@ -588,10 +588,15 @@ var grdTrans_Edit = function (item, e) {
                     callback: checkSourceEdit,
                     row: e
                 });
+                App.stoPrice.load({
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtTranDate.getValue() },
+                    callback: checkSourceEdit,
+                    row: e
+                });
             } else if (key == 'UnitDesc') {
                 App.grdTrans.view.loadMask.show();
                 HQ.numEditTrans = 0;
-                HQ.maxEditTrans = 2;
+                HQ.maxEditTrans = 3;
                 App.stoItemSite.load({
                     params: { siteID: App.cboSiteID.getValue(), invtID: e.record.data.InvtID },
                     callback: checkSourceEdit,
@@ -599,6 +604,11 @@ var grdTrans_Edit = function (item, e) {
                 });
                 App.stoOldTrans.load({
                     params: { batNbr: App.cboBatNbr.getValue(), branchID: App.txtBranchID.getValue(), refNbr: App.txtRefNbr.getValue() },
+                    callback: checkSourceEdit,
+                    row: e
+                });
+                App.stoPrice.load({
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtTranDate.getValue() },
                     callback: checkSourceEdit,
                     row: e
                 });
@@ -1209,6 +1219,9 @@ var checkExitEdit = function (row) {
         if (invt.ValMthd == "A" || invt.ValMthd == "E") {
             trans.UnitPrice = site.AvgCost;
         }
+        else {
+            trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
+        }
         trans.TranAmt = trans.Qty * trans.UnitPrice;
 
         getQtyAvail(row.record);
@@ -1243,6 +1256,9 @@ var checkExitEdit = function (row) {
         trans.UnitMultDiv = cnv.MultDiv;
         if (invt.ValMthd == "A" || invt.ValMthd == "E") {
             trans.UnitPrice = Math.round((trans.UnitMultDiv == "M" ? site.AvgCost * trans.CnvFact : site.AvgCost / trans.CnvFact));
+        }
+        else {
+            trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
         }
         trans.TranAmt = trans.Qty * trans.UnitPrice;
         getQtyAvail(row.record);

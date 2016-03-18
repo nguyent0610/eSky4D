@@ -519,6 +519,58 @@ namespace IN10300
     
             return base.ExecuteFunction<global::System.String>("INNumbering", branchIDParameter, getTypeParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="vendID">No Metadata Documentation available.</param>
+        /// <param name="invtID">No Metadata Documentation available.</param>
+        /// <param name="uOM">No Metadata Documentation available.</param>
+        /// <param name="effDate">No Metadata Documentation available.</param>
+        public ObjectResult<IN10300_pdPrice_Result> IN10300_pdPrice(global::System.String vendID, global::System.String invtID, global::System.String uOM, Nullable<global::System.DateTime> effDate)
+        {
+            ObjectParameter vendIDParameter;
+            if (vendID != null)
+            {
+                vendIDParameter = new ObjectParameter("VendID", vendID);
+            }
+            else
+            {
+                vendIDParameter = new ObjectParameter("VendID", typeof(global::System.String));
+            }
+    
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
+            }
+    
+            ObjectParameter uOMParameter;
+            if (uOM != null)
+            {
+                uOMParameter = new ObjectParameter("UOM", uOM);
+            }
+            else
+            {
+                uOMParameter = new ObjectParameter("UOM", typeof(global::System.String));
+            }
+    
+            ObjectParameter effDateParameter;
+            if (effDate.HasValue)
+            {
+                effDateParameter = new ObjectParameter("EffDate", effDate);
+            }
+            else
+            {
+                effDateParameter = new ObjectParameter("EffDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<IN10300_pdPrice_Result>("IN10300_pdPrice", vendIDParameter, invtIDParameter, uOMParameter, effDateParameter);
+        }
 
         #endregion
 
@@ -5740,6 +5792,30 @@ namespace IN10300
         private global::System.Boolean _CheckINVal;
         partial void OnCheckINValChanging(global::System.Boolean value);
         partial void OnCheckINValChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LastStkOutNbr
+        {
+            get
+            {
+                return _LastStkOutNbr;
+            }
+            set
+            {
+                OnLastStkOutNbrChanging(value);
+                ReportPropertyChanging("LastStkOutNbr");
+                _LastStkOutNbr = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LastStkOutNbr");
+                OnLastStkOutNbrChanged();
+            }
+        }
+        private global::System.String _LastStkOutNbr;
+        partial void OnLastStkOutNbrChanging(global::System.String value);
+        partial void OnLastStkOutNbrChanged();
 
         #endregion
 
@@ -10097,6 +10173,44 @@ namespace IN10300
         private global::System.Double _CnvFact;
         partial void OnCnvFactChanging(global::System.Double value);
         partial void OnCnvFactChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10300Model", Name="IN10300_pdPrice_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10300_pdPrice_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Price
+        {
+            get
+            {
+                return _Price;
+            }
+            set
+            {
+                OnPriceChanging(value);
+                ReportPropertyChanging("Price");
+                _Price = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Price");
+                OnPriceChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Price;
+        partial void OnPriceChanging(Nullable<global::System.Double> value);
+        partial void OnPriceChanged();
 
         #endregion
 

@@ -254,6 +254,7 @@
           <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="CheckINVal" Type="bit" Nullable="false" />
+          <Property Name="LastStkOutNbr" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="IN_Trans">
           <Key>
@@ -431,6 +432,12 @@
         <Function Name="IN10300_pcUnitConversion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="IN10300_pdPrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="VendID" Type="varchar" Mode="In" />
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
+          <Parameter Name="UOM" Type="nvarchar" Mode="In" />
+          <Parameter Name="EffDate" Type="smalldatetime" Mode="In" />
+        </Function>
         <Function Name="IN10300_pgTransferLoad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BatNbr" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -480,6 +487,12 @@
             <Parameter Name="GetType" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="IN_LotTrans" EntityType="IN10300Model.IN_LotTrans" />
+          <FunctionImport Name="IN10300_pdPrice" ReturnType="Collection(IN10300Model.IN10300_pdPrice_Result)">
+            <Parameter Name="VendID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="UOM" Mode="In" Type="String" />
+            <Parameter Name="EffDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Batch">
           <Key>
@@ -680,6 +693,7 @@
           <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="Boolean" Name="CheckINVal" Nullable="false" />
+          <Property Type="String" Name="LastStkOutNbr" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="IN_Trans">
           <Key>
@@ -962,6 +976,9 @@
           <Property Type="Double" Name="CnvFact" Nullable="false" />
           <Property Type="String" Name="UnitMultDiv" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="IN10300_pdPrice_Result">
+          <Property Type="Double" Name="Price" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1142,6 +1159,7 @@
           <EntitySetMapping Name="IN_Setup">
             <EntityTypeMapping TypeName="IN10300Model.IN_Setup">
               <MappingFragment StoreEntitySet="IN_Setup">
+                <ScalarProperty Name="LastStkOutNbr" ColumnName="LastStkOutNbr" />
                 <ScalarProperty Name="CheckINVal" ColumnName="CheckINVal" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
@@ -1455,6 +1473,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN10300_pdPrice" FunctionName="eBiz4DWebSysModel.Store.IN10300_pdPrice" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10300Model.IN10300_pdPrice_Result">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1475,7 +1500,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="59" >
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="39" >
         <EntityTypeShape EntityType="IN10300Model.Batch" Width="1.5" PointX="7.625" PointY="0.5" />
         <EntityTypeShape EntityType="IN10300Model.IN_Inventory" Width="1.5" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="IN10300Model.IN_ItemLot" Width="1.5" PointX="5.75" PointY="0.5" />

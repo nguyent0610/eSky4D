@@ -221,7 +221,17 @@
         .ActionMethods(action => { action.Read = HttpMethod.POST; })
         .Reader(X.JsonReader().Root("data")))
 )
-
+@(
+    X.Store()
+    .ID("stoPrice")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof (IN10300_pdPrice_Result),"mdlPrice",""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetPrice", "IN10300"))
+        .ActionMethods(action => { action.Read = HttpMethod.POST; })
+        .Reader(X.JsonReader().Root("data")))
+)
 @{ Html.RenderAction("Body", new { lang = Current.LangID.ToString() }); }
 </body>
 </html>

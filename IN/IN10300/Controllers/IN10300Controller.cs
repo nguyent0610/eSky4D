@@ -30,7 +30,7 @@ namespace IN10300.Controllers
         private string _screenNbr = "IN10300";
         private string _userName = Current.UserName;
         private string _handle = "";
-        private IN10300Entities _app = Util.CreateObjectContext<IN10300Entities>();
+        private IN10300Entities _app = Util.CreateObjectContext<IN10300Entities>(false);
         private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);     
         private FormCollection _form;
         private IN10300_pcBatch_Result _objBatch;
@@ -157,6 +157,11 @@ namespace IN10300.Controllers
         {
             var lstUnit = _app.IN10300_pcUnitConversion(Current.CpnyID).ToList();
             return this.Store(lstUnit);
+        }
+        public ActionResult GetPrice(string invtID, string uom, DateTime effDate)
+        {
+            var lstPrice = _app.IN10300_pdPrice("", invtID, uom, DateTime.Now).ToList();
+            return this.Store(lstPrice);
         }
         public ActionResult GetUnit(string invtID)
         {
