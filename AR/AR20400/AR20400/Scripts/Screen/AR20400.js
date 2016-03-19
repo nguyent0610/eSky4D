@@ -54,13 +54,11 @@ var checkLoad = function (sto) {
             App.tabDetail.child('#pnlAR_CustSellingProducts').tab.hide();
         if (hideDisplayMethod == 'true')
             App.tabDetail.child('#pnlDispMethod').tab.hide();
-
-        
     }
 };
 
 var firstLoad = function () {
-    //HQ.util.checkAccessRight();
+    HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     App.frmMain.isValid();
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
@@ -250,26 +248,34 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain)
+                    && HQ.util.checkEmail(App.txtEMailAddr.getValue())
                     && HQ.store.checkRequirePass(App.stoAR_LTTContract, keysTab_4, fieldsCheckRequireTab_4, fieldsLangCheckRequireTab_4)
                     && HQ.store.checkRequirePass(App.stoAR_LTTContractDetail, keysTab_41, fieldsCheckRequireTab_41, fieldsLangCheckRequireTab_41)
                     && HQ.store.checkRequirePass(App.stoAR_CustAdvTool, keysTab_5, fieldsCheckRequireTab_5, fieldsLangCheckRequireTab_5)
                     && HQ.store.checkRequirePass(App.stoAR_CustSellingProducts, keysTab_7, fieldsCheckRequireTab_7, fieldsLangCheckRequireTab_7)
                     && HQ.store.checkRequirePass(App.stoAR_CustDisplayMethod, keysTab_6, fieldsCheckRequireTab_6, fieldsLangCheckRequireTab_6)) {
-                    //if (_hiddenTree == 'false') {
-                    //    if (_maxLevel > _nodeLevel && !App.cboCustId.getValue()) {
-                    //        HQ.message.show(213, '', '');
-                    //        return false;
-                    //    }
-                    //}
-                    if (_hiddenTree == 'false') {
-                        if (_root == 'true') {
-                            HQ.message.show(2015040901, '', '');
-                            return false;
+                    if (HQ.util.checkSpecialChar(App.cboCustId.getValue()) == true) {
+                        if (_hiddenTree == 'false') {
+                            if (_recordID != '' && _parentRecordID != '' && _nodeID != '' && _nodeLevel != '') {
+                                if (_root == 'true') {
+                                    HQ.message.show(2015040901, '', '');
+                                    return false;
+                                }
+                                save();
+                            }
+                            else {
+                                HQ.message.show(2015090701, '', '');
+                                return false;
+                            }
                         }
-                        save();
+                        else
+                            save();
                     }
-                    else
-                        save();
+                }
+                else {
+                    HQ.message.show(2015123111, App.cboCustId.fieldLabel);
+                    App.cboCustId.focus();
+                    App.cboCustId.selectText();
                 }
             }
             break;
@@ -677,9 +683,10 @@ var deleteData = function (item) {
                     url: 'AR20400/DeleteAll',
                     timeout: 7200,
                     success: function (msg, data) {
-                        CustId = '';
-                        App.cboCustId.getStore().load();
+                        if (_hiddenTree == 'false')
+                            ReloadTree('delete');
                         menuClick("new");
+                        
                     },
                     failure: function (msg, data) {
                         HQ.message.process(msg, data, true);
@@ -928,146 +935,172 @@ var cboClassId_Select = function (sender, e) {
     }
 };
 
-
-var filterComboSate = function (sender, e) {
-    if (sender.hasfocus) {
+var cboClassId_TriggerClick = function (sender, e) {
+        App.cboClassId.setValue('');
+        App.cboCountry.setValue('');
+        App.cboState.setValue('');
         App.cboCity.setValue('');
         App.cboDistrict.setValue('');
-    }
-    var code = App.cboCountry.getValue();
-    App.cboState.store.clearFilter();
-    App.cboState.store.filter("Country", code);
-};
+        App.cboPriceClassID.setValue('');
+        App.cboTerms.setValue('');
+        App.cboTerritory.setValue('');
+        App.txtTradeDisc.setValue('');
+        App.cboTaxDflt.setValue('');
+        App.cboTaxID00.setValue('');
+        App.cboTaxID01.setValue('');
+        App.cboTaxID02.setValue('');
+        App.cboTaxID03.setValue('');
+}
 
-var filterComboCityDistrict = function () {
-    var code = App.cboCountry.getValue() + App.cboState.getValue();
-    App.cboCity.store.clearFilter();
-    App.cboCity.store.filter("CountryState", code);
-    App.cboDistrict.store.clearFilter();
-    App.cboDistrict.store.filter("CountryState", code);
-};
+    var filterComboSate = function (sender, e) {
+        App.cboState.setValue('');
+        App.cboCity.setValue('');
+        App.cboDistrict.setValue('');
+        
+        var code = App.cboCountry.getValue();
+        App.cboState.store.clearFilter();
+        App.cboState.store.filter("Country", code);
+    };
 
-var filterComboBillSate = function (sender, e) {
-    if (sender.hasfocus) {
+    var filterComboCityDistrict = function (sender, e) {
+        App.cboCity.setValue('');
+        App.cboDistrict.setValue('');
+        
+        var code = App.cboCountry.getValue() + App.cboState.getValue();
+        App.cboCity.store.clearFilter();
+        App.cboCity.store.filter("CountryState", code);
+        App.cboDistrict.store.clearFilter();
+        App.cboDistrict.store.filter("CountryState", code);
+    };
+
+    var filterComboBillSate = function (sender, e) {
+        App.cboBillState.setValue('');
         App.cboBillCity.setValue('');
-    }
-    var code = App.cboBillCountry.getValue();
-    App.cboBillState.store.clearFilter();
-    App.cboBillState.store.filter("Country", code);
-};
+        
+        var code = App.cboBillCountry.getValue();
+        App.cboBillState.store.clearFilter();
+        App.cboBillState.store.filter("Country", code);
+    };
 
-var filterComboBillCity = function () {
-    var code = App.cboBillCountry.getValue() + App.cboBillState.getValue();
-    App.cboBillCity.store.clearFilter();
-    App.cboBillCity.store.filter("CountryState", code);
-};
+    var filterComboBillCity = function (sender, e) {
+        App.cboBillCity.setValue('');
+        
+        var code = App.cboBillCountry.getValue() + App.cboBillState.getValue();
+        App.cboBillCity.store.clearFilter();
+        App.cboBillCity.store.filter("CountryState", code);
+    };
 
-var stoCheckAutoCustID_Load = function () {
-    if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1') {
-        App.cboCustId.allowBlank = true;
-        App.cboCustId.isValid(false);
-    }
-    else {
-        App.cboCustId.allowBlank = false;
-        App.cboCustId.isValid(true);
-    }
-};
-
-var stoGetMaxHierarchyLevel_Load = function () {
-    if (App.stoGetMaxHierarchyLevel.data.items[0]) {
-        _maxLevel = App.stoGetMaxHierarchyLevel.data.items[0].data.NodeLevel;
-    }
-};
-
-var stoCheckHiddenTree_Load = function () {
-    if (App.stoCheckHiddenTree.data.items[0]) {
-        if (App.stoCheckHiddenTree.data.items[0].data.HiddenHierarchy == true) {
-            _hiddenTree = 'true';
-            App.pnlWest.collapse();
+    var stoCheckAutoCustID_Load = function () {
+        if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1') {
+            App.cboCustId.allowBlank = true;
+            App.cboCustId.isValid(false);
         }
         else {
-            _hiddenTree = 'false';
-            App.pnlWest.expand();
-            App.stoGetMaxHierarchyLevel.reload();
-            ReloadTree();
+            App.cboCustId.allowBlank = false;
+            App.cboCustId.isValid(true);
         }
-    }
-    else {
-        if (App.cboCpnyID.getValue()) {
-            HQ.message.show(2016030901, '', '');
+    };
+
+    var stoGetMaxHierarchyLevel_Load = function () {
+        if (App.stoGetMaxHierarchyLevel.data.items[0]) {
+            _maxLevel = App.stoGetMaxHierarchyLevel.data.items[0].data.NodeLevel;
         }
-    }
-};
+    };
 
-///////////////////////// Tree ///////////////////////////
-var btnExpand_click = function (btn, e, eOpts) {
-    App.treeCust.expandAll();
-};
+    var stoCheckHiddenTree_Load = function () {
+        if (App.stoCheckHiddenTree.data.items[0]) {
+            if (App.stoCheckHiddenTree.data.items[0].data.HiddenHierarchy == true) {
+                _hiddenTree = 'true';
+                App.pnlWest.collapse();
+            }
+            else {
+                _hiddenTree = 'false';
+                App.pnlWest.expand();
+                App.stoGetMaxHierarchyLevel.reload();
+                ReloadTree();
+            }
+        }
+        else {
+            if (App.cboCpnyID.getValue()) {
+                HQ.message.show(2016030901, '', '');
+            }
+        }
+    };
 
-var btnCollapse_click = function (btn, e, eOpts) {
-    App.treeCust.collapseAll();
-};
+    ///////////////////////// Tree ///////////////////////////
+    var btnExpand_click = function (btn, e, eOpts) {
+        App.treeCust.expandAll();
+    };
 
-var nodeSelected_Change = function (store, operation, options) {
-    if (operation.internalId != 'root') {
-        _root = 'false';
-        var CustID1 = '';
-        //_leaf = operation.data.leaf;
-        parentRecordIDAll = operation.internalId.split("-");
-        if (parentRecordIDAll[1] != '|') {
-            _nodeID = parentRecordIDAll[0];
-            _nodeLevel = parentRecordIDAll[1];
-            _parentRecordID = parentRecordIDAll[2];
-            _recordID = parentRecordIDAll[3];
+    var btnCollapse_click = function (btn, e, eOpts) {
+        App.treeCust.collapseAll();
+    };
+
+    var nodeSelected_Change = function (store, operation, options) {
+        if (operation.internalId != 'root') {
+            _root = 'false';
+            var CustID1 = '';
+            //_leaf = operation.data.leaf;
+            parentRecordIDAll = operation.internalId.split("-");
+            if (parentRecordIDAll[1] != '|') {
+                _nodeID = parentRecordIDAll[0];
+                _nodeLevel = parentRecordIDAll[1];
+                _parentRecordID = parentRecordIDAll[2];
+                _recordID = parentRecordIDAll[3];
+            } else {
+                parentRecordIDAll = operation.data.parentId.split("-");
+                _nodeID = parentRecordIDAll[0];
+                _nodeLevel = parentRecordIDAll[1];
+                _parentRecordID = parentRecordIDAll[2];
+                _recordID = parentRecordIDAll[3];
+                var custIDall = operation.data.id.split("-");
+                CustID1 = custIDall[0];
+                CustId = custIDall[0];
+            }
         } else {
-            parentRecordIDAll = operation.data.parentId.split("-");
-            _nodeID = parentRecordIDAll[0];
-            _nodeLevel = parentRecordIDAll[1];
-            _parentRecordID = parentRecordIDAll[2];
-            _recordID = parentRecordIDAll[3];
-            var custIDall = operation.data.id.split("-");
-            CustID1 = custIDall[0];
-            CustId = custIDall[0];
+            _root = 'true';
+            _nodeID = '';
+            _nodeLevel = '1';
+            _parentRecordID ='0';
+            _recordID = '0';
         }
-    } else {
-        _root = 'true';
-        _nodeID = '';
-        _nodeLevel = '1';
-        _parentRecordID ='0';
-        _recordID = '0';
-    }
 
-    if (CustID1) {
-        App.cboCustId.setValue(CustID1);
-    }
-};
+        if (CustID1) {
+            App.cboCustId.setValue(CustID1);
+        }
+    };
 
-var ReloadTree = function (type) {
-    try {
-        App.direct.ReloadTreeAR20400(App.cboCpnyID.getValue(), {
-            success: function (data) {
-                if (type == 'save') {
-                    App.cboCustId.setValue(CustId);
-                    App.stoAR_Customer.reload();
-                }
-            },
-            failure: function () {
-                alert("fail");
-            },
-            //eventMask: { msg: 'loadingTree', showMask: true }
-        });
-    } catch (ex) {
-        alert(ex.message);
-    }
-};
+    var ReloadTree = function (type) {
+        try {
+            App.direct.ReloadTreeAR20400(App.cboCpnyID.getValue(), {
+                success: function (data) {
+                    if (type == 'save') {
+                        App.cboCustId.setValue(CustId);
+                        App.stoAR_Customer.reload();
+                    }
+                    else if (type =='delete')
+                    {
+                        CustId = '';
+                        App.cboCustId.getStore().load();
+                    }
+                },
+                failure: function () {
+                    alert("fail");
+                },
+                //eventMask: { msg: 'loadingTree', showMask: true }
+            });
+        } catch (ex) {
+            alert(ex.message);
+        }
+    };
 
-var searchNode = function () {
-    App.treeCust.expandAll();
-    var objRecord = App.treeCust.getRootNode().findChild('id', App.cboCustId.getValue() + '-|', true);
-    if (objRecord)
-        App.treeCust.getSelectionModel().select(objRecord);
-};
+    var searchNode = function () {
+        App.treeCust.expandAll();
+        var objRecord = App.treeCust.getRootNode().findChild('id', App.cboCustId.getValue() + '-|', true);
+        if (objRecord)
+            App.treeCust.getSelectionModel().select(objRecord);
+    };
 
-var tabDetail_Change = function (tabPanel, newCard, oldCard, eOpts) {
-    HQ.focus = tabPanel.activeTab.id;
-};
+    var tabDetail_Change = function (tabPanel, newCard, oldCard, eOpts) {
+        HQ.focus = tabPanel.activeTab.id;
+    };
