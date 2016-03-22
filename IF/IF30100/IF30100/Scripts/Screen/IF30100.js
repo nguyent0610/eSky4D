@@ -45,7 +45,13 @@ var getValue = function (val) {
 }
 var getGridValue = function (grd) {
     var data = grd.store.allData == undefined ? grd.store.data : grd.store.allData;
-  
+    var selData = '';
+    data.each(function (item) {
+        if (item.data.Sel) {
+            selData += item.data[grd.tag] + ',';
+        }
+    });
+    return selData;
 }
 
 var chkHeader_Change = function (ct, column, e, t) {
@@ -136,8 +142,14 @@ var cboReport_Change = function (sender, newValue, oldValue) {
             App.stoDet.reload();
         } else {
             //App.btnTemplate.show();
-            App.pnlFilterHeader.items.clear();
-            App.tabFilterGrid.items.clear();
+            App.pnlFilterHeader.items.each(function (item) {
+                App.pnlFilterHeader.remove(item);
+                App[item.id] = null;
+            })
+            App.tabFilterGrid.items.each(function (item) {
+                App.tabFilterGrid.remove(item)
+                App[item.id] = null;
+            })
             App.tabFilterGrid.hide();
             HQ.common.showBusy(true, HQ.waitMsg);
             App.direct.IF30100Filter(App.cboReport.getValue(), {

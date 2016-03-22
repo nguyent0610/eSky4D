@@ -513,7 +513,7 @@ namespace IF30100.Controllers
                         {
                             for (int row = 0; row < 1000; row++)
                             {
-                                rawData2[row, col] = "'" + dt.Rows[row + (i * 1000)].ItemArray[col].ToString();
+                                rawData2[row, col] =  dt.Rows[row + (i * 1000)].ItemArray[col];
                             }
                             
                         }
@@ -540,7 +540,7 @@ namespace IF30100.Controllers
                         {
                             for (int row = 0; row < (dt.Rows.Count % 1000); row++)
                             {
-                                rawData2[row, col] = "'" + dt.Rows[(dt.Rows.Count / 1000) * 1000 + row].ItemArray[col].ToString();
+                                rawData2[row, col] =  dt.Rows[(dt.Rows.Count / 1000) * 1000 + row].ItemArray[col];
                             }
                           
                         }
@@ -589,8 +589,9 @@ namespace IF30100.Controllers
                         pvf.Orientation = XlPivotFieldOrientation.xlRowField;
                         pvf.Subtotals[1] = true;
                         pvf.Subtotals[1] = false;
+                        
                     }
-                  
+                   
                     //foreach (var item in pvf.PivotItems())
                     //{
                     //    item.ShowDetail = false;
@@ -608,6 +609,7 @@ namespace IF30100.Controllers
                         pvf.Orientation = XlPivotFieldOrientation.xlColumnField;
                         pvf.Subtotals[1] = true;
                         pvf.Subtotals[1] = false;
+                       
                     }
                   
                     //foreach (var item in pvf.PivotItems())
