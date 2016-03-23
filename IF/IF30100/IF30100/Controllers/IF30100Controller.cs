@@ -491,11 +491,11 @@ namespace IF30100.Controllers
 
                     if (colData.DataFormat.PassNull() != string.Empty)
                     {
-                        dataSheet.Range[string.Format("{0}:{0}", column), Type.Missing].NumberFormat = colData.DataFormat;
+                        dataSheet.Range[string.Format("{0}{1}:{0}{2}", column,2,dt.Rows.Count+1), Type.Missing].NumberFormat = colData.DataFormat;
                     }
                     else
                     {
-                        dataSheet.Range[string.Format("{0}:{0}", column), Type.Missing].NumberFormat = "@";
+                        dataSheet.Range[string.Format("{0}{1}:{0}{2}", column, 2, dt.Rows.Count+1), Type.Missing].NumberFormat = "@";
                     }
                 }
 
@@ -650,7 +650,9 @@ namespace IF30100.Controllers
                     pvf.Subtotals[1] = false;
                 }
 
-              
+                pivotTable.CacheIndex = 1;
+                pivotTable.SaveData = false;
+                pivotTable.RefreshTable();
                 //pivotTable.CalculateData();
                 string path = Server.MapPath("~/ExportPivot");
                 if (!Directory.Exists(path))
@@ -658,13 +660,13 @@ namespace IF30100.Controllers
                     Directory.CreateDirectory(path);
                 }
 
-                fileName = path + @"\" + Guid.NewGuid().ToString() + ".xlsx";
+                fileName = path + @"\" + Guid.NewGuid().ToString() + ".xlsb";
 
                 targetSheet.Protect("Hqs0ft20062099", true, false, true, true, true, true, true, true, true, true, true, true, true, true, true);
                 excelApplication.DisplayAlerts = false;
 
 
-                excelWorkBook.SaveAs(fileName, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange);
+                excelWorkBook.SaveAs(fileName, XlFileFormat.xlExcel12, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange);
                 excelWorkBook.Close(true, Type.Missing, Type.Missing);
                 excelApplication.Quit();
                 excelApplication = null;
@@ -679,7 +681,7 @@ namespace IF30100.Controllers
                 }
 
                 Stream stream = new MemoryStream(buffer);
-                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsx" };
+                return new FileStreamResult(stream, "application/vnd.ms-excel") { FileDownloadName = name + ".xlsb" };
 
             }
             catch (Exception ex)
