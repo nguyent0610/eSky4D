@@ -862,7 +862,6 @@ namespace AR20400.Controllers
 
             //quan trong dung de refresh slmTree
             this.GetCmp<TreePanel>("treeCust").SetRootNode(node);
-
             return this.Direct();
         }
 

@@ -333,7 +333,7 @@ var stoBeforeLoad = function (sto) {
 
 var stoLoad = function (sto) {
     HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
-    HQ.common.setForceSelection(App.frmMain, false, "cboCpnyID,cboCustId");
+    HQ.common.setForceSelection(App.frmMain, false, "cboCpnyID,cboCustId,cboHandle");
     App.cboCpnyID.forceSelection = true;
     App.cboCustId.forceSelection = true;
     HQ.isNew = false;
@@ -1029,7 +1029,10 @@ var cboClassId_TriggerClick = function (sender, e) {
 
     ///////////////////////// Tree ///////////////////////////
     var btnExpand_click = function (btn, e, eOpts) {
+        Ext.suspendLayouts();
         App.treeCust.expandAll();
+        Ext.resumeLayouts(true);
+        
     };
 
     var btnCollapse_click = function (btn, e, eOpts) {
@@ -1095,7 +1098,9 @@ var cboClassId_TriggerClick = function (sender, e) {
     };
 
     var searchNode = function () {
+        Ext.suspendLayouts();
         App.treeCust.expandAll();
+        Ext.resumeLayouts(true);
         var objRecord = App.treeCust.getRootNode().findChild('id', App.cboCustId.getValue() + '-|', true);
         if (objRecord)
             App.treeCust.getSelectionModel().select(objRecord);

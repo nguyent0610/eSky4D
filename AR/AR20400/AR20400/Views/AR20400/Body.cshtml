@@ -40,6 +40,8 @@
             .Listeners(lst =>
             {
                 lst.ItemClick.Fn = "nodeSelected_Change";
+                lst.BeforeItemExpand.Handler = "this.el.mask('Loading...', 'x-mask-loading'); Ext.suspendLayouts();";
+                lst.AfterItemExpand.Handler = "Ext.resumeLayouts(true); this.el.unmask();";
             })
             .BottomBar(
                 X.Toolbar()
