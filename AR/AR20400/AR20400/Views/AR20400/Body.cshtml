@@ -559,7 +559,7 @@
                                     lst.Select.Fn = "filterComboSate";
                                     lst.Change.Fn = "filterComboSate";
                                     lst.Focus.Handler = "this.forceSelection = true;";
-                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue(); }";
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue(); }";
                                     
                                 })
 
@@ -578,7 +578,7 @@
                                     lst.Select.Fn = "filterComboCityDistrict";
                                     lst.Change.Fn = "filterComboCityDistrict";
                                     lst.Focus.Handler = "this.forceSelection = true;";
-                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
                                     //lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
 
@@ -675,7 +675,7 @@
                                 {
                                     lst.Select.Fn = "filterComboBillSate";
                                     lst.Change.Fn = "filterComboBillSate";
-                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
                                     lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
 
@@ -694,7 +694,7 @@
                                     lst.Select.Fn = "filterComboBillCity";
                                     lst.Change.Fn = "filterComboBillCity";
                                     lst.Focus.Handler = "this.forceSelection = true;";
-                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
                                     lst.Focus.Handler = "this.forceSelection = true;";  
                                 })
 

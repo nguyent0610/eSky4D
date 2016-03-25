@@ -952,43 +952,49 @@ var cboClassId_TriggerClick = function (sender, e) {
         App.cboTaxID03.setValue('');
 }
 
-    var filterComboSate = function (sender, e) {
+var filterComboSate = function (sender, e) {
+    if (sender.hasFocus) {
         App.cboState.setValue('');
         App.cboCity.setValue('');
         App.cboDistrict.setValue('');
+    }
         
-        var code = App.cboCountry.getValue();
-        App.cboState.store.clearFilter();
-        App.cboState.store.filter("Country", code);
-    };
+    var code = App.cboCountry.getValue();
+    App.cboState.store.clearFilter();
+    App.cboState.store.filter("Country", code);
+};
 
-    var filterComboCityDistrict = function (sender, e) {
+var filterComboCityDistrict = function (sender, e) {
+    if (sender.hasFocus) {
         App.cboCity.setValue('');
         App.cboDistrict.setValue('');
-        
-        var code = App.cboCountry.getValue() + App.cboState.getValue();
-        App.cboCity.store.clearFilter();
-        App.cboCity.store.filter("CountryState", code);
-        App.cboDistrict.store.clearFilter();
-        App.cboDistrict.store.filter("CountryState", code);
-    };
+    }
+    var code = App.cboCountry.getValue() + App.cboState.getValue();
+    App.cboCity.store.clearFilter();
+    App.cboCity.store.filter("CountryState", code);
+    App.cboDistrict.store.clearFilter();
+    App.cboDistrict.store.filter("CountryState", code);
+};
 
-    var filterComboBillSate = function (sender, e) {
+var filterComboBillSate = function (sender, e) {
+    if (sender.hasFocus) {
         App.cboBillState.setValue('');
         App.cboBillCity.setValue('');
+    }
         
-        var code = App.cboBillCountry.getValue();
-        App.cboBillState.store.clearFilter();
-        App.cboBillState.store.filter("Country", code);
-    };
+    var code = App.cboBillCountry.getValue();
+    App.cboBillState.store.clearFilter();
+    App.cboBillState.store.filter("Country", code);
+};
 
-    var filterComboBillCity = function (sender, e) {
+var filterComboBillCity = function (sender, e) {
+    if (sender.hasFocus) {
         App.cboBillCity.setValue('');
-        
-        var code = App.cboBillCountry.getValue() + App.cboBillState.getValue();
-        App.cboBillCity.store.clearFilter();
-        App.cboBillCity.store.filter("CountryState", code);
-    };
+    }
+    var code = App.cboBillCountry.getValue() + App.cboBillState.getValue();
+    App.cboBillCity.store.clearFilter();
+    App.cboBillCity.store.filter("CountryState", code);
+};
 
     var stoCheckAutoCustID_Load = function () {
         if (App.stoCheckAutoCustID.data.items[0].data.Flag == '1') {
