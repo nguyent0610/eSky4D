@@ -248,12 +248,14 @@ var menuClick = function (command) {
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain)
-                    && HQ.util.checkEmail(App.txtEMailAddr.getValue())
                     && HQ.store.checkRequirePass(App.stoAR_LTTContract, keysTab_4, fieldsCheckRequireTab_4, fieldsLangCheckRequireTab_4)
                     && HQ.store.checkRequirePass(App.stoAR_LTTContractDetail, keysTab_41, fieldsCheckRequireTab_41, fieldsLangCheckRequireTab_41)
                     && HQ.store.checkRequirePass(App.stoAR_CustAdvTool, keysTab_5, fieldsCheckRequireTab_5, fieldsLangCheckRequireTab_5)
                     && HQ.store.checkRequirePass(App.stoAR_CustSellingProducts, keysTab_7, fieldsCheckRequireTab_7, fieldsLangCheckRequireTab_7)
                     && HQ.store.checkRequirePass(App.stoAR_CustDisplayMethod, keysTab_6, fieldsCheckRequireTab_6, fieldsLangCheckRequireTab_6)) {
+                    if (App.txtEMailAddr.getValue())
+                        if (!HQ.util.checkEmail(App.txtEMailAddr.getValue()))
+                            return false
                     if (HQ.util.checkSpecialChar(App.cboCustId.getValue()) == true) {
                         if (_hiddenTree == 'false') {
                             if (_recordID != '' && _parentRecordID != '' && _nodeID != '' && _nodeLevel != '') {
@@ -271,11 +273,11 @@ var menuClick = function (command) {
                         else
                             save();
                     }
-                }
-                else {
-                    HQ.message.show(2015123111, App.cboCustId.fieldLabel);
-                    App.cboCustId.focus();
-                    App.cboCustId.selectText();
+                    else {
+                        HQ.message.show(2015123111, App.cboCustId.fieldLabel);
+                        App.cboCustId.focus();
+                        App.cboCustId.selectText();
+                    }
                 }
             }
             break;
@@ -645,7 +647,7 @@ var save = function () {
                 App.cboCustId.getStore().load({
                     callback: function () {
                         if (Ext.isEmpty(App.cboCustId.getValue())) {
-                            if (_hiddenTree == 'false')
+                            if (_hiddenTree == 'false' && data.result.isNew == 'true')
                                 ReloadTree('save');
                             else
                             {
@@ -655,7 +657,7 @@ var save = function () {
                            
                         }
                         else {
-                            if (_hiddenTree == 'false')
+                            if (_hiddenTree == 'false' && data.result.isNew == 'true')
                                 ReloadTree('save');
                             else
                             {
@@ -951,6 +953,16 @@ var cboClassId_TriggerClick = function (sender, e) {
         App.cboTaxID02.setValue('');
         App.cboTaxID03.setValue('');
 }
+
+
+var cboTerritory_Change_Select = function (sender, e) {
+    if (sender.hasFocus) {
+        App.cboState.setValue('');
+        App.cboCity.setValue('');
+        App.cboDistrict.setValue('');
+    }
+};
+
 
 var filterComboSate = function (sender, e) {
     if (sender.hasFocus) {

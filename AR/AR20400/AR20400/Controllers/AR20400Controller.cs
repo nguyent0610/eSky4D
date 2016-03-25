@@ -119,6 +119,7 @@ namespace AR20400.Controllers
         {
             try
             {
+                string isNew = "false";
                 string CustId = data["cboCustId"].PassNull();
                 string BranchID = data["cboCpnyID"].PassNull();
                 string ClassId = data["cboClassId"].PassNull();
@@ -161,8 +162,8 @@ namespace AR20400.Controllers
                     {
                         if (objAR_Setup.AutoCustID == true)
                         {
+                            isNew = "true";
                             var objCustID = _db.AR20400_ppCustID(BranchID, "", "", "", "", "", "", "", "", "", ClassId).FirstOrDefault();
-
                             header = new AR_Customer();
                             header.ResetET();
                             header.CustId = objCustID.PassNull();
@@ -180,6 +181,7 @@ namespace AR20400.Controllers
                         }
                         else
                         {
+                            isNew = "true";
                             header = new AR_Customer();
                             header.ResetET();
                             header.CustId = CustId;
@@ -469,7 +471,7 @@ namespace AR20400.Controllers
                 }
 
                 _db.SaveChanges();
-                return Json(new { success = true, CustId = CustId });
+                return Json(new { success = true, CustId = CustId, isNew = isNew });
             }
             catch (Exception ex)
             {

@@ -132,22 +132,6 @@ namespace AR20400
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<AR_Customer> AR_Customer
-        {
-            get
-            {
-                if ((_AR_Customer == null))
-                {
-                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
-                }
-                return _AR_Customer;
-            }
-        }
-        private ObjectSet<AR_Customer> _AR_Customer;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<AR_CustSellingProducts> AR_CustSellingProducts
         {
             get
@@ -288,6 +272,22 @@ namespace AR20400
             }
         }
         private ObjectSet<SI_Hierarchy> _SI_Hierarchy;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<AR_Customer> AR_Customer
+        {
+            get
+            {
+                if ((_AR_Customer == null))
+                {
+                    _AR_Customer = base.CreateObjectSet<AR_Customer>("AR_Customer");
+                }
+                return _AR_Customer;
+            }
+        }
+        private ObjectSet<AR_Customer> _AR_Customer;
 
         #endregion
 
@@ -323,14 +323,6 @@ namespace AR20400
         public void AddToAR_CustHist(AR_CustHist aR_CustHist)
         {
             base.AddObject("AR_CustHist", aR_CustHist);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToAR_Customer(AR_Customer aR_Customer)
-        {
-            base.AddObject("AR_Customer", aR_Customer);
         }
     
         /// <summary>
@@ -403,6 +395,14 @@ namespace AR20400
         public void AddToSI_Hierarchy(SI_Hierarchy sI_Hierarchy)
         {
             base.AddObject("SI_Hierarchy", sI_Hierarchy);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the AR_Customer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToAR_Customer(AR_Customer aR_Customer)
+        {
+            base.AddObject("AR_Customer", aR_Customer);
         }
 
         #endregion

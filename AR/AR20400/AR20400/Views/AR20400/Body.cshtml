@@ -39,7 +39,8 @@
             .SelectionModel(X.TreeSelectionModel().ID("slmtreeCust").Mode(SelectionMode.Multi))
             .Listeners(lst =>
             {
-                lst.ItemClick.Fn = "nodeSelected_Change";
+                //lst.ItemClick.Fn = "nodeSelected_Change";
+                lst.Select.Fn = "nodeSelected_Change";
                 lst.BeforeItemExpand.Handler = "this.el.mask('Loading...', 'x-mask-loading'); Ext.suspendLayouts();";
                 lst.AfterItemExpand.Handler = "Ext.resumeLayouts(true); this.el.unmask();";
             })
@@ -289,7 +290,9 @@
                                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                     .Listeners(lst =>
                                     {
-                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                        lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus; this.clearValue();}";
+                                        lst.Change.Fn = "cboTerritory_Change_Select";
+                                        lst.Select.Fn = "cboTerritory_Change_Select";
                                         lst.Focus.Handler = "this.forceSelection = true;";  
                                     })
 
@@ -537,7 +540,7 @@
                                 .Width(200).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtSalut").Name("txtSalut").DataIndex("Salut")
-                                .EnforceMaxLength(true).MaxLength(30)
+                                .EnforceMaxLength(true).MaxLength(50)
                                 .Width(200).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtAddr1").Name("txtAddr1").DataIndex("Addr1").HQLangCode("ADDR1")
@@ -654,7 +657,7 @@
                                 .Width(200).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtBillSalut").Name("txtBillSalut").DataIndex("BillSalut")
-                                .EnforceMaxLength(true).MaxLength(30)
+                                .EnforceMaxLength(true).MaxLength(50)
                                 .Width(200).MarginSpec("5 0 0 0")
 
                             , HQ.TextBox().ID("txtBillAddr1").Name("txtBillAddr1").DataIndex("BillAddr1").HQLangCode("ADDR1")
