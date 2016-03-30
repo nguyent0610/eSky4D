@@ -164,22 +164,6 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_Trans> IN_Trans
-        {
-            get
-            {
-                if ((_IN_Trans == null))
-                {
-                    _IN_Trans = base.CreateObjectSet<IN_Trans>("IN_Trans");
-                }
-                return _IN_Trans;
-            }
-        }
-        private ObjectSet<IN_Trans> _IN_Trans;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_UnitConversion> IN_UnitConversion
         {
             get
@@ -240,6 +224,22 @@ namespace IN10100
             }
         }
         private ObjectSet<RPTRunning> _RPTRunnings;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_Trans> IN_Trans
+        {
+            get
+            {
+                if ((_IN_Trans == null))
+                {
+                    _IN_Trans = base.CreateObjectSet<IN_Trans>("IN_Trans");
+                }
+                return _IN_Trans;
+            }
+        }
+        private ObjectSet<IN_Trans> _IN_Trans;
 
         #endregion
 
@@ -294,14 +294,6 @@ namespace IN10100
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the IN_Trans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_Trans(IN_Trans iN_Trans)
-        {
-            base.AddObject("IN_Trans", iN_Trans);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the IN_UnitConversion EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToIN_UnitConversion(IN_UnitConversion iN_UnitConversion)
@@ -332,62 +324,18 @@ namespace IN10100
         {
             base.AddObject("RPTRunnings", rPTRunning);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_Trans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_Trans(IN_Trans iN_Trans)
+        {
+            base.AddObject("IN_Trans", iN_Trans);
+        }
 
         #endregion
 
         #region Function Imports
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="batNbr">No Metadata Documentation available.</param>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="lineRef">No Metadata Documentation available.</param>
-        /// <param name="refNbr">No Metadata Documentation available.</param>
-        public ObjectResult<IN10100_pgReceiptLoad_Result> IN10100_pgReceiptLoad(global::System.String batNbr, global::System.String branchID, global::System.String lineRef, global::System.String refNbr)
-        {
-            ObjectParameter batNbrParameter;
-            if (batNbr != null)
-            {
-                batNbrParameter = new ObjectParameter("BatNbr", batNbr);
-            }
-            else
-            {
-                batNbrParameter = new ObjectParameter("BatNbr", typeof(global::System.String));
-            }
-    
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter lineRefParameter;
-            if (lineRef != null)
-            {
-                lineRefParameter = new ObjectParameter("LineRef", lineRef);
-            }
-            else
-            {
-                lineRefParameter = new ObjectParameter("LineRef", typeof(global::System.String));
-            }
-    
-            ObjectParameter refNbrParameter;
-            if (refNbr != null)
-            {
-                refNbrParameter = new ObjectParameter("RefNbr", refNbr);
-            }
-            else
-            {
-                refNbrParameter = new ObjectParameter("RefNbr", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<IN10100_pgReceiptLoad_Result>("IN10100_pgReceiptLoad", batNbrParameter, branchIDParameter, lineRefParameter, refNbrParameter);
-        }
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -772,6 +720,58 @@ namespace IN10100
             }
     
             return base.ExecuteFunction<IN10100_pdLotTrnsfer_Result>("IN10100_pdLotTrnsfer", branchIDParameter, trnsfrDocNbrParameter, tranDateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="batNbr">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="lineRef">No Metadata Documentation available.</param>
+        /// <param name="refNbr">No Metadata Documentation available.</param>
+        public ObjectResult<IN10100_pgReceiptLoad_Result> IN10100_pgReceiptLoad(global::System.String batNbr, global::System.String branchID, global::System.String lineRef, global::System.String refNbr)
+        {
+            ObjectParameter batNbrParameter;
+            if (batNbr != null)
+            {
+                batNbrParameter = new ObjectParameter("BatNbr", batNbr);
+            }
+            else
+            {
+                batNbrParameter = new ObjectParameter("BatNbr", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter lineRefParameter;
+            if (lineRef != null)
+            {
+                lineRefParameter = new ObjectParameter("LineRef", lineRef);
+            }
+            else
+            {
+                lineRefParameter = new ObjectParameter("LineRef", typeof(global::System.String));
+            }
+    
+            ObjectParameter refNbrParameter;
+            if (refNbr != null)
+            {
+                refNbrParameter = new ObjectParameter("RefNbr", refNbr);
+            }
+            else
+            {
+                refNbrParameter = new ObjectParameter("RefNbr", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<IN10100_pgReceiptLoad_Result>("IN10100_pgReceiptLoad", batNbrParameter, branchIDParameter, lineRefParameter, refNbrParameter);
         }
 
         #endregion
@@ -4681,9 +4681,8 @@ namespace IN10100
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        /// <param name="unitDesc">Initial value of the UnitDesc property.</param>
         /// <param name="cnvFact">Initial value of the CnvFact property.</param>
-        public static IN_LotTrans CreateIN_LotTrans(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, global::System.String lotSerNbr, global::System.String iNTranLineRef, global::System.DateTime expDate, global::System.String invtID, global::System.Int16 invtMult, global::System.String kitID, global::System.String mfgrLotSerNbr, global::System.Double qty, global::System.String siteID, global::System.String toSiteID, global::System.DateTime tranDate, global::System.String tranType, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime warrantyDate, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.String unitDesc, global::System.Double cnvFact)
+        public static IN_LotTrans CreateIN_LotTrans(global::System.String branchID, global::System.String batNbr, global::System.String refNbr, global::System.String lotSerNbr, global::System.String iNTranLineRef, global::System.DateTime expDate, global::System.String invtID, global::System.Int16 invtMult, global::System.String kitID, global::System.String mfgrLotSerNbr, global::System.Double qty, global::System.String siteID, global::System.String toSiteID, global::System.DateTime tranDate, global::System.String tranType, global::System.Double unitCost, global::System.Double unitPrice, global::System.DateTime warrantyDate, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.Double cnvFact)
         {
             IN_LotTrans iN_LotTrans = new IN_LotTrans();
             iN_LotTrans.BranchID = branchID;
@@ -4711,7 +4710,6 @@ namespace IN10100
             iN_LotTrans.LUpd_User = lUpd_User;
             iN_LotTrans.LUpd_DateTime = lUpd_DateTime;
             iN_LotTrans.tstamp = tstamp;
-            iN_LotTrans.UnitDesc = unitDesc;
             iN_LotTrans.CnvFact = cnvFact;
             return iN_LotTrans;
         }
@@ -5338,7 +5336,7 @@ namespace IN10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String UnitDesc
         {
@@ -5350,7 +5348,7 @@ namespace IN10100
             {
                 OnUnitDescChanging(value);
                 ReportPropertyChanging("UnitDesc");
-                _UnitDesc = StructuralObject.SetValidValue(value, false);
+                _UnitDesc = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("UnitDesc");
                 OnUnitDescChanged();
             }
@@ -6984,6 +6982,30 @@ namespace IN10100
         private global::System.Double _QtyUncosted;
         partial void OnQtyUncostedChanging(global::System.Double value);
         partial void OnQtyUncostedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PosmID
+        {
+            get
+            {
+                return _PosmID;
+            }
+            set
+            {
+                OnPosmIDChanging(value);
+                ReportPropertyChanging("PosmID");
+                _PosmID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PosmID");
+                OnPosmIDChanged();
+            }
+        }
+        private global::System.String _PosmID;
+        partial void OnPosmIDChanging(global::System.String value);
+        partial void OnPosmIDChanged();
 
         #endregion
 
@@ -13625,6 +13647,54 @@ namespace IN10100
         private global::System.String _IsChanged;
         partial void OnIsChangedChanging(global::System.String value);
         partial void OnIsChangedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PosmID
+        {
+            get
+            {
+                return _PosmID;
+            }
+            set
+            {
+                OnPosmIDChanging(value);
+                ReportPropertyChanging("PosmID");
+                _PosmID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PosmID");
+                OnPosmIDChanged();
+            }
+        }
+        private global::System.String _PosmID;
+        partial void OnPosmIDChanging(global::System.String value);
+        partial void OnPosmIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ClassID
+        {
+            get
+            {
+                return _ClassID;
+            }
+            set
+            {
+                OnClassIDChanging(value);
+                ReportPropertyChanging("ClassID");
+                _ClassID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ClassID");
+                OnClassIDChanged();
+            }
+        }
+        private global::System.String _ClassID;
+        partial void OnClassIDChanging(global::System.String value);
+        partial void OnClassIDChanged();
 
         #endregion
 

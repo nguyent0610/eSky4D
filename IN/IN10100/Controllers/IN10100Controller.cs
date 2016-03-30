@@ -44,7 +44,7 @@ namespace IN10100.Controllers
         private string _screenNbr = "IN10100";
         private string _userName = Current.UserName;
         private string _handle = "";
-        private IN10100Entities _app = Util.CreateObjectContext<IN10100Entities>();
+        private IN10100Entities _app = Util.CreateObjectContext<IN10100Entities>(false);
         private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private FormCollection _form;
         private IN10100_pcBatch_Result _objBatch;
@@ -665,6 +665,7 @@ namespace IN10100.Controllers
             t.UnitMultDiv = s.UnitMultDiv;
             t.UnitPrice = s.UnitPrice;
             t.SlsperID = _form["SlsperID"].PassNull();
+            t.PosmID = s.PosmID;
         }
         private bool Update_Lot(IN_LotTrans t, IN_LotTrans s, Batch batch, IN_Trans tran, bool isNew)
         {
