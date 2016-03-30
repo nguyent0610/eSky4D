@@ -61,7 +61,7 @@ namespace IN10200.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -1173,6 +1173,7 @@ namespace IN10200.Controllers
             t.UnitMultDiv = s.UnitMultDiv;
             t.UnitPrice = s.UnitPrice;
             t.SlsperID = _form["SlsperID"].PassNull();
+            t.PosmID = s.PosmID;
         }
         private bool Update_Lot(IN_LotTrans t, IN_LotTrans s, Batch batch, IN_Trans tran, bool isNew)
         {

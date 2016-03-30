@@ -597,14 +597,27 @@
                 .Align(Alignment.Right)
                 .Width(100)
                 .Renderer("rdrTrans_QtyAmt")
-                ,
-
-                X.Column()
+                
+                , X.Column()
                 .DataIndex("TranAmt")
                 .Text(Util.GetLang("ExtAmt"))
                 .Align(Alignment.Right)
                 .Width(100)
                 .Renderer("rdrTrans_QtyAmt")
+                
+                , X.Column().Text(Util.GetLang("PosmID")).DataIndex("PosmID").Width(120)
+                        .Editor(
+	                        HQ.Combo().ID("cboPosmID").Name("cboPosmID").ForceSelection(true)
+		                        .HQDBSys(false).HQProcedure("IN10200_pcPOSM").HQHeightWidth(400, 300)
+		                        .HQColumnShow("PosmID").DisplayField("PosmID").ValueField("PosmID")
+		                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+		                        .Listeners(lst =>
+		                        {
+			                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+		                        })
+		                        .LoadData()
+			            )
+                , X.Column().DataIndex("ClassID").Hidden(true)
             )
             .Listeners(lst =>
             {

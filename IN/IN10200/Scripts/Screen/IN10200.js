@@ -830,6 +830,7 @@ var grdTrans_Edit = function (item, e) {
                     e.record.data.UnitDesc = invt.StkUnit;
                     e.record.data.CnvFact = cnv.CnvFact == 0 ? 1 : cnv.CnvFact;
                     e.record.data.UnitMultDiv = cnv.MultDiv;
+                    e.record.data.ClassID = invt.ClassID;
                 } else {
                     return;
                 }
@@ -991,6 +992,22 @@ var bindBatch = function (record) {
 }
 
 var save = function () {
+    var i = 0;
+    var errorMessage = '';
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
+    allRecords.each(function (record) {
+        i++;
+        if (record.data.ClassID == 'POSM')
+            if (!record.data.PosmID) {
+                errorMessage += i + ', ';
+            }
+    });
+    if (errorMessage) {
+        HQ.message.show(2016033001, [errorMessage], '', true);
+        return;
+    }
+
     if ((App.cboBatNbr.value && !HQ.isUpdate) || (Ext.isEmpty(App.cboBatNbr.value) && !HQ.isInsert)) {
         HQ.message.show(728, '', '', true);
         return;
@@ -1448,7 +1465,7 @@ var checkExitEdit = function (row) {
         trans.UnitMultDiv = cnv.MultDiv;
         trans.TranDesc = invt.Descr;
         trans.BarCode = invt.BarCode;
-
+        trans.ClassID = invt.ClassID;
         var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [trans.InvtID, trans.SiteID]);
 
         if (Ext.isEmpty(site)) {
