@@ -202,6 +202,19 @@
                     X.NumberField().SelectOnFocus(true).DecimalPrecision(0).MinValue(0)
                 )
                 
+                , X.Column().Text(Util.GetLang("PosmID")).DataIndex("PosmID").Width(120)
+                    .Editor(
+	                    HQ.Combo().ID("cboPosmID").Name("cboPosmID").ForceSelection(true)
+		                    .HQDBSys(false).HQProcedure("IN10800_pcPOSM").HQHeightWidth(400, 300)
+		                    .HQColumnShow("PosmID").DisplayField("PosmID").ValueField("PosmID")
+		                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+		                    .Listeners(lst =>
+		                    {
+			                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+		                    })
+		                    .LoadData()
+			        )
+                , X.Column().DataIndex("ClassID").Hidden(true)
                 //, X.CommandColumn()
                 //.Commands(
                 //    X.GridCommand()

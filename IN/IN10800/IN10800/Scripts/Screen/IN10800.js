@@ -123,6 +123,22 @@ var Process = {
     saveData: function () {
         if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
             if (HQ.form.checkRequirePass(App.frmMain)) {
+                var i = 0;
+                var errorMessage = '';
+                var store = App.stoStockOutletDet;
+                var allRecords = store.snapshot || store.allData || store.data;
+                allRecords.each(function (record) {
+                    i++;
+                    if (record.data.ClassID == 'POSM')
+                        if (!record.data.PosmID) {
+                            errorMessage += i + ', ';
+                        }
+                });
+                if (errorMessage) {
+                    HQ.message.show(2016033001, [errorMessage], '', true);
+                    return;
+                }
+
                 App.frmMain.submit({
                     waitMsg: HQ.common.getLang("SavingData"),
                     url: 'IN10800/SaveData',
@@ -345,7 +361,7 @@ var Event = {
                     var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
 
                     if (e.record.data.tstamp) {
-                        if (e.field == "StkQty" || e.field == "ReasonID") {
+                        if (e.field == "StkQty" || e.field == "ReasonID" || e.field == "PosmID") {
                             if (_allowUpdate) {
                                 return true;
                             }
@@ -370,6 +386,11 @@ var Event = {
         },
 
         grdStockOutletDet_edit: function (editor, e) {
+            if (e.field == 'InvtID') {
+                var objInvt = HQ.store.findInStore(App.cboInvtID.store, ['InvtID'], [e.record.data.InvtID]);
+                if (objInvt)
+                    e.record.set('ClassID', objInvt.ClassID);
+            }
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
             if (!Process.checkStkOutNbrFromPDA(App.txtStkOutNbr.value)) {
                 if (keys.indexOf(e.field) != -1) {
