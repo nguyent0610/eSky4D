@@ -213,6 +213,7 @@ namespace IN10700.Controllers
             }
             updatedDetail.StkQty = updated.StkQty;
             updatedDetail.ReasonID = updated.ReasonID;
+            updatedDetail.PosmID = updated.PosmID;
 
             updatedDetail.LUpd_DateTime = DateTime.Now;
             updatedDetail.LUpd_Prog = _screenNbr;

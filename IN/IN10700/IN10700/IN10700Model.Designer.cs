@@ -339,10 +339,12 @@ namespace IN10700
         /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="slsperID">No Metadata Documentation available.</param>
-        /// <param name="stkOutNbr">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="stkType">No Metadata Documentation available.</param>
+        /// <param name="stkOutDate">No Metadata Documentation available.</param>
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Boolean>> IN10700_ppCheckForUpdate(global::System.String branchID, global::System.String slsperID, global::System.String stkOutNbr, global::System.String userID, global::System.String cpnyID)
+        public ObjectResult<Nullable<global::System.Boolean>> IN10700_ppCheckForUpdate(global::System.String branchID, global::System.String slsperID, global::System.String custID, global::System.String stkType, Nullable<global::System.DateTime> stkOutDate, global::System.String userID, global::System.String cpnyID)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -364,14 +366,34 @@ namespace IN10700
                 slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
             }
     
-            ObjectParameter stkOutNbrParameter;
-            if (stkOutNbr != null)
+            ObjectParameter custIDParameter;
+            if (custID != null)
             {
-                stkOutNbrParameter = new ObjectParameter("StkOutNbr", stkOutNbr);
+                custIDParameter = new ObjectParameter("CustID", custID);
             }
             else
             {
-                stkOutNbrParameter = new ObjectParameter("StkOutNbr", typeof(global::System.String));
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter stkTypeParameter;
+            if (stkType != null)
+            {
+                stkTypeParameter = new ObjectParameter("StkType", stkType);
+            }
+            else
+            {
+                stkTypeParameter = new ObjectParameter("StkType", typeof(global::System.String));
+            }
+    
+            ObjectParameter stkOutDateParameter;
+            if (stkOutDate.HasValue)
+            {
+                stkOutDateParameter = new ObjectParameter("StkOutDate", stkOutDate);
+            }
+            else
+            {
+                stkOutDateParameter = new ObjectParameter("StkOutDate", typeof(global::System.DateTime));
             }
     
             ObjectParameter userIDParameter;
@@ -394,7 +416,7 @@ namespace IN10700
                 cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<Nullable<global::System.Boolean>>("IN10700_ppCheckForUpdate", branchIDParameter, slsperIDParameter, stkOutNbrParameter, userIDParameter, cpnyIDParameter);
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("IN10700_ppCheckForUpdate", branchIDParameter, slsperIDParameter, custIDParameter, stkTypeParameter, stkOutDateParameter, userIDParameter, cpnyIDParameter);
         }
 
         #endregion
@@ -1396,14 +1418,10 @@ namespace IN10700
         /// <param name="stkOutNbr">Initial value of the StkOutNbr property.</param>
         /// <param name="invtID">Initial value of the InvtID property.</param>
         /// <param name="expDate">Initial value of the ExpDate property.</param>
-        /// <param name="crtd_Prog">Initial value of the Crtd_Prog property.</param>
-        /// <param name="crtd_User">Initial value of the Crtd_User property.</param>
         /// <param name="crtd_DateTime">Initial value of the Crtd_DateTime property.</param>
-        /// <param name="lUpd_Prog">Initial value of the LUpd_Prog property.</param>
-        /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="lUpd_DateTime">Initial value of the LUpd_DateTime property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
-        public static PPC_StockOutletDet CreatePPC_StockOutletDet(global::System.String branchID, global::System.String slsPerID, global::System.String stkOutNbr, global::System.String invtID, global::System.DateTime expDate, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime crtd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp)
+        public static PPC_StockOutletDet CreatePPC_StockOutletDet(global::System.String branchID, global::System.String slsPerID, global::System.String stkOutNbr, global::System.String invtID, global::System.DateTime expDate, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp)
         {
             PPC_StockOutletDet pPC_StockOutletDet = new PPC_StockOutletDet();
             pPC_StockOutletDet.BranchID = branchID;
@@ -1411,11 +1429,7 @@ namespace IN10700
             pPC_StockOutletDet.StkOutNbr = stkOutNbr;
             pPC_StockOutletDet.InvtID = invtID;
             pPC_StockOutletDet.ExpDate = expDate;
-            pPC_StockOutletDet.Crtd_Prog = crtd_Prog;
-            pPC_StockOutletDet.Crtd_User = crtd_User;
             pPC_StockOutletDet.Crtd_DateTime = crtd_DateTime;
-            pPC_StockOutletDet.LUpd_Prog = lUpd_Prog;
-            pPC_StockOutletDet.LUpd_User = lUpd_User;
             pPC_StockOutletDet.LUpd_DateTime = lUpd_DateTime;
             pPC_StockOutletDet.tstamp = tstamp;
             return pPC_StockOutletDet;
@@ -1659,7 +1673,7 @@ namespace IN10700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Crtd_Prog
         {
@@ -1671,7 +1685,7 @@ namespace IN10700
             {
                 OnCrtd_ProgChanging(value);
                 ReportPropertyChanging("Crtd_Prog");
-                _Crtd_Prog = StructuralObject.SetValidValue(value, false);
+                _Crtd_Prog = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Crtd_Prog");
                 OnCrtd_ProgChanged();
             }
@@ -1683,7 +1697,7 @@ namespace IN10700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Crtd_User
         {
@@ -1695,7 +1709,7 @@ namespace IN10700
             {
                 OnCrtd_UserChanging(value);
                 ReportPropertyChanging("Crtd_User");
-                _Crtd_User = StructuralObject.SetValidValue(value, false);
+                _Crtd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Crtd_User");
                 OnCrtd_UserChanged();
             }
@@ -1731,7 +1745,7 @@ namespace IN10700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String LUpd_Prog
         {
@@ -1743,7 +1757,7 @@ namespace IN10700
             {
                 OnLUpd_ProgChanging(value);
                 ReportPropertyChanging("LUpd_Prog");
-                _LUpd_Prog = StructuralObject.SetValidValue(value, false);
+                _LUpd_Prog = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("LUpd_Prog");
                 OnLUpd_ProgChanged();
             }
@@ -1755,7 +1769,7 @@ namespace IN10700
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String LUpd_User
         {
@@ -1767,7 +1781,7 @@ namespace IN10700
             {
                 OnLUpd_UserChanging(value);
                 ReportPropertyChanging("LUpd_User");
-                _LUpd_User = StructuralObject.SetValidValue(value, false);
+                _LUpd_User = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("LUpd_User");
                 OnLUpd_UserChanged();
             }
@@ -1847,6 +1861,30 @@ namespace IN10700
         private global::System.String _ReasonID;
         partial void OnReasonIDChanging(global::System.String value);
         partial void OnReasonIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PosmID
+        {
+            get
+            {
+                return _PosmID;
+            }
+            set
+            {
+                OnPosmIDChanging(value);
+                ReportPropertyChanging("PosmID");
+                _PosmID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PosmID");
+                OnPosmIDChanged();
+            }
+        }
+        private global::System.String _PosmID;
+        partial void OnPosmIDChanging(global::System.String value);
+        partial void OnPosmIDChanged();
 
         #endregion
 
@@ -2179,6 +2217,54 @@ namespace IN10700
         private global::System.String _Descr;
         partial void OnDescrChanging(global::System.String value);
         partial void OnDescrChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PosmID
+        {
+            get
+            {
+                return _PosmID;
+            }
+            set
+            {
+                OnPosmIDChanging(value);
+                ReportPropertyChanging("PosmID");
+                _PosmID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PosmID");
+                OnPosmIDChanged();
+            }
+        }
+        private global::System.String _PosmID;
+        partial void OnPosmIDChanging(global::System.String value);
+        partial void OnPosmIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ClassID
+        {
+            get
+            {
+                return _ClassID;
+            }
+            set
+            {
+                OnClassIDChanging(value);
+                ReportPropertyChanging("ClassID");
+                _ClassID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ClassID");
+                OnClassIDChanged();
+            }
+        }
+        private global::System.String _ClassID;
+        partial void OnClassIDChanging(global::System.String value);
+        partial void OnClassIDChanged();
 
         #endregion
 
