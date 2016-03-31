@@ -1,0 +1,168 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM23300;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad()";
+    })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+        .Region(Region.North)
+        .Layout(LayoutType.HBox)
+        .AutoScroll(true)
+        .Items(
+            X.Container().Layout(LayoutType.VBox)
+            .Items(
+                HQ.Combo().ID("cboPosmID").Name("cboPosmID").MarginSpec("5 0 5 0").Width(300)
+                .HQLangCode("PosmID").HQDBSys(false).HQProcedure("OM23300_pcPosmID")
+                .HQColumnShow("PosmID,FromDate,ToDate").ForceSelection(true).AllowBlank(false)
+                .DisplayField("PosmID").ValueField("PosmID").HQHeightWidth(400, 300)
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.Select.Fn = "cboPosmID_Select";
+                    lst.Change.Fn = "cboPosmID_Change";
+                    lst.TriggerClick.Handler = "if (index == 0) { this.focus(true);this.clearValue();App.stoOM_POSMStructure.reload(); }";
+                })
+                .LoadData()
+
+            )
+        ).Listeners(lst =>
+        {
+            lst.Render.Handler = "HQ.common.control_render(this,'header')";
+        })
+
+        , X.Panel().ID("pnlGrid")
+        .Region(Region.Center)
+        .Layout(LayoutType.Border)
+        .Items(
+            X.GridPanel()
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .ID("grdOM_POSMStructure")
+            //.SelectionMemory(false)
+            .Region(Region.Center).Flex(1)
+            .Store(
+                X.Store()
+                .ID("stoOM_POSMStructure").AutoLoad(false)
+                .PageSize(50)
+                .Model(Util.GenerateModel(typeof(OM23300_pgOM_POSMStructure_Result), "mdlOM23300_pgOM_POSMStructure", ""))
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("PosmID", "App.cboPosmID.getValue()", ParameterMode.Raw));
+                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOM_POSMStructure")))
+                .Listeners(l =>
+                {
+                    l.Load.Fn = "stoOM_POSMStructure_Load";
+                    l.Update.Fn = "frmChange";
+                })
+            )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdOM_POSMStructure');")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40)
+                , X.Column().Text(Util.GetLang("Structure")).DataIndex("Structure").Width(200)
+				    .Editor(X.TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true))
+
+                , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(120)
+                   .Editor(
+	                   HQ.Combo().ID("cboInvtID").Name("cboInvtID").ForceSelection(true)
+		                    .HQDBSys(false).HQProcedure("OM23300_pcInvtID").HQHeightWidth(400, 300)
+		                    .HQColumnShow("InvtID,Descr,SlsPrice").DisplayField("InvtID").ValueField("InvtID")
+		                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+		                    .Listeners(lst =>
+		                    {
+			                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+		                    })
+		                    .LoadData()
+			        )
+                    
+                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
+
+                , X.NumberColumn().Align(Alignment.Right).Format("0,000").Text(Util.GetLang("SlsPrice")).DataIndex("SlsPrice")
+                
+                , X.NumberColumn().Align(Alignment.Right).Format("0,000").Text(Util.GetLang("UnitCost")).DataIndex("UnitCost")
+                    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
+                    
+                , X.NumberColumn().Align(Alignment.Right).Format("0,000").Text(Util.GetLang("CnvFact")).DataIndex("CnvFact")
+                    .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
+                
+                , X.CommandColumn().Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdOM_POSMStructure_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmOM_POSMStructure").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdOM_POSMStructure_BeforeEdit";
+                    ls.Edit.Fn = "grdOM_POSMStructure_Edit";
+                    ls.ValidateEdit.Fn = "grdOM_POSMStructure_ValidateEdit";
+                })
+            )
+
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("BranchID"),
+                        X.StringFilter().DataIndex("BranchName"),
+                        X.StringFilter().DataIndex("POSMCode"),
+                        X.StringFilter().DataIndex("POSMName"),
+                        X.NumericFilter().DataIndex("Qty")
+                    )
+            )
+                
+
+        ).Listeners(lst =>
+        {
+            lst.Render.Handler = "HQ.common.control_render(this,'grdOM_POSMStructure')";
+        })
+
+
+    )
+))
