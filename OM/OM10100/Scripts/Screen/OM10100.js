@@ -1772,7 +1772,7 @@ var checkExitEdit = function (row) {
                     det.DiscAmt2 = Math.round((soFee + det.LineQty * det.SlsPrice) * (det.DiscPct / 100));
                     det.LineAmt = Math.round(det.LineQty * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
                 }
-                if (!det.POSM) {
+                if (det.POSM) {
                     det.LineAmt = 0;
                     det.DiscPct = 0;
                     det.DiscAmt = 0;
@@ -2179,7 +2179,7 @@ var checkSubDisc = function (record) {
             det.DiscAmt = Math.round(det.LineQty * det.SlsPrice * (det.DiscPct / 100));
             det.LineAmt = Math.round(det.LineQty * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
         }
-        if (!det.POSM) {
+        if (det.POSM) {
             det.LineAmt = 0;
             det.DiscPct = 0;
             det.DiscAmt = 0;
