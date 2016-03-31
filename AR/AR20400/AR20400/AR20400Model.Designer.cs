@@ -927,6 +927,36 @@ namespace AR20400
     
             return base.ExecuteFunction<Nullable<global::System.Int16>>("AR20400_ppGetMaxHierarchyLevel", typeParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="custId">No Metadata Documentation available.</param>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20400_ppCheckDeleteCust(global::System.String custId, global::System.String branchID)
+        {
+            ObjectParameter custIdParameter;
+            if (custId != null)
+            {
+                custIdParameter = new ObjectParameter("CustId", custId);
+            }
+            else
+            {
+                custIdParameter = new ObjectParameter("CustId", typeof(global::System.String));
+            }
+    
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<global::System.String>("AR20400_ppCheckDeleteCust", custIdParameter, branchIDParameter);
+        }
 
         #endregion
 

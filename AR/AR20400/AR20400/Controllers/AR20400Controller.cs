@@ -727,51 +727,62 @@ namespace AR20400.Controllers
                 string CustId = data["cboCustId"].PassNull();
                 string BranchID = data["cboCpnyID"].PassNull();
 
-                var objAR_Customer = _db.AR_Customer.FirstOrDefault(p => p.BranchID == BranchID
-                                                           && p.CustId == CustId);
-                if (objAR_Customer != null)
+                var objDelete = _db.AR20400_ppCheckDeleteCust(CustId,BranchID).FirstOrDefault();
+                if (objDelete != null)
                 {
-                    _db.AR_Customer.DeleteObject(objAR_Customer);
-                }
-
-                var objAR_SOAddress = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == BranchID
-                                                           && p.CustId == CustId);
-                if (objAR_SOAddress != null)
-                {
-                    _db.AR_SOAddress.DeleteObject(objAR_SOAddress);
-                }
-
-                var lstAR_CustAdvTool = _db.AR_CustAdvTool.Where(p => p.CustID == CustId).ToList();
-                foreach (var item in lstAR_CustAdvTool)
-                {
-                    _db.AR_CustAdvTool.DeleteObject(item);
-                }
-
-                var lstAR_CustSellingProducts = _db.AR_CustSellingProducts.Where(p => p.CustID == CustId).ToList();
-                foreach (var item in lstAR_CustSellingProducts)
-                {
-                    _db.AR_CustSellingProducts.DeleteObject(item);
-                }
-
-                var lstAR_CustDisplayMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == CustId).ToList();
-                foreach (var item in lstAR_CustDisplayMethod)
-                {
-                    _db.AR_CustDisplayMethod.DeleteObject(item);
-                }
-
-                var lstAR_LTTContract = _db.AR_LTTContract.Where(p => p.CustID == CustId).ToList();
-                foreach (var item in lstAR_LTTContract)
-                {
-                    var lstAR_LTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == item.LTTContractNbr).ToList();
-                    foreach (var item1 in lstAR_LTTContractDetail)
+                    if (objDelete.PassNull() == "0")
                     {
-                        _db.AR_LTTContractDetail.DeleteObject(item1);
+                        var objAR_Customer = _db.AR_Customer.FirstOrDefault(p => p.BranchID == BranchID
+                                                                   && p.CustId == CustId);
+                        if (objAR_Customer != null)
+                        {
+                            _db.AR_Customer.DeleteObject(objAR_Customer);
+                        }
+
+                        var objAR_SOAddress = _db.AR_SOAddress.FirstOrDefault(p => p.BranchID == BranchID
+                                                                   && p.CustId == CustId);
+                        if (objAR_SOAddress != null)
+                        {
+                            _db.AR_SOAddress.DeleteObject(objAR_SOAddress);
+                        }
+
+                        var lstAR_CustAdvTool = _db.AR_CustAdvTool.Where(p => p.CustID == CustId).ToList();
+                        foreach (var item in lstAR_CustAdvTool)
+                        {
+                            _db.AR_CustAdvTool.DeleteObject(item);
+                        }
+
+                        var lstAR_CustSellingProducts = _db.AR_CustSellingProducts.Where(p => p.CustID == CustId).ToList();
+                        foreach (var item in lstAR_CustSellingProducts)
+                        {
+                            _db.AR_CustSellingProducts.DeleteObject(item);
+                        }
+
+                        var lstAR_CustDisplayMethod = _db.AR_CustDisplayMethod.Where(p => p.CustID == CustId).ToList();
+                        foreach (var item in lstAR_CustDisplayMethod)
+                        {
+                            _db.AR_CustDisplayMethod.DeleteObject(item);
+                        }
+
+                        var lstAR_LTTContract = _db.AR_LTTContract.Where(p => p.CustID == CustId).ToList();
+                        foreach (var item in lstAR_LTTContract)
+                        {
+                            var lstAR_LTTContractDetail = _db.AR_LTTContractDetail.Where(p => p.LTTContractNbr == item.LTTContractNbr).ToList();
+                            foreach (var item1 in lstAR_LTTContractDetail)
+                            {
+                                _db.AR_LTTContractDetail.DeleteObject(item1);
+                            }
+
+                            _db.AR_LTTContract.DeleteObject(item);
+                        }
+
+                        _db.SaveChanges();
                     }
-
-                    _db.AR_LTTContract.DeleteObject(item);
+                    else
+                    {
+                        throw new MessageException(MessageType.Message, "18","");
+                    }
                 }
-
-                _db.SaveChanges();
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -866,105 +877,6 @@ namespace AR20400.Controllers
             this.GetCmp<TreePanel>("treeCust").SetRootNode(node);
             return this.Direct();
         }
-
-        //[DirectMethod]
-        //public ActionResult AR20400GetTreeBranch(string panelID)
-        //{
-        //var a = new ItemsCollection<Plugin>();
-        //a.Add(Html.X().TreeViewDragDrop().DDGroup("CpnyID").EnableDrop(false));
-
-        //TreeView v = new TreeView();
-        //v.Plugins.Add(a);
-        //v.Copy = true;
-        //TreePanel tree = new TreePanel()
-        //{
-        //    ViewConfig = v
-        //};
-        //tree.ID = "treePanelBranch";
-        //tree.ItemID = "treePanelBranch";
-        //tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
-        //tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
-        //tree.Fields.Add(new ModelField("State", ModelFieldType.String));
-        //tree.Fields.Add(new ModelField("Territory", ModelFieldType.String));
-        //tree.Border = false;
-        //tree.RootVisible = true;
-        //tree.Animate = true;
-
-        //Node node = new Node();
-        //node.NodeID = "Root";
-
-        //tree.Root.Add(node);
-
-        //var lstTerritories = _db.AR20400_ptTerritory().ToList();//tam thoi
-        //var lstState = _db.AR20400_ptState().ToList();
-        //var companies = _db.AR20400_ptCompany().ToList();
-
-        //foreach (var itemTerritory in lstTerritories)
-        //{
-        //    var nodeTerritory = new Node();
-        //    nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = itemTerritory.Territory, Mode = ParameterMode.Value });
-        //    nodeTerritory.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Territory", Mode = ParameterMode.Value });
-        //    //nodeTerritory.Cls = "tree-node-parent";
-        //    nodeTerritory.Text = itemTerritory.Descr;
-        //    //nodeTerritory.Checked = false;
-        //    nodeTerritory.NodeID = "territory-" + itemTerritory.Territory;
-        //    //nodeTerritory.IconCls = "tree-parent-icon";
-
-        //    var lstStateInTerr = lstState.Where(x => x.Territory == itemTerritory.Territory);
-        //    foreach (var itemState in lstStateInTerr)
-        //    {
-        //        var nodeState = new Node();
-        //        nodeState.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = itemState.State, Mode = ParameterMode.Value });
-        //        nodeState.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "State", Mode = ParameterMode.Value });
-        //        //nodeTerritory.Cls = "tree-node-parent";
-        //        nodeState.Text = itemState.Descr;
-        //        //nodeState.Checked = false;
-        //        nodeState.NodeID = "territory-state-" + itemTerritory.Territory + "-" + itemState.State;
-        //        //nodeTerritory.IconCls = "tree-parent-icon";
-
-        //        nodeTerritory.Children.Add(nodeState);
-
-        //        var lstCompaniesInState = companies.Where(x => x.State == itemState.State);
-        //        foreach (var company in lstCompaniesInState)
-        //        {
-        //            var nodeCompany = new Node();
-        //            nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "RecID", Value = company.CpnyID, Mode = ParameterMode.Value });
-        //            nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "Type", Value = "Company", Mode = ParameterMode.Value });
-        //            nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "State", Value = itemState.State, Mode = ParameterMode.Value });
-        //            nodeCompany.CustomAttributes.Add(new ConfigItem() { Name = "Territory", Value = itemTerritory.Territory, Mode = ParameterMode.Value });
-
-        //            //nodeCompany.Cls = "tree-node-parent";
-        //            nodeCompany.Text = company.CpnyName;
-        //            //nodeCompany.Checked = false;
-        //            nodeCompany.Leaf = true;
-        //            nodeCompany.NodeID = "territory-state-company-" + itemTerritory.Territory + "-" + itemState.State + "-" + company.CpnyID;
-        //            //nodeCompany.IconCls = "tree-parent-icon";
-
-        //            nodeState.Children.Add(nodeCompany);
-
-        //        }
-        //        if (lstCompaniesInState.Count() == 0)
-        //        {
-        //            nodeState.Leaf = true;
-        //        }
-        //    }
-        //    if (lstStateInTerr.Count() == 0)
-        //    {
-        //        nodeTerritory.Leaf = true;
-        //    }
-        //    node.Children.Add(nodeTerritory);
-        //}
-        //var treeBranch = X.GetCmp<Panel>(panelID);
-
-        ////tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
-        //tree.Listeners.CheckChange.Fn = "treePanelBranch_checkChange";
-        //tree.Listeners.BeforeItemExpand.Handler = "App.treePanelBranch.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
-        //tree.Listeners.AfterItemExpand.Handler = "App.treePanelBranch.el.unmask();Ext.resumeLayouts(true);";
-        //tree.AddTo(treeBranch);
-
-        //return this.Direct();
-        //}
-
 
         //[HttpPost]
         //public ActionResult Report(FormCollection data)

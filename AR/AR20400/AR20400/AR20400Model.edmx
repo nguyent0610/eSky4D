@@ -427,6 +427,10 @@
         <Function Name="AR20400_ppCheckAutoCustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="AR20400_ppCheckDeleteCust" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustId" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="AR20400_ppCustID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="KeyTree" Type="varchar" Mode="In" />
@@ -550,6 +554,10 @@
           <Parameter Name="Type" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="AR_Customer" EntityType="AR20400Model.AR_Customer" />
+          <FunctionImport Name="AR20400_ppCheckDeleteCust" ReturnType="Collection(String)">
+            <Parameter Name="CustId" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="AR_CustAdvTool">
           <Key>
@@ -1600,6 +1608,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AR20400_ppCheckDeleteCust" FunctionName="eBiz4DWebSysModel.Store.AR20400_ppCheckDeleteCust" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
