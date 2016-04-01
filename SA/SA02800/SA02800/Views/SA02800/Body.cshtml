@@ -1,0 +1,112 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using SA02800;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad()";
+    })
+    .Items(
+        X.Panel().ID("pnlGrid")
+        .Region(Region.Center)
+        .Layout(LayoutType.Border)
+        .Items(
+            X.GridPanel()
+            .Scroll(ScrollMode.Both)
+            .View(X.GridView().TrackOver(false))
+            .ID("grdSYS_Role")
+            //.SelectionMemory(false)
+            .Region(Region.Center).Flex(1)
+            .Store(
+                X.Store()
+                .ID("stoSYS_Role").AutoLoad(false)
+                .PageSize(50)
+                .Model(Util.GenerateModel(typeof(SA02800_pgSYS_Role_Result), "mdlSA02800_pgSYS_Role", ""))
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSYS_Role")))
+                .Listeners(l =>
+                {
+                    l.Load.Fn = "stoSYS_Role_Load";
+                    l.Update.Fn = "frmChange";
+                })
+            )
+            .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_Role');")
+            .SortableColumns(false)
+            .ColumnModel(
+                X.RowNumbererColumn().Width(40)
+                , X.Column().Text(Util.GetLang("RoleID")).DataIndex("RoleID").Width(200)
+				    .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
+                    
+                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Desc").Width(200)
+				    .Editor(X.TextField().MaxLength(250).EnforceMaxLength(true))
+                
+                , X.CommandColumn().Width(150)
+                .Commands(
+                    X.GridCommand()
+                    .Text(Util.GetLang("Reject"))
+                    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                    .CommandName("reject")
+                    .Icon(Icon.ArrowUndo)
+                )
+                .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                .Listeners(l => l.Command.Handler = "grdSYS_Role_Reject(record);")
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmSYS_Role").Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l =>
+                        {
+                            l.Select.Fn = "HQ.grid.onPageSelect";
+                        })
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdSYS_Role_BeforeEdit";
+                    ls.Edit.Fn = "grdSYS_Role_Edit";
+                    ls.ValidateEdit.Fn = "grdSYS_Role_ValidateEdit";
+                })
+            )
+
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("RoleID"),
+                        X.StringFilter().DataIndex("Desc")
+                    )
+            )
+                
+
+        ).Listeners(lst =>
+        {
+            lst.Render.Handler = "HQ.common.control_render(this,'grdSYS_Role')";
+        })
+    )
+))
