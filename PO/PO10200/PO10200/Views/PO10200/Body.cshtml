@@ -415,7 +415,24 @@
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("DiscPct")).DataIndex("DiscPct").Width(150).Format("0,000,000.00").Editor(Html.X().NumberField().DecimalPrecision(2))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Discount")).DataIndex("DocDiscAmt").Width(150).Format("0,000,000.00").Editor(Html.X().NumberField().DecimalPrecision(2))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("TranAmt")).DataIndex("TranAmt").Width(150).Format("0,000,000").Editor(Html.X().NumberField().DecimalPrecision(0))
-
+                                                    , X.Column().Text(Util.GetLang("PosmID")).DataIndex("PosmID").Width(120)
+                                                        .Editor(
+	                                                        HQ.Combo().ID("cboPosmID").Name("cboPosmID").ForceSelection(true)
+		                                                        .HQDBSys(false).HQProcedure("PO10200_pcPOSM").HQHeightWidth(400, 300)
+		                                                        .HQColumnShow("PosmID").DisplayField("PosmID").ValueField("PosmID")
+                                                                .HQParam(new StoreParameterCollection() {
+                                                                                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw}
+                                                                                        ,new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                                                                                        ,new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}											                                              
+                                                                    })
+		                                                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })                                                                
+		                                                        .Listeners(lst =>
+		                                                        {
+			                                                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+		                                                        })
+		                                                        .LoadData()
+			                                            )
+                                                    , X.Column().DataIndex("ClassID").Hidden(true)
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("POFee")).DataIndex("RcptFee").Width(150).Format("0,000,000").Editor(HQ.NumberField().DecimalPrecision(0))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Weight")).DataIndex("UnitWeight").Width(150).Format("0,000,000").Editor(HQ.NumberField().DecimalPrecision(0))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("ExtWeight")).DataIndex("ExtWeight").Width(150).Format("0,000,000")//.Editor(HQ.NumberField())

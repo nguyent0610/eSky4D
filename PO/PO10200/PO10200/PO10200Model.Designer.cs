@@ -164,22 +164,6 @@ namespace PO10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<PO_Trans> PO_Trans
-        {
-            get
-            {
-                if ((_PO_Trans == null))
-                {
-                    _PO_Trans = base.CreateObjectSet<PO_Trans>("PO_Trans");
-                }
-                return _PO_Trans;
-            }
-        }
-        private ObjectSet<PO_Trans> _PO_Trans;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<PO_LotTrans> PO_LotTrans
         {
             get
@@ -224,6 +208,22 @@ namespace PO10200
             }
         }
         private ObjectSet<RPTRunning> _RPTRunnings;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<PO_Trans> PO_Trans
+        {
+            get
+            {
+                if ((_PO_Trans == null))
+                {
+                    _PO_Trans = base.CreateObjectSet<PO_Trans>("PO_Trans");
+                }
+                return _PO_Trans;
+            }
+        }
+        private ObjectSet<PO_Trans> _PO_Trans;
 
         #endregion
 
@@ -278,14 +278,6 @@ namespace PO10200
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the PO_Trans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToPO_Trans(PO_Trans pO_Trans)
-        {
-            base.AddObject("PO_Trans", pO_Trans);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the PO_LotTrans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToPO_LotTrans(PO_LotTrans pO_LotTrans)
@@ -307,6 +299,14 @@ namespace PO10200
         public void AddToRPTRunnings(RPTRunning rPTRunning)
         {
             base.AddObject("RPTRunnings", rPTRunning);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the PO_Trans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPO_Trans(PO_Trans pO_Trans)
+        {
+            base.AddObject("PO_Trans", pO_Trans);
         }
 
         #endregion
@@ -6032,6 +6032,30 @@ namespace PO10200
         private Nullable<global::System.Boolean> _IsExport;
         partial void OnIsExportChanging(Nullable<global::System.Boolean> value);
         partial void OnIsExportChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SlsperID
+        {
+            get
+            {
+                return _SlsperID;
+            }
+            set
+            {
+                OnSlsperIDChanging(value);
+                ReportPropertyChanging("SlsperID");
+                _SlsperID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("SlsperID");
+                OnSlsperIDChanged();
+            }
+        }
+        private global::System.String _SlsperID;
+        partial void OnSlsperIDChanging(global::System.String value);
+        partial void OnSlsperIDChanged();
 
         #endregion
 
@@ -7483,7 +7507,8 @@ namespace PO10200
         /// <param name="taxAmtTot02">Initial value of the TaxAmtTot02 property.</param>
         /// <param name="taxAmtTot03">Initial value of the TaxAmtTot03 property.</param>
         /// <param name="docDiscAmt">Initial value of the DocDiscAmt property.</param>
-        public static PO_Receipt CreatePO_Receipt(global::System.String branchID, global::System.String batNbr, global::System.String rcptNbr, global::System.Int32 noteID, global::System.DateTime rcptDate, global::System.Double rcptFeeTot, global::System.Double rcptQtyTot, global::System.Double rcptTot, global::System.Int16 rlsed, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.Double discAmt, global::System.Double discAmtPct, global::System.Double rcptTotAmt, global::System.Double txblAmtTot00, global::System.Double txblAmtTot01, global::System.Double txblAmtTot02, global::System.Double txblAmtTot03, global::System.Double taxAmtTot00, global::System.Double taxAmtTot01, global::System.Double taxAmtTot02, global::System.Double taxAmtTot03, global::System.Double docDiscAmt)
+        /// <param name="shiptoID">Initial value of the ShiptoID property.</param>
+        public static PO_Receipt CreatePO_Receipt(global::System.String branchID, global::System.String batNbr, global::System.String rcptNbr, global::System.Int32 noteID, global::System.DateTime rcptDate, global::System.Double rcptFeeTot, global::System.Double rcptQtyTot, global::System.Double rcptTot, global::System.Int16 rlsed, global::System.DateTime crtd_DateTime, global::System.DateTime lUpd_DateTime, global::System.Byte[] tstamp, global::System.Double discAmt, global::System.Double discAmtPct, global::System.Double rcptTotAmt, global::System.Double txblAmtTot00, global::System.Double txblAmtTot01, global::System.Double txblAmtTot02, global::System.Double txblAmtTot03, global::System.Double taxAmtTot00, global::System.Double taxAmtTot01, global::System.Double taxAmtTot02, global::System.Double taxAmtTot03, global::System.Double docDiscAmt, global::System.String shiptoID)
         {
             PO_Receipt pO_Receipt = new PO_Receipt();
             pO_Receipt.BranchID = branchID;
@@ -7510,6 +7535,7 @@ namespace PO10200
             pO_Receipt.TaxAmtTot02 = taxAmtTot02;
             pO_Receipt.TaxAmtTot03 = taxAmtTot03;
             pO_Receipt.DocDiscAmt = docDiscAmt;
+            pO_Receipt.ShiptoID = shiptoID;
             return pO_Receipt;
         }
 
@@ -8461,6 +8487,30 @@ namespace PO10200
         private global::System.Double _DocDiscAmt;
         partial void OnDocDiscAmtChanging(global::System.Double value);
         partial void OnDocDiscAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ShiptoID
+        {
+            get
+            {
+                return _ShiptoID;
+            }
+            set
+            {
+                OnShiptoIDChanging(value);
+                ReportPropertyChanging("ShiptoID");
+                _ShiptoID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ShiptoID");
+                OnShiptoIDChanged();
+            }
+        }
+        private global::System.String _ShiptoID;
+        partial void OnShiptoIDChanging(global::System.String value);
+        partial void OnShiptoIDChanged();
 
         #endregion
 
@@ -8518,7 +8568,9 @@ namespace PO10200
         /// <param name="taxAmt03">Initial value of the TaxAmt03 property.</param>
         /// <param name="discPct">Initial value of the DiscPct property.</param>
         /// <param name="discAmt">Initial value of the DiscAmt property.</param>
-        public static PO_Trans CreatePO_Trans(global::System.String branchID, global::System.String batNbr, global::System.String rcptNbr, global::System.String lineRef, global::System.Double cnvFact, global::System.Double costVouched, global::System.Double extWeight, global::System.Double extVolume, global::System.DateTime origRcptDate, global::System.Double qty, global::System.Double qtyVouched, global::System.Double rcptConvFact, global::System.DateTime rcptDate, global::System.Double rcptFee, global::System.Double rcptQty, global::System.Double tranAmt, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitVolume, global::System.Double unitWeight, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double docDiscAmt, global::System.Double txblAmt00, global::System.Double txblAmt01, global::System.Double txblAmt02, global::System.Double txblAmt03, global::System.Double taxAmt00, global::System.Double taxAmt01, global::System.Double taxAmt02, global::System.Double taxAmt03, global::System.Double discPct, global::System.Double discAmt)
+        /// <param name="rcptQtyInvoice">Initial value of the RcptQtyInvoice property.</param>
+        /// <param name="shiptoID">Initial value of the ShiptoID property.</param>
+        public static PO_Trans CreatePO_Trans(global::System.String branchID, global::System.String batNbr, global::System.String rcptNbr, global::System.String lineRef, global::System.Double cnvFact, global::System.Double costVouched, global::System.Double extWeight, global::System.Double extVolume, global::System.DateTime origRcptDate, global::System.Double qty, global::System.Double qtyVouched, global::System.Double rcptConvFact, global::System.DateTime rcptDate, global::System.Double rcptFee, global::System.Double rcptQty, global::System.Double tranAmt, global::System.DateTime tranDate, global::System.Double unitCost, global::System.Double unitVolume, global::System.Double unitWeight, global::System.DateTime crtd_DateTime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_DateTime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.Double docDiscAmt, global::System.Double txblAmt00, global::System.Double txblAmt01, global::System.Double txblAmt02, global::System.Double txblAmt03, global::System.Double taxAmt00, global::System.Double taxAmt01, global::System.Double taxAmt02, global::System.Double taxAmt03, global::System.Double discPct, global::System.Double discAmt, global::System.Double rcptQtyInvoice, global::System.Double shiptoID)
         {
             PO_Trans pO_Trans = new PO_Trans();
             pO_Trans.BranchID = branchID;
@@ -8559,6 +8611,8 @@ namespace PO10200
             pO_Trans.TaxAmt03 = taxAmt03;
             pO_Trans.DiscPct = discPct;
             pO_Trans.DiscAmt = discAmt;
+            pO_Trans.RcptQtyInvoice = rcptQtyInvoice;
+            pO_Trans.ShiptoID = shiptoID;
             return pO_Trans;
         }
 
@@ -10089,6 +10143,78 @@ namespace PO10200
         private global::System.Double _DiscAmt;
         partial void OnDiscAmtChanging(global::System.Double value);
         partial void OnDiscAmtChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double RcptQtyInvoice
+        {
+            get
+            {
+                return _RcptQtyInvoice;
+            }
+            set
+            {
+                OnRcptQtyInvoiceChanging(value);
+                ReportPropertyChanging("RcptQtyInvoice");
+                _RcptQtyInvoice = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("RcptQtyInvoice");
+                OnRcptQtyInvoiceChanged();
+            }
+        }
+        private global::System.Double _RcptQtyInvoice;
+        partial void OnRcptQtyInvoiceChanging(global::System.Double value);
+        partial void OnRcptQtyInvoiceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double ShiptoID
+        {
+            get
+            {
+                return _ShiptoID;
+            }
+            set
+            {
+                OnShiptoIDChanging(value);
+                ReportPropertyChanging("ShiptoID");
+                _ShiptoID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ShiptoID");
+                OnShiptoIDChanged();
+            }
+        }
+        private global::System.Double _ShiptoID;
+        partial void OnShiptoIDChanging(global::System.Double value);
+        partial void OnShiptoIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PosmID
+        {
+            get
+            {
+                return _PosmID;
+            }
+            set
+            {
+                OnPosmIDChanging(value);
+                ReportPropertyChanging("PosmID");
+                _PosmID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PosmID");
+                OnPosmIDChanged();
+            }
+        }
+        private global::System.String _PosmID;
+        partial void OnPosmIDChanging(global::System.String value);
+        partial void OnPosmIDChanged();
 
         #endregion
 
@@ -20854,6 +20980,54 @@ namespace PO10200
         private global::System.String _TaxID03;
         partial void OnTaxID03Changing(global::System.String value);
         partial void OnTaxID03Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PosmID
+        {
+            get
+            {
+                return _PosmID;
+            }
+            set
+            {
+                OnPosmIDChanging(value);
+                ReportPropertyChanging("PosmID");
+                _PosmID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PosmID");
+                OnPosmIDChanged();
+            }
+        }
+        private global::System.String _PosmID;
+        partial void OnPosmIDChanging(global::System.String value);
+        partial void OnPosmIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ClassID
+        {
+            get
+            {
+                return _ClassID;
+            }
+            set
+            {
+                OnClassIDChanging(value);
+                ReportPropertyChanging("ClassID");
+                _ClassID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ClassID");
+                OnClassIDChanged();
+            }
+        }
+        private global::System.String _ClassID;
+        partial void OnClassIDChanging(global::System.String value);
+        partial void OnClassIDChanged();
 
         #endregion
 

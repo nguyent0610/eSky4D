@@ -22,7 +22,11 @@ var _objIN_ItemSite = null;
 //////////////////////////////////////////////////////////////////
 //// Store ///////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
-
+var store_Load = function () {
+    HQ.numSource++;
+    if(HQ.numSource==3)
+    App.cboBranchID.setValue(HQ.cpnyID);
+};
 var loadDataHeader = function (sto) {
     App.lblQtyAvail.setText('');
     App.cboPONbr.allowBlank = true;
@@ -167,6 +171,7 @@ var menuClick = function (command) {
         case "save":
             if (App.cboStatus.value == 'V') break;
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+
                 //checkRequire để kiếm tra các field yêu cầu có rỗng hay ko
                 if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoPO10200_pgDetail, _keys, _fieldsCheckRequire, _fieldsLangCheckRequire)) {
                     save();
@@ -249,12 +254,14 @@ var menuClick = function (command) {
     }
 };
 //load lần đầu khi mở
-var firstLoad = function () {    
-    App.cboDocType.getStore().load(function () {
-        App.cboBranchID.getStore().load(function () {
-            App.cboBranchID.setValue(HQ.cpnyID);
-        });
-    });   
+var firstLoad = function () {
+    HQ.numSource = 0;
+    App.cboPosmID.getStore().addListener('load', store_Load);
+    App.cboDocType.getStore().addListener('load', store_Load);
+    App.cboBranchID.getStore().addListener('load', store_Load);
+    App.cboBranchID.store.reload();
+    App.cboDocType.store.reload();
+    App.cboPosmID.store.reload();
 };
 var frmChange = function (sender) {
     if (App.stoHeader.data.length > 0 && App.cboBranchID.getValue()!=null) {
@@ -339,7 +346,9 @@ var grdPO_Trans_BeforeEdit = function (editor, e) {
         return false;
 
     }
- 
+    if (e.field == "PosmID" && e.record.data.ClassID!="POSM") {
+        return false;
+    }
     var det = e.record.data;
     _purUnit = e.record.data.RcptUnitDescr;
     if (e.field == "DocDiscAmt" && det.TranAmt == 0) return false;
@@ -379,6 +388,7 @@ var grdPO_Trans_BeforeEdit = function (editor, e) {
         _invtID = objIN_Inventory.InvtID;
         _classID = objIN_Inventory.ClassID;
         _stkUnit = objIN_Inventory.StkUnit;
+        e.record.data.ClassID = objIN_Inventory.ClassID;
         App.cboRcptUnitDescr.getStore().reload();
     }
    
@@ -439,7 +449,7 @@ var grdPO_Trans_ValidateEdit = function (item, e) {
             _invtID = objIN_Inventory.InvtID;
             _classID = objIN_Inventory.ClassID;
             _stkUnit = objIN_Inventory.StkUnit;
-
+            e.record.data.ClassID = objIN_Inventory.ClassID;
             App.cboRcptUnitDescr.getStore().reload();
 
             if (objdet.get("SiteID") == "") {
@@ -1121,6 +1131,21 @@ var showLot = function (record) {
 }
 ///////DataProcess///
 function save(b714, b235) {//mess714 khi huy
+    var errorMessage = '';
+    var i = 0;
+    var allRecords = App.stoPO10200_pgDetail.snapshot || App.stoPO10200_pgDetail.allData || App.stoPO10200_pgDetail.data;
+    allRecords.each(function (record) {
+        i++;
+        if (record.data.ClassID == 'POSM')
+            if (!record.data.PosmID) {
+                errorMessage += i + ', ';
+            }
+    });
+    if (errorMessage) {
+        HQ.message.show(2016033001, [errorMessage], '', true);
+        return;
+    }
+
     App.frmMain.getForm().updateRecord();
     App.stoLotTrans.clearFilter();
     if (App.frmMain.isValid()) {

@@ -49,7 +49,7 @@ namespace PO10200.Controllers
             ViewBag.BussinessTime = DateTime.Now;
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -809,6 +809,7 @@ namespace PO10200.Controllers
                 objPO_Tr.UnitMultDiv = objr.UnitMultDiv;
                 objPO_Tr.CnvFact = objr.CnvFact;
                 objPO_Tr.Qty = objr.Qty;
+                objPO_Tr.PosmID = objr.PosmID;
                 if (string.IsNullOrEmpty(objr.PONbr))
                 {
                     if (objr.UnitMultDiv == "M")
