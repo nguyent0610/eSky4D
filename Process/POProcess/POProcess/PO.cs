@@ -373,6 +373,7 @@ namespace POProcess
                 m_objIN_Trans.UnitDesc = rowPO_Trans.RcptUnitDescr;
                 m_objIN_Trans.UnitMultDiv = rowPO_Trans.RcptMultDiv;
                 m_objIN_Trans.UnitPrice = rowPO_Trans.UnitCost;
+                m_objIN_Trans.PosmID = rowPO_Trans.PosmID;
                 m_objIN_Trans.Rlsed = 1;
 
                 m_objIN_Trans.Crtd_DateTime = DateTime.Now;
@@ -413,6 +414,7 @@ namespace POProcess
                 m_objIN_Trans.UnitDesc = rowPO_Trans.RcptUnitDescr;
                 m_objIN_Trans.UnitMultDiv = rowPO_Trans.RcptMultDiv;
                 m_objIN_Trans.UnitPrice = rowPO_Trans.UnitCost;
+                m_objIN_Trans.PosmID = rowPO_Trans.PosmID;
                 m_objIN_Trans.Rlsed = 1;
 
                 m_objIN_Trans.Crtd_DateTime = DateTime.Now;
