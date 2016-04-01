@@ -413,6 +413,7 @@ var save = function () {
 
 var PopupWinLot = {
     calcLot: function (record) {
+        if (!record.data.isEditQtyShip) return;
         record.invt = HQ.store.findInStore(App.stoOM20500_pdIN_Inventory, ['InvtID'], [record.data.InvtID]);
         if (!Ext.isEmpty(record.invt) && !Ext.isEmpty(record.invt.LotSerTrack) && record.invt.LotSerTrack != 'N' && !Ext.isEmpty(record.data.SlsUnit)) {
             var flat = false;
