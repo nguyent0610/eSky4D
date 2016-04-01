@@ -173,7 +173,9 @@ namespace IF30100
         /// <param name="lUpd_User">Initial value of the LUpd_User property.</param>
         /// <param name="tstamp">Initial value of the tstamp property.</param>
         /// <param name="type">Initial value of the Type property.</param>
-        public static SYS_ReportExport CreateSYS_ReportExport(global::System.String reportNbr, global::System.String name, global::System.String tableView, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String type)
+        /// <param name="proc">Initial value of the Proc property.</param>
+        /// <param name="sourceType">Initial value of the SourceType property.</param>
+        public static SYS_ReportExport CreateSYS_ReportExport(global::System.String reportNbr, global::System.String name, global::System.String tableView, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String type, global::System.String proc, global::System.String sourceType)
         {
             SYS_ReportExport sYS_ReportExport = new SYS_ReportExport();
             sYS_ReportExport.ReportNbr = reportNbr;
@@ -187,6 +189,8 @@ namespace IF30100
             sYS_ReportExport.LUpd_User = lUpd_User;
             sYS_ReportExport.tstamp = tstamp;
             sYS_ReportExport.Type = type;
+            sYS_ReportExport.Proc = proc;
+            sYS_ReportExport.SourceType = sourceType;
             return sYS_ReportExport;
         }
 
@@ -460,6 +464,54 @@ namespace IF30100
         private global::System.String _Type;
         partial void OnTypeChanging(global::System.String value);
         partial void OnTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Proc
+        {
+            get
+            {
+                return _Proc;
+            }
+            set
+            {
+                OnProcChanging(value);
+                ReportPropertyChanging("Proc");
+                _Proc = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Proc");
+                OnProcChanged();
+            }
+        }
+        private global::System.String _Proc;
+        partial void OnProcChanging(global::System.String value);
+        partial void OnProcChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SourceType
+        {
+            get
+            {
+                return _SourceType;
+            }
+            set
+            {
+                OnSourceTypeChanging(value);
+                ReportPropertyChanging("SourceType");
+                _SourceType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SourceType");
+                OnSourceTypeChanged();
+            }
+        }
+        private global::System.String _SourceType;
+        partial void OnSourceTypeChanging(global::System.String value);
+        partial void OnSourceTypeChanged();
 
         #endregion
 
@@ -761,7 +813,8 @@ namespace IF30100
         /// <param name="dataFormat">Initial value of the DataFormat property.</param>
         /// <param name="pivotOrder">Initial value of the PivotOrder property.</param>
         /// <param name="pivotShow">Initial value of the PivotShow property.</param>
-        public static SYS_ReportOLAPTemplate CreateSYS_ReportOLAPTemplate(global::System.String reportNbr, global::System.String columnName, global::System.String pivotType, global::System.String columnDescr, global::System.String parmType, global::System.String parmData, global::System.String parmOperator, global::System.String filterBy, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String measureFunc, global::System.String dataFormat, global::System.Int16 pivotOrder, global::System.Boolean pivotShow)
+        /// <param name="rPTParm">Initial value of the RPTParm property.</param>
+        public static SYS_ReportOLAPTemplate CreateSYS_ReportOLAPTemplate(global::System.String reportNbr, global::System.String columnName, global::System.String pivotType, global::System.String columnDescr, global::System.String parmType, global::System.String parmData, global::System.String parmOperator, global::System.String filterBy, global::System.DateTime crtd_Datetime, global::System.String crtd_Prog, global::System.String crtd_User, global::System.DateTime lUpd_Datetime, global::System.String lUpd_Prog, global::System.String lUpd_User, global::System.Byte[] tstamp, global::System.String measureFunc, global::System.String dataFormat, global::System.Int16 pivotOrder, global::System.Boolean pivotShow, global::System.String rPTParm)
         {
             SYS_ReportOLAPTemplate sYS_ReportOLAPTemplate = new SYS_ReportOLAPTemplate();
             sYS_ReportOLAPTemplate.ReportNbr = reportNbr;
@@ -783,6 +836,7 @@ namespace IF30100
             sYS_ReportOLAPTemplate.DataFormat = dataFormat;
             sYS_ReportOLAPTemplate.PivotOrder = pivotOrder;
             sYS_ReportOLAPTemplate.PivotShow = pivotShow;
+            sYS_ReportOLAPTemplate.RPTParm = rPTParm;
             return sYS_ReportOLAPTemplate;
         }
 
@@ -1254,6 +1308,30 @@ namespace IF30100
         private global::System.Boolean _PivotShow;
         partial void OnPivotShowChanging(global::System.Boolean value);
         partial void OnPivotShowChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String RPTParm
+        {
+            get
+            {
+                return _RPTParm;
+            }
+            set
+            {
+                OnRPTParmChanging(value);
+                ReportPropertyChanging("RPTParm");
+                _RPTParm = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("RPTParm");
+                OnRPTParmChanged();
+            }
+        }
+        private global::System.String _RPTParm;
+        partial void OnRPTParmChanging(global::System.String value);
+        partial void OnRPTParmChanged();
 
         #endregion
 

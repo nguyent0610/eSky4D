@@ -386,68 +386,125 @@ namespace IF30100.Controllers
                 var lstParm = parmHandler.ObjectData<ParmData>().ToList();
 
                 IF30100SysEntities sys = new IF30100SysEntities(EntityConnectionStringHelper.Build(Current.Server, Current.DBSys, "IF30100SysModel"));
-                var filter = sys.SYS_ReportOLAPFilter.FirstOrDefault(p => p.ReportNbr == reportNbr);
-                if (filter != null && filter.FilterData.PassNull() != string.Empty)
-                {
-                    foreach (var item in lstParm)
-                    {
-                        string parmName = item.Name.Replace("Parm_", "");
-
-
-                        if (filter.FilterData.Contains("IN #" + parmName))
-                        {
-                            var lstTempValue = item.Value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                            string inValue = "IN (";
-                            foreach (var itemValue in lstTempValue)
-                            {
-                                inValue += "N'" + itemValue + "',";
-                            }
-                            if (inValue.Length > 3)
-                            {
-                                inValue = inValue.TrimEnd(',') + ")";
-                            }
-                            else
-                            {
-                                inValue = "";
-                            }
-                            filter.FilterData = filter.FilterData.Replace("IN #" + parmName, inValue);
-                        }
-                        filter.FilterData = filter.FilterData.Replace("#" + parmName, "N'" + item.Value + "'");
-                    }
-                }
-
-
-                var lstColumn = sys.SYS_ReportOLAPTemplate.Where(p => p.ReportNbr == reportNbr && p.PivotType != "P").ToList();
-
-                var lstTemp = new List<string>();
-                foreach (var col in lstColumn)
-                {
-                    if (!lstTemp.Any(p => p == col.ColumnName))
-                    {
-                        lstTemp.Add(col.ColumnName);
-                        select += string.Format("N'{0}' = {1},", Util.GetLang(col.ColumnDescr), col.ColumnName);
-                    }
-                }
-
-                cmd = "select " + select.TrimEnd(',') + " from " + view;
-                if (filter.FilterData.PassNull().Length > 0)
-                {
-                    cmd += " where " + filter.FilterData;
-                }
-
-
-
-
+                var report = sys.SYS_ReportExport.FirstOrDefault(p => p.ReportNbr == reportNbr);
                 DataAccess dal = Util.Dal();
                 ParamCollection pc = new ParamCollection();
+                var lstColumn = sys.SYS_ReportOLAPTemplate.Where(p => p.ReportNbr == reportNbr && p.PivotType != "P").ToList();
+                System.Data.DataTable dt = null;
+                if (report.SourceType.PassNull() == "V")
+                {
+                    var filter = sys.SYS_ReportOLAPFilter.FirstOrDefault(p => p.ReportNbr == reportNbr);
+                    if (filter != null && filter.FilterData.PassNull() != string.Empty)
+                    {
+                        foreach (var item in lstParm)
+                        {
+                            string parmName = item.Name.Replace("Parm_", "");
 
-                System.Data.DataTable dt = dal.ExecDataTable(cmd, CommandType.Text, ref pc);
-                
+
+                            if (filter.FilterData.Contains("IN #" + parmName))
+                            {
+                                var lstTempValue = item.Value.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                                string inValue = "IN (";
+                                foreach (var itemValue in lstTempValue)
+                                {
+                                    inValue += "N'" + itemValue + "',";
+                                }
+                                if (inValue.Length > 4)
+                                {
+                                    inValue = inValue.TrimEnd(',') + ")";
+                                }
+                                else
+                                {
+                                    inValue += "'')";
+                                }
+                                filter.FilterData = filter.FilterData.Replace("IN #" + parmName, inValue);
+                            }
+                            filter.FilterData = filter.FilterData.Replace("#" + parmName, "N'" + item.Value + "'");
+                        }
+                    }
+
+
+                  
+
+                    var lstTemp = new List<string>();
+                    foreach (var col in lstColumn)
+                    {
+                        if (!lstTemp.Any(p => p == col.ColumnName))
+                        {
+                            lstTemp.Add(col.ColumnName);
+                            //select += string.Format("N'{0}' = {1},", Util.GetLang(col.ColumnDescr), col.ColumnName);
+                            select += string.Format("[{0}],", col.ColumnName);
+                        }
+                    }
+
+                    cmd = "select " + select.TrimEnd(',') + " from " + view;
+                    if (filter.FilterData.PassNull().Length > 0)
+                    {
+                        cmd += " where " + filter.FilterData;
+                    }
+                    dt = dal.ExecDataTable(cmd, CommandType.Text, ref pc);
+                }
+                else
+                {
+                    var lstColReport = sys.SYS_ReportOLAPTemplate.Where(p => p.ReportNbr == reportNbr && p.PivotType == "P").ToList();
+
+                    string cmdRPT = "insert into RPTRunning(ReportNbr,MachineName,ReportName,ReportCap,ReportDate,StringParm00,StringParm01,StringParm02,StringParm03," +
+                        "DateParm00,DateParm01,DateParm02,DateParm03,BooleanParm00,BooleanParm01,BooleanParm02,BooleanParm03,ListParm00,ListParm01,ListParm02,ListParm03,SelectionFormular,UserID,AppPath,ClientName,LoggedCpnyID,CpnyID,LangID) " +
+                        "values(@ReportNbr,@MachineName,@ReportName,@ReportCap,@ReportDate,@StringParm00,@StringParm01,@StringParm02,@StringParm03," +
+                        "@DateParm00,@DateParm01,@DateParm02,@DateParm03,@BooleanParm00,@BooleanParm01,@BooleanParm02,@BooleanParm03,@ListParm00,@ListParm01,@ListParm02,@ListParm03,@SelectionFormular,@UserID,@AppPath,@ClientName,@LoggedCpnyID,@CpnyID,@LangID) SELECT @@IDENTITY";
+
+                    pc.Add(new ParamStruct("@ReportNbr", DbType.String, report.ReportNbr, ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@MachineName", DbType.String, Environment.MachineName, ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@ReportName", DbType.String, report.Name, ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@ReportCap", DbType.String, report.Name, ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@ReportDate", DbType.DateTime, DateTime.Now, ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@StringParm00", DbType.String, GetRPTParm(lstColReport, lstParm, "StringParm00", ""), ParameterDirection.Input, Int32.MaxValue));
+                    pc.Add(new ParamStruct("@StringParm01", DbType.String, GetRPTParm(lstColReport, lstParm, "StringParm01", ""), ParameterDirection.Input, Int32.MaxValue));
+                    pc.Add(new ParamStruct("@StringParm02", DbType.String, GetRPTParm(lstColReport, lstParm, "StringParm02", ""), ParameterDirection.Input, Int32.MaxValue));
+                    pc.Add(new ParamStruct("@StringParm03", DbType.String, GetRPTParm(lstColReport, lstParm, "StringParm03", ""), ParameterDirection.Input, Int32.MaxValue));
+                    pc.Add(new ParamStruct("@DateParm00", DbType.DateTime, GetRPTParm(lstColReport, lstParm, "DateParm00", DateTime.Now), ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@DateParm01", DbType.DateTime, GetRPTParm(lstColReport, lstParm, "DateParm01", DateTime.Now), ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@DateParm02", DbType.DateTime, GetRPTParm(lstColReport, lstParm, "DateParm02", DateTime.Now), ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@DateParm03", DbType.DateTime, GetRPTParm(lstColReport, lstParm, "DateParm03", DateTime.Now), ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@BooleanParm00", DbType.Boolean, GetRPTParm(lstColReport, lstParm, "BooleanParm00", false), ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@BooleanParm01", DbType.Boolean, GetRPTParm(lstColReport, lstParm, "BooleanParm01", false), ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@BooleanParm02", DbType.Boolean, GetRPTParm(lstColReport, lstParm, "BooleanParm02", false), ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@BooleanParm03", DbType.Boolean, GetRPTParm(lstColReport, lstParm, "BooleanParm03", false), ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@ListParm00", DbType.String, GetRPTParm(lstColReport, lstParm, "ListParm00", ""), ParameterDirection.Input, Int32.MaxValue));
+                    pc.Add(new ParamStruct("@ListParm01", DbType.String, GetRPTParm(lstColReport, lstParm, "ListParm01", ""), ParameterDirection.Input, Int32.MaxValue));
+                    pc.Add(new ParamStruct("@ListParm02", DbType.String, GetRPTParm(lstColReport, lstParm, "ListParm02", ""), ParameterDirection.Input, Int32.MaxValue));
+                    pc.Add(new ParamStruct("@ListParm03", DbType.String, GetRPTParm(lstColReport, lstParm, "ListParm03", ""), ParameterDirection.Input, Int32.MaxValue));
+                    pc.Add(new ParamStruct("@SelectionFormular",DbType.String, "", ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@UserID", DbType.String, Current.UserName, ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@AppPath", DbType.String,"", ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@ClientName", DbType.String, "", ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@LoggedCpnyID", DbType.String, Current.CpnyID, ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@CpnyID", DbType.String, "", ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@LangID", DbType.Int16, Current.LangID, ParameterDirection.Input, 200));
+
+                    int rptID = Convert.ToInt32(dal.ExecScalar(cmdRPT, CommandType.Text, ref pc));
+
+                    pc = new ParamCollection();
+                    pc.Add(new ParamStruct("@RPTID", DbType.Int32, rptID, ParameterDirection.Input, 200));
+                    dt = dal.ExecDataTable(report.Proc, CommandType.StoredProcedure, ref pc);
+
+                }
+                      
                 if (dt.Rows.Count == 0)
                 {
                     Util.AppendLog(ref _logMessage, "20100101", "");
                     return _logMessage;
                 }
+
+                for (int i = dt.Columns.Count - 1; i >= 0; i--)
+                {
+                    var col = lstColumn.FirstOrDefault(p => p.ColumnName == dt.Columns[i].ColumnName);
+                    if (col == null)
+                    {
+                        dt.Columns.RemoveAt(i);
+                    }
+                }
+                dt.AcceptChanges();
 
                 excelApplication = new Application();
 
@@ -477,27 +534,24 @@ namespace IF30100.Controllers
 
 
                 object[,] rawData = new object[1, dt.Columns.Count];
-                for (int col = 0; col < dt.Columns.Count; col++)
+                for (int i = 0; i < dt.Columns.Count; i++)
                 {
-                    rawData[0, col] = dt.Columns[col].ColumnName;
-                }
+                    var col = lstColumn.FirstOrDefault(p => p.ColumnName == dt.Columns[i].ColumnName);
+                    rawData[0, i] = Util.GetLang(col.ColumnDescr);
 
-                var lstMeasure = lstColumn.Where(p => p.PivotType == "M").OrderBy(p => p.PivotOrder).ToList();
+                    var column = (i / 25 > 0 ? colChartSet[i / 25].ToString() : "") + colChartSet[i % 25].ToString();
 
-                for (int col = 0; col < dt.Columns.Count; col++)
-                {
-                    var column = (col / 25 > 0 ? colChartSet[col / 25].ToString() : "") + colChartSet[col % 25].ToString();
-                    var colData = lstColumn.FirstOrDefault(p => Util.GetLang(p.ColumnDescr) == dt.Columns[col].ColumnName);
-
-                    if (colData.DataFormat.PassNull() != string.Empty)
+                    if (col.DataFormat.PassNull() != string.Empty)
                     {
-                        dataSheet.Range[string.Format("{0}{1}:{0}{2}", column,2,dt.Rows.Count+1), Type.Missing].NumberFormat = colData.DataFormat;
+                        dataSheet.Range[string.Format("{0}{1}:{0}{2}", column, 2, dt.Rows.Count + 1), Type.Missing].NumberFormat = col.DataFormat;
                     }
                     else
                     {
-                        dataSheet.Range[string.Format("{0}{1}:{0}{2}", column, 2, dt.Rows.Count+1), Type.Missing].NumberFormat = "@";
+                        dataSheet.Range[string.Format("{0}{1}:{0}{2}", column, 2, dt.Rows.Count + 1), Type.Missing].NumberFormat = "@";
                     }
                 }
+
+                var lstMeasure = lstColumn.Where(p => p.PivotType == "M").OrderBy(p => p.PivotOrder).ToList();
 
                 string excelRange = String.Format("A1:{0}{1}", finalColLetter, 1);
                 dataSheet.Range[excelRange, Type.Missing].Value2 = rawData;
@@ -923,6 +977,16 @@ namespace IF30100.Controllers
                 }
             }
             return handler;
+        }
+        private object GetRPTParm(List<SYS_ReportOLAPTemplate> lstColumn,List<ParmData> lstParm,string parmName, object defaultVal)
+        {
+            var col = lstColumn.FirstOrDefault(p => p.RPTParm.ToLower() == parmName.ToLower());
+            if (col != null)
+            {
+                var parm = lstParm.FirstOrDefault(p => p.Name == "Parm_" +  col.ColumnName);
+                if(parm!=null)  return parm.Value;
+            }
+            return defaultVal;
         }
         //private ConsolidationFunction GetFunction(string func)
         //{

@@ -142,10 +142,11 @@
             )
             
             , X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Fit).Items(
-                X.Panel().ID("pnlFilter").Hidden(true).Layout(LayoutType.Border)
+                X.Panel().ID("pnlFilter").Hidden(true).Layout(LayoutType.Border).Title(Util.GetLang("Parameter"))
                 .Items(
                     X.Panel().ID("pnlFilterHeader").BodyStyle("padding:20px 10px 10px 50px;").Border(false).Region(Region.North).Layout(LayoutType.VBox)
-                    , X.TabPanel().ID("tabFilterGrid").Region(Region.Center).Layout(LayoutType.Fit)
+                    , X.Panel().Border(false).Region(Region.Center).Layout(LayoutType.Fit)
+                    .Items(X.TabPanel().ID("tabFilterGrid"))
                 )
                 
                 , X.GridPanel().ID("grdDet")

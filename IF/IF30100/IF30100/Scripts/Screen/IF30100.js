@@ -135,7 +135,8 @@ var cboType_Change = function (sender, newValue, oldValue) {
     }
    
 }
-var cboReport_Change = function (sender, newValue, oldValue) {   
+var cboReport_Change = function (sender, newValue, oldValue) {
+    HQ.parm = [];
     if (sender.valueModels != null ) {
         if (App.cboType.getValue() == 'E') {
             App.btnTemplate.hide();

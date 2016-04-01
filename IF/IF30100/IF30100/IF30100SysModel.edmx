@@ -25,6 +25,8 @@
           <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="Type" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="Proc" Type="varchar" Nullable="false" MaxLength="200" />
+          <Property Name="SourceType" Type="varchar" Nullable="false" MaxLength="1" />
         </EntityType>
         <EntityType Name="SYS_ReportOLAPFilter">
           <Key>
@@ -65,6 +67,7 @@
           <Property Name="DataFormat" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="PivotOrder" Type="smallint" Nullable="false" />
           <Property Name="PivotShow" Type="bit" Nullable="false" />
+          <Property Name="RPTParm" Type="varchar" Nullable="false" MaxLength="100" />
         </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -104,6 +107,8 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="Type" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Proc" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SourceType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SYS_ReportOLAPTemplate">
           <Key>
@@ -130,6 +135,7 @@
           <Property Type="String" Name="DataFormat" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int16" Name="PivotOrder" Nullable="false" />
           <Property Type="Boolean" Name="PivotShow" Nullable="false" />
+          <Property Type="String" Name="RPTParm" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -155,6 +161,8 @@
           <EntitySetMapping Name="SYS_ReportExport">
             <EntityTypeMapping TypeName="IF30100SysModel.SYS_ReportExport">
               <MappingFragment StoreEntitySet="SYS_ReportExport">
+                <ScalarProperty Name="SourceType" ColumnName="SourceType" />
+                <ScalarProperty Name="Proc" ColumnName="Proc" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
@@ -172,6 +180,7 @@
           <EntitySetMapping Name="SYS_ReportOLAPTemplate">
             <EntityTypeMapping TypeName="IF30100SysModel.SYS_ReportOLAPTemplate">
               <MappingFragment StoreEntitySet="SYS_ReportOLAPTemplate">
+                <ScalarProperty Name="RPTParm" ColumnName="RPTParm" />
                 <ScalarProperty Name="PivotShow" ColumnName="PivotShow" />
                 <ScalarProperty Name="PivotOrder" ColumnName="PivotOrder" />
                 <ScalarProperty Name="DataFormat" ColumnName="DataFormat" />
