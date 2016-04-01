@@ -267,6 +267,7 @@ var Event = {
             });
         },
         grdDet_beforeEdit: function (editor, e) {
+            if (e.field == "QtyShip" && !e.record.data.isEditQtyShip) return false;
             var recordOrder = HQ.store.findRecord(App.stoOrder, ["OrderNbr"], [e.record.data.OrderNbr]);
             if (recordOrder.data.Status == 'C' || recordOrder.data.Status == 'E') return false;
             var objInvtID = HQ.store.findInStore(App.stoOM20500_pdIN_Inventory, ['InvtID'], [e.record.data.InvtID]);

@@ -4107,7 +4107,8 @@ namespace OM20500
         /// <param name="discAmt">Initial value of the DiscAmt property.</param>
         /// <param name="lineAmt">Initial value of the LineAmt property.</param>
         /// <param name="unitRate">Initial value of the UnitRate property.</param>
-        public static OM20500_pgDet_Result CreateOM20500_pgDet_Result(global::System.String branchID, global::System.String orderNbr, global::System.String lineRef, global::System.Boolean freeItem, global::System.Double lineQty, global::System.Double qtyShip, global::System.Double qtyShipped, global::System.Double slsPrice, global::System.Double discAmt, global::System.Double lineAmt, global::System.Double unitRate)
+        /// <param name="isEditQtyShip">Initial value of the isEditQtyShip property.</param>
+        public static OM20500_pgDet_Result CreateOM20500_pgDet_Result(global::System.String branchID, global::System.String orderNbr, global::System.String lineRef, global::System.Boolean freeItem, global::System.Double lineQty, global::System.Double qtyShip, global::System.Double qtyShipped, global::System.Double slsPrice, global::System.Double discAmt, global::System.Double lineAmt, global::System.Double unitRate, global::System.Boolean isEditQtyShip)
         {
             OM20500_pgDet_Result oM20500_pgDet_Result = new OM20500_pgDet_Result();
             oM20500_pgDet_Result.BranchID = branchID;
@@ -4121,6 +4122,7 @@ namespace OM20500
             oM20500_pgDet_Result.DiscAmt = discAmt;
             oM20500_pgDet_Result.LineAmt = lineAmt;
             oM20500_pgDet_Result.UnitRate = unitRate;
+            oM20500_pgDet_Result.isEditQtyShip = isEditQtyShip;
             return oM20500_pgDet_Result;
         }
 
@@ -4583,6 +4585,30 @@ namespace OM20500
         private global::System.String _UnitMultDiv;
         partial void OnUnitMultDivChanging(global::System.String value);
         partial void OnUnitMultDivChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean isEditQtyShip
+        {
+            get
+            {
+                return _isEditQtyShip;
+            }
+            set
+            {
+                OnisEditQtyShipChanging(value);
+                ReportPropertyChanging("isEditQtyShip");
+                _isEditQtyShip = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("isEditQtyShip");
+                OnisEditQtyShipChanged();
+            }
+        }
+        private global::System.Boolean _isEditQtyShip;
+        partial void OnisEditQtyShipChanging(global::System.Boolean value);
+        partial void OnisEditQtyShipChanged();
 
         #endregion
 
