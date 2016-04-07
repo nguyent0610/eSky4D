@@ -148,22 +148,6 @@ namespace OM10100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_Setup> IN_Setup
-        {
-            get
-            {
-                if ((_IN_Setup == null))
-                {
-                    _IN_Setup = base.CreateObjectSet<IN_Setup>("IN_Setup");
-                }
-                return _IN_Setup;
-            }
-        }
-        private ObjectSet<IN_Setup> _IN_Setup;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_ItemSite> IN_ItemSite
         {
             get
@@ -528,6 +512,22 @@ namespace OM10100
             }
         }
         private ObjectSet<OM_SalesOrd> _OM_SalesOrd;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_Setup> IN_Setup
+        {
+            get
+            {
+                if ((_IN_Setup == null))
+                {
+                    _IN_Setup = base.CreateObjectSet<IN_Setup>("IN_Setup");
+                }
+                return _IN_Setup;
+            }
+        }
+        private ObjectSet<IN_Setup> _IN_Setup;
 
         #endregion
 
@@ -571,14 +571,6 @@ namespace OM10100
         public void AddToOM_UserDefault(OM_UserDefault oM_UserDefault)
         {
             base.AddObject("OM_UserDefault", oM_UserDefault);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the IN_Setup EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_Setup(IN_Setup iN_Setup)
-        {
-            base.AddObject("IN_Setup", iN_Setup);
         }
     
         /// <summary>
@@ -763,6 +755,14 @@ namespace OM10100
         public void AddToOM_SalesOrd(OM_SalesOrd oM_SalesOrd)
         {
             base.AddObject("OM_SalesOrd", oM_SalesOrd);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_Setup EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_Setup(IN_Setup iN_Setup)
+        {
+            base.AddObject("IN_Setup", iN_Setup);
         }
 
         #endregion
@@ -1318,6 +1318,47 @@ namespace OM10100
         public ObjectResult<OM10100_pcReasonCode_Result> OM10100_pcReasonCode()
         {
             return base.ExecuteFunction<OM10100_pcReasonCode_Result>("OM10100_pcReasonCode");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="orderDate">No Metadata Documentation available.</param>
+        public ObjectResult<OM10100_pcPOSM_Result> OM10100_pcPOSM(global::System.String branchID, global::System.String userID, Nullable<global::System.DateTime> orderDate)
+        {
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            ObjectParameter userIDParameter;
+            if (userID != null)
+            {
+                userIDParameter = new ObjectParameter("UserID", userID);
+            }
+            else
+            {
+                userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter orderDateParameter;
+            if (orderDate.HasValue)
+            {
+                orderDateParameter = new ObjectParameter("OrderDate", orderDate);
+            }
+            else
+            {
+                orderDateParameter = new ObjectParameter("OrderDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<OM10100_pcPOSM_Result>("OM10100_pcPOSM", branchIDParameter, userIDParameter, orderDateParameter);
         }
 
         #endregion
@@ -8529,30 +8570,6 @@ namespace OM10100
         private global::System.Boolean _CheckINVal;
         partial void OnCheckINValChanging(global::System.Boolean value);
         partial void OnCheckINValChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String LastStkOutNbr
-        {
-            get
-            {
-                return _LastStkOutNbr;
-            }
-            set
-            {
-                OnLastStkOutNbrChanging(value);
-                ReportPropertyChanging("LastStkOutNbr");
-                _LastStkOutNbr = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("LastStkOutNbr");
-                OnLastStkOutNbrChanged();
-            }
-        }
-        private global::System.String _LastStkOutNbr;
-        partial void OnLastStkOutNbrChanging(global::System.String value);
-        partial void OnLastStkOutNbrChanged();
 
         #endregion
 
@@ -28064,6 +28081,59 @@ namespace OM10100
         private global::System.Boolean _ManualDisc;
         partial void OnManualDiscChanging(global::System.Boolean value);
         partial void OnManualDiscChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="OM10100Model", Name="OM10100_pcPOSM_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class OM10100_pcPOSM_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OM10100_pcPOSM_Result object.
+        /// </summary>
+        /// <param name="posmID">Initial value of the PosmID property.</param>
+        public static OM10100_pcPOSM_Result CreateOM10100_pcPOSM_Result(global::System.String posmID)
+        {
+            OM10100_pcPOSM_Result oM10100_pcPOSM_Result = new OM10100_pcPOSM_Result();
+            oM10100_pcPOSM_Result.PosmID = posmID;
+            return oM10100_pcPOSM_Result;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PosmID
+        {
+            get
+            {
+                return _PosmID;
+            }
+            set
+            {
+                OnPosmIDChanging(value);
+                ReportPropertyChanging("PosmID");
+                _PosmID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PosmID");
+                OnPosmIDChanged();
+            }
+        }
+        private global::System.String _PosmID;
+        partial void OnPosmIDChanging(global::System.String value);
+        partial void OnPosmIDChanged();
 
         #endregion
 

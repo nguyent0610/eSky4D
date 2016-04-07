@@ -4,44 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="OM10100Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="OM10100ModelStoreContainer">
-          <EntitySet Name="AR_Balances" EntityType="OM10100Model.Store.AR_Balances" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="AR_Customer" EntityType="OM10100Model.Store.AR_Customer" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="AR_SOAddress" EntityType="OM10100Model.Store.AR_SOAddress" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="IN_Inventory" EntityType="OM10100Model.Store.IN_Inventory" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="IN_ItemLot" EntityType="OM10100Model.Store.IN_ItemLot" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="IN_ItemSite" EntityType="OM10100Model.Store.IN_ItemSite" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="IN_Setup" EntityType="OM10100Model.Store.IN_Setup" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="IN_UnitConversion" EntityType="OM10100Model.Store.IN_UnitConversion" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_DiscBreak" EntityType="OM10100Model.Store.OM_DiscBreak" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_DiscCust" EntityType="OM10100Model.Store.OM_DiscCust" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_DiscCustClass" EntityType="OM10100Model.Store.OM_DiscCustClass" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_DiscFreeItem" EntityType="OM10100Model.Store.OM_DiscFreeItem" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_DiscItem" EntityType="OM10100Model.Store.OM_DiscItem" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_DiscItemClass" EntityType="OM10100Model.Store.OM_DiscItemClass" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_Discount" EntityType="OM10100Model.Store.OM_Discount" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_DiscSeq" EntityType="OM10100Model.Store.OM_DiscSeq" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_LotTrans" EntityType="OM10100Model.Store.OM_LotTrans" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_OrdAddr" EntityType="OM10100Model.Store.OM_OrdAddr" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_OrdDisc" EntityType="OM10100Model.Store.OM_OrdDisc" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_OrderType" EntityType="OM10100Model.Store.OM_OrderType" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_PPAlloc" EntityType="OM10100Model.Store.OM_PPAlloc" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_PPBudget" EntityType="OM10100Model.Store.OM_PPBudget" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_PPCpny" EntityType="OM10100Model.Store.OM_PPCpny" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_PPFreeItem" EntityType="OM10100Model.Store.OM_PPFreeItem" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_SalesOrd" EntityType="OM10100Model.Store.OM_SalesOrd" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_SalesOrdDet" EntityType="OM10100Model.Store.OM_SalesOrdDet" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_Setup" EntityType="OM10100Model.Store.OM_Setup" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OM_UserDefault" EntityType="OM10100Model.Store.OM_UserDefault" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="RPTRunning" EntityType="OM10100Model.Store.RPTRunning" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="OM10100Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="AR_Balances">
           <Key>
             <PropertyRef Name="CustID" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CustID" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="AccruedRevAgeBal01" Type="float" Nullable="false" />
           <Property Name="AccruedRevAgeBal02" Type="float" Nullable="false" />
           <Property Name="AccruedRevAgeBal03" Type="float" Nullable="false" />
@@ -67,21 +36,21 @@
           <Property Name="TotPrePay" Type="float" Nullable="false" />
           <Property Name="TotShipped" Type="float" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="AR_Customer">
           <Key>
             <PropertyRef Name="CustId" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="CustId" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="CustName" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="CustId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CustName" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Addr1" Type="nvarchar" MaxLength="200" />
           <Property Name="Addr2" Type="nvarchar" MaxLength="50" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
@@ -143,13 +112,13 @@
           <Property Name="GiftExchange" Type="bit" Nullable="false" />
           <Property Name="HasPG" Type="bit" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="EstablishDate" Type="date" />
           <Property Name="Birthdate" Type="date" />
         </EntityType>
@@ -159,9 +128,9 @@
             <PropertyRef Name="CustId" />
             <PropertyRef Name="ShipToId" />
           </Key>
-          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="CustId" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="ShipToId" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="CustId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ShipToId" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="30" />
           <Property Name="SOName" Type="nvarchar" MaxLength="200" />
           <Property Name="Attn" Type="nvarchar" MaxLength="200" />
@@ -182,19 +151,19 @@
           <Property Name="SiteId" Type="varchar" MaxLength="10" />
           <Property Name="ShipViaID" Type="varchar" MaxLength="15" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="District" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="IN_Inventory">
           <Key>
             <PropertyRef Name="InvtID" />
           </Key>
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="BarCode" Type="varchar" MaxLength="20" />
           <Property Name="Buyer" Type="varchar" MaxLength="10" />
           <Property Name="ClassID" Type="varchar" MaxLength="10" />
@@ -256,14 +225,14 @@
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
           <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="ApproveStatus" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="ApproveStatus" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="Media" Type="varchar" MaxLength="100" />
           <Property Name="LotSerRcptAuto" Type="bit" />
-          <Property Name="Category" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="Brand" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="ProGroup" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="ProType" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Category" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Brand" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ProGroup" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ProType" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_ItemLot">
           <Key>
@@ -271,13 +240,13 @@
             <PropertyRef Name="InvtID" />
             <PropertyRef Name="LotSerNbr" />
           </Key>
-          <Property Name="SiteID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="LotSerNbr" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LotSerNbr" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="Cost" Type="float" Nullable="false" />
           <Property Name="ExpDate" Type="smalldatetime" Nullable="false" />
           <Property Name="LIFODate" Type="smalldatetime" Nullable="false" />
-          <Property Name="MfgrLotSerNbr" Type="char" Nullable="false" MaxLength="25" />
+          <Property Name="MfgrLotSerNbr" Type="char" MaxLength="25" Nullable="false" />
           <Property Name="QtyAlloc" Type="float" Nullable="false" />
           <Property Name="QtyAllocIN" Type="float" Nullable="false" />
           <Property Name="QtyAllocOther" Type="float" Nullable="false" />
@@ -288,20 +257,20 @@
           <Property Name="QtyShipNotInv" Type="float" Nullable="false" />
           <Property Name="WarrantyDate" Type="smalldatetime" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="IN_ItemSite">
           <Key>
             <PropertyRef Name="InvtID" />
             <PropertyRef Name="SiteID" />
           </Key>
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="SiteID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="AvgCost" Type="float" Nullable="false" />
           <Property Name="QtyAlloc" Type="float" Nullable="false" />
           <Property Name="QtyAllocIN" Type="float" Nullable="false" />
@@ -320,11 +289,11 @@
           <Property Name="LastPurchaseDate" Type="smalldatetime" Nullable="false" />
           <Property Name="LastPurchasePrice" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="QtyUncosted" Type="float" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
@@ -333,8 +302,8 @@
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="SetupID" />
           </Key>
-          <Property Name="BranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="SetupID" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="BranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="SetupID" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="AutoRefNbr" Type="bit" Nullable="false" />
           <Property Name="CnvFactEditable" Type="bit" />
           <Property Name="NegQty" Type="bit" Nullable="false" />
@@ -348,14 +317,13 @@
           <Property Name="PreFixBat" Type="varchar" MaxLength="2" />
           <Property Name="UseBarCode" Type="bit" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CheckINVal" Type="bit" Nullable="false" />
-          <Property Name="LastStkOutNbr" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="IN_UnitConversion">
           <Key>
@@ -365,20 +333,20 @@
             <PropertyRef Name="FromUnit" />
             <PropertyRef Name="ToUnit" />
           </Key>
-          <Property Name="UnitType" Type="char" Nullable="false" MaxLength="1" />
-          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="6" />
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="FromUnit" Type="nvarchar" Nullable="false" MaxLength="15" />
-          <Property Name="ToUnit" Type="nvarchar" Nullable="false" MaxLength="15" />
-          <Property Name="MultDiv" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="UnitType" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="ClassID" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="FromUnit" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="ToUnit" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="MultDiv" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="CnvFact" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscBreak">
           <Key>
@@ -386,19 +354,19 @@
             <PropertyRef Name="DiscSeq" />
             <PropertyRef Name="LineRef" />
           </Key>
-          <Property Name="DiscID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="DiscSeq" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="DiscID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DiscSeq" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LineRef" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="BreakAmt" Type="float" Nullable="false" />
           <Property Name="BreakQty" Type="float" Nullable="false" />
           <Property Name="DiscAmt" Type="float" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="OM_DiscCust">
@@ -407,16 +375,16 @@
             <PropertyRef Name="DiscSeq" />
             <PropertyRef Name="CustID" />
           </Key>
-          <Property Name="DiscID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="DiscSeq" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="CustID" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="DiscID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DiscSeq" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CustID" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscCustClass">
           <Key>
@@ -424,16 +392,16 @@
             <PropertyRef Name="DiscSeq" />
             <PropertyRef Name="ClassID" />
           </Key>
-          <Property Name="DiscID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="DiscSeq" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="DiscID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DiscSeq" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ClassID" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscFreeItem">
           <Key>
@@ -442,21 +410,21 @@
             <PropertyRef Name="LineRef" />
             <PropertyRef Name="FreeItemID" />
           </Key>
-          <Property Name="DiscID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="DiscSeq" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
-          <Property Name="FreeItemID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="DiscID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DiscSeq" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LineRef" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="FreeItemID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="FreeItemBudgetID" Type="varchar" MaxLength="10" />
           <Property Name="FreeItemQty" Type="float" Nullable="false" />
           <Property Name="FreeITemSiteID" Type="varchar" MaxLength="10" />
           <Property Name="UnitDescr" Type="nvarchar" MaxLength="15" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscItem">
           <Key>
@@ -464,9 +432,9 @@
             <PropertyRef Name="DiscSeq" />
             <PropertyRef Name="InvtID" />
           </Key>
-          <Property Name="DiscID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="DiscSeq" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="DiscID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DiscSeq" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Active" Type="smallint" Nullable="false" />
           <Property Name="BundleAmt" Type="float" Nullable="false" />
           <Property Name="BundleNbr" Type="smallint" Nullable="false" />
@@ -475,12 +443,12 @@
           <Property Name="DiscType" Type="varchar" MaxLength="1" />
           <Property Name="UnitDesc" Type="nvarchar" MaxLength="30" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="OM_DiscItemClass">
           <Key>
@@ -488,33 +456,33 @@
             <PropertyRef Name="DiscSeq" />
             <PropertyRef Name="ClassID" />
           </Key>
-          <Property Name="DiscID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="DiscSeq" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="6" />
+          <Property Name="DiscID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DiscSeq" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ClassID" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="UnitDesc" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="OM_Discount">
           <Key>
             <PropertyRef Name="DiscID" />
           </Key>
-          <Property Name="DiscID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="DiscID" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Descr" Type="nvarchar" MaxLength="50" />
           <Property Name="DiscClass" Type="varchar" MaxLength="2" />
           <Property Name="DiscType" Type="varchar" MaxLength="1" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Crtd_Role" Type="varchar" MaxLength="30" />
           <Property Name="Accumulate" Type="bit" Nullable="false" />
         </EntityType>
@@ -523,8 +491,8 @@
             <PropertyRef Name="DiscID" />
             <PropertyRef Name="DiscSeq" />
           </Key>
-          <Property Name="DiscID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="DiscSeq" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="DiscID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DiscSeq" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Active" Type="smallint" Nullable="false" />
           <Property Name="BreakBy" Type="varchar" MaxLength="1" />
           <Property Name="BudgetID" Type="varchar" MaxLength="10" />
@@ -535,16 +503,16 @@
           <Property Name="Promo" Type="smallint" Nullable="false" />
           <Property Name="StartDate" Type="smalldatetime" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="ProAplForItem" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="ProAplForItem" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="AutoFreeItem" Type="bit" Nullable="false" />
           <Property Name="AllowEditDisc" Type="bit" Nullable="false" />
-          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="POStartDate" Type="smalldatetime" Nullable="false" />
           <Property Name="POEndDate" Type="smalldatetime" Nullable="false" />
           <Property Name="POUse" Type="bit" Nullable="false" />
@@ -557,13 +525,13 @@
             <PropertyRef Name="LotSerNbr" />
             <PropertyRef Name="OMLineRef" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="OrderNbr" Type="varchar" Nullable="false" MaxLength="15" />
-          <Property Name="LotSerNbr" Type="varchar" Nullable="false" MaxLength="25" />
-          <Property Name="OMLineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="BranchID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="OrderNbr" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="LotSerNbr" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="OMLineRef" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="UnitDesc" Type="varchar" MaxLength="10" />
           <Property Name="ExpDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="InvtMult" Type="smallint" Nullable="false" />
           <Property Name="MfgrLotSerNbr" Type="varchar" MaxLength="25" />
           <Property Name="CnvFact" Type="float" Nullable="false" />
@@ -575,11 +543,11 @@
           <Property Name="UnitCost" Type="float" Nullable="false" />
           <Property Name="UnitPrice" Type="float" Nullable="false" />
           <Property Name="WarrantyDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
@@ -588,8 +556,8 @@
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="OrderNbr" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="OrderNbr" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="OrderNbr" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="OrderClass" Type="char" MaxLength="1" />
           <Property Name="BillName" Type="nvarchar" MaxLength="200" />
           <Property Name="BillAttn" Type="nvarchar" MaxLength="200" />
@@ -623,13 +591,13 @@
           <Property Name="CardName" Type="nvarchar" MaxLength="30" />
           <Property Name="CardExpDate" Type="smalldatetime" Nullable="false" />
           <Property Name="AuthCode" Type="varchar" MaxLength="15" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="TaxRegNbr" Type="varchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="OM_OrdDisc">
@@ -640,11 +608,11 @@
             <PropertyRef Name="OrderNbr" />
             <PropertyRef Name="LineRef" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="DiscID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="DiscSeq" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="OrderNbr" Type="varchar" Nullable="false" MaxLength="15" />
-          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="DiscID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DiscSeq" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="OrderNbr" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="LineRef" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="BreakBy" Type="varchar" MaxLength="1" />
           <Property Name="BudgetID" Type="varchar" MaxLength="10" />
           <Property Name="DiscAmt" Type="float" Nullable="false" />
@@ -661,19 +629,19 @@
           <Property Name="SOLineRef" Type="varchar" MaxLength="5" />
           <Property Name="UserOperationLog" Type="nvarchar" MaxLength="100" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="DiscBreakLineRef" Type="varchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="OM_OrderType">
           <Key>
             <PropertyRef Name="OrderType" />
           </Key>
-          <Property Name="OrderType" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="OrderType" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="ApplShift" Type="bit" Nullable="false" />
           <Property Name="ARDocType" Type="varchar" MaxLength="2" />
@@ -692,7 +660,7 @@
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
           <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="ShippingReport" Type="varchar" MaxLength="20" />
           <Property Name="TaxFee" Type="bit" Nullable="false" />
           <Property Name="ManualDisc" Type="bit" Nullable="false" />
@@ -704,20 +672,20 @@
             <PropertyRef Name="ObjID" />
             <PropertyRef Name="FreeItemID" />
           </Key>
-          <Property Name="BudgetID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="CpnyID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="ObjID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="FreeItemID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BudgetID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CpnyID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="ObjID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="FreeItemID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="UnitDesc" Type="varchar" MaxLength="30" />
           <Property Name="ApplyTo" Type="char" MaxLength="1" />
           <Property Name="QtyAmtAlloc" Type="float" Nullable="false" />
           <Property Name="QtyAmtAvail" Type="float" Nullable="false" />
           <Property Name="QtyAmtSpent" Type="float" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
@@ -725,20 +693,20 @@
           <Key>
             <PropertyRef Name="BudgetID" />
           </Key>
-          <Property Name="BudgetID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="BudgetID" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
-          <Property Name="Status" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="Status" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="ApplyTo" Type="char" MaxLength="1" />
           <Property Name="Descr" Type="nvarchar" MaxLength="30" />
           <Property Name="RvsdDate" Type="smalldatetime" Nullable="false" />
           <Property Name="QtyAmtFree" Type="float" Nullable="false" />
           <Property Name="QtyAmtTotal" Type="float" Nullable="false" />
           <Property Name="QtyAmtAlloc" Type="float" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
           <Property Name="AllocType" Type="varchar" MaxLength="1" />
@@ -749,19 +717,19 @@
             <PropertyRef Name="CpnyID" />
             <PropertyRef Name="FreeItemID" />
           </Key>
-          <Property Name="BudgetID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="CpnyID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="FreeItemID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BudgetID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CpnyID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="FreeItemID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="UnitDesc" Type="varchar" MaxLength="30" />
           <Property Name="ApplyTo" Type="char" MaxLength="1" />
           <Property Name="QtyAmtAlloc" Type="float" Nullable="false" />
           <Property Name="QtyAmtAvail" Type="float" Nullable="false" />
           <Property Name="QtyAmtSpent" Type="float" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
@@ -770,17 +738,17 @@
             <PropertyRef Name="BudgetID" />
             <PropertyRef Name="FreeItemID" />
           </Key>
-          <Property Name="BudgetID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="FreeItemID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="UnitDesc" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="BudgetID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="FreeItemID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="UnitDesc" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="QtyAmtAlloc" Type="float" Nullable="false" />
           <Property Name="QtyAmtAvail" Type="float" Nullable="false" />
           <Property Name="QtyAmtSpent" Type="float" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
           <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
@@ -789,8 +757,8 @@
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="OrderNbr" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="OrderNbr" Type="varchar" Nullable="false" MaxLength="15" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="OrderNbr" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="ARBatNbr" Type="varchar" MaxLength="10" />
           <Property Name="ARDocDate" Type="smalldatetime" Nullable="false" />
           <Property Name="ARRefNbr" Type="varchar" MaxLength="10" />
@@ -880,9 +848,9 @@
             <PropertyRef Name="OrderNbr" />
             <PropertyRef Name="LineRef" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="OrderNbr" Type="varchar" Nullable="false" MaxLength="15" />
-          <Property Name="LineRef" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="OrderNbr" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="LineRef" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="BarCode" Type="varchar" MaxLength="20" />
           <Property Name="BOCustID" Type="varchar" MaxLength="50" />
           <Property Name="BOType" Type="varchar" MaxLength="30" />
@@ -959,7 +927,7 @@
           <Key>
             <PropertyRef Name="SetupID" />
           </Key>
-          <Property Name="SetupID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="SetupID" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="AutoReleaseAR" Type="smallint" Nullable="false" />
           <Property Name="AutoReleaseIN" Type="smallint" Nullable="false" />
           <Property Name="BGWarningMsg" Type="smallint" Nullable="false" />
@@ -981,8 +949,8 @@
           <Property Name="DetDiscG6App" Type="smallint" Nullable="false" />
           <Property Name="DetDiscG6C1" Type="varchar" MaxLength="10" />
           <Property Name="DetDiscG6C2" Type="varchar" MaxLength="10" />
-          <Property Name="DfltOrderType" Type="varchar" Nullable="false" MaxLength="2" />
-          <Property Name="DfltSalesPrice" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="DfltOrderType" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="DfltSalesPrice" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="DocDiscG1App" Type="smallint" Nullable="false" />
           <Property Name="DocDiscG1C1" Type="varchar" MaxLength="10" />
           <Property Name="DocDiscG1C2" Type="varchar" MaxLength="10" />
@@ -1041,26 +1009,26 @@
           <Property Name="POSPrinter" Type="varchar" MaxLength="10" />
           <Property Name="PrcClsHierarchyLevel" Type="smallint" Nullable="false" />
           <Property Name="PrefixBat" Type="varchar" MaxLength="2" />
-          <Property Name="PriceSeq00" Type="varchar" Nullable="false" MaxLength="2" />
-          <Property Name="PriceSeq01" Type="varchar" Nullable="false" MaxLength="2" />
-          <Property Name="PriceSeq02" Type="varchar" Nullable="false" MaxLength="2" />
-          <Property Name="PriceSeq03" Type="varchar" Nullable="false" MaxLength="2" />
-          <Property Name="PriceSeq04" Type="varchar" Nullable="false" MaxLength="2" />
-          <Property Name="PriceSeq05" Type="varchar" Nullable="false" MaxLength="2" />
+          <Property Name="PriceSeq00" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="PriceSeq01" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="PriceSeq02" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="PriceSeq03" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="PriceSeq04" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="PriceSeq05" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="ProrateDisc" Type="smallint" Nullable="false" />
           <Property Name="SimpleDiscounts" Type="smallint" Nullable="false" />
           <Property Name="UseBarCode" Type="smallint" Nullable="false" />
           <Property Name="UseDiscTerm" Type="smallint" Nullable="false" />
           <Property Name="VN32Promotion" Type="smallint" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="AutoInvcNbr" Type="bit" Nullable="false" />
-          <Property Name="CreditChkRule" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="CreditChkRule" Type="varchar" MaxLength="1" Nullable="false" />
           <Property Name="InlcSOFeeDisc" Type="bit" Nullable="false" />
           <Property Name="InlcSOFeeProm" Type="bit" Nullable="false" />
           <Property Name="ReqDiscID" Type="bit" Nullable="false" />
@@ -1072,19 +1040,19 @@
             <PropertyRef Name="UserID" />
             <PropertyRef Name="DfltBranchID" />
           </Key>
-          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="UserID" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="OMSite" Type="varchar" MaxLength="10" />
           <Property Name="INSite" Type="varchar" MaxLength="10" />
           <Property Name="POSite" Type="varchar" MaxLength="10" />
           <Property Name="DfltOrderType" Type="varchar" MaxLength="2" />
-          <Property Name="DfltBranchID" Type="nvarchar" Nullable="false" MaxLength="30" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="DfltBranchID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="DfltSlsPerID" Type="varchar" MaxLength="30" />
           <Property Name="DfltSupID" Type="varchar" MaxLength="30" />
           <Property Name="LastInvcNbr" Type="varchar" MaxLength="50" />
@@ -1098,16 +1066,16 @@
             <PropertyRef Name="ReportID" />
             <PropertyRef Name="MachineName" />
           </Key>
-          <Property Name="ReportNbr" Type="varchar" Nullable="false" MaxLength="7" />
-          <Property Name="ReportID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="MachineName" Type="nvarchar" Nullable="false" MaxLength="20" />
-          <Property Name="ReportName" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="ReportCap" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ReportNbr" Type="varchar" MaxLength="7" Nullable="false" />
+          <Property Name="ReportID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MachineName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ReportName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReportCap" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ReportDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="StringParm00" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="StringParm01" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="StringParm02" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="StringParm03" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="StringParm00" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="StringParm01" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="StringParm02" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="StringParm03" Type="nvarchar" MaxLength="1000" Nullable="false" />
           <Property Name="DateParm00" Type="smalldatetime" Nullable="false" />
           <Property Name="DateParm01" Type="smalldatetime" Nullable="false" />
           <Property Name="DateParm02" Type="smalldatetime" Nullable="false" />
@@ -1116,10 +1084,10 @@
           <Property Name="BooleanParm01" Type="smallint" Nullable="false" />
           <Property Name="BooleanParm02" Type="smallint" Nullable="false" />
           <Property Name="BooleanParm03" Type="smallint" Nullable="false" />
-          <Property Name="SelectionFormular" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="UserID" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="AppPath" Type="varchar" Nullable="false" MaxLength="400" />
-          <Property Name="ClientName" Type="varchar" Nullable="false" MaxLength="40" />
+          <Property Name="SelectionFormular" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="UserID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="AppPath" Type="varchar" MaxLength="400" Nullable="false" />
+          <Property Name="ClientName" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="LoggedCpnyID" Type="varchar" MaxLength="30" />
           <Property Name="CpnyID" Type="varchar(max)" />
           <Property Name="LangID" Type="smallint" />
@@ -1144,6 +1112,11 @@
           <Parameter Name="To" Type="int" Mode="In" />
         </Function>
         <Function Name="OM10100_pcOrderType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="OM10100_pcPOSM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="OM10100_pcReasonCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="OM10100_pcShipToId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustId" Type="varchar" Mode="In" />
@@ -1199,6 +1172,37 @@
           <Parameter Name="GetType" Type="varchar" Mode="In" />
           <Parameter Name="OrderType" Type="varchar" Mode="In" />
         </Function>
+        <EntityContainer Name="OM10100ModelStoreContainer">
+          <EntitySet Name="AR_Balances" EntityType="Self.AR_Balances" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AR_Customer" EntityType="Self.AR_Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AR_SOAddress" EntityType="Self.AR_SOAddress" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IN_Inventory" EntityType="Self.IN_Inventory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IN_ItemLot" EntityType="Self.IN_ItemLot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IN_ItemSite" EntityType="Self.IN_ItemSite" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IN_Setup" EntityType="Self.IN_Setup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IN_UnitConversion" EntityType="Self.IN_UnitConversion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_DiscBreak" EntityType="Self.OM_DiscBreak" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_DiscCust" EntityType="Self.OM_DiscCust" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_DiscCustClass" EntityType="Self.OM_DiscCustClass" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_DiscFreeItem" EntityType="Self.OM_DiscFreeItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_DiscItem" EntityType="Self.OM_DiscItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_DiscItemClass" EntityType="Self.OM_DiscItemClass" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_Discount" EntityType="Self.OM_Discount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_DiscSeq" EntityType="Self.OM_DiscSeq" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_LotTrans" EntityType="Self.OM_LotTrans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_OrdAddr" EntityType="Self.OM_OrdAddr" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_OrdDisc" EntityType="Self.OM_OrdDisc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_OrderType" EntityType="Self.OM_OrderType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_PPAlloc" EntityType="Self.OM_PPAlloc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_PPBudget" EntityType="Self.OM_PPBudget" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_PPCpny" EntityType="Self.OM_PPCpny" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_PPFreeItem" EntityType="Self.OM_PPFreeItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_SalesOrd" EntityType="Self.OM_SalesOrd" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_SalesOrdDet" EntityType="Self.OM_SalesOrdDet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_Setup" EntityType="Self.OM_Setup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OM_UserDefault" EntityType="Self.OM_UserDefault" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RPTRunning" EntityType="Self.RPTRunning" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -1235,7 +1239,6 @@
           <EntitySet Name="OM_OrdAddr" EntityType="OM10100Model.OM_OrdAddr" />
           <EntitySet Name="OM_Setup" EntityType="OM10100Model.OM_Setup" />
           <EntitySet Name="OM_UserDefault" EntityType="OM10100Model.OM_UserDefault" />
-          <EntitySet Name="IN_Setup" EntityType="OM10100Model.IN_Setup" />
           <FunctionImport Name="OM10100_pcUnitConversion" ReturnType="Collection(OM10100Model.OM10100_pcUnitConversion_Result)">
           <Parameter Name="CpnyID" Mode="In" Type="String" />
           </FunctionImport>
@@ -1304,6 +1307,12 @@
           <FunctionImport Name="OM10100_pcReasonCode" ReturnType="Collection(OM10100Model.OM10100_pcReasonCode_Result)" />
           <EntitySet Name="OM_OrdDisc" EntityType="OM10100Model.OM_OrdDisc" />
           <EntitySet Name="OM_SalesOrd" EntityType="OM10100Model.OM_SalesOrd" />
+          <FunctionImport Name="OM10100_pcPOSM" ReturnType="Collection(OM10100Model.OM10100_pcPOSM_Result)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="IN_Setup" EntityType="OM10100Model.IN_Setup" />
         </EntityContainer>
         <ComplexType Name="OM10100_pcOrder_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -1784,35 +1793,6 @@
           <Property Type="String" Name="InvcNote" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="WorkingDate" Precision="0" />
           <Property Type="String" Name="DiscSite" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="IN_Setup">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="SetupID" />
-          </Key>
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="SetupID" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="Boolean" Name="AutoRefNbr" Nullable="false" />
-          <Property Type="Boolean" Name="CnvFactEditable" />
-          <Property Type="Boolean" Name="NegQty" Nullable="false" />
-          <Property Type="String" Name="LastBatNbr" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastRefNbr" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastTransferNbr" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastIssueNbr" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastRcptNbr" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltValMthd" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="DfltSite" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="PreFixBat" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Type="Boolean" Name="UseBarCode" Nullable="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="Boolean" Name="CheckINVal" Nullable="false" />
-          <Property Type="String" Name="LastStkOutNbr" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <ComplexType Name="OM10100_pcUnitConversion_Result">
           <Property Type="String" Name="UnitType" Nullable="false" MaxLength="1" />
@@ -2732,6 +2712,37 @@
           <Property Type="String" Name="Remark" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsAddStock" />
         </EntityType>
+        <ComplexType Name="OM10100_pcPOSM_Result">
+          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
+          </ComplexType>
+        <EntityType Name="IN_Setup">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SetupID" />
+          </Key>
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="SetupID" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="AutoRefNbr" Type="Boolean" Nullable="false" />
+          <Property Name="CnvFactEditable" Type="Boolean" />
+          <Property Name="NegQty" Type="Boolean" Nullable="false" />
+          <Property Name="LastBatNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LastRefNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LastTransferNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LastIssueNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LastRcptNbr" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="DfltValMthd" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="DfltSite" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PreFixBat" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="UseBarCode" Type="Boolean" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CheckINVal" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3235,35 +3246,6 @@
                 <ScalarProperty Name="INSite" ColumnName="INSite" />
                 <ScalarProperty Name="OMSite" ColumnName="OMSite" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IN_Setup">
-            <EntityTypeMapping TypeName="OM10100Model.IN_Setup">
-              <MappingFragment StoreEntitySet="IN_Setup">
-                <ScalarProperty Name="LastStkOutNbr" ColumnName="LastStkOutNbr" />
-                <ScalarProperty Name="CheckINVal" ColumnName="CheckINVal" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
-                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
-                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
-                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
-                <ScalarProperty Name="UseBarCode" ColumnName="UseBarCode" />
-                <ScalarProperty Name="PreFixBat" ColumnName="PreFixBat" />
-                <ScalarProperty Name="DfltSite" ColumnName="DfltSite" />
-                <ScalarProperty Name="DfltValMthd" ColumnName="DfltValMthd" />
-                <ScalarProperty Name="LastRcptNbr" ColumnName="LastRcptNbr" />
-                <ScalarProperty Name="LastIssueNbr" ColumnName="LastIssueNbr" />
-                <ScalarProperty Name="LastTransferNbr" ColumnName="LastTransferNbr" />
-                <ScalarProperty Name="LastRefNbr" ColumnName="LastRefNbr" />
-                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
-                <ScalarProperty Name="NegQty" ColumnName="NegQty" />
-                <ScalarProperty Name="CnvFactEditable" ColumnName="CnvFactEditable" />
-                <ScalarProperty Name="AutoRefNbr" ColumnName="AutoRefNbr" />
-                <ScalarProperty Name="SetupID" ColumnName="SetupID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4214,6 +4196,41 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM10100_pcPOSM" FunctionName="OM10100Model.Store.OM10100_pcPOSM">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM10100Model.OM10100_pcPOSM_Result">
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+                </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="IN_Setup">
+            <EntityTypeMapping TypeName="OM10100Model.IN_Setup">
+              <MappingFragment StoreEntitySet="IN_Setup">
+                <ScalarProperty Name="CheckINVal" ColumnName="CheckINVal" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="UseBarCode" ColumnName="UseBarCode" />
+                <ScalarProperty Name="PreFixBat" ColumnName="PreFixBat" />
+                <ScalarProperty Name="DfltSite" ColumnName="DfltSite" />
+                <ScalarProperty Name="DfltValMthd" ColumnName="DfltValMthd" />
+                <ScalarProperty Name="LastRcptNbr" ColumnName="LastRcptNbr" />
+                <ScalarProperty Name="LastIssueNbr" ColumnName="LastIssueNbr" />
+                <ScalarProperty Name="LastTransferNbr" ColumnName="LastTransferNbr" />
+                <ScalarProperty Name="LastRefNbr" ColumnName="LastRefNbr" />
+                <ScalarProperty Name="LastBatNbr" ColumnName="LastBatNbr" />
+                <ScalarProperty Name="NegQty" ColumnName="NegQty" />
+                <ScalarProperty Name="CnvFactEditable" ColumnName="CnvFactEditable" />
+                <ScalarProperty Name="AutoRefNbr" ColumnName="AutoRefNbr" />
+                <ScalarProperty Name="SetupID" ColumnName="SetupID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -4231,6 +4248,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

@@ -881,7 +881,10 @@ namespace OM10100.Controllers
                 {
                     throw new MessageException("703");
                 }
-
+                if (objInvt.ClassID == "POSM" && _lstOrdDet[i].POSM.PassNull() == string.Empty)
+                {
+                    throw new MessageException("20160407", new[] { _lstOrdDet[i].InvtID });
+                }
                 if (!_lstOrdDet[i].FreeItem && _lstOrdDet[i].BOType != "R" && _lstOrdDet[i].LineAmt == 0 &&
                     _lstOrdDet[i].QtyBO == 0 && _lstOrdDet[i].POSM.PassNull()==string.Empty)
                 {
@@ -6231,6 +6234,11 @@ namespace OM10100.Controllers
             List<OM10100_pdSOPrice_Result> lstPrice = _app.OM10100_pdSOPrice(branchID, custID, ""
                 , orderDate.HasValue ? orderDate.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd")).ToList();
             return this.Store(lstPrice, lstPrice.Count);
+        }
+        public ActionResult GetPOSM(string branchID, DateTime? orderDate)
+        {
+            var data = _app.OM10100_pcPOSM(branchID, Current.UserName, orderDate).ToList();
+            return this.Store(data, data.Count);
         }
         public ActionResult GetTax(string branchID)
         {

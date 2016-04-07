@@ -80,6 +80,19 @@
 )
 
 @(
+ X.Store().ID("stoPOSM")
+    .AutoLoad(false)
+    .Model(Util.GenerateModel(typeof(OM10100_pcPOSM_Result), "mdlPOSM", ""))
+    .Proxy(
+        X.AjaxProxy()
+        .Url(Url.Action("GetPOSM", "OM10100"))
+        .ActionMethods(action => action.Read = HttpMethod.POST)
+        .Reader(X.JsonReader().Root("data"))
+    )
+)
+
+
+@(
     X.Store().ID("stoDisc")
     .AutoLoad(false)
     .Model(Util.GenerateModel(typeof(OM10100_pcDiscCode_Result),"mdlDisc",""))
@@ -1080,7 +1093,18 @@
                                 lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             })
                         )
-                                
+
+                        , X.Column().ID("colPOSM").DataIndex("POSM").Text(Util.GetLang("POSM"))
+                        .Width(120)
+                        .Editor(
+                            X.ComboBox().ID("cboDetPOSM")
+                            .DisplayField("PosmID").ValueField("PosmID")
+                            .StoreID("stoPOSM")
+                            .QueryMode(DataLoadMode.Local)
+                            .ForceSelection(true)
+                            .SubmitValue(false)
+                        )
+                                    
                         , X.Column().ID("colUnitRate").DataIndex("UnitRate").Text(Util.GetLang("CnvFact"))
                         .Width(100)
                         .Align(Alignment.Right)

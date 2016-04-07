@@ -93,12 +93,14 @@ var stoOMSetup_Load = function () {
 var loadCust = function (custID, orderDate, shipToID, isSelect) {
     if (isSelect) {
         HQ.numCust = 0;
-        HQ.maxCust = 4;
+        HQ.maxCust = 5;
 
         App.stoPrice.load({
             params: { custID: custID, orderDate: orderDate, branchID: App.txtBranchID.getValue() }, callback: checkSelectCust
         });
-
+        App.stoPOSM.load({
+            params: { custID: custID,orderDate: orderDate, branchID: App.txtBranchID.getValue() }, callback: checkSelectCust
+        });
         App.stoCustomer.load({
             params: { custID: custID, branchID: App.txtBranchID.getValue() }, callback: checkSelectCust
         });
@@ -112,12 +114,15 @@ var loadCust = function (custID, orderDate, shipToID, isSelect) {
         });
     } else {
         HQ.numCust = 0;
-        HQ.maxCust = 3;
+        HQ.maxCust = 4;
 
         App.stoPrice.load({
             params: { custID: custID, orderDate: orderDate, branchID: App.txtBranchID.getValue() }, callback: checkSelectCust
         });
 
+        App.stoPOSM.load({
+            params: { orderDate: orderDate, branchID: App.txtBranchID.getValue() }, callback: checkSelectCust
+        });
         App.stoCustomer.load({
             params: { custID: custID, branchID: App.txtBranchID.getValue() }, callback: checkSelectCust
         });
@@ -775,12 +780,22 @@ var txtOrderDate_Change = function () {
         App.txtARDocDate.setValue(App.txtOrderDate.getValue());
         App.txtShipDate.setValue(App.txtOrderDate.getValue());
         App.stoPrice.load({
-            params: { custID: App.cboCustID.getValue(), orderDate: App.txtOrderDate.getValue(), branchID: App.txtBranchID.getValue() }, callback: function () {
-                HQ.common.showBusy(false);
+            params: { custID: App.cboCustID.getValue(), orderDate: App.txtOrderDate.getValue(), branchID: App.txtBranchID.getValue() },
+            callback: function () {
+                App.stoPOSM.load({
+                    params: {
+                        orderDate: App.txtOrderDate.getValue(), branchID: App.txtBranchID.getValue()
+                    },
+                    callback: function () {
+                        HQ.common.showBusy(false);
+                    }
+                });
+               
             }
         });
     } else {
         App.stoPrice.clearData();
+        App.stoPOSM.clearData();
     }
 
 }
@@ -842,7 +857,9 @@ var grdOrdDet_BeforeEdit = function (item, e) {
     var record = e.record;
 
     if (!Ext.isEmpty(record.data.POSM) && (key == 'FreeItem' || key == 'DiscPct' || key == 'SlsPrice' || key == 'SlsUnit' || key == 'DiscAmt' || key == 'ManuDiscAmt')) return false;
-
+    if (key == 'POSM' && record.invt && record.invt.ClassID != 'POSM') {
+        return false;
+    }
     if (key == 'BOType' && !Ext.isEmpty(record.data.BOType)) return false;
 
     if (key == 'InvtID' && !Ext.isEmpty(record.data.InvtID)) return false;
@@ -1346,6 +1363,11 @@ var save = function () {
             }
             if (Ext.isEmpty(item.invt)) {
                 item.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [item.data.InvtID]);
+            }
+            if (item.invt.ClassID == 'POSM' && !item.data.POSM) {
+                HQ.message.show(20160407, [item.data.InvtID], '', true);
+                flat = item;
+                return false;
             }
             if (item.invt.LotSerTrack != "N" && !Ext.isEmpty(item.invt.LotSerTrack)) {
                 var lotQty = 0;
@@ -2008,9 +2030,7 @@ var checkExitEdit = function (row) {
             det.BarCode = invt.BarCode;
         }
 
-        if (invt.ClassID == 'POSM' ) {
-            det.POSM = 'POSM';
-        }
+       
         var site = HQ.store.findInStore(App.stoItemSite, ['SiteID', 'InvtID'], [HQ.objUser.OMSite, det.InvtID]);
 
         if (!Ext.isEmpty(site)) {
