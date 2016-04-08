@@ -50,6 +50,7 @@ namespace OM23100
             Session["CpnyID"] = Current.CpnyID = "HQHD1120";//18510580
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 1;
+            Current.FormatDate = "dd.MM.yyyy";
         }
     }
 }

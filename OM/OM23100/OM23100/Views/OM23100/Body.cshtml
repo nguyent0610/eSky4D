@@ -48,7 +48,7 @@
             .Region(Region.North)
             .Items(
                 HQ.DateField().ID("dateFcs").MarginSpec("5 0 0 0").HQLangCode("OM23100_Date").Width(400)
-                .Type(DatePickerType.Month).Format("yyyy/MM").Value(DateTime.Now.ToString("yyyy/MM"))
+                .Type(DatePickerType.Month).Value(DateTime.Now)
                 .Listeners(p =>
                 {
                     p.Change.Fn = "dateFcs_Change";
