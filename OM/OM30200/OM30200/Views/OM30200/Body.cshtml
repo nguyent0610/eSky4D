@@ -234,7 +234,7 @@
                                 .ColumnModel(
                                     X.Column().Text(Util.GetLang("OrderNbr")).DataIndex("OrderNbr")
                                     , X.Column().Text(Util.GetLang("InvcNbr")).DataIndex("InvcNbr")
-                                    , X.DateColumn().Text(Util.GetLang("OrderDate")).DataIndex("OrderDate").Format("dd/MM/yyyy")
+                                    , HQ.DateColumn().Text(Util.GetLang("OrderDate")).DataIndex("OrderDate")
                                     , X.Column().Text(Util.GetLang("CustID")).DataIndex("CustID")
                                     , X.Column().Text(Util.GetLang("Name")).DataIndex("CustName")
                                     , X.NumberColumn().Text(Util.GetLang("Qty")).DataIndex("Qty").Align(Alignment.Right).Format("0,000")
