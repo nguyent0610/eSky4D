@@ -49,8 +49,8 @@
             , X.Column().Text(Util.GetLang("DiscCode")).DataIndex("DiscCode").Width(150).Editor(X.TextField().MaxLength(30).EnforceMaxLength(true))
             , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150).Editor(X.TextField().MaxLength(300).EnforceMaxLength(true))
             , X.CheckColumn().Text(Util.GetLang("Active")).DataIndex("Active").Width(150).Editable(true)
-            , X.DateColumn().ID("txtFromDate").DataIndex("FromDate").Text(Util.GetLang("FromDate")).Format("dd/MM/yyyy").Editor(X.DateField().Format("dd/MM/yyyy"))
-            , X.DateColumn().ID("txtToDate").DataIndex("ToDate").Text(Util.GetLang("ToDate")).Format("dd/MM/yyyy").Editor(X.DateField().Format("dd/MM/yyyy"))
+            , HQ.DateColumn().ID("txtFromDate").DataIndex("FromDate").Text("FromDate").Editor(HQ.DateField())
+            , HQ.DateColumn().ID("txtToDate").DataIndex("ToDate").Text("ToDate").Editor(HQ.DateField())
             
             
             , X.CommandColumn().Width(150)
