@@ -127,10 +127,10 @@
                     , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                         .Items(
                             HQ.DateField().ID("lblFromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(220)
-                            .Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy"))
+                            .Value(DateTime.Now)
                             
                             , HQ.DateField().ID("lblToDate").MarginSpec("5 0 0 0").HQLangCode("ToDate").Width(220)
-                            .Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy"))
+                            .Value(DateTime.Now)
                             
                             , HQ.Combo().ID("cboJournalType").Name("cboJournalType").MarginSpec("5 158 0 0").Width(300)
                                 .HQLangCode("JrnlType").HQDBSys(false).HQProcedure("IN30100_pcJournalType")
@@ -204,7 +204,7 @@
                         X.RowNumbererColumn().Width(40)
 
                         , X.Column().Text(Util.GetLang("BatNbr")).DataIndex("BatNbr").Width(100)
-                        , X.DateColumn().Text(Util.GetLang("TranDate")).DataIndex("TranDate").Width(100).Format("dd/MM/yyyy")
+                        , HQ.DateColumn().Text(Util.GetLang("TranDate")).DataIndex("TranDate").Width(100)
                         , X.Column().Text(Util.GetLang("JrnlType")).DataIndex("JrnlType").Width(100)
                         , X.Column().Text(Util.GetLang("TranType")).DataIndex("TranType").Width(100)
                         , X.NumberColumn().Text(Util.GetLang("StkQty")).DataIndex("Qty1").Width(150).Align(Alignment.Right).Format("0,000")
