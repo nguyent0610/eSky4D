@@ -91,10 +91,10 @@
                 , X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 0 0")
                 .Items(
                     HQ.DateField().ID("dtmFromDate").Name("dtmFromDate").HQLangCode("FROMDATE").DataIndex("DateTime")
-                        .Width(300).MarginSpec("5 0 0 0").AllowBlank(false).Value(DateTime.Now.ToString()).Format("dd/MM/yyyy")
+                        .Width(300).MarginSpec("5 0 0 0").AllowBlank(false).Value(DateTime.Now)
                         
                     , HQ.DateField().ID("dtmToDate").Name("dtmToDate").HQLangCode("TODATE").DataIndex("DateTime")
-                        .Width(300).MarginSpec("5 0 0 0").AllowBlank(false).Value(DateTime.Now.ToString()).Format("dd/MM/yyyy")
+                        .Width(300).MarginSpec("5 0 0 0").AllowBlank(false).Value(DateTime.Now)
                         
                     , HQ.Combo().ID("cboFreqType").Name("cboFreqType").HQLangCode("SlsFreqType").HQProcedure("OM22300_pcSalesFreq")
                         .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").HQValue("ALL",false)
@@ -156,7 +156,7 @@
             .SortableColumns(false)                     
             .ColumnModel(
                 X.RowNumbererColumn().Width(35).Listeners(x => x.AfterRender.Handler = "this.resizable = true")
-                , X.DateColumn().Text(Util.GetLang("VisitDate")).Width(120).DataIndex("VisitDate").Format("dd/MM/yyyy")
+                , HQ.DateColumn().Text("VisitDate").Width(120).DataIndex("VisitDate")
                 
                 , X.NumberColumn().Text(Util.GetLang("Week")).DataIndex("WeekNbr").Width(50).Align(Alignment.Right).Format("0,000")
               
