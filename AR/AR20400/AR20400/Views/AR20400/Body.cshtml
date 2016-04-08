@@ -490,15 +490,15 @@
                                     .DecimalPrecision(0).MinValue(0).MaxValue(2147483647)
 
                                 , HQ.DateField().ID("calExpiryDate").HQLangCode("CUSTEXPD").DataIndex("ExpiryDate")
-                                    .Format("MM/dd/yyyy").AllowBlank(false)
+                                    .AllowBlank(false)
                                     .Width(320).LabelWidth(150).MarginSpec("5 0 0 0")
 
                                 , HQ.DateField().ID("calEstablishDate").HQLangCode("ESTABLISHDATE").DataIndex("EstablishDate")
-                                    .Format("MM/dd/yyyy").AllowBlank(false)
+                                    .AllowBlank(false)
                                     .Width(320).LabelWidth(150).MarginSpec("5 0 0 0")
                                     
                                 , HQ.DateField().ID("calBirthday").HQLangCode("BIRTHDAY").DataIndex("Birthdate")
-                                    .Format("MM/dd/yyyy").AllowBlank(false)
+                                    .AllowBlank(false)
                                     .Width(320).LabelWidth(150).MarginSpec("5 0 5 0")
                             )
                     )
@@ -868,14 +868,14 @@
 
                                 , X.CheckColumn().Text(Util.GetLang("Active")).DataIndex("Active").Editable(true).Width(80)
 
-                                , X.DateColumn().Text(Util.GetLang("FromDate")).DataIndex("FromDate").Width(100).Format("MM/dd/yyyy")
-                                    .Editor(HQ.DateField().Format("MM/dd/yyyy"))
+                                , HQ.DateColumn().Text(Util.GetLang("FromDate")).DataIndex("FromDate").Width(100)
+                                    .Editor(HQ.DateField())
 
-                                , X.DateColumn().Text(Util.GetLang("ToDate")).DataIndex("ToDate").Width(100).Format("MM/dd/yyyy")
-                                    .Editor(HQ.DateField().Format("MM/dd/yyyy"))
+                                , HQ.DateColumn().Text(Util.GetLang("ToDate")).DataIndex("ToDate").Width(100)
+                                    .Editor(HQ.DateField())
 
-                                , X.DateColumn().Text(Util.GetLang("ExtDate")).DataIndex("ExtDate").Width(100).Format("MM/dd/yyyy")
-                                    .Editor(HQ.DateField().Format("MM/dd/yyyy"))
+                                , HQ.DateColumn().Text(Util.GetLang("ExtDate")).DataIndex("ExtDate").Width(100)
+                                    .Editor(HQ.DateField())
 
                                 , X.NumberColumn().Text(Util.GetLang("MonthNo")).DataIndex("MonthNum")
                                     .Width(120).Align(Alignment.Right).Format("0,000")
@@ -1156,8 +1156,8 @@
                             .Width(120).Align(Alignment.Right).Format("0,000")
                             .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
 
-                        , X.DateColumn().Text(Util.GetLang("FitupDate")).DataIndex("FitupDate").Width(100).Format("MM/dd/yyyy")
-                            .Editor(HQ.DateField().Format("MM/dd/yyyy"))
+                        , HQ.DateColumn().Text(Util.GetLang("FitupDate")).DataIndex("FitupDate").Width(100)
+                            .Editor(HQ.DateField())
 
                         , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(100)
                             .Editor(X.TextField().MaxLength(50).EnforceMaxLength(true))
