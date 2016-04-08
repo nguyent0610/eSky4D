@@ -50,6 +50,8 @@ namespace OM30200
             Session["CpnyID"] = Current.CpnyID = "HQHD3110"; //HQHD3120 LCUS-HCM-0004
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] =1;
+
+            Current.FormatDate = "dd.MM.yyyy";
         }
     }
 }

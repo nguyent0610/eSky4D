@@ -112,7 +112,7 @@
                         , HQ.TextBox().ID("txtCusPO").Name("txtCusPO").HQLangCode("CUSTORDERNBR").MarginSpec("5 0 0 0").Width(300)
 
                         , HQ.DateField().ID("lblOrderDate").MarginSpec("5 0 5 0").HQLangCode("ORDDATE").Width(300)
-                        .Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy"))
+                        .Value(DateTime.Now)
                     )
                 , X.Container().Layout(LayoutType.VBox)
                 .Items(
@@ -134,7 +134,7 @@
                     , HQ.TextBox().ID("txtInvoiceNbr").Name("txtInvoiceNbr").HQLangCode("INVOICENBR").MarginSpec("5 0 0 0").Width(300)
 
                     , HQ.DateField().ID("lblTo").MarginSpec("5 0 5 0").HQLangCode("TO").Width(300)
-                    .Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy"))
+                    .Value(DateTime.Now)
                 )
                 
             )//pnl Header
