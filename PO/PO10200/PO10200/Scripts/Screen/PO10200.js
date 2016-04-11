@@ -1360,6 +1360,7 @@ var insertItemGrid = function (grd, item) {
     var objDetail = App.stoPO10200_pgDetail.data.items[App.stoPO10200_pgDetail.getCount() - 1];
    
     var valueTax = '';
+    var objInvtID = HQ.store.findRecord(App.cboInvtID.store, ['InvtID'], [item.InvtID]);
     App.cboTaxID.getStore().data.each(function (det) {
         valueTax += det.data.taxid + ',';
 
@@ -1435,7 +1436,7 @@ var insertItemGrid = function (grd, item) {
     objDetail.set('VouchStage', item.VouchStage);
 
 
-
+    objDetail.set('ClassID', objInvtID ? objInvtID.data.ClassID : '');
    
     delTax(objDetail);
     calcTax(objDetail);
