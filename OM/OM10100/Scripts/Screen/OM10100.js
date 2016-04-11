@@ -856,7 +856,8 @@ var grdOrdDet_BeforeEdit = function (item, e) {
     var key = e.field;
     var record = e.record;
 
-    if (!Ext.isEmpty(record.data.POSM) && (key == 'FreeItem' || key == 'DiscPct' || key == 'SlsPrice' || key == 'SlsUnit' || key == 'DiscAmt' || key == 'ManuDiscAmt')) return false;
+    if (record.invt && record.invt.ClassID == 'POSM' && (key == 'FreeItem' || key == 'DiscPct' || key == 'SlsPrice' || key == 'SlsUnit' || key == 'DiscAmt' || key == 'ManuDiscAmt')) return false;
+
     if (key == 'POSM' && record.invt && record.invt.ClassID != 'POSM') {
         return false;
     }
@@ -1320,6 +1321,14 @@ var save = function () {
                 return false;
             }
 
+            if (Ext.isEmpty(item.invt)) {
+                item.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [item.data.InvtID]);
+            }
+            if (item.invt.ClassID == 'POSM' && !item.data.POSM) {
+                HQ.message.show(20160407, [item.data.InvtID], '', true);
+                flat = item;
+                return false;
+            }
 
             if (item.data.FreeItem && item.data.LineAmt != 0) {
                 HQ.message.show(703, '', '', true);
@@ -1361,14 +1370,7 @@ var save = function () {
                 flat = item;
                 return false;
             }
-            if (Ext.isEmpty(item.invt)) {
-                item.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [item.data.InvtID]);
-            }
-            if (item.invt.ClassID == 'POSM' && !item.data.POSM) {
-                HQ.message.show(20160407, [item.data.InvtID], '', true);
-                flat = item;
-                return false;
-            }
+          
             if (item.invt.LotSerTrack != "N" && !Ext.isEmpty(item.invt.LotSerTrack)) {
                 var lotQty = 0;
                 var lotFlat = false;
@@ -1794,7 +1796,7 @@ var checkExitEdit = function (row) {
                     det.DiscAmt2 = Math.round((soFee + det.LineQty * det.SlsPrice) * (det.DiscPct / 100));
                     det.LineAmt = Math.round(det.LineQty * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
                 }
-                if (det.POSM) {
+                if (invt.ClassID == 'POSM') {
                     det.LineAmt = 0;
                     det.DiscPct = 0;
                     det.DiscAmt = 0;
@@ -2199,7 +2201,7 @@ var checkSubDisc = function (record) {
             det.DiscAmt = Math.round(det.LineQty * det.SlsPrice * (det.DiscPct / 100));
             det.LineAmt = Math.round(det.LineQty * det.SlsPrice - det.DiscAmt - det.ManuDiscAmt);
         }
-        if (det.POSM) {
+        if (record.invt.ClassID == 'POSM') {
             det.LineAmt = 0;
             det.DiscPct = 0;
             det.DiscAmt = 0;
