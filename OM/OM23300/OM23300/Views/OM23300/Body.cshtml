@@ -83,7 +83,7 @@
                 , X.Column().Text(Util.GetLang("OM23300Structure")).DataIndex("Structure").Width(200)
 				    .Editor(X.TextField().AllowBlank(true).MaxLength(30).EnforceMaxLength(true))
 
-                , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(120)
+                , X.Column().Text(Util.GetLang("OM23300InvtID")).DataIndex("InvtID").Width(120)
                    .Editor(
 	                   HQ.Combo().ID("cboInvtID").Name("cboInvtID").ForceSelection(true)
 		                    .HQDBSys(false).HQProcedure("OM23300_pcInvtID").HQHeightWidth(400, 300)
@@ -96,14 +96,14 @@
 		                    .LoadData()
 			        )
                     
-                , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
+                , X.Column().Text(Util.GetLang("OM23300Descr")).DataIndex("Descr").Width(200)
 
-                , X.NumberColumn().Align(Alignment.Right).Format("0,000").Text(Util.GetLang("SlsPrice")).DataIndex("SlsPrice")
+                , X.NumberColumn().Align(Alignment.Right).Format("0,000").Text(Util.GetLang("OM23300SlsPrice")).DataIndex("SlsPrice")
                 
-                , X.NumberColumn().Align(Alignment.Right).Format("0,000").Text(Util.GetLang("UnitCost")).DataIndex("UnitCost")
+                , X.NumberColumn().Align(Alignment.Right).Format("0,000").Text(Util.GetLang("OM23300UnitCost")).DataIndex("UnitCost")
                     .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
                     
-                , X.NumberColumn().Align(Alignment.Right).Format("0,000").Text(Util.GetLang("CnvFact")).DataIndex("CnvFact")
+                , X.NumberColumn().Align(Alignment.Right).Format("0,000").Text(Util.GetLang("OM23300CnvFact")).DataIndex("CnvFact")
                     .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))
                 
                 , X.CommandColumn().Width(150)
