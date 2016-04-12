@@ -39,7 +39,9 @@
                         .HQColumnShow("InvtID,Descr,Color").ForceSelection(true)
                         .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
                         .HQParam(new StoreParameterCollection() {
-                            new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                            new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                         })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
@@ -66,7 +68,9 @@
                                 .HQColumnShow("SiteID,Name").ForceSelection(true)
                                 .DisplayField("Name").ValueField("SiteID").HQHeightWidth(400, 300)
                                 .HQParam(new StoreParameterCollection() {
-                                    new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                                    new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                    new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                                    new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                                 })
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>
@@ -81,7 +85,9 @@
                                 .HQColumnShow("CustId,CustName,Addr1,Addr2").ForceSelection(true)
                                 .DisplayField("CustName").ValueField("CustId").HQHeightWidth(400, 300)
                                 .HQParam(new StoreParameterCollection() {
-                                    new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                                    new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                    new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                                    new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                                 })
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>
@@ -96,8 +102,9 @@
                                 .HQColumnShow("VendID,name,Address").ForceSelection(true)
                                 .DisplayField("name").ValueField("VendID").HQHeightWidth(400, 300)
                                 .HQParam(new StoreParameterCollection() {
-                                    new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw},
-                                    new StoreParameter() { Name = "@BranchID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw}
+                                    new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                    new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                                    new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                                 })
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>
@@ -112,6 +119,8 @@
                                 .HQColumnShow("Descr").ForceSelection(true)
                                 .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300).HQValue("-2",false)
                                 .HQParam(new StoreParameterCollection() {
+                                    new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                    new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
                                     new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                                 })
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -137,6 +146,8 @@
                                 .HQColumnShow("Descr").ForceSelection(true)
                                 .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300).HQValue("%",false)
                                 .HQParam(new StoreParameterCollection() {
+                                    new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                    new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
                                     new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                                 })
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -152,6 +163,8 @@
                                 .HQColumnShow("Descr").ForceSelection(true)
                                 .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300).HQValue("%",false)
                                 .HQParam(new StoreParameterCollection() {
+                                    new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                                    new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
                                     new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                                 })
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -184,7 +197,7 @@
                             .ServerProxy(X.AjaxProxy().Url(Url.Action("GetIN_Transactions"))).AutoLoad(false)
                             .Parameters(ps =>
                             {
-                                ps.Add(new StoreParameter("BranchID", "HQ.cpnyID", ParameterMode.Raw));
+                                //ps.Add(new StoreParameter("BranchID", "HQ.cpnyID", ParameterMode.Raw));
                                 ps.Add(new StoreParameter("InvtID", "App.cboInvtID.getValue()", ParameterMode.Raw));
                                 ps.Add(new StoreParameter("CustID", "App.cboCustID.getValue()", ParameterMode.Raw));
                                 ps.Add(new StoreParameter("VendID", "App.cboVendID.getValue()", ParameterMode.Raw));
