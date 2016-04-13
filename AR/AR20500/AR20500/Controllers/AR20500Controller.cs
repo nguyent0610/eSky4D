@@ -148,6 +148,7 @@ namespace AR20500.Controllers
                                 objCust.Phone = item.Phone.PassNull();
 
                                 objCust.Channel = item.Channel.PassNull();
+                                objCust.Area = item.Area.PassNull();
 
                                 objCust.EMailAddr = item.Email.PassNull();
 
@@ -179,6 +180,7 @@ namespace AR20500.Controllers
                                 objCust.LUpd_User = Current.UserName;
                                 objCust.Phone = objCust.BillPhone = item.Phone.PassNull(); ;
                                 objCust.Channel = objCust.Channel.PassNull();
+                                objCust.Area = objCust.Area.PassNull();
                                 objCust.ShopType = item.ShopType.PassNull();
                                 objCust.State = item.State.PassNull();
                                 objCust.Status = "A";// item.IsActive == 1 ? "A" : "I";
