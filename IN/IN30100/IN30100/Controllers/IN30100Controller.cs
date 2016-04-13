@@ -41,7 +41,7 @@ namespace IN30100.Controllers
             DateTime ToDate_tmp = DateTime.Parse(ToDate.PassNull());
             short Status_tmp = short.Parse(Status);
 
-            return this.Store(_db.IN30100_pgTransactionsQuery(BranchID, InvtID, CustID, VendID, SiteID, TranType, JrnlType, Status_tmp, FromDate_tmp, ToDate_tmp).ToList());
+            return this.Store(_db.IN30100_pgTransactionsQuery(Current.UserName,Current.CpnyID,Current.LangID, InvtID, CustID, VendID, SiteID, TranType, JrnlType, Status_tmp, FromDate_tmp, ToDate_tmp).ToList());
         }
 
         public ActionResult GetIN30100_GetStockBegEndBal(string BranchID, string InvtID, string CustID, string VendID, string SiteID

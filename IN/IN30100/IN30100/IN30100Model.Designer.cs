@@ -78,124 +78,6 @@ namespace IN30100
         /// <param name="status">No Metadata Documentation available.</param>
         /// <param name="fromDate">No Metadata Documentation available.</param>
         /// <param name="toDate">No Metadata Documentation available.</param>
-        public ObjectResult<IN30100_pgTransactionsQuery_Result> IN30100_pgTransactionsQuery(global::System.String branchID, global::System.String invtID, global::System.String custID, global::System.String vendID, global::System.String siteID, global::System.String tranType, global::System.String jrnlType, Nullable<global::System.Int16> status, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate)
-        {
-            ObjectParameter branchIDParameter;
-            if (branchID != null)
-            {
-                branchIDParameter = new ObjectParameter("BranchID", branchID);
-            }
-            else
-            {
-                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
-            }
-    
-            ObjectParameter invtIDParameter;
-            if (invtID != null)
-            {
-                invtIDParameter = new ObjectParameter("InvtID", invtID);
-            }
-            else
-            {
-                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
-            }
-    
-            ObjectParameter custIDParameter;
-            if (custID != null)
-            {
-                custIDParameter = new ObjectParameter("CustID", custID);
-            }
-            else
-            {
-                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
-            }
-    
-            ObjectParameter vendIDParameter;
-            if (vendID != null)
-            {
-                vendIDParameter = new ObjectParameter("VendID", vendID);
-            }
-            else
-            {
-                vendIDParameter = new ObjectParameter("VendID", typeof(global::System.String));
-            }
-    
-            ObjectParameter siteIDParameter;
-            if (siteID != null)
-            {
-                siteIDParameter = new ObjectParameter("SiteID", siteID);
-            }
-            else
-            {
-                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
-            }
-    
-            ObjectParameter tranTypeParameter;
-            if (tranType != null)
-            {
-                tranTypeParameter = new ObjectParameter("TranType", tranType);
-            }
-            else
-            {
-                tranTypeParameter = new ObjectParameter("TranType", typeof(global::System.String));
-            }
-    
-            ObjectParameter jrnlTypeParameter;
-            if (jrnlType != null)
-            {
-                jrnlTypeParameter = new ObjectParameter("JrnlType", jrnlType);
-            }
-            else
-            {
-                jrnlTypeParameter = new ObjectParameter("JrnlType", typeof(global::System.String));
-            }
-    
-            ObjectParameter statusParameter;
-            if (status.HasValue)
-            {
-                statusParameter = new ObjectParameter("Status", status);
-            }
-            else
-            {
-                statusParameter = new ObjectParameter("Status", typeof(global::System.Int16));
-            }
-    
-            ObjectParameter fromDateParameter;
-            if (fromDate.HasValue)
-            {
-                fromDateParameter = new ObjectParameter("FromDate", fromDate);
-            }
-            else
-            {
-                fromDateParameter = new ObjectParameter("FromDate", typeof(global::System.DateTime));
-            }
-    
-            ObjectParameter toDateParameter;
-            if (toDate.HasValue)
-            {
-                toDateParameter = new ObjectParameter("ToDate", toDate);
-            }
-            else
-            {
-                toDateParameter = new ObjectParameter("ToDate", typeof(global::System.DateTime));
-            }
-    
-            return base.ExecuteFunction<IN30100_pgTransactionsQuery_Result>("IN30100_pgTransactionsQuery", branchIDParameter, invtIDParameter, custIDParameter, vendIDParameter, siteIDParameter, tranTypeParameter, jrnlTypeParameter, statusParameter, fromDateParameter, toDateParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="branchID">No Metadata Documentation available.</param>
-        /// <param name="invtID">No Metadata Documentation available.</param>
-        /// <param name="custID">No Metadata Documentation available.</param>
-        /// <param name="vendID">No Metadata Documentation available.</param>
-        /// <param name="siteID">No Metadata Documentation available.</param>
-        /// <param name="tranType">No Metadata Documentation available.</param>
-        /// <param name="jrnlType">No Metadata Documentation available.</param>
-        /// <param name="status">No Metadata Documentation available.</param>
-        /// <param name="fromDate">No Metadata Documentation available.</param>
-        /// <param name="toDate">No Metadata Documentation available.</param>
         public ObjectResult<IN30100_GetStockBegEndBal_Result> IN30100_GetStockBegEndBal(global::System.String branchID, global::System.String invtID, global::System.String custID, global::System.String vendID, global::System.String siteID, global::System.String tranType, global::System.String jrnlType, Nullable<global::System.Int16> status, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate)
         {
             ObjectParameter branchIDParameter;
@@ -299,6 +181,146 @@ namespace IN30100
             }
     
             return base.ExecuteFunction<IN30100_GetStockBegEndBal_Result>("IN30100_GetStockBegEndBal", branchIDParameter, invtIDParameter, custIDParameter, vendIDParameter, siteIDParameter, tranTypeParameter, jrnlTypeParameter, statusParameter, fromDateParameter, toDateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
+        /// <param name="invtID">No Metadata Documentation available.</param>
+        /// <param name="custID">No Metadata Documentation available.</param>
+        /// <param name="vendID">No Metadata Documentation available.</param>
+        /// <param name="siteID">No Metadata Documentation available.</param>
+        /// <param name="tranType">No Metadata Documentation available.</param>
+        /// <param name="jrnlType">No Metadata Documentation available.</param>
+        /// <param name="status">No Metadata Documentation available.</param>
+        /// <param name="fromDate">No Metadata Documentation available.</param>
+        /// <param name="toDate">No Metadata Documentation available.</param>
+        public ObjectResult<IN30100_pgTransactionsQuery_Result> IN30100_pgTransactionsQuery(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String invtID, global::System.String custID, global::System.String vendID, global::System.String siteID, global::System.String tranType, global::System.String jrnlType, Nullable<global::System.Int16> status, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate)
+        {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
+            }
+    
+            ObjectParameter custIDParameter;
+            if (custID != null)
+            {
+                custIDParameter = new ObjectParameter("CustID", custID);
+            }
+            else
+            {
+                custIDParameter = new ObjectParameter("CustID", typeof(global::System.String));
+            }
+    
+            ObjectParameter vendIDParameter;
+            if (vendID != null)
+            {
+                vendIDParameter = new ObjectParameter("VendID", vendID);
+            }
+            else
+            {
+                vendIDParameter = new ObjectParameter("VendID", typeof(global::System.String));
+            }
+    
+            ObjectParameter siteIDParameter;
+            if (siteID != null)
+            {
+                siteIDParameter = new ObjectParameter("SiteID", siteID);
+            }
+            else
+            {
+                siteIDParameter = new ObjectParameter("SiteID", typeof(global::System.String));
+            }
+    
+            ObjectParameter tranTypeParameter;
+            if (tranType != null)
+            {
+                tranTypeParameter = new ObjectParameter("TranType", tranType);
+            }
+            else
+            {
+                tranTypeParameter = new ObjectParameter("TranType", typeof(global::System.String));
+            }
+    
+            ObjectParameter jrnlTypeParameter;
+            if (jrnlType != null)
+            {
+                jrnlTypeParameter = new ObjectParameter("JrnlType", jrnlType);
+            }
+            else
+            {
+                jrnlTypeParameter = new ObjectParameter("JrnlType", typeof(global::System.String));
+            }
+    
+            ObjectParameter statusParameter;
+            if (status.HasValue)
+            {
+                statusParameter = new ObjectParameter("Status", status);
+            }
+            else
+            {
+                statusParameter = new ObjectParameter("Status", typeof(global::System.Int16));
+            }
+    
+            ObjectParameter fromDateParameter;
+            if (fromDate.HasValue)
+            {
+                fromDateParameter = new ObjectParameter("FromDate", fromDate);
+            }
+            else
+            {
+                fromDateParameter = new ObjectParameter("FromDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter toDateParameter;
+            if (toDate.HasValue)
+            {
+                toDateParameter = new ObjectParameter("ToDate", toDate);
+            }
+            else
+            {
+                toDateParameter = new ObjectParameter("ToDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<IN30100_pgTransactionsQuery_Result>("IN30100_pgTransactionsQuery", userNameParameter, cpnyIDParameter, langIDParameter, invtIDParameter, custIDParameter, vendIDParameter, siteIDParameter, tranTypeParameter, jrnlTypeParameter, statusParameter, fromDateParameter, toDateParameter);
         }
 
         #endregion
@@ -1321,6 +1343,30 @@ namespace IN30100
         private global::System.Double _QtyUncosted;
         partial void OnQtyUncostedChanging(global::System.Double value);
         partial void OnQtyUncostedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PosmID
+        {
+            get
+            {
+                return _PosmID;
+            }
+            set
+            {
+                OnPosmIDChanging(value);
+                ReportPropertyChanging("PosmID");
+                _PosmID = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PosmID");
+                OnPosmIDChanged();
+            }
+        }
+        private global::System.String _PosmID;
+        partial void OnPosmIDChanging(global::System.String value);
+        partial void OnPosmIDChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

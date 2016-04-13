@@ -19,7 +19,9 @@
           <Parameter Name="ToDate" Type="smalldatetime" Mode="In" />
         </Function>
         <Function Name="IN30100_pgTransactionsQuery" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="BranchID" Type="nvarchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="InvtID" Type="varchar" Mode="In" />
           <Parameter Name="CustID" Type="varchar" Mode="In" />
           <Parameter Name="VendID" Type="varchar" Mode="In" />
@@ -35,18 +37,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="IN30100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="IN30100Entities" annotation:LazyLoadingEnabled="true" >
-          <FunctionImport Name="IN30100_pgTransactionsQuery" ReturnType="Collection(IN30100Model.IN30100_pgTransactionsQuery_Result)">
-            <Parameter Name="BranchID" Mode="In" Type="String" />
-            <Parameter Name="InvtID" Mode="In" Type="String" />
-            <Parameter Name="CustID" Mode="In" Type="String" />
-            <Parameter Name="VendID" Mode="In" Type="String" />
-            <Parameter Name="SiteID" Mode="In" Type="String" />
-            <Parameter Name="TranType" Mode="In" Type="String" />
-            <Parameter Name="JrnlType" Mode="In" Type="String" />
-            <Parameter Name="Status" Mode="In" Type="Int16" />
-            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
           <FunctionImport Name="IN30100_GetStockBegEndBal" ReturnType="Collection(IN30100Model.IN30100_GetStockBegEndBal_Result)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="InvtID" Mode="In" Type="String" />
@@ -59,7 +49,25 @@
             <Parameter Name="FromDate" Mode="In" Type="DateTime" />
             <Parameter Name="ToDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <FunctionImport Name="IN30100_pgTransactionsQuery" ReturnType="Collection(IN30100Model.IN30100_pgTransactionsQuery_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="String" />
+            <Parameter Name="VendID" Mode="In" Type="String" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="TranType" Mode="In" Type="String" />
+            <Parameter Name="JrnlType" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Int16" />
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="IN30100_GetStockBegEndBal_Result">
+          <Property Type="Double" Name="BeginQty" Nullable="true" />
+          <Property Type="Double" Name="EndQty" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="IN30100_pgTransactionsQuery_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="BatNbr" Nullable="false" MaxLength="10" />
@@ -98,11 +106,8 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
           <Property Type="String" Name="CostID" Nullable="true" MaxLength="30" />
           <Property Type="Double" Name="QtyUncosted" Nullable="false" />
+          <Property Type="String" Name="PosmID" Nullable="true" MaxLength="30" />
           <Property Type="Double" Name="Qty1" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="IN30100_GetStockBegEndBal_Result">
-          <Property Type="Double" Name="BeginQty" Nullable="true" />
-          <Property Type="Double" Name="EndQty" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -110,6 +115,14 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="IN30100Entities" >
+          <FunctionImportMapping FunctionImportName="IN30100_GetStockBegEndBal" FunctionName="eBiz4DWebSysModel.Store.IN30100_GetStockBegEndBal">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN30100Model.IN30100_GetStockBegEndBal_Result">
+                <ScalarProperty Name="BeginQty" ColumnName="BeginQty" />
+                <ScalarProperty Name="EndQty" ColumnName="EndQty" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="IN30100_pgTransactionsQuery" FunctionName="eBiz4DWebSysModel.Store.IN30100_pgTransactionsQuery">
             <ResultMapping>
               <ComplexTypeMapping TypeName="IN30100Model.IN30100_pgTransactionsQuery_Result">
@@ -150,15 +163,8 @@
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="CostID" ColumnName="CostID" />
                 <ScalarProperty Name="QtyUncosted" ColumnName="QtyUncosted" />
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
                 <ScalarProperty Name="Qty1" ColumnName="Qty1" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="IN30100_GetStockBegEndBal" FunctionName="eBiz4DWebSysModel.Store.IN30100_GetStockBegEndBal">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IN30100Model.IN30100_GetStockBegEndBal_Result">
-                <ScalarProperty Name="BeginQty" ColumnName="BeginQty" />
-                <ScalarProperty Name="EndQty" ColumnName="EndQty" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

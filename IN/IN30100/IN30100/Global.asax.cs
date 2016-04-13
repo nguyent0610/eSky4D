@@ -40,6 +40,7 @@ namespace IN30100
             Current.Authorize = false;
             Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.FormatDate = "dd.MM.yyyy";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
