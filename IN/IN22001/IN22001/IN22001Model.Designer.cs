@@ -125,8 +125,10 @@ namespace IN22001
         /// No Metadata Documentation available.
         /// </summary>
         /// <param name="userID">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="posmID">No Metadata Documentation available.</param>
-        public ObjectResult<IN22001_pgBranch_Result> IN22001_pgBranch(global::System.String userID, global::System.String posmID)
+        public ObjectResult<IN22001_pgBranch_Result> IN22001_pgBranch(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String posmID)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -136,6 +138,26 @@ namespace IN22001
             else
             {
                 userIDParameter = new ObjectParameter("UserID", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
             ObjectParameter posmIDParameter;
@@ -148,7 +170,7 @@ namespace IN22001
                 posmIDParameter = new ObjectParameter("PosmID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<IN22001_pgBranch_Result>("IN22001_pgBranch", userIDParameter, posmIDParameter);
+            return base.ExecuteFunction<IN22001_pgBranch_Result>("IN22001_pgBranch", userIDParameter, cpnyIDParameter, langIDParameter, posmIDParameter);
         }
 
         #endregion
@@ -473,6 +495,30 @@ namespace IN22001
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> FCS
+        {
+            get
+            {
+                return _FCS;
+            }
+            set
+            {
+                OnFCSChanging(value);
+                ReportPropertyChanging("FCS");
+                _FCS = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FCS");
+                OnFCSChanged();
+            }
+        }
+        private Nullable<global::System.Double> _FCS;
+        partial void OnFCSChanging(Nullable<global::System.Double> value);
+        partial void OnFCSChanged();
 
         #endregion
 
@@ -928,6 +974,30 @@ namespace IN22001
         private global::System.String _Territory;
         partial void OnTerritoryChanging(global::System.String value);
         partial void OnTerritoryChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> FCS
+        {
+            get
+            {
+                return _FCS;
+            }
+            set
+            {
+                OnFCSChanging(value);
+                ReportPropertyChanging("FCS");
+                _FCS = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FCS");
+                OnFCSChanged();
+            }
+        }
+        private Nullable<global::System.Double> _FCS;
+        partial void OnFCSChanging(Nullable<global::System.Double> value);
+        partial void OnFCSChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

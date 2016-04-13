@@ -4,48 +4,51 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="eBiz4DWebAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
-          <EntitySet Name="IN_POSMBranch" EntityType="eBiz4DWebAppModel.Store.IN_POSMBranch" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="IN_POSMHeader" EntityType="eBiz4DWebAppModel.Store.IN_POSMHeader" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="eBiz4DWebAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="IN_POSMBranch">
           <Key>
             <PropertyRef Name="PosmID" />
             <PropertyRef Name="BranchID" />
           </Key>
-          <Property Name="PosmID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="Zone" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="Territory" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="PosmID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Zone" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Territory" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="FCS" Type="float" />
         </EntityType>
         <EntityType Name="IN_POSMHeader">
           <Key>
             <PropertyRef Name="PosmID" />
           </Key>
-          <Property Name="PosmID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="PosmID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="FromDate" Type="datetime" Nullable="false" />
           <Property Name="ToDate" Type="datetime" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <Function Name="IN22001_pgBranch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
           <Parameter Name="PosmID" Type="varchar" Mode="In" />
         </Function>
+        <EntityContainer Name="eBiz4DWebAppModelStoreContainer">
+          <EntitySet Name="IN_POSMBranch" EntityType="Self.IN_POSMBranch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IN_POSMHeader" EntityType="Self.IN_POSMHeader" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -55,6 +58,8 @@
           <EntitySet Name="IN_POSMHeader" EntityType="IN22001Model.IN_POSMHeader" />
           <FunctionImport Name="IN22001_pgBranch" ReturnType="Collection(IN22001Model.IN22001_pgBranch_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
             <Parameter Name="PosmID" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
@@ -74,6 +79,7 @@
           <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
+          <Property Name="FCS" Type="Double" />
         </EntityType>
         <EntityType Name="IN_POSMHeader">
           <Key>
@@ -96,6 +102,7 @@
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="String" Name="Zone" Nullable="false" MaxLength="10" />
           <Property Type="String" Name="Territory" Nullable="false" MaxLength="10" />
+          <Property Type="Double" Name="FCS" Nullable="true" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
         </ComplexType>
         </Schema>
@@ -107,6 +114,7 @@
           <EntitySetMapping Name="IN_POSMBranch">
             <EntityTypeMapping TypeName="IN22001Model.IN_POSMBranch">
               <MappingFragment StoreEntitySet="IN_POSMBranch">
+                <ScalarProperty Name="FCS" ColumnName="FCS" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
@@ -145,6 +153,7 @@
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="Zone" ColumnName="Zone" />
                 <ScalarProperty Name="Territory" ColumnName="Territory" />
+                <ScalarProperty Name="FCS" ColumnName="FCS" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -166,6 +175,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

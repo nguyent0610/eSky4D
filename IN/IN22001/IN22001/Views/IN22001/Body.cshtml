@@ -40,6 +40,7 @@
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
                         ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                         ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                     })
                     .LoadData()
                     .Listeners(l =>
@@ -82,6 +83,8 @@
                     .HQHeightWidth(400, 300).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                         ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                     })
                     .LoadData()
                 )
@@ -94,6 +97,8 @@
                     .HQHeightWidth(400, 300).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                         ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                         , new StoreParameter("@Zone", 
                             "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.Zone : Ext.String.empty", 
                             ParameterMode.Raw)
@@ -109,6 +114,8 @@
                     .HQHeightWidth(400, 300).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() { 
                         new StoreParameter("@UserID", "HQ.userName", ParameterMode.Raw) 
+                        ,new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw) 
+                         ,new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw) 
                         , new StoreParameter("@Territory", 
                             "App.slmDet.selected.items[0] ? App.slmDet.selected.items[0].data.Territory : Ext.String.empty", 
                             ParameterMode.Raw)
@@ -116,6 +123,10 @@
                     .LoadData()
                 )
 
+                , X.NumberColumn().ID("DisplayTarget").Text(Util.GetLang("DisplayTarget")).DataIndex("FCS").Width(100)
+                .Align(Alignment.Right)//.Format("0.000")
+                .Editor(X.NumberField().DecimalPrecision(2).MinValue(0))
+                
                 , X.CommandColumn()
                 .Commands(
                     X.GridCommand()
@@ -144,6 +155,7 @@
                     X.StringFilter().DataIndex("Zone")
                     , X.StringFilter().DataIndex("Territory")
                     , X.StringFilter().DataIndex("BranchID")
+                    , X.NumericFilter().DataIndex("DisplayTarget")
                 )
             )
             .Listeners(x => { 

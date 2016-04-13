@@ -31,7 +31,7 @@ namespace IN22001.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -45,7 +45,7 @@ namespace IN22001.Controllers
 
         public ActionResult GetBranch(string posmID)
         {
-            var dets = _db.IN22001_pgBranch(Current.UserName, posmID).ToList();
+            var dets = _db.IN22001_pgBranch(Current.UserName, Current.CpnyID, Current.LangID, posmID).ToList();
             return this.Store(dets);
         }
 
@@ -210,6 +210,7 @@ namespace IN22001.Controllers
                 createdCpny.BranchID = created.BranchID;
                 createdCpny.Zone = created.Zone;
                 createdCpny.Territory = created.Territory;
+                createdCpny.FCS = created.FCS;
 
                 createdCpny.Crtd_DateTime = DateTime.Now;
                 createdCpny.Crtd_Prog = _screenNbr;
