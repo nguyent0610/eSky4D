@@ -149,11 +149,12 @@
                 X.GridFilters()
                     .Local(true)
                     .Filters(
-                        X.StringFilter().DataIndex("BranchID"),
-                        X.StringFilter().DataIndex("BranchName"),
-                        X.StringFilter().DataIndex("POSMCode"),
-                        X.StringFilter().DataIndex("POSMName"),
-                        X.NumericFilter().DataIndex("Qty")
+                        X.StringFilter().DataIndex("Structure"),
+                        X.StringFilter().DataIndex("InvtID"),
+                        X.StringFilter().DataIndex("Descr"),
+                        X.NumericFilter().DataIndex("SlsPrice"),
+                        X.NumericFilter().DataIndex("UnitCost"),
+                        X.NumericFilter().DataIndex("CnvFact")
                     )
             )
                 

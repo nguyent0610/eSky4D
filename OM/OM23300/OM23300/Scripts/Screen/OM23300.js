@@ -1,7 +1,7 @@
 //// Declare //////////////////////////////////////////////////////////
-var keys = ['InvtID'];
-var fieldsCheckRequire = ["InvtID"];
-var fieldsLangCheckRequire = ["InvtID"];
+var keys = ['Structure','InvtID'];
+var fieldsCheckRequire = ["Structure","InvtID"];
+var fieldsLangCheckRequire = ["OM23300Structure","OM23300InvtID"];
 
 var _Source = 0;
 var _maxSource = 2;
@@ -172,7 +172,12 @@ var stoOM_POSMStructure_Load = function (sto) {
 };
 
 var grdOM_POSMStructure_BeforeEdit = function (editor, e) {
-    if (e.field == 'Structure') return true;
+    if (e.field == 'Structure') {
+        if (HQ.isUpdate == true)
+            return true;
+        else if (HQ.isInsert == true && Ext.isEmpty(e.record.data.tstamp))
+            return true;
+    }
     if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
 };
 
@@ -180,6 +185,7 @@ var grdOM_POSMStructure_Edit = function (item, e) {
     if (e.field == 'InvtID') {
         if (e.value) {
             e.record.set('PosmID', App.cboPosmID.getValue());
+            e.record.set('CnvFact', 1);
             var objInvt = App.cboInvtIDOM23300_pcInvtID.findRecord(['InvtID'], [e.value]);
             if (objInvt) {
                 e.record.set('Descr', objInvt.data.Descr);
@@ -187,7 +193,13 @@ var grdOM_POSMStructure_Edit = function (item, e) {
             }
         }
     }
-    HQ.grid.checkInsertKey(App.grdOM_POSMStructure, e, keys);
+    else if (e.field == 'CnvFact') {
+        if (e.value < 1) {
+            e.record.set(e.field, e.originalValue);
+            HQ.message.show(2015110901, [HQ.common.getLang('CnvFact')], '', true);
+        }
+    }
+    HQ.grid.checkInsertKey(App.grdOM_POSMStructure, e, ['InvtID']);
     frmChange();
 };
 
