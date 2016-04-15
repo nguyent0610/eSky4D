@@ -31,6 +31,7 @@ namespace PO10400
             Current.Authorize = false;
             Current.Server = "MARSSVR\\SQL2012";
             Current.DBSys = "eSky4DSys";
+            Current.FormatDate = "dd.MM.yyyy";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
