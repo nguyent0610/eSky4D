@@ -29,7 +29,7 @@ namespace OM10100.Controllers
     {
         private string _screenNbr = "OM10100";
         private string _userName = Current.UserName;
-        private OM10100Entities _app = Util.CreateObjectContext<OM10100Entities>();
+        private OM10100Entities _app = Util.CreateObjectContext<OM10100Entities>(false);
         private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);     
         private FormCollection _form;
         private JsonResult _logMessage;
@@ -6116,7 +6116,7 @@ namespace OM10100.Controllers
                             _lstLot.RemoveAt(i);
                         }
                     }
-                    OM10100Entities app = Util.CreateObjectContext<OM10100Entities>();
+                    OM10100Entities app = Util.CreateObjectContext<OM10100Entities>(false);
                     var lstItemLot = app.IN_ItemLot.Where(p => p.SiteID == newdet.SiteID && p.InvtID == newdet.InvtID && p.QtyAvail > 0).ToList();
 
                     List<OM_LotTrans> lstLotTrans = app.OM_LotTrans.Where(p => p.BranchID == _objOrder.BranchID && p.OrderNbr == _objOrder.OrderNbr && p.InvtID == newdet.InvtID && p.SiteID == newdet.SiteID).ToList();
