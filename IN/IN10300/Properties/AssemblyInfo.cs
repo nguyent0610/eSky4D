@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Transfer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("IN10300")]
+[assembly: AssemblyDescription("IN10300")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Han Quang Software Solution")]
 [assembly: AssemblyProduct("HQ Solutions - Cloud Framework")]

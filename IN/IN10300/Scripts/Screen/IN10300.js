@@ -44,6 +44,7 @@ var store_Load = function () {
     checkSetDefault();
 }
 var stoBatch_Load = function () {
+    HQ.isNew = false;
     var record = App.stoBatch.getById(App.cboBatNbr.getValue());
     if (record) {
         bindBatch(record);
@@ -107,6 +108,7 @@ var checkSelectLot = function (records, options, success) {
 //////////////////////////////////////////////////////////////////
 
 var frmMain_BoxReady = function () {
+    HQ.util.checkAccessRight();
     HQ.numSource = 0;
     HQ.maxSource = 12;
     HQ.numEditTrans = 0;
@@ -205,7 +207,9 @@ var menuClick = function (command) {
             if (!App.grdTrans.view.loadMask.isHidden()) {
                 return;
             }
-            save();
+            if (HQ.form.checkRequirePass(App.frmMain)) {
+                save();
+            }
             break;
         case "delete":
             if (HQ.focus == 'batch') {
@@ -245,10 +249,14 @@ var menuClick = function (command) {
             }
             break;
         case "new":
-            if (HQ.isChange) {
-                HQ.message.show(2015030201, '', "askNew", true);
-            } else {
-                defaultOnNew();
+            if (HQ.focus == 'batch') {
+                if (HQ.isChange) {
+                    HQ.message.show(150, '', '');
+                } else {
+                    defaultOnNew();
+                }
+            } else if (HQ.focus == 'trans') {
+                eventNew(App.stoTrans, App.grdTrans, 'InvtID');
             }
             break;
         case "refresh":
@@ -268,6 +276,22 @@ var menuClick = function (command) {
             }
             break;
         default:
+    }
+}
+
+var eventNew = function (sto, grd, keys) {
+    HQ.store.insertBlank(sto, keys);
+    HQ.grid.last(grd);
+    if (grd.editingPlugin) {
+        grd.editingPlugin.startEditByPosition({
+            row: sto.getCount() - 1,
+            column: 1
+        });
+    } else {
+        grd.lockedGrid.editingPlugin.startEditByPosition({
+            row: sto.getCount() - 1,
+            column: 1
+        });
     }
 }
 
@@ -642,7 +666,7 @@ var grdLot_BeforeEdit = function (item, e) {
 
     record.commit();
 
-    App.cboLotUnitDesc.setValue('');
+    //App.cboLotUnitDesc.setValue('');
 }
 var grdLot_SelectionChange = function (item, selected) {
     if (selected.length > 0) {
@@ -755,6 +779,12 @@ var save = function () {
     App.stoLotTrans.clearFilter();
     App.stoTrans.data.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {
+            if (Ext.isEmpty(item.data.UnitDesc)) {
+                HQ.message.show(1000, [HQ.common.getLang('Unit')], '', true);
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['UnitDesc'], [item.data.UnitDesc])));
+                flat = true;
+                return false;
+            }
             if (item.data.Qty == 0) {
                 HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
                 App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
@@ -904,6 +934,8 @@ var deleteTrans = function (item) {
                     App.grdTrans.deleteSelected();
                     calculate();
                     HQ.message.process(msg, data, true);
+                    HQ.isChange = false;
+                    HQ.common.changeData(HQ.isChange, 'IN10300');
                 },
                 failure: function (msg, data) {
                     HQ.message.process(msg, data, true);
@@ -1086,6 +1118,7 @@ var calculate = function () {
 }
 
 var defaultOnNew = function () {
+    HQ.isNew = true;
     var record = Ext.create('App.mdlBatch');
     record.data.BranchID = HQ.cpnyID;
     record.data.Status = 'H';
@@ -1159,19 +1192,18 @@ var renderQtyAmt = function (value) {
 }
 
 var setStatusForm = function () {
-
+    var flag = true
     var lock = true;
     if (!Ext.isEmpty(HQ.objBatch.data.BatNbr)) {
         if (HQ.objBatch.data.Status == 'H') {
             lock = false;
         }
-
     } else {
         lock = !HQ.isInsert;
     }
 
-    HQ.common.lockItem(App.frmMain, lock);
-    App.grdTrans.isLock = lock;
+    //HQ.common.lockItem(App.frmMain, lock);
+    //App.grdTrans.isLock = lock;
     App.cboBatNbr.setReadOnly(false);
     App.cboHandle.setReadOnly(false);
     App.txtRcptBatNbr.setReadOnly(true);
@@ -1180,6 +1212,24 @@ var setStatusForm = function () {
     App.txtTotAmt.setReadOnly(true);
     App.txtTrnsfrDocNbr.setReadOnly(true);
     App.cboTransferStatus.setReadOnly(true);
+
+    //App.cboSiteID.setReadOnly(true);
+    //App.cboToSiteID.setReadOnly(true);
+    //App.cboToCpnyID.setReadOnly(true);
+    if (!HQ.isInsert && HQ.isNew) {
+        lock = true;
+        flag = false;
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        lock = true;
+        flag = false;
+    }
+
+    HQ.common.lockItem(App.frmMain, lock);
+    App.grdTrans.isLock = lock;
+    if (flag == true && App.cboStatus.getValue() != 'H') {
+        App.cboHandle.setReadOnly(false);
+    }
 }
 
 var checkExitEdit = function (row) {
@@ -1404,6 +1454,19 @@ var checkTransAdd = function () {
     });
 
     App.cboSiteID.setReadOnly(flat);
+    App.cboToSiteID.setReadOnly(flat);
+    App.cboToCpnyID.setReadOnly(flat);
+
+    if (!HQ.isInsert && HQ.isNew) {
+        App.cboSiteID.setReadOnly(true);
+        App.cboToSiteID.setReadOnly(true);
+        App.cboToCpnyID.setReadOnly(true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        App.cboSiteID.setReadOnly(true);
+        App.cboToSiteID.setReadOnly(true);
+        App.cboToCpnyID.setReadOnly(true);
+    }
 }
 
 var getQtyAvail = function (row) {

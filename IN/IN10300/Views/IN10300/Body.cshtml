@@ -90,17 +90,17 @@
                
                 , X.Column().ID("colLotUnitDesc").DataIndex("UnitDesc").Text(Util.GetLang("Unit"))
                 .Width(100)
-                .Editor(
-                    X.ComboBox().ID("cboLotUnitDesc")
-                    .DisplayField("FromUnit").ValueField("FromUnit")
-                    .StoreID("stoUnit")
-                    .QueryMode(DataLoadMode.Local)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst =>
-                    {
-                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-                    })
-                )
+                //.Editor(
+                    //X.ComboBox().ID("cboLotUnitDesc")
+                    //.DisplayField("FromUnit").ValueField("FromUnit")
+                    //.StoreID("stoUnit")
+                    //.QueryMode(DataLoadMode.Local)
+                    //.Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    //.Listeners(lst =>
+                    //{
+                    //    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    //})
+                //)
                   
                  , X.Column().ID("colLotQty").DataIndex("Qty").Text(Util.GetLang("Qty"))
                 .Width(75)
@@ -577,7 +577,7 @@
                         .HQLangCode("Comment")
                         .AllowBlank(false)
                         .LabelWidth(120)
-                        .MaxLength(100)
+                        .MaxLength(30)
                         .EnforceMaxLength(true)
                         .HQControlFocus("txtBranchID")
                         .BlankText(Util.GetLangPrefix("Input", "Comment"))
@@ -589,111 +589,129 @@
                 
                 X.Hidden().ID("tstamp")
             ), // Panel
-            
-            X.GridPanel().ID("grdTrans")
-            .Border(true)
-            .BorderSpec("1 0 0 0")
-            .ColumnLines(true)
-            .RowLines(true)
+            X.Panel()
             .Region(Region.Center)
-            .StoreID("stoTrans")
-            .ColumnModel(
-                X.RowNumbererColumn(),
+            .Layout(LayoutType.Border)
+            .Items(
+                X.GridPanel().ID("grdTrans")
+                .Border(true)
+                .BorderSpec("1 0 0 0")
+                .ColumnLines(true)
+                .RowLines(true)
+                .Region(Region.Center).Flex(1)
+                .StoreID("stoTrans")
+                .ColumnModel(
+                    X.RowNumbererColumn(),
 
-                X.Column()
-                .DataIndex("InvtID")
-                .ID("colInvtID")
-                .Width(100)
-                .Text(Util.GetLang("InvtID"))
-                .Editor(
-                    HQ.Combo().ID("cboTransInvtID")
-                    .HQProcedure("IN10300_pcInvt")
-                    .HQColumnShow("InvtID,Descr,Descr1,Color")
-                    .DisplayField("InvtID")
-                    .ValueField("InvtID")
-                    .Width(250)
-                    .HQHeightWidth(400, 300)
-                    .ForceSelection(true)
-                    .LabelWidth(90)
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .HQParam(new StoreParameterCollection(){
-                    new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
-                })
-                    .LoadData()
-                    .Listeners(lst =>
-                    {
-                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    X.Column()
+                    .DataIndex("InvtID")
+                    .ID("colInvtID")
+                    .Width(100)
+                    .Text(Util.GetLang("InvtID"))
+                    .Editor(
+                        HQ.Combo().ID("cboTransInvtID")
+                        .HQProcedure("IN10300_pcInvt")
+                        .HQColumnShow("InvtID,Descr,Descr1,Color")
+                        .DisplayField("InvtID")
+                        .ValueField("InvtID")
+                        .Width(250)
+                        .HQHeightWidth(400, 300)
+                        .ForceSelection(true)
+                        .LabelWidth(90)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
                     })
-                )
-                ,
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    )
+                    ,
 
-                X.Column()
-                .DataIndex("TranDesc")
-                .MinWidth(250)
-                .MaxWidth(350)
-                .Flex(1)
-                .Text(Util.GetLang("Descr")),
+                    X.Column()
+                    .DataIndex("TranDesc")
+                    .MinWidth(250)
+                    .MaxWidth(350)
+                    .Flex(1)
+                    .Text(Util.GetLang("Descr")),
 
-                X.Column()
-                .DataIndex("UnitDesc")
-                .Width(100)
-                .Text(Util.GetLang("Unit"))
-                .Editor(
-                    X.ComboBox()
-                    .ID("cboTransUnitDesc")
-                    .ForceSelection(true)
-                    .TriggerAction(TriggerAction.All)
-                    .QueryMode(DataLoadMode.Local)
-                    .ValueField("FromUnit")
-                    .DisplayField("FromUnit")
-                    .StoreID("stoUnit")
-                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
-                )
-                ,
+                    X.Column()
+                    .DataIndex("UnitDesc")
+                    .Width(100)
+                    .Text(Util.GetLang("Unit"))
+                    .Editor(
+                        X.ComboBox()
+                        .ID("cboTransUnitDesc")
+                        .ForceSelection(true)
+                        .TriggerAction(TriggerAction.All)
+                        .QueryMode(DataLoadMode.Local)
+                        .ValueField("FromUnit")
+                        .DisplayField("FromUnit")
+                        .StoreID("stoUnit")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                    )
+                    ,
 
-                X.Column()
-                .DataIndex("Qty")
-                .Text(Util.GetLang("Qty"))
-                .Align(Alignment.Right)
-                .Width(100)
-                .Editor(HQ.NumberField().MaxValue(100000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
-                .Renderer("renderQtyAmt"),
+                    X.Column()
+                    .DataIndex("Qty")
+                    .Text(Util.GetLang("Qty"))
+                    .Align(Alignment.Right)
+                    .Width(100)
+                    .Editor(HQ.NumberField().MaxValue(100000).MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
+                    .Renderer("renderQtyAmt"),
                 
-                X.ComponentColumn()
-                .Text("")
-                .Width(26)
-                .Component(
-                    X.Button().MarginSpec("1 4 1 3").Height(18).Text("")
-                    .Listeners(p=>p.Click.Fn="btnLot_Click")
-                )
-                ,
+                    X.ComponentColumn()
+                    .Text("")
+                    .Width(26)
+                    .Component(
+                        X.Button().MarginSpec("1 4 1 3").Height(18).Text("")
+                        .Listeners(p=>p.Click.Fn="btnLot_Click")
+                    )
+                    ,
                 
-                X.Column()
-                .DataIndex("UnitPrice")
-                .Text(Util.GetLang("UnitPrice"))
-                .Align(Alignment.Right)
-                .Width(100)
-                .Renderer("renderQtyAmt"),
+                    X.Column()
+                    .DataIndex("UnitPrice")
+                    .Text(Util.GetLang("UnitPrice"))
+                    .Align(Alignment.Right)
+                    .Width(100)
+                    .Renderer("renderQtyAmt"),
 
-                X.Column()
-                .DataIndex("TranAmt")
-                .Text(Util.GetLang("ExtAmt"))
-                .Align(Alignment.Right)
-                .Width(100)
-                .Renderer("renderQtyAmt")
-            )
-            .Listeners(lst =>
+                    X.Column()
+                    .DataIndex("TranAmt")
+                    .Text(Util.GetLang("ExtAmt"))
+                    .Align(Alignment.Right)
+                    .Width(100)
+                    .Renderer("renderQtyAmt")
+                )
+                .Listeners(lst =>
+                {
+                    lst.SelectionChange.Fn = "grdTrans_SelectionChange";
+                    lst.Edit.Fn = "grdTrans_Edit";
+                    lst.ValidateEdit.Fn = "grdTrans_ValidateEdit";
+                    lst.BeforeEdit.Fn = "grdTrans_BeforeEdit";
+                })
+                .SelectionModel(X.RowSelectionModel().ID("smlTrans").Mode(SelectionMode.Single))
+                .View(X.GridView().TrackOver(false))
+                .Plugins(X.CellEditing().ClicksToEdit(1))
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("InvtID"),
+                            X.StringFilter().DataIndex("TranDesc"),
+                            X.StringFilter().DataIndex("UnitDesc"),
+                            X.NumericFilter().DataIndex("Qty"),
+                            X.NumericFilter().DataIndex("UnitPrice"),
+                            X.NumericFilter().DataIndex("TranAmt")
+                        )
+                )
+            ).Listeners(lss =>
             {
-                lst.SelectionChange.Fn = "grdTrans_SelectionChange";
-                lst.Edit.Fn = "grdTrans_Edit";
-                lst.ValidateEdit.Fn = "grdTrans_ValidateEdit";
-                lst.BeforeEdit.Fn = "grdTrans_BeforeEdit";
+                lss.Render.Handler = "HQ.common.control_render(this,'trans')";
             })
-            .SelectionModel(X.RowSelectionModel().ID("smlTrans").Mode(SelectionMode.Single))
-            .View(X.GridView().TrackOver(false))
-            .Plugins(X.CellEditing().ClicksToEdit(1))
-          
         )
     )
 )
