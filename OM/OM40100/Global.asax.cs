@@ -41,6 +41,7 @@ namespace OM40100
             Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
+            Current.FormatDate = "dd.MM.yyyy";
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
