@@ -31,6 +31,7 @@ namespace PO10100
             Current.Server ="EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();// "EARTHSVR\\SQL2012";//
             Current.DBSys = "ND_eSky4DSys";// "eBiz4DWebSys";// ConfigurationManager.AppSettings["DBSys"].ToString();
             Current.Theme = "Default";
+            Current.FormatDate = "dd.MM.yyyy";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;

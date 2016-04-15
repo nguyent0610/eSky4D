@@ -52,7 +52,7 @@ namespace PO10100.Controllers
             ViewBag.BussinessTime = DateTime.Now;
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
