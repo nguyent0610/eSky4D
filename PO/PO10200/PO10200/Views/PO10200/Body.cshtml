@@ -439,7 +439,7 @@
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Volume")).DataIndex("UnitVolume").Width(150).Format("0,000,000").Editor(HQ.NumberField().DecimalPrecision(0))
                                                     , Html.X().NumberColumn().Align(Alignment.Right).Text(Util.GetLang("ExtVolume")).DataIndex("ExtVolume").Width(150).Format("0,000,000")//.Editor(HQ.NumberField())
 
-                                                    , Html.X().DateColumn().Text(Util.GetLang("OrigRcptDate")).DataIndex("OrigRcptDate").Width(150)//.Editor(Html.X().DateField()).Hidden(true)
+                                                    , HQ.DateColumn().Text(Util.GetLang("OrigRcptDate")).DataIndex("OrigRcptDate").Width(150)//.Editor(Html.X().DateField()).Hidden(true)
 
                                                     , Html.X().Column().Text(Util.GetLang("VouchSta")).DataIndex("VouchStage").Renderer("renderVouchStage")
                                                                 .Editor(HQ.Combo().ID("VouchStage").Name("VouchStage").HideLabel(true).LabelWidth(0)
@@ -743,7 +743,7 @@
                 .Align(Alignment.Right)
         //.Renderer("renderQtyAmt") 
 
-                , X.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(Html.X().DateField().MinDate(@DateTime.Now.ToDateShort()))
+                , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(HQ.DateField().MinDate(@DateTime.Now.ToDateShort()))
             )
             .Listeners(lst =>
             {
