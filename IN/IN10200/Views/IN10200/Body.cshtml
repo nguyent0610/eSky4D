@@ -93,7 +93,7 @@
                                         </tpl>
                                         <tr class='x-boundlist-item'>
                                             <td style='width:100px;'>{LotSerNbr}</td>
-                                            <td>{ExpDate:date(""m-d-Y"")}</td>
+                                            <td>{ExpDate:date("""+Current.FormatDateJS+@""")}</td>
                                             <td>{QtyAvail}</td>
                                         </tr>
                                         <tpl if='[xcount-xindex] == 0'>
@@ -134,7 +134,7 @@
                 .Align(Alignment.Right)
                 .Renderer("renderQtyAmt") 
                 
-                , X.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate"))
+                , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate"))
             )
             .Listeners(lst =>
             {
@@ -250,7 +250,7 @@
                                         </tpl>
                                         <tr class='x-boundlist-item'>
                                             <td>{BatNbr}</td>
-                                            <td>{DateEnt:date(""m-d-Y"")}</td>
+                                            <td>{DateEnt:date("""+Current.FormatDateJS+@""")}</td>
                                             <td>{Status}</td>
                                             <td>{Descr}</td>
                                         </tr>
