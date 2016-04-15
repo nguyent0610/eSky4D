@@ -32,7 +32,7 @@ var Process = {
             timeout: 1800000,
             params: {
                 lstDetChange: HQ.store.getAllData(App.grdDet.store, ["Selected"], [true]),
-                isCancel: !Ext.isEmpty(App.cboHandleApprove.valueModels[0].data.Code) ? (App.cboHandleApprove.valueModels[0].data.Code == 'D' ? true : false) : false
+                isCancel: !App.cboHandleApprove.valueModels[0] ? false : (App.cboHandleApprove.valueModels[0].data.Code == 'D' ? true : false)
             },
             success: function (msg, data) {
                 HQ.message.process(msg, data, true);
@@ -1178,6 +1178,7 @@ deleteRecordGrid = function (item) {
                             lstHeader: Ext.encode(App.stoHeader.getRecordsValues())
                         },
                         success: function (msg, data) {
+                            HQ.isChange = false;
                             HQ.message.process(msg, data, true);
                             var batNbr = '';                          
                             if (this.result.data != undefined && this.result.data.batNbr != null) {

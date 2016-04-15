@@ -62,7 +62,7 @@ namespace PO10401.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -718,6 +718,8 @@ namespace PO10401.Controllers
                             foreach (var objlot in lstold)
                             {
                                 _db.PO_LotTrans.DeleteObject(objlot);
+                                var objLotGrid = _lstLot.Where(p => p.POTranLineRef == obj.LineRef).FirstOrDefault();
+                                _lstLot.Remove(objLotGrid);
                                 if (_poHead.RcptType == "X")
                                 {
                                     double NewQty = (objlot.UnitMultDiv == "D" ? (objlot.Qty / objlot.CnvFact) : (objlot.Qty * obj.CnvFact));
@@ -1377,7 +1379,7 @@ namespace PO10401.Controllers
                     foreach (var objlot in _lstLot)
                     {
                         var qty = objlot.UnitMultDiv == "M" ? objlot.Qty * objlot.CnvFact : objlot.Qty / objlot.CnvFact;
-                        var objItemLot = _db.IN_ItemLot.Where(p => p.InvtID == objlot.InvtID && p.SiteID == objlot.SiteID && p.LotSerNbr == objlot.LotSerNbr).FirstOrDefault();
+                        var objItemLot = _db.IN_ItemLot.ToList().Where(p => p.InvtID == objlot.InvtID && p.SiteID == objlot.SiteID && p.LotSerNbr == objlot.LotSerNbr).FirstOrDefault();
                         if (objItemLot == null || qty > objItemLot.QtyAvail)
                         {
                             invtID += objlot.InvtID + ",";
