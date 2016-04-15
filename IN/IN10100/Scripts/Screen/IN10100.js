@@ -212,12 +212,12 @@ var frmMain_FieldChange = function (item, field, newValue, oldValue) {
         return;
     }
     if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
-    if (Object.keys(App.stoBatch.getChangedData()).length > 0 || App.grdTrans.isChange) {
-        setChange(true);
-    } else {
-        setChange(false);
-    }
-
+    //if (Object.keys(App.stoBatch.getChangedData()).length > 0 || App.grdTrans.isChange) {
+    //    setChange(true);
+    //} else {
+    //    setChange(false);
+    //}
+    setChange(true);
 };
 var menuClick = function (command) {
     switch (command) {
@@ -336,7 +336,7 @@ var menuClick = function (command) {
             //}
             break;
         case "refresh":
-            if ((HQ.isChange || App.grdTrans.isChange) && !Ext.isEmpty(App.BatNbr.getValue())) {
+            if ((HQ.isChange || App.grdTrans.isChange)) {
                 HQ.message.show(20150303, '', "askRefresh", true);
             } else {
                 if (!Ext.isEmpty(App.BatNbr.getValue())) {
@@ -549,10 +549,10 @@ var btnLotDel_Click = function () {
     }
 };
 var btnExport_Click = function () {
-    if (Ext.isEmpty(App.BatNbr.getValue())) {
-        HQ.message.show('1000', [HQ.common.getLang('batnbr')], '', true);
-        return;
-    }
+    //if (Ext.isEmpty(App.BatNbr.getValue())) {
+    //    HQ.message.show('1000', [HQ.common.getLang('batnbr')], '', true);
+    //    return;
+    //}
     //var form = Ext.DomHelper.append(document.body, {
     //    tag: 'form',
     //    method: 'post',

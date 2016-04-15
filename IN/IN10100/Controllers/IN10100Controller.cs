@@ -793,7 +793,7 @@ namespace IN10100.Controllers
                 sheetTrans.Cells["E4"].PutValue("Giá Bán");
                 sheetTrans.Cells["F4"].PutValue("Tổng Tiền");
                 sheetTrans.Cells["G4"].PutValue("Số LOT");
-                sheetTrans.Cells["H4"].PutValue("Ngày Hết Hạn");
+                sheetTrans.Cells["H4"].PutValue("Ngày Hết Hạn(yyyy/mm/dd)");
 
                 sheetTrans.Cells["A4"].SetStyle(style);
                 sheetTrans.Cells["B4"].SetStyle(style);
@@ -874,7 +874,7 @@ namespace IN10100.Controllers
                 range = sheetTrans.Cells.CreateRange("G5", "G" + (dt.Rows.Count * 2 + 5));
                 range.ApplyStyle(style, flag);
 
-                style.Number = 14;
+                style.Number = 49;
                 style.IsLocked = false;
 
                 range = sheetTrans.Cells.CreateRange("H5", "H" + (dt.Rows.Count * 2 + 5));
@@ -886,6 +886,7 @@ namespace IN10100.Controllers
                 sheetTrans.Cells.Columns[2].Width = 15;
                 sheetTrans.Cells.Columns[4].Width = 15;
                 sheetTrans.Cells.Columns[5].Width = 15;
+                sheetTrans.Cells.Columns[6].Width = 15;
                 sheetTrans.Protect(ProtectionType.All);
 
                 int row = 5;
@@ -937,6 +938,7 @@ namespace IN10100.Controllers
         {
             try
             {
+                
                 FileUploadField fileUploadField = X.GetCmp<FileUploadField>("btnImport");
                 HttpPostedFile file = fileUploadField.PostedFile; // or: HttpPostedFileBase file = this.HttpContext.Request.Files[0];
                 FileInfo fileInfo = new FileInfo(file.FileName);
@@ -951,11 +953,13 @@ namespace IN10100.Controllers
                         int lineRef = data["lineRef"].ToInt();
                         if (workbook.Worksheets.Count > 0)
                         {
+                            
                             Worksheet workSheet = workbook.Worksheets[0];
                             string invtID = string.Empty;
                           
                             for (int i = 4; i < workSheet.Cells.MaxDataRow; i++)
                             {
+                                
                                 invtID = workSheet.Cells[i, 0].StringValue;
                                 if (invtID == string.Empty) break;
                                 var objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
@@ -1006,15 +1010,16 @@ namespace IN10100.Controllers
                                 }
                                 else if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 7].Value.PassNull() != string.Empty)
                                 {
-                                    DateTime parsed;
 
-                                    bool valid = DateTime.TryParseExact(workSheet.Cells[i, 7].StringValue, Current.FormatDate,
+                                    DateTime parsed;
+                                    bool valid = DateTime.TryParseExact(workSheet.Cells[i, 7].StringValue, "yyyy/MM/dd",
                                                                         CultureInfo.InvariantCulture,
                                                                         DateTimeStyles.None,
                                                                         out parsed);
+
                                     if (valid == false)
                                     {
-                                        message += string.Format("Dòng {0} sai định dạng Ngày Hết Hạn. Ngày Hết Hạn phải có dạng ({1})<br/>", (i + 1).ToString(),Current.FormatDate);
+                                        message += string.Format("Dòng {0} sai định dạng Ngày Hết Hạn. Ngày Hết Hạn phải có dạng ({1})<br/>", (i + 1).ToString(), "yyyy/MM/dd");
                                         continue;
                                     }
                                 }
@@ -1034,7 +1039,9 @@ namespace IN10100.Controllers
                                 newLot.CnvFact = 1;
                                 if (objInvt.LotSerTrack == "L")
                                 {
-                                    newLot.ExpDate = workSheet.Cells[i, 7].DateTimeValue.ToDateShort();
+                                    string[] strExpDate = workSheet.Cells[i, 7].StringValue.PassNull().Split('/');
+                                    DateTime dExpDate = new DateTime(int.Parse(strExpDate[0]), int.Parse(strExpDate[1]), int.Parse(strExpDate[2]));
+                                    newLot.ExpDate = dExpDate;
                                     newLot.LotSerNbr = workSheet.Cells[i, 6].StringValue;
                                 }
                              
