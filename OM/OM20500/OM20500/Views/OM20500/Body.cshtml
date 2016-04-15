@@ -190,7 +190,7 @@
                 , X.Column()
                 .Text(Util.GetLang("CustName")).DataIndex("CustName")
 
-                , X.DateColumn()
+                , HQ.DateColumn()
                 .Text(Util.GetLang("OrderDate")).DataIndex("OrderDate")
 
                 , X.Column()
@@ -382,10 +382,10 @@
                         , X.Column()
                         .Text(Util.GetLang("DeliveryID")).DataIndex("DeliveryID")
 
-                        , X.Column()
+                        , HQ.DateColumn()
                         .Text(Util.GetLang("OrderDate")).DataIndex("OrderDate")
 
-                        , X.Column()
+                        , HQ.DateColumn()
                         .Text(Util.GetLang("ARDocDate")).DataIndex("ARDocDate")
 
                         , X.Column()
@@ -615,7 +615,7 @@
                 .Align(Alignment.Right)
         //.Renderer("renderQtyAmt") 
 
-                , X.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(Html.X().DateField().MinDate(@DateTime.Now.ToDateShort()))
+                , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(HQ.DateField().MinDate(@DateTime.Now.ToDateShort()))
             )
             .Listeners(lst =>
             {
@@ -696,7 +696,7 @@
                 , X.Column()
                 .Text(Util.GetLang("CustName")).DataIndex("CustName")
 
-                , X.DateColumn()
+                , HQ.DateColumn()
                 .Text(Util.GetLang("OrderDate")).DataIndex("OrderDate")
 
                 , X.Column()
