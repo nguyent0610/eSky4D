@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="OM_POSMBranch">
+          <Key>
+            <PropertyRef Name="PosmID" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="CustId" />
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Name="PosmID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CustId" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="CustName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ClassID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SiteID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Descr" Type="varchar" MaxLength="100" />
+          <Property Name="Date" Type="smalldatetime" Nullable="false" />
+          <Property Name="Qty" Type="float" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <Function Name="OM23600_pcBranchID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PosmID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM23600_pcClassID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM23600_pcCustId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM23600_pcExpDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="SiteID" Type="varchar" Mode="In" />
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="OM23600_pcInvtID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ClassID" Type="varchar" Mode="In" />
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM23600_pcPosmID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM23600_pcSiteID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="OM23600_pgPosmID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="OM_POSMBranch" EntityType="Self.OM_POSMBranch" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OM23600Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="OM23600Entities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="OM23600_pcBranchID" ReturnType="Collection(OM23600Model.OM23600_pcBranchID_Result)">
+            <Parameter Name="PosmID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM23600_pcClassID" ReturnType="Collection(OM23600Model.OM23600_pcClassID_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM23600_pcCustId" ReturnType="Collection(OM23600Model.OM23600_pcCustId_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM23600_pcInvtID" ReturnType="Collection(OM23600Model.OM23600_pcInvtID_Result)">
+            <Parameter Name="ClassID" Mode="In" Type="String" />
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM23600_pcPosmID" ReturnType="Collection(OM23600Model.OM23600_pcPosmID_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="OM23600_pcSiteID" ReturnType="Collection(OM23600Model.OM23600_pcSiteID_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <EntitySet Name="OM_POSMBranch" EntityType="OM23600Model.OM_POSMBranch" />
+          <FunctionImport Name="OM23600_pcExpDate" ReturnType="Collection(OM23600Model.OM23600_pcExpDate_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="SiteID" Mode="In" Type="String" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="OM23600_pgPosmID" ReturnType="Collection(OM23600Model.OM23600_pgPosmID_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="OM23600_pcBranchID_Result">
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="OM23600_pcClassID_Result">
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="OM23600_pcCustId_Result">
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="OM23600_pcInvtID_Result">
+          <Property Type="String" Name="ClassID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="OM23600_pcPosmID_Result">
+          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="FromDate" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="ToDate" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="OM23600_pcSiteID_Result">
+          <Property Type="String" Name="SiteId" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <EntityType Name="OM_POSMBranch">
+          <Key>
+            <PropertyRef Name="PosmID" />
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="CustId" />
+            <PropertyRef Name="InvtID" />
+          </Key>
+          <Property Name="PosmID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CustId" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CustName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ClassID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SiteID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="InvtID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Descr" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Qty" Type="Double" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <ComplexType Name="OM23600_pcExpDate_Result">
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ExpDate" Nullable="true" MaxLength="4000" />
+        </ComplexType>
+        <ComplexType Name="OM23600_pgPosmID_Result">
+          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CustName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="16" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="OM23600Entities" >
+          <FunctionImportMapping FunctionImportName="OM23600_pcBranchID" FunctionName="eBiz4DWebSysModel.Store.OM23600_pcBranchID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23600Model.OM23600_pcBranchID_Result">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM23600_pcClassID" FunctionName="eBiz4DWebSysModel.Store.OM23600_pcClassID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23600Model.OM23600_pcClassID_Result">
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM23600_pcCustId" FunctionName="eBiz4DWebSysModel.Store.OM23600_pcCustId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23600Model.OM23600_pcCustId_Result">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM23600_pcInvtID" FunctionName="eBiz4DWebSysModel.Store.OM23600_pcInvtID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23600Model.OM23600_pcInvtID_Result">
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM23600_pcPosmID" FunctionName="eBiz4DWebSysModel.Store.OM23600_pcPosmID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23600Model.OM23600_pcPosmID_Result">
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM23600_pcSiteID" FunctionName="eBiz4DWebSysModel.Store.OM23600_pcSiteID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23600Model.OM23600_pcSiteID_Result">
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OM_POSMBranch">
+            <EntityTypeMapping TypeName="OM23600Model.OM_POSMBranch">
+              <MappingFragment StoreEntitySet="OM_POSMBranch">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM23600_pcExpDate" FunctionName="eBiz4DWebSysModel.Store.OM23600_pcExpDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23600Model.OM23600_pcExpDate_Result">
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OM23600_pgPosmID" FunctionName="eBiz4DWebSysModel.Store.OM23600_pgPosmID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23600Model.OM23600_pgPosmID_Result">
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" >
+        <EntityTypeShape EntityType="OM23600Model.OM_POSMBranch" Width="1.5" PointX="0.75" PointY="0.75" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
