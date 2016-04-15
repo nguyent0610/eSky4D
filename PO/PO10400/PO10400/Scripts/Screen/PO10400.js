@@ -10,7 +10,7 @@ var Process = {
         else {
             return value;
         }
-    },  
+    },
     renderPOType: function (value) {
         var record = App.stoPOType.findRecord("Code", value);
         if (record) {
@@ -511,6 +511,7 @@ var Popup = {
         if (!_recordEdit.IsEditOrder) return false;
        
         var det = e.record.data;
+        if (e.field == "DiscAmt" && det.ExtCost == 0) return false;
         _purUnit = e.record.data.PurchUnit;
 
         if (det.PurchaseType == "") {
@@ -625,6 +626,7 @@ var Popup = {
             }
 
             StkQty = Math.round((objDetail.UnitMultDiv == "D" ? (objDetail.QtyOrd / objDetail.CnvFact) : (objDetail.QtyOrd * objDetail.CnvFact)));
+            e.record.set("DiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
             e.record.set("ExtCost", objDetail.QtyOrd * objDetail.UnitCost - objDetail.DiscAmt);
             objDetail.POFee = StkQty * objIN_Inventory.POFee;
 
@@ -636,6 +638,7 @@ var Popup = {
 
         }
         else if (e.field == "UnitCost") {
+            e.record.set("DiscAmt", HQ.util.mathRound((objDetail.UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
             e.record.set("ExtCost", objDetail.QtyOrd * objDetail.UnitCost - objDetail.DiscAmt);
 
         }
@@ -644,11 +647,12 @@ var Popup = {
 
         }
         else if (e.field == "DiscAmt") {
+            if (e.value > objDetail.UnitCost * objDetail.QtyOrd)
+                e.record.set("DiscAmt", 0);
             e.record.set("ExtCost", objDetail.UnitCost * objDetail.QtyOrd - objDetail.DiscAmt);
             if (objDetail.QtyOrd != 0) {
                 e.record.set("DiscPct", HQ.util.mathRound((objDetail.DiscAmt / (objDetail.UnitCost * objDetail.QtyOrd)) * 100, 2));//Math.round((objDetail.DiscAmt / (objDetail.UnitCost * objDetail.QtyOrd)) * 100, 2));
             }
-
         }
         else if (e.field == "DiscPct") {
             if (objDetail.ExtCost != 0) {
@@ -667,6 +671,7 @@ var Popup = {
                            UnitCost = result == null ? 0 : (_objPO_Setup.DfltLstUnitCost == "A" ? result.AvgCost : result.LastPurchasePrice);
                            UnitCost = Math.round((objDetail.UnitMultDiv == "D" ? (UnitCost / objDetail.CnvFact) : (UnitCost * objDetail.CnvFact)));
                            e.record.set("UnitCost", UnitCost);
+                           e.record.set("DiscAmt", HQ.util.mathRound((UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
                            e.record.set("ExtCost", UnitCost * objDetail.QtyOrd - objDetail.DiscAmt);
 
                            HQ.common.showBusy(false, '', App.frmDetail);
@@ -688,6 +693,7 @@ var Popup = {
                         success: function (result) {
                             UnitCost = result;
                             e.record.set("UnitCost", result);
+                            e.record.set("DiscAmt", HQ.util.mathRound((result * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
                             e.record.set("ExtCost", result * objDetail.QtyOrd - objDetail.DiscAmt);
                             HQ.common.showBusy(false, '', App.frmDetail);
                             Popup.delTax(e.rowIdx);
@@ -704,6 +710,7 @@ var Popup = {
                 var UnitCost = objIN_Inventory.POPrice;
                 UnitCost = Math.round((objDetail.UnitMultDiv == "D" ? (UnitCost / objDetail.CnvFact) : (UnitCost * objDetail.CnvFact)));
                 e.record.set("UnitCost", UnitCost);
+                e.record.set("DiscAmt", HQ.util.mathRound((UnitCost * objDetail.QtyOrd * objDetail.DiscPct) / 100, 2));
                 e.record.set("ExtCost", UnitCost * objDetail.QtyOrd - objDetail.DiscAmt);
                 Popup.delTax(e.rowIdx);
                 Popup.calcTax(e.rowIdx);
@@ -713,7 +720,9 @@ var Popup = {
         }
         if (objDetail.PurchaseType == "PR") {
             e.record.set("UnitCost", 0);
-            HQ.common.showBusy(false, '', App.frmDetail);
+            e.record.set("ExtCost", 0);
+            e.record.set("DiscPct", 0);
+            e.record.set("DiscAmt", 0);
         }
         if (e.field == "QtyOrd" || e.field == "DiscPct" || e.field == "DiscAmt" || e.field == "UnitCost") {
             Popup.delTax(e.rowIdx);
@@ -723,7 +732,7 @@ var Popup = {
         }
        
         //calcDet();
-        HQ.common.showBusy(false, '', App.frmDetail);
+
     },
     grdPO_Detail_Deselect: function (item, e) {
         Popup.calcDet();
