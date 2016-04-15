@@ -1169,6 +1169,8 @@ var deleteTrans = function (item) {
                     App.grdTrans.deleteSelected();
                     calculate();
                     HQ.message.process(msg, data, true);
+                    HQ.isChange = false;
+                    HQ.common.changeData(HQ.isChange, 'IN10100');
                 },
                 failure: function (msg, data) {
                     HQ.message.process(msg, data, true);

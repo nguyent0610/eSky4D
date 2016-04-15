@@ -114,7 +114,7 @@
                                         </tpl>
                                         <tr class='x-boundlist-item'>
                                             <td>{BatNbr}</td>
-                                            <td>{DateEnt:date(""m-d-Y"")}</td>
+                                            <td>{DateEnt:date("+Current.FormatDate+@")}</td>
                                             <td>{Status}</td>
                                             <td>{Descr}</td>
                                         </tr>
@@ -573,7 +573,7 @@
                                     </tpl>
                                     <tr class='x-boundlist-item'>
                                         <td style='width:100px;'>{LotSerNbr}</td>
-                                        <td>{ExpDate:date(""m-d-Y"")}</td>
+                                        <td>{ExpDate:date("+Current.FormatDate+@")}</td>
                                         <td>{QtyAvail}</td>
                                     </tr>
                                     <tpl if='[xcount-xindex] == 0'>
