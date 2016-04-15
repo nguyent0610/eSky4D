@@ -26,7 +26,22 @@ var stoBatch_Load = function () {
     var record = App.stoBatch.getById(App.BatNbr.getValue());
     if (record) {
         bindBatch(record);
+        //if (record.data.Status == 'H') {
+        //    HQ.common.lockItem(App.frmMain, false);
+        //}
+        //else {
+        //    HQ.common.lockItem(App.frmMain, true);
+        //}
+
+        //if (!HQ.isInsert && HQ.isNew) {
+        //    App.BatNbr.forceSelection = true;
+        //    HQ.common.lockItem(App.frmMain, true);
+        //}
+        //else if (!HQ.isUpdate && !HQ.isNew) {
+        //    HQ.common.lockItem(App.frmMain, true);
+        //}
     }
+    
 };
 var stoBatch_BeforeLoad = function (store, operation, eOpts) {
     //if (Ext.isEmpty(operation.params.query)) {
@@ -167,6 +182,7 @@ var checkExitEditLot = function (row) {
 //////////////////////////////////////////////////////////////////
 
 var frmMain_BoxReady = function () {
+    HQ.util.checkAccessRight();
     HQ.numSource = 0;
     HQ.maxSource = 8;
     HQ.numTrans = 0;
@@ -255,7 +271,9 @@ var menuClick = function (command) {
             if (!App.grdTrans.view.loadMask.isHidden()) {
                 return;
             }
-            save();
+            if (HQ.form.checkRequirePass(App.frmMain)) {
+                save();
+            }
             break;
         case "delete":
             if (HQ.focus == 'batch') {
@@ -295,15 +313,31 @@ var menuClick = function (command) {
             }
             break;
         case "new":
-            if ((HQ.isChange || App.grdTrans.isChange) && !Ext.isEmpty(App.BatNbr.getValue())) {
-                HQ.message.show(2015030201, '', "askNew", true);
-            } else {
-                defaultOnNew();
+            if (HQ.focus == 'batch') {
+                if (HQ.isChange || App.grdTrans.isChange ) {
+                    HQ.message.show(150, '', '');
+                }
+                else {
+                    defaultOnNew();
+                }
+            } else if (HQ.focus == 'trans') {
+                eventNew(App.stoTrans, App.grdTrans, 'InvtID');
             }
+
+            //if (HQ.focus == 'batch') {
+            //    if ((HQ.isChange || App.grdTrans.isChange) && !Ext.isEmpty(App.BatNbr.getValue())) {
+            //        HQ.message.show(2015030201, '', "askNew", true);
+            //    } else {
+            //        defaultOnNew();
+            //    }
+            //} else if (HQ.focus == 'trans') {
+            //    eventNew(App.stoTrans, App.grdTrans, 'InvtID');
+            //    //HQ.store.insertRecord(App.stoTrans, 'InvtID', Ext.create('App.mdlTrans'), true);
+            //}
             break;
         case "refresh":
             if ((HQ.isChange || App.grdTrans.isChange) && !Ext.isEmpty(App.BatNbr.getValue())) {
-                HQ.message.show(2015030201, '', "askRefresh", true);
+                HQ.message.show(20150303, '', "askRefresh", true);
             } else {
                 if (!Ext.isEmpty(App.BatNbr.getValue())) {
                     App.stoBatch.reload();
@@ -311,7 +345,6 @@ var menuClick = function (command) {
                     defaultOnNew();
                 }
             }
-
             break;
         case "print":
             if (!Ext.isEmpty(App.BatNbr.getValue()) && App.Status.value != "H") {
@@ -321,8 +354,26 @@ var menuClick = function (command) {
         default:
     }
 };
+
+var eventNew = function (sto, grd, keys) {
+    HQ.store.insertBlank(sto, keys);
+    HQ.grid.last(grd);
+    if (grd.editingPlugin) {
+        grd.editingPlugin.startEditByPosition({
+            row: sto.getCount() - 1,
+            column: 1
+        });
+    } else {
+        grd.lockedGrid.editingPlugin.startEditByPosition({
+            row: sto.getCount() - 1,
+            column: 1
+        });
+    }
+};
+
 var btnLot_Click = function () {
     if (Ext.isEmpty(this.record.invt)) {
+        App.cboTransInvtID.store.clearFilter();
         this.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [this.record.data.InvtID]);
     }
 
@@ -592,7 +643,7 @@ var cboTrnsferNbr_Change = function () {
 };
 
 var grdTrans_BeforeEdit = function (item, e) {
-
+    if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
     if (App.grdTrans.isLock) {
         return false;
     }
@@ -967,6 +1018,12 @@ var save = function () {
     App.stoLotTrans.clearFilter();
     App.stoTrans.data.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {
+            if (Ext.isEmpty(item.data.UnitDesc)) {
+                HQ.message.show(1000, [HQ.common.getLang('Unit')], '', true);
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['UnitDesc'], [item.data.UnitDesc])));
+                flat = true;
+                return false;
+            }
             if (item.data.Qty == 0) {
                 HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
                 App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
@@ -1275,24 +1332,21 @@ var rdrTrans_QtyAmt = function (value) {
 var setStatusForm = function () {
 
     var lock = true;
-
+    var flag = true;
     if (!Ext.isEmpty(HQ.objBatch.data.BatNbr)) {
         if (HQ.objBatch.data.JrnlType == 'PO') {
             lock = true;
         } else if (HQ.objBatch.data.Status == 'H') {
             lock = false;
         }
-
+        
     } else {
         lock = !HQ.isInsert;
         App.btnImport.setDisabled(false);
     }
 
-
     App.btnImport.setDisabled(App.Status.getValue() != 'H');
 
-    HQ.common.lockItem(App.frmMain, lock);
-    App.grdTrans.isLock = lock;
     App.BatNbr.setReadOnly(false);
     App.Handle.setReadOnly(false);
     App.RvdBatNbr.setReadOnly(true);
@@ -1301,6 +1355,21 @@ var setStatusForm = function () {
     App.TotQty.setReadOnly(true);
     App.TotAmt.setReadOnly(true);
     App.BranchID.setReadOnly(true);
+
+    if (!HQ.isInsert && HQ.isNew) {
+        lock = true;
+        flag = false;
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        lock = true;
+        flag = false;
+    }
+    
+    HQ.common.lockItem(App.frmMain, lock);
+    App.grdTrans.isLock = lock;
+    if (flag == true && App.Status.getValue() != 'H') {
+        App.Handle.setReadOnly(false);
+    }
 };
 
 var checkExitEdit =  function (row) {
@@ -1324,6 +1393,10 @@ var checkExitEdit =  function (row) {
         if (Ext.isEmpty(cnv)) {
             trans.UnitMultDiv = '';
             trans.UnitPrice = 0;
+            trans.TranAmt = 0;
+            row.record.commit();
+            App.grdTrans.view.loadMask.hide();
+            App.grdTrans.view.loadMask.setDisabled(false);
             return;
         }
         if (invt.ValMthd == "A" || invt.ValMthd == "E") {
@@ -1350,6 +1423,10 @@ var checkExitEdit =  function (row) {
         if (Ext.isEmpty(cnv)) {
             trans.UnitMultDiv = '';
             trans.UnitPrice = 0;
+            trans.TranAmt = 0;
+            row.record.commit();
+            App.grdTrans.view.loadMask.hide();
+            App.grdTrans.view.loadMask.setDisabled(false);
             return;
         }
 
@@ -1397,7 +1474,7 @@ var checkExitEdit =  function (row) {
     checkTransAdd();
 
     App.grdTrans.view.loadMask.hide();
-    App.grdTrans.view.loadMask.setDisabled(false)
+    App.grdTrans.view.loadMask.setDisabled(false);
 };
 
 var checkTransAdd = function () {
@@ -1414,6 +1491,16 @@ var checkTransAdd = function () {
     App.SlsperID.setReadOnly(App.Status.getValue() != 'H');
 
     App.FromToSiteID.setReadOnly(HQ.isTransfer || App.Status.getValue() != 'H');
+
+    if (!HQ.isInsert && HQ.isNew) {
+        App.SlsperID.setReadOnly(true);
+        App.FromToSiteID.setReadOnly(true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        App.SlsperID.setReadOnly(true);
+        App.FromToSiteID.setReadOnly(true);
+    }
+
 };
 
 var getQtyAvail = function (row) {
@@ -1483,8 +1570,3 @@ var tickToDate = function (ticks) {
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
-
-
-
-
-

@@ -365,9 +365,9 @@
             X.Panel()
             .Border(true)
             .Region(Region.Center)
-            .Layout(LayoutType.Fit)
+            .Layout(LayoutType.Border)
             .Items(
-                X.GridPanel().ID("grdTrans")
+                X.GridPanel().ID("grdTrans").Region(Region.Center).Flex(1)
                 .StoreID("stoTrans")
                 .RowLines(true)
                 .ColumnLines(true)
@@ -451,7 +451,7 @@
                     .Text(Util.GetLang("UnitPrice"))
                     .Align(Alignment.Right)
                     .Width(100)
-                    .Editor(HQ.NumberField().MaxValue(100000000).DecimalPrecision(0).SpinUpEnabled(true))
+                    .Editor(HQ.NumberField().MinValue(0).MaxValue(100000000).DecimalPrecision(0).SpinUpEnabled(true))
                     .Renderer("rdrTrans_QtyAmt")
 
                     , X.Column()
@@ -490,7 +490,23 @@
                 .Plugins(
                     X.CellEditing().ClicksToEdit(1)
                 )
-            )
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("InvtID"),
+                            X.StringFilter().DataIndex("TranDesc"),
+                            X.StringFilter().DataIndex("UnitDesc"),
+                            X.NumericFilter().DataIndex("Qty"),
+                            X.NumericFilter().DataIndex("UnitPrice"),
+                            X.NumericFilter().DataIndex("TranAmt"),
+                            X.StringFilter().DataIndex("PosmID")
+                        )
+                )
+            ).Listeners(lss =>
+            {
+                lss.Render.Handler = "HQ.common.control_render(this,'trans')";
+            })
         )
     )
 )
@@ -588,7 +604,7 @@
             .Renderer("renderQtyAmt") 
                 
               
-            , X.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(Html.X().DateField())
+            , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate")).Editor(Html.X().DateField())
         )
         .Listeners(lst =>
         {

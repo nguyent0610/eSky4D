@@ -41,6 +41,7 @@ namespace IN10100
             //Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
             Current.Server = "EARTHSVR\\SQL2012";
             Current.DBSys = "ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.FormatDate = "yyyy/MM/dd";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;

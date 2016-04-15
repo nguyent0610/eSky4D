@@ -20,6 +20,7 @@ using System.Drawing;
 using HQFramework.DAL;
 using System.Dynamic;
 using HQFramework.Common;
+using System.Globalization;
 namespace IN10100.Controllers
 {
 
@@ -72,7 +73,7 @@ namespace IN10100.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -968,11 +969,30 @@ namespace IN10100.Controllers
                                     message += string.Format("Dòng {0} mặt hàng {1} không có đơn vị<br/>", (i + 1).ToString(), invtID);
                                     continue;
                                 }
-                                if (workSheet.Cells[i, 3].FloatValue == 0)
+                                if (workSheet.Cells[i, 3].StringValue.PassNull() == "")
                                 {
-                                    message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số lượng<br/>", (i + 1).ToString(), invtID);
+                                    message += string.Format("Dòng {0} mặt hàng {1} không có số lượng<br/>", (i + 1).ToString(), invtID);
                                     continue;
                                 }
+                                else
+                                {
+                                    float n;
+                                    bool isNumeric = float.TryParse(workSheet.Cells[i, 3].StringValue, out n);
+                                    if (isNumeric == true)
+                                    {
+                                        if (workSheet.Cells[i, 3].FloatValue == 0)
+                                        {
+                                            message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số lượng<br/>", (i + 1).ToString(), invtID);
+                                            continue;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        message += string.Format("Dòng {0} sai định dạng Số Lượng<br/>", (i + 1).ToString());
+                                        continue;
+                                    }
+                                }
+                                
                                 if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 6].StringValue.PassNull() == string.Empty)
                                 {
                                     message += string.Format("Dòng {0} mặt hàng {1} chưa nhập số LOT<br/>", (i + 1).ToString(), invtID);
@@ -983,6 +1003,20 @@ namespace IN10100.Controllers
                                 {
                                     message += string.Format("Dòng {0} mặt hàng {1} chưa nhập ngày hết hạn<br/>", (i + 1).ToString(), invtID);
                                     continue;
+                                }
+                                else if (objInvt.LotSerTrack == "L" && workSheet.Cells[i, 7].Value.PassNull() != string.Empty)
+                                {
+                                    DateTime parsed;
+
+                                    bool valid = DateTime.TryParseExact(workSheet.Cells[i, 7].StringValue, Current.FormatDate,
+                                                                        CultureInfo.InvariantCulture,
+                                                                        DateTimeStyles.None,
+                                                                        out parsed);
+                                    if (valid == false)
+                                    {
+                                        message += string.Format("Dòng {0} sai định dạng Ngày Hết Hạn. Ngày Hết Hạn phải có dạng ({1})<br/>", (i + 1).ToString(),Current.FormatDate);
+                                        continue;
+                                    }
                                 }
 
 
@@ -1006,8 +1040,15 @@ namespace IN10100.Controllers
                              
                                 newLot.InvtID = invtID;
                                 newLot.InvtMult = 1;
+                                if (workSheet.Cells[i, 3].StringValue.PassNull() == "")
+                                {
+                                    newLot.Qty = 0;
+                                }
+                                else
+                                {
+                                    newLot.Qty = workSheet.Cells[i, 3].FloatValue;
+                                }
                                 
-                                newLot.Qty = workSheet.Cells[i, 3].FloatValue;
                                 newLot.SiteID = data["SiteID"].PassNull();
                                 newLot.TranDate = data["DateEnt"].ToDateShort();
                                 newLot.TranType = "RC";
