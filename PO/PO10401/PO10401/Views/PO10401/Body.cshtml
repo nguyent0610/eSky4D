@@ -211,12 +211,12 @@
                     .Model(Util.GenerateModel(typeof(PO10401_pgLoadPOHeader_Result), "mdlDet", ""))       
                     .ServerProxy(
                         X.AjaxProxy()                
-                        .Url(Url.Action("GetDet", "PO10401"))                
-                        //.ActionMethods(action =>
-                        //{
-                        //    action.Read = HHQpMethod.POST;
-                        //})
-                        //.Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                        .Url(Url.Action("GetDet", "PO10401"))
+                            .ActionMethods(action =>
+                            {
+                                action.Read =HttpMethod.POST;
+                            })
+                            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
                     )
                     .Listeners(l =>
                         {
