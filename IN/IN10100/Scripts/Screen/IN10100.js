@@ -23,6 +23,7 @@ var store_Load = function () {
     checkSetDefault();
 };
 var stoBatch_Load = function () {
+    HQ.isNew = false;
     var record = App.stoBatch.getById(App.BatNbr.getValue());
     if (record) {
         bindBatch(record);
@@ -1274,6 +1275,7 @@ var calculate = function () {
 };
 
 var defaultOnNew = function () {
+    HQ.isNew = true;
     var record = Ext.create('App.mdlBatch');
     record.data.BranchID = HQ.cpnyID;
     record.data.Status = 'H';
