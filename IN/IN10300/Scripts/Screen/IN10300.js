@@ -425,16 +425,7 @@ var cboSiteID_Change = function () {
         App.cboSiteID.setValue('');
     }
 }
-var cboToCpnyID_Change = function () {
-    App.stoToSite.clearFilter();
-    App.cboToSiteID.setValue('');
-    if (Ext.isEmpty(App.cboToCpnyID.getValue())) {
-        App.stoToSite.filter('CpnyID', "##@##");
-    } else {
-        App.stoToSite.filter('CpnyID', App.cboToCpnyID.getValue());
-    }
 
-}
 var cboTrnsferNbr_Change = function () {
     if (Ext.isEmpty(App.cboBatNbr.getValue())) {
         if (!Ext.isEmpty(App.TrnsferNbr.getValue())) {
@@ -738,6 +729,7 @@ var bindBatch = function (record) {
     App.cboStatus.forceSelection = false;
     App.frmMain.loadRecord(HQ.objBatch);
     App.cboStatus.forceSelection = false;
+    App.cboToSiteID.store.reload();
     App.frmMain.events['fieldchange'].resume();
     App.cboBatNbr.events['change'].resume();
     App.cboSiteID.events['change'].resume();
@@ -1116,7 +1108,11 @@ var calculate = function () {
 
     App.txtTotAmt.setValue(totAmt);
 }
-
+var cboToCpnyID_Change = function (sender,e) {
+    App.cboToSiteID.setValue('');
+    if(!Ext.isEmpty(e))
+        App.cboToSiteID.store.reload();
+}
 var defaultOnNew = function () {
     HQ.isNew = true;
     var record = Ext.create('App.mdlBatch');
@@ -1131,14 +1127,6 @@ var defaultOnNew = function () {
     record.data.TransferType = "1";
     record.data.TransferStatus = "P";
     record.data.ShipViaID = "MD";
-
-    App.stoToSite.clearFilter();
-    if (Ext.isEmpty(record.data.ToCpnyID)) {
-        App.stoToSite.filter('CpnyID', '##@##');
-    } else {
-        App.stoToSite.filter('CpnyID', record.data.ToCpnyID);
-    }
-
 
     App.frmMain.validate();
     bindBatch(record);

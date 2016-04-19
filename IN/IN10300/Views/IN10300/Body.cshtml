@@ -509,12 +509,13 @@
                         .ForceSelection(true)
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .HQParam(new StoreParameterCollection(){
-                            new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboToCpnyID.getValue()", Mode = ParameterMode.Raw }
                         })
                         .HQControlFocus("cboTransferType")
                         .LoadData()
                         .Listeners(lst =>
                         {
+                            lst.Expand.Handler = "if(Ext.isEmpty(App.cboToCpnyID.getValue())) App.cboToSiteID.collapse();";
                             lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
                             lst.Change.Fn = "cboToSiteID_Change";
                             lst.Focus.Handler = "HQ.focus='batch';";
