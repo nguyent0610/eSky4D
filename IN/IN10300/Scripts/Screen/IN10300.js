@@ -506,7 +506,7 @@ var cboTrnsferNbr_Change = function () {
 }
 
 var grdTrans_BeforeEdit = function (item, e) {
-
+    if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
     if (App.grdTrans.isLock) {
         return false;
     }
@@ -1569,11 +1569,3 @@ var setChange = function (isChange) {
     }
     HQ.common.changeData(isChange, 'IN10300');
 }
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-
-
-
-
-
