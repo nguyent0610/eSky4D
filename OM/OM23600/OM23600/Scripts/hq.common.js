@@ -562,6 +562,7 @@ var HQ = {
                         if (row.field == keys[jkey])
                             rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
                         else
+                           // rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
                             rowdata += row.record.data[keys[jkey]] ? row.record.data[keys[jkey]].toString().toLowerCase() : '' + ',';
                     }
                 }

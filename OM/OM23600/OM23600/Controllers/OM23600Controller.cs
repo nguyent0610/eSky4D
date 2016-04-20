@@ -27,14 +27,15 @@ namespace OM23600.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
         public ActionResult GetData()
         {
-            return this.Store(_db.OM23600_pgPosmID(Current.UserName, Current.CpnyID, Current.LangID));
+            var lstPOSM = _db.OM23600_pgPosmID(Current.UserName, Current.CpnyID, Current.LangID);
+            return this.Store(lstPOSM);
         }
         public ActionResult Save(FormCollection data)
         {
@@ -123,8 +124,9 @@ namespace OM23600.Controllers
             t.CustName = s.CustName;
             t.ClassID = s.ClassID;
             t.SiteID = s.SiteID;
-            t.Descr = s.Descr;           
+            t.Descr = s.Descr;
             t.Date = s.Date.ToDateTime();
+            //t.Date = DateTime.TryParseExact("", Current.FormatDate);//,/ s.Date.ToDateTime();
             t.Qty = s.Qty;
             t.LUpd_DateTime = DateTime.Now;
             t.LUpd_Prog = _screenNbr;

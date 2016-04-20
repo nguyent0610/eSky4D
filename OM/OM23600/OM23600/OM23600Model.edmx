@@ -68,6 +68,7 @@
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
         </Function>
         <Function Name="OM23600_pgPosmID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
@@ -113,6 +114,7 @@
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="OM_POSMBranch" EntityType="OM23600Model.OM_POSMBranch" />
           <FunctionImport Name="OM23600_pcExpDate" ReturnType="Collection(OM23600Model.OM23600_pcExpDate_Result)">

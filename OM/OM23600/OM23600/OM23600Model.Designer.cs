@@ -330,7 +330,8 @@ namespace OM23600
         /// <param name="userID">No Metadata Documentation available.</param>
         /// <param name="cpnyID">No Metadata Documentation available.</param>
         /// <param name="langID">No Metadata Documentation available.</param>
-        public ObjectResult<OM23600_pcSiteID_Result> OM23600_pcSiteID(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID)
+        /// <param name="branchID">No Metadata Documentation available.</param>
+        public ObjectResult<OM23600_pcSiteID_Result> OM23600_pcSiteID(global::System.String userID, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String branchID)
         {
             ObjectParameter userIDParameter;
             if (userID != null)
@@ -362,7 +363,17 @@ namespace OM23600
                 langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
             }
     
-            return base.ExecuteFunction<OM23600_pcSiteID_Result>("OM23600_pcSiteID", userIDParameter, cpnyIDParameter, langIDParameter);
+            ObjectParameter branchIDParameter;
+            if (branchID != null)
+            {
+                branchIDParameter = new ObjectParameter("BranchID", branchID);
+            }
+            else
+            {
+                branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<OM23600_pcSiteID_Result>("OM23600_pcSiteID", userIDParameter, cpnyIDParameter, langIDParameter, branchIDParameter);
         }
     
         /// <summary>

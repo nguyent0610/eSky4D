@@ -7,6 +7,7 @@ var _branchID = '';
 var _classID = '';
 var _siteId = '';
 var _invtID = '';
+
 /////////////Store/////////////////
 //khi có sự thay đổi thêm xóa sửa trên lưới gọi tới để set * cho header de biết đã có sự thay đổi của grid
 var stoData_changed = function (sto) {
@@ -84,18 +85,82 @@ var menuClick = function (command) {
 var firstLoad = function () {
     //HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
+    if (HQ.isInsert == false) {
+        App.menuClickbtnNew.disable();
+    }
+    if (HQ.isDelete == false) {
+        App.menuClickbtnDelete.disable();
+    }
+    if (HQ.isUpdate == false && HQ.isInsert == false && HQ.isDelete == false) {
+        App.menuClickbtnSave.disable();
+    }
     App.stoData.reload();
 };
 var grdDet_BeforeEdit = function (editor, e) {
+    //if (_posmID == e.record.data.PosmID)
+    //{
+    //    //e.record.set('BranchID', '');
+    //    App.cboBranchID.store.reload();
+      
+    //    //App.cboBranchID.setvalue('');
+    //}
     _posmID = e.record.data.PosmID;
     App.cboBranchID.store.reload();
     _classID = e.record.data.ClassID;
     App.cboClassID.store.reload();
     _siteId = e.record.data.SiteID;
     App.cboSiteId.store.reload();
-    return HQ.grid.checkBeforeEdit(e, keys);
+    //_classID = e.record.data.ClassID;
+    //App.cboInvtID.store.reload();
+    if (e.field == 'SiteID') {
+        if (Ext.isEmpty(e.record.data.BranchID)) {
+            App.cboSiteId.getStore().removeAll();
+
+        }
+        else {
+            App.cboSiteId.store.reload();
+        }
+    }
+    if (HQ.isUpdate == false && HQ.isInsert == false) {
+        return false;
+    }
+    else {
+        return HQ.grid.checkBeforeEdit(e, keys);
+    }
+    //return HQ.grid.checkBeforeEdit(e, keys);
 };
 var grdDet_Edit = function (item, e) {
+    if (e.field == 'PosmID')
+    {
+        if (Ext.isEmpty(e.record.data.PosmID) )
+        {
+            e.record.set('BranchID', '');
+            e.record.set('CustId', '');
+            e.record.set('CustName', '');
+            e.record.set('SiteID', '');
+        }
+    }
+    if (e.field == 'BranchID') {
+        if (Ext.isEmpty(e.record.data.BranchID)) {
+            e.record.set('CustId', '');
+            e.record.set('CustName', '');
+            e.record.set('SiteID', '');
+           
+        }
+    }
+    if (e.field == 'ClassID') {
+        if (Ext.isEmpty(e.record.data.BranchID)) {
+            e.record.set('InvtID', '');
+            e.record.set('Descr', '');
+  
+        }
+    }
+    if (e.field == 'SiteID' || e.field == 'InvtID') {
+        if (Ext.isEmpty(e.record.data.BranchID)) {
+            e.record.set('Date', '');
+           
+        }
+    }
     if (e.field == 'CustId') {
         //Ten combo + ten proceduce --> lay duoc data cua combo do
         var obj = App.cboCustIdOM23600_pcCustId.findRecord('CustId', e.value);
@@ -123,6 +188,10 @@ var grdDet_Edit = function (item, e) {
     stoData_changed(App.stoData);
 };
 var grdDet_ValidateEdit = function (item, e) {
+    if (e.field == 'Date' 
+        && e.record) {
+        e.record.data.Date = new Date(e.value);
+    }     
      return HQ.grid.checkValidateEdit(App.grdDet, e, keys, false);
  
 };
@@ -173,9 +242,11 @@ var cboBranchID_Change = function (sender, value) {
     if (sender.valueModels && sender.valueModels[0] ) {
         _branchID = value;
         App.cboCustId.getStore().reload();
+        App.cboSiteId.getStore().reload();
     } else {
         _branchID = '';
         App.cboCustId.getStore().reload();
+        App.cboSiteId.getStore().reload();
     }
 };
 // cboBranchID Select
@@ -252,6 +323,8 @@ var cboInvtID_Select = function (sender, value) {
         App.cboExpDate.getStore().reload();
     }
 };
+
+
 ///////////////////////////////////////////////////////////////////////////
 ////// Process Data ///////////////////////////////////////////////////////
 var save = function () {
@@ -287,6 +360,9 @@ var refresh = function (item) {
         App.stoData.reload();       
     }
 }
+var dateTime_Renderer = function (value) {   
+    return Ext.Date.format(value, "m/d/Y");
+};
 
 
 

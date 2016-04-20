@@ -144,7 +144,8 @@
                             { 
                                 new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
                                 new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
-                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@BranchID", Value = "_branchID", Mode = ParameterMode.Raw }
                             })
                             .Listeners(l =>
                             {
@@ -181,13 +182,13 @@
                             ),
             X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150),
 
-            HQ.DateColumn().ID("ExpDate").Text(Util.GetLang("ExpDate")).DataIndex("Date").Width(150)
+                X.Column().ID("ExpDate").Text(Util.GetLang("ExpDate")).DataIndex("Date").Width(150)//.Renderer("dateTime_Renderer")
                         .Editor(
-                        HQ.Combo().ID("cboExpDate").Name("cboExpDate")
+                            HQ.Combo().ID("cboExpDate").Name("cboExpDate")//.Format("yyyy/MM/dd HH:mm")
                         .HQProcedure("OM23600_pcExpDate")
                         .Width(300).HQHeightWidth(500, 400)
-                        .HQColumnShow("InvtID,ExpDate").DisplayField("ExpDate").ValueField("ExpDate")
-                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)                     
+                        .HQColumnShow("ExpDate").DisplayField("ExpDate").ValueField("ExpDate")
+                        .AllowBlank(true).ForceSelection(false).HQDBSys(false)                     
                         .HQParam(new StoreParameterCollection() 
                         {                             
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
@@ -201,7 +202,7 @@
                         .LoadData()
                             ),
             X.NumberColumn().ID("Qty").Text(Util.GetLang("Qty")).DataIndex("Qty").Width(100)
-            .Align(Alignment.Right)
+            .Align(Alignment.Right).Format("0")
             .Editor(X.NumberField().MinValue(0)),    
             //.Editor(X.NumberField().DecimalPrecision(0).MinValue(0)),          
             X.CommandColumn()
@@ -257,7 +258,7 @@
                     X.StringFilter().DataIndex("SiteID"),
                     X.StringFilter().DataIndex("InvtID"),
                     X.StringFilter().DataIndex("Descr"),
-                    X.DateFilter().DataIndex("ExpDate"),
+                    X.DateFilter().DataIndex("Date"),                    
                     X.NumericFilter().DataIndex("Qty")
                 )
         )
