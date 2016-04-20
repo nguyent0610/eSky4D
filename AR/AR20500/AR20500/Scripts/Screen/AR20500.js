@@ -77,7 +77,7 @@ var btnProcess_Click = function () {
                 return;
             }
             App.dteFromDate.setValue(HQ.bussinessDate);
-            App.dteToDate.setValue(HQ.bussinessDate);
+            App.dteToDate.setValue(HQ.EndDateYear);
             App.winProcess.show();
         }
         else {

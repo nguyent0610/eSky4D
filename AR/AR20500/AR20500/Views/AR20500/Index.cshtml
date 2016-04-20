@@ -66,6 +66,7 @@
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
         HQ.bussinessDate = new Date('@DateTime.Now.Date');
+        HQ.EndDateYear = new Date('@( new DateTime(DateTime.Now.Year,12,31))');
         HQ.imagePath = '@ViewBag.ImagePath';
         HQ.isShowCustHT = HQ.util.toBool('@ViewBag.IsShowCustHT');
     </script>  

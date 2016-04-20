@@ -101,7 +101,7 @@
                                     lst.Expand.Handler = "HQ.combo.expand(this,',');";
                                 })
                             , HQ.DateField().ID("ToDate").HQLangCode("ToDate").Width(250)
-                                    .Value(new DateTime(DateTime.Now.Year,12,31))
+                                   .Value(DateTime.Now.ToShortDateString())
 
                             , HQ.Combo().ID("cboHandle")
                                     .Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20500_pcHandle")
