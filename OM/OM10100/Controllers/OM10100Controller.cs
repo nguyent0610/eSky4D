@@ -2271,6 +2271,9 @@ namespace OM10100.Controllers
                 throw new MessageException(MessageType.Message, "728");
 
             _handle = data["Handle"].PassNull() == string.Empty ? "N" : data["Handle"].PassNull();
+            var acc = Session["OM10100"] as AccessRight;
+            if (_handle == "V" && !acc.Init) throw new MessageException(MessageType.Message, "725");
+
 
             if (_handle != "L")
             {
