@@ -29,7 +29,7 @@ namespace OM23600
             Current.Authorize = false;
 
             Current.Server = "MARSSVR\\SQL2012"; // MARSSVR EARTHSVR
-            Current.FormatDate = "MM/dd/yyyy";  // MM/dd/yyyy  dd-MM-yyyy       
+            Current.FormatDate = "dd.MM.yyyy";  // MM/dd/yyyy  dd-MM-yyyy       
             Current.DBSys = "eSky4DSys"; // ND_eSky4DSys
             AccessRight acc = new AccessRight();
             acc.Delete = true;

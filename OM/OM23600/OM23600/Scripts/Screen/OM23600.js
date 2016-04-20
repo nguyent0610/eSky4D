@@ -188,9 +188,11 @@ var grdDet_Edit = function (item, e) {
     stoData_changed(App.stoData);
 };
 var grdDet_ValidateEdit = function (item, e) {
-    if (e.field == 'Date' 
+    if (e.field == 'Date'
+        && e.value
         && e.record) {
-        e.record.data.Date = new Date(e.value);
+        e.record.set('Date', Ext.Date.parse(e.value, HQ.formatDate));
+        //Ze.record.data.Date = Ext.Date.parse(e.value, HQ.formatDate);
     }     
      return HQ.grid.checkValidateEdit(App.grdDet, e, keys, false);
  
