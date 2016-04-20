@@ -101,7 +101,7 @@
                                     lst.Expand.Handler = "HQ.combo.expand(this,',');";
                                 })
                             , HQ.DateField().ID("ToDate").HQLangCode("ToDate").Width(250)
-                                    .Value(DateTime.Now.ToShortDateString())
+                                    .Value(new DateTime(DateTime.Now.Year,12,31))
 
                             , HQ.Combo().ID("cboHandle")
                                     .Name("cboHandle").HQLangCode("Handle").HQProcedure("AR20500_pcHandle")
@@ -333,7 +333,7 @@
                         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
                         .Items(
                             HQ.DateField().HQLangCode("FromDate").ID("dteFromDate").Name("popFromDate").Listeners(lst=>lst.Change.Fn="dteFromDate_change")
-                            ,HQ.DateField().HQLangCode("ToDate").ID("dteToDate").Name("popToDate").Listeners(lst=>lst.Change.Fn="dteToDate_change")
+                            ,HQ.DateField().HQLangCode("ToDate").ID("dteToDate").Name("popToDate").Value(new DateTime(DateTime.Now.Year,12,31)).Listeners(lst=>lst.Change.Fn="dteToDate_change")
                 
                         )          
                 )

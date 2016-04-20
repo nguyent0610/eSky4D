@@ -622,19 +622,19 @@ var Gmap = {
                         (function (marker, data) {
                             google.maps.event.addListener(marker, "click", function (e) {
                                 App.slmCust.select(data.index);
-                                //displayImage(App.imgImages, data.ImageFileName);
-                                //infoWindow.setContent(data.description);
-                                //infoWindow.open(Gmap.Declare.map, marker);
+                                displayImage(App.imgImages, data.ImageFileName);
+                                infoWindow.setContent(data.description);
+                                infoWindow.open(Gmap.Declare.map, marker);
 
-                                //// Set animation of marker
-                                //if (marker.getAnimation() != null) {
-                                //    marker.setAnimation(null);
-                                //} else {
-                                //    marker.setAnimation(google.maps.Animation.BOUNCE);
-                                //    setTimeout(function () {
-                                //        marker.setAnimation(null);
-                                //    }, 1400);
-                                //}
+                                // Set animation of marker
+                                if (marker.getAnimation() != null) {
+                                    marker.setAnimation(null);
+                                } else {
+                                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                                    setTimeout(function () {
+                                        marker.setAnimation(null);
+                                    }, 1400);
+                                }
                             });
                         })(marker, data);
 
