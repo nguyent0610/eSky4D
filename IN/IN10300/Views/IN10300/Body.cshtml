@@ -73,7 +73,7 @@
                                         </tpl>
                                         <tr class='x-boundlist-item'>
                                             <td style='width:100px;'>{LotSerNbr}</td>
-                                            <td>{ExpDate:date(""m-d-Y"")}</td>
+                                            <td>{ExpDate:date("""+Current.FormatDateJS+@""")}</td>
                                             <td>{QtyAvail}</td>
                                         </tr>
                                         <tpl if='[xcount-xindex] == 0'>
@@ -114,7 +114,7 @@
                 .Align(Alignment.Right)
                 .Renderer("renderQtyAmt") 
                 
-                , X.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate"))
+                , HQ.DateColumn().ID("ExpDate").DataIndex("ExpDate").Text(Util.GetLang("ExpDate"))
             )
             .Listeners(lst =>
             {
@@ -178,7 +178,7 @@
                     .HQColumnShow("Code,Descr")
                     .DisplayField("Descr")
                     .ValueField("Code")
-                    .AllowBlank(false)
+                    .AllowBlank(false).Tag("X")
                     .BlankText(Util.GetLangPrefix("Input", "Status"))
                     .Width(250)
                     .LabelWidth(120)
@@ -267,7 +267,7 @@
                                         </tpl>
                                         <tr class='x-boundlist-item'>
                                             <td>{BatNbr}</td>
-                                            <td>{TranDate:date(""m-d-Y"")}</td>
+                                            <td>{TranDate:date("""+Current.FormatDateJS+@""")}</td>
                                             <td>{Status}</td>
                                             <td>{Descr}</td>
                                         </tr>
@@ -600,9 +600,26 @@
                 .ColumnLines(true)
                 .RowLines(true)
                 .Region(Region.Center).Flex(1)
-                .StoreID("stoTrans")
+                .Store(
+                    X.Store()
+                    .ID("stoTrans")
+                    .PageSize(50).AutoLoad(false)
+                    .Model(Util.GenerateModel(typeof(IN10300_pgTransferLoad_Result), "mdlTrans", ""))
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("BranchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("RefNbr", "App.txtRefNbr.getValue()", ParameterMode.Raw));
+                    })
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetTrans")))
+                    .Listeners(l =>    
+                    {
+                        l.Load.Fn = "stoDetail_Load";
+                        l.BeforeLoad.Fn = "stoTrans_BeforeLoad";
+                    })
+                )
                 .ColumnModel(
-                    X.RowNumbererColumn(),
+                    X.RowNumbererColumn().Width(30).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
 
                     X.Column()
                     .DataIndex("InvtID")
@@ -696,6 +713,19 @@
                 })
                 .SelectionModel(X.RowSelectionModel().ID("smlTrans").Mode(SelectionMode.Single))
                 .View(X.GridView().TrackOver(false))
+                .BottomBar(
+                        X.PagingToolbar()
+                        .Items(
+                            X.Label("Page size:"),
+                            X.ToolbarSpacer(10),
+                            X.ComboBox()
+                            .Width(80)
+                            .Items("1", "2", "10", "20", "30", "50")
+                            .SelectedItems("50")
+                            .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                        )
+                        .Plugins(X.ProgressBarPager())
+                )
                 .Plugins(X.CellEditing().ClicksToEdit(1))
                 .Features(
                     X.GridFilters()

@@ -19,6 +19,7 @@
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/screen/IN10300.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
@@ -89,7 +90,7 @@
 
 @(
     X.Store()
-    .ID("stoCalcLot")
+    .ID("stoCalcLot").SortOnLoad(false)
     .AutoLoad(false)
     .Model(Util.GenerateModel(typeof (IN_ItemLot),"mdlCalcLot",""))
     .Proxy(
@@ -146,7 +147,7 @@
         .Reader(X.JsonReader().Root("data"))
     )
 )
-@(X.Store().ID("stoTrans")
+@*@(X.Store().ID("stoTrans")
     .AutoLoad(false)
     .Model(Util.GenerateModel(typeof(IN10300_pgTransferLoad_Result), "mdlTrans", ""))
     .Proxy(
@@ -168,7 +169,7 @@
         p.Load.Fn = "stoDetail_Load";
         p.BeforeLoad.Fn= "stoTrans_BeforeLoad";
     })
-)
+)*@
 
 @(
     X.Store().ID("stoOldTrans")

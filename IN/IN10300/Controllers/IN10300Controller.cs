@@ -118,8 +118,8 @@ namespace IN10300.Controllers
 
             }
             lstLot = lstLot.OrderBy(p => p.ExpDate).ThenBy(p => p.LotSerNbr).ToList();
-
-            return this.Store(lstLot.OrderBy(p => p.LotSerNbr).ToList(), lstLot.Count);
+            return this.Store(lstLot, lstLot.Count);
+            //return this.Store(lstLot.OrderBy(p => p.LotSerNbr).ToList(), lstLot.Count);
         }
         public ActionResult GetLotTrans(string branchID, string batNbr)
         {

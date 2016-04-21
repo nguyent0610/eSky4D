@@ -27,8 +27,10 @@ var stoSetup_Load = function () {
     HQ.numSource++;
     checkSetDefault();
 }
+
 var stoTrans_BeforeLoad = function () {
-    App.grdTrans.view.loadMask.disable();
+    //App.grdTrans.view.loadMask.disable();
+    //HQ.common.showBusy(false);
 }
 var stoHandle_Load = function () {
     App.cboHandle.setValue('N');
@@ -60,8 +62,9 @@ var stoBatch_BeforeLoad = function (store, operation, eOpts) {
 var checkSelect = function (records, options, success) {
     HQ.numSelectTrans++;
     if (HQ.numSelectTrans == HQ.maxSelectTrans) {
-        App.grdTrans.view.loadMask.hide();
-        App.grdTrans.view.loadMask.setDisabled(false)
+        //App.grdTrans.view.loadMask.hide();
+        //App.grdTrans.view.loadMask.setDisabled(false)
+        HQ.common.showBusy(false);
         getQtyAvail(options.row);
     }
 }
@@ -204,11 +207,13 @@ var menuClick = function (command) {
             }
             break;
         case "save":
-            if (!App.grdTrans.view.loadMask.isHidden()) {
-                return;
-            }
-            if (HQ.form.checkRequirePass(App.frmMain)) {
-                save();
+            //if (!App.grdTrans.view.loadMask.isHidden()) {
+            //    return;
+            //}
+            if (HQ.isBusy == false) {
+                if (HQ.form.checkRequirePass(App.frmMain)) {
+                    save();
+                }
             }
             break;
         case "delete":
@@ -542,7 +547,9 @@ var grdTrans_SelectionChange = function (item, selected) {
     if (selected.length > 0) {
         if (!Ext.isEmpty(selected[0].data.InvtID)) {
             HQ.numSelectTrans = 0;
-            App.grdTrans.view.loadMask.show();
+            //App.grdTrans.view.loadMask.show();
+
+            HQ.common.showBusy(true,'Process...');
             App.stoItemSite.load({
                 params: { siteID: App.cboSiteID.getValue(), invtID: selected[0].data.InvtID },
                 callback: checkSelect,
@@ -585,7 +592,8 @@ var grdTrans_Edit = function (item, e) {
             }
 
             if (key == 'InvtID') {
-                App.grdTrans.view.loadMask.show();
+                //App.grdTrans.view.loadMask.show();
+                HQ.common.showBusy(true, 'Process...');
                 HQ.numEditTrans = 0;
                 HQ.maxEditTrans = 4;
                 App.stoUnit.load({
@@ -609,7 +617,8 @@ var grdTrans_Edit = function (item, e) {
                     row: e
                 });
             } else if (key == 'UnitDesc') {
-                App.grdTrans.view.loadMask.show();
+                //App.grdTrans.view.loadMask.show();
+                HQ.common.showBusy(true, 'Process...');
                 HQ.numEditTrans = 0;
                 HQ.maxEditTrans = 3;
                 App.stoItemSite.load({
@@ -762,36 +771,40 @@ var save = function () {
         HQ.message.show(1092, '', '', true);
         return;
     }
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
 
-    if (App.stoTrans.data.items.length <= 1) {
+    if (allRecords.items.length <= 1) {
         HQ.message.show(2015020804, [App.cboBatNbr.value], '', true);
         return;
     }
     var flat = false;
     App.stoLotTrans.clearFilter();
-    App.stoTrans.data.each(function (item) {
+
+    
+    allRecords.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {
             if (Ext.isEmpty(item.data.UnitDesc)) {
                 HQ.message.show(1000, [HQ.common.getLang('Unit')], '', true);
-                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['UnitDesc'], [item.data.UnitDesc])));
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findRecord(App.stoTrans, ['UnitDesc'], [item.data.UnitDesc])));
                 flat = true;
                 return false;
             }
             if (item.data.Qty == 0) {
                 HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
-                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findRecord(App.stoTrans, ['LineRef'], [item.data.LineRef])));
                 flat = true;
                 return false;
             }
             if (item.data.UnitMultDiv == '') {
                 HQ.message.show(2525, [item.data.InvtID], '', true);
-                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findRecord(App.stoTrans, ['LineRef'], [item.data.LineRef])));
                 flat = true;
                 return false;
             }
             if (Ext.isEmpty(item.data.SiteID)) {
                 HQ.message.show(1000, [HQ.common.getLang('siteid')], '', true);
-                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findRecord(App.stoTrans, ['LineRef'], [item.data.LineRef])));
                 flat = true;
                 return false;
             }
@@ -1100,8 +1113,10 @@ var showLot = function (record, loadCombo) {
 var calculate = function () {
     var totAmt = 0;
     var totQty = 0;
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
 
-    App.stoTrans.data.each(function (item) {
+    allRecords.each(function (item) {
         totAmt += item.data.TranAmt;
         totQty += item.data.Qty;
     });
@@ -1134,8 +1149,10 @@ var defaultOnNew = function () {
 
 var lastLineRef = function () {
     var num = 0;
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
 
-    App.stoTrans.data.each(function (item) {
+    allRecords.each(function (item) {
         if (!Ext.isEmpty(item.data.LineRef) && parseInt(item.data.LineRef) > num) {
             num = parseInt(item.data.LineRef);
         }
@@ -1235,8 +1252,9 @@ var checkExitEdit = function (row) {
             trans.UnitMultDiv = '';
             trans.UnitPrice = 0;
             row.record.commit();
-            App.grdTrans.view.loadMask.hide();
-            App.grdTrans.view.loadMask.setDisabled(false)
+            //App.grdTrans.view.loadMask.hide();
+            //App.grdTrans.view.loadMask.setDisabled(false);
+            HQ.common.showBusy(false);
             return;
         }
 
@@ -1284,8 +1302,9 @@ var checkExitEdit = function (row) {
             trans.Qty = 0;
             trans.TranAmt = 0;
             row.record.commit();
-            App.grdTrans.view.loadMask.hide();
-            App.grdTrans.view.loadMask.setDisabled(false)
+            //App.grdTrans.view.loadMask.hide();
+            //App.grdTrans.view.loadMask.setDisabled(false);
+            HQ.common.showBusy(false);
             return;
         }
 
@@ -1332,8 +1351,9 @@ var checkExitEdit = function (row) {
                     trans.Qty = 0;
                     row.record.commit();
                     HQ.message.show(35, '', '', true);
-                    App.grdTrans.view.loadMask.hide();
-                    App.grdTrans.view.loadMask.setDisabled(false)
+                    //App.grdTrans.view.loadMask.hide();
+                    //App.grdTrans.view.loadMask.setDisabled(false);
+                    HQ.common.showBusy(false);
                     return;
                 }
             }
@@ -1357,8 +1377,9 @@ var checkExitEdit = function (row) {
 
     checkTransAdd();
 
-    App.grdTrans.view.loadMask.hide();
-    App.grdTrans.view.loadMask.setDisabled(false)
+    //App.grdTrans.view.loadMask.hide();
+    //App.grdTrans.view.loadMask.setDisabled(false);
+    HQ.common.showBusy(false);
 }
 var checkExitEditLot = function (row) {
     var key = row.field;
@@ -1434,7 +1455,10 @@ var checkExitEditLot = function (row) {
 }
 var checkTransAdd = function () {
     var flat = false;
-    App.stoTrans.data.each(function (item) {
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
+
+    allRecords.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {
             flat = true;
             return false;
@@ -1516,7 +1540,10 @@ var getLotQtyAvail = function (row) {
 var calculateInvtTotal = function (invtID, siteID, lineRef) {
     var qty = 0;
     var qtyOld = 0;
-    App.stoTrans.each(function (item) {
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
+
+    allRecords.each(function (item) {
         if (item.data.InvtID == invtID && item.data.SiteID == siteID && ((lineRef != "" && item.data.LineRef != lineRef) || lineRef == "")) {
             qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
         }

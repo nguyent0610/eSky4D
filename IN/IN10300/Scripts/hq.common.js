@@ -562,52 +562,13 @@ var HQ = {
                         if (row.field == keys[jkey])
                             rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
                         else
-                            rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                            rowdata += row.record.data[keys[jkey]] ? row.record.data[keys[jkey]].toString().toLowerCase() : '' + ',';
                     }
                 }
                 if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
                     break;
                 };
             }
-            //if (store.data) {
-            //    for (var i = 0; i < store.data.items.length; i++) {
-            //        var record = store.data.items[i];
-            //        var data = '';
-            //        var rowdata = '';
-            //        for (var jkey = 0; jkey < keys.length; jkey++) {
-            //            if (record.data[keys[jkey]] != undefined) {
-            //                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-            //                if (row.field == keys[jkey])
-            //                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-            //                else
-            //                    rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
-            //            }
-            //        }
-            //        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-            //            break;
-            //        };
-            //    }
-            //}
-            //else {
-            //    for (var i = 0; i < store.allData.items.length; i++) {
-            //        var record = store.allData.items[i];
-            //        var data = '';
-            //        var rowdata = '';
-            //        for (var jkey = 0; jkey < keys.length; jkey++) {
-            //            if (record.data[keys[jkey]] != undefined) {
-            //                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-            //                if (row.field == keys[jkey])
-            //                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-            //                else
-            //                    rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
-            //            }
-            //        }
-            //        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-            //            break;
-            //        };
-            //    }
-            //}
-            return found;
         },
         //TrungHT d�ng cho ph�n trang
         checkDuplicateAll: function (grd, row, keys) {
@@ -878,14 +839,18 @@ var HQ = {
             if (form == undefined) {
                 if (busy) {
                     App.frmMain.body.mask(waitMsg);
+                    HQ.isBusy = true;
                 } else {
                     App.frmMain.body.unmask();
+                    HQ.isBusy = false;
                 }
             } else {
                 if (busy) {
                     form.body.mask(waitMsg);
+                    HQ.isBusy = true;
                 } else {
                     form.body.unmask();
+                    HQ.isBusy = false;
                 }
             }
 
