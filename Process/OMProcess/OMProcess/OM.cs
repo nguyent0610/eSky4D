@@ -473,6 +473,7 @@ namespace OMProcess
                     clsOM_PDASalesOrd objPDAOrd = new clsOM_PDASalesOrd(Dal);
                     clsOM_PDASalesOrdDet objPDADet = new clsOM_PDASalesOrdDet(Dal);
                     clsOM_SalesOrdDet objSalesDet = new clsOM_SalesOrdDet(Dal);
+					 
                     if (objPDAOrd.GetByKey(branchID, objSalesOrd.OrigOrderNbr))
                     {
                         DataTable lstPDADetail = objPDADet.GetAll(branchID, objSalesOrd.OrigOrderNbr, "%");
@@ -1382,6 +1383,888 @@ namespace OMProcess
             }
 
         }
+
+		public bool OM20500_ReleaseKAO(string branchID, string orderNbr, Dictionary<string, double> dicRef, string deliveryID, DateTime shipDate, DateTime docDate, bool isAddStock, Dictionary<string, double> dicRefLot)
+		{
+
+			try
+			{
+				if (string.IsNullOrEmpty(orderNbr))
+				{
+					throw new MessageException(MessageType.Message, "8012", "", new[] { orderNbr });
+
+				}
+
+				clsOM_PDASalesOrd objPDAOrd = new clsOM_PDASalesOrd(Dal);
+				if (!objPDAOrd.GetByKey(branchID, orderNbr))
+				{
+					throw new MessageException(MessageType.Message, "8012", "", new[] { orderNbr });
+
+				}
+				
+				clsOM_OrderType objType = new clsOM_OrderType(Dal);
+				if (!objType.GetByKey(objPDAOrd.OrderType))
+				{
+					throw new MessageException(MessageType.Message, "8013", "", new[] { objPDAOrd.OrderType });
+
+				}
+				clsOM_PDAOrdDisc objPDADisc = new clsOM_PDAOrdDisc(Dal);
+		
+				clsIN_Setup objINSetup = new clsIN_Setup(Dal);
+				objINSetup.GetByKey(branchID, "IN");
+
+				clsSQL objSql = new clsSQL(Dal);
+
+				string nbr = objSql.OMNumbering(branchID, "OrderNbr", objType.OrderType);
+				clsOM_Setup objOM = new clsOM_Setup(Dal);
+				objOM.GetByKey("OM");
+				clsOM_SalesOrd objSalesOrd = new clsOM_SalesOrd(Dal);
+				if (objPDAOrd.PriceClassID == string.Empty)
+				{
+					clsAR_Customer objCust = new clsAR_Customer(Dal);
+					objCust.GetByKey(objPDAOrd.CustID, branchID);
+					objSalesOrd.PriceClassID = objCust.PriceClassID;
+					objSalesOrd.ClassID = objCust.ClassId;
+				}
+				else
+				{
+					objSalesOrd.PriceClassID = objPDAOrd.PriceClassID;
+					objSalesOrd.ClassID = objPDAOrd.ClassID;
+				}
+
+
+				objSalesOrd.IsAddStock = isAddStock;
+				objSalesOrd.BranchID = branchID;
+				objSalesOrd.OrderNbr = nbr;
+				objSalesOrd.DeliveryID = deliveryID;
+				objSalesOrd.ShipDate = shipDate;
+				objSalesOrd.ARDocDate = docDate;
+				objSalesOrd.ARBatNbr = string.Empty;
+				objSalesOrd.ARRefNbr = string.Empty;
+				objSalesOrd.BudgetID1 = objPDAOrd.BudgetID1;
+				objSalesOrd.BudgetID2 = objPDAOrd.BudgetID2;
+				objSalesOrd.CmmnPct = objPDAOrd.CmmnPct;
+				objSalesOrd.CreditHold = objPDAOrd.CreditHold;
+				objSalesOrd.CreditMgrID = objPDAOrd.CreditMgrID;
+				objSalesOrd.Crtd_DateTime = DateTime.Now;
+				objSalesOrd.Crtd_Prog = Prog;
+				objSalesOrd.Crtd_User = User;
+				objSalesOrd.CustID = objPDAOrd.CustID;
+				objSalesOrd.CustOrderNbr = objPDAOrd.CustOrderNbr;
+				objSalesOrd.DoNotCalDisc = objPDAOrd.DoNotCalDisc;
+				objSalesOrd.ExpiryDate = objPDAOrd.ExpiryDate;
+				objSalesOrd.FreightAllocAmt = objPDAOrd.FreightAllocAmt;
+				objSalesOrd.FreightAmt = objPDAOrd.FreightAmt;
+				objSalesOrd.FreightCost = objPDAOrd.FreightCost;
+				objSalesOrd.FreightTermsID = objPDAOrd.FreightTermsID;
+				objSalesOrd.ImpExp = objPDAOrd.ImpExp;
+				objSalesOrd.INBatNbr = string.Empty;
+				objSalesOrd.INRefNbr = string.Empty;
+				objSalesOrd.InvcNbr = string.Empty;
+				objSalesOrd.InvcNote = string.Empty;
+				objSalesOrd.IssueMethod = objPDAOrd.IssueMethod;
+				objSalesOrd.IssueNumber = objPDAOrd.IssueNumber;
+				objSalesOrd.LUpd_DateTime = DateTime.Now;
+				objSalesOrd.LUpd_Prog = Prog;
+				objSalesOrd.LUpd_User = User;
+				objSalesOrd.MiscAmt = objPDAOrd.MiscAmt;
+				objSalesOrd.NoteId = objPDAOrd.NoteId;
+				objSalesOrd.OrderDate = objPDAOrd.OrderDate;
+
+				short ordNo = objSql.OM_GetOrderNo(objPDAOrd.BranchID, objPDAOrd.SlsPerID, objPDAOrd.OrderDate);
+				objSalesOrd.OrderNo = (short)(ordNo != 0 ? ordNo + 1 : 0);
+				objSalesOrd.OrderType = objPDAOrd.OrderType;
+				objSalesOrd.OrderWeight = objPDAOrd.OrderWeight;
+				objSalesOrd.OrigOrderNbr = objPDAOrd.OrderNbr;
+				objSalesOrd.PaymentBatNbr = objPDAOrd.PaymentBatNbr;
+				objSalesOrd.PaymentID = objPDAOrd.PaymentID;
+				objSalesOrd.PaymentNbr = objPDAOrd.PaymentNbr;
+				objSalesOrd.PmtAmt = objPDAOrd.PmtAmt;
+				objSalesOrd.PmtDate = objPDAOrd.PmtDate;
+				objSalesOrd.PremFreightAmt = objPDAOrd.PremFreightAmt;
+				objSalesOrd.PromiseDate = objPDAOrd.PromiseDate;
+				objSalesOrd.ReasonCode = objPDAOrd.ReasonCode;
+				objSalesOrd.ReceiptAmt = objPDAOrd.ReceiptAmt;
+				objSalesOrd.ReFundAmt = objPDAOrd.ReFundAmt;
+				objSalesOrd.ShiftID = objPDAOrd.ShiftID;
+				objSalesOrd.ShipPriority = objPDAOrd.ShipPriority;
+				objSalesOrd.ShipViaId = objPDAOrd.ShipViaId;
+				objSalesOrd.SlsPerID = objPDAOrd.SlsPerID;
+				objSalesOrd.StationID = objPDAOrd.StationID;
+				objSalesOrd.Status = "I";//"N";
+				objSalesOrd.Terms = objPDAOrd.Terms;
+				objSalesOrd.ToSiteID = objPDAOrd.ToSiteID;
+				objSalesOrd.UnitsShipped = objPDAOrd.UnitsShipped;
+				objSalesOrd.VolDiscAmt = objPDAOrd.VolDiscAmt;
+				objSalesOrd.VolDiscPct = objPDAOrd.VolDiscPct;
+
+				double taxAmt00 = 0;
+				double taxAmt01 = 0;
+				double taxAmt02 = 0;
+				double taxAmt03 = 0;
+				double txblAmt00 = 0;
+				double txblAmt01 = 0;
+				double txblAmt02 = 0;
+				double txblAmt03 = 0;
+				double soFee = 0;
+				double curyLineDiscAmt = 0;
+				double ordQty = 0;
+				double curyLineAmt = 0;
+
+				string listLineRef = string.Empty;
+				foreach (var item in dicRef)
+					listLineRef += item.Key + ",";
+
+				DataTable lstDet = objSql.OM_GetPDASalesOrdDetByLineRef(objPDAOrd.BranchID, objPDAOrd.OrderNbr, listLineRef);
+				clsOM_PDASalesOrdDet objPDADet = new clsOM_PDASalesOrdDet(Dal);
+				clsOM_SalesOrdDet objSalesDet = new clsOM_SalesOrdDet(Dal);
+				clsOM_LotTrans objLot = new clsOM_LotTrans(Dal);
+				clsOM_PDAOrdDisc objPDAOrdDisc = new clsOM_PDAOrdDisc(Dal);
+				clsOM_OrdAddr objOrdDisc = new clsOM_OrdAddr(Dal);
+
+				DataTable lstDetAll = objPDADet.GetAll(objPDAOrd.BranchID, objPDAOrd.OrderNbr, "%");
+				bool chkApproveAll = false;
+				if (lstDet.Rows.Count == lstDetAll.Rows.Count)
+				{
+					chkApproveAll = true;
+				}
+				foreach (var item in dicRef)
+				{
+					if (objPDADet.GetByKey(branchID, orderNbr, item.Key))
+					{
+
+						double rate = item.Value / objPDADet.LineQty;
+						if (chkApproveAll && item.Value != objPDADet.LineQty) chkApproveAll = false;
+						objSalesDet.Reset();
+						objSalesDet.BarCode = objPDADet.BarCode;
+						objSalesDet.BOCustID = objPDADet.BOCustID;
+						objSalesDet.BOType = objPDADet.BOType;
+						objSalesDet.BranchID = objPDADet.BranchID;
+						objSalesDet.BudgetID1 = objPDADet.BudgetID1;
+						objSalesDet.BudgetID2 = objPDADet.BudgetID2;
+						objSalesDet.CostID = objPDADet.CostID;
+						objSalesDet.Crtd_Datetime = DateTime.Now;
+						objSalesDet.Crtd_Prog = Prog;
+						objSalesDet.Crtd_User = User;
+						objSalesDet.Descr = objPDADet.Descr;
+						objSalesDet.DiscAmt = Math.Round(objPDADet.DiscAmt * rate, 2);
+						objSalesDet.DiscAmt1 = Math.Round(objPDADet.DiscAmt1 * rate, 2);
+						objSalesDet.DiscAmt2 = Math.Round(objPDADet.DiscAmt2 / rate, 2);
+						objSalesDet.DiscCode = objPDADet.DiscCode;
+						objSalesDet.DiscID1 = objPDADet.DiscID1;
+						objSalesDet.DiscID2 = objPDADet.DiscID2;
+						objSalesDet.DiscPct = Math.Round(objPDADet.DiscPct * rate, 2);
+						objSalesDet.DiscPct1 = Math.Round(objPDADet.DiscPct1 * rate, 2);
+						objSalesDet.DiscPct2 = Math.Round(objPDADet.DiscPct2 * rate, 2);
+						objSalesDet.DiscSeq1 = objPDADet.DiscSeq1;
+						objSalesDet.DiscSeq2 = objPDADet.DiscSeq2;
+						objSalesDet.DocDiscAmt = Math.Round(objPDADet.DocDiscAmt / rate, 2);
+						objSalesDet.FreeItem = objPDADet.FreeItem;
+						objSalesDet.FreeItemQty1 = Math.Round(objPDADet.FreeItemQty1 * rate, 2);
+						objSalesDet.FreeItemQty2 = Math.Round(objPDADet.FreeItemQty2 * rate, 2);
+						objSalesDet.GroupDiscAmt1 = Math.Round(objPDADet.GroupDiscAmt1 * rate, 2);
+						objSalesDet.GroupDiscAmt2 = Math.Round(objPDADet.GroupDiscAmt2 * rate, 2);
+						objSalesDet.GroupDiscID1 = objPDADet.GroupDiscID1;
+						objSalesDet.GroupDiscID2 = objPDADet.GroupDiscID2;
+						objSalesDet.GroupDiscPct1 = Math.Round(objPDADet.GroupDiscPct1 * rate, 2);
+						objSalesDet.GroupDiscPct2 = Math.Round(objPDADet.GroupDiscPct2 * rate, 2);
+						objSalesDet.GroupDiscSeq1 = objPDADet.GroupDiscSeq1;
+						objSalesDet.GroupDiscSeq2 = objPDADet.GroupDiscSeq2;
+						objSalesDet.InvtID = objPDADet.InvtID;
+						objSalesDet.ItemPriceClass = objPDADet.ItemPriceClass;
+						objSalesDet.LineAmt = Math.Round(objPDADet.LineAmt * rate, 2);
+						objSalesDet.LineQty = item.Value;
+						objSalesDet.LineRef = item.Key;
+						objSalesDet.LUpd_Datetime = DateTime.Now;
+						objSalesDet.LUpd_Prog = Prog;
+						objSalesDet.LUpd_User = User;
+						objSalesDet.ManuDiscAmt = Math.Round(objPDADet.ManuDiscAmt * rate, 2);
+						objSalesDet.OrderType = objPDAOrd.OrderType;
+						objSalesDet.OrigOrderNbr = objPDAOrd.OrderNbr;
+						objSalesDet.QtyBO = Math.Round(objPDADet.QtyBO * rate, 2);
+						objSalesDet.QtyInvc = Math.Round(objPDADet.QtyInvc * rate, 2);
+						objSalesDet.QtyOpenShip = Math.Round(objPDADet.QtyOpenShip * rate, 2);
+						objSalesDet.QtyShip = Math.Round(objPDADet.QtyShip * rate, 2);
+						objSalesDet.ShipStatus = objPDADet.ShipStatus;
+						objSalesDet.SiteID = objPDADet.SiteID;
+						objSalesDet.SlsPrice = objPDADet.SlsPrice;
+						objSalesDet.SlsUnit = objPDADet.SlsUnit;
+						objSalesDet.SOFee = Math.Round(objPDADet.SOFee * rate, 2);
+						objSalesDet.TaxAmt00 = Math.Round(objPDADet.TaxAmt00 * rate, 2);
+						objSalesDet.TaxAmt01 = Math.Round(objPDADet.TaxAmt01 * rate, 2);
+						objSalesDet.TaxAmt02 = Math.Round(objPDADet.TaxAmt02 * rate, 2);
+						objSalesDet.TaxAmt03 = Math.Round(objPDADet.TaxAmt03 * rate, 2);
+						objSalesDet.TaxCat = objPDADet.TaxCat;
+						objSalesDet.TaxID00 = objPDADet.TaxID00;
+						objSalesDet.TaxID01 = objPDADet.TaxID01;
+						objSalesDet.TaxID02 = objPDADet.TaxID02;
+						objSalesDet.TaxID03 = objPDADet.TaxID03;
+
+						objSalesDet.TxblAmt00 = Math.Round(objPDADet.TxblAmt00 * rate, 2);
+						objSalesDet.TxblAmt01 = Math.Round(objPDADet.TxblAmt01 * rate, 2);
+						objSalesDet.TxblAmt02 = Math.Round(objPDADet.TxblAmt02 * rate, 2);
+						objSalesDet.TxblAmt03 = Math.Round(objPDADet.TxblAmt03 * rate, 2);
+						objSalesDet.UnitMultDiv = objPDADet.UnitMultDiv;
+						objSalesDet.UnitRate = objPDADet.UnitRate;
+						objSalesDet.UnitWeight = objPDADet.UnitWeight;
+						objSalesDet.OrderNbr = objSalesOrd.OrderNbr;
+						objSalesDet.POSM = objPDADet.POSM;
+						objSalesDet.POSMImg = objPDADet.POSMImg;
+
+
+						taxAmt00 += objSalesDet.TaxAmt00;
+						taxAmt01 += objSalesDet.TaxAmt01;
+						taxAmt02 += objSalesDet.TaxAmt02;
+						taxAmt03 += objSalesDet.TaxAmt03;
+						txblAmt00 += objSalesDet.TxblAmt00;
+						txblAmt01 += objSalesDet.TxblAmt01;
+						txblAmt02 += objSalesDet.TxblAmt02;
+						txblAmt03 += objSalesDet.TxblAmt03;
+						soFee += objSalesDet.SOFee;
+						curyLineAmt += objSalesDet.LineAmt;
+						curyLineDiscAmt += objSalesDet.DiscAmt + objSalesDet.ManuDiscAmt;
+						ordQty += objSalesDet.LineQty;
+
+						objSalesDet.Add();
+
+						clsIN_Inventory objInvt = new clsIN_Inventory(Dal);
+						clsOM_LotTrans objLotTrans = new clsOM_LotTrans(Dal);
+						clsIN_ItemSite objItemSite = new clsIN_ItemSite(Dal);
+						clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
+						objInvt.GetByKey(objPDADet.InvtID);
+						double editQty = 0;
+						double qtyTot = 0;
+
+						if (objInvt.StkItem == 1 || objPDADet.BOType != "B")
+						{
+							if (objPDADet.UnitMultDiv == "M")
+								editQty = objSalesDet.LineQty * (objSalesDet.UnitRate == 0 ? 1 : objSalesDet.UnitRate);
+							else
+								editQty = objSalesDet.LineQty / (objSalesDet.UnitRate == 0 ? 1 : objSalesDet.UnitRate);
+
+							qtyTot = editQty + CalculateInvtTotals(objSalesOrd, lstDet, objSalesDet.InvtID, objSalesDet.SiteID, objSalesDet.LineRef);
+
+							objItemSite.GetByKey(objSalesDet.InvtID, objSalesDet.SiteID);
+							if (!objINSetup.NegQty)
+							{
+
+								if (objType != null)
+								{
+									if (objType.INDocType != "CM" && objType.INDocType != "DM" && objType.INDocType != "NA" && objType.INDocType != "RC")
+									{
+										if (qtyTot > objItemSite.QtyAvail)
+										{
+											throw new MessageException(MessageType.Message, "10431", "", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID });
+
+										}
+									}
+									else if (objSalesOrd.OrderType != "SR" && objSalesOrd.OrderType != "BL" && objSalesOrd.OrderType != "OC" && objType.INDocType != "CM" && objType.INDocType != "DM" && objType.INDocType != "NA" && objType.INDocType != "RC")
+									{
+										if (editQty > objItemSite.QtyAvail)
+										{
+											throw new MessageException(MessageType.Message, "10431", "", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID });
+
+										}
+									}
+								}
+							}
+							else
+							{
+								if (objType.INDocType != "CM" && objType.INDocType != "DM" && objType.INDocType != "NA" && objType.INDocType != "RC")
+								{
+									if (editQty > objItemSite.QtyAvail)
+									{
+										throw new MessageException(MessageType.Message, "10431", "", new[] { orderNbr, objInvt.InvtID, objPDADet.SiteID });
+
+									}
+								}
+							}
+						}
+
+						if (objPDADet.DiscAmt > 0 && objPDADet.DiscCode != string.Empty && objSalesDet.BudgetID1 != string.Empty)
+						{
+							double discAmt = Math.Round(objSalesDet.DiscAmt, 0);
+							string discID = objSalesDet.DiscCode;
+							string budGetID = objSalesDet.BudgetID1;
+							string tmp = string.Empty;
+							if (!CheckAvailableDiscBudget(objSalesOrd, branchID, budGetID, discID, tmp, discAmt, false, true, objSalesDet.LineRef, true, true, objSalesDet.InvtID, objSalesDet.SlsUnit))
+							{
+								return false;
+							}
+						}
+
+						DataTable checkShipQty = objSql.OM20500_ppCheckShipQty(branchID, objPDAOrd.OrderNbr);
+						foreach (DataRow check in checkShipQty.Rows)
+						{
+							if (check.String("InvtID") == objPDADet.InvtID && check.Bool("FreeItem") == objPDADet.FreeItem && objPDADet.LineQty - check.Double("Qty") < objSalesDet.LineQty)
+							{
+								throw new MessageException(MessageType.Message, "10211", "", new[] { orderNbr, check.String("InvtID"), (objPDADet.LineQty - check.Double("Qty")).ToString() });
+							}
+						}
+
+						if (objInvt.StkItem != 0 && objPDADet.BOType != "B" && objType.INDocType != "CM" && objType.INDocType != "DM" && objType.INDocType != "NA" && objType.INDocType != "RC")
+						{
+							if (!UpdateAllocSO(objINSetup, objSalesDet.InvtID, objSalesDet.SiteID, 0, editQty, 0))
+							{
+								return false;
+							}
+						}
+
+						int rtrn = (objType.ARDocType == "CM" || objType.ARDocType == "CC") ? -1 : 1;
+						clsOM_PPBudget objBudget = new clsOM_PPBudget(Dal);
+						clsOM_Discount objDisc = new clsOM_Discount(Dal);
+						objSql.OM_GetBudgetIDCpny(ref objBudget, branchID, objSalesDet.BudgetID1);
+						objDisc.GetByKey(objSalesDet.DiscID1);
+
+						if (objType.ARDocType != "NA" && objSalesDet.BOType != "R" && objBudget.Active && objDisc.DiscType == "L")
+						{
+							if (objBudget.ApplyTo == "A")
+							{
+								clsOM_PPAlloc objAlloc = new clsOM_PPAlloc(Dal);
+								if (objAlloc.GetByKey(objBudget.BudgetID, branchID, (objBudget.AllocType == "1" ? objSalesOrd.SlsPerID : objSalesOrd.CustID), "."))
+								{
+									double spent = objSalesDet.DiscAmt1 * rtrn;
+									if (objAlloc.QtyAmtAlloc - (objAlloc.QtyAmtSpent + spent) < 0)
+									{
+										throw new MessageException(MessageType.Message, "7531", "", new[] { orderNbr, objSalesDet.DiscID1, objSalesDet.DiscSeq1 });
+									}
+									else
+									{
+										objAlloc.QtyAmtSpent = objAlloc.QtyAmtSpent + spent;
+										objAlloc.QtyAmtAvail = objAlloc.QtyAmtAlloc - objAlloc.QtyAmtSpent;
+										objAlloc.Update();
+									}
+									clsOM_PPCpny objCpny = new clsOM_PPCpny(Dal);
+									if (objCpny.GetByKey(objBudget.BudgetID, branchID, "."))
+									{
+										objCpny.QtyAmtSpent = objCpny.QtyAmtSpent + spent;
+										objCpny.QtyAmtAvail = objCpny.QtyAmtAlloc - objCpny.QtyAmtSpent;
+										objCpny.Update();
+									}
+								}
+							}//  if(objBudget.ApplyTo=="A")
+							else
+							{
+								if (objSalesDet.FreeItem)
+								{
+									clsOM_PPFreeItem objPPInvt = new clsOM_PPFreeItem(Dal);
+									if (objPPInvt.GetByKey(objBudget.BudgetID, objSalesDet.InvtID))
+									{
+
+										clsIN_UnitConversion uomFrom = SetUOM(objSalesDet.InvtID, objInvt.ClassID, objInvt.StkUnit, objSalesDet.SlsUnit);
+										if (uomFrom != null)
+										{
+											clsIN_UnitConversion uomTo = SetUOM(objSalesDet.InvtID, objInvt.ClassID, objInvt.StkUnit, objPPInvt.UnitDesc);
+											double rate1 = 1;
+											double rate2 = 1;
+
+											if (uomFrom.MultDiv == "M")
+												rate1 = uomFrom.CnvFact;
+											else
+												rate1 = 1 / uomFrom.CnvFact;
+
+											if (uomTo.MultDiv == "M")
+												rate2 = uomTo.CnvFact;
+											else
+												rate2 = 1 / uomTo.CnvFact;
+
+											rate1 = Math.Round(rate1 / rate2, 2);
+
+											clsOM_PPAlloc objAlloc = new clsOM_PPAlloc(Dal);
+											if (objAlloc.GetByKey(objBudget.BudgetID, branchID, (objBudget.AllocType == "1" ? objSalesOrd.SlsPerID : objSalesOrd.CustID), objSalesDet.InvtID))
+											{
+												double spent = objSalesDet.FreeItemQty1 * rate1 * rtrn;
+												objPPInvt.QtyAmtSpent = objPPInvt.QtyAmtSpent + spent;
+												objPPInvt.QtyAmtAvail = objPPInvt.QtyAmtAlloc - objPPInvt.QtyAmtSpent;
+												objPPInvt.Update();
+
+												clsOM_PPCpny objCpny = new clsOM_PPCpny(Dal);
+												if (objCpny.GetByKey(objBudget.BudgetID, branchID, objSalesDet.InvtID))
+												{
+													objCpny.QtyAmtSpent = objCpny.QtyAmtSpent + spent;
+													objCpny.QtyAmtAvail = objCpny.QtyAmtAlloc - objCpny.QtyAmtSpent;
+													objCpny.Update();
+												}
+
+												objAlloc.QtyAmtSpent = objAlloc.QtyAmtSpent + spent;
+												objAlloc.QtyAmtAvail = objAlloc.QtyAmtAlloc - objAlloc.QtyAmtSpent;
+												objAlloc.Update();
+											}
+
+										}
+									}
+								}
+
+							}
+						}
+						objSql.OM_GetBudgetIDCpny(ref objBudget, branchID, objSalesDet.BudgetID2);
+						objDisc.GetByKey(objSalesDet.DiscID2);
+						if (objType.ARDocType != "NA" && objSalesDet.BOType != "R" && objBudget.Active && objDisc.DiscType == "L")
+						{
+							if (objBudget.ApplyTo == "A")
+							{
+								clsOM_PPAlloc objAlloc = new clsOM_PPAlloc(Dal);
+								if (objAlloc.GetByKey(objBudget.BudgetID, branchID, (objBudget.AllocType == "1" ? objSalesOrd.SlsPerID : objSalesOrd.CustID), "."))
+								{
+									double spent = objSalesDet.DiscAmt2 * rtrn;
+									if (objAlloc.QtyAmtAlloc - (objAlloc.QtyAmtSpent + spent) < 0)
+									{
+										throw new MessageException(MessageType.Message, "7531", "", new[] { orderNbr, objSalesDet.DiscID1, objSalesDet.DiscSeq1 });
+									}
+									else
+									{
+										objAlloc.QtyAmtSpent = objAlloc.QtyAmtSpent + spent;
+										objAlloc.QtyAmtAvail = objAlloc.QtyAmtAlloc - objAlloc.QtyAmtSpent;
+										objAlloc.Update();
+
+										clsOM_PPCpny objCpny = new clsOM_PPCpny(Dal);
+										if (objCpny.GetByKey(objBudget.BudgetID, branchID, "."))
+										{
+											objCpny.QtyAmtSpent = objCpny.QtyAmtSpent + spent;
+											objCpny.QtyAmtAvail = objCpny.QtyAmtAlloc - objCpny.QtyAmtSpent;
+											objCpny.Update();
+										}
+									}
+								}
+							}//  if(objBudget.ApplyTo=="A")
+							else
+							{
+								if (objSalesDet.FreeItem)
+								{
+									clsOM_PPFreeItem objPPInvt = new clsOM_PPFreeItem(Dal);
+									if (objPPInvt.GetByKey(objBudget.BudgetID, objSalesDet.InvtID))
+									{
+										clsIN_UnitConversion uomFrom = SetUOM(objSalesDet.InvtID, objInvt.ClassID, objInvt.StkUnit, objSalesDet.SlsUnit);
+										if (uomFrom != null)
+										{
+											clsIN_UnitConversion uomTo = SetUOM(objSalesDet.InvtID, objInvt.ClassID, objInvt.StkUnit, objPPInvt.UnitDesc);
+											double rate1 = 1;
+											double rate2 = 1;
+
+											if (uomFrom.MultDiv == "M")
+												rate1 = uomFrom.CnvFact;
+											else
+												rate1 = 1 / uomFrom.CnvFact;
+
+											if (uomTo.MultDiv == "M")
+												rate2 = uomTo.CnvFact;
+											else
+												rate2 = 1 / uomTo.CnvFact;
+
+											rate1 = Math.Round(rate1 / rate2, 2);
+
+											clsOM_PPAlloc objAlloc = new clsOM_PPAlloc(Dal);
+											if (objAlloc.GetByKey(objBudget.BudgetID, branchID, (objBudget.AllocType == "1" ? objSalesOrd.SlsPerID : objSalesOrd.CustID), objSalesDet.InvtID))
+											{
+												double spent = (objSalesDet.FreeItemQty2 * rate1) * rtrn;
+												objPPInvt.QtyAmtSpent = objPPInvt.QtyAmtSpent + spent;
+												objPPInvt.QtyAmtAvail = objPPInvt.QtyAmtAlloc - objPPInvt.QtyAmtSpent;
+												objPPInvt.Update();
+
+												clsOM_PPCpny objCpny = new clsOM_PPCpny(Dal);
+												if (objCpny.GetByKey(objBudget.BudgetID, branchID, objSalesDet.InvtID))
+												{
+													objCpny.QtyAmtSpent = objCpny.QtyAmtSpent + spent;
+													objCpny.QtyAmtAvail = objCpny.QtyAmtAlloc - objCpny.QtyAmtSpent;
+													objCpny.Update();
+												}
+
+												objAlloc.QtyAmtSpent = objAlloc.QtyAmtSpent + spent;
+												objAlloc.QtyAmtAvail = objAlloc.QtyAmtAlloc - objAlloc.QtyAmtSpent;
+												objAlloc.Update();
+											}
+
+										}
+									}
+								}
+
+							}
+						}
+						objSql.OM_GetBudgetIDCpny(ref objBudget, branchID, objSalesDet.BudgetID1);
+						if (objSalesDet.DiscCode != string.Empty && (objSalesDet.FreeItem || objSalesDet.DiscAmt > 0) && objType.ARDocType != "NA" && objSalesDet.BOType != "R" && objBudget != null && objBudget.Active)
+						{
+							if (objBudget.ApplyTo == "A")
+							{
+								clsOM_PPAlloc objAlloc = new clsOM_PPAlloc(Dal);
+								if (objAlloc.GetByKey(objBudget.BudgetID, branchID, (objBudget.AllocType == "1" ? objSalesOrd.SlsPerID : objSalesOrd.CustID), "."))
+								{
+									double spent = objSalesDet.DiscAmt * rtrn;
+									objAlloc.QtyAmtSpent = objAlloc.QtyAmtSpent + spent;
+									objAlloc.QtyAmtAvail = objAlloc.QtyAmtAlloc - objAlloc.QtyAmtSpent;
+									objAlloc.Update();
+
+									clsOM_PPCpny objCpny = new clsOM_PPCpny(Dal);
+									objCpny.GetByKey(objBudget.BudgetID, branchID, ".");
+									objCpny.QtyAmtSpent = objCpny.QtyAmtSpent + spent;
+									objCpny.QtyAmtAvail = objCpny.QtyAmtAlloc - objCpny.QtyAmtSpent;
+									objCpny.Update();
+								}
+
+							}// if(objBudget.ApplyTo=="A")
+							else
+							{
+								clsOM_PPFreeItem objPPInvt = new clsOM_PPFreeItem(Dal);
+								if (objPPInvt.GetByKey(objBudget.BudgetID, objSalesDet.InvtID))
+								{
+									clsIN_UnitConversion uomFrom = SetUOM(objSalesDet.InvtID, objInvt.ClassID, objInvt.StkUnit, objSalesDet.SlsUnit);
+									if (uomFrom != null)
+									{
+										clsIN_UnitConversion uomTo = SetUOM(objSalesDet.InvtID, objInvt.ClassID, objInvt.StkUnit, objPPInvt.UnitDesc);
+										double rate1 = 1;
+										double rate2 = 1;
+
+										if (uomFrom.MultDiv == "M")
+											rate1 = uomFrom.CnvFact;
+										else
+											rate1 = 1 / uomFrom.CnvFact;
+
+										if (uomTo.MultDiv == "M")
+											rate2 = uomTo.CnvFact;
+										else
+											rate2 = 1 / uomTo.CnvFact;
+
+										rate1 = Math.Round(rate1 / rate2, 2);
+
+										clsOM_PPAlloc objAlloc = new clsOM_PPAlloc(Dal);
+										if (objAlloc.GetByKey(objBudget.BudgetID, branchID, (objBudget.AllocType == "1" ? objSalesOrd.SlsPerID : objSalesOrd.CustID), objSalesDet.InvtID))
+										{
+											double spent = objSalesDet.LineQty * rate1 * rtrn;
+											objPPInvt.QtyAmtSpent = objPPInvt.QtyAmtSpent + spent;
+											objPPInvt.QtyAmtAvail = objPPInvt.QtyAmtAlloc - objPPInvt.QtyAmtSpent;
+											objPPInvt.Update();
+
+											objAlloc.QtyAmtSpent = objAlloc.QtyAmtSpent + spent;
+											objAlloc.QtyAmtAvail = objAlloc.QtyAmtAlloc - objAlloc.QtyAmtSpent;
+											objAlloc.Update();
+
+											clsOM_PPCpny objCpny = new clsOM_PPCpny(Dal);
+											objCpny.GetByKey(objBudget.BudgetID, branchID, objSalesDet.InvtID);
+											objCpny.QtyAmtSpent = objCpny.QtyAmtSpent + spent;
+											objCpny.QtyAmtAvail = objCpny.QtyAmtAlloc - objCpny.QtyAmtSpent;
+											objCpny.Update();
+										}
+
+									}
+								}
+							}
+						}
+						#region truong hop lay tu dong lot
+						if (objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N" && dicRefLot.Count == 0)
+						{
+							DataTable dtItemLot = objSql.OM_GetItemLot(objSalesDet.SiteID, objSalesDet.InvtID);
+
+							double needQty = objPDADet.UnitMultDiv == "M" ? objSalesDet.LineQty * objSalesDet.UnitRate : objSalesDet.LineQty / objSalesDet.UnitRate;
+
+							foreach (DataRow lotRow in dtItemLot.Rows)
+							{
+								double newQty = 0;
+
+								if (objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr")))
+								{
+									if (objItemLot.QtyAvail >= needQty)
+									{
+										newQty = needQty;
+										objItemLot.QtyAvail = objItemLot.QtyAvail - needQty;
+										objItemLot.QtyAllocSO = objItemLot.QtyAllocSO + needQty;
+
+										needQty = 0;
+									}
+									else
+									{
+										newQty = objItemLot.QtyAvail;
+										needQty -= objItemLot.QtyAvail;
+										objItemLot.QtyAvail = 0;
+										objItemLot.QtyAllocSO = objItemLot.QtyAllocSO + newQty;
+									}
+									objItemLot.LUpd_DateTime = DateTime.Now;
+									objItemLot.LUpd_Prog = Prog;
+									objItemLot.LUpd_User = User;
+									objItemLot.Update();
+
+									if (newQty != 0)
+									{
+										objLotTrans.Reset();
+										objLotTrans.BranchID = objSalesDet.BranchID;
+										objLotTrans.OrderNbr = objSalesDet.OrderNbr;
+										objLotTrans.LotSerNbr = lotRow.String("LotSerNbr");
+										objLotTrans.ExpDate = lotRow.Date("ExpDate");
+										objLotTrans.MfgrLotSerNbr = lotRow.String("MfgrLotSerNbr");
+										objLotTrans.WarrantyDate = lotRow.Date("WarrantyDate");
+										objLotTrans.TranDate = objSalesOrd.OrderDate;
+										objLotTrans.INDocType = "IN";
+										objLotTrans.OMLineRef = objSalesDet.LineRef;
+										objLotTrans.SiteID = objSalesDet.SiteID;
+										objLotTrans.InvtID = objSalesDet.InvtID;
+										objLotTrans.InvtMult = -1;
+
+										if ((objSalesDet.UnitMultDiv == "M" ? newQty / objSalesDet.UnitRate : newQty * objSalesDet.UnitRate) % 1 > 0)
+										{
+											objLotTrans.CnvFact = 1;
+											objLotTrans.UnitMultDiv = "M";
+											objLotTrans.Qty = newQty;
+											objLotTrans.UnitDesc = objInvt.StkUnit;
+											if (objOM.DfltSalesPrice == "I")
+											{
+												double price = Math.Round(objLotTrans.UnitMultDiv == "M" ? objInvt.SOPrice * objLotTrans.CnvFact : objInvt.SOPrice / objLotTrans.CnvFact, 0);
+												objLotTrans.UnitPrice = price;
+												objLotTrans.UnitCost = price;
+											}
+											else
+											{
+												objLotTrans.UnitPrice = Math.Round(objSalesDet.UnitMultDiv == "M" ? objSalesDet.SlsPrice / objSalesDet.UnitRate : objSalesDet.SlsPrice * objSalesDet.UnitRate, 0);
+												objLotTrans.UnitCost = objLotTrans.UnitPrice;
+											}
+
+										}
+										else
+										{
+											objLotTrans.Qty = Math.Round(objSalesDet.UnitMultDiv == "M" ? newQty / objSalesDet.UnitRate : newQty * objSalesDet.UnitRate, 0);
+											objLotTrans.CnvFact = objSalesDet.UnitRate;
+											objLotTrans.UnitMultDiv = objSalesDet.UnitMultDiv;
+											objLotTrans.UnitPrice = objSalesDet.SlsPrice;
+											objLotTrans.UnitCost = objSalesDet.SlsPrice;
+											objLotTrans.UnitDesc = objSalesDet.SlsUnit;
+										}
+										objLotTrans.LUpd_DateTime = objLotTrans.Crtd_DateTime = DateTime.Now;
+										objLotTrans.LUpd_Prog = objLotTrans.Crtd_Prog = Prog;
+										objLotTrans.LUpd_User = objLotTrans.Crtd_User = User;
+
+										objLotTrans.Add();
+									}
+								}
+
+								if (needQty == 0) break;
+							}
+						}
+						#endregion
+						else
+						{
+							foreach (var lotRow in dicRefLot.Where(p => p.Key.Contains(objSalesDet.LineRef + "@" + objSalesDet.InvtID)))
+							{
+								double needQty = lotRow.Value;
+								if (objItemLot.GetByKey(objSalesDet.SiteID, lotRow.Key.Split('@')[1], lotRow.Key.Split('@')[2]))
+								{
+									if (objItemLot.QtyAvail >= needQty)
+									{
+										objItemLot.QtyAvail = objItemLot.QtyAvail - needQty;
+										objItemLot.QtyAllocSO = objItemLot.QtyAllocSO + needQty;
+										objItemLot.LUpd_DateTime = DateTime.Now;
+										objItemLot.LUpd_Prog = Prog;
+										objItemLot.LUpd_User = User;
+										objItemLot.Update();
+
+										objLotTrans.Reset();
+										objLotTrans.BranchID = objSalesDet.BranchID;
+										objLotTrans.OrderNbr = objSalesDet.OrderNbr;
+										objLotTrans.LotSerNbr = objItemLot.LotSerNbr;
+										objLotTrans.ExpDate = objItemLot.ExpDate;
+										objLotTrans.MfgrLotSerNbr = objItemLot.MfgrLotSerNbr;
+										objLotTrans.WarrantyDate = objItemLot.WarrantyDate;
+										objLotTrans.TranDate = objSalesOrd.OrderDate;
+										objLotTrans.INDocType = "IN";
+										objLotTrans.OMLineRef = objSalesDet.LineRef;
+										objLotTrans.SiteID = objSalesDet.SiteID;
+										objLotTrans.InvtID = objSalesDet.InvtID;
+										objLotTrans.InvtMult = -1;
+										objLotTrans.CnvFact = objSalesDet.UnitRate;
+										objLotTrans.Qty = lotRow.Value;
+										objLotTrans.UnitCost = objSalesDet.SlsPrice;
+										objLotTrans.UnitDesc = objSalesDet.SlsUnit;
+										objLotTrans.UnitMultDiv = objSalesDet.UnitMultDiv;
+										objLotTrans.UnitPrice = objSalesDet.SlsPrice;
+										objLotTrans.Crtd_DateTime = DateTime.Now;
+										objLotTrans.Crtd_Prog = Prog;
+										objLotTrans.Crtd_User = User;
+										objLotTrans.LUpd_DateTime = objLotTrans.Crtd_DateTime = DateTime.Now;
+										objLotTrans.LUpd_Prog = objLotTrans.Crtd_Prog = Prog;
+										objLotTrans.LUpd_User = objLotTrans.Crtd_User = User;
+
+										objLotTrans.Add();
+									}
+									else
+									{
+										throw new MessageException(MessageType.Message, "201508181", "", new[] { objSalesDet.OrderNbr, objSalesDet.InvtID, objItemLot.LotSerNbr, needQty.ToString() });
+									}
+								}
+								else
+								{
+									throw new MessageException(MessageType.Message, "201508181", "", new[] { objSalesDet.OrderNbr, objSalesDet.InvtID, lotRow.Key.Split('@')[2], needQty.ToString() });
+								}
+							}
+						}
+					}
+				}
+				// day qua table OM_OrdDisc
+				if (chkApproveAll)
+				{
+
+					clsOM_PDAOrdDisc objOM_PDAOrdDisc = new clsOM_PDAOrdDisc(Dal);
+					DataTable dtOM_PDAOrdDisc = objOM_PDAOrdDisc.GetAll(branchID, "%", "%", orderNbr, "%");
+					IList<clsOM_PDAOrdDisc> lstclsOM_PDAOrdDisc = DataTableHelper.ConvertTo<clsOM_PDAOrdDisc>(dtOM_PDAOrdDisc);
+					foreach (var obj in lstclsOM_PDAOrdDisc)
+					{
+						clsOM_OrdDisc objOM_OrdDisc = new clsOM_OrdDisc(Dal);
+						objOM_OrdDisc.Reset();
+						objOM_OrdDisc.BranchID = obj.BranchID;
+						objOM_OrdDisc.BreakBy = obj.BreakBy;
+						objOM_OrdDisc.BudgetID = obj.BudgetID;
+						objOM_OrdDisc.DiscAmt = obj.DiscAmt;
+						objOM_OrdDisc.DiscBreakLineRef = obj.DiscBreakLineRef;
+						objOM_OrdDisc.DiscFor = obj.DiscFor;
+						objOM_OrdDisc.DiscID = obj.DiscID;
+						objOM_OrdDisc.DiscSeq = obj.DiscSeq;
+						objOM_OrdDisc.DisctblAmt = obj.DisctblAmt;
+						objOM_OrdDisc.DisctblQty = obj.DisctblQty;
+						objOM_OrdDisc.DiscType = obj.DiscType;
+						objOM_OrdDisc.DiscUOM = obj.DiscUOM;
+						objOM_OrdDisc.FreeItemBudgetID = obj.FreeItemBudgetID;
+						objOM_OrdDisc.FreeItemID = obj.FreeItemID;
+						objOM_OrdDisc.FreeItemQty = obj.FreeItemQty;
+						objOM_OrdDisc.LineRef = obj.LineRef;
+						objOM_OrdDisc.OrderNbr = objSalesOrd.OrderNbr;
+						objOM_OrdDisc.OrigFreeItemQty = obj.OrigFreeItemQty;
+						objOM_OrdDisc.SlsPerID = obj.SlsPerID;
+						objOM_OrdDisc.SOLineRef = obj.SOLineRef;
+						objOM_OrdDisc.UserOperationLog = obj.UserOperationLog;
+
+						objOM_OrdDisc.Crtd_DateTime = DateTime.Now;
+						objOM_OrdDisc.Crtd_Prog = Prog;
+						objOM_OrdDisc.Crtd_User = User;
+						objOM_OrdDisc.LUpd_DateTime = DateTime.Now;
+						objOM_OrdDisc.LUpd_Prog = Prog;
+						objOM_OrdDisc.LUpd_User = User;
+
+						objOM_OrdDisc.Add();
+
+
+					}
+				}
+
+
+				objSalesOrd.TaxAmtTot00 = taxAmt00;
+				objSalesOrd.TaxAmtTot01 = taxAmt01;
+				objSalesOrd.TaxAmtTot02 = taxAmt02;
+				objSalesOrd.TaxAmtTot03 = taxAmt03;
+				double taxAmt = taxAmt00 + taxAmt01 + taxAmt02 + taxAmt03;
+				objSalesOrd.TxblAmtTot00 = txblAmt00;
+				objSalesOrd.TxblAmtTot01 = txblAmt01;
+				objSalesOrd.TxblAmtTot02 = txblAmt02;
+				objSalesOrd.TxblAmtTot03 = txblAmt03;
+
+				objSalesOrd.TaxID00 = objPDAOrd.TaxID00;
+				objSalesOrd.TaxID01 = objPDAOrd.TaxID01;
+				objSalesOrd.TaxID02 = objPDAOrd.TaxID02;
+				objSalesOrd.TaxID03 = objPDAOrd.TaxID03;
+
+				objSalesOrd.SOFeeTot = soFee;
+				objSalesOrd.OrdQty = ordQty;
+				objSalesOrd.LineAmt = curyLineAmt;
+				objSalesOrd.LineDiscAmt = curyLineDiscAmt;
+
+
+				double txblAmt = 0;
+				if (objType.DiscType == "B")
+					txblAmt = curyLineAmt;
+				else
+				{
+					if (objType.TaxFee)
+						txblAmt = curyLineAmt - taxAmt + soFee * 0.1;
+					else
+						txblAmt = curyLineAmt - taxAmt;
+				}
+				double curyOrdDiscAmt = 0;
+
+				clsOM_Setup omSetup = new clsOM_Setup(Dal);
+				omSetup.GetByKey("OM");
+				if (omSetup.InlcSOFeeDisc)
+				{
+
+					if (objType.TaxFee)
+						curyOrdDiscAmt =
+							Math.Round(
+								(objSalesOrd.VolDiscPct *
+								 (curyLineAmt + soFee * 1.1 -
+								  objSalesOrd.VolDiscAmt)) / 100, 0);
+					else
+						curyOrdDiscAmt =
+							Math.Round(
+								(objSalesOrd.VolDiscPct *
+								 (curyLineAmt + soFee -
+								  objSalesOrd.VolDiscAmt)) / 100, 0);
+
+				}
+				else
+				{
+					curyOrdDiscAmt =
+							Math.Round(
+								(objSalesOrd.VolDiscPct *
+								 (curyLineAmt -
+								  objSalesOrd.VolDiscAmt)) / 100, 0);
+				}
+				objSalesOrd.OrdAmt = Math.Round(
+						txblAmt + objPDAOrd.FreightAllocAmt +
+						objPDAOrd.MiscAmt + taxAmt +
+						soFee - objSalesOrd.VolDiscAmt -
+						curyOrdDiscAmt, 0);
+				
+				objPDAOrd.Status = "O";
+				//cap nhat objPDAOrd isAddStock 20150929
+				objPDAOrd.IsAddStock = isAddStock;
+				objPDAOrd.Update();
+
+				objSalesOrd.Add();
+				var lstDisc = objPDADisc.GetAll(branchID, "%", "%", objPDAOrd.OrderNbr, "%");
+
+				var objOrdDisc1 = new clsOM_OrdDisc(Dal);
+				foreach (DataRow item in lstDisc.Rows)
+				{
+					if (objPDADisc.GetByKey(branchID, item["DiscID"].ToString(), item["DiscSeq"].ToString(), item["OrderNbr"].ToString(), item["LineRef"].ToString()))
+					{
+						objOrdDisc1.Reset();
+						objOrdDisc1.BranchID = branchID;
+						objOrdDisc1.OrderNbr = objSalesOrd.OrderNbr;
+						objOrdDisc1.BreakBy = objPDADisc.BreakBy;
+						objOrdDisc1.BudgetID = objPDADisc.BudgetID;
+						objOrdDisc1.Crtd_DateTime = DateTime.Now;
+						objOrdDisc1.Crtd_Prog = Prog;
+						objOrdDisc1.Crtd_User = User;
+						objOrdDisc1.DiscAmt = objPDADisc.DiscAmt;
+						objOrdDisc1.DiscBreakLineRef = objPDADisc.DiscBreakLineRef;
+						objOrdDisc1.DiscFor = objPDADisc.DiscFor;
+						objOrdDisc1.DiscID = objPDADisc.DiscID;
+						objOrdDisc1.DiscSeq = objPDADisc.DiscSeq;
+						objOrdDisc1.DisctblAmt = objPDADisc.DisctblAmt;
+						objOrdDisc1.DisctblQty = objPDADisc.DisctblQty;
+						objOrdDisc1.DiscType = objPDADisc.DiscType;
+						objOrdDisc1.DiscUOM = objPDADisc.DiscUOM;
+						objOrdDisc1.FreeItemBudgetID = objPDADisc.FreeItemBudgetID;
+						objOrdDisc1.FreeItemID = objPDADisc.FreeItemID;
+						objOrdDisc1.FreeItemQty = objPDADisc.FreeItemQty;
+						objOrdDisc1.LineRef = objPDADisc.LineRef;
+						objOrdDisc1.LUpd_DateTime = DateTime.Now;
+						objOrdDisc1.LUpd_Prog = Prog;
+						objOrdDisc1.LUpd_User = User;
+						objOrdDisc1.OrigFreeItemQty = objPDADisc.OrigFreeItemQty;
+						objOrdDisc1.SlsPerID = objPDADisc.SlsPerID;
+						objOrdDisc1.SOLineRef = objPDADisc.SOLineRef;
+						objOrdDisc1.UserOperationLog = objPDADisc.UserOperationLog;
+						objOrdDisc.Add();
+					}
+
+
+				}
+
+				if (!OM10100_PrintInvoice( branchID, objSalesOrd.OrderNbr)) return false;
+		
+				return true;
+			}
+			catch (Exception ex)
+			{
+
+				throw ex;
+			}
+
+		}
 
         #region Tinh Allocate
         public bool OM41200_Release(string branchID, string allocateID)

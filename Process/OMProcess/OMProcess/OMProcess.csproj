@@ -56,33 +56,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ARProcess">
-      <HintPath>..\..\ARProcess\ARProcess\bin\Release\ARProcess.dll</HintPath>
+      <HintPath>..\..\..\..\eSky_KAO\OM\OM20500\OM20500\bin\ARProcess.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\eBiz4DApp\eBiz4DApp\bin\Release\eBiz4DApp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\eBiz4DApp.dll</HintPath>
     </Reference>
     <Reference Include="eBiz4DSys">
-      <HintPath>..\..\eBiz4DSys\eBiz4DSys\bin\Debug\eBiz4DSys.dll</HintPath>
+      <HintPath>..\..\..\..\eSky_KAO\OM\OM20500\OM20500\bin\eBiz4DSys.dll</HintPath>
     </Reference>
     <Reference Include="Encryption">
-      <HintPath>..\..\APProcess\APProcess\bin\Release\Encryption.dll</HintPath>
+      <HintPath>..\..\..\..\eSky_KAO\OM\OM20500\OM20500\bin\Encryption.dll</HintPath>
     </Reference>
     <Reference Include="HQ.eSkyFramework">
-      <HintPath>..\..\..\..\eSky Framework\HQ.eSkyFramework\bin\HQ.eSkyFramework.dll</HintPath>
+      <HintPath>..\..\..\..\eSky_KAO\OM\OM20500\OM20500\bin\HQ.eSkyFramework.dll</HintPath>
     </Reference>
     <Reference Include="HQFramework.Common">
-      <HintPath>..\..\ARProcess\ARProcess\bin\Release\HQFramework.Common.DLL</HintPath>
+      <HintPath>..\..\..\..\eSky_KAO\OM\OM20500\OM20500\bin\HQFramework.Common.DLL</HintPath>
     </Reference>
     <Reference Include="HQFramework.DAL">
-      <HintPath>..\..\ARProcess\ARProcess\bin\Release\HQFramework.DAL.DLL</HintPath>
+      <HintPath>..\..\..\..\eSky_KAO\OM\OM20500\OM20500\bin\HQFramework.DAL.DLL</HintPath>
     </Reference>
     <Reference Include="INProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\INProcess\INProcess\bin\Release\INProcess.dll</HintPath>
+      <HintPath>..\..\..\..\eSky_KAO\OM\OM20500\OM20500\bin\INProcess.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\ARProcess\ARProcess\bin\Release\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\eSky_KAO\OM\OM20500\OM20500\bin\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -135,7 +135,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
