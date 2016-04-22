@@ -855,6 +855,12 @@ var grdTrans_Edit = function (item, e) {
                     callback: checkSourceEdit,
                     row: e
                 });
+                if (key == 'InvtID') {
+                    App.stoPrice.load({
+                        params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtDateEnt.getValue() }, callback: checkSourceEdit, row: e
+                    });
+                }
+
             } else if (key == 'UnitDesc') {
                 App.grdTrans.view.loadMask.show();
                 HQ.numEditTrans = 0;
@@ -868,6 +874,9 @@ var grdTrans_Edit = function (item, e) {
                     params: { batNbr: App.cboBatNbr.getValue(), branchID: App.txtBranchID.getValue() },
                     callback: checkSourceEdit,
                     row: e
+                });
+                App.stoPrice.load({
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtDateEnt.getValue() }, callback: checkSourceEdit, row: e
                 });
             } else {
                 checkExitEdit(e);
@@ -1450,6 +1459,13 @@ var checkExitEdit = function (row) {
 
         var invt = row.record.invt;
         var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
+        var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [trans.InvtID, trans.SiteID]);
+
+        if (Ext.isEmpty(site)) {
+            site = Ext.create('App.mdlItemSite').data;
+            site.SiteID = trans.SiteID;
+            site.InvtID = trans.InvtID;
+        }
 
         if (Ext.isEmpty(cnv)) {
             trans.UnitMultDiv = '';
@@ -1460,23 +1476,18 @@ var checkExitEdit = function (row) {
             return;
         }
 
+        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+            trans.UnitPrice = Math.round(site.AvgCost, 0);
+        } else {
+            trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
+        }
+
         trans.UnitDesc = invt.StkUnit;
         trans.CnvFact = cnv.CnvFact == 0 ? 1 : cnv.CnvFact;
         trans.UnitMultDiv = cnv.MultDiv;
         trans.TranDesc = invt.Descr;
         trans.BarCode = invt.BarCode;
         trans.ClassID = invt.ClassID;
-        var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [trans.InvtID, trans.SiteID]);
-
-        if (Ext.isEmpty(site)) {
-            site = Ext.create('App.mdlItemSite').data;
-            site.SiteID = trans.SiteID;
-            site.InvtID = trans.InvtID;
-        }
-
-        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
-            trans.UnitPrice = site.AvgCost;
-        }
         trans.TranAmt = trans.Qty * trans.UnitPrice;
 
         getQtyAvail(row.record);
@@ -1484,14 +1495,6 @@ var checkExitEdit = function (row) {
     } else if (key == 'UnitDesc') {
 
         var invt = row.record.invt;
-
-        var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [trans.InvtID, trans.SiteID]);
-
-        if (Ext.isEmpty(site)) {
-            site = Ext.create('App.mdlItemSite').data;
-            site.SiteID = trans.SiteID;
-            site.InvtID = trans.InvtID;
-        }
 
         var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, trans.UnitDesc);
 
@@ -1506,18 +1509,26 @@ var checkExitEdit = function (row) {
             return;
         }
 
+        var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [trans.InvtID, trans.SiteID]);
+
+        if (Ext.isEmpty(site)) {
+            site = Ext.create('App.mdlItemSite').data;
+            site.SiteID = trans.SiteID;
+            site.InvtID = trans.InvtID;
+        }
+
         trans.CnvFact = cnv.CnvFact;
         trans.UnitMultDiv = cnv.MultDiv;
         if (invt.ValMthd == "A" || invt.ValMthd == "E") {
-            trans.UnitPrice = Math.round((trans.UnitMultDiv == "M" ? site.AvgCost * trans.CnvFact : site.AvgCost / trans.CnvFact));
+            trans.UnitPrice = Math.round(trans.UnitMultDiv == 'M' ? site.AvgCost * trans.CnvFact : site.AvgCost / trans.CnvFact, 0);
+        } else {
+            trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
         }
         trans.TranAmt = trans.Qty * trans.UnitPrice;
         getQtyAvail(row.record);
         if (trans.Qty > 0) {
             calcLot(row.record);
         }
-
-
     } else if (key == "Qty") {
 
         var invt = row.record.invt;
@@ -1797,8 +1808,3 @@ var renderQtyAmt = function (value) {
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
-
-
-
-
-

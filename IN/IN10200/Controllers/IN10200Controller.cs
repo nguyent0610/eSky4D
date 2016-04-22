@@ -61,7 +61,7 @@ namespace IN10200.Controllers
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -745,7 +745,11 @@ namespace IN10200.Controllers
             var lstTrans = _app.IN10200_pgIssueLoad(batNbr, branchID, "%", "%").ToList();
             return this.Store(lstTrans);
         }
-
+        public ActionResult GetPrice(string invtID, string uom, DateTime effDate)
+        {
+            var lstPrice = _app.IN10200_pdPrice("", invtID, uom, DateTime.Now).ToList();
+            return this.Store(lstPrice);
+        }
         public ActionResult GetItemSite(string invtID, string siteID)
         {
             var objSite = _app.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);

@@ -212,22 +212,6 @@ namespace IN10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<IN_LotTrans> IN_LotTrans
-        {
-            get
-            {
-                if ((_IN_LotTrans == null))
-                {
-                    _IN_LotTrans = base.CreateObjectSet<IN_LotTrans>("IN_LotTrans");
-                }
-                return _IN_LotTrans;
-            }
-        }
-        private ObjectSet<IN_LotTrans> _IN_LotTrans;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<IN_Trans> IN_Trans
         {
             get
@@ -240,6 +224,22 @@ namespace IN10200
             }
         }
         private ObjectSet<IN_Trans> _IN_Trans;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<IN_LotTrans> IN_LotTrans
+        {
+            get
+            {
+                if ((_IN_LotTrans == null))
+                {
+                    _IN_LotTrans = base.CreateObjectSet<IN_LotTrans>("IN_LotTrans");
+                }
+                return _IN_LotTrans;
+            }
+        }
+        private ObjectSet<IN_LotTrans> _IN_LotTrans;
 
         #endregion
 
@@ -318,19 +318,19 @@ namespace IN10200
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the IN_LotTrans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToIN_LotTrans(IN_LotTrans iN_LotTrans)
-        {
-            base.AddObject("IN_LotTrans", iN_LotTrans);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the IN_Trans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToIN_Trans(IN_Trans iN_Trans)
         {
             base.AddObject("IN_Trans", iN_Trans);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the IN_LotTrans EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToIN_LotTrans(IN_LotTrans iN_LotTrans)
+        {
+            base.AddObject("IN_LotTrans", iN_LotTrans);
         }
 
         #endregion
@@ -518,6 +518,58 @@ namespace IN10200
             }
     
             return base.ExecuteFunction<global::System.String>("INNumbering", branchIDParameter, getTypeParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="vendID">No Metadata Documentation available.</param>
+        /// <param name="invtID">No Metadata Documentation available.</param>
+        /// <param name="uOM">No Metadata Documentation available.</param>
+        /// <param name="effDate">No Metadata Documentation available.</param>
+        public ObjectResult<IN10200_pdPrice_Result> IN10200_pdPrice(global::System.String vendID, global::System.String invtID, global::System.String uOM, Nullable<global::System.DateTime> effDate)
+        {
+            ObjectParameter vendIDParameter;
+            if (vendID != null)
+            {
+                vendIDParameter = new ObjectParameter("VendID", vendID);
+            }
+            else
+            {
+                vendIDParameter = new ObjectParameter("VendID", typeof(global::System.String));
+            }
+    
+            ObjectParameter invtIDParameter;
+            if (invtID != null)
+            {
+                invtIDParameter = new ObjectParameter("InvtID", invtID);
+            }
+            else
+            {
+                invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
+            }
+    
+            ObjectParameter uOMParameter;
+            if (uOM != null)
+            {
+                uOMParameter = new ObjectParameter("UOM", uOM);
+            }
+            else
+            {
+                uOMParameter = new ObjectParameter("UOM", typeof(global::System.String));
+            }
+    
+            ObjectParameter effDateParameter;
+            if (effDate.HasValue)
+            {
+                effDateParameter = new ObjectParameter("EffDate", effDate);
+            }
+            else
+            {
+                effDateParameter = new ObjectParameter("EffDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<IN10200_pdPrice_Result>("IN10200_pdPrice", vendIDParameter, invtIDParameter, uOMParameter, effDateParameter);
         }
 
         #endregion
@@ -4602,30 +4654,6 @@ namespace IN10200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String UnitDesc
-        {
-            get
-            {
-                return _UnitDesc;
-            }
-            set
-            {
-                OnUnitDescChanging(value);
-                ReportPropertyChanging("UnitDesc");
-                _UnitDesc = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("UnitDesc");
-                OnUnitDescChanged();
-            }
-        }
-        private global::System.String _UnitDesc;
-        partial void OnUnitDescChanging(global::System.String value);
-        partial void OnUnitDescChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.DateTime ExpDate
@@ -5102,6 +5130,30 @@ namespace IN10200
         private global::System.Byte[] _tstamp;
         partial void OntstampChanging(global::System.Byte[] value);
         partial void OntstampChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String UnitDesc
+        {
+            get
+            {
+                return _UnitDesc;
+            }
+            set
+            {
+                OnUnitDescChanging(value);
+                ReportPropertyChanging("UnitDesc");
+                _UnitDesc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("UnitDesc");
+                OnUnitDescChanged();
+            }
+        }
+        private global::System.String _UnitDesc;
+        partial void OnUnitDescChanging(global::System.String value);
+        partial void OnUnitDescChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -9847,6 +9899,44 @@ namespace IN10200
         private global::System.Double _CnvFact;
         partial void OnCnvFactChanging(global::System.Double value);
         partial void OnCnvFactChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="IN10200Model", Name="IN10200_pdPrice_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class IN10200_pdPrice_Result : ComplexObject
+    {
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> Price
+        {
+            get
+            {
+                return _Price;
+            }
+            set
+            {
+                OnPriceChanging(value);
+                ReportPropertyChanging("Price");
+                _Price = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Price");
+                OnPriceChanged();
+            }
+        }
+        private Nullable<global::System.Double> _Price;
+        partial void OnPriceChanging(Nullable<global::System.Double> value);
+        partial void OnPriceChanged();
 
         #endregion
 

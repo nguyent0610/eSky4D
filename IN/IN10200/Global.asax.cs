@@ -42,6 +42,8 @@ namespace IN10200
             Current.DBSys = "ND_eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
             Current.FormatDate = "dd.MM.yyyy";
             AccessRight acc = new AccessRight();
+            Current.FormatDateJS = "yyyy.MM.dd";
+            Current.FormatDate ="yyyy.MM.dd";
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;

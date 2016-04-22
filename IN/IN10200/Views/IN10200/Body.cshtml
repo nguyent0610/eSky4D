@@ -201,7 +201,7 @@
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "BranchID"))
                     .MaxLength(30)
-                    .EnforceMaxLength(true)
+                    .EnforceMaxLength(true).ReadOnly(true).Tag("X")
                     .Width(220)
                     .HQControlFocus("cboBatNbr")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
