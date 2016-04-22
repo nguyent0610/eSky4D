@@ -23,7 +23,7 @@
         .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; })
         .Listeners(lst =>
         {
-           // lst.BoxReady.Fn = "loadSourceCombo";
+           lst.BoxReady.Fn = "firstLoad";
         })
         .Items(
             X.Panel().ID("pnlHeader")
@@ -79,7 +79,7 @@
                         , HQ.Button().ID("btnRebuildINTrans").HQLangCode("Handle").MarginSpec("0 0 32 105").Width(145)
                             .Listeners(p =>
                             {
-                                //p.Click.Fn = "btnRebuildINTrans_Click";
+                                p.Click.Handler = "btnProccess_Click(1)";
                             })
                     )
                     
@@ -91,8 +91,8 @@
                 .Items(
                     X.Container().Layout(LayoutType.VBox)
                     .Items(
-                        HQ.TextBox().ID("txtBatNbr").HQLangCode("BatNbr").Width(250)
-                        , HQ.TextBox().ID("txtBranchID").HQLangCode("BranchID").Width(250)
+                        HQ.TextBox().ID("txtBatNbr").Name("txtBatNbr").HQLangCode("BatNbr").Width(250)
+                        , HQ.TextBox().ID("txtBranchID").Name("txtBranchID").HQLangCode("BranchID").Width(250)
                         , HQ.Combo().ID("cboStatus").Name("cboStatus").Width(250)
                             .HQLangCode("Status").HQDBSys(false).HQProcedure("IN40300_pcStatus")
                             .HQColumnShow("Descr").ForceSelection(true).AllowBlank(false)
@@ -110,13 +110,18 @@
                         , HQ.Button().ID("btnRebuildINBat").HQLangCode("Handle").MarginSpec("0 0 5 105").Width(145)
                             .Listeners(p =>
                             {
-                                //p.Click.Fn = "btnRebuildINBat_Click";
+                                p.Click.Handler = "btnProccess_Click(2);";
                             })
                     )
            
                 )//RebuildINBat
             )//pnl Header
-
+            ,X.Panel().ID("pnlDet")
+             .Region(Region.Center)
+            .Layout(LayoutType.Fit)
+            .Items(
+                HQ.TextArea().ID("txtRes")
+            )
         )//frm Main
 )//View port
 )

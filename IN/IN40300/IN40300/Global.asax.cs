@@ -38,16 +38,16 @@ namespace IN40300
             //Session["LangID"] = 1;
 
             Current.Authorize = false;
-            Current.Server = "MARSSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
-            Current.DBSys = "eSky4DSys";//ConfigurationManager.AppSettings["DBSys"].ToString();
+            Current.Server = "EARTHSVR\\SQL2012";// ConfigurationManager.AppSettings["Server"].ToString();
+            Current.DBSys = "eBiz4DCloudSysKAO";//ConfigurationManager.AppSettings["DBSys"].ToString();
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN40300"] = acc;
-            Session["DBApp"] = Current.DBApp = "eSky4DApp";// "eBiz4DWebApp";
+            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppKAO";// "eBiz4DWebApp";
             Session["UserName"] = Current.UserName = "admin";
-            Session["CpnyID"] = Current.CpnyID = "HQHD3120";
+            Session["CpnyID"] = Current.CpnyID = "18501757";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] =1;
         }

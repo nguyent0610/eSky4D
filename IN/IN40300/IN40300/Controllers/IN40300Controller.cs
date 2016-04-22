@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using PartialViewResult = System.Web.Mvc.PartialViewResult;
 using System.IO;
 using System.Text;
+using HQ.eSkySys;
+using HQFramework.DAL;
 namespace IN40300.Controllers
 {
     [DirectController]
@@ -22,6 +24,7 @@ namespace IN40300.Controllers
         private string _screenNbr = "IN40300";
         private string _userName = Current.UserName;
         IN40300Entities _db = Util.CreateObjectContext<IN40300Entities>(false);
+        //private eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         private JsonResult mLogMessage;
         private FormCollection mForm;
         public ActionResult Index()
@@ -41,97 +44,120 @@ namespace IN40300.Controllers
         //    return this.Store(_db.IN40300_pgLoadGrid(DateFrom, DateTo, BranchID).ToList());
         //}
 
-        //[HttpPost]
-        //public ActionResult Process(FormCollection data)
-        //{
-        //    try
-        //    {
-        //        mForm = data;
-        //        StoreDataHandler custHandler = new StoreDataHandler(data["lstPPC_StockRecovery"]);
+        [HttpPost]
+        public ActionResult Process(FormCollection data)
+        {
+            try
+            {
+                
+                bool inValidate = false;
+                bool inRebuildQtyCost = false;
+                bool inRebuildOnSOQty = false;
 
-        //        var lstPPC_StockRecovery = custHandler.ObjectData<IN40300_pgLoadGrid_Result>();
+                string a = data["chkINValidate"];
 
-        //        var access = Session["IN40300"] as AccessRight;
+                if (data["chkINValidates"] == "true")
+                {
+                    inValidate = true;
+                }
+                if (data["chkCalQtys"] == "true")
+                {
+                    inRebuildQtyCost = true;
+                }
+                if (data["chkCalSOQtys"] == "true")
+                {
+                    inRebuildOnSOQty = true;
+                }
+                string param01 = data["type"];
+                string param02 = inValidate.ToShort().ToString();
+                string param03 = inRebuildOnSOQty.ToShort().ToString();
+                string param04 = inRebuildQtyCost.ToShort().ToString();
 
-        //        if (!access.Update && !access.Insert)
-        //            throw new MessageException(MessageType.Message, "728");
-        //        string handle = data["cboHandle"];
-        //        if (handle != "N" && handle != string.Empty)
-        //        {
-        //            foreach (var item in lstPPC_StockRecovery)
-        //            {
-        //                if (item.ColCheck == true)
-        //                {
-        //                    var obj = _db.PPC_StockRecoveryDet.FirstOrDefault(p => p.BranchID == item.BranchID
-        //                                                                        && p.SlsPerID == item.SlsPerID
-        //                                                                        && p.StkRecNbr == item.StkRecNbr
-        //                                                                        && p.InvtID == item.InvtID
-        //                                                                        && p.ExpDate == item.ExpDate);
-        //                    if (obj != null)
-        //                    {
-        //                        if (handle=="A")
-        //                        {
-        //                            obj.ApproveQty = item.ApproveQty;
-        //                            var obj1 = _db.IN_StockRecoveryDet.FirstOrDefault(p => p.BranchID == item.BranchID
-        //                                                                            && p.StkRecNbr == item.StkRecNbr
-        //                                                                            && p.ExpDate == item.ExpDate
-        //                                                                            && p.InvtID == item.InvtID);
-        //                            if (obj1 == null)
-        //                            {
-        //                                var record = new IN_StockRecoveryDet();
-        //                                record.BranchID = item.BranchID;
-        //                                record.StkRecNbr = item.StkRecNbr;
-        //                                record.ExpDate = item.ExpDate;
-        //                                record.InvtID = item.InvtID;
-        //                                record.Status = "H";
-        //                                record.StkQty = item.ApproveQty;
-        //                                record.Price = item.Price;
-        //                                record.Crtd_DateTime = DateTime.Now;
-        //                                record.Crtd_Prog = _screenNbr;
-        //                                record.Crtd_User = _userName;
-        //                                record.LUpd_DateTime = DateTime.Now;
-        //                                record.LUpd_Prog = _screenNbr;
-        //                                record.LUpd_User = _userName;
-        //                                _db.IN_StockRecoveryDet.AddObject(record);
-        //                            }
-        //                            else
-        //                            {
-        //                                obj1.StkQty = obj1.StkQty + item.ApproveQty;
-        //                                obj1.LUpd_DateTime = DateTime.Now;
-        //                                obj1.LUpd_Prog = _screenNbr;
-        //                                obj1.LUpd_User = _userName;
-        //                            }
-        //                        }
+                if (param01 == "2")
+                {
+                    param02 = data["cboStatus"];
+                    param03 = data["txtBranchID"];
+                    param04 = data["txtBatNbr"];
+                }
 
-        //                        obj.Status = handle;
-        //                        obj.LUpd_DateTime = DateTime.Now;
-        //                        obj.LUpd_Prog = _screenNbr;
-        //                        obj.LUpd_User = _userName;
-        //                    }
-        //                }
-        //            }
-        //            _db.SaveChanges();
+                List<string> lstLang = new List<string>();
 
-        //        }
-        //        if (mLogMessage != null)
-        //        {
-        //            return mLogMessage;
-        //        }
-        //        else
-        //            return Json(new { success = true, type = "message", code = "8009" });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is MessageException)
-        //        {
-        //            return (ex as MessageException).ToMessage();
-        //        }
-        //        else
-        //        {
-        //            return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
-        //        }
-        //    }
-        //}
+
+                string langID = Current.LangID.ToString();
+                    string langObj =
+                       _db.vs_Language.Where(p => p.Code.ToLower() == "obj").Select(
+                            p =>
+                            langID == "0" ? p.Lang00 :
+                            langID == "1" ? p.Lang01 :
+                            langID == "2" ? p.Lang02 :
+                            langID == "3" ? p.Lang03 :
+                            langID == "4" ? p.Lang04 : "")
+                            .FirstOrDefault();
+
+                    string langMsg0 =
+                        _db.vs_Language.Where(p => p.Code.ToLower() == "inintegmsg00").Select(
+                            p =>
+                            langID == "0" ? p.Lang00 :
+                            langID == "1" ? p.Lang01 :
+                            langID == "2" ? p.Lang02 :
+                            langID == "3" ? p.Lang03 :
+                            langID == "4" ? p.Lang04 : "")
+                            .FirstOrDefault();
+                    string langMsg1 =
+                       _db.vs_Language.Where(p => p.Code.ToLower() == "inintegmsg01").Select(
+                           p =>
+                           langID == "0" ? p.Lang00 :
+                           langID == "1" ? p.Lang01 :
+                           langID == "2" ? p.Lang02 :
+                           langID == "3" ? p.Lang03 :
+                           langID == "4" ? p.Lang04 : "")
+                           .FirstOrDefault();
+                    lstLang.Add(langObj);
+                    lstLang.Add(langMsg0);
+                    lstLang.Add(langMsg1);
+                
+
+                string param05 = data["cboInvtID"];
+                string param06 = data["cboSiteID"];
+                string message = string.Empty;
+                DataAccess dal = Util.Dal();
+                INProcess.IN inventory = new INProcess.IN(_userName, _screenNbr, dal);
+                try
+                {
+                    dal.BeginTrans(IsolationLevel.ReadCommitted);
+
+                    message = inventory.IN40300_Release(lstLang, param01, param02, param03, param04, param05, param06);
+
+                    dal.CommitTrans();
+                }
+                catch (Exception)
+
+                {
+                    dal.RollbackTrans();
+                    throw;
+                }
+                finally
+                {
+                    inventory = null;
+                    dal = null;
+                }
+
+                //_db.SaveChanges();
+
+                return Json(new { success = true, Msg = message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                if (ex is MessageException)
+                {
+                    return (ex as MessageException).ToMessage();
+                }
+                else
+                {
+                    return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
+                }
+            }
+        }
 
     }
 }

@@ -6,62 +6,87 @@
     <edmx:StorageModels>
     <Schema Namespace="eBiz4DWebSysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
-          <EntitySet Name="IN_StockRecoveryDet" EntityType="eBiz4DWebSysModel.Store.IN_StockRecoveryDet" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="vs_Language" EntityType="eBiz4DWebSysModel.Store.vs_Language" store:Type="Views" store:Schema="dbo" store:Name="vs_Language">
+            <DefiningQuery>SELECT 
+      [vs_Language].[Code] AS [Code], 
+      [vs_Language].[Lang00] AS [Lang00], 
+      [vs_Language].[Lang01] AS [Lang01], 
+      [vs_Language].[Lang02] AS [Lang02], 
+      [vs_Language].[Lang03] AS [Lang03], 
+      [vs_Language].[Lang04] AS [Lang04], 
+      [vs_Language].[Crtd_Datetime] AS [Crtd_Datetime], 
+      [vs_Language].[Crtd_Prog] AS [Crtd_Prog], 
+      [vs_Language].[Crtd_User] AS [Crtd_User], 
+      [vs_Language].[LUpd_Datetime] AS [LUpd_Datetime], 
+      [vs_Language].[LUpd_Prog] AS [LUpd_Prog], 
+      [vs_Language].[LUpd_User] AS [LUpd_User], 
+      [vs_Language].[tstamp] AS [tstamp]
+      FROM [dbo].[vs_Language] AS [vs_Language]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
-        <EntityType Name="IN_StockRecoveryDet">
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'eBiz4DCloudAppKAO.dbo.vs_Language' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="vs_Language">
           <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="StkRecNbr" />
-            <PropertyRef Name="ExpDate" />
-            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Lang00" />
+            <PropertyRef Name="Lang01" />
+            <PropertyRef Name="Crtd_Datetime" />
+            <PropertyRef Name="Crtd_Prog" />
+            <PropertyRef Name="Crtd_User" />
+            <PropertyRef Name="LUpd_Datetime" />
+            <PropertyRef Name="LUpd_Prog" />
+            <PropertyRef Name="LUpd_User" />
+            <PropertyRef Name="tstamp" />
           </Key>
-          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="StkRecNbr" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="ExpDate" Type="datetime" Nullable="false" />
-          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="StkQty" Type="float" />
-          <Property Name="Price" Type="float" />
-          <Property Name="ApproveStkQty" Type="float" />
-          <Property Name="Status" Type="varchar" MaxLength="10" />
-          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
-          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
-          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
-          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
-          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Code" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="Lang00" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Lang01" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Lang02" Type="nvarchar" MaxLength="100" />
+          <Property Name="Lang03" Type="nvarchar" MaxLength="100" />
+          <Property Name="Lang04" Type="nvarchar" MaxLength="100" />
+          <Property Name="Crtd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="LUpd_Datetime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
-          <Property Name="NewExpDate" Type="datetime" />
         </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="IN40300Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="IN40300Entities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="IN_StockRecoveryDet" EntityType="IN40300Model.IN_StockRecoveryDet" />
+          <EntitySet Name="vs_Language" EntityType="IN40300Model.vs_Language" />
         </EntityContainer>
-        <EntityType Name="IN_StockRecoveryDet">
+        <EntityType Name="vs_Language">
           <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="StkRecNbr" />
-            <PropertyRef Name="ExpDate" />
-            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Lang00" />
+            <PropertyRef Name="Lang01" />
+            <PropertyRef Name="Crtd_Datetime" />
+            <PropertyRef Name="Crtd_Prog" />
+            <PropertyRef Name="Crtd_User" />
+            <PropertyRef Name="LUpd_Datetime" />
+            <PropertyRef Name="LUpd_Prog" />
+            <PropertyRef Name="LUpd_User" />
+            <PropertyRef Name="tstamp" />
           </Key>
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="StkRecNbr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="3" />
-          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Type="Double" Name="StkQty" />
-          <Property Type="Double" Name="Price" />
-          <Property Type="Double" Name="ApproveStkQty" />
-          <Property Type="String" Name="Status" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Lang00" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Lang01" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Lang02" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Lang03" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Lang04" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Crtd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_Datetime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Type="DateTime" Name="NewExpDate" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -69,25 +94,22 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="IN40300Entities" >
-          <EntitySetMapping Name="IN_StockRecoveryDet">
-            <EntityTypeMapping TypeName="IN40300Model.IN_StockRecoveryDet">
-              <MappingFragment StoreEntitySet="IN_StockRecoveryDet">
-                <ScalarProperty Name="NewExpDate" ColumnName="NewExpDate" />
+        <EntitySetMapping Name="vs_Language">
+            <EntityTypeMapping TypeName="IN40300Model.vs_Language">
+              <MappingFragment StoreEntitySet="vs_Language">
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
                 <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
                 <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
-                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="LUpd_Datetime" ColumnName="LUpd_Datetime" />
                 <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
                 <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ApproveStkQty" ColumnName="ApproveStkQty" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="StkQty" ColumnName="StkQty" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
-                <ScalarProperty Name="StkRecNbr" ColumnName="StkRecNbr" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Crtd_Datetime" ColumnName="Crtd_Datetime" />
+                <ScalarProperty Name="Lang04" ColumnName="Lang04" />
+                <ScalarProperty Name="Lang03" ColumnName="Lang03" />
+                <ScalarProperty Name="Lang02" ColumnName="Lang02" />
+                <ScalarProperty Name="Lang01" ColumnName="Lang01" />
+                <ScalarProperty Name="Lang00" ColumnName="Lang00" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -112,7 +134,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="73" >
-        <EntityTypeShape EntityType="IN40300Model.IN_StockRecoveryDet" Width="1.5" PointX="10.67819319790145" PointY="12.718472173772041" />
+        <EntityTypeShape EntityType="IN40300Model.vs_Language" Width="1.5" PointX="3.0256843599610423" PointY="23.95783076805893" />
       </Diagram>
     </Diagrams>
   </Designer>
