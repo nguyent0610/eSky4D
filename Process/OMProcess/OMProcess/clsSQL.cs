@@ -10,12 +10,7 @@ namespace OMProcess
 {
     class clsSQL
     {
-        #region SQLCommand
-        string strOM_GetPDASalesOrdDetByLineRef = "select * from OM_PDASalesOrdDet as a where a.BranchID=@BranchID and a.OrderNbr=@OrderNbr and exists (select * from dbo.fr_SplitString(@ListLineRef,',') where part=a.LineRef)";
-        string strOM_GetItemLot = "select * from IN_ItemLot as a where a.SiteID=@SiteID and a.InvtID=@InvtID and a.QtyAvail > 0 order by ExpDate, LotSerNbr";
-        string strBudgetIDCpny = "select * from OM_PPBudget as b join OM_PPCpny as c on b.BudgetID=c.BudgetID where c.CpnyID=@BranchID";
-
-        #endregion
+       
         private DataAccess mDal;
         public clsSQL(DataAccess da)
         {
@@ -596,7 +591,7 @@ namespace OMProcess
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@OrderNbr", DbType.String, clsCommon.GetValueDBNull(orderNbr), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@ListLineRef", DbType.String, clsCommon.GetValueDBNull(listLineRef), ParameterDirection.Input, 500));
-                return mDal.ExecDataTable(strOM_GetPDASalesOrdDetByLineRef, CommandType.Text, ref pc);
+                return mDal.ExecDataTable("OM_GetPDASalesOrdDetByLineRef", CommandType.StoredProcedure, ref pc);
             }
             catch (Exception ex)
             {
@@ -611,7 +606,7 @@ namespace OMProcess
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@SiteID", DbType.String, clsCommon.GetValueDBNull(siteID), ParameterDirection.Input, 50));
                 pc.Add(new ParamStruct("@InvtID", DbType.String, clsCommon.GetValueDBNull(invtID), ParameterDirection.Input, 50));
-                return mDal.ExecDataTable(strOM_GetItemLot, CommandType.Text, ref pc);
+				return mDal.ExecDataTable("OM_GetItemLot", CommandType.StoredProcedure, ref pc);
             }
             catch (Exception ex)
             {
@@ -625,7 +620,7 @@ namespace OMProcess
             {
                 ParamCollection pc = new ParamCollection();
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 50));
-                if (mDal.ExecDataTable(strBudgetIDCpny, CommandType.Text, ref pc).Rows.Count > 0)
+				if (mDal.ExecDataTable("OM_GetBudgetIDCpny", CommandType.StoredProcedure, ref pc).Rows.Count > 0)
                     budget.GetByKey(budgetID);
                 else
                     budget.Reset();
