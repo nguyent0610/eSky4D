@@ -644,7 +644,7 @@ var cboTrnsferNbr_Change = function () {
 };
 
 var grdTrans_BeforeEdit = function (item, e) {
-    //if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
+    if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
     if (App.grdTrans.isLock) {
         return false;
     }
@@ -685,7 +685,7 @@ var grdTrans_BeforeEdit = function (item, e) {
     }
 
     if (key == 'UnitPrice') {
-        var invt = e.row.invt; //HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
+        var invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]); //e.row.invt; //
         if (!Ext.isEmpty(invt) && invt.ValMthd == 'T') {
             return false;
         }
@@ -1385,7 +1385,7 @@ var checkExitEdit =  function (row) {
         trans.SiteID = App.SiteID.getValue();
 
         var invt = row.record.invt;
-        var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
+        var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);    
         var site = HQ.store.findInStore(App.stoItemSite, ['SiteID', 'InvtID'], [trans.SiteID, trans.InvtID]);
 
         if (Ext.isEmpty(site)) {
@@ -1450,7 +1450,6 @@ var checkExitEdit =  function (row) {
         } else {
             trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
         }
-
         trans.TranAmt = trans.Qty * trans.UnitPrice;
         calcLot(row.record, false);
     }
