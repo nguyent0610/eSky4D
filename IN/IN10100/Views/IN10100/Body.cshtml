@@ -67,7 +67,7 @@
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "BranchID"))
                     .MaxLength(30)
-                    .EnforceMaxLength(true)
+                    .EnforceMaxLength(true).Tag("X").ReadOnly(true)
                     .Width(220)
                     .HQControlFocus("BatNbr")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
@@ -163,7 +163,7 @@
                     .Width(220)
                     .LabelWidth(90)
                     .HQHeightWidth(400, 300)
-                    .ForceSelection(true)
+                    .ForceSelection(true).Tag("X")
                     .HQParam(new StoreParameterCollection() {
                         new StoreParameter() { Name = "@LangID", Value = Current.LangID.ToString(), Mode = ParameterMode.Value }
                     })
@@ -181,7 +181,7 @@
                 .Items(
                     HQ.TextBox().ID("RefNbr")
                     .HQLangCode("PerPost/RcptNbr")
-                    .Width(220)
+                    .Width(220).Tag("X")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
 
                     HQ.Combo().ID("TrnsferNbr")
@@ -299,7 +299,7 @@
                     }),
 
                     HQ.TextBox().ID("RvdBatNbr")
-                    .HQLangCode("CancelledBatNbr")
+                    .HQLangCode("CancelledBatNbr").Tag("X")
                     .LabelWidth(90)
                     .Width(220)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
@@ -312,13 +312,13 @@
                     HQ.NumberField().ID("TotQty")
                     .HQLangCode("TotQ")
                     .Width(220)
-                    .DecimalPrecision(0)
+                    .DecimalPrecision(0).Tag("X")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
 
                     HQ.NumberField().ID("TotAmt")
                     .HQLangCode("TotAmt")
                     .Width(250)
-                    .DecimalPrecision(0)
+                    .DecimalPrecision(0).Tag("X")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
 
                     HQ.Combo().ID("SlsperID")

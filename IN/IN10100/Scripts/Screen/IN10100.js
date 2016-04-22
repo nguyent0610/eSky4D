@@ -644,7 +644,7 @@ var cboTrnsferNbr_Change = function () {
 };
 
 var grdTrans_BeforeEdit = function (item, e) {
-    if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
+    //if (!HQ.grid.checkBeforeEdit(e, ['InvtID'])) return false;
     if (App.grdTrans.isLock) {
         return false;
     }
@@ -1546,7 +1546,7 @@ var askRefresh = function (item) {
             defaultOnNew();
         }
     }
-};
+}; 
 var setChange = function (isChange) {
     HQ.isChange = isChange;
     if (isChange) {
