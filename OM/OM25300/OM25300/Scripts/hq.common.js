@@ -569,6 +569,7 @@ var HQ = {
                     break;
                 };
             }
+            return found;
         },
         //TrungHT d�ng cho ph�n trang
         checkDuplicateAll: function (grd, row, keys) {
@@ -634,7 +635,9 @@ var HQ = {
                         }
                 }
                 if (HQ.grid.checkDuplicate(grd, e, keys)) {
-                    HQ.message.show(1112, e.value);
+                    if(e.column.xtype=="datecolumn")
+                        HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+                    else HQ.message.show(1112, e.value);
                     return false;
                 }
 
@@ -644,7 +647,9 @@ var HQ = {
         checkValidateEditDG: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 if (HQ.grid.checkDuplicate(grd, e, keys)) {
-                    HQ.message.show(1112, e.value);
+                    if (e.column.xtype == "datecolumn")
+                        HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+                    else HQ.message.show(1112, e.value);
                     return false;
                 }
             }
