@@ -1,0 +1,253 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM25300;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdDet")
+        .Store(
+            X.Store()
+            .ID("stoData")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(OM25300_pgPosmID_Result), "mdlOM25300_pgPosmID", ""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoData_beforeLoad";
+                l.Load.Fn = "stoData_load";
+                l.Update.Fn = "stoData_changed";             
+            })
+        )
+        .Listeners(p =>
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40)
+               
+           , X.Column().Text(Util.GetLang("PosmID")).DataIndex("PosmID").Width(100)
+                .Editor(
+
+                    HQ.Combo().ID("cboPosmID").Name("cboPosmID").HQProcedure("OM25300_pcPosmID")
+                    .HQColumnShow("PosmID,FromDate,ToDate").DisplayField("PosmID").ValueField("PosmID")
+                    .Width(300).HQHeightWidth(200, 200)
+                    .AllowBlank(true).HQAutoLoad(true).HQDBSys(false)
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Change.Fn = "cboPosmID_Change";
+                        l.Select.Fn = "cboPosmID_Select";
+                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    ),
+            X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID").Width(100)
+                .Editor(
+                         HQ.Combo().ID("cboBranchID").Name("cboBranchID").DataIndex("BranchID")
+                        .HQProcedure("OM25300_pcBranchID")
+                        .Width(300).HQHeightWidth(500, 400)
+                        .HQColumnShow("BranchID,CpnyName").DisplayField("BranchID").ValueField("BranchID")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@PosmID", Value = "_posmID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "_branchID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .Listeners(l =>
+                        {
+                            l.Change.Fn = "cboBranchID_Change";
+                            l.Select.Fn = "cboBranchID_Select";
+                            l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                            ),
+
+            X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Width(150),                                       
+            
+            X.Column().ID("ClassID").Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(100)
+                     .Editor(
+                        HQ.Combo().ID("cboClassID").Name("cboClassID")
+                        .HQProcedure("OM25300_pcClassID")
+                        .Width(300).HQHeightWidth(500, 400)
+                        .HQColumnShow("ClassID,Descr").DisplayField("ClassID").ValueField("ClassID")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .Listeners(l =>
+                        {
+                            l.Change.Fn = "cboClassID_Change";
+                            l.Select.Fn = "cboClassID_Select";
+                            l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                            ),
+             
+            X.Column().ID("InvtID").Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(100)
+                        .Editor(
+                        HQ.Combo().ID("cboInvtID").Name("cboInvtID")
+                        .HQProcedure("OM25300_pcInvtID")
+                        .Width(300).HQHeightWidth(500, 400)
+                        .HQColumnShow("InvtID,Descr").DisplayField("InvtID").ValueField("InvtID")
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+
+                        .HQParam(new StoreParameterCollection() 
+                        { 
+                            new StoreParameter() { Name = "@ClassID", Value = "_classID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .Listeners(l =>
+                            {
+                                l.Change.Fn = "cboInvtID_Change";
+                                l.Select.Fn = "cboInvtID_Select";
+                                l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                            ),
+            X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(150),
+
+            X.Column().ID("SiteId").Text(Util.GetLang("SiteId")).DataIndex("SiteID").Width(100)
+                    .Editor(
+                    HQ.Combo().ID("cboSiteId").Name("cboSiteId")
+                    .HQProcedure("OM25300_pcSiteID")
+                    .Width(300).HQHeightWidth(500, 400)
+                    .HQColumnShow("SiteId,Name").DisplayField("SiteId").ValueField("SiteId")
+                    .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+
+                    .HQParam(new StoreParameterCollection() 
+                    { 
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@BranchID", Value = "_branchID", Mode = ParameterMode.Raw }
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Change.Fn = "cboSiteId_Change";
+                        l.Select.Fn = "cboSiteId_Select";
+                        l.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                        )
+
+            ,HQ.DateColumn().ID("ExpDate").Text(Util.GetLang("ExpDate")).DataIndex("Date").Width(150)
+                .Editor(                       
+                    HQ.Combo().ID("cboExpDate").Name("cboExpDate")
+                    .HQProcedure("OM25300_pcExpDate")
+                    .Width(300).HQHeightWidth(500, 400)
+                    .HQColumnShow("dExpDate").DisplayField("dExpDate").ValueField("vExpDate")
+                    .AllowBlank(true).ForceSelection(true).HQDBSys(false)
+                    .HQParam(new StoreParameterCollection() 
+                    {                             
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@SiteID", Value = "_siteId", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@InvtID", Value = "_invtID", Mode = ParameterMode.Raw }
+                    })
+
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .LoadData()
+                    )          
+
+           , X.NumberColumn().ID("FCS").Text(Util.GetLang("FCS")).DataIndex("FCS").Width(100)
+            .Align(Alignment.Right).Format("0")
+            .Editor(X.NumberField().MinValue(0)),    
+            //.Editor(X.NumberField().DecimalPrecision(0).MinValue(0)),          
+            X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdDet_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdDet_BeforeEdit";
+                ls.Edit.Fn = "grdDet_Edit";
+                ls.ValidateEdit.Fn = "grdDet_ValidateEdit";
+
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.StringFilter().DataIndex("PosmID"),
+                    X.StringFilter().DataIndex("BranchID"),
+                    X.StringFilter().DataIndex("CpnyName"),
+                    X.StringFilter().DataIndex("ClassID"),                  
+                    X.StringFilter().DataIndex("InvtID"),
+                    X.StringFilter().DataIndex("Descr"),
+                    X.StringFilter().DataIndex("SiteID"),
+                    X.DateFilter().DataIndex("Date"),
+                    X.NumericFilter().DataIndex("FCS")
+                )
+        )
+    )
+))
