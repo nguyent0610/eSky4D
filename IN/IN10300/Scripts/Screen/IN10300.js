@@ -1468,16 +1468,19 @@ var checkTransAdd = function () {
     App.cboSiteID.setReadOnly(flat);
     App.cboToSiteID.setReadOnly(flat);
     App.cboToCpnyID.setReadOnly(flat);
-
+    App.cboTransferType.setReadOnly(flat);
     if (!HQ.isInsert && HQ.isNew) {
         App.cboSiteID.setReadOnly(true);
         App.cboToSiteID.setReadOnly(true);
         App.cboToCpnyID.setReadOnly(true);
+        App.cboTransferType.setReadOnly(true);
+        
     }
     else if (!HQ.isUpdate && !HQ.isNew) {
         App.cboSiteID.setReadOnly(true);
         App.cboToSiteID.setReadOnly(true);
         App.cboToCpnyID.setReadOnly(true);
+        App.cboTransferType.setReadOnly(true);
     }
 }
 

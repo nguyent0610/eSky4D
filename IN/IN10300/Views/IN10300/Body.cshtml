@@ -164,7 +164,7 @@
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "BranchID"))
                     .MaxLength(30)
-                    .EnforceMaxLength(true)
+                    .EnforceMaxLength(true).Tag("X").ReadOnly(true)
                     .LabelWidth(130)
                     .Width(250)
                     .HQControlFocus("cboHandle")
@@ -288,7 +288,7 @@
                     .HQLangCode("TotAmt")
                     .DecimalPrecision(0)
                     .Width(250)
-                    .LabelWidth(120)
+                    .LabelWidth(120).Tag("X")
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                 ),
 
@@ -326,7 +326,7 @@
                         .DataIndex("TrnsfrDocNbr")
                         .HQLangCode("TrnsferNbr")
                         .MaxLength(30)
-                        .EnforceMaxLength(true)
+                        .EnforceMaxLength(true).Tag("X")
                         .Width(240)
                         .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
                         
@@ -465,7 +465,7 @@
                         .HQColumnShow("Code,Descr")
                         .DisplayField("Descr")
                         .ValueField("Code")
-                        .AllowBlank(false)
+                        .AllowBlank(false).Tag("X")
                         .BlankText(Util.GetLangPrefix("Input", "Status"))
                         .Width(250)
                         .LabelWidth(120)
@@ -484,7 +484,7 @@
                         .Name("RcptBatNbr")
                         .DataIndex("RcptBatNbr")
                         .HQLangCode("RcptNbr")
-                        .MaxLength(30)
+                        .MaxLength(30).Tag("X")
                         .EnforceMaxLength(true)
                         .Width(240)
                         .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
@@ -525,7 +525,7 @@
                         .Name("RefNbr")
                         .DataIndex("RefNbr")
                         .HQLangCode("RefNbr")
-                        .MaxLength(30)
+                        .MaxLength(30).Tag("X")
                         .EnforceMaxLength(true)
                         .Width(250)
                         .Listeners(p => p.Focus.Handler = "HQ.focus='batch';"),
