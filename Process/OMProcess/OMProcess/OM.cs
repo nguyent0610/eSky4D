@@ -1532,7 +1532,7 @@ namespace OMProcess
 				{
 					if (objPDADet.GetByKey(branchID, orderNbr, item.Key))
 					{
-
+						
 						double rate = item.Value / objPDADet.LineQty;
 						if (chkApproveAll && item.Value != objPDADet.LineQty) chkApproveAll = false;
 						objSalesDet.Reset();
@@ -2248,7 +2248,7 @@ namespace OMProcess
 						objOrdDisc1.SlsPerID = objPDADisc.SlsPerID;
 						objOrdDisc1.SOLineRef = objPDADisc.SOLineRef;
 						objOrdDisc1.UserOperationLog = objPDADisc.UserOperationLog;
-						objOrdDisc.Add();
+						objOrdDisc1.Add();
 					}
 
 
