@@ -1403,6 +1403,7 @@ var checkExitEdit =  function (row) {
             App.grdTrans.view.loadMask.setDisabled(false);
             return;
         }
+
         if (invt.ValMthd == "A" || invt.ValMthd == "E") {
             trans.UnitPrice = Math.round(site.AvgCost, 0);
         } else {
