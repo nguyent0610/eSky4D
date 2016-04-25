@@ -665,6 +665,14 @@ namespace OMProcess
                 throw ex;
             }
         }
+		//public void OM_ReleaseKAOProc(string branchID,string orderNbr,string user)
+		//{
+		//	ParamCollection pc = new ParamCollection();
+		//	pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 50));
+		//	pc.Add(new ParamStruct("@OrderNbr", DbType.String, clsCommon.GetValueDBNull(orderNbr), ParameterDirection.Input, 500));
+		//	pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 30));
+		//	mDal.ExecNonQuery("OM20500Release_KAOOrder", CommandType.StoredProcedure, ref pc);
+		//}
         #endregion
         #region AR
         public string ARNumbering(string branchID, string type)
@@ -681,6 +689,7 @@ namespace OMProcess
                 throw ex;
             }
         }
+
         public void AR_ReleaseBatch(string branchID, string batnbr, string proc, string user)
         {
             try

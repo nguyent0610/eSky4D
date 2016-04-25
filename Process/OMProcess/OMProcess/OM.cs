@@ -1432,7 +1432,7 @@ namespace OMProcess
 					objSalesOrd.ClassID = objPDAOrd.ClassID;
 				}
 
-
+				
 				objSalesOrd.IsAddStock = isAddStock;
 				objSalesOrd.BranchID = branchID;
 				objSalesOrd.OrderNbr = nbr;
@@ -1521,7 +1521,7 @@ namespace OMProcess
 				clsOM_LotTrans objLot = new clsOM_LotTrans(Dal);
 				clsOM_PDAOrdDisc objPDAOrdDisc = new clsOM_PDAOrdDisc(Dal);
 				clsOM_OrdAddr objOrdDisc = new clsOM_OrdAddr(Dal);
-
+				//objSql.OM_ReleaseKAOProc(branchID, nbr, User);
 				DataTable lstDetAll = objPDADet.GetAll(objPDAOrd.BranchID, objPDAOrd.OrderNbr, "%");
 				bool chkApproveAll = false;
 				if (lstDet.Rows.Count == lstDetAll.Rows.Count)
@@ -2215,44 +2215,44 @@ namespace OMProcess
 				objSalesOrd.Add();
 				var lstDisc = objPDADisc.GetAll(branchID, "%", "%", objPDAOrd.OrderNbr, "%");
 
-				var objOrdDisc1 = new clsOM_OrdDisc(Dal);
-				foreach (DataRow item in lstDisc.Rows)
-				{
-					if (objPDADisc.GetByKey(branchID, item["DiscID"].ToString(), item["DiscSeq"].ToString(), item["OrderNbr"].ToString(), item["LineRef"].ToString()))
-					{
-						objOrdDisc1.Reset();
-						objOrdDisc1.BranchID = branchID;
-						objOrdDisc1.OrderNbr = objSalesOrd.OrderNbr;
-						objOrdDisc1.BreakBy = objPDADisc.BreakBy;
-						objOrdDisc1.BudgetID = objPDADisc.BudgetID;
-						objOrdDisc1.Crtd_DateTime = DateTime.Now;
-						objOrdDisc1.Crtd_Prog = Prog;
-						objOrdDisc1.Crtd_User = User;
-						objOrdDisc1.DiscAmt = objPDADisc.DiscAmt;
-						objOrdDisc1.DiscBreakLineRef = objPDADisc.DiscBreakLineRef;
-						objOrdDisc1.DiscFor = objPDADisc.DiscFor;
-						objOrdDisc1.DiscID = objPDADisc.DiscID;
-						objOrdDisc1.DiscSeq = objPDADisc.DiscSeq;
-						objOrdDisc1.DisctblAmt = objPDADisc.DisctblAmt;
-						objOrdDisc1.DisctblQty = objPDADisc.DisctblQty;
-						objOrdDisc1.DiscType = objPDADisc.DiscType;
-						objOrdDisc1.DiscUOM = objPDADisc.DiscUOM;
-						objOrdDisc1.FreeItemBudgetID = objPDADisc.FreeItemBudgetID;
-						objOrdDisc1.FreeItemID = objPDADisc.FreeItemID;
-						objOrdDisc1.FreeItemQty = objPDADisc.FreeItemQty;
-						objOrdDisc1.LineRef = objPDADisc.LineRef;
-						objOrdDisc1.LUpd_DateTime = DateTime.Now;
-						objOrdDisc1.LUpd_Prog = Prog;
-						objOrdDisc1.LUpd_User = User;
-						objOrdDisc1.OrigFreeItemQty = objPDADisc.OrigFreeItemQty;
-						objOrdDisc1.SlsPerID = objPDADisc.SlsPerID;
-						objOrdDisc1.SOLineRef = objPDADisc.SOLineRef;
-						objOrdDisc1.UserOperationLog = objPDADisc.UserOperationLog;
-						objOrdDisc1.Add();
-					}
+				//var objOrdDisc1 = new clsOM_OrdDisc(Dal);
+				//foreach (DataRow item in lstDisc.Rows)
+				//{
+				//	if (objPDADisc.GetByKey(branchID, item["DiscID"].ToString(), item["DiscSeq"].ToString(), item["OrderNbr"].ToString(), item["LineRef"].ToString()))
+				//	{
+				//		objOrdDisc1.Reset();
+				//		objOrdDisc1.BranchID = branchID;
+				//		objOrdDisc1.OrderNbr = objSalesOrd.OrderNbr;
+				//		objOrdDisc1.BreakBy = objPDADisc.BreakBy;
+				//		objOrdDisc1.BudgetID = objPDADisc.BudgetID;
+				//		objOrdDisc1.Crtd_DateTime = DateTime.Now;
+				//		objOrdDisc1.Crtd_Prog = Prog;
+				//		objOrdDisc1.Crtd_User = User;
+				//		objOrdDisc1.DiscAmt = objPDADisc.DiscAmt;
+				//		objOrdDisc1.DiscBreakLineRef = objPDADisc.DiscBreakLineRef;
+				//		objOrdDisc1.DiscFor = objPDADisc.DiscFor;
+				//		objOrdDisc1.DiscID = objPDADisc.DiscID;
+				//		objOrdDisc1.DiscSeq = objPDADisc.DiscSeq;
+				//		objOrdDisc1.DisctblAmt = objPDADisc.DisctblAmt;
+				//		objOrdDisc1.DisctblQty = objPDADisc.DisctblQty;
+				//		objOrdDisc1.DiscType = objPDADisc.DiscType;
+				//		objOrdDisc1.DiscUOM = objPDADisc.DiscUOM;
+				//		objOrdDisc1.FreeItemBudgetID = objPDADisc.FreeItemBudgetID;
+				//		objOrdDisc1.FreeItemID = objPDADisc.FreeItemID;
+				//		objOrdDisc1.FreeItemQty = objPDADisc.FreeItemQty;
+				//		objOrdDisc1.LineRef = objPDADisc.LineRef;
+				//		objOrdDisc1.LUpd_DateTime = DateTime.Now;
+				//		objOrdDisc1.LUpd_Prog = Prog;
+				//		objOrdDisc1.LUpd_User = User;
+				//		objOrdDisc1.OrigFreeItemQty = objPDADisc.OrigFreeItemQty;
+				//		objOrdDisc1.SlsPerID = objPDADisc.SlsPerID;
+				//		objOrdDisc1.SOLineRef = objPDADisc.SOLineRef;
+				//		objOrdDisc1.UserOperationLog = objPDADisc.UserOperationLog;
+				//		objOrdDisc1.Add();
+				//	}
 
 
-				}
+				//}
 
 				if (!OM10100_PrintInvoice( branchID, objSalesOrd.OrderNbr)) return false;
 		
