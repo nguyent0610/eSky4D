@@ -949,7 +949,7 @@ namespace INProcess
                 throw ex;
             }
         }
-        public bool IN40300_Release(List<string> lstLang, string parm01, string parm02, string parm03, string parm04, string parm05, string parm06)
+        public string  IN40300_Release(List<string> lstLang, string parm01, string parm02, string parm03, string parm04, string parm05, string parm06)
         {
             clsSQL objSql = new clsSQL(Dal);
             string mMessage = string.Empty;
@@ -982,7 +982,7 @@ namespace INProcess
             {
                 objSql.IN_Integrity_ReBuildBatch(Prog, User, parm02, parm03, parm04);
             }         
-            return true;
+            return mMessage;
         }
         public bool Issue_Cancel(string branchID, string batNbr, string rcptNbr, bool release)
         {

@@ -273,7 +273,7 @@ namespace INProcess
                 pc.Add(new ParamStruct("@UserID", DbType.String, clsCommon.GetValueDBNull(user), ParameterDirection.Input, 10));
                 pc.Add(new ParamStruct("@Posted", DbType.String, clsCommon.GetValueDBNull(posted), ParameterDirection.Input, 1));
                 pc.Add(new ParamStruct("@BranchID", DbType.String, clsCommon.GetValueDBNull(branchID), ParameterDirection.Input, 50));
-                pc.Add(new ParamStruct("@BatNbr", DbType.Int32, clsCommon.GetValueDBNull(batNbr), ParameterDirection.Input, 30));
+                pc.Add(new ParamStruct("@BatNbr", DbType.String, clsCommon.GetValueDBNull(batNbr), ParameterDirection.Input, 30));
                 mDal.ExecNonQuery("IN_Integrity_ReBuildBatch", CommandType.StoredProcedure, ref pc);
                
             }
