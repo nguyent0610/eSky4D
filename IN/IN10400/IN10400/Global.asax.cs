@@ -39,13 +39,13 @@ namespace IN10400
 
             Current.Authorize = false;
             Current.Server = "EARTHSVR\\SQL2012";
-            Current.DBSys = "eBiz4DCloudSysKAO";
+            Current.DBSys = "ND_eSky4DSys";
             AccessRight acc = new AccessRight();
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
             Session["IN10400"] = acc;
-            Session["DBApp"] = Current.DBApp = "eBiz4DCloudAppKAO";
+            Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";
             Session["CpnyID"] = Current.CpnyID = "HQHD3110";
             Session["Language"] = Current.Language = "vi";
