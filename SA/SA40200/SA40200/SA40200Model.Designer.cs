@@ -879,6 +879,30 @@ namespace SA40200
         private global::System.String _BranchID;
         partial void OnBranchIDChanging(global::System.String value);
         partial void OnBranchIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BranchName
+        {
+            get
+            {
+                return _BranchName;
+            }
+            set
+            {
+                OnBranchNameChanging(value);
+                ReportPropertyChanging("BranchName");
+                _BranchName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("BranchName");
+                OnBranchNameChanged();
+            }
+        }
+        private global::System.String _BranchName;
+        partial void OnBranchNameChanging(global::System.String value);
+        partial void OnBranchNameChanged();
 
         #endregion
 

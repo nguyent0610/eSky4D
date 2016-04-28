@@ -128,9 +128,9 @@
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>
                                 {
-                                    lst.TriggerClick.Fn = "cboID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
-                                    lst.Change.Fn = "cboID_Change";//khi thay doi du lieu
-                                    lst.Expand.Fn = "cboID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
+                                    lst.TriggerClick.Fn = "cboID_TriggerClick";
+                                    lst.Change.Fn = "cboID_Change";
+                                    lst.Expand.Fn = "cboID_Expand"; 
                                     lst.KeyPress.Fn = "cboID_KeyPress";
                                 })
                                 .EnableKeyEvents(true)
@@ -198,7 +198,7 @@
                         HQ.Combo().ID("cboBranchID")
                         .Name("cboBranchID").HQProcedure("SA40200_pcCompany").HQDBSys(true)
                         .HQColumnShow("CpnyID,CpnyName,Territory,Address").DisplayField("CpnyID").ValueField("CpnyID")
-                        .Width(300).HQHeightWidth(500, 400).MarginSpec("5 0 0 0").ForceSelection(true).HQAutoLoad(false)
+                        .Width(300).HQHeightWidth(500, 400).ForceSelection(true).HQAutoLoad(false)
                         .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw }
@@ -206,7 +206,7 @@
                         .LoadData()
                     )
 
-                    , X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchName").Width(150).Renderer("renderBranchName")
+                    , X.Column().Text(Util.GetLang("BranchName")).DataIndex("BranchName").Width(250).Renderer("renderBranchName")
 
                     , X.CommandColumn().Width(150)
                     .Commands(
@@ -219,7 +219,7 @@
                     .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
                     .Listeners(l => l.Command.Handler = "grdSYS_CloseDateBranchAuto_Reject(record);")
                 )
-                .SelectionModel(X.RowSelectionModel().ID("slmSYS_CloseDateBranchAuto").Mode(SelectionMode.Multi))
+                .SelectionModel(X.RowSelectionModel().ID("slmSYS_CloseDateBranchAuto").Mode(SelectionMode.Multi).Listeners(p=>p.Select.Handler="_focusNo = 1;"))
                 .BottomBar(
                     X.PagingToolbar()
                     .Items(

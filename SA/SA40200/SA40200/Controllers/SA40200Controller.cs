@@ -44,36 +44,33 @@ namespace SA40200.Controllers
             int value = ID.PassNull() == "" ? 0 : int.Parse(ID);
             return this.Store(_sys.SA40200_pdHeader().FirstOrDefault(p => p.ID == value));
         }
-        
+
         [DirectMethod]
         public ActionResult SA40200GetTreeBranch(string panelID)
         {
-            var a=new ItemsCollection<Plugin>();
-            a.Add(Html.X().TreeViewDragDrop().DDGroup("BranchID").EnableDrop(false));
+            var a = new ItemsCollection<Plugin>();
+            a.Add(Html.X().TreeViewDragDrop().ID("treeBranchDrop").DDGroup("BranchID").EnableDrop(false));
 
             TreeView v = new TreeView();
             v.Plugins.Add(a);
-            v.Copy= true;
+            v.Copy = true;
             TreePanel tree = new TreePanel()
             {
                 ViewConfig = v
             };
-            
-          
             tree.ID = "treePanelBranch";
             tree.ItemID = "treePanelBranch";
             tree.Fields.Add(new ModelField("RecID", ModelFieldType.String));
             tree.Fields.Add(new ModelField("Type", ModelFieldType.String));
-       
+
             tree.Border = false;
             tree.RootVisible = true;
             tree.Animate = true;
-           
+
             Node node = new Node();
             node.NodeID = "Root";
-         
+
             tree.Root.Add(node);
-           
 
             var lstTerritories = _sys.SA40200_ptTerritory().ToList();//tam thoi
             var companies = _sys.SA40200_ptCompany(Current.UserName).ToList();
@@ -113,10 +110,11 @@ namespace SA40200.Controllers
             }
 
             var treeBranch = X.GetCmp<Panel>(panelID);
-            
+
             //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
             tree.Listeners.CheckChange.Fn = "treePanelBranch_checkChange";
-            
+            tree.Listeners.BeforeItemExpand.Handler = "App.treePanelBranch.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
+            tree.Listeners.AfterItemExpand.Handler = "App.treePanelBranch.el.unmask();Ext.resumeLayouts(true);";
             tree.AddTo(treeBranch);
 
             return this.Direct();
@@ -167,8 +165,7 @@ namespace SA40200.Controllers
                 ChangeRecords<SA40200_pdHeader_Result> lstSYS_CloseDateAuto = dataHandler.BatchObjectData<SA40200_pdHeader_Result>();
 
                 StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSYS_CloseDateBranchAuto"]);
-                ChangeRecords<SA40200_pgSYS_CloseDateBranchAuto_Result> lstSYS_CloseDateBranchAuto = dataHandler1.BatchObjectData<SA40200_pgSYS_CloseDateBranchAuto_Result>();
-
+                var lstSYS_CloseDateBranchAuto = dataHandler1.ObjectData<SA40200_pgSYS_CloseDateBranchAuto_Result>();
 
                 #region Save Header SYS_CloseDateAuto
                 lstSYS_CloseDateAuto.Created.AddRange(lstSYS_CloseDateAuto.Updated);
@@ -194,7 +191,7 @@ namespace SA40200.Controllers
                         var iID = _sys.SA40200_GetAutoNumber().FirstOrDefault() ;
 
                         header = new SYS_CloseDateAuto();
-                        header.ID = iID.Value;
+                        header.ID = ID = iID.Value;
                         header.Time = Time;
                         header.Crtd_DateTime = DateTime.Now;
                         header.Crtd_Prog = _screenNbr;
@@ -204,36 +201,28 @@ namespace SA40200.Controllers
                     }
                 }
                 #endregion
+                
+                #region Detail
+                var lstSYS_CloseDateBranchAuto_DB = _sys.SYS_CloseDateBranchAuto.Where(p => p.ID == ID).ToList();
 
-                #region Save SYS_CloseDateBranchAuto
-                foreach (SA40200_pgSYS_CloseDateBranchAuto_Result deleted in lstSYS_CloseDateBranchAuto.Deleted)
+                foreach (var del in lstSYS_CloseDateBranchAuto_DB)
                 {
-                    var objDelete = _sys.SYS_CloseDateBranchAuto.FirstOrDefault(p => p.ID == ID && p.BranchID == deleted.BranchID);
-                    if (objDelete != null)
-                    {
-                        _sys.SYS_CloseDateBranchAuto.DeleteObject(objDelete);
-                    }
+                    if (lstSYS_CloseDateBranchAuto.Where(p => p.ID == ID && p.BranchID == del.BranchID).Count() == 0)
+                        _sys.SYS_CloseDateBranchAuto.DeleteObject(del);
                 }
 
-                lstSYS_CloseDateBranchAuto.Created.AddRange(lstSYS_CloseDateBranchAuto.Updated);
-
-                foreach (SA40200_pgSYS_CloseDateBranchAuto_Result curLang in lstSYS_CloseDateBranchAuto.Created)
+                foreach (var obj in lstSYS_CloseDateBranchAuto)
                 {
-                    if (curLang.BranchID.PassNull() == "") continue;
-
-                    var lang = _sys.SYS_CloseDateBranchAuto.FirstOrDefault(p => p.ID== ID && p.BranchID.ToLower() == curLang.BranchID.ToLower());
-
-                    if (lang != null)
+                    if (obj.BranchID.PassNull() == "") continue;
+                    var objBranch = _sys.SYS_CloseDateBranchAuto.FirstOrDefault(p => p.ID == ID && p.BranchID == obj.BranchID);
+                    if (objBranch == null)
                     {
+                        objBranch = new SYS_CloseDateBranchAuto();
+                        objBranch.ResetET();
+                        objBranch.ID = ID;
+                        objBranch.BranchID = obj.BranchID;
 
-                            throw new MessageException(MessageType.Message, "19");
-                    }
-                    else
-                    {
-                        lang = new SYS_CloseDateBranchAuto();
-                        lang.ID = ID;
-                        lang.BranchID = curLang.BranchID;
-                        _sys.SYS_CloseDateBranchAuto.AddObject(lang);
+                        _sys.SYS_CloseDateBranchAuto.AddObject(objBranch);
                     }
                 }
                 #endregion

@@ -97,6 +97,7 @@
         <ComplexType Name="SA40200_pgSYS_CloseDateBranchAuto_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="200" />
         </ComplexType>
         <ComplexType Name="SA40200_pdHeader_Result">
           <Property Type="Boolean" Name="Active" Nullable="false" />
@@ -160,6 +161,7 @@
               <ComplexTypeMapping TypeName="SA40200Model.SA40200_pgSYS_CloseDateBranchAuto_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -198,7 +200,7 @@
     <Diagrams>
       <Diagram Name="eBiz4DWebSysModel" ZoomLevel="95" >
         <EntityTypeShape EntityType="SA40200Model.SYS_CloseDateAuto" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SA40200Model.SYS_CloseDateBranchAuto" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SA40200Model.SYS_CloseDateBranchAuto" Width="2.75" PointX="2.75" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>
