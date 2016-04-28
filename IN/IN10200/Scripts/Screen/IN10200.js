@@ -28,7 +28,6 @@ var stoSetup_Load = function () {
     checkSetDefault();
 }
 var stoTrans_BeforeLoad = function () {
-    App.grdTrans.view.loadMask.disable();
 }
 var stoHandle_Load = function () {
     App.cboHandle.setValue('N');
@@ -41,6 +40,7 @@ var store_Load = function () {
     checkSetDefault();
 }
 var stoBatch_Load = function () {
+    HQ.isNew = false;
     var record = App.stoBatch.getById(App.cboBatNbr.getValue());
     if (record) {
         bindBatch(record);
@@ -56,8 +56,7 @@ var stoBatch_BeforeLoad = function (store, operation, eOpts) {
 var checkSelect = function (records, options, success) {
     HQ.numSelectTrans++;
     if (HQ.numSelectTrans == HQ.maxSelectTrans) {
-        App.grdTrans.view.loadMask.hide();
-        App.grdTrans.view.loadMask.setDisabled(false)
+        HQ.common.showBusy(false);
         getQtyAvail(options.row);
     }
 }
@@ -87,8 +86,7 @@ var checkSourceEditLot = function (records, options, success) {
 var checkSelectLot = function (records, options, success) {
     HQ.numSelectLot++;
     if (HQ.numSelectLot == HQ.maxSelectLot) {
-        App.grdLot.view.loadMask.hide();
-        App.grdLot.view.loadMask.setDisabled(false)
+        HQ.common.showBusy(false);
         getLotQtyAvail(options.row);
     }
 }
@@ -104,12 +102,13 @@ var checkSelectLot = function (records, options, success) {
 //////////////////////////////////////////////////////////////////
 
 var frmMain_BoxReady = function () {
+    HQ.util.checkAccessRight();
+    HQ.numDetail = 0;
+    HQ.maxDetail = 2;
     HQ.numSource = 0;
     HQ.maxSource = 8;
     HQ.numEditTrans = 0;
     HQ.maxEditTrans = 4;
-    HQ.numDetail = 0;
-    HQ.maxDetail = 2;
     HQ.numSelectTrans = 0;
     HQ.maxSelectTrans = 3;
     App.cboBatNbr.key = true;
@@ -218,10 +217,9 @@ var menuClick = function (command) {
             }
             break;
         case "save":
-            if (!App.grdTrans.view.loadMask.isHidden()) {
-                return;
+            if (HQ.isBusy == false) {
+                save();
             }
-            save();
             break;
         case "delete":
             if (HQ.focus == 'batch') {
@@ -793,7 +791,7 @@ var grdTrans_SelectionChange = function (item, selected) {
     if (selected.length > 0) {
         if (!Ext.isEmpty(selected[0].data.InvtID)) {
             HQ.numSelectTrans = 0;
-            App.grdTrans.view.loadMask.show();
+            HQ.common.showBusy(true, 'Process...');
             App.stoItemSite.load({
                 params: { siteID: App.cboSiteID.getValue(), invtID: selected[0].data.InvtID },
                 callback: checkSelect,
@@ -813,11 +811,12 @@ var grdTrans_SelectionChange = function (item, selected) {
             App.lblQtyAvail.setText('');
         }
     }
-}
+};
 var grdTrans_Edit = function (item, e) {
     HQ.focus = 'trans';
     var key = e.field;
     if (Object.keys(e.record.modified).length > 0) {
+        App.grdTrans.isChange = true;
         if (e.record.invt == undefined) {
             e.record.invt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
         }
@@ -837,9 +836,9 @@ var grdTrans_Edit = function (item, e) {
             }
 
             if (key == 'InvtID' || key == 'Qty') {
-                App.grdTrans.view.loadMask.show();
+                HQ.common.showBusy(true, 'Process...');
                 HQ.numEditTrans = 0;
-                HQ.maxEditTrans = 3;
+                HQ.maxEditTrans = 4;
                 App.stoUnit.load({
                     params: { invtID: e.record.data.InvtID },
                     callback: checkSourceEdit,
@@ -855,16 +854,14 @@ var grdTrans_Edit = function (item, e) {
                     callback: checkSourceEdit,
                     row: e
                 });
-                if (key == 'InvtID') {
-                    App.stoPrice.load({
-                        params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtDateEnt.getValue() }, callback: checkSourceEdit, row: e
-                    });
-                }
+                App.stoPrice.load({
+                    params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.txtDateEnt.getValue() }, callback: checkSourceEdit, row: e
+                });
 
             } else if (key == 'UnitDesc') {
-                App.grdTrans.view.loadMask.show();
+                HQ.common.showBusy(true, 'Process...');
                 HQ.numEditTrans = 0;
-                HQ.maxEditTrans = 2;
+                HQ.maxEditTrans = 3;
                 App.stoItemSite.load({
                     params: { siteID: App.cboSiteID.getValue(), invtID: e.record.data.InvtID },
                     callback: checkSourceEdit,
@@ -917,7 +914,7 @@ var grdLot_SelectionChange = function (item, selected) {
         if (!Ext.isEmpty(selected[0].data.InvtID)) {
             HQ.numSelectLot = 0;
             HQ.maxSelectLot = 1;
-            App.grdLot.view.loadMask.show();
+            HQ.common.showBusy(true, 'Process...');
             App.stoItemLot.load({
                 params: { siteID: selected[0].data.SiteID, invtID: selected[0].data.InvtID, branchID: App.txtBranchID.getValue(), lotSerNbr: selected[0].data.LotSerNbr, batNbr: App.cboBatNbr.getValue() },
                 callback: checkSelectLot,
@@ -936,7 +933,7 @@ var grdLot_Edit = function (item, e) {
         if (key == "Qty" || key == "UnitDesc") {
             checkExitEditLot(e);
         } else if (key == "LotSerNbr") {
-            App.grdLot.view.loadMask.show();
+            HQ.common.showBusy(true, 'Process...');
             HQ.numLot = 0;
             HQ.maxLot = 1;
             App.stoItemLot.load({
@@ -1025,14 +1022,16 @@ var save = function () {
         HQ.message.show(2015020803, '', '', true);
         return;
     }
+    var store1 = App.stoTrans;
+    var allRecords1 = store1.snapshot || store1.allData || store1.data;
 
-    if (App.stoTrans.data.items.length <= 1) {
+    if (allRecords1.items.length <= 1) {
         HQ.message.show(2015020804, [App.cboBatNbr.value], '', true);
         return;
     }
     var flat = false;
     App.stoLotTrans.clearFilter();
-    App.stoTrans.data.each(function (item) {
+    allRecords1.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {
             if (item.data.Qty == 0) {
                 HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
@@ -1357,8 +1356,9 @@ var showLot = function (record, loadCombo) {
 var calculate = function () {
     var totAmt = 0;
     var totQty = 0;
-
-    App.stoTrans.data.each(function (item) {
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
+    allRecords.each(function (item) {
         totAmt += item.data.TranAmt;
         totQty += item.data.Qty;
     });
@@ -1369,6 +1369,7 @@ var calculate = function () {
 }
 
 var defaultOnNew = function () {
+    HQ.isNew = true;
     var record = Ext.create('App.mdlBatch');
     record.data.BranchID = HQ.cpnyID;
     record.data.Status = 'H';
@@ -1383,8 +1384,9 @@ var defaultOnNew = function () {
 
 var lastLineRef = function () {
     var num = 0;
-
-    App.stoTrans.data.each(function (item) {
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
+    allRecords.each(function (item) {
         if (!Ext.isEmpty(item.data.LineRef) && parseInt(item.data.LineRef) > num) {
             num = parseInt(item.data.LineRef);
         }
@@ -1426,9 +1428,8 @@ var rdrTrans_QtyAmt = function (value) {
 }
 
 var setStatusForm = function () {
-
     var lock = true;
-    HQ.common.lockItem(App.frmMain, true);
+    var flag = true;
     if (!Ext.isEmpty(HQ.objBatch.data.BatNbr)) {
         if (HQ.objBatch.data.Status == 'H') {
             lock = false;
@@ -1447,7 +1448,42 @@ var setStatusForm = function () {
     App.txtRefNbr.setReadOnly(true);
     App.txtTotQty.setReadOnly(true);
     App.txtTotAmt.setReadOnly(true);
-}
+
+    if (!HQ.isInsert && HQ.isNew) {
+        lock = true;
+        flag = false;
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        lock = true;
+        flag = false;
+    }
+
+    HQ.common.lockItem(App.frmMain, lock);
+    App.grdTrans.isLock = lock;
+    if (flag == true && App.cboStatus.getValue() != 'H') {
+        App.cboHandle.setReadOnly(false);
+    }
+    //var lock = true;
+    //HQ.common.lockItem(App.frmMain, true);
+    //if (!Ext.isEmpty(HQ.objBatch.data.BatNbr)) {
+    //    if (HQ.objBatch.data.Status == 'H') {
+    //        lock = false;
+    //    }
+
+    //} else {
+    //    lock = !HQ.isInsert;
+    //}
+
+    //HQ.common.lockItem(App.frmMain, lock);
+    //App.grdTrans.isLock = lock;
+    //App.cboBatNbr.setReadOnly(false);
+    //App.cboHandle.setReadOnly(false);
+    //App.txtRvdBatNbr.setReadOnly(true);
+    //App.cboStatus.setReadOnly(true);
+    //App.txtRefNbr.setReadOnly(true);
+    //App.txtTotQty.setReadOnly(true);
+    //App.txtTotAmt.setReadOnly(true);
+};
 
 var checkExitEdit = function (row) {
     var key = row.field;
@@ -1459,27 +1495,14 @@ var checkExitEdit = function (row) {
 
         var invt = row.record.invt;
         var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);
-        var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [trans.InvtID, trans.SiteID]);
-
-        if (Ext.isEmpty(site)) {
-            site = Ext.create('App.mdlItemSite').data;
-            site.SiteID = trans.SiteID;
-            site.InvtID = trans.InvtID;
-        }
-
+        
         if (Ext.isEmpty(cnv)) {
             trans.UnitMultDiv = '';
             trans.UnitPrice = 0;
+            trans.TranAmt = 0;
             row.record.commit();
-            App.grdTrans.view.loadMask.hide();
-            App.grdTrans.view.loadMask.setDisabled(false)
+            HQ.common.showBusy(false);
             return;
-        }
-
-        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
-            trans.UnitPrice = Math.round(site.AvgCost, 0);
-        } else {
-            trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
         }
 
         trans.UnitDesc = invt.StkUnit;
@@ -1487,9 +1510,23 @@ var checkExitEdit = function (row) {
         trans.UnitMultDiv = cnv.MultDiv;
         trans.TranDesc = invt.Descr;
         trans.BarCode = invt.BarCode;
-        trans.ClassID = invt.ClassID;
-        trans.TranAmt = trans.Qty * trans.UnitPrice;
+        
 
+        var site = HQ.store.findInStore(App.stoItemSite, ['SiteID', 'InvtID'], [trans.SiteID, trans.InvtID]);
+
+        if (Ext.isEmpty(site)) {
+            site = Ext.create('App.mdlItemSite').data;
+            site.SiteID = trans.SiteID;
+            site.InvtID = trans.InvtID;
+        }
+        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+            trans.UnitPrice = Math.round(site.AvgCost, 0);
+        } else {
+            trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
+        }
+
+        trans.TranAmt = trans.Qty * trans.UnitPrice;
+        trans.ClassID = invt.ClassID;
         getQtyAvail(row.record);
 
     } else if (key == 'UnitDesc') {
@@ -1504,8 +1541,7 @@ var checkExitEdit = function (row) {
             trans.Qty = 0;
             trans.TranAmt = 0;
             row.record.commit();
-            App.grdTrans.view.loadMask.hide();
-            App.grdTrans.view.loadMask.setDisabled(false)
+            HQ.common.showBusy(false);
             return;
         }
 
@@ -1557,8 +1593,7 @@ var checkExitEdit = function (row) {
                     trans.Qty = 0;
                     row.record.commit();
                     HQ.message.show(35, '', '', true);
-                    App.grdTrans.view.loadMask.hide();
-                    App.grdTrans.view.loadMask.setDisabled(false)
+                    HQ.common.showBusy(false);
                     return;
                 }
             }
@@ -1584,8 +1619,7 @@ var checkExitEdit = function (row) {
 
     checkTransAdd();
 
-    App.grdTrans.view.loadMask.hide();
-    App.grdTrans.view.loadMask.setDisabled(false)
+    HQ.common.showBusy(false);
 
     handleTab(key);
    
@@ -1629,8 +1663,7 @@ var checkExitEditLot = function (row) {
             lot.UnitPrice = 0;
             lot.UnitDesc = '';
             record.commit();
-            App.grdLot.view.loadMask.hide();
-            App.grdLot.view.loadMask.setDisabled(false)
+            HQ.common.showBusy(false);
             return;
         }
 
@@ -1655,8 +1688,7 @@ var checkExitEditLot = function (row) {
         if (flat) {
             HQ.message.show(219, "", "", true);
             lot.LotSerNbr = "";
-            App.grdLot.view.loadMask.hide();
-            App.grdLot.view.loadMask.setDisabled(false)
+            HQ.common.showBusy(false);
             record.commit();
             return;
         }
@@ -1677,24 +1709,32 @@ var checkExitEditLot = function (row) {
         getLotQtyAvail(record);
     }
     record.commit();
-    App.grdLot.view.loadMask.hide();
-    App.grdLot.view.loadMask.setDisabled(false)
+    HQ.common.showBusy(false);
 }
 
 var checkTransAdd = function () {
     var flat = false;
-    App.stoTrans.data.each(function (item) {
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
+    allRecords.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {
             flat = true;
             return false;
         }
     });
-
-    App.cboSiteID.setReadOnly(flat);
-
     App.cboSlsperID.setReadOnly(App.cboStatus.getValue() != 'H');
-
     App.cboFromToSiteID.setReadOnly(App.cboStatus.getValue() != 'H');
+    App.cboSiteID.setReadOnly(flat);
+    App.cboFromToSiteID.setReadOnly(flat);
+
+    if (!HQ.isInsert && HQ.isNew) {
+        App.cboSlsperID.setReadOnly(true);
+        App.cboFromToSiteID.setReadOnly(true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        App.cboSlsperID.setReadOnly(true);
+        App.cboFromToSiteID.setReadOnly(true);
+    }
 }
 
 var getQtyAvail = function (row) {
@@ -1757,7 +1797,9 @@ var getLotQtyAvail = function (row) {
 var calculateInvtTotal = function (invtID, siteID, lineRef) {
     var qty = 0;
     var qtyOld = 0;
-    App.stoTrans.each(function (item) {
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
+    allRecords.each(function (item) {
         if (item.data.InvtID == invtID && item.data.SiteID == siteID && (lineRef == "" || (lineRef != "" && lineRef != item.data.LineRef))) {
             qty += item.data.UnitMultDiv == "M" ? item.data.Qty * item.data.CnvFact : item.data.Qty / item.data.CnvFact;
         }

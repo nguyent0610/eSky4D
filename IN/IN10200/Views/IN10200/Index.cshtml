@@ -41,7 +41,8 @@
 @(
     X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull()))
 )
-
+@X.GridFilters()<!--Khi cache cho grid-->
+@X.ProgressBarPager()<!--Khi cache cho grid -->   
 @(
     X.Store().ID("stoBatch")
     .AutoLoad(false)
@@ -147,7 +148,7 @@
     )
 )
 
-@(X.Store().ID("stoTrans")
+@*@(X.Store().ID("stoTrans")
     .AutoLoad(false)
     .Model(Util.GenerateModel(typeof(IN10200_pgIssueLoad_Result), "mdlTrans", ""))
     .Proxy(
@@ -168,7 +169,7 @@
         p.Load.Fn = "stoDetail_Load";
         p.BeforeLoad.Fn= "stoTrans_BeforeLoad";
     })
-)
+)*@
 
 @(
     X.Store().ID("stoOldTrans")

@@ -300,7 +300,7 @@
                     .HQLangCode("Status")
                     .HQProcedure("IN10200_pcStatus")
                     .HQColumnShow("Code,Descr")
-                    .DisplayField("Descr")
+                    .DisplayField("Descr").Tag("X")
                     .ValueField("Code")
                     .AllowBlank(false)
                     .BlankText(Util.GetLangPrefix("Input", "Status"))
@@ -324,7 +324,7 @@
                 X.FieldContainer()
                 .Layout(LayoutType.HBox)
                 .Items(
-                    HQ.TextBox().ID("txtRefNbr")
+                    HQ.TextBox().ID("txtRefNbr").Tag("X")
                     .Name("RefNbr")
                     .DataIndex("RefNbr")
                     .HQLangCode("PerPost/RcptNbr")
@@ -403,7 +403,7 @@
                     .Name("TotQty")
                     .DataIndex("TotQty")
                     .HQLangCode("TotQ")
-                    .DecimalPrecision(0)
+                    .DecimalPrecision(0).Tag("X")
                     .Width(220)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                     ,
@@ -412,7 +412,7 @@
                     .Name("TotAmt")
                     .DataIndex("TotAmt")
                     .HQLangCode("TotAmt")
-                    .DecimalPrecision(0)
+                    .DecimalPrecision(0).Tag("X")
                     .Width(250)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
                     ,
@@ -485,7 +485,7 @@
                     
                     HQ.TextBox().ID("txtRvdBatNbr")
                     .Name("RvdBatNbr")
-                    .DataIndex("RvdBatNbr")
+                    .DataIndex("RvdBatNbr").Tag("X")
                     .HQLangCode("CancelledBatNbr")
                     .Width(250)
                     .Listeners(p => p.Focus.Handler = "HQ.focus='batch';")
@@ -516,10 +516,26 @@
             .ColumnLines(true)
             .BorderSpec("1 0 0 0")
             .Region(Region.Center)
-            .StoreID("stoTrans")
+            .Store(
+                X.Store()
+                .ID("stoTrans")
+                .PageSize(50).AutoLoad(false)
+                .Model(Util.GenerateModel(typeof(IN10200_pgIssueLoad_Result), "mdlTrans", ""))
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("BatNbr", "App.cboBatNbr.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("BranchID", "App.txtBranchID.getValue()", ParameterMode.Raw));
+                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetTrans")))
+                .Listeners(l =>    
+                {
+                    l.Load.Fn = "stoDetail_Load";
+                    l.BeforeLoad.Fn = "stoTrans_BeforeLoad";
+                })
+            )
             .ColumnModel(
-                X.RowNumbererColumn()
-                ,
+                X.RowNumbererColumn().Width(30).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
+
 
                 X.Column()
                 .DataIndex("InvtID")
@@ -628,6 +644,19 @@
             })
             .SelectionModel(X.RowSelectionModel().ID("smlTrans").Mode(SelectionMode.Single))
             .View(X.GridView().TrackOver(false))
+            .BottomBar(
+                X.PagingToolbar()
+                .Items(
+                    X.Label("Page size:"),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                )
+                .Plugins(X.ProgressBarPager())
+            )
             .Plugins(X.CellEditing().ClicksToEdit(1))
         )
     )
