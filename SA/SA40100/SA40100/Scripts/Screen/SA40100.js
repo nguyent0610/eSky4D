@@ -172,13 +172,13 @@ var btnAddAll_click = function (btn, e, eOpts) {
                             HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
                             record = App.stoSYS_CloseDateHistDetail.getAt(App.grdSYS_CloseDateHistDetail.store.getCount() - 1);
                             record.set('BranchID', node.data.RecID);
-                            record.set('WrkDateChk', oldDate.WrkDateChk);
-                            record.set('WrkAdjDateBefore', oldDate.WrkAdjDate);
-                            record.set('WrkOpenDateBefore', oldDate.WrkOpenDate);
+                            record.set('WrkDateChk', oldDate.data.WrkDateChk);
+                            record.set('WrkAdjDateBefore', oldDate.data.WrkAdjDate);
+                            record.set('WrkOpenDateBefore', oldDate.data.WrkOpenDate);
                             record.set('WrkAdjDateAfter', new Date(App.lblDate.getValue()));
                             record.set('WrkOpenDateAfter', new Date(App.lblDate.getValue()));
-                            record.set('WrkLowerDays', oldDate.WrkLowerDays);
-                            record.set('WrkUpperDays', oldDate.WrkUpperDays);
+                            record.set('WrkLowerDays', oldDate.data.WrkLowerDays);
+                            record.set('WrkUpperDays', oldDate.data.WrkUpperDays);
                         }
                     }
                 }
@@ -331,6 +331,7 @@ var deleteSelectedCompanies = function (item) {
 
 var deleteAllCompanies = function (item) {
     if (item == "yes") {
+        HQ.isChange = false;
         App.grdSYS_CloseDateHistDetail.store.removeAll();
     }
 };
