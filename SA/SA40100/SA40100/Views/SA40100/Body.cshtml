@@ -161,12 +161,11 @@
                         )
                         , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 0 0")
                         .Items(
-                            HQ.DateField().ID("lblDate").MarginSpec("5 0 0 0").HQLangCode("DATE").Width(300)
-                            .Format("MM/dd/yyyy").Value(DateTime.Now.ToString("MM/dd/yyyy"))
+                            HQ.DateField().ID("lblDate").MarginSpec("5 0 0 0").HQLangCode("DATE").Width(300).Value(DateTime.Now)
                             , HQ.Button().ID("btnProcess").HQLangCode("PROCESS").MarginSpec("5 0 0 105").Width(195)
                             .Listeners(p =>
                                 {
-                                    //p.Click.Fn = "btnProcess_Click";
+                                    p.Click.Fn = "btnProcess_Click";
                                 })
                         )
                     )//
@@ -247,14 +246,14 @@
                     , X.Column().Text(Util.GetLang("Status")).DataIndex("Status").Width(150).Renderer("renderStatus")
                     , X.CheckColumn().ID("WrkDateChk").Text(Util.GetLang("WrkDateChk")).DataIndex("WrkDateChk").Width(150).Editable(true)
 
-                    , X.DateColumn().Text(Util.GetLang("WrkAdjDateBefore")).DataIndex("WrkAdjDateBefore")
-                    .Width(150).ID("txtWrkAdjDateBefore").Editor(X.DateField().Format("MM/dd/yyyy"))
-                    , X.DateColumn().Text(Util.GetLang("WrkAdjDateAfter")).DataIndex("WrkAdjDateAfter")
-                    .Width(150).ID("txtWrkAdjDateAfter").Editor(X.DateField().Format("MM/dd/yyyy"))
-                    , X.DateColumn().Text(Util.GetLang("WrkOpenDateBefore")).DataIndex("WrkOpenDateBefore")
-                    .Width(150).ID("txtWrkOpenDateBefore").Editor(X.DateField().Format("MM/dd/yyyy"))
-                    , X.DateColumn().Text(Util.GetLang("WrkOpenDateAfter")).DataIndex("WrkOpenDateAfter")
-                    .Width(150).ID("txtWrkOpenDateAfter").Editor(X.DateField().Format("MM/dd/yyyy"))
+                    , HQ.DateColumn().Text(Util.GetLang("WrkAdjDateBefore")).DataIndex("WrkAdjDateBefore")
+                    .Width(150).ID("txtWrkAdjDateBefore").Editor(HQ.DateField())
+                    , HQ.DateColumn().Text(Util.GetLang("WrkAdjDateAfter")).DataIndex("WrkAdjDateAfter")
+                    .Width(150).ID("txtWrkAdjDateAfter").Editor(HQ.DateField())
+                    , HQ.DateColumn().Text(Util.GetLang("WrkOpenDateBefore")).DataIndex("WrkOpenDateBefore")
+                    .Width(150).ID("txtWrkOpenDateBefore").Editor(HQ.DateField())
+                    , HQ.DateColumn().Text(Util.GetLang("WrkOpenDateAfter")).DataIndex("WrkOpenDateAfter")
+                    .Width(150).ID("txtWrkOpenDateAfter").Editor(HQ.DateField())
 
                     , X.NumberColumn().ID("WrkLowerDays").Text(Util.GetLang("WrkLowerDays")).DataIndex("WrkLowerDays").Format("0,000").Width(150).Align(Alignment.Right)
                     .Editor(X.NumberField().DecimalPrecision(0).MinValue(0))

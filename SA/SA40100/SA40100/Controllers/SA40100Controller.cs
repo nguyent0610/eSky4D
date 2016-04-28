@@ -41,7 +41,6 @@ namespace SA40100.Controllers
         {
             return this.Store(_sys.SA40100_pfSYS_CloseDateHistHeader().ToList());
         }
-        
         public ActionResult GetDayCloseDateSetUp()
         {
             return this.Store(_sys.SA40100_ppGetDayCloseDateSetUp().ToList());
@@ -51,11 +50,11 @@ namespace SA40100.Controllers
         public ActionResult SA40100GetTreeBranch(string panelID)
         {
             var a=new ItemsCollection<Plugin>();
-            a.Add(Html.X().TreeViewDragDrop().DDGroup("BranchID").EnableDrop(false));
+            a.Add(Html.X().TreeViewDragDrop().ID("treeBranchDrop").DDGroup("BranchID").EnableDrop(false));
 
             TreeView v = new TreeView();
             v.Plugins.Add(a);
-            v.Copy= true;
+            v.Copy = true;
             TreePanel tree = new TreePanel()
             {
                 ViewConfig = v
@@ -115,7 +114,8 @@ namespace SA40100.Controllers
             
             //tree.Listeners.ItemClick.Fn = "DiscDefintion.nodeClick";
             tree.Listeners.CheckChange.Fn = "treePanelBranch_checkChange";
-            
+            tree.Listeners.BeforeItemExpand.Handler = "App.treePanelBranch.el.mask('Loading...', 'x-mask-loading');Ext.suspendLayouts();";
+            tree.Listeners.AfterItemExpand.Handler = "App.treePanelBranch.el.unmask();Ext.resumeLayouts(true);";
             tree.AddTo(treeBranch);
 
             return this.Direct();
@@ -142,8 +142,8 @@ namespace SA40100.Controllers
                 if (objHeader == null)
                 {
                     string WrkDate_temp = data["lblDate"];
-                    DateTime dtOpen;
-                    DateTime WrkDate = DateTime.Parse(WrkDate_temp).ToDateShort();
+                    DateTime dtOpen= DateTime.Now;
+                    DateTime WrkDate = DateTime.Parse(WrkDate_temp);//.ToDateShort();
 
                     string _dateServer = DateTime.Now.ToString("yyyyMMdd");
                     var ID = _sys.SA40100_pcCreateHistID(_dateServer).FirstOrDefault();
@@ -151,7 +151,7 @@ namespace SA40100.Controllers
                     objHeader = new SYS_CloseDateHistHeader();
                     objHeader.HistID = ID;
                     objHeader.Task = Task;
-                    objHeader.WrkDate = WrkDate;
+                    objHeader.WrkDate = WrkDate.ToDateShort();
                     objHeader.Crtd_DateTime = DateTime.Now;
                     objHeader.Crtd_Prog = _screenNbr;
                     objHeader.Crtd_User = _userName;
@@ -172,7 +172,7 @@ namespace SA40100.Controllers
                         {
                             strBranch += obj.BranchID + ",";
                         }
-                        var lstCloseDateChecking = _app.SA40100_CloseDateChecking(dtOpen, WrkDate, strBranch, "").ToList();
+                        var lstCloseDateChecking = _sys.SA40100_CloseDateChecking(dtOpen.ToDateShort(), WrkDate.ToDateShort(), strBranch, "").ToList();
                         foreach (var grdSetup in lstSYS_CloseDateHistDetail.Updated)
                         {
 
@@ -203,19 +203,19 @@ namespace SA40100.Controllers
                                 {
                                     if (objitem.BranchID == grdSetup.BranchID)
                                     {
-                                        content += objitem.BranchID + "  " + objitem.Bat + "  " + objitem.Module + " " + objitem.Screen + "\\r";
+                                        content += objitem.BranchID + "  " + objitem.Bat + "  " + objitem.Module + " - " + objitem.Screen + "<br/>";
                                     }
                                 }
                                 if (content == "")
                                 {
                                     var objSetup = _sys.SYS_CloseDateSetUp.Where(p => p.BranchID == grdSetup.BranchID).FirstOrDefault();
-                                    objSetup.WrkOpenDate = WrkDate;
-                                    objSetup.WrkAdjDate = WrkDate;
+                                    objSetup.WrkOpenDate = WrkDate.ToDateShort();
+                                    objSetup.WrkAdjDate = WrkDate.ToDateShort();
                                     objSetup.LUpd_DateTime = DateTime.Now;
                                     objSetup.LUpd_Prog = _screenNbr;
                                     objSetup.LUpd_User = _userName;
-                                    obj.WrkOpenDateAfter = WrkDate;
-                                    obj.WrkAdjDateAfter = WrkDate;
+                                    obj.WrkOpenDateAfter = WrkDate.ToDateShort();
+                                    obj.WrkAdjDateAfter = WrkDate.ToDateShort();
                                     obj.Status = "C";
                                 }
                                 else obj.ContentHist = content;
@@ -238,7 +238,7 @@ namespace SA40100.Controllers
                         {
                             strBranch += obj.BranchID + ",";
                         }
-                        var lstCloseDateChecking = _app.SA40100_CloseDateChecking(dtOpen, WrkDate, strBranch, "").ToList();
+                        var lstCloseDateChecking = _sys.SA40100_CloseDateChecking(dtOpen.ToDateShort(), WrkDate.ToDateShort(), strBranch, "").ToList();
                         foreach (SA40100_pgSYS_CloseDateHistDetail_Result curGrd in lstSYS_CloseDateHistDetail.Created)
                         {
                             if (curGrd.BranchID.PassNull() == "") continue;
@@ -251,10 +251,10 @@ namespace SA40100.Controllers
 
                                 obj.HistID = ID;
                                 obj.BranchID = curGrd.BranchID;
-                                obj.WrkAdjDateBefore = curGrd.WrkAdjDateBefore;
-                                obj.WrkAdjDateAfter = curGrd.WrkAdjDateAfter;
-                                obj.WrkOpenDateBefore = curGrd.WrkOpenDateBefore;
-                                obj.WrkOpenDateAfter = curGrd.WrkOpenDateAfter;
+                                obj.WrkAdjDateBefore = curGrd.WrkAdjDateBefore.Short();
+                                obj.WrkAdjDateAfter = curGrd.WrkAdjDateAfter.Short();
+                                obj.WrkOpenDateBefore = curGrd.WrkOpenDateBefore.Short();
+                                obj.WrkOpenDateAfter = curGrd.WrkOpenDateAfter.Short();
                                 obj.WrkDateChk = curGrd.WrkDateChk;
                                 obj.WrkLowerDays = curGrd.WrkLowerDays;
                                 obj.WrkUpperDays = curGrd.WrkUpperDays;
@@ -266,10 +266,9 @@ namespace SA40100.Controllers
                                 obj.LUpd_DateTime = DateTime.Now;
                                 obj.LUpd_Prog = _screenNbr;
                                 obj.LUpd_User = _userName;
-                                string content = "";
                                 var objSetup = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == curGrd.BranchID);
-                                objSetup.WrkAdjDate = WrkDate;
-                                obj.WrkAdjDateAfter = WrkDate;
+                                objSetup.WrkAdjDate = WrkDate.ToDateShort();
+                                obj.WrkAdjDateAfter = WrkDate.ToDateShort();
                                 _sys.SYS_CloseDateHistDetail.AddObject(obj);
                             }
                         }

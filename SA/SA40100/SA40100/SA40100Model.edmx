@@ -103,14 +103,14 @@
           <Parameter Name="Date" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="SYS_CloseDateSetUp" EntityType="SA40100Model.SYS_CloseDateSetUp" />
+          <FunctionImport Name="SA40100_ppGetDayCloseDateSetUp" ReturnType="Collection(SA40100Model.SA40100_ppGetDayCloseDateSetUp_Result)" />
+          <FunctionImport Name="SA40100_pfSYS_CloseDateHistHeader" ReturnType="Collection(SA40100Model.SA40100_pfSYS_CloseDateHistHeader_Result)" />
           <FunctionImport Name="SA40100_CloseDateChecking" ReturnType="Collection(SA40100Model.SA40100_CloseDateChecking_Result)">
             <Parameter Name="OpenDate" Mode="In" Type="DateTime" />
             <Parameter Name="CloseToDate" Mode="In" Type="DateTime" />
             <Parameter Name="ListBranch" Mode="In" Type="String" />
             <Parameter Name="LoadBlank" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="SA40100_ppGetDayCloseDateSetUp" ReturnType="Collection(SA40100Model.SA40100_ppGetDayCloseDateSetUp_Result)" />
-          <FunctionImport Name="SA40100_pfSYS_CloseDateHistHeader" ReturnType="Collection(SA40100Model.SA40100_pfSYS_CloseDateHistHeader_Result)" />
         </EntityContainer>
         <EntityType Name="SYS_CloseDateHistDetail">
           <Key>
@@ -192,12 +192,6 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="SA40100_CloseDateChecking_Result">
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Module" Nullable="true" MaxLength="250" />
-          <Property Type="String" Name="Screen" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="Bat" Nullable="false" MaxLength="10" />
-        </ComplexType>
         <ComplexType Name="SA40100_ppGetDayCloseDateSetUp_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
           <Property Type="Boolean" Name="WrkDateChk" Nullable="false" />
@@ -211,6 +205,12 @@
           <Property Type="String" Name="Task" Nullable="false" MaxLength="10" />
           <Property Type="DateTime" Name="WrkDate" Nullable="false" Precision="23" />
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="SA40100_CloseDateChecking_Result">
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Module" Nullable="false" MaxLength="18" />
+          <Property Type="String" Name="Screen" Nullable="false" MaxLength="47" />
+          <Property Type="String" Name="Bat" Nullable="false" MaxLength="15" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -313,16 +313,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SA40100_CloseDateChecking" FunctionName="eBiz4DWebSysModel.Store.SA40100_CloseDateChecking" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SA40100Model.SA40100_CloseDateChecking_Result">
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="Module" ColumnName="Module" />
-                <ScalarProperty Name="Screen" ColumnName="Screen" />
-                <ScalarProperty Name="Bat" ColumnName="Bat" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SA40100_ppGetDayCloseDateSetUp" FunctionName="eBiz4DWebSysModel.Store.SA40100_ppGetDayCloseDateSetUp">
             <ResultMapping>
               <ComplexTypeMapping TypeName="SA40100Model.SA40100_ppGetDayCloseDateSetUp_Result">
@@ -342,6 +332,16 @@
                 <ScalarProperty Name="Task" ColumnName="Task" />
                 <ScalarProperty Name="WrkDate" ColumnName="WrkDate" />
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SA40100_CloseDateChecking" FunctionName="eBiz4DWebSysModel.Store.SA40100_CloseDateChecking">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SA40100Model.SA40100_CloseDateChecking_Result">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="Screen" ColumnName="Screen" />
+                <ScalarProperty Name="Bat" ColumnName="Bat" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

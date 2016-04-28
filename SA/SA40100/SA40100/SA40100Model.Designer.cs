@@ -213,6 +213,22 @@ namespace SA40100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectResult<SA40100_ppGetDayCloseDateSetUp_Result> SA40100_ppGetDayCloseDateSetUp()
+        {
+            return base.ExecuteFunction<SA40100_ppGetDayCloseDateSetUp_Result>("SA40100_ppGetDayCloseDateSetUp");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectResult<SA40100_pfSYS_CloseDateHistHeader_Result> SA40100_pfSYS_CloseDateHistHeader()
+        {
+            return base.ExecuteFunction<SA40100_pfSYS_CloseDateHistHeader_Result>("SA40100_pfSYS_CloseDateHistHeader");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         /// <param name="openDate">No Metadata Documentation available.</param>
         /// <param name="closeToDate">No Metadata Documentation available.</param>
         /// <param name="listBranch">No Metadata Documentation available.</param>
@@ -260,22 +276,6 @@ namespace SA40100
             }
     
             return base.ExecuteFunction<SA40100_CloseDateChecking_Result>("SA40100_CloseDateChecking", openDateParameter, closeToDateParameter, listBranchParameter, loadBlankParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectResult<SA40100_ppGetDayCloseDateSetUp_Result> SA40100_ppGetDayCloseDateSetUp()
-        {
-            return base.ExecuteFunction<SA40100_ppGetDayCloseDateSetUp_Result>("SA40100_ppGetDayCloseDateSetUp");
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectResult<SA40100_pfSYS_CloseDateHistHeader_Result> SA40100_pfSYS_CloseDateHistHeader()
-        {
-            return base.ExecuteFunction<SA40100_pfSYS_CloseDateHistHeader_Result>("SA40100_pfSYS_CloseDateHistHeader");
         }
 
         #endregion
@@ -1464,11 +1464,15 @@ namespace SA40100
         /// Create a new SA40100_CloseDateChecking_Result object.
         /// </summary>
         /// <param name="branchID">Initial value of the BranchID property.</param>
+        /// <param name="module">Initial value of the Module property.</param>
+        /// <param name="screen">Initial value of the Screen property.</param>
         /// <param name="bat">Initial value of the Bat property.</param>
-        public static SA40100_CloseDateChecking_Result CreateSA40100_CloseDateChecking_Result(global::System.String branchID, global::System.String bat)
+        public static SA40100_CloseDateChecking_Result CreateSA40100_CloseDateChecking_Result(global::System.String branchID, global::System.String module, global::System.String screen, global::System.String bat)
         {
             SA40100_CloseDateChecking_Result sA40100_CloseDateChecking_Result = new SA40100_CloseDateChecking_Result();
             sA40100_CloseDateChecking_Result.BranchID = branchID;
+            sA40100_CloseDateChecking_Result.Module = module;
+            sA40100_CloseDateChecking_Result.Screen = screen;
             sA40100_CloseDateChecking_Result.Bat = bat;
             return sA40100_CloseDateChecking_Result;
         }
@@ -1504,7 +1508,7 @@ namespace SA40100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Module
         {
@@ -1516,7 +1520,7 @@ namespace SA40100
             {
                 OnModuleChanging(value);
                 ReportPropertyChanging("Module");
-                _Module = StructuralObject.SetValidValue(value, true);
+                _Module = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Module");
                 OnModuleChanged();
             }
@@ -1528,7 +1532,7 @@ namespace SA40100
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String Screen
         {
@@ -1540,7 +1544,7 @@ namespace SA40100
             {
                 OnScreenChanging(value);
                 ReportPropertyChanging("Screen");
-                _Screen = StructuralObject.SetValidValue(value, true);
+                _Screen = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("Screen");
                 OnScreenChanged();
             }

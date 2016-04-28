@@ -50,7 +50,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.store.getAllData(App.stoSYS_CloseDateHistDetail).length == 2) {
+                if(App.stoSYS_CloseDateHistDetail.getCount() == 0){//if (HQ.store.getAllData(App.stoSYS_CloseDateHistDetail).length == 2) {
                     HQ.message.show(20405);
                 }
                 else {
@@ -112,27 +112,39 @@ var cboHistID_Change = function (sender, e) {
 
 };
 var btnProcess_Click = function (sender, e) {
-    if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-        if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoSYS_CloseDateHistDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
-            save();
-        }
-    }
+    menuClick('save');
+    //if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+    //    if (HQ.form.checkRequirePass(App.frmMain) && HQ.store.checkRequirePass(App.stoSYS_CloseDateHistDetail, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+    //        save();
+    //    }
+    //}
 };
+
+/////////////////// TREE /////////////////////
 
 var beforenodedrop = function (node, data, overModel, dropPosition, dropFn) {
     if (Ext.isArray(data.records)) {
         var records = data.records;
-
         data.records = [];
-        HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
+        //HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
+        App.stoSYS_CloseDateHistDetail.suspendEvents();
         addNode(records[0]);
+        App.stoSYS_CloseDateHistDetail.resumeEvents();
+        App.grdSYS_CloseDateHistDetail.view.refresh();
+        App.stoSYS_CloseDateHistDetail.loadPage(1);
     }
 };
 
 var treePanelBranch_checkChange = function (node, checked, eOpts) {
-    node.childNodes.forEach(function (childNode) {
-        childNode.set("checked", checked);
-    });
+    //node.childNodes.forEach(function (childNode) {
+    //    childNode.set("checked", checked);
+    //});
+    if (node.hasChildNodes()) {
+        node.eachChild(function (childNode) {
+            childNode.set('checked', checked);
+            treePanelBranch_checkChange(childNode, checked);
+        });
+    }
 };
 
 var btnExpand_click = function (btn, e, eOpts) {
@@ -144,31 +156,36 @@ var btnCollapse_click = function (btn, e, eOpts) {
 };
 
 var btnAddAll_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
-        var allNodes = getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
+    if (HQ.isInsert) {
+        //var allNodes = getDeepAllLeafNodes(App.treePanelBranch.getRootNode(), true);
+        var allNodes = getLeafNodes(App.treePanelBranch.getRootNode());
         if (allNodes && allNodes.length > 0) {
+            App.stoSYS_CloseDateHistDetail.suspendEvents();
             allNodes.forEach(function (node) {
-                HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
                 if (node.data.Type == "Company") {
-                    var record = HQ.store.findInStore(App.grdSYS_CloseDateHistDetail.store,
+                    var record = HQ.store.findRecord(App.grdSYS_CloseDateHistDetail.store,
                         ['BranchID'],
                         [node.data.RecID]);
-                    var oldDate = HQ.store.findInStore(App.stoGetDayCloseDateSetUp, ['BranchID'], [node.data.RecID]);
-
                     if (!record) {
-                        record = App.stoSYS_CloseDateHistDetail.getAt(App.grdSYS_CloseDateHistDetail.store.getCount() - 1);
-                        record.set('BranchID', node.data.RecID);
-                        record.set('WrkDateChk', oldDate.WrkDateChk);
-                        record.set('WrkAdjDateBefore', oldDate.WrkAdjDate);
-                        record.set('WrkOpenDateBefore', oldDate.WrkOpenDate);
-                        record.set('WrkAdjDateAfter', new Date(App.lblDate.getValue()));
-                        record.set('WrkOpenDateAfter', new Date(App.lblDate.getValue()));
-                        record.set('WrkLowerDays', oldDate.WrkLowerDays);
-                        record.set('WrkUpperDays', oldDate.WrkUpperDays);
-
+                        var oldDate = HQ.store.findRecord(App.stoGetDayCloseDateSetUp, ['BranchID'], [node.data.RecID]);
+                        if (oldDate != null) {
+                            HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
+                            record = App.stoSYS_CloseDateHistDetail.getAt(App.grdSYS_CloseDateHistDetail.store.getCount() - 1);
+                            record.set('BranchID', node.data.RecID);
+                            record.set('WrkDateChk', oldDate.WrkDateChk);
+                            record.set('WrkAdjDateBefore', oldDate.WrkAdjDate);
+                            record.set('WrkOpenDateBefore', oldDate.WrkOpenDate);
+                            record.set('WrkAdjDateAfter', new Date(App.lblDate.getValue()));
+                            record.set('WrkOpenDateAfter', new Date(App.lblDate.getValue()));
+                            record.set('WrkLowerDays', oldDate.WrkLowerDays);
+                            record.set('WrkUpperDays', oldDate.WrkUpperDays);
+                        }
                     }
                 }
             });
+            App.stoSYS_CloseDateHistDetail.resumeEvents();
+            App.grdSYS_CloseDateHistDetail.view.refresh();
+            App.stoSYS_CloseDateHistDetail.loadPage(1);
             App.treePanelBranch.clearChecked();
         }
 
@@ -179,63 +196,67 @@ var btnAddAll_click = function (btn, e, eOpts) {
 };
 
 var addNode = function (node) {
-    if (node.data.Type == "Company") {
-        var record = HQ.store.findInStore(App.grdSYS_CloseDateHistDetail.store,
-            ['BranchID'],
-            [node.data.RecID]);
-        //Lay date dung xu ly rieng
-        var oldDate = HQ.store.findInStore(App.stoGetDayCloseDateSetUp, ['BranchID'], [node.data.RecID]);
-        if (!record) {
-
-            HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
-
-            record = App.stoSYS_CloseDateHistDetail.getAt(App.grdSYS_CloseDateHistDetail.store.getCount() - 1);
-            record.set('BranchID', node.data.RecID);
-            record.set('WrkDateChk', oldDate.WrkDateChk);
-            record.set('WrkAdjDateBefore', oldDate.WrkAdjDate);
-            record.set('WrkOpenDateBefore', oldDate.WrkOpenDate);
-            record.set('WrkAdjDateAfter', new Date(App.lblDate.getValue()));
-            record.set('WrkOpenDateAfter', new Date(App.lblDate.getValue()));
-            record.set('WrkLowerDays', oldDate.WrkLowerDays);
-            record.set('WrkUpperDays', oldDate.WrkUpperDays);
+    if (HQ.isInsert) {
+        if (node.data.Type == "Company") {
+            var record = HQ.store.findRecord(App.grdSYS_CloseDateHistDetail.store,
+                ['BranchID'],
+                [node.data.RecID]);
+            if (!record) {
+                var oldDate = HQ.store.findRecord(App.stoGetDayCloseDateSetUp, ['BranchID'], [node.data.RecID]);
+                if (oldDate != null) {
+                    HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
+                    record = App.stoSYS_CloseDateHistDetail.getAt(App.grdSYS_CloseDateHistDetail.store.getCount() - 1);
+                    record.set('BranchID', node.data.RecID);
+                    record.set('WrkDateChk', oldDate.data.WrkDateChk);
+                    record.set('WrkAdjDateBefore', oldDate.data.WrkAdjDate);
+                    record.set('WrkOpenDateBefore', oldDate.data.WrkOpenDate);
+                    record.set('WrkAdjDateAfter', new Date(App.lblDate.getValue()));
+                    record.set('WrkOpenDateAfter', new Date(App.lblDate.getValue()));
+                    record.set('WrkLowerDays', oldDate.data.WrkLowerDays);
+                    record.set('WrkUpperDays', oldDate.data.WrkUpperDays);
+                }
+            }
         }
-
-    }
-    else if (node.childNodes) {
-        node.childNodes.forEach(function (itm) {
-            addNode(itm);
-        });
+        else if (node.childNodes) {
+            node.childNodes.forEach(function (itm) {
+                addNode(itm);
+            });
+        }
     }
 };
 
 var btnAdd_click = function (btn, e, eOpts) {
-    if (HQ.isUpdate) {
+    if (HQ.isInsert) {
         var allNodes = App.treePanelBranch.getCheckedNodes();
         if (allNodes && allNodes.length > 0) {
+            App.stoSYS_CloseDateHistDetail.suspendEvents();
             allNodes.forEach(function (node) {
-                HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
                 if (node.attributes.Type == "Company") {
-                    var record = HQ.store.findInStore(App.grdSYS_CloseDateHistDetail.store,
+                    var record = HQ.store.findRecord(App.grdSYS_CloseDateHistDetail.store,
                         ['BranchID'],
                         [node.attributes.RecID]);
-                    var oldDate = HQ.store.findInStore(App.stoGetDayCloseDateSetUp, ['BranchID'], [node.attributes.RecID]);
-
                     if (!record) {
-                        record = App.stoSYS_CloseDateHistDetail.getAt(App.grdSYS_CloseDateHistDetail.store.getCount() - 1);
-                        record.set('BranchID', node.attributes.RecID);
-                        record.set('WrkDateChk', oldDate.WrkDateChk);
-                        record.set('WrkAdjDateBefore', oldDate.WrkAdjDate);
-                        record.set('WrkOpenDateBefore', oldDate.WrkOpenDate);
-                        record.set('WrkAdjDateAfter', new Date(App.lblDate.getValue()));
-                        record.set('WrkOpenDateAfter', new Date(App.lblDate.getValue()));
-                        record.set('WrkLowerDays', oldDate.WrkLowerDays);
-                        record.set('WrkUpperDays', oldDate.WrkUpperDays);
+                        var oldDate = HQ.store.findRecord(App.stoGetDayCloseDateSetUp, ['BranchID'], [node.attributes.RecID]);
+                        if (oldDate != null) {
+                            HQ.store.insertBlank(App.stoSYS_CloseDateHistDetail, keys);
+                            record = App.stoSYS_CloseDateHistDetail.getAt(App.grdSYS_CloseDateHistDetail.store.getCount() - 1);
+                            record.set('BranchID', node.attributes.RecID);
+                            record.set('WrkDateChk', oldDate.data.WrkDateChk);
+                            record.set('WrkAdjDateBefore', oldDate.data.WrkAdjDate);
+                            record.set('WrkOpenDateBefore', oldDate.data.WrkOpenDate);
+                            record.set('WrkAdjDateAfter', new Date(App.lblDate.getValue()));
+                            record.set('WrkOpenDateAfter', new Date(App.lblDate.getValue()));
+                            record.set('WrkLowerDays', oldDate.data.WrkLowerDays);
+                            record.set('WrkUpperDays', oldDate.data.WrkUpperDays);
+                        }
                     }
                 }
             });
+            App.stoSYS_CloseDateHistDetail.resumeEvents();
+            App.grdSYS_CloseDateHistDetail.view.refresh();
+            App.stoSYS_CloseDateHistDetail.loadPage(1);
             App.treePanelBranch.clearChecked();
         }
-
     }
     else {
         HQ.message.show(4, '', '');
@@ -285,7 +306,23 @@ var getDeepAllLeafNodes = function (node, onlyLeaf) {
     }
     return allNodes;
 };
-
+var getLeafNodes = function (node) {
+    var childNodes = [];
+    node.eachChild(function (child) {
+        if (child.isLeaf()) {
+            childNodes.push(child);
+        }
+        else {
+            var children = getLeafNodes(child);
+            if (children.length) {
+                children.forEach(function (nill) {
+                    childNodes.push(nill);
+                });
+            }
+        }
+    });
+    return childNodes;
+};
 var deleteSelectedCompanies = function (item) {
     if (item == "yes") {
         App.grdSYS_CloseDateHistDetail.deleteSelected();
@@ -319,6 +356,7 @@ var renderStatus = function (value, metaData, rec, rowIndex, colIndex, store) {
 };
 //load khi giao dien da load xong, gan  HQ.isFirstLoad=true de biet la load lan dau
 var firstLoad = function () {
+    HQ.util.checkAccessRight();
     HQ.isFirstLoad = true;
     App.cboBranchID.store.load(function () {
         App.stoSYS_CloseDateHistDetail.reload();
@@ -436,3 +474,15 @@ var getRowClass = function (record, index) {
     else return "row-none";
 };
 /////////////////////////////////////////////////////////////////////////
+var dates = {
+    convert: function (d) {
+        return (
+            d.constructor === Date ? d :
+            d.constructor === Array ? new Date(d[0], d[1], d[2]) :
+            d.constructor === Number ? new Date(d) :
+            d.constructor === String ? new Date(d) :
+            typeof d === "object" ? new Date(d.year, d.month, d.date) :
+            NaN
+        );
+    }
+};
