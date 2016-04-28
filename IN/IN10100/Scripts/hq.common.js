@@ -183,27 +183,9 @@ var HQ = {
         },
         findInStore: function (store, fields, values) {
             var data;
-            if (store.allData) {
-                store.allData.each(function (item) {
-                    var intT = 0;
-                    for (var i = 0; i < fields.length; i++) {
-
-                        var tmp1 = item.get(fields[i]);
-                        var tmp2 = values[i];
-                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
-                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
-                        if (val1.toString() == val2.toString()) {
-                            intT++;
-                        }
-                    }
-                    if (intT == fields.length) {
-                        data = item.data;
-                        return false;
-                    }
-                });
-            }
-            else {
-                store.data.each(function (item) {
+            var allData = store.snapshot || store.allData || store.data;
+            if (allData) {
+                allData.each(function (item) {
                     var intT = 0;
                     for (var i = 0; i < fields.length; i++) {
                         var tmp1 = item.get(fields[i]);
@@ -243,24 +225,6 @@ var HQ = {
                     }
                 });
             }
-            //else {
-            //    store.data.each(function (item) {
-            //        var intT = 0;
-            //        for (var i = 0; i < fields.length; i++) {
-            //            var tmp1 = item.get(fields[i]);
-            //            var tmp2 = values[i];
-            //            var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
-            //            var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
-            //            if (val1.toString() == val2.toString()) {
-            //                intT++;
-            //            }
-            //        }
-            //        if (intT == fields.length) {
-            //            data = item;
-            //            return false;
-            //        }
-            //    });
-            //}
             return data;
         },
         // TinhHV using for auto gen the LineRef
@@ -562,51 +526,13 @@ var HQ = {
                         if (row.field == keys[jkey])
                             rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
                         else
-                            rowdata += row.record.data[keys[jkey]].toString().toLowerCase() + ',';
+                            rowdata += (row.record.data[keys[jkey]] ? row.record.data[keys[jkey]].toString().toLowerCase() : '') + ',';
                     }
                 }
                 if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
                     break;
                 };
             }
-            //if (store.data) {
-            //    for (var i = 0; i < store.data.items.length; i++) {
-            //        var record = store.data.items[i];
-            //        var data = '';
-            //        var rowdata = '';
-            //        for (var jkey = 0; jkey < keys.length; jkey++) {
-            //            if (record.data[keys[jkey]] != undefined) {
-            //                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-            //                if (row.field == keys[jkey])
-            //                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-            //                else
-            //                    rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
-            //            }
-            //        }
-            //        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-            //            break;
-            //        };
-            //    }
-            //}
-            //else {
-            //    for (var i = 0; i < store.allData.items.length; i++) {
-            //        var record = store.allData.items[i];
-            //        var data = '';
-            //        var rowdata = '';
-            //        for (var jkey = 0; jkey < keys.length; jkey++) {
-            //            if (record.data[keys[jkey]] != undefined) {
-            //                data += record.data[keys[jkey]].toString().toLowerCase() + ',';
-            //                if (row.field == keys[jkey])
-            //                    rowdata += (row.value == null ? "" : row.value.toString().toLowerCase()) + ',';
-            //                else
-            //                    rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
-            //            }
-            //        }
-            //        if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
-            //            break;
-            //        };
-            //    }
-            //}
             return found;
         },
         //TrungHT d�ng cho ph�n trang
@@ -673,7 +599,9 @@ var HQ = {
                         }
                 }
                 if (HQ.grid.checkDuplicate(grd, e, keys)) {
-                    HQ.message.show(1112, e.value);
+                    if (e.column.xtype == "datecolumn")
+                        HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+                    else HQ.message.show(1112, e.value);
                     return false;
                 }
 
@@ -683,7 +611,9 @@ var HQ = {
         checkValidateEditDG: function (grd, e, keys) {
             if (keys.indexOf(e.field) != -1) {
                 if (HQ.grid.checkDuplicate(grd, e, keys)) {
-                    HQ.message.show(1112, e.value);
+                    if (e.column.xtype == "datecolumn")
+                        HQ.message.show(1112, Ext.Date.format(e.value, e.column.format));
+                    else HQ.message.show(1112, e.value);
                     return false;
                 }
             }
@@ -878,14 +808,18 @@ var HQ = {
             if (form == undefined) {
                 if (busy) {
                     App.frmMain.body.mask(waitMsg);
+                    HQ.isBusy = true;
                 } else {
                     App.frmMain.body.unmask();
+                    HQ.isBusy = false;
                 }
             } else {
                 if (busy) {
                     form.body.mask(waitMsg);
+                    HQ.isBusy = true;
                 } else {
                     form.body.unmask();
+                    HQ.isBusy = false;
                 }
             }
 

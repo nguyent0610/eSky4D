@@ -10,7 +10,7 @@ HQ.isTransfer = false;
 
 
 var stoTrans_BeforeLoad = function () {
-    App.grdTrans.view.loadMask.disable();
+    //App.grdTrans.view.loadMask.disable();
 };
 var stoHandle_Load = function () {
     App.Handle.setValue('N');
@@ -18,6 +18,9 @@ var stoHandle_Load = function () {
 var stoTrans_Load = function () {
     bindTran();
 };
+var stoDetail_Load = function () {
+    checkSourceDetail();
+}
 var store_Load = function () {
     HQ.numSource++;
     checkSetDefault();
@@ -54,8 +57,7 @@ var stoBatch_BeforeLoad = function (store, operation, eOpts) {
 var checkSelect = function (records, options, success) {
     HQ.numSelectTrans++;
     if (HQ.numSelectTrans == HQ.maxSelectTrans) {
-        App.grdTrans.view.loadMask.hide();
-        App.grdTrans.view.loadMask.setDisabled(false)
+        HQ.common.showBusy(false);
         getQtyAvail(options.row);
     }
 };
@@ -70,6 +72,13 @@ var checkSourceEdit = function (records, options, success) {
         checkExitEdit(options.row);
     }
 };
+var checkSourceDetail = function (records, options, success) {
+    HQ.numDetail++;
+    if (HQ.numDetail == HQ.maxDetail) {
+        bindTran();
+    }
+}
+
 var checkSourceEditLot = function (records, options, success) {
     HQ.numLot++;
     if (HQ.numLot == HQ.maxLot) {
@@ -85,8 +94,7 @@ var checkSourceTransfer = function (records, options, success) {
 var checkSelectLot = function (records, options, success) {
     HQ.numSelectLot++;
     if (HQ.numSelectLot == HQ.maxSelectLot) {
-        App.grdLot.view.loadMask.hide();
-        App.grdLot.view.loadMask.setDisabled(false)
+        HQ.common.showBusy(false);
         getLotQtyAvail(options.row);
     }
 };
@@ -142,8 +150,7 @@ var checkExitEditLot = function (row) {
         if (flat) {
             HQ.message.show(219, "", "", true);
             lot.LotSerNbr = "";
-            App.grdLot.view.loadMask.hide();
-            App.grdLot.view.loadMask.setDisabled(false)
+            HQ.common.showBusy(false);
             record.commit();
             return;
         }
@@ -168,8 +175,7 @@ var checkExitEditLot = function (row) {
         }
     }
     record.commit();
-    App.grdLot.view.loadMask.hide();
-    App.grdLot.view.loadMask.setDisabled(false)
+    HQ.common.showBusy(false);
 };
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
@@ -184,6 +190,8 @@ var checkExitEditLot = function (row) {
 
 var frmMain_BoxReady = function () {
     HQ.util.checkAccessRight();
+    HQ.numDetail = 0;
+    HQ.maxDetail = 2;
     HQ.numSource = 0;
     HQ.maxSource = 8;
     HQ.numTrans = 0;
@@ -213,12 +221,11 @@ var frmMain_FieldChange = function (item, field, newValue, oldValue) {
         return;
     }
     if (App.frmMain.getRecord() != undefined) App.frmMain.updateRecord();
-    //if (Object.keys(App.stoBatch.getChangedData()).length > 0 || App.grdTrans.isChange) {
-    //    setChange(true);
-    //} else {
-    //    setChange(false);
-    //}
-    setChange(true);
+    if (Object.keys(App.stoBatch.getChangedData()).length > 0 || App.grdTrans.isChange == true) {
+        setChange(true);
+    } else {
+        setChange(false);
+    }
 };
 var menuClick = function (command) {
     switch (command) {
@@ -269,11 +276,10 @@ var menuClick = function (command) {
             }
             break;
         case "save":
-            if (!App.grdTrans.view.loadMask.isHidden()) {
-                return;
-            }
-            if (HQ.form.checkRequirePass(App.frmMain)) {
-                save();
+            if (HQ.isBusy == false) {
+                if (HQ.form.checkRequirePass(App.frmMain)) {
+                    save();
+                }
             }
             break;
         case "delete":
@@ -653,7 +659,6 @@ var grdTrans_BeforeEdit = function (item, e) {
         return false;
     }
 
-
     if (Ext.isEmpty(App.SiteID.getValue())) {
         HQ.message.show(1000, [HQ.common.getLang('SiteID')], '', true);
         return false;
@@ -697,7 +702,7 @@ var grdTrans_SelectionChange = function (item, selected) {
     if (selected.length > 0) {
         if (!Ext.isEmpty(selected[0].data.InvtID)) {
             HQ.numSelectTrans = 0;
-            App.grdTrans.view.loadMask.show();
+            HQ.common.showBusy(true, 'Process...');
             App.stoItemSite.load({
                 params: { siteID: App.SiteID.getValue(), invtID: selected[0].data.InvtID },
                 callback: checkSelect,
@@ -737,7 +742,7 @@ var grdTrans_Edit = function (item, e) {
             }
 
             if (key == 'InvtID') {
-                App.grdTrans.view.loadMask.show();
+                HQ.common.showBusy(true, 'Process...');
                 //var objInvt = HQ.store.findInStore(App.stoInvt, ['InvtID'], [e.record.data.InvtID]);
                 //if (objInvt) {
                 //    e.record.set('ClassID',objInvt.ClassID);
@@ -756,7 +761,7 @@ var grdTrans_Edit = function (item, e) {
                     params: { uom: e.record.data.UnitDesc, invtID: e.record.data.InvtID, effDate: App.DateEnt.getValue() }, callback: checkSourceEdit, row: e
                 });
             } else if (key == 'UnitDesc') {
-                App.grdTrans.view.loadMask.show();
+                HQ.common.showBusy(true, 'Process...');
                 HQ.numTrans = 0;
                 HQ.maxTrans = 2;
                 App.stoItemSite.load({
@@ -800,7 +805,7 @@ var grdLot_SelectionChange = function (item, selected) {
         if (!Ext.isEmpty(selected[0].data.InvtID)) {
             HQ.numSelectLot = 0;
             HQ.maxSelectLot = 1;
-            App.grdLot.view.loadMask.show();
+            HQ.common.showBusy(true, 'Process...');
             App.stoItemLot.load({
                 params: { siteID: selected[0].data.SiteID, invtID: selected[0].data.InvtID, branchID: App.BranchID.getValue(), lotSerNbr: selected[0].data.LotSerNbr, batNbr: App.DateEnt.getValue() },
                 callback: checkSelectLot,
@@ -820,7 +825,7 @@ var grdLot_Edit = function (item, e) {
         if (key == "Qty" || key == "UnitDesc") {
             checkExitEditLot(e);
         } else if (key == "LotSerNbr") {
-            App.grdLot.view.loadMask.show();
+            HQ.common.showBusy(true, 'Process...');
             HQ.numLot = 0;
             HQ.maxLot = 1;
             App.stoItemLot.load({
@@ -900,6 +905,7 @@ var bindBatch = function (record) {
     App.FromToSiteID.events['change'].resume();
     setStatusForm();
     HQ.common.showBusy(true, HQ.waitMsg);
+    HQ.numDetail = 0;
     App.TrnsferNbr.store.reload();
     App.stoTrans.reload();
     App.stoLotTrans.reload();
@@ -1011,13 +1017,16 @@ var save = function () {
         HQ.message.show(2015020801, [App.BatNbr.value], '', true);
         return;
     }
-    if (App.stoTrans.data.items.length <= 1) {
+    var store1 = App.stoTrans;
+    var allRecords1 = store1.snapshot || store1.allData || store1.data;
+
+    if (allRecords1.items.length <= 1) {
         HQ.message.show(2015020804, [App.BatNbr.value], '', true);
         return;
     }
     var flat = false;
     App.stoLotTrans.clearFilter();
-    App.stoTrans.data.each(function (item) {
+    allRecords1.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {
             if (Ext.isEmpty(item.data.UnitDesc)) {
                 HQ.message.show(1000, [HQ.common.getLang('Unit')], '', true);
@@ -1263,8 +1272,10 @@ var showLot = function (record, loadCombo) {
 var calculate = function () {
     var totAmt = 0;
     var totQty = 0;
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
 
-    App.stoTrans.data.each(function (item) {
+    allRecords.each(function (item) {
         totAmt += item.data.TranAmt;
         totQty += item.data.Qty;
     });
@@ -1291,8 +1302,10 @@ var defaultOnNew = function () {
 
 var lastLineRef = function () {
     var num = 0;
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
 
-    App.stoTrans.data.each(function (item) {
+    allRecords.each(function (item) {
         if (!Ext.isEmpty(item.data.LineRef) && parseInt(item.data.LineRef) > num) {
             num = parseInt(item.data.LineRef);
         }
@@ -1376,7 +1389,7 @@ var setStatusForm = function () {
     }
 };
 
-var checkExitEdit =  function (row) {
+var checkExitEdit = function (row) {
     var key = row.field;
     var trans = row.record.data;
     if (key == 'InvtID' || key == 'BarCode') {
@@ -1386,28 +1399,14 @@ var checkExitEdit =  function (row) {
 
         var invt = row.record.invt;
         var cnv = setUOM(invt.InvtID, invt.ClassID, invt.StkUnit, invt.StkUnit);    
-        var site = HQ.store.findInStore(App.stoItemSite, ['SiteID', 'InvtID'], [trans.SiteID, trans.InvtID]);
-
-        if (Ext.isEmpty(site)) {
-            site = Ext.create('App.mdlItemSite').data;
-            site.SiteID = trans.SiteID;
-            site.InvtID = trans.InvtID;
-        }
 
         if (Ext.isEmpty(cnv)) {
             trans.UnitMultDiv = '';
             trans.UnitPrice = 0;
             trans.TranAmt = 0;
             row.record.commit();
-            App.grdTrans.view.loadMask.hide();
-            App.grdTrans.view.loadMask.setDisabled(false);
+            HQ.common.showBusy(false);
             return;
-        }
-
-        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
-            trans.UnitPrice = Math.round(site.AvgCost, 0);
-        } else {
-            trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
         }
 
         trans.UnitDesc = invt.StkUnit;
@@ -1415,6 +1414,20 @@ var checkExitEdit =  function (row) {
         trans.UnitMultDiv = cnv.MultDiv;
         trans.TranDesc = invt.Descr;
         trans.BarCode = invt.BarCode;
+
+        var site = HQ.store.findInStore(App.stoItemSite, ['SiteID', 'InvtID'], [trans.SiteID, trans.InvtID]);
+
+        if (Ext.isEmpty(site)) {
+            site = Ext.create('App.mdlItemSite').data;
+            site.SiteID = trans.SiteID;
+            site.InvtID = trans.InvtID;
+        }
+        if (invt.ValMthd == "A" || invt.ValMthd == "E") {
+            trans.UnitPrice = Math.round(site.AvgCost, 0);
+        } else {
+            trans.UnitPrice = App.stoPrice.data.items[0].data.Price;
+        }
+
         trans.TranAmt = trans.Qty * trans.UnitPrice;
         trans.ClassID = invt.ClassID;
         getQtyAvail(row.record);
@@ -1430,8 +1443,7 @@ var checkExitEdit =  function (row) {
             trans.UnitPrice = 0;
             trans.TranAmt = 0;
             row.record.commit();
-            App.grdTrans.view.loadMask.hide();
-            App.grdTrans.view.loadMask.setDisabled(false);
+            HQ.common.showBusy(false);
             return;
         }
 
@@ -1455,12 +1467,12 @@ var checkExitEdit =  function (row) {
         calcLot(row.record, false);
     }
 
-    if (key == "Qty") {
+    else if (key == "Qty") {
         trans.TranAmt = trans.Qty * trans.UnitPrice;
         calcLot(row.record, true);
     }
 
-    if (key == "UnitPrice") {
+    else if (key == "UnitPrice") {
         trans.TranAmt = trans.Qty * trans.UnitPrice;
         calcLot(row.record, false);
     }
@@ -1477,25 +1489,25 @@ var checkExitEdit =  function (row) {
 
     checkTransAdd();
 
-    App.grdTrans.view.loadMask.hide();
-    App.grdTrans.view.loadMask.setDisabled(false);
+    HQ.common.showBusy(false);
 };
 
 var checkTransAdd = function () {
     var flat = false;
-    App.stoTrans.data.each(function (item) {
+    var store = App.stoTrans;
+    var allRecords = store.snapshot || store.allData || store.data;
+
+    allRecords.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {
             flat = true;
             return false;
         }
     });
 
-    App.SiteID.setReadOnly(flat);
-
     App.SlsperID.setReadOnly(App.Status.getValue() != 'H');
-
     App.FromToSiteID.setReadOnly(HQ.isTransfer || App.Status.getValue() != 'H');
-
+    App.SiteID.setReadOnly(flat);
+    App.FromToSiteID.setReadOnly(flat);
     if (!HQ.isInsert && HQ.isNew) {
         App.SlsperID.setReadOnly(true);
         App.FromToSiteID.setReadOnly(true);
@@ -1508,8 +1520,8 @@ var checkTransAdd = function () {
 };
 
 var getQtyAvail = function (row) {
-
     var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [row.data.InvtID, row.data.SiteID]);
+
     if (!Ext.isEmpty(site)) {
         App.lblQtyAvail.setText(row.data.InvtID + " - " + HQ.common.getLang('qtyavail') + ":" + site.QtyAvail);
     }
@@ -1547,13 +1559,10 @@ var askRefresh = function (item) {
         }
     }
 }; 
-var setChange = function (isChange) {
+var setChange = function (isChange) {   
     HQ.isChange = isChange;
     if (isChange) {
-        if (!Ext.isEmpty(App.BatNbr.getValue())) {
-            App.BatNbr.setReadOnly(true);
-        }
-
+        App.BatNbr.setReadOnly(true);
     } else {
         App.grdTrans.isChange = false;
         App.BatNbr.setReadOnly(false);

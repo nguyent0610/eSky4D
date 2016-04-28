@@ -64,7 +64,7 @@
         })
 )
 
-@(
+@*@(
     X.Store().ID("stoTrans")
     .AutoLoad(false)
     .Model(Util.GenerateModel(typeof(IN10100_pgReceiptLoad_Result), "mdlTrans", ""))
@@ -86,7 +86,7 @@
         p.Load.Fn = "stoTrans_Load";
         p.BeforeLoad.Fn= "stoTrans_BeforeLoad";
     })
-)
+)*@
 
 @(
     X.Store()
@@ -191,7 +191,10 @@
         .Url(Url.Action("GetLotTrans", "IN10100"))
         .ActionMethods(action => action.Read = HttpMethod.POST)
         .Reader(X.JsonReader().Root("data"))
-    )            
+    )      
+    .Listeners(p => {
+        p.Load.Fn = "stoDetail_Load";
+    })      
     .Parameters(ps => {
         ps.Add(new StoreParameter("branchID", "App.BranchID.getValue()", ParameterMode.Raw));
         ps.Add(new StoreParameter("batNbr", "App.BatNbr.getValue()", ParameterMode.Raw)); 

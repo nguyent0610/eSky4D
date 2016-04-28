@@ -466,6 +466,11 @@
           <Parameter Name="LineRef" Type="varchar" Mode="In" />
           <Parameter Name="RefNbr" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="IN10100_ppCheckCloseDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="ScreenNbr" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="INNumbering" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
           <Parameter Name="GetType" Type="varchar" Mode="In" />
@@ -545,6 +550,11 @@
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="LineRef" Mode="In" Type="String" />
             <Parameter Name="RefNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="IN10100_ppCheckCloseDate" ReturnType="Collection(String)">
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="ScreenNbr" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Batch">
@@ -1748,6 +1758,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="IN10100_ppCheckCloseDate" FunctionName="eBiz4DWebSysModel.Store.IN10100_ppCheckCloseDate" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

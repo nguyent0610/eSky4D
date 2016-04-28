@@ -335,20 +335,23 @@ namespace IN10100.Controllers
             _handle = data["Handle"].PassNull();
             _objBatch.Status = _objBatch.Status.PassNull() == string.Empty ? "H" : _objBatch.Status;
 
-            var cfgWrkDateChk = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
-            if (cfgWrkDateChk != null && cfgWrkDateChk.WrkDateChk)
-            {
-                DateTime tranDate = _objBatch.DateEnt;
-                if (!((DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate.AddDays(-1 * cfgWrkDateChk.WrkLowerDays)) >=
-                       0 && DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate) <= 0)
-                      ||
-                      (DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate.AddDays(cfgWrkDateChk.WrkUpperDays)) <=
-                       0 && DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate) >= 0)
-                      || DateTime.Compare(tranDate, cfgWrkDateChk.WrkAdjDate) == 0))
-                {
-                    throw new MessageException(MessageType.Message, "301");
-                }
-            }
+            if (_app.IN10100_ppCheckCloseDate(_objBatch.BranchID, _objBatch.DateEnt.ToDateShort(), "IN10100").FirstOrDefault() == "0")
+                throw new MessageException(MessageType.Message, "301");
+
+            //var cfgWrkDateChk = _sys.SYS_CloseDateSetUp.FirstOrDefault(p => p.BranchID == _objBatch.BranchID);
+            //if (cfgWrkDateChk != null && cfgWrkDateChk.WrkDateChk)
+            //{
+            //    DateTime tranDate = _objBatch.DateEnt;
+            //    if (!((DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate.AddDays(-1 * cfgWrkDateChk.WrkLowerDays)) >=
+            //           0 && DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate) <= 0)
+            //          ||
+            //          (DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate.AddDays(cfgWrkDateChk.WrkUpperDays)) <=
+            //           0 && DateTime.Compare(tranDate, cfgWrkDateChk.WrkOpenDate) >= 0)
+            //          || DateTime.Compare(tranDate, cfgWrkDateChk.WrkAdjDate) == 0))
+            //    {
+            //        throw new MessageException(MessageType.Message, "301");
+            //    }
+            //}
             Batch batch = _app.Batches.FirstOrDefault(p => p.BatNbr == _objBatch.BatNbr && p.BranchID == _objBatch.BranchID);
             if ((_objBatch.Status == "U" || _objBatch.Status == "C") && (_handle == "C" || _handle == "V"))
             {

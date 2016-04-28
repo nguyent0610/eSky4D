@@ -368,13 +368,29 @@
             .Layout(LayoutType.Border)
             .Items(
                 X.GridPanel().ID("grdTrans").Region(Region.Center).Flex(1)
-                .StoreID("stoTrans")
                 .RowLines(true)
                 .ColumnLines(true)
                 .Border(true)
                 .BorderSpec("1 0 0 0")
+                .Store(
+                    X.Store()
+                    .ID("stoTrans")
+                    .PageSize(50).AutoLoad(false)
+                    .Model(Util.GenerateModel(typeof(IN10100_pgReceiptLoad_Result), "mdlTrans", ""))
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("BatNbr", "App.BatNbr.getValue()", ParameterMode.Raw));
+                        ps.Add(new StoreParameter("BranchID", "App.BranchID.getValue()", ParameterMode.Raw));
+                    })
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetTrans")))
+                    .Listeners(l =>    
+                    {
+                        l.Load.Fn = "stoDetail_Load";
+                        l.BeforeLoad.Fn = "stoTrans_BeforeLoad";
+                    })
+                )
                 .ColumnModel(
-                    X.RowNumbererColumn(),
+                    X.RowNumbererColumn().Width(30).Listeners(x => 	x.AfterRender.Handler = "this.resizable = true"),
 
                     X.Column()
                     .DataIndex("InvtID")
@@ -487,6 +503,19 @@
                 })
                 .SelectionModel(X.RowSelectionModel().ID("smlTrans").Mode(SelectionMode.Single))
                 .View(X.GridView().TrackOver(false))
+                .BottomBar(
+                        X.PagingToolbar()
+                        .Items(
+                            X.Label("Page size:"),
+                            X.ToolbarSpacer(10),
+                            X.ComboBox()
+                            .Width(80)
+                            .Items("1", "2", "10", "20", "30", "50")
+                            .SelectedItems("50")
+                            .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                        )
+                        .Plugins(X.ProgressBarPager())
+                )
                 .Plugins(
                     X.CellEditing().ClicksToEdit(1)
                 )
