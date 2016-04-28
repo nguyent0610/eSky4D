@@ -147,7 +147,7 @@ namespace IN10300.Controllers
             List<IN_ItemLot> lstLot = new List<IN_ItemLot>() { lot };
             return this.Store(lstLot, lstLot.Count);
         }
-
+        
         public ActionResult GetItemSite(string invtID, string siteID)
         {
             var objSite = _app.IN_ItemSite.FirstOrDefault(p => p.InvtID == invtID && p.SiteID == siteID);

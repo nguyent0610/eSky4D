@@ -94,8 +94,9 @@ var checkSourceEditLot = function (records, options, success) {
 var checkSelectLot = function (records, options, success) {
     HQ.numSelectLot++;
     if (HQ.numSelectLot == HQ.maxSelectLot) {
-        App.grdLot.view.loadMask.hide();
-        App.grdLot.view.loadMask.setDisabled(false)
+        //App.grdLot.view.loadMask.hide();
+        //App.grdLot.view.loadMask.setDisabled(false)
+        HQ.common.showBusy(false);
         getLotQtyAvail(options.row);
     }
 }
@@ -592,7 +593,6 @@ var grdTrans_Edit = function (item, e) {
             }
 
             if (key == 'InvtID') {
-                //App.grdTrans.view.loadMask.show();
                 HQ.common.showBusy(true, 'Process...');
                 HQ.numEditTrans = 0;
                 HQ.maxEditTrans = 4;
@@ -673,7 +673,7 @@ var grdLot_SelectionChange = function (item, selected) {
         if (!Ext.isEmpty(selected[0].data.InvtID)) {
             HQ.numSelectLot = 0;
             HQ.maxSelectLot = 1;
-            App.grdLot.view.loadMask.show();
+            HQ.common.showBusy(true, 'Process...');
             App.stoItemLot.load({
                 params: { siteID: selected[0].data.SiteID, invtID: selected[0].data.InvtID, branchID: App.txtBranchID.getValue(), lotSerNbr: selected[0].data.LotSerNbr, batNbr: App.cboBatNbr.getValue() },
                 callback: checkSelectLot,
@@ -692,7 +692,7 @@ var grdLot_Edit = function (item, e) {
         if (key == "Qty" || key == "UnitDesc") {
             checkExitEditLot(e);
         } else if (key == "LotSerNbr") {
-            App.grdLot.view.loadMask.show();
+            HQ.common.showBusy(true, 'Process...');
             HQ.numLot = 0;
             HQ.maxLot = 1;
             App.stoItemLot.load({
@@ -771,40 +771,39 @@ var save = function () {
         HQ.message.show(1092, '', '', true);
         return;
     }
-    var store = App.stoTrans;
-    var allRecords = store.snapshot || store.allData || store.data;
+    var store1 = App.stoTrans;
+    var allRecords1 = store1.snapshot || store1.allData || store1.data;
 
-    if (allRecords.items.length <= 1) {
+    if (allRecords1.items.length <= 1) {
         HQ.message.show(2015020804, [App.cboBatNbr.value], '', true);
         return;
     }
     var flat = false;
     App.stoLotTrans.clearFilter();
 
-    
-    allRecords.each(function (item) {
+    allRecords1.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {
             if (Ext.isEmpty(item.data.UnitDesc)) {
                 HQ.message.show(1000, [HQ.common.getLang('Unit')], '', true);
-                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findRecord(App.stoTrans, ['UnitDesc'], [item.data.UnitDesc])));
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['UnitDesc'], [item.data.UnitDesc])));
                 flat = true;
                 return false;
             }
             if (item.data.Qty == 0) {
                 HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
-                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findRecord(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
                 flat = true;
                 return false;
             }
             if (item.data.UnitMultDiv == '') {
                 HQ.message.show(2525, [item.data.InvtID], '', true);
-                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findRecord(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
                 flat = true;
                 return false;
             }
             if (Ext.isEmpty(item.data.SiteID)) {
                 HQ.message.show(1000, [HQ.common.getLang('siteid')], '', true);
-                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findRecord(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
                 flat = true;
                 return false;
             }
@@ -1146,7 +1145,6 @@ var defaultOnNew = function () {
     App.frmMain.validate();
     bindBatch(record);
 }
-
 var lastLineRef = function () {
     var num = 0;
     var store = App.stoTrans;
@@ -1166,7 +1164,6 @@ var lastLineRef = function () {
     }
     return lineRef;
 }
-
 var setUOM = function (invtID, classID, stkUnit, fromUnit) {
     if (!Ext.isEmpty(fromUnit)) {
         var data = HQ.store.findInStore(App.stoUnitConversion, ['UnitType', 'ClassID', 'InvtID', 'FromUnit', 'ToUnit'], ["3", "*", invtID, fromUnit, stkUnit]);
@@ -1188,14 +1185,12 @@ var setUOM = function (invtID, classID, stkUnit, fromUnit) {
     }
     return null;
 }
-
 var renderRowNumber = function (value, meta, record) {
     return App.stoLotTrans.data.indexOf(record) + 1;
 }
 var renderQtyAmt = function (value) {
     return Ext.util.Format.number(value, '0,000');
 }
-
 var setStatusForm = function () {
     var flag = true
     var lock = true;
@@ -1236,7 +1231,6 @@ var setStatusForm = function () {
         App.cboHandle.setReadOnly(false);
     }
 }
-
 var checkExitEdit = function (row) {
     var key = row.field;
     var trans = row.record.data;
@@ -1403,8 +1397,9 @@ var checkExitEditLot = function (row) {
             lot.UnitPrice = 0;
             lot.UnitDesc = '';
             record.commit();
-            App.grdLot.view.loadMask.hide();
-            App.grdLot.view.loadMask.setDisabled(false)
+            //App.grdLot.view.loadMask.hide();
+            //App.grdLot.view.loadMask.setDisabled(false)
+            HQ.common.showBusy(false);
             return;
         }
 
@@ -1429,8 +1424,9 @@ var checkExitEditLot = function (row) {
         if (flat) {
             HQ.message.show(219, "", "", true);
             lot.LotSerNbr = "";
-            App.grdLot.view.loadMask.hide();
-            App.grdLot.view.loadMask.setDisabled(false)
+            //App.grdLot.view.loadMask.hide();
+            //App.grdLot.view.loadMask.setDisabled(false)
+            HQ.common.showBusy(false);
             record.commit();
             return;
         }
@@ -1450,8 +1446,9 @@ var checkExitEditLot = function (row) {
         }
     }
     record.commit();
-    App.grdLot.view.loadMask.hide();
-    App.grdLot.view.loadMask.setDisabled(false)
+    //App.grdLot.view.loadMask.hide();
+    //App.grdLot.view.loadMask.setDisabled(false)
+    HQ.common.showBusy(false);
 }
 var checkTransAdd = function () {
     var flat = false;
@@ -1483,7 +1480,6 @@ var checkTransAdd = function () {
         App.cboTransferType.setReadOnly(true);
     }
 }
-
 var getQtyAvail = function (row) {
 
     var site = HQ.store.findInStore(App.stoItemSite, ['InvtID', 'SiteID'], [row.data.InvtID, row.data.SiteID]);
@@ -1558,7 +1554,6 @@ var calculateInvtTotal = function (invtID, siteID, lineRef) {
     });
     return qty - qtyOld;
 }
-
 var askClose = function (item) {
     if (item == "no" || item == "ok") {
         HQ.common.close(this);

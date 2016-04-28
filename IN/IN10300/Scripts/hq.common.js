@@ -183,27 +183,9 @@ var HQ = {
         },
         findInStore: function (store, fields, values) {
             var data;
-            if (store.allData) {
-                store.allData.each(function (item) {
-                    var intT = 0;
-                    for (var i = 0; i < fields.length; i++) {
-
-                        var tmp1 = item.get(fields[i]);
-                        var tmp2 = values[i];
-                        var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
-                        var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
-                        if (val1.toString() == val2.toString()) {
-                            intT++;
-                        }
-                    }
-                    if (intT == fields.length) {
-                        data = item.data;
-                        return false;
-                    }
-                });
-            }
-            else {
-                store.data.each(function (item) {
+            var allData = store.snapshot || store.allData || store.data;
+            if (allData) {
+                allData.each(function (item) {
                     var intT = 0;
                     for (var i = 0; i < fields.length; i++) {
                         var tmp1 = item.get(fields[i]);
@@ -243,24 +225,6 @@ var HQ = {
                     }
                 });
             }
-            //else {
-            //    store.data.each(function (item) {
-            //        var intT = 0;
-            //        for (var i = 0; i < fields.length; i++) {
-            //            var tmp1 = item.get(fields[i]);
-            //            var tmp2 = values[i];
-            //            var val1 = (tmp1 == undefined || tmp1 == null) ? '' : tmp1;
-            //            var val2 = (tmp2 == undefined || tmp2 == null) ? '' : tmp2;
-            //            if (val1.toString() == val2.toString()) {
-            //                intT++;
-            //            }
-            //        }
-            //        if (intT == fields.length) {
-            //            data = item;
-            //            return false;
-            //        }
-            //    });
-            //}
             return data;
         },
         // TinhHV using for auto gen the LineRef
