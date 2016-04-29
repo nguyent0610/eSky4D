@@ -10,7 +10,9 @@
             <PropertyRef Name="PosmID" />
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="CustId" />
+            <PropertyRef Name="SiteID" />
             <PropertyRef Name="InvtID" />
+            <PropertyRef Name="Date" />
           </Key>
           <Property Name="PosmID" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="BranchID" Type="varchar" MaxLength="30" Nullable="false" />
@@ -43,19 +45,34 @@
     <edmx:ConceptualModels>
       <Schema Namespace="OM23600Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="OM23600Entities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="OM_POSMBranch" EntityType="OM23600Model.OM_POSMBranch" />
           <FunctionImport Name="OM23600_pgPosmID" ReturnType="Collection(OM23600Model.OM23600_pgPosmID_Result)">
             <Parameter Name="UserID" Mode="In" Type="String" />
             <Parameter Name="CpnyID" Mode="In" Type="String" />
             <Parameter Name="LangID" Mode="In" Type="Int16" />
           </FunctionImport>
+          <EntitySet Name="OM_POSMBranch" EntityType="OM23600Model.OM_POSMBranch" />
         </EntityContainer>
+        <ComplexType Name="OM23600_pgPosmID_Result">
+          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CustId" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CustName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="16" />
+          <Property Type="Double" Name="Qty" Nullable="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+        </ComplexType>
         <EntityType Name="OM_POSMBranch">
           <Key>
             <PropertyRef Name="PosmID" />
             <PropertyRef Name="BranchID" />
             <PropertyRef Name="CustId" />
+            <PropertyRef Name="SiteID" />
             <PropertyRef Name="InvtID" />
+            <PropertyRef Name="Date" />
           </Key>
           <Property Name="PosmID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="BranchID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -75,25 +92,29 @@
           <Property Name="LUpd_User" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="tstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
-        <ComplexType Name="OM23600_pgPosmID_Result">
-          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="CustId" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="CustName" Nullable="true" MaxLength="100" />
-          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" />
-          <Property Type="String" Name="SiteID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
-          <Property Type="DateTime" Name="Date" Nullable="false" Precision="16" />
-          <Property Type="Double" Name="Qty" Nullable="false" />
-          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="OM23600Entities" >
+          <FunctionImportMapping FunctionImportName="OM23600_pgPosmID" FunctionName="eBiz4DWebSysModel.Store.OM23600_pgPosmID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM23600Model.OM23600_pgPosmID_Result">
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="OM_POSMBranch">
             <EntityTypeMapping TypeName="OM23600Model.OM_POSMBranch">
               <MappingFragment StoreEntitySet="OM_POSMBranch">
@@ -117,23 +138,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="OM23600_pgPosmID" FunctionName="eBiz4DWebSysModel.Store.OM23600_pgPosmID">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM23600Model.OM23600_pgPosmID_Result">
-                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="CustId" ColumnName="CustId" />
-                <ScalarProperty Name="CustName" ColumnName="CustName" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
-                <ScalarProperty Name="Descr" ColumnName="Descr" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
-                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

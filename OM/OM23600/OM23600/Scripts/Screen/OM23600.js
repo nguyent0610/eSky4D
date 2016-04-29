@@ -98,20 +98,30 @@ var firstLoad = function () {
 };
 var grdDet_BeforeEdit = function (editor, e) {
     //if (_posmID == e.record.data.PosmID)
-    //{
-    //    //e.record.set('BranchID', '');
-    //    App.cboBranchID.store.reload();
-      
-    //    //App.cboBranchID.setvalue('');
+    //{     
+    //    App.cboBranchID.store.reload();           
+    //}
+    //if (_branchID == e.record.data.BranchID) {    
+    //    App.cboCustId.store.reload();      
+    //}
+    //if (_branchID == e.record.data.BranchID) {    
+    //    App.cboSiteId.store.reload();       
+    //}
+    //if (_classID == e.record.data.ClassID) {       
+    //    App.cboInvtID.store.reload();       
     //}
     _posmID = e.record.data.PosmID;
     App.cboBranchID.store.reload();
-    _classID = e.record.data.ClassID;
-    App.cboClassID.store.reload();
-    _siteId = e.record.data.SiteID;
-    App.cboSiteId.store.reload();
     //_classID = e.record.data.ClassID;
-    //App.cboInvtID.store.reload();
+    //App.cboClassID.store.reload();
+    _siteId = e.record.data.SiteID;
+    App.cboExpDate.store.reload();
+    _invtID = e.record.data.InvtID;
+    App.cboExpDate.store.reload();
+    _branchID = e.record.data.BranchID;
+    App.cboExpDate.store.reload();
+    _classID = e.record.data.ClassID;
+    App.cboInvtID.store.reload();
     if (e.field == 'SiteID') {
         if (Ext.isEmpty(e.record.data.BranchID)) {
             App.cboSiteId.getStore().removeAll();
@@ -155,12 +165,12 @@ var grdDet_Edit = function (item, e) {
   
         }
     }
-    if (e.field == 'SiteID' || e.field == 'InvtID') {
-        if (Ext.isEmpty(e.record.data.BranchID)) {
-            e.record.set('Date', '');
-           
-        }
-    }
+    //if (e.field == 'Date') {
+    //    if (Ext.isEmpty(e.record.data.SiteID) || Ext.isEmpty(e.record.data.InvtID)) {
+    //        e.record.set('Date', '');           
+    //    }
+    //}
+   
     if (e.field == 'CustId') {
         //Ten combo + ten proceduce --> lay duoc data cua combo do
         var obj = App.cboCustIdOM23600_pcCustId.findRecord('CustId', e.value);

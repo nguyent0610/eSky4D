@@ -331,7 +331,7 @@ namespace OM23600
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String SiteID
         {
@@ -341,11 +341,14 @@ namespace OM23600
             }
             set
             {
-                OnSiteIDChanging(value);
-                ReportPropertyChanging("SiteID");
-                _SiteID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("SiteID");
-                OnSiteIDChanged();
+                if (_SiteID != value)
+                {
+                    OnSiteIDChanging(value);
+                    ReportPropertyChanging("SiteID");
+                    _SiteID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("SiteID");
+                    OnSiteIDChanged();
+                }
             }
         }
         private global::System.String _SiteID;
@@ -406,7 +409,7 @@ namespace OM23600
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.DateTime Date
         {
@@ -416,11 +419,14 @@ namespace OM23600
             }
             set
             {
-                OnDateChanging(value);
-                ReportPropertyChanging("Date");
-                _Date = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Date");
-                OnDateChanged();
+                if (_Date != value)
+                {
+                    OnDateChanging(value);
+                    ReportPropertyChanging("Date");
+                    _Date = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Date");
+                    OnDateChanged();
+                }
             }
         }
         private global::System.DateTime _Date;

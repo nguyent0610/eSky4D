@@ -27,7 +27,7 @@ namespace OM23600.Controllers
             return View();
         }
 
-        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -48,13 +48,13 @@ namespace OM23600.Controllers
                 foreach (OM23600_pgPosmID_Result del in lstData.Deleted)
                 {
 
-                    if (lstData.Created.Where(p => p.PosmID.ToLower().Trim() == del.PosmID.ToLower().Trim() && p.BranchID.ToLower().Trim() == del.BranchID.ToLower().Trim() && p.CustId.ToLower().Trim() == del.CustId.ToLower().Trim() && p.InvtID.ToLower().Trim() == del.InvtID.ToLower().Trim()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
+                    if (lstData.Created.Where(p => p.PosmID.ToLower().Trim() == del.PosmID.ToLower().Trim() && p.BranchID.ToLower().Trim() == del.BranchID.ToLower().Trim() && p.CustId.ToLower().Trim() == del.CustId.ToLower().Trim() && p.SiteID.ToLower().Trim()==del.SiteID.ToLower().Trim() && p.InvtID.ToLower().Trim() == del.InvtID.ToLower().Trim()).Count() > 0)// neu danh sach them co chua danh sach xoa thi khong xoa thằng đó cập nhật lại tstamp của thằng đã xóa xem nhu trường hợp xóa thêm mới là trường hợp update
                     {
-                        lstData.Created.Where(p => p.PosmID.ToLower().Trim() == del.PosmID.ToLower().Trim() && p.BranchID.ToLower().Trim() == del.BranchID.ToLower().Trim() && p.CustId.ToLower().Trim() == del.CustId.ToLower().Trim() && p.InvtID.ToLower().Trim() == del.InvtID.ToLower().Trim()).FirstOrDefault().tstamp = del.tstamp;
+                        lstData.Created.Where(p => p.PosmID.ToLower().Trim() == del.PosmID.ToLower().Trim() && p.BranchID.ToLower().Trim() == del.BranchID.ToLower().Trim() && p.CustId.ToLower().Trim() == del.CustId.ToLower().Trim() && p.SiteID.ToLower().Trim() == del.SiteID.ToLower().Trim() && p.InvtID.ToLower().Trim() == del.InvtID.ToLower().Trim()).FirstOrDefault().tstamp = del.tstamp;
                     }
                     else
                     {
-                        var objDel = _db.OM_POSMBranch.ToList().Where(p => p.PosmID.ToLower().Trim() == del.PosmID.ToLower().Trim() && p.BranchID.ToLower().Trim() == del.BranchID.ToLower().Trim() && p.CustId.ToLower().Trim() == del.CustId.ToLower().Trim() && p.InvtID.ToLower().Trim() == del.InvtID.ToLower().Trim()).FirstOrDefault();
+                        var objDel = _db.OM_POSMBranch.ToList().Where(p => p.PosmID.ToLower().Trim() == del.PosmID.ToLower().Trim() && p.BranchID.ToLower().Trim() == del.BranchID.ToLower().Trim() && p.CustId.ToLower().Trim() == del.CustId.ToLower().Trim() && p.SiteID.ToLower().Trim() == del.SiteID.ToLower().Trim() && p.InvtID.ToLower().Trim() == del.InvtID.ToLower().Trim()).FirstOrDefault();
                         if (objDel != null)
                         {
                             _db.OM_POSMBranch.DeleteObject(objDel);
@@ -68,6 +68,7 @@ namespace OM23600.Controllers
                     if (curItem.PosmID.PassNull() == ""
                         && curItem.BranchID.PassNull() == ""
                         && curItem.CustId.PassNull() == ""
+                        && curItem.SiteID.PassNull() == ""
                         && curItem.InvtID.PassNull() == "")
                     {
                         continue;
@@ -77,6 +78,7 @@ namespace OM23600.Controllers
                     var BranchID = _db.OM_POSMBranch.Where(p => p.PosmID.ToLower() == curItem.PosmID.ToLower() 
                         && p.BranchID.ToLower() == curItem.BranchID.ToLower() 
                         && p.CustId.ToLower() == curItem.CustId.ToLower()
+                        && p.SiteID.ToLower() == curItem.SiteID.ToLower()
                         && p.InvtID.ToLower() == curItem.InvtID.ToLower()).FirstOrDefault();
 
                     if (BranchID != null)

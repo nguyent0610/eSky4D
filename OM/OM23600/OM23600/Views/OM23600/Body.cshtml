@@ -45,11 +45,11 @@
         .SortableColumns(false)
         .ColumnModel(
             X.RowNumbererColumn().Width(40),
-            X.Column().Text(Util.GetLang("PosmID")).DataIndex("PosmID").Width(120)
+            X.Column().Text(Util.GetLang("PosmID")).DataIndex("PosmID").Width(100)
                 .Editor(
                     HQ.Combo().ID("cboPosmID").Name("cboPosmID").HQProcedure("OM23600_pcPosmID")
                     .HQColumnShow("PosmID,FromDate,ToDate").DisplayField("PosmID").ValueField("PosmID")
-                    .Width(300).HQHeightWidth(200, 200)
+                    .Width(200).HQHeightWidth(200, 200)
                     .AllowBlank(true).HQAutoLoad(true).HQDBSys(false)
                     .HQParam(new StoreParameterCollection() 
                     { 
@@ -66,11 +66,11 @@
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .LoadData()
                     ),
-            X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID").Width(120)
+            X.Column().Text(Util.GetLang("BranchID")).DataIndex("BranchID").Width(100)
                 .Editor(
                         HQ.Combo().ID("cboBranchID").Name("cboBranchID")
                         .HQProcedure("OM23600_pcBranchID")
-                        .Width(300).HQHeightWidth(500, 400)
+                        .Width(200).HQHeightWidth(500, 400)
                         .HQColumnShow("BranchID,CpnyName").DisplayField("BranchID").ValueField("BranchID")
                         .AllowBlank(true).ForceSelection(true).HQDBSys(false)
                         .HQParam(new StoreParameterCollection() 
@@ -109,11 +109,11 @@
 
             X.Column().Text(Util.GetLang("CustName")).DataIndex("CustName").Width(150),
             
-            X.Column().ID("ClassID").Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(120)
+            X.Column().ID("ClassID").Text(Util.GetLang("ClassID")).DataIndex("ClassID").Width(100)
                      .Editor(
                         HQ.Combo().ID("cboClassID").Name("cboClassID")
                         .HQProcedure("OM23600_pcClassID")
-                        .Width(300).HQHeightWidth(500, 400)
+                        .Width(200).HQHeightWidth(500, 400)
                         .HQColumnShow("ClassID,Descr").DisplayField("ClassID").ValueField("ClassID")
                         .AllowBlank(true).ForceSelection(true).HQDBSys(false)
 
@@ -132,11 +132,11 @@
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .LoadData()
                             ),
-            X.Column().ID("SiteId").Text(Util.GetLang("SiteId")).DataIndex("SiteID").Width(120)
+            X.Column().ID("SiteId").Text(Util.GetLang("SiteId")).DataIndex("SiteID").Width(100)
                          .Editor(
                             HQ.Combo().ID("cboSiteId").Name("cboSiteId")
                             .HQProcedure("OM23600_pcSiteID")
-                            .Width(300).HQHeightWidth(500, 400)
+                            .Width(200).HQHeightWidth(500, 400)
                             .HQColumnShow("SiteId,Name").DisplayField("SiteId").ValueField("SiteId")
                             .AllowBlank(true).ForceSelection(true).HQDBSys(false)
 
@@ -156,11 +156,11 @@
                             .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                             .LoadData()
                                 ),                
-            X.Column().ID("InvtID").Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(120)
+            X.Column().ID("InvtID").Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(100)
                         .Editor(
                         HQ.Combo().ID("cboInvtID").Name("cboInvtID")
                         .HQProcedure("OM23600_pcInvtID")
-                        .Width(300).HQHeightWidth(500, 400)
+                        .Width(200).HQHeightWidth(500, 400)
                         .HQColumnShow("InvtID,Descr").DisplayField("InvtID").ValueField("InvtID")
                         .AllowBlank(true).ForceSelection(true).HQDBSys(false)
 
@@ -186,7 +186,7 @@
                         .Editor(
                             HQ.Combo().ID("cboExpDate").Name("cboExpDate")
                         .HQProcedure("OM23600_pcExpDate")
-                        .Width(300).HQHeightWidth(500, 400)
+                        .Width(200).HQHeightWidth(500, 400)
                         .HQColumnShow("dExpDate").DisplayField("dExpDate").ValueField("vExpDate")
                         .AllowBlank(true).ForceSelection(false).HQDBSys(false)                     
                         .HQParam(new StoreParameterCollection() 
