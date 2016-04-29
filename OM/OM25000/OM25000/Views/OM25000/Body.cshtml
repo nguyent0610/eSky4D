@@ -1,0 +1,254 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM25000;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+    .TopBar(Util.SetupToolbar("Print", true, ""))
+    .Layout(LayoutType.Fit)
+    .Items(
+        ////Thiet ke giao dien o day
+        X.GridPanel()
+        .Scroll(ScrollMode.Both)
+        .View(X.GridView().TrackOver(false))
+        .ID("grdDet")
+        .Store(
+            X.Store()
+            .ID("stoData")
+            .PageSize(50)
+            .Model(Util.GenerateModel(typeof(OM25000_pgLoadKPI_Result), "mdlOM25000_pgLoadKPI", ""))
+            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetData"))).AutoLoad(false)
+            .Listeners(l =>
+            {
+                l.BeforeLoad.Fn = "stoData_beforeLoad";
+                l.Load.Fn = "stoData_load";
+                l.Update.Fn = "stoData_changed";             
+            })
+        )
+        .Listeners(p =>
+        {
+            p.BoxReady.Handler = "firstLoad();";
+        })
+        .SortableColumns(false)
+        .ColumnModel(
+            X.RowNumbererColumn().Width(40),
+            X.Column().ID("KPI").Text(Util.GetLang("OM25000KPI")).DataIndex("KPI").Width(150)
+                .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true)) 
+            ,X.Column().ID("Name").Text(Util.GetLang("OM25000Name")).DataIndex("Name").Width(150)
+                .Editor(Html.X().TextField().MaxLength(200).EnforceMaxLength(true))        
+            //X.Column().ID("KPI").Text(Util.GetLang("KPI")).DataIndex("KPI")
+            //.Editor(
+            //        HQ.Combo().ID("cboKPI").Name("cboKPI").HQProcedure("OM25000_pcLoadKPI").HQAutoLoad(true).HQDBSys(false)
+            //        .HQColumnShow("KPI,Name").DisplayField("KPI").ValueField("KPI")
+            //        .Width(500).HQHeightWidth(500, 400)
+            //        .HQParam(new StoreParameterCollection() 
+            //        {
+            //            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+            //            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+            //            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            //        })
+            //        .AllowBlank(true).ForceSelection(true)
+            //        .LoadData()
+            //        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            //        .Listeners(lst =>
+            //        {
+            //            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+            //            lst.Focus.Handler = "this.forceSelection = true";
+            //        })
+            //    )
+            //, X.Column().Text(Util.GetLang("Name")).DataIndex("Name").Width(300).AutoFocus(true)
+            //, X.Column().ID("ApplyFor").Text(Util.GetLang("OM25000ApplyFor")).DataIndex("ApplyFor")//.Renderer("renderApplyForName")
+            //.Hidden(true)
+            //.Editor(
+            //        HQ.Combo().ID("cboApplyFor").Name("cboApplyFor").HQProcedure("OM25000_pcApplyFor").HQAutoLoad(true).HQDBSys(false)
+            //            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Descr")//.DataIndex("ApplyFor")
+            //        .Width(500).HQHeightWidth(500, 400)
+            //        .HQParam(new StoreParameterCollection() 
+            //        {
+            //            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+            //            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },                  
+            //            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            //        })
+            //        .AllowBlank(true).ForceSelection(true)
+            //        .LoadData()
+            //        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            //        .Listeners(lst =>
+            //        {
+            //            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+            //            lst.Focus.Handler = "this.forceSelection = true";
+            //        })
+            //    )
+
+            , X.Column().ID("ApplyForDescr").Text(Util.GetLang("OM25000ApplyFor")).DataIndex("ApplyFor").Width(150).Renderer("renderApplyForName")
+            .Editor(
+                    HQ.Combo().ID("cboApplyForDescr").Name("cboApplyForDescr").HQProcedure("OM25000_pcApplyFor").HQAutoLoad(true).HQDBSys(false)
+                       .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("ApplyFor").ForceSelection(true)
+                    .Width(500).HQHeightWidth(500, 400)
+                    .HQParam(new StoreParameterCollection() 
+                    {
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },                  
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .AllowBlank(true).ForceSelection(true)
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        //lst.Focus.Handler = "this.forceSelection = true";
+                        //lst.Select.Fn = "cboApplyForDescr_select";
+                    })
+                )    
+                
+            //, X.Column().ID("ApplyTo").Text(Util.GetLang("OM25000ApplyTo")).DataIndex("ApplyTo")//.Renderer("renderApplyToName")
+            //.Hidden(true)
+            //.Editor(
+            //        HQ.Combo().ID("cboApplyTo").Name("cboApplyTo").HQProcedure("OM25000_pcApplyTo").HQAutoLoad(true).HQDBSys(false)
+            //            .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Descr")//.DataIndex("ApplyTo")
+            //        .Width(500).HQHeightWidth(500, 400)
+            //        .HQParam(new StoreParameterCollection() 
+            //        {
+            //            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+            //            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+            //            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            //        })
+            //        .AllowBlank(true).ForceSelection(true)
+            //        .LoadData()
+            //        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            //        .Listeners(lst =>
+            //        {
+            //            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+            //            lst.Focus.Handler = "this.forceSelection = true";
+            //        })
+            //    )
+            , X.Column().ID("ApplyToDescr").Text(Util.GetLang("OM25000ApplyTo")).DataIndex("ApplyTo").Renderer("renderApplyToName")           
+            .Editor(
+                HQ.Combo().ID("cboApplyToDescr").Name("cboApplyToDescr").HQProcedure("OM25000_pcApplyTo").HQAutoLoad(true).HQDBSys(false)
+                    .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("ApplyTo").ForceSelection(true)
+                .Width(500).HQHeightWidth(500, 400)
+                .HQParam(new StoreParameterCollection() 
+                {
+                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                })
+                .AllowBlank(true).ForceSelection(true)
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    //lst.Focus.Handler = "this.forceSelection = true";
+                    //lst.Select.Fn = "cboApplyToDescr_select";
+                })
+                )
+            //, X.Column().ID("Type").Text(Util.GetLang("Type")).DataIndex("Type")//.Renderer("renderType")
+            //.Hidden(true)
+            //.Editor(
+            //        HQ.Combo().ID("cboType").Name("cboType").HQProcedure("OM25000_pcType").HQAutoLoad(true).HQDBSys(false)
+            //        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")//.DataIndex("Type")
+            //        .Width(500).HQHeightWidth(500, 400)
+            //        .HQParam(new StoreParameterCollection() 
+            //        {                    
+            //            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+            //            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+            //            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+            //        })
+            //        .AllowBlank(true).ForceSelection(true)
+            //        .LoadData()
+            //        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+            //        .Listeners(lst =>
+            //        {
+            //            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+            //            lst.Focus.Handler = "this.forceSelection = true";
+            //        })
+            //    )
+                , X.Column().ID("TypeDescr").Text(Util.GetLang("Type")).DataIndex("Type").Renderer("renderType")
+                .Editor(
+                        HQ.Combo().ID("cboTypeDescr").Name("cboType").HQProcedure("OM25000_pcType").HQAutoLoad(true).HQDBSys(false)
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("Type")
+                        .Width(500).HQHeightWidth(500, 400)
+                        .HQParam(new StoreParameterCollection() 
+                        {                    
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .AllowBlank(true).ForceSelection(true)
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            //lst.Focus.Handler = "this.forceSelection = true";
+                            //lst.Select.Fn = "cboTypeDescr_select";
+                        })
+                    )
+                 
+            ,X.CommandColumn()
+            .Width(150)
+            .Commands(
+                X.GridCommand()
+                .Text(Util.GetLang("Reject"))
+                .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
+                .CommandName("reject")
+                .Icon(Icon.ArrowUndo)
+            )
+            .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+            .Listeners(l => l.Command.Handler = "grdDet_Reject(record);")
+        )
+        .SelectionModel(X.RowSelectionModel().ID("slmData").Mode(SelectionMode.Multi))
+        .BottomBar(
+            X.PagingToolbar()
+            .Items(
+                X.Label("Page size:"),
+                X.ToolbarSpacer(10),
+                X.ComboBox()
+                .Width(80)
+                .Items("1", "2", "10", "20", "30", "50")
+                .SelectedItems("50")
+                .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";                   
+                    })
+            )
+            .Plugins(X.ProgressBarPager())
+        )
+        .Plugins(
+            X.CellEditing()
+            .ClicksToEdit(1)
+            .Listeners(ls =>
+            {
+                ls.BeforeEdit.Fn = "grdDet_BeforeEdit";
+                ls.Edit.Fn = "grdDet_Edit";
+                ls.ValidateEdit.Fn = "grdDet_ValidateEdit";
+
+            })
+        )
+
+        .Features(
+            X.GridFilters()
+                .Local(true)
+                .Filters(
+                        X.StringFilter().DataIndex("KPI"),
+                        X.StringFilter().DataIndex("Name"),
+                        X.StringFilter().DataIndex("ApplyFor").ValidateRecord(p => p.Fn = "stringFilter"),
+                        X.StringFilter().DataIndex("ApplyTo").ValidateRecord(p => p.Fn = "stringFilter"),
+                        X.StringFilter().DataIndex("Type").ValidateRecord(p => p.Fn = "stringFilter")
+                )
+        )
+    )
+))
