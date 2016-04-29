@@ -1,0 +1,82 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM25100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM25100";
+    var acc = Session["OM25100"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+ <!--Không thay đổi phần head Đổi mã màn hình OM25100.js tùy theo màn hình đổi lại-->
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @*<script src='@Url.Content("Scripts/Screen/hq.language" + Current.LangID + ".js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/hq.common.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/OM25100.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>*@
+
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/OM25100.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        //HQ.isUpdate = HQ.util.toBool('true');
+        //HQ.isInsert = HQ.util.toBool('false');
+        //HQ.isDelete = HQ.util.toBool('true');
+        @*HQ.bussinessDate = new Date('@DateTime.Now.Year', '@DateTime.Now.Month', '@DateTime.Now.Date');*@
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');
+
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
+         
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("stoCycleNbr")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM_KPIHeader), "mdlOM_KPIHeader", "CycleNbr,KPI"))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetMCCodeHeader", "OM25100"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("CycleNbr", "App.cboCycleNbr.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("KPI", "App.cboKPI.getValue()", ParameterMode.Raw));
+                
+            })
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";                   
+                }
+            )
+        )
+        @X.GridFilters()<!--Khi cache cho grid-->
+        @X.ProgressBarPager()<!--Khi cache cho grid --> 
+        <!-- Gọi hàm Body trong OM25100Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID });}   
+    </body>
+</html>
