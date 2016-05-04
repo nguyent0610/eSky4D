@@ -105,7 +105,10 @@ var menuClick = function (command) {
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain)
                     && HQ.store.checkRequirePass(App.stoSYS_CloseDateAuto, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
-                    save();
+                    if (App.stoSYS_CloseDateAuto.getCount() == 1)
+                        HQ.message.show(2015020804, '', '');
+                    else
+                        save();
                 }
             }
             break;
@@ -388,7 +391,6 @@ var btnAddAll_click = function (btn, e, eOpts) {
         if (allNodes && allNodes.length > 0) {
             App.stoSYS_CloseDateBranchAuto.suspendEvents();
             allNodes.forEach(function (node) {
-                HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
                 if (node.data.Type == "Company") {
                     var record = HQ.store.findRecord(App.grdSYS_CloseDateBranchAuto.store,
                         ['BranchID'],
@@ -396,10 +398,11 @@ var btnAddAll_click = function (btn, e, eOpts) {
                     if (!record) {
                         record = App.stoSYS_CloseDateBranchAuto.getAt(App.grdSYS_CloseDateBranchAuto.store.getCount() - 1);
                         record.set('BranchID', node.data.RecID);
+                        HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
                     }
                 }
             });
-            HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
+            //HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
             App.stoSYS_CloseDateBranchAuto.resumeEvents();
             App.grdSYS_CloseDateBranchAuto.view.refresh();
             App.stoSYS_CloseDateBranchAuto.loadPage(1);
@@ -421,8 +424,8 @@ var addNode = function (node) {
             if (!record) {
                 record = App.stoSYS_CloseDateBranchAuto.getAt(App.grdSYS_CloseDateBranchAuto.store.getCount() - 1);
                 record.set('BranchID', node.data.RecID);
+                HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
             }
-            HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
         }
         else if (node.childNodes) {
             node.childNodes.forEach(function (itm) {
@@ -438,18 +441,19 @@ var btnAdd_click = function (btn, e, eOpts) {
         if (allNodes && allNodes.length > 0) {
             App.stoSYS_CloseDateBranchAuto.suspendEvents();
             allNodes.forEach(function (node) {
-                HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
                 if (node.attributes.Type == "Company") {
                     var record = HQ.store.findInStore(App.grdSYS_CloseDateBranchAuto.store,
                         ['BranchID'],
                         [node.attributes.RecID]);
                     if (!record) {
+                        //HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
                         record = App.stoSYS_CloseDateBranchAuto.getAt(App.grdSYS_CloseDateBranchAuto.store.getCount() - 1);
                         record.set('BranchID', node.attributes.RecID);
+                        HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
                     }
                 }
             });
-            HQ.store.insertBlank(App.stoSYS_CloseDateBranchAuto, keys);
+            
             App.stoSYS_CloseDateBranchAuto.resumeEvents();
             App.grdSYS_CloseDateBranchAuto.view.refresh();
             App.stoSYS_CloseDateBranchAuto.loadPage(1);

@@ -124,16 +124,16 @@
                             HQ.Combo().ID("cboID").Name("cboID")
                                 .HQLangCode("ID").HQProcedure("SA40200_pcSYS_CloaseDateAuto").HQDBSys(true)
                                 .HQColumnShow("ID,Descr").DisplayField("ID").ValueField("ID").HQHeightWidth(400, 300)
-                                .ForceSelection(true).Editable(false)
+                                .ForceSelection(true)//.Editable(false)
                                 .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                                 .Listeners(lst =>
                                 {
                                     lst.TriggerClick.Fn = "cboID_TriggerClick";
                                     lst.Change.Fn = "cboID_Change";
                                     lst.Expand.Fn = "cboID_Expand"; 
-                                    lst.KeyPress.Fn = "cboID_KeyPress";
+                                    //lst.KeyPress.Fn = "cboID_KeyPress";
                                 })
-                                .EnableKeyEvents(true)
+                                //.EnableKeyEvents(true)
                                 .LoadData().Width(250)
 
                             , HQ.NumberField().ID("txtUpDates").Name("UpDates").HQLangCode("UpDates").MarginSpec("0 0 10 0").Width(250).MinValue(0).DecimalPrecision(0)

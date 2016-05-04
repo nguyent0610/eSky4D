@@ -66,6 +66,33 @@ var HQ = {
                 return false;
             }
         },
+        isGridChange: function (store, keys) { // Kiểm tra dòng thêm mới đã đủ key thì đánh dấu là đã thay đổi
+            if (store.getChangedData().Updated != undefined
+                || store.getChangedData().Deleted != undefined) {
+                return true;
+            }
+            else if (store.getChangedData().Created != undefined) {
+                if (store.getChangedData().Created.length > 1) {
+                    return true;
+                }
+                else {
+                    var itmCount = keys.length;
+                    var match = 0;
+                    for (var idx = 0; idx < itmCount; idx++) {
+                        if (store.getChangedData().Created[0][keys[idx]]) {
+                            match++;
+                        }
+                    }
+                    if (match == itmCount) {
+                        return true;
+                    }
+                    return false;
+                }
+
+            } else {
+                return false;
+            }
+        },
         insertBlank: function (store, keys) {
             if (keys == undefined) {
                 store.insert(store.getCount(), Ext.data.Record());
@@ -506,7 +533,7 @@ var HQ = {
             var index = '';
             var arr = grd.getSelectionModel().selected.items;
             arr.forEach(function (itm) {
-                index += (itm.index + 1) + ',';
+                index += (itm.index == undefined ? (grd.getStore().indexOf(itm) + 1) : itm.index + 1) + ',';
             });
             return index.substring(0, index.length - 1);
         },
