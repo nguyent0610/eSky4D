@@ -1,7 +1,7 @@
 //// Declare //////////////////////////////////////////////////////////
 var keys = ['RoleID'];
-var fieldsCheckRequire = ["RoleID"];
-var fieldsLangCheckRequire = ["RoleID"];
+var fieldsCheckRequire = ["RoleID","Desc"];
+var fieldsLangCheckRequire = ["RoleID","Desc"];
 
 var _Source = 0;
 var _maxSource = 1;
