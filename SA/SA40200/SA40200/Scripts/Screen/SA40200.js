@@ -98,14 +98,13 @@ var menuClick = function (command) {
                         }
                     }
                 }
-
             }
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
                 if (HQ.form.checkRequirePass(App.frmMain)
                     && HQ.store.checkRequirePass(App.stoSYS_CloseDateAuto, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
-                    if (App.stoSYS_CloseDateAuto.getCount() == 1)
+                    if (App.stoSYS_CloseDateBranchAuto.getCount() == 1)
                         HQ.message.show(2015020804, '', '');
                     else
                         save();
