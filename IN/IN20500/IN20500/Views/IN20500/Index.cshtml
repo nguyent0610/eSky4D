@@ -18,9 +18,9 @@
         <meta name="viewport" content="width=device-width" />
 
 
-   <script src='@Url.Content("Scripts/hq.language"+ Current.LangID + ".js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/IN20500.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/IN20500.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
 @*<script src='@Url.Content("Scripts/Screen/uxflash.js")' type="text/javascript"></script>
 <script src='@Url.Content("Scripts/Screen/uxflex.js")' type="text/javascript"></script>
 <script src='@Url.Content("Scripts/Screen/uxmedia-ie.js")' type="text/javascript"></script>
@@ -177,7 +177,7 @@
         .Listeners(p =>
         {
             p.Load.Fn = "loadDataGrid";
-            p.DataChanged.Handler = "frmChange();";
+            p.Update.Handler = "frmChange();";
         })
   )
 

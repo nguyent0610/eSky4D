@@ -366,7 +366,11 @@ namespace IN20500.Controllers
 
                                 ZipFiles(FilePath, newFileName);
                             }
-                            else if (Path.GetExtension(files[i].FileName).ToLower().Contains("mp4") || Path.GetExtension(files[i].FileName).ToLower().Contains("wmv"))
+                            else if (Path.GetExtension(files[i].FileName).ToLower().Contains("mp4") || Path.GetExtension(files[i].FileName).ToLower().Contains("wmv")||
+                                     Path.GetExtension(files[i].FileName).ToLower().Contains("ppt") || Path.GetExtension(files[i].FileName).ToLower().Contains("pptx")||
+                                     Path.GetExtension(files[i].FileName).ToLower().Contains("pdf") || Path.GetExtension(files[i].FileName).ToLower().Contains("xls") ||
+                                     Path.GetExtension(files[i].FileName).ToLower().Contains("xlsx") || Path.GetExtension(files[i].FileName).ToLower().Contains("docx")||
+                                     Path.GetExtension(files[i].FileName).ToLower().Contains("doc"))
                             {
                                 // Xoa file cu di
                                 var oldPath = string.Format("{0}\\{1}", FilePath, _objHeader.Media);
@@ -411,7 +415,7 @@ namespace IN20500.Controllers
                 {
                     foreach (IN20500_pgGetCompanyInvt_Result deleted in lstgrd.Deleted)
                     {
-                        if (approveStatus != "H" && approveStatus != "D" && approveStatus != "C")
+                        if (approveStatus != "D" && approveStatus != "C")
                         {
                             var del = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == deleted.CpnyID).FirstOrDefault();
                             if (del != null)
