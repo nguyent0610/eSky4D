@@ -62,8 +62,7 @@ var menuClick = function (command) {
             break;
         case "save":
             if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
-                if (HQ.form.checkRequirePass(App.frmMain)
-                    && HQ.store.checkRequirePass(App.stoSYS_Role, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
+                if (HQ.store.checkRequirePass(App.stoSYS_Role, keys, fieldsCheckRequire, fieldsLangCheckRequire)) {
                     save();
                 }
             }
