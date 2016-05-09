@@ -117,12 +117,18 @@ var menuClick = function (command) {
             }
             break;
         case "new":
-            if (HQ.isChange) {
-                HQ.message.show(2015030201, '', "askNew", true);
-            } else {
-                defaultOnNew();
+            if (HQ.focus == 'batch') {
+                if (HQ.isChange) {
+                    HQ.message.show(2015030201, '', "askNew", true);
+                } else {
+                    defaultOnNew();
+                }
+            }
+            else if (HQ.focus == 'trans') {
+                HQ.store.insertRecord(App.stoTrans, "InvtID", Ext.create('App.mdlTrans'), true)
             }
             break;
+          
         case "refresh":
             if (HQ.isChange) {
                 HQ.message.show(20150303, '', "askRefresh", true);
@@ -525,6 +531,7 @@ var bindBatch = function (record) {
 
     HQ.common.showBusy(true, HQ.waitMsg);
     HQ.numDetail = 0;
+    
     App.stoTrans.reload();
     App.stoLotTrans.reload();
 

@@ -302,11 +302,14 @@ namespace IN10400.Controllers
                 if (trans != null)
                 {
                     double oldQty = 0;
-                    if (trans.TranType == "")
+                    
+                    if (trans.Qty < 0)
                     {
-                        oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
+                        oldQty = Math.Abs(trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact);
+                        //oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
                         UpdateINAlloc(trans.InvtID, trans.SiteID, oldQty, 0);
                     }
+                 
 
                     lstTrans.Remove(trans);
                     _app.IN_Trans.DeleteObject(trans);
@@ -384,6 +387,9 @@ namespace IN10400.Controllers
                     }
                    objSite.QtyAllocIN = Math.Round(objSite.QtyAllocIN + newQty - oldQty, _decQty);
                    objSite.QtyAvail = Math.Round(objSite.QtyAvail - newQty + oldQty, _decQty);
+
+                  // itemsite.QtyAllocIN = Math.Round(itemsite.QtyAllocIN + newQty - oldQty, 0);
+                  // itemsite.QtyAvail = Math.Round(itemsite.QtyAvail - newQty + oldQty, 0);
 
                     return true;
                 }
@@ -768,7 +774,7 @@ namespace IN10400.Controllers
                 {
                     if (t.Qty < 0)
                     {
-                        oldQty = Math.Abs(t.UnitMultDiv == "M" ? t.Qty / t.CnvFact : t.Qty * t.CnvFact);
+                        oldQty = Math.Abs(t.UnitMultDiv == "D" ? t.Qty / t.CnvFact : t.Qty * t.CnvFact);
                     }
                     else
                         oldQty = 0;
@@ -779,7 +785,7 @@ namespace IN10400.Controllers
 
                 if (s.Qty < 0)
                 {
-                    newQty =  Math.Abs(s.UnitMultDiv == "M" ? s.Qty / s.CnvFact : s.Qty * s.CnvFact);
+                    newQty =  Math.Abs(s.UnitMultDiv == "D" ? s.Qty / s.CnvFact : s.Qty * s.CnvFact);
                 }
                 UpdateINAlloc(t.InvtID, t.SiteID, oldQty, 0);
 
