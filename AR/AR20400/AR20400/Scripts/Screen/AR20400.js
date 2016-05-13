@@ -255,29 +255,31 @@ var menuClick = function (command) {
                     && HQ.store.checkRequirePass(App.stoAR_CustDisplayMethod, keysTab_6, fieldsCheckRequireTab_6, fieldsLangCheckRequireTab_6)) {
                     if (App.txtEMailAddr.getValue())
                         if (!HQ.util.checkEmail(App.txtEMailAddr.getValue()))
-                            return false
-                    if (HQ.util.checkSpecialChar(App.cboCustId.getValue()) == true) {
-                        if (_hiddenTree == 'false') {
-                            if (_recordID != '' && _parentRecordID != '' && _nodeID != '' && _nodeLevel != '') {
-                                if (_root == 'true') {
-                                    HQ.message.show(2015040901, '', '');
-                                    return false;
-                                }
-                                save();
-                            }
-                            else {
-                                HQ.message.show(2015090701, '', '');
+                            return false;
+                    if (App.cboCustId.allowBlank == false) {
+                        if (HQ.util.checkSpecialChar(App.cboCustId.getValue()) == false) {
+                            HQ.message.show(2015123111, App.cboCustId.fieldLabel);
+                            App.cboCustId.focus();
+                            App.cboCustId.selectText();
+                            return false;
+                        }
+                    }
+                    if (_hiddenTree == 'false') {
+                        if (_recordID != '' && _parentRecordID != '' && _nodeID != '' && _nodeLevel != '') {
+                            if (_root == 'true') {
+                                HQ.message.show(2015040901, '', '');
                                 return false;
                             }
-                        }
-                        else
                             save();
+                        }
+                        else {
+                            HQ.message.show(2015090701, '', '');
+                            return false;
+                        }
                     }
-                    else {
-                        HQ.message.show(2015123111, App.cboCustId.fieldLabel);
-                        App.cboCustId.focus();
-                        App.cboCustId.selectText();
-                    }
+                    else
+                        save();
+
                 }
             }
             break;
