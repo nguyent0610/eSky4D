@@ -59,6 +59,7 @@ namespace OM22003.Controllers
 
         public ActionResult GetDet(string zone, string territory, string cpnyID, string displayID, DateTime? fromDate, DateTime? toDate)
         {
+            _db.CommandTimeout = int.MaxValue;
             var dets = _db.OM22003_pgAppraise(zone, territory, cpnyID, displayID, fromDate, toDate).ToList();
             return this.Store(dets);
         }
@@ -83,13 +84,15 @@ namespace OM22003.Controllers
                     imgs[i].ImageSrc = (FilePath + "\\" + imgs[i].ImageName).ToBase64Thumbnails(width, height, true);
                 }
                 catch
-                { }
+                {
+                    imgs[i].ImageSrc = "A";
+                }
             }
             return this.Store(imgs);
         }
 
         [ValidateInput(false)]
-        public ActionResult SaveAppraise(FormCollection data, bool pass)
+        public ActionResult SaveAppraise(FormCollection data, bool pass,DateTime dateDisplay)
         {
             try
             {
@@ -97,7 +100,7 @@ namespace OM22003.Controllers
                 var Appraise = recHandler.ObjectData<OM22003_pgAppraise_Result>()
                             .FirstOrDefault();
 
-                var recAppraise = _db.OM_TDisplayCustomer.FirstOrDefault(
+                var recAppraise = _db.OM_TDisplayResult.FirstOrDefault(
                     p => p.BranchID == Appraise.BranchID && p.SlsperID == Appraise.SlsperID
                         && p.CustID == Appraise.CustID && p.DisplayID == Appraise.DisplayID);
                 if (recAppraise != null)
@@ -109,17 +112,47 @@ namespace OM22003.Controllers
                         {
                             recAppraise.Pass = pass;
                             recAppraise.Remark = Appraise.Remark;
-                            _db.SaveChanges();
+                            recAppraise.LUpd_DateTime = DateTime.Now;
+                            recAppraise.LUpd_Prog = _screenNbr;
+                            recAppraise.LUpd_User = Current.UserName;
+                          
                         }
-                        return Json(new { success = true });
+                      
                     }
                     else {
                         throw new MessageException("19");
                     }
                 }
                 else {
-                    throw new MessageException("8");
+                    recAppraise = new OM_TDisplayResult();
+                    recAppraise.ResetET();
+
+                    recAppraise.BranchID = Appraise.BranchID;
+                    recAppraise.CustID = Appraise.CustID;
+                    recAppraise.Date = dateDisplay;
+                    recAppraise.DisplayID = Appraise.DisplayID;
+                    recAppraise.LevelID = Appraise.LevelID;
+                    recAppraise.Rate = 0;
+                    recAppraise.SlsperID = Appraise.SlsperID;
+                    recAppraise.Territory = Appraise.Territory;
+                    recAppraise.Zone = Appraise.Zone;
+
+                    recAppraise.Pass = pass;
+                    recAppraise.Remark = Appraise.Remark;
+
+                    recAppraise.Crtd_DateTime = DateTime.Now;
+                    recAppraise.Crtd_Prog = _screenNbr;
+                    recAppraise.Crtd_User = Current.UserName;
+
+                    recAppraise.LUpd_DateTime = DateTime.Now;
+                    recAppraise.LUpd_Prog = _screenNbr;
+                    recAppraise.LUpd_User = Current.UserName;
+
+                    _db.OM_TDisplayResult.AddObject(recAppraise);
+                    //throw new MessageException("8");
                 }
+                _db.SaveChanges();
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {

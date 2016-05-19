@@ -120,12 +120,16 @@
                 .MinWidth(250)//.Flex(1)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
                 .Items(
-                    HQ.DateField().ID("dtpFromDate")
+                
+                    HQ.DateField().ID("dtpFromDate").Hidden(true)
                     .HQLangCode("FromDate").AllowBlank(false)
-                    .Listeners(l => l.Change.Fn = "Event.Form.dtpFromDate_change")
+                    //.Listeners(l => l.Change.Fn = "Event.Form.dtpFromDate_change")
                     
-                    , HQ.DateField().ID("dtpToDate")
-                    .HQLangCode("ToDate").AllowBlank(false)
+                    , HQ.DateField().ID("dtpToDate").Hidden(true)
+                    .HQLangCode("ToDate").AllowBlank(false)                    
+                     , HQ.DateField().ID("dtpMonth").Type(DatePickerType.Month)
+                    .HQLangCode("Month").AllowBlank(false)
+                    .Listeners(l => l.Change.Fn = "Event.Form.dtpMonth_change")
                 ) // Third Column
                 
                  // Forth Column
@@ -252,11 +256,13 @@
                     Html.X().XTemplate()
                         .Html(
                             @<text>
-                                <tpl for=".">
-								    <div class="thumb-wrap" id="{ImageName}">
-									    <div class="thumb"><a target="_blank" href="OM22003/Download?fileName={ImageName}">{ImageSrc}</a></div>
-									    <span class="x-editable">{CreateDate}</span>
-								    </div>
+                                <tpl for=".">      
+                                    <tpl if="ImageSrc!=&quot;&quot;">
+                                         <div class="thumb-wrap" id="{ImageName}">
+									        <div class="thumb"><a target="_blank" href="OM22003/Download?fileName={ImageName}">{ImageSrc}</a></div>
+									        <span class="x-editable">{CreateDate}</span>
+								        </div>     
+                                    </tpl>                                                                                                            								                           
 							    </tpl>
 							    <div class="x-clear"></div>
                             </text>

@@ -57,7 +57,8 @@ var Process = {
                 timeout: 1800000,
                 params: {
                     record: Ext.encode([App.frmImage.getRecord().data]),
-                    pass: App.radDat.value
+                    pass: App.radDat.value,
+                    dateDisplay:App.dtpToDate.value
                 },
                 success: function (msg, data) {
                     if (data.result.msgCode) {
@@ -129,6 +130,7 @@ var Event = {
         frmMain_boxReady: function () {
             App.dtpFromDate.setValue(HQ.dateNow);
             App.dtpToDate.setValue(HQ.dateNow);
+            App.dtpMonth.setValue(HQ.dateNow);
         },
 
         cboZone_change: function (cbo, newValue, oldValue, eOpts) {
@@ -143,9 +145,13 @@ var Event = {
             App.cboDisplayID.store.reload();
         },
 
-        dtpFromDate_change: function (dtp, newValue, oldValue, eOpts) {
-            App.dtpToDate.setMinValue(newValue);
-            App.dtpToDate.validate();
+        dtpMonth_change: function (dtp, newValue, oldValue, eOpts) {
+            if (App.dtpMonth.isValid()) {
+                App.dtpFromDate.setValue(new Date(App.dtpMonth.value.getFullYear(), App.dtpMonth.value.getMonth(), 1));
+                App.dtpToDate.setValue((new Date(App.dtpMonth.value.getFullYear(), App.dtpMonth.value.getMonth() + 1, 1)).addDays(-1));
+                //App.dtpToDate.setMinValue(newValue);
+                //App.dtpToDate.validate();
+            }
         },
 
         btnLoad_click: function (btn, e) {
@@ -233,7 +239,10 @@ var Event = {
                 App.winImgAppraise.show();
 
                 if (record.data.Pass) {
-                    App.btnConfirm.disable();
+                    App.btnConfirm.hide();
+                    App.radDat.setReadOnly(true);
+                    App.radKhongDat.setReadOnly(true);
+                    App.txtRemark.setReadOnly(true);
                     if (record.data.Pass == _Pass.Dat) {
                         App.radDat.setValue(true);
                     }
@@ -242,7 +251,10 @@ var Event = {
                     }
                 }
                 else {
-                    App.btnConfirm.enable();
+                    App.btnConfirm.show();
+                    App.radDat.setReadOnly(false);
+                    App.radKhongDat.setReadOnly(false);
+                    App.txtRemark.setReadOnly(false);
                     App.radDat.setValue(false);
                     App.radKhongDat.setValue(false);
                 }
