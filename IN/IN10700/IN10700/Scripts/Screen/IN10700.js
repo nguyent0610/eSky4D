@@ -86,7 +86,7 @@ var Process = {
                             rowdata += (!row.record.data[keys[jkey]]? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
                     }
                 }
-                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                if (found = (data == rowdata && record.id != row.record.id && rowdata) ? true : false) {
                     break;
                 };
             }
@@ -105,7 +105,7 @@ var Process = {
                             rowdata += (!row.record.data[keys[jkey]] ? '' : row.record.data[keys[jkey]].toString().toLowerCase()) + ',';
                     }
                 }
-                if (found = (data == rowdata && record.id != row.record.id) ? true : false) {
+                if (found = (data == rowdata && record.id != row.record.id && rowdata) ? true : false) {
                     break;
                 };
             }
@@ -126,14 +126,14 @@ var Process = {
                 var i = 0;
                 var errorMessage = '';
                 var store = App.stoStockOutletDet;
-                var allRecords = store.snapshot || store.allData || store.data;
-                allRecords.each(function (record) {
-                    i++;
-                    if (record.data.ClassID == 'POSM')
-                        if (!record.data.PosmID) {
-                            errorMessage += i + ', ';
-                        }
-                });
+                //var allRecords = store.snapshot || store.allData || store.data;
+                //allRecords.each(function (record) {
+                //    i++;
+                //    if (record.data.ClassID == 'POSM')
+                //        if (!record.data.PosmID ) {
+                //            errorMessage += i + ', ';
+                //        }
+                //});
                 if (errorMessage) {
                     HQ.message.show(2016033001, [errorMessage], '', true);
                     return;
@@ -144,8 +144,9 @@ var Process = {
                     url: 'IN10700/SaveData',
                     timeout: 10000000,
                     params: {
-                        lstStockOutlet: Ext.encode(App.stoStockOutlet.getRecordsValues()),
+                        lstStockOutlet: Ext.encode(App.stoStockOutlet.getRecordsValues()),                      
                         lstStockOutletDetChange: HQ.store.getData(App.grdStockOutletDet.store),
+                        lstStockOutletPOSM: HQ.store.getData(App.stoPOSM),
                         isNew: HQ.isNew
                     },
                     success: function (msg, data) {
@@ -156,6 +157,7 @@ var Process = {
                             HQ.message.show(201405071);
                         }
                         App.stoStockOutlet.reload();
+                        App.stoPOSM.reload();
                         //App.grdStockOutletDet.store.reload();
                     },
                     failure: function (msg, data) {
@@ -175,7 +177,14 @@ var Process = {
     },
 
     deleteSelectedInGrid: function (item) {
-        if (item == 'yes') {
+        if (item == 'yes') {           
+            App.stoPOSM.clearFilter();
+            var det = App.slmStockOutletDet.selected.items[0].data;
+            for (i = App.stoPOSM.data.items.length - 1; i >= 0; i--) {
+                if (App.stoPOSM.data.items[i].data.InvtID == det.InvtID) {
+                    App.stoPOSM.data.removeAt(i);
+                }
+            }
             App.grdStockOutletDet.deleteSelected();
         }
     },
@@ -244,7 +253,7 @@ var Store = {
             var newData = {
                 BranchID: App.cboBranchID.getValue(),
                 SlsperID: App.cboSlsperID.getValue()//,
-                //ExpDate: HQ.dateNow
+                //ExpDate: HQ.bussinessDate
             };
 
             var newRec = Ext.create(sto.model.modelName, newData);
@@ -262,6 +271,7 @@ var Store = {
             _allowUpdate = false;
         }
         App.grdStockOutletDet.store.reload();
+        App.stoPOSM.reload();
     }
 };
 
@@ -316,12 +326,15 @@ var Event = {
         cboStockType_change: function (cbo, newValue, oldValue, eOpts) {
             if (newValue == _LOT) {
                 Process.showColumns(App.grdStockOutletDet, ["ExpDate"], true);
+                Process.showColumns(App.grdPOSM, ["ExpDate"], true);
             }
             else {
                 Process.showColumns(App.grdStockOutletDet, ["ExpDate"], false);
+                Process.showColumns(App.grdPOSM, ["ExpDate"], false);
             }
             if (App.frmMain.isValid()) {
                 App.stoStockOutlet.reload();
+                App.stoPOSM.reload();
             }
         },
 
@@ -347,6 +360,8 @@ var Event = {
                     break;
                 case "refresh":
                     App.grdStockOutletDet.store.reload();
+                    App.stoPOSM.reload();
+
                     break;
                 case "new":
                     if (HQ.isUpdate) {
@@ -436,8 +451,12 @@ var Event = {
         grdStockOutletDet_edit: function (editor, e) {
             if (e.field == 'InvtID') {
                 var objInvt = HQ.store.findInStore(App.cboInvtID.store, ['InvtID'], [e.record.data.InvtID]);
-                if (objInvt)
+                if (objInvt) {
                     e.record.set('ClassID', objInvt.ClassID);
+                    if (!e.record.data.ExpDate && objInvt.ClassID=="POSM")
+                        e.record.set('ExpDate', new Date(1900,0,1));
+                }
+               
             }
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
             HQ.grid.checkInsertKey(App.grdStockOutletDet, e, keys);
@@ -450,7 +469,7 @@ var Event = {
                 //        var newData = {
                 //            BranchID: App.cboBranchID.getValue(),
                 //            SlsperID: App.cboSlsperID.getValue()//,
-                //            //ExpDate: HQ.dateNow
+                //            //ExpDate: HQ.bussinessDate
                 //        };
 
                 //        var newRec = Ext.create(e.store.model.modelName, newData);
@@ -462,7 +481,11 @@ var Event = {
 
         grdStockOutletDet_validateEdit: function(editor, e){
             var keys = e.store.HQFieldKeys ? e.store.HQFieldKeys : "";
-
+           
+            var objInvt = HQ.store.findInStore(App.cboInvtID.store, ['InvtID'],e.field=="InvtID"?[e.value]: [e.record.data.InvtID]);
+            if (objInvt && objInvt.ClassID == "POSM") {
+                keys = ["InvtID"];
+            }
             if (keys.indexOf(e.field) != -1) {
                 var regex = /^(\w*(\d|[a-zA-Z]))[\_]*$/
                 if (e.value && e.column.xtype != "datecolumn" && !e.value.match(regex)) {
@@ -475,6 +498,104 @@ var Event = {
                 }
 
             }
+        },
+
+        showPOSM: function (record) {
+            App.winPOSM.invt = HQ.store.findInStore(App.cboInvtID.store, ['InvtID'], [record.data.InvtID]);
+            if (!Ext.isEmpty(record.data.ClassID) && !Ext.isEmpty(record.data.InvtID) && App.winPOSM.invt.ClassID == 'POSM') {               
+                PopupwinPOSM.showPOSM(record);
+            }
+        },
+        txtQty_Change: function (sender) {
+            var record = App.slmStockOutletDet.selected.items[0];
+            Event.Grid.showPOSM(record);
         }
     }
 };
+
+var PopupwinPOSM = {
+    showPOSM: function (record) {
+
+        var lock = !((App.txtStkOutNbr.value && HQ.isUpdate) || (!App.txtStkOutNbr.value && HQ.isInsert));
+        App.grdPOSM.isLock = lock;
+        App.stoPOSM.clearFilter();
+        App.stoPOSM.filter('InvtID', record.data.InvtID);      
+        App.winPOSM.record = record;
+        App.grdPOSM.view.refresh();
+
+        App.winPOSM.setTitle(record.data.InvtID);
+
+        App.cboPosmID.getStore().reload();
+
+        PopupwinPOSM.addNewPOSM(record.data);
+
+        App.winPOSM.show();
+    },
+    btnPOSMOK_Click: function () {
+        var qty = 0;
+        setTimeout(function () {
+            App.stoPOSM.data.each(function (item) {
+                qty += item.data.StkQty;
+                App.winPOSM.record.set("StkQty", qty);
+                App.winPOSM.hide();
+            });
+        }, 300);
+    },
+    btnPOSMDel_Click: function () {
+        if (App.smlPOSM.selected.items.length != 0) {
+            if (!Ext.isEmpty(App.smlPOSM.selected.items[0].data.PosmID)) {
+                HQ.message.show(2015020806, [App.smlPOSM.selected.items[0].data.PosmID], 'PopupwinPOSM.deletePOSM', true);
+            }
+        }
+    },
+    grdPOSM_BeforeEdit: function (item, e) {
+        var obj = e.record.data;
+     
+        if (App.grdPOSM.isLock) {
+            return false;
+        }
+        
+        if (e.field == 'PosmID')
+            return HQ.grid.checkBeforeEdit(e, ["PosmID"]);
+    },
+    grdPOSM_SelectionChange: function (item, selected) {
+       
+    },
+    grdPOSM_Edit: function (item, e) {
+        if (App.cboStockType.getValue() != 'LOT') {
+            e.record.set('ExpDate', new Date(1900, 0, 1));
+        }
+        var record = App.winPOSM.record.data;
+        PopupwinPOSM.addNewPOSM(record);
+       
+    },
+    grdPOSM_ValidateEdit: function (item, e) {
+        if (App.cboStockType.getValue() == 'LOT') {
+            if (Process.checkDuplicate(App.grdPOSM, e, ["PosmID", "ExpDate"])) {
+                HQ.message.show(1112, e.value);
+                return false;
+            }
+        } else {
+            if (Process.checkDuplicate(App.grdPOSM, e, ["PosmID"])) {
+                HQ.message.show(1112, e.value);
+                return false;
+            }
+        }
+       
+    },
+    deletePOSM: function (item) {
+        if (item == 'yes') {
+            App.grdPOSM.deleteSelected();
+        }
+    },
+    addNewPOSM: function (record, PosmID) {
+        var newRow = Ext.create('App.mdlStockOutletPOSM');
+        newRow.data.PosmID = !Ext.isEmpty(PosmID) ? PosmID : '';       
+        newRow.data.InvtID = record.InvtID;
+        newRow.data.InvtID = record.InvtID;
+        if (App.cboStockType.getValue() == 'LOT')
+            HQ.store.insertRecord(App.stoPOSM, ["InvtID", "PosmID", "ExpDate"], newRow, false);
+        else
+            HQ.store.insertRecord(App.stoPOSM, ["InvtID", "PosmID"], newRow, false);
+    }
+}

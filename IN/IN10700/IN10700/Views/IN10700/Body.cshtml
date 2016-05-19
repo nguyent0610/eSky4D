@@ -181,9 +181,9 @@
                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
                 .Renderer("Process.renderDescr")
                 
-                , X.DateColumn().Text(Util.GetLang("ExpireDate")).DataIndex("ExpDate").Format("dd/MM/yyyy")
+                , HQ.DateColumn().Text(Util.GetLang("ExpireDate")).DataIndex("ExpDate")
                 .Hidden(true).Hideable(false)
-                .Editor(HQ.DateField().Format("dd/MM/yyyy"))
+                .Editor(HQ.DateField())
                 
                 , X.Column().Text(Util.GetLang("Reason")).DataIndex("ReasonID")
                 .Width(150).Renderer("Process.renderDescr")
@@ -201,33 +201,25 @@
                 
                 , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLang("Qty")).DataIndex("StkQty").Format("0,000")
                 .Editor(
-                    X.NumberField().SelectOnFocus(true).DecimalPrecision(0).MinValue(0)
+                    X.NumberField().SelectOnFocus(true).DecimalPrecision(0).MinValue(0).DecimalPrecision(0).Listeners(l=>l.Change.Fn="Event.Grid.txtQty_Change")
                 )
+                , Html.X().ImageCommandColumn().Text(Util.GetLang(""))
+                                                    .Width(30)
+                                                    .Commands(
+                                                        Html.X().ImageCommand()
+                                                            .Icon(Icon.TabEdit)
+                                                            .ToolTip(t =>
+                                                            {
+                                                                t.Text = Util.GetLang("ShowPOSM");
+                                                            })                                                        
+                                                            .CommandName("Update")
+                                                    )
+                                                    .Listeners(l => {
+                                                        l.Command.Handler = "Event.Grid.showPOSM(record);";
+                                                    })
                 
-                , X.Column().Text(Util.GetLang("PosmID")).DataIndex("PosmID").Width(120)
-                    .Editor(
-	                    HQ.Combo().ID("cboPosmID").Name("cboPosmID").ForceSelection(true)
-		                    .HQDBSys(false).HQProcedure("IN10700_pcPOSM").HQHeightWidth(400, 300)
-		                    .HQColumnShow("PosmID").DisplayField("PosmID").ValueField("PosmID")
-		                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
-		                    .Listeners(lst =>
-		                    {
-			                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
-		                    })
-		                    .LoadData()
-			        )
                 , X.Column().DataIndex("ClassID").Hidden(true)
                 
-                //, X.CommandColumn()
-                //.Commands(
-                //    X.GridCommand()
-                //    .Text(Util.GetLang("Reject"))
-                //    .ToolTip(t => t.Text = Util.GetLang("Rejectrowchanges"))
-                //    .CommandName("reject")
-                //    .Icon(Icon.ArrowUndo)
-                //)
-                //.PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
-                //.Listeners(l => l.Command.Handler = "Event.Grid.grd_reject(this, record);")
             )
             .SelectionModel(X.RowSelectionModel().ID("slmStockOutletDet").Mode(SelectionMode.Single))
             .Plugins(
@@ -273,4 +265,59 @@
             lst.FieldChange.Fn = "Event.Form.frmMain_fieldChange";
         })// Form: frmMain
     )
+)
+
+@(X.Window()
+        .ID("winPOSM")
+        .Hidden(true)
+        .Layout(LayoutType.Fit)
+        .Height(300)
+        .Width(550)
+        .Modal(true)
+        .Closable(false)
+        .Buttons(
+            X.Button().ID("btnPOSMDel").Text(Util.GetLang("DeleteRights"))
+                .Listeners(p => p.Click.Fn = "PopupwinPOSM.btnPOSMDel_Click")
+            , X.Button().ID("btnPOSMOK").Text(Util.GetLang("OK"))
+                .Listeners(p => p.Click.Fn = "PopupwinPOSM.btnPOSMOK_Click")
+        )       
+        .Items(
+            X.GridPanel().ID("grdPOSM")
+            .Border(true).BorderSpec("1 0 0 0")
+                .StoreID("stoPOSM")
+                .ColumnModel(
+                    X.RowNumbererColumn()//.Renderer("renderRowNumber")
+
+                    , X.Column().Text(Util.GetLang("PosmID")).DataIndex("PosmID").Width(120)
+                        .Editor(
+                            HQ.Combo().ID("cboPosmID").Name("cboPosmID").ForceSelection(true)
+                                .HQDBSys(false).HQProcedure("IN10700_pcPOSM").HQHeightWidth(400, 300)
+                                .HQColumnShow("PosmID").DisplayField("PosmID").ValueField("PosmID")
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                })
+                                .LoadData()
+                        )
+                    , HQ.DateColumn().Text(Util.GetLang("ExpireDate")).DataIndex("ExpDate")
+                        .Hideable(false)
+                        .Editor(HQ.DateField())
+                    , X.NumberColumn().ID("colPOSMQty").DataIndex("StkQty").Text(Util.GetLang("Qty")).Format("#,###")
+                        .Width(75)
+                        .Align(Alignment.Right)       
+                        .Editor(Html.X().NumberField().MinValue(0).DecimalPrecision(0))              
+                    )
+                    .Listeners(lst =>
+                    {
+                        lst.Select.Handler = "HQ.focus='POSM';";
+                        lst.Edit.Fn = "PopupwinPOSM.grdPOSM_Edit";
+                        lst.BeforeEdit.Fn = "PopupwinPOSM.grdPOSM_BeforeEdit";
+                        lst.ValidateEdit.Fn = "PopupwinPOSM.grdPOSM_ValidateEdit";
+                        lst.SelectionChange.Fn = "PopupwinPOSM.grdPOSM_SelectionChange";
+                    })
+                    .SelectionModel(Html.X().RowSelectionModel().ID("smlPOSM").Mode(SelectionMode.Single))
+                    .View(X.GridView().TrackOver(false))
+                    .Plugins(X.CellEditing().ClicksToEdit(1))
+        )
 )

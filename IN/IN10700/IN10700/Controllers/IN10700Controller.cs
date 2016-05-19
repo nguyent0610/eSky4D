@@ -47,6 +47,10 @@ namespace IN10700.Controllers
         {
             return this.Store(_db.IN10700_pgStockOutletDet(Current.UserName, Current.CpnyID, branchID, slsperID, stkOutNbr).ToList());
         }
+        public ActionResult GetStockOutletPOSM(string branchID, string slsperID, string stkOutNbr)
+        {
+            return this.Store(_db.IN10700_pgStockOutletDetPOSM(Current.UserName, Current.CpnyID, branchID, slsperID, stkOutNbr).ToList());
+        }
 
         public ActionResult SaveData(FormCollection data, bool isNew)
         {
@@ -55,8 +59,14 @@ namespace IN10700.Controllers
                 var lstStockOutletHandler = new StoreDataHandler(data["lstStockOutlet"]);
                 var inputStockOutlet = lstStockOutletHandler.ObjectData<IN10700_phStockOutlet_Result>().FirstOrDefault();
 
+
+
                 var lstStockOutletDetChangeHandler = new StoreDataHandler(data["lstStockOutletDetChange"]);
                 var lstStockOutletDetChange = lstStockOutletDetChangeHandler.BatchObjectData<IN10700_pgStockOutletDet_Result>();
+
+                var lstStockOutletPOSMHandle = new StoreDataHandler(data["lstStockOutletPOSM"]);
+                var lstStockOutletPOSM = lstStockOutletPOSMHandle.BatchObjectData<IN10700_pgStockOutletDetPOSM_Result>();
+             
 
                 var outlet = _db.PPC_StockOutlet.FirstOrDefault(o => o.BranchID == inputStockOutlet.BranchID 
                     && o.SlsPerID == inputStockOutlet.SlsPerID 
@@ -173,6 +183,53 @@ namespace IN10700.Controllers
                 }
                 #endregion
 
+
+                #region Detail POSM
+                lstStockOutletPOSM.Updated.AddRange(lstStockOutletPOSM.Created);
+
+                foreach (var updated in lstStockOutletPOSM.Updated)
+                {
+                    if (!string.IsNullOrWhiteSpace(updated.PosmID))
+                    {
+                     
+
+                        var updatedDetail = _db.PPC_StockOutletPOSM.FirstOrDefault(
+                            x => x.BranchID == outlet.BranchID
+                                && x.StkOutNbr == outlet.StkOutNbr
+                                && x.SlsPerID == outlet.SlsPerID
+                                && x.InvtID == updated.InvtID
+                                && x.PosmID == updated.PosmID
+                                && x.ExpDate == updated.ExpDate);
+                        if (updatedDetail != null)
+                        {
+                            updateStockOutletPOSM(ref updatedDetail, updated,outlet, false);
+                        }
+                        else
+                        {
+                            updateStockOutletPOSM(ref updatedDetail, updated,outlet, true);
+                            _db.PPC_StockOutletPOSM.AddObject(updatedDetail);
+                        }
+                    }
+                }
+
+                foreach (var deleted in lstStockOutletPOSM.Deleted)
+                {
+                    if (!string.IsNullOrWhiteSpace(deleted.PosmID))
+                    {
+                        var deletedDetail = _db.PPC_StockOutletPOSM.FirstOrDefault(
+                           x => x.BranchID == outlet.BranchID
+                                && x.StkOutNbr == outlet.StkOutNbr
+                                && x.SlsPerID == outlet.SlsPerID
+                                && x.InvtID == deleted.InvtID
+                                && x.PosmID == deleted.PosmID
+                                && x.ExpDate == deleted.ExpDate);
+                        if (deletedDetail != null)
+                        {
+                            _db.PPC_StockOutletPOSM.DeleteObject(deletedDetail);
+                        }
+                    }
+                }
+                #endregion
                 _db.SaveChanges();
 
                 return Json(new { success = true, msgCode = 201405071 });
@@ -219,7 +276,34 @@ namespace IN10700.Controllers
             updatedDetail.LUpd_Prog = _screenNbr;
             updatedDetail.LUpd_User = Current.UserName;
         }
+        private void updateStockOutletPOSM(ref PPC_StockOutletPOSM updatedDetail, IN10700_pgStockOutletDetPOSM_Result updated,PPC_StockOutlet objHeader, bool isNew)
+        {
+            if (isNew)
+            {
+                updatedDetail = new PPC_StockOutletPOSM();
+                updatedDetail.ResetET();
+                updatedDetail.BranchID = objHeader.BranchID;
+                updatedDetail.SlsPerID = objHeader.SlsPerID;
+                updatedDetail.StkOutNbr = objHeader.StkOutNbr;
 
+                updatedDetail.InvtID = updated.InvtID;
+                updatedDetail.PosmID = updated.PosmID;
+                updatedDetail.ExpDate = updated.ExpDate.PassMin().Date;
+
+                updatedDetail.Crtd_DateTime = DateTime.Now;
+                updatedDetail.Crtd_Prog = _screenNbr;
+                updatedDetail.Crtd_User = Current.UserName;
+
+                updatedDetail.CS = 0;
+                updatedDetail.PC = 0;
+                updatedDetail.ProdDate = new DateTime(1900, 1, 1);
+            }
+            updatedDetail.StkQty = updated.StkQty;
+         
+            updatedDetail.LUpd_DateTime = DateTime.Now;
+            updatedDetail.LUpd_Prog = _screenNbr;
+            updatedDetail.LUpd_User = Current.UserName;
+        }
         private void updateStockOutlet(ref PPC_StockOutlet outlet, IN10700_phStockOutlet_Result inputStockOutlet, bool isNew)
         {
             if (isNew) {
@@ -265,6 +349,14 @@ namespace IN10700.Controllers
 
                         _db.PPC_StockOutletDet.DeleteObject(lstdel.FirstOrDefault());
                         lstdel.Remove(lstdel.FirstOrDefault());
+                    }
+
+                    var lstdelPOSM = _db.PPC_StockOutletPOSM.Where(p => p.BranchID == inputStockOutlet.BranchID && p.SlsPerID == inputStockOutlet.SlsPerID && p.StkOutNbr == inputStockOutlet.StkOutNbr).ToList();
+                    while (lstdelPOSM.FirstOrDefault() != null)
+                    {
+
+                        _db.PPC_StockOutletPOSM.DeleteObject(lstdelPOSM.FirstOrDefault());
+                        lstdelPOSM.Remove(lstdelPOSM.FirstOrDefault());
                     }
                 }
                 _db.SaveChanges();

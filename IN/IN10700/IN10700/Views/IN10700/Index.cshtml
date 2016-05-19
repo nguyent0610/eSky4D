@@ -29,7 +29,7 @@
             HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
             HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
             HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
-            HQ.dateNow = new Date('@DateTime.Now.Date');
+            HQ.bussinessDate = new Date('@DateTime.Now.Date');
         </script>
 
         <title>@ViewBag.Title</title>
@@ -82,7 +82,26 @@
                 }
             )
         )
-
+        @(
+            X.Store().ID("stoPOSM").AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(IN10700_pgStockOutletDetPOSM_Result), "mdlStockOutletPOSM", ""))       
+            .Proxy(
+                X.AjaxProxy()                
+                .Url(Url.Action("GetStockOutletPOSM", "IN10700"))                
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboBranchID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperID", "App.cboSlsperID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("stkOutNbr", "App.txtStkOutNbr.getValue()", ParameterMode.Raw));
+            })      
+           
+        )
         @X.GridFilters() <!--Khi cache cho grid-->
         @X.ProgressBarPager() <!--Khi cache cho grid -->
 
