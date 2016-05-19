@@ -506,6 +506,14 @@ namespace AR20500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectResult<Nullable<global::System.Boolean>> AR20500_pdIsShowCustHT()
+        {
+            return base.ExecuteFunction<Nullable<global::System.Boolean>>("AR20500_pdIsShowCustHT");
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="keyTree">No Metadata Documentation available.</param>
         /// <param name="preFix1">No Metadata Documentation available.</param>
@@ -518,7 +526,8 @@ namespace AR20500
         /// <param name="sufFix4">No Metadata Documentation available.</param>
         /// <param name="classID">No Metadata Documentation available.</param>
         /// <param name="state">No Metadata Documentation available.</param>
-        public ObjectResult<global::System.String> AR20500_CustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID, global::System.String state)
+        /// <param name="custName">No Metadata Documentation available.</param>
+        public ObjectResult<global::System.String> AR20500_CustID(global::System.String branchID, global::System.String keyTree, global::System.String preFix1, global::System.String preFix2, global::System.String preFix3, global::System.String preFix4, global::System.String sufFix1, global::System.String sufFix2, global::System.String sufFix3, global::System.String sufFix4, global::System.String classID, global::System.String state, global::System.String custName)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -640,15 +649,17 @@ namespace AR20500
                 stateParameter = new ObjectParameter("State", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<global::System.String>("AR20500_CustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter, stateParameter);
-        }
+            ObjectParameter custNameParameter;
+            if (custName != null)
+            {
+                custNameParameter = new ObjectParameter("CustName", custName);
+            }
+            else
+            {
+                custNameParameter = new ObjectParameter("CustName", typeof(global::System.String));
+            }
     
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectResult<Nullable<global::System.Boolean>> AR20500_pdIsShowCustHT()
-        {
-            return base.ExecuteFunction<Nullable<global::System.Boolean>>("AR20500_pdIsShowCustHT");
+            return base.ExecuteFunction<global::System.String>("AR20500_CustID", branchIDParameter, keyTreeParameter, preFix1Parameter, preFix2Parameter, preFix3Parameter, preFix4Parameter, sufFix1Parameter, sufFix2Parameter, sufFix3Parameter, sufFix4Parameter, classIDParameter, stateParameter, custNameParameter);
         }
 
         #endregion

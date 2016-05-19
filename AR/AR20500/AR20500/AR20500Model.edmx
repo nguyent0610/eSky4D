@@ -322,6 +322,7 @@
           <Parameter Name="SufFix4" Type="varchar" Mode="In" />
           <Parameter Name="ClassID" Type="varchar" Mode="In" />
           <Parameter Name="State" Type="varchar" Mode="In" />
+          <Parameter Name="CustName" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="AR20500_DeleteSalesRouteDetByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FromDate" Type="smalldatetime" Mode="In" />
@@ -387,6 +388,7 @@
             <Parameter Name="CustID" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="AR_SOAddress" EntityType="AR20500Model.AR_SOAddress" />
+          <FunctionImport Name="AR20500_pdIsShowCustHT" ReturnType="Collection(Boolean)" />
           <FunctionImport Name="AR20500_CustID" ReturnType="Collection(String)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="KeyTree" Mode="In" Type="String" />
@@ -400,8 +402,8 @@
             <Parameter Name="SufFix4" Mode="In" Type="String" />
             <Parameter Name="ClassID" Mode="In" Type="String" />
             <Parameter Name="State" Mode="In" Type="String" />
+            <Parameter Name="CustName" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AR20500_pdIsShowCustHT" ReturnType="Collection(Boolean)" />
         </EntityContainer>
         <ComplexType Name="AR20500_pgDetail_Result">
           <Property Type="Boolean" Name="ColCheck" Nullable="true" />
@@ -1103,8 +1105,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AR20500_CustID" FunctionName="eBiz4DWebSysModel.Store.AR20500_CustID" />
           <FunctionImportMapping FunctionImportName="AR20500_pdIsShowCustHT" FunctionName="eBiz4DWebSysModel.Store.AR20500_pdIsShowCustHT" />
+          <FunctionImportMapping FunctionImportName="AR20500_CustID" FunctionName="eBiz4DWebSysModel.Store.AR20500_CustID" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
