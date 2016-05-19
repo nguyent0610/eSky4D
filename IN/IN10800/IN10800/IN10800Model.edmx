@@ -9,6 +9,7 @@
           <EntitySet Name="IN_Setup" EntityType="eBiz4DWebAppModel.Store.IN_Setup" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="PPC_StockOutlet" EntityType="eBiz4DWebAppModel.Store.PPC_StockOutlet" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="PPC_StockOutletDet" EntityType="eBiz4DWebAppModel.Store.PPC_StockOutletDet" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PPC_StockOutletPOSM" EntityType="eBiz4DWebAppModel.Store.PPC_StockOutletPOSM" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="IN_Setup">
           <Key>
@@ -86,7 +87,41 @@
           <Property Name="ReasonID" Type="varchar" MaxLength="5" />
           <Property Name="PosmID" Type="varchar" MaxLength="30" />
         </EntityType>
+        <EntityType Name="PPC_StockOutletPOSM">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsPerID" />
+            <PropertyRef Name="StkOutNbr" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="PosmID" />
+            <PropertyRef Name="ExpDate" />
+          </Key>
+          <Property Name="BranchID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="SlsPerID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="StkOutNbr" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="InvtID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="PosmID" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ExpDate" Type="datetime" Nullable="false" />
+          <Property Name="ProdDate" Type="datetime" />
+          <Property Name="StkQty" Type="float" />
+          <Property Name="CS" Type="float" />
+          <Property Name="PC" Type="float" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="10" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="10" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <Function Name="IN10800_pgStockOutletDet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="BranchID" Type="varchar" Mode="In" />
+          <Parameter Name="SlsperID" Type="varchar" Mode="In" />
+          <Parameter Name="StkOutNbr" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="IN10800_pgStockOutletDetPOSM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="varchar" Mode="In" />
           <Parameter Name="CpnyID" Type="varchar" Mode="In" />
           <Parameter Name="BranchID" Type="varchar" Mode="In" />
@@ -136,6 +171,14 @@
           <EntitySet Name="IN_Setup" EntityType="IN10800Model.IN_Setup" />
           <EntitySet Name="PPC_StockOutlet" EntityType="IN10800Model.PPC_StockOutlet" />
           <EntitySet Name="PPC_StockOutletDet" EntityType="IN10800Model.PPC_StockOutletDet" />
+          <FunctionImport Name="IN10800_pgStockOutletDetPOSM" ReturnType="Collection(IN10800Model.IN10800_pgStockOutletDetPOSM_Result)">
+            <Parameter Name="UserID" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="BranchID" Mode="In" Type="String" />
+            <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="StkOutNbr" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="PPC_StockOutletPOSM" EntityType="IN10800Model.PPC_StockOutletPOSM" />
         </EntityContainer>
         <ComplexType Name="IN10800_phStockOutlet_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" />
@@ -241,6 +284,40 @@
           <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
           <Property Type="String" Name="ReasonID" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="PosmID" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="IN10800_pgStockOutletDetPOSM_Result">
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="23" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" />
+          <Property Type="Double" Name="StkQty" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="PPC_StockOutletPOSM">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="SlsPerID" />
+            <PropertyRef Name="StkOutNbr" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="PosmID" />
+            <PropertyRef Name="ExpDate" />
+          </Key>
+          <Property Type="String" Name="BranchID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SlsPerID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="StkOutNbr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PosmID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="ExpDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="ProdDate" Precision="3" />
+          <Property Type="Double" Name="StkQty" />
+          <Property Type="Double" Name="CS" />
+          <Property Type="Double" Name="PC" />
+          <Property Type="String" Name="Crtd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -361,6 +438,40 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="IN10800_pgStockOutletDetPOSM" FunctionName="eBiz4DWebAppModel.Store.IN10800_pgStockOutletDetPOSM">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="IN10800Model.IN10800_pgStockOutletDetPOSM_Result">
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+                <ScalarProperty Name="StkQty" ColumnName="StkQty" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PPC_StockOutletPOSM">
+            <EntityTypeMapping TypeName="IN10800Model.PPC_StockOutletPOSM">
+              <MappingFragment StoreEntitySet="PPC_StockOutletPOSM">
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="PC" ColumnName="PC" />
+                <ScalarProperty Name="CS" ColumnName="CS" />
+                <ScalarProperty Name="StkQty" ColumnName="StkQty" />
+                <ScalarProperty Name="ProdDate" ColumnName="ProdDate" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="PosmID" ColumnName="PosmID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="StkOutNbr" ColumnName="StkOutNbr" />
+                <ScalarProperty Name="SlsPerID" ColumnName="SlsPerID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -386,6 +497,7 @@
         <EntityTypeShape EntityType="IN10800Model.IN_Setup" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN10800Model.PPC_StockOutlet" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="IN10800Model.PPC_StockOutletDet" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="IN10800Model.PPC_StockOutletPOSM" Width="1.5" PointX="7.4312903301004738" PointY="13.431787035163392" />
       </Diagram>
     </Diagrams>
   </Designer>
