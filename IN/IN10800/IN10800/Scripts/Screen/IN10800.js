@@ -487,7 +487,7 @@ var PopupwinPOSM = {
         App.winPOSM.show();
     },
     btnPOSMOK_Click: function () {
-        if (HQ.store.checkRequirePass(App.stoPOSM, [ "ExpDate"], [ "ExpDate"], [ "ExpDate"])) {
+        if (PopupwinPOSM.checkRequirePass(App.stoPOSM, ["PosmID", "ExpDate"], ["PosmID", "ExpDate"], ["PosmID", "ExpDate"])) {
             var qty = 0;
             setTimeout(function () {
                 App.stoPOSM.data.each(function (item) {
@@ -554,5 +554,23 @@ var PopupwinPOSM = {
             HQ.store.insertRecord(App.stoPOSM, ["InvtID", "PosmID", "ExpDate"], newRow, false);
         else
             HQ.store.insertRecord(App.stoPOSM, ["InvtID", "PosmID"], newRow, false);
+    },
+    checkRequirePass: function (store, keys, fieldsCheck, fieldsLang) {
+        items = store.data.items;
+        if (items != undefined) {
+            for (var i = 0; i < items.length; i++) {
+                for (var jkey = 0; jkey < keys.length; jkey++) {
+                    if (items[i].data[keys[jkey]]) {
+                        for (var k = 0; k < fieldsCheck.length; k++) {
+                            if (HQ.util.passNull(items[i].data[fieldsCheck[k]]).toString().trim() == "") {
+                                HQ.message.show(15, HQ.common.getLang(fieldsLang == undefined ? fieldsCheck[k] : fieldsLang[k]));
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 }
