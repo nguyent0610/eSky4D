@@ -35,6 +35,8 @@ namespace IN10700
             acc.Delete = true;
             acc.Insert = true;
             acc.Update = true;
+            Current.FormatDate = "dd.MM.yyyy";
+            Current.FormatTime = "HH:mm";
             Session["IN10700"] = acc;
             Session["DBApp"] = Current.DBApp = "ND_eSky4DApp";
             Session["UserName"] = Current.UserName = "admin";

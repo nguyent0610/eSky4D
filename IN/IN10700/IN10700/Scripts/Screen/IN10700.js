@@ -123,52 +123,54 @@ var Process = {
     saveData: function () {
         if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
             if (HQ.form.checkRequirePass(App.frmMain)) {
-                var i = 0;
-                var errorMessage = '';
-                var store = App.stoStockOutletDet;
-                //var allRecords = store.snapshot || store.allData || store.data;
-                //allRecords.each(function (record) {
-                //    i++;
-                //    if (record.data.ClassID == 'POSM')
-                //        if (!record.data.PosmID ) {
-                //            errorMessage += i + ', ';
-                //        }
-                //});
-                if (errorMessage) {
-                    HQ.message.show(2016033001, [errorMessage], '', true);
-                    return;
-                }
-
-                App.frmMain.submit({
-                    waitMsg: HQ.common.getLang("SavingData"),
-                    url: 'IN10700/SaveData',
-                    timeout: 10000000,
-                    params: {
-                        lstStockOutlet: Ext.encode(App.stoStockOutlet.getRecordsValues()),                      
-                        lstStockOutletDetChange: HQ.store.getData(App.grdStockOutletDet.store),
-                        lstStockOutletPOSM: HQ.store.getData(App.stoPOSM),
-                        isNew: HQ.isNew
-                    },
-                    success: function (msg, data) {
-                        if (data.result.msgCode) {
-                            HQ.message.show(data.result.msgCode);
-                        }
-                        else {
-                            HQ.message.show(201405071);
-                        }
-                        App.stoStockOutlet.reload();
-                        App.stoPOSM.reload();
-                        //App.grdStockOutletDet.store.reload();
-                    },
-                    failure: function (msg, data) {
-                        if (data.result.msgCode) {
-                            HQ.message.show(data.result.msgCode);
-                        }
-                        else {
-                            HQ.message.process(msg, data, true);
-                        }
+                if (HQ.store.checkRequirePass(App.stoStockOutletDet, ["InvtID", "ExpDate"], ["InvtID", "ExpDate"], ["InvtID", "ExpDate"])) {
+                    var i = 0;
+                    var errorMessage = '';
+                    var store = App.stoStockOutletDet;
+                    //var allRecords = store.snapshot || store.allData || store.data;
+                    //allRecords.each(function (record) {
+                    //    i++;
+                    //    if (record.data.ClassID == 'POSM')
+                    //        if (!record.data.PosmID ) {
+                    //            errorMessage += i + ', ';
+                    //        }
+                    //});
+                    if (errorMessage) {
+                        HQ.message.show(2016033001, [errorMessage], '', true);
+                        return;
                     }
-                });
+                    App.stoPOSM.clearFilter();
+                    App.frmMain.submit({
+                        waitMsg: HQ.common.getLang("SavingData"),
+                        url: 'IN10700/SaveData',
+                        timeout: 10000000,
+                        params: {
+                            lstStockOutlet: Ext.encode(App.stoStockOutlet.getRecordsValues()),
+                            lstStockOutletDetChange: HQ.store.getData(App.grdStockOutletDet.store),
+                            lstStockOutletPOSM: HQ.store.getData(App.stoPOSM),
+                            isNew: HQ.isNew
+                        },
+                        success: function (msg, data) {
+                            if (data.result.msgCode) {
+                                HQ.message.show(data.result.msgCode);
+                            }
+                            else {
+                                HQ.message.show(201405071);
+                            }
+                            App.stoStockOutlet.reload();
+                            App.stoPOSM.reload();
+                            //App.grdStockOutletDet.store.reload();
+                        },
+                        failure: function (msg, data) {
+                            if (data.result.msgCode) {
+                                HQ.message.show(data.result.msgCode);
+                            }
+                            else {
+                                HQ.message.process(msg, data, true);
+                            }
+                        }
+                    });
+                }
             }
         }
         else {
@@ -493,7 +495,7 @@ var Event = {
                     return false;
                 }
                 if (Process.checkDuplicate(e.grid, e, keys)) {
-                    HQ.message.show(1112, e.value);
+                    HQ.message.show(1112, e.field == "ExpDate" ? e.value.getFromFormat(HQ.formatDate) : e.value);
                     return false;
                 }
 
@@ -533,13 +535,15 @@ var PopupwinPOSM = {
     },
     btnPOSMOK_Click: function () {
         var qty = 0;
-        setTimeout(function () {
-            App.stoPOSM.data.each(function (item) {
-                qty += item.data.StkQty;
-                App.winPOSM.record.set("StkQty", qty);
-                App.winPOSM.hide();
-            });
-        }, 300);
+        if (HQ.store.checkRequirePass(App.stoPOSM, ["PosmID", "ExpDate"], ["PosmID", "ExpDate"], ["PosmID", "ExpDate"])) {
+            setTimeout(function () {
+                App.stoPOSM.data.each(function (item) {
+                    qty += item.data.StkQty;
+                    App.winPOSM.record.set("StkQty", qty);
+                    App.winPOSM.hide();
+                });
+            }, 300);
+        }
     },
     btnPOSMDel_Click: function () {
         if (App.smlPOSM.selected.items.length != 0) {
@@ -555,14 +559,14 @@ var PopupwinPOSM = {
             return false;
         }
         
-        if (e.field == 'PosmID')
-            return HQ.grid.checkBeforeEdit(e, ["PosmID"]);
+        //if (e.field == 'PosmID')
+        return HQ.grid.checkBeforeEdit(e, ["PosmID", "ExpDate"]);
     },
     grdPOSM_SelectionChange: function (item, selected) {
        
     },
     grdPOSM_Edit: function (item, e) {
-        if (App.cboStockType.getValue() != 'LOT') {
+        if (e.field == "PosmID" && App.cboStockType.getValue() != 'LOT') {
             e.record.set('ExpDate', new Date(1900, 0, 1));
         }
         var record = App.winPOSM.record.data;
@@ -572,12 +576,12 @@ var PopupwinPOSM = {
     grdPOSM_ValidateEdit: function (item, e) {
         if (App.cboStockType.getValue() == 'LOT') {
             if (Process.checkDuplicate(App.grdPOSM, e, ["PosmID", "ExpDate"])) {
-                HQ.message.show(1112, e.value);
+                HQ.message.show(1112, e.field == "ExpDate" ? e.value.getFromFormat(HQ.formatDate) : e.value);
                 return false;
             }
         } else {
             if (Process.checkDuplicate(App.grdPOSM, e, ["PosmID"])) {
-                HQ.message.show(1112, e.value);
+                HQ.message.show(1112, e.field == "ExpDate" ? e.value.getFromFormat(HQ.formatDate) : e.value);
                 return false;
             }
         }

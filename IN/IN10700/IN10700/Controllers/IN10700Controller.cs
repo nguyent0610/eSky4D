@@ -134,6 +134,45 @@ namespace IN10700.Controllers
 
                 #region Detail
                 lstStockOutletDetChange.Updated.AddRange(lstStockOutletDetChange.Created);
+                foreach (var deleted in lstStockOutletDetChange.Deleted)
+                {
+                    if (!string.IsNullOrWhiteSpace(deleted.InvtID) )
+                    {
+                        if (lstStockOutletDetChange.Updated.Where(p => p.InvtID == deleted.InvtID && p.ExpDate==deleted.ExpDate).Count() == 0)
+                        {
+                            deleted.StkOutNbr = outlet.StkOutNbr;
+                            deleted.BranchID = outlet.BranchID;
+                            deleted.SlsperID = outlet.SlsPerID;
+
+                            var deletedDetail = _db.PPC_StockOutletDet.FirstOrDefault(
+                               x => x.BranchID == deleted.BranchID
+                                    && x.StkOutNbr == deleted.StkOutNbr
+                                    && x.SlsPerID == deleted.SlsperID
+                                    && x.InvtID == deleted.InvtID
+                                    && x.ExpDate == deleted.ExpDate);
+                            if (deletedDetail != null)
+                            {
+                                _db.PPC_StockOutletDet.DeleteObject(deletedDetail);
+                            }
+
+                            var lstdeletedPOSM = _db.PPC_StockOutletPOSM.Where(
+                              x => x.BranchID == outlet.BranchID
+                                   && x.StkOutNbr == outlet.StkOutNbr
+                                   && x.SlsPerID == outlet.SlsPerID
+                                   && x.InvtID == deleted.InvtID).ToList();
+                            foreach (var obj in lstdeletedPOSM)
+                            {
+                                _db.PPC_StockOutletPOSM.DeleteObject(obj);
+                            }
+                        }
+                        else
+                        {
+                            lstStockOutletDetChange.Updated.Where(p => p.InvtID == deleted.InvtID).FirstOrDefault().tstamp = deleted.tstamp;
+                        }
+
+
+                    }
+                }
 
                 foreach (var updated in lstStockOutletDetChange.Updated)
                 {
@@ -151,7 +190,11 @@ namespace IN10700.Controllers
                                 && x.ExpDate == updated.ExpDate);
                         if (updatedDetail != null)
                         {
-                            updateStockOutletDet(ref updatedDetail, updated, false);
+                            if (updatedDetail.tstamp.ToHex() == updated.tstamp.ToHex())
+                            {
+                                updateStockOutletDet(ref updatedDetail, updated, false);
+                            } 
+                            else throw new MessageException(MessageType.Message, "19");
                         }
                         else
                         {
@@ -161,38 +204,40 @@ namespace IN10700.Controllers
                     }
                 }
 
-                foreach (var deleted in lstStockOutletDetChange.Deleted)
-                {
-                    if (!string.IsNullOrWhiteSpace(deleted.InvtID))
-                    {
-                        deleted.StkOutNbr = outlet.StkOutNbr;
-                        deleted.BranchID = outlet.BranchID;
-                        deleted.SlsperID = outlet.SlsPerID;
-
-                        var deletedDetail = _db.PPC_StockOutletDet.FirstOrDefault(
-                           x => x.BranchID == deleted.BranchID
-                                && x.StkOutNbr == deleted.StkOutNbr
-                                && x.SlsPerID == deleted.SlsperID
-                                && x.InvtID == deleted.InvtID
-                                && x.ExpDate == deleted.ExpDate);
-                        if (deletedDetail != null)
-                        {
-                            _db.PPC_StockOutletDet.DeleteObject(deletedDetail);
-                        }
-                    }
-                }
+              
                 #endregion
 
 
                 #region Detail POSM
                 lstStockOutletPOSM.Updated.AddRange(lstStockOutletPOSM.Created);
-
+                foreach (var deleted in lstStockOutletPOSM.Deleted)
+                {
+                    if (!string.IsNullOrWhiteSpace(deleted.PosmID) && lstStockOutletDetChange.Updated.Where(p => p.InvtID == deleted.InvtID).Count() > 0)
+                    {
+                        if (lstStockOutletPOSM.Updated.Where(p => p.InvtID == deleted.InvtID && p.PosmID==deleted.PosmID && p.ExpDate==deleted.ExpDate).Count() == 0)
+                        {
+                            var deletedDetail = _db.PPC_StockOutletPOSM.FirstOrDefault(
+                               x => x.BranchID == outlet.BranchID
+                                    && x.StkOutNbr == outlet.StkOutNbr
+                                    && x.SlsPerID == outlet.SlsPerID
+                                    && x.InvtID == deleted.InvtID
+                                    && x.PosmID == deleted.PosmID
+                                    && x.ExpDate == deleted.ExpDate);
+                            if (deletedDetail != null)
+                            {
+                                _db.PPC_StockOutletPOSM.DeleteObject(deletedDetail);
+                            }
+                        }
+                        else
+                        {
+                            lstStockOutletPOSM.Updated.Where(p => p.InvtID == deleted.InvtID).FirstOrDefault().tstamp = deleted.tstamp;
+                        }
+                    }
+                }
                 foreach (var updated in lstStockOutletPOSM.Updated)
                 {
                     if (!string.IsNullOrWhiteSpace(updated.PosmID))
-                    {
-                     
-
+                    {                    
                         var updatedDetail = _db.PPC_StockOutletPOSM.FirstOrDefault(
                             x => x.BranchID == outlet.BranchID
                                 && x.StkOutNbr == outlet.StkOutNbr
@@ -202,7 +247,11 @@ namespace IN10700.Controllers
                                 && x.ExpDate == updated.ExpDate);
                         if (updatedDetail != null)
                         {
-                            updateStockOutletPOSM(ref updatedDetail, updated,outlet, false);
+                            if (updatedDetail.tstamp.ToHex() == updated.tstamp.ToHex())
+                            {
+                                updateStockOutletPOSM(ref updatedDetail, updated, outlet, false);
+                            }
+                            else throw new MessageException(MessageType.Message, "19"); 
                         }
                         else
                         {
@@ -210,25 +259,7 @@ namespace IN10700.Controllers
                             _db.PPC_StockOutletPOSM.AddObject(updatedDetail);
                         }
                     }
-                }
-
-                foreach (var deleted in lstStockOutletPOSM.Deleted)
-                {
-                    if (!string.IsNullOrWhiteSpace(deleted.PosmID))
-                    {
-                        var deletedDetail = _db.PPC_StockOutletPOSM.FirstOrDefault(
-                           x => x.BranchID == outlet.BranchID
-                                && x.StkOutNbr == outlet.StkOutNbr
-                                && x.SlsPerID == outlet.SlsPerID
-                                && x.InvtID == deleted.InvtID
-                                && x.PosmID == deleted.PosmID
-                                && x.ExpDate == deleted.ExpDate);
-                        if (deletedDetail != null)
-                        {
-                            _db.PPC_StockOutletPOSM.DeleteObject(deletedDetail);
-                        }
-                    }
-                }
+                }               
                 #endregion
                 _db.SaveChanges();
 
