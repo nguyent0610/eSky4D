@@ -158,7 +158,7 @@ var Process = {
                                 HQ.message.show(201405071);
                             }
                             App.stoStockOutlet.reload();
-                            App.stoPOSM.reload();
+                            
                             //App.grdStockOutletDet.store.reload();
                         },
                         failure: function (msg, data) {
@@ -336,7 +336,7 @@ var Event = {
             }
             if (App.frmMain.isValid()) {
                 App.stoStockOutlet.reload();
-                App.stoPOSM.reload();
+              
             }
         },
 
