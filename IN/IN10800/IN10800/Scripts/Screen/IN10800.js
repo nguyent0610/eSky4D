@@ -410,7 +410,7 @@ var Event = {
                 var objInvt = HQ.store.findInStore(App.cboInvtID.store, ['InvtID'], [e.record.data.InvtID]);
                 if (objInvt) {
                     e.record.set('ClassID', objInvt.ClassID);
-                    if (!e.record.data.ExpDate && objInvt.ClassID == "POSM")
+                    if ((!e.record.data.ExpDate && objInvt.ClassID == "POSM") || (App.cboStockType.getValue() != 'LOT'))
                         e.record.set('ExpDate', new Date(1900, 0, 1));
                 }
 
@@ -487,7 +487,7 @@ var PopupwinPOSM = {
         App.winPOSM.show();
     },
     btnPOSMOK_Click: function () {
-        if (HQ.store.checkRequirePass(App.stoPOSM, ["PosmID", "ExpDate"], ["PosmID", "ExpDate"], ["PosmID", "ExpDate"])) {
+        if (HQ.store.checkRequirePass(App.stoPOSM, [ "ExpDate"], [ "ExpDate"], [ "ExpDate"])) {
             var qty = 0;
             setTimeout(function () {
                 App.stoPOSM.data.each(function (item) {
