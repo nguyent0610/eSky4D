@@ -179,9 +179,9 @@
                 , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(200)
                 .Renderer("Process.renderDescr")
                 
-                , X.DateColumn().Text(Util.GetLang("ExpireDate")).DataIndex("ExpDate").Format("dd/MM/yyyy")
+                , HQ.DateColumn().Text(Util.GetLang("ExpireDate")).DataIndex("ExpDate")
                 .Hidden(true).Hideable(false)
-                .Editor(HQ.DateField().Format("dd/MM/yyyy"))
+                .Editor(HQ.DateField())
                 
                 , X.Column().Text(Util.GetLang("Reason")).DataIndex("ReasonID")
                 .Width(150).Renderer("Process.renderDescr")

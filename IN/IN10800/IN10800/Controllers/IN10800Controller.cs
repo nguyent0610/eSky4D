@@ -171,7 +171,22 @@ namespace IN10800.Controllers
                         {
                             _db.PPC_StockOutletDet.DeleteObject(deletedDetail);
                         }
+
+
+
+                        var lstdeletedPOSM = _db.PPC_StockOutletPOSM.Where(
+                          x => x.BranchID == outlet.BranchID
+                               && x.StkOutNbr == outlet.StkOutNbr
+                               && x.SlsPerID == outlet.SlsPerID
+                               && x.InvtID == deleted.InvtID).ToList();
+                        foreach (var obj in lstdeletedPOSM)
+                        {
+                            _db.PPC_StockOutletPOSM.DeleteObject(obj);
+                        }
+
                     }
+
+
                 }
                 #endregion
                 #region Detail POSM
@@ -204,7 +219,7 @@ namespace IN10800.Controllers
 
                 foreach (var deleted in lstStockOutletPOSM.Deleted)
                 {
-                    if (!string.IsNullOrWhiteSpace(deleted.PosmID))
+                    if (!string.IsNullOrWhiteSpace(deleted.PosmID) && lstStockOutletDetChange.Updated.Where(p => p.InvtID == deleted.InvtID).Count() > 0)
                     {
                         var deletedDetail = _db.PPC_StockOutletPOSM.FirstOrDefault(
                            x => x.BranchID == outlet.BranchID
