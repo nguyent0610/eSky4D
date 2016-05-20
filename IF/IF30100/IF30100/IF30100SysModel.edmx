@@ -27,6 +27,8 @@
           <Property Name="Type" Type="varchar" Nullable="false" MaxLength="1" />
           <Property Name="Proc" Type="varchar" Nullable="false" MaxLength="200" />
           <Property Name="SourceType" Type="varchar" Nullable="false" MaxLength="1" />
+          <Property Name="ScreenNbr" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ExportImage" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="SYS_ReportOLAPFilter">
           <Key>
@@ -68,6 +70,7 @@
           <Property Name="PivotOrder" Type="smallint" Nullable="false" />
           <Property Name="PivotShow" Type="bit" Nullable="false" />
           <Property Name="RPTParm" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="ShowFilterInExcel" Type="bit" Nullable="false" />
         </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -109,6 +112,8 @@
           <Property Type="String" Name="Type" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Proc" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SourceType" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ScreenNbr" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="ExportImage" Nullable="false" />
         </EntityType>
         <EntityType Name="SYS_ReportOLAPTemplate">
           <Key>
@@ -136,6 +141,7 @@
           <Property Type="Int16" Name="PivotOrder" Nullable="false" />
           <Property Type="Boolean" Name="PivotShow" Nullable="false" />
           <Property Type="String" Name="RPTParm" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="ShowFilterInExcel" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -161,6 +167,8 @@
           <EntitySetMapping Name="SYS_ReportExport">
             <EntityTypeMapping TypeName="IF30100SysModel.SYS_ReportExport">
               <MappingFragment StoreEntitySet="SYS_ReportExport">
+                <ScalarProperty Name="ExportImage" ColumnName="ExportImage" />
+                <ScalarProperty Name="ScreenNbr" ColumnName="ScreenNbr" />
                 <ScalarProperty Name="SourceType" ColumnName="SourceType" />
                 <ScalarProperty Name="Proc" ColumnName="Proc" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
@@ -180,6 +188,7 @@
           <EntitySetMapping Name="SYS_ReportOLAPTemplate">
             <EntityTypeMapping TypeName="IF30100SysModel.SYS_ReportOLAPTemplate">
               <MappingFragment StoreEntitySet="SYS_ReportOLAPTemplate">
+                <ScalarProperty Name="ShowFilterInExcel" ColumnName="ShowFilterInExcel" />
                 <ScalarProperty Name="RPTParm" ColumnName="RPTParm" />
                 <ScalarProperty Name="PivotShow" ColumnName="PivotShow" />
                 <ScalarProperty Name="PivotOrder" ColumnName="PivotOrder" />

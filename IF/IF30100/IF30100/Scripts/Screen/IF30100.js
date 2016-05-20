@@ -28,7 +28,11 @@ var firstLoad = function () {
     HQ.common.showBusy(true, HQ.waitMsg);
     App.cboType.store.addListener('load', function () {
         HQ.common.showBusy(false);
-        App.cboType.setValue('E');
+        if (HQ.screenNbr != 'IF30100') {
+            App.cboType.setValue('P');
+        } else {
+            App.cboType.setValue('E');
+        }
         App.btnTemplate.hide();
         App.cboReport.store.reload();
     });
@@ -38,6 +42,16 @@ var firstLoad = function () {
 var getComboValue = function (val) {
     if (val == null) return '';
     return val.join(',');
+}
+var getDate = function (val,type) {
+    if (type == 'Y') {
+        new Date(val.getYear(), 0, 1)
+    } else if (type == 'M') {
+        new Date(val.getYear(), val.getMonth(), 1)
+    } else if (type == 'D') {
+        return val;
+    }
+  
 }
 var getValue = function (val) {
     if (val == null) return '';
@@ -207,4 +221,12 @@ var colCheck_Header_Change = function (value) {
         App.stoDet.resumeEvents();
         App.grdDet.view.refresh();
     }
+}
+var frmMain_BoxReady = function () {
+    if (HQ.screenNbr != 'IF30100') {
+        App.cboType.hide();
+        App.grdDet.hide();
+    }
+   
+
 }

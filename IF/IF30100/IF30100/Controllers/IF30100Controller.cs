@@ -35,12 +35,17 @@ namespace IF30100.Controllers
         private string _branchID = "";
         IF30100Entities _db = Util.CreateObjectContext<IF30100Entities>(false);
         private JsonResult _logMessage;
-        public ActionResult Index()
+        public ActionResult Index(string screenNbr)
         {
+            if (screenNbr.PassNull() != string.Empty)
+            {
+                _screenNbr = screenNbr;
+            }
+            ViewBag.ScreenNbr = _screenNbr;
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
@@ -171,6 +176,46 @@ namespace IF30100.Controllers
                     dateField.AddTo(pnlFilterHeader);
                 
                 }
+                if (col.ParmType.ToUpper() == "Month".ToUpper())
+                {
+                    pnlFilterHeader.Show();
+                    string[] settings = col.ParmData.Split('#').ToArray();
+                    HQDateField dateField = new HQDateField()
+                    {
+                        Name = "Parm_" + col.ColumnName,
+                        ID = "Parm_" + col.ColumnName,
+                        Value = new DateTime(DateTime.Now.Year,DateTime.Now.Month,1),
+                        HQLangCode = col.ColumnDescr,
+                        Width = settings[0].ToInt(),
+                        Type = DatePickerType.Month,
+                        LabelWidth = 150,
+                        Format = "MM/yyyy",
+                    };
+                    dateField.Listeners.Change.Handler = GetHandle(lstColumn, col);
+                    dateField.Listeners.Render.Handler = string.Format("HQ.parm.push({{id:'{0}',type:'date'}})", "Parm_" + col.ColumnName);
+                    dateField.AddTo(pnlFilterHeader);
+
+                }
+                if (col.ParmType.ToUpper() == "Year".ToUpper())
+                {
+                    pnlFilterHeader.Show();
+                    string[] settings = col.ParmData.Split('#').ToArray();
+                    HQDateField dateField = new HQDateField()
+                    {
+                        Name = "Parm_" + col.ColumnName,
+                        ID = "Parm_" + col.ColumnName,
+                        Value = new DateTime(DateTime.Now.Year, 1, 1),
+                        HQLangCode = col.ColumnDescr,
+                        Width = settings[0].ToInt(),
+                        Type = DatePickerType.Month,
+                        LabelWidth = 150,
+                        Format = "yyyy"
+                    };
+                    dateField.Listeners.Change.Handler = GetHandle(lstColumn, col);
+                    dateField.Listeners.Render.Handler = string.Format("HQ.parm.push({{id:'{0}',type:'date'}})", "Parm_" + col.ColumnName);
+                    dateField.AddTo(pnlFilterHeader);
+
+                }
                 if (col.ParmType.ToUpper() == "Grid".ToUpper())
                 {
                     string[] settings = col.ParmData.Split('#').ToArray();
@@ -243,7 +288,15 @@ namespace IF30100.Controllers
                             }
                             if (colFilter.ParmType.ToUpper() == "Date".ToUpper())
                             {
-                                gridPanel.HQParam.Add(new StoreParameter() { Name = "@" + colFilter.ColumnName, Value = "App.Parm_" + colFilter.ColumnName + ".getValue()", Mode = ParameterMode.Raw });
+                                gridPanel.HQParam.Add(new StoreParameter() { Name = "@" + colFilter.ColumnName, Value = "getDate(App.Parm_" + colFilter.ColumnName + ".getValue(),'D')", Mode = ParameterMode.Raw });
+                            }
+                            if (colFilter.ParmType.ToUpper() == "Month".ToUpper())
+                            {
+                                gridPanel.HQParam.Add(new StoreParameter() { Name = "@" + colFilter.ColumnName, Value = "getDate(App.Parm_" + colFilter.ColumnName + ".getValue(),'M')", Mode = ParameterMode.Raw });
+                            }
+                            if (colFilter.ParmType.ToUpper() == "Year".ToUpper())
+                            {
+                                gridPanel.HQParam.Add(new StoreParameter() { Name = "@" + colFilter.ColumnName, Value = "getDate(App.Parm_" + colFilter.ColumnName + ".getValue(),'Y')", Mode = ParameterMode.Raw });
                             }
                         }
                     }
@@ -389,7 +442,25 @@ namespace IF30100.Controllers
                 var report = sys.SYS_ReportExport.FirstOrDefault(p => p.ReportNbr == reportNbr);
                 DataAccess dal = Util.Dal();
                 ParamCollection pc = new ParamCollection();
+
                 var lstColumn = sys.SYS_ReportOLAPTemplate.Where(p => p.ReportNbr == reportNbr && p.PivotType != "P").ToList();
+                var lstColReport = sys.SYS_ReportOLAPTemplate.Where(p => p.ReportNbr == reportNbr && p.PivotType == "P").ToList();
+
+                foreach (var item in lstParm)
+                {
+                    string nameParm = item.Name.Replace("Parm_","");
+
+                    var colFilter = lstColReport.FirstOrDefault(p => p.ColumnName == nameParm);
+                    if (colFilter == null) continue;
+                    if (colFilter.ParmType.ToUpper() == "Month".ToUpper())
+                    {
+                        item.Value = item.Value.Substring(0,7) + "-01T00:00:00";
+                    }
+                    else if (colFilter.ParmType.ToUpper() == "Year".ToUpper())
+                    {
+                        item.Value = item.Value.Substring(0, 4) + "-01-01T00:00:00";
+                    }
+                }
                 System.Data.DataTable dt = null;
                 if (report.SourceType.PassNull() == "V")
                 {
@@ -446,7 +517,7 @@ namespace IF30100.Controllers
                 }
                 else
                 {
-                    var lstColReport = sys.SYS_ReportOLAPTemplate.Where(p => p.ReportNbr == reportNbr && p.PivotType == "P").ToList();
+                 
 
                     string cmdRPT = "insert into RPTRunning(ReportNbr,MachineName,ReportName,ReportCap,ReportDate,StringParm00,StringParm01,StringParm02,StringParm03," +
                         "DateParm00,DateParm01,DateParm02,DateParm03,BooleanParm00,BooleanParm01,BooleanParm02,BooleanParm03,ListParm00,ListParm01,ListParm02,ListParm03,SelectionFormular,UserID,AppPath,ClientName,LoggedCpnyID,CpnyID,LangID) " +
@@ -624,9 +695,10 @@ namespace IF30100.Controllers
                 pivotData = dataSheet.Range[dataSheet.Cells[1, 1], dataSheet.Cells[dt.Rows.Count + 1, dt.Columns.Count]];
 
 
-              
+                var lstControlFilter = lstColReport.Where(p =>p.ShowFilterInExcel).OrderBy(p => p.PivotOrder).ToList();
 
-                pivotDestination = targetSheet.Range["A" + (7 + lstFilter.Count() / 2).ToString()];
+
+                pivotDestination = targetSheet.Range["A" + (lstControlFilter.Count + 7 + lstFilter.Count() / 2).ToString()];
 
                 excelWorkBook.PivotTableWizard(XlPivotTableSourceType.xlDatabase, pivotData, pivotDestination, pivotTableName, true, true, true, true, Type.Missing, Type.Missing, false, false, XlOrder.xlOverThenDown, 2);
                 pivotTable = targetSheet.PivotTables(pivotTableName);
@@ -708,6 +780,93 @@ namespace IF30100.Controllers
                 pivotTable.SaveData = false;
                 pivotTable.RefreshTable();
                 //pivotTable.CalculateData();
+
+                string pathImage =Server.MapPath("\\Content\\Images\\logo.png");
+
+                if (System.IO.File.Exists(pathImage))
+                {
+                    System.Drawing.Image image = System.Drawing.Image.FromFile(pathImage);
+                    double rate = (double)image.Height / 40;
+
+                    targetSheet.Shapes.AddPicture(pathImage, Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoCTrue, targetSheet.Range["F1:F1"].Left, 0, (int)((double)image.Width / rate), 30);
+                }
+
+                targetSheet.Range["A1:E1"].Font.Size = 25;
+                targetSheet.Cells[1, 5].HorizontalAlignment = Microsoft.Office.Interop.Excel.Constants.xlLeft;
+                targetSheet.Cells[1, 5].Value = Util.GetLang(report.Name);
+                targetSheet.Cells[1, 5].Font.Bold = true;
+                targetSheet.Range["A1:E1"].HorizontalAlignment = Microsoft.Office.Interop.Excel.Constants.xlLeft;
+                targetSheet.Range["A1:E1"].Merge();
+
+                targetSheet.Cells[2, 5].Font.Bold = true;
+                targetSheet.Cells[2, 5].HorizontalAlignment = Microsoft.Office.Interop.Excel.Constants.xlLeft;
+                targetSheet.Cells[2, 5].Value = DateTime.Now.ToString("dd/MM/yyyy HH:mm") + " (" + Current.UserName + ")";
+                targetSheet.Range["A2:E2"].HorizontalAlignment = Microsoft.Office.Interop.Excel.Constants.xlLeft;
+                targetSheet.Range["A2:E2"].Merge();
+
+                targetSheet.Range["A3:A3"].EntireColumn.ColumnWidth = 20;
+                targetSheet.Range["B3:B3"].EntireColumn.ColumnWidth = 15;
+                targetSheet.Range["C3:C3"].EntireColumn.ColumnWidth = 20;
+                targetSheet.Range["D3:D3"].EntireColumn.ColumnWidth = 15;
+
+                int start = 3;
+                for (int i = 0; i < lstControlFilter.Count; i++)
+                {
+                    var ctrFilter = lstControlFilter[i];
+                    var parm = lstParm.FirstOrDefault(p => p.Name == "Parm_" + ctrFilter.ColumnName);
+                    if (parm == null)
+                    {
+                        parm = new ParmData();
+                    }
+                    if (i % 2 == 0)
+                    {
+                        targetSheet.Cells[start, 1].Value = Util.GetLang(lstControlFilter[i].ColumnDescr);
+                        targetSheet.Cells[start, 1].Font.Bold = true;
+                        targetSheet.Cells[start, 2].NumberFormat = "@";
+                        if (ctrFilter.ParmType.ToUpper() == "Month".ToUpper())
+                        {
+                            targetSheet.Cells[start, 2].Value = parm.Value.Substring(0, 7);
+                        }
+                        else if (ctrFilter.ParmType.ToUpper() == "Year".ToUpper())
+                        {
+                            targetSheet.Cells[start, 2].Value = parm.Value.Substring(0, 4);
+                        }
+                        else if (ctrFilter.ParmType.ToUpper() == "Date".ToUpper())
+                        {
+                            targetSheet.Cells[start, 2].Value = parm.Value.Substring(0, 10);
+                        }
+                        else
+                        {
+                            targetSheet.Cells[start, 2].Value = parm.Value;
+                        }
+                      
+                    }
+                    else
+                    {
+                        targetSheet.Cells[start, 3].Value = Util.GetLang(lstControlFilter[i].ColumnDescr);
+                        targetSheet.Cells[start, 3].Font.Bold = true;
+                        targetSheet.Cells[start, 4].NumberFormat = "@";
+                        if (ctrFilter.ParmType.ToUpper() == "Month".ToUpper())
+                        {
+                            targetSheet.Cells[start, 4].Value = parm.Value.Substring(0, 7);
+                        }
+                        else if (ctrFilter.ParmType.ToUpper() == "Year".ToUpper())
+                        {
+                            targetSheet.Cells[start, 4].Value = parm.Value.Substring(0, 4);
+                        }
+                        else if (ctrFilter.ParmType.ToUpper() == "Date".ToUpper())
+                        {
+                            targetSheet.Cells[start, 4].Value = parm.Value.Substring(0, 10);
+                        }
+                        else
+                        {
+                            targetSheet.Cells[start, 4].Value = parm.Value;
+                        }
+
+                        start++;
+                    }
+                }
+                
                 string path = Server.MapPath("~/ExportPivot");
                 if (!Directory.Exists(path))
                 {
