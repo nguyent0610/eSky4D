@@ -781,15 +781,19 @@ namespace IF30100.Controllers
                 pivotTable.RefreshTable();
                 //pivotTable.CalculateData();
 
-                string pathImage =Server.MapPath("\\Content\\Images\\logo.png");
-
-                if (System.IO.File.Exists(pathImage))
+                if (report.ExportImage)
                 {
-                    System.Drawing.Image image = System.Drawing.Image.FromFile(pathImage);
-                    double rate = (double)image.Height / 40;
+                    string pathImage = Server.MapPath("\\Content\\Images\\logo.png");
 
-                    targetSheet.Shapes.AddPicture(pathImage, Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoCTrue, targetSheet.Range["F1:F1"].Left, 0, (int)((double)image.Width / rate), 30);
+                    if (System.IO.File.Exists(pathImage))
+                    {
+                        System.Drawing.Image image = System.Drawing.Image.FromFile(pathImage);
+                        double rate = (double)image.Height / 40;
+
+                        targetSheet.Shapes.AddPicture(pathImage, Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoCTrue, targetSheet.Range["F1:F1"].Left, 0, (int)((double)image.Width / rate), 30);
+                    }
                 }
+               
 
                 targetSheet.Range["A1:E1"].Font.Size = 25;
                 targetSheet.Cells[1, 5].HorizontalAlignment = Microsoft.Office.Interop.Excel.Constants.xlLeft;
