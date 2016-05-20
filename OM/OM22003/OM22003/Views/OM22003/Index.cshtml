@@ -14,7 +14,7 @@
     
 }
 <!DOCTYPE html>
-<html>_pg
+<html>
     <head>
         <meta name="viewport" content="width=device-width" />
         <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
@@ -148,7 +148,7 @@
         @(
             X.Store().ID("stoImage")
             .AutoLoad(false)
-            .Model(Util.GenerateModel(typeof(OM22003_pgImage_Result), "mdlImage", "CreateDate"))       
+            .Model(Util.GenerateModel(typeof(OM22003_pgImage_Result), "mdlImage", ""))       
             .Proxy(
                 X.AjaxProxy()                
                 .Url(Url.Action("GetImage", "OM22003"))                

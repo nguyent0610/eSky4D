@@ -101,7 +101,7 @@ namespace OM22003.Controllers
 
                 var recAppraise = _db.OM_TDisplayResult.FirstOrDefault(
                     p => p.BranchID == Appraise.BranchID && p.SlsperID == Appraise.SlsperID
-                        && p.CustID == Appraise.CustID && p.DisplayID == Appraise.DisplayID);
+                        && p.CustID == Appraise.CustID && p.DisplayID == Appraise.DisplayID && p.Date == dateDisplay);
                 if (recAppraise != null)
                 {
                     if (recAppraise.tstamp.ToHex() == Appraise.tstamp.ToHex())
