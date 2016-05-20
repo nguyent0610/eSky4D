@@ -78,6 +78,8 @@
           <Parameter Name="CustID" Type="varchar" Mode="In" />
           <Parameter Name="DisplayID" Type="varchar" Mode="In" />
           <Parameter Name="SlsperID" Type="varchar" Mode="In" />
+          <Parameter Name="FromDate" Type="date" Mode="In" />
+          <Parameter Name="ToDate" Type="date" Mode="In" />
         </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -92,14 +94,16 @@
             <Parameter Name="FromDate" Mode="In" Type="DateTime" />
             <Parameter Name="ToDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="OM_TDisplayCustomer" EntityType="OM22003Model.OM_TDisplayCustomer" />
+          <EntitySet Name="OM_TDisplayResult" EntityType="OM22003Model.OM_TDisplayResult" />
           <FunctionImport Name="OM22003_pgImage" ReturnType="Collection(OM22003Model.OM22003_pgImage_Result)">
             <Parameter Name="BranchID" Mode="In" Type="String" />
             <Parameter Name="CustID" Mode="In" Type="String" />
             <Parameter Name="DisplayID" Mode="In" Type="String" />
             <Parameter Name="SlsperID" Mode="In" Type="String" />
+            <Parameter Name="FromDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ToDate" Mode="In" Type="DateTime" />
           </FunctionImport>
-          <EntitySet Name="OM_TDisplayCustomer" EntityType="OM22003Model.OM_TDisplayCustomer" />
-          <EntitySet Name="OM_TDisplayResult" EntityType="OM22003Model.OM_TDisplayResult" />
         </EntityContainer>
         <ComplexType Name="OM22003_pgAppraise_Result">
           <Property Type="String" Name="BranchID" Nullable="false" MaxLength="50" />
@@ -119,11 +123,6 @@
           <Property Type="Binary" Name="tstamp" Nullable="true" MaxLength="8" />
           <Property Type="String" Name="Descr" Nullable="true" MaxLength="500" />
           </ComplexType>
-        <ComplexType Name="OM22003_pgImage_Result">
-          <Property Type="String" Name="ImageName" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="ImageSrc" Nullable="false" MaxLength="1" />
-          <Property Type="DateTime" Name="CreateDate" Nullable="true" Precision="23" />
-        </ComplexType>
         <EntityType Name="OM_TDisplayCustomer">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -180,6 +179,11 @@
           <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Type="Binary" Name="tstamp" MaxLength="8" FixedLength="true" p1:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <ComplexType Name="OM22003_pgImage_Result">
+          <Property Type="String" Name="ImageName" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ImageSrc" Nullable="false" MaxLength="1" />
+          <Property Type="DateTime" Name="CreateDate" Nullable="true" Precision="23" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -206,15 +210,6 @@
                 <ScalarProperty Name="tstamp" ColumnName="tstamp" />
                 <ScalarProperty Name="Descr" ColumnName="Descr" />
                 </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="OM22003_pgImage" FunctionName="eBiz4DWebAppModel.Store.OM22003_pgImage">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="OM22003Model.OM22003_pgImage_Result">
-                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
-                <ScalarProperty Name="ImageSrc" ColumnName="ImageSrc" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-              </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <EntitySetMapping Name="OM_TDisplayCustomer">
@@ -268,6 +263,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OM22003_pgImage" FunctionName="eBiz4DWebAppModel.Store.OM22003_pgImage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OM22003Model.OM22003_pgImage_Result">
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="ImageSrc" ColumnName="ImageSrc" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

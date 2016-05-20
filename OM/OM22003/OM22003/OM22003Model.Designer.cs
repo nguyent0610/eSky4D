@@ -202,7 +202,9 @@ namespace OM22003
         /// <param name="custID">No Metadata Documentation available.</param>
         /// <param name="displayID">No Metadata Documentation available.</param>
         /// <param name="slsperID">No Metadata Documentation available.</param>
-        public ObjectResult<OM22003_pgImage_Result> OM22003_pgImage(global::System.String branchID, global::System.String custID, global::System.String displayID, global::System.String slsperID)
+        /// <param name="fromDate">No Metadata Documentation available.</param>
+        /// <param name="toDate">No Metadata Documentation available.</param>
+        public ObjectResult<OM22003_pgImage_Result> OM22003_pgImage(global::System.String branchID, global::System.String custID, global::System.String displayID, global::System.String slsperID, Nullable<global::System.DateTime> fromDate, Nullable<global::System.DateTime> toDate)
         {
             ObjectParameter branchIDParameter;
             if (branchID != null)
@@ -244,7 +246,27 @@ namespace OM22003
                 slsperIDParameter = new ObjectParameter("SlsperID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<OM22003_pgImage_Result>("OM22003_pgImage", branchIDParameter, custIDParameter, displayIDParameter, slsperIDParameter);
+            ObjectParameter fromDateParameter;
+            if (fromDate.HasValue)
+            {
+                fromDateParameter = new ObjectParameter("FromDate", fromDate);
+            }
+            else
+            {
+                fromDateParameter = new ObjectParameter("FromDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter toDateParameter;
+            if (toDate.HasValue)
+            {
+                toDateParameter = new ObjectParameter("ToDate", toDate);
+            }
+            else
+            {
+                toDateParameter = new ObjectParameter("ToDate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<OM22003_pgImage_Result>("OM22003_pgImage", branchIDParameter, custIDParameter, displayIDParameter, slsperIDParameter, fromDateParameter, toDateParameter);
         }
 
         #endregion

@@ -14,7 +14,7 @@
     
 }
 <!DOCTYPE html>
-<html>
+<html>_pg
     <head>
         <meta name="viewport" content="width=device-width" />
         <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
@@ -166,6 +166,8 @@
                 ps.Add(new StoreParameter("slsperID", "App.frmImage.getRecord().data.SlsperID", ParameterMode.Raw));
                 ps.Add(new StoreParameter("width", "App.cboImageSize.valueModels.length?App.cboImageSize.valueModels[0].data.Width:150", ParameterMode.Raw));
                 ps.Add(new StoreParameter("height", "App.cboImageSize.valueModels.length?App.cboImageSize.valueModels[0].data.Height:100", ParameterMode.Raw));
+                ps.Add(new StoreParameter("fromDate", "App.dtpFromDate.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("toDate", "App.dtpToDate.getValue()", ParameterMode.Raw));
             })      
             .Listeners(p=>p.Load.Fn="Store.stoImage_load" )
             // Store: stoImage

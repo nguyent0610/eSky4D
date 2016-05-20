@@ -66,10 +66,9 @@ namespace OM22003.Controllers
 
 
 
-        public ActionResult GetImage(string branchID, string custID, 
-            string displayID, string slsperID, int width = 150, int height = 100)
+        public ActionResult GetImage(string branchID, string custID, string displayID, string slsperID, DateTime? fromDate,DateTime? toDate, int width = 150, int height = 100)
         {
-            var imgs = _db.OM22003_pgImage(branchID, custID, displayID, slsperID).ToList();
+            var imgs = _db.OM22003_pgImage(branchID, custID, displayID, slsperID, fromDate,toDate).ToList();
             //var imgs = new List<OM22003_pgImage_Result>();
             //imgs.Add(new OM22003_pgImage_Result()
             //{
