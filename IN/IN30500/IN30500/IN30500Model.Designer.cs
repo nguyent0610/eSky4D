@@ -68,14 +68,47 @@ namespace IN30500
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="invtID">No Metadata Documentation available.</param>
         /// <param name="branch">No Metadata Documentation available.</param>
         /// <param name="site">No Metadata Documentation available.</param>
         /// <param name="firstDate">No Metadata Documentation available.</param>
         /// <param name="lastDate">No Metadata Documentation available.</param>
         /// <param name="status">No Metadata Documentation available.</param>
-        public ObjectResult<IN30500_QuickQueryInvt_Result> IN30500_QuickQueryInvt(global::System.String invtID, global::System.String branch, global::System.String site, Nullable<global::System.DateTime> firstDate, Nullable<global::System.DateTime> lastDate, global::System.String status)
+        public ObjectResult<IN30500_ppQuickQueryInvt_Result> IN30500_ppQuickQueryInvt(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String invtID, global::System.String branch, global::System.String site, Nullable<global::System.DateTime> firstDate, Nullable<global::System.DateTime> lastDate, global::System.String status)
         {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
             ObjectParameter invtIDParameter;
             if (invtID != null)
             {
@@ -136,20 +169,53 @@ namespace IN30500
                 statusParameter = new ObjectParameter("Status", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<IN30500_QuickQueryInvt_Result>("IN30500_QuickQueryInvt", invtIDParameter, branchParameter, siteParameter, firstDateParameter, lastDateParameter, statusParameter);
+            return base.ExecuteFunction<IN30500_ppQuickQueryInvt_Result>("IN30500_ppQuickQueryInvt", userNameParameter, cpnyIDParameter, langIDParameter, invtIDParameter, branchParameter, siteParameter, firstDateParameter, lastDateParameter, statusParameter);
         }
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="invtID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
         /// <param name="siteID">No Metadata Documentation available.</param>
         /// <param name="firstDate">No Metadata Documentation available.</param>
         /// <param name="lastDate">No Metadata Documentation available.</param>
         /// <param name="status">No Metadata Documentation available.</param>
-        public ObjectResult<IN30500_QuickQuerySite_Result> IN30500_QuickQuerySite(global::System.String invtID, global::System.String branchID, global::System.String siteID, Nullable<global::System.DateTime> firstDate, Nullable<global::System.DateTime> lastDate, global::System.String status)
+        public ObjectResult<IN30500_ppQuickQuerySite_Result> IN30500_ppQuickQuerySite(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String invtID, global::System.String branchID, global::System.String siteID, Nullable<global::System.DateTime> firstDate, Nullable<global::System.DateTime> lastDate, global::System.String status)
         {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
             ObjectParameter invtIDParameter;
             if (invtID != null)
             {
@@ -210,7 +276,7 @@ namespace IN30500
                 statusParameter = new ObjectParameter("Status", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<IN30500_QuickQuerySite_Result>("IN30500_QuickQuerySite", invtIDParameter, branchIDParameter, siteIDParameter, firstDateParameter, lastDateParameter, statusParameter);
+            return base.ExecuteFunction<IN30500_ppQuickQuerySite_Result>("IN30500_ppQuickQuerySite", userNameParameter, cpnyIDParameter, langIDParameter, invtIDParameter, branchIDParameter, siteIDParameter, firstDateParameter, lastDateParameter, statusParameter);
         }
 
         #endregion
@@ -224,22 +290,22 @@ namespace IN30500
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="IN30500Model", Name="IN30500_QuickQueryInvt_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="IN30500Model", Name="IN30500_ppQuickQueryInvt_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class IN30500_QuickQueryInvt_Result : ComplexObject
+    public partial class IN30500_ppQuickQueryInvt_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new IN30500_QuickQueryInvt_Result object.
+        /// Create a new IN30500_ppQuickQueryInvt_Result object.
         /// </summary>
         /// <param name="branchID">Initial value of the BranchID property.</param>
-        public static IN30500_QuickQueryInvt_Result CreateIN30500_QuickQueryInvt_Result(global::System.String branchID)
+        public static IN30500_ppQuickQueryInvt_Result CreateIN30500_ppQuickQueryInvt_Result(global::System.String branchID)
         {
-            IN30500_QuickQueryInvt_Result iN30500_QuickQueryInvt_Result = new IN30500_QuickQueryInvt_Result();
-            iN30500_QuickQueryInvt_Result.BranchID = branchID;
-            return iN30500_QuickQueryInvt_Result;
+            IN30500_ppQuickQueryInvt_Result iN30500_ppQuickQueryInvt_Result = new IN30500_ppQuickQueryInvt_Result();
+            iN30500_ppQuickQueryInvt_Result.BranchID = branchID;
+            return iN30500_ppQuickQueryInvt_Result;
         }
 
         #endregion
@@ -445,22 +511,22 @@ namespace IN30500
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmComplexTypeAttribute(NamespaceName="IN30500Model", Name="IN30500_QuickQuerySite_Result")]
+    [EdmComplexTypeAttribute(NamespaceName="IN30500Model", Name="IN30500_ppQuickQuerySite_Result")]
     [DataContractAttribute(IsReference=true)]
     [Serializable()]
-    public partial class IN30500_QuickQuerySite_Result : ComplexObject
+    public partial class IN30500_ppQuickQuerySite_Result : ComplexObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new IN30500_QuickQuerySite_Result object.
+        /// Create a new IN30500_ppQuickQuerySite_Result object.
         /// </summary>
         /// <param name="branchID">Initial value of the BranchID property.</param>
-        public static IN30500_QuickQuerySite_Result CreateIN30500_QuickQuerySite_Result(global::System.String branchID)
+        public static IN30500_ppQuickQuerySite_Result CreateIN30500_ppQuickQuerySite_Result(global::System.String branchID)
         {
-            IN30500_QuickQuerySite_Result iN30500_QuickQuerySite_Result = new IN30500_QuickQuerySite_Result();
-            iN30500_QuickQuerySite_Result.BranchID = branchID;
-            return iN30500_QuickQuerySite_Result;
+            IN30500_ppQuickQuerySite_Result iN30500_ppQuickQuerySite_Result = new IN30500_ppQuickQuerySite_Result();
+            iN30500_ppQuickQuerySite_Result.BranchID = branchID;
+            return iN30500_ppQuickQuerySite_Result;
         }
 
         #endregion

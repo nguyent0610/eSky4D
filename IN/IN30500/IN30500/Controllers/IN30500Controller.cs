@@ -34,19 +34,19 @@ namespace IN30500.Controllers
             return PartialView();
         }
 
-        public ActionResult GetHeader(string InvtID, string Branch, string Site, string FirstDate, string LastDate, string Status)
+        public ActionResult GetHeader(string InvtID, string BranchID, string Site, string FirstDate, string LastDate, string Status)
         {
             DateTime FromDate_tmp = DateTime.Parse(FirstDate.PassNull());
             DateTime ToDate_tmp = DateTime.Parse(LastDate.PassNull());
 
-            return this.Store(_db.IN30500_QuickQueryInvt(InvtID, Branch, Site, FromDate_tmp, ToDate_tmp, Status).ToList());
+            return this.Store(_db.IN30500_ppQuickQueryInvt(Current.UserName, Current.CpnyID, Current.LangID, InvtID, BranchID, Site, FromDate_tmp, ToDate_tmp, Status).ToList());
         }
         public ActionResult GetDetail(string InvtID, string BranchID, string Site, string FirstDate, string LastDate, string Status)
         {
             DateTime FromDate_tmp = DateTime.Parse(FirstDate.PassNull());
             DateTime ToDate_tmp = DateTime.Parse(LastDate.PassNull());
 
-            return this.Store(_db.IN30500_QuickQuerySite(InvtID, BranchID, Site, FromDate_tmp, ToDate_tmp, Status).ToList());
+            return this.Store(_db.IN30500_ppQuickQuerySite(Current.UserName, Current.CpnyID, Current.LangID, InvtID, BranchID, Site, FromDate_tmp, ToDate_tmp, Status).ToList());
         }
 
     }

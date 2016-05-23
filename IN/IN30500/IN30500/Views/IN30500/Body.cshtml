@@ -35,11 +35,13 @@
                 X.Container().Layout(LayoutType.VBox)
                 .Items(
                     HQ.Combo().ID("cboBranchID").Name("cboBranchID").MarginSpec("5 0 0 0").Width(300)
-                    .HQLangCode("BranchID").HQDBSys(false).HQProcedure("IN30500_BranchAllByUser")
+                    .HQLangCode("BranchID").HQDBSys(false).HQProcedure("IN30500_pcBranchAllByUser")
                     .HQColumnShow("BranchID,BranchName").ForceSelection(true).MultiSelect(true)
                     .DisplayField("BranchID").ValueField("BranchID").HQHeightWidth(400, 300)
                     .HQParam(new StoreParameterCollection() {
-                        new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+                        new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                     .Listeners(lst =>
@@ -55,6 +57,9 @@
                     .HQColumnShow("InvtID,Descr,CpnyID").ForceSelection(true).MultiSelect(true)
                     .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
                     .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw},
                         new StoreParameter() { Name = "@Branch", Value ="App.cboBranchID.getValue().join(',')", Mode = ParameterMode.Raw}
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -70,6 +75,9 @@
                     .HQColumnShow("SiteID,Name,CpnyID").ForceSelection(true).MultiSelect(true)
                     .DisplayField("SiteID").ValueField("SiteID").HQHeightWidth(400, 300)
                     .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                        new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw},
                         new StoreParameter() { Name = "@Branch", Value ="App.cboBranchID.getValue().join(',')", Mode = ParameterMode.Raw}
                     })
                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
@@ -111,7 +119,9 @@
                         .HQColumnShow("Descr").ForceSelection(true)
                         .DisplayField("Descr").ValueField("Code").HQHeightWidth(400, 300).HQValue("%", false)
                         .HQParam(new StoreParameterCollection() {
-                        new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
+                            new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@CpnyID", Value ="HQ.cpnyID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw}
                         })
                         .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
                         .Listeners(lst =>
@@ -145,7 +155,7 @@
                         X.Store()
                         .ID("stoHeader")
                         .PageSize(50)
-                        .Model(Util.GenerateModel(typeof(IN30500_QuickQueryInvt_Result), "mdlIN30500_QuickQueryInvt", ""))
+                        .Model(Util.GenerateModel(typeof(IN30500_ppQuickQueryInvt_Result), "mdlIN30500_ppQuickQueryInvt", ""))
                         .ServerProxy(X.AjaxProxy().Url(Url.Action("GetHeader"))).AutoLoad(false)
                         .Parameters(ps =>
                         {
@@ -167,7 +177,7 @@
                         , X.Column().Text(Util.GetLang("Item")).DataIndex("MaHang").Width(100)
                         , X.Column().Text(Util.GetLang("Descr")).DataIndex("TenHang").Width(100)
                         , X.NumberColumn().Text(Util.GetLang("OpQty")).DataIndex("Tondau").Width(150).Align(Alignment.Right).Format("0,000")
-                        , X.NumberColumn().Text(Util.GetLang("UnitPrice")).DataIndex("Nhap").Width(150).Align(Alignment.Right).Format("0,000")
+                        , X.NumberColumn().Text(Util.GetLang("InvtReceipt")).DataIndex("Nhap").Width(150).Align(Alignment.Right).Format("0,000")
                         , X.NumberColumn().Text(Util.GetLang("Issue")).DataIndex("Xuat").Width(150).Align(Alignment.Right).Format("0,000")
                         , X.NumberColumn().Text(Util.GetLang("OnSO")).DataIndex("BanHang").Width(150).Align(Alignment.Right).Format("0,000")
                         , X.NumberColumn().Text(Util.GetLang("CloQty")).DataIndex("Toncuoi").Width(150).Align(Alignment.Right).Format("0,000")
@@ -209,7 +219,7 @@
                                 X.Store()
                                 .ID("stoDetail")
                                 .PageSize(50)
-                                .Model(Util.GenerateModel(typeof(IN30500_QuickQuerySite_Result), "mdlIN30500_QuickQuerySite", ""))
+                                .Model(Util.GenerateModel(typeof(IN30500_ppQuickQuerySite_Result), "mdlIN30500_ppQuickQuerySite", ""))
                                 .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDetail"))).AutoLoad(false)
                                 .Parameters(ps =>
                                 {
@@ -225,11 +235,11 @@
                                 .ColumnModel(
                                     X.Column().Text(Util.GetLang("SiteID")).DataIndex("Kho")
                                     , X.Column().Text(Util.GetLang("Descr")).DataIndex("TenKho")
-                                    , X.Column().Text(Util.GetLang("OpQty")).DataIndex("Tondau")
-                                    , X.Column().Text(Util.GetLang("InvtReceipt")).DataIndex("Nhap")
-                                    , X.Column().Text(Util.GetLang("Issue")).DataIndex("Xuat")
-                                    , X.Column().Text(Util.GetLang("OnSO")).DataIndex("BanHang")
-                                    , X.Column().Text(Util.GetLang("CloQty")).DataIndex("Toncuoi")
+                                    , X.NumberColumn().Text(Util.GetLang("OpQty")).DataIndex("Tondau").Width(150).Align(Alignment.Right).Format("0,000")
+                                    , X.NumberColumn().Text(Util.GetLang("InvtReceipt")).DataIndex("Nhap").Width(150).Align(Alignment.Right).Format("0,000")
+                                    , X.NumberColumn().Text(Util.GetLang("Issue")).DataIndex("Xuat").Width(150).Align(Alignment.Right).Format("0,000")
+                                    , X.NumberColumn().Text(Util.GetLang("OnSO")).DataIndex("BanHang").Width(150).Align(Alignment.Right).Format("0,000")
+                                    , X.NumberColumn().Text(Util.GetLang("CloQty")).DataIndex("Toncuoi").Width(150).Align(Alignment.Right).Format("0,000")
                                 )
                                 
                             )
