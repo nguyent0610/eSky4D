@@ -68,9 +68,42 @@ namespace IN30200
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="invtID">No Metadata Documentation available.</param>
-        public ObjectResult<IN30200_LoadText_Result> IN30200_LoadText(global::System.String invtID)
+        public ObjectResult<IN30200_LoadText_Result> IN30200_LoadText(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String invtID)
         {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
             ObjectParameter invtIDParameter;
             if (invtID != null)
             {
@@ -81,16 +114,49 @@ namespace IN30200
                 invtIDParameter = new ObjectParameter("InvtID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<IN30200_LoadText_Result>("IN30200_LoadText", invtIDParameter);
+            return base.ExecuteFunction<IN30200_LoadText_Result>("IN30200_LoadText", userNameParameter, cpnyIDParameter, langIDParameter, invtIDParameter);
         }
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        /// <param name="userName">No Metadata Documentation available.</param>
+        /// <param name="cpnyID">No Metadata Documentation available.</param>
+        /// <param name="langID">No Metadata Documentation available.</param>
         /// <param name="invtID">No Metadata Documentation available.</param>
         /// <param name="branchID">No Metadata Documentation available.</param>
-        public ObjectResult<IN30200_pgDetail_Result> IN30200_pgDetail(global::System.String invtID, global::System.String branchID)
+        public ObjectResult<IN30200_pgDetail_Result> IN30200_pgDetail(global::System.String userName, global::System.String cpnyID, Nullable<global::System.Int16> langID, global::System.String invtID, global::System.String branchID)
         {
+            ObjectParameter userNameParameter;
+            if (userName != null)
+            {
+                userNameParameter = new ObjectParameter("UserName", userName);
+            }
+            else
+            {
+                userNameParameter = new ObjectParameter("UserName", typeof(global::System.String));
+            }
+    
+            ObjectParameter cpnyIDParameter;
+            if (cpnyID != null)
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", cpnyID);
+            }
+            else
+            {
+                cpnyIDParameter = new ObjectParameter("CpnyID", typeof(global::System.String));
+            }
+    
+            ObjectParameter langIDParameter;
+            if (langID.HasValue)
+            {
+                langIDParameter = new ObjectParameter("LangID", langID);
+            }
+            else
+            {
+                langIDParameter = new ObjectParameter("LangID", typeof(global::System.Int16));
+            }
+    
             ObjectParameter invtIDParameter;
             if (invtID != null)
             {
@@ -111,7 +177,7 @@ namespace IN30200
                 branchIDParameter = new ObjectParameter("BranchID", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<IN30200_pgDetail_Result>("IN30200_pgDetail", invtIDParameter, branchIDParameter);
+            return base.ExecuteFunction<IN30200_pgDetail_Result>("IN30200_pgDetail", userNameParameter, cpnyIDParameter, langIDParameter, invtIDParameter, branchIDParameter);
         }
 
         #endregion

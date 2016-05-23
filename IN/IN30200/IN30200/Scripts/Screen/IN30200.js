@@ -35,7 +35,7 @@ var cboInvtID_Change = function () {
 
 var cboBranchID_Change = function () {
     App.cboInvtID.store.reload();
-    App.stoDetail.reload();
+    //App.stoDetail.reload();
 };
 
 var chkBranchID_Change = function (ctr) {
@@ -53,5 +53,5 @@ var stoHeader_Load = function (sto) {
     }
     var record = sto.data.items[0];
     App.frmMain.getForm().loadRecord(record);
-    App.stoDetail.reload();
+    //App.stoDetail.reload();
 };

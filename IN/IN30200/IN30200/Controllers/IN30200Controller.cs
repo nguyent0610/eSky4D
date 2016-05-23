@@ -36,12 +36,12 @@ namespace IN30200.Controllers
 
         public ActionResult GetDetail(string InvtID, string BranchID)
         {
-            return this.Store(_db.IN30200_pgDetail(InvtID, BranchID).ToList());
+            return this.Store(_db.IN30200_pgDetail(Current.UserName, Current.CpnyID, Current.LangID, InvtID, BranchID).ToList());
         }
 
         public ActionResult GetHeader(string InvtID)
         {
-            return this.Store(_db.IN30200_LoadText(InvtID).ToList());
+            return this.Store(_db.IN30200_LoadText(Current.UserName, Current.CpnyID, Current.LangID, InvtID).ToList());
         }
 
     }
