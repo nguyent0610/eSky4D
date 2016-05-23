@@ -1,1 +1,57 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('o a=["\\v\\d\\m\\s\\b\\c\\g\\q\\h","\\x\\q\\d\\j\\c","\\v\\d\\q\\m","\\C\\d\\b\\y","\\n\\b\\T\\c","\\h\\g\\j\\c","\\d\\b\\h\\e\\g\\m","\\j\\c\\e\\s\\b\\c\\g\\q\\h","\\d\\b\\x\\d\\b\\j\\t","\\n\\b\\1f","\\m\\b\\h\\b\\c\\b","\\j\\g\\y\\b","\\C\\d\\q\\n\\c","\\f\\h\\e\\j\\b","\\f\\e\\u\\u\\e\\n","\\j\\c\\e\\Z\\b\\g\\m\\b\\d","\\j\\c\\e\\d\\b","\\f\\z\\e\\w\\n\\y\\c\\w\\s","\\f\\t\\b\\f\\E\\b\\m","\\f\\t\\E\\G\\d\\g\\n\\f\\t\\w\\s","\\f\\z\\e\\G\\d\\g\\n\\f\\t\\w\\s","\\j\\b\\h\\b\\f\\c\\B\\h\\h","\\f\\e\\u\\z\\e","","\\j\\b\\c\\1h\\g\\h\\L\\b","\\v\\b\\c\\B\\c","\\h\\e\\g\\m\\N\\b\\f\\e\\d\\m","\\v\\b\\c\\J\\e\\d\\u","\\x\\d\\u\\K\\g\\q\\n"];o I=r(D){M(D){l a[1]:p[a[2]][a[1]](i[a[0]]);k;l a[3]:p[a[2]][a[3]](i[a[0]]);k;l a[4]:p[a[2]][a[4]](i[a[0]]);k;l a[5]:p[a[2]][a[5]](i[a[0]]);k;l a[8]:i[a[7]][a[6]]();k;l a[9]:k;l a[10]:k;l a[11]:k;l a[12]:k;l a[13]:p[a[14]][a[13]](1b);k}};o O=r(){i[a[15]][a[6]]()};o 1a=r(){i[a[17]][a[16]][a[6]]()};o 1c=r(1d){1g(i[a[19]][a[18]]){p[a[1e]][a[Y]](i[a[H]])}X{i[a[H]][a[R]](a[Q])}};o P=r(F){o A=F[a[S]](0);i[a[W]][a[V]]()[a[U]](A)};', 62, 80, '||||||||||_0x6f71|x65|x74|x72|x6F|x63|x61|x6C|App|x73|break|case|x64|x6E|var|HQ|x69|function|x44|x68|x6D|x67|x49|x66|x76|x62|_0xe54ax9|x41|x70|_0xe54ax2|x6B|_0xe54ax8|x42|20|menuClick|x46|x4D|x75|switch|x52|cboInvtID_Change|stoHeader_Load|23|24|25|x78|26|27|28|else|21|x48|||||||||||cboBranchID_Change|this|chkBranchID_Change|_0xe54ax6|22|x77|if|x56'.split('|'), 0, {}))
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdDetail);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdDetail);
+            break;
+        case "next":
+            HQ.grid.next(App.grdDetail);
+            break;
+        case "last":
+            HQ.grid.last(App.grdDetail);
+            break;
+        case "refresh":
+            App.stoDetail.reload();
+            break;
+        case "new":
+            break;
+        case "delete":
+            break;
+        case "save":
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+};
+
+var cboInvtID_Change = function () {
+    App.stoHeader.reload();
+};
+
+var cboBranchID_Change = function () {
+    App.cboInvtID.store.reload();
+    App.stoDetail.reload();
+};
+
+var chkBranchID_Change = function (ctr) {
+    if (App.chkBranchID.checked) {
+        HQ.combo.selectAll(App.cboBranchID);
+    }
+    else {
+        App.cboBranchID.setValue('');
+    }
+};
+
+var stoHeader_Load = function (sto) {
+    if (sto.data.items.length == 0) {
+        sto.insert(sto.getCount(), Ext.data.Record());
+    }
+    var record = sto.data.items[0];
+    App.frmMain.getForm().loadRecord(record);
+    App.stoDetail.reload();
+};
