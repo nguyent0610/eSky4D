@@ -156,7 +156,7 @@
                         .ID("stoHeader")
                         .PageSize(50)
                         .Model(Util.GenerateModel(typeof(IN30500_ppQuickQueryInvt_Result), "mdlIN30500_ppQuickQueryInvt", ""))
-                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetHeader"))).AutoLoad(false)
+                        .ServerProxy(X.AjaxProxy().Timeout(int.MaxValue).Json(true).Url(Url.Action("GetHeader"))).AutoLoad(false)
                         .Parameters(ps =>
                         {
                             ps.Add(new StoreParameter("InvtID", "App.cboInvtID.getValue().join(',')", ParameterMode.Raw));

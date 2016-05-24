@@ -1,1 +1,88 @@
-eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('j a=["","\\A\\e\\p\\C\\b\\g\\p\\b\\e","\\Q\\t\\e\\i\\d","\\A\\e\\t\\p","\\O\\e\\b\\z","\\o\\b\\1a\\d","\\l\\g\\i\\d","\\e\\b\\l\\h\\g\\p","\\i\\d\\h\\C\\b\\g\\p\\b\\e","\\e\\b\\Q\\e\\b\\i\\q","\\o\\b\\1g","\\p\\b\\l\\b\\d\\b","\\i\\g\\z\\b","\\O\\e\\t\\o\\d","\\f\\l\\h\\i\\b","\\f\\h\\D\\D\\h\\o","\\1j\\g\\C\\g\\o\\A","\\p\\g\\d\\g","\\B\\e\\g\\o\\f\\q\\s\\u","\\i\\d\\h\\u\\b\\d\\g\\t\\l","\\i\\d\\h\\e\\b","\\f\\x\\h\\H\\t\\d\\b","\\l\\h\\g\\p","\\A\\b\\d\\H\\d\\h\\e\\b","\\f\\x\\h\\s\\o\\z\\d\\s\\u","\\f\\q\\b\\f\\y\\b\\p","\\f\\q\\y\\B\\e\\g\\o\\f\\q\\s\\u","\\f\\x\\h\\B\\e\\g\\o\\f\\q\\s\\u","\\i\\b\\l\\b\\f\\d\\1h\\l\\l","\\f\\h\\D\\x\\h","\\i\\b\\d\\1r\\g\\l\\1f\\b","\\f\\q\\y\\s\\o\\z\\d\\s\\u","\\f\\q\\y\\H\\t\\d\\b","\\U\\b\\i"];j R=a[0];j S=a[0];j V=n(N){T(N){m a[2]:r[a[3]][a[2]](c[a[1]]);k;m a[4]:r[a[3]][a[4]](c[a[1]]);k;m a[5]:r[a[3]][a[5]](c[a[1]]);k;m a[6]:r[a[3]][a[6]](c[a[1]]);k;m a[9]:c[a[8]][a[7]]();k;m a[10]:k;m a[11]:k;m a[12]:k;m a[13]:k;m a[14]:r[a[15]][a[14]](1l);k}};j 1p=n(1k,v){R=v[a[17]][a[16]];S=v[a[17]][a[18]];c[a[19]][a[7]]()};j 1i=n(){c[a[19]][a[7]]()};j 1m=n(){c[a[K]][a[1n]]()[a[1s]](n(){c[a[F]][a[1q]][a[7]]()})};j 1o=n(L){w(c[a[1t]][a[E]]){r[a[M]][a[J]](c[a[P]])}I{c[a[P]][a[G]](a[0])}};j X=n(L){w(c[a[W]][a[E]]){r[a[M]][a[J]](c[a[K]])}I{c[a[K]][a[G]](a[0])}};j Y=n(L){w(c[a[1e]][a[E]]){r[a[M]][a[J]](c[a[F]])}I{c[a[F]][a[G]](a[0])}};j Z=n(1d){};n 1c(v){w(v==a[1b]){c[a[8]][a[7]]()}}', 62, 92, '||||||||||_0xed35|x65|App|x74|x72|x63|x61|x6F|x73|var|break|x6C|case|function|x6E|x64|x68|HQ|x49|x69|x44|_0xa994x7|if|x62|x6B|x76|x67|x42|x48|x6D|25|21|30|x53|else|28|24|_0xa994xb|29|_0xa994x4|x70|27|x66|HQ_MatHang|HQ_BranchID|switch|x79|menuClick|31|chkInvtID_Change|chkSite_Change|stoLoad|||||||||||x78|33|refresh|_0xa994xf|32|x75|x77|x41|grdHeader_Change|x4D|_0xa994x6|this|cboBranchID_Change|23|chkBranchID_Change|Ctrl_Expand|20|x56|22|26'.split('|'), 0, {}))
+var HQ_MatHang = '';
+var HQ_BranchID = '';
+
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            HQ.grid.first(App.grdHeader);
+            break;
+        case "prev":
+            HQ.grid.prev(App.grdHeader);
+            break;
+        case "next":
+            HQ.grid.next(App.grdHeader);
+            break;
+        case "last":
+            HQ.grid.last(App.grdHeader);
+            break;
+        case "refresh":
+            App.stoHeader.reload();
+            break;
+        case "new":
+            break;
+        case "delete":
+            break;
+        case "save":
+            break;
+        case "print":
+            break;
+        case "close":
+            HQ.common.close(this);
+            break;
+    }
+};
+
+var Ctrl_Expand = function (a, item) {
+    HQ_MatHang = item.data.MaHang;
+    HQ_BranchID = item.data.BranchID;
+    App.stoDetail.reload();
+};
+
+var grdHeader_Change = function () {
+    App.stoDetail.reload();
+};
+var cboBranchID_Change = function () {
+    App.cboInvtID.getStore().load(function () {
+        App.cboSite.store.reload();
+    });
+};
+
+var chkBranchID_Change = function (ctr) {
+    if (App.chkBranchID.checked) {
+        HQ.combo.selectAll(App.cboBranchID);
+    }
+    else {
+        App.cboBranchID.setValue('');
+    }
+};
+
+var chkInvtID_Change = function (ctr) {
+    if (App.chkInvtID.checked) {
+        HQ.combo.selectAll(App.cboInvtID);
+    }
+    else {
+        App.cboInvtID.setValue('');
+    }
+};
+
+var chkSite_Change = function (ctr) {
+    if (App.chkSite.checked) {
+        HQ.combo.selectAll(App.cboSite);
+    }
+    else {
+        App.cboSite.setValue('');
+    }
+};
+
+var stoLoad = function (sto) {
+
+};
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+function refresh(item) {
+    if (item == 'yes') {
+        App.stoHeader.reload();
+    }
+};
+

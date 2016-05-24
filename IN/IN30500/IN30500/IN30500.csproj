@@ -216,6 +216,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>IN30500Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="Properties\PublishProfiles\IN30500.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\hq.common.js" />
     <Content Include="Scripts\hq.language0.js" />
@@ -293,7 +294,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Reactor_Enabled="1" Reactor_Commands="" Reactor_Project="" Reactor_Configuration="Release" Reactor_Output="" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

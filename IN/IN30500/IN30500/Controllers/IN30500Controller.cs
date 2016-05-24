@@ -28,14 +28,15 @@ namespace IN30500.Controllers
             Util.InitRight(_screenNbr);
             return View();
         }
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
-        }
-
+        }    
+     
         public ActionResult GetHeader(string InvtID, string BranchID, string Site, string FirstDate, string LastDate, string Status)
         {
+            _db.CommandTimeout = int.MaxValue;            
             DateTime FromDate_tmp = DateTime.Parse(FirstDate.PassNull());
             DateTime ToDate_tmp = DateTime.Parse(LastDate.PassNull());
 
