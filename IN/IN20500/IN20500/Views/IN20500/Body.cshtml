@@ -68,6 +68,11 @@
                 .Split(true)                                           
                 .Items(
                     X.Panel().ID("pnlHeader").Layout(LayoutType.VBox)
+                    .Listeners(l=>
+                     {
+                            l.Render.Handler = "HQ.common.control_render(this,'header')";
+                   
+                        })        
                     .Border(false)
                     .MarginSpec("3 5 0 0")
                     .AutoScroll(true)
@@ -80,12 +85,12 @@
                     .Items(
                         X.Container().Layout(LayoutType.HBox).MarginSpec("3 0 0 0")
                         .Listeners(l =>
-                                {
-                                    l.Render.Handler = "HQ.common.control_render(this,'header')";
+                        {
+                            l.Render.Handler = "HQ.common.control_render(this,'header')";
                    
-                                })                         
+                        })                         
                         .Items(                                                                                                            
-                            HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQLangCode("InvtID").HQProcedure("IN20500_pcloadInvtID")
+                            HQ.Combo().ID("cboInvtID").Name("cboInvtID").HQLangCode("InvtID").HQProcedure("IN20500_pcloadInvtID").Tag("X")
                             .HQColumnShow("InvtID,Descr,Descr1,BarCode,Color").DisplayField("InvtID").ValueField("InvtID")
                             .LabelWidth(150).InputWidth(150).HQHeightWidth(400, 500).AllowBlank(false)
                             .HQDBSys(false)//.MaxLength(30).EnforceMaxLength(true)

@@ -26,6 +26,7 @@ var _parentRecordIDold;
 var keys = ['CpnyID'];
 var fieldsCheckRequire = ["CpnyID"];
 var fieldsLangCheckRequire = ["CpnyID"];
+var _coppy = false;
 var menuClick = function (command) {
     switch (command) {
         case "first":
@@ -66,6 +67,7 @@ var menuClick = function (command) {
                 HQ.message.show(20150303, '', 'refresh');
             } else {
                 refresh('yes');
+                _coppy = false;
             }
             break;
         case "new":
@@ -77,7 +79,7 @@ var menuClick = function (command) {
                     }
                     else {
                         App.cboInvtID.setValue('');
-                        App.stoIN_Inventory.reload();
+                        //App.stoIN_Inventory.reload();
                     }
 
                 } else if (HQ.focus == 'grd') {
@@ -125,6 +127,7 @@ var menuClick = function (command) {
     }
 
 };
+
 function refresh(item) {
     if (item == 'yes') {
         HQ.isChange = false;
@@ -135,34 +138,18 @@ function refresh(item) {
         
     }
 };
-//var refreshTree = function (i) {
-//    App.Tree.select(i);
-//}
-//var refreshTree2 = function (dt) {
-//    App.cboInvtID.setValue(dt);
-//    var findNode = App.IDTree.items.items[0].store.data.items;
-//    for (var i = 0; i < findNode.length; i++) {
-//        if (findNode[i].data.id == node) {
-//            App.Tree.select(i);
-//            break;
 
-//        }
-
-//    }
-//}
-
-var checkdataCompany = function (sto)
-{
+var checkdataCompany = function (sto) {
     var res = false
-    var store = sto.allData;
+    var store = sto.data;
     store.each(function (item) {
-        if (!Ext.isEmpty(itm.data.CpnyID))
-        {
+        if (!Ext.isEmpty(item.data.CpnyID)) {
             res = true;
         }
     })
     return res;
-}
+};
+
 function Save() {
     var record = App.stoIN_Inventory.getAt(0);
     record.set('Public', App.chkPublic.getValue());
@@ -217,6 +204,7 @@ function Save() {
             params: {
                 lstheader: Ext.encode(App.stoIN_Inventory.getRecordsValues()),//,        
                 lstgrd: Ext.encode(App.stoCompany.getChangedData({ skipIdForPhantomRecords: false })),
+                listAllCpny : Ext.encode(App.stoCompany.getRecordsValues()),
                 InvtID: App.cboInvtID.getValue(),
                 Handle: App.cboHandle.getValue(),
                 isNew:HQ.isNew,
@@ -238,8 +226,10 @@ function Save() {
                 tmpCopyFormMedia: curRecord.data.Media,
                 tmpOldFileName: tmpOldFileName,
                 mediaExist: App.frmMain.getRecord().data.Media,
+                isCp :_coppy,
             },
             success: function (result, data) {
+                _coppy = false;
                 tmpCopyForm = "0";
                 var Descr = App.txtDescr.getValue();
                 var InvtID = App.cboInvtID.getValue();
@@ -290,92 +280,9 @@ function Save() {
                         }
 
 
-                        //var record = App.IDTree.getStore().getNodeById(newNode);
-
-                        //if (data.result.tmpChangeTreeDic == "0") {
-                        //    var newNode = App.slmTree.selected.items[0].data.id;
-                        //    var record = App.IDTree.getStore().getNodeById(newNode);
-                        //    var node = data.result.invtID + "-" + data.result.Descr;
-
-                        //    record.appendChild({ text: node, leaf: true, id: node });
-
-                        //    var findNode = App.IDTree.items.items[0].store.data.items;
-                        //    for (var i = 0; i < findNode.length; i++) {
-                        //        if (findNode[i].data.id == node) {                           
-                        //            App.slmTree.select(i);                              
-                        //            break;
-                        //        }
-                        //    }
-                        //} else if (data.result.tmpChangeTreeDic == "1") {
-                        //    var tmpSelectedNode = data.result.tmpSelectedNode;
-                        //    var recordtmpSelectedNode = App.IDTree.getStore().getNodeById(tmpSelectedNode);
-                        //    recordtmpSelectedNode.remove(true);
-
-                        //    var newNode = App.slmTree.selected.items[0].data.id;
-                        //    var record = App.IDTree.getStore().getNodeById(newNode);
-
-                        //    var node = data.result.invtID + "-" + data.result.Descr;
-                        //    //var findNode = App.IDTree.items.items[0].store.data.items;
-                        //    //for (var i = 0; i < findNode.length; i++) {
-                        //    //    if (findNode[i].data.id == node) {
-                        //    //        //click = 1;
-                        //    //        App.slmTree.select(i);
-                        //    //        //setTimeout(function () { refreshTree(i); }, 7000);
-                        //    //        break;
-                        //    //    }
-                        //    //}
-                        //    //var newNode2 = App.slmTree.selected.items[0].data.id;
-                        //    //var recordDeleteNode = App.IDTree.getStore().getNodeById(newNode2);
-                        //    //recordDeleteNode.remove(true);
-                        //    record.appendChild({ text: node, leaf: true, id: node });
-                        //    App.cboInvtID.setValue("");
-                        //    //for (var i = 0; i < findNode.length; i++) {
-                        //    //    if (findNode[i].data.id == node) {
-                        //    //        //click = 1;
-                        //    //        App.slmTree.select(i);
-                        //    //        //setTimeout(function () { refreshTree(i); }, 7000);
-
-                        //    //        break;
-                        //    //    }
-                        //    //}
-
-
-
-                        //}
+                     
                     }
-                //if (data.result.addNewOrUpdate == "update") {
-                //    var newNode = App.slmTree.selected.items[0].data.id;
-                //    var record = App.IDTree.getStore().getNodeById(newNode);
-                //    var node = data.result.invtID + "-" + data.result.Descr;
-                //    if (newNode != node) {
-                //        record.parentNode.appendChild({ text: node, leaf: true, id: node });
-                //        var findNode = App.IDTree.items.items[0].store.data.items;
-                //        for (var i = 0; i < findNode.length; i++) {
-                //            if (findNode[i].data.id == node) {
-                //                //click = 1;
-                //                App.slmTree.select(i);
-                //                //setTimeout(function () { refreshTree(i); }, 7000);
-
-                //            }
-                //        }
-                //        var newNode2 = App.slmTree.selected.items[0].data.id;
-                //        var record2 = App.IDTree.getStore().getNodeById(newNode2);
-                //        record2.remove(true);
-                //        record.parentNode.replaceChild(record2, record);
-                //        var findNode = App.IDTree.items.items[0].store.data.items;
-                //        for (var i = 0; i < findNode.length; i++) {
-                //            if (findNode[i].data.id == node) {
-                //                //click = 1;
-                //                App.slmTree.select(i);
-                //                //setTimeout(function () { refreshTree(i); }, 7000);
-                //                break;
-                //            }
-                //        }
-                //    }
-
-
-                //}
-                //ReloadTreeIN20500();
+              
 
             }
             , failure: function (errorMsg, data) {
@@ -526,8 +433,12 @@ var stoIN_Inventory_Loaded = function (store) {
 
     HQ.common.showBusy(false);
     if (Ext.isEmpty(App.cboInvtID.getValue())) {
-        App.cboInvtID.forceSelection = false;
+            App.cboInvtID.forceSelection = false;
         HQ.isNew = true;
+    }
+    if (_coppy == true)
+    {
+        App.cboInvtID.forceSelection = false;
     }
     if (record.data.ApproveStatus != 'H') {
         HQ.common.lockItem(App.frmMain, true);
@@ -615,7 +526,6 @@ var searchNode = function () {
     //App.IDTree.getStore().getNodeById(invtIDDescr).select();
 }
 
-
 var cboInvtID_Change = function (sender, e) {
     if (!e) {
         App.txtBarCode.setReadOnly(false);
@@ -626,14 +536,14 @@ var cboInvtID_Change = function (sender, e) {
         App.btnCopy.disable();
 
     }
-    if ((!HQ.isNew || sender.valueModels != null) && !App.stoIN_Inventory.loading) {
+    if ((!HQ.isNew || sender.valueModels != null) && !App.stoIN_Inventory.loading && _coppy == false) {
        
         App.stoIN_Inventory.reload();
         searchNode();
     } 
 };
 var cboInvtID_Select = function (sender, value) {
-    if (sender.valueModels != null && !App.stoIN_Inventory.loading) {       
+    if (sender.valueModels != null && !App.stoIN_Inventory.loading && _coppy == false) {       
         App.stoIN_Inventory.reload();
         //searchNode();
     }
@@ -641,11 +551,15 @@ var cboInvtID_Select = function (sender, value) {
 };
 
 var cboClassID_Change = function (sender, e) {
-    if (HQ.focus == 'ClassID' ) {
-        chooseGrid="2";
-        App.stoIN_ProductClass.load();
-        App.stoCompany.load();
-    } 
+    if (!App.stoCompany.loading) {
+        if (HQ.focus == 'ClassID') {
+            if (HQ.isInsert == true)
+                HQ.isFirstLoad = true;
+            chooseGrid = "2";
+            App.stoIN_ProductClass.load();
+            App.stoCompany.load();
+        }
+    }
 };
 
 var frmloadAfterRender = function (obj) {
@@ -731,7 +645,6 @@ var chkPublic_Change = function (item) {
 
 }
 
-
 var NextShowNextLotSerial_AfterRender = function (value) {
     prefixvalue = App.txtLotSerFxdVal.getValue();
     lastfixvalue = App.txtLotSerNumVal.getValue();
@@ -767,7 +680,22 @@ var NodeSelected_Change = function (store, operation, options) {
     } else { // nếu đang tạo mới
         if (operation.parentNode) {// nếu node đang chọn ko phải node root
             if (operation.data.children) {//nếu node đang chọn có con
-                
+                parentRecordIDAll = operation.data.id.split("-");
+                if (operation.childNodes.length == 0) {
+                    var invtall = operation.data.id.split("-")
+                    var invt1 = invtall[1];
+                    App.cboInvtID.setValue(invt1);
+                    parentRecordIDAll = operation.parentNode.data.id.split("-");
+                    _nodeID = parentRecordIDAll[0];
+                    _nodeLevel = parentRecordIDAll[1];
+                    _parentRecordID = parentRecordIDAll[2];
+
+                }
+                else if (parentRecordIDAll.length == 3) {
+                    _nodeID = parentRecordIDAll[0];
+                    _nodeLevel = parentRecordIDAll[1];
+                    _parentRecordID = parentRecordIDAll[2];
+                }
             } else { // nếu node đang chọn là leaf rồi
                 parentRecordIDAll = operation.data.id.split("-");
                 if (operation.childNodes.length == 0) {
@@ -836,9 +764,6 @@ var Tab_Change = function (sender, e)
 
 }
 
-
-
-
 // Event when uplPPCStorePicReq is change a file
 var fupPPCStorePicReq_Change = function (fup, newValue, oldValue, eOpts) { 
         if (fup.value) {
@@ -902,6 +827,8 @@ var CopyForm_Click = function (sender, e) {
         App.cboInvtID.setValue(barcode);        
         //App.cboInvtID.setValue('');
         HQ.isNew = true;
+        _coppy = true;
+        App.cboInvtID.forceSelection = false;
     }
 };
 

@@ -37,7 +37,7 @@ namespace IN20500.Controllers
                 var config = _sys.SYS_Configurations.FirstOrDefault(x => x.Code == "UploadIN20500");
                 if (config != null && !string.IsNullOrWhiteSpace(config.TextVal))
                 {
-                    _filePath = HostingEnvironment.ApplicationPhysicalPath+"\\" + config.TextVal;
+                    _filePath =  config.TextVal;
                     _Path = config.TextVal;
                 }
                 else
@@ -503,7 +503,41 @@ namespace IN20500.Controllers
                 }
                 #endregion
 
+
+                //if (data["isCp"] == "true")
+                //{
+                //    string oldInvt = data["txtBarCode"];
+                //    if (!string.IsNullOrEmpty(oldInvt))
+                //    {
+                //        var listCpny = _db.IN_InvtCpny.Where(p => p.InvtID == oldInvt).ToList();
+                //        foreach (var item in list)
+                //        {
+ 
+                //        }
+                //    }
+                //}
                 _db.SaveChanges();
+
+                StoreDataHandler dataHandlerCpny = new StoreDataHandler(data["listAllCpny"]);
+                var listCpny = dataHandlerCpny.ObjectData<IN20500_pgGetCompanyInvt_Result>().ToList();
+
+                foreach (var item in listCpny)
+                {
+                    var record = _db.IN_InvtCpny.Where(p => p.InvtID == invtID && p.CpnyID == item.CpnyID).FirstOrDefault();
+                    if (record != null)
+                    {
+                    }
+                    else
+                    {
+                        record = new IN_InvtCpny();
+                        record.InvtID = invtID;
+                        record.CpnyID = item.CpnyID;
+                        _db.IN_InvtCpny.AddObject(record);
+                    }
+                }
+
+                _db.SaveChanges();
+
                 return Json(new { success = true, invtID = _objHeader.InvtID, Descr = _objHeader.Descr }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
