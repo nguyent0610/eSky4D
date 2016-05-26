@@ -16,7 +16,7 @@ var menuClick = function (command) {
             HQ.grid.last(App.grdHeader);
             break;
         case "refresh":
-            App.stoHeader.reload();
+            refresh('yes');
             break;
         case "new":
             break;
@@ -75,13 +75,16 @@ var chkSite_Change = function (ctr) {
 };
 
 var stoLoad = function (sto) {
-
+    HQ.common.showBusy(false, HQ.waitMsg);
+};
+var sto_BeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.waitMsg);
 };
 
 /////////////////////////////////////////////////////////////////////////
 //// Other Functions ////////////////////////////////////////////////////
 function refresh(item) {
-    if (item == 'yes') {
+    if (item == 'yes') {      
         App.stoHeader.reload();
     }
 };

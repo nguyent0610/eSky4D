@@ -131,11 +131,11 @@
                         })
                         .LoadData()
 
-                        , HQ.DateField().ID("lblFromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(220)
-                        .Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy"))
+                        , HQ.DateField().ID("dtpFromDate").MarginSpec("5 0 0 0").HQLangCode("FromDate").Width(220)
+                        .Value(DateTime.Now)
 
-                        , HQ.DateField().ID("lblToDate").MarginSpec("5 0 0 0").HQLangCode("ToDate").Width(220)
-                        .Format("dd/MM/yyyy").Value(DateTime.Now.ToString("dd/MM/yyyy"))
+                        , HQ.DateField().ID("dtpToDate").MarginSpec("5 0 0 0").HQLangCode("ToDate").Width(220)
+                        .Value(DateTime.Now)
                     )//Column 3
                 )
 
@@ -151,7 +151,7 @@
                     .View(X.GridView().TrackOver(false).LoadMask(true))
                     .Region(Region.Center).Flex(1)
                     .SelectionMemory(false)
-                    .Store(
+                    .Store(                      
                         X.Store()
                         .ID("stoHeader")
                         .PageSize(50)
@@ -162,11 +162,15 @@
                             ps.Add(new StoreParameter("InvtID", "App.cboInvtID.getValue().join(',')", ParameterMode.Raw));
                             ps.Add(new StoreParameter("BranchID", "App.cboBranchID.getValue().join(',')", ParameterMode.Raw));
                             ps.Add(new StoreParameter("Site", "App.cboSite.getValue().join(',')", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("FirstDate", "App.lblFromDate.getValue()", ParameterMode.Raw));
-                            ps.Add(new StoreParameter("LastDate", "App.lblToDate.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("FirstDate", "App.dtpFromDate.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("LastDate", "App.dtpToDate.getValue()", ParameterMode.Raw));
                             ps.Add(new StoreParameter("Status", "App.cboStatus.getValue()", ParameterMode.Raw));
                         })
-                            .Listeners(p => p.Load.Fn = "stoLoad")
+                                .Listeners(p =>
+                                {
+                                    p.Load.Fn = "stoLoad";
+                                    p.BeforeLoad.Fn = "sto_BeforeLoad";
+                            })
                     )
                     .Listeners(lst => lst.Render.Handler = "HQ.common.control_render(this,'grdHeader');")
                     .SortableColumns(false)

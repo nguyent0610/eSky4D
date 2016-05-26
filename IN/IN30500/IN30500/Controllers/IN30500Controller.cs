@@ -32,8 +32,8 @@ namespace IN30500.Controllers
         public PartialViewResult Body(string lang)
         {
             return PartialView();
-        }    
-     
+        }
+        
         public ActionResult GetHeader(string InvtID, string BranchID, string Site, string FirstDate, string LastDate, string Status)
         {
             _db.CommandTimeout = int.MaxValue;            
