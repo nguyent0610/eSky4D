@@ -255,9 +255,10 @@ namespace INProcess
 
                 clsIN_Setup objSetup = new clsIN_Setup(Dal);
                 objSetup.GetByKey(branchID, "IN");
-                clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
+             
                 clsIN_Trans objTran = new clsIN_Trans(Dal);
                 DataTable lstTrans = objTran.GetAll(branchID, batNbr, "%", "%");
+                clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
                 clsIN_LotTrans objLot = new clsIN_LotTrans(Dal);
     
                 DateTime? tranDate = DateTime.Now;
@@ -755,7 +756,9 @@ namespace INProcess
 
                 clsIN_Trans objTran = new clsIN_Trans(Dal);
                 DataTable lstTrans = objTran.GetAll(branchID, batNbr, "%", "%");
-
+                clsIN_ItemLot objItemLot = new clsIN_ItemLot(Dal);
+                clsIN_LotTrans objLot = new clsIN_LotTrans(Dal);
+              
                 string User = string.Empty;
                 string prog = string.Empty;
                 if (lstTrans.Rows.Count > 0)
@@ -797,6 +800,57 @@ namespace INProcess
                     objItem.LUpd_Prog = prog;
                     objItem.LUpd_User = User;
                     objItem.Update();
+
+
+                    ///them lot 20160527
+                    if (objInvt.StkItem == 1 && objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack.PassNull() != "N")
+                    {
+                        DataTable dtLot = objLot.GetAll(branchID, batNbr, "%", "%", tran.String("LineRef"));
+                        foreach (DataRow lotRow in dtLot.Rows)
+                        {
+                            qty = Math.Round(lotRow.Double("Qty") * (lotRow.String("UnitMultDiv") == "D" ? 1.0 / lotRow.Double("CnvFact") : lotRow.Double("CnvFact")), 0) * lotRow.Short("InvtMult");
+                            if (!objItemLot.GetByKey(lotRow.String("SiteID"), lotRow.String("InvtID"), lotRow.String("LotSerNbr")))
+                            {
+                                objItemLot.Reset();
+                                objItemLot.LotSerNbr = lotRow.String("LotSerNbr");
+                                objItemLot.InvtID = lotRow.String("InvtID");
+                                objItemLot.SiteID = lotRow.String("SiteID");
+                                objItemLot.ExpDate = lotRow.Date("ExpDate");
+                                objItemLot.WarrantyDate = lotRow.Date("WarrantyDate");
+                                objItemLot.LIFODate = lotRow.Date("ExpDate");
+
+                                objItemLot.Crtd_DateTime = DateTime.Now;
+                                objItemLot.Crtd_Prog = Prog;
+                                objItemLot.Crtd_User = User;
+
+                                objItemLot.LUpd_DateTime = DateTime.Now;
+                                objItemLot.LUpd_Prog = Prog;
+                                objItemLot.LUpd_User = User;
+                                objItemLot.Add();
+                            }
+
+
+
+                            if (!objSetup.NegQty && objItemLot.QtyOnHand + qty < 0)
+                            {
+                                throw new MessageException(MessageType.Message, "608", "", new[] { objItemLot.InvtID, objItemLot.SiteID + "-" + objItemLot.LotSerNbr });
+                            }
+
+                           
+                            objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
+                            objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
+
+                            if (qty > 0) objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
+
+
+                            objItemLot.Cost = objItem.TotCost * objItemLot.QtyOnHand;
+                            objItemLot.LUpd_DateTime = DateTime.Now;
+                            objItemLot.LUpd_Prog = Prog;
+                            objItemLot.LUpd_User = User;
+                            objItemLot.Update();
+                        }
+                    }
+
                 }
 
                 sql.IN_ReleaseBatch(branchID, batNbr, Prog, User);
