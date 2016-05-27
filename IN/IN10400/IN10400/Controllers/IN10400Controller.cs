@@ -240,20 +240,34 @@ namespace IN10400.Controllers
                     //    oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
                     //    UpdateINAlloc(trans.InvtID, trans.SiteID, oldQty, 0);
                     //}
+                    if (trans != null)
+                    {
+                        if (trans.Qty < 0)
+                        {
+                            oldQty = Math.Abs(trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact);
+                            //oldQty = trans.UnitMultDiv == "D" ? trans.Qty / trans.CnvFact : trans.Qty * trans.CnvFact;
+                            UpdateINAlloc(trans.InvtID, trans.SiteID, oldQty, 0);
+                        }
+                    }
+
+
                     _app.IN_Trans.DeleteObject(trans);
                 }
-                
-                //var lstLot = _app.IN_LotTrans.Where(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr).ToList();
-                //foreach (var lot in lstLot)
-                //{
-                //    double oldQty = 0;
-                //    if (lot.TranType == "II")
-                //    {
-                //        oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
-                //        UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
-                //    }
-                //    _app.IN_LotTrans.DeleteObject(lot);
-                //}
+
+                var lstLot = _app.IN_LotTrans.Where(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr).ToList();
+                foreach (var lot in lstLot)
+                {
+                    double oldQty = 0;
+                    if (lot != null)
+                    {
+                        if (lot.Qty  < 0)
+                        {
+                            oldQty = Math.Abs(lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact);
+                            UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
+                        }
+                    }
+                    _app.IN_LotTrans.DeleteObject(lot);
+                }
 
                 _app.SaveChanges();
 
@@ -315,17 +329,17 @@ namespace IN10400.Controllers
                     _app.IN_Trans.DeleteObject(trans);
                 }
 
-                //var lstLot = _app.IN_LotTrans.Where(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.INTranLineRef == lineRef).ToList();
-                //foreach (var lot in lstLot)
-                //{
-                //    double oldQty = 0;
-                //    if (lot.TranType == "II")
-                //    {
-                //        oldQty = lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact;
-                //        UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
-                //    }
-                //    _app.IN_LotTrans.DeleteObject(lot);
-                //}
+                var lstLot = _app.IN_LotTrans.Where(p => p.BranchID == _objBatch.BranchID && p.BatNbr == _objBatch.BatNbr && p.INTranLineRef == lineRef).ToList();
+                foreach (var lot in lstLot)
+                {
+                    double oldQty = 0;
+                    if (lot.Qty < 0)
+                    {
+                        oldQty = Math.Abs(lot.UnitMultDiv == "D" ? lot.Qty / lot.CnvFact : lot.Qty * lot.CnvFact);
+                        UpdateAllocLot(lot.InvtID, lot.SiteID, lot.LotSerNbr, oldQty, 0, 0);
+                    }
+                    _app.IN_LotTrans.DeleteObject(lot);
+                }
 
                 var batch = _app.Batches.FirstOrDefault(p => p.BatNbr == _objBatch.BatNbr && p.BranchID == _objBatch.BranchID);
                 if (batch != null)
