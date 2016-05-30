@@ -327,6 +327,13 @@ var grdTrans_Edit = function (item, e) {
             }
 
             if (key == 'InvtID' || key == 'Qty' || key == 'TranAmt') {
+                if (key == "InvtID")
+                {
+                    if (Ext.isEmpty(e.record.data.InvtID))
+                    {
+                        return;
+                    }
+                }
                 App.grdTrans.view.loadMask.show();
                 HQ.numEditTrans = 0;
                 HQ.maxEditTrans = 3;

@@ -597,21 +597,24 @@ namespace IN10400.Controllers
                 string siteID = _lstTrans[i].SiteID;
                 double editQty = 0;
                 double qtyTot = 0;
-                if (_lstTrans[i].Qty == 0)
+                if (!string.IsNullOrEmpty(invtID))
                 {
-                    throw new MessageException("1000", new[] { Util.GetLang("Qty") });
-                }
+                    if (_lstTrans[i].Qty == 0)
+                    {
+                        throw new MessageException("1000", new[] { Util.GetLang("Qty") });
+                    }
 
-                if (_lstTrans[i].SiteID.PassNull() == string.Empty)
-                {
-                    throw new MessageException("1000", new[] { Util.GetLang("SiteID") });
-                }
 
-                if (_lstTrans[i].UnitMultDiv.PassNull() == string.Empty || _lstTrans[i].UnitDesc.PassNull() == string.Empty)
-                {
-                    throw new MessageException("2525", new[] { _lstTrans[i].InvtID });
-                }
+                    if (_lstTrans[i].SiteID.PassNull() == string.Empty)
+                    {
+                        throw new MessageException("1000", new[] { Util.GetLang("SiteID") });
+                    }
 
+                    if (_lstTrans[i].UnitMultDiv.PassNull() == string.Empty || _lstTrans[i].UnitDesc.PassNull() == string.Empty)
+                    {
+                        throw new MessageException("2525", new[] { _lstTrans[i].InvtID });
+                    }
+                }
                 //IN_Inventory objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
                 //if (objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack != "N")
                 //{
