@@ -599,21 +599,32 @@ namespace IN10400.Controllers
                 double qtyTot = 0;
                 if (!string.IsNullOrEmpty(invtID))
                 {
-                    if (_lstTrans[i].Qty == 0)
-                    {
-                        throw new MessageException("1000", new[] { Util.GetLang("Qty") });
-                    }
+                     IN_Inventory objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
+                     if (objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack != "N")
+                     {
+                         if (_lstTrans[i].Qty == 0 && _lstLot.Where(p => p.INTranLineRef == _lstTrans[i].LineRef && p.Qty != 0).Count() == 0)
+                         {
+                             throw new MessageException("201605301", new[] { Util.GetLang("Qty") });
+                         }
+                     }
+                     else
+                     {
+                         if (_lstTrans[i].Qty == 0 )
+                         {
+                             throw new MessageException("201605301", new[] { Util.GetLang("Qty") });
+                         }
 
+                     }
 
-                    if (_lstTrans[i].SiteID.PassNull() == string.Empty)
-                    {
-                        throw new MessageException("1000", new[] { Util.GetLang("SiteID") });
-                    }
+                     if (_lstTrans[i].SiteID.PassNull() == string.Empty)
+                     {
+                         throw new MessageException("1000", new[] { Util.GetLang("SiteID") });
+                     }
 
-                    if (_lstTrans[i].UnitMultDiv.PassNull() == string.Empty || _lstTrans[i].UnitDesc.PassNull() == string.Empty)
-                    {
-                        throw new MessageException("2525", new[] { _lstTrans[i].InvtID });
-                    }
+                     if (_lstTrans[i].UnitMultDiv.PassNull() == string.Empty || _lstTrans[i].UnitDesc.PassNull() == string.Empty)
+                     {
+                         throw new MessageException("2525", new[] { _lstTrans[i].InvtID });
+                     }
                 }
                 //IN_Inventory objInvt = _app.IN_Inventory.FirstOrDefault(p => p.InvtID == invtID);
                 //if (objInvt.LotSerTrack.PassNull() != string.Empty && objInvt.LotSerTrack != "N")
@@ -699,7 +710,7 @@ namespace IN10400.Controllers
         }
         private bool Save_Lot(Batch batch, IN_Trans tran)
         {
-            var lots = _app.IN_LotTrans.Where(p => p.BranchID == batch.BranchID && p.BatNbr == batch.BatNbr).ToList();
+            var lots = _app.IN_LotTrans.Where(p => p.BranchID == batch.BranchID && p.BatNbr == batch.BatNbr && p.RefNbr == tran.RefNbr).ToList();
             foreach (var item in lots)
             {
                 if (item.EntityState == EntityState.Deleted || item.EntityState == EntityState.Detached) continue;
@@ -707,7 +718,7 @@ namespace IN10400.Controllers
                 {
                     var oldQty = item.UnitMultDiv == "D" ? item.Qty / item.CnvFact : item.Qty * item.CnvFact;
 
-                    UpdateAllocLot(item.InvtID, item.SiteID, item.LotSerNbr, oldQty, 0, 0);
+                    UpdateAllocLot(item.InvtID, item.SiteID, item.LotSerNbr, -oldQty, 0, 0);
 
                     _app.IN_LotTrans.DeleteObject(item);
                 }

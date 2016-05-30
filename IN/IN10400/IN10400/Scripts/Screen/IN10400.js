@@ -778,12 +778,12 @@ var save = function () {
     App.stoLotTrans.clearFilter();
     App.stoTrans.data.each(function (item) {
         if (!Ext.isEmpty(item.data.InvtID)) {
-            if (item.data.Qty == 0) {
-                HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
-                App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
-                flat = true;
-                return false;
-            }
+            //if (item.data.Qty == 0) {
+            //    HQ.message.show(1000, [HQ.common.getLang('qty')], '', true);
+            //    App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
+            //    flat = true;
+            //    return false;
+            //}
             //if (item.data.UnitMultDiv == '') {
             //    HQ.message.show(2525, [item.data.InvtID], '', true);
             //    App.smlTrans.select(App.stoTrans.indexOf(HQ.store.findInStore(App.stoTrans, ['LineRef'], [item.data.LineRef])));
