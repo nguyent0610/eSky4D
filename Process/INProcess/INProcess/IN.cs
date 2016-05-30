@@ -786,10 +786,14 @@ namespace INProcess
                         else
                             qty = (tran.Double("Qty") * tran.Short("InvtMult")) / tran.Double("CnvFact");
 
-                        objItem.QtyAllocIN = Math.Round(objItem.QtyAllocIN + qty, 0);
+                        //objItem.QtyAllocIN = Math.Round(objItem.QtyAllocIN + qty, 0);
                         objItem.QtyOnHand = Math.Round(objItem.QtyOnHand + qty, 0);
-
-                        if(qty>0) objItem.QtyAvail = Math.Round(objItem.QtyAvail + qty, 0);
+                        if (qty < 0) objItem.QtyAllocIN = Math.Round(objItem.QtyAllocIN + qty, 0);
+                        if (qty > 0)
+                        {
+                            objItem.QtyAvail = Math.Round(objItem.QtyAvail + qty, 0);
+                          
+                        }
                     }
                     if (!objSetup.NegQty && objSetup.CheckINVal && Math.Round(objItem.TotCost + tran.Double("ExtCost"), 0) < 0)
                     {
@@ -837,11 +841,13 @@ namespace INProcess
                             }
 
                            
-                            objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
+                            
                             objItemLot.QtyOnHand = Math.Round(objItemLot.QtyOnHand + qty, 0);
-
-                            if (qty > 0) objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
-
+                            if (qty<0) objItemLot.QtyAllocIN = Math.Round(objItemLot.QtyAllocIN + qty, 0);
+                            if (qty > 0)
+                            {                           
+                                objItemLot.QtyAvail = Math.Round(objItemLot.QtyAvail + qty, 0);
+                            }
 
                             objItemLot.Cost = objItem.TotCost * objItemLot.QtyOnHand;
                             objItemLot.LUpd_DateTime = DateTime.Now;
