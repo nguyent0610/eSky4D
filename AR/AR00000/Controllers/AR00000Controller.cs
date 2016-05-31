@@ -1,15 +1,17 @@
-using HQ.eSkyFramework;
+using System.Web.Mvc;
 using Ext.Net;
 using Ext.Net.MVC;
-using System;
+using HQ.eSkyFramework;
+using HQ.eSkySys;
+using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using PartialViewResult = System.Web.Mvc.PartialViewResult;
-using System.IO;
+using System.Net;
+using System;
+using System.Data.Metadata.Edm;
+using System.Security.Cryptography;
 using System.Text;
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
 namespace AR00000.Controllers
 {
     [DirectController]
@@ -19,23 +21,24 @@ namespace AR00000.Controllers
     {
         private string _screenNbr = "AR00000";
         private string _userName = Current.UserName;
+        private string _cpnyID = Current.CpnyID;
 
         AR00000Entities _db = Util.CreateObjectContext<AR00000Entities>(false);
-
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
         public ActionResult Index()
         {
-            
+
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
         public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-     
+
         public ActionResult GetAR00000Header(string branchId, string setupID)
         {
             var setupData = _db.AR_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupId == setupID);
@@ -45,40 +48,42 @@ namespace AR00000.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-            string branchId = Current.CpnyID;         
+            string branchId = _cpnyID;
+            string setupID = "AR";
             try
             {
 
                 StoreDataHandler dataHandler = new StoreDataHandler(data["lstAR00000Header"]);
-                ChangeRecords<AR_Setup> lstSetup = dataHandler.BatchObjectData<AR_Setup>();
-                
+                //ChangeRecords<AR_Setup> lstSetup = dataHandler.BatchObjectData<AR_Setup>();
 
-                lstSetup.Created.AddRange(lstSetup.Updated);
+                var curHeader = dataHandler.ObjectData<AR_Setup>().FirstOrDefault();
 
-                foreach (AR_Setup curSetup in lstSetup.Created)
+                //lstSetup.Created.AddRange(lstSetup.Updated);
+
+
+                #region Save AP_Setup
+
+                var header = _db.AR_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupId == setupID);
+
+                if (header != null)
                 {
-                    if (curSetup.BranchID.PassNull() == "") continue;
-
-                    var Setup = _db.AR_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupId == "AR");
-
-                    if (Setup != null)
+                    if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        if (Setup.tstamp.ToHex() == curSetup.tstamp.ToHex())
-                        {
-                            Update_Setup(Setup, curSetup, false);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
+                        Update_Setup(ref header, curHeader, false);
                     }
                     else
                     {
-                        Setup = new AR_Setup();
-                        Update_Setup(Setup, curSetup, true);
-                        _db.AR_Setup.AddObject(Setup);
+                        throw new MessageException(MessageType.Message, "19");
                     }
                 }
+                else
+                {
+                    header = new AR_Setup();
+                    header.ResetET();
+                    Update_Setup(ref header, curHeader, true);
+                    _db.AR_Setup.AddObject(header);
+                }
+                #endregion
 
                 _db.SaveChanges();
                 return Json(new { success = true });
@@ -89,35 +94,23 @@ namespace AR00000.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        [DirectMethod]
-        public ActionResult Delete(string branchId)
-        {
-            branchId = Current.CpnyID;
-            var cpny = _db.AR_Setup.FirstOrDefault(p => p.BranchID == branchId);
-            if (cpny != null)
-            {
-                _db.AR_Setup.DeleteObject(cpny);
 
-            }   
-            _db.SaveChanges();
-            return this.Direct();
-        }
-        private void Update_Setup(AR_Setup s, AR_Setup d, bool isNew)
+        private void Update_Setup(ref AR_Setup s, AR_Setup d, bool isNew)
         {
             if (isNew)
             {
-                s.BranchID = d.BranchID;
+                s.BranchID = _cpnyID;
                 s.SetupId = "AR";
                 s.Crtd_DateTime = DateTime.Now;
                 s.Crtd_Prog = _screenNbr;
                 s.Crtd_User = _userName;
             }
 
-            s.LastBatNbr =d.LastBatNbr;
+            s.LastBatNbr = d.LastBatNbr;
             s.AutoCustID = d.AutoCustID == null ? false : d.AutoCustID;
             s.LastRefNbr = d.LastRefNbr;
             s.AutoSlsperID = d.AutoSlsperID == null ? false : d.AutoSlsperID;
-            s.LastReceiptNbr =d.LastReceiptNbr;
+            s.LastReceiptNbr = d.LastReceiptNbr;
             s.HiddenHierarchy = d.AutoSlsperID == null ? false : d.HiddenHierarchy;
 
             s.LastCustID = d.LastCustID;
@@ -132,6 +125,6 @@ namespace AR00000.Controllers
             s.LUpd_Prog = _screenNbr;
             s.LUpd_User = _userName;
         }
-        
+
     }
 }

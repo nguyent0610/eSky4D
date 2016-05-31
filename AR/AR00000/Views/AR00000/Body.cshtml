@@ -15,10 +15,15 @@
     X.FormPanel()
     .ID("frmMain")
     .BodyPadding(0)
+    .TrackResetOnLoad(true)
     .KeyMap(Util.SetupKeyMap())
-    .TopBar(Util.SetupToolbar("Print", false, ""))
+    .TopBar(Util.SetupToolbar("New,Print,Delete", false, ""))
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
     .Layout(LayoutType.Fit)
+    .Listeners(l=>{
+            l.BoxReady.Handler = "firstLoad()";
+            l.FieldChange.Fn = "frmChange";
+        })
     .Items(
         ////Thiet ke giao dien o day
          X.Panel().ID("pnlHeader").Layout(LayoutType.HBox).LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top })//.Width(735)
@@ -28,16 +33,16 @@
                 X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0").Flex(1).MinWidth(300).MaxWidth(500)
                 .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })//.Width(735)
                 .Items(
-                    HQ.TextBox().ID("txtLastBatNbr").Name("txtLastBatNbr").HQLangCode("LASTBATNBR").DataIndex("LastBatNbr")
-                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(false)
+                    HQ.TextBox().ID("txtLastBatNbr").Name("txtLastBatNbr").HQLangCode("LASTBATNBR").DataIndex("LastBatNbr").MaskRe(@"/[0-9]/")
+                    .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
                    
-                    ,HQ.TextBox().ID("txtLastRefNbr ").Name("txtLastRefNbr ").HQLangCode("LASTREFNBR").DataIndex("LastRefNbr")
+                    ,HQ.TextBox().ID("txtLastRefNbr ").Name("txtLastRefNbr ").HQLangCode("LASTREFNBR").DataIndex("LastRefNbr").MaskRe(@"/[0-9]/")
                     .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
                     
-                    , HQ.TextBox().ID("lblLastReceiptNbr").Name("lblLastReceiptNbr").HQLangCode("LASTRECEIPTNBR").DataIndex("LastReceiptNbr")
+                    , HQ.TextBox().ID("lblLastReceiptNbr").Name("lblLastReceiptNbr").HQLangCode("LASTRECEIPTNBR").DataIndex("LastReceiptNbr").MaskRe(@"/[0-9]/")
                     .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
                      
-                    , HQ.TextBox().ID("txtLastCustID").Name("txtLastCustID").HQLangCode("LASTCUSTID").DataIndex("LastCustID")
+                    , HQ.TextBox().ID("txtLastCustID").Name("txtLastCustID").HQLangCode("LASTCUSTID").DataIndex("LastCustID").MaskRe(@"/[0-9]/")
                     .Width(400).MarginSpec("5 0 0 0").AllowBlank(false).MaxLength(50).EnforceMaxLength(true)
                     
                      , HQ.TextBox().ID("txtLastSlsperID").Name("txtLastSlsperID").HQLangCode("LASTSLSPERID").DataIndex("LastSlsID")
@@ -46,41 +51,61 @@
 
                     , HQ.Combo().ID("cboDfltShipViaID").Name("cboDfltShipViaID").HQLangCode("SHIPVIAID").HQProcedure("AR00000_pcShipViaID")
                     .HQColumnShow("ShipViaID,Descr").DisplayField("ShipViaID").ValueField("ShipViaID").DataIndex("DfltShipViaID")
-                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false)
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false).ForceSelection(true)
                     .LoadData()
+                     .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
 
                      , HQ.TextBox().ID("txtPreFixBat").Name("txtPreFixBat").HQLangCode("Prefix").DataIndex("PrefixBat")
                     .Width(400).MarginSpec("5 0 0 0").MaxLength(2).EnforceMaxLength(true)
                     
                     , HQ.Combo().ID("cboTranDescDflt").Name("cboTranDescDflt").HQLangCode("TranDescDflt").HQProcedure("AR00000_pcTranDescDflt")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("TranDescDflt")
-                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false)
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                       
                         })
                     .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
 
                     , HQ.Combo().ID("cboAddressLevel").Name("cboAddressLevel").HQLangCode("ADDRLEVEL").HQProcedure("AR00000_pcAddrLevel")
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").DataIndex("AddressLevel")
-                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false)
+                    .Width(400).HQHeightWidth(400, 300).MarginSpec("5 0 0 0").Editable(false).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
                             new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
                          
                         })
                     .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
                     
                     , HQ.Combo().ID("cboBankAcct").Name("cboBankAcct").HQLangCode("BankAcct").HQProcedure("AR00000_pcBankAcctCA")
                     .HQColumnShow("BankAcct,CashAcctName,AcctNbr").DisplayField("BankAcct").ValueField("BankAcct").DataIndex("DfltBankAcct")
-                    .Width(400).HQHeightWidth(400, 600).MarginSpec("5 0 0 0").Editable(false)
+                    .Width(400).HQHeightWidth(400, 600).MarginSpec("5 0 0 0").Editable(false).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                         { 
-                            new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID" , Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID" , Mode = ParameterMode.Raw }
                            
                         })
                     .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
                     
                 
             )
