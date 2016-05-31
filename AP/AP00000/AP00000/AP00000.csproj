@@ -217,7 +217,6 @@
       <LastGenOutput>AP00000Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
-    <Content Include="Scripts\hq.common.debug.js" />
     <Content Include="Scripts\hq.common.js" />
     <Content Include="Scripts\hq.language1.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
@@ -234,7 +233,6 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Scripts\Screen\AP00000.debug.js" />
     <Content Include="Scripts\Screen\AP00000.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -280,9 +278,10 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>7313</DevelopmentServerPort>
+          <DevelopmentServerPort>63870</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2020/</IISUrl>
+          <IISUrl>
+          </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

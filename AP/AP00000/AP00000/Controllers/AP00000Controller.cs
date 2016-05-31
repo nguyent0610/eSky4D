@@ -1,41 +1,42 @@
-using HQ.eSkyFramework;
+using System.Web.Mvc;
 using Ext.Net;
 using Ext.Net.MVC;
-using System;
+using HQ.eSkyFramework;
+using HQ.eSkySys;
+using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using PartialViewResult = System.Web.Mvc.PartialViewResult;
-using System.IO;
+using System.Net;
+using System;
+using System.Data.Metadata.Edm;
+using System.Security.Cryptography;
 using System.Text;
+using PartialViewResult = System.Web.Mvc.PartialViewResult;
 namespace AP00000.Controllers
 {
     [DirectController]
-    [CustomAuthorize]
-    [CheckSessionOut]
     public class AP00000Controller : Controller
     {
         private string _screenNbr = "AP00000";
         private string _userName = Current.UserName;
+        private string _cpnyID = Current.CpnyID;
 
         AP00000Entities _db = Util.CreateObjectContext<AP00000Entities>(false);
+        eSkySysEntities _sys = Util.CreateObjectContext<eSkySysEntities>(true);
 
         public ActionResult Index()
         {
-            
             Util.InitRight(_screenNbr);
             return View();
         }
 
-        [OutputCache(Duration = 1000000, VaryByParam = "lang")]
-        public PartialViewResult Body(int lang)
+        //[OutputCache(Duration = 1000000, VaryByParam = "lang")]
+        public PartialViewResult Body(string lang)
         {
             return PartialView();
         }
 
-        
+        // Get collection of Vendor for binding data (Ajax)
         public ActionResult GetAP00000Header(string branchId, string setupID)
         {
             var setupData = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == setupID);
@@ -45,62 +46,44 @@ namespace AP00000.Controllers
         [HttpPost]
         public ActionResult Save(FormCollection data)
         {
-            string branchId = Current.CpnyID;
-            string dfltBankAcct = data["cboBankAcct"];
-            string classID = data["cboClassID"];
-            string lastBatNbr = data["txtLastBatNbr"];
-            string lastRefNbr = data["txtLastRefNbr"];
-            string lastPaymentNbr = data["txtLastPaymentNbr"];
-            string preFixBat = data["txtPreFixBat"];
-            string tranDescDef = data["cboTranDescDef"];
-            string terms = data["cboTermsID"];
-
-
             try
             {
+                string BranchID = _cpnyID;
+                string setupID = "AP";
 
-                StoreDataHandler dataHandler = new StoreDataHandler(data["lstAP00000Header"]);
-                ChangeRecords<AP_Setup> lstSetup = dataHandler.BatchObjectData<AP_Setup>();
+                StoreDataHandler dataHandler1 = new StoreDataHandler(data["lstSetup"]);
+
+                var curHeader = dataHandler1.ObjectData<AP_Setup>().FirstOrDefault();
                 
+                #region Save AP_Setup
 
-                lstSetup.Created.AddRange(lstSetup.Updated);
-
-                foreach (AP_Setup curSetup in lstSetup.Created)
+                var header = _db.AP_Setup.FirstOrDefault(p => p.BranchID == BranchID && p.SetupID == setupID);
+                if (header != null)
                 {
-                    if (curSetup.BranchID.PassNull() == "") continue;
-
-                    var setup = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId && p.SetupID == "AP");
-
-                    if (setup != null)
+                    if (header.tstamp.ToHex() == curHeader.tstamp.ToHex())
                     {
-                        if (setup.tstamp.ToHex() == curSetup.tstamp.ToHex())
-                        {
-                            Update_Setup(setup, curSetup, false);
-                        }
-                        else
-                        {
-                            throw new MessageException(MessageType.Message, "19");
-                        }
+                        UpdatingHeader(ref header, curHeader,false);
                     }
                     else
                     {
-                        setup = new AP_Setup();
-                        setup.DfltBankAcct = dfltBankAcct; 
-                        setup.ClassID = classID;
-                        setup.LastBatNbr = lastBatNbr;
-                        setup.LastRefNbr = lastRefNbr;
-                        setup.LastPaymentNbr = lastPaymentNbr;
-                        setup.PreFixBat = preFixBat;
-                        setup.TranDescDflt = tranDescDef;
-                        setup.terms = terms;
-
-                        Update_Setup(setup, curSetup, true);
-                        _db.AP_Setup.AddObject(setup);
+                        throw new MessageException(MessageType.Message, "19");
                     }
                 }
-
+                else
+                {
+                    header = new AP_Setup();
+                    header.ResetET();
+                    //header.BranchID = BranchID;
+                    //header.Crtd_DateTime = DateTime.Now;
+                    //header.Crtd_Prog = _screenNbr;
+                    //header.Crtd_User = Current.UserName;
+                    UpdatingHeader(ref header, curHeader,true);
+                    _db.AP_Setup.AddObject(header);
+                }
+                #endregion
+                
                 _db.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true , VendID = BranchID }, "text/html");
             }
             catch (Exception ex)
             {
@@ -108,41 +91,32 @@ namespace AP00000.Controllers
                 return Json(new { success = false, type = "error", errorMsg = ex.ToString() });
             }
         }
-        [DirectMethod]
-        public ActionResult Delete(string branchId)
-        {
-            branchId = Current.CpnyID;
-            var cpny = _db.AP_Setup.FirstOrDefault(p => p.BranchID == branchId);
-            if (cpny != null)
-            {
-                _db.AP_Setup.DeleteObject(cpny);
 
-            }   
-            _db.SaveChanges();
-            return this.Direct();
-        }
-        private void Update_Setup(AP_Setup s, AP_Setup d, bool isNew)
+
+
+        private void UpdatingHeader(ref AP_Setup t, AP_Setup s, bool isNew)
         {
             if (isNew)
             {
-                s.BranchID = d.BranchID;
-                s.SetupID = "AP";
-                s.Crtd_DateTime = DateTime.Now;
-                s.Crtd_Prog = _screenNbr;
-                s.Crtd_User = _userName;
+                //t.CpnyID = s.CpnyID;
+                t.BranchID = _cpnyID;
+                t.SetupID = "AP";
+                t.Crtd_DateTime = DateTime.Now;
+                t.Crtd_Prog = _screenNbr;
+                t.Crtd_User = _userName;
             }
-            s.ClassID = d.ClassID;
-            s.DfltBankAcct = d.DfltBankAcct;
-            s.LastBatNbr = d.LastBatNbr;
-            s.LastRefNbr = d.LastRefNbr;
-            s.LastPaymentNbr = d.LastPaymentNbr;
-            s.PreFixBat = d.PreFixBat;
-            s.TranDescDflt = d.TranDescDflt;
-            s.terms = d.terms;
-            s.LUpd_DateTime = DateTime.Now;
-            s.LUpd_Prog = _screenNbr;
-            s.LUpd_User = _userName;
+            t.ClassID = s.ClassID;
+            t.DfltBankAcct = s.DfltBankAcct;
+            t.LastBatNbr = s.LastBatNbr;
+            t.LastRefNbr = s.LastRefNbr;
+            t.LastPaymentNbr = s.LastPaymentNbr;
+            t.PreFixBat = s.PreFixBat;
+            t.TranDescDflt = s.TranDescDflt;
+            t.terms = s.terms;
+            t.LUpd_DateTime = DateTime.Now;
+            t.LUpd_Prog = _screenNbr;
+            t.LUpd_User = _userName;
         }
-        
+
     }
 }

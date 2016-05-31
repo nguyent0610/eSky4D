@@ -16,54 +16,57 @@
  <!--Không thay đổi phần head Đổi mã màn hình AP00000.js tùy theo màn hình đổi lại-->
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/AP00000.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/AP00000.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
         }
     </style>
     <script>
-       
         HQ.cpnyID = '@Current.CpnyID';
         HQ.langID = '@Current.LangID';
         HQ.userName = '@Current.UserName';
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');
 
     </script>  
     <title>@ViewBag.Title</title>
 </head>
-<body>   
-    @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
-    
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Gray":Current.Theme.PassNull())))
 
-        @X.GridFilters()<!--Khi cache cho grid-->
-        @X.ProgressBarPager()<!--Khi cache cho grid -->   
-      
-        @(Html.X().Store().ID("stoAP00000Header")   
-            .Model(Util.GenerateModel(typeof(AP_Setup), "AP00000Model", "BrandID"))       
+        @*Make the store - the binding data of the form*@
+        @(
+            X.Store().ID("stoAP00000Header")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(AP_Setup), "mdlAP_Setup", "BrandID"))
             .Proxy(
-                X.AjaxProxy()                
-                .Url(Url.Action("GetAP00000Header", "AP00000"))                
+                X.AjaxProxy()
+                .Url(Url.Action("GetAP00000Header", "AP00000"))
                 .ActionMethods(action =>
                 {
                     action.Read = HttpMethod.POST;
                 })
                 .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
-            ) 
+            )
             .Parameters(ps =>
-                            {
-                                ps.Add(new StoreParameter("branchId", Current.CpnyID, ParameterMode.Value));
-                                ps.Add(new StoreParameter("setupID", "AP", ParameterMode.Value));
-                            })      
-            .Listeners(p=>p.Load.Handler="loadDataHeader()" )
-      )  
-      <!-- Gọi hàm Body trong AP00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->          
-       @{Html.RenderAction("Body", new { lang=@Current.LangID});}   
-    
-</body>
+            {
+                ps.Add(new StoreParameter("branchId", Current.CpnyID, ParameterMode.Value));
+                ps.Add(new StoreParameter("setupID", "AP", ParameterMode.Value));
+            })
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";                   
+                }
+            )
+        )
+        <!-- Gọi hàm Body trong AP00000Controller để dựng view Body.cshtml, mục đích tạo cache. -->
+        @{ Html.RenderAction("Body", new { lang = Current.LangID });}   
+    </body>
 </html>
- 
