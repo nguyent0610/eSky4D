@@ -16,9 +16,9 @@
  <!--Không thay đổi phần head Đổi mã màn hình AR21100.js tùy theo màn hình đổi lại-->
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src='@Url.Content("Scripts/hq.Language"+Current.LangID+".js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/AR21100.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/AR21100.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
@@ -32,6 +32,10 @@
         HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
         HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
         HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.bussinessDate = new Date('@DateTime.Now.Date');
+            //HQ.isUpdate =false;
+            //HQ.isInsert = false;
+            //HQ.isDelete = true;
 
     </script>  
     <title>@ViewBag.Title</title>
