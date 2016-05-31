@@ -9,7 +9,7 @@
     Layout = null;
     var X = Html.X();
     ViewBag.Title = "IF30100";
-    var acc = Session["IF30100"] as AccessRight;
+    var acc = Session[(string)ViewBag.ScreenNbr] as AccessRight;
 }
 <!DOCTYPE html>
 <html>

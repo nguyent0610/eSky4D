@@ -697,8 +697,8 @@ namespace IF30100.Controllers
 
                 var lstControlFilter = lstColReport.Where(p =>p.ShowFilterInExcel).OrderBy(p => p.PivotOrder).ToList();
 
-
-                pivotDestination = targetSheet.Range["A" + (lstControlFilter.Count + 7 + lstFilter.Count() / 2).ToString()];
+                var lstFilterShow = lstFilter.Where(p => p.PivotShow).ToList();
+                pivotDestination = targetSheet.Range["A" + (lstControlFilter.Count + 7 + lstFilterShow.Count() / 2).ToString()];
 
                 excelWorkBook.PivotTableWizard(XlPivotTableSourceType.xlDatabase, pivotData, pivotDestination, pivotTableName, true, true, true, true, Type.Missing, Type.Missing, false, false, XlOrder.xlOverThenDown, 2);
                 pivotTable = targetSheet.PivotTables(pivotTableName);
@@ -769,11 +769,14 @@ namespace IF30100.Controllers
                 foreach (var colFilter in lstFilter)
                 {
                     PivotField pvf = pivotTable.PivotFields(Util.GetLang(colFilter.ColumnDescr));
+                    if (colFilter.PivotShow)
+                    {
+                        pvf.Orientation = XlPivotFieldOrientation.xlPageField;
+                        pvf.CurrentPage = "(All)";
+                        pvf.Subtotals[1] = true;
+                        pvf.Subtotals[1] = false;
+                    }
                     
-                    pvf.Orientation = XlPivotFieldOrientation.xlPageField;
-                    pvf.CurrentPage = "(All)";
-                    pvf.Subtotals[1] = true;
-                    pvf.Subtotals[1] = false;
                 }
 
                 pivotTable.CacheIndex = 1;
@@ -783,7 +786,7 @@ namespace IF30100.Controllers
 
                 if (report.ExportImage)
                 {
-                    string pathImage = Server.MapPath("\\Content\\Images\\logo.png");
+                    string pathImage = Server.MapPath("~/Content/Images/logo.png");
 
                     if (System.IO.File.Exists(pathImage))
                     {
@@ -792,8 +795,22 @@ namespace IF30100.Controllers
 
                         targetSheet.Shapes.AddPicture(pathImage, Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoCTrue, targetSheet.Range["F1:F1"].Left, 0, (int)((double)image.Width / rate), 30);
                     }
+                  
                 }
-               
+
+
+
+                for (int i = 4 + (lstControlFilter.Count / 2); i <= 6 + (lstControlFilter.Count / 2) + (lstFilterShow.Count / 2); i++)
+                {
+                    if (!String.IsNullOrWhiteSpace(targetSheet.Cells[i, 1].Value))
+                    {
+                        targetSheet.Cells[i, 1].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.FromArgb(0, 176, 240));
+                    }
+                    if (!String.IsNullOrWhiteSpace(targetSheet.Cells[i, 4].Value))
+                    {
+                        targetSheet.Cells[i, 4].Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.FromArgb(0, 176, 240));
+                    }
+                }
 
                 targetSheet.Range["A1:E1"].Font.Size = 25;
                 targetSheet.Cells[1, 5].HorizontalAlignment = Microsoft.Office.Interop.Excel.Constants.xlLeft;
@@ -827,9 +844,10 @@ namespace IF30100.Controllers
                         targetSheet.Cells[start, 1].Value = Util.GetLang(lstControlFilter[i].ColumnDescr);
                         targetSheet.Cells[start, 1].Font.Bold = true;
                         targetSheet.Cells[start, 2].NumberFormat = "@";
+     
                         if (ctrFilter.ParmType.ToUpper() == "Month".ToUpper())
                         {
-                            targetSheet.Cells[start, 2].Value = parm.Value.Substring(0, 7);
+                            targetSheet.Cells[start, 2].Value = parm.Value.Substring(5, 2) + "/" + parm.Value.Substring(0, 4);
                         }
                         else if (ctrFilter.ParmType.ToUpper() == "Year".ToUpper())
                         {
@@ -837,13 +855,23 @@ namespace IF30100.Controllers
                         }
                         else if (ctrFilter.ParmType.ToUpper() == "Date".ToUpper())
                         {
-                            targetSheet.Cells[start, 2].Value = parm.Value.Substring(0, 10);
+                            DateTime date = Convert.ToDateTime(parm.Value.Substring(8, 2) + "/" + parm.Value.Substring(5, 2) + "/" + parm.Value.Substring(0, 4));
+                            if (ctrFilter.DataFormat.PassNull() != string.Empty)
+                            {
+                                targetSheet.Cells[start, 2].Value = date.ToString(ctrFilter.DataFormat);
+                            }
+                            else
+                            {
+                                targetSheet.Cells[start, 2].Value = date.ToString("dd/MM/yyyy");
+                            }
+                            
                         }
                         else
                         {
                             targetSheet.Cells[start, 2].Value = parm.Value;
                         }
-                      
+                       
+                   
                     }
                     else
                     {
@@ -866,7 +894,7 @@ namespace IF30100.Controllers
                         {
                             targetSheet.Cells[start, 4].Value = parm.Value;
                         }
-
+                    
                         start++;
                     }
                 }
