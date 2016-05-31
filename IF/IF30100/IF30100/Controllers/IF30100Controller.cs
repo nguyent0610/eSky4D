@@ -548,9 +548,13 @@ namespace IF30100.Controllers
                     pc.Add(new ParamStruct("@SelectionFormular",DbType.String, "", ParameterDirection.Input, 200));
                     pc.Add(new ParamStruct("@UserID", DbType.String, Current.UserName, ParameterDirection.Input, 200));
                     pc.Add(new ParamStruct("@AppPath", DbType.String,"", ParameterDirection.Input, 200));
-                    pc.Add(new ParamStruct("@ClientName", DbType.String, "", ParameterDirection.Input, 200));
+                    pc.Add(new ParamStruct("@ClientName", DbType.String, HttpContext.Request.UserHostName, ParameterDirection.Input, 200));
                     pc.Add(new ParamStruct("@LoggedCpnyID", DbType.String, Current.CpnyID, ParameterDirection.Input, 200));
-                    pc.Add(new ParamStruct("@CpnyID", DbType.String, "", ParameterDirection.Input, 200));
+                  
+                    HQ.eSkySys.eSkySysEntities sys2 = Util.CreateObjectContext<HQ.eSkySys.eSkySysEntities>(true);
+                    var user = sys2.Users.FirstOrDefault(p => p.UserName.ToLower() == Current.UserName.ToLower());
+
+                    pc.Add(new ParamStruct("@CpnyID", DbType.String, user !=null ? user.CpnyID : "" , ParameterDirection.Input, 200));
                     pc.Add(new ParamStruct("@LangID", DbType.Int16, Current.LangID, ParameterDirection.Input, 200));
 
                     int rptID = Convert.ToInt32(dal.ExecScalar(cmdRPT, CommandType.Text, ref pc));
