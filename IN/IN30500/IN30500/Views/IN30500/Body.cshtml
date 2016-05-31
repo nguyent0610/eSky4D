@@ -54,7 +54,7 @@
 
                     , HQ.Combo().ID("cboInvtID").Name("cboInvtID").MarginSpec("5 0 0 0").Width(300)
                     .HQLangCode("InvtID").HQDBSys(false).HQProcedure("IN30500_pcInventoryActive")
-                    .HQColumnShow("InvtID,Descr,CpnyID").ForceSelection(true).MultiSelect(true)
+                    .HQColumnShow("InvtID,Descr").ForceSelection(true).MultiSelect(true)
                     .DisplayField("InvtID").ValueField("InvtID").HQHeightWidth(400, 300)
                     .HQParam(new StoreParameterCollection() {
                         new StoreParameter() { Name = "@UserName", Value ="HQ.userName", Mode = ParameterMode.Raw},
