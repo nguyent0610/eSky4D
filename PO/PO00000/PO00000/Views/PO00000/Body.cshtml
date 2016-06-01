@@ -43,11 +43,11 @@
                 .Items(
                     HQ.TextBox().ID("PreFixBat").Name("PreFixBat").HQLangCode("Prefix").Width(300).AllowBlank(true).MaxLength(2)
                     .DataIndex("PreFixBat").EnforceMaxLength(true),
-                    HQ.TextBox().ID("LastBatNbr").Name("LastBatNbr").HQLangCode("LastBatNbr").Width(300).AllowBlank(true).MaxLength(10)
+                    HQ.TextBox().ID("LastBatNbr").Name("LastBatNbr").HQLangCode("LastBatNbr").Width(300).AllowBlank(false).MaxLength(10).MaskRe(@"/[0-9]/")
                     .DataIndex("LastBatNbr").EnforceMaxLength(true),
-                    HQ.TextBox().ID("LastPONbr").Name("LastPONbr").HQLangCode("LastPO").Width(300).AllowBlank(true).MaxLength(100)
+                    HQ.TextBox().ID("LastPONbr").Name("LastPONbr").HQLangCode("LastPO").Width(300).AllowBlank(false).MaxLength(100).MaskRe(@"/[0-9]/")
                     .DataIndex("LastPONbr").EnforceMaxLength(true),
-                    HQ.TextBox().ID("LastRcptNbr").Name("LastRcptNbr").HQLangCode("LastRec").Width(300).AllowBlank(true).MaxLength(10)
+                    HQ.TextBox().ID("LastRcptNbr").Name("LastRcptNbr").HQLangCode("LastRec").Width(300).AllowBlank(true).MaxLength(10).MaskRe(@"/[0-9]/")
                     .DataIndex("LastRcptNbr").EnforceMaxLength(true)
 
                     , HQ.Combo().ID("cboDfltLstUnitCost").Name("cboDfltLstUnitCost").HQLangCode("DefCost").HQProcedure("PO00000_pcUnitCost").AllowBlank(false)
@@ -125,7 +125,7 @@
                         HQ.TextBox().ID("ShipAddr2").Name("ShipAddr2").Width(300).MaxLength(50)
                         .DataIndex("ShipAddr2").EnforceMaxLength(true),
 
-                        HQ.Combo().ID("cboShipCountry").Name("cboShipCountry").HQProcedure("PO00000_pcCountryID").HQAutoLoad(false)
+                        HQ.Combo().ID("cboShipCountry").Name("cboShipCountry").HQProcedure("PO00000_pcCountryID")
                         .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID").Width(300).DataIndex("ShipCountry")
                         .HQHeightWidth(300, 300)
                         .LoadData()
@@ -172,7 +172,7 @@
                         .DataIndex("ShipPhone").EnforceMaxLength(true),
                         HQ.TextBox().ID("ShipFax").Name("ShipFax").Width(300).AllowBlank(true).MaxLength(30)
                         .DataIndex("ShipFax").EnforceMaxLength(true),
-                        HQ.TextBox().ID("ShipEmail").Name("ShipEmail").Width(300).AllowBlank(true).MaxLength(40)
+                        HQ.TextBox().ID("ShipEmail").Name("ShipEmail").Width(300).AllowBlank(false).MaxLength(40)
                         .DataIndex("ShipEmail").EnforceMaxLength(true)
                     )//Column 2
                     
@@ -188,7 +188,7 @@
                         HQ.TextBox().ID("BillAddr2").Name("BillAddr2").Width(300).MaxLength(30)
                         .DataIndex("BillAddr2").EnforceMaxLength(true),
 
-                        HQ.Combo().ID("cboBillCountry").Name("cboBillCountry").HQProcedure("PO00000_pcCountryID").HQAutoLoad(false)
+                        HQ.Combo().ID("cboBillCountry").Name("cboBillCountry").HQProcedure("PO00000_pcCountryID")
                         .HQColumnShow("CountryID,Descr").DisplayField("CountryID").ValueField("CountryID").Width(300).DataIndex("BillCountry")
                         .HQHeightWidth(300, 300)
                         .LoadData()
@@ -235,7 +235,7 @@
                         .DataIndex("BillPhone").EnforceMaxLength(true),
                         HQ.TextBox().ID("BillFax").Name("BillFax").Width(300).AllowBlank(true).MaxLength(30)
                         .DataIndex("BillFax").EnforceMaxLength(true),
-                        HQ.TextBox().ID("BillEmail").Name("BillEmail").Width(300).AllowBlank(true).MaxLength(40)
+                        HQ.TextBox().ID("BillEmail").Name("BillEmail").Width(300).AllowBlank(false).MaxLength(40)
                         .DataIndex("BillEmail").EnforceMaxLength(true)
                     )//Column 3
             )//tab Address
