@@ -18,7 +18,7 @@
     .Config("trackResetOnLoad","true")
     
     .KeyMap(Util.SetupKeyMap())
-    .TopBar(Util.SetupToolbar("Print", false, ""))
+    .TopBar(Util.SetupToolbar("New,Print,Delete", false, ""))
     .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 200; })
     .Listeners(l =>
     {
@@ -40,20 +40,20 @@
                 
                 , HQ.TextBox().ID("txtPreFixBat").Name("txtPreFixBat").MaxLength(10).EnforceMaxLength(true)
                     .DataIndex("PreFixBat").HQLangCode("Prefix").Width(400).MarginSpec("10 0 0 10")
-                , HQ.TextBox().ID("txtLastBatNbr").Name("txtLastBatNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                , HQ.TextBox().ID("txtLastBatNbr").Name("txtLastBatNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true).MaskRe(@"/[0-9]/")
                     .DataIndex("LastBatNbr").HQLangCode("LastBatNbr").Width(400).MarginSpec("5 0 0 10")
-                , HQ.TextBox().ID("txtLastTransferNbr").Name("txtLastTransferNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                , HQ.TextBox().ID("txtLastTransferNbr").Name("txtLastTransferNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true).MaskRe(@"/[0-9]/")
                     .DataIndex("LastTransferNbr").HQLangCode("LastTransferNbr").Width(400).MarginSpec("5 0 0 10")
-                , HQ.TextBox().ID("txtLastRefNbr").Name("txtLastRefNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                , HQ.TextBox().ID("txtLastRefNbr").Name("txtLastRefNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true).MaskRe(@"/[0-9]/")
                     .DataIndex("LastRefNbr").HQLangCode("LastRefNbr").Width(400).MarginSpec("5 0 0 10")
-                , HQ.TextBox().ID("txtLastIssueNbr").Name("txtLastIssueNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                , HQ.TextBox().ID("txtLastIssueNbr").Name("txtLastIssueNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true).MaskRe(@"/[0-9]/")
                     .DataIndex("LastIssueNbr").HQLangCode("LastIssueNbr").Width(400).MarginSpec("5 0 0 10")
-                , HQ.TextBox().ID("txtLastRcptNbr").Name("txtLastRcptNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true)
+                , HQ.TextBox().ID("txtLastRcptNbr").Name("txtLastRcptNbr").AllowBlank(false).MaxLength(10).EnforceMaxLength(true).MaskRe(@"/[0-9]/")
                     .DataIndex("LastRcptNbr").HQLangCode("LastRcptNbr").Width(400).MarginSpec("5 0 0 10")
        
                 , HQ.Combo().ID("cboDfltSite").Name("cboDfltSite").HQLangCode("DfltSite").HQProcedure("IN00000_pcSiteAll").AllowBlank(false)
                     .HQColumnShow("SiteID,Name").DisplayField("Name").ValueField("SiteID").Width(400).DataIndex("DfltSite")
-                    .HQHeightWidth(400, 400).MarginSpec("5 0 0 10").LabelAlign(LabelAlign.Left)
+                    .HQHeightWidth(400, 400).MarginSpec("5 0 0 10").LabelAlign(LabelAlign.Left).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@BranchID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
@@ -67,7 +67,7 @@
             
                 , HQ.Combo().ID("cboDfltValMthd").Name("cboDfltValMthd").HQLangCode("ValMthd").HQProcedure("IN00000_pcValuation").AllowBlank(false)
                     .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Width(400).DataIndex("DfltValMthd").HQDBSys(true)
-                    .HQHeightWidth(400, 400).MarginSpec("5 0 0 10").LabelAlign(LabelAlign.Left)
+                    .HQHeightWidth(400, 400).MarginSpec("5 0 0 10").LabelAlign(LabelAlign.Left).ForceSelection(true)
                     .HQParam(new StoreParameterCollection() 
                     { 
                         new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }

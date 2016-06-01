@@ -1,1 +1,160 @@
-﻿eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('w a=["\\j\\c\\A\\i\\c\\b\\h\\e","\\j\\c\\1f\\H\\m\\d\\e\\b","\\l\\b\\e\\B\\b\\o\\g\\h\\m","\\E\\h\\q\\1s\\d\\j\\i","\\z\\H\\m\\d\\e\\b\\B\\b\\o\\g\\h\\m","\\l\\b\\e\\1p\\g\\h\\q","\\j\\c\\1m\\d\\p\\j\\m","\\V\\z\\Z\\q\\j\\e\\j\\i\\l\\K\\K\\K","\\l\\b\\e\\1o\\d\\i\\l","\\o\\g\\q\\q\\g\\i","\\A\\G\\k\\k\\k\\k\\k\\1q\\V\\d\\M\\b","\\l\\b\\e\\J\\r\\d\\i\\l\\b\\m\\F\\d\\e\\d","\\c\\e\\g\\A\\G\\k\\k\\k\\k\\k","\\b\\i\\o\\g\\m\\b","\\j\\c\\G\\b\\D","","\\c\\r\\g\\D","\\q\\b\\c\\c\\d\\l\\b","\\h\\b\\p\\g\\d\\m","\\H\\h\\g\\o\\b\\c\\c","\\c\\z\\Z\\q\\j\\e","\\E\\j\\h\\c\\e","\\i\\b\\1n\\e","\\H\\h\\b\\M","\\p\\d\\c\\e","\\j\\c\\F\\b\\p\\b\\e\\b","\\o\\r\\b\\o\\1b\\B\\b\\O\\z\\j\\h\\b\\1r\\d\\c\\c","\\E\\g\\h\\q","\\c\\d\\M\\b","\\o\\p\\g\\c\\b","\\i\\b\\D","\\m\\b\\p\\b\\e\\b","\\j\\c\\J\\r\\d\\i\\l\\b","\\h\\b\\E\\h\\b\\c\\r","\\c\\r\\g\\D\\N\\z\\c\\R","\\p\\b\\i\\l\\e\\r","\\m\\d\\e\\d","\\N\\h\\d\\i\\o\\r\\A\\F","\\j\\i\\c\\b\\h\\e\\N\\p\\d\\i\\1b","\\c\\e\\g\\h\\b","\\l\\b\\e\\1t\\e","\\o\\g\\q\\q\\j\\e\\J\\r\\d\\i\\l\\b\\c","\\c\\b\\e\\B\\b\\O\\z\\j\\h\\b","\\p\\g\\d\\m\\B\\b\\o\\g\\h\\m","\\A\\G\\k\\k\\k\\k\\k","\\o\\r\\d\\i\\l\\b\\F\\d\\e\\d","\\p\\g\\d\\m\\j\\i\\l\\m\\d\\e\\d","\\R\\b\\c"];t W(){v(f[a[0]]||f[a[1]]){w 1l=n[a[3]][a[2]]();n[a[3]][a[5]]()[a[4]]();v(n[a[3]][a[6]]()){n[a[3]][a[20]]({1k:f[a[9]][a[8]](a[7]),1e:a[10],1g:{1j:1i[a[13]](n[a[12]][a[11]]({1h:C})),1d:f[a[14]]},1x:t(1W,I){f[a[17]][a[16]](1Z,a[15],a[15]);n[a[12]][a[18]]()},1P:t(S,I){f[a[17]][a[19]](S,I,L)}})}}}w 1T=t(T){1u(T){s a[21]:u;s a[22]:u;s a[23]:u;s a[24]:u;s a[1R]:v(f[a[1]]||f[a[0]]||f[a[1A]]){v(f[a[1B]][a[1C]](n[a[3]])){W()}};u;s a[Q]:f[a[9]][a[Q]](1z);u;s a[1y]:u;s a[1v]:u;s a[X]:v(f[a[y]]){f[a[17]][a[16]](1D,a[15],a[X])}1E{f[a[y]]=C;n[a[12]][a[18]]()};u;1K:}};w 1L=t(){};w 1M=t(x){f[a[9]][a[P]](C);f[a[14]]=C;v(x[a[1J]][a[1I]]==0){f[a[1c]][a[1F]](x,a[1G]);1H=x[a[Y]](0);x[a[1N]]();f[a[14]]=L;f[a[9]][a[1w]](n[a[3]])};n[a[3]][a[5]]()[a[1O]](n[a[12]][a[Y]](0));1a()};w 1a=t(){n[a[3]][a[5]]()[a[4]]();f[a[y]]=f[a[1c]][a[y]](n[a[12]]);f[a[9]][a[1V]](f[a[y]],a[1U])};w 1Q=t(x){f[a[9]][a[P]](L,f[a[9]][a[8]](a[1X]))};t 1S(U){v(U==a[1Y]){f[a[y]]=C;n[a[12]][a[18]]()}}', 62, 129, '||||||||||_0x9643|x65|x73|x61|x74|HQ|x6F|x72|x6E|x69|x30|x67|x64|App|x63|x6C|x6D|x68|case|function|break|if|var|_0x96bdxa|32|x75|x49|x52|false|x77|x66|x44|x4E|x70|_0x96bdx4|x43|x2E|true|x76|x42|x71|34|29|x79|_0x96bdx5|_0x96bdx7|_0x96bdxe|x53|save|33|40|x62|||||||||||frmChange|x6B|39|isNew|url|x55|params|skipIdForPhantomRecords|Ext|lstIN00000|waitMsg|_0x96bdx2|x56|x78|x4C|x46|x2F|x50|x4D|x41|switch|31|42|success|30|this|25|27|26|20150303|else|38|37|record|35|36|default|firstLoad|stoLoad|41|43|failure|stoBeforeLoad|28|refresh|menuClick|44|45|_0x96bdx3|46|47|201405071|||||'.split('|'), 0, {}))
+﻿////////////////////////////////////////////////////////////////////////
+//// Declare ///////////////////////////////////////////////////////////
+var _Source = 0;
+var _maxSource = 2;
+var _isLoadMaster = false;
+
+////////////////////////////////////////////////////////////////////////
+//// Store /////////////////////////////////////////////////////////////
+var checkLoad = function (sto) {
+    _Source += 1;
+    if (_Source == _maxSource) {
+        _isLoadMaster = true;
+        _Source = 0;
+        App.stoIN00000.reload();
+        HQ.common.showBusy(false);
+    }
+};
+
+////////////////////////////////////////////////////////////////////////
+//// First Load ////////////////////////////////////////////////////////
+var firstLoad = function () {
+    //HQ.util.checkAccessRight(); //Kiểm tra quyền Insert Update Delete để disable các button trên topbar(Bắt buộc)
+    if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false)
+        App.menuClickbtnSave.disable();
+    App.frmMain.isValid(); //Require các field yêu cầu trên man hình
+    HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
+    HQ.isFirstLoad = true;
+    App.cboDfltSite.getStore().addListener('load', checkLoad);
+    App.cboDfltValMthd.getStore().addListener('load', checkLoad);
+    
+};
+
+
+////////////////////////////////////////////////////////////////////////
+//// Event /////////////////////////////////////////////////////////////
+// Load and show binding data to the form
+// Command of the topbar on screen
+var menuClick = function (command) {
+    switch (command) {
+        case "first":
+            break;
+        case "next":
+            break;
+        case "prev":
+            break;
+        case "last":
+            break;
+        case "save":
+            if (HQ.isUpdate || HQ.isInsert || HQ.isDelete) {
+                if (HQ.form.checkRequirePass(App.frmMain)) {
+                    save();
+                }
+            }
+            break;
+        case "delete":
+
+            break;
+        case "close":
+            break;
+        case "new":
+            break;
+        case "refresh":
+            if (HQ.isChange) {
+                HQ.message.show(20150303, '', 'refresh');
+            }
+            else {
+                refresh("yes");
+            }
+            break;
+
+        default:
+    }
+};
+
+var frmChange = function () {
+    if (App.stoIN00000.getCount() > 0)
+        App.frmMain.getForm().updateRecord();
+
+    HQ.isChange = HQ.store.isChange(App.stoIN00000);
+    HQ.common.changeData(HQ.isChange, 'IN00000');
+};
+
+var stoLoad = function (sto) {
+    HQ.isNew = false;
+    HQ.common.lockItem(App.frmMain, false);
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "");
+        record = sto.getAt(0);
+        HQ.isNew = true; //record la new 
+        HQ.isFirstLoad = true;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require 
+        sto.commitChanges();
+    }
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
+
+    if (!HQ.isInsert && HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    else if (!HQ.isUpdate && !HQ.isNew) {
+        HQ.common.lockItem(App.frmMain, true);
+    }
+    if (_isLoadMaster) {
+        HQ.common.showBusy(false);
+        frmChange();
+    }
+};
+
+//Truoc khi load store se hien Busy
+
+var stoBeforeLoad = function (sto) {
+    HQ.common.showBusy(true, HQ.common.getLang('loadingData'));
+};
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Process Data ///////////////////////////////////////////////////////
+// Submit the changed data (created, updated) into server side
+
+function save() {
+    var curRecord = App.frmMain.getRecord();
+
+
+    App.frmMain.getForm().updateRecord();
+    if (App.frmMain.isValid()) {
+        App.frmMain.submit({
+            waitMsg: 'Submiting...',
+            url: 'IN00000/Save',
+            params: {
+                lstIN00000: Ext.encode(App.stoIN00000.getRecordsValues())
+            },
+            success: function (data) {
+                HQ.message.show(201405071);
+                refresh("yes");
+            },
+
+            failure: function (errorMsg, data) {
+                HQ.message.process(errorMsg, data, true);
+            }
+        });
+    }
+};
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////
+//// Other Functions ////////////////////////////////////////////////////
+
+
+
+function refresh(item) {
+    if (item == 'yes') {
+        HQ.isChange = false;
+        App.stoIN00000.reload();
+    }
+};
+
+
