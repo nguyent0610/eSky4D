@@ -18,7 +18,7 @@
     <meta name="viewport" content="width=device-width" />
     <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
     <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
-    <script src='@Url.Content("Scripts/Screen/AR00000.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/Screen/AR00000.js")' type="text/javascript"></script>
     <style>
         .x-grid-row-over .x-grid-cell-inner {
             font-weight : bold;
@@ -46,7 +46,7 @@
         @X.GridFilters()<!--Khi cache cho grid-->
         @X.ProgressBarPager()<!--Khi cache cho grid -->   
       
-        @(Html.X().Store().ID("stoAR00000Header")   
+        @(Html.X().Store().ID("stoAR00000Header").AutoLoad(false)   
             .Model(Util.GenerateModel(typeof(AR_Setup), "AR00000Model", "BrandID"))       
             .Proxy(
                 X.AjaxProxy()                
@@ -59,7 +59,7 @@
             ) 
             .Parameters(ps =>
                             {
-                                ps.Add(new StoreParameter("branchId", Current.CpnyID, ParameterMode.Value));
+                                ps.Add(new StoreParameter("branchId", "HQ.cpnyID", ParameterMode.Raw));
                                 ps.Add(new StoreParameter("setupID", "AR", ParameterMode.Value));
                             })      
             .Listeners(l =>

@@ -86,7 +86,7 @@ namespace AR00000.Controllers
                 #endregion
 
                 _db.SaveChanges();
-                return Json(new { success = true });
+                return Json(new { success = true }, "text/html");
             }
             catch (Exception ex)
             {

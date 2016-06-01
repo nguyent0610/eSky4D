@@ -19,7 +19,9 @@ var checkLoad = function (sto) {
 ////////////////////////////////////////////////////////////////////////
 //// First Load ////////////////////////////////////////////////////////
 var firstLoad = function () {
-    HQ.util.checkAccessRight(); //Kiểm tra quyền Insert Update Delete để disable các button trên topbar(Bắt buộc)
+    //HQ.util.checkAccessRight(); //Kiểm tra quyền Insert Update Delete để disable các button trên topbar(Bắt buộc)
+    if (HQ.isInsert == false && HQ.isDelete == false && HQ.isUpdate == false)
+        App.menuClickbtnSave.disable();
     App.frmMain.isValid(); //Require các field yêu cầu trên man hình
     HQ.common.showBusy(true, HQ.common.getLang("loadingData"));
     HQ.isFirstLoad = true;
@@ -74,7 +76,7 @@ var menuClick = function (command) {
 var frmChange = function () {
     if (App.stoAR00000Header.getCount() > 0)
         App.frmMain.getForm().updateRecord();
-
+    
     HQ.isChange = HQ.store.isChange(App.stoAR00000Header);
     HQ.common.changeData(HQ.isChange, 'AR00000');
 };
@@ -82,10 +84,16 @@ var frmChange = function () {
 var stoLoad = function (sto) {
     HQ.isNew = false;
     HQ.common.lockItem(App.frmMain, false);
-    if (App.stoAR00000Header.getCount() == 0) {
-        App.stoAR00000Header.insert(0, Ext.data.Record());
+    if (sto.data.length == 0) {
+        HQ.store.insertBlank(sto, "");
+        record = sto.getAt(0);
+        HQ.isNew = true; //record la new 
+        HQ.isFirstLoad = true;
+        HQ.common.setRequire(App.frmMain);  //to do cac o la require 
+        sto.commitChanges();
     }
-    App.frmMain.getForm().loadRecord(App.stoAR00000Header.getAt(0));
+    var record = sto.getAt(0);
+    App.frmMain.getForm().loadRecord(record);
 
     if (!HQ.isInsert && HQ.isNew) {
         HQ.common.lockItem(App.frmMain, true);
@@ -123,11 +131,11 @@ function save() {
             },
             success: function (data) {
                 HQ.message.show(201405071);
-                refresh('yes');
+                refresh("yes");
             },
 
             failure: function (errorMsg, data) {
-                HQ.message.process(msg, data, true);
+                HQ.message.process(errorMsg, data, true);
             }
         });
     }
